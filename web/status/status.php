@@ -338,84 +338,7 @@
 		<div role="main" class="container" style="margin-top: 20px">
 			<h1>Status</h1>
 			<form action="./tools/saveconfig.php" method="POST">
-
-				<!-- EVU  -->
-				<div class="card-deck">
-					<div class="card border-danger">
-						<div class="card-header bg-danger">
-							<div class="form-group mb-0">
-								<div class="form-row vaRow mb-0">
-									<div>EVU</div>
-								</div>
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table" id="evu1">
-									<tbody>
-										<tr id="schieflastEvuStatusId">
-											<th scope="row">Schieflast [A]</th>
-											<td><div id="schieflastdiv"></div></td>
-										</tr>
-										<tr id="gesamtleistungEvuStatusId">
-											<th scope="row">Gesamtleistung [W]</th>
-											<td><div id="wattbezugdiv"></div></td>
-										</tr>
-										<tr id="frequenzEvuStatusId">
-											<th scope="row">Frequenz [Hz]</th>
-											<td><div id="evuhzdiv"></div></td>
-										</tr>																							
-										<tr id="bezugEvuStatusId">
-											<th scope="row">Bezug [kWh]</th>
-											<td><div id="bezugkwhdiv"></div></td>
-										</tr>
-										<tr id="einspeisungEvuStatusId">
-											<th scope="row">Einspeisung [kWh]</th>
-											<td><div id="einspeisungkwhdiv"></div></td>
-										</tr>									
-									</tbody>
-								</table>
-							</div>
-							<div class="table-responsive">
-								<table class="table" id="evu2">
-									<thead>
-										<tr>
-											<th scope="col"></th>
-											<th scope="col">Phase 1</th>
-											<th scope="col">Phase 2</th>
-											<th scope="col">Phase 3</th>
-										</tr>
-									</head>
-									<tbody>
-										<tr id =spannungEvuStatusId>
-											<th scope="row">Spannung [V]</th>
-											<td><div id="evuv1div"></div></td>
-											<td><div id="evuv2div"></div></td>
-											<td><div id="evuv3div"></div></td>
-										</tr>
-										<tr id =stromstaerkeEvuStatusId>
-											<th scope="row">Stromstärke [A]</th>
-											<td><div id="bezuga1div"></div></td>
-											<td><div id="bezuga2div"></div></td>
-											<td><div id="bezuga3div"></div></td>
-										</tr>
-										<tr id =leistungEvuStatusId>
-											<th scope="row">Leistung [W]</th>
-											<td><div id="bezugw1div"></div></td>
-											<td><div id="bezugw2div"></div></td>
-											<td><div id="bezugw3div"></div></td>
-										</tr>
-										<tr id =powerfaktorEvuStatusId>
-											<th scope="row">Power Faktor</th>
-											<td><div id="evupf1div"></div></td>
-											<td><div id="evupf2div"></div></td>
-											<td><div id="evupf3div"></div></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
+			<div class="wrapper">
 
 					<!-- Ladepunkte-->
 					<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
@@ -506,6 +429,83 @@
 										<tr id=kWhCounterAllRow>
 											<th scope="row">Zählerstand [kWh]</th>
 											<td><div id="kWhCounterAll"></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- EVU  -->
+					<div class="card border-danger">
+						<div class="card-header bg-danger">
+							<div class="form-group mb-0">
+								<div class="form-row vaRow mb-0">
+									<div>EVU</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table" id="evu1">
+									<tbody>
+										<tr id="schieflastEvuStatusId">
+											<th scope="row">Schieflast [A]</th>
+											<td><div id="schieflastdiv"></div></td>
+										</tr>
+										<tr id="gesamtleistungEvuStatusId">
+											<th scope="row">Gesamtleistung [W]</th>
+											<td><div id="wattbezugdiv"></div></td>
+										</tr>
+										<tr id="frequenzEvuStatusId">
+											<th scope="row">Frequenz [Hz]</th>
+											<td><div id="evuhzdiv"></div></td>
+										</tr>																							
+										<tr id="bezugEvuStatusId">
+											<th scope="row">Bezug [kWh]</th>
+											<td><div id="bezugkwhdiv"></div></td>
+										</tr>
+										<tr id="einspeisungEvuStatusId">
+											<th scope="row">Einspeisung [kWh]</th>
+											<td><div id="einspeisungkwhdiv"></div></td>
+										</tr>									
+									</tbody>
+								</table>
+							</div>
+							<div class="table-responsive">
+								<table class="table" id="evu2">
+									<thead>
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">Phase 1</th>
+											<th scope="col">Phase 2</th>
+											<th scope="col">Phase 3</th>
+										</tr>
+									</head>
+									<tbody>
+										<tr id =spannungEvuStatusId>
+											<th scope="row">Spannung [V]</th>
+											<td><div id="evuv1div"></div></td>
+											<td><div id="evuv2div"></div></td>
+											<td><div id="evuv3div"></div></td>
+										</tr>
+										<tr id =stromstaerkeEvuStatusId>
+											<th scope="row">Stromstärke [A]</th>
+											<td><div id="bezuga1div"></div></td>
+											<td><div id="bezuga2div"></div></td>
+											<td><div id="bezuga3div"></div></td>
+										</tr>
+										<tr id =leistungEvuStatusId>
+											<th scope="row">Leistung [W]</th>
+											<td><div id="bezugw1div"></div></td>
+											<td><div id="bezugw2div"></div></td>
+											<td><div id="bezugw3div"></div></td>
+										</tr>
+										<tr id =powerfaktorEvuStatusId>
+											<th scope="row">Power Faktor</th>
+											<td><div id="evupf1div"></div></td>
+											<td><div id="evupf2div"></div></td>
+											<td><div id="evupf3div"></div></td>
 										</tr>
 									</tbody>
 								</table>

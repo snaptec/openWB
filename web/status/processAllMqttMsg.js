@@ -61,7 +61,7 @@ function handlevar(mqttmsg, mqttpayload) {
 			case "openWB/Verbraucher/1/Configured": visibilityCard('#loads1', mqttpayload); break;
 			case "openWB/Verbraucher/2/Configured": visibilityCard('#loads2', mqttpayload); break;
 			case "openWB/global/WAllChargePoints": directShow(mqttpayload, '#ladeleistungAll'); visibilityValue('#ladeleistungAllRow', '#ladeleistungAll'); break;
-			case "openWB/global/kWhCounterAllChargePoints": console.log(mqttpayload); directShow(mqttpayload, '#kWhCounterAll'); visibilityValue('#kWhCounterAllRow', '#kWhCounterAll'); break;
+			case "openWB/global/kWhCounterAllChargePoints": directShow(mqttpayload, '#kWhCounterAll'); visibilityValue('#kWhCounterAllRow', '#kWhCounterAll'); break;
 			default: break;
 		}
 	}

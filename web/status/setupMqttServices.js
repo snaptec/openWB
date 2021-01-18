@@ -125,7 +125,6 @@ var topicsToSubscribe = [
 	["openWB/pv/boolPVConfigured", 0],
 	["openWB/pv/CounterTillStartPvCharging", 0],
 	["openWB/pv/W", 0],
-	//pvallwh
 	["openWB/pv/DailyYieldKwh", 0],
 	["openWB/pv/MonthlyYieldKwh", 0],
 	["openWB/pv/YearlyYieldKwh", 0],
@@ -140,7 +139,6 @@ var topicsToSubscribe = [
 	//monthly_pvkwhk2
 	//yearly_pvkwhk2
 	//wattbezug
-
 
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/WhImported", 0],

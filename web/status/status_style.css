@@ -132,7 +132,12 @@ h1 {
     }
     .navbar-brand {
         font-size: 2.0em;
-    }
+	}
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		gap: 10px;
+	}
 }
 
 /* Devices with limited height */
@@ -142,21 +147,36 @@ h1 {
         overflow-x: hidden;
         max-height: 250px;
         overflow-y: scroll;
-    }
+	}
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		gap: 10px;
+	}
 }
 
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
     html {
         font-size: 0.8rem;
-    }
+	}
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		gap: 10px;
+	}
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media screen and (min-width: 768px) {
     html {
         font-size: 0.9rem;
-    }
+	}
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px;
+	}
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -435,13 +455,4 @@ input:invalid {
 .accordion .card-header.collapsed:after {
     /* symbol for "collapsed" panels */
     content: "\f0fe"; 
-}
-
-.card-deck{
-    margin-top: 10px;
-	margin-left: auto;
-	margin-bottom: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    grid-gap: .5rem;
 }
