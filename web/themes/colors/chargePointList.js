@@ -25,6 +25,7 @@ class ChargePointList {
 
   // update if data has changed
   update() {
+    console.log(wbdata);
     this.updateValues();
     this.table.selectAll("*").remove();
 
@@ -55,7 +56,7 @@ class ChargePointList {
       .data(row => [
         formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A",
         row.energy + " kWh / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
-      //  row.soc + " %"
+        //  row.soc + " %"
       ]).enter()
       .append("td")
       .attr("class", "tablecell px-1 py-1")
@@ -63,12 +64,12 @@ class ChargePointList {
       .text(data => data);
     rows.append((row, i) => this.cpSocButtonCell(row, i));
 
-    
-      
+
+
     // for debugging only
- /*    var body = d3.select("body");
-    this.footer
-      .text("Page Width:" + body.style("width")); */
+    /*    var body = d3.select("body");
+       this.footer
+         .text("Page Width:" + body.style("width")); */
   }
 
   updateValues() {
@@ -112,26 +113,27 @@ class ChargePointList {
     return cell.node();
   }
 
-  cpSocButtonCell (row, index) {
+  cpSocButtonCell(row, index) {
+
     const cell = d3.create("td")
       .attr("class", "tablecell px-1 py-1")
       .style("text-align", "center")
       .style("vertical-align", "middle");
-
-    cell.text (row.soc + " %");
-    cell.append ("span").text("   ");  
-    const button = cell
-      .append("button")
-      .attr("class", "btn btn-sm btn-outline-info px-2 pt-0 mt-0 pb-1")
-      .style("text-align", "center")
-      .style("vertical-align", "middle")
-      // .style("color", row.color)
-      .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
-    button.append("i")
-      .attr("class", "small reloadLpSoc fas fa-redo-alt")
-      .attr ("id", "soclabel-" + index)
-    ;
-
+    if (row.isSocConfigured) {
+      cell.text(row.soc + " %");
+      cell.append("span").text("   ");
+      const button = cell
+        .append("button")
+        .attr("class", "btn btn-sm btn-outline-info px-2 pt-0 mt-0 pb-1")
+        .style("text-align", "center")
+        .style("vertical-align", "middle")
+        // .style("color", row.color)
+        .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
+      button.append("i")
+        .attr("class", "small reloadLpSoc fas fa-redo-alt")
+        .attr("id", "soclabel-" + index)
+        ;
+    }
     return cell.node();
   }
 }
@@ -148,8 +150,8 @@ function lpButtonClicked(i) {
 
 function socButtonClicked(i) {
   publish("1", "openWB/set/lp/" + (+i + 1) + "/ForceSoCUpdate");
-  d3.select ("i#soclabel-" + i)
-    .classed ("fa-spin", true)
+  d3.select("i#soclabel-" + i)
+    .classed("fa-spin", true)
 }
- 
- var chargePointList = new ChargePointList();
+
+var chargePointList = new ChargePointList();
