@@ -454,5 +454,9 @@ input:invalid {
 }
 .accordion .card-header.collapsed:after {
     /* symbol for "collapsed" panels */
-    content: "\f0fe"; 
+	content: "\f0fe"; 
+}
+
+.hide {
+    display: none;
 }

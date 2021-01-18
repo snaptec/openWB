@@ -30,7 +30,7 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script src="js/Chart.bundle.js"></script>
+		<script src="js/Chart.bundle.min.js"></script>
 
 		<!-- special stromtarif scripts to be loaded -->
 		<script src="../modules/et_tibber/stromtarifinfo/tibber.js?ver=20210104-a"></script>
@@ -188,6 +188,8 @@
 			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
 
 			$(document).ready(function(){
+				$('#navStromtarifInfo').removeClass('hide');
+
 				readTibberAPI()
 				.then((data) => {
     				processTibberResponse(data)

@@ -1198,6 +1198,12 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("HzFrequenz" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (devicenumb == 1) and (0 <= float(msg.payload) <= 80) ):
+                f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
 
         # clear all set topics if not already done
         if ( not(setTopicCleared) ):
