@@ -1,0 +1,473 @@
+/*!
+Stylesheet zum openWB Standard-Theme
+
+2019-2020 Michael Ortenstein
+*/
+
+html{
+	min-height: 100%;
+	min-width: 100%;
+}
+
+body {
+	color: black;
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+	/* Old browsers */
+	background: white;
+}
+body > .container {
+	padding: 55px 15px 0;
+}
+
+body > .container-fluid {
+	padding: 55px 15px 0;
+}
+@keyframes alertPulsation {
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-o-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-moz-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-webkit-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+.animate-alertPulsation {
+	-webkit-animation: alertPulsation 1s infinite;
+	-moz-animation: alertPulsation 1s infinite;
+	-o-animation: alertPulsation 1s infinite;
+	animation: alertPulsation 1s infinite;
+}
+
+.limitation-progress {
+	height: 0.6em !important;
+}
+
+.pull-right {
+	float:right
+}
+
+.row.no-gutter [class*='col-']:first-child:not(:only-child) {
+	padding-right: 0;
+}
+.row.no-gutter [class*='col-']:last-child:not(:only-child) {
+	padding-left: 0;
+}
+.row.no-gutter [class*='col-']:not(:first-child):not(:last-child):not(:only-child) {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.gradient {
+	background: -webkit-linear-gradient(black, #f2f2f2, black);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+}
+
+.cursor-pointer{
+	cursor: pointer;
+}
+
+.vaRow {
+	/* vertical alignment of content in rows */
+	display: flex;
+	align-items: center;
+}
+
+.hide {
+	display: none;
+}
+
+.lpEnabledStyle {
+	color: #006515;
+	text-decoration: none;
+}
+.lpWaitingStyle {
+	color: #ffdb00;
+	text-decoration: none;
+}
+.lpDisabledStyle {
+	color: #A30000;
+	text-decoration: line-through;
+}
+
+.text-green {
+	color: #006515;
+}
+
+.text-red {
+	color: #A30000;
+}
+
+.text-white {
+	color: white;
+}
+
+.text-orange {
+	color: #ff8c1a;
+}
+
+.text-black {
+	color: black;
+}
+
+.text-blue {
+	color: blue;
+}
+
+.text-grey {
+	color: #515151;
+}
+
+.text-lightgrey {
+	color: lightgrey;
+}
+
+.bg-darkgrey {
+	background-color: #b6bcc9;
+}
+
+.bg-lightgrey {
+	background-color: #d0d7e6;
+}
+.bg-lightblue {
+	background-color: #23ebe1;
+}
+
+.bg-lightgreen {
+	background-color: #befebe;
+}
+
+.bg-rose {
+	background-color: #febebe;
+}
+
+.bg-apricot {
+	background-color:#fefedf;
+}
+
+.bg-orange {
+	background-color:#fcbe1e;
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query since this is the default in Bootstrap */
+h1 {
+	font-size: 1.4rem;
+}
+
+h2 {
+	font-size: 0.9rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+.verySmallTextSize {
+	font-size: 1.0rem;
+}
+
+.smallTextSize {
+	font-size: 1.1rem;
+}
+
+.regularTextSize {
+	font-size: 1.2rem;
+}
+
+.largeTextSize {
+	font-size: 0.8rem;
+}
+
+.buttonTextSize {
+	font-size: 0.9rem;
+}
+.tablecell {
+	font-size: 0.9rem;
+	line-height: 1.1rem;
+	vertical-align: middle;
+	padding: 0;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media screen and (min-width: 576px) {
+	h1 {
+		font-size: 1.7rem;
+	}
+
+	h2 {
+		font-size: 1.1rem;
+	}
+
+	h3 {
+		font-size: 1.7rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.0rem;
+	}
+
+	.smallTextSize {
+		font-size: 0.68rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.1rem;
+	}
+
+	.largeTextSize {
+		font-size: 0.95rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.0rem;
+	}
+	.tablecell {
+		font-size: 1.2rem;
+		line-height: 1.1rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+
+	.table-condensed>tbody>tr>td {
+		padding: 1px;
+	}
+
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media screen and (min-width: 768px) {
+	h1 {
+		font-size: 2.0rem;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	h3 {
+		font-size: 1.1rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.1rem;
+	}
+
+	.smallTextSize {
+		font-size: 0.9rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.2rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.3rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.2rem;
+	}
+	.tablecell {
+		font-size: 0.9rem;
+		line-height: 0.8rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media screen and (min-width: 992px) {
+	h1 {
+		font-size: 2.6rem;
+	}
+
+	h2 {
+		font-size: 2.0rem;
+	}
+
+	h3 {
+		font-size: 1.1rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.1rem;
+	}
+
+	.smallTextSize {
+		font-size: 1.25rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.4rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.6rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.6rem;
+	}
+	.tablecell {
+		font-size: 1.0rem;
+		line-height: 0.8rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	h1 {
+		font-size: 3rem;
+	}
+
+	h2 {
+		font-size: 2.4rem;
+	}
+
+	h3 {
+		font-size: 1.5rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.4rem;
+	}
+
+	.smallTextSize {
+		font-size: 1.65rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.8rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.8rem;
+	}
+
+	.buttonTextSize {
+		font-size: 2.0rem;
+	}
+	.tablecell {
+		font-size: 1.3rem;
+		line-height: 1.0rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+}
+
+/* Livechart colors */
+:root {
+	--fontCol: rgba(153, 153, 153, 1);
+	--xgridCol: rgba(204, 204, 204, 1);	
+	--gridCol: rgba(204, 204, 204, 1);
+	--gridSocCol: rgba(0, 0, 0, 0);
+	--tickCol: rgba(153, 153, 153, 1);
+	--lp1Col: rgba(0, 0, 255, 0.7);
+	--lp1bgCol: rgba(0, 0, 255, 0.7);
+	--lp2Col: rgba(50, 30, 105, 0.7);
+	--lp2bgCol: rgba(50, 30, 105, 0.7);
+	--evuCol: rgba(255, 0, 0, 0.7);
+	--evubgCol: rgba(255, 10, 13, 0.3);
+	--pvCol: rgba(0, 255, 0, 0.7);;
+	--pvbgCol: rgba(10, 255, 13, 0.3);
+	--speicherCol: rgba(255, 153, 13, 0.7);
+	--speicherbgCol: rgba(200, 255, 13, 0.3);
+	--speicherSocCol: rgba(255, 153, 13, 0.7);
+	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
+	--lp1SocCol: rgba(0, 0, 255, 0.5);
+	--lp2SocCol: rgba(50, 50, 55, 0.5);
+	--hausverbrauchCol: rgba(0, 0, 0, 0.7);
+	--hausverbrauchbgCol: rgba(200, 255, 13, 0.3);
+	--verbraucher1Col: rgba(0, 150, 150, 0.7);
+	--verbraucher1bgCol: rgba(200, 255, 13, 0.3);
+	--verbraucher2Col: rgba(150, 150, 0, 0.7);
+	--verbraucher2bgCol: rgba(200, 255, 13, 0.3);
+	--lpgesamtCol: rgba(50, 50, 55, 0.1);
+	--lpgesamtbgCol: rgba(0, 0, 255, 0.1);
+	--lp3Col: rgba(50, 50, 55, 0.7);
+	--lp3bgCol: blue;
+	--lp4Col: rgba(50, 50, 55, 0.7);
+	--lp4bgCol: blue;
+	--lp5Col: rgba(50, 50, 55, 0.7);
+	--lp5bgCol: blue;
+	--lp6Col: rgba(50, 50, 55, 0.7);
+	--lp6bgCol: blue;
+	--lp7Col: rgba(50, 50, 55, 0.7);
+	--lp7bgCol: blue;
+	--lp8Col: rgba(50, 50, 55, 0.7);
+	--lp8bgCol: blue;
+	--d1Col: rgba(230, 50, 220, 0.7);
+	--d1bgCol: blue;
+	--d2Col: rgba(230, 50, 220, 0.7);
+	--d2bgCol: blue;
+	--d3Col: rgba(230, 50, 220, 0.7);
+	--d3bgCol: blue;
+	--d4Col: rgba(230, 50, 220, 0.7);
+	--d4bgCol: blue;
+	--d5Col: rgba(230, 50, 220, 0.7);
+	--d5bgCol: blue;
+	--d6Col: rgba(230, 50, 220, 0.7);
+	--d6bgCol: blue;
+	--d7Col: rgba(230, 50, 220, 0.7);
+	--d7bgCol: blue;
+	--d8Col: rgba(230, 50, 220, 0.7);
+	--d8bgCol: blue;
+	--d9Col: rgba(230, 50, 220, 0.7);
+	--d9bgCol: blue;
+	--color-bg: midnightblue;
+	--color-evu: firebrick;
+	--color-pv: goldenrod;
+	--color-house: grey;
+	--color-devices: cornflowerblue;
+	--color-charging: mediumseagreen;
+	--color-export: skyblue;
+	--color-axis: steelblue;
+	--color-lp1: mediumseagreen;
+	--color-lp2: lightseagreen;
+	--color-lp3: mediumspringgreen;
+	--color-lp4: mediumturquoise;
+	--color-lp5: darkseagreen;
+	--color-lp6: darkolivegreen;
+	--color-lp7: olive;
+	--color-lp8: palegreen;
+	--color-sh1: lightblue;
+	--color-sh2: deepskyblue;
+	--color-sh3: aqua;
+	--color-sh4: cadetblue;
+	--color-sh5: dodgerblue;
+	--color-sh6: lightsteelblue;
+	--color-sh7: skyblue;
+	--color-sh8: mediumslateblue;
+	--color-sh9: paleturquoise;
+
+}
+
+.openwb-devices {
+	color: #ccffff;
+	background-color: #009696;
+}
+
+.wb-widget {
+	background-color: midnightblue;
+}
+
+
+.table-borderless td {
+	border: 0;
+}
