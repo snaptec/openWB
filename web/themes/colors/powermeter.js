@@ -67,16 +67,17 @@ class PowerMeter {
       .style("font-size", "24")
       ;
 
-    svg.append("text")
-      .attr("x", 0)
-      .attr("y", 0)
+    if (wbdata.chargePoint[0].isSocConfigured) {
+      svg.append("text")
+        .attr("x", 0)
+        .attr("y", 0)
 
-      .text("SOC (" + wbdata.chargePoint[0].name + "): " + (wbdata.chargePoint[0].soc) + " %")
-      .attr("fill", this.chargeColor)
-      .attr("backgroundcolor", this.bgColor)
-      .style("text-anchor", "middle")
-      .style("font-size", "24");
-
+        .text("SOC (" + wbdata.chargePoint[0].name + "): " + (wbdata.chargePoint[0].soc) + " %")
+        .attr("fill", this.chargeColor)
+        .attr("backgroundcolor", this.bgColor)
+        .style("text-anchor", "middle")
+        .style("font-size", "24");
+    }
     svg.append("text")
       .attr("x", 0)
       .attr("y", this.height / 8)

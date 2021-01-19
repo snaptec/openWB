@@ -10,7 +10,7 @@ html{
 }
 
 body {
-	color: black;
+	color: lightgrey;
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
 	/* Old browsers */
 	background: white;
@@ -18,7 +18,9 @@ body {
 body > .container {
 	padding: 55px 15px 0;
 }
-
+h3 {
+	color: black;
+}
 body > .container-fluid {
 	padding: 55px 15px 0;
 }
@@ -102,6 +104,10 @@ body > .container-fluid {
 	text-decoration: line-through;
 }
 
+input[type=range]::-webkit-slider-runnable-track {
+	background: slategrey;
+	
+}
 .text-green {
 	color: #006515;
 }

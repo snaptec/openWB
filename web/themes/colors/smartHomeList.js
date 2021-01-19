@@ -5,70 +5,78 @@
 
 class SmartHomeList {
 
+  div;
+
   constructor() {
     var consumers = [];
   };
 
   // initialize after document is created
-  init() { }
+  init() {
+    this.div = d3.select("div#smartHomeTable");
+  }
 
   // update if data has changed
   update() {
-    
     this.updateValues();
-    const table = d3.select("table#smartHomeTable");
-    table.selectAll("*").remove();
+    this.div.selectAll("*").remove();
 
-    table.attr("class", "table table-borderless table-condensed p-0 m-0");
-    // table.attr("style", "border-spacing:0;")
+    if (this.consumers.length > 0) {
+      var table = this.div.append("table")
+        .attr("class", "table table-borderless table-condensed p-0 m-0");
+      // table.attr("style", "border-spacing:0;")
 
-    const headers = ["Gerät", "Verbrauch", "Laufzeit", "Modus"];
-    const thead = table.append("thead")
-      .selectAll("headers")
-      .data(headers).enter()
-      .append("th")
-      .attr("style", "color:white;text-align:center;")
-      .attr("class", "tablecell ")
-      .text((data) => data)
-      ;
+      const headers = ["Gerät", "Verbrauch", "Laufzeit", "Modus"];
+      const thead = table.append("thead")
+        .selectAll("headers")
+        .data(headers).enter()
+        .append("th")
+        .attr("style", "color:white;text-align:center;")
+        .attr("class", "tablecell ")
+        .text((data) => data)
+        ;
 
-    const rows = table.append("tbody").selectAll("rows")
-      .data(this.consumers).enter()
-      .append("tr")
-      .attr("style", row => this.calcColor(row));
+      const rows = table.append("tbody").selectAll("rows")
+        .data(this.consumers).enter()
+        .append("tr")
+        .attr("style", row => this.calcColor(row));
 
-    rows.append("td")
-      .attr("class", "tablecell py-1 px-1")
-      .append("button")
-      .attr ("id", (row,i) => "shbutton-" + i)
-      .attr("class", row => this.deviceClass(row))
-      .attr("style", row => this.calcColor(row))
-      .attr("onClick", (row, i) => "shDeviceClicked(" + i + ")")
-      .classed ("disabled", (row => (row.isAutomatic)))
-      .text(row => row.name);
+      rows.append("td")
+        .attr("class", "tablecell py-1 px-1")
+        .append("button")
+        .attr("id", (row, i) => "shbutton-" + i)
+        .attr("class", row => this.deviceClass(row))
+        .attr("style", row => this.calcColor(row))
+        .attr("onClick", (row, i) => "shDeviceClicked(" + i + ")")
+        .classed("disabled", (row => (row.isAutomatic)))
+        .text(row => row.name);
 
-    rows.append("td")
-      .attr("class", "tablecell py-1 px-1")
-      .attr("style", "vertical-align: middle;")
-      .text(row => formatWatt(row.power) + " (" + row.energy + " kWh)",);
+      rows.append("td")
+        .attr("class", "tablecell py-1 px-1")
+        .attr("style", "vertical-align: middle;")
+        .text(row => formatWatt(row.power) + " (" + row.energy + " kWh)",);
 
+      rows.append("td")
+        .attr("class", "tablecell py-1 px-1")
+        .attr("style", "vertical-align: middle;")
+        .text(row => formatTime(row.runningTime))
 
-
-    rows.append("td")
-      .attr("class", "tablecell py-1 px-1")
-      .attr("style", "vertical-align: middle;")
-      .text(row => formatTime(row.runningTime))
-
-    rows.append("td")
-      .attr("class", "tablecell py-1 px-1")
-      .append("button")
-      .attr ("id", (row,i) => "shmodebutton-" + i)
-      .attr("class", row => this.modeClass(row))
-      .attr("style", row => this.calcColor(row))
-      .attr("onClick", (row, i) => "shModeClicked(" + i + ")")
-      .classed ("disabled", false)
-      .text(row => row.isAutomatic ? "Automatik" : "Manuell");
-
+      rows.append("td")
+        .attr("class", "tablecell py-1 px-1")
+        .append("button")
+        .attr("id", (row, i) => "shmodebutton-" + i)
+        .attr("class", row => this.modeClass(row))
+        .attr("style", row => this.calcColor(row))
+        .attr("onClick", (row, i) => "shModeClicked(" + i + ")")
+        .classed("disabled", false)
+        .text(row => row.isAutomatic ? "Automatik" : "Manuell");
+    }
+    else {
+      this.div.append("h4")
+        .attr("class", "tablecell text-white pt-3")
+        .attr("style", "text-align:center; vertical-align:middle;")
+        .text("Es sind keine Geräte konfiguriert");
+    }
   }
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");
@@ -97,8 +105,8 @@ function shModeClicked(i) {
   } else {
     publish("0", "openWB/config/set/SmartHome/Devices/" + (+i + 1) + "/mode");
   }
-  d3.select ("button#shmodebutton-" + i)
-    .classed ("disabled", true);
+  d3.select("button#shmodebutton-" + i)
+    .classed("disabled", true);
 };
 
 function shDeviceClicked(i) {
@@ -108,8 +116,8 @@ function shDeviceClicked(i) {
     } else {
       publish("1", "openWB/config/set/SmartHome/Device" + (+i + 1) + "/device_manual_control");
     }
-    d3.select ("button#shbutton-" + i)
-      .classed ("disabled", true)
+    d3.select("button#shbutton-" + i)
+      .classed("disabled", true)
   }
 }
 
