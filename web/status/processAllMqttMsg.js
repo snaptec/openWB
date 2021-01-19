@@ -222,15 +222,12 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/APhase1$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .stromstaerkeP1');
-		visibilityRow('#lp' + index + ' .stromstaerkeRow', '#lp' + index + ' .stromstaerkeP1', '#lp' + index + ' .stromstaerkeP2', '#lp' + index + ' .stromstaerkeP3');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/APhase2$/i ) ) {		
 		directShow(mqttpayload, '#lp' + index + ' .stromstaerkeP2');
-		visibilityRow('#lp' + index + ' .stromstaerkeRow', '#lp' + index + ' .stromstaerkeP1', '#lp' + index + ' .stromstaerkeP2', '#lp' + index + ' .stromstaerkeP3');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/APhase3$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .stromstaerkeP3');
-		visibilityRow('#lp' + index + ' .stromstaerkeRow', '#lp' + index + ' .stromstaerkeP1', '#lp' + index + ' .stromstaerkeP2', '#lp' + index + ' .stromstaerkeP3');
 	} 
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/AConfigured$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .stromvorgabe');
@@ -242,15 +239,12 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/VPhase1$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .spannungP1');
-		visibilityRow('#lp' + index + ' .spannungRow', '#lp' + index + ' .spannungP1', '#lp' + index + ' .spannungP2', '#lp' + index + ' .spannungP3');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/VPhase2$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .spannungP2');
-		visibilityRow('#lp' + index + ' .spannungRow', '#lp' + index + ' .spannungP1', '#lp' + index + ' .spannungP2', '#lp' + index + ' .spannungP3');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/VPhase3$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .spannungP3');
-		visibilityRow('#lp' + index + ' .spannungRow', '#lp' + index + ' .spannungP1', '#lp' + index + ' .spannungP2', '#lp' + index + ' .spannungP3');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/W$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .ladeleistung');
