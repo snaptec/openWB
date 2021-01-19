@@ -582,42 +582,49 @@
 						<a class="card-title">Ladestatus Änderungen </a>
 					</div>
 					<div id="collapseOne" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<button class="btn btn-info float-right reloadLadestatusLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="ladestatuslogdiv" style="white-space: pre-line "></div>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseTwo">
 						<a class="card-title">SmartHome Log </a>
 					</div>
 					<div id="collapseTwo" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info float-right reloadSmartHomeLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="smarthomediv" style="white-space: pre-line "></div>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseThree">
 						<a class="card-title">RFID Log </a>
 					</div>
 					<div id="collapseThree" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info float-right reloadRfidLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="rfiddiv" style="white-space: pre-line "></div>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFour">
 						<a class="card-title">Mqtt Log </a>
 					</div>
 					<div id="collapseFour" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info float-right reloadMqttLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="mqttdiv" style="white-space: pre-line "></div>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFive">
 						<a class="card-title">Debug Log </a>
 					</div>
 					<div id="collapseFive" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info float-right reloadDebugLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="debugdiv" style="white-space: pre-line "></div>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSix">
 						<a class="card-title">Nur PV Log </a>
 					</div>
 					<div id="collapseSix" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info float-right reloadPvLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="nurpvdiv" style="white-space: pre-line "></div>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSeven">
 						<a class="card-title">EV SoC Log </a>
 					</div>
 					<div id="collapseSeven" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info float-right reloadSocLog" type="reset">Neu laden <i class="fas fa-redo-alt"></i> </button>
 						<div id="socdiv" style="white-space: pre-line"></div>
 					</div>
 				</div>
@@ -712,6 +719,28 @@
 				document.body.appendChild(script);
 			});
 		});  // end document ready
+
+		$('.reloadLadestatusLog').click(function(event){
+			loadstatuslog();
+		});
+		$('.reloadSmartHomeLog').click(function(event){
+			smarthomelog();
+		});
+		$('.reloadRfidLog').click(function(event){
+			rfidlog();
+		});
+		$('.reloadMqttLog').click(function(event){
+			mqttlog();
+		});
+		$('.reloadDebugLog').click(function(event){
+			debuglog();
+		});
+		$('.reloadPvLog').click(function(event){
+			nurpvlog();
+		});
+		$('.reloadSocLog').click(function(event){
+			soclog();
+		});
 		</script>
 
 	</body>
