@@ -97,7 +97,7 @@ if ($_POST['action'] === 'deleteBridge') {
 // validate input data and assign to variables
 //
 $fileToUseForNewConfig = "/var/www/html/openWB/ramdisk/$bridgeFileName";
-if (!isset($_POST['bridgeEnabled'])) {
+if (!isset($_POST['bridgeEnabled']) && ($_POST['bridgeEnabled'] == 1)) {
 	$fileToUseForNewConfig = $fileToUseForNewConfig . ".no";
 }
 
@@ -159,9 +159,9 @@ if(!preg_match('/^(tlsv1.2|tlsv1.3)$/', $tlsProtocol)) {
 	exit("Interner Fehler: Ung&uuml;tiges TLS Protokoll '" . htmlentities($tlsProtocol) . "'");
 }
 
-$exportStatus = isset($_POST['exportStatus']);
-$exportGraph = isset($_POST['exportGraph']);
-$subscribeConfigs = isset($_POST['subscribeConfigs']);
+$exportStatus = isset($_POST['exportStatus']) && ($_POST['exportStatus'] == 1);
+$exportGraph = isset($_POST['exportGraph']) && ($_POST['exportGraph'] == 1);
+$subscribeConfigs = isset($_POST['subscribeConfigs']) && ($_POST['subscribeConfigs'] == 1);
 
 //// print "Export Status: '$exportStatus'<br/>";
 //// print "Export Graph: '$exportGraph'<br/>";
