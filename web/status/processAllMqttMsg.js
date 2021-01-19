@@ -134,17 +134,20 @@ function processPvMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/pv/boolPVConfigured":
 			visibilityCard('#pvGes', mqttpayload);
-			visibilityCard('#inverter1', mqttpayload);
-			visibilityCard('#inverter2', mqttpayload);
+			visibilityCard('#inverter1', 0);
+			visibilityCard('#inverter2', 0);
 			break;
 		case "openWB/pv/CounterTillStartPvCharging":
 			directShow(mqttpayload, '#pvcounterdiv');
 			visibilityValue('#pvCounterRow', "#pvcounterdiv");
 			break;
 		case "openWB/pv/W":
-			invertShow(mqttpayload, '#pvkwhdiv');
-			visibilityMin('#gesamtertragRow', "#pvkwhdiv");invertShow(mqttpayload, '#pvwattdiv');
-			visibilityMin('#leistungRow', "#pvwattdiv");
+			invertShow(mqttpayload, '#pvwattdiv');
+			visibilityMin('#leistungRow', mqttpayload);
+			break;
+		case "openWB/pv/WhCounter":
+			kShow(mqttpayload, '#pvkwhdiv');
+			visibilityValue('#gesamtertragRow', '#pvkwhdiv');
 			break;
 		case "openWB/pv/DailyYieldKwh":
 			directShow(mqttpayload, '#daily_pvkwhdiv');
@@ -178,6 +181,14 @@ function processBatMsg (mqttmsg, mqttpayload) {
 		case "openWB/housebattery/WhExported":
 			kShow(mqttpayload, '#speicherekwhdiv');
 			visibilityValue('#entladenRow', '#speicherekwhdiv');
+			break;
+		case "openWB/housebattery/W":
+			directShow(mqttpayload, '#wBatDiv');
+			visibilityValue('#wBatRow', '#wBatDiv');
+			break;
+		case "openWB/housebattery/%Soc":
+			directShow(mqttpayload, '#socBatDiv');
+			visibilityValue('#socBatRow', '#socBatDiv');
 			break;
 		case "openWB/housebattery/boolHouseBatteryConfigured":
 			visibilityCard('#speicher', mqttpayload);
@@ -344,9 +355,10 @@ function invertShow(mqttpayload, variable) {
 }
 
 //show only values over 100
-function visibilityMin(row, variable) {
-	var value = parseInt($(variable).text());
-	if (value>100){
+//Der String ist mit einem Tausender-Punkt versehen. Daher den Payload für die if-Abfrage verwenden.
+function visibilityMin(row, mqttpayload) {
+	var value = parseFloat(mqttpayload) * -1;
+	if (value>100) { 
 		showSection(row);
 	}
 	else {

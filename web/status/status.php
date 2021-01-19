@@ -531,6 +531,14 @@
 										<th scope="row">entladen [kWh]</th>
 										<td><div id="speicherekwhdiv"></div></td>
 									</tr>
+									<tr id=wBatRow>
+										<th scope="row">Leistung [W]</th>
+										<td><div id="wBatDiv"></div></td>
+									</tr>
+									<tr id=socBatRow>
+										<th scope="row">SoC [%]</th>
+										<td><div id="socBatDiv"></div></td>
+									</tr>
 								</tbody>
 							</table>
 						</div>
