@@ -169,10 +169,13 @@ else:
 
 
 if extprodakt == 1:    
-    resp= client.read_holding_registers(40380,1,unit=slave1id)
-    value1 = resp.registers[0]
-    all = format(value1, '04x')
-    extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+    try:
+        resp= client.read_holding_registers(40380,1,unit=slave1id)
+        value1 = resp.registers[0]
+        all = format(value1, '04x')
+        extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+    except:
+        extprod = 0
 else:
     extprod = 0
 allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower+extprod

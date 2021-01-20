@@ -36,6 +36,21 @@
 		<meta name="theme-color" content="#ffffff">
 		<meta name="google" content="notranslate">
 		<script src="js/jquery-1.11.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				/**
+				 * detect touch devices and map contextmenu (long press) to normal click
+				 */
+				$('body').on("contextmenu", function(event){
+					console.log("Contextmenu triggered");
+					if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+						console.log("Click event generated");
+						$(event.target).trigger("click"); // fire a click event
+						event.preventDefault();
+					}
+				});
+			});
+		</script>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<!-- Font Awesome, all styles -->

@@ -1,3 +1,4 @@
+<!-- gets called by System/Backup erstellen navbar item from mainpage and calls the actual script -->
 <!DOCTYPE html>
 <html lang="de">
 
@@ -61,8 +62,9 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
+			<h1>Backup erstellen</h1>
 			<div class="alert alert-info">
-				Erstelle Backup... <i class="fas fa-cog fa-spin"></i>
+				Erstelle Backup, bitte warten... <i class="fas fa-cog fa-spin"></i>
 			</div>
 
 		</div>  <!-- container -->
@@ -84,7 +86,8 @@
 				}
 			);
 
-			setTimeout(function() { window.location = "tools/backup.php"; }, 3000);
+			// call backup script with parameter so filename is generated with timestamp
+			setTimeout(function() { window.location = "tools/backup.php?extendedFilename=1"; }, 3000);
 
 		</script>
 
