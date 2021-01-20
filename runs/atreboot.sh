@@ -608,6 +608,7 @@ done
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
+mkdir -p /var/www/html/openWB/web/logging/data/ladelog
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 if ! grep -Fq "wr1extprod=" /var/www/html/openWB/openwb.conf
 then
