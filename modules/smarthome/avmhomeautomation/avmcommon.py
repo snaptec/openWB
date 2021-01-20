@@ -117,27 +117,32 @@ class AVMHomeAutomation:
                 should_authenticate = age_of_id_in_seconds / 60 >= 5
             else:
                 should_authenticate = True
-        except IOError:
+        except IOError as e:
             should_authenticate = True
+            self.logMessage(2, "non-critical error reading previous session id: %s" % (e))
+        except:
+            self.logMessage(2, "unexpected error: %s" % (sys.exc_info()[0]))
 
         if should_authenticate:
             self.logMessage(0, "(re-)authenticate at fritzbox")
-            # perform authentication
-            self.sessionID = getAVMSessionID(
-                    self.baseURL,
-                    previoussessionid = self.sessionID,
-                    username = self.username,
-                    password = self.password)
+            try:
+                # perform authentication
+                self.sessionID = getAVMSessionID(
+                        self.baseURL,
+                        previoussessionid = self.sessionID,
+                        username = self.username,
+                        password = self.password)
 
             # Try to store potentially new session id to ramdisk for next run
             # If this operations fails, no harm is done as we can always authenticate
             # with username/password.
-            try:
                 f = open(file_stringsessionid, 'w')
                 print ('%s' % (self.sessionID),file = f)
                 f.close()
             except IOError:
-                pass
+                self.logMessage(2, "non-critical storing session id: %s" % (e))
+            except:
+                self.logMessage(2, "unexpected error while negotiating session id: %s" % (sys.exc_info()[0]))
 
     # logMessage writes a message to the logfile for the smarthome device.
     def logMessage(self, level, message):
@@ -181,16 +186,15 @@ class AVMHomeAutomation:
             self.fetchAndCacheDeviceInfos()
 
     def fetchAndCacheDeviceInfos(self):
-        self.device_infos = getDevicesDict(self.baseURL, self.sessionID)
         try:
+            self.device_infos = getDevicesDict(self.baseURL, self.sessionID)
             f = open(self.cacheFileString(), 'w')
             print ('%s' % (json.dumps(self.device_infos)), file = f)
             f.close()
         except IOError as e:
-            pass
             self.logMessage(2, "error writing power result %s" % (e))
         except:
-            self.logMessage(2, "unexpected error: %s" % (sys.exc_info()[0]))
+            self.logMessage(2, "unexpected error loading and writing power results: %s" % (sys.exc_info()[0]))
 
 
     # switchDevice sets the relais of the AVM Home Automation actor
