@@ -8,7 +8,7 @@ sofortlademodus(){
 			fi
 		fi
 	fi
-	if (( awattaraktiv == 1 )); then
+	if (( etprovideraktiv == 1 )); then
 		actualprice=$(<ramdisk/awattarprice)
 		if (( $(echo "$actualprice < $awattarmaxprice" |bc -l) )); then
 			#price lower than max price, enable charging
