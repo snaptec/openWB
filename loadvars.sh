@@ -1113,7 +1113,7 @@ loadvars(){
 		if [[ $speichermodul != "none" ]] ; then
 			echo speicherleistung $speicherleistung speichersoc $speichersoc
 		fi
-		if (( $awattaraktiv == 1 )) ; then
+		if (( $etprovideraktiv == 1 )) ; then
 			echo awattarprice "$awattarprice" awattarmaxprice "$awattarmaxprice"
 		fi
 		echo pv1watt $pv1watt pv2watt $pv2watt pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
@@ -1524,10 +1524,10 @@ loadvars(){
 		tempPubList="${tempPubList}\nopenWB/config/get/pv/priorityModeEVBattery=${speicherpveinbeziehen}"
 		echo $speicherpveinbeziehen > ramdisk/mqttspeicherpveinbeziehen
 	fi
-	oawattaraktiv=$(<ramdisk/mqttawattaraktiv)
-	if [[ "$oawattaraktiv" != "$awattaraktiv" ]]; then
-		tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${awattaraktiv}"
-		echo $awattaraktiv > ramdisk/mqttawattaraktiv
+	oetprovideraktiv=$(<ramdisk/mqttawattaraktiv)
+	if [[ "$oetprovideraktiv" != "$etprovideraktiv" ]]; then
+		tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${etprovideraktiv}"
+		echo $etprovideraktiv > ramdisk/mqttawattaraktiv
 	fi
 	oawattarprice=$(<ramdisk/mqttawattarprice)
 	awattarprice=$(<ramdisk/awattarprice)
