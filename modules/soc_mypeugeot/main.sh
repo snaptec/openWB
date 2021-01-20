@@ -8,7 +8,7 @@ CHARGEPOINT=$1
 
 socDebug=$debug
 # for developement only
-socDebug=1
+# socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -26,6 +26,8 @@ case $CHARGEPOINT in
 		password=$mypeugeot_passlp2
 		clientId=$mypeugeot_clientidlp2
 		clientSecret=$mypeugeot_clientsecretlp2
+		soccalc=$mypeugeot_soccalclp2
+		chargestat=$(</var/www/html/openWB/ramdisk/chargestats1)
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -44,6 +46,8 @@ case $CHARGEPOINT in
 		password=$mypeugeot_passlp1
 		clientId=$mypeugeot_clientidlp1
 		clientSecret=$mypeugeot_clientsecretlp1
+		soccalc=$mypeugeot_soccalclp1
+		chargestat=$(</var/www/html/openWB/ramdisk/chargestat)
 		;;
 esac
 
@@ -61,7 +65,7 @@ incrementTimer(){
 
 soctimer=$(<$soctimerfile)
 
-if (($mypeugeot_soccalclp1 == 0)); then #manual calculation not enabled, using existing logic
+if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 	timer=$(<$soctimerfile)
 	if (( timer < 60 )); then
 		timer=$((timer+1))
@@ -80,8 +84,6 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 		echo $(<$socFile) > $manualSocFile
 		socDebugLog "Fetched from myPeugeot: $(<$socFile)%"
 	fi
-
-	chargestat=$(</var/www/html/openWB/ramdisk/chargestat)
 
 	# if charging ist not active fetch SoC from myPeugeot
 	if [[ $chargestat == "0" ]] ; then
