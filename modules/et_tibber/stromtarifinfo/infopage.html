@@ -70,12 +70,16 @@
 				Daten stellen lediglich beispielhaft das kommende Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.)
 				und der durch den Anbieter bereitgestellten Daten folgt.
 			</div>
-			<div id="noValidData">
-				<span id="noValidDataText">Tibber-Daten werden abgerufen, bitte warten... </span>
-				<div id="noValidDataSpinner" class="spinner-border spinner-border-sm" role="status">
+			<div id="waitForData">
+				<span>Tibber-Daten werden abgerufen, bitte warten... </span>
+				<div class="spinner-border spinner-border-sm" role="status">
   					<span class="sr-only"></span>
 				</div>
 			</div>
+			<div id="dataError" class="alert alert-danger hide" role="alert">
+				Fehler bei der Abfrage der Tibber-API (<span id="dataErrorText"></span>).
+			</div>
+
 
 			<div id="validData" style="display: none;">
 
@@ -128,14 +132,14 @@
 				</div>
 
 
-				<div id="cardTagesverbrauch" class="card border-secondary hide">
+				<div id="cardTagesbezug" class="card border-secondary hide">
 					<div class="card-header bg-secondary">
-						Tagesverbrauch <span id="dateYesterday"></span>
+						Tagesbezug <span id="dateYesterday"></span>
 					</div>
 					<div class="card-body">
 						<div class="row">
 							<div class="col smallTextSize">
-								Gesamtverbrauch:  <span id="totalConsumptionDay"></span><br>
+								Gesamtbezug:  <span id="totalConsumptionDay"></span><br>
 								Gesamtkosten:  <span id="totalCostsDay"></span><br>
 								&empty;-Strompreis: <span id="avgPriceDay"></span>
 							</div>
@@ -151,9 +155,9 @@
 					</div>
 				</div>
 
-				<div class="card border-secondary hide">
+				<div id="cardMonatsbezug" class="card border-secondary hide">
 					<div class="card-header bg-secondary">
-						Monatsverbrauch
+						Monatsbezug
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -164,9 +168,9 @@
 					</div>
 				</div>
 
-				<div class="card border-secondary hide">
+				<div id="cardJahresbezug" class="card border-secondary hide">
 					<div class="card-header bg-secondary">
-						Jahresverbrauch
+						Jahresbezug
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -191,12 +195,16 @@
 				$('#navStromtarifInfo').removeClass('hide');
 
 				readTibberAPI()
-				.then((data) => {
-    				processTibberResponse(data)
-				})
-				.catch((error) => {
-    				console.log(error)
-  				})
+					.then((data) => {
+						console.log('erfolgreiche Abfrage');
+						console.log(data);
+	    				processTibberResponse(data)
+					})
+					.catch((error) => {
+						$("#waitForData").hide();
+						$("#dataErrorText").text(error);
+						$("#dataError").show();
+	  				})
 			});
 
 		</script>
