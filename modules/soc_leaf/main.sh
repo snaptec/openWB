@@ -18,9 +18,20 @@ case $CHARGEPOINT in
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
 		username=$leafusername
 		password=$leafpasswort
 		;;
 esac
 
-sudo python /var/www/html/openWB/modules/soc_leaf/soc.py $username $password
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
+socDebugLog "Starting Python module"
+sudo python /var/www/html/openWB/modules/soc_leaf/soc.py $username $password $CHARGEPOINT
+socDebugLog "Done"

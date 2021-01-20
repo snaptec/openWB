@@ -21,6 +21,8 @@ case $CHARGEPOINT in
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		intervall=$soccarnetintervall

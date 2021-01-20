@@ -48,9 +48,12 @@ else
 	answer=$(curl -s -X GET 'https://app.evnotify.de/soc?akey='$akey'&token='$token)
 	# extract the soc value
 	soc=$(echo $answer | jq .soc_display)
+	socDebugLog "SoC from Server: $soc"
 	# parse to int to be able to check in condition - to determine if valid or not
 	isvalid=$(echo $soc | cut -d "." -f 1 | cut -d "," -f 1)
 	if (( isvalid >= 0 && isvalid != null)); then
 		echo $isvalid > $socfile
+	else
+		socDebugLog "SoC is invalid!"
 	fi
 fi

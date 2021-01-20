@@ -26,11 +26,21 @@ case $CHARGEPOINT in
 		;;
 esac
 
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
 timer=$(<$soctimerfile)
 if (( timer < 60 )); then
+	socDebugLog "Nothing to do yet. Incrementing timer."
 	timer=$((timer+1))
 	echo $timer > $soctimerfile
 else
 	echo 0 > $soctimerfile
+	socDebugLog "Requesting SoC"
 	sudo python $MODULEDIR/opelsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
+	socDebugLog "Done"
 fi
