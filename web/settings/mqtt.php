@@ -148,11 +148,11 @@
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($bridgeEnabledold == 0) echo " active" ?>">
-											<input type="radio" name="bridgeEnabled" id="bridgeEnabledoldOff" value="0" <?php if($bridgeEnabledold == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-outline-info<?php if($bridgeEnabled == 0) echo " active" ?>">
+											<input type="radio" name="bridgeEnabled" id="bridgeEnabledoldOff" value="0" <?php if($bridgeEnabled == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($bridgeEnabledold == 1) echo " active" ?>">
-											<input type="radio" name="bridgeEnabled" id="bridgeEnabledoldOn" value="1" <?php if($bridgeEnabledold == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-outline-info<?php if($bridgeEnabled == 1) echo " active" ?>">
+											<input type="radio" name="bridgeEnabled" id="bridgeEnabledoldOn" value="1" <?php if($bridgeEnabled == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
@@ -253,11 +253,11 @@
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($exportStatusold == 0) echo " active" ?>">
-											<input type="radio" name="exportStatus" id="exportStatusoldOff" value="0"<?php if($exportStatusold == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-outline-info<?php if($exportStatus == 0) echo " active" ?>">
+											<input type="radio" name="exportStatus" id="exportStatusoldOff" value="0"<?php if($exportStatus == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($exportStatusold == 1) echo " active" ?>">
-											<input type="radio" name="exportStatus" id="exportStatusoldOn" value="1"<?php if($exportStatusold == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-outline-info<?php if($exportStatus == 1) echo " active" ?>">
+											<input type="radio" name="exportStatus" id="exportStatusoldOn" value="1"<?php if($exportStatus == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 									<span class="form-text small">Hausverbrauch, EVU, PV, Ladepunkte, Speicher</span>
@@ -271,11 +271,11 @@
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($exportGraphold == 0) echo " active" ?>">
-											<input type="radio" name="exportGraph" id="exportGrapholdOff" value="0"<?php if($exportGraphold == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-outline-info<?php if($exportGraph == 0) echo " active" ?>">
+											<input type="radio" name="exportGraph" id="exportGrapholdOff" value="0"<?php if($exportGraph == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($exportGraphold == 1) echo " active" ?>">
-											<input type="radio" name="exportGraph" id="exportGrapholdOn" value="1"<?php if($exportGraphold == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-outline-info<?php if($exportGraph == 1) echo " active" ?>">
+											<input type="radio" name="exportGraph" id="exportGrapholdOn" value="1"<?php if($exportGraph == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
@@ -303,11 +303,11 @@
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($subscribeConfigsold == 0) echo " active" ?>">
-											<input type="radio" name="subscribeConfigs" id="subscribeConfigsoldOff" value="0" <?php if($subscribeConfigsold == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-outline-info<?php if($subscribeConfigs == 0) echo " active" ?>">
+											<input type="radio" name="subscribeConfigs" id="subscribeConfigsoldOff" value="0" <?php if($subscribeConfigs == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($subscribeConfigsold == 1) echo " active" ?>">
-											<input type="radio" name="subscribeConfigs" id="subscribeConfigsoldOn" value="1" <?php if($subscribeConfigsold == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-outline-info<?php if($subscribeConfigs == 1) echo " active" ?>">
+											<input type="radio" name="subscribeConfigs" id="subscribeConfigsoldOn" value="1" <?php if($subscribeConfigs == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
