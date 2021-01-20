@@ -1199,9 +1199,15 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
         if (( "openWB/set/lp" in msg.topic) and ("HzFrequenz" in msg.topic)):
-            devicenumb = int(re.sub(r'\D.', '', msg.topic))
-            if ( (devicenumb == 1) and (0 <= float(msg.payload) <= 80) ):
-                f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 80) ):
+                if ( devicenumb == 1 ):
+                    filename = "llhz"
+                elif ( devicenumb == 2 ):
+                    filename = "llhzs1"
+                elif ( devicenumb == 3 ):
+                    filename = "llhzs2"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
 
