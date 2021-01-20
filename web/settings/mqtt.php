@@ -133,7 +133,7 @@
 				<!-- Konfiguration -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
-						Konfiguration der MQTT-Brücke
+						Konfiguration der MQTT-Br&uuml;cke
 					</div>
 					<div class="card-body">
 						<div class="card-text alert alert-danger">

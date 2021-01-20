@@ -131,15 +131,6 @@ var topicsToSubscribe = [
 	["openWB/pv/Modul1W", 1],
 	["openWB/pv/Modul2W", 1],
 
-	//pvkwhk1
-	//daily_pvkwhk1
-	//monthly_pvkwhk1
-	//yearly_pvkwhk1
-	//daily_pvkwhk2
-	//monthly_pvkwhk2
-	//yearly_pvkwhk2
-	//wattbezug
-
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/WhImported", 1],
 	["openWB/housebattery/WhExported", 1],
