@@ -32,30 +32,30 @@ while IFS= read -r line; do
 	date +"%H" -d @$((line/1000)) >> $RAMDISKDIR/awattarendhours
 done <<< "$end"
 
-if [ -f $RAMDISKDIR/awattarpricelist ]; then
-	rm $RAMDISKDIR/awattarpricelist
+if [ -f $RAMDISKDIR/etproviderpricelist ]; then
+	rm $RAMDISKDIR/etproviderpricelist
 fi
 actual=0
 price=$(echo $awadata | jq '.data[].marketprice')
 if [[ "$awattarlocation" == "de" ]]; then
 	while IFS= read -r line; do
 		if ((actual == 0 )); then
-			echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l > $RAMDISKDIR/awattarprice
+			echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l > $RAMDISKDIR/etproviderprice
 			actual=1
-			actualprice=$(<$RAMDISKDIR/awattarprice)
+			actualprice=$(<$RAMDISKDIR/etproviderprice)
 		fi
-		echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l >> $RAMDISKDIR/awattarpricelist
+		echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l >> $RAMDISKDIR/etproviderpricelist
 	done <<< "$price"
 fi
 if [[ "$awattarlocation" == "at" ]]; then
 	while IFS= read -r line; do
 		if ((actual == 0 )); then
-			echo "scale=2;$line * 100 / 1000 * 1.20" | bc -l > $RAMDISKDIR/awattarprice
+			echo "scale=2;$line * 100 / 1000 * 1.20" | bc -l > $RAMDISKDIR/etproviderprice
 			actual=1
-			actualprice=$(<$RAMDISKDIR/awattarprice)
+			actualprice=$(<$RAMDISKDIR/etproviderprice)
 		fi
-		echo "scale=2;$line * 100 / 1000 * 1.20" | bc -l >> $RAMDISKDIR/awattarpricelist
+		echo "scale=2;$line * 100 / 1000 * 1.20" | bc -l >> $RAMDISKDIR/etproviderpricelist
 	done <<< "$price"
 fi
-paste -d "," $RAMDISKDIR/awattarstarthours $RAMDISKDIR/awattarpricelist > $RAMDISKDIR/awattargraphlist
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat $RAMDISKDIR/awattargraphlist)"
+paste -d "," $RAMDISKDIR/awattarstarthours $RAMDISKDIR/etproviderpricelist > $RAMDISKDIR/etprovidergraphlist
+mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat $RAMDISKDIR/etprovidergraphlist)"

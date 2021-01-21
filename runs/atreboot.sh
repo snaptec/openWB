@@ -65,10 +65,10 @@ echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2
 echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
 echo 0 > /var/www/html/openWB/ramdisk/ipaddress
-echo 0 > /var/www/html/openWB/ramdisk/awattarprice
-echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
-echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
-echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/etproviderprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttetproviderprice
+echo 0 > /var/www/html/openWB/ramdisk/etprovidermaxprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttetprovidermaxprice
 echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp2
 echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp3
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
