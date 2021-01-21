@@ -320,11 +320,11 @@
 				<div class="row justify-content-center py-1">
 					<div class="col text-center">
 						Das Anwenden der Änderungen dauert <?php echo $refreshDuration ?> Sekunden. Bitte die openWB in dieser Zeit nicht vom Strom trennen!<br><br>
-						<button type="submit" class="btn btn-green" name="action" value="saveBridge">Einstellungen für Brücke '<?php echo urlencode($connectionName); ?>' speichern</button>
+						<button type="submit" class="btn btn-info" name="action" value="saveBridge">Einstellungen für Brücke '<?php echo urlencode($connectionName); ?>' speichern</button>
 					</div>
 				</div>
 				<div class="row justify-content-center py-1">
-					<button type="submit" class="btn btn-green" name="action" value="deleteBridge">Brücke '<?php echo urlencode($connectionName); ?>' löschen</button>
+					<button type="submit" class="btn btn-info" name="action" value="deleteBridge">Brücke '<?php echo urlencode($connectionName); ?>' löschen</button>
 				</div>
 
 			</form>
