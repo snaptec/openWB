@@ -40,13 +40,19 @@ function readTibberAPI() {
                 "Content-Type": "application/json"
             },
             data: tibberQuery,
-            success: function (data) {
-                resolve(data)
-            },
-            error: function (error) {
-                reject(error)
+            timeout: 4000
+        })
+        .done (function (data) {
+            console.log(data);
+            if ( typeof data?.errors === "undefined") {
+                resolve(data);
+            } else {
+                reject(data.errors[0].message);
             }
         })
+        .fail ( function (error) {
+            reject(error.statusText + " " + error.status);
+        });
     })
 }
 
@@ -67,7 +73,7 @@ function createXLabel(dateFrom, dateTo){
         result += " - " + dateToObj.getHours();
     }
     result += " Uhr";
-    return  result;
+    return result;
 }
 
 
@@ -153,7 +159,7 @@ function fillCardStrompreis(response){
     }
 }
 
-function fillCardTagesverbrauch(response){
+function fillCardTagesbezug(response){
     /**
      * fills the card "Tagesverbrauch" with data from tibber response
      *
@@ -177,7 +183,6 @@ function fillCardTagesverbrauch(response){
         consumptionHourly = consumptionHourly.filter(function (e) {
             return new Date(e.from).valueOf() < midnight.valueOf();
         });
-        console.log(consumptionHourly);
         // now if 24 hours are left, sum up totals and fill arrays for chart
         if (consumptionHourly.length == 24) {
             for (i=0; i<consumptionHourly.length; i++) {
@@ -199,7 +204,7 @@ function fillCardTagesverbrauch(response){
         } else {
             $('#dailyConsumptionchartCanvasDiv').hide();
         }
-        $('#cardTagesverbrauch').show();
+        $('#cardTagesbezug').show();
     }
 }
 
@@ -222,16 +227,17 @@ function processTibberResponse(tibberResponse){
         // data for card "Strompreis"
         fillCardStrompreis(tibberResponse);
         // data for card "Tagesverbrauch"
-        fillCardTagesverbrauch(tibberResponse);
+        fillCardTagesbezug(tibberResponse);
         // data for card "Monatsverbrauch"
 
         // data for card "Jahresverbrauch"
 
         // now show cards
-        $('#noValidData').hide();
+        $('#waitForData').hide();
         $('#validData').show();
     } else {
-        $('#noValidDataText').text('Tibber-Daten fehlerhaft, bitte später noch einmal versuchen.');
-        $('#noValidDataSpinner').hide();
+        $('#dataErrorText').text('Tibber-Daten fehlerhaft, bitte später noch einmal versuchen.');
+        $('#waitForData').hide();
+        $('#dataError').show();
     }
 }

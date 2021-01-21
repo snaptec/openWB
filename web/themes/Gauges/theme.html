@@ -676,6 +676,11 @@
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
+				<div class="row justify-content-center regularTextSize vaRow">
+					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
+					Preis
+					<button type="button" class="btn btn-secondary ml-3 priceMore"><i class="far fa-plus-square"></i></button>
+				</div>
 			</div>  <!--/ priceBasedCharging -->
 
 			<hr class="border-secondary">
@@ -1691,7 +1696,7 @@
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20201218',
 				// respective Chart.js definition pricechart
-				'themes/dark/electricityPriceChart.js?ver=20201228',
+				'themes/dark/electricityPriceChart.js?ver=20210120',
 				// functions performing mqtt and start mqtt-service
 				'themes/Gauges/setupMqttServices.js?ver=20201228'
 			];
@@ -1849,6 +1854,28 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
+			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
+				event.preventDefault();
+				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
+				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
+				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
+				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
+				if ( $(this).hasClass ('priceLess') ) {
+					currentMaxPrice -= step;
+				} else {
+					currentMaxPrice += step;
+				}
+				// prevent timeout of delayUserInput when clicking "beyond" range
+				if ( currentMaxPrice < rangeMin ) {
+					currentMaxPrice = rangeMin;
+				} else if ( currentMaxPrice > rangeMax ) {
+					currentMaxPrice = rangeMax;
+				}
+				$('#MaxPriceForCharging').val(currentMaxPrice);
+				$('#MaxPriceForCharging').trigger('input');
+			});
+
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
@@ -1858,9 +1885,9 @@
 				label.addClass('text-danger');
 				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
 					// marks times in the pricechart where the price is low enough so charging would be allowed
-					var priceAnnotations = createPriceAnnotations();
-					electricityPricechart.options.annotation.annotations = priceAnnotations;
-					electricityPricechart.update();
+	 				var priceAnnotations = createPriceAnnotations();
+	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
+	 				electricityPricechart.update();
 				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
