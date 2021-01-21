@@ -1,4 +1,14 @@
 #!/bin/bash
+
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+
+# for testing from cli without loadvars.sh
+if [ ! $awattarlocation ]; then
+	awattarlocation="de"
+	echo "setting location to de"
+fi
+
 if [[ "$awattarlocation" == "de" ]]; then
 	awadata=$(curl -s https://api.awattar.de/v1/marketdata)
 fi
@@ -6,38 +16,46 @@ if [[ "$awattarlocation" == "at" ]]; then
 	awadata=$(curl -s https://api.awattar.at/v1/marketdata)
 fi
 
-rm /var/www/html/openWB/ramdisk/awattarstarthours
+if [ -f $RAMDISKDIR/awattarstarthours ]; then
+	rm $RAMDISKDIR/awattarstarthours
+fi
 start=$(echo $awadata | jq '.data[].start_timestamp')
 while IFS= read -r line; do
-	date +"%H" -d @$((line/1000)) >> /var/www/html/openWB/ramdisk/awattarstarthours
+	date +"%H" -d @$((line/1000)) >> $RAMDISKDIR/awattarstarthours
 done <<< "$start"
-rm /var/www/html/openWB/ramdisk/awattarendhours
+
+if [ -f $RAMDISKDIR/awattarendhours ]; then
+	rm $RAMDISKDIR/awattarendhours
+fi
 end=$(echo $awadata | jq '.data[].end_timestamp')
 while IFS= read -r line; do
-	date +"%H" -d @$((line/1000)) >> /var/www/html/openWB/ramdisk/awattarendhours
+	date +"%H" -d @$((line/1000)) >> $RAMDISKDIR/awattarendhours
 done <<< "$end"
-rm /var/www/html/openWB/ramdisk/awattarpricelist
+
+if [ -f $RAMDISKDIR/awattarpricelist ]; then
+	rm $RAMDISKDIR/awattarpricelist
+fi
 actual=0
 price=$(echo $awadata | jq '.data[].marketprice')
 if [[ "$awattarlocation" == "de" ]]; then
 	while IFS= read -r line; do
 		if ((actual == 0 )); then
-			echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l > /var/www/html/openWB/ramdisk/awattarprice
+			echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l > $RAMDISKDIR/awattarprice
 			actual=1
-			actualprice=$(</var/www/html/openWB/ramdisk/awattarprice)
+			actualprice=$(<$RAMDISKDIR/awattarprice)
 		fi
-		echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l >> /var/www/html/openWB/ramdisk/awattarpricelist
+		echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l >> $RAMDISKDIR/awattarpricelist
 	done <<< "$price"
 fi
 if [[ "$awattarlocation" == "at" ]]; then
 	while IFS= read -r line; do
 		if ((actual == 0 )); then
-			echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l > /var/www/html/openWB/ramdisk/awattarprice
+			echo "scale=2;$line * 100 / 1000 * 1.20" | bc -l > $RAMDISKDIR/awattarprice
 			actual=1
-			actualprice=$(</var/www/html/openWB/ramdisk/awattarprice)
+			actualprice=$(<$RAMDISKDIR/awattarprice)
 		fi
-		echo "scale=2;$line * 100 / 1000 * 1.19" | bc -l >> /var/www/html/openWB/ramdisk/awattarpricelist
+		echo "scale=2;$line * 100 / 1000 * 1.20" | bc -l >> $RAMDISKDIR/awattarpricelist
 	done <<< "$price"
 fi
-paste -d "," /var/www/html/openWB/ramdisk/awattarstarthours /var/www/html/openWB/ramdisk/awattarpricelist > /var/www/html/openWB/ramdisk/awattargraphlist
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/awattargraphlist)"
+paste -d "," $RAMDISKDIR/awattarstarthours $RAMDISKDIR/awattarpricelist > $RAMDISKDIR/awattargraphlist
+mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat $RAMDISKDIR/awattargraphlist)"
