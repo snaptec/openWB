@@ -2808,6 +2808,16 @@ if ! grep -Fq "solaxip=" /var/www/html/openWB/openwb.conf
 then
 	echo "solaxip=192.168.1.1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mypeugeot_soccalclp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "mypeugeot_soccalclp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mypeugeot_soccalclp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "mypeugeot_soccalclp2=0" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
