@@ -112,9 +112,9 @@ if (( netzabschaltunghz == 1 )); then
 	fi
 fi
 
-# update awattar prices
-if (( awattaraktiv == 1 )); then
-	$OPENWBBASEDIR/runs/awattargetprices.sh
+# update electricity provider prices
+if (( etprovideraktiv == 1 )); then
+	$OPENWBBASEDIR/modules/$etprovider/main.sh &
 fi
 
 # update all daily yield stats

@@ -65,10 +65,10 @@ echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2
 echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
 echo 0 > /var/www/html/openWB/ramdisk/ipaddress
-echo 0 > /var/www/html/openWB/ramdisk/awattarprice
-echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
-echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
-echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/etproviderprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttetproviderprice
+echo 0 > /var/www/html/openWB/ramdisk/etprovidermaxprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttetprovidermaxprice
 echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp2
 echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp3
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
@@ -2003,9 +2003,22 @@ if ! grep -Fq "awattarlocation=" /var/www/html/openWB/openwb.conf
 then
   echo "awattarlocation=de" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "awattaraktiv=" /var/www/html/openWB/openwb.conf
+# upgrade from awattar to electricity tariff provider
+if ! grep -Fq "etprovider=" ./openwb.conf
 then
-  echo "awattaraktiv=0" >> /var/www/html/openWB/openwb.conf
+  if grep -Fq "awattaraktiv=1" ./openwb.conf
+  then
+    echo "etprovider=et_awattar" >> ./openwb.conf
+  else
+    echo "etprovider=none" >> ./openwb.conf
+  fi
+  echo "tibbertoken=demo" >> ./openwb.conf
+  echo "tibberhomeid=demo" >> ./openwb.conf
+fi
+# remove obsolete line from config
+if grep -Fq "awattaraktiv=" ./openwb.conf
+then
+  sed -i '/^awattaraktiv=/d' ./openwb.conf
 fi
 if ! grep -Fq "plz=" /var/www/html/openWB/openwb.conf
 then

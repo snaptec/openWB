@@ -929,7 +929,7 @@ def on_message(client, userdata, msg):
             client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
             if (float(msg.payload) >= -50 and float(msg.payload) <=50):
-                f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
+                f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
         if (msg.topic == "openWB/set/houseBattery/W"):
