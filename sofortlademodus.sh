@@ -10,7 +10,7 @@ sofortlademodus(){
 	fi
 	if (( etprovideraktiv == 1 )); then
 		actualprice=$(<ramdisk/etproviderprice)
-		if (( $(echo "$actualprice < $etprovidermaxprice" |bc -l) )); then
+		if (( $(echo "$actualprice <= $etprovidermaxprice" |bc -l) )); then
 			#price lower than max price, enable charging
 			if [[ $debug == "1" ]]; then
 				echo "Aktiviere preisbasierte Ladung, Preis $actualprice, Max $etprovidermaxprice"
