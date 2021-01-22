@@ -46,11 +46,11 @@ function processGlobalMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/global/WAllChargePoints":
 			directShow(mqttpayload, '#ladeleistungAll');
-			visibilityValue('#ladeleistungAllRow', '#ladeleistungAll');
+			noZeroShow(mqttpayload, '#ladeleistungAll');
 			break;
 		case "openWB/global/kWhCounterAllChargePoints":
 			directShow(mqttpayload, '#kWhCounterAll');
-			visibilityValue('#kWhCounterAllRow', '#kWhCounterAll');
+			noZeroShow(mqttpayload, '#kWhCounterAll');
 			break;
 		default:
 			break;
@@ -61,59 +61,48 @@ function processEvuMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/evu/ASchieflast":
 			directShow(mqttpayload, '#schieflastdiv');
-			visibilityValue('#schieflastEvuStatusId', '#schieflastdiv');
 			break;
 		case "openWB/evu/APhase1":
 			directShow(mqttpayload, '#bezuga1div');
-			visibilityRow('#stromstaerkeEvuStatusId', '#bezuga1div', '#bezuga2div', '#bezuga3div');
 			break;
 		case "openWB/evu/APhase2":
 			directShow(mqttpayload, '#bezuga2div');
-			visibilityRow('#stromstaerkeEvuStatusId', '#bezuga1div', '#bezuga2div', '#bezuga3div');
 			break;
 		case "openWB/evu/APhase3":
 			directShow(mqttpayload, '#bezuga3div');
-			visibilityRow('#stromstaerkeEvuStatusId', '#bezuga1div', '#bezuga2div', '#bezuga3div');
 			break;
 		case "openWB/evu/WPhase1":
 			impExpShow(mqttpayload, '#bezugw1div');
-			visibilityRow('#leistungEvuStatusId', '#bezugw1div', '#bezugw2div', '#bezugw3div');
 			break;
 		case "openWB/evu/WPhase2":
 			impExpShow(mqttpayload, '#bezugw2div');
-			visibilityRow('#leistungEvuStatusId', '#bezugw1div', '#bezugw2div', '#bezugw3div');
 			break;
 		case "openWB/evu/WPhase3":
 			impExpShow(mqttpayload, '#bezugw3div');
-			visibilityRow('#leistungEvuStatusId', '#bezugw1div', '#bezugw2div', '#bezugw3div');
 			break;
 		case "openWB/evu/W":
 			impExpShow(mqttpayload, '#wattbezugdiv');
-			visibilityValue('#gesamtleistungEvuStatusId', '#wattbezugdiv');
 			break;
 		case "openWB/evu/WhExported":
 			kShow(mqttpayload, "#einspeisungkwhdiv");
-			visibilityValue('#einspeisungEvuStatusId', "#einspeisungkwhdiv");
+			noZeroShow($('#einspeisungkwhdiv').text(), '#einspeisungkwhdiv');
 			break;
 		case "openWB/evu/WhImported":
 			kShow(mqttpayload, "#bezugkwhdiv");
-			visibilityValue('#bezugEvuStatusId', "#bezugkwhdiv");
+			noZeroShow($('#bezugkwhdiv').text(), '#bezugkwhdiv');
 			break;
 		case "openWB/evu/VPhase1":
 			directShow(mqttpayload, '#evuv1div');
-			visibilityRow('#spannungEvuStatusId', '#evuv1div', '#evuv2div', '#evuv3div');
 			break;
 		case "openWB/evu/VPhase2":
 			directShow(mqttpayload, '#evuv2div');
-			visibilityRow('#spannungEvuStatusId', '#evuv1div', '#evuv2div', '#evuv3div');
 			break;
 		case "openWB/evu/VPhase3":
 			directShow(mqttpayload, '#evuv3div');
-			visibilityRow('#spannungEvuStatusId', '#evuv1div', '#evuv2div', '#evuv3div');
 			break;
 		case "openWB/evu/Hz":
 			directShow(mqttpayload, '#evuhzdiv');
-			visibilityValue('#frequenzEvuStatusId', '#evuhzdiv');
+			noZeroShow(mqttpayload, '#evuhzdiv');
 			break;
 		case "openWB/evu/PfPhase1":
 			directShow(mqttpayload, '#evupf1div');
@@ -138,36 +127,32 @@ function processPvMsg (mqttmsg, mqttpayload) {
 			visibilityCard('#inverter2', 0);
 			break;
 		case "openWB/pv/CounterTillStartPvCharging":
-			directShow(mqttpayload, '#pvcounterdiv');
-			visibilityValue('#pvCounterRow', "#pvcounterdiv");
+			noZeroShow(mqttpayload, '#pvcounterdiv');
 			break;
 		case "openWB/pv/W":
 			invertShow(mqttpayload, '#pvwattdiv');
-			visibilityMin('#leistungRow', mqttpayload);
 			break;
 		case "openWB/pv/WhCounter":
 			kShow(mqttpayload, '#pvkwhdiv');
-			visibilityValue('#gesamtertragRow', '#pvkwhdiv');
+			noZeroShow($('#pvkwhdiv').text(), '#pvkwhdiv');
 			break;
 		case "openWB/pv/DailyYieldKwh":
 			directShow(mqttpayload, '#daily_pvkwhdiv');
-			visibilityValue('#tagesertragRow', "#daily_pvkwhdiv");
+			noZeroShow($('#daily_pvkwhdiv').text(), '#daily_pvkwhdiv');
 			break;
 		case "openWB/pv/MonthlyYieldKwh":
 			directShow(mqttpayload, '#monthly_pvkwhdiv');
-			visibilityValue('#monatsertragRow', "#monthly_pvkwhdiv");
+			noZeroShow($('#monthly_pvkwhdiv').text(), '#monthly_pvkwhdiv');
 			break;
 		case "openWB/pv/YearlyYieldKwh":
 			directShow(mqttpayload, '#yearly_pvkwhdiv');
-			visibilityValue('#jahresertragRow', "#yearly_pvkwhdiv");
+			noZeroShow($('#yearly_pvkwhdiv').text(), '#yearly_pvkwhdiv');
 			break;
 		case "openWB/pv/Modul1W":
 			invertShow(mqttpayload, '#inverter1 .pvwattdiv');
-			visibilityValue('#inverter1 .gesamtertragPvRow', '#inverter1 .pvwattdiv');
 			break;
 		case "openWB/pv/Modul2W":
 			invertShow(mqttpayload, '#inverter2 .pvwattdiv');
-			visibilityValue('#inverter2 .gesamtertragPvRow', '#inverter2 .pvwattdiv');
 			break;
 	}
 }
@@ -176,19 +161,17 @@ function processBatMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/housebattery/WhImported":
 			kShow(mqttpayload, '#speicherikwhdiv');
-			visibilityValue('#geladenRow', '#speicherikwhdiv');
+			noZeroShow($('#speicherikwhdiv').text(), '#speicherikwhdiv');
 			break;
 		case "openWB/housebattery/WhExported":
 			kShow(mqttpayload, '#speicherekwhdiv');
-			visibilityValue('#entladenRow', '#speicherekwhdiv');
+			noZeroShow($('#speicherekwhdiv').text(), '#speicherekwhdiv');
 			break;
 		case "openWB/housebattery/W":
 			directShow(mqttpayload, '#wBatDiv');
-			visibilityValue('#wBatRow', '#wBatDiv');
 			break;
 		case "openWB/housebattery/%Soc":
 			directShow(mqttpayload, '#socBatDiv');
-			visibilityValue('#socBatRow', '#socBatDiv');
 			break;
 		case "openWB/housebattery/boolHouseBatteryConfigured":
 			visibilityCard('#speicher', mqttpayload);
@@ -203,15 +186,14 @@ function processVerbraucherMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Watt$/i ) ) {
 		directShow(mqttpayload, '#loads'+index+' .verbraucherWatt');
-		visibilityValue('#loads'+index+' .leistungVerbraucherRow', '#loads'+index+' .verbraucherWatt');
 	}
 	else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/WhImported$/i ) ) {
 		kShow(mqttpayload, '#loads'+index+' .importVerbraucher');
-		visibilityValue('#loads'+index+' .importVerbraucherRow', '#loads'+index+' .importVerbraucher');
+		noZeroShow($('#loads'+index+' .importVerbraucher').text(), '#loads'+index+' .importVerbraucher');
 	}
 	else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/WhExported$/i ) ) {
 		kShow(mqttpayload, '#loads'+index+' .exportVerbraucher');
-		visibilityValue('#loads'+index+' .exportVerbraucherRow', '#loads'+index+' .exportVerbraucher');
+		noZeroShow($('#loads'+index+' .exportVerbraucher').text(), '#loads'+index+' .exportVerbraucher');
 	}
 }
 
@@ -231,11 +213,10 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	} 
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/AConfigured$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .stromvorgabe');
-		visibilityValue('#lp' + index + ' .stromvorgabeRow', '#lp' + index + ' .stromvorgabe');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhCounter$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .kWhCounter');
-		visibilityValue('#lp' + index + ' .kWhCounterRow', '#lp' + index + ' .kWhCounter');
+		noZeroShow($('#lp' + index + ' .kWhCounter').text(), '#lp' + index + ' .kWhCounter');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/VPhase1$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .spannungP1');
@@ -248,7 +229,6 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/W$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .ladeleistung');
-		visibilityValue('#lp' + index + ' .ladeleistungRow', '#lp' + index + ' .ladeleistung');
 	}
 	else {
 		switch (mqttmsg) {
@@ -316,6 +296,15 @@ function directShow(mqttpayload, variable) {
 		$(variable).text(valueStr);
 }
 
+// show missing value oder zero value as --
+function noZeroShow(mqttpayload, variable) {
+	var value = parseFloat(mqttpayload);
+	if ( isNaN(value) || (value == 0) ) {
+		valueStr = "--";
+		$(variable).text(valueStr);
+	}
+}
+
 //show with imp/exp
 function impExpShow(mqttpayload, variable) {
 	// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
@@ -323,12 +312,12 @@ function impExpShow(mqttpayload, variable) {
 	var valueStr = "";
 	if(value<0) {
 		value = value * -1;
-		valueStr = value+" (E)"
+		valueStr = value.toLocaleString(undefined)+" (E)";
 	} else if (value>0) {
-		valueStr = value+" (B)"
+		valueStr = value.toLocaleString(undefined)+" (B)";
 	} else  {
 		// Bezug = 0
-		valueStr = value
+		valueStr = value.toLocaleString(undefined);
 	}
 	$(variable).text(valueStr);
 }
@@ -336,8 +325,8 @@ function impExpShow(mqttpayload, variable) {
 // show value as kilo
 function kShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
-	value = (value / 1000).toFixed(3);
-	var valueStr = value.toLocaleString(undefined) ;
+	value = (value / 1000);
+	var valueStr = value.toLocaleString({maximumFractionDigits: 3}) ;
 	$(variable).text(valueStr);
 }
 
