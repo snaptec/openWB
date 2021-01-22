@@ -55,7 +55,7 @@ class Battery_API {
 		);
 	}
 
-
+	
 	function get_cached_token() {
 		return json_decode(
 			@file_get_contents(

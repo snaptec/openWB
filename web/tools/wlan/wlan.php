@@ -49,7 +49,7 @@
 			$output = shell_exec($command); 
 			echo $output;
 		?>
-		<form action="tools/wlan/wlan1.php" method="post">
+		<form action="tools/wlan/wlan1.php" method="post" autocomplete="off">
 		<br><br>
 		<h5> Neuverbinden mit</h5>
 		<p> Wlan SSID: <input id="wssid" type="text" name="wssid" /></p>

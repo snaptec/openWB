@@ -16,7 +16,7 @@ function createPriceAnnotations(){
 		cornerRadius = 0;
 	}
 	var annotations = [];
-	var maxPrice = $('#MaxPriceForCharging').val();
+	var maxPrice = parseFloat($('#MaxPriceForCharging').val());
 	if ( !isNaN(maxPrice) ) {
 		for ( var i = 0; i < electricityPriceChartline.length; i++ ) {
 			if ( electricityPriceChartline[i] <= maxPrice ) {
@@ -24,6 +24,10 @@ function createPriceAnnotations(){
 				newAnnotation.xMin = i;  // set left edge of box
 				while ( i < electricityPriceChartline.length && electricityPriceChartline[i] <= maxPrice ) {
 					i++;
+				}
+				if ( i == electricityPriceChartline.length ) {
+					// correct index if out of bounds
+					i--;
 				}
 				newAnnotation.xMax = i;  // first index electricityPriceChartline[i] > maxPrice is right edge of box
 				annotations.push(newAnnotation);  // add box to annotations

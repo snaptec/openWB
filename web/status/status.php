@@ -26,12 +26,40 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
-		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="./status/status_style.css">
 
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
+		<!-- include settings-style -->
+		<link rel="stylesheet" type="text/css" href="status/status_style.css">
+		<!-- local css due to async loading of theme css -->
+		<style type="text/css">
+			#preloader {
+				background-color:white;
+				position:fixed;
+				top:0px;
+				left:0px;
+				width:100%;
+				height:100%;
+				z-index:999999;
+			}
+			#preloader-inner {
+				margin-top: 150px;
+				text-align: center;
+			}
+			#preloader-image {
+				max-width: 300px;
+			}
+			#preloader-info {
+				color:grey;
+			}
+			#thegraph > div {
+				height: 350px;
+			}
+		</style>
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
 			function getCookie(cname) {
 				var name = cname + '=';
@@ -52,1370 +80,668 @@
 		</script>
 
 		<script>
-			var doInterval;
-
-			function getfile() {
-				$.ajaxSetup({ cache: false});
-				$.ajax({
-					url: "/openWB/ramdisk/llkombiniert",
-					complete: function(request){
-						$("#lldiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evsedintestlp1",
-					complete: function(request){
-						$("#evsedintestlp1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evsedintestlp2",
-					complete: function(request){
-						$("#evsedintestlp2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evsedintestlp3",
-					complete: function(request){
-						$("#evsedintestlp3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/schieflast",
-					complete: function(request){
-						$("#schieflastdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezuga1",
-					complete: function(request){
-						$("#bezuga1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezuga2",
-					complete: function(request){
-						$("#bezuga2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezuga3",
-					complete: function(request){
-						$("#bezuga3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugw1",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#bezugw1div").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugw2",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#bezugw2div").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugw3",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#bezugw3div").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llsoll",
-					complete: function(request){
-						$("#llsolldiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llsolls1",
-					complete: function(request){
-						$("#llsolls1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llsolls2",
-					complete: function(request){
-						$("#llsolls2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas11",
-					complete: function(request){
-						$("#llas11div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas12",
-					complete: function(request){
-						$("#llas12div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas13",
-					complete: function(request){
-						$("#llas13div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas21",
-					complete: function(request){
-						$("#llas21div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas22",
-					complete: function(request){
-						$("#llas22div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas23",
-					complete: function(request){
-						$("#llas23div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/lla1",
-					complete: function(request){
-						$("#lla1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/lla2",
-					complete: function(request){
-						$("#lla2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/lla3",
-					complete: function(request){
-						$("#lla3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llaktuell",
-					complete: function(request){
-						$("#llaktuelldiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llaktuells1",
-					complete: function(request){
-						$("#llaktuells1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llaktuells2",
-					complete: function(request){
-						$("#llaktuells2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llkwh",
-					complete: function(request){
-						$("#llkwhdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llkwhs1",
-					complete: function(request){
-						$("#llkwhs1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llkwhs2",
-					complete: function(request){
-						$("#llkwhs2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llkwhges",
-					complete: function(request){
-						$("#llkwhgesdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher1_watt",
-					complete: function(request){
-						$("#verbraucher1wattdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher1_wh",
-					complete: function(request){
-						var vfinal = request.responseText;
-						vfinal = (vfinal / 1000).toFixed(3);
-						$("#verbraucher1whdiv").html(vfinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher1_whe",
-					complete: function(request){
-						var vefinal = request.responseText;
-						vefinal = (vefinal / 1000).toFixed(3);
-						$("#verbraucher1whediv").html(vefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher2_watt",
-					complete: function(request){
-						$("#verbraucher2wattdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher2_wh",
-					complete: function(request){
-						var vfinal = request.responseText;
-						vfinal = (vfinal / 1000).toFixed(3);
-						$("#verbraucher2whdiv").html(vfinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher2_whe",
-					complete: function(request){
-						var vefinal = request.responseText;
-						vefinal = (vefinal / 1000).toFixed(3);
-						$("#verbraucher2whediv").html(vefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/einspeisungkwh",
-					complete: function(request){
-						var eefinal = request.responseText;
-						eefinal = (eefinal / 1000).toFixed(3);
-						$("#einspeisungkwhdiv").html(eefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugkwh",
-					complete: function(request){
-						var eifinal = request.responseText;
-						eifinal = (eifinal / 1000).toFixed(3);
-						$("#bezugkwhdiv").html(eifinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/speicherikwh",
-					complete: function(request){
-						var sgfinal = request.responseText;
-						sgfinal = (sgfinal / 1000).toFixed(3);
-						$("#speicherikwhdiv").html(sgfinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/speicherekwh",
-					complete: function(request){
-						var sefinal = request.responseText;
-						sefinal = (sefinal / 1000).toFixed(3);
-						$("#speicherekwhdiv").html(sefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvcounter",
-					complete: function(request){
-						$("#pvcounterdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvallwatt",
-					complete: function(request){
-						// zur Anzeige Wert positiv darstellen
-						// (Erzeugung liegt als Negativwert vor)
-						var value = parseInt(request.responseText) * -1;
-						$("#pvwattdiv").html(""+value);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvallwh",
-					complete: function(request){
-						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/daily_pvkwhk",
-					complete: function(request){
-						$("#daily_pvkwhdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/monthly_pvkwhk",
-					complete: function(request){
-						$("#monthly_pvkwhdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/yearly_pvkwhk",
-					complete: function(request){
-						$("#yearly_pvkwhdiv").html(request.responseText);
-						if ( request.responseText > 100 ) {
-							$('#pvpartlycounterdiv').show();
-						}
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvwatt1",
-					complete: function(request){
-						// zur Anzeige Wert positiv darstellen
-						// (Erzeugung liegt als Negativwert vor)
-						var value = parseInt(request.responseText) * -1;
-						$("#pvwattdiv1").html(""+value);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvkwhk1",
-					complete: function(request){
-						$("#pvkwhdiv1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/daily_pvkwhk1",
-					complete: function(request){
-						$("#daily_pvkwhdiv1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/monthly_pvkwhk1",
-					complete: function(request){
-						$("#monthly_pvkwhdiv1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/yearly_pvkwhk1",
-					complete: function(request){
-						$("#yearly_pvkwhdiv1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvwatt2",
-					complete: function(request){
-						// zur Anzeige Wert positiv darstellen
-						// (Erzeugung liegt als Negativwert vor)
-						var value = parseInt(request.responseText) * -1;
-						$("#pvwattdiv2").html(""+value);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvkwhk2",
-					complete: function(request){
-						$("#pvkwhdiv2").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/daily_pvkwhk2",
-					complete: function(request){
-						$("#daily_pvkwhdiv2").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/monthly_pvkwhk2",
-					complete: function(request){
-						$("#monthly_pvkwhdiv2").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/yearly_pvkwhk2",
-					complete: function(request){
-						$("#yearly_pvkwhdiv2").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/wattbezug",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#wattbezugdiv").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/soc",
-					complete: function(request){
-						$("#soclevel").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/soc1",
-					complete: function(request){
-						$("#soclevel1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llv1",
-					complete: function(request){
-						$("#llv1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llv2",
-					complete: function(request){
-						$("#llv2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llv3",
-					complete: function(request){
-						$("#llv3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs11",
-					complete: function(request){
-						$("#llv1s1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs21",
-					complete: function(request){
-						$("#llv1s2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs12",
-					complete: function(request){
-						$("#llv2s1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs22",
-					complete: function(request){
-						$("#llv2s2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs13",
-					complete: function(request){
-						$("#llv3s1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs23",
-					complete: function(request){
-						$("#llv3s2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llpf1",
-					complete: function(request){
-						$("#llpf1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llpf2",
-					complete: function(request){
-						$("#llpf2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llpf3",
-					complete: function(request){
-						$("#llpf3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuv1",
-					complete: function(request){
-						$("#evuv1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuv2",
-					complete: function(request){
-						$("#evuv2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuv3",
-					complete: function(request){
-						$("#evuv3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuhz",
-					complete: function(request){
-						$("#evuhzdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evupf1",
-					complete: function(request){
-						$("#evupf1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evupf2",
-					complete: function(request){
-						$("#evupf2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evupf3",
-					complete: function(request){
-						$("#evupf3div").html(request.responseText);
+			function loadstatuslog() {
+				$.ajax({
+					url: "/openWB/ramdisk/ladestatus.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#ladestatuslogdiv").text(result);
 					}
 				});
 			}
-		doInterval = setInterval(getfile, 2000);
+			loadstatuslog();
 
-		function loadstatuslog() {
-			$.ajax({
-				url: "/openWB/ramdisk/ladestatus.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#ladestatuslogdiv").html(result);
+			function mqttlog() {
+				$.ajax({
+					url: "/openWB/ramdisk/mqtt.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#mqttdiv").text(result);
+					}
+				});
+			}
+			mqttlog();
+
+			function rfidlog() {
+				$.ajax({
+					url: "/openWB/ramdisk/rfid.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#rfiddiv").text(result);
+					}
+				});
+			}
+			rfidlog();
+
+			function debuglog() {
+				$.ajax({
+					url: "/openWB/ramdisk/openWB.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#debugdiv").text(result);
+					}
+				});
+			}
+			debuglog();
+
+			function smarthomelog() {
+				$.ajax({
+					url: "/openWB/ramdisk/smarthome.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#smarthomediv").text(result);
+					}
+				});
+			}
+			smarthomelog();
+
+			function nurpvlog() {
+				$.ajax({
+					url: "/openWB/ramdisk/nurpv.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#nurpvdiv").text(result);
+					}
+				});
+			}
+			nurpvlog();
+
+			function soclog() {
+				$.ajax({
+					url: "/openWB/ramdisk/soc.log",
+					complete: function(request){
+						var lines = request.responseText.split("\n");
+						var result = "";
+						for(var i=0; i<lines.length-1; i++)
+							result = lines[i] + "\n" + result;
+						$("#socdiv").text(result);
+					}
+				});
+			}
+			soclog();
+		</script>
+
+		<?php
+			$owbversion = file_get_contents('/var/www/html/openWB/web/version');
+			$result = '';
+			$lines = file('/var/www/html/openWB/openwb.conf');
+			foreach ($lines as $line) {
+				if (strpos($line, "lp1name=") !== false) {
+					list(, $lp1nameold) = explode("=", $line);
+				}
+				if (strpos($line, "lp2name=") !== false) {
+					list(, $lp2nameold) = explode("=", $line);
+				}
+				if (strpos($line, "lp3name=") !== false) {
+					list(, $lp3nameold) = explode("=", $line);
+				}
+				if (strpos($line, "lastmanagement=") !== false) {
+					list(, $lastmanagementold) = explode("=", $line);
+				}
+				if (strpos($line, "lastmanagements2=") !== false) {
+					list(, $lastmanagements2old) = explode("=", $line);
+				}
+				if (strpos($line, "simplemode=") !== false) {
+					list(, $simplemodeold) = explode("=", $line);
+				}
+				if (strpos($line, "verbraucher1_name=") !== false) {
+					list(, $verbraucher1_nameold) = explode("=", $line);
+				}
+				if (strpos($line, "verbraucher2_name=") !== false) {
+					list(, $verbraucher2_nameold) = explode("=", $line);
+				}
+				if (strpos($line, "name_wechselrichter1=") !== false) {
+					list(, $name_wechselrichter1old) = explode("=", $line);
+					# entferne EOL von String
+					$name_wechselrichter1old = trim(preg_replace('/\s+/', '', $name_wechselrichter1old));
+				}
+				if (strpos($line, "name_wechselrichter2=") !== false) {
+					list(, $name_wechselrichter2old) = explode("=", $line);
+					# entferne EOL von String
+					$name_wechselrichter2old = trim(preg_replace('/\s+/', '', $name_wechselrichter2old));
+				}
+				if (strpos($line, "kostalplenticoreip2=") !== false) {
+					# wird benötigt, für Anzeige der getrennten WR-Daten an/aus
+					list(, $kostalplenticoreip2old) = explode("=", $line);
+					# entferne EOL von String
+					$kostalplenticoreip2old = trim(preg_replace('/\s+/', '', $kostalplenticoreip2old));
+				}
+			}
+		?>
+
+	</head>
+	<body>
+		<?php
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+
+			$speichervorhanden = trim( file_get_contents( $_SERVER['DOCUMENT_ROOT'] . '/openWB/ramdisk/speichervorhanden' ) );
+		?>
+
+		<!-- Preloader with Progress Bar -->
+		<div id="preloader">
+			<div id="preloader-inner">
+				<div class="row">
+					<div class="mx-auto d-block justify-content-center">
+						<img id="preloader-image" src="img/favicons/preloader-image.png" alt="openWB">
+					</div>
+				</div>
+				<div id="preloader-info" class="row justify-content-center mt-2">
+					<div class="col-10 col-sm-6">
+						Bitte warten, während die Seite aufgebaut wird.
+					</div>
+				</div>
+				<div class="row justify-content-center mt-2">
+					<div class="col-10 col-sm-6">
+						<div class="progress active">
+							<div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" id="preloaderbar" role="progressbar">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Landing Page -->
+		<div id="nav-placeholder"></div>
+		<div role="main" class="container" style="margin-top: 20px">
+			<h1>Status</h1>
+			<div class="wrapper">
+
+				<!-- Ladepunkte-->
+				<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
+					<div class="card border-primary" id="lp<?php echo $chargepointNum ?>">
+						<div class="card-header bg-primary">
+							Ladepunkt <?php echo $chargepointNum ?>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-sm ">
+									<tbody>
+										<tr class=stromvorgabeRow>
+											<th scope="row">Ladestromvorgabe [A]</th>
+											<td class=stromvorgabe></td>
+										</tr>
+										<tr class=ladeleistungRow>
+											<th scope="row">Ladeleistung [W]</th>
+											<td class=ladeleistung></td>
+										</tr>
+										<tr class=kWhCounterRow>
+											<th scope="row">Zählerstand [kWh]</th>
+											<td class="kWhCounter"></td>
+										</tr>
+										<tr class=socRow>
+											<th scope="row">SoC [%]</th>
+											<td class=soc></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">Phase 1</th>
+											<th scope="col">Phase 2</th>
+											<th scope="col">Phase 3</th>
+										</tr>
+									</head>
+									<tbody>
+										<tr class=spannungRow>
+											<th scope="row">Spannung [V]</th>
+											<td class=spannungP1></td>
+											<td class=spannungP2></td>
+											<td class=spannungP3></td>
+										</tr>
+										<tr class=powerFaktorRow>
+											<th scope="row">Power Faktor</th>
+											<td class=powerFaktorP1></td>
+											<td class=powerFaktorP2></td>
+											<td class=powerFaktorP3></td>
+										</tr>
+										<tr class=stromstaerkeRow>
+											<th scope="row">Stromstärke [A]</th>
+											<td class=stromstaerkeP1></td>
+											<td class=stromstaerkeP2></td>
+											<td class=stromstaerkeP3></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
+
+				<!-- Ladepunkte Gesamt -->
+				<div class="card border-primary" id="lpges">
+					<div class="card-header bg-primary">
+						Ladepunkte Gesamt
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table">
+								<tbody>
+									<tr id=ladeleistungAllRow>
+										<th scope="row">Ladeleistung [W]</th>
+										<td><div id="ladeleistungAll"></div></td>
+									</tr>
+									<tr id=kWhCounterAllRow>
+										<th scope="row">Zählerstand [kWh]</th>
+										<td><div id="kWhCounterAll"></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!-- EVU  -->
+				<div class="card border-danger">
+					<div class="card-header bg-danger">
+						EVU
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table" id="evu1">
+								<tbody>
+									<tr id="schieflastEvuStatusId">
+										<th scope="row">Schieflast [A]</th>
+										<td><div id="schieflastdiv"></div></td>
+									</tr>
+									<tr id="gesamtleistungEvuStatusId">
+										<th scope="row">Gesamtleistung [W]</th>
+										<td><div id="wattbezugdiv"></div></td>
+									</tr>
+									<tr id="frequenzEvuStatusId">
+										<th scope="row">Frequenz [Hz]</th>
+										<td><div id="evuhzdiv"></div></td>
+									</tr>																							
+									<tr id="bezugEvuStatusId">
+										<th scope="row">Bezug [kWh]</th>
+										<td><div id="bezugkwhdiv"></div></td>
+									</tr>
+									<tr id="einspeisungEvuStatusId">
+										<th scope="row">Einspeisung [kWh]</th>
+										<td><div id="einspeisungkwhdiv"></div></td>
+									</tr>									
+								</tbody>
+							</table>
+						</div>
+						<div class="table-responsive">
+							<table class="table" id="evu2">
+								<thead>
+									<tr>
+										<th scope="col"></th>
+										<th scope="col">Phase 1</th>
+										<th scope="col">Phase 2</th>
+										<th scope="col">Phase 3</th>
+									</tr>
+								</head>
+								<tbody>
+									<tr id =spannungEvuStatusId>
+										<th scope="row">Spannung [V]</th>
+										<td><div id="evuv1div"></div></td>
+										<td><div id="evuv2div"></div></td>
+										<td><div id="evuv3div"></div></td>
+									</tr>
+									<tr id =stromstaerkeEvuStatusId>
+										<th scope="row">Stromstärke [A]</th>
+										<td><div id="bezuga1div"></div></td>
+										<td><div id="bezuga2div"></div></td>
+										<td><div id="bezuga3div"></div></td>
+									</tr>
+									<tr id =leistungEvuStatusId>
+										<th scope="row">Leistung [W]</th>
+										<td><div id="bezugw1div"></div></td>
+										<td><div id="bezugw2div"></div></td>
+										<td><div id="bezugw3div"></div></td>
+									</tr>
+									<tr id =powerfaktorEvuStatusId>
+										<th scope="row">Power Faktor</th>
+										<td><div id="evupf1div"></div></td>
+										<td><div id="evupf2div"></div></td>
+										<td><div id="evupf3div"></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!--PV Gesamt-Anlagendaten-->
+				<div class="card border-success" id="pvGes">
+					<div class="card-header bg-success">
+						PV Gesamt-Anlagendaten
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table">
+								<tbody>
+									<tr id=pvCounterRow>
+										<th scope="row">Counter</th>
+										<td><div id="pvcounterdiv"></div></td>
+									</tr>
+									<tr id=leistungRow>
+										<th scope="row">Leistung [W]</th>
+										<td><div id="pvwattdiv"></div></td>
+									</tr>
+									<tr id=gesamtertragRow>
+										<th scope="row">Gesamtertrag [kWh]</th>
+										<td><div id="pvkwhdiv"></div></td>
+									</tr>
+									<tr id=tagesertragRow>
+										<th scope="row">Tagesertrag [kWh]</th>
+										<td><div id="daily_pvkwhdiv"></div></td>
+									</tr>
+									<tr id=monatsertragRow>
+										<th scope="row">Monatsertrag [kWh]</th>
+										<td><div id="monthly_pvkwhdiv"></div></td>
+									</tr>
+									<tr id=jahresertragRow>
+										<th scope="row">Jahresertrag [kWh]</th>
+										<td><div id="yearly_pvkwhdiv"></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!--PV Wechselrichter-->
+				<?php for( $inverterNum = 1; $inverterNum <= 2; $inverterNum++ ){ ?>
+					<div class="card border-success" id="inverter<?php echo $inverterNum ?>">
+						<div class="card-header bg-success">
+							PV Wechselrichter 
+							<?php 
+							echo $inverterNum ;
+							if (${'name_wechselrichter'.$inverterNum.'old'} != '') {
+								echo ' (';
+								echo ${'name_wechselrichter'.$inverterNum.'old'};
+								echo ')';
+							}
+							?>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table">
+									<tbody>
+										<tr class=leistungPvRow>
+											<th scope="row">Leistung [W]</th>
+											<td class=></td>
+										</tr>
+										<tr class=gesamtertragPvRow>
+											<th scope="row">Gesamtertrag [kWh]</th>
+											<td class=pvwattdiv></td>
+										</tr>
+										<tr id=tagesertragPvRow>
+											<th scope="row">Tagesertrag [kWh]</th>
+											<td><div id=""></div></td>
+										</tr>
+										<tr id=monatsertragPvRow>
+											<th scope="row">Monatsertrag [kWh]</th>
+											<td><div id=""></div></td>
+										</tr>
+										<tr id=jahresertragPvRow>
+											<th scope="row">Jahresertrag [kWh]</th>
+											<td><div id=""></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
+
+				<!-- Speicher -->
+				<div class="card border-warning" id="speicher">
+					<div class="card-header bg-warning">
+						Speicher
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table">
+								<tbody>
+									<tr id=geladenRow>
+										<th scope="row">geladen [kWh]</th>
+										<td><div id="speicherikwhdiv"></div></td>
+									</tr>
+									<tr id=entladenRow>
+										<th scope="row">entladen [kWh]</th>
+										<td><div id="speicherekwhdiv"></div></td>
+									</tr>
+									<tr id=wBatRow>
+										<th scope="row">Leistung [W]</th>
+										<td><div id="wBatDiv"></div></td>
+									</tr>
+									<tr id=socBatRow>
+										<th scope="row">SoC [%]</th>
+										<td><div id="socBatDiv"></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!--Verbraucher-->
+				<?php for( $loadsNum = 1; $loadsNum <= 2; $loadsNum++ ){ ?>
+					<div class="card border-secondary" id="loads<?php echo $loadsNum ?>">
+						<div class="card-header bg-secondary">
+							Verbraucher <?php echo ${'verbraucher'.loadsNum.'_nameold'} ?>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table">
+									<tbody>
+										<tr class=leistungVerbraucherRow>
+											<th scope="row">Leistung [W]</th>
+											<td class=verbraucherWatt></td>
+										</tr>
+										<tr class=importVerbraucherRow>
+											<th scope="row">Import [kWh]</th>
+											<td class=importVerbraucher></td>
+										</tr>
+										<tr class=exportVerbraucherRow>
+											<th scope="row">Export [kWh]</th>
+											<td class=exportVerbraucher></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
+			</div> <!-- wrapper -->
+
+			<!--Log-->
+			<div id="accordion" class="accordion">
+				<div class="card mb-0">
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseOne">
+						<a class="card-title">Ladestatus Änderungen </a>
+					</div>
+					<div id="collapseOne" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<button class="btn btn-info reloadLadestatusLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="ladestatuslogdiv" style="white-space: pre-line "></div>
+					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseTwo">
+						<a class="card-title">SmartHome Log </a>
+					</div>
+					<div id="collapseTwo" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadSmartHomeLog mr-3" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="smarthomediv" style="white-space: pre-line "></div>
+					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseThree">
+						<a class="card-title">RFID Log </a>
+					</div>
+					<div id="collapseThree" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadRfidLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="rfiddiv" style="white-space: pre-line "></div>
+					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFour">
+						<a class="card-title">Mqtt Log </a>
+					</div>
+					<div id="collapseFour" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadMqttLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="mqttdiv" style="white-space: pre-line "></div>
+					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFive">
+						<a class="card-title">Debug Log </a>
+					</div>
+					<div id="collapseFive" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadDebugLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="debugdiv" style="white-space: pre-line "></div>
+					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSix">
+						<a class="card-title">Nur PV Log </a>
+					</div>
+					<div id="collapseSix" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadPvLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="nurpvdiv" style="white-space: pre-line "></div>
+					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSeven">
+						<a class="card-title">EV SoC Log </a>
+					</div>
+					<div id="collapseSeven" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadSocLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<div id="socdiv" style="white-space: pre-line"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>  <!-- container -->
+
+		<footer class="footer bg-dark text-light font-small">
+			<div class="container text-center">
+				<small>Sie befinden sich hier: System/Status</small>
+			</div>
+		</footer>
+
+		<script>
+
+			// load navbar
+			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101', disableMenuItem);
+			function disableMenuItem() {
+				$('#navStatus').addClass('disabled');
+			}
+
+			$(function() {
+				if('<?php echo $kostalplenticoreip2old ?>' == 'none') {
+					$('#pvinverter1and2div').hide();
 				}
 			});
-		}
-		loadstatuslog();
-		function mqttlog() {
-			$.ajax({
-				url: "/openWB/ramdisk/mqtt.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#mqttdiv").html(result);
-				}
-			});
-		}
-		mqttlog();
-		function rfidlog() {
-			$.ajax({
-				url: "/openWB/ramdisk/rfid.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#rfiddiv").html(result);
-				}
-			});
-		}
-		rfidlog();
-		function debuglog() {
-			$.ajax({
-				url: "/openWB/ramdisk/openWB.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#debugdiv").html(result);
-				}
-			});
-		}
-		debuglog();
-		function smarthomelog() {
-			$.ajax({
-				url: "/openWB/ramdisk/smarthome.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#smarthomediv").html(result);
-				}
-			});
-		}
-		smarthomelog();
-		function nurpvlog() {
-			$.ajax({
-				url: "/openWB/ramdisk/nurpv.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#nurpvdiv").html(result);
-				}
-			});
-		}
-		nurpvlog();
-		function soclog() {
-			$.ajax({
-				url: "/openWB/ramdisk/soc.log",
-				complete: function(request){
-					var lines = request.responseText.split("\n");
-					var result = "";
-					for(var i=0; i<lines.length; i++)
-						result = lines[i] + "\n" + result;
-					$("#socdiv").html(result);
-				}
-			});
-		}
-		soclog();
-	</script>
+		</script>
 
-	<?php
-		$owbversion = file_get_contents('/var/www/html/openWB/web/version');
-		$result = '';
-		$lines = file('/var/www/html/openWB/openwb.conf');
-		foreach ($lines as $line) {
-			if (strpos($line, "lp1name=") !== false) {
-				list(, $lp1nameold) = explode("=", $line);
-			}
-			if (strpos($line, "lp2name=") !== false) {
-				list(, $lp2nameold) = explode("=", $line);
-			}
-			if (strpos($line, "lp3name=") !== false) {
-				list(, $lp3nameold) = explode("=", $line);
-			}
-			if (strpos($line, "lastmanagement=") !== false) {
-				list(, $lastmanagementold) = explode("=", $line);
-			}
-			if (strpos($line, "lastmanagements2=") !== false) {
-				list(, $lastmanagements2old) = explode("=", $line);
-			}
-			if (strpos($line, "simplemode=") !== false) {
-				list(, $simplemodeold) = explode("=", $line);
-			}
-			if (strpos($line, "verbraucher1_name=") !== false) {
-				list(, $verbraucher1_nameold) = explode("=", $line);
-			}
-			if (strpos($line, "verbraucher2_name=") !== false) {
-				list(, $verbraucher2_nameold) = explode("=", $line);
-			}
-			if (strpos($line, "name_wechselrichter1=") !== false) {
-				list(, $name_wechselrichter1old) = explode("=", $line);
-				# entferne EOL von String
-				$name_wechselrichter1old = trim(preg_replace('/\s+/', '', $name_wechselrichter1old));
-			}
-			if (strpos($line, "name_wechselrichter2=") !== false) {
-				list(, $name_wechselrichter2old) = explode("=", $line);
-				# entferne EOL von String
-				$name_wechselrichter2old = trim(preg_replace('/\s+/', '', $name_wechselrichter2old));
-			}
-			if (strpos($line, "kostalplenticoreip2=") !== false) {
-				# wird benötigt, für Anzeige der getrennten WR-Daten an/aus
-				list(, $kostalplenticoreip2old) = explode("=", $line);
-				# entferne EOL von String
-				$kostalplenticoreip2old = trim(preg_replace('/\s+/', '', $kostalplenticoreip2old));
-			}
-		}
-?>
-<script>
-	$(function() {
-		var lp2akt = <?php echo $lastmanagementold ?>;
-		var lp3akt = <?php echo $lastmanagements2old ?>;
+		<script>
+		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
+		var landingpageShown = false;  // holds flag for landing page being shown
 
-		if(lp2akt == '0') {
-			$('#ladepunkt2div').hide();
-		} else {
-			$('#ladepunkt2div').show();
-		}
-		if(lp2akt == '0') {
-			$('#ladepunkt3div').hide();
-		} else {
-			$('#ladepunkt3div').show();
-		}
-	});
-</script>
-
-</head>
-<body>
-	<div id="nav-placeholder"></div>
-	<div role="main" class="container" style="margin-top: 20px; display: block;">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<h3> Status </h3>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-4 text-center"></div>
-			<div class="col-sm-2 text-center">
-				Phase 1
-			</div>
-			<div class="col-sm-2 text-center">
-				Phase 2
-			</div>
-			<div class="col-sm-2 text-center">
-				Phase 3
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Spannung [V]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evuv1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evuv2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evuv3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Stromstärke [A]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezuga1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezuga2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezuga3div"></div>
-			</div>
-		</div>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-			EVU Schieflast [A]</div>
-			<div class="col-sm-2 text-center">
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="schieflastdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Leistung [W]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezugw1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezugw2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezugw3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Power Faktor
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evupf1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evupf2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evupf3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center">
-				LP1 <?php echo $lp1nameold ?>  Spannung [V]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center">
-				LP1 <?php echo $lp1nameold ?>  Power Faktor
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llpf1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llpf2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llpf3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center">
-				LP1 <?php echo $lp1nameold ?>  Stromstärke [A]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="lla1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="lla2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="lla3div"></div>
-			</div>
-		</div>
-		<div id="ladepunkt2div">
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center">
-					LP2 <?php echo $lp2nameold ?>  Spannung [V]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llv1s1div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llv2s1div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llv3s1div"></div>
-				</div>
-			</div>
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center bg-info">
-					LP2 <?php echo $lp2nameold ?> Stromstärke [A]
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llas11div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llas12div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llas13div"></div>
-				</div>
-			</div>
-		</div>
-		<div id="ladepunkt3div">
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center">
-					LP3 <?php echo $lp3nameold ?> Spannung [V]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llv1s2div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llv2s2div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llv3s2div"></div>
-				</div>
-			</div>
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center bg-info">
-					LP3 <?php echo $lp3nameold ?> Stromstärke [A]
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llas21div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llas22div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llas23div"></div>
-				</div>
-			</div>
-		</div>
-		<hr style="height:3px;background-color:#333;" />
-		<div class="row">
-			<div class="col-sm-4 text-center"></div>
-			<div class="col-sm-2 text-center">
-				Ladepunkt 1
-			</div>
-			<div class="col-sm-2 text-center">
-				Ladepunkt 2
-			</div>
-			<div class="col-sm-2 text-center">
-				Ladepunkt 3
-			</div>
-			<div class="col-sm-2 text-center">
-				Gesamt
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center">
-				Ladestromvorgabe [A]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llsolldiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llsolls1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llsolls2div"></div>
-			</div>
-			<div class="col-sm-2 text-center"></div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center bg-info">
-				Ladeleistung [W]
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llaktuelldiv"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llaktuells1div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llaktuells2div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="lldiv"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center bg-info">
-				Zählerstand [kWh]
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llkwhdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llkwhs1div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llkwhs2div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llkwhgesdiv"></div>
-			</div>
-		</div>
-
-
-		<hr style="height:3px;border:none;color:#333;background-color:#333;" />
-		<div class="row" style="background-color:#BEFEBE">
-			<div class="col text-center bold">
-				PV Gesamt-Anlagendaten
-			</div>
-		</div>
-		<div class="row" style="background-color:#BEFEBE">
-			<div class="col-sm-2 text-center">
-				PV Counter
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="pvcounterdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				PV Leistung [W]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="pvwattdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				PV Gesamtertrag [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="pvkwhdiv"></div>
-			</div>
-		</div>
-		<div id="pvpartlycounterdiv" style="display: none;">
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-sm-2 text-center">
-					PV Tagesertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="daily_pvkwhdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Monatsertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="monthly_pvkwhdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Jahresertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="yearly_pvkwhdiv"></div>
-				</div>
-			</div>
-		</div>
-		<div class="row" style="background-color:#FCBE1E">
-			<div class="col-sm-2 text-center">
-			</div>
-			<div class="col-sm-2 text-center">
-				Speicher
-			</div>
-			<div class="col-sm-2 text-center">
-				geladen [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="speicherikwhdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				entladen [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="speicherekwhdiv"></div>
-			</div>
-		</div>
-		<hr>
-		<div id="pvinverter1and2div">
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col text-center bold">
-					PV Anlagendaten Wechselrichter 1
-					<?php
-						if ($name_wechselrichter1old != '') {
-							echo ' (';
-							echo $name_wechselrichter1old;
-							echo ')';
+		function processPreloader(mqttTopic) {
+			// sets flag for topic received in topic-array
+			// and updates the preloader progress bar
+			if ( !landingpageShown ) {
+				var countTopicsReceived = 0;
+				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
+					if ( topicsToSubscribe[index][0] == mqttTopic && topicsToSubscribe[index][1] == 0 ) {
+						// topic found in array
+						topicsToSubscribe[index][1] = 1;  // mark topic as received
+					};
+					if ( topicsToSubscribe[index][1] > 0 ) {
+						countTopicsReceived++;
+					}
+				};
+				// countTopicsToBeReceived holds all topics flagged 1 and not only those for preloader
+				countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
+				var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
+				var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
+				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
+				if ( timeBetweenTwoMesagges > 3000 ) {
+					console.log('timeout');
+					// latest after 3 sec without new messages
+					percentageReceived = 100;
+					// debug output
+					topicsToSubscribe.forEach((item, i) => {
+						if ( item[1] == 0 ) {
+							console.log('not received: ' + item[0]);
 						}
-					?>
-				</div>
-			</div>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-sm-2 text-center">
-				</div>
-				<div class="col-sm-2 text-center">
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Leistung [W]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvwattdiv1"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Gesamtertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvkwhdiv1"></div>
-				</div>
-			</div>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-sm-2 text-center">
-					PV Tagesertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="daily_pvkwhdiv1"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Monatsertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="monthly_pvkwhdiv1"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Jahresertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="yearly_pvkwhdiv1"></div>
-				</div>
-			</div>
-			<hr>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col text-center bold">
-					PV Anlagendaten Wechselrichter 2
-					<?php
-						if ($name_wechselrichter2old != '') {
-							echo ' (';
-							echo $name_wechselrichter2old;
-							echo ')';
-						}
-					?>
-				</div>
-			</div>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-sm-2 text-center">
-				</div>
-				<div class="col-sm-2 text-center">
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Leistung [W]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvwattdiv2"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Gesamtertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvkwhdiv2"></div>
-				</div>
-			</div>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-sm-2 text-center">
-					PV Tagesertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="daily_pvkwhdiv2"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Monatsertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="monthly_pvkwhdiv2"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Jahresertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="yearly_pvkwhdiv2"></div>
-				</div>
-			</div>
-			<hr>
-		</div>
-		<div class="row">
-			<div class="col-sm-2 text-center bg-info">
-				SoC LP1 [%]
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="soclevel"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU [W]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="wattbezugdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU [Hz]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="evuhzdiv"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2 text-center bg-info">
-				SoC LP2 [%]
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="soclevel1"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU Bezug [kWh]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="bezugkwhdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU Einspeisung [kWh]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="einspeisungkwhdiv"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2 text-center ">
-				<?php echo $verbraucher1_nameold ?> [W]
-			</div>
-			<div class="col-sm-2 text-center ">
-				<div id="verbraucher1wattdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<?php echo $verbraucher1_nameold ?> Import [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="verbraucher1whdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<?php echo $verbraucher1_nameold ?>Export [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="verbraucher1whediv"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2 text-center ">
-				<?php echo $verbraucher2_nameold ?> [W]
-			</div>
-			<div class="col-sm-2 text-center ">
-				<div id="verbraucher2wattdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<?php echo $verbraucher2_nameold ?> Import [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="verbraucher2whdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<?php echo $verbraucher2_nameold ?> Export [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="verbraucher2whediv"></div>
-			</div>
-		</div>
-		<hr style="height:3px;border:none;color:#333;background-color:#333;" />
+					});
 
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" id="ladestatuslog"><h4>Ladestatus Änderungen:</h4></span>
-		</div>
-		<div class="hide" style="white-space: pre-line; display: none;" id="ladestatuslogdiv"></div>
-
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" id="smarthomelog"> <h4>SmartHome Log:</h4></span>
-		</div>
-
-		<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="rfidlog"> <h4>RFID Log:</h4></span>
-		</div>
-
-		<div class="hide" style="white-space: pre-line; display: none;" id="rfiddiv"></div>
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
-		</div>
-
-		<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="debuglog"> <h4>Debug Log:</h4></span>
-		</div>
-
-		<div class="hide" style="white-space: pre-line; display: none;" id="debugdiv"></div>
-
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="nurpvlog"> <h4>Nur PV Log:</h4></span>
-		</div>
-
-		<div class="hide" style="white-space: pre-line; display: none;" id="nurpvdiv"></div>
-
-		<div class="row">
-			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="soclog"> <h4>EV SoC Log:</h4></span>
-		</div>
-
-		<div class="hide" style="white-space: pre-line; display: none;" id="socdiv"></div>
-	</div>  <!-- container -->
-
-	<footer class="footer bg-dark text-light font-small">
-		<div class="container text-center">
-			<small>Sie befinden sich hier: System/Status</small>
-		</div>
-	</footer>
-
-	<script>
-
-		// load navbar
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101', disableMenuItem);
-		function disableMenuItem() {
-			$('#navStatus').addClass('disabled');
+				}
+				timeOfLastMqttMessage = Date.now();
+				$("#preloaderbar").width(percentageReceived+"%");
+				$("#preloaderbar").text(percentageReceived+" %");
+				if ( percentageReceived == 100 ) {
+					landingpageShown = true;
+					setTimeout(function (){
+						// delay a little bit
+						$("#preloader").fadeOut(1000);
+					}, 500);
+				}
+			}
 		}
 
-		$(function() {
-			if('<?php echo $kostalplenticoreip2old ?>' == 'none') {
-				$('#pvinverter1and2div').hide();
-			}
-		});
-		$('#mqttlog').click(function(event){
-			var element = document.getElementById('mqttdiv');
-			if ( element.classList.contains("hide") ) {
-				$('#mqttdiv').show();
-				$('#mqttdiv').removeClass("hide");
-			} else {
-				$('#mqttdiv').hide();
-				$('#mqttdiv').addClass("hide");
-			}
-		});
-		$('#rfidlog').click(function(event){
-			var element = document.getElementById('rfiddiv');
-			if ( element.classList.contains("hide") ) {
-				$('#rfiddiv').show();
-				$('#rfiddiv').removeClass("hide");
-			} else {
-				$('#rfiddiv').hide();
-				$('#rfiddiv').addClass("hide");
-			}
-		});
-		$('#nurpvlog').click(function(event){
-			var element = document.getElementById('nurpvdiv');
-			if ( element.classList.contains("hide") ) {
-				$('#nurpvdiv').show();
-				$('#nurpvdiv').removeClass("hide");
-			} else {
-				$('#nurpvdiv').hide();
-				$('#nurpvdiv').addClass("hide");
-			}
-		});
-		$('#soclog').click(function(event){
-			var element = document.getElementById('socdiv');
-			if ( element.classList.contains("hide") ) {
-				$('#socdiv').show();
-				$('#socdiv').removeClass("hide");
-			} else {
-				$('#socdiv').hide();
-				$('#socdiv').addClass("hide");
-			}
-		});
+		$(document).ready(function(){
 
-		$('#ladestatuslog').click(function(event){
-			var element = document.getElementById('ladestatuslogdiv');
-			if ( element.classList.contains("hide") ) {
-				$('#ladestatuslogdiv').show();
-				$('#ladestatuslogdiv').removeClass("hide");
-			} else {
-				$('#ladestatuslogdiv').hide();
-				$('#ladestatuslogdiv').addClass("hide");
-			}
-		});
-		$('#debuglog').click(function(event){
-			var element = document.getElementById('debugdiv');
-			if ( element.classList.contains("hide") ) {
-				$('#debugdiv').show();
-				$('#debugdiv').removeClass("hide");
-			} else {
-				$('#debugdiv').hide();
-				$('#debugdiv').addClass("hide");
-			}
-		});
-		$('#smarthomelog').click(function(event){
-			var element = document.getElementById('smarthomediv');
-			if ( element.classList.contains("hide") ) {
-				$('#smarthomediv').show();
-				$('#smarthomediv').removeClass("hide");
-			} else {
-				$('#smarthomediv').hide();
-				$('#smarthomediv').addClass("hide");
-			}
-		});
+			// load scripts synchronously in order specified
+			var scriptsToLoad = [
+				// load mqtt library
+				'js/mqttws31.js',
+				// functions for processing messages
+				'status/processAllMqttMsg.js?ver=20201228a',
+				// functions performing mqtt and start mqtt-service
+				'status/setupMqttServices.js?ver=20201228a',
+			];
+			scriptsToLoad.forEach(function(src) {
+				var script = document.createElement('script');
+				script.src = src;
+				script.async = false;
+				document.body.appendChild(script);
+			});
+		});  // end document ready
 
-	</script>
-</body>
+		$('.reloadLadestatusLog').click(function(event){
+			loadstatuslog();
+		});
+		$('.reloadSmartHomeLog').click(function(event){
+			smarthomelog();
+		});
+		$('.reloadRfidLog').click(function(event){
+			rfidlog();
+		});
+		$('.reloadMqttLog').click(function(event){
+			mqttlog();
+		});
+		$('.reloadDebugLog').click(function(event){
+			debuglog();
+		});
+		$('.reloadPvLog').click(function(event){
+			nurpvlog();
+		});
+		$('.reloadSocLog').click(function(event){
+			soclog();
+		});
+		</script>
+
+	</body>
 </html>
