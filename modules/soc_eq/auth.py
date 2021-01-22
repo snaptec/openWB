@@ -24,16 +24,12 @@ def printHtml(message):
 
 print("<html>")
 
-printHtml("LP: " + ChargePoint)
-
-if ChargePoint == "lp1":
-	ChargePoint = "1"
-elif ChargePoint == "lp2":
-	ChargePoint = "2"
-printHtml("LP: " + ChargePoint)
 client_id = ""
 client_secret = ""
 callback = ""
+
+#get last Character to identify the Chargepoint
+ChargePoint = ChargePoint[-1]
 
 #get SoC module config from openWB cofig
 fd = open('/var/www/html/openWB/openwb.conf','r')
