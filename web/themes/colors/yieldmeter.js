@@ -16,7 +16,10 @@ class YieldMeter {
 	constructor() {
 		this.width = 500;
 		this.height = 500;
-		this.margin = 40;
+		this.margin = {
+			top:25, bottom: 30, left: 30, right: 40
+		};
+		this.labelfontsize = 16;
 	}
 
 	// to be called when the document is loaded
@@ -54,12 +57,12 @@ class YieldMeter {
 			.attr("fill", "midnightblue"); */
 
 		const g = this.svg.append("g")
-			.attr("transform", "translate(" + this.margin + "," + this.margin + ")");
+			.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 		this.xScale = d3.scaleBand()
-			.range([0, this.width - this.margin - 10])
+			.range([0, this.width - this.margin.right - 10])
 			.padding(0.4);
 		this.yScale = d3.scaleLinear()
-			.range([this.height - 2 * this.margin, 0]);
+			.range([this.height - this.margin.bottom - this.margin.top, 0]);
 
 		return g;
 	}
@@ -79,26 +82,31 @@ class YieldMeter {
 			.attr("x", (d) => this.xScale(d.name))
 			.attr("y", (d) => this.yScale(d.energy))
 			.attr("width", this.xScale.bandwidth())
-			.attr("height", (d) => +this.height - this.margin - this.margin - this.yScale(d.energy))
+			.attr("height", (d) => this.height -  this.yScale( d.energy) - this.margin.top - this.margin.bottom)
 			.attr("fill", (d) => d.color);
 
-		const xAxisGenerator = d3.axisBottom(this.xScale);
+	/* 	const xAxisGenerator = d3.axisBottom(this.xScale);
 		const xAxis = svg
 			.append("g")
-			.attr("transform", "translate(0," + (+this.height - 80) + ")")
+			.attr ("class", "axis")
+			.attr("transform", "translate(0," + (+this.height - this.margin.top -this.margin.bottom) + ")")
 			.call(xAxisGenerator);
 		xAxis.selectAll(".tick").attr("stroke", this.axisColor);
 		xAxis.selectAll(".tick line").attr("stroke", this.axisColor);
-
-
+		xAxis.select(".domain")
+			.attr("stroke", this.bgcolor);
+*/ 
 		const yAxisGenerator = d3.axisLeft(this.yScale)
 			.tickFormat(function (d) {
-				return d + " kWh";
+				return ((d>0) ? d : "");
 			})
-			.ticks(6)
-			.tickSizeInner(-this.width);
+			.ticks(8)
+			.tickSizeInner(-this.width); 
 
 		const yAxis = svg.append("g")
+			.attr ("class", "axis")
+			.attr("transform", "translate(0," + 0 + ")")
+		
 			.call(yAxisGenerator);
 
 		yAxis.append("text")
@@ -107,8 +115,14 @@ class YieldMeter {
 			.attr("text-anchor", "end")
 			.text("energy");
 
-		yAxis.selectAll(".tick").attr("stroke", this.axisColor);
+		yAxis.selectAll(".tick").attr("font-size", 12);
 		yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
+		yAxis.select(".domain")
+			.attr("stroke", this.bgcolor);
+
+
+
+
 
 		const labels = svg.selectAll(".label")
 			.data(this.plotdata)
@@ -118,10 +132,24 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => this.yScale(d.energy) - 10)
-
+			.attr("font-size", this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (formatWattH(d.energy * 1000)));
+	
+
+	const categories = svg.selectAll(".category")
+			.data(this.plotdata)
+			.enter()
+			.append("g");
+		labels
+			.append("text")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+			.attr("y", this.height -  this.margin.bottom -5)
+			.attr("font-size", this.labelfontsize)
+			.attr("text-anchor", "middle")
+			.attr("fill", (d) => d.color)
+			.text((d) => (d.name));
 	}
 }
 var yieldMeter = new YieldMeter();

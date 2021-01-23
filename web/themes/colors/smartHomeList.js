@@ -22,6 +22,7 @@ class SmartHomeList {
     this.div.selectAll("*").remove();
 
     if (this.consumers.length > 0) {
+      d3.select("div#smartHomeWidget").classed("hide", false);
       var table = this.div.append("table")
         .attr("class", "table table-borderless table-condensed p-0 m-0");
       // table.attr("style", "border-spacing:0;")
@@ -72,11 +73,8 @@ class SmartHomeList {
         .text(row => row.isAutomatic ? "Automatik" : "Manuell");
     }
     else {
-      this.div.append("h4")
-        .attr("class", "tablecell text-white pt-3")
-        .attr("style", "text-align:center; vertical-align:middle;")
-        .text("Es sind keine Geräte konfiguriert");
-    }
+      d3.select("div#smartHomeWidget").classed("hide", true);
+     }
   }
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");

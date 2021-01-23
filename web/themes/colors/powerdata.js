@@ -19,9 +19,11 @@ class WbData {
 		this.chargeSum = 0;
 		this.housePower = 0;
 		this.houseSum = 0;
+		this.batteryIn = 0;
+		this.batterOut = 0;
+		this.batterydailyExport = 0;
+		this.batteryImport = 0;
 
-		this.cpName = "Wallbox 1";
-		this.soc = 0;
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
 
@@ -31,13 +33,15 @@ class WbData {
 		this.sourceSummary = [
 			{ name: "PV", power: 0, energy: 0, color: "white" },
 			{ name: "Netz", power: 0, energy: 0, color: "white" },
-			{ name: "Export", power: 0, energy: 0, color: "white" },
+			{ name: "Speicher out", power: 0, energy: 0, color: "white"}
 		];
 		this.usageSummary = [
-			{ name: "Haus", power: 0, energy: 0, color: "white" },
-			{ name: "Geräte", power: 0, energy: 0, color: "white" },
-			{ name: "Laden", power: 0, energy: 0, color: "white" }
-		]
+			{ name: "Export", power: 0, energy: 0, color: "white" },
+			{ name: "Laden", power: 0, energy: 0, color: "white" },
+			{ name: "Geräte", power: 0, energy: 0, color: "white" },			
+			{ name: "Speicher in", power: 0, energy: 0, color: "white"},
+			{ name: "Haus", power: 0, energy: 0, color: "white" }
+		];
 		this.usageDetails = [this.usageSummary[0]];
 	};
 
@@ -45,10 +49,12 @@ class WbData {
 		var style = getComputedStyle(document.body);
 		this.sourceSummary[0].color = style.getPropertyValue('--color-pv');
 		this.sourceSummary[1].color = style.getPropertyValue('--color-evu');
-		this.sourceSummary[2].color = style.getPropertyValue('--color-export');
-		this.usageSummary[0].color = style.getPropertyValue('--color-house');
-		this.usageSummary[1].color = style.getPropertyValue('--color-devices');
-		this.usageSummary[2].color = style.getPropertyValue('--color-charging');
+		this.sourceSummary[2].color = style.getPropertyValue('--color-battery');
+		this.usageSummary[0].color = style.getPropertyValue('--color-export');
+		this.usageSummary[1].color = style.getPropertyValue('--color-charging');
+		this.usageSummary[2].color = style.getPropertyValue('--color-devices');
+		this.usageSummary[3].color = style.getPropertyValue('--color-battery');
+		this.usageSummary[4].color = style.getPropertyValue('--color-house');
 		var i;
 		for (i = 0; i < 8; i++) {
 			this.chargePoint[i].color = style.getPropertyValue('--color-lp' + (i + 1));
@@ -59,20 +65,19 @@ class WbData {
 	}
 
 	updateEvu(field, value) {
-
 		this[field] = value;
 		switch (field) {
 			case 'powerEvuIn':
 			case 'powerEvuOut':
 				this.updateSourceSummary(1, "power", this.powerEvuIn);
-				this.updateSourceSummary(2, "power", this.powerEvuOut);
+				this.updateUsageSummary(0, "power", this.powerEvuOut);
 				break;
 			case 'evuiDailyYield':
 				this.updateSourceSummary(1, "energy", this.evuiDailyYield);
 
 				break;
 			case 'evueDailyYield':
-				this.updateSourceSummary(2, "energy", this.evueDailyYield);
+				this.updateUsageSummary(0, "energy", this.evueDailyYield);
 				break;
 			default:
 				break;
@@ -80,20 +85,19 @@ class WbData {
 	}
 
 	updateGlobal(field, value) {
-
 		this[field] = value;
 		switch (field) {
 			case 'housePower':
-				this.updateUsageSummary(0, "power", value);
+				this.updateUsageSummary(4, "power", value);
 				break;
 			case 'chargePower':
-				this.updateUsageSummary(2, "power", value);
+				this.updateUsageSummary(1, "power", value);
 				break;
 			case 'chargeEnergy':
-				this.updateUsageSummary(2, "energy", value)
+				this.updateUsageSummary(1, "energy", value)
 				break;
 			case 'houseEnergy':
-				this.updateUsageSummary(0, "energy", value);
+				this.updateUsageSummary(4, "energy", value);
 				break;
 			default:
 				break;
@@ -101,23 +105,17 @@ class WbData {
 	}
 
 	updatePv(field, value) {
-
 		this[field] = value;
 		switch (field) {
 			case 'pvwatt':
 				this.updateSourceSummary(0, "power", this.pvwatt);
-
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary(0, "energy", this.pvDailyYield);
-
 				break;
-
 			default:
 				break;
 		}
-		// powerTable.update();
-
 	}
 
 	updateConsumer(index, field, value) {
@@ -133,19 +131,16 @@ class WbData {
 				break;
 		}
 		smartHomeList.update();
-
 	}
 
 	updateSH(index, field, value) {
 		this.shDevice[index - 1][field] = value;
 		switch (field) {
 			case 'power':
-				this.updateUsageSummary(1, "power", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
-
+				this.updateUsageSummary(2, "power", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
 				break;
 			case 'energy':
-				this.updateUsageSummary(1, "energy", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
-
+				this.updateUsageSummary(2, "energy", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
 				break;
 			default:
 				break;
@@ -155,7 +150,6 @@ class WbData {
 
 	updateCP(index, field, value) {
 		this.chargePoint[index - 1][field] = value;
-		chargePointList.update();
 		switch (field) {
 			case 'power':
 				powerMeter.update();
@@ -163,14 +157,29 @@ class WbData {
 			case 'energy':
 				yieldMeter.update();
 				break;
-			case 'isPluggedIn':
-				chargePointList.update();
-				break;
 			case 'soc':
-				chargePointList.update();
+				powerMeter.update();
 			default:
 				break;
 		}
+		chargePointList.update();
+	}
+
+	updateBat (field, value) {
+		this[field] = value;
+		switch (field) {
+			case 'batteryIn': this.usageSummary[3].power = value;
+				break;
+			case 'batteryOut': this.sourceSummary[2].power = value;
+				break;
+			case 'batteryDailyExport': this.usageSummary[3].energy = value;
+				break;
+			case 'batteryDailyImport': this.sourceSummary[2].energy = value;
+				break;
+			default:
+				break;
+		}
+		batteryList.update();
 	}
 
 	updateSourceSummary(index, field, value) {
@@ -200,14 +209,15 @@ class WbData {
 	}
 
 	updateUsageDetails() {
-		this.usageDetails = [this.usageDetails[0]]
-			.concat(this.chargePoint.filter(row => (row.configured)))
+		this.usageDetails = [this.usageSummary[0],
+			this.usageSummary[1]]
 			.concat(this.shDevice.filter(row => (row.configured)))
-			.concat(this.consumer.filter(row => (row.configured)));
+			.concat(this.consumer.filter(row => (row.configured)))
+			.concat ([this.usageSummary[3],this.usageSummary[4]]);
 	}
 
 	updateConsumerSummary(cat) {
-		this.updateUsageSummary(1, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
+		this.updateUsageSummary(3, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
 			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0));
 	}
 }
