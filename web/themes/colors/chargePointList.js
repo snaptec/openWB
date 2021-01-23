@@ -4,8 +4,9 @@
  */
 
 class ChargePointList {
+  tbody;
+  formSection;
 
-  table;
   constructor() {
     this.chargepoints = [];
     this.phaseSymbols = ['/', '\u2460', '\u2461', '\u2462']
@@ -14,22 +15,11 @@ class ChargePointList {
 
   // initialize after document is created
   init() {
-    this.table = d3.select("table#chargePointTable")
+    const div = d3.select ("div#chargePointTable")
+    const table = div.append("table")
       .attr("class", "table table-borderless p-0 m-0");
-
-    // for debugging information
-    this.footer = d3.select("div#footer")
-      .append("p")
-      .style("color", "yellow");
-  }
-
-  // update if data has changed
-  update() {
-    console.log(wbdata);
-    this.updateValues();
-    this.table.selectAll("*").remove();
-
-    const thead = this.table.append("thead")
+    
+    table.append("thead")
       .append("tr")
       .selectAll("headers")
       .data(this.headers).enter()
@@ -42,7 +32,17 @@ class ChargePointList {
       .text((data) => data)
       ;
 
-    const rows = this.table.append("tbody")
+    this.tbody = table.append ("tbody");
+    this.formSection = div.append("div");
+  }
+
+  // update if data has changed
+  update() {
+    this.updateValues();
+    this.tbody.selectAll("*").remove();
+    this.formSection.selectAll("*").remove();
+
+    const rows = this.tbody
       .selectAll("rows")
       .data(this.chargepoints).enter()
       .append("tr")
@@ -64,13 +64,10 @@ class ChargePointList {
       .text(data => data);
     rows.append((row, i) => this.cpSocButtonCell(row, i));
 
-
-
-    // for debugging only
-    /*    var body = d3.select("body");
-       this.footer
-         .text("Page Width:" + body.style("width")); */
   }
+
+
+ 
 
   updateValues() {
     this.chargepoints = wbdata.chargePoint.filter(cp => cp.configured);
@@ -124,10 +121,10 @@ class ChargePointList {
       cell.append("span").text("   ");
       const button = cell
         .append("button")
-        .attr("class", "btn btn-sm btn-outline-info px-2 pt-0 mt-0 pb-1")
+        .attr("class", "btn btn-outline-basic px-2 pt-0 mt-0 pb-1")
         .style("text-align", "center")
         .style("vertical-align", "middle")
-        // .style("color", row.color)
+        .style("color", "white")
         .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
       button.append("i")
         .attr("class", "small reloadLpSoc fas fa-redo-alt")

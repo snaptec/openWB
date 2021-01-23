@@ -552,260 +552,49 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/housebattery
 	// called by handlevar
 	processPreloader(mqttmsg);
+
+	// color theme
+
 	if (mqttmsg == 'openWB/housebattery/W') {
-		var prefix = ': ';
-		var unit = ' W';
 		var speicherwatt = parseInt(mqttpayload, 10);
 		if (isNaN(speicherwatt)) {
 			speicherwatt = 0;
 		}
 		if (speicherwatt > 0) {
-			prefix = '-Ladung: ';
+			wbdata.updateBat ("batteryIn", speicherwatt);
+			
 		} else if (speicherwatt < 0) {
-			speicherwatt *= -1;
-			prefix = '-Entladung: ';
+			wbdata.updateBat ("batteryOut", -speicherwatt);
 		}
-		if (speicherwatt > 999) {
-			speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-			unit = ' kW';
-		}
-		$('#speicherleistung').text(prefix + speicherwatt + unit);
 	}
 	else if (mqttmsg == 'openWB/housebattery/%Soc') {
 		var speicherSoc = parseInt(mqttpayload, 10);
 		if (isNaN(speicherSoc) || speicherSoc < 0 || speicherSoc > 100) {
-			speicherSoc = '--';
+			speicherSoc = 0;
 		}
-		speichersoc = speicherSoc + ' % SoC';
-		$('#speichersoc').text(speichersoc);
-	}
+		wbdata.updateBat ("batterySoc", speicherSoc);
+		}
 	else if (mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured') {
-		if (mqttpayload == 1) {
-			// if housebattery is configured, show info-div
-			$('#speicher').show();
-			// and outer element for priority icon in pv mode
-			$('#priorityEvBattery').show();
-			// priority buttons in modal
-			$('#priorityModeBtns').show();
-		} else {
-			$('#speicher').hide();
-			$('#priorityEvBattery').hide();
-			$('#priorityModeBtns').hide();
-		}
+		wbdata.updateBat ("isBatteryConfigured", (mqttpayload == 1));
 	}
-
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
 		var sieDailyYield = parseFloat(mqttpayload);
 		if (isNaN(sieDailyYield)) {
 			sieDailyYield = 0;
 		}
-		if (sieDailyYield >= 0) {
-			var sieDailyYieldStr = ' (' + sieDailyYield.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kWh E)';
-			$('#siedailyyield').text(sieDailyYieldStr);
-		} else {
-			$('#siedailyyield').text("");
-		}
-
+		wbdata.updateBat ("batteryDailyExport", sieDailyYield)
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
 		var siiDailyYield = parseFloat(mqttpayload);
 		if (isNaN(siiDailyYield)) {
 			siiDailyYield = 0;
 		}
-		if (siiDailyYield >= 0) {
-			var siiDailyYieldStr = ' (' + siiDailyYield.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kWh I)';
-			$('#siidailyyield').text(siiDailyYieldStr);
-		} else {
-			$('#siidailyyield').text("");
-		}
-
+		wbdata.updateBat ("batteryDailyImport", siiDailyYield)
 	}
 	// end color theme
-	if (mqttmsg == 'openWB/global/WHouseConsumption') {
-		var powerHouse = parseInt(mqttpayload, 10);
-		if (isNaN(powerHouse)) {
-			powerHouse = 0;
-		}
-		if (powerHouse > 999) {
-			powerHouse = (powerHouse / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kW';
-		} else {
-			powerHouse += ' W';
-		}
-		$('#hausverbrauch').text(powerHouse);
-	}
-	else if (mqttmsg == 'openWB/global/WAllChargePoints') {
-		var powerAllLp = parseInt(mqttpayload, 10);
-		if (isNaN(powerAllLp)) {
-			powerAllLp = 0;
-		}
-		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kW';
-		} else {
-			powerAllLp += ' W';
-		}
-		$('#powerAllLp').text(powerAllLp);
-	}
-	else if (mqttmsg == 'openWB/global/strLastmanagementActive') {
-		if (mqttpayload.length >= 5) {
-			// if there is info-text in payload for topic, show the text
-			$('#lastregelungaktiv').text(mqttpayload);
-		} else {
-			// if there is no text, show nothing (hides row)
-			$('#lastregelungaktiv').text('');
-		}
-	}
-	else if (mqttmsg == 'openWB/global/awattar/boolAwattarEnabled') {
-		if (mqttpayload == '1') {
-			$('#awattarEnabledIcon').show();
-			$('#awattar').show();
-		} else {
-			$('#awattarEnabledIcon').hide();
-			$('#awattar').hide();
-		}
-	}
-	else if (mqttmsg == 'openWB/global/awattar/pricelist') {
-		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf
-		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
-		var csvaData = [];
-		var rawacsv = mqttpayload.split(/\r?\n|\r/);
-		for (var i = 0; i < rawacsv.length; i++) {
-			csvaData.push(rawacsv[i].split(','));
-		}
-		awattartime = getCol(csvaData, 0);
-		graphawattarprice = getCol(csvaData, 1);
 
-		loadawattargraph();
-	}
-	else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
-		setInputValue('MaxPriceForCharging', mqttpayload);
-	}
-	else if (mqttmsg == 'openWB/global/awattar/ActualPriceForCharging') {
-		$('#ActualPriceForCharging').text(parseFloat(mqttpayload).toLocaleString(undefined, { maximumFractionDigits: 2 }));
-	}
-	else if (mqttmsg == 'openWB/global/ChargeMode') {
-		// set modal button colors depending on charge mode
-		// set visibility of divs
-		// set visibility of priority icon depending on charge mode
-		// (priority icon is encapsulated in another element hidden/shown by housebattery configured or not)
-		switch (mqttpayload) {
-			case '0':
-				// mode sofort
-				$('#chargeModeSelectBtnText').text('Sofortladen');  // text btn mainpage
-				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
-				$('#chargeModeSofortBtn').addClass('btn-success');
-				$('#targetChargingProgress').show();  // visibility of divs for special settings
-				$('#sofortladenEinstellungen').show();
-				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
-				$('#minundpvladenEinstellungen').hide();
-
-				break;
-			case '1':
-				// mode min+pv
-				$('#chargeModeSelectBtnText').text('Min+PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-success');
-				$('#chargeModeMinPVBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').hide();
-				$('#minundpvladenEinstellungen').show();
-
-				break;
-			case '2':
-				// mode pv
-				$('#chargeModeSelectBtnText').text('PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-success');
-				$('#chargeModePVBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').show();
-				$('#minundpvladenEinstellungen').hide();
-
-				break;
-			case '3':
-				// mode stop
-				$('#chargeModeSelectBtnText').text('Stop');
-				$('.chargeModeBtn').removeClass('btn-success');
-				$('#chargeModeStopBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').hide();
-				$('#minundpvladenEinstellungen').hide();
-
-				break;
-			case '4':
-				// mode standby
-				$('#chargeModeSelectBtnText').text('Standby');
-				$('.chargeModeBtn').removeClass('btn-success');
-				$('#chargeModeStdbyBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').hide();
-				$('#minundpvladenEinstellungen').hide();
-
-		}
-	}
-	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
-		var llaDailyYield = parseFloat(mqttpayload);
-		if (isNaN(llaDailyYield)) {
-			llaDailyYield = 0;
-		}
-		if (llaDailyYield >= 0) {
-			var llaDailyYieldStr = ' (' + llaDailyYield.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kWh)';
-			$('#lladailyyield').text(llaDailyYieldStr);
-		} else {
-			$('#lladailyyield').text("");
-		}
-
-	}
-	else if (mqttmsg == 'openWB/global/DailyYieldHausverbrauchKwh') {
-		var hausverbrauchDailyYield = parseFloat(mqttpayload);
-		if (isNaN(hausverbrauchDailyYield)) {
-			hausverbrauchDailyYield = 0;
-		}
-		if (hausverbrauchDailyYield >= 0) {
-			var hausverbrauchDailyYieldStr = ' (' + hausverbrauchDailyYield.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kWh)';
-			$('#hausverbrauchdailyyield').text(hausverbrauchDailyYieldStr);
-		} else {
-			$('#hausverbrauchdailyyield').text("");
-		}
-
-	}
-}
-
-function processHousebatteryMessages(mqttmsg, mqttpayload) {
-	// processes mqttmsg for topic openWB/housebattery
-	// called by handlevar
-	processPreloader(mqttmsg);
-	if (mqttmsg == 'openWB/housebattery/W') {
-		var prefix = ': ';
-		var unit = ' W';
-		var speicherwatt = parseInt(mqttpayload, 10);
-		if (isNaN(speicherwatt)) {
-			speicherwatt = 0;
-		}
-		if (speicherwatt > 0) {
-			prefix = '-Ladung: ';
-		} else if (speicherwatt < 0) {
-			speicherwatt *= -1;
-			prefix = '-Entladung: ';
-		}
-		if (speicherwatt > 999) {
-			speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-			unit = ' kW';
-		}
-		$('#speicherleistung').text(prefix + speicherwatt + unit);
-	}
-	else if (mqttmsg == 'openWB/housebattery/%Soc') {
-		var speicherSoc = parseInt(mqttpayload, 10);
-		if (isNaN(speicherSoc) || speicherSoc < 0 || speicherSoc > 100) {
-			speicherSoc = '--';
-		}
-		speichersoc = speicherSoc + ' % SoC';
-		$('#speichersoc').text(speichersoc);
-	}
-	else if (mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured') {
-		if (mqttpayload == 1) {
+	if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
+		if ( mqttpayload == 1 ) {
 			// if housebattery is configured, show info-div
 			$('#speicher').show();
 			// and outer element for priority icon in pv mode
@@ -819,32 +608,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		}
 	}
 
-	else if (mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
-		var sieDailyYield = parseFloat(mqttpayload);
-		if (isNaN(sieDailyYield)) {
-			sieDailyYield = 0;
-		}
-		if (sieDailyYield >= 0) {
-			var sieDailyYieldStr = ' (' + sieDailyYield.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kWh E)';
-			$('#siedailyyield').text(sieDailyYieldStr);
-		} else {
-			$('#siedailyyield').text("");
-		}
-
-	}
-	else if (mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
-		var siiDailyYield = parseFloat(mqttpayload);
-		if (isNaN(siiDailyYield)) {
-			siiDailyYield = 0;
-		}
-		if (siiDailyYield >= 0) {
-			var siiDailyYieldStr = ' (' + siiDailyYield.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kWh I)';
-			$('#siidailyyield').text(siiDailyYieldStr);
-		} else {
-			$('#siidailyyield').text("");
-		}
-
-	}
+	
 }
 
 function processSystemMessages(mqttmsg, mqttpayload) {
@@ -1137,45 +901,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 
 
 	// end color theme
-	if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/w$/i)) {
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.actualPowerLp');  // now get parents respective child element
-		var actualPower = parseInt(mqttpayload, 10);
-		if (isNaN(actualPower)) {
-			actualPower = 0;
-		}
-		if (actualPower > 999) {
-			actualPower = (actualPower / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-			actualPower += ' kW';
-		} else {
-			actualPower += ' W';
-		}
-		element.text(actualPower);
-	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/kWhchargedsinceplugged$/i)) {
-		// energy charged since ev was plugged in
-		// also calculates and displays km charged
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.energyChargedLp');  // now get parents respective child element
-		var energyCharged = parseFloat(mqttpayload, 10);
-		if (isNaN(energyCharged)) {
-			energyCharged = 0;
-		}
-		element.text(energyCharged.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' kWh');
-		var kmChargedLp = parent.find('.kmChargedLp');  // now get parents kmChargedLp child element
-		var consumption = parseFloat($(kmChargedLp).data('consumption'));
-		var kmCharged = '';
-		if (!isNaN(consumption) && consumption > 0) {
-			kmCharged = (energyCharged / consumption) * 100;
-			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' km';
-		} else {
-			kmCharged = '-- km';
-		}
-		$(kmChargedLp).text(kmCharged);
-	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i)) {
+	if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i)) {
 		// energy charged since reset of limitation
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		if (isNaN(mqttpayload)) {
@@ -1192,21 +918,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var progress = (mqttpayload / limit * 100).toFixed(0);
 		element.width(progress + "%");
 	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/\%soc$/i)) {
-		// soc of ev at respective charge point
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.socLp');  // now get parents respective child element
-		var soc = parseInt(mqttpayload, 10);
-		if (isNaN(soc) || soc < 0 || soc > 100) {
-			soc = '--';
-		}
-		element.text(soc + ' %');
-		var spinner = parent.find('.reloadLpSoc');
-		if (spinner.hasClass('fa-spin')) {
-			spinner.removeClass('fa-spin');
-		}
-	}
+	
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i)) {
 		// time remaining for charging to target value
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -1214,38 +926,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var element = parent.find('.restzeitLp');  // get element
 		element.text('Restzeit ' + mqttpayload);
 	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolchargeatnight$/i)) {
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.nightChargingLp');  // now get parents respective child element
-		if (mqttpayload == 1) {
-			element.show();
-		} else {
-			element.hide();
-		}
-	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i)) {
-		// status ev plugged in or not
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.plugstatLp');  // now get parents respective child element
-		if (mqttpayload == 1) {
-			element.show();
-		} else {
-			element.hide();
-		}
-	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolchargestat$/i)) {
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.plugstatLp');  // now get parents respective child element
-		if (mqttpayload == 1) {
-			element.removeClass('text-orange').addClass('text-green');
-		} else {
-			element.removeClass('text-green').addClass('text-orange');
-		}
-	}
-
+	
+	
+	
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/strchargepointname$/i)) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameLp').each(function () {  // fill in name for all element of class '.nameLp'
@@ -1271,18 +954,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 		});
 	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i)) {
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.phasesInUseLp');  // now get parents respective child element
-		var phasesInUse = parseInt(mqttpayload, 10);
-		if (isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3) {
-			element.text(' /');
-		} else {
-			var phaseSymbols = ['', '\u2460', '\u2461', '\u2462'];
-			element.text(' ' + phaseSymbols[phasesInUse]);
-		}
-	}
+	
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i)) {
 		// target current value at charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -1365,40 +1037,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 				break;
 		}
 	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/energyconsumptionper100km$/i)) {
-		// store configured value in element attribute
-		// to calculate charged km upon receipt of charged energy
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.kmChargedLp');  // now get parents respective child element
-		var consumption = parseFloat(mqttpayload);
-		if (isNaN(consumption)) {
-			consumption = 0;
-		}
-		element.data('consumption', consumption);  // store value in data-attribute
-		// if already energyCharged-displayed, update kmCharged
-		var energyChargedLp = parent.find('.energyChargedLp');  // now get parents respective energyCharged child element
-		var energyCharged = parseFloat($(energyChargedLp).text());
-		var kmCharged = '';
-		if (!isNaN(energyCharged) && consumption > 0) {
-			kmCharged = (energyCharged / consumption) * 100;
-			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' km';
-		} else {
-			kmCharged = '-- km';
-		}
-		element.text(kmCharged);
-	}
-	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolfinishattimechargeactive$/i)) {
-		// respective charge point configured
-		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
-		var element = parent.find('.targetChargingLp');  // now get parents respective child element
-		if (mqttpayload == 1) {
-			element.show();
-		} else {
-			element.hide();
-		}
-	}
+	
+	
 }
 
 function processHookMessages(mqttmsg, mqttpayload) {

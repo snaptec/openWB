@@ -13,13 +13,13 @@ body {
 	color: lightgrey;
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
 	/* Old browsers */
-	background: white;
+	background: midnightblue;
 }
 body > .container {
 	padding: 55px 15px 0;
 }
 h3 {
-	color: black;
+	color: lightgrey;
 }
 body > .container-fluid {
 	padding: 55px 15px 0;
@@ -442,8 +442,9 @@ h3 {
 	--color-house: grey;
 	--color-devices: cornflowerblue;
 	--color-charging: mediumseagreen;
-	--color-export: skyblue;
+	--color-export: khaki;
 	--color-axis: steelblue;
+	--color-battery: purple;
 	--color-lp1: mediumseagreen;
 	--color-lp2: lightseagreen;
 	--color-lp3: mediumspringgreen;
@@ -461,6 +462,8 @@ h3 {
 	--color-sh7: skyblue;
 	--color-sh8: mediumslateblue;
 	--color-sh9: paleturquoise;
+	--color-co1: skyblue;
+	--color-co2: cadetblue;
 
 }
 
@@ -471,9 +474,19 @@ h3 {
 
 .wb-widget {
 	background-color: midnightblue;
+	border:1px solid  lightskyblue;
 }
 
 
 .table-borderless td {
 	border: 0;
 }
+
+/* Colors for the charts */
+
+
+
+.axis text {
+	color: steelblue;
+	stroke-width: 0;
+	} 

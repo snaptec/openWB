@@ -6,7 +6,7 @@ class PowerGraph {
   axiscolor;
 
 
-  margin = { top: 10, right: 10, bottom: 20, left: 40 };
+  margin = { top: 10, right: 20, bottom: 20, left: 25 };
 
   constructor() {
     this.graphData = [];
@@ -22,10 +22,12 @@ class PowerGraph {
 
   init() {
     var style = getComputedStyle(document.body);
-    this.colors[16] = style.getPropertyValue('--color-house');
-    this.gridColors[0] = style.getPropertyValue('--color-pv');
-    this.gridColors[1] = style.getPropertyValue('--color-export');
-    this.gridColors[2] = style.getPropertyValue('--color-evu');
+    this.colors[18] = style.getPropertyValue('--color-house');
+    this.colors[19] = style.getPropertyValue('--color-battery');
+    this.gridColors[0] = style.getPropertyValue('--color-battery');
+    this.gridColors[1] = style.getPropertyValue('--color-pv');
+    this.gridColors[2] = style.getPropertyValue('--color-export');
+    this.gridColors[3] = style.getPropertyValue('--color-evu');
     this.bgcolor = style.getPropertyValue('--color-bg');
     this.chargeColor = style.getPropertyValue('--color-charging');
     this.axiscolor = style.getPropertyValue('--color-axis');
@@ -37,6 +39,8 @@ class PowerGraph {
     for (i = 0; i < 8; i++) {
       this.colors[8 + i] = wbdata.shDevice[i].color;
     }
+    this.colors[16] = style.getPropertyValue('--color-co1');
+    this.colors[17] = style.getPropertyValue('--color-co2');
     var figure = d3.select("figure#powergraph");
     this.svg = figure.append("svg")
       .attr("viewBox", `0 0 500 500`);
@@ -97,11 +101,8 @@ class PowerGraph {
 
   extractValues(payload) {
     const elements = payload.split(",");
-    // const  values = new WbData(new Date(d3.timeParse("%H:%M:%S")(elements[0])));
     var values = {};
     values.date = new Date(d3.timeParse("%H:%M:%S")(elements[0]));
-
-
     if (+elements[1] > 0) {
       values.gridPull = +elements[1];
       values.gridPush = 0;
@@ -113,12 +114,14 @@ class PowerGraph {
     values.solarPower = +elements[3];
     values.housePower = +elements[11];
     // values.boilerPower = +elements[21];
-    values.soc = +elements[9];
+    values.soc1 = +elements[9];
+    values.soc2 = +elements[10];
     values.selfUsage = values.solarPower - values.gridPush;
     if (values.selfUsage < 0) {
       values.selfUsage = 0;
     }
     var i;
+    
     values.lp0 = +elements[4];
     values.lp1 = +elements[5];
     for (i = 2; i < 9; i++) {
@@ -127,7 +130,19 @@ class PowerGraph {
     for (i = 0; i < 8; i++) {
       values["sh" + i] = +elements[20 + i];
     }
-
+    values.co1 = +elements[12];
+    values.co2 = +elements[13];
+    if (+elements[7] > 0) {
+      values.batIn = +elements[7];
+      values.batOut = 0;
+    } else if (+elements[7] < 0) {
+      values.batIn = 0;
+      values.batOut = -elements[7]
+    } else {
+      values.batIn = 0;
+      values.batOut = 0;
+    };
+    values.batSoc = +elements[8];
     return values;
   }
 
@@ -154,7 +169,7 @@ class PowerGraph {
 
   drawChart(svg) {
     const height = this.height - this.margin.top - this.margin.bottom;
-    const width = this.width - this.margin.left - this.margin.bottom;
+    const width = this.width - this.margin.left - this.margin.right;
 
     this.drawSourceGraph(svg, width, height / 2);
     this.drawUsageGraph(svg, width, height / 2);
@@ -163,8 +178,8 @@ class PowerGraph {
   }
 
   drawSourceGraph(svg, width, height) {
-    const keys = ["selfUsage", "gridPush", "gridPull"];
-    const xScale = d3.scaleTime().range([0, width - 10]);
+    const keys = ["batOut","selfUsage", "gridPush", "gridPull"];
+    const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height - 10, 0]);
     const extent = d3.extent(this.graphData, (d) =>
       Math.max(d.solarPower + d.gridPull, d.selfUsage + d.gridPush));
@@ -185,12 +200,15 @@ class PowerGraph {
       )
       .attr("fill", (d, i) => this.gridColors[i]);
 
-    const yAxis = svg.call(d3.axisLeft(yScale)
+    const yAxis = svg.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(yScale)
       .tickSizeInner(-width)
-      .ticks(5)
-      .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10) + " kW"))
+      .ticks(6)
+      .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10)))
       ;
-    yAxis.selectAll(".tick").attr("stroke", this.axiscolor);
+    yAxis.selectAll(".tick")
+      .attr("font-size", 12);
     yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     yAxis.select(".domain")
       .attr("stroke", this.bgcolor)
@@ -198,8 +216,8 @@ class PowerGraph {
   }
 
   drawUsageGraph(svg, width, height) {
-    const xScale = d3.scaleTime().range([0, width - 10]);
-    const yScale = d3.scaleLinear().range([height + 10, 2 * height + 10]);
+    const xScale = d3.scaleTime().range([0, width - this.margin.right]);
+    const yScale = d3.scaleLinear().range([height + 10, 2 * height + 15]);
 
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
     const extent = d3.extent(this.graphData, (d) =>
@@ -211,8 +229,7 @@ class PowerGraph {
     const keys = ["lp0", "lp1", "lp2", "lp3", "lp4",
       "lp5", "lp6", "lp7",
       "sh0", "sh1", "sh2", "sh3", "sh4",
-      "sh5", "sh6", "sh7",
-      "housePower"];
+      "sh5", "sh6", "sh7", "co1", "co2", "housePower", "batIn"];
 
     const stackGen = d3.stack().keys(keys);
     const stackedSeries = stackGen(this.graphData);
@@ -227,12 +244,15 @@ class PowerGraph {
       )
       .attr("fill", (d, i) => this.colors[i]);
 
-    const yAxis = svg.append("g").call(d3.axisLeft(yScale)
+    const yAxis = svg.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(yScale)
       .tickSizeInner(-width)
-      .ticks(5)
-      .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10) + " kW")
+      .ticks(6)
+      .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10))
     );
-    yAxis.selectAll(".tick").attr("stroke", this.axiscolor);
+    yAxis.selectAll(".tick")
+      .attr("font-size", 12);
     yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     yAxis.select(".domain")
       .attr("stroke", this.bgcolor)
@@ -240,7 +260,7 @@ class PowerGraph {
   }
 
   drawXAxis(svg, width, height) {
-    const xScale = d3.scaleTime().range([0, width - 10]);
+    const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
 
     const xAxisGenerator = d3
@@ -249,9 +269,12 @@ class PowerGraph {
       .tickSizeInner(-10)
       .tickFormat(d3.timeFormat("%H:%M"));
 
-    const xAxis = svg.append("g").call(xAxisGenerator);
+    const xAxis = svg.append("g").attr("class", "axis")
+      .call(xAxisGenerator);
     xAxis.attr("transform", "translate(0," + (height / 2 - 6) + ")");
-    xAxis.selectAll(".tick").attr("stroke", this.axiscolor);
+    xAxis.selectAll(".tick")
+      .attr("color", this.axiscolor)
+      .attr("font-size", 12)
     xAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     xAxis.select(".domain")
       .attr("stroke", this.bgcolor)
@@ -259,7 +282,7 @@ class PowerGraph {
 
   }
   drawSoc(svg, width, height) {
-    const xScale = d3.scaleTime().range([0, width - 10]);
+    const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height - 10, 0]);
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
     yScale.domain([0, 100]);
@@ -268,20 +291,24 @@ class PowerGraph {
       .datum(this.graphData)
       .attr("stroke", this.chargeColor)
       .attr("stroke-width", 1)
+      .attr("fill", this.bgcolor)
       .style("stroke-dasharray", ("3, 3"))
+      .style("background-color", this.bgcolor)
       .attr("d", d3.line()
         .x((d, i) => xScale(this.graphData[i].date))
-        .y(d => yScale(d.soc))
+        .y(d => yScale(d.soc1))
       );
 
     const socAxis = svg.append("g")
-      .attr("transform", "translate(" + (width - 15) + ",0)")
+      .attr("class", "axis")
+      .attr("transform", "translate(" + (width - 20) + ",0)")
       .call(d3.axisRight(yScale)
         .ticks(5)
-        .tickFormat((d, i) => (d == 0) ? "" : (d + "%")))
+        .tickFormat((d) => (d + "%")))
 
       ;
-    socAxis.selectAll(".tick").attr("stroke", this.axiscolor);
+    socAxis.selectAll(".tick").attr("font-size", 12);
+    socAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     socAxis.select(".domain")
       .attr("stroke", this.bgcolor)
       ;
