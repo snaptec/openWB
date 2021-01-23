@@ -1464,7 +1464,7 @@ loadvars(){
 		echo $nlakt_minpv > ramdisk/mqttnlakt_minpv
 	fi
 
-	onlakt_standby=$(<ramdisk/mqttnlakt_sofort)
+	onlakt_standby=$(<ramdisk/mqttnlakt_standby)
 	if [[ "$onlakt_standby" != "$nlakt_standby" ]]; then
 		tempPubList="${tempPubList}\nopenWB/boolChargeAtNight_standby=${nlakt_standby}"
 		echo $nlakt_standby > ramdisk/mqttnlakt_standby

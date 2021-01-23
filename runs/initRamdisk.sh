@@ -508,9 +508,9 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/lla1
 	echo 0 > $RamdiskPath/lla2
 	echo 0 > $RamdiskPath/lla3
-	touch /var/www/html/openWB/ramdisk/llog1
-	touch /var/www/html/openWB/ramdisk/llogs1
-	touch /var/www/html/openWB/ramdisk/llogs2
+	touch $RamdiskPath/llog1
+	touch $RamdiskPath/llogs1
+	touch $RamdiskPath/llogs2
 	echo 1 > $RamdiskPath/anzahlphasen
 	echo 0 > $RamdiskPath/llkombiniert
 	echo 0 > $RamdiskPath/llkwh
@@ -562,11 +562,15 @@ initRamdisk(){
 	echo $verbraucher2_name > $RamdiskPath/verbraucher2_name
 	echo $rfidlist > $RamdiskPath/rfidlist
 
+	# init common files for lp1 to lp8
 	for i in $(seq 1 8);
 	do
 		for f in \
 			"pluggedladunglp${i}startkwh:openWB/lp/${i}/plugStartkWh" \
-			"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt"
+			"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt" \
+			"mqttmsmoduslp${i}:openWB/config/get/sofort/lp/${i}/chargeLimitation" \
+			"mqttlp${i}name:openWB/lp/${i}/strChargePointName" \
+			"mqttdisplaylp${i}max:openWB/config/get/display/chartLp/${i}/max"
 		do
 			IFS=':' read -r -a tuple <<< "$f"
 			currentRamdiskFileVar="\"$RamdiskPath/${tuple[0]}\""
@@ -582,6 +586,125 @@ initRamdisk(){
 				fi
 			fi
 		done
+	done
+
+	# init other files
+	for f in \
+		"mqttCp1Configured:openWB/lp/1/boolChargePointConfigured" \
+		"mqttRandomSleepValue:openWB/system/randomSleep" \
+		"mqttabschaltuberschuss:openWB/config/get/pv/maxPowerConsumptionBeforeStop" \
+		"mqttabschaltverzoegerung:openWB/config/get/pv/stopDelay" \
+		"mqttadaptfaktor:openWB/config/get/pv/adaptiveChargingFactor" \
+		"mqttadaptpv:openWB/config/get/pv/boolAdaptiveCharging" \
+		"mqttaktgeladen:openWB/openWB/lp/1/kWhActualCharged" \
+		"mqttaktgeladens1:openWB/openWB/lp/2/kWhActualCharged" \
+		"mqttaktgeladens2:openWB/openWB/lp/3/kWhActualCharged" \
+		"mqttdailychargelp1:openWB/lp/1/kWhDailyCharged" \
+		"mqttdailychargelp2:openWB/lp/2/kWhDailyCharged" \
+		"mqttdailychargelp3:openWB/lp/3/kWhDailyCharged" \
+		"mqttdatenschutzack:openWB/config/get/global/dataProtectionAcknoledged" \
+		"mqttdisplayevumax:openWB/config/get/display/chartEvuMinMax" \
+		"mqttdisplayhausanzeigen:openWB/config/get/display/showHouseConsumption" \
+		"mqttdisplayhausmax:openWB/config/get/display/chartHouseConsumptionMax" \
+		"mqttdisplaypvmax:openWB/config/get/display/chartPvMax" \
+		"mqttdisplayspeichermax:openWB/config/get/display/chartBatteryMinMax" \
+		"mqttdurchslp1:openWB/lp/1/energyConsumptionPer100km" \
+		"mqtteinschaltverzoegerung:openWB/config/get/pv/startDelay" \
+		"mqttetprovideraktiv:openWB/global/awattar/boolAwattarEnabled" \
+		"mqttevuglaettungakt:openWB/boolEvuSmoothedActive" \
+		"mqtthausverbrauch:openWB/global/WHouseConsumption" \
+		"mqtthausverbrauchstat:openWB/boolDisplayHouseConsumption" \
+		"mqttheutegeladen:openWB/boolDisplayDailyCharged" \
+		"mqtthook1_aktiv:openWB/hook/1/boolHookConfigured" \
+		"mqtthook2_aktiv:openWB/hook/2/boolHookConfigured" \
+		"mqtthook3_aktiv:openWB/hook/3/boolHookConfigured" \
+		"mqttlademkwh:openWB/config/get/sofort/lp/1/energyToCharge" \
+		"mqttlademkwhlp4:openWB/config/get/sofort/lp/4/energyToCharge" \
+		"mqttlademkwhlp5:openWB/config/get/sofort/lp/5/energyToCharge" \
+		"mqttlademkwhlp6:openWB/config/get/sofort/lp/6/energyToCharge" \
+		"mqttlademkwhlp7:openWB/config/get/sofort/lp/7/energyToCharge" \
+		"mqttlademkwhlp8:openWB/config/get/sofort/lp/8/energyToCharge" \
+		"mqttlademstat:openWB/lp/1/boolDirectModeChargekWh" \
+		"mqttlademstatlp4:openWB/lp/4/boolDirectModeChargekWh" \
+		"mqttlademstatlp5:openWB/lp/5/boolDirectModeChargekWh" \
+		"mqttlademstatlp6:openWB/lp/6/boolDirectModeChargekWh" \
+		"mqttlademstatlp7:openWB/lp/7/boolDirectModeChargekWh" \
+		"mqttlademstatlp8:openWB/lp/8/boolDirectModeChargekWh" \
+		"mqttlademstats1:openWB/lp/2/boolDirectModeChargekWh" \
+		"mqttlademstats2:openWB/lp/3/boolDirectModeChargekWh" \
+		"mqttlastlademodus:openWB/global/ChargeMode" \
+		"mqttmaximalstromstaerke:openWB/config/get/global/maxEVSECurrentAllowed" \
+		"mqttmaxnurpvsoclp1:openWB/config/get/pv/lp/1/maxSocToChargeTo" \
+		"mqttmindestuberschuss:openWB/config/get/pv/minFeedinPowerBeforeStart" \
+		"mqttminimalalp2pv:openWB/config/get/pv/lp/2/minCurrent" \
+		"mqttminimalampv:openWB/config/get/pv/minCurrentMinPv" \
+		"mqttminimalapv:openWB/config/get/pv/lp/1/minCurrent" \
+		"mqttminimalstromstaerke:openWB/config/get/global/minEVSECurrentAllowed" \
+		"mqttminnurpvsocll:openWB/config/get/pv/lp/1/minSocAlwaysToChargeToCurrent" \
+		"mqttminnurpvsoclp1:openWB/config/get/pv/lp/1/minSocAlwaysToChargeTo" \
+		"mqttnachtladen:openWB/lp/1/boolChargeAtNight" \
+		"mqttnachtladens1:openWB/lp/2/boolChargeAtNight" \
+		"mqttnlakt_minpv:openWB/boolChargeAtNight_minpv" \
+		"mqttnlakt_nurpv:openWB/boolChargeAtNight_nurpv" \
+		"mqttnlakt_sofort:openWB/boolChargeAtNight_direct" \
+		"mqttnlakt_standby:openWB/boolChargeAtNight_standby" \
+		"mqttnurpv70dynact:openWB/config/get/pv/nurpv70dynact" \
+		"mqttnurpv70dynw:openWB/config/get/pv/nurpv70dynw" \
+		"mqttoffsetpv:openWB/config/get/pv/regulationPoint" \
+		"mqttpreisjekwh:openWB/system/priceForKWh" \
+		"mqttpvbezugeinspeisung:openWB/config/get/pv/chargeSubmode" \
+		"mqttpvwatt:openWB/pv/W" \
+		"mqttrestzeitlp1:openWB/lp/1/TimeRemaining" \
+		"mqttrestzeitlp2:openWB/lp/2/TimeRemaining" \
+		"mqttrestzeitlp3:openWB/lp/3/TimeRemaining" \
+		"mqttrfidakt:openWB/global/rfidConfigured" \
+		"mqttsoc1vorhanden:openWB/lp/2/boolSocConfigured" \
+		"mqttsoc:openWB/lp/1/%Soc" \
+		"mqttsocvorhanden:openWB/lp/1/boolSocConfigured" \
+		"mqttsofortsoclp1:openWB/config/get/sofort/lp/1/socToChargeTo" \
+		"mqttsofortsoclp2:openWB/config/get/sofort/lp/2/socToChargeTo" \
+		"mqttsofortsocstatlp1:openWB/lp/1/boolDirectChargeModeSoc" \
+		"mqttsofortsocstatlp2:openWB/lp/2/boolDirectChargeModeSoc" \
+		"mqttspeichermaxwatt:openWB/config/get/pv/minBatteryChargePowerAtEvPriority" \
+		"mqttspeicherpveinbeziehen:openWB/config/get/pv/priorityModeEVBattery" \
+		"mqttspeicherpvui:openWB/config/get/pv/boolShowPriorityIconInTheme" \
+		"mqttspeichersochystminpv:openWB/config/get/pv/socStopChargeAtMinPv" \
+		"mqttspeichersocminpv:openWB/config/get/pv/socStartChargeAtMinPv" \
+		"mqttspeichersocnurpv:openWB/config/get/pv/minBatteryDischargeSocAtBattPriority" \
+		"mqttspeicherwattnurpv:openWB/config/get/pv/batteryDischargePowerAtBattPriority" \
+		"mqttstopchargepvatpercentlp1:openWB/config/get/pv/lp/1/socLimitation" \
+		"mqttstopchargepvatpercentlp2:openWB/config/get/pv/lp/2/socLimitation" \
+		"mqttstopchargepvpercentagelp1:openWB/config/get/pv/lp/1/maxSoc" \
+		"mqttstopchargepvpercentagelp2:openWB/config/get/pv/lp/2/maxSoc" \
+		"mqttu1p3paktiv:openWB/config/get/u1p3p/isConfigured" \
+		"mqttu1p3pminundpv:openWB/config/get/u1p3p/minundpvPhases" \
+		"mqttu1p3pnl:openWB/config/get/u1p3p/nachtPhases" \
+		"mqttu1p3pnurpv:openWB/config/get/u1p3p/nurpvPhases" \
+		"mqttu1p3psofort:openWB/config/get/u1p3p/sofortPhases" \
+		"mqttu1p3pstandby:openWB/config/get/u1p3p/standbyPhases" \
+		"mqttupdateinprogress:openWB/system/updateInProgress" \
+		"mqttverbraucher1_aktiv:openWB/Verbraucher/1/Configured" \
+		"mqttverbraucher1_name:openWB/Verbraucher/1/Name" \
+		"mqttverbraucher2_aktiv:openWB/Verbraucher/2/Configured" \
+		"mqttverbraucher2_name:openWB/Verbraucher/2/Name" \
+		"mqttversion:openWB/system/Version" \
+		"mqttwattbezug:openWB/evu/W" \
+		"mqttwizzarddone:openWB/system/wizzardDone" \
+		"mqttzielladenaktivlp1:openWB/lp/1/boolFinishAtTimeChargeActive"
+	do
+		IFS=':' read -r -a tuple <<< "$f"
+		currentRamdiskFileVar="\"$RamdiskPath/${tuple[0]}\""
+		eval currentRamdiskFile=\$$currentRamdiskFileVar
+		if ! [ -f $currentRamdiskFile ]; then
+			mqttValue=$(timeout 1 mosquitto_sub -C 1 -t ${tuple[1]})
+			if [[ ! -z "$mqttValue" ]]; then
+				echo "'$currentRamdiskFile' missing: Setting from MQTT topic '${tuple[0]}' to value '$mqttValue'"
+				echo "$mqttValue" > $currentRamdiskFile
+			else
+				echo "'$currentRamdiskFile' missing: MQTT topic '${tuple[0]}' can also not provide any value: Setting to 0"
+				echo 0 > $currentRamdiskFile
+			fi
+		fi
 	done
 
 	sudo chmod 777 $RamdiskPath/*
