@@ -2829,7 +2829,14 @@ if ! grep -Fq "mypeugeot_soccalclp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "mypeugeot_soccalclp2=0" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "myopel_soccalclp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "myopel_soccalclp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "myopel_soccalclp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "myopel_soccalclp2=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
