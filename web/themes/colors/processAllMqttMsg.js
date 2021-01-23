@@ -430,33 +430,37 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if (mqttmsg == 'openWB/global/awattar/boolAwattarEnabled') {
+		// sets icon, graph and price-info-field visible/invisible
 		if (mqttpayload == '1') {
-			$('#awattarEnabledIcon').show();
-			$('#awattar').show();
+			$('#etproviderEnabledIcon').show();
+			$('#priceBasedCharging').show();
+			$('#strompreis').show();
+			$('#navStromtarifInfo').removeClass('hide');
 		} else {
-			$('#awattarEnabledIcon').hide();
-			$('#awattar').hide();
+			$('#etproviderEnabledIcon').hide();
+			$('#priceBasedCharging').hide();
+			$('#strompreis').hide();
+			$('#navStromtarifInfo').addClass('hide');
 		}
 	}
 	else if (mqttmsg == 'openWB/global/awattar/pricelist') {
-		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf
+		// read etprovider values and trigger graph creation
+		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
 			csvaData.push(rawacsv[i].split(','));
 		}
-		awattartime = getCol(csvaData, 0);
-		graphawattarprice = getCol(csvaData, 1);
-
-		loadawattargraph();
+		electricityPriceTimeline = getCol(csvaData, 0);
+		electricityPriceChartline = getCol(csvaData, 1);
+		loadElectricityPriceChart();
 	}
 	else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
 		setInputValue('MaxPriceForCharging', mqttpayload);
 	}
 	else if (mqttmsg == 'openWB/global/awattar/ActualPriceForCharging') {
-		$('#ActualPriceForCharging').text(parseFloat(mqttpayload).toLocaleString(undefined, { maximumFractionDigits: 2 }));
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' Cent/kWh');
 	}
 	else if (mqttmsg == 'openWB/global/ChargeMode') {
 		// set modal button colors depending on charge mode
@@ -561,10 +565,10 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			speicherwatt = 0;
 		}
 		if (speicherwatt > 0) {
-			wbdata.updateBat ("batteryIn", speicherwatt);
-			
+			wbdata.updateBat("batteryIn", speicherwatt);
+
 		} else if (speicherwatt < 0) {
-			wbdata.updateBat ("batteryOut", -speicherwatt);
+			wbdata.updateBat("batteryOut", -speicherwatt);
 		}
 	}
 	else if (mqttmsg == 'openWB/housebattery/%Soc') {
@@ -572,29 +576,29 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		if (isNaN(speicherSoc) || speicherSoc < 0 || speicherSoc > 100) {
 			speicherSoc = 0;
 		}
-		wbdata.updateBat ("batterySoc", speicherSoc);
-		}
+		wbdata.updateBat("batterySoc", speicherSoc);
+	}
 	else if (mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured') {
-		wbdata.updateBat ("isBatteryConfigured", (mqttpayload == 1));
+		wbdata.updateBat("isBatteryConfigured", (mqttpayload == 1));
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
 		var sieDailyYield = parseFloat(mqttpayload);
 		if (isNaN(sieDailyYield)) {
 			sieDailyYield = 0;
 		}
-		wbdata.updateBat ("batteryDailyExport", sieDailyYield)
+		wbdata.updateBat("batteryDailyExport", sieDailyYield)
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
 		var siiDailyYield = parseFloat(mqttpayload);
 		if (isNaN(siiDailyYield)) {
 			siiDailyYield = 0;
 		}
-		wbdata.updateBat ("batteryDailyImport", siiDailyYield)
+		wbdata.updateBat("batteryDailyImport", siiDailyYield)
 	}
 	// end color theme
 
-	if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
-		if ( mqttpayload == 1 ) {
+	if (mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured') {
+		if (mqttpayload == 1) {
 			// if housebattery is configured, show info-div
 			$('#speicher').show();
 			// and outer element for priority icon in pv mode
@@ -608,7 +612,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		}
 	}
 
-	
+
 }
 
 function processSystemMessages(mqttmsg, mqttpayload) {
@@ -918,7 +922,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var progress = (mqttpayload / limit * 100).toFixed(0);
 		element.width(progress + "%");
 	}
-	
+
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i)) {
 		// time remaining for charging to target value
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -926,9 +930,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var element = parent.find('.restzeitLp');  // get element
 		element.text('Restzeit ' + mqttpayload);
 	}
-	
-	
-	
+
+
+
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/strchargepointname$/i)) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameLp').each(function () {  // fill in name for all element of class '.nameLp'
@@ -954,7 +958,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 		});
 	}
-	
+
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i)) {
 		// target current value at charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -1037,8 +1041,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 				break;
 		}
 	}
-	
-	
+
+
 }
 
 function processHookMessages(mqttmsg, mqttpayload) {

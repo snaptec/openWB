@@ -33,13 +33,13 @@ class WbData {
 		this.sourceSummary = [
 			{ name: "PV", power: 0, energy: 0, color: "white" },
 			{ name: "Netz", power: 0, energy: 0, color: "white" },
-			{ name: "Speicher out", power: 0, energy: 0, color: "white"}
+			{ name: "Speicher out", power: 0, energy: 0, color: "white" }
 		];
 		this.usageSummary = [
 			{ name: "Export", power: 0, energy: 0, color: "white" },
 			{ name: "Laden", power: 0, energy: 0, color: "white" },
-			{ name: "Geräte", power: 0, energy: 0, color: "white" },			
-			{ name: "Speicher in", power: 0, energy: 0, color: "white"},
+			{ name: "Geräte", power: 0, energy: 0, color: "white" },
+			{ name: "Speicher in", power: 0, energy: 0, color: "white" },
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
 		this.usageDetails = [this.usageSummary[0]];
@@ -165,7 +165,7 @@ class WbData {
 		chargePointList.update();
 	}
 
-	updateBat (field, value) {
+	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
 			case 'batteryIn': this.usageSummary[3].power = value;
@@ -210,10 +210,10 @@ class WbData {
 
 	updateUsageDetails() {
 		this.usageDetails = [this.usageSummary[0],
-			this.usageSummary[1]]
+		this.usageSummary[1]]
 			.concat(this.shDevice.filter(row => (row.configured)))
 			.concat(this.consumer.filter(row => (row.configured)))
-			.concat ([this.usageSummary[3],this.usageSummary[4]]);
+			.concat([this.usageSummary[3], this.usageSummary[4]]);
 	}
 
 	updateConsumerSummary(cat) {

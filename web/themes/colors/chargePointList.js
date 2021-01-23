@@ -15,10 +15,10 @@ class ChargePointList {
 
   // initialize after document is created
   init() {
-    const div = d3.select ("div#chargePointTable")
+    const div = d3.select("div#chargePointTable")
     const table = div.append("table")
       .attr("class", "table table-borderless p-0 m-0");
-    
+
     table.append("thead")
       .append("tr")
       .selectAll("headers")
@@ -32,7 +32,7 @@ class ChargePointList {
       .text((data) => data)
       ;
 
-    this.tbody = table.append ("tbody");
+    this.tbody = table.append("tbody");
     this.formSection = div.append("div");
   }
 
@@ -67,7 +67,7 @@ class ChargePointList {
   }
 
 
- 
+
 
   updateValues() {
     this.chargepoints = wbdata.chargePoint.filter(cp => cp.configured);
@@ -96,9 +96,11 @@ class ChargePointList {
     button.append("span").text(" ");
     if (row.isPluggedIn) {
       button.append("span")
-        .attr("class", "fa fa-xs fa-plug text-orange ")
+        .attr("class", "fa fa-xs fa-plug")
         ;
     }
+    button.classed("text-orange", (!row.isCharging))
+    button.classed("text-green", row.isCharging)
     if (row.willFinishAtTime) {
       button.append("span")
         .attr("class", "fa fa-xs fa-flag-checkered");
