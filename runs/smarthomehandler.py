@@ -578,7 +578,7 @@ def conditions(nummer):
     try:
         speichersocbeforestop = int(config.get('smarthomedevices', 'device_speichersocbeforestop_'+str(nummer)))
     except:
-        speichersocbeforestop = 0
+        speichersocbeforestop = 100
     try:
         speichersocbeforestart = int(config.get('smarthomedevices', 'device_speichersocbeforestart_'+str(nummer)))
     except:

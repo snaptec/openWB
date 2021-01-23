@@ -239,7 +239,7 @@
 		<!-- chargepoint info header -->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
 			<div class="col-3 px-0">
-				Ladepunkt <span id="awattarEnabledIcon" class="fa fa-chart-line hide"></span>
+				Ladepunkt <span id="etproviderEnabledIcon" class="fa fa-chart-line hide"></span>
 			</div>
 			<div class="col-3 px-0">
 				Ladeparameter
@@ -650,14 +650,19 @@
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
+				<div class="row justify-content-center regularTextSize vaRow">
+					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
+					Preis
+					<button type="button" class="btn btn-secondary ml-3 priceMore"><i class="far fa-plus-square"></i></button>
+				</div>
 			</div>  <!--/ priceBasedCharging -->
-
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
 			</div>
+			<div class="row justify-content-center">
 
-
+			</div>
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 				<div class="col">
@@ -1294,8 +1299,8 @@
 				'themes/dark/processAllMqttMsg.js?ver=20210114-tb',
 				// respective Chart.js definition live
 				'themes/dark/livechart.js?ver=20201218',
-				// respective Chart.js definition awattar
-				'themes/dark/electricityPriceChart.js?ver=20201228',
+				// respective Chart.js definition
+				'themes/dark/electricityPriceChart.js?ver=20210120',
 				// functions performing mqtt and start mqtt-service
 				'themes/dark/setupMqttServices.js?ver=20201228',
 			];
@@ -1434,6 +1439,28 @@
 				publish(option, topic);
 				// show/hide respective option-values and progress
 				chargeLimitationOptionsShowHide(this, option);
+			});
+
+			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
+				event.preventDefault();
+				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
+				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
+				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
+				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
+				if ( $(this).hasClass ('priceLess') ) {
+					currentMaxPrice -= step;
+				} else {
+					currentMaxPrice += step;
+				}
+				// prevent timeout of delayUserInput when clicking "beyond" range
+				if ( currentMaxPrice < rangeMin ) {
+					currentMaxPrice = rangeMin;
+				} else if ( currentMaxPrice > rangeMax ) {
+					currentMaxPrice = rangeMax;
+				}
+				$('#MaxPriceForCharging').val(currentMaxPrice);
+				$('#MaxPriceForCharging').trigger('input');
 			});
 
 			$('.rangeInput').on('input', function() {

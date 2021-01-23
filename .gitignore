@@ -4,6 +4,7 @@ web/ladelog
 *.pyc
 ramdisk/
 .DS_Store
+.ftp*
 web/settings/.htaccess
 web/settings/.passwd
 web/lastcommit

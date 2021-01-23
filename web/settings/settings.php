@@ -84,10 +84,10 @@
 								<div class="col-4">openWB ist nur ein Ladepunkt</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($isssold == 0) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($isssold == 0) echo " active" ?>">
 											<input type="radio" name="isss" id="isssOff" value="0"<?php if($isssold == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
-										<label class="btn btn-outline-info<?php if($isssold == 1) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($isssold == 1) echo " active" ?>">
 											<input type="radio" name="isss" id="isssOn" value="1"<?php if($isssold == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
@@ -135,19 +135,19 @@
 					</script>
 				</div>
 
-				<!-- Awattar -->
+				<!-- electricity tariff providers -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Awattar</div>
+								<div class="col-4">Stromanbieter</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-sm btn-outline-info<?php if($awattaraktivold == 0) echo " active" ?>">
-											<input type="radio" name="awattaraktiv" id="awattaraktivOff" value="0"<?php if($awattaraktivold == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-sm btn-outline-info<?php if($etprovideraktivold == 0) echo " active" ?>">
+											<input type="radio" name="etprovideraktiv" id="etprovideraktivOff" value="0"<?php if($etprovideraktivold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-sm btn-outline-info<?php if($awattaraktivold == 1) echo " active" ?>">
-											<input type="radio" name="awattaraktiv" id="awattaraktivOn" value="1"<?php if($awattaraktivold == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-sm btn-outline-info<?php if($etprovideraktivold == 1) echo " active" ?>">
+											<input type="radio" name="etprovideraktiv" id="etprovideraktivOn" value="1"<?php if($etprovideraktivold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
@@ -156,17 +156,44 @@
 					</div>
 					<div class="card-body">
 						<div class="card-text alert alert-info">
-							Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler. Die Awattar Funktion ist nur im SofortLaden Modus aktiv!
+							Ermöglicht Laden nach Strompreis. Hierfür wird ein unterstützter Anbieter benötigt. Die Funktion ist nur im SofortLaden Modus aktiv!
 						</div>
-						<div id="awattardiv" class="hide">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
-									<div class="col">
-										<select name="awattarlocation" id="awattarlocation" class="form-control">
-											<option <?php if($awattarlocationold == "de") echo "selected" ?> value="de">Deutschland</option>
-											<option <?php if($awattarlocationold == "at") echo "selected" ?> value="at">Österreich</option>
-										</select>
+						<div class="form-group mb-0" id="etproviderondiv">
+							<div class="form-row mb-1">
+								<label for="et_provider" class="col-md-4 col-form-label">Anbieter</label>
+								<div class="col">
+									<select name="etprovider" id="etprovider" class="form-control">
+										<option <?php if($etproviderold == "et_awattar") echo "selected" ?> value="et_awattar">Awattar</option>
+										<option <?php if($etproviderold == "et_tibber") echo "selected" ?> value="et_tibber">Tibber</option>
+									</select>
+								</div>
+							</div>
+							<div id="awattardiv" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
+										<div class="col">
+											<select name="awattarlocation" id="awattarlocation" class="form-control">
+												<option <?php if($awattarlocationold == "de") echo "selected" ?> value="de">Deutschland</option>
+												<option <?php if($awattarlocationold == "at") echo "selected" ?> value="at">Österreich</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="tibberdiv" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="tibbertoken" class="col-md-4 col-form-label">Tibber-Token</label>
+										<div class="col">
+											<input class="form-control" type="text" name="tibbertoken" id="tibbertoken" value="<?php echo $tibbertokenold; ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="tibberhomeid" class="col-md-4 col-form-label">homeID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="tibberhomeid" id="tibberhomeid" value="<?php echo $tibberhomeidold; ?>">
+										</div>
 									</div>
 								</div>
 							</div>
@@ -174,19 +201,37 @@
 					</div>
 					<script>
 						$(function() {
-							function visibility_awattaraktiv() {
-								if($('#awattaraktivOff').prop("checked")) {
-									hideSection('#awattardiv');
+							function visibility_electricityprovider() {
+								if($('#etprovideraktivOff').prop("checked")) {
+									hideSection('#etproviderondiv');
 								} else {
-									showSection('#awattardiv');
+									showSection('#etproviderondiv');
 								}
 							}
 
-							$('input[type=radio][name=awattaraktiv]').change(function(){
-								visibility_awattaraktiv();
+							function visibility_electricitytariff() {
+								hideSection('#awattardiv');
+								hideSection('#tibberdiv');
+								switch ($('#etprovider').val()) {
+									case 'et_awattar':
+										showSection('#awattardiv');
+									break;
+									case 'et_tibber':
+										showSection('#tibberdiv');
+									break;
+								}
+							}
+
+							$('#etprovider').change(function(){
+								visibility_electricitytariff();
 							});
 
-							visibility_awattaraktiv();
+							$('input[type=radio][name=etprovideraktiv]').change(function(){
+								visibility_electricityprovider();
+							});
+
+							visibility_electricitytariff();
+							visibility_electricityprovider();
 						});
 					</script>
 				</div>

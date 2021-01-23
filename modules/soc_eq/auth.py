@@ -28,6 +28,9 @@ client_id = ""
 client_secret = ""
 callback = ""
 
+#get last Character to identify the Chargepoint
+ChargePoint = ChargePoint[-1]
+
 #get SoC module config from openWB cofig
 fd = open('/var/www/html/openWB/openwb.conf','r')
 for line in fd:
@@ -56,6 +59,8 @@ tok_url  = "https://id.mercedes-benz.com/as/token.oauth2"
 data = {'grant_type': 'authorization_code', 'code': str(code), 'redirect_uri': callback}
 #call API to get Access/Refresh tokens
 act = requests.post(tok_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret))
+
+printDebug(act.url,1)
 
 if act.status_code == 200:
   #valid Response
