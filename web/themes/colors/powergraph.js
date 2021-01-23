@@ -121,7 +121,7 @@ class PowerGraph {
       values.selfUsage = 0;
     }
     var i;
-    
+
     values.lp0 = +elements[4];
     values.lp1 = +elements[5];
     for (i = 2; i < 9; i++) {
@@ -178,7 +178,7 @@ class PowerGraph {
   }
 
   drawSourceGraph(svg, width, height) {
-    const keys = ["batOut","selfUsage", "gridPush", "gridPull"];
+    const keys = ["batOut", "selfUsage", "gridPush", "gridPull"];
     const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height - 10, 0]);
     const extent = d3.extent(this.graphData, (d) =>
@@ -203,9 +203,9 @@ class PowerGraph {
     const yAxis = svg.append("g")
       .attr("class", "axis")
       .call(d3.axisLeft(yScale)
-      .tickSizeInner(-width)
-      .ticks(6)
-      .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10)))
+        .tickSizeInner(-width)
+        .ticks(6)
+        .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10)))
       ;
     yAxis.selectAll(".tick")
       .attr("font-size", 12);
@@ -247,10 +247,10 @@ class PowerGraph {
     const yAxis = svg.append("g")
       .attr("class", "axis")
       .call(d3.axisLeft(yScale)
-      .tickSizeInner(-width)
-      .ticks(6)
-      .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10))
-    );
+        .tickSizeInner(-width)
+        .ticks(6)
+        .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10))
+      );
     yAxis.selectAll(".tick")
       .attr("font-size", 12);
     yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);

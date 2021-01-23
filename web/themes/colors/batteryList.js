@@ -6,7 +6,7 @@
 class BatteryList {
 
   div;
-  constructor() {};
+  constructor() { };
 
   // initialize after document is created
   init() {
@@ -33,44 +33,43 @@ class BatteryList {
       const row = table.append("tbody")
         .append("tr")
         .style("color", wbdata.sourceSummary[2].color)
-        .style ("text-align", "center");
+        .style("text-align", "center");
 
       // current power
       const cell = row.append("td")
         .attr("class", "tablecell py-1 px-1");
       if (wbdata.batteryIn > 0) {
-        cell.text ("Ladung: " + formatWatt(wbdata.batteryIn))
+        cell.text("Ladung: " + formatWatt(wbdata.batteryIn))
       } else if (wbdata.batteryOut > 0) {
-        cell.text ("Lieferung: " + formatWatt(wbdata.batteryOut) )
+        cell.text("Lieferung: " + formatWatt(wbdata.batteryOut))
       } else {
-        cell.text ("0 W")
+        cell.text("0 W")
       }
       // Daily Import  
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
         .attr("style", "vertical-align: middle;")
-        .text(formatWattH (wbdata.batteryDailyImport));
+        .text(formatWattH(wbdata.batteryDailyImport));
 
       // Daily Export
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
         .attr("style", "vertical-align: middle;")
-        .text(formatWattH (wbdata.batteryDailyExport));
+        .text(formatWattH(wbdata.batteryDailyExport));
 
       // SoC
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
-        
         .text(wbdata.batterySoc + " %");
     }
     else {
       d3.select("div#batteryWidget").classed("hide", true);
     }
   }
-  }
-  
+}
 
-  
+
+
 
 var batteryList = new BatteryList();
 

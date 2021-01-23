@@ -74,7 +74,7 @@ class SmartHomeList {
     }
     else {
       d3.select("div#smartHomeWidget").classed("hide", true);
-     }
+    }
   }
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");
