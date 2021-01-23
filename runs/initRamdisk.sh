@@ -683,6 +683,7 @@ initRamdisk(){
 		"mqttu1p3psofort:openWB/config/get/u1p3p/sofortPhases" \
 		"mqttu1p3pstandby:openWB/config/get/u1p3p/standbyPhases" \
 		"mqttupdateinprogress:openWB/system/updateInProgress" \
+		"updateinprogress:openWB/system/updateInProgress" \
 		"mqttverbraucher1_aktiv:openWB/Verbraucher/1/Configured" \
 		"mqttverbraucher1_name:openWB/Verbraucher/1/Name" \
 		"mqttverbraucher2_aktiv:openWB/Verbraucher/2/Configured" \
@@ -690,7 +691,8 @@ initRamdisk(){
 		"mqttversion:openWB/system/Version" \
 		"mqttwattbezug:openWB/evu/W" \
 		"mqttwizzarddone:openWB/system/wizzardDone" \
-		"mqttzielladenaktivlp1:openWB/lp/1/boolFinishAtTimeChargeActive"
+		"mqttzielladenaktivlp1:openWB/lp/1/boolFinishAtTimeChargeActive" \
+		"lastregelungaktiv:openWB/global/strLastmanagementActive"
 	do
 		IFS=':' read -r -a tuple <<< "$f"
 		currentRamdiskFileVar="\"$RamdiskPath/${tuple[0]}\""
