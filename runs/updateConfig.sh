@@ -1640,6 +1640,12 @@ updateConfig(){
 	if ! grep -Fq "mypeugeot_soccalclp2=" $ConfigFile; then
 		echo "mypeugeot_soccalclp2=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "myopel_soccalclp1=" $ConfigFile; then
+		echo "myopel_soccalclp1=0" >> $ConfigFile; 
+	fi 
+	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
+		echo "myopel_soccalclp2=0" >> $ConfigFile;
+	fi
 	if ! grep -Fq "wr1extprod=" $ConfigFile; then
 		echo "wr1extprod=0" >> $ConfigFile
 	fi
