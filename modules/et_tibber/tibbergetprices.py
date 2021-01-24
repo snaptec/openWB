@@ -12,8 +12,7 @@
 # benötigt als Parameter den persönlichen Tibber-Token und die homeID
 # des Anschlusses
 #
-# TODO: schreibt derzeit (testweise) noch auf awattar-ramdisk, Implementierung per 
-# korrekter MQTT-Topics folgt
+# TODO: Implementierung per korrekter MQTT-Topics folgt
 #
 # 2020 Michael Ortenstein
 # This file is part of openWB
@@ -21,19 +20,11 @@
 #########################################################
 
 import requests
+from requests.exceptions import Timeout
 import json
 import time
 import os
 import sys
-
-# übergebene Token auslesen
-tibberToken = str(sys.argv[1])
-homeID = str(sys.argv[2])
-
-# Variablen initialisieren
-readPriceSuccessfull = False
-headers = {'Authorization': 'Bearer ' + tibberToken, 'Content-Type': 'application/json'}
-data = '{ "query": "{viewer {home(id:\\"' + homeID + '\\") {currentSubscription {priceInfo {today {total startsAt} tomorrow {total startsAt}}}}}}" }'
 
 # Hilfsfunktionen
 def writeLogEntry(message):
@@ -43,14 +34,39 @@ def writeLogEntry(message):
         f.write(timestamp + ' Modul tibbergetprices.py: ' + message + '\n')
 
 # Hauptprogramm
+
+# übergebene Token auslesen
+# nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
+if len(sys.argv) == 3:
+    tibberToken = str(sys.argv[1])
+    homeID = str(sys.argv[2])
+else:
+    writeLogEntry('Argumente fehlen, setze Preis auf 99.99ct/kWh.')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
+        etproviderpricefile.write('99.99\n')
+    exit()
+
+# Variablen initialisieren
+readPriceSuccessfull = False
+headers = {'Authorization': 'Bearer ' + tibberToken, 'Content-Type': 'application/json'}
+data = '{ "query": "{viewer {home(id:\\"' + homeID + '\\") {currentSubscription {priceInfo {today {total startsAt} tomorrow {total startsAt}}}}}}" }'
+
 # Tibber-API abfragen
-response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data)
+try:
+    # Timeout für Verbindung = 2 sek und Antwort = 6 sek
+    response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data, timeout=(2, 6))
+except Timeout:
+    # Timeout bei API-Abfrage, dann Preis auf 99.99ct/kWh setzen
+    writeLogEntry('API-Timeout, setze 99.99ct/kWh.')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
+        etproviderpricefile.write('99.99\n')
+    exit()
 
 if response:
-    # Tibber Antwort ist angekommen
+    # response Code 200: Tibber Antwort ist angekommen, jetzt die JSON prüfen
     if not 'errors' in response.text:
         # keine Fehler, parse json
-        prices = json.loads(response.text)
+        prices = response.json()
         # extrahiere Preise für heute, sortiert nach Zeitstempel
         todayPrices = sorted(prices['data']['viewer']['home']['currentSubscription']['priceInfo']['today'], key=lambda k: (k['startsAt'], k['total']))
         # extrahiere Preise für morgen, sortiert nach Zeitstempel
@@ -58,33 +74,33 @@ if response:
 
         if len(todayPrices) == 24:
             # alle 24 Stundenpreise für heute erhalten, schreibe in Ramdisk, Preise konvertiert in Eurocent
-            with open('/var/www/html/openWB/ramdisk/awattarprice', 'w') as awattarpricefile, \
-                 open('/var/www/html/openWB/ramdisk/awattargraphlist', 'w') as awattargraphlistfile:
+            with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile, \
+                 open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovidergraphlistfile:
                 # aktuelle Stunde als int
                 currentHour = int(time.strftime('%H', time.localtime(time.time())))
                 for tibberHour, price in enumerate(todayPrices):
                     # Preisliste mit den heutigen Preisen füllen
                     if tibberHour >= currentHour:
-                        awattargraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
+                        etprovidergraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
                         if tibberHour == currentHour:
-                            awattarpricefile.write('%2.2f\n' % (price['total'] * 100))
+                            etproviderpricefile.write('%2.2f\n' % (price['total'] * 100))
                             readPriceSuccessfull = True
                 # jetzt die Preise für morgen
                 if len(tomorrowPrices) == 24:
                     # alle 24 Stundenpreise für morgen erhalten, schreibe in Ramdisk, Preise konvertiert in Eurocent
                     for tibberHour, price in enumerate(tomorrowPrices):
-                        awattargraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
+                        etprovidergraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
             # publish MQTT-Daten für den Graphen
-            os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/awattargraphlist)"')
+            os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     else:
         # Fehler in Antwort
         writeLogEntry('Fehler in Tibber-Antwort.')
 else:
-    # keine Antwort
-    writeLogEntry('404 NOT FOUND - keine Tibber-Antwort.\n')
+    # fehlerhafte Antwort
+    writeLogEntry('POST-Fehler: ' + str(response.status_code) + ' ' + response.reason)
 
 if not readPriceSuccessfull:
     # aktueller Preis wurde nicht gelesen, dann Preis auf 99.99ct/kWh setzen
-    with open('/var/www/html/openWB/ramdisk/awattarprice', 'w') as awattarpricefile:
-        writeLogEntry('Kein aktueller Preis erkannt, setze 99.99ct/kWh.\n')
-        awattarpricefile.write('99.99\n')
+    writeLogEntry('Kein aktueller Preis erkannt, setze 99.99ct/kWh.')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
+        etproviderpricefile.write('99.99\n')

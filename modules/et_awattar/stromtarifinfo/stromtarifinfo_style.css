@@ -1,0 +1,174 @@
+/*!
+Stylesheet zu openWB settings
+
+2020 Michael Ortenstein
+*/
+
+html {
+    font-size: 0.7rem;
+}
+
+body {
+    margin-bottom: 40px;  /* margin bottom by footer height and some more space */
+}
+
+body > .container {
+    padding: 50px 15px 0;
+}
+
+.card {
+    margin-bottom: 1rem;
+}
+
+.card .card-header {
+    font-weight: bold;
+}
+
+.bg-primary,
+.bg-secondary,
+.bg-danger,
+.bg-success {
+    color: white;
+}
+
+.bg-warning,
+.bg-info {
+    color: #212529;
+}
+
+.card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-primary .btn-outline-info:not(.active):not(:hover) {
+    background-color: white;
+}
+
+.card-header.bg-success .btn-outline-info.focus {
+    box-shadow: 0 0 0 0.2rem white;
+}
+
+.card-header.bg-success .btn-outline-info.active,
+.card-header.bg-success .btn-outline-info:hover {
+    border-color: white;
+}
+
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 30px; /* fixed height of footer */
+    line-height: 30px; /* vertically center the text there */
+    z-index: 1030; /* same as menue */
+}
+
+h1 {
+    margin: 0.67em 0 0.2em 0;
+}
+
+.hide {
+    display: none;
+}
+
+.btn-blue {
+  background-color: hsl(197, 95%, 24%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#06acee", endColorstr="#035677");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#06acee), to(#035677));
+  background-image: -moz-linear-gradient(top, #06acee, #035677);
+  background-image: -ms-linear-gradient(top, #06acee, #035677);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #06acee), color-stop(100%, #035677));
+  background-image: -webkit-linear-gradient(top, #06acee, #035677);
+  background-image: -o-linear-gradient(top, #06acee, #035677);
+  background-image: linear-gradient(#06acee, #035677);
+  border-color: #035677 #035677 hsl(197, 95%, 18%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.39);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-red {
+  background-color: hsl(12, 95%, 24%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ee3406", endColorstr="#771a03");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#ee3406), to(#771a03));
+  background-image: -moz-linear-gradient(top, #ee3406, #771a03);
+  background-image: -ms-linear-gradient(top, #ee3406, #771a03);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ee3406), color-stop(100%, #771a03));
+  background-image: -webkit-linear-gradient(top, #ee3406, #771a03);
+  background-image: -o-linear-gradient(top, #ee3406, #771a03);
+  background-image: linear-gradient(#ee3406, #771a03);
+  border-color: #771a03 #771a03 hsl(12, 95%, 18%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.39);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-green {
+  background-color: hsl(112, 95%, 24%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#25ee06", endColorstr="#127703");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#25ee06), to(#127703));
+  background-image: -moz-linear-gradient(top, #25ee06, #127703);
+  background-image: -ms-linear-gradient(top, #25ee06, #127703);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #25ee06), color-stop(100%, #127703));
+  background-image: -webkit-linear-gradient(top, #25ee06, #127703);
+  background-image: -o-linear-gradient(top, #25ee06, #127703);
+  background-image: linear-gradient(#25ee06, #127703);
+  border-color: #127703 #127703 hsl(112, 95%, 18%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.39);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* very Small devices (up to 575.98px) */
+@media screen and (max-width: 575.98px) {
+    .navbar-collapse a,
+    .navbar-collapse .dropdown-header {
+        font-size: 1.8em;
+    }
+    .navbar-brand {
+        font-size: 2.0em;
+    }
+}
+
+/* Devices with limited height */
+@media screen and (max-height: 1024px) {
+    .scrollable-menu {
+        height: auto;
+        overflow-x: hidden;
+        max-height: 250px;
+        overflow-y: scroll;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media screen and (min-width: 576px) {
+    html {
+        font-size: 0.8rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media screen and (min-width: 768px) {
+    html {
+        font-size: 0.9rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media screen and (min-width: 992px) {
+    html {
+        font-size: 1.0rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    html {
+        font-size: 1.1rem;
+    }
+}

@@ -350,18 +350,20 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
 		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
-			$('#awattarEnabledIcon').show();
+			$('#etproviderEnabledIcon').show();
 			$('#priceBasedCharging').show();
 			$('#strompreis').show();
+			$('#navStromtarifInfo').removeClass('hide');
 		} else {
-			$('#awattarEnabledIcon').hide();
+			$('#etproviderEnabledIcon').hide();
 			$('#priceBasedCharging').hide();
 			$('#strompreis').hide();
+			$('#navStromtarifInfo').addClass('hide');
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awattaraktiv=1 in openwb.conf
+		// read etprovider values and trigger graph creation
+		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
@@ -695,7 +697,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			kmCharged = (energyCharged / consumption) * 100;
 			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		} else {
-			kmCharged = '-- km';
+			kmCharged = ' / -- km';
 		}
 		$(kmChargedLp).text(kmCharged);
 	}
@@ -923,7 +925,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			kmCharged = (energyCharged / consumption) * 100;
 			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		} else {
-			kmCharged = '-- km';
+			kmCharged = ' / -- km';
 		}
 		element.text(kmCharged);
 	}

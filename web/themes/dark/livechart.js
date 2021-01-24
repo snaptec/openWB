@@ -57,8 +57,6 @@ var d8bgCol = style.getPropertyValue('--d8bgCol');
 var d9Col = style.getPropertyValue('--d9Col');
 var d9bgCol = style.getPropertyValue('--d9bgCol');
 
-var awattartime = [];
-var graphawattarprice;
 var initialread = 0;
 var graphloaded = 0;
 var boolDisplayHouseConsumption;

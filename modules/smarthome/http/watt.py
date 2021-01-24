@@ -27,7 +27,8 @@ else:
    f = open( file_string , 'w')
 print ('%s devicenr %s orig url %s replaced url %s' % (time_string,devicenumber,url,urlrep),file=f)
 f.close()
-aktpower = int(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
+aktpowerfl = float(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
+aktpower = int(aktpowerfl)
 if aktpower > 50:
     relais = 1
 else:

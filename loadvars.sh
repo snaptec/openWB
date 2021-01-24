@@ -419,6 +419,7 @@ loadvars(){
 			pvwatt="0"
 		fi
 		pv1watt=$pvwatt
+		echo $pv1watt > ramdisk/pv1watt
 	else
 		pvvorhanden="0"
 		echo 0 > /var/www/html/openWB/ramdisk/pvvorhanden
@@ -426,6 +427,7 @@ loadvars(){
 	fi
 	if [[ $pv2wattmodul != "none" ]]; then
 		pv2watt=$(modules/$pv2wattmodul/main.sh || true)
+		echo $pv2watt > ramdisk/pv2watt
 		pvwatt=$(( pvwatt + pv2watt ))
 		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
@@ -1111,8 +1113,8 @@ loadvars(){
 		if [[ $speichermodul != "none" ]] ; then
 			echo speicherleistung $speicherleistung speichersoc $speichersoc
 		fi
-		if (( $awattaraktiv == 1 )) ; then
-			echo awattarprice "$awattarprice" awattarmaxprice "$awattarmaxprice"
+		if (( $etprovideraktiv == 1 )) ; then
+			echo etproviderprice "$etproviderprice" etprovidermaxprice "$etprovidermaxprice"
 		fi
 		echo pv1watt $pv1watt pv2watt $pv2watt pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
 		echo -e lla1 "$lla1"'\t'llv1 "$llv1"'\t'llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
@@ -1462,7 +1464,7 @@ loadvars(){
 		echo $nlakt_minpv > ramdisk/mqttnlakt_minpv
 	fi
 
-	onlakt_standby=$(<ramdisk/mqttnlakt_sofort)
+	onlakt_standby=$(<ramdisk/mqttnlakt_standby)
 	if [[ "$onlakt_standby" != "$nlakt_standby" ]]; then
 		tempPubList="${tempPubList}\nopenWB/boolChargeAtNight_standby=${nlakt_standby}"
 		echo $nlakt_standby > ramdisk/mqttnlakt_standby
@@ -1522,22 +1524,22 @@ loadvars(){
 		tempPubList="${tempPubList}\nopenWB/config/get/pv/priorityModeEVBattery=${speicherpveinbeziehen}"
 		echo $speicherpveinbeziehen > ramdisk/mqttspeicherpveinbeziehen
 	fi
-	oawattaraktiv=$(<ramdisk/mqttawattaraktiv)
-	if [[ "$oawattaraktiv" != "$awattaraktiv" ]]; then
-		tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${awattaraktiv}"
-		echo $awattaraktiv > ramdisk/mqttawattaraktiv
+	oetprovideraktiv=$(<ramdisk/mqttetprovideraktiv)
+	if [[ "$oetprovideraktiv" != "$etprovideraktiv" ]]; then
+		tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${etprovideraktiv}"
+		echo $etprovideraktiv > ramdisk/mqttetprovideraktiv
 	fi
-	oawattarprice=$(<ramdisk/mqttawattarprice)
-	awattarprice=$(<ramdisk/awattarprice)
-	if [[ "$oawattarprice" != "$awattarprice" ]]; then
-		tempPubList="${tempPubList}\nopenWB/global/awattar/ActualPriceForCharging=${awattarprice}"
-		echo $awattarprice > ramdisk/mqttawattarprice
+	oetproviderprice=$(<ramdisk/mqttetproviderprice)
+	etproviderprice=$(<ramdisk/etproviderprice)
+	if [[ "$oetproviderprice" != "$etproviderprice" ]]; then
+		tempPubList="${tempPubList}\nopenWB/global/awattar/ActualPriceForCharging=${etproviderprice}"
+		echo $etproviderprice > ramdisk/mqttetproviderprice
 	fi
-	oawattarmaxprice=$(<ramdisk/mqttawattarmaxprice)
-	awattarmaxprice=$(<ramdisk/awattarmaxprice)
-	if [[ "$oawattarmaxprice" != "$awattarmaxprice" ]]; then
-		tempPubList="${tempPubList}\nopenWB/global/awattar/MaxPriceForCharging=${awattarmaxprice}"
-		echo $awattarmaxprice > ramdisk/mqttawattarmaxprice
+	oetprovidermaxprice=$(<ramdisk/mqttetprovidermaxprice)
+	etprovidermaxprice=$(<ramdisk/etprovidermaxprice)
+	if [[ "$oetprovidermaxprice" != "$etprovidermaxprice" ]]; then
+		tempPubList="${tempPubList}\nopenWB/global/awattar/MaxPriceForCharging=${etprovidermaxprice}"
+		echo $etprovidermaxprice > ramdisk/mqttetprovidermaxprice
 	fi
 	odurchslp1=$(<ramdisk/mqttdurchslp1)
 	if [[ "$odurchslp1" != "$durchslp1" ]]; then

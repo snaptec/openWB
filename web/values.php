@@ -2,8 +2,8 @@
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	if(strpos($line, "awattaraktiv=") !== false) {
-		list(, $awattaraktivold) = explode("=", $line);
+	if(strpos($line, "etprovideraktiv=") !== false) {
+		list(, $etprovideraktivold) = explode("=", $line);
 	}
 	if(strpos($line, "minimalstromstaerke=") !== false) {
 		list(, $minimalstromstaerkeold) = explode("=", $line);

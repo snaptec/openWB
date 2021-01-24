@@ -83,6 +83,16 @@
 	<script src="js/RGraph.gauge.js"></script>
 
 	<script>
+		function setCookie(name, value, days) {
+			var expires = '';
+			if ( days ) {
+				var date = new Date();
+				date.setDate(date.getDate() + days);
+				expires = '; expires=' + date.toUTCString();
+			}
+			document.cookie = name + '=' + (value || '')  + expires;
+		}
+
 		function getCookie(cname) {
 			var name = cname + '=';
 			var decodedCookie = decodeURIComponent(document.cookie);
@@ -255,7 +265,7 @@
 		<!-- chargepoint info header -->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
 			<div class="col-3 px-0">
-				Ladepunkt <span id="awattarEnabledIcon" class="fa fa-chart-line hide"></span>
+				Ladepunkt <span id="etproviderEnabledIcon" class="fa fa-chart-line hide"></span>
 			</div>
 			<div class="col-3 px-0">
 				Ladeparameter
@@ -665,6 +675,11 @@
 						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
+				</div>
+				<div class="row justify-content-center regularTextSize vaRow">
+					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
+					Preis
+					<button type="button" class="btn btn-secondary ml-3 priceMore"><i class="far fa-plus-square"></i></button>
 				</div>
 			</div>  <!--/ priceBasedCharging -->
 
@@ -1249,7 +1264,7 @@
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
 		// load navbar, be carefull: it loads asynchonously
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101');
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210115');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1669,17 +1684,19 @@
 			// load scripts synchronously in order specified
 			var scriptsToLoad = [
 				// load Chart.js library
-				'js/Chart.bundle.js',
+				'js/Chart.bundle.min.js',
+				// load Chart.js annotation plugin
+				'js/chartjs-plugin-annotation.min.js',
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
 				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20201228',
+				'themes/Gauges/processAllMqttMsg.js?ver=20210114',
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20201218',
-				// respective Chart.js definition awattar
-				'themes/dark/electricityPriceChart.js?ver=20201228',
+				// respective Chart.js definition pricechart
+				'themes/dark/electricityPriceChart.js?ver=20210120',
 				// functions performing mqtt and start mqtt-service
 				'themes/Gauges/setupMqttServices.js?ver=20201228'
 			];
@@ -1837,6 +1854,28 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
+			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
+				event.preventDefault();
+				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
+				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
+				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
+				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
+				if ( $(this).hasClass ('priceLess') ) {
+					currentMaxPrice -= step;
+				} else {
+					currentMaxPrice += step;
+				}
+				// prevent timeout of delayUserInput when clicking "beyond" range
+				if ( currentMaxPrice < rangeMin ) {
+					currentMaxPrice = rangeMin;
+				} else if ( currentMaxPrice > rangeMax ) {
+					currentMaxPrice = rangeMax;
+				}
+				$('#MaxPriceForCharging').val(currentMaxPrice);
+				$('#MaxPriceForCharging').trigger('input');
+			});
+
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
@@ -1844,6 +1883,12 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
+				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
+					// marks times in the pricechart where the price is low enough so charging would be allowed
+	 				var priceAnnotations = createPriceAnnotations();
+	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
+	 				electricityPricechart.update();
+				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt

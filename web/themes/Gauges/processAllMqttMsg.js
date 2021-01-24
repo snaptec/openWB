@@ -266,22 +266,12 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	if ( mqttmsg == "openWB/evu/W" ) {
 		// zur Regelung: Einspeisung = negativ, Bezug = positiv
 		// Vorzeichen zur Darstellung umdrehen
-		var anzeigeWert = parseInt(mqttpayload,10) * -1;
-		if ( isNaN(anzeigeWert) ) {
-			anzeigeWert = 0;
+		var evuPower = parseInt(mqttpayload,10) * -1;
+		if ( isNaN(evuPower) ) {
+			evuPower = 0;
 		}
-		var anzeigeText = '';
-		if ( anzeigeWert < 0 ) {
-			anzeigeText = 'Bezug';
-		} else if ( anzeigeWert > 0 ) {
-			anzeigeText = 'Einspeisung';
-		}
-		if ( powerEvu > 999 ) {
-			powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-			unit = ' kW';
-		}
-		$('#bezug').text(prefix + powerEvu + unit);
-	 }
+		updateGaugeValue(gaugeEVU, evuPower, "");
+	}
 	else if ( mqttmsg == 'openWB/evu/DailyYieldImportKwh') {
 		var evuiDailyYield = parseFloat(mqttpayload);
 		if ( isNaN(evuiDailyYield) ) {
@@ -335,18 +325,18 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
 		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
-			$('#awattarEnabledIcon').show();
+			$('#etproviderEnabledIcon').show();
 			$('#priceBasedCharging').show();
 			$('#strompreis').show();
 		} else {
-			$('#awattarEnabledIcon').hide();
+			$('#etproviderEnabledIcon').hide();
 			$('#priceBasedCharging').hide();
 			$('#strompreis').hide();
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awattaraktiv=1 in openwb.conf
+		// read etprovider values and trigger graph creation
+		// loadElectricityPriceChart will show etproviderdiv if etprovideraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);

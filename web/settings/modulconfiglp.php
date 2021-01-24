@@ -648,7 +648,8 @@
 									<span class="text-info">openWB/set/lp/1/VPhase3</span> Spannung Phase 3, float, Punkt als Trenner, nur positiv<br>
 									<span class="text-info">openWB/set/lp/1/APhase1</span> Strom Phase 1, float, Punkt als Trenner, nur positiv<br>
 									<span class="text-info">openWB/set/lp/1/APhase2</span> Strom Phase 2, float, Punkt als Trenner, nur positiv<br>
-									<span class="text-info">openWB/set/lp/1/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv
+									<span class="text-info">openWB/set/lp/1/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/HzFrequenz</span> Netzfrequenz, float, Punkt als Trenner, nur positiv
 								</div>
 							</div>
 						</div>
@@ -1222,7 +1223,67 @@
 											<input class="form-control" type="text" name="mypeugeot_clientsecretlp1" id="mypeugeot_clientsecretlp1" value="<?php echo $mypeugeot_clientsecretlp1old ?>">
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere Peugeot SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp1old == 0) echo " active" ?>">
+													<input type="radio" name="mypeugeot_soccalclp1" id="mypeugeot_soccalclp1Off" value="0"<?php if($mypeugeot_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="mypeugeot_soccalclp1" id="mypeugeot_soccalclp1On" value="1"<?php if($mypeugeot_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
+												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.<br>
+											</span>
+										</div>
+										<div id="peugeotmanualcalcdiv" class="hide">
+											<div class="form-row mb-1">
+												<label for="akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 46kWh<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 93-94 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+								$(function() {
+									function visibility_mypeugeot_soccalclp1() {
+										if($('#mypeugeot_soccalclp1Off').prop("checked")) {
+											hideSection('#peugeotmanualcalcdiv');
+										} else {
+											showSection('#peugeotmanualcalcdiv');
+										}
+									}
+
+									$('input[type=radio][name=mypeugeot_soccalclp1]').change(function(){
+										visibility_mypeugeot_soccalclp1();
+									});
+
+									visibility_mypeugeot_soccalclp1();
+								});
+								</script>
 							</div>
 							<div id="socmyopel" class="hide">
 								<div class="form-group">
@@ -1291,7 +1352,7 @@
 										<div class="col">
 											<span class="form-text small">
 												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
-												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
+												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -2454,7 +2515,67 @@
 											<input class="form-control" type="text" name="mypeugeot_clientsecretlp2" id="mypeugeot_clientsecretlp2" value="<?php echo $mypeugeot_clientsecretlp2old ?>">
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere Peugeot SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp2old == 0) echo " active" ?>">
+													<input type="radio" name="mypeugeot_soccalclp2" id="mypeugeot_soccalclp2Off" value="0"<?php if($mypeugeot_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp2old == 1) echo " active" ?>">
+													<input type="radio" name="mypeugeot_soccalclp2" id="mypeugeot_soccalclp2On" value="1"<?php if($mypeugeot_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
+												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.<br>
+											</span>
+										</div>
+										<div id="peugeotmanualcalclp2div" class="hide">
+											<div class="form-row mb-1">
+												<label for="akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 46kWh<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 93-94 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+								$(function() {
+									function visibility_mypeugeot_soccalclp2() {
+										if($('#mypeugeot_soccalclp2Off').prop("checked")) {
+											hideSection('#peugeotmanualcalclp2div');
+										} else {
+											showSection('#peugeotmanualcalclp2div');
+										}
+									}
+
+									$('input[type=radio][name=mypeugeot_soccalclp2]').change(function(){
+										visibility_mypeugeot_soccalclp2();
+									});
+
+									visibility_mypeugeot_soccalclp2();
+								});
+								</script>
 							</div>
 							<div id="socmyopellp2" class="hide">
 								<div class="form-group">
@@ -2522,7 +2643,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
