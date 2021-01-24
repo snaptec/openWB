@@ -55,6 +55,11 @@ class AVMHomeAutomation:
             self.logMessage(0, "last sessionID was accepted as valid")
             self.sessionID = sessionid
             return
+        blockTimeXML = challengeResponse.find('BlockTime')
+        if blockTimeXML != None and int(blockTimeXML.text) > 0:
+            self.logMessage(2, "Durch Anmeldefehler in der Vergangenheit ist der Zugang zur Fritzbox noch fuer %s Sekunden gesperrt." % (blockTimeXML.text))
+            self.sessionID = INVALID_SESSIONID
+            return
         self.logMessage(0, "last sessionID was invalid, performing new challenge-response authentication")
         challenge = challengeResponse.find('Challenge').text
         self.logMessage(0, "challenge: %s" % (challenge))
