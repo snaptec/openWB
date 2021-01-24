@@ -163,7 +163,6 @@ class AVMHomeAutomation:
         try:
             getDeviceListInfosResponseBodyRaw = urllib.request.urlopen(getDeviceListInfosURL).read()
             getDeviceListInfosResponseBody = str(getDeviceListInfosResponseBodyRaw, "utf-8").strip()
-            self.logMessage(0, "returned device info infos (raw Body): %s" % (getDeviceListInfosResponseBody))
             deviceListElementTree = ET.fromstring(getDeviceListInfosResponseBody)
         except BaseException as e:
             self.logMessage(2, "error while requesting device infos from fritz box:" % (e))
@@ -174,14 +173,28 @@ class AVMHomeAutomation:
             for device in deviceListElementTree:
                 name = device.find("name").text
                 ain = device.attrib["identifier"]
-                powermeter = device.find("powermeter")
-                power = float(powermeter.find("power").text)/1000.0 # AVM returns mW, convert to W here
-                voltage = float(powermeter.find("voltage").text)/1000.0 # AVM returns mV, convert to V here
-                energy = powermeter.find("energy").text # AVM returns Wh
-                next_device_infos[name] = {'ain': ain, 'power': power, 'voltage': voltage, 'energy': energy}
+                next_device_infos[name] = {'ain': ain}
+
+                hkrBlock = device.find("hkr")
+                if hkrBlock != None:
+                    next_device_infos[name]['is_thermostat'] = True
+                else:
+                    next_device_infos[name]['is_thermostat'] = False
+
+                powermeterBlock = device.find("powermeter")
+                if powermeterBlock != None:
+                    # AVM returns mW, convert to W here
+                    next_device_infos[name]['power'] = float(powermeterBlock.find("power").text)/1000.0
+                    # AVM returns mV, convert to V here
+                    next_device_infos[name]['voltage'] = float(powermeterBlock.find("voltage").text)/1000.0
+                    # AVM returns Wh
+                    next_device_infos[name]['energy'] = powermeterBlock.find("energy").text 
+
                 temperatureBlock = device.find("temperature")
                 if temperatureBlock != None:
+                    # AVM returns tenths of degrees Celsius
                     next_device_infos[name]['temperature'] = float(temperatureBlock.find("celsius").text)/10.0 
+
                 switchBlock = device.find("switch")
                 if switchBlock != None:
                     if int(switchBlock.find("state").text) == 1:
@@ -294,12 +307,23 @@ class AVMHomeAutomation:
 
         try:
             switch = self.device_infos[self.switchname]
-            aktpower = switch['power']
-            powerc = switch['energy']
-
-            if switch['state']:
-                relais = 1
+            if 'power' in switch:
+                aktpower = switch['power']
             else:
+                aktpower = 0
+                self.logMessage(2, "device does not provide power measurement, falling back to 0")
+            if 'energy' in switch:
+                powerc = switch['energy']
+            else:
+                powerc = 0
+                self.logMessage(2, "device does not provide energy measurement, falling back to 0")
+            if 'state' in switch:
+                if switch['state']:
+                    relais = 1
+                else:
+                    relais = 0
+            else:
+                self.logMessage(2, "device does not provider switch state, falling back to OFF")
                 relais = 0
             answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '}'
         except:
