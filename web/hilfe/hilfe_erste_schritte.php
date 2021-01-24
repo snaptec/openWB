@@ -1,16 +1,33 @@
 <!-- Erste Schritte >>> -->
 <h3>Bedienung</h3>
-<h4> Lademodus</h4>
+<h4>Lademodus</h4>
+Der Lademodus bestimmt das Ladeverhalten der Wallbox und kann weiter konfiguriert werden.
+<h5>Sofort</h5>
 <p>
-	Der Unterschied zwischen "Standby" und "Stop" ist, dass bei "Stop" keine Ladung erlaubt ist.<br>
-	Im Standby  Modus kann die Ladung durch Nachtladen und Zielladen aktiviert werden.<br>
-	Im Lademodus Min + PV wird immer mit der eingestellten Minimalstromstärke geladen und bei vorhandenem Überschuss hochgeregelt<br>
-	Der Lademodus PV startet die Ladung erst wenn genügend PV Überschuss vorhanden ist. Lässt dieser nach wird die Ladung auch wieder gestoppt.<br>
-	Die PV Ladeeeinstellungen können entsprechend ihrer Optionen das Laden steuern.<br>
-
-
+Die Box beginnt sofort zu laden. Der Ladestrom kann vorgegeben werden, ebenso kann ein Ladelimit definiert werden. Beim Erreichen eines konfigurierten Ladelimits wird die Ladung beendet. Mögliche Ladelimits:<br>
+<ul>
+<li>Ladezustand (SoC) des Fahrzeugs. Dies erfordert dass SoC Modul in den Einstellungen des Ladepunkts konfiguriert ist.</li>
+<li>Zugeführte Energiemenge (kWh). Eignet sich z.b. falls kein SoC Modul vorhanden ist.</li>
+</ul>
 </p>
-<hr>
+<h5>PV Laden</h5>
+<p>
+Geladen wird bei ausreichendem PV Überschuss. Der Ladestrom wird automatisch angepasst um den vorhandenen PV Überschuss bestmöglich zu nutzen.
+ Die Ladung startet automatisch bei erreichen der Einschaltschwelle für die Einspeisung und stoppt beim Erreichen der Abschaltschelle oder beim Erreichen eines konfigurierten maximalen SoC.
+ Je nach Fahrzeug und installierter openWB Variante kann die CP-Unterbrechung genutzt werden um Fahrzeuge aus dem Schlaf für den Ladebegin aufzuwecken.
+</p>
+<h5>Min+PV Laden</h5>
+<p>
+Verhält sich wie PV Laden, jedoch wird sofort mit konfigurierte Mindeststromstärke geladen. Die Einschalt- und Abschaltschwelle entfernt.
+ Eignet sich bei kleineren PV-Anlagen oder stark wechselnder Sonneneinstrahlung um häufige Ladeunterbrechungen zu vermeiden.
+</p>
+<h5>Standby</h5>
+<p>
+Es findet keine Ladung statt, lediglich mögliche konfigurierte Nacht-, Morgen- und Zielladungen werden durchgeführt.
+</p>
+<h5>Stop</h5>
+Es findet keine Ladung statt, auch keine Nacht-, Morgen- und Zielladungen.
+</p>
 <h4>Ladeeinstellung</h4>
 <h5>Meldung "Lastmanagement aktiv, Ladeleistung reduziert"</h5>
 <p>
