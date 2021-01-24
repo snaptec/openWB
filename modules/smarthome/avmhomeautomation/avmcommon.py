@@ -8,6 +8,8 @@ import hashlib
 import credentials
 import xml.etree.ElementTree as ET
 
+INVALID_SESSIONID =  "0000000000000000"
+
 class AVMHomeAutomation:
     # Parse configuration from command line arguments as proviced by /runs/smarthomehandler.py
     def __init__(self):
@@ -48,7 +50,7 @@ class AVMHomeAutomation:
         challengeURL = loginurl + "?sid="+self.sessionID
         challengeResponse = ET.fromstring(urllib.request.urlopen(loginurl, timeout = 5).read())
         sessionid = challengeResponse.find('SID').text
-        if sessionid != "0000000000000000":
+        if sessionid != INVALID_SESSIONID:
             # We already had valid session id, so return directly
             self.logMessage(0, "last sessionID was accepted as valid")
             self.sessionID = sessionid
@@ -74,6 +76,9 @@ class AVMHomeAutomation:
             self.sessionID = sessionid
         except BaseException as e:
             self.logMessage(2, "error completing auth: %s" % (e))
+        if self.sessionID == INVALID_SESSIONID:
+            blockTime = sessioninfo.find('BlockTime').text
+            self.logMessage(2, "Anmeldung fehlgeschlagen, bitte Nutzernamen und Passwort ueberpruefen. Anmeldung fuer die naechsten %s Sekunden durch FRITZ!Box-Webinterface gesperrt." % (blockTime))
 
 
     # connect checks the currently known session ID for validity and
@@ -93,7 +98,7 @@ class AVMHomeAutomation:
                 f.close()
                 mtime = os.path.getmtime(file_stringsessionid)
                 age_of_id_in_seconds = time.time() - mtime
-                should_authenticate = age_of_id_in_seconds / 60 >= 5
+                should_authenticate = self.sessionID == INVALID_SESSIONID or age_of_id_in_seconds / 60 >= 5
                 self.logMessage(0, "loaded session ID from ramdisk: %s (age: %.1f seconds)" % (self.sessionID, age_of_id_in_seconds))
             else:
                 self.logMessage(1, "no previously stored session ID found, will try to get a new one")
@@ -161,7 +166,7 @@ class AVMHomeAutomation:
     def getDevicesDict(self):
         getDeviceListInfosURL = self.baseURL + "/webservices/homeautoswitch.lua?sid="+self.sessionID+"&switchcmd=getdevicelistinfos"
         try:
-            getDeviceListInfosResponseBodyRaw = urllib.request.urlopen(getDeviceListInfosURL).read()
+            getDeviceListInfosResponseBodyRaw = urllib.request.urlopen(getDeviceListInfosURL, timeout = 5).read()
             getDeviceListInfosResponseBody = str(getDeviceListInfosResponseBodyRaw, "utf-8").strip()
             deviceListElementTree = ET.fromstring(getDeviceListInfosResponseBody)
         except BaseException as e:
@@ -267,6 +272,9 @@ class AVMHomeAutomation:
     # switchDevice sets the relais of the AVM Home Automation actor
     # state parameter: true -> on, false -> off
     def switchDevice(self, state):
+        if self.sessionID == INVALID_SESSIONID:
+            self.logMessage(2, "Kann ohne valide Anmeldung nicht schalten.")
+            return
         self.logMessage(0, "start of switchDevice")
         if state:
             cmd = "setswitchon"
@@ -299,6 +307,9 @@ class AVMHomeAutomation:
     # The JSON answer is either written to the according smarthome device return file
     # or dumped to stdout if no such file exists (for local development)
     def getActualPower(self):
+        if self.sessionID == INVALID_SESSIONID:
+            self.logMessage(2, "Kann ohne valide Anmeldung keine neuen Daten holen.")
+            return
         self.logMessage(0, "start of getActualPower")
         self.fetchAndCacheDeviceInfos()
         if not self.switchname in self.device_infos:
