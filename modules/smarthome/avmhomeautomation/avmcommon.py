@@ -57,7 +57,7 @@ class AVMHomeAutomation:
             return
         blockTimeXML = challengeResponse.find('BlockTime')
         if blockTimeXML != None and int(blockTimeXML.text) > 0:
-            self.logMessage(2, "Durch Anmeldefehler in der Vergangenheit ist der Zugang zur Fritzbox noch fuer %s Sekunden gesperrt." % (blockTimeXML.text))
+            self.logMessage(2, "Durch Anmeldefehler in der Vergangenheit ist der Zugang zur FRITZ!Box noch fuer %s Sekunden gesperrt." % (blockTimeXML.text))
             self.sessionID = INVALID_SESSIONID
             return
         self.logMessage(0, "last sessionID was invalid, performing new challenge-response authentication")
@@ -117,14 +117,14 @@ class AVMHomeAutomation:
             self.logMessage(2, "unexpected error during connect: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
 
         if should_authenticate:
-            self.logMessage(0, "(re-)authenticate at fritzbox, old sessionID: %s" % (self.sessionID))
+            self.logMessage(0, "(re-)authenticate at FRITZ!Box, old sessionID: %s" % (self.sessionID))
             try:
                 self.getAVMSessionID()
             except:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 self.logMessage(2, "unexpected error while negotiating session id: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
-            self.logMessage(0, "retrieved sessionID from fritzbox: %s" % (self.sessionID))
+            self.logMessage(0, "retrieved sessionID from FRITZ!Box: %s" % (self.sessionID))
             try:
                 # Try to store potentially new session id to ramdisk for next run
                 # If this operations fails, no harm is done as we can always authenticate
@@ -175,7 +175,7 @@ class AVMHomeAutomation:
             getDeviceListInfosResponseBody = str(getDeviceListInfosResponseBodyRaw, "utf-8").strip()
             deviceListElementTree = ET.fromstring(getDeviceListInfosResponseBody)
         except BaseException as e:
-            self.logMessage(2, "error while requesting device infos from fritz box:" % (e))
+            self.logMessage(2, "error while requesting device infos from FRITZ!Box:" % (e))
             self.device_infos = {}
             return
         next_device_infos = {}
@@ -217,7 +217,7 @@ class AVMHomeAutomation:
 
 
     # readOrBuildDeviceInfoCache fills self.device_infos, either from a cached
-    # file of maximum age 5 minutes, or by fetching the info from the fritzbox.
+    # file of maximum age 5 minutes, or by fetching the info from the FRITZ!Box.
     # The main purpose of this cache is to skip looking up the AIN via network
     # every time.
     def readOrBuildDeviceInfoCache(self):
@@ -243,7 +243,7 @@ class AVMHomeAutomation:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             self.logMessage(2, "unexpected error during readOrBuild: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
-        self.logMessage(0, "should fetch new info from fritzbox: %s" % (should_fetch))
+        self.logMessage(0, "should fetch new info from FRITZ!Box: %s" % (should_fetch))
         if should_fetch:
             self.fetchAndCacheDeviceInfos()
         self.logMessage(0, "end of readOrBuildDeviceInfoCache")
@@ -252,7 +252,7 @@ class AVMHomeAutomation:
     # fetchAndCacheDeviceInfos calls getDevicesDict and then stores the result in 
     # a cachefile on the ramdisk
     def fetchAndCacheDeviceInfos(self):
-        self.logMessage(0, "fetching device info for all devices from fritzbox")
+        self.logMessage(0, "fetching device info for all devices from FRITZ!Box")
         try:
             self.getDevicesDict()
         except:
@@ -293,7 +293,7 @@ class AVMHomeAutomation:
 
         if not self.switchname in self.device_infos:
             # still not found -> bail out
-            self.logMessage(2, "no such device found at fritzbox: %s" % (self.switchname))
+            self.logMessage(2, "no such device found at FRITZ!Box: %s" % (self.switchname))
             return
 
         switch = self.device_infos[self.switchname]
@@ -318,7 +318,7 @@ class AVMHomeAutomation:
         self.logMessage(0, "start of getActualPower")
         self.fetchAndCacheDeviceInfos()
         if not self.switchname in self.device_infos:
-            self.logMessage(2, "no such device found at fritzbox: %s" % (self.switchname))
+            self.logMessage(2, "no such device found at FRITZ!Box: %s" % (self.switchname))
             return
 
         try:
