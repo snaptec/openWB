@@ -18,11 +18,11 @@ class WbData {
 		this.chargePower = 0;
 		this.chargeSum = 0;
 		this.housePower = 0;
-		this.houseSum = 0;
-		this.batteryIn = 0;
-		this.batterOut = 0;
-		this.batterydailyExport = 0;
-		this.batteryImport = 0;
+		this.houseEnergy = 0;
+		this.batteryEnergyExport = 0;
+		this.batteryEnergyImport = 0;
+		this.batteryPowerExport = 0;
+		this.batteryPowerImport = 0;
 
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
@@ -99,6 +99,8 @@ class WbData {
 			case 'houseEnergy':
 				this.updateUsageSummary(4, "energy", value);
 				break;
+			case 'currentPowerPrice':
+				chargePointList.update();
 			default:
 				break;
 		}
@@ -168,13 +170,13 @@ class WbData {
 	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
-			case 'batteryIn': this.usageSummary[3].power = value;
+			case 'batteryPowerImport': this.usageSummary[3].power = value;
 				break;
-			case 'batteryOut': this.sourceSummary[2].power = value;
+			case 'batteryPowerExport': this.sourceSummary[2].power = value;
 				break;
-			case 'batteryDailyExport': this.usageSummary[3].energy = value;
+			case 'batteryEnergyExport': this.usageSummary[3].energy = value;
 				break;
-			case 'batteryDailyImport': this.sourceSummary[2].energy = value;
+			case 'batteryEnergyImport': this.sourceSummary[2].energy = value;
 				break;
 			default:
 				break;

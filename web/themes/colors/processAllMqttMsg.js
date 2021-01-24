@@ -357,7 +357,6 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 		} else {
 			$('#evuedailyyield').text("");
 		}
-
 	}
 }
 
@@ -368,59 +367,44 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 
 	// color theme
 	if (mqttmsg == 'openWB/global/WHouseConsumption') {
-		var powerHouse = parseInt(mqttpayload, 10);
-		if (isNaN(powerHouse)) {
-			powerHouse = 0;
-		}
-		wbdata.updateGlobal("housePower", powerHouse);
+		wbdata.updateGlobal("housePower", makeInt(mqttpayload));
 	}
 	else if (mqttmsg == 'openWB/global/WAllChargePoints') {
-		var powerAllLp = parseInt(mqttpayload, 10);
-		if (isNaN(powerAllLp)) {
-			powerAllLp = 0;
-		}
-		wbdata.updateGlobal("chargePower", powerAllLp);
+		wbdata.updateGlobal("chargePower", makeInt(mqttpayload));
+	}
+	else if ( mqttmsg == 'openWB/global/strLastmanagementActive' ) {
+		wbdata.updateGlobal("loadMgtText", (mqttpayload.length >=5 ? mqttpayload : ''));
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));	
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
+		// currently not implemented for color theme		
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
+		// currently not implemented for color theme
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		wbdata.updateGlobal("currentPowerPrice", parseFloat(mqttpayload));
+	}
+	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
+		wbdata.updateGlobal("chargeMode", mqttpayload);
+			// '0': mode sofort
+			// '1': mode min+pv
+			// '2': mode pv
+			// '3': mode stop
+			// '4': mode standby
+	
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
-		var llaDailyYield = parseFloat(mqttpayload);
-		if (isNaN(llaDailyYield)) {
-			llaDailyYield = 0;
-		}
-		wbdata.updateGlobal("chargeEnergy", llaDailyYield);
+		wbdata.updateGlobal("chargeEnergy", makeFloat (mqttpayload));
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldHausverbrauchKwh') {
-		var hausverbrauchDailyYield = parseFloat(mqttpayload);
-		if (isNaN(hausverbrauchDailyYield)) {
-			hausverbrauchDailyYield = 0;
-		}
-		wbdata.updateGlobal("houseEnergy", hausverbrauchDailyYield);
+		wbdata.updateGlobal("houseEnergy", makeFloat (mqttpayload));
 	}
+	// end color theme
 
-	if (mqttmsg == 'openWB/global/WHouseConsumption') {
-		var powerHouse = parseInt(mqttpayload, 10);
-		if (isNaN(powerHouse)) {
-			powerHouse = 0;
-		}
-		if (powerHouse > 999) {
-			powerHouse = (powerHouse / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kW';
-		} else {
-			powerHouse += ' W';
-		}
-		$('#hausverbrauch').text(powerHouse);
-	}
-	else if (mqttmsg == 'openWB/global/WAllChargePoints') {
-		var powerAllLp = parseInt(mqttpayload, 10);
-		if (isNaN(powerAllLp)) {
-			powerAllLp = 0;
-		}
-		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kW';
-		} else {
-			powerAllLp += ' W';
-		}
-		$('#powerAllLp').text(powerAllLp);
-	}
-	else if (mqttmsg == 'openWB/global/strLastmanagementActive') {
+	if (mqttmsg == 'openWB/global/strLastmanagementActive') {
 		if (mqttpayload.length >= 5) {
 			// if there is info-text in payload for topic, show the text
 			$('#lastregelungaktiv').text(mqttpayload);
@@ -447,14 +431,14 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// read etprovider values and trigger graph creation
 		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
-		var csvaData = [];
+		 var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
 			csvaData.push(rawacsv[i].split(','));
 		}
 		electricityPriceTimeline = getCol(csvaData, 0);
 		electricityPriceChartline = getCol(csvaData, 1);
-		loadElectricityPriceChart();
+		loadElectricityPriceChart(); 
 	}
 	else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
 		setInputValue('MaxPriceForCharging', mqttpayload);
@@ -560,15 +544,11 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	// color theme
 
 	if (mqttmsg == 'openWB/housebattery/W') {
-		var speicherwatt = parseInt(mqttpayload, 10);
-		if (isNaN(speicherwatt)) {
-			speicherwatt = 0;
-		}
+		var speicherwatt = makeInt(mqttpayload);
 		if (speicherwatt > 0) {
-			wbdata.updateBat("batteryIn", speicherwatt);
-
+			wbdata.updateBat("batteryPowerImport", speicherwatt);
 		} else if (speicherwatt < 0) {
-			wbdata.updateBat("batteryOut", -speicherwatt);
+			wbdata.updateBat("batteryPowerExport", -speicherwatt);
 		}
 	}
 	else if (mqttmsg == 'openWB/housebattery/%Soc') {
@@ -582,18 +562,10 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		wbdata.updateBat("isBatteryConfigured", (mqttpayload == 1));
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
-		var sieDailyYield = parseFloat(mqttpayload);
-		if (isNaN(sieDailyYield)) {
-			sieDailyYield = 0;
-		}
-		wbdata.updateBat("batteryDailyExport", sieDailyYield)
+		wbdata.updateBat("batteryEnergyExport", makeFloat (mqttpayload));
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
-		var siiDailyYield = parseFloat(mqttpayload);
-		if (isNaN(siiDailyYield)) {
-			siiDailyYield = 0;
-		}
-		wbdata.updateBat("batteryDailyImport", siiDailyYield)
+		wbdata.updateBat("batteryEnergyImport", makeFloat (mqttpayload))
 	}
 	// end color theme
 
@@ -1208,3 +1180,19 @@ function unsubscribeMqttGraphSegments() {
 		client.unsubscribe(topic);
 	}
 } 
+
+function makeInt(message) {
+	var number = parseInt(message, 10);
+	if (isNaN(number)) {
+		number = 0;
+	}
+	return number;	
+}
+
+function makeFloat(message) {
+	var number = parseFloat(message, 10);
+	if (isNaN(number)) {
+		number = 0.0;
+	}
+	return number;	
+}

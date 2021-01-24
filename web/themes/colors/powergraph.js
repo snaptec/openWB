@@ -291,9 +291,9 @@ class PowerGraph {
       .datum(this.graphData)
       .attr("stroke", this.chargeColor)
       .attr("stroke-width", 1)
-      .attr("fill", this.bgcolor)
+      .attr("fill", "none")
       .style("stroke-dasharray", ("3, 3"))
-      .style("background-color", this.bgcolor)
+      
       .attr("d", d3.line()
         .x((d, i) => xScale(this.graphData[i].date))
         .y(d => yScale(d.soc1))
