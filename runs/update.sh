@@ -143,6 +143,10 @@ if ! grep -Fq "bezug_http_ekwh_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_http_ekwh_url=http://192.168.0.17/einspeisungwh.txt" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "u1p3schaltparam=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3schaltparam=8" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 sudo /var/www/html/openWB/runs/atreboot.sh

@@ -6,6 +6,11 @@ u1p3pswitch(){
 		u1p3pstat=$(<ramdisk/u1p3pstat)
 		nachtladenstate=$(<ramdisk/nachtladenstate)
 		nachtladen2state=$(<ramdisk/nachtladen2state)
+		if (( u1p3schaltparam == 0 ))
+			u1p3schaltparam = 8
+		fi
+		uhwaittime = u1p3schaltparam * 60
+		urwaittime = (16 - u1p3schaltparam) * 60 
 		if (( debug == 1 )); then
 			echo "automatische Umschaltung aktiv"
 		fi
@@ -48,9 +53,9 @@ u1p3pswitch(){
 							fi
 							if (( u1p3pstat == 3 )); then
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
-								if (( urcounter < 600 )); then
-									if (( urcounter < 540 )); then
-										urcounter=540
+								if (( urcounter < urwaittime )); then
+									if (( urcounter < urwaittime - 60 )); then
+										urcounter=urwaittime - 60
 									fi
 									urcounter=$((urcounter + 10))
 									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
@@ -85,9 +90,9 @@ u1p3pswitch(){
 							fi
 							if (( u1p3pstat == 3 )); then
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
-								if (( urcounter < 600 )); then
-									if (( urcounter < 540 )); then
-										urcounter=540
+								if (( urcounter < urwaittime )); then
+									if (( urcounter < urwaittime - 60 )); then
+										urcounter=urwaittime - 60
 									fi
 									urcounter=$((urcounter + 10))
 									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
@@ -216,7 +221,7 @@ u1p3pswitch(){
 								fi
 								if (( oldll == maximalstromstaerke )); then
 									uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
-									if (( uhcounter < 600 )); then
+									if (( uhcounter < uhwaittime )); then
 										uhcounter=$((uhcounter + 10))
 										echo $uhcounter > /var/www/html/openWB/ramdisk/uhcounter
 										if (( debug == 1 )); then
@@ -259,7 +264,7 @@ u1p3pswitch(){
 								fi
 								if (( oldll == minimalampv )); then
 									urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
-									if (( urcounter < 500 )); then
+									if (( urcounter < urwaittime )); then
 										urcounter=$((urcounter + 10))
 										echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
 										if (( debug == 1 )); then
@@ -330,7 +335,7 @@ u1p3pswitch(){
 								fi
 								if (( oldll == maximalstromstaerke )); then
 									uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
-									if (( uhcounter < 600 )); then
+									if (( uhcounter < uhwaittime )); then
 										uhcounter=$((uhcounter + 10))
 										echo $uhcounter > /var/www/html/openWB/ramdisk/uhcounter
 										if (( debug == 1 )); then
@@ -373,7 +378,7 @@ u1p3pswitch(){
 								fi
 								if (( oldll == minimalapv )); then
 									urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
-									if (( urcounter < 500 )); then
+									if (( urwaittime < 500 )); then
 										urcounter=$((urcounter + 10))
 										echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
 										if (( debug == 1 )); then
