@@ -378,7 +378,7 @@ u1p3pswitch(){
 								fi
 								if (( oldll == minimalapv )); then
 									urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
-									if (( urwaittime < 500 )); then
+									if (( urcounter  < urwaittime )); then
 										urcounter=$((urcounter + 10))
 										echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
 										if (( debug == 1 )); then
