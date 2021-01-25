@@ -32,6 +32,9 @@ if ( $response == "nomail" ) {
 } elseif ( $response == "usernameempty" ) {
 	echo "Kein Benutzername angegeben. Weiterleitung erfolgt in 10 Sekunden...";
 	header( "refresh:10;url='../settings/cloudconfig.php" );
+} elseif ( $response == "exists" ) {
+	echo "Der Benutzername exisitiert bereits. Weiterleitung erfolgt in 10 Sekunden...";
+	header( "refresh:10;url='../settings/cloudconfig.php" );
 } else {
 	$upass = explode(',', $response);
 	$clouduser = $upass[0];
@@ -64,9 +67,9 @@ $data = array(
 	'RemotePrefix' => $clouduser.'/',
 	'mqttProtocol' => 'mqttv311',
 	'tlsProtocol' => 'tlsv1.2',
-	'exportStatus' => 'true',
-	'exportGraph' => 'true',
-	'subscribeConfigs' => 'true',
+	'exportStatus' => '1',
+	'exportGraph' => '1',
+	'subscribeConfigs' => '1',
 	'username' => $_POST['username']
 );
 $ch = curl_init($url);

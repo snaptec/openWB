@@ -8,12 +8,12 @@ sofortlademodus(){
 			fi
 		fi
 	fi
-	if (( awattaraktiv == 1 )); then
-		actualprice=$(<ramdisk/awattarprice)
-		if (( $(echo "$actualprice < $awattarmaxprice" |bc -l) )); then
+	if (( etprovideraktiv == 1 )); then
+		actualprice=$(<ramdisk/etproviderprice)
+		if (( $(echo "$actualprice <= $etprovidermaxprice" |bc -l) )); then
 			#price lower than max price, enable charging
 			if [[ $debug == "1" ]]; then
-				echo "Aktiviere preisbasierte Ladung, Preis $actualprice, Max $awattarmaxprice"
+				echo "Aktiviere preisbasierte Ladung, Preis $actualprice, Max $etprovidermaxprice"
 			fi
 			if (( lp1enabled == 0 )); then
 				mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"
@@ -26,7 +26,7 @@ sofortlademodus(){
 			fi
 		else
 			if [[ $debug == "1" ]]; then
-				echo "Deaktiviere preisbasierte Ladung, Preis $actualprice, Max $awattarmaxprice"
+				echo "Deaktiviere preisbasierte Ladung, Preis $actualprice, Max $etprovidermaxprice"
 			fi
 			#price higher than max price, disable charging
 			if (( lp1enabled == 1 )); then

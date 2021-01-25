@@ -52,10 +52,12 @@ socDebugLog(){
 
 timer=$(<$soctimerfile)
 if (( timer < 60 )); then
+	socDebugLog "Nothing to do yet. Incrementing timer."
 	timer=$((timer+1))
 	echo $timer > $soctimerfile
 else
 	echo 0 > $soctimerfile
+	socDebugLog "Requesting SoC"
 	sudo python /var/www/html/openWB/modules/soc_myrenault/zoensoc.py $username $password $location $country $vin $CHARGEPOINT
 
 	dtime=$(date +"%T")
