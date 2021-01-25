@@ -14,7 +14,7 @@
 #
 # TODO: Implementierung per korrekter MQTT-Topics folgt
 #
-# 2020 Michael Ortenstein
+# 2021 Michael Ortenstein
 # This file is part of openWB
 #
 #########################################################
@@ -33,6 +33,21 @@ def writeLogEntry(message):
     with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
         f.write(timestamp + ' Modul tibbergetprices.py: ' + message + '\n')
 
+def writeInvalidPriceData(error):
+    # wenn kein aktueller Preis erkannt wurde,
+    # schreibt 99.99ct/kWh in Preis-Datei und füllt Chart-Array für die nächsten 12 Stunden damit,
+    # schreibt Fehler ins Log
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile, \
+         open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovidergraphlistfile:
+        etproviderpricefile.write('99.99\n')
+        currentHour = int(time.strftime('%H', time.localtime(time.time())))
+        for hour in range(currentHour, currentHour+12):
+            if hour > 23:
+                etprovidergraphlistfile.write('%i,99.99\n' % (hour-24))
+            else:
+                etprovidergraphlistfile.write('%i,99.99\n' % hour)
+    writeLogEntry(error + ', setze Preis auf 99.99ct/kWh.')
+
 # Hauptprogramm
 
 # übergebene Token auslesen
@@ -41,9 +56,7 @@ if len(sys.argv) == 3:
     tibberToken = str(sys.argv[1])
     homeID = str(sys.argv[2])
 else:
-    writeLogEntry('Argumente fehlen, setze Preis auf 99.99ct/kWh.')
-    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
-        etproviderpricefile.write('99.99\n')
+    writeInvalidPriceData('Argumente fehlen')
     exit()
 
 # Variablen initialisieren
@@ -57,20 +70,18 @@ try:
     response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data, timeout=(2, 6))
 except Timeout:
     # Timeout bei API-Abfrage, dann Preis auf 99.99ct/kWh setzen
-    writeLogEntry('API-Timeout, setze 99.99ct/kWh.')
-    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
-        etproviderpricefile.write('99.99\n')
+    writeInvalidPriceData('API-Timeout')
     exit()
 
 if response:
+    # parse json
+    tibberJSON = response.json()
     # response Code 200: Tibber Antwort ist angekommen, jetzt die JSON prüfen
-    if not 'errors' in response.text:
-        # keine Fehler, parse json
-        prices = response.json()
+    if not 'errors' in tibberJSON:
         # extrahiere Preise für heute, sortiert nach Zeitstempel
-        todayPrices = sorted(prices['data']['viewer']['home']['currentSubscription']['priceInfo']['today'], key=lambda k: (k['startsAt'], k['total']))
+        todayPrices = sorted(tibberJSON['data']['viewer']['home']['currentSubscription']['priceInfo']['today'], key=lambda k: (k['startsAt'], k['total']))
         # extrahiere Preise für morgen, sortiert nach Zeitstempel
-        tomorrowPrices = sorted(prices['data']['viewer']['home']['currentSubscription']['priceInfo']['tomorrow'], key=lambda k: (k['startsAt'], k['total']))
+        tomorrowPrices = sorted(tibberJSON['data']['viewer']['home']['currentSubscription']['priceInfo']['tomorrow'], key=lambda k: (k['startsAt'], k['total']))
 
         if len(todayPrices) == 24:
             # alle 24 Stundenpreise für heute erhalten, schreibe in Ramdisk, Preise konvertiert in Eurocent
@@ -94,13 +105,12 @@ if response:
             os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     else:
         # Fehler in Antwort
-        writeLogEntry('Fehler in Tibber-Antwort.')
+        error = tibberJSON['errors'][0]['message']
+        writeLogEntry('Fehler in Tibber-Antwort: ' + error)
 else:
     # fehlerhafte Antwort
     writeLogEntry('POST-Fehler: ' + str(response.status_code) + ' ' + response.reason)
 
 if not readPriceSuccessfull:
     # aktueller Preis wurde nicht gelesen, dann Preis auf 99.99ct/kWh setzen
-    writeLogEntry('Kein aktueller Preis erkannt, setze 99.99ct/kWh.')
-    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
-        etproviderpricefile.write('99.99\n')
+    writeInvalidPriceData('Kein aktueller Preis erkannt')
