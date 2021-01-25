@@ -12,8 +12,7 @@
 # benötigt als Parameter den persönlichen Tibber-Token und die homeID
 # des Anschlusses
 #
-# TODO: schreibt derzeit (testweise) noch auf awattar-ramdisk, Implementierung per
-# korrekter MQTT-Topics folgt
+# TODO: Implementierung per korrekter MQTT-Topics folgt
 #
 # 2020 Michael Ortenstein
 # This file is part of openWB
@@ -42,9 +41,9 @@ if len(sys.argv) == 3:
     tibberToken = str(sys.argv[1])
     homeID = str(sys.argv[2])
 else:
-    writeLogEntry('Argumente fehlen, setze Preis auf 99.99ct/kWh.');
-    with open('/var/www/html/openWB/ramdisk/awattarprice', 'w') as awattarpricefile:
-        awattarpricefile.write('99.99\n')
+    writeLogEntry('Argumente fehlen, setze Preis auf 99.99ct/kWh.')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
+        etproviderpricefile.write('99.99\n')
     exit()
 
 # Variablen initialisieren
@@ -59,8 +58,8 @@ try:
 except Timeout:
     # Timeout bei API-Abfrage, dann Preis auf 99.99ct/kWh setzen
     writeLogEntry('API-Timeout, setze 99.99ct/kWh.')
-    with open('/var/www/html/openWB/ramdisk/awattarprice', 'w') as awattarpricefile:
-        awattarpricefile.write('99.99\n')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
+        etproviderpricefile.write('99.99\n')
     exit()
 
 if response:
@@ -75,24 +74,24 @@ if response:
 
         if len(todayPrices) == 24:
             # alle 24 Stundenpreise für heute erhalten, schreibe in Ramdisk, Preise konvertiert in Eurocent
-            with open('/var/www/html/openWB/ramdisk/awattarprice', 'w') as awattarpricefile, \
-                 open('/var/www/html/openWB/ramdisk/awattargraphlist', 'w') as awattargraphlistfile:
+            with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile, \
+                 open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovidergraphlistfile:
                 # aktuelle Stunde als int
                 currentHour = int(time.strftime('%H', time.localtime(time.time())))
                 for tibberHour, price in enumerate(todayPrices):
                     # Preisliste mit den heutigen Preisen füllen
                     if tibberHour >= currentHour:
-                        awattargraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
+                        etprovidergraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
                         if tibberHour == currentHour:
-                            awattarpricefile.write('%2.2f\n' % (price['total'] * 100))
+                            etproviderpricefile.write('%2.2f\n' % (price['total'] * 100))
                             readPriceSuccessfull = True
                 # jetzt die Preise für morgen
                 if len(tomorrowPrices) == 24:
                     # alle 24 Stundenpreise für morgen erhalten, schreibe in Ramdisk, Preise konvertiert in Eurocent
                     for tibberHour, price in enumerate(tomorrowPrices):
-                        awattargraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
+                        etprovidergraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
             # publish MQTT-Daten für den Graphen
-            os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/awattargraphlist)"')
+            os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     else:
         # Fehler in Antwort
         writeLogEntry('Fehler in Tibber-Antwort.')
@@ -103,5 +102,5 @@ else:
 if not readPriceSuccessfull:
     # aktueller Preis wurde nicht gelesen, dann Preis auf 99.99ct/kWh setzen
     writeLogEntry('Kein aktueller Preis erkannt, setze 99.99ct/kWh.')
-    with open('/var/www/html/openWB/ramdisk/awattarprice', 'w') as awattarpricefile:
-        awattarpricefile.write('99.99\n')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etproviderpricefile:
+        etproviderpricefile.write('99.99\n')

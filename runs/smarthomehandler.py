@@ -35,6 +35,26 @@ for i in range(1, (numberOfSupportedDevices+1)):
     
 global numberOfDevices
 
+#art der Ueberschussberechnung lesen, relevanten ueberschuss zurueckgeben
+def getueb(nummer):
+#    (1 = mit Speicher, 2 = ohne Speicher, 0 = manual eingeschaltet)
+    ueberschussberechnung = 0
+    if os.path.isfile(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss'):
+       f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'r')
+       ueberschussberechnung=int(f.read())
+       f.close()
+    if (ueberschussberechnung == 2):
+       return uberschussohne
+    else:
+       return uberschuss
+# setze art der Ueberschussrechnung
+def setueb(nummer,ueberschussberechnung):
+#    (1 = mit Speicher, 2 = ohne Speicher, 0 = manual eingeschaltet)
+    f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'w')
+    f.write(str(ueberschussberechnung))
+    f.close()
+
+
 # support old smarttypes and new smarttypes 
 def getdir(smarttype,name):
     if (smarttype == "shelly"):
@@ -78,8 +98,9 @@ def sepwatt(oldwatt,oldwattk,nummer):
         argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
     except:
         argumentList.append("undef")
-    argumentList.append(str(uberschuss))
-
+        
+    devuberschuss = getueb(nummer)
+    argumentList.append(str(devuberschuss))
     if meastyp == "sdm630":
        argumentList[1] = prefixpy +'sdm630/sdm630.py'
        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
@@ -267,6 +288,7 @@ def publishmqtt():
 # Lese aus der Ramdisk Regelrelevante Werte ein
 def loadregelvars():
     global uberschuss
+    global uberschussohne
     global speicherleistung
     global speichersoc
     global speichervorhanden
@@ -297,6 +319,7 @@ def loadregelvars():
         logDebug("2", "Fehler beim Auslesen der Ramdisk (wattbezug): " + str(e))
         wattbezug = 0
     uberschuss = wattbezug + speicherleistung 
+    uberschussohne = wattbezug
     try:
         with open('ramdisk/smarthomehandlerloglevel', 'r') as value:
             loglevel = int(value.read())
@@ -329,7 +352,7 @@ def loadregelvars():
                 DeviceValues.update( {str(i) + "manualmodevar": int(value.read())}) 
         except:
             DeviceValues.update( {str(i) + "manualmodevar": 2})
-    logDebug("0", "Wattbezug: " + str(wattbezug) + " Uberschuss: " + str(uberschuss) + " Speicherleistung: " + str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
+    logDebug("0", "EVU Bezug(-)/Einspeisung(+): " + str(wattbezug) + " Uberschuss (+): " + str(uberschuss)  + " Uberschuss ohne Speicher (+): " + str(uberschussohne) + " Speicherentladung(-)/Speicherladung(+): " + str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
@@ -351,6 +374,7 @@ def getdevicevalues():
         DeviceConfigured[i-1] = config.get('smarthomedevices', 'device_configured_'+str(i)) # list starts at 0
     numberOfDevices = 0
     totalwatt = 0
+    totalwattot = 0
     for n in DeviceConfigured:
         numberOfDevices += 1
         # prepare 
@@ -381,6 +405,7 @@ def getdevicevalues():
             #alle devices laufen gleich 
             switchtyp =  str(config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)))
             devicename = str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices)))
+            devuberschuss = getueb(numberOfDevices)
             try:
                 device_leistungurl = str(config.get('smarthomedevices', 'device_leistungurl_'+str(numberOfDevices))) 
             except:
@@ -407,7 +432,7 @@ def getdevicevalues():
                 if os.path.isfile(pyname):
                    argumentList = ['python3', pyname, str(numberOfDevices)]
                    argumentList.append(device_ip)
-                   argumentList.append(str(uberschuss))
+                   argumentList.append(str(devuberschuss))
                    argumentList.append(device_leistungurl)
                    argumentList.append(device_actor)
                    argumentList.append(device_username)
@@ -448,6 +473,8 @@ def getdevicevalues():
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
                 if abschalt == 1:
                    totalwatt = totalwatt + watt
+                else:
+                   totalwattot = totalwattot + watt
                 DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                 DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                 f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -483,7 +510,7 @@ def getdevicevalues():
                       else:
                          DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
                    except Exception as e:
-                      print(str(e))
+                      logDebug("2", "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " (Einschaltdauer)Fehlermeldung: " + str(e))
                 else:
                    try:
                       del DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
@@ -506,10 +533,14 @@ def getdevicevalues():
     f = open(basePath+'/ramdisk/devicetotal_watt', 'w')
     f.write(str(totalwatt))
     f.close()
-    logDebug("0", "Total Watt alle abschaltbarer smarthomedevices: " + str(totalwatt))
+    f = open(basePath+'/ramdisk/devicetotal_watt_other', 'w')
+    f.write(str(totalwattot))
+    f.close()
+    
+    logDebug("0", "Total Watt alle abschaltbarer smarthomedevices: " + str(totalwatt) + " Watt alle anderen smarthomedevices: " + str(totalwattot) )
     publishmqtt()
 
-def turndevicerelais(nummer, zustand):
+def turndevicerelais(nummer, zustand,ueberschussberechnung):
     switchtyp =  str(config.get('smarthomedevices', 'device_type_'+str(nummer)))
     devicename = str(config.get('smarthomedevices', 'device_name_'+str(nummer)))
     try:
@@ -533,9 +564,11 @@ def turndevicerelais(nummer, zustand):
     except:
        device_password = "undef"
     pyname0 = getdir(switchtyp,devicename)
+    setueb(nummer,ueberschussberechnung)
+    devuberschuss = getueb(nummer)
     argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
     argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
-    argumentList.append(str(uberschuss))
+    argumentList.append(str(devuberschuss))
     argumentList.append("") # element with index 5 will be set on URL for switch on or off
     argumentList.append(device_actor)
     argumentList.append(device_username)
@@ -546,7 +579,7 @@ def turndevicerelais(nummer, zustand):
            if os.path.isfile(pyname):
               argumentList[1] = pyname
               argumentList[5] = device_einschalturl
-              logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " angeschaltet")
+              logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = ohne Speicher) " + str(ueberschussberechnung) )
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
               f.write(str(zustand))
               f.close()
@@ -578,7 +611,7 @@ def conditions(nummer):
     try:
         speichersocbeforestop = int(config.get('smarthomedevices', 'device_speichersocbeforestop_'+str(nummer)))
     except:
-        speichersocbeforestop = 0
+        speichersocbeforestop = 100
     try:
         speichersocbeforestart = int(config.get('smarthomedevices', 'device_speichersocbeforestart_'+str(nummer)))
     except:
@@ -609,7 +642,7 @@ def conditions(nummer):
     else:
         if ( DeviceValues[str(nummer)+"relais"] == 1 ):
             logDebug("1","Device: " + str(nummer) + " " + str(name) + " Maximale Einschaltdauer erreicht schalte ab")
-            turndevicerelais(nummer, 0)
+            turndevicerelais(nummer, 0,0)
         else:
             logDebug("0","Device: " + str(nummer) + " " + str(name) + " Maximale Einschaltdauer erreicht bereits abgeschaltet")
         return
@@ -623,13 +656,13 @@ def conditions(nummer):
                 timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                 if ( mineinschaltdauer < timestart):
                    logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Mindesteinschaltdauer erreicht, schalte aus ")
-                   turndevicerelais(nummer, 0)
+                   turndevicerelais(nummer, 0,0)
                    return
                 else:
                    logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Mindesteinschaltdauer noch nicht erreicht, " + str(mineinschaltdauer) + " ist größer als " + str(timestart))
              else:
                 logDebug("1","Device: " + str(nummer) + " " + str(name)+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
-                turndevicerelais(nummer, 0)   
+                turndevicerelais(nummer, 0,0)   
                 return
           else: 
               logDebug("0","Device: " + str(nummer) + " " + str(name) + " Ladung läuft nicht, prüfe weitere Bedingungen..")     
@@ -641,25 +674,47 @@ def conditions(nummer):
            else:
               logDebug("0","Device: " + str(nummer) + " " + str(name) + " Ladung läuft nicht, prüfe weitere Bedingungen..")
     # Auto ladung ende
-    if ( uberschuss > einschwelle):
+    # Art vom ueberschussberechnung pruefen
+    ueberschussberechnung = 0
+    devuberschuss = 0
+    if ( DeviceValues[str(nummer)+"relais"] == 1 ):
+       #device laeuft schon,  alte Ueberschussberechnung nehmen
+       devuberschuss = getueb(nummer)
+    else:
+       if (speichersocbeforestart == 0):
+          # Berechnung aus, Ueberschuss mit Speicher nehmen
+          devuberschuss = uberschuss
+          ueberschussberechnung = 1
+       else:
+          if ( speichersoc < speichersocbeforestart ):
+             # unter dem Speicher soc, nur EVU Ueberschuss 
+             # Berechnung mit Ueberschuss ohne Speicher
+             devuberschuss = uberschussohne
+             ueberschussberechnung = 2
+          else:
+             # sonst drueber oder gleich Speicher soc Berechnung mit Ueberschuss mit Speicher nehmen
+             devuberschuss = uberschuss
+             ueberschussberechnung = 1
+    if ( devuberschuss > einschwelle):
         try:
             del DeviceCounters[str(nummer)+"ausverz"]
         except:
             pass
-        logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss größer Einschaltschwelle")
+        logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss größer Einschaltschwelle" + str(einschwelle) + " Ueberschuss " + str(devuberschuss) )
         if ( DeviceValues[str(nummer)+"relais"] == 0 ):
-             #speichersocbeforestart
-            if ( speichersoc < speichersocbeforestart ):
-                logDebug("1","Device: " + str(nummer) + " " + str(name)+ " SoC " + str(speichersoc) + " kleiner als Einschalt SoC " + str(speichersocbeforestart) + " , schalte Gerät nicht ein")
-                return
-            else:
-                logDebug("1","Device: " + str(nummer) + " " + str(name)+ " SoC " + str(speichersoc) + " grösser gleich als Einschalt SoC " + str(speichersocbeforestart) + " , prüfe weitere Bedingungen")            
+            #speichersocbeforestart
+            #if ( speichersoc < speichersocbeforestart ):
+            #    logDebug("1","Device: " + str(nummer) + " " + str(name)+ " SoC " + str(speichersoc) + " kleiner als Einschalt SoC " + str(speichersocbeforestart) + " , schalte Gerät nicht ein")
+            #    return
+            #else:
+            #    logDebug("1","Device: " + str(nummer) + " " + str(name)+ " SoC " + str(speichersoc) + " grösser gleich als Einschalt SoC " + str(speichersocbeforestart) + " , prüfe weitere Bedingungen")            
+            logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) +  ", Ueberschussberechnung (1 = mit Speicher, 2 = ohne Speicher) " + str(ueberschussberechnung) + " Ueberschuss " + str(devuberschuss)    )
             #speichersocbeforestart
             if  str(nummer)+"einverz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
                 if ( einverz < timesince ):
                     logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Einschaltverzögerung erreicht, schalte ein bei " + str(einschwelle))
-                    turndevicerelais(nummer, 1)
+                    turndevicerelais(nummer, 1,ueberschussberechnung)
                     del DeviceCounters[str(nummer)+"einverz"]
                 else:
                     logDebug("1","Device: " + str(nummer) + " " + str(name) + " Einschaltverzögerung noch nicht erreicht. " + str(einverz) + " ist größer als " + str(timesince))
@@ -677,13 +732,13 @@ def conditions(nummer):
             del DeviceCounters[str(nummer)+"einverz"]
         except:
             pass
-        if ( uberschuss < ausschwelle):
+        if ( devuberschuss < ausschwelle):
             if ( speichersoc > speichersocbeforestop ):
                 logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC höher als Abschalt SoC, lasse Gerät weiterlaufen")
                 return
             else:
                 logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC niedriger als Abschalt SoC, prüfe weitere Bedingungen")
-            logDebug("0","Device: " + str(nummer) + " " + str(name)+ " Überschuss kleiner Ausschaltschwelle")
+            logDebug("0","Device: " + str(nummer) + " " + str(name)+ " Überschuss kleiner Ausschaltschwelle" + str(ausschwelle) + " Ueberschuss " + str(devuberschuss)  )
             if ( DeviceValues[str(nummer)+"relais"] == 1 ):
                 if  str(nummer)+"ausverz" in DeviceCounters:
                     timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"ausverz"])
@@ -692,13 +747,13 @@ def conditions(nummer):
                             timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                             if ( mineinschaltdauer < timestart):
                                 logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Ausschaltverzögerung & Mindesteinschaltdauer erreicht, schalte aus bei " + str(ausschwelle))
-                                turndevicerelais(nummer, 0)
+                                turndevicerelais(nummer, 0,0)
                                 del DeviceCounters[str(nummer)+"ausverz"]
                             else:
                                 logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Ausschaltverzögerung erreicht, Mindesteinschaltdauer noch nicht erreicht, " + str(mineinschaltdauer) + " ist größer als " + str(timestart))
                         else:
                             logDebug("1","Device: " + str(nummer) + " " + str(name)+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
-                            turndevicerelais(nummer, 0)
+                            turndevicerelais(nummer, 0,0)
                     else:
                         logDebug("1","Device: " + str(nummer) + " " + str(name) + " Ausschaltverzögerung noch nicht erreicht. " + str(ausverz) + " ist größer als " + str(timesince))
                 else:
@@ -711,7 +766,7 @@ def conditions(nummer):
                 except:
                     pass
         else:
-            logDebug("0","Device: " + str(nummer) + " " + str(name) + " Überschuss kleiner als Einschaltschwelle und größer als Ausschaltschwelle")
+            logDebug("0","Device: " + str(nummer) + " " + str(name) + " Überschuss kleiner als Einschaltschwelle und größer als Ausschaltschwelle. Ueberschuss " + str(devuberschuss) )
             try:
                 del DeviceCounters[str(nummer)+"einverz"]
             except:
@@ -763,10 +818,10 @@ while True:
                 if ( DeviceValues[str(i)+"manual"] == 1 ):
                     if ( DeviceValues[str(i)+"manualmodevar"] == 0 ):
                         if ( DeviceValues[str(i)+"relais"] == 1 ):
-                            turndevicerelais(i, 0)
+                            turndevicerelais(i, 0,0)
                     if ( DeviceValues[str(i)+"manualmodevar"] == 1 ):
                         if ( DeviceValues[str(i)+"relais"] == 0 ):
-                            turndevicerelais(i, 1)
+                            turndevicerelais(i, 1,0)
                     logDebug("0","Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, führe keine Regelung durch")
                 else:
                     try:
@@ -777,9 +832,9 @@ while True:
                         if canswitch == 1:
                             conditions(int(i))
                     except Exception as e:
-                        logDebug("2", "Conditions Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + str(e))
+                        logDebug("2", "Conditions Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " Fehlermeldung: " + str(e))
         except Exception as e:
-            logDebug("2", "Main routine Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + str(e))
+            logDebug("2", "Main routine Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " Fehlermeldung: " + str(e))
     #conditions(2)
     #if "2eintime" in DeviceCounters:
     #    print(DeviceCounters["2eintime"])

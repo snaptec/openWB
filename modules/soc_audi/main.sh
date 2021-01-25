@@ -38,6 +38,7 @@ socDebugLog(){
 
 auditimer=$(<$soctimerfile)
 if (( auditimer < 180 )); then
+	socDebugLog "Nothing to do yet. Incrementing timer."
 	auditimer=$((auditimer+1))
 	if ((ladeleistung > 800 )); then
 		auditimer=$((auditimer+2))
@@ -45,7 +46,8 @@ if (( auditimer < 180 )); then
 	echo $auditimer > $soctimerfile
 else
 	echo 0 > $soctimerfile
-	answer=$(/var/www/html/openWB/modules/evcc-soc audi --user "$username" --password "$passsword" 2>&1)
+	socDebugLog "Requesting SoC"
+	answer=$($MODULEDIR/../evcc-soc audi --user "$username" --password "$passsword" 2>&1)
 	if [ $? -eq 0 ]; then
  		# we got a valid answer
  		echo $answer > $socfile

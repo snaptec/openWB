@@ -21,6 +21,8 @@ case $CHARGEPOINT in
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		intervall=$soccarnetintervall
@@ -47,9 +49,8 @@ else
 	socDebugLog "Requesting SoC"
 	echo 0 > $soctimerfile
 
-	response=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/we_connect_client.py -u $username -p $password)
-	socDebugLog "Response from Server: $response"
-	soclevel=$(echo $response | grep batteryPercentage | jq -r .EManager.rbc.status.batteryPercentage)
+	response=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/we_connect_client.py --user="$username" --password="$password")
+	soclevel=$(echo "$response" | grep batteryPercentage | jq -r .EManager.rbc.status.batteryPercentage)
 	socDebugLog "Filtered SoC from Server: $soclevel"
 	if  [[ $soclevel =~ $reValidSoc ]] ; then
 		if (( $soclevel != 0 )) ; then
@@ -58,6 +59,7 @@ else
 		fi
 	else
 		socDebugLog "SoC is not valid."
+		socDebugLog "Response from Server: ${response}"
 	fi
 
 	#Abfrage Ladung aktiv. Setzen des soctimers. 
