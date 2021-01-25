@@ -110,10 +110,6 @@ if [[ $evsecon == twcmanager ]]; then
 	if [[ $twcmanagerlp1ip == "localhost/TWC" ]]; then
 		screen -dm -S TWCManager /var/www/html/TWC/TWCManager.py &
 	fi
-<<<<<<< HEAD
->>>>>>> 009db467050e64226d845d80ab2d703d84362032
-=======
->>>>>>> 11bd289adf9953da1724ee9d47416fb69425dcfb
 fi
 
 # check if display is configured and setup timeout
