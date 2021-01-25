@@ -46,10 +46,8 @@ function processGlobalMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/global/WAllChargePoints":
 			directShow(mqttpayload, '#ladeleistungAll');
-			noZeroShow(mqttpayload, '#ladeleistungAll');
 			break;
 		case "openWB/global/kWhCounterAllChargePoints":
-			directShow(mqttpayload, '#kWhCounterAll');
 			noZeroShow(mqttpayload, '#kWhCounterAll');
 			break;
 		default:
@@ -270,7 +268,6 @@ function processLpMsg (mqttmsg, mqttpayload) {
 				break;
 			case "openWB/lp/1/%Soc":
 				directShow(mqttpayload, '#lp1 .soc');
-				visibilityValue('#socRow', '#lp1 .soc');
 				// bei allen anderen LPs diese Zeilen ausblenden
 				hideSection('#lp2 .socRow');
 				hideSection('#lp3 .socRow');
@@ -301,8 +298,11 @@ function noZeroShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
 	if ( isNaN(value) || (value == 0) ) {
 		valueStr = "--";
-		$(variable).text(valueStr);
 	}
+	else {
+		var valueStr = value.toLocaleString(undefined);
+	}
+	$(variable).text(valueStr);
 }
 
 //show with imp/exp
