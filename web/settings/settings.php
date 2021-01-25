@@ -229,11 +229,10 @@
 										});
 
 										$('#getTibberHomeIdBtn').click(function(){
-											const tibberQuery = '{ "query": "{viewer {homes{address{address1 address2 address3 postalCode city}}}}" }';
+											const tibberQuery = '{ "query": "{viewer {homes{id address{address1 address2 address3 postalCode city}}}}" }';
 											$('#tibberModal').find('.modal-title').html('Tibber Home-ID ermitteln');
 											readTibberAPI($('#tibbertoken').val(), tibberQuery)
-												.then((data) => {
-													console.log(data);
+												.then((queryData) => {
 													$('#tibberModal').find('.modal-header').removeClass('bg-danger');
 													$('#tibberModal').find('.modal-header').addClass('bg-success');
 													$('#tibberModalOkBtn').text('Home-ID übernehmen');
@@ -241,8 +240,35 @@
 													$('#tibberModal').find('.btn-danger').show();
 													$('#tibberModalErrorDiv').hide();
 													$('#tibberModalSelectHomeIdDiv').show();
+													var homes = queryData.data.viewer.homes;
 
+													console.log(homes);
 
+													$(homes).each(function() {
+														var homeID = this.id;
+														var addressStr = this.address.address1;
+														if ( this.address.address2 !== null ) {
+															addressStr = addressStr + ', ' + this.address.address2;
+														}
+														if ( this.address.address3 !== null ) {
+															addressStr = addressStr + ', ' + this.address.address3;
+														}
+														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
+      													console.log(addressStr);
+														console.log(homeID);
+														$('#tibberHomesDropdown').append($('<option>', {
+													        value: homeID,
+													        text : addressStr
+													    }));
+														$('#tibberHomesDropdown').append($('<option>', {
+													        value: '2',
+													        text : addressStr
+													    }));
+														$('#tibberHomesDropdown').append($('<option>', {
+													        value: '3',
+													        text : addressStr
+													    }));
+    												});
 													$('#tibberModal').modal("show");
 												})
 												.catch((error) => {
@@ -283,10 +309,16 @@
 														Home-ID-Ermittlung fehlgeschlagen.
 													</div>
 												</div>
-												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
-													<div class="col">
-														Bitte wählen Sie die Home-ID:
 
+												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center">
+													<div class="col">
+														Bitte wählen Sie eine Home-ID: <br>
+														<select id="tibberHomesDropdown" name="tibberHomesDropdown">
+															<option value="volvo">Volvo</option>
+															<option value="saab">Saab</option>
+															<option value="opel">Opel</option>
+															<option value="audi">Audi</option>
+														</select>
 													</div>
 												</div>
 											</div>
