@@ -182,6 +182,7 @@
 								</div>
 							</div>
 							<div id="tibberdiv" class="hide">
+								<script src = "../modules/et_tibber/tibber.js?ver=20210125" ></script>
 								<div class="card-text alert alert-danger">
 									Ihren persönlichen Tibber-Token erhalten Sie über die <a href="https://developer.tibber.com/explorer" target="_blank">Tibber-Developer-Seite</a>.
 									Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
@@ -203,9 +204,144 @@
 									</div>
 								</div>
 								<div class="row justify-content-center">
-									<button id="getHomeIdBtn" type="button" class="btn btn-primary m-2">Home-ID ermitteln</button>
+									<button id="getTibberHomeIdBtn" type="button" class="btn btn-primary m-2">Home-ID ermitteln</button>
 									<button id="verifyTibberBtn" type="button" class="btn btn-secondary m-2">Tibber-Daten verifizieren</button>
 								</div>
+								<script type="text/javascript">
+									$(document).ready(function(){
+
+										$('#tibbertoken').change(function(){
+											// after change of token check if only alphanumeric chars were entered
+											var currentVal = $(this).val();
+											// !Attention! Until now there are only alphanumeric characters in token.
+											// Function may be needed to be adjusted in future
+											newVal = currentVal.trim().replace(/[^a-z0-9]/gi,'');
+											$(this).val(newVal);
+										});
+
+										$('#tibberhomeid').change(function(){
+											// after change of homeID check if only alphanumeric chars and dash were entered
+											var currentVal = $(this).val();
+											// !Attention! Until now there are only alphanumeric characters and dash in homeID.
+											// Function may be needed to be adjusted in future
+											newVal = currentVal.trim().replace(/[^a-z0-9-]/gi,'');
+											$(this).val(newVal);
+										});
+
+										$('#getTibberHomeIdBtn').click(function(){
+											const tibberQuery = '{ "query": "{viewer {homes{address{address1 address2 address3 postalCode city}}}}" }';
+											$('#tibberModal').find('.modal-title').html('Tibber Home-ID ermitteln');
+											readTibberAPI($('#tibbertoken').val(), tibberQuery)
+												.then((data) => {
+													console.log(data);
+													$('#tibberModal').find('.modal-header').removeClass('bg-danger');
+													$('#tibberModal').find('.modal-header').addClass('bg-success');
+													$('#tibberModalOkBtn').text('Home-ID übernehmen');
+													$('#tibberModalOkBtn').show();
+													$('#tibberModal').find('.btn-danger').show();
+													$('#tibberModalErrorDiv').hide();
+													$('#tibberModalSelectHomeIdDiv').show();
+
+
+													$('#tibberModal').modal("show");
+												})
+												.catch((error) => {
+													$('#tibberModal').find('.modal-header').removeClass('bg-success');
+													$('#tibberModal').find('.modal-header').addClass('bg-danger');
+													$('#tibberModalOkBtn').text('OK');
+													$('#tibberModalOkBtn').show();
+													$('#tibberModal').find('.btn-danger').hide();
+													$('#tibberErrorText').text(error);
+													$('#tibberModalErrorDiv').show();
+													$('#tibberModalSelectHomeIdDiv').hide();
+													$('#tibberhomeid').val('');
+													$('#tibberModal').modal("show");
+								  				})
+										});
+
+									});  // end document ready
+								</script>
+
+								<!-- modal Tibber-window -->
+								<div class="modal fade" id="tibberModal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+
+											<!-- modal header -->
+											<div class="modal-header">
+												<h4 class="modal-title"></h4>
+											</div>
+
+											<!-- modal body -->
+											<div class="modal-body">
+												<div id="tibberModalErrorDiv" class="row justify-content-center hide">
+													<div class="col">
+														Fehler!
+														<p>
+															<span id="tibberErrorText"></span>
+														</p>
+														Home-ID-Ermittlung fehlgeschlagen.
+													</div>
+												</div>
+												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
+													<div class="col">
+														Bitte wählen Sie die Home-ID:
+
+													</div>
+												</div>
+											</div>
+
+											<!-- modal footer -->
+											<div class="modal-footer d-flex justify-content-center">
+												<button type="button" class="btn btn-success" data-dismiss="modal" id="tibberModalOkBtn">OK</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+											</div>
+
+										</div>
+									</div>
+									<script>
+										function clearSocForm(){
+											$("#manualSocBox").val("0");
+										}
+
+										function submitSocForm() {
+											var currentLp = $('#socModal').find('.socLp').text();
+											var manualSoc = $("#manualSocBox").val();
+											console.log("SoC for LP"+currentLp+": "+manualSoc);
+											publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
+											// reset input after publishing
+											clearSocForm();
+										};
+										$(document).ready(function(){
+
+											$('#manualSocDecrement').click(function() {
+												var newValue = parseInt($('#manualSocBox').val()) - 1;
+												if( newValue < 0 ){
+													newValue = 0;
+												}
+												$('#manualSocBox').val(newValue);
+											});
+
+											$('#manualSocIncrement').click(function() {
+												var newValue = parseInt($('#manualSocBox').val()) + 1;
+												if( newValue > 100 ){
+													newValue = 100;
+												}
+												$('#manualSocBox').val(newValue);
+											});
+
+											$('#manualSocCancel').click(function() {
+												clearSocForm();
+											});
+
+											$('#manualSocOk').click(function() {
+												submitSocForm();
+											});
+
+										});
+									</script>
+								</div>  <!-- end modal Tibber-window -->
+
 							</div>
 						</div>
 					</div>
@@ -1391,24 +1527,6 @@
 				$('.rangeInput').on('input', function() {
 					// show slider value in label of class valueLabel
 					updateLabel($(this).attr('id'));
-				});
-
-				$('#tibbertoken').change(function(){
-					// after change of token check if only alphanumeric chars were entered
-					var currentVal = $(this).val();
-					// !Attention! Until now there are only alphanumeric characters in token.
-					// Function may be needed to be adjusted in future
-					newVal = currentVal.trim().replace(/[^a-z0-9]/gi,'');
-					$(this).val(newVal);
-				});
-
-				$('#tibberhomeid').change(function(){
-					// after change of homeID check if only alphanumeric chars and dash were entered
-					var currentVal = $(this).val();
-					// !Attention! Until now there are only alphanumeric characters and dash in homeID.
-					// Function may be needed to be adjusted in future
-					newVal = currentVal.trim().replace(/[^a-z0-9-]/gi,'');
-					$(this).val(newVal);
 				});
 
 			});  // end document ready

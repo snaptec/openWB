@@ -4,7 +4,59 @@
  * @author Michael Ortenstein
  */
 
-function readTibberAPI() {
+const tibberAPI = "https://api.tibber.com/v1-beta/gql";
+
+function readTibberAPI(tibberToken, tibberQuery) {
+    /**
+     * calls Tibber-API as promise returns data or error-message
+     * @function readTibberAPI
+     * @author Michael Ortenstein
+     * @param {string} tibberToken
+     * @param {string} tibberQuery
+     * @returns {Promise} Promise object represents the result of the ajax-query
+     */
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: tibberAPI,
+            headers: {
+                "Authorization": "Bearer " + tibberToken,
+                "Content-Type": "application/json"
+            },
+            data: tibberQuery,
+            timeout: 4000
+        })
+        .done (function (data) {
+            if ( typeof data?.errors === "undefined" ) {
+                // nor errors in API response
+                resolve(data);
+            } else {
+                // got an API response but with an error-message
+                reject("Interner Tibber-API-Fehler: " + data.errors[0].message);
+            }
+        })
+        .fail ( function (error) {
+            try {
+                var errorJSON = JSON.parse(error.responseText);
+            } catch (e) {
+                // not an API-error, so just return error code and text
+                reject(error.statusText + " " + error.status);
+                return;
+            }
+            // error includes API-error-message
+            if ( typeof errorJSON?.errors === "undefined" ) {
+                // no error-message, so just return error code and text
+                reject(error.statusText + " " + error.status);
+            } else {
+                // return detailed error-message
+                reject(error.statusText + " " + error.status + ": "+ errorJSON.errors[0].message);
+            }
+        });
+    });
+}
+
+function readTibberAPI2() {
     /**
      * calls Tibber API as promise and returns data or error-message
      *
@@ -44,7 +96,7 @@ function readTibberAPI() {
         })
         .done (function (data) {
             console.log(data);
-            if ( typeof data?.errors === "undefined") {
+            if ( typeof data?.errors === "undefined" ) {
                 resolve(data);
             } else {
                 reject(data.errors[0].message);
