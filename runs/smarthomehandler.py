@@ -37,7 +37,7 @@ global numberOfDevices
 
 #art der Ueberschussberechnung lesen, relevanten ueberschuss zurueckgeben
 def getueb(nummer):
-#    (1 = mit Speicher, 2 = ohne Speicher, 0 = manual eingeschaltet)
+#    (1 = mit Speicher, 2 = nur mit Speicherentladung , 0 = manual eingeschaltet)
     ueberschussberechnung = 0
     if os.path.isfile(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss'):
        f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'r')
@@ -49,7 +49,7 @@ def getueb(nummer):
        return uberschuss
 # setze art der Ueberschussrechnung
 def setueb(nummer,ueberschussberechnung):
-#    (1 = mit Speicher, 2 = ohne Speicher, 0 = manual eingeschaltet)
+#    (1 = mit Speicher, 2 = nur mit Speicherentladung, 0 = manual eingeschaltet)
     f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'w')
     f.write(str(ueberschussberechnung))
     f.close()
@@ -319,7 +319,10 @@ def loadregelvars():
         logDebug("2", "Fehler beim Auslesen der Ramdisk (wattbezug): " + str(e))
         wattbezug = 0
     uberschuss = wattbezug + speicherleistung 
-    uberschussohne = wattbezug
+    if (speicherleistung < 0):
+       uberschussohne = wattbezug + speicherleistung
+    else:
+       uberschussohne = wattbezug
     try:
         with open('ramdisk/smarthomehandlerloglevel', 'r') as value:
             loglevel = int(value.read())
@@ -353,7 +356,7 @@ def loadregelvars():
         except:
             DeviceValues.update( {str(i) + "manualmodevar": 2})
     logDebug("0", "EVU Bezug(-)/Einspeisung(+): " + str(wattbezug))
-    logDebug("0", "Uberschuss (+): " + str(uberschuss)  + " Uberschuss ohne Speicher (+): " + str(uberschussohne) )
+    logDebug("0", "Uberschuss: " + str(uberschuss)  + " Uberschuss nur mit Speicher Entladung: " + str(uberschussohne) )
     logDebug("0", "Speicher Entladung(-)/Ladung(+): " + str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
 def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
@@ -581,7 +584,7 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung):
            if os.path.isfile(pyname):
               argumentList[1] = pyname
               argumentList[5] = device_einschalturl
-              logDebug("1", "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = ohne) " + str(ueberschussberechnung) )
+              logDebug("1", "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = nur mit Speicher Entladung) " + str(ueberschussberechnung) )
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
               f.write(str(zustand))
               f.close()
@@ -685,7 +688,7 @@ def conditions(nummer):
        deltasoc = abs(speichersoc - speichersocbeforestart)
     if ( DeviceValues[str(nummer)+"relais"] == 1 ) and (deltasoc > 5):
        #device laeuft schon,  alte Ueberschussberechnung nehmen
-       # und delta vom soc gross
+       # wenn delta vom soc gross ist
        devuberschuss = getueb(nummer)
     else:
        if (speichersocbeforestart == 0):
@@ -695,7 +698,7 @@ def conditions(nummer):
        else:
           if ( speichersoc < speichersocbeforestart ):
              # unter dem Speicher soc, nur EVU Ueberschuss 
-             # Berechnung mit Ueberschuss ohne Speicher
+             # Berechnung mit Ueberschuss nur mit Speicherentladung
              devuberschuss = uberschussohne
              ueberschussberechnung = 2
           else:
@@ -705,7 +708,7 @@ def conditions(nummer):
     if ( deltasoc <= 5):     
        setueb(nummer,ueberschussberechnung) 
        logDebug("0","(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) +  " Ueberschuss " + str(devuberschuss))
-       logDebug("0","(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung deltasoc (1 = mit Speicher, 2 = ohne) " + str(ueberschussberechnung))
+       logDebug("0","(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung deltasoc (1 = mit Speicher, 2 = nur mit Speicher Entladung) " + str(ueberschussberechnung))
     if ( devuberschuss > einschwelle):
         try:
             del DeviceCounters[str(nummer)+"ausverz"]
@@ -720,7 +723,7 @@ def conditions(nummer):
             #else:
             #    logDebug("1","(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " grösser gleich als Einschalt SoC " + str(speichersocbeforestart) + " , prüfe weiter")            
             logDebug("0","(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) + " Ueberschuss " + str(devuberschuss))
-            logDebug("0","(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung (1 = mit Speicher, 2 = ohne) " + str(ueberschussberechnung))
+            logDebug("0","(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung (1 = mit Speicher, 2 = nur mit Speicher Entladung) " + str(ueberschussberechnung))
             #speichersocbeforestart
             if  str(nummer)+"einverz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])

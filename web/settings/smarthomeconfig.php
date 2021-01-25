@@ -336,7 +336,7 @@ $numDevices = 9;
 												</div>
 												<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion.<br>
 												Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br> 
-												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle nur die direkt am EVU-Punkt gemessene Einspeisung/Bezug relevant.</span>
+												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle die direkt am EVU-Punkt gemessene Einspeisung/Bezug und die Speicherentladung relevant.</span>
 											</div>
 										</div>
 									</div>
