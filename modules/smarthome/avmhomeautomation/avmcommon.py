@@ -9,30 +9,61 @@ import credentials
 import xml.etree.ElementTree as ET
 
 INVALID_SESSIONID =  "0000000000000000"
+CACHEFILE = "/var/www/html/openWB/ramdisk/smarthome_avmautomation_cache"
 
 class AVMHomeAutomation:
     # Parse configuration from command line arguments as proviced by /runs/smarthomehandler.py
     def __init__(self):
         self.devicenumber = str(sys.argv[1])
-        self.baseURL = "http://" + str(sys.argv[2]) # IP or hostname (e.g. "fritz.box")
+        self.host = str(sys.argv[2]) # IP or hostname (e.g. "fritz.box")
         self.switchname = str(sys.argv[5])
         self.username = str(sys.argv[6])
         self.password = str(sys.argv[7])
+        self.baseURL = "http://" + self.host
         self.sessionID = ""
         self.device_infos = {}
+        m = hashlib.sha256()
+        m.update(self.password.encode('utf-8'))
+        m.hexdigest()
+        self.cacheKey = "%s:%s@%s" % (self.username, m.hexdigest(), self.host)
         try:
             with open('ramdisk/smarthomehandlerloglevel', 'r') as value:
                 self.loglevel = int(value.read())
         except:
             self.loglevel=2
 
-    # cacheFileString returns the filename in which the device dictionary is cached
-    def cacheFileString(self):
-        return '/var/www/html/openWB/ramdisk/smarthome_device_' + str(self.devicenumber) + '_avmdeviceinfos'
+        self.cache = {}
+        if os.path.isfile(CACHEFILE):
+            self.logMessage(0, "found an AVM cache file, trying to load")
+            try:
+                f = open(CACHEFILE, 'r')
+                self.cache = json.loads(f.read().strip())
+                f.close()
+            except Exception as e:
+                self.logMessage(0, "unable to load cache file: %s" % (e))
 
-    # sessionIDFile returns the filename in which the session ID is stored
-    def sessionIDFile(self):
-        return '/var/www/html/openWB/ramdisk/smarthome_device_' + str(self.devicenumber) + '_sessionid'
+    def cachedOwnInfo(self):
+        key = self.cacheKey
+        if key in self.cache:
+            return self.cache[key]
+        return {}
+
+    def writeCacheToRamdisk(self):
+        cacheToWrite = {}
+        for login in self.cache:
+            if "session_mtime" in self.cache[login]:
+                mtime = self.cache[login]["session_mtime"]
+                age = time.time() - mtime
+                if age > 450:
+                    self.logMessage(0, "removing stale cache for %s (%.1fs old)" % (login, age))
+                else:
+                    cacheToWrite[login] = self.cache[login]
+        try:
+            f = open(CACHEFILE, 'w')
+            json.dump(cacheToWrite, f)
+            f.close()
+        except Exception as e:
+            self.logMessage(0, "unable to write cache file: %s" % (e))
 
     # getAVMSessionID retrieves a session ID for issuing commands to a
     # FRITZ!Box webinterface. See
@@ -58,6 +89,7 @@ class AVMHomeAutomation:
         blockTimeXML = challengeResponse.find('BlockTime')
         if blockTimeXML != None and int(blockTimeXML.text) > 0:
             self.logMessage(2, "Durch Anmeldefehler in der Vergangenheit ist der Zugang zur FRITZ!Box noch fuer %s Sekunden gesperrt." % (blockTimeXML.text))
+            self.errorListCredentials()
             self.sessionID = INVALID_SESSIONID
             return
         self.logMessage(0, "last sessionID was invalid, performing new challenge-response authentication")
@@ -84,60 +116,45 @@ class AVMHomeAutomation:
         if self.sessionID == INVALID_SESSIONID:
             blockTime = sessioninfo.find('BlockTime').text
             self.logMessage(2, "Anmeldung fehlgeschlagen, bitte Nutzernamen und Passwort ueberpruefen. Anmeldung fuer die naechsten %s Sekunden durch FRITZ!Box-Webinterface gesperrt." % (blockTime))
+            self.errorListCredentials()
+
+    def errorListCredentials(self):
+        errorMessage = "Folgende Anmeldungen sind im System bekannt: "
+        for login in self.cache:
+            errorMessage += "%s " % (login)
+        self.logMessage(2, errorMessage)
 
 
-    # connect checks the currently known session ID for validity and
-    # performs an authentication to obtain a new session ID if neccessary.
-    # The session ID is assumed to be valid if it has been written to the
-    # ramdisk less than 5 minutes ago.
-    def connect(self):
-        file_stringsessionid = self.sessionIDFile()
-        # try to read previous session id from ramdisk file. If this operation fails,
-        # no harm is done as we can proceed with normal authentication. Reusing
-        # a session ID (which is valid up to 60 minutes) saves some time, though.
-        try:
-            if os.path.isfile(file_stringsessionid):
-                self.logMessage(0, "found a session ID file, trying to load")
-                f = open(file_stringsessionid, 'r')
-                self.sessionID = f.read().strip()
-                f.close()
-                mtime = os.path.getmtime(file_stringsessionid)
-                age_of_id_in_seconds = time.time() - mtime
-                should_authenticate = self.sessionID == INVALID_SESSIONID or age_of_id_in_seconds / 60 >= 5
-                self.logMessage(0, "loaded session ID from ramdisk: %s (age: %.1f seconds)" % (self.sessionID, age_of_id_in_seconds))
-            else:
-                self.logMessage(1, "no previously stored session ID found, will try to get a new one")
-                should_authenticate = True
-        except IOError as e:
-            self.logMessage(2, "non-critical error reading previous session id: %s" % (e))
-            should_authenticate = True
-        except:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            self.logMessage(2, "unexpected error during connect: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+    # connect checks the currently known session ID for validity and performs
+    # an authentication to obtain a new session ID if neccessary. A session ID
+    # is assumed to be recent enough if it has been obtained ramdisk less than
+    # 5 minutes ago in which case it is reused.
+    def connect(self): should_authenticate = True
+
+        ownInfo = self.cachedOwnInfo()
+        if "session_mtime" in ownInfo and "session_id" in ownInfo:
+            self.sessionID = ownInfo["session_id"]
+            mtime = ownInfo["session_mtime"]
+            age_of_id_in_seconds = time.time() - mtime
+            should_authenticate = self.sessionID == INVALID_SESSIONID or age_of_id_in_seconds >= 5 * 60
 
         if should_authenticate:
             self.logMessage(0, "(re-)authenticate at FRITZ!Box, old sessionID: %s" % (self.sessionID))
             try:
                 self.getAVMSessionID()
-            except:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.logMessage(2, "unexpected error while negotiating session id: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+            except Exception as e:
+                self.logMessage(2, "unexpected error while negotiating session id: %s" % (e))
+                self.sessionID = INVALID_SESSIONID
             self.logMessage(0, "retrieved sessionID from FRITZ!Box: %s" % (self.sessionID))
-            try:
-                # Try to store potentially new session id to ramdisk for next run
-                # If this operations fails, no harm is done as we can always authenticate
-                # with username/password.
-                f = open(file_stringsessionid, 'w')
-                print ('%s' % (self.sessionID),file = f)
-                f.close()
-            except IOError:
-                self.logMessage(2, "non-critical storing session id: %s" % (e))
-            except:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.logMessage(2, "unexpected error while storing session id: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+
+            # Try to store potentially new session id to ramdisk for next run
+            # If this operations fails, no harm is done as we can always authenticate
+            # with username/password.
+            if not self.cacheKey in self.cache: 
+                self.cache[self.cacheKey] = {}
+            self.cache[self.cacheKey]["session_mtime"] = time.time()
+            self.cache[self.cacheKey]["session_id"] = self.sessionID
+            self.writeCacheToRamdisk()
 
     # logMessage writes a message to the logfile for the smarthome device.
     def logMessage(self, level, message):
@@ -216,62 +233,42 @@ class AVMHomeAutomation:
         self.device_infos = next_device_infos
 
 
-    # readOrBuildDeviceInfoCache fills self.device_infos, either from a cached
-    # file of maximum age 5 minutes, or by fetching the info from the FRITZ!Box.
+    # readOrBuildDeviceInfoCache fills self.device_infos, either from cached
+    # values (if more recent than 5 seconds), or by fetching the info from the FRITZ!Box.
     # The main purpose of this cache is to skip looking up the AIN via network
     # every time.
     def readOrBuildDeviceInfoCache(self):
         self.logMessage(0, "start of readOrBuildDeviceInfoCache")
-        file_stringdeviceinfos = self.cacheFileString()
-        try:
-            if os.path.isfile(file_stringdeviceinfos):
-                self.logMessage(0, "trying to load cached device infos")
-                f = open(file_stringdeviceinfos, 'r')
-                self.device_infos = json.loads(f.read().strip())
-                f.close()
-                mtime = os.path.getmtime(file_stringdeviceinfos)
-                age_of_id_in_seconds = time.time() - mtime
-                self.logMessage(0, "age of cachefile for device infos: %.1f seconds" % (age_of_id_in_seconds))
-                should_fetch = age_of_id_in_seconds / 60 >= 5
-            else:
-                self.logMessage(0, "no cached device info yet")
-                should_fetch = True
-        except IOError as e:
-            self.logMessage(2, "non-critical error reading cached device infos: %s" % (e))
-            should_fetch = True
-        except:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            self.logMessage(2, "unexpected error during readOrBuild: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+        should_fetch = True
+        ownInfo = self.cachedOwnInfo()
+        if "device_infos_mtime" in ownInfo and "device_infos" in ownInfo:
+            self.device_infos = ownInfo["device_infos"]
+            mtime = ownInfo["device_infos_mtime"]
+            age_of_infos_in_seconds = time.time() - mtime
+            self.logMessage(0, "age of cached device infos: %.1f seconds" % (age_of_infos_in_seconds))
+            should_fetch = self.device_infos == INVALID_SESSIONID or age_of_infos_in_seconds >= 5
+
         self.logMessage(0, "should fetch new info from FRITZ!Box: %s" % (should_fetch))
         if should_fetch:
-            self.fetchAndCacheDeviceInfos()
+            self.logMessage(0, "fetching device info for all devices from FRITZ!Box")
+            try:
+                self.getDevicesDict()
+            except:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                self.logMessage(2, "unexpected error during getDevicesDict: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+            self.logMessage(0, "device info fetched: %s" % (self.device_infos))
+            if self.sessionID != INVALID_SESSIONID:
+                if not self.cacheKey in self.cache: 
+                    self.cache[self.cacheKey] = {}
+                self.cache[self.cacheKey]["device_infos_mtime"] = time.time()
+                self.cache[self.cacheKey]["device_infos"] = self.device_infos
+                self.writeCacheToRamdisk()
+                self.logMessage(0, "written device infos to ramdisk cache")
+        else:
+            self.logMessage(0, "using cached device infos from ramdisk")
+
         self.logMessage(0, "end of readOrBuildDeviceInfoCache")
-
-
-    # fetchAndCacheDeviceInfos calls getDevicesDict and then stores the result in 
-    # a cachefile on the ramdisk
-    def fetchAndCacheDeviceInfos(self):
-        self.logMessage(0, "fetching device info for all devices from FRITZ!Box")
-        try:
-            self.getDevicesDict()
-        except:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            self.logMessage(2, "unexpected error during getDevicesDict: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
-
-        self.logMessage(0, "device info fetched: %s" % (self.device_infos))
-        try:
-            f = open(self.cacheFileString(), 'w')
-            print ('%s' % (json.dumps(self.device_infos)), file = f)
-            f.close()
-        except IOError as e:
-            self.logMessage(2, "error writing cached device info %s" % (e))
-        except:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            self.logMessage(2, "unexpected error writing cached device info result %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
-        self.logMessage(0, "cached device infos to ramdisk")
 
 
     # switchDevice sets the relais of the AVM Home Automation actor
@@ -316,7 +313,7 @@ class AVMHomeAutomation:
             self.logMessage(2, "Kann ohne valide Anmeldung keine neuen Daten holen.")
             return
         self.logMessage(0, "start of getActualPower")
-        self.fetchAndCacheDeviceInfos()
+        self.readOrBuildDeviceInfoCache()
         if not self.switchname in self.device_infos:
             self.logMessage(2, "no such device found at FRITZ!Box: %s" % (self.switchname))
             return
