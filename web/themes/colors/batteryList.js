@@ -39,9 +39,9 @@ class BatteryList {
       const cell = row.append("td")
         .attr("class", "tablecell py-1 px-1");
       if (wbdata.batteryIn > 0) {
-        cell.text("Ladung: " + formatWatt(wbdata.batteryIn))
+        cell.text("Ladung: " + formatWatt(wbdata.batteryPowerImport))
       } else if (wbdata.batteryOut > 0) {
-        cell.text("Lieferung: " + formatWatt(wbdata.batteryOut))
+        cell.text("Lieferung: " + formatWatt(wbdata.batteryPowerExport))
       } else {
         cell.text("0 W")
       }
@@ -49,13 +49,13 @@ class BatteryList {
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
         .attr("style", "vertical-align: middle;")
-        .text(formatWattH(wbdata.batteryDailyImport));
+        .text(formatWattH(wbdata.batteryEnergyImport));
 
       // Daily Export
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
         .attr("style", "vertical-align: middle;")
-        .text(formatWattH(wbdata.batteryDailyExport));
+        .text(formatWattH(wbdata.batteryEnergyExport));
 
       // SoC
       row.append("td")

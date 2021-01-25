@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "atreboot.sh started"
-(sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
+(sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
 
 # read openwb.conf
 echo "loading config"
@@ -110,10 +110,6 @@ if [[ $evsecon == twcmanager ]]; then
 	if [[ $twcmanagerlp1ip == "localhost/TWC" ]]; then
 		screen -dm -S TWCManager /var/www/html/TWC/TWCManager.py &
 	fi
-<<<<<<< HEAD
->>>>>>> 009db467050e64226d845d80ab2d703d84362032
-=======
->>>>>>> 11bd289adf9953da1724ee9d47416fb69425dcfb
 fi
 
 # check if display is configured and setup timeout
