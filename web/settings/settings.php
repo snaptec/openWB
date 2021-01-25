@@ -98,7 +98,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-info">
 							Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
-							Hier ist Ja zu wählen wenn bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
+							Hier ist Ja zu wählen wenn, bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
 							<span class="text-danger">Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
 							An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
 						</div>
@@ -156,7 +156,7 @@
 					</div>
 					<div class="card-body">
 						<div class="card-text alert alert-info">
-							Ermöglicht Laden nach Strompreis. Hierfür wird ein unterstützter Anbieter benötigt. Die Funktion ist nur im SofortLaden Modus aktiv!
+							Ermöglicht Laden nach Strompreis. Hierfür wird ein unterstützter Anbieter benötigt. Die Funktion ist nur im Modus Sofortladen aktiv!
 						</div>
 						<div class="form-group mb-0" id="etproviderondiv">
 							<div class="form-row mb-1">
@@ -182,6 +182,12 @@
 								</div>
 							</div>
 							<div id="tibberdiv" class="hide">
+								<div class="card-text alert alert-danger">
+									Ihren persönlichen Tibber-Token erhalten Sie über die <a href="https://developer.tibber.com/explorer" target="_blank">Tibber-Developer-Seite</a>.
+									Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
+									entweder selbst eintragen oder durch Klick auf den entsprechenden Button ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
+									Bitte verifizieren Sie die Eingabe, bevor die Einstellungen gespeichert werden.
+								</div>
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label for="tibbertoken" class="col-md-4 col-form-label">Tibber-Token</label>
@@ -190,11 +196,15 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="tibberhomeid" class="col-md-4 col-form-label">homeID</label>
+										<label for="tibberhomeid" class="col-md-4 col-form-label">Home-ID</label>
 										<div class="col">
 											<input class="form-control" type="text" name="tibberhomeid" id="tibberhomeid" value="<?php echo $tibberhomeidold; ?>">
 										</div>
 									</div>
+								</div>
+								<div class="row justify-content-center">
+									<button id="getHomeIdBtn" type="button" class="btn btn-primary m-2">Home-ID ermitteln</button>
+									<button id="verifyTibberBtn" type="button" class="btn btn-secondary m-2">Tibber-Daten verifizieren</button>
 								</div>
 							</div>
 						</div>
@@ -1366,10 +1376,6 @@
 
 
 		<script>
-			$('.rangeInput').on('input', function() {
-				// show slider value in label of class valueLabel
-				updateLabel($(this).attr('id'));
-			});
 
 			$.get(
 				{ url: "settings/navbar.html", cache: false },
@@ -1379,6 +1385,34 @@
 					$('#navAllgemein').addClass('disabled');
 				}
 			);
+
+			$(document).ready(function(){
+
+				$('.rangeInput').on('input', function() {
+					// show slider value in label of class valueLabel
+					updateLabel($(this).attr('id'));
+				});
+
+				$('#tibbertoken').change(function(){
+					// after change of token check if only alphanumeric chars were entered
+					var currentVal = $(this).val();
+					// !Attention! Until now there are only alphanumeric characters in token.
+					// Function may be needed to be adjusted in future
+					newVal = currentVal.trim().replace(/[^a-z0-9]/gi,'');
+					$(this).val(newVal);
+				});
+
+				$('#tibberhomeid').change(function(){
+					// after change of homeID check if only alphanumeric chars and dash were entered
+					var currentVal = $(this).val();
+					// !Attention! Until now there are only alphanumeric characters and dash in homeID.
+					// Function may be needed to be adjusted in future
+					newVal = currentVal.trim().replace(/[^a-z0-9-]/gi,'');
+					$(this).val(newVal);
+				});
+
+			});  // end document ready
+
 		</script>
 
 	</body>
