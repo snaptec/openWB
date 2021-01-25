@@ -5,6 +5,39 @@ updateConfig(){
 	ConfigFile="/var/www/html/openWB/openwb.conf"
 	echo "Updating $ConfigFile..."
 
+	if ! grep -Fq "wr_http_w_url=" $ConfigFile; then
+		echo "wr_http_w_url=http://192.168.0.17/pvwatt.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "hsocip1=" $ConfigFile; then
+		echo "hsocip1=http://10.0.0.110/soc.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "socmodul1=" $ConfigFile; then
+		echo "socmodul1=soc_http1" >> $ConfigFile
+	fi
+	if ! grep -Fq "dacregisters1=" $ConfigFile; then
+		echo "dacregisters1=12" >> $ConfigFile
+	fi
+	if ! grep -Fq "wr_http_kwh_url=" $ConfigFile; then
+		echo "wr_http_kwh_url=http://192.168.0.17/pvwh.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "smaemdbezugid=" $ConfigFile; then
+		echo "smaemdbezugid=1900123456" >> $ConfigFile
+	fi
+	if ! grep -Fq "smaemdpvid=" $ConfigFile; then
+		echo "smaemdpvid=1900123456" >> $ConfigFile
+	fi
+	if ! grep -Fq "smaemdllid=" $ConfigFile; then
+		echo "smaemdllid=1900123456" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug_http_w_url=" $ConfigFile; then
+		echo "bezug_http_w_url=http://192.168.0.17/bezugwatt.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug_http_ikwh_url=" $ConfigFile; then
+		echo "bezug_http_ikwh_url=http://192.168.0.17/bezugwh.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug_http_ekwh_url=" $ConfigFile; then
+		echo "bezug_http_ekwh_url=http://192.168.0.17/einspeisungwh.txt" >> $ConfigFile
+	fi
 	if ! grep -Fq "minimalapv=" $ConfigFile; then
 		echo "minimalapv=6" >> $ConfigFile
 	fi

@@ -414,6 +414,14 @@ def on_message(client, userdata, msg):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalalp2mpv=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/pv/lp/2/minCurrent", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (( "openWB/set/pv" in msg.topic) and ("faultState" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 2) and (0 <= int(msg.payload) <= 2) ):
+                client.publish("openWB/pv/"+str(devicenumb)+"/faultState", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (( "openWB/set/pv" in msg.topic) and ("faultStr" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if (1 <= devicenumb <= 2):
+                client.publish("openWB/pv/"+str(devicenumb)+"/faultStr", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/config/set/u1p3p/standbyPhases"):
             if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pstandby=", msg.payload.decode("utf-8")]
@@ -952,6 +960,11 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (msg.topic == "openWB/set/houseBattery/faultState"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+                client.publish("openWB/housebattery/faultState", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (msg.topic == "openWB/set/houseBattery/faultStr"):
+            client.publish("openWB/housebattery/faultStr", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/evu/W"):
             if (float(msg.payload) >= -100000 and float(msg.payload) <= 100000):
                 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
@@ -1002,6 +1015,11 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (msg.topic == "openWB/set/evu/faultState"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+                client.publish("openWB/evu/faultState", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (msg.topic == "openWB/set/evu/faultStr"):
+            client.publish("openWB/evu/faultStr", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/lp/1/%Soc"):
             if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
                 f = open('/var/www/html/openWB/ramdisk/soc', 'w')
@@ -1067,6 +1085,22 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("faultState" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 8) and (0 <= int(msg.payload) <= 2) ):
+                client.publish("openWB/lp/"+str(devicenumb)+"/faultState", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (( "openWB/set/lp" in msg.topic) and ("faultStr" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if (1 <= devicenumb <= 8):
+                client.publish("openWB/lp/"+str(devicenumb)+"/faultStr", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (( "openWB/set/lp" in msg.topic) and ("socFaultState" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 2) and (0 <= int(msg.payload) <= 2) ):
+                client.publish("openWB/lp/"+str(devicenumb)+"/socFaultState", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (( "openWB/set/lp" in msg.topic) and ("socFaultStr" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if (1 <= devicenumb <= 2):
+                client.publish("openWB/lp/"+str(devicenumb)+"/socFaultStr", msg.payload.decode("utf-8"), qos=0, retain=True)
 
         # Topics for Mqtt-EVSE module
         # ToDo: check if Mqtt-EVSE module is selected!
