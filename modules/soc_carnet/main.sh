@@ -67,6 +67,4 @@ else
 		vwtimer=$((60 * (10 - $intervall) / 10))
 		echo $vwtimer > $soctimerfile
 	fi
-	
-	/var/www/html/openWB/modules/soc_carnet/soc.sh $username $password $socfile
 fi
