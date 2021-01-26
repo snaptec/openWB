@@ -26,6 +26,22 @@
 
 set -o pipefail
 cd /var/www/html/openWB/
+
+if [ -e ramdisk/updateinprogress ] && [ -e ramdisk/bootinprogress ]; then
+	updateinprogress=$(<ramdisk/updateinprogress)
+	bootinprogress=$(<ramdisk/bootinprogress)
+	if (( updateinprogress == "1" )); then
+		echo "Update in progress"
+		exit 0
+	elif (( bootinprogress == "1" )); then
+		echo "Boot in progress"
+		exit 0
+	fi
+else
+	echo "Ramdisk not set up. Maybe we are still booting."
+	exit 0
+fi
+
 #config file einlesen
 . /var/www/html/openWB/loadconfig.sh
 
@@ -81,11 +97,6 @@ if [[ $dspeed == "2" ]]; then
 	else
 		echo 0 > ramdisk/5sec
 	fi
-fi
-updateinprogress=$(<ramdisk/updateinprogress)
-if (( updateinprogress == "1" )); then
-	echo "Update in progress"
-	exit 0
 fi
 
 # process autolock

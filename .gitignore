@@ -9,3 +9,4 @@ web/settings/.htaccess
 web/settings/.passwd
 web/lastcommit
 modules/soc_tesla/tokens.*
+.vscode/settings.json

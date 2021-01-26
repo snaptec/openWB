@@ -285,7 +285,7 @@ $numDevices = 9;
 													<input id="device_einschaltschwelleDevices<?php echo $devicenum; ?>" name="device_einschaltschwelle" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="50000" data-default="1500" value="0" data-signcheckbox="device_einschaltschwelleDevices<?php echo $devicenum; ?>PosNeg" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												</div>
 											</div>
-											<span class="form-text small">Parameter in Watt [W] für das Einschalten des Gerätes. Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle, startet das Gerät. Wenn ein Speicher vorhanden ist, wird die Speicherleistung mit in den vorhanden Überschuss mit eingerechnet.</span>
+											<span class="form-text small">Parameter in Watt [W] für das Einschalten des Gerätes. Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle, startet das Gerät.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -311,7 +311,7 @@ $numDevices = 9;
 													<input id="device_ausschaltschwelleDevices<?php echo $devicenum; ?>" name="device_ausschaltschwelle" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="50000" data-default="1500" value="1500" data-signcheckbox="device_ausschaltschwelleDevices<?php echo $devicenum; ?>PosNeg" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												</div>
 											</div>
-											<span class="form-text small">Parameter in Watt [W] für das Ausschalten des Gerätes. Steigt der <b>Bezug</b> über den Wert Ausschaltschwelle, stoppt das Gerät. Wenn ein Speicher vorhanden ist, wird die Speicherleistung mit in den vorhanden Überschuss mit eingerechnet.</span>
+											<span class="form-text small">Parameter in Watt [W] für das Ausschalten des Gerätes. Steigt der <b>Bezug</b> über den Wert Ausschaltschwelle, stoppt das Gerät.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -334,7 +334,9 @@ $numDevices = 9;
 														<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													</div>
 												</div>
-												<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
+												<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion.<br>
+												Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br> 
+												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle die direkt am EVU-Punkt gemessene Einspeisung/Bezug und die Speicherentladung relevant.</span>
 											</div>
 										</div>
 									</div>
@@ -443,10 +445,10 @@ $numDevices = 9;
 							<div class="form-row mb-1">
 								<label for="logLevel" class="col-md-4 col-form-label">SmartHome Loglevel</label>
 								<div class="col">
-									<select name="logLevel" id="logLevel" class="form-control" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/">
-										<option value="0" data-option="0" checked="checked">0</option>
+									<select name="logLevel" id="logLevel" class="form-control" data-default="2" value="2" data-topicprefix="openWB/config/get/SmartHome/">
+										<option value="0" data-option="0">0</option>
 										<option value="1" data-option="1">1</option>
-										<option value="2" data-option="2">2</option>
+										<option value="2" data-option="2" checked="checked">2</option>
 									</select>
 								</div>
 							</div>
