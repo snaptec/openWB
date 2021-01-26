@@ -12,10 +12,10 @@ function updateLabel(elementId) {
      */
     var element = $('#' + $.escapeSelector(elementId));
     var label = $('label[for="' + elementId + '"].valueLabel');
-    if ( label.length == 1 ) {
+    if (label.length == 1) {
         var suffix = label.attr('suffix');
-        var text = parseFloat(element.val()).toLocaleString(undefined, {maximumFractionDigits: 2});
-        if ( suffix != '' ) {
+        var text = parseFloat(element.val()).toLocaleString(undefined, { maximumFractionDigits: 2 });
+        if (suffix != '') {
             text += ' ' + suffix;
         }
         label.text(text);
@@ -30,13 +30,13 @@ function setInputValue(elementId, value) {
      * if the element has data-attribute 'signcheckbox' the checkbox with the id of the attribute
      * will represent negative numbers by being checked
      */
-    if ( !isNaN(value) ) {
+    if (!isNaN(value)) {
         var element = $('#' + $.escapeSelector(elementId));
         var signCheckboxName = element.data('signcheckbox');
         var signCheckbox = $('#' + signCheckboxName);
-        if ( signCheckbox.length == 1 ) {
+        if (signCheckbox.length == 1) {
             // checkbox exists
-            if ( value < 0 ) {
+            if (value < 0) {
                 signCheckbox.prop('checked', true);
                 value *= -1;
             } else {
@@ -44,18 +44,18 @@ function setInputValue(elementId, value) {
             }
         }
         element.val(value);
-        if ( element.attr('type') == 'range' ) {
+        if (element.attr('type') == 'range') {
             updateLabel(elementId);
         }
     }
 }
 
-function getTopicToSendTo (elementId) {
+function getTopicToSendTo(elementId) {
     var element = $('#' + $.escapeSelector(elementId));
     var topic = element.data('topicprefix') + elementId;
     topic = topic.replace('/get/', '/set/');
     if (topic.includes('MaxPriceForCharging')) {
-	    topic = 'openWB/set/awattar/MaxPriceForCharging'
+        topic = 'openWB/set/awattar/MaxPriceForCharging'
     }
     return topic;
 }
@@ -70,7 +70,7 @@ function setToggleBtnGroup(groupId, option) {
     $('input[name="' + groupId + '"][data-option="' + option + '"]').prop('checked', true);
     $('input[name="' + groupId + '"][data-option="' + option + '"]').closest('label').addClass('active');
     // and uncheck all others
-    $('input[name="' + groupId + '"]').not('[data-option="' + option + '"]').each(function() {
+    $('input[name="' + groupId + '"]').not('[data-option="' + option + '"]').each(function () {
         $(this).prop('checked', false);
         $(this).closest('label').removeClass('active');
     });
