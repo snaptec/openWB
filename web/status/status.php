@@ -80,101 +80,51 @@
 		</script>
 
 		<script>
-			function loadstatuslog() {
+			function readLogFile(urlStr, variable) {
 				$.ajax({
-					url: "/openWB/ramdisk/ladestatus.log",
+					url: urlStr,
 					complete: function(request){
 						var lines = request.responseText.split("\n");
 						var result = "";
 						for(var i=0; i<lines.length-1; i++)
 							result = lines[i] + "\n" + result;
-						$("#ladestatuslogdiv").text(result);
+						$(variable).text(result);
 					}
 				});
+			}
+
+			function loadstatuslog() {
+				readLogFile("/openWB/ramdisk/ladestatus.log", "#ladestatuslogdiv");
 			}
 			loadstatuslog();
 
 			function mqttlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/mqtt.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#mqttdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/mqtt.log", "#mqttdiv");
 			}
 			mqttlog();
 
 			function rfidlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/rfid.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#rfiddiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/rfid.log", "#rfiddiv");
 			}
 			rfidlog();
 
 			function debuglog() {
-				$.ajax({
-					url: "/openWB/ramdisk/openWB.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#debugdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/openWB.log", "#debugdiv");
 			}
 			debuglog();
 
 			function smarthomelog() {
-				$.ajax({
-					url: "/openWB/ramdisk/smarthome.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#smarthomediv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/smarthome.log", "#smarthomediv");
 			}
 			smarthomelog();
 
 			function nurpvlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/nurpv.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#nurpvdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/nurpv.log", "#nurpvdiv");
 			}
 			nurpvlog();
 
 			function soclog() {
-				$.ajax({
-					url: "/openWB/ramdisk/soc.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#socdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/soc.log", "#socdiv");
 			}
 			soclog();
 		</script>
