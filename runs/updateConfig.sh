@@ -1709,6 +1709,9 @@ updateConfig(){
 	if ! grep -Fq "rseenabled=" $ConfigFile; then
 		echo "rseenabled=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "u1p3schaltparam=" $ConfigFile; then
+		echo "u1p3schaltparam=8" >> $ConfigFile
+	fi
 
 	echo "Config file Update done."
 }
