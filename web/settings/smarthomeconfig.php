@@ -334,9 +334,8 @@ $numDevices = 9;
 														<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													</div>
 												</div>
-												<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion.<br>
-												Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br> 
-												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle die direkt am EVU-Punkt gemessene Einspeisung/Bezug und die Speicherentladung relevant.</span>
+												<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br> 
+												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle die Speicherleistung und die maximal mögliche Speicherladung (als Offset) relevant.</span>
 											</div>
 										</div>
 									</div>

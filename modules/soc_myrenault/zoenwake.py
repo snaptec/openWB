@@ -13,7 +13,7 @@ password=str(sys.argv[2])
 location=str(sys.argv[3])
 country=str(sys.argv[4])
 vin=str(sys.argv[5])
-chargepoint=str(sys.arg[v6])
+chargepoint=str(sys.argv[6])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp"+chargepoint, named_tuple)
