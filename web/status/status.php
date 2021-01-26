@@ -181,15 +181,11 @@
 							<div class="table-responsive">
 								<table class="table table-sm ">
 									<tbody>
-										<tr>
-											<th scope="row">Störungsstatus</th>
-											<td class=faultStateLP></td>
-										</tr>
-										<tr>
+										<tr class="faultStrLpRow">
 											<th scope="row">Störungsbeschreibung</th>
-											<td class=faultStrLP></td>
+											<td class="faultStrLp"></td>
 										</tr>
-										<tr class=stromvorgabeRow>
+										<tr class="stromvorgabeRow">
 											<th scope="row">Ladestromvorgabe [A]</th>
 											<td class="stromvorgabe">--</td>
 										</tr>
@@ -207,11 +203,11 @@
 										</tr>
 										<tr>
 											<th scope="row">Störungsstatus</th>
-											<td class=faultStateSocLP></td>
+											<td class="faultStateSocLP"></td>
 										</tr>
 										<tr>
 											<th scope="row">Störungsbeschreibung</th>
-											<td class=faultStrSocLP></td>
+											<td class="faultStrSocLP"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -284,10 +280,6 @@
 						<div class="table-responsive">
 							<table class="table" id="evu1">
 								<tbody>
-									<tr>
-										<th scope="row">Störungsstatus</th>
-										<td><div id="faultStateEvu"></div></td>
-									</tr>
 									<tr id="faultStrEvuRow">
 										<th scope="row">Störungsbeschreibung</th>
 										<td><div id="faultStrEvu"></div></td>
@@ -330,25 +322,25 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id ="spannungEvuStatusId">
+									<tr id="spannungEvuStatusId">
 										<th scope="row">Spannung [V]</th>
 										<td><div id="evuv1div">--</div></td>
 										<td><div id="evuv2div">--</div></td>
 										<td><div id="evuv3div">--</div></td>
 									</tr>
-									<tr id ="stromstaerkeEvuStatusId">
+									<tr id="stromstaerkeEvuStatusId">
 										<th scope="row">Stromstärke [A]</th>
 										<td><div id="bezuga1div">--</div></td>
 										<td><div id="bezuga2div">--</div></td>
 										<td><div id="bezuga3div">--</div></td>
 									</tr>
-									<tr id ="leistungEvuStatusId">
+									<tr id="leistungEvuStatusId">
 										<th scope="row">Leistung [W]</th>
 										<td><div id="bezugw1div">--</div></td>
 										<td><div id="bezugw2div">--</div></td>
 										<td><div id="bezugw3div">--</div></td>
 									</tr>
-									<tr id ="powerfaktorEvuStatusId">
+									<tr id="powerfaktorEvuStatusId">
 										<th scope="row">Power Faktor</th>
 										<td><div id="evupf1div">--</div></td>
 										<td><div id="evupf2div">--</div></td>
@@ -369,6 +361,11 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
+								<tr>
+									<tr id="faultStrPvRow">
+										<th scope="row">Störungsbeschreibung</th>
+										<td id="faultStrPv"></td>
+									</tr>
 									<tr id="pvCounterRow">
 										<th scope="row">Counter</th>
 										<td><div id="pvcounterdiv">--</div></td>
@@ -415,14 +412,7 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<th scope="row">Störungsstatus</th>
-											<td class=faultStatePv></td>
-										</tr>
-										<tr id="faultStrPvRow">
-											<th scope="row">Störungsbeschreibung</th>
-											<td class=faultStrPv></td>
-										</tr>
-										<tr class=leistungPvRow>
+										<tr class="leistungPvRow">
 											<th scope="row">Leistung [W]</th>
 											<td class="pvwattdiv">--</td>
 										</tr>
@@ -458,14 +448,11 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
-									<th scope="row">Störungsstatus</th>
-										<td><div id="faultStateBat"></div></td>
-									</tr>
-									<tr id="faultStrbatRow">
+									<tr id="faultStrBatRow">
 										<th scope="row">Störungsbeschreibung</th>
 										<td><div id="faultStrBat"></div></td>
 									</tr>
-									<tr id=geladenRow>
+									<tr id="geladenRow">
 										<th scope="row">geladen [kWh]</th>
 										<td><div id="speicherikwhdiv"></div></td>
 									</tr>
