@@ -464,3 +464,7 @@ input:invalid {
 td {
 	text-align: right;
 }
+
+pre {
+	font-size: 0.7em;
+}
