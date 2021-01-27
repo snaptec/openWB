@@ -103,7 +103,7 @@ if (( ladeleistung > 100 )); then
 				./runs/pushover.sh "$lp1name Ladung gestartet$soctext"
 			fi
 		fi
-		echo "$date LP1, Ladung gestartet." >> ramdisk/ladestatus.log
+		openwbDebugLog "CHARGESTAT" 0 "LP1, Ladung gestartet."
 	fi
 	echo 0 > ramdisk/llog1
 else
@@ -143,7 +143,7 @@ else
 					fi
 				fi
 			fi
-			echo "$date LP1, Ladung gestoppt" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP1, Ladung gestoppt"
 			rm ramdisk/ladeustart
 		fi
 	fi
@@ -212,7 +212,7 @@ if (( lastmanagement == 1 )); then
 					./runs/pushover.sh "$lp2name Ladung gestartet$soctext1"
 				fi
 			fi
-			echo "$date LP2, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP2, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp2
 			touch ramdisk/ladeustarts1
@@ -259,7 +259,7 @@ if (( lastmanagement == 1 )); then
 						fi
 					fi
 				fi
-				echo "$date LP2, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP2, Ladung gestoppt"
 				rm ramdisk/ladeustarts1
 			fi
 		fi
@@ -329,7 +329,7 @@ if (( lastmanagements2 == 1 )); then
 					./runs/pushover.sh "$lp3name Ladung gestartet"
 				fi
 			fi
-			echo "$date LP3, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP3, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp3
 			touch ramdisk/ladeustarts2
@@ -378,7 +378,7 @@ if (( lastmanagements2 == 1 )); then
 					fi
 
 				fi
-				echo "$date LP3, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP3, Ladung gestoppt"
 
 				rm ramdisk/ladeustarts2
 			fi
@@ -448,7 +448,7 @@ if (( lastmanagementlp4 == 1 )); then
 					./runs/pushover.sh "$lp4name Ladung gestartet"
 				fi
 			fi
-			echo "$date LP4, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP4, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp4
 			touch ramdisk/ladeustartlp4
@@ -498,7 +498,7 @@ if (( lastmanagementlp4 == 1 )); then
 					fi
 
 				fi
-				echo "$date LP4, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP4, Ladung gestoppt"
 
 				rm ramdisk/ladeustartlp4
 			fi
@@ -567,7 +567,7 @@ if (( lastmanagementlp5 == 1 )); then
 					./runs/pushover.sh "$lp5name Ladung gestartet"
 				fi
 			fi
-			echo "$date LP5, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP5, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp5
 			touch ramdisk/ladeustartlp5
@@ -617,7 +617,7 @@ if (( lastmanagementlp5 == 1 )); then
 					fi
 
 				fi
-				echo "$date LP5, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP5, Ladung gestoppt"
 
 				rm ramdisk/ladeustartlp5
 			fi
@@ -687,7 +687,7 @@ if (( lastmanagementlp6 == 1 )); then
 					./runs/pushover.sh "$lp6name Ladung gestartet"
 				fi
 			fi
-			echo "$date LP6, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP6, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp6
 			touch ramdisk/ladeustartlp6
@@ -737,7 +737,7 @@ if (( lastmanagementlp6 == 1 )); then
 					fi
 
 				fi
-				echo "$date LP6, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP6, Ladung gestoppt"
 
 				rm ramdisk/ladeustartlp6
 			fi
@@ -807,7 +807,7 @@ if (( lastmanagementlp7 == 1 )); then
 					./runs/pushover.sh "$lp7name Ladung gestartet"
 				fi
 			fi
-			echo "$date LP7, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP7, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp7
 			touch ramdisk/ladeustartlp7
@@ -857,7 +857,7 @@ if (( lastmanagementlp7 == 1 )); then
 					fi
 
 				fi
-				echo "$date LP7, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP7, Ladung gestoppt"
 
 				rm ramdisk/ladeustartlp7
 			fi
@@ -927,7 +927,7 @@ if (( lastmanagementlp8 == 1 )); then
 					./runs/pushover.sh "$lp8name Ladung gestartet"
 				fi
 			fi
-			echo "$date LP8, Ladung gestartet" >> ramdisk/ladestatus.log
+			openwbDebugLog "CHARGESTAT" 0 "LP8, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp8
 			touch ramdisk/ladeustartlp8
@@ -977,7 +977,7 @@ if (( lastmanagementlp8 == 1 )); then
 					fi
 
 				fi
-				echo "$date LP8, Ladung gestoppt" >> ramdisk/ladestatus.log
+				openwbDebugLog "CHARGESTAT" 0 "LP8, Ladung gestoppt"
 
 				rm ramdisk/ladeustartlp8
 			fi
