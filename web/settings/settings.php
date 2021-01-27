@@ -25,6 +25,8 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- Bootstrap Selectpicker-->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-selectpicker/bootstrap-select.min.css">
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
@@ -33,6 +35,7 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="js/bootstrap-selectpicker/bootstrap-select.min.js"></script>
 		<!-- load helper functions -->
 		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
@@ -210,6 +213,8 @@
 								<script type="text/javascript">
 									$(document).ready(function(){
 
+										$('#tibberHomesDropdown').selectpicker();
+
 										$('#tibbertoken').change(function(){
 											// after change of token check if only alphanumeric chars were entered
 											var currentVal = $(this).val();
@@ -228,9 +233,14 @@
 											$(this).val(newVal);
 										});
 
+										$('#tibberModalOkBtn').click(function(){
+											$('#tibberhomeid').val($('#tibberHomesDropdown option:selected').val());
+										});
+
 										$('#getTibberHomeIdBtn').click(function(){
 											const tibberQuery = '{ "query": "{viewer {homes{id address{address1 address2 address3 postalCode city}}}}" }';
 											$('#tibberModal').find('.modal-title').html('Tibber Home-ID ermitteln');
+											$('#tibberModalVerifySuccess').hide();
 											readTibberAPI($('#tibbertoken').val(), tibberQuery)
 												.then((queryData) => {
 													$('#tibberModal').find('.modal-header').removeClass('bg-danger');
@@ -238,12 +248,12 @@
 													$('#tibberModalOkBtn').text('Home-ID übernehmen');
 													$('#tibberModalOkBtn').show();
 													$('#tibberModal').find('.btn-danger').show();
-													$('#tibberModalErrorDiv').hide();
+													$('#tibberModalHomeIdErrorDiv').hide();
 													$('#tibberModalSelectHomeIdDiv').show();
 													var homes = queryData.data.viewer.homes;
-
-													console.log(homes);
-
+													// clear selectpicker
+													$('#tibberHomesDropdown').empty();
+													// and fill with received address(es)
 													$(homes).each(function() {
 														var homeID = this.id;
 														var addressStr = this.address.address1;
@@ -254,21 +264,15 @@
 															addressStr = addressStr + ', ' + this.address.address3;
 														}
 														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
-      													console.log(addressStr);
-														console.log(homeID);
-														$('#tibberHomesDropdown').append($('<option>', {
-													        value: homeID,
-													        text : addressStr
-													    }));
-														$('#tibberHomesDropdown').append($('<option>', {
-													        value: '2',
-													        text : addressStr
-													    }));
-														$('#tibberHomesDropdown').append($('<option>', {
-													        value: '3',
-													        text : addressStr
-													    }));
+														$('#tibberHomesDropdown').append('<option value="' + homeID + '">' + addressStr + '</option>');
     												});
+													// order of the following selectpicker commands is crucial for correct functionality!!
+													// make sure formerly hidden element is now enabled,
+													$('#tibberHomesDropdown').attr('disabled',false);
+													$('#tibberHomesDropdown').selectpicker('refresh');
+													// set the selectpicker to the first option
+													$('#tibberHomesDropdown').selectpicker('val', $('#tibberHomesDropdown option:first').val());
+													// show modal with unhidden div
 													$('#tibberModal').modal("show");
 												})
 												.catch((error) => {
@@ -278,11 +282,43 @@
 													$('#tibberModalOkBtn').show();
 													$('#tibberModal').find('.btn-danger').hide();
 													$('#tibberErrorText').text(error);
-													$('#tibberModalErrorDiv').show();
+													$('#tibberModalHomeIdErrorDiv').show();
 													$('#tibberModalSelectHomeIdDiv').hide();
 													$('#tibberhomeid').val('');
 													$('#tibberModal').modal("show");
 								  				})
+										});
+
+										$('#verifyTibberBtn').click(function(){
+											const tibberQuery = '{ "query": "{viewer {name home(id:\\"' + $('#tibberhomeid').val() + '\\") {address {address1}}}}" }';
+console.log(tibberQuery);
+											$('#tibberModal').find('.modal-title').html('Tibber-Daten verifizieren');
+											$('#tibberModalSelectHomeIdDiv').hide();
+											readTibberAPI($('#tibbertoken').val(), tibberQuery)
+												.then((queryData) => {
+													$('#tibberModal').find('.modal-header').removeClass('bg-danger');
+													$('#tibberModal').find('.modal-header').addClass('bg-success');
+													$('#tibberModalOkBtn').text('OK');
+													$('#tibberModalOkBtn').show();
+													$('#tibberModal').find('.btn-danger').show();
+													$('#tibberModalHomeIdErrorDiv').hide();
+													$('#tibberModalVerifySuccess').show();
+													var name = queryData.data.viewer.name;
+													$('#tibberVerifyText').text(name);
+													$('#tibberModal').modal("show");
+												})
+												.catch((error) => {
+													$('#tibberModal').find('.modal-header').removeClass('bg-success');
+													$('#tibberModal').find('.modal-header').addClass('bg-danger');
+													$('#tibberModalOkBtn').text('OK');
+													$('#tibberModalOkBtn').show();
+													$('#tibberModal').find('.btn-danger').hide();
+													$('#tibberErrorText').text(error);
+													$('#tibberModalHomeIdErrorDiv').show();
+													$('#tibberModalSelectHomeIdDiv').hide();
+													$('#tibberhomeid').val('');
+													$('#tibberModal').modal("show");
+												})
 										});
 
 									});  // end document ready
@@ -300,7 +336,7 @@
 
 											<!-- modal body -->
 											<div class="modal-body">
-												<div id="tibberModalErrorDiv" class="row justify-content-center hide">
+												<div id="tibberModalHomeIdErrorDiv" class="row justify-content-center hide">
 													<div class="col">
 														Fehler!
 														<p>
@@ -310,15 +346,22 @@
 													</div>
 												</div>
 
-												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center">
+												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
 													<div class="col">
-														Bitte wählen Sie eine Home-ID: <br>
-														<select id="tibberHomesDropdown" name="tibberHomesDropdown">
-															<option value="volvo">Volvo</option>
-															<option value="saab">Saab</option>
-															<option value="opel">Opel</option>
-															<option value="audi">Audi</option>
+														<div class="form-group">
+														<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
+														<select class="form-control selectpicker" id="tibberHomesDropdown">
 														</select>
+													  </div>
+													</div>
+												</div>
+
+												<div id="tibberModalVerifySuccess" class="row justify-content-center hide">
+													<div class="col">
+														Verifizierung der Tibber-Daten erfolgreich!
+														<p>
+															Registrierter Account-Inhaber: <span id="tibberVerifyText"></span>
+														</p>
 													</div>
 												</div>
 											</div>
@@ -331,6 +374,7 @@
 
 										</div>
 									</div>
+									
 									<script>
 										function clearSocForm(){
 											$("#manualSocBox").val("0");
