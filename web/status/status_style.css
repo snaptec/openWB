@@ -460,3 +460,11 @@ input:invalid {
 .hide {
     display: none;
 }
+
+td {
+	text-align: right;
+}
+
+pre {
+	font-size: 0.7em;
+}
