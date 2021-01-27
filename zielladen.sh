@@ -27,9 +27,7 @@ ziellademodus(){
 	fi
 	moeglichewh=$(( wunschawh / 60 * minzeitdiff ))
 
-	if (( debug == 1 )); then
-		echo "Zielladen aktiv:" $wunschawh "gewünschte Lade Wh," $lademaxwh "maximal mögliche Wh," $zuladendewh "zu ladende Wh," $moeglichewh " mögliche ladbare Wh bis Zieluhrzeit"
-	fi
+	openwbDebugLog "MAIN" 1 "Zielladen aktiv: $wunschawh gewünschte Lade Wh, $lademaxwh maximal mögliche Wh, $zuladendewh zu ladende Wh, $moeglichewh mögliche ladbare Wh bis Zieluhrzeit"
 	diffwh=$(( zuladendewh - moeglichewh ))
 
 	#vars
