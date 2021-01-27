@@ -170,6 +170,25 @@ updateConfig(){
 	if ! grep -Fq "sdm120modbusllid3s2=" $ConfigFile; then
 		echo "sdm120modbusllid3s2=10" >> $ConfigFile
 	fi
+	# upgrade from old "none" to 254
+	if grep -Fq "sdm120modbusllid2=none" $ConfigFile; then
+		echo "sdm120modbusllid2=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3=none" $ConfigFile; then
+		echo "sdm120modbusllid3=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid2s1=none" $ConfigFile; then
+		echo "sdm120modbusllid2s1=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3s1=none" $ConfigFile; then
+		echo "sdm120modbusllid3s1=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid2s2=none" $ConfigFile; then
+		echo "sdm120modbusllid2s2=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3s2=none" $ConfigFile; then
+		echo "sdm120modbusllid3s2=254" >> $ConfigFile
+	fi
 	if ! grep -Fq "evsewifiiplp1=" $ConfigFile; then
 		echo "evsewifiiplp1=192.168.0.25" >> $ConfigFile
 	fi
