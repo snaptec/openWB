@@ -50,7 +50,7 @@ else
 	tmpintervall=$(( 60 * 6 ))
 fi
 if (( socDebug > 0 )); then
-	tmpintervall=5
+	tmpintervall=6
 fi
 
 
