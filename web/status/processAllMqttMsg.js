@@ -48,6 +48,7 @@ function processGlobalMsg (mqttmsg, mqttpayload) {
 			directShow(mqttpayload, '#ladeleistungAll');
 			break;
 		case "openWB/global/kWhCounterAllChargePoints":
+			fractionDigitsShow(mqttpayload, '#kWhCounterAll');
 			noZeroShow(mqttpayload, '#kWhCounterAll');
 			break;
 		default:
@@ -135,15 +136,15 @@ function processPvMsg (mqttmsg, mqttpayload) {
 			noZeroShow($('#pvkwhdiv').text(), '#pvkwhdiv');
 			break;
 		case "openWB/pv/DailyYieldKwh":
-			directShow(mqttpayload, '#daily_pvkwhdiv');
+			fractionDigitsShow(mqttpayload, '#daily_pvkwhdiv');
 			noZeroShow($('#daily_pvkwhdiv').text(), '#daily_pvkwhdiv');
 			break;
 		case "openWB/pv/MonthlyYieldKwh":
-			directShow(mqttpayload, '#monthly_pvkwhdiv');
+			fractionDigitsShow(mqttpayload, '#monthly_pvkwhdiv');
 			noZeroShow($('#monthly_pvkwhdiv').text(), '#monthly_pvkwhdiv');
 			break;
 		case "openWB/pv/YearlyYieldKwh":
-			directShow(mqttpayload, '#yearly_pvkwhdiv');
+			fractionDigitsShow(mqttpayload, '#yearly_pvkwhdiv');
 			noZeroShow($('#yearly_pvkwhdiv').text(), '#yearly_pvkwhdiv');
 			break;
 		case "openWB/pv/Modul1W":
@@ -213,7 +214,7 @@ function processLpMsg (mqttmsg, mqttpayload) {
 		directShow(mqttpayload, '#lp' + index + ' .stromvorgabe');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhCounter$/i ) ) {
-		directShow(mqttpayload, '#lp' + index + ' .kWhCounter');
+		fractionDigitsShow(mqttpayload, '#lp' + index + ' .kWhCounter');
 		noZeroShow($('#lp' + index + ' .kWhCounter').text(), '#lp' + index + ' .kWhCounter');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/VPhase1$/i ) ) {
@@ -227,6 +228,9 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/W$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .ladeleistung');
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/%Soc$/i ) ) {
+		directShow(mqttpayload, '#lp' + index + ' .soc');
 	}
 	else {
 		switch (mqttmsg) {
@@ -266,17 +270,6 @@ function processLpMsg (mqttmsg, mqttpayload) {
 				hideSection('#lp7 .powerFaktorRow');
 				hideSection('#lp8 .powerFaktorRow');
 				break;
-			case "openWB/lp/1/%Soc":
-				directShow(mqttpayload, '#lp1 .soc');
-				// bei allen anderen LPs diese Zeilen ausblenden
-				hideSection('#lp2 .socRow');
-				hideSection('#lp3 .socRow');
-				hideSection('#lp4 .socRow');
-				hideSection('#lp5 .socRow');
-				hideSection('#lp6 .socRow');
-				hideSection('#lp7 .socRow');
-				hideSection('#lp8 .socRow');
-				break;
 			default:
 				break;
 		}
@@ -307,7 +300,7 @@ function noZeroShow(mqttpayload, variable) {
 
 //show with imp/exp
 function impExpShow(mqttpayload, variable) {
-	// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
+	// zur Anzeige Wert um "Bezug"/"Einspeisung" ergÃ¤nzen
 	var value = parseInt(mqttpayload);
 	var valueStr = "";
 	if(value<0) {
@@ -326,7 +319,7 @@ function impExpShow(mqttpayload, variable) {
 function kShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
 	value = (value / 1000);
-	var valueStr = value.toLocaleString({maximumFractionDigits: 3}) ;
+	var valueStr = value.toLocaleString('de-DE', {minimumFractionDigits: 3, maximumFractionDigits: 3}) ;
 	$(variable).text(valueStr);
 }
 
@@ -337,8 +330,18 @@ function invertShow(mqttpayload, variable) {
 	$(variable).text(valueStr);
 }
 
+//show kilo-payloads with 3 fraction digits
+function fractionDigitsShow(mqttpayload, variable) {
+	var value = parseFloat(mqttpayload);
+	if ( isNaN(value) ) {
+		value = 0;
+	}
+	var valueStr = value.toLocaleString('de-DE', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+	$(variable).text(valueStr);
+}
+
 //show only values over 100
-//Der String ist mit einem Tausender-Punkt versehen. Daher den Payload für die if-Abfrage verwenden.
+//Der String ist mit einem Tausender-Punkt versehen. Daher den Payload fÃ¼r die if-Abfrage verwenden.
 function visibilityMin(row, mqttpayload) {
 	var value = parseFloat(mqttpayload) * -1;
 	if (value>100) { 
@@ -351,7 +354,7 @@ function visibilityMin(row, mqttpayload) {
 
 //show/hide row with only one value
 function visibilityValue(row, variable){
-	var value = parseFloat($(variable).text()); // zu Berücksichtigung von 0,00
+	var value = parseFloat($(variable).text()); // zu BerÃ¼cksichtigung von 0,00
 	if (( value != 0) && ( $(variable).text() != "")) {
 		showSection(row);
 	}
@@ -362,7 +365,7 @@ function visibilityValue(row, variable){
 
 //show/hide complete row, if all three values are zero or empty
 function visibilityRow(row, var1, var2, var3) {
-	var val1 = parseFloat($(var1).text()); // zu Berücksichtigung von 0,00
+	var val1 = parseFloat($(var1).text()); // zu BerÃ¼cksichtigung von 0,00
 	var val2 = parseFloat($(var2).text());
 	var val3 = parseFloat($(var3).text());
 	if ( ( (val1 == 0) || ($(var1).text() == "") ) &&
@@ -375,7 +378,9 @@ function visibilityRow(row, var1, var2, var3) {
 	}
 }
 
-//show/hide card, if lp is configured
+var lpGesCardShown = false; // flag, show lpGes-Card if any other cp than cp1 is configured
+
+//show/hide card, if module is configured
 function visibilityCard(card, mqttpayload) {
 	var value = parseInt(mqttpayload);
 	if (value == 0)
@@ -384,5 +389,10 @@ function visibilityCard(card, mqttpayload) {
 	}
 	else {
 		showSection(card);
+		if ( (card.match( /^[#]lp[2-8]$/i)) && lpGesCardShown == false )
+		{
+			showSection('#lpges');
+			lpGesCardShown = true;
+		}
 	}
 }
