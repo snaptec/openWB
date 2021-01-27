@@ -88,10 +88,10 @@ sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 # restore saved files after fetching new release
 # module soc_i3
 if [ -f /tmp/auth.json ]; then
-	sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
+	sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth1.json
 fi
 if [ -f /tmp/auth.json.1 ]; then
-	sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
+	sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth2.json
 fi
 if [ -f /tmp/auth1.json]; then
 	sudo cp /tmp/auth1.json /var/www/html/openWB/modules/soc_i3/auth1.json

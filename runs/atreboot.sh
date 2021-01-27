@@ -26,19 +26,19 @@ if [ -d "/var/www/html/openWB/modules/soc_i3s1" ]; then
 	sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth1.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3/auth.json" "/var/www/html/openWB/modules/soc_i3/auth1.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth2.json"]; then
 	mv "/var/www/html/openWB/modules/soc_i3s1/auth.json" "/var/www/html/openWB/modules/soc_i3/auth2.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token1.json"]; then
 	mv "/var/www/html/openWB/modules/soc_i3/token.json" "/var/www/html/openWB/modules/soc_i3/token1.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token2.json"]; then
 	mv "/var/www/html/openWB/modules/soc_i3s1/token.json" "/var/www/html/openWB/modules/soc_i3/token2.json"
 fi
 
