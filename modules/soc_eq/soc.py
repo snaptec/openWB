@@ -2,11 +2,12 @@
 
 import os, requests, json, time, sys, os
 from datetime import datetime, timezone
+from requests.exceptions import Timeout
 
 ramdiskdir = '/var/www/html/openWB/ramdisk/'
 moduledir = '/var/www/html/openWB/modules/soc_eq/'
 
-req_timeout=15 #Timeout for requests in seconds
+req_timeout=(15,15) #Timeout for requests in seconds
 
 client_id     = str(sys.argv[1])
 client_secret = str(sys.argv[2])
@@ -49,7 +50,8 @@ fd.close()
 
 if int(expires_in) < int(time.time()):
   #Access Token is exired
-  socDebugLog("Acc Token Expired")
+  if Debug >= 1:
+     socDebugLog("Acc Token Expired")
   
   #get new Access Token with referesh token
   data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
@@ -121,8 +123,14 @@ if int(expires_in) < int(time.time()):
 
 #call API for SoC
 header = {'authorization': 'Bearer ' + access_token}
-req_soc = requests.get(soc_url, headers=header, verify=True)
-#req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
+try:
+
+    #req_soc = requests.get(soc_url, headers=header, verify=True)
+    req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
+    #req_soc = requests.get(soc_url, headers=header, verify=True, timeout=(5,10))
+except Timeout:
+    socDebugLog("Soc Request Timed Out")
+    exit(5)
 if Debug >= 1:
     socDebugLog("SOC Request: " + str(req_soc.status_code))
     socDebugLog("SOC Response: " + req_soc.text)
