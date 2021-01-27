@@ -1247,18 +1247,18 @@
 										</div>
 										<div id="peugeotmanualcalcdiv" class="hide">
 											<div class="form-row mb-1">
-												<label for="akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<label for="peugeot_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="peugeot_akkuglp1" value="<?php echo $akkuglp1old ?>">
 													<span class="form-text small">
 														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
 											<div class="form-row mb-1">
-												<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<label for="peugeot_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="peugeot_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
 													<span class="form-text small">
 														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
@@ -1340,18 +1340,18 @@
 										</div>
 										<div id="opelmanualcalclp1div" class="hide">
 											<div class="form-row mb-1">
-												<label for="akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<label for="opel_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="opel_akkuglp1" value="<?php echo $akkuglp1old ?>">
 													<span class="form-text small">
 														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Corsa-e: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
 											<div class="form-row mb-1">
-												<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<label for="opel_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="opel_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
 													<span class="form-text small">
 														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Corsa-e: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
@@ -2604,18 +2604,18 @@
 										</div>
 										<div id="peugeotmanualcalclp2div" class="hide">
 											<div class="form-row mb-1">
-												<label for="akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<label for="peugeot_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="peugeot_akkuglp2" value="<?php echo $akkuglp2old ?>">
 													<span class="form-text small">
 														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 46kWh<br>
 													</span>
 												</div>
 											</div>
 											<div class="form-row mb-1">
-												<label for="wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<label for="peugeot_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="peugeot_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
 													<span class="form-text small">
 														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 94-96 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
@@ -2692,18 +2692,18 @@
 										</div>
 										<div id="opelmanualcalclp2div" class="hide">
 											<div class="form-row mb-1">
-												<label for="akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<label for="opel_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="opel_akkuglp2" value="<?php echo $akkuglp2old ?>">
 													<span class="form-text small">
 														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Corsa-e: 46kWh<br>
 													</span>
 												</div>
 											</div>
 											<div class="form-row mb-1">
-												<label for="wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<label for="opel_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="opel_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
 													<span class="form-text small">
 														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Corsa-e: 94-96 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
