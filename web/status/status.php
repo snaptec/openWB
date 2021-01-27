@@ -237,7 +237,7 @@
 				<?php } ?>
 
 				<!-- Ladepunkte Gesamt -->
-				<div class="card border-primary" id="lpges">
+				<div class="card border-primary hide" id="lpges">
 					<div class="card-header bg-primary">
 						Ladepunkte Gesamt
 					</div>
