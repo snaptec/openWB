@@ -9,9 +9,10 @@ u1p3pswitch(){
 		if [ -z "$u1p3schaltparam" ]; then
 			u1p3schaltparam = 8
 		fi
-		uhwaittime = u1p3schaltparam * 60
-		urwaittime = (16 - u1p3schaltparam) * 60 
+		uhwaittime=$(( $u1p3schaltparam * 60 ))
+		urwaittime=$(( (16 - $u1p3schaltparam) * 60 ))
 		openwbDebugLog "MAIN" 1 "automatische Umschaltung aktiv"
+		openwbDebugLog "MAIN" 1 "Timing Umschaltung: $uhwaittime / $urwaittime"
 		if (( ladestatus == 0)); then
 			if (( nachtladenstate == 1 )) || (( nachtladen2state == 1 )); then
 				if (( u1p3pstat != u1p3pnl )); then
