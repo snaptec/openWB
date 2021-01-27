@@ -4,6 +4,4 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 
-source $OPENWBBASEDIR/helperFunctions.sh
-
-openwbPublishModuleState "LP" 0 "Kein Fehler" 2
+openwbModulePublishState "LP" 0 "Kein Fehler" 2
