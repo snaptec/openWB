@@ -80,152 +80,54 @@
 		</script>
 
 		<script>
-			function loadstatuslog() {
+			function readLogFile(urlStr, variable) {
 				$.ajax({
-					url: "/openWB/ramdisk/ladestatus.log",
+					url: urlStr,
 					complete: function(request){
 						var lines = request.responseText.split("\n");
 						var result = "";
 						for(var i=0; i<lines.length-1; i++)
 							result = lines[i] + "\n" + result;
-						$("#ladestatuslogdiv").text(result);
+						$(variable).text(result);
 					}
 				});
+			}
+
+			function loadstatuslog() {
+				readLogFile("/openWB/ramdisk/ladestatus.log", "#ladestatuslogdiv");
 			}
 			loadstatuslog();
 
 			function mqttlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/mqtt.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#mqttdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/mqtt.log", "#mqttdiv");
 			}
 			mqttlog();
 
 			function rfidlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/rfid.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#rfiddiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/rfid.log", "#rfiddiv");
 			}
 			rfidlog();
 
 			function debuglog() {
-				$.ajax({
-					url: "/openWB/ramdisk/openWB.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#debugdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/openWB.log", "#debugdiv");
 			}
 			debuglog();
 
 			function smarthomelog() {
-				$.ajax({
-					url: "/openWB/ramdisk/smarthome.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#smarthomediv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/smarthome.log", "#smarthomediv");
 			}
 			smarthomelog();
 
 			function nurpvlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/nurpv.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#nurpvdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/nurpv.log", "#nurpvdiv");
 			}
 			nurpvlog();
 
 			function soclog() {
-				$.ajax({
-					url: "/openWB/ramdisk/soc.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#socdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/soc.log", "#socdiv");
 			}
 			soclog();
 		</script>
-
-		<?php
-			$owbversion = file_get_contents('/var/www/html/openWB/web/version');
-			$result = '';
-			$lines = file('/var/www/html/openWB/openwb.conf');
-			foreach ($lines as $line) {
-				if (strpos($line, "lp1name=") !== false) {
-					list(, $lp1nameold) = explode("=", $line);
-				}
-				if (strpos($line, "lp2name=") !== false) {
-					list(, $lp2nameold) = explode("=", $line);
-				}
-				if (strpos($line, "lp3name=") !== false) {
-					list(, $lp3nameold) = explode("=", $line);
-				}
-				if (strpos($line, "lastmanagement=") !== false) {
-					list(, $lastmanagementold) = explode("=", $line);
-				}
-				if (strpos($line, "lastmanagements2=") !== false) {
-					list(, $lastmanagements2old) = explode("=", $line);
-				}
-				if (strpos($line, "simplemode=") !== false) {
-					list(, $simplemodeold) = explode("=", $line);
-				}
-				if (strpos($line, "verbraucher1_name=") !== false) {
-					list(, $verbraucher1_nameold) = explode("=", $line);
-				}
-				if (strpos($line, "verbraucher2_name=") !== false) {
-					list(, $verbraucher2_nameold) = explode("=", $line);
-				}
-				if (strpos($line, "name_wechselrichter1=") !== false) {
-					list(, $name_wechselrichter1old) = explode("=", $line);
-					# entferne EOL von String
-					$name_wechselrichter1old = trim(preg_replace('/\s+/', '', $name_wechselrichter1old));
-				}
-				if (strpos($line, "name_wechselrichter2=") !== false) {
-					list(, $name_wechselrichter2old) = explode("=", $line);
-					# entferne EOL von String
-					$name_wechselrichter2old = trim(preg_replace('/\s+/', '', $name_wechselrichter2old));
-				}
-				if (strpos($line, "kostalplenticoreip2=") !== false) {
-					# wird benötigt, für Anzeige der getrennten WR-Daten an/aus
-					list(, $kostalplenticoreip2old) = explode("=", $line);
-					# entferne EOL von String
-					$kostalplenticoreip2old = trim(preg_replace('/\s+/', '', $kostalplenticoreip2old));
-				}
-			}
-		?>
 
 	</head>
 	<body>
@@ -358,7 +260,7 @@
 				</div>
 
 				<!-- EVU  -->
-				<div class="card border-danger">
+				<div class="card border-danger <?php if($wattbezugmodulold == "none") echo "hide" ?>">
 					<div class="card-header bg-danger">
 						EVU
 					</div>

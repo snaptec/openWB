@@ -46,7 +46,6 @@ function processGlobalMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/global/WAllChargePoints":
 			directShow(mqttpayload, '#ladeleistungAll');
-			noZeroShow(mqttpayload, '#ladeleistungAll');
 			break;
 		case "openWB/global/kWhCounterAllChargePoints":
 			fractionDigitsShow(mqttpayload, '#kWhCounterAll');
@@ -292,8 +291,11 @@ function noZeroShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
 	if ( isNaN(value) || (value == 0) ) {
 		valueStr = "--";
-		$(variable).text(valueStr);
 	}
+	else {
+		var valueStr = value.toLocaleString(undefined);
+	}
+	$(variable).text(valueStr);
 }
 
 //show with imp/exp
