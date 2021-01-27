@@ -16,7 +16,6 @@ class Battery_API {
 	private $token;
 	private $json;
 
-
 	function __construct ( $chargepoint = null ) {
 
 		if( !is_null($chargepoint) ){
