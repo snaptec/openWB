@@ -175,7 +175,7 @@ class AVMHomeAutomation:
                 prefix = "[INFO] "
             if level == 2:
                 prefix = "[ERROR] "
-            print ('%s: Device: %s AHA Module (actor: %s) %s%s' % (time_string, self.devicenumber, self.switchname, prefix, message), file = f)
+            print ('%s: (%s) AVM (actor: %s) %s%s' % (time_string, self.devicenumber, self.switchname, prefix, message), file = f)
             f.close()
         except IOError:
             pass
