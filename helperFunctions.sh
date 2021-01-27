@@ -1,6 +1,6 @@
 #!/bin/bash
 
-openwbPublishModuleState() {
+openwbModulePublishState() {
 	# $1: Modultyp (EVU, LP, EVSOC, PV, BAT)
 	# $2: Status (0=Ok, 1=Warning, 2=Error)
 	# $3: Meldung (String)
@@ -51,3 +51,54 @@ openwbPublishModuleState() {
 			;;
 	esac
 }
+
+export -f openwbModulePublishState
+
+openwbDebugLog() {
+	# $1: Channel (MAIN=default, EVSOC, PV, MQTT, RFID, SMARTHOME, CHARGESTAT)
+	# $2: Level (0=Info, 1=Regelwerte , 2=Berechnungsgrundlage)
+	# $3: Meldung (String)
+	LOGFILE="/var/log/openWB.log"
+	timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+
+	if [[ -z "$debug" ]]; then
+		# enable all levels as global $debug is not set up yet
+		DEBUGLEVEL=2
+	else
+		DEBUGLEVEL=$debug
+	fi
+	# echo "LVL: $2 DEBUG: $debug DEBUGLEVEL: $DEBUGLEVEL" >> $LOGFILE
+	if (( $2 <= $DEBUGLEVEL )); then
+		case $1 in
+			"EVSOC")
+				LOGFILE="/var/www/html/openWB/ramdisk/soc.log"
+				;;
+			"PV")
+				LOGFILE="/var/www/html/openWB/ramdisk/nurpv.log"
+				;;
+			"MQTT")
+				LOGFILE="/var/www/html/openWB/ramdisk/mqtt.log"
+				;;
+			"RFID")
+				LOGFILE="/var/www/html/openWB/ramdisk/rfid.log"
+				;;
+			"SMARTHOME")
+				LOGFILE="/var/www/html/openWB/ramdisk/smarthome.log"
+				;;
+			"CHARGESTAT")
+				LOGFILE="/var/www/html/openWB/ramdisk/ladestatus.log"
+				;;
+			*)
+				# MAIN
+				LOGFILE="/var/log/openWB.log"
+				;;
+		esac
+		if (( $DEBUGLEVEL > 0 )); then
+			echo "$timestamp: $3 (LV$2) at $(caller 0)" >> $LOGFILE
+		else
+			echo "$timestamp: $3 (LV$2)" >> $LOGFILE
+		fi
+	fi
+}
+
+export -f openwbDebugLog

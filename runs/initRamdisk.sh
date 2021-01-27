@@ -7,13 +7,13 @@ initRamdisk(){
 
 	# Logfiles erstellen
 	ln -s /var/log/openWB.log $RamdiskPath/openWB.log
-	echo "**** REBOOT ****" > $RamdiskPath/mqtt.log
-	echo "**** REBOOT ****" > $RamdiskPath/ladestatus.log
-	echo "**** REBOOT ****" > $RamdiskPath/soc.log
-	echo "**** REBOOT ****" > $RamdiskPath/rfid.log
-	echo "**** REBOOT ****" > $RamdiskPath/nurpv.log
-	echo "**** REBOOT ****" > $RamdiskPath/cleanup.log
-	echo "**** REBOOT ****" > $RamdiskPath/smarthome.log
+	echo "**** REBOOT ****" >> $RamdiskPath/mqtt.log
+	echo "**** REBOOT ****" >> $RamdiskPath/ladestatus.log
+	echo "**** REBOOT ****" >> $RamdiskPath/soc.log
+	echo "**** REBOOT ****" >> $RamdiskPath/rfid.log
+	echo "**** REBOOT ****" >> $RamdiskPath/nurpv.log
+	echo "**** REBOOT ****" >> $RamdiskPath/cleanup.log
+	echo "**** REBOOT ****" >> $RamdiskPath/smarthome.log
 
 
 	echo $bootmodus > $RamdiskPath/lademodus
