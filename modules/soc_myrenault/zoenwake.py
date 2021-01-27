@@ -17,7 +17,7 @@ chargepoint=str(sys.argv[6])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp"+chargepoint, named_tuple)
-f = open('/var/www/html/openWB/ramdisk/zoereply1lp1'+chargepoint, 'r')
+f = open('/var/www/html/openWB/ramdisk/zoereply1lp'+chargepoint, 'r')
 android_config = json.loads(f.read())
 f.close()
 gigyarooturl = android_config['servers']['gigyaProd']['target'] 
