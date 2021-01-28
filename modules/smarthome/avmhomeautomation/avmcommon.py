@@ -129,8 +129,8 @@ class AVMHomeAutomation:
     # an authentication to obtain a new session ID if neccessary. A session ID
     # is assumed to be recent enough if it has been obtained ramdisk less than
     # 5 minutes ago in which case it is reused.
-    def connect(self): should_authenticate = True
-
+    def connect(self): 
+        should_authenticate = True
         ownInfo = self.cachedOwnInfo()
         if "session_mtime" in ownInfo and "session_id" in ownInfo:
             self.sessionID = ownInfo["session_id"]
@@ -175,7 +175,7 @@ class AVMHomeAutomation:
                 prefix = "[INFO] "
             if level == 2:
                 prefix = "[ERROR] "
-            print ('%s: Device: %s AHA Module (actor: %s) %s%s' % (time_string, self.devicenumber, self.switchname, prefix, message), file = f)
+            print ('%s: (%s) AVM (actor: %s) %s%s' % (time_string, self.devicenumber, self.switchname, prefix, message), file = f)
             f.close()
         except IOError:
             pass
