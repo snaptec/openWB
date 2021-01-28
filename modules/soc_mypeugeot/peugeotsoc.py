@@ -101,7 +101,6 @@ f.close()
 batt = json.loads(responsetext)
 soc = batt['energy'][0]['level']
 #print(time_string,'soc lp'+chargepoint,soc)
-
 if (int(chargepoint) == 1):
     f = open('/var/www/html/openWB/ramdisk/soc', 'w')
 if (int(chargepoint) == 2):
