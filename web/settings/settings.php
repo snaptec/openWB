@@ -233,23 +233,14 @@
 											$(this).val(newVal);
 										});
 
-										$('#tibberModalOkBtn').click(function(){
+										$('#tibberhomeIdModalOkBtn').click(function(){
 											$('#tibberhomeid').val($('#tibberHomesDropdown option:selected').val());
 										});
 
 										$('#getTibberHomeIdBtn').click(function(){
 											const tibberQuery = '{ "query": "{viewer {homes{id address{address1 address2 address3 postalCode city}}}}" }';
-											$('#tibberModal').find('.modal-title').html('Tibber Home-ID ermitteln');
-											$('#tibberModalVerifySuccess').hide();
 											readTibberAPI($('#tibbertoken').val(), tibberQuery)
 												.then((queryData) => {
-													$('#tibberModal').find('.modal-header').removeClass('bg-danger');
-													$('#tibberModal').find('.modal-header').addClass('bg-success');
-													$('#tibberModalOkBtn').text('Home-ID übernehmen');
-													$('#tibberModalOkBtn').show();
-													$('#tibberModal').find('.btn-danger').show();
-													$('#tibberModalHomeIdErrorDiv').hide();
-													$('#tibberModalSelectHomeIdDiv').show();
 													var homes = queryData.data.viewer.homes;
 													// clear selectpicker
 													$('#tibberHomesDropdown').empty();
@@ -266,6 +257,11 @@
 														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
 														$('#tibberHomesDropdown').append('<option value="' + homeID + '">' + addressStr + '</option>');
     												});
+													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-danger');
+													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-success');
+													$('#tibberhomeIdModalOkBtn').show();
+													$('#tibberModalHomeIdErrorDiv').hide();
+													$('#tibberModalSelectHomeIdDiv').show();
 													// order of the following selectpicker commands is crucial for correct functionality!!
 													// make sure formerly hidden element is now enabled,
 													$('#tibberHomesDropdown').attr('disabled',false);
@@ -273,74 +269,67 @@
 													// set the selectpicker to the first option
 													$('#tibberHomesDropdown').selectpicker('val', $('#tibberHomesDropdown option:first').val());
 													// show modal with unhidden div
-													$('#tibberModal').modal("show");
+													$('#tibberhomeIdModal').modal("show");
 												})
 												.catch((error) => {
-													$('#tibberModal').find('.modal-header').removeClass('bg-success');
-													$('#tibberModal').find('.modal-header').addClass('bg-danger');
-													$('#tibberModalOkBtn').text('OK');
-													$('#tibberModalOkBtn').show();
-													$('#tibberModal').find('.btn-danger').hide();
-													$('#tibberErrorText').text(error);
+													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-success');
+													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-danger');
+													$('#tibberhomeIdModalOkBtn').hide();
+													$('#tibberModalHomeIdErrorDiv').find('span').text(error);
+													//$('#tibberErrorText').text(error);
 													$('#tibberModalHomeIdErrorDiv').show();
 													$('#tibberModalSelectHomeIdDiv').hide();
 													$('#tibberhomeid').val('');
-													$('#tibberModal').modal("show");
+													$('#tibberhomeIdModal').modal("show");
 								  				})
 										});
 
 										$('#verifyTibberBtn').click(function(){
 											const tibberQuery = '{ "query": "{viewer {name home(id:\\"' + $('#tibberhomeid').val() + '\\") {address {address1}}}}" }';
-console.log(tibberQuery);
-											$('#tibberModal').find('.modal-title').html('Tibber-Daten verifizieren');
-											$('#tibberModalSelectHomeIdDiv').hide();
 											readTibberAPI($('#tibbertoken').val(), tibberQuery)
 												.then((queryData) => {
-													$('#tibberModal').find('.modal-header').removeClass('bg-danger');
-													$('#tibberModal').find('.modal-header').addClass('bg-success');
-													$('#tibberModalOkBtn').text('OK');
-													$('#tibberModalOkBtn').show();
-													$('#tibberModal').find('.btn-danger').show();
-													$('#tibberModalHomeIdErrorDiv').hide();
-													$('#tibberModalVerifySuccess').show();
+													$('#tibberVerifyModal').find('.modal-header').removeClass('bg-danger');
+													$('#tibberVerifyModal').find('.modal-header').addClass('bg-success');
+													$('#tibberVerifyOkBtn').show();
+													$('#tibberVerifyModal').find('.btn-danger').hide();
+													$('#tibberModalVerifyErrorDiv').hide();
+													$('#tibberModalVerifySuccessDiv').show();
 													var name = queryData.data.viewer.name;
-													$('#tibberVerifyText').text(name);
-													$('#tibberModal').modal("show");
+													$('#tibberModalVerifySuccessDiv').find('span').text(name);
+													$('#tibberVerifyModal').modal("show");
 												})
 												.catch((error) => {
-													$('#tibberModal').find('.modal-header').removeClass('bg-success');
-													$('#tibberModal').find('.modal-header').addClass('bg-danger');
-													$('#tibberModalOkBtn').text('OK');
-													$('#tibberModalOkBtn').show();
-													$('#tibberModal').find('.btn-danger').hide();
-													$('#tibberErrorText').text(error);
-													$('#tibberModalHomeIdErrorDiv').show();
-													$('#tibberModalSelectHomeIdDiv').hide();
+													$('#tibberVerifyModal').find('.modal-header').removeClass('bg-success');
+													$('#tibberVerifyModal').find('.modal-header').addClass('bg-danger');
+													$('#tibberVerifyOkBtn').hide();
+													$('#tibberVerifyModal').find('.btn-danger').show();
+													$('#tibberModalVerifyErrorDiv').find('span').text(error);
+													$('#tibberModalVerifyErrorDiv').show();
+													$('#tibberModalVerifySuccessDiv').hide();
 													$('#tibberhomeid').val('');
-													$('#tibberModal').modal("show");
+													$('#tibberVerifyModal').modal("show");
 												})
 										});
 
 									});  // end document ready
 								</script>
 
-								<!-- modal Tibber-window -->
-								<div class="modal fade" id="tibberModal">
+								<!-- modal Tibber-homeID-window -->
+								<div class="modal fade" id="tibberhomeIdModal">
 									<div class="modal-dialog">
 										<div class="modal-content">
 
 											<!-- modal header -->
 											<div class="modal-header">
-												<h4 class="modal-title"></h4>
+												<h4 class="modal-title">Tibber Home-ID ermitteln</h4>
 											</div>
 
 											<!-- modal body -->
 											<div class="modal-body">
 												<div id="tibberModalHomeIdErrorDiv" class="row justify-content-center hide">
 													<div class="col">
-														Fehler!
 														<p>
-															<span id="tibberErrorText"></span>
+															<span></span>
 														</p>
 														Home-ID-Ermittlung fehlgeschlagen.
 													</div>
@@ -356,71 +345,63 @@ console.log(tibberQuery);
 													</div>
 												</div>
 
-												<div id="tibberModalVerifySuccess" class="row justify-content-center hide">
+											</div>
+
+											<!-- modal footer -->
+											<div class="modal-footer d-flex justify-content-center">
+												<button type="button" class="btn btn-success" data-dismiss="modal" id="tibberhomeIdModalOkBtn">Home-ID übernehmen</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+											</div>
+
+										</div>
+									</div>
+								</div>  <!-- end modal Tibber-homeID-window -->
+
+								<!-- modal Tibber-verify-data-window -->
+								<div class="modal fade" id="tibberVerifyModal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+
+											<!-- modal header -->
+											<div class="modal-header">
+												<h4 class="modal-title">Tibber-Daten verifizieren</h4>
+											</div>
+
+											<!-- modal body -->
+											<div class="modal-body">
+												<div id="tibberModalVerifyErrorDiv" class="row justify-content-center hide">
 													<div class="col">
-														Verifizierung der Tibber-Daten erfolgreich!
 														<p>
-															Registrierter Account-Inhaber: <span id="tibberVerifyText"></span>
+															<span></span>
 														</p>
+														Verifizierung der Tibber-Daten fehlgeschlagen.
+													</div>
+												</div>
+
+												<div id="tibberModalVerifySuccessDiv" class="row justify-content-center hide">
+													<div class="col">
+														<p>
+															Verifizierung der Tibber-Daten erfolgreich!
+														</p>
+														Registrierter Account-Inhaber: <span></span>
 													</div>
 												</div>
 											</div>
 
 											<!-- modal footer -->
 											<div class="modal-footer d-flex justify-content-center">
-												<button type="button" class="btn btn-success" data-dismiss="modal" id="tibberModalOkBtn">OK</button>
+												<button type="button" class="btn btn-success" data-dismiss="modal" id="tibberVerifyOkBtn">OK</button>
 												<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 											</div>
 
 										</div>
 									</div>
-									
-									<script>
-										function clearSocForm(){
-											$("#manualSocBox").val("0");
-										}
-
-										function submitSocForm() {
-											var currentLp = $('#socModal').find('.socLp').text();
-											var manualSoc = $("#manualSocBox").val();
-											console.log("SoC for LP"+currentLp+": "+manualSoc);
-											publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
-											// reset input after publishing
-											clearSocForm();
-										};
-										$(document).ready(function(){
-
-											$('#manualSocDecrement').click(function() {
-												var newValue = parseInt($('#manualSocBox').val()) - 1;
-												if( newValue < 0 ){
-													newValue = 0;
-												}
-												$('#manualSocBox').val(newValue);
-											});
-
-											$('#manualSocIncrement').click(function() {
-												var newValue = parseInt($('#manualSocBox').val()) + 1;
-												if( newValue > 100 ){
-													newValue = 100;
-												}
-												$('#manualSocBox').val(newValue);
-											});
-
-											$('#manualSocCancel').click(function() {
-												clearSocForm();
-											});
-
-											$('#manualSocOk').click(function() {
-												submitSocForm();
-											});
-
-										});
-									</script>
-								</div>  <!-- end modal Tibber-window -->
+								</div>  <!-- end modal Tibber-verify-data-window -->
 
 							</div>
 						</div>
 					</div>
+
 					<script>
 						$(function() {
 							function visibility_electricityprovider() {
