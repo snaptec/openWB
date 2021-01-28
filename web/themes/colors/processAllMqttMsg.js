@@ -230,7 +230,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;
 			window['all'+index] = 1;
-			//putgraphtogether(); 
+			//putgraphtogether();
 		}*/
 	}
 	else if (mqttmsg == 'openWB/graph/lastlivevalues') {
@@ -376,10 +376,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		wbdata.updateGlobal("loadMgtText", (mqttpayload.length >=5 ? mqttpayload : ''));
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
-		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));	
+		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-		// currently not implemented for color theme		
+		// currently not implemented for color theme
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
 		// currently not implemented for color theme
@@ -394,7 +394,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			// '2': mode pv
 			// '3': mode stop
 			// '4': mode standby
-	
+
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
 		wbdata.updateGlobal("chargeEnergy", makeFloat (mqttpayload));
@@ -438,13 +438,13 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 		electricityPriceTimeline = getCol(csvaData, 0);
 		electricityPriceChartline = getCol(csvaData, 1);
-		loadElectricityPriceChart(); 
+		loadElectricityPriceChart();
 	}
 	else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
 		setInputValue('MaxPriceForCharging', mqttpayload);
 	}
 	else if (mqttmsg == 'openWB/global/awattar/ActualPriceForCharging') {
-		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' Cent/kWh');
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' ct/kWh');
 	}
 	else if (mqttmsg == 'openWB/global/ChargeMode') {
 		// set modal button colors depending on charge mode
@@ -1179,14 +1179,14 @@ function unsubscribeMqttGraphSegments() {
 		topic = "openWB/graph/" + segments + "alllivevalues";
 		client.unsubscribe(topic);
 	}
-} 
+}
 
 function makeInt(message) {
 	var number = parseInt(message, 10);
 	if (isNaN(number)) {
 		number = 0;
 	}
-	return number;	
+	return number;
 }
 
 function makeFloat(message) {
@@ -1194,5 +1194,5 @@ function makeFloat(message) {
 	if (isNaN(number)) {
 		number = 0.0;
 	}
-	return number;	
+	return number;
 }
