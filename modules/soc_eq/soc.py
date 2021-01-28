@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-import os, requests, json, time, sys, os
+import os, requests, json, time, sys, os, psutil
 from datetime import datetime, timezone
 from requests.exceptions import Timeout
 
 ramdiskdir = '/var/www/html/openWB/ramdisk/'
 moduledir = '/var/www/html/openWB/modules/soc_eq/'
 
-req_timeout=(15,15) #Timeout for requests in seconds
+req_timeout=(30,30) #timeout for requests in seconds
 
 client_id     = str(sys.argv[1])
 client_secret = str(sys.argv[2])
@@ -16,11 +16,18 @@ soc_file      = str(sys.argv[4])
 ChargePoint   = str(sys.argv[5])
 
 Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
 
+me = psutil.Process()
+parent = psutil.Process(me.ppid())
+callerPid = str(parent.pid)
 def socDebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
+    if Debug < 2:
+        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": Lp" + ChargePoint + ": " + message)
+    else:
+        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": Lp" + ChargePoint + ": PID:" + myPid +  ": CPID:" + callerPid + ": " + message)
 
 if Debug >= 1:
     socDebugLog("Debug Level: " + str(Debug))
@@ -125,9 +132,9 @@ if int(expires_in) < int(time.time()):
 header = {'authorization': 'Bearer ' + access_token}
 try:
 
-    #req_soc = requests.get(soc_url, headers=header, verify=True)
-    req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
-    #req_soc = requests.get(soc_url, headers=header, verify=True, timeout=(5,10))
+    req_soc = requests.get(soc_url, headers=header, verify=True)
+    #req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
+
 except Timeout:
     socDebugLog("Soc Request Timed Out")
     exit(5)
