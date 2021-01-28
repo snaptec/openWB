@@ -42,6 +42,7 @@ var topicsToSubscribe = [
 	["openWB/lp/1/PfPhase2", 1],
 	["openWB/lp/1/PfPhase3", 1],
 	["openWB/lp/1/W", 1],
+	["openWB/lp/1/boolSocConfigured", 1],
 	["openWB/lp/1/%Soc", 1],
 
 	["openWB/lp/2/boolChargePointConfigured", 0],
@@ -54,6 +55,7 @@ var topicsToSubscribe = [
 	["openWB/lp/2/VPhase2", 1],
 	["openWB/lp/2/VPhase3", 1],
 	["openWB/lp/2/W", 1],
+	["openWB/lp/2/boolSocConfigured", 1],
 	["openWB/lp/2/%Soc", 1],
 
 	["openWB/lp/3/boolChargePointConfigured", 0],
@@ -66,6 +68,7 @@ var topicsToSubscribe = [
 	["openWB/lp/3/VPhase2", 1],
 	["openWB/lp/3/VPhase3", 1],
 	["openWB/lp/3/W", 1],
+	["openWB/lp/3/boolSocConfigured", 1],
 	["openWB/lp/3/%Soc", 1],
 
 	["openWB/lp/4/boolChargePointConfigured", 0],
@@ -78,6 +81,7 @@ var topicsToSubscribe = [
 	["openWB/lp/4/VPhase2", 1],
 	["openWB/lp/4/VPhase3", 1],
 	["openWB/lp/4/W", 1],
+	["openWB/lp/4/boolSocConfigured", 1],
 	["openWB/lp/4/%Soc", 1],
 
 	["openWB/lp/5/boolChargePointConfigured", 0],
@@ -90,6 +94,7 @@ var topicsToSubscribe = [
 	["openWB/lp/5/VPhase2", 1],
 	["openWB/lp/5/VPhase3", 1],
 	["openWB/lp/5/W", 1],
+	["openWB/lp/5/boolSocConfigured", 1],
 	["openWB/lp/5/%Soc", 1],
 
 	["openWB/lp/6/boolChargePointConfigured", 0],
@@ -102,6 +107,7 @@ var topicsToSubscribe = [
 	["openWB/lp/6/VPhase2", 1],
 	["openWB/lp/6/VPhase3", 1],
 	["openWB/lp/6/W", 1],
+	["openWB/lp/6/boolSocConfigured", 1],
 	["openWB/lp/6/%Soc", 1],
 
 	["openWB/lp/7/boolChargePointConfigured", 0],
@@ -114,6 +120,7 @@ var topicsToSubscribe = [
 	["openWB/lp/7/VPhase2", 1],
 	["openWB/lp/7/VPhase3", 1],
 	["openWB/lp/7/W", 1],
+	["openWB/lp/7/boolSocConfigured", 1],
 	["openWB/lp/7/%Soc", 1],
 
 	["openWB/lp/8/boolChargePointConfigured", 0],
@@ -126,6 +133,7 @@ var topicsToSubscribe = [
 	["openWB/lp/8/VPhase2", 1],
 	["openWB/lp/8/VPhase3", 1],
 	["openWB/lp/8/W", 1],
+	["openWB/lp/8/boolSocConfigured", 1],
 	["openWB/lp/8/%Soc", 1],
 
 	["openWB/pv/boolPVConfigured", 0],
