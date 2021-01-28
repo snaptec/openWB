@@ -1,4 +1,4 @@
-/**
+ct/**
  * Functions to retrieve and process data from Tibber API
  *
  * @author Michael Ortenstein
@@ -128,9 +128,9 @@ function fillCardStrompreis(response){
 
     if (typeof priceCurrentData !== 'undefined') {
         var startsAt = new Date(priceCurrentData.startsAt);
-        $('#currentPrice').text(convertToLocale((priceCurrentData.total * 100), 'Cent/kWh'));
-        $('#currentEnergyPrice').text(convertToLocale((priceCurrentData.energy * 100), 'Cent/kWh'));
-        $('#currentTax').text(convertToLocale((priceCurrentData.tax * 100), 'Cent/kWh'));
+        $('#currentPrice').text(convertToLocale((priceCurrentData.total * 100), 'ct/kWh'));
+        $('#currentEnergyPrice').text(convertToLocale((priceCurrentData.energy * 100), 'ct/kWh'));
+        $('#currentTax').text(convertToLocale((priceCurrentData.tax * 100), 'ct/kWh'));
         $('#currentValidSince').text(startsAt.toLocaleDateString(undefined, options));
         if (typeof priceTomorrowData !== 'undefined') {
             $('#noPricechartDiv').hide();
@@ -196,7 +196,7 @@ function fillCardTagesbezug(response){
             }
             $('#totalConsumptionDay').text(convertToLocale(totalConsumptionDay, ' kWh'));
             $('#totalCostsDay').text(convertToLocale(totalCostsDay, ' €'));
-            $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' Cent/kWh'));
+            $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' ct/kWh'));
         }
         // create chart or hide it
         if (totalConsumptionDay > 0) {

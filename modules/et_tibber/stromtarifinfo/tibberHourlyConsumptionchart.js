@@ -40,7 +40,7 @@ function loadHourlyConsumptionchart(labels, dataConsumption, dataPrice) {
                 callbacks: {
                     label: function(tooltipItem, data) {
 						let i = tooltipItem.index;
-                        return data.datasets[1].data[i] + ' kWh bezogen zu ' + data.datasets[0].data[i] + ' Cent/kWh';
+                        return data.datasets[1].data[i] + ' kWh bezogen zu ' + data.datasets[0].data[i] + ' ct/kWh';
                     }
                 }
 			},
@@ -90,7 +90,7 @@ function loadHourlyConsumptionchart(labels, dataConsumption, dataPrice) {
 					display: true,
 					scaleLabel: {
 						display: true,
-						labelString: 'stündl. Preis [Cent/kWh]',
+						labelString: 'stündl. Preis [ct/kWh]',
 						fontColor: 'rgba(153, 153, 153, 1)'
 					},
 					gridLines: {
