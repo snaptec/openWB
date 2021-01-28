@@ -1,4 +1,4 @@
-ct/**
+/**
  * Functions to update graph and gui values via MQTT-messages
  *
  * @author Kevin Wieland
