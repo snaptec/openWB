@@ -53,9 +53,14 @@ esac
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
+}
+
+socLog(){
+	timestamp=`date +"%Y-%m-%d %H:%M:%S"`	
+	echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 }
 
 incrementTimer(){
@@ -77,12 +82,12 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 else	# manual calculation enabled, combining PSA module with manual calc method
 	# if charging started this round fetch once from myPeugeot out of order
 	if [[ $(<$ladungaktivFile) == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
-		socDebugLog "Ladestatus changed to laedt. Fetching SoC from myPeugeot out of order."
+		socLog "Ladestatus changed to laedt. Fetching SoC from myPeugeot out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 		echo $(<$socFile) > $manualSocFile
-		socDebugLog "Fetched from myPeugeot: $(<$socFile)%"
+		socLog "Fetched from myPeugeot: $(<$socFile)%"
 	fi
 
 	# if charging ist not active fetch SoC from myPeugeot
@@ -91,11 +96,11 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 			socDebugLog "Nothing to do yet. Incrementing timer. Extralong myPeugeot wait: $soctimer"
 			incrementTimer
 		else
-			socDebugLog "Fetching SoC from myPeugeot"
+			socLog "Fetching SoC from myPeugeot"
 			echo 0 > $soctimerfile
 			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 			echo $(<$socFile) > $manualSocFile
-			socDebugLog "Fetched from myPeugeot: $(<$socFile)%"
+			socLog "Fetched from myPeugeot: $(<$socFile)%"
 		fi
 	# if charging ist active calculate SoC manually
 	else
@@ -151,16 +156,18 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				socDebugLog "currentSocDiff: $currentSocDiff"
 				newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 				if (( newSoc > 100 )); then
+					socLog "newSoC above 100, setting to 100."
 					newSoc=100
 				fi
 				if (( newSoc < 0 )); then
+					socLog "newSoC below 100, setting to 0."
 					newSoc=0
 				fi
 				socDebugLog "newSoc: $newSoc"
 				echo $newSoc > $socFile
 			else
 				# no current meter value for calculation -> Exit
-				socDebugLog "ERROR: no meter value for calculation! ($meterFile)"
+				socLog "ERROR: no meter value for calculation! ($meterFile)"
 			fi
 		fi
 	fi

@@ -13,11 +13,11 @@ password=str(sys.argv[2])
 location=str(sys.argv[3])
 country=str(sys.argv[4])
 vin=str(sys.argv[5])
-chargepoint=str(sys.arg[v6])
+chargepoint=str(sys.argv[6])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp"+chargepoint, named_tuple)
-f = open('/var/www/html/openWB/ramdisk/zoereply1lp1'+chargepoint, 'r')
+f = open('/var/www/html/openWB/ramdisk/zoereply1lp'+chargepoint, 'r')
 android_config = json.loads(f.read())
 f.close()
 gigyarooturl = android_config['servers']['gigyaProd']['target'] 

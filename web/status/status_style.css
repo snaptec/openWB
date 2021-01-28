@@ -207,6 +207,25 @@ input:invalid {
     border-bottom: 2px solid red !important;
 }
 
+.accordion .card-header:after {
+    font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+    content: "\f146";
+    float: right; 
+}
+.accordion .card-header.collapsed:after {
+    /* symbol for "collapsed" panels */
+	content: "\f0fe"; 
+}
+
+td {
+	text-align: right;
+}
+
+pre {
+	font-size: 0.7em;
+}
+
 /* Bootstrap carousel */
 .carousel-item img {
     object-fit: contain;
@@ -444,19 +463,4 @@ input:invalid {
 	100% {
 		-moz-transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
 	}
-}
-
-.accordion .card-header:after {
-    font-family: 'Font Awesome 5 Free';
-	font-weight: 900;
-    content: "\f146";
-    float: right; 
-}
-.accordion .card-header.collapsed:after {
-    /* symbol for "collapsed" panels */
-	content: "\f0fe"; 
-}
-
-.hide {
-    display: none;
 }
