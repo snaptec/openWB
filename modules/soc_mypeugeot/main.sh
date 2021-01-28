@@ -79,7 +79,7 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 else	# manual calculation enabled, combining PSA module with manual calc method
 	# if charging started this round fetch once from myPeugeot out of order
 	if [[ $(<$ladungaktivFile) == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
-		socDebugLog "Ladestatus changed to laedt. Fetching SoC from myPeugeot out of order."
+		socDebugLog "Status changed to loading. Fetching SoC from myPeugeot out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
@@ -98,8 +98,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 			dateofmanualsoc=$(($(stat -c %Y "$manualSocFile")))
 			diff=$(($dateofmanualsoc - $(<$peugeotSocTime)))
-			dateofmanualsocreadable=$(date -d @$dateofmanualsoc)
-			socDebugLog "Time of manual SoC:  $(date -d @$dateofmanualsoc +'%F %T')"
+			socDebugLog "Time of manual SoC:  $(date -d @$dateofsoc +'%F %T')"
 			socDebugLog "Time of fetched SoC: $(date -d @$(<$peugeotSocTime) +'%F %T')"
 			socDebugLog "Fetched SoC is $diff s older"
 			
@@ -111,7 +110,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				socDebugLog "Fetched from myPeugeot: $(<$socFile)% but skipping it, because it is older than calculated SoC."
 			fi
 		fi
-	# if charging ist active calculate SoC manually
+	# if charging is active calculate SoC manually
 	else
 		if (( soctimer < socIntervall )); then
 			socDebugLog "Nothing to do yet. Incrementing timer."
@@ -172,6 +171,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				fi
 				socDebugLog "newSoc: $newSoc"
 				echo $newSoc > $socFile
+				echo $newSoc > $manualSocFile
 			else
 				# no current meter value for calculation -> Exit
 				socDebugLog "ERROR: no meter value for calculation! ($meterFile)"
