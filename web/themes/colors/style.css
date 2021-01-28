@@ -13,13 +13,13 @@ body {
 	color: lightgrey;
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
 	/* Old browsers */
-	background: white;
+	background: midnightblue;
 }
 body > .container {
 	padding: 55px 15px 0;
 }
 h3 {
-	color: black;
+	color: lightgrey;
 }
 body > .container-fluid {
 	padding: 55px 15px 0;
@@ -105,9 +105,9 @@ body > .container-fluid {
 }
 
 input[type=range]::-webkit-slider-runnable-track {
-	background: slategrey;
-	
-}
+	background: grey;
+	}
+
 .text-green {
 	color: #006515;
 }
@@ -170,11 +170,11 @@ input[type=range]::-webkit-slider-runnable-track {
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query since this is the default in Bootstrap */
 h1 {
-	font-size: 1.4rem;
+	font-size: 1.6rem;
 }
 
 h2 {
-	font-size: 0.9rem;
+	font-size: 1.4rem;
 }
 
 h3 {
@@ -182,19 +182,19 @@ h3 {
 }
 
 .verySmallTextSize {
-	font-size: 1.0rem;
+	font-size: 0.8rem;
 }
 
 .smallTextSize {
-	font-size: 1.1rem;
+	font-size: 0.7rem;
 }
 
 .regularTextSize {
-	font-size: 1.2rem;
+	font-size: 0.9rem;
 }
 
 .largeTextSize {
-	font-size: 0.8rem;
+	font-size: 1.1rem;
 }
 
 .buttonTextSize {
@@ -210,11 +210,11 @@ h3 {
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
 	h1 {
-		font-size: 1.7rem;
+		font-size: 2.1rem;
 	}
 
 	h2 {
-		font-size: 1.1rem;
+		font-size: 1.9rem;
 	}
 
 	h3 {
@@ -226,19 +226,19 @@ h3 {
 	}
 
 	.smallTextSize {
-		font-size: 0.68rem;
+		font-size: 1.2rem;
 	}
 
 	.regularTextSize {
-		font-size: 1.1rem;
+		font-size: 1.4rem;
 	}
 
 	.largeTextSize {
-		font-size: 0.95rem;
+		font-size: 1.6rem;
 	}
 
 	.buttonTextSize {
-		font-size: 1.0rem;
+		font-size: 1.4rem;
 	}
 	.tablecell {
 		font-size: 1.2rem;
@@ -257,11 +257,11 @@ h3 {
 /* Medium devices (tablets, 768px and up) */
 @media screen and (min-width: 768px) {
 	h1 {
-		font-size: 2.0rem;
+		font-size: 1.5rem;
 	}
 
 	h2 {
-		font-size: 1.4rem;
+		font-size: 1.3rem;
 	}
 
 	h3 {
@@ -269,23 +269,23 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 1.1rem;
+		font-size: 0.8rem;
 	}
 
 	.smallTextSize {
-		font-size: 0.9rem;
+		font-size: 0.6rem;
 	}
 
 	.regularTextSize {
-		font-size: 1.2rem;
+		font-size: 0.8rem;
 	}
 
 	.largeTextSize {
-		font-size: 1.3rem;
+		font-size: 1.0rem;
 	}
 
 	.buttonTextSize {
-		font-size: 1.2rem;
+		font-size: 0.8rem;
 	}
 	.tablecell {
 		font-size: 0.9rem;
@@ -298,11 +298,11 @@ h3 {
 /* Large devices (desktops, 992px and up) */
 @media screen and (min-width: 992px) {
 	h1 {
-		font-size: 2.6rem;
+		font-size: 1.5rem;
 	}
 
 	h2 {
-		font-size: 2.0rem;
+		font-size: 1.3rem;
 	}
 
 	h3 {
@@ -310,23 +310,23 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 1.1rem;
+		font-size: 0.6rem;
 	}
 
 	.smallTextSize {
-		font-size: 1.25rem;
+		font-size: 0.7rem;
 	}
 
 	.regularTextSize {
-		font-size: 1.4rem;
+		font-size: 0.9rem;
 	}
 
 	.largeTextSize {
-		font-size: 1.6rem;
+		font-size: 1.1rem;
 	}
 
 	.buttonTextSize {
-		font-size: 1.6rem;
+		font-size: 0.9rem;
 	}
 	.tablecell {
 		font-size: 1.0rem;
@@ -359,7 +359,7 @@ h3 {
 	}
 
 	.regularTextSize {
-		font-size: 1.8rem;
+		font-size: 1.2rem;
 	}
 
 	.largeTextSize {
@@ -442,8 +442,9 @@ h3 {
 	--color-house: grey;
 	--color-devices: cornflowerblue;
 	--color-charging: mediumseagreen;
-	--color-export: skyblue;
+	--color-export: khaki;
 	--color-axis: steelblue;
+	--color-battery: darkkhaki;
 	--color-lp1: mediumseagreen;
 	--color-lp2: lightseagreen;
 	--color-lp3: mediumspringgreen;
@@ -461,6 +462,8 @@ h3 {
 	--color-sh7: skyblue;
 	--color-sh8: mediumslateblue;
 	--color-sh9: paleturquoise;
+	--color-co1: skyblue;
+	--color-co2: cadetblue;
 
 }
 
@@ -471,9 +474,19 @@ h3 {
 
 .wb-widget {
 	background-color: midnightblue;
+	border:1px solid  lightskyblue;
 }
 
 
 .table-borderless td {
 	border: 0;
 }
+
+/* Colors for the charts */
+
+
+
+.axis text {
+	color: steelblue;
+	stroke-width: 0;
+	} 

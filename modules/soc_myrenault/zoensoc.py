@@ -157,7 +157,7 @@ f.close()
 batt = json.loads(responsetext)
 soc = batt['data']['attributes']['batteryLevel']
 #print(time_string,'soc lp'+chargepoint,soc)
-if int(chargepoint) == 1:       
+if int(chargepoint) == 1:
     f = open('/var/www/html/openWB/ramdisk/soc', 'w')
 else :
     f = open('/var/www/html/openWB/ramdisk/soc1', 'w')

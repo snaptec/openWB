@@ -694,6 +694,10 @@
 						$('#saveBtn').html("Speichern und weiter...");
 						// display wizzard specific elements
 						$('.wizzard').removeClass('hide');
+					} else {
+						// disable hidden wizzarddone input
+						// on some browsers hidden input fields cannot be initially disabled
+						$('#wizzarddoneInput').attr('disabled', true);
 					}
 				}
 			);

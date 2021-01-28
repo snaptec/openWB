@@ -80,152 +80,54 @@
 		</script>
 
 		<script>
-			function loadstatuslog() {
+			function readLogFile(urlStr, variable) {
 				$.ajax({
-					url: "/openWB/ramdisk/ladestatus.log",
+					url: urlStr,
 					complete: function(request){
 						var lines = request.responseText.split("\n");
 						var result = "";
 						for(var i=0; i<lines.length-1; i++)
 							result = lines[i] + "\n" + result;
-						$("#ladestatuslogdiv").text(result);
+						$(variable).text(result);
 					}
 				});
+			}
+
+			function loadstatuslog() {
+				readLogFile("/openWB/ramdisk/ladestatus.log", "#ladestatuslogdiv");
 			}
 			loadstatuslog();
 
 			function mqttlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/mqtt.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#mqttdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/mqtt.log", "#mqttdiv");
 			}
 			mqttlog();
 
 			function rfidlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/rfid.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#rfiddiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/rfid.log", "#rfiddiv");
 			}
 			rfidlog();
 
 			function debuglog() {
-				$.ajax({
-					url: "/openWB/ramdisk/openWB.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#debugdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/openWB.log", "#debugdiv");
 			}
 			debuglog();
 
 			function smarthomelog() {
-				$.ajax({
-					url: "/openWB/ramdisk/smarthome.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#smarthomediv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/smarthome.log", "#smarthomediv");
 			}
 			smarthomelog();
 
 			function nurpvlog() {
-				$.ajax({
-					url: "/openWB/ramdisk/nurpv.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#nurpvdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/nurpv.log", "#nurpvdiv");
 			}
 			nurpvlog();
 
 			function soclog() {
-				$.ajax({
-					url: "/openWB/ramdisk/soc.log",
-					complete: function(request){
-						var lines = request.responseText.split("\n");
-						var result = "";
-						for(var i=0; i<lines.length-1; i++)
-							result = lines[i] + "\n" + result;
-						$("#socdiv").text(result);
-					}
-				});
+				readLogFile("/openWB/ramdisk/soc.log", "#socdiv");
 			}
 			soclog();
 		</script>
-
-		<?php
-			$owbversion = file_get_contents('/var/www/html/openWB/web/version');
-			$result = '';
-			$lines = file('/var/www/html/openWB/openwb.conf');
-			foreach ($lines as $line) {
-				if (strpos($line, "lp1name=") !== false) {
-					list(, $lp1nameold) = explode("=", $line);
-				}
-				if (strpos($line, "lp2name=") !== false) {
-					list(, $lp2nameold) = explode("=", $line);
-				}
-				if (strpos($line, "lp3name=") !== false) {
-					list(, $lp3nameold) = explode("=", $line);
-				}
-				if (strpos($line, "lastmanagement=") !== false) {
-					list(, $lastmanagementold) = explode("=", $line);
-				}
-				if (strpos($line, "lastmanagements2=") !== false) {
-					list(, $lastmanagements2old) = explode("=", $line);
-				}
-				if (strpos($line, "simplemode=") !== false) {
-					list(, $simplemodeold) = explode("=", $line);
-				}
-				if (strpos($line, "verbraucher1_name=") !== false) {
-					list(, $verbraucher1_nameold) = explode("=", $line);
-				}
-				if (strpos($line, "verbraucher2_name=") !== false) {
-					list(, $verbraucher2_nameold) = explode("=", $line);
-				}
-				if (strpos($line, "name_wechselrichter1=") !== false) {
-					list(, $name_wechselrichter1old) = explode("=", $line);
-					# entferne EOL von String
-					$name_wechselrichter1old = trim(preg_replace('/\s+/', '', $name_wechselrichter1old));
-				}
-				if (strpos($line, "name_wechselrichter2=") !== false) {
-					list(, $name_wechselrichter2old) = explode("=", $line);
-					# entferne EOL von String
-					$name_wechselrichter2old = trim(preg_replace('/\s+/', '', $name_wechselrichter2old));
-				}
-				if (strpos($line, "kostalplenticoreip2=") !== false) {
-					# wird benötigt, für Anzeige der getrennten WR-Daten an/aus
-					list(, $kostalplenticoreip2old) = explode("=", $line);
-					# entferne EOL von String
-					$kostalplenticoreip2old = trim(preg_replace('/\s+/', '', $kostalplenticoreip2old));
-				}
-			}
-		?>
 
 	</head>
 	<body>
@@ -335,7 +237,7 @@
 				<?php } ?>
 
 				<!-- Ladepunkte Gesamt -->
-				<div class="card border-primary" id="lpges">
+				<div class="card border-primary hide" id="lpges">
 					<div class="card-header bg-primary">
 						Ladepunkte Gesamt
 					</div>
@@ -358,7 +260,7 @@
 				</div>
 
 				<!-- EVU  -->
-				<div class="card border-danger">
+				<div class="card border-danger <?php if($wattbezugmodulold == "none") echo "hide" ?>">
 					<div class="card-header bg-danger">
 						EVU
 					</div>
@@ -581,51 +483,51 @@
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseOne">
 						<a class="card-title">Ladestatus Änderungen </a>
 					</div>
-					<div id="collapseOne" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+					<div id="collapseOne" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadLadestatusLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="ladestatuslogdiv" style="white-space: pre-line "></div>
+						<pre id="ladestatuslogdiv"></pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseTwo">
 						<a class="card-title">SmartHome Log </a>
 					</div>
 					<div id="collapseTwo" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadSmartHomeLog mr-3" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="smarthomediv" style="white-space: pre-line "></div>
+						<pre id="smarthomediv"></pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseThree">
 						<a class="card-title">RFID Log </a>
 					</div>
 					<div id="collapseThree" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadRfidLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="rfiddiv" style="white-space: pre-line "></div>
+						<pre id="rfiddiv"></pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFour">
 						<a class="card-title">Mqtt Log </a>
 					</div>
 					<div id="collapseFour" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadMqttLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="mqttdiv" style="white-space: pre-line "></div>
+						<pre id="mqttdiv"></pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFive">
 						<a class="card-title">Debug Log </a>
 					</div>
 					<div id="collapseFive" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadDebugLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="debugdiv" style="white-space: pre-line "></div>
+						<pre id="debugdiv"></pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSix">
 						<a class="card-title">Nur PV Log </a>
 					</div>
 					<div id="collapseSix" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadPvLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="nurpvdiv" style="white-space: pre-line "></div>
+						<pre id="nurpvdiv"></pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSeven">
 						<a class="card-title">EV SoC Log </a>
 					</div>
 					<div id="collapseSeven" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadSocLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<div id="socdiv" style="white-space: pre-line"></div>
+						<pre id="socdiv"></pre>
 					</div>
 				</div>
 			</div>
