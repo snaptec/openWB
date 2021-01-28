@@ -30,7 +30,6 @@ var topicsToSubscribe = [
 	["openWB/evu/W", 1],
 
 	["openWB/lp/1/boolChargePointConfigured", 0],
-	["openWB/lp/1/strChargePointName", 1],
 	["openWB/lp/1/AConfigured", 1], 
 	["openWB/lp/1/APhase1", 1],
 	["openWB/lp/1/APhase2", 1],
