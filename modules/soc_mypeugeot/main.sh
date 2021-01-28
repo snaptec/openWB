@@ -10,8 +10,6 @@ socDebug=$debug
 # for developement only
 # socDebug=1
 
-sommerzeit=0
-
 case $CHARGEPOINT in
 	2)
 		# second charge point
