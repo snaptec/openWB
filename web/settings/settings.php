@@ -185,12 +185,12 @@
 								</div>
 							</div>
 							<div id="tibberdiv" class="hide">
-								<script src = "../modules/et_tibber/tibber.js?ver=20210125" ></script>
+								<script src = "../modules/et_tibber/tibber.js?ver=20210128" ></script>
 								<div class="card-text alert alert-danger">
 									Ihren persönlichen Tibber-Token erhalten Sie über die <a href="https://developer.tibber.com/explorer" target="_blank">Tibber-Developer-Seite</a>.
 									Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
 									entweder selbst eintragen oder durch Klick auf den entsprechenden Button ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
-									Bitte verifizieren Sie die Eingabe, bevor die Einstellungen gespeichert werden.
+									Bitte verifizieren Sie die Eingabe, bevor Sie die Einstellungen speichern.
 								</div>
 								<div class="form-group">
 									<div class="form-row mb-1">
