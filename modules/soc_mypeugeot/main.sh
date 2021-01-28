@@ -98,7 +98,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 			dateofmanualsoc=$(($(stat -c %Y "$manualSocFile")))
 			diff=$(($dateofmanualsoc - $(<$peugeotSocTime)))
-			socDebugLog "Time of manual SoC:  $(date -d @$dateofsoc +'%F %T')"
+			socDebugLog "Time of manual SoC:  $(date -d @$dateofmanualsoc +'%F %T')"
 			socDebugLog "Time of fetched SoC: $(date -d @$(<$peugeotSocTime) +'%F %T')"
 			socDebugLog "Fetched SoC is $diff s older"
 			
@@ -107,7 +107,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				echo $(<$socFile) > $manualSocFile
 				socDebugLog "Fetched from myPeugeot: $(<$socFile)% and using it."
 			else
-				socDebugLog "Fetched from myPeugeot: $(<$socFile)% but skipping it, because it is older than calculated SoC."
+				socDebugLog "Fetched from myPeugeot: $(<$socFile)% but skipping it, because it is older than known SoC."
 			fi
 		fi
 	# if charging is active calculate SoC manually
