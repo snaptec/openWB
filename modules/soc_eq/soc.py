@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os, requests, json, time, sys, os, psutil
+import os, requests, json, time, sys, os
 from datetime import datetime, timezone
 from requests.exceptions import Timeout
 
@@ -18,16 +18,10 @@ ChargePoint   = str(sys.argv[5])
 Debug         = int(os.environ.get('debug'))
 myPid         = str(os.getpid())
 
-me = psutil.Process()
-parent = psutil.Process(me.ppid())
-callerPid = str(parent.pid)
 def socDebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
-    if Debug < 2:
-        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": Lp" + ChargePoint + ": " + message)
-    else:
-        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": Lp" + ChargePoint + ": PID:" + myPid +  ": CPID:" + callerPid + ": " + message)
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": PID:"+ myPid + ": " + message)
 
 if Debug >= 1:
     socDebugLog("Debug Level: " + str(Debug))
