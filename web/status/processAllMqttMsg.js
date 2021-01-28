@@ -3,6 +3,8 @@
  *
  * @author Kevin Wieland
  * @author Michael Ortenstein
+ * @author Lutz Bender
+ * @author Lena Kümmel
  */
 
 function getIndex(topic) {
@@ -49,7 +51,6 @@ function processGlobalMsg (mqttmsg, mqttpayload) {
 			break;
 		case "openWB/global/kWhCounterAllChargePoints":
 			fractionDigitsShow(mqttpayload, '#kWhCounterAll');
-			noZeroShow(mqttpayload, '#kWhCounterAll');
 			break;
 		default:
 			break;
@@ -84,11 +85,9 @@ function processEvuMsg (mqttmsg, mqttpayload) {
 			break;
 		case "openWB/evu/WhExported":
 			kShow(mqttpayload, "#einspeisungkwhdiv");
-			noZeroShow($('#einspeisungkwhdiv').text(), '#einspeisungkwhdiv');
 			break;
 		case "openWB/evu/WhImported":
 			kShow(mqttpayload, "#bezugkwhdiv");
-			noZeroShow($('#bezugkwhdiv').text(), '#bezugkwhdiv');
 			break;
 		case "openWB/evu/VPhase1":
 			directShow(mqttpayload, '#evuv1div');
@@ -101,19 +100,19 @@ function processEvuMsg (mqttmsg, mqttpayload) {
 			break;
 		case "openWB/evu/Hz":
 			directShow(mqttpayload, '#evuhzdiv');
-			noZeroShow(mqttpayload, '#evuhzdiv');
+			//noZeroShow(mqttpayload, '#evuhzdiv');
 			break;
 		case "openWB/evu/PfPhase1":
 			directShow(mqttpayload, '#evupf1div');
-			visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
+			// visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
 			break;
 		case "openWB/evu/PfPhase2":
 			directShow(mqttpayload, '#evupf2div');
-			visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
+			// visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
 			break;
 		case "openWB/evu/PfPhase3":
 			directShow(mqttpayload, '#evupf3div');
-			visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
+			// visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
 			break;
 	}
 }
@@ -122,58 +121,56 @@ function processPvMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/pv/boolPVConfigured":
 			visibilityCard('#pvGes', mqttpayload);
-			visibilityCard('#inverter1', 0);
-			visibilityCard('#inverter2', 0);
+			visibilityCard('#inverter1', mqttpayload);
+			visibilityCard('#inverter2', mqttpayload);
 			break;
 		case "openWB/pv/CounterTillStartPvCharging":
-			noZeroShow(mqttpayload, '#pvcounterdiv');
+			directShow(mqttpayload, '#pvcounterdiv');
 			break;
 		case "openWB/pv/W":
-			invertShow(mqttpayload, '#pvwattdiv');
+			absShow(mqttpayload, '#pvwattdiv');
 			break;
 		case "openWB/pv/WhCounter":
 			kShow(mqttpayload, '#pvkwhdiv');
-			noZeroShow($('#pvkwhdiv').text(), '#pvkwhdiv');
+			//noZeroShow($('#pvkwhdiv').text(), '#pvkwhdiv');
 			break;
 		case "openWB/pv/DailyYieldKwh":
 			fractionDigitsShow(mqttpayload, '#daily_pvkwhdiv');
-			noZeroShow($('#daily_pvkwhdiv').text(), '#daily_pvkwhdiv');
+			//noZeroShow($('#daily_pvkwhdiv').text(), '#daily_pvkwhdiv');
 			break;
 		case "openWB/pv/MonthlyYieldKwh":
 			fractionDigitsShow(mqttpayload, '#monthly_pvkwhdiv');
-			noZeroShow($('#monthly_pvkwhdiv').text(), '#monthly_pvkwhdiv');
+			//noZeroShow($('#monthly_pvkwhdiv').text(), '#monthly_pvkwhdiv');
 			break;
 		case "openWB/pv/YearlyYieldKwh":
 			fractionDigitsShow(mqttpayload, '#yearly_pvkwhdiv');
-			noZeroShow($('#yearly_pvkwhdiv').text(), '#yearly_pvkwhdiv');
+			//noZeroShow($('#yearly_pvkwhdiv').text(), '#yearly_pvkwhdiv');
 			break;
 		case "openWB/pv/Modul1W":
-			invertShow(mqttpayload, '#inverter1 .pvwattdiv');
+			absShow(mqttpayload, '#inverter1 .pvwattdiv');
 			break;
 		case "openWB/pv/Modul2W":
-			invertShow(mqttpayload, '#inverter2 .pvwattdiv');
+			absShow(mqttpayload, '#inverter2 .pvwattdiv');
 			break;
 	}
 }
 
 function processBatMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
+		case "openWB/housebattery/boolHouseBatteryConfigured":
+			visibilityCard('#speicher', mqttpayload);
+			break;
 		case "openWB/housebattery/WhImported":
 			kShow(mqttpayload, '#speicherikwhdiv');
-			noZeroShow($('#speicherikwhdiv').text(), '#speicherikwhdiv');
 			break;
 		case "openWB/housebattery/WhExported":
 			kShow(mqttpayload, '#speicherekwhdiv');
-			noZeroShow($('#speicherekwhdiv').text(), '#speicherekwhdiv');
 			break;
 		case "openWB/housebattery/W":
 			directShow(mqttpayload, '#wBatDiv');
 			break;
 		case "openWB/housebattery/%Soc":
 			directShow(mqttpayload, '#socBatDiv');
-			break;
-		case "openWB/housebattery/boolHouseBatteryConfigured":
-			visibilityCard('#speicher', mqttpayload);
 			break;
 	}
 }
@@ -188,11 +185,9 @@ function processVerbraucherMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/WhImported$/i ) ) {
 		kShow(mqttpayload, '#loads'+index+' .importVerbraucher');
-		noZeroShow($('#loads'+index+' .importVerbraucher').text(), '#loads'+index+' .importVerbraucher');
 	}
 	else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/WhExported$/i ) ) {
 		kShow(mqttpayload, '#loads'+index+' .exportVerbraucher');
-		noZeroShow($('#loads'+index+' .exportVerbraucher').text(), '#loads'+index+' .exportVerbraucher');
 	}
 }
 
@@ -215,7 +210,7 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhCounter$/i ) ) {
 		fractionDigitsShow(mqttpayload, '#lp' + index + ' .kWhCounter');
-		noZeroShow($('#lp' + index + ' .kWhCounter').text(), '#lp' + index + ' .kWhCounter');
+		//noZeroShow($('#lp' + index + ' .kWhCounter').text(), '#lp' + index + ' .kWhCounter');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/VPhase1$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .spannungP1');
@@ -229,46 +224,29 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/W$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .ladeleistung');
 	}
+	else if ( mqttmsg.match( /^openWB\/lp\/[1-9][0-9]*\/boolSocConfigured$/i )) {
+		if( mqttpayload == "1" ){
+			showSection('#lp' + index + ' .socRow');
+		} else {
+			hideSection('#lp' + index + ' .socRow');
+		}
+	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/%Soc$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .soc');
 	}
 	else {
 		switch (mqttmsg) {
 			case "openWB/lp/1/PfPhase1":
+				showSection('#lp1 .powerFaktorRow');
 				directShow(mqttpayload, '#lp1 .powerFaktorP1');
-				visibilityRow('#lp1 .powerFaktorRow', '#lp1 .powerFaktorP1', '#lp1 .powerFaktorP2', '#lp1 .powerFaktorP3');
-				// bei allen anderen LPs diese Zeilen ausblenden
-				hideSection('#lp2 .powerFaktorRow');
-				hideSection('#lp3 .powerFaktorRow');
-				hideSection('#lp4 .powerFaktorRow');
-				hideSection('#lp5 .powerFaktorRow');
-				hideSection('#lp6 .powerFaktorRow');
-				hideSection('#lp7 .powerFaktorRow');
-				hideSection('#lp8 .powerFaktorRow');
 				break;
 			case "openWB/lp/1/PfPhase2":
+				showSection('#lp1 .powerFaktorRow');
 				directShow(mqttpayload, '#lp1 .powerFaktorP2');
-				visibilityRow('#lp1 .powerFaktorRow', '#lp1 .powerFaktorP1', '#lp1 .powerFaktorP2', '#lp1 .powerFaktorP3');
-				// bei allen anderen LPs diese Zeilen ausblenden
-				hideSection('#lp2 .powerFaktorRow');
-				hideSection('#lp3 .powerFaktorRow');
-				hideSection('#lp4 .powerFaktorRow');
-				hideSection('#lp5 .powerFaktorRow');
-				hideSection('#lp6 .powerFaktorRow');
-				hideSection('#lp7 .powerFaktorRow');
-				hideSection('#lp8 .powerFaktorRow');
 				break;
 			case "openWB/lp/1/PfPhase3":
+				showSection('#lp1 .powerFaktorRow');
 				directShow(mqttpayload, '#lp1 .powerFaktorP3');
-				visibilityRow('#lp1 .powerFaktorRow', '#lp1 .powerFaktorP1', '#lp1 .powerFaktorP2', '#lp1 .powerFaktorP3');
-				// bei allen anderen LPs diese Zeilen ausblenden
-				hideSection('#lp2 .powerFaktorRow');
-				hideSection('#lp3 .powerFaktorRow');
-				hideSection('#lp4 .powerFaktorRow');
-				hideSection('#lp5 .powerFaktorRow');
-				hideSection('#lp6 .powerFaktorRow');
-				hideSection('#lp7 .powerFaktorRow');
-				hideSection('#lp8 .powerFaktorRow');
 				break;
 			default:
 				break;
@@ -286,7 +264,7 @@ function directShow(mqttpayload, variable) {
 		$(variable).text(valueStr);
 }
 
-// show missing value oder zero value as --
+// show missing value or zero value as --
 function noZeroShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
 	if ( isNaN(value) || (value == 0) ) {
@@ -300,17 +278,13 @@ function noZeroShow(mqttpayload, variable) {
 
 //show with imp/exp
 function impExpShow(mqttpayload, variable) {
-	// zur Anzeige Wert um "Bezug"/"Einspeisung" ergÃ¤nzen
+	// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
 	var value = parseInt(mqttpayload);
-	var valueStr = "";
-	if(value<0) {
-		value = value * -1;
-		valueStr = value.toLocaleString(undefined)+" (E)";
-	} else if (value>0) {
-		valueStr = value.toLocaleString(undefined)+" (B)";
-	} else  {
-		// Bezug = 0
-		valueStr = value.toLocaleString(undefined);
+	var valueStr = Math.abs(value).toLocaleString(undefined);
+	if(value < 0) {
+		valueStr += " (Exp.)";
+	} else if (value > 0) {
+		valueStr += " (Imp.)";
 	}
 	$(variable).text(valueStr);
 }
@@ -319,13 +293,13 @@ function impExpShow(mqttpayload, variable) {
 function kShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
 	value = (value / 1000);
-	var valueStr = value.toLocaleString('de-DE', {minimumFractionDigits: 3, maximumFractionDigits: 3}) ;
+	var valueStr = value.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3}) ;
 	$(variable).text(valueStr);
 }
 
-// multiply value with -1
-function invertShow(mqttpayload, variable) {
-	var value = parseInt(mqttpayload) * -1;
+// show absolute value (always >0)
+function absShow(mqttpayload, variable) {
+	var value = Math.abs(parseInt(mqttpayload));
 	var valueStr = value.toLocaleString(undefined) ;
 	$(variable).text(valueStr);
 }
@@ -336,36 +310,13 @@ function fractionDigitsShow(mqttpayload, variable) {
 	if ( isNaN(value) ) {
 		value = 0;
 	}
-	var valueStr = value.toLocaleString('de-DE', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+	var valueStr = value.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3});
 	$(variable).text(valueStr);
-}
-
-//show only values over 100
-//Der String ist mit einem Tausender-Punkt versehen. Daher den Payload fÃ¼r die if-Abfrage verwenden.
-function visibilityMin(row, mqttpayload) {
-	var value = parseFloat(mqttpayload) * -1;
-	if (value>100) { 
-		showSection(row);
-	}
-	else {
-		hideSection(row);
-	}
-}
-
-//show/hide row with only one value
-function visibilityValue(row, variable){
-	var value = parseFloat($(variable).text()); // zu BerÃ¼cksichtigung von 0,00
-	if (( value != 0) && ( $(variable).text() != "")) {
-		showSection(row);
-	}
-	else {
-		hideSection(row);
-	}
 }
 
 //show/hide complete row, if all three values are zero or empty
 function visibilityRow(row, var1, var2, var3) {
-	var val1 = parseFloat($(var1).text()); // zu BerÃ¼cksichtigung von 0,00
+	var val1 = parseFloat($(var1).text()); // zu Berücksichtigung von 0,00
 	var val2 = parseFloat($(var2).text());
 	var val3 = parseFloat($(var3).text());
 	if ( ( (val1 == 0) || ($(var1).text() == "") ) &&
@@ -383,14 +334,11 @@ var lpGesCardShown = false; // flag, show lpGes-Card if any other cp than cp1 is
 //show/hide card, if module is configured
 function visibilityCard(card, mqttpayload) {
 	var value = parseInt(mqttpayload);
-	if (value == 0)
-	{
+	if (value == 0) {
 		hideSection(card);
-	}
-	else {
+	} else {
 		showSection(card);
-		if ( (card.match( /^[#]lp[2-8]$/i)) && lpGesCardShown == false )
-		{
+		if ( (card.match( /^[#]lp[2-8]$/i)) && lpGesCardShown == false ) {
 			showSection('#lpges');
 			lpGesCardShown = true;
 		}
