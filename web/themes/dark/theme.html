@@ -638,6 +638,9 @@
 		<form id="sofortladenEinstellungen" class="hide">
 			<div class="hide" id="priceBasedCharging">
 				<hr class="border-secondary">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">preisbasiertes Laden</h3>
+				</div>
 				<div class="row justify-content-center my-2">
 					<div id="electricityPriceChartCanvasDiv" class="col text-center">
 						<canvas id="electricityPriceChartCanvas"></canvas>
@@ -648,7 +651,7 @@
 					<div class="col">
 						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
-					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="ct/kWh"></label>
 				</div>
 				<div class="row justify-content-center regularTextSize vaRow">
 					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
@@ -658,7 +661,7 @@
 			</div>  <!--/ priceBasedCharging -->
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
-				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
+				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
 			</div>
 			<div class="row justify-content-center">
 
