@@ -56,58 +56,6 @@ function readTibberAPI(tibberToken, tibberQuery) {
     });
 }
 
-function readTibberAPI2() {
-    /**
-     * calls Tibber API as promise and returns data or error-message
-     *
-     * @function readTibberAPI
-     * @author Michael Ortenstein
-     * @returns {Promise} Promise object represents the result of the ajax-query
-     */
-    // calculate amount of datasets to be received since Tibber only sends valid data for
-    // past hours/days/months
-    var now = new Date();
-    const hoursToReceive = now.getHours() + 24; // Tibber sends hourly data for past hours
-    const daysToReceive = now.getDate() + 1;  // Tibber sends daily data for past days
-    var monthsToReceive = now.getMonth();  // no index correction since Tibber sends monthly data for past months
-
-    // token have to be replaced by user-specific data once page is completed
-    // frontend will receive tibber-data by mqtt, token handling only in backend
-    var tibberToken = "d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a";
-    var tibberHomeID = "c70dcbe5-4485-4821-933d-a8a86452737b";
-    const tibberAPI = "https://api.tibber.com/v1-beta/gql";
-    const tibberQueryHead = '{ "query": "{viewer {name home(id:\\"' + tibberHomeID + '\\") {';
-    const tibberQueryGetAdress = 'address {address1 postalCode city}';
-    const tibberQueryGetPriceInfo = 'currentSubscription {priceInfo {current{total energy tax startsAt} today {total startsAt} tomorrow {total startsAt}}}';
-    const tibberQueryGetHourlyConsumption = 'cons_hourly: consumption(resolution: HOURLY, last:' + hoursToReceive + ') {nodes {from to cost unitPrice unitPriceVAT consumption}}';
-    const tibberQueryTail = '}}}"}';
-    var tibberQuery = tibberQueryHead + tibberQueryGetAdress + tibberQueryGetPriceInfo + tibberQueryGetHourlyConsumption + tibberQueryTail;
-
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "POST",
-            url: tibberAPI,
-            headers: {
-                "Authorization": "Bearer " + tibberToken,
-                "Content-Type": "application/json"
-            },
-            data: tibberQuery,
-            timeout: 4000
-        })
-        .done (function (data) {
-            console.log(data);
-            if ( typeof data?.errors === "undefined" ) {
-                resolve(data);
-            } else {
-                reject(data.errors[0].message);
-            }
-        })
-        .fail ( function (error) {
-            reject(error.statusText + " " + error.status);
-        });
-    })
-}
-
 function createXLabel(dateFrom, dateTo){
     /**
      * convert date in suitable label for chart x-axis
