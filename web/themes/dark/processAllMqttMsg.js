@@ -378,7 +378,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		setInputValue('MaxPriceForCharging', mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' Cent/kWh');
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' ct/kWh');
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		// set modal button colors depending on charge mode

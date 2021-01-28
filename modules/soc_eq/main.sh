@@ -5,7 +5,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
-
+myPid=$$
 socDebug=$debug
 # for developement only
 #socDebug=1
@@ -37,7 +37,11 @@ esac
 socDebugLog(){
 	if (( socDebug > 0 )); then
 		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+		if (( socDebug == 2 )); then
+                      echo "$timestamp: Lp$CHARGEPOINT: PID:$myPid: $@" >> $LOGFILE
+                else
+		      echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+                fi
 	fi
 }
 
@@ -50,7 +54,7 @@ else
 	tmpintervall=$(( 60 * 6 ))
 fi
 if (( socDebug > 0 )); then
-	tmpintervall=5
+	tmpintervall=6
 fi
 
 

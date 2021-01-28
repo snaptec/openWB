@@ -5,6 +5,39 @@ updateConfig(){
 	ConfigFile="/var/www/html/openWB/openwb.conf"
 	echo "Updating $ConfigFile..."
 
+	if ! grep -Fq "wr_http_w_url=" $ConfigFile; then
+		echo "wr_http_w_url=http://192.168.0.17/pvwatt.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "hsocip1=" $ConfigFile; then
+		echo "hsocip1=http://10.0.0.110/soc.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "socmodul1=" $ConfigFile; then
+		echo "socmodul1=soc_http1" >> $ConfigFile
+	fi
+	if ! grep -Fq "dacregisters1=" $ConfigFile; then
+		echo "dacregisters1=12" >> $ConfigFile
+	fi
+	if ! grep -Fq "wr_http_kwh_url=" $ConfigFile; then
+		echo "wr_http_kwh_url=http://192.168.0.17/pvwh.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "smaemdbezugid=" $ConfigFile; then
+		echo "smaemdbezugid=1900123456" >> $ConfigFile
+	fi
+	if ! grep -Fq "smaemdpvid=" $ConfigFile; then
+		echo "smaemdpvid=1900123456" >> $ConfigFile
+	fi
+	if ! grep -Fq "smaemdllid=" $ConfigFile; then
+		echo "smaemdllid=1900123456" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug_http_w_url=" $ConfigFile; then
+		echo "bezug_http_w_url=http://192.168.0.17/bezugwatt.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug_http_ikwh_url=" $ConfigFile; then
+		echo "bezug_http_ikwh_url=http://192.168.0.17/bezugwh.txt" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug_http_ekwh_url=" $ConfigFile; then
+		echo "bezug_http_ekwh_url=http://192.168.0.17/einspeisungwh.txt" >> $ConfigFile
+	fi
 	if ! grep -Fq "minimalapv=" $ConfigFile; then
 		echo "minimalapv=6" >> $ConfigFile
 	fi
@@ -136,6 +169,25 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sdm120modbusllid3s2=" $ConfigFile; then
 		echo "sdm120modbusllid3s2=10" >> $ConfigFile
+	fi
+	# upgrade from old "none" to 254
+	if grep -Fq "sdm120modbusllid2=none" $ConfigFile; then
+		echo "sdm120modbusllid2=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3=none" $ConfigFile; then
+		echo "sdm120modbusllid3=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid2s1=none" $ConfigFile; then
+		echo "sdm120modbusllid2s1=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3s1=none" $ConfigFile; then
+		echo "sdm120modbusllid3s1=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid2s2=none" $ConfigFile; then
+		echo "sdm120modbusllid2s2=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3s2=none" $ConfigFile; then
+		echo "sdm120modbusllid3s2=254" >> $ConfigFile
 	fi
 	if ! grep -Fq "evsewifiiplp1=" $ConfigFile; then
 		echo "evsewifiiplp1=192.168.0.25" >> $ConfigFile
@@ -995,8 +1047,9 @@ updateConfig(){
 		else
 			echo "etprovideraktiv=0" >> $ConfigFile
 		fi
-		echo "tibbertoken=demo" >> $ConfigFile
-		echo "tibberhomeid=demo" >> $ConfigFile
+		# tibber demo settings
+		echo "tibbertoken=d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a" >> $ConfigFile
+		echo "tibberhomeid=c70dcbe5-4485-4821-933d-a8a86452737b" >> $ConfigFile
 	fi
 	# remove obsolete line from config
 	if grep -Fq "awattaraktiv=" $ConfigFile; then
@@ -1640,6 +1693,12 @@ updateConfig(){
 	if ! grep -Fq "mypeugeot_soccalclp2=" $ConfigFile; then
 		echo "mypeugeot_soccalclp2=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "myopel_soccalclp1=" $ConfigFile; then
+		echo "myopel_soccalclp1=0" >> $ConfigFile; 
+	fi 
+	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
+		echo "myopel_soccalclp2=0" >> $ConfigFile;
+	fi
 	if ! grep -Fq "wr1extprod=" $ConfigFile; then
 		echo "wr1extprod=0" >> $ConfigFile
 	fi
@@ -1669,6 +1728,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "rseenabled=" $ConfigFile; then
 		echo "rseenabled=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "u1p3schaltparam=" $ConfigFile; then
+		echo "u1p3schaltparam=8" >> $ConfigFile
 	fi
 
 	echo "Config file Update done."

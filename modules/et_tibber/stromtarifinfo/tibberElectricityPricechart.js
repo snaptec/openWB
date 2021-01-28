@@ -30,7 +30,7 @@ function loadElectricityPricechart(labels, dataPrice) {
 				mode: 'index',
 				callbacks: {
 					label: function(tooltipItem, data) {
-						return tooltipItem.yLabel + ' Cent/kWh';
+						return tooltipItem.yLabel + ' ct/kWh';
 					}
 				}
 			},
@@ -66,7 +66,7 @@ function loadElectricityPricechart(labels, dataPrice) {
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'stündl. Preis [Cent/kWh]',
+							labelString: 'stündl. Preis [ct/kWh]',
 							fontColor: 'rgba(153, 153, 153, 1)'
 						},
 						gridLines: {

@@ -1199,6 +1199,11 @@
 							</div>
 							<div id="socmypeugeot" class="hide">
 								<div class="form-group">
+									<div class="card-text alert alert-info">
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
@@ -1242,20 +1247,20 @@
 										</div>
 										<div id="peugeotmanualcalcdiv" class="hide">
 											<div class="form-row mb-1">
-												<label for="akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<label for="peugeot_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="peugeot_akkuglp1" value="<?php echo $akkuglp1old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 46kWh<br>
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
 											<div class="form-row mb-1">
-												<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<label for="peugeot_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="peugeot_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 93-94 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
@@ -1287,6 +1292,11 @@
 							</div>
 							<div id="socmyopel" class="hide">
 								<div class="form-group">
+									<div class="card-text alert alert-info">
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
@@ -1311,7 +1321,67 @@
 											<input class="form-control" type="text" name="myopel_clientsecretlp1" id="myopel_clientsecretlp1" value="<?php echo $myopel_clientsecretlp1old ?>">
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere MyOpel SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($myopel_soccalclp1old == 0) echo " active" ?>">
+													<input type="radio" name="myopel_soccalclp1" id="myopel_soccalclp1Off" value="0"<?php if($myopel_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($myopel_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="myopel_soccalclp1" id="myopel_soccalclp1On" value="1"<?php if($myopel_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
+												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.<br>
+											</span>
+										</div>
+										<div id="opelmanualcalclp1div" class="hide">
+											<div class="form-row mb-1">
+												<label for="opel_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="opel_akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Corsa-e: 45-46kWh<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="opel_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="opel_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Corsa-e: 96-98 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+								$(function() {
+									function visibility_myopel_soccalclp1() {
+										if($('#myopel_soccalclp1Off').prop("checked")) {
+											hideSection('#opelmanualcalclp1div');
+										} else {
+											showSection('#opelmanualcalclp1div');
+										}
+									}
+
+									$('input[type=radio][name=myopel_soccalclp1]').change(function(){
+										visibility_myopel_soccalclp1();
+									});
+
+									visibility_myopel_soccalclp1();
+								});
+								</script>
 							</div>
 							<div id="socmeq" class="hide">
 								<div class="form-group">
@@ -2534,20 +2604,20 @@
 										</div>
 										<div id="peugeotmanualcalclp2div" class="hide">
 											<div class="form-row mb-1">
-												<label for="akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<label for="peugeot_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="peugeot_akkuglp2" value="<?php echo $akkuglp2old ?>">
 													<span class="form-text small">
 														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 46kWh<br>
 													</span>
 												</div>
 											</div>
 											<div class="form-row mb-1">
-												<label for="wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<label for="peugeot_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
 												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="peugeot_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 93-94 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 94-96 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
@@ -2603,7 +2673,67 @@
 											<input class="form-control" type="text" name="myopel_clientsecretlp2" id="myopel_clientsecretlp2" value="<?php echo $myopel_clientsecretlp2old ?>">
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere MyOpel SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($myopel_soccalclp2old == 0) echo " active" ?>">
+													<input type="radio" name="myopel_soccalclp2" id="myopel_soccalclp2Off" value="0"<?php if($myopel_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($myopel_soccalclp2old == 1) echo " active" ?>">
+													<input type="radio" name="myopel_soccalclp2" id="myopel_soccalclp2On" value="1"<?php if($myopel_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
+												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.<br>
+											</span>
+										</div>
+										<div id="opelmanualcalclp2div" class="hide">
+											<div class="form-row mb-1">
+												<label for="opel_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="opel_akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Corsa-e: 46kWh<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="opel_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="opel_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Corsa-e: 94-96 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+								$(function() {
+									function visibility_myopel_soccalclp2() {
+										if($('#myopel_soccalclp2Off').prop("checked")) {
+											hideSection('#opelmanualcalclp2div');
+										} else {
+											showSection('#opelmanualcalclp2div');
+										}
+									}
+
+									$('input[type=radio][name=myopel_soccalclp2]').change(function(){
+										visibility_myopel_soccalclp2();
+									});
+
+									visibility_myopel_soccalclp2();
+								});
+								</script>
 							</div>
 							<div id="socmeqlp2" class="hide">
 								<div class="form-group">
