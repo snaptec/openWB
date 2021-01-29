@@ -222,7 +222,7 @@
 									<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40"
 										step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 								</div>
-								<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
+								<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="ct/kWh"></label>
 							</div>
 							<div class="row justify-content-center regularTextSize vaRow">
 								<button type="button" class="btn btn-secondary mr-3 priceLess"><i
@@ -870,13 +870,13 @@
 				// some helper functions
 				'themes/colors/helperFunctions.js?ver=20200526-c',
 				// functions for processing messages
-				'themes/colors/processAllMqttMsg.js',
+				'themes/colors/processAllMqttMsg.js?ver=20210129',
 				// respective Chart.js definition live
 				// 'themes/dark/livechart.js?ver=20200530-b',
 				// respective Chart.js definition
 				'themes/dark/electricityPriceChart.js?ver=20210120',
 				// functions performing mqtt and start mqtt-service
-				'themes/colors/setupMqttServices.js?ver=20200924-a',
+				'themes/colors/setupMqttServices.js?ver=20210129',
 			];
 			scriptsToLoad.forEach(function (src) {
 				var script = document.createElement('script');

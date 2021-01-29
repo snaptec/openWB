@@ -4,32 +4,17 @@
  * @author Michael Ortenstein
  */
 
-function readTibberAPI() {
+const tibberAPI = "https://api.tibber.com/v1-beta/gql";
+
+function readTibberAPI(tibberToken, tibberQuery) {
     /**
-     * calls Tibber API as promise and returns data or error-message
-     *
+     * calls Tibber-API as promise returns data or error-message
      * @function readTibberAPI
      * @author Michael Ortenstein
+     * @param {string} tibberToken
+     * @param {string} tibberQuery
      * @returns {Promise} Promise object represents the result of the ajax-query
      */
-    // calculate amount of datasets to be received since Tibber only sends valid data for
-    // past hours/days/months
-    var now = new Date();
-    const hoursToReceive = now.getHours() + 24; // Tibber sends hourly data for past hours
-    const daysToReceive = now.getDate() + 1;  // Tibber sends daily data for past days
-    var monthsToReceive = now.getMonth();  // no index correction since Tibber sends monthly data for past months
-
-    // token have to be replaced by user-specific data once page is completed
-    // frontend will receive tibber-data by mqtt, token handling only in backend
-    var tibberToken = "d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a";
-    var tibberHomeID = "c70dcbe5-4485-4821-933d-a8a86452737b";
-    const tibberAPI = "https://api.tibber.com/v1-beta/gql";
-    const tibberQueryHead = '{ "query": "{viewer {name home(id:\\"' + tibberHomeID + '\\") {';
-    const tibberQueryGetAdress = 'address {address1 postalCode city}';
-    const tibberQueryGetPriceInfo = 'currentSubscription {priceInfo {current{total energy tax startsAt} today {total startsAt} tomorrow {total startsAt}}}';
-    const tibberQueryGetHourlyConsumption = 'cons_hourly: consumption(resolution: HOURLY, last:' + hoursToReceive + ') {nodes {from to cost unitPrice unitPriceVAT consumption}}';
-    const tibberQueryTail = '}}}"}';
-    var tibberQuery = tibberQueryHead + tibberQueryGetAdress + tibberQueryGetPriceInfo + tibberQueryGetHourlyConsumption + tibberQueryTail;
 
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -43,17 +28,32 @@ function readTibberAPI() {
             timeout: 4000
         })
         .done (function (data) {
-            console.log(data);
-            if ( typeof data?.errors === "undefined") {
+            if ( typeof data?.errors === "undefined" ) {
+                // nor errors in API response
                 resolve(data);
             } else {
-                reject(data.errors[0].message);
+                // got an API response but with an error-message
+                reject("Interner Tibber-API-Fehler: " + data.errors[0].message);
             }
         })
         .fail ( function (error) {
-            reject(error.statusText + " " + error.status);
+            try {
+                var errorJSON = JSON.parse(error.responseText);
+            } catch (e) {
+                // not an API-error, so just return error code and text
+                reject(error.statusText + " " + error.status);
+                return;
+            }
+            // error includes API-error-message
+            if ( typeof errorJSON?.errors === "undefined" ) {
+                // no error-message, so just return error code and text
+                reject(error.statusText + " " + error.status);
+            } else {
+                // return detailed error-message
+                reject(error.statusText + " " + error.status + ": "+ errorJSON.errors[0].message);
+            }
         });
-    })
+    });
 }
 
 function createXLabel(dateFrom, dateTo){
@@ -128,9 +128,9 @@ function fillCardStrompreis(response){
 
     if (typeof priceCurrentData !== 'undefined') {
         var startsAt = new Date(priceCurrentData.startsAt);
-        $('#currentPrice').text(convertToLocale((priceCurrentData.total * 100), 'Cent/kWh'));
-        $('#currentEnergyPrice').text(convertToLocale((priceCurrentData.energy * 100), 'Cent/kWh'));
-        $('#currentTax').text(convertToLocale((priceCurrentData.tax * 100), 'Cent/kWh'));
+        $('#currentPrice').text(convertToLocale((priceCurrentData.total * 100), 'ct/kWh'));
+        $('#currentEnergyPrice').text(convertToLocale((priceCurrentData.energy * 100), 'ct/kWh'));
+        $('#currentTax').text(convertToLocale((priceCurrentData.tax * 100), 'ct/kWh'));
         $('#currentValidSince').text(startsAt.toLocaleDateString(undefined, options));
         if (typeof priceTomorrowData !== 'undefined') {
             $('#noPricechartDiv').hide();
@@ -196,7 +196,7 @@ function fillCardTagesbezug(response){
             }
             $('#totalConsumptionDay').text(convertToLocale(totalConsumptionDay, ' kWh'));
             $('#totalCostsDay').text(convertToLocale(totalCostsDay, ' €'));
-            $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' Cent/kWh'));
+            $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' ct/kWh'));
         }
         // create chart or hide it
         if (totalConsumptionDay > 0) {

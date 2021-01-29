@@ -93,7 +93,7 @@ function loadElectricityPriceChart() {
 					display: true,
 					scaleLabel: {
 						display: true,
-						labelString: 'Strompreis [Cent/kWh]',
+						labelString: 'Strompreis [ct/kWh]',
 						fontColor: "rgba(153, 153, 153, 1)"
 					},
 					gridLines: {
