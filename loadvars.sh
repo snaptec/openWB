@@ -1520,6 +1520,11 @@ loadvars(){
 		tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${etprovideraktiv}"
 		echo $etprovideraktiv > ramdisk/mqttetprovideraktiv
 	fi
+	oetprovider=$(<ramdisk/mqttetprovider)
+	if [[ "$oetprovider" != "$etprovider" ]]; then
+		tempPubList="${tempPubList}\nopenWB/global/ETProvider/modulePath=${etprovider}"
+		echo $etprovider > ramdisk/mqttetprovider
+	fi
 	oetproviderprice=$(<ramdisk/mqttetproviderprice)
 	etproviderprice=$(<ramdisk/etproviderprice)
 	if [[ "$oetproviderprice" != "$etproviderprice" ]]; then
