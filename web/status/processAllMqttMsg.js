@@ -261,6 +261,12 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/faultStr$/i ) ) {
 		textShow(mqttpayload, '#lp' + index + ' .faultStrLp');
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/socFaultState$/i ) ) {
+		setWarningLevel(mqttpayload, '#lp' + index + ' .faultStrSocLpRow');
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/socFaultStr$/i ) ) {
+		textShow(mqttpayload, '#lp' + index + ' .faultStrSocLp');
+	}
 	else {
 		switch (mqttmsg) {
 			case "openWB/lp/1/PfPhase1":
@@ -350,12 +356,15 @@ function setWarningLevel(mqttpayload, variable) {
 	switch (mqttpayload) {
 		case "0":
 			$(variable).removeClass("text-warning").removeClass("text-danger");
+			hideSection(variable);
 			break;
 		case "1":
 			$(variable).addClass("text-warning").removeClass("text-danger");
+			showSection(variable);
 			break;
 		case "2":
 			$(variable).addClass("text-danger").removeClass("text-warning");
+			showSection(variable);
 			break;
 	}
 }

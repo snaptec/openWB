@@ -181,7 +181,7 @@
 							<div class="table-responsive">
 								<table class="table table-sm ">
 									<tbody>
-										<tr class="faultStrLpRow">
+										<tr class="faultStrLpRow hide">
 											<th scope="row">Störungsbeschreibung</th>
 											<td class="faultStrLp"></td>
 										</tr>
@@ -201,13 +201,9 @@
 											<th scope="row">SoC [%]</th>
 											<td class="soc">--</td>
 										</tr>
-										<tr>
-											<th scope="row">Störungsstatus</th>
-											<td class="faultStateSocLP"></td>
-										</tr>
-										<tr>
+										<tr class="faultStrSocLpRow hide">
 											<th scope="row">Störungsbeschreibung</th>
-											<td class="faultStrSocLP"></td>
+											<td class="faultStrSocLp"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -280,7 +276,7 @@
 						<div class="table-responsive">
 							<table class="table" id="evu1">
 								<tbody>
-									<tr id="faultStrEvuRow">
+									<tr id="faultStrEvuRow" class="hide">
 										<th scope="row">Störungsbeschreibung</th>
 										<td><div id="faultStrEvu"></div></td>
 									</tr>
@@ -362,7 +358,7 @@
 							<table class="table">
 								<tbody>
 								<tr>
-									<tr id="faultStrPvRow">
+									<tr id="faultStrPvRow" class="hide">
 										<th scope="row">Störungsbeschreibung</th>
 										<td id="faultStrPv"></td>
 									</tr>
@@ -448,7 +444,7 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
-									<tr id="faultStrBatRow">
+									<tr id="faultStrBatRow" class="hide">
 										<th scope="row">Störungsbeschreibung</th>
 										<td><div id="faultStrBat"></div></td>
 									</tr>
