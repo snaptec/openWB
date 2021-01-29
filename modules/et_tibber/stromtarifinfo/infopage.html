@@ -189,10 +189,12 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
+			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102', function() {
+				$('#navStromtarifInfo').removeClass('hide');
+				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
+			});
 
 			$(document).ready(function(){
-				$('#navStromtarifInfo').removeClass('hide');
 
 				// calculate amount of datasets to be received since Tibber only sends valid data for
 				// past hours/days/months

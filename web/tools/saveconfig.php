@@ -65,11 +65,15 @@
 		</header>
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Einstellungen werden gespeichert</h1>
+			<div id="feedbackdiv" class="alert alert-info">
+				Bitte warten ... <i class="fas fa-cog fa-spin"></i>
+			</div>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: System/Einstellungen</small>
 			</div>
 		</footer>
 <?php
@@ -141,7 +145,9 @@
 		}
 
 		// update display process if in POST data
-		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){
+		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){ ?>
+			<script>$('#feedbackdiv').append("<br>Displays werden neu geladen.");</script>
+			<?php
 			exec( 'mosquitto_pub -t openWB/system/reloadDisplay -m "1"' );
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
 		}
@@ -176,13 +182,27 @@
 			fclose($i3auth_fp);
 		}
 
+		// start etprovider update if in POST data
+		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){ ?>
+			<script>$('#feedbackdiv').append("<br>Update des Stromtarifanbieters gestartet.");</script>
+			<?php
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['etprovider'] . "/main.sh > /var/log/openWB.log 2>&1 &" );
+			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m "' . $_POST['etprovider'] . '"' );
+		}
+
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
 		echo "<script>alert('$msg');</script>";
 	}
 
 	// return to theme
-	echo "<script>window.location.href='index.php';</script>";
+	?>
+		<script>
+			window.setTimeout( function(){
+				window.location.href='index.php';
+			}, 3000);
+		</script>
+	<?php
 ?>
 	</body>
 </html>
