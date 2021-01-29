@@ -181,6 +181,10 @@
 							<div class="table-responsive">
 								<table class="table table-sm ">
 									<tbody>
+										<tr class="faultStrLpRow hide">
+											<th scope="row">Störungsbeschreibung</th>
+											<td class="faultStrLp"></td>
+										</tr>
 										<tr class="stromvorgabeRow">
 											<th scope="row">Ladestromvorgabe [A]</th>
 											<td class="stromvorgabe">--</td>
@@ -196,6 +200,10 @@
 										<tr class="socRow hide">
 											<th scope="row">SoC [%]</th>
 											<td class="soc">--</td>
+										</tr>
+										<tr class="faultStrSocLpRow hide">
+											<th scope="row">Störungsbeschreibung</th>
+											<td class="faultStrSocLp"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -268,6 +276,10 @@
 						<div class="table-responsive">
 							<table class="table" id="evu1">
 								<tbody>
+									<tr id="faultStrEvuRow" class="hide">
+										<th scope="row">Störungsbeschreibung</th>
+										<td><div id="faultStrEvu"></div></td>
+									</tr>
 									<tr id="gesamtleistungEvuStatusId">
 										<th scope="row">Gesamtleistung [W]</th>
 										<td><div id="wattbezugdiv">--</div></td>
@@ -302,25 +314,25 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id ="spannungEvuStatusId">
+									<tr id="spannungEvuStatusId">
 										<th scope="row">Spannung [V]</th>
 										<td><div id="evuv1div">--</div></td>
 										<td><div id="evuv2div">--</div></td>
 										<td><div id="evuv3div">--</div></td>
 									</tr>
-									<tr id ="stromstaerkeEvuStatusId">
+									<tr id="stromstaerkeEvuStatusId">
 										<th scope="row">Stromstärke [A]</th>
 										<td><div id="bezuga1div">--</div></td>
 										<td><div id="bezuga2div">--</div></td>
 										<td><div id="bezuga3div">--</div></td>
 									</tr>
-									<tr id ="leistungEvuStatusId">
+									<tr id="leistungEvuStatusId">
 										<th scope="row">Leistung [W]</th>
 										<td><div id="bezugw1div">--</div></td>
 										<td><div id="bezugw2div">--</div></td>
 										<td><div id="bezugw3div">--</div></td>
 									</tr>
-									<tr id ="powerfaktorEvuStatusId">
+									<tr id="powerfaktorEvuStatusId">
 										<th scope="row">Power Faktor</th>
 										<td><div id="evupf1div">--</div></td>
 										<td><div id="evupf2div">--</div></td>
@@ -341,6 +353,11 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
+								<tr>
+									<tr id="faultStrPvRow" class="hide">
+										<th scope="row">Störungsbeschreibung</th>
+										<td id="faultStrPv"></td>
+									</tr>
 									<tr id="pvCounterRow">
 										<th scope="row">Counter</th>
 										<td><div id="pvcounterdiv">--</div></td>
@@ -423,6 +440,10 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
+									<tr id="faultStrBatRow" class="hide">
+										<th scope="row">Störungsbeschreibung</th>
+										<td><div id="faultStrBat"></div></td>
+									</tr>
 									<tr id="geladenRow">
 										<th scope="row">geladen [kWh]</th>
 										<td><div id="speicherikwhdiv"></div></td>
