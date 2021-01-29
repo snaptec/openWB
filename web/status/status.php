@@ -280,10 +280,6 @@
 										<th scope="row">Störungsbeschreibung</th>
 										<td><div id="faultStrEvu"></div></td>
 									</tr>
-									<tr id="schieflastEvuStatusId">
-										<th scope="row">Schieflast [A]</th>
-										<td><div id="schieflastdiv"></div></td>
-									</tr>
 									<tr id="gesamtleistungEvuStatusId">
 										<th scope="row">Gesamtleistung [W]</th>
 										<td><div id="wattbezugdiv">--</div></td>
