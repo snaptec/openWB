@@ -39,6 +39,8 @@ function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
 	if (mqttmsg.match(/^openwb\/graph\//i)) { processGraphMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/evu\//i)) { processEvuMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/global\/awattar\//i)) { processETProviderMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/global\/ETProvider\//i)) { processETProviderMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/global\//i)) { processGlobalMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/housebattery\//i)) { processHousebatteryMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/system\//i)) { processSystemMessages(mqttmsg, mqttpayload); }
@@ -52,7 +54,36 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/config\/get\/pv\//i)) { processPvConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
+function processETProviderMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/global
+	// called by handlevar
+	processPreloader(mqttmsg);
+	if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
+		$('.etproviderName').text(mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
+		$('.etproviderLink').attr("href", "/openWB/modules/"+mqttpayload+"/stromtarifinfo/infopage.html");
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));
+		// show navbar link
+		if ( mqttpayload == '1' ) {
+			$('#navStromtarifInfo').removeClass('hide');
+		} else {
+			$('#navStromtarifInfo').addClass('hide');
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
+		// currently not implemented for color theme
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
+		// currently not implemented for color theme
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		wbdata.updateGlobal("currentPowerPrice", parseFloat(mqttpayload));
+	}
 
+}
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
 	processPreloader(mqttmsg);
@@ -374,18 +405,6 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == 'openWB/global/strLastmanagementActive' ) {
 		wbdata.updateGlobal("loadMgtText", (mqttpayload.length >=5 ? mqttpayload : ''));
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
-		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-		// currently not implemented for color theme
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
-		// currently not implemented for color theme
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-		wbdata.updateGlobal("currentPowerPrice", parseFloat(mqttpayload));
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		wbdata.updateGlobal("chargeMode", mqttpayload);
