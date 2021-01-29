@@ -36,6 +36,8 @@ function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
 	if ( mqttmsg.match( /^openwb\/graph\//i ) ) { processGraphMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/evu\//i) ) { processEvuMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/global\/awattar\//i) ) { processETProviderMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/global\/ETProvider\//i) ) { processETProviderMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/global\//i) ) { processGlobalMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/housebattery\//i) ) { processHousebatteryMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/system\//i) ) { processSystemMessages(mqttmsg, mqttpayload); }
@@ -49,7 +51,51 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/config\/get\/pv\//i) ) { processPvConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
+function processETProviderMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/global
+	// called by handlevar
+	processPreloader(mqttmsg);
+	if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
+		$('.etproviderName').text(mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
+		$('.etproviderLink').attr("href", "/openWB/modules/"+mqttpayload+"/stromtarifinfo/infopage.html");
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		// sets icon, graph and price-info-field visible/invisible
+		if ( mqttpayload == '1' ) {
+			$('#etproviderEnabledIcon').show();
+			$('#priceBasedCharging').show();
+			$('#strompreis').show();
+			$('#navStromtarifInfo').removeClass('hide');
+		} else {
+			$('#etproviderEnabledIcon').hide();
+			$('#priceBasedCharging').hide();
+			$('#strompreis').hide();
+			$('#navStromtarifInfo').addClass('hide');
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
+		// read etprovider values and trigger graph creation
+		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
+		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
+		var csvaData = [];
+		var rawacsv = mqttpayload.split(/\r?\n|\r/);
+		for (var i = 0; i < rawacsv.length; i++) {
+			csvaData.push(rawacsv[i].split(','));
+		}
+		electricityPriceTimeline = getCol(csvaData, 0);
+		electricityPriceChartline = getCol(csvaData, 1);
+		loadElectricityPriceChart();
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
+		setInputValue('MaxPriceForCharging', mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' ct/kWh');
+	}
 
+}
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
 	processPreloader(mqttmsg);
@@ -346,39 +392,6 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			// if there is no text, show nothing (hides row)
 			$('#lastregelungaktiv').text('');
 		}
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
-		// sets icon, graph and price-info-field visible/invisible
-		if ( mqttpayload == '1' ) {
-			$('#etproviderEnabledIcon').show();
-			$('#priceBasedCharging').show();
-			$('#strompreis').show();
-			$('#navStromtarifInfo').removeClass('hide');
-		} else {
-			$('#etproviderEnabledIcon').hide();
-			$('#priceBasedCharging').hide();
-			$('#strompreis').hide();
-			$('#navStromtarifInfo').addClass('hide');
-		}
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-		// read etprovider values and trigger graph creation
-		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
-		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
-		var csvaData = [];
-		var rawacsv = mqttpayload.split(/\r?\n|\r/);
-		for (var i = 0; i < rawacsv.length; i++) {
-			csvaData.push(rawacsv[i].split(','));
-		}
-		electricityPriceTimeline = getCol(csvaData, 0);
-		electricityPriceChartline = getCol(csvaData, 1);
-		loadElectricityPriceChart();
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
-		setInputValue('MaxPriceForCharging', mqttpayload);
-	}
-	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' Cent/kWh');
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		// set modal button colors depending on charge mode
@@ -835,7 +848,6 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
-		console.log(mqttmsg+': '+mqttpayload);
 		// manual soc-module configured for respective charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
