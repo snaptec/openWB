@@ -413,7 +413,6 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			// '2': mode pv
 			// '3': mode stop
 			// '4': mode standby
-
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
 		wbdata.updateGlobal("chargeEnergy", makeFloat (mqttpayload));
@@ -457,7 +456,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 		electricityPriceTimeline = getCol(csvaData, 0);
 		electricityPriceChartline = getCol(csvaData, 1);
-		loadElectricityPriceChart();
+		loadElectricityPriceChart(); 
 	}
 	else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
 		setInputValue('MaxPriceForCharging', mqttpayload);
