@@ -479,6 +479,7 @@ initRamdisk(){
 		"mqttdurchslp1:-1" \
 		"mqtteinschaltverzoegerung:-1" \
 		"mqttetprovideraktiv:-1" \
+		"mqttetprovider:notset" \
 		"mqttevuglaettungakt:-1" \
 		"mqtthausverbrauch:-1" \
 		"mqtthausverbrauchstat:-1" \
