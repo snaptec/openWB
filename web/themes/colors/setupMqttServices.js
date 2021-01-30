@@ -53,8 +53,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
 	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
 
-	// etprovider topcis
-	["openWB/global/ETProvider/modulePath", 1],
+	// awattar topcis
 	["openWB/global/awattar/boolAwattarEnabled", 1],
 	["openWB/global/awattar/MaxPriceForCharging", 1],
 	["openWB/global/awattar/ActualPriceForCharging", 1],

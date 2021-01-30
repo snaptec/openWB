@@ -10,7 +10,7 @@ class ChargePointList {
   constructor() {
     this.chargepoints = [];
     this.phaseSymbols = ['/', '\u2460', '\u2461', '\u2462']
-    this.headers = ["Ladepunkt", "Ladeparameter", "geladen", "Soc"];
+    this.headers = ["Ladepunkt", "Ladeparameter", "geladen", "Ladestand"];
   };
 
   // initialize after document is created
@@ -26,7 +26,7 @@ class ChargePointList {
       .append("th")
       .attr("class", "tablecell")
       .style("color", "white")
-      .style("text-align", "center")
+      .style("text-align", (data,i) => (i==0) ? "left" : "center" )
       //.classed ("tablecell", true)
       //.classed ("px-1", true)
       .text((data) => data)
@@ -42,10 +42,11 @@ class ChargePointList {
     this.tbody.selectAll("*").remove();
     this.footer.selectAll("*").remove();
 
-    const rows = this.tbody
+    const chargePoint = this.tbody
       .selectAll("rows")
       .data(this.chargepoints).enter()
-      .append("tr")
+      ;
+    const rows = chargePoint.append("tr")
       .style("color", row => row.color)
       .style("text-align", "center")
       .style("vertical-align", "middle");
@@ -55,15 +56,15 @@ class ChargePointList {
     rows.selectAll("cells")
       .data(row => [
         formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A",
-        row.energy + " kWh / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
-        //  row.soc + " %"
+        formatWattH(row.energy*1000) + " / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
+        
       ]).enter()
       .append("td")
       .attr("class", "tablecell px-1 py-1")
       .attr("style", "vertical-align:middle;")
       .text(data => data);
     rows.append((row, i) => this.cpSocButtonCell(row, i));
-
+    
     if (wbdata.isPriceChartEnabled) {
       this.footer.append ('p')
       .attr ("class", "pt-3 pb-0 m-0")
@@ -72,78 +73,69 @@ class ChargePointList {
     }
   }
 
-
-
-
   updateValues() {
     this.chargepoints = wbdata.chargePoint.filter(cp => cp.configured);
   }
 
   cpNameButtonCell(row, index) {
     const cell = d3.create("td")
-      .attr("class", "tablecell px-1 py-1");
-    const button = cell
-      .append("button")
-      .attr("class", "btn btn-sm")
-      .attr("id", "lpbutton-" + index)
-      .style("text-align", "center")
-      .style("vertical-align", "middle")
-      .style("color", row.color)
-      .classed("disabled", false)
+      .attr("class", "tablecell px-1 py-1")
+      .attr("style", "vertical-align:middle; text-align:left")
       .attr("onClick", (row, i) => ("lpButtonClicked(" + i + ")"));
-    button
-      .text(row.name);
+    
+      if (row.isEnabled) { 
+        cell.append("span")
+        .attr("class", "fa fa-toggle-on text-green px-0")
+       } else {
+        cell.append("span")
+         .attr("class", "fa fa-toggle-off text-red px-0")
+      }
 
-    if (row.isEnabled) {
-      button.classed("btn-outline-success", true);
-    } else {
-      button.classed("btn-outline-danger", true);
-    }
-    button.append("span").text(" ");
+      cell
+      .append("span").text(row.name)
+      .attr("class", "px-2");
+    
     if (row.isPluggedIn) {
       const span = 
-      button.append("span")
+      cell.append("span")
         .attr("class", "fa fa-xs fa-plug")
         ;
         span.classed("text-orange", (!row.isCharging))
         span.classed("text-green", row.isCharging)
     }
     if (row.willFinishAtTime) {
-      button.append("span")
+      cell.append("span")
         .attr("class", "fa fa-xs fa-flag-checkered");
     }
     if (row.chargeAtNight) {
-      button.append("span")
+      cell.append("span")
         .attr("fa fa-xs fa-moon");
     }
+
+    
     return cell.node();
   }
 
   cpSocButtonCell(row, index) {
-
     const cell = d3.create("td")
       .attr("class", "tablecell px-1 py-1")
+      .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
       .style("text-align", "center")
       .style("vertical-align", "middle");
     if (row.isSocConfigured) {
-      cell.text(row.soc + " %");
-      cell.append("span").text("   ");
-      const button = cell
-        .append("button")
-        .attr("class", "btn btn-outline-basic px-2 pt-0 mt-0 pb-1")
-        .style("text-align", "center")
-        .style("vertical-align", "middle")
-        .style("color", "white")
-        .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
-      button.append("i")
-        .attr("class", "small reloadLpSoc fas fa-redo-alt")
-        .attr("id", "soclabel-" + index)
-        ;
+      cell.append("span").text(row.soc + " %")
+      .attr ("class", "px-2");
+      cell.append("i")
+      .attr("class", "small fas fa-redo-alt")
+      .attr("id", "soclabel-" + index)
+      .style("color", "white");
+    
     }
     return cell.node();
   }
-}
 
+
+}
 function lpButtonClicked(i) {
   if (wbdata.chargePoint[i].isEnabled) {
     publish("0", "openWB/set/lp/" + (+i + 1) + "/ChargePointEnabled");
@@ -152,6 +144,12 @@ function lpButtonClicked(i) {
   }
   d3.select("button#lpbutton-" + i)
     .classed("disabled", true);
+}
+
+function socButtonClicked(i) {
+  publish("1", "openWB/set/lp/" + (+i + 1) + "/ForceSoCUpdate");
+  d3.select("i#soclabel-" + i)
+    .classed("fa-spin", true)
 }
 
 function socButtonClicked(i) {
