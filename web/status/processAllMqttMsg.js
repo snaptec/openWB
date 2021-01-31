@@ -114,6 +114,12 @@ function processEvuMsg (mqttmsg, mqttpayload) {
 			directShow(mqttpayload, '#evupf3div');
 			// visibilityRow('#powerfaktorEvuStatusId', '#evupf1div', '#evupf2div', '#evupf3div');
 			break;
+		case "openWB/evu/faultState":
+			setWarningLevel(mqttpayload, '#faultStrEvuRow');
+			break;
+		case "openWB/evu/faultStr":
+			textShow(mqttpayload, '#faultStrEvu');
+			break;
 	}
 }
 
@@ -152,6 +158,12 @@ function processPvMsg (mqttmsg, mqttpayload) {
 		case "openWB/pv/Modul2W":
 			absShow(mqttpayload, '#inverter2 .pvwattdiv');
 			break;
+		case "openWB/pv/1/faultState":
+			setWarningLevel(mqttpayload, '#faultStrPvRow');
+			break;
+		case "openWB/pv/1/faultStr":
+			textShow(mqttpayload, '#faultStrPv');
+			break;
 	}
 }
 
@@ -171,6 +183,15 @@ function processBatMsg (mqttmsg, mqttpayload) {
 			break;
 		case "openWB/housebattery/%Soc":
 			directShow(mqttpayload, '#socBatDiv');
+			break;
+		case "openWB/housebattery/boolHouseBatteryConfigured":
+			visibilityCard('#speicher', mqttpayload);
+			break;
+		case "openWB/housebattery/faultState":
+			setWarningLevel(mqttpayload, '#faultStrBatRow');
+			break;
+		case "openWB/housebattery/faultStr":
+			textShow(mqttpayload, '#faultStrBat');
 			break;
 	}
 }
@@ -233,6 +254,18 @@ function processLpMsg (mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/%Soc$/i ) ) {
 		directShow(mqttpayload, '#lp' + index + ' .soc');
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/faultState$/i ) ) {
+		setWarningLevel(mqttpayload, '#lp' + index + ' .faultStrLpRow');
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/faultStr$/i ) ) {
+		textShow(mqttpayload, '#lp' + index + ' .faultStrLp');
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/socFaultState$/i ) ) {
+		setWarningLevel(mqttpayload, '#lp' + index + ' .faultStrSocLpRow');
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/socFaultStr$/i ) ) {
+		textShow(mqttpayload, '#lp' + index + ' .faultStrSocLp');
 	}
 	else {
 		switch (mqttmsg) {
@@ -309,6 +342,53 @@ function fractionDigitsShow(mqttpayload, variable) {
 	var value = parseFloat(mqttpayload);
 	if ( isNaN(value) ) {
 		value = 0;
+	}
+	var valueStr = value.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3});
+	$(variable).text(valueStr);
+}
+
+function textShow(mqttpayload, variable) {
+	$(variable).text(mqttpayload);
+}
+
+// shows table row colored regarding to the fault state
+function setWarningLevel(mqttpayload, variable) {
+	switch (mqttpayload) {
+		case "0":
+			$(variable).removeClass("text-warning").removeClass("text-danger");
+			hideSection(variable);
+			break;
+		case "1":
+			$(variable).addClass("text-warning").removeClass("text-danger");
+			showSection(variable);
+			break;
+		case "2":
+			$(variable).addClass("text-danger").removeClass("text-warning");
+			showSection(variable);
+			break;
+	}
+}
+
+//show only values over 100
+//Der String ist mit einem Tausender-Punkt versehen. Daher den Payload für die if-Abfrage verwenden.
+function visibilityMin(row, mqttpayload) {
+	var value = parseFloat(mqttpayload) * -1;
+	if (value>100) { 
+		showSection(row);
+	}
+	else {
+		hideSection(row);
+	}
+}
+
+//show/hide row with only one value
+function visibilityValue(row, variable){
+	var value = parseFloat($(variable).text()); // zu Berücksichtigung von 0,00
+	if (( value != 0) && ( $(variable).text() != "")) {
+		showSection(row);
+	}
+	else {
+		hideSection(row);
 	}
 	var valueStr = value.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3});
 	$(variable).text(valueStr);

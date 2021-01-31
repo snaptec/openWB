@@ -18,6 +18,11 @@ config.read(shconfigfile)
 prefixpy = basePath+'/modules/smarthome/'
 loglevel=2
 maxspeicher = 100
+oldmaxspeicher = 0
+oldtotalwatt = 0
+oldtotalwattot = 0
+olduberschuss = 0
+olduberschussohne = 0
 numberOfSupportedDevices=9 # limit number of smarthome devices
 DeviceValues = { }
 DeviceTempValues = { }
@@ -140,7 +145,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
         local_time = datetime.now(timezone.utc).astimezone()
-        file = open(basePath+'/ramdisk/smarthome.log', 'a')
+        file = open(basePath+'/ramdisk/smarthome.log', 'a',encoding='utf8')
         if (int(level) == 0):
             file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         if (int(level) == 1):
@@ -248,6 +253,13 @@ def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
         f.close()
 
 def publishmqtt():
+    global oldmaxspeicher
+    global oldtotalwatt
+    global oldtotalwattot
+    global olduberschuss
+    global olduberschussohne
+    global totalwatt
+    global totalwattot
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key in DeviceValues:
@@ -284,8 +296,27 @@ def publishmqtt():
             nummer = int(list(filter(str.isdigit, key))[0])
             client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/WHImported_temp", payload=DeviceValues[str(key)], qos=0, retain=True)
             client.loop(timeout=2.0)
+    if (oldmaxspeicher != maxspeicher):
+       client.publish("openWB/SmartHome/Status/maxspeicherladung", payload=str(maxspeicher), qos=0, retain=True)
+       client.loop(timeout=2.0)
+       oldmaxspeicher = maxspeicher
+    if (oldtotalwatt != totalwatt):
+       client.publish("openWB/SmartHome/Status/wattschalt", payload=str(totalwatt), qos=0, retain=True)
+       client.loop(timeout=2.0)
+       oldtotalwatt = totalwatt    
+    if (oldtotalwattot != totalwattot):
+       client.publish("openWB/SmartHome/Status/wattnichtschalt", payload=str(totalwattot), qos=0, retain=True)
+       client.loop(timeout=2.0)
+       oldtotalwattot = totalwattot
+    if (olduberschuss != uberschuss):
+       client.publish("openWB/SmartHome/Status/uberschuss", payload=str(uberschuss), qos=0, retain=True)
+       client.loop(timeout=2.0)
+       olduberschuss = uberschuss       
+    if (olduberschussohne != uberschussohne):
+       client.publish("openWB/SmartHome/Status/uberschussoffset", payload=str(uberschussohne), qos=0, retain=True)
+       client.loop(timeout=2.0)
+       olduberschussohne = uberschussohne
     client.disconnect()
-
 # Lese aus der Ramdisk Regelrelevante Werte ein
 def loadregelvars():
     global uberschuss
@@ -379,6 +410,8 @@ def on_message(client, userdata, msg):
 
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
+    global totalwatt
+    global totalwattot
     for i in range(1, (numberOfSupportedDevices+1)):
         DeviceConfigured[i-1] = config.get('smarthomedevices', 'device_configured_'+str(i)) # list starts at 0
     numberOfDevices = 0

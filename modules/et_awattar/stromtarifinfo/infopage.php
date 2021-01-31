@@ -62,8 +62,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Stromtarif-Info Awattar</h1>
 			<div class="alert alert-info" role="alert">
-				Daten stellen lediglich beispielhaft das kommende Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.)
-				und der durch den Anbieter bereitgestellten Daten folgt.
+				Vollständige Implementierung mit den durch Awattar bereitgestellten Daten folgt.
 			</div>
 
 		</div>  <!-- container -->
@@ -71,10 +70,9 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
-
-			$(document).ready(function(){
+			$("#nav-placeholder").load('themes/navbar.html?v=20210130', function() {
 				$('#navStromtarifInfo').removeClass('hide');
+				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
 			});
 
 		</script>

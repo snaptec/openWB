@@ -186,10 +186,17 @@
 							</div>
 							<div id="tibberdiv" class="hide">
 								<script src = "../modules/et_tibber/tibber.js?ver=20210128" ></script>
-								<div class="card-text alert alert-danger">
-									Ihren persönlichen Tibber-Token erhalten Sie über die <a href="https://developer.tibber.com/explorer" target="_blank">Tibber-Developer-Seite</a>.
-									Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
-									entweder selbst eintragen oder durch Klick auf den entsprechenden Button ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
+								<div class="card-text alert alert-primary">
+									<p>
+										Ihren persönlichen Tibber-Token erhalten Sie über die <a href="https://developer.tibber.com/explorer" target="_blank">Tibber-Developer-Seite</a>.
+									</p>
+									<p>
+										Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
+										in das Eingebafeld selbst eintragen oder <b>nach Eingabe Ihres Token</b> durch Klick auf den Button von der openWB ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
+									</p>
+									<p>
+										Bei einer fehlerhaften Tibber-Abfrage wird der Strompreis von der openWB bis zur nächsten erfolgreichen Abfrage mit 99.99ct/kWh festgelegt.
+									</p>
 									Bitte verifizieren Sie die Eingabe, bevor Sie die Einstellungen speichern.
 								</div>
 								<div class="form-group">

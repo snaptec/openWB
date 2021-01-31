@@ -62,14 +62,17 @@
 	</head>
 
 	<body>
+		<?php
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+		?>
 
 		<div id="nav-placeholder"></div>
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Stromtarif-Info Tibber</h1>
-			<div class="alert alert-info" role="alert">
-				Daten stellen lediglich beispielhaft das kommende Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.)
-				und der durch den Anbieter bereitgestellten Daten folgt.
-			</div>
 			<div id="waitForData">
 				<span>Tibber-Daten werden abgerufen, bitte warten... </span>
 				<div class="spinner-border spinner-border-sm" role="status">
@@ -189,10 +192,12 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
+			$("#nav-placeholder").load('themes/navbar.html?v=20210130', function() {
+				$('#navStromtarifInfo').removeClass('hide');
+				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
+			});
 
 			$(document).ready(function(){
-				$('#navStromtarifInfo').removeClass('hide');
 
 				// calculate amount of datasets to be received since Tibber only sends valid data for
 				// past hours/days/months
@@ -200,11 +205,8 @@
 				const hoursToReceive = now.getHours() + 24; // Tibber sends hourly data for past hours
 				const daysToReceive = now.getDate() + 1;  // Tibber sends daily data for past days
 				var monthsToReceive = now.getMonth();  // no index correction since Tibber sends monthly data for past months
-
-				// token have to be replaced by user-specific data once page is completed
-				// only demo token at the moment
-				var tibberToken = "d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a";
-				var tibberHomeID = "c70dcbe5-4485-4821-933d-a8a86452737b";
+				var tibberToken = "<?php echo $tibbertokenold; ?>";
+				var tibberHomeID = "<?php echo $tibberhomeidold; ?>";
 				const tibberAPI = "https://api.tibber.com/v1-beta/gql";
 				const tibberQueryHead = '{ "query": "{viewer {name home(id:\\"' + tibberHomeID + '\\") {';
 				const tibberQueryGetAdress = 'address {address1 postalCode city}';
@@ -215,8 +217,6 @@
 
 				readTibberAPI(tibberToken, tibberQuery)
 					.then((data) => {
-						console.log('erfolgreiche Abfrage');
-						console.log(data);
 	    				processTibberResponse(data)
 					})
 					.catch((error) => {

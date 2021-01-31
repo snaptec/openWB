@@ -109,11 +109,11 @@ input[type=range]::-webkit-slider-runnable-track {
 	}
 
 .text-green {
-	color: #006515;
+	color: #4db662;
 }
 
 .text-red {
-	color: #A30000;
+	color: #d12020;
 }
 
 .text-white {
@@ -269,7 +269,7 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 0.8rem;
+		font-size: 1.0rem;
 	}
 
 	.smallTextSize {
@@ -310,7 +310,7 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 0.6rem;
+		font-size: 1.2rem;
 	}
 
 	.smallTextSize {
