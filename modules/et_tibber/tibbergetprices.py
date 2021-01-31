@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # coding: utf8
 
 #########################################################
@@ -69,9 +69,14 @@ try:
     # Timeout für Verbindung = 2 sek und Antwort = 6 sek
     response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data, timeout=(2, 6))
 except Timeout:
-    # Timeout bei API-Abfrage, dann Preis auf 99.99ct/kWh setzen
-    writeInvalidPriceData('API-Timeout')
-    exit()
+    writeLogEntry('API-Timeout, versuche erneute Abfrage')
+    try:
+        # Timeout für Verbindung = 2 sek und Antwort = 6 sek
+        response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data, timeout=(2, 6))
+    except Timeout:
+        # Timeout bei API-Abfrage, dann Preis auf 99.99ct/kWh setzen
+        writeInvalidPriceData('API-Timeout, gebe auf')
+        exit()
 
 if response:
     # parse json
@@ -101,8 +106,9 @@ if response:
                     # alle 24 Stundenpreise für morgen erhalten, schreibe in Ramdisk, Preise konvertiert in Eurocent
                     for tibberHour, price in enumerate(tomorrowPrices):
                         etprovidergraphlistfile.write('%i,%2.2f\n' % (tibberHour, (price['total']) * 100))
-            # publish MQTT-Daten für den Graphen
+            # publish MQTT-Daten für Preis und Graph
             os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
+            os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
     else:
         # Fehler in Antwort
         error = tibberJSON['errors'][0]['message']
