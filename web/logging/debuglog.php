@@ -39,19 +39,37 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Debug-Logfile</h1>
 			<?php
+				$filepath = $_SERVER['DOCUMENT_ROOT'] . '/openWB/ramdisk/openWB.log';
+				$linesToRead = 30;
+
 				// returns last n lines from logfile
-				function getLastDebugLines($filepath, $lines) {
-					$file = escapeshellarg($file); // for the security
-					$log = `tail -n $lines $filepath`;
+				function getLastDebugLines() {
+					global $filepath, $linesToRead;
+					$log = `tail -n $linesToRead $filepath`;
 					return trim($log);
+				}
+
+				// returns total number of lines in logfile
+				function getDebugLinesCount() {
+					global $filepath;
+					$file = new \SplFileObject($filepath, 'r');
+					$file->seek(PHP_INT_MAX);
+					return $file->key();
+				}
+
+				$debugLinesCount = getDebugLinesCount();
+				$textAreaLabelText = 'Letzte 30 Log-Einträge:';
+				if ( $debugLinesCount <= $linesToRead ) {
+					$textAreaLabelText = 'Log-Einträge:';
 				}
 			?>
 			<div class="row">
 				<div class="col">
-					Stand: <span id="timestampSpan"></span>
+					Stand: <span id="timestampSpan"></span> <br>
+					Insgesamt <?php echo $debugLinesCount; ?> Einträge im Debug-Log<br>
 					<div class="form-group textarea">
-						<label for="debugLinesArea">Letzte 30 Einträge im Debug-Log:</label>
-						<textarea readonly class="form-control" id="debugLinesArea" rows="10" cols="1"><?php echo getLastDebugLines($_SERVER['DOCUMENT_ROOT'] . '/openWB/ramdisk/openWB.log', 30);?>
+						<label for="debugLinesArea"><?php echo $textAreaLabelText; ?></label>
+						<textarea readonly class="form-control" id="debugLinesArea" rows="10" cols="1"><?php echo getLastDebugLines();?>
 						</textarea>
 					</div>
 				</div>
