@@ -58,9 +58,8 @@
 				}
 
 				$debugLinesCount = getDebugLinesCount();
-				$textAreaLabelText = 'Letzte 30 Log-Einträge:';
-				if ( $debugLinesCount <= $linesToRead ) {
-					$textAreaLabelText = 'Log-Einträge:';
+				if ( $debugLinesCount > $linesToRead ) {
+					$textAreaLabelText = 'Letzte 30 ';
 				}
 			?>
 			<div class="row">
@@ -68,7 +67,7 @@
 					Stand: <span id="timestampSpan"></span> <br>
 					Insgesamt <?php echo $debugLinesCount; ?> Einträge im Debug-Log<br>
 					<div class="form-group textarea">
-						<label for="debugLinesArea"><?php echo $textAreaLabelText; ?></label>
+						<label for="debugLinesArea"><?php echo $textAreaLabelText; ?>Log-Einträge:</label>
 						<textarea readonly class="form-control" id="debugLinesArea" rows="10" cols="1"><?php echo getLastDebugLines();?>
 						</textarea>
 					</div>
