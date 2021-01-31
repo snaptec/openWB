@@ -29,12 +29,12 @@ class WbData {
 
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
-		// this.chargeColors = d3.schemeGreens[9];
-		this.sourceSummary = [
-			{ name: "PV", power: 0, energy: 0, color: "white" },
-			{ name: "Netz", power: 0, energy: 0, color: "white" },
-			{ name: "Speicher out", power: 0, energy: 0, color: "white" }
-		];
+		this.sourceSummary = {
+			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
+			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
+			"batIn": { name: "Speicher out", power: 0, energy: 0, color: "white" }
+
+		};
 		this.usageSummary = [
 			{ name: "Export", power: 0, energy: 0, color: "white" },
 			{ name: "Laden", power: 0, energy: 0, color: "white" },
@@ -47,9 +47,9 @@ class WbData {
 
 	init() {
 		var style = getComputedStyle(document.body);
-		this.sourceSummary[0].color = style.getPropertyValue('--color-pv');
-		this.sourceSummary[1].color = style.getPropertyValue('--color-evu');
-		this.sourceSummary[2].color = style.getPropertyValue('--color-battery');
+		this.sourceSummary.pv.color = style.getPropertyValue('--color-pv');
+		this.sourceSummary.evuIn.color = style.getPropertyValue('--color-evu');
+		this.sourceSummary.batIn.color = style.getPropertyValue('--color-battery');
 		this.usageSummary[0].color = style.getPropertyValue('--color-export');
 		this.usageSummary[1].color = style.getPropertyValue('--color-charging');
 		this.usageSummary[2].color = style.getPropertyValue('--color-devices');
@@ -62,6 +62,16 @@ class WbData {
 		for (i = 0; i < 9; i++) {
 			this.shDevice[i].color = style.getPropertyValue('--color-sh' + (i + 1));
 		}
+		// read preferences stored in cookie
+		const myCookies = document.cookie.split(';');
+		const deviceCookie = myCookies.filter(entry => entry.split('=')[0] === "openWBColorThemeHideDevices");
+		if (deviceCookie.length > 0) {
+			const devicesToHideString = deviceCookie[0].split('=')[1];
+			if (devicesToHideString != "") {
+				const devicesToHide = JSON.parse(devicesToHideString);
+				devicesToHide.map(i => this.shDevice[i].showInGraph = false)
+			}
+		}
 	}
 
 	updateEvu(field, value) {
@@ -69,11 +79,11 @@ class WbData {
 		switch (field) {
 			case 'powerEvuIn':
 			case 'powerEvuOut':
-				this.updateSourceSummary(1, "power", this.powerEvuIn);
+				this.updateSourceSummary("evuIn", "power", this.powerEvuIn);
 				this.updateUsageSummary(0, "power", this.powerEvuOut);
 				break;
 			case 'evuiDailyYield':
-				this.updateSourceSummary(1, "energy", this.evuiDailyYield);
+				this.updateSourceSummary("evuIn", "energy", this.evuiDailyYield);
 
 				break;
 			case 'evueDailyYield':
@@ -110,10 +120,10 @@ class WbData {
 		this[field] = value;
 		switch (field) {
 			case 'pvwatt':
-				this.updateSourceSummary(0, "power", this.pvwatt);
+				this.updateSourceSummary("pv", "power", this.pvwatt);
 				break;
 			case 'pvDailyYield':
-				this.updateSourceSummary(0, "energy", this.pvDailyYield);
+				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
 				break;
 			default:
 				break;
@@ -144,6 +154,11 @@ class WbData {
 			case 'energy':
 				this.updateUsageSummary(2, "energy", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
 				break;
+			case 'showInGraph':
+				this.persistGraphPreferences();
+				this.updateUsageDetails();
+				yieldMeter.update();
+				break;
 			default:
 				break;
 		}
@@ -171,12 +186,16 @@ class WbData {
 		this[field] = value;
 		switch (field) {
 			case 'batteryPowerImport': this.usageSummary[3].power = value;
+				powerMeter.update();
 				break;
-			case 'batteryPowerExport': this.sourceSummary[2].power = value;
+			case 'batteryPowerExport': this.updateSourceSummary("batIn", "power", value);
+				powerMeter.update();
 				break;
 			case 'batteryEnergyExport': this.usageSummary[3].energy = value;
+				yieldMeter.update();
 				break;
-			case 'batteryEnergyImport': this.sourceSummary[2].energy = value;
+			case 'batteryEnergyImport': this.updateSourceSummary("batIn", "energy", value);
+				yieldMeter.update();
 				break;
 			default:
 				break;
@@ -184,8 +203,8 @@ class WbData {
 		batteryList.update();
 	}
 
-	updateSourceSummary(index, field, value) {
-		this.sourceSummary[index][field] = value;
+	updateSourceSummary(cat, field, value) {
+		this.sourceSummary[cat][field] = value;
 		if (field == "power") {
 			this.updateUsageDetails();
 			powerMeter.update();
@@ -213,7 +232,7 @@ class WbData {
 	updateUsageDetails() {
 		this.usageDetails = [this.usageSummary[0],
 		this.usageSummary[1]]
-			.concat(this.shDevice.filter(row => (row.configured)))
+			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary[3], this.usageSummary[4]]);
 	}
@@ -221,6 +240,24 @@ class WbData {
 	updateConsumerSummary(cat) {
 		this.updateUsageSummary(3, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
 			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0));
+	}
+
+	//update cookie
+	persistGraphPreferences() {
+		var idlist = "["
+			+ wbdata.shDevice.reduce((str, device, i) => {
+				var result = str;
+				if (!device.showInGraph) {
+					if (result === "") {
+						result = device.id;
+					} else {
+						result = result + "," + device.id;
+					}
+				}
+				return result
+			}, "")
+			+ "]";
+		document.cookie = "openWBColorThemeHideDevices=" + idlist + "; max-age=16000000";
 	}
 }
 
@@ -245,12 +282,14 @@ class ChargePoint {
 };
 
 class SHDevice {
-	constructor(index, name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, color = "") {
+		this.id = index;
 		this.name = name;
 		this.power = power;
 		this.energy = dailyYield;
 		this.configured = configured;
-		//	this.color = d3.interpolateBlues (index / 10 + 0.3);
+		this.showInGraph = true;
+		this.color = color;
 	}
 };
 

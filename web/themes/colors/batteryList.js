@@ -32,7 +32,7 @@ class BatteryList {
 
       const row = table.append("tbody")
         .append("tr")
-        .style("color", wbdata.sourceSummary[2].color)
+        .style("color", wbdata.sourceSummary.batIn.color)
         .style("text-align", "center");
 
       // current power
