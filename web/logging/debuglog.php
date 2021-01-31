@@ -48,7 +48,7 @@
 			?>
 			<div class="row">
 				<div class="col">
-					Stand <span id="timestampSpan"></span>
+					Stand: <span id="timestampSpan"></span>
 					<div class="form-group textarea">
 						<label for="debugLinesArea">Letzte 30 Einträge im Debug-Log:</label>
 						<textarea readonly class="form-control" id="debugLinesArea" rows="10" cols="1"><?php echo getLastDebugLines($_SERVER['DOCUMENT_ROOT'] . '/openWB/ramdisk/openWB.log', 30);?>
