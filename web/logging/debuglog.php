@@ -38,18 +38,46 @@
 		<div id="nav-placeholder"></div>
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Debug-Logfile</h1>
-			<div class="alert alert-info" role="alert">
-				Vollständige Implementierung folgt.
+			<?php
+				// returns last n lines from logfile
+				function getLastDebugLines($filepath, $lines) {
+					$file = escapeshellarg($file); // for the security
+					$log = `tail -n $lines $filepath`;
+					return trim($log);
+				}
+			?>
+			<div class="row">
+				<div class="col">
+					Stand <span id="timestampSpan"></span>
+					<div class="form-group textarea">
+						<label for="debugLinesArea">Letzte 30 Einträge im Debug-Log:</label>
+						<textarea readonly class="form-control" id="debugLinesArea" rows="10" cols="1"><?php echo getLastDebugLines($_SERVER['DOCUMENT_ROOT'] . '/openWB/ramdisk/openWB.log', 30);?>
+						</textarea>
+					</div>
+				</div>
 			</div>
-
+			<div class="row row justify-content-center">
+				<button type="button" class="btn btn-success" id="refreshBtn">Abfrage erneuern</button>
+			</div>
 		</div>  <!-- container -->
 
 		<script>
 
 			// load navbar
 			$("#nav-placeholder").load('themes/navbar.html?v=20210130', function() {
-				$('#navStromtarifInfo').removeClass('hide');
-				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
+				$('#navDebuglog').addClass('disabled');
+			});
+
+			$(document).ready(function(){
+
+				const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
+				var now = new Date();
+		        $('#timestampSpan').text(now.toLocaleDateString(undefined, options));
+
+				$('#refreshBtn').click(function(){
+					location.reload();
+				});
+
 			});
 
 		</script>
