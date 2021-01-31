@@ -47,7 +47,7 @@ class ChargePointList {
       .data(this.chargepoints).enter()
       ;
     const rows = chargePoint.append("tr")
-      .style("color", row => row.color)
+      .style("color", "white")
       .style("text-align", "center")
       .style("vertical-align", "middle");
 
@@ -80,7 +80,9 @@ class ChargePointList {
   cpNameButtonCell(row, index) {
     const cell = d3.create("td")
       .attr("class", "tablecell px-1 py-1")
-      .attr("style", "vertical-align:middle; text-align:left")
+      .style ("color", row.color)
+      .style ("vertical-align", "middle")
+      .style ("text-align", "left")
       .attr("onClick", (row, i) => ("lpButtonClicked(" + i + ")"));
     
       if (row.isEnabled) { 

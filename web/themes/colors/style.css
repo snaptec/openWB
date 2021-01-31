@@ -438,33 +438,32 @@ h3 {
 	--d9bgCol: blue;
 	--color-bg: midnightblue;
 	--color-evu: firebrick;
-	--color-pv: goldenrod;
+	--color-pv: mediumseagreen;
 	--color-house: grey;
-	--color-devices: cornflowerblue;
-	--color-charging: mediumseagreen;
-	--color-export: khaki;
+	--color-devices: goldenrod;
+	--color-charging: cornflowerblue;
+	--color-export: lightgreen;
 	--color-axis: steelblue;
-	--color-battery: darkkhaki;
-	--color-lp1: mediumseagreen;
-	--color-lp2: lightseagreen;
-	--color-lp3: mediumspringgreen;
-	--color-lp4: mediumturquoise;
-	--color-lp5: darkseagreen;
-	--color-lp6: darkolivegreen;
-	--color-lp7: olive;
-	--color-lp8: palegreen;
-	--color-sh1: lightblue;
-	--color-sh2: deepskyblue;
-	--color-sh3: aqua;
-	--color-sh4: cadetblue;
-	--color-sh5: dodgerblue;
-	--color-sh6: lightsteelblue;
-	--color-sh7: skyblue;
-	--color-sh8: mediumslateblue;
-	--color-sh9: paleturquoise;
-	--color-co1: skyblue;
-	--color-co2: cadetblue;
-
+	--color-battery: rgba(255, 153, 13, 0.7);
+	--color-lp1: cornflowerblue;
+	--color-lp2: lightblue;
+	--color-lp3: deepskyblue;
+	--color-lp4: aqua;
+	--color-lp5: cadetblue;
+	--color-lp6: dodgerblue;
+	--color-lp7: lightsteelblue;
+	--color-lp8: skyblue;
+	--color-sh1: goldenrod;
+	--color-sh2: navajowhite;
+	--color-sh3: peru;
+	--color-sh4: peachpuff;
+	--color-sh5: tan;
+	--color-sh6: khaki;
+	--color-sh7: burlywood;
+	--color-sh8: linen;
+	--color-sh9: bisque;
+	--color-co1: moccasin;
+	--color-co2: rosybrown;
 }
 
 .openwb-devices {
