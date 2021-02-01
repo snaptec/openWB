@@ -103,7 +103,6 @@ batt = json.loads(responsetext)
 soc = batt['energy'][0]['level']
 #print(time_string,'soc lp'+chargepoint,soc)
 
-
 if (int(soccalc) == 0):
 	#manual calculation not enabled, using existing logic
 	if (int(chargepoint) == 1):
