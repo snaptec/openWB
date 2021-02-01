@@ -34,13 +34,13 @@ class SmartHomeList {
         .selectAll("headers")
         .data(headers).enter()
         .append("th")
-        .attr("style", (data, i) => (i == 0) ? "color:white;text-align:left;"
-          : "color:white;text-align:center;")
+        .attr("style", (data, i) => (i == 0) ? "text-align:left;"
+          : "text-align:center;")
         .attr("class", "tablecell ")
         .text((data) => data)
         ;
       thead.append("th")
-        .attr("style", "color:white; text-align:right")
+        .attr("style", "text-align:right")
         .attr("class", "tablecell")
         .append("span")
         .attr("class", "fa fa-chart-area px-0");

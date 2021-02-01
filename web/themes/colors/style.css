@@ -437,29 +437,29 @@ h3 {
 	--d9Col: rgba(230, 50, 220, 0.7);
 	--d9bgCol: blue;
 	--color-bg: midnightblue;
-	--color-evu: #d62728;
-	--color-pv: #2ca02c;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
 	--color-house: #7f7f7f;
-	--color-devices: #17becf;
-	--color-charging: #1f77b4;
-	--color-export: #bcbd22;
+	--color-devices: #cab2d6;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
 	--color-axis: steelblue;
-	--color-battery: #ff7f0e;
-	--color-lp1: #2f7ebc;
-	--color-lp2: #4b97c9;
-	--color-lp3: #6daed5;
-	--color-lp4: #93c3df;
-	--color-lp5: #b5d4e9;
-	--color-lp6: #cfe1f2;
-	--color-lp7: #e3eef9;
-	--color-lp8: #f7fbff;
-	--color-sh1: #b74304;
-	--color-sh2: #d85b0a;
-	--color-sh3: #ee7918;
-	--color-sh4: #fb992c;
-	--color-sh5: #feba4a;
-	--color-sh6: #fed676;
-	--color-sh7: #ff5e63;
+	--color-battery: #ff7f00;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
 	--color-sh8: #fe4b83;
 	--color-sh9: #e4419d;
 	--color-co1: #bf3caf;
@@ -476,7 +476,9 @@ h3 {
 	border:1px solid  lightskyblue;
 }
 
-
+th {
+	color: steelblue;
+}
 .table-borderless td {
 	border: 0;
 }

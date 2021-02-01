@@ -25,7 +25,7 @@ class BatteryList {
         .selectAll("headers")
         .data(headers).enter()
         .append("th")
-        .attr("style", "color:white;text-align:center;")
+        .attr("style", "text-align:center;")
         .attr("class", "tablecell ")
         .text((data) => data)
         ;
