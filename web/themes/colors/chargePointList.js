@@ -83,7 +83,7 @@ class ChargePointList {
       .style ("color", row.color)
       .style ("vertical-align", "middle")
       .style ("text-align", "left")
-      .attr("onClick", (row, i) => ("lpButtonClicked(" + i + ")"));
+      .attr("onClick", "lpButtonClicked(" + index + ")");
     
       if (row.isEnabled) { 
         cell.append("span")
@@ -121,7 +121,7 @@ class ChargePointList {
   cpSocButtonCell(row, index) {
     const cell = d3.create("td")
       .attr("class", "tablecell px-1 py-1")
-      .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
+      .attr("onClick", (row) => ("socButtonClicked(" + index + ")"))
       .style("text-align", "center")
       .style("vertical-align", "middle");
     if (row.isSocConfigured) {
