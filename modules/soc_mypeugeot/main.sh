@@ -17,9 +17,9 @@ case $CHARGEPOINT in
 		manualMeterFile="$RAMDISKDIR/manual_soc_meter_lp2"
 		socFile="$RAMDISKDIR/soc1"
 		soctimerfile="$RAMDISKDIR/soctimer1"
+		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		peugeotSocFile="$RAMDISKDIR/peugeotsoc1"
 		peugeotSocTime="$RAMDISKDIR/peugeotsoctime1"
-		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		socOnlineIntervall=60 # update every 10 minutes if script is called every 10 seconds
 		meterFile="$RAMDISKDIR/llkwhs1"
 		ladungaktivFile="$RAMDISKDIR/ladungaktivlp2"
@@ -40,9 +40,9 @@ case $CHARGEPOINT in
 		manualMeterFile="$RAMDISKDIR/manual_soc_meter_lp1"
 		socFile="$RAMDISKDIR/soc"
 		soctimerfile="$RAMDISKDIR/soctimer"
+		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		peugeotSocFile="$RAMDISKDIR/peugeotsoc"
 		peugeotSocTime="$RAMDISKDIR/peugeotsoctime"
-		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		socOnlineIntervall=60 # update every 10 minutes if script is called every 10 seconds
 		meterFile="$RAMDISKDIR/llkwh"
 		ladungaktivFile="$RAMDISKDIR/ladungaktivlp1"
@@ -59,9 +59,14 @@ esac
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
+}
+
+socLog(){
+	timestamp=`date +"%Y-%m-%d %H:%M:%S"`	
+	echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 }
 
 incrementTimer(){
@@ -83,13 +88,13 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 else	# manual calculation enabled, combining PSA module with manual calc method
 	# if charging started this round fetch once from myPeugeot out of order
 	if [[ $(<$ladungaktivFile) == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
-		socDebugLog "Status changed to loading. Fetching SoC from myPeugeot out of order."
+		socLog "Ladestatus changed to charging. Fetching SoC from myPeugeot out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 		echo $(<$peugeotSocFile) > $socFile
 		echo $(<$peugeotSocFile) > $manualSocFile
-		socDebugLog "Fetched from myPeugeot: $(<$peugeotSocFile)%"
+		socLog "Fetched from myPeugeot: $(<$peugeotSocFile)%"
 	fi
 
 	# if charging ist not active fetch SoC from myPeugeot
@@ -98,27 +103,27 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 			socDebugLog "Nothing to do yet. Incrementing timer. Extralong myPeugeot wait: $soctimer"
 			incrementTimer
 		else
-			socDebugLog "Fetching SoC from myPeugeot"
+			socLog "Fetching SoC from myPeugeot"
 			echo 0 > $soctimerfile
 			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 			dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file mofified date in epoch
 			diff=$(($dateofSoc - $(<$peugeotSocTime)))
-			socDebugLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
-			socDebugLog "Time of fetched SoC: $(date -d @$(<$peugeotSocTime) +'%F %T')"
-			socDebugLog "Fetched SoC time difference is $diff s"
+			socLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
+			socLog "Time of fetched SoC: $(date -d @$(<$peugeotSocTime) +'%F %T')"
+			socLog "Fetched SoC time difference is $diff s"
 			
 			# if fetched SoC is newer than manualSoC
 			if (( $diff < 0 )); then
 				echo $(<$peugeotSocFile) > $socFile
 				echo $(<$peugeotSocFile) > $manualSocFile
-				socDebugLog "Fetched from myPeugeot: $(<$peugeotSocFile)% and using it."
+				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% and using it."
 			# if SoC is 0, so probably there ist no valid SoC known
 			elif (( $(($(<$socFile))) == 0 )); then
 				echo $(<$peugeotSocFile) > $socFile
 				echo $(<$peugeotSocFile) > $manualSocFile
-				socDebugLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but nevertheless using it, because SoC was 0."
+				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but nevertheless using it, because SoC was 0."
 			else
-				socDebugLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but skipping it, because it is older than known SoC."
+				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but skipping it, because it is older than known SoC."
 			fi
 		fi
 	# if charging is active calculate SoC manually
@@ -175,16 +180,18 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				socDebugLog "currentSocDiff: $currentSocDiff"
 				newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 				if (( newSoc > 100 )); then
+					socLog "newSoC above 100, setting to 100."
 					newSoc=100
 				fi
 				if (( newSoc < 0 )); then
+					socLog "newSoC below 100, setting to 0."
 					newSoc=0
 				fi
 				socDebugLog "newSoc: $newSoc"
 				echo $newSoc > $socFile
 			else
 				# no current meter value for calculation -> Exit
-				socDebugLog "ERROR: no meter value for calculation! ($meterFile)"
+				socLog "ERROR: no meter value for calculation! ($meterFile)"
 			fi
 		fi
 	fi
