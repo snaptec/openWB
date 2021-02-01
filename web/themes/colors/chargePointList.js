@@ -25,7 +25,7 @@ class ChargePointList {
       .data(this.headers).enter()
       .append("th")
       .attr("class", "tablecell")
-      .style("color", "white")
+      // .style("color", "white")
       .style("text-align", (data,i) => (i==0) ? "left" : "center" )
       //.classed ("tablecell", true)
       //.classed ("px-1", true)
