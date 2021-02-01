@@ -83,7 +83,7 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 		echo $timer > $soctimerfile
 	else
 		echo 0 > $soctimerfile
-		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
+		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret $soccalc
 	fi
 else	# manual calculation enabled, combining PSA module with manual calc method
 	# if charging started this round fetch once from myPeugeot out of order
@@ -91,7 +91,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 		socLog "Ladestatus changed to charging. Fetching SoC from myPeugeot out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
-		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
+		sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret $soccalc
 		echo $(<$peugeotSocFile) > $socFile
 		echo $(<$peugeotSocFile) > $manualSocFile
 		socLog "Fetched from myPeugeot: $(<$peugeotSocFile)%"
@@ -105,7 +105,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 		else
 			socLog "Fetching SoC from myPeugeot"
 			echo 0 > $soctimerfile
-			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
+			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret $soccalc
 			dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file mofified date in epoch
 			diff=$(($dateofSoc - $(<$peugeotSocTime)))
 			socLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
