@@ -96,14 +96,14 @@
 								<div class="col">
 									<input type="text" name="hostname" id="hostname" value="<?php echo $currentHostname; ?>" placeholder="Name" aria-describedby="hostnameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9_-]*">
 									<span id="hostnameHelpBlock" class="form-text small">
-										Der Hostname darf nur Buchstaben, Zahlen und die Zeichen "-_" enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.<br>
+										Der Hostname darf nur Buchstaben, Zahlen und die Zeichen "-_" enthalten. Keine Umlaute, Sonderzeichen oder Leerzeichen.<br>
 										<span class="text-danger">Die openWB wird direkt nach der Änderung neu gestartet! Alle Fahrzeuge sind vorher abzustecken!</span>
 									</span>
 								</div>
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" name="action" value="rename" class="btn btn-success">Hostname ändern</button>
+							<button type="submit" name="action" value="rename" class="btn btn-success">Hostnamen ändern</button>
 						</div>
 					</form>
 				</div> <!-- card end -->
