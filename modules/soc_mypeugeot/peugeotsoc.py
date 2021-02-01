@@ -101,10 +101,11 @@ f.close()
 batt = json.loads(responsetext)
 soc = batt['energy'][0]['level']
 #print(time_string,'soc lp'+chargepoint,soc)
+
 if (int(chargepoint) == 1):
-    f = open('/var/www/html/openWB/ramdisk/soc', 'w')
+    f = open('/var/www/html/openWB/ramdisk/peugeotsoc', 'w')
 if (int(chargepoint) == 2):
-    f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
+    f = open('/var/www/html/openWB/ramdisk/peugeotsoc1', 'w')
 f.write(str(soc))
 f.close()
 
@@ -119,6 +120,7 @@ if (dst.tm_isdst == 0):
 	# adding one hour to fetched SoCtime if needed
 	soctime = soctime + 3600
 
+# writing timestamp to ramdisk
 if (int(chargepoint) == 1):
     f = open('/var/www/html/openWB/ramdisk/peugeotsoctime', 'w')
 if (int(chargepoint) == 2):
