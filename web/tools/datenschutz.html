@@ -76,7 +76,7 @@
 								<label class="col-form-label">Einverstanden?</label>
 							</div>
 							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="dataProtectionAcknoledged" name="dataProtectionAcknoledged" data-toggle="buttons" data-default="1" data-topicprefix="openWB/config/get/global/"  data-topicsubgroup="lp/1/">
+								<div class="btn-group btn-block btn-group-toggle" id="dataProtectionAcknoledged" name="dataProtectionAcknoledged" data-toggle="buttons" data-default="1" data-topicprefix="openWB/config/get/global/">
 									<label class="btn btn-outline-info">
 										<input type="radio" name="dataProtectionAcknoledged" id="dataProtectionAcknoledgedNo" value="2" data-option="2">Nein
 									</label>
@@ -109,27 +109,27 @@
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_fehlerbericht.js?ver=20201001-a" ></script>
+		<script src = "settings/topicsToSubscribe_fehlerbericht.js?ver=20210129" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20210129" ></script>
 		<!-- load service -->
-		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
+		<script src = "settings/setupMqttServices.js?ver=20210129" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
+		<script src = "settings/processAllMqttMsg.js?ver=20210129" ></script>
 		<script>
 			function visibiltycheck(elementId, mqttpayload) {
 				// required by processAllMqttMsg.js but nothing to do here
 			}
 
-			$.get(
-				{ url: "settings/navbar.html", cache: false },
-				function(data){
-					$("#nav").replaceWith(data);
-					// disable navbar entry for current page
-					// no menue entry for this page
-					// $('#navXXXXXX').addClass('disabled');
-				}
-			);
+			// $.get(
+			// 	{ url: "settings/navbar.html", cache: false },
+			// 	function(data){
+			// 		$("#nav").replaceWith(data);
+			// 		// disable navbar entry for current page
+			// 		// no menue entry for this page
+			// 		// $('#navXXXXXX').addClass('disabled');
+			// 	}
+			// );
 		</script>
 
 	</body>

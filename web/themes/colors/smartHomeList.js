@@ -18,6 +18,7 @@ class SmartHomeList {
 
   // update if data has changed
   update() {
+   
     this.updateValues();
     this.div.selectAll("*").remove();
 
@@ -28,54 +29,84 @@ class SmartHomeList {
       // table.attr("style", "border-spacing:0;")
 
       const headers = ["Gerät", "Verbrauch", "Laufzeit", "Modus"];
-      const thead = table.append("thead")
+      const thead = table.append("thead");
+      thead
         .selectAll("headers")
         .data(headers).enter()
         .append("th")
-        .attr("style", "color:white;text-align:center;")
+        .attr("style", (data, i) => (i == 0) ? "color:white;text-align:left;"
+          : "color:white;text-align:center;")
         .attr("class", "tablecell ")
         .text((data) => data)
         ;
+      thead.append("th")
+        .attr("style", "color:white; text-align:right")
+        .attr("class", "tablecell")
+        .append("span")
+        .attr("class", "fa fa-chart-area px-0");
 
       const rows = table.append("tbody").selectAll("rows")
         .data(this.consumers).enter()
         .append("tr")
         .attr("style", row => this.calcColor(row));
 
-      rows.append("td")
+      const cell = rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .append("button")
+        .attr("onClick", (row) => "shDeviceClicked(" + row.id + ")")
         .attr("id", (row, i) => "shbutton-" + i)
-        .attr("class", row => this.deviceClass(row))
-        .attr("style", row => this.calcColor(row))
-        .attr("onClick", (row, i) => "shDeviceClicked(" + i + ")")
-        .classed("disabled", (row => (row.isAutomatic)))
+        .attr("style", "text-align:left; vertical-align:middle;");
+      // status indicator
+      cell.append("span")
+        .attr("id", (row) => "shbutton-" + row.id)
+        .attr("class", (row) => row.isOn ? "fa fa-toggle-on text-green pr-2" : "fa fa-toggle-off text-red pr-2");
+      // name
+      cell.append("span")
         .text(row => row.name);
-
+      // Power/energy
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .attr("style", "vertical-align: middle;")
-        .text(row => formatWatt(row.power) + " (" + row.energy + " kWh)",);
-
+        .attr("style", "vertical-align: middle;color:white")
+        .text(row => formatWatt(row.power) + " (" + formatWattH(row.energy * 1000) + ")");
+      // Running time
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .attr("style", "vertical-align: middle;")
+        .attr("style", "vertical-align: middle;color:white")
         .text(row => formatTime(row.runningTime))
-
+      // Automatic mode button
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
         .append("button")
-        .attr("id", (row, i) => "shmodebutton-" + i)
+        .attr("id", (row) => "shmodebutton-" + row.id)
         .attr("class", row => this.modeClass(row))
-        .attr("style", row => this.calcColor(row))
-        .attr("onClick", (row, i) => "shModeClicked(" + i + ")")
+        .attr("style", "color:white; text-align:center;")
+        .attr("onClick", (row) => "shModeClicked(" + row.id + ")")
         .classed("disabled", false)
         .text(row => row.isAutomatic ? "Automatik" : "Manuell");
+      // select graph display
+      rows.append("td")
+        .attr("class", "tablecell py-1 px-1")
+        .append("div")
+        .attr("class", "form-check")
+        .style("text-align", "right")
+        .append("input")
+        .attr("type", "checkbox")
+        .attr("name", "graphswitch")
+        .attr("class", "form-check-input")
+        .property("checked", row => row.showInGraph)
+        .attr("id", (row) => row.id)
+        ;
+
+      d3.selectAll("[name=graphswitch]")
+        .on("change", function () {
+          wbdata.updateSH(+this.id + 1, "showInGraph", this.checked);
+        })
+
     }
     else {
       d3.select("div#smartHomeWidget").classed("hide", true);
     }
   }
+
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");
   }
@@ -88,11 +119,10 @@ class SmartHomeList {
 
   modeClass(row) {
     return (this.buttonClass + (row.isAutomatic ? " btn-outline-info" : " btn-outline-warning"));
-
   }
 
   updateValues() {
-    this.consumers = wbdata.shDevice.filter(dv => dv.configured);
+    this.consumers = wbdata.shDevice.filter((dv) => dv.configured);
   }
 }
 
@@ -108,15 +138,23 @@ function shModeClicked(i) {
 };
 
 function shDeviceClicked(i) {
+
   if (!wbdata.shDevice[i].isAutomatic) {
     if (wbdata.shDevice[i].isOn) {
       publish("0", "openWB/config/set/SmartHome/Device" + (+i + 1) + "/device_manual_control");
     } else {
       publish("1", "openWB/config/set/SmartHome/Device" + (+i + 1) + "/device_manual_control");
     }
-    d3.select("button#shbutton-" + i)
-      .classed("disabled", true)
+    d3.select("span#shbutton-" + i)
+      .attr("class", "fa fa-clock text-white pr-2")
+      ;
   }
+}
+
+function toggleGraphDisplay(i) {
+  console.log("toggle graph display");
+  const checkbox = d3.select("input#graphcheckbox-" + i)
+
 }
 
 var smartHomeList = new SmartHomeList();

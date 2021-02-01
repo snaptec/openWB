@@ -59,7 +59,7 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 		$('.etproviderName').text(mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
-		$('.etproviderLink').attr("href", "/openWB/modules/"+mqttpayload+"/stromtarifinfo/infopage.html");
+		$('.etproviderLink').attr("href", "/openWB/modules/"+mqttpayload+"/stromtarifinfo/infopage.php");
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
 		// sets icon, graph and price-info-field visible/invisible

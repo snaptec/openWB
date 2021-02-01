@@ -557,11 +557,9 @@ $numDevices = 9;
 		<script>
 			<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
 				function visibility_device_configuredDevices<?php echo $devicenum; ?>( data ){
-					// console.log("device_configuredDevices: data: "+data);
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_configuredDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
 					}
-					// console.log("device_configuredDevices: data: "+data);
 					if( data == 0 ){
 						hideSection('#device<?php echo $devicenum; ?>options');
 					} else {
@@ -570,21 +568,17 @@ $numDevices = 9;
 				}
 
 				function visibility_device_typeDevices<?php echo $devicenum; ?>( data ){
-					// console.log("device_typeDevices: data: "+data);
 					if( typeof data == 'undefined' ){
 						data = $('#device_typeDevices<?php echo $devicenum; ?>').val();
 					}
-					// console.log("device_typeDevices: data: "+data);
 					hideSection(".device<?php echo $devicenum; ?>-option");
 					showSection(".device<?php echo $devicenum; ?>-option-"+data);
 				}
 
 				function visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( data ){
-					// console.log("device_differentMeasurementDevices: data: "+data);
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_differentMeasurementDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
 					}
-					// console.log("device_differentMeasurementDevices: data: "+data);
 					if( data == 0 ){
 						hideSection('.device<?php echo $devicenum; ?>differentMeasurement');
 						showSection('.device<?php echo $devicenum; ?>noDifferentMeasurement');
@@ -595,21 +589,17 @@ $numDevices = 9;
 				}
 
 				function visibility_device_measureTypeDevices<?php echo $devicenum; ?>( data ){
-					// console.log("device_measureTypeDevices: data: "+data);
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_measureTypeDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
 					}
-					// console.log("device_measureTypeDevices: data: "+data);
 					hideSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option");
 					showSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-"+data);
 				}
 
 				function visibility_device_canSwitchDevices<?php echo $devicenum; ?>( data ){
-					// console.log("device_canSwitchDevices: data: "+data);
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_canSwitchDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
 					}
-					// console.log("device_canSwitchDevices: data: "+data);
 					if( data == 0 ){
 						hideSection('.device<?php echo $devicenum; ?>canSwitch');
 					} else {
@@ -618,11 +608,9 @@ $numDevices = 9;
 				}
 
 				function visibility_device_nameDevices<?php echo $devicenum; ?>( data ){
-					// console.log("device_nameDevices: data: "+data);
 					if( typeof data =='undefined' ){
 						data = $('#device_nameDevices<?php echo $devicenum; ?>').val();
 					}
-					// console.log("device_nameDevices: data: "+data);
 					if ( data != "Name" ) {
 						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+data+')');
 					} else {

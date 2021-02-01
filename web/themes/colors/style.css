@@ -109,11 +109,11 @@ input[type=range]::-webkit-slider-runnable-track {
 	}
 
 .text-green {
-	color: #006515;
+	color: #4db662;
 }
 
 .text-red {
-	color: #A30000;
+	color: #d12020;
 }
 
 .text-white {
@@ -269,7 +269,7 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 0.8rem;
+		font-size: 1.0rem;
 	}
 
 	.smallTextSize {
@@ -310,7 +310,7 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 0.6rem;
+		font-size: 1.2rem;
 	}
 
 	.smallTextSize {
@@ -437,34 +437,33 @@ h3 {
 	--d9Col: rgba(230, 50, 220, 0.7);
 	--d9bgCol: blue;
 	--color-bg: midnightblue;
-	--color-evu: firebrick;
-	--color-pv: goldenrod;
-	--color-house: grey;
-	--color-devices: cornflowerblue;
-	--color-charging: mediumseagreen;
-	--color-export: khaki;
+	--color-evu: #d62728;
+	--color-pv: #2ca02c;
+	--color-house: #7f7f7f;
+	--color-devices: #17becf;
+	--color-charging: #1f77b4;
+	--color-export: #bcbd22;
 	--color-axis: steelblue;
-	--color-battery: darkkhaki;
-	--color-lp1: mediumseagreen;
-	--color-lp2: lightseagreen;
-	--color-lp3: mediumspringgreen;
-	--color-lp4: mediumturquoise;
-	--color-lp5: darkseagreen;
-	--color-lp6: darkolivegreen;
-	--color-lp7: olive;
-	--color-lp8: palegreen;
-	--color-sh1: lightblue;
-	--color-sh2: deepskyblue;
-	--color-sh3: aqua;
-	--color-sh4: cadetblue;
-	--color-sh5: dodgerblue;
-	--color-sh6: lightsteelblue;
-	--color-sh7: skyblue;
-	--color-sh8: mediumslateblue;
-	--color-sh9: paleturquoise;
-	--color-co1: skyblue;
-	--color-co2: cadetblue;
-
+	--color-battery: #ff7f0e;
+	--color-lp1: #2f7ebc;
+	--color-lp2: #4b97c9;
+	--color-lp3: #6daed5;
+	--color-lp4: #93c3df;
+	--color-lp5: #b5d4e9;
+	--color-lp6: #cfe1f2;
+	--color-lp7: #e3eef9;
+	--color-lp8: #f7fbff;
+	--color-sh1: #b74304;
+	--color-sh2: #d85b0a;
+	--color-sh3: #ee7918;
+	--color-sh4: #fb992c;
+	--color-sh5: #feba4a;
+	--color-sh6: #fed676;
+	--color-sh7: #ff5e63;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
 }
 
 .openwb-devices {
