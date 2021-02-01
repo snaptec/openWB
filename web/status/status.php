@@ -353,7 +353,6 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
-								<tr>
 									<tr id="faultStrPvRow" class="hide">
 										<th scope="row">Störungsbeschreibung</th>
 										<td id="faultStrPv"></td>
@@ -562,7 +561,7 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101', disableMenuItem);
+			$("#nav-placeholder").load('themes/navbar.html?v=20210101', disableMenuItem);
 			function disableMenuItem() {
 				$('#navStatus').addClass('disabled');
 			}
