@@ -1732,6 +1732,10 @@ updateConfig(){
 	if ! grep -Fq "u1p3schaltparam=" $ConfigFile; then
 		echo "u1p3schaltparam=8" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_tesla_mfapasscode=" $ConfigFile; then
+		echo "soc_tesla_mfapasscode=XXX" >> $ConfigFile
+		echo "soc_teslalp2_mfapasscode=XXX" >> $ConfigFile
+	fi
 
 	echo "Config file Update done."
 }
