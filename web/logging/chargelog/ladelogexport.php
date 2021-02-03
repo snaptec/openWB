@@ -52,6 +52,7 @@
 						$files = glob($_SERVER['DOCUMENT_ROOT'] . "/openWB/web/logging/data/ladelog/*.csv");
 						foreach ($files as $current) {
 					?>
+					<hr>
 						<div class="row">
 							<label for="downloadBtn" class="col-6 col-form-label">
 								<?php 
@@ -63,7 +64,7 @@
 								?>
 							</label>
 							<div class="col-6 text-right">
-								<a class="btn downloadBtn btn-info" style="margin-bottom:12px" href=<?php echo $current ?> download><i class="fas fa-download"></i> Download</a>
+								<a class="btn downloadBtn btn-info" style="margin-bottom:12px" href=<?php echo preg_split('/\/var\/www\/html\/openWB\/web\//', $current)[1]; ?> download><i class="fas fa-download"></i> Download</a>
 							</div>
 						</div>
 					<?php } ?>
