@@ -111,7 +111,7 @@ if (int(soccalc) == 0):
 		f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
 	f.write(str(soc))
 	f.close()
-else
+else:
 	#manual calculation  enabled, using new logic with timestamp
 	if (int(chargepoint) == 1):
 		f = open('/var/www/html/openWB/ramdisk/peugeotsoc', 'w')
