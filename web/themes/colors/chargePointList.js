@@ -154,10 +154,6 @@ function socButtonClicked(i) {
     .classed("fa-spin", true)
 }
 
-function socButtonClicked(i) {
-  publish("1", "openWB/set/lp/" + (+i + 1) + "/ForceSoCUpdate");
-  d3.select("i#soclabel-" + i)
-    .classed("fa-spin", true)
-}
+
 
 var chargePointList = new ChargePointList();

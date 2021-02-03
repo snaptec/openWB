@@ -32,7 +32,7 @@ class WbData {
 		this.sourceSummary = {
 			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "Speicher out", power: 0, energy: 0, color: "white" }
+			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" }
 
 		};
 		this.usageSummary = [
@@ -49,7 +49,7 @@ class WbData {
 		var style = getComputedStyle(document.body);
 		this.sourceSummary.pv.color = style.getPropertyValue('--color-pv');
 		this.sourceSummary.evuIn.color = style.getPropertyValue('--color-evu');
-		this.sourceSummary.batIn.color = style.getPropertyValue('--color-battery');
+		this.sourceSummary.batOut.color = style.getPropertyValue('--color-battery');
 		this.usageSummary[0].color = style.getPropertyValue('--color-export');
 		this.usageSummary[1].color = style.getPropertyValue('--color-charging');
 		this.usageSummary[2].color = style.getPropertyValue('--color-devices');
@@ -185,18 +185,23 @@ class WbData {
 	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
-			case 'batteryPowerImport': this.usageSummary[3].power = value;
+			case 'batteryPowerImport': 
+				this.usageSummary[3].power = value;
 				powerMeter.update();
 				break;
-			case 'batteryPowerExport': this.updateSourceSummary("batIn", "power", value);
+			case 'batteryPowerExport': 
+				this.updateSourceSummary("batOut", "power", value);
 				powerMeter.update();
 				break;
-			case 'batteryEnergyExport': this.usageSummary[3].energy = value;
+			case 'batteryEnergyImport': 
+				this.usageSummary[3].energy = value;
 				yieldMeter.update();
 				break;
-			case 'batteryEnergyImport': this.updateSourceSummary("batIn", "energy", value);
+			case 'batteryEnergyExport': 
+				this.updateSourceSummary("batOut", "energy", value);
 				yieldMeter.update();
 				break;
+			
 			default:
 				break;
 		}
