@@ -108,9 +108,9 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 			sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret $soccalc
 			dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file mofified date in epoch
 			diff=$(($dateofSoc - $(<$peugeotSocTime)))
-			socLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
-			socLog "Time of fetched SoC: $(date -d @$(<$peugeotSocTime) +'%F %T')"
-			socLog "Fetched SoC time difference is $diff s"
+			socDebugLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
+			socDebugLog "Time of fetched SoC: $(date -d @$(<$peugeotSocTime) +'%F %T')"
+			socDebugLog "Fetched SoC time difference is $diff s"
 			
 			# if fetched SoC is newer than manualSoC
 			if (( $diff < 0 )); then
