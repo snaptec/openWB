@@ -52,7 +52,7 @@ class PowerMeter {
 
     this.addLabel(svg, 0, -this.height / 2 * 3 / 5, "middle", wbdata.sourceSummary.pv); // PV
     this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.sourceSummary.evuIn); // Netz
-    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.sourceSummary.batIn); // Speicher Out
+    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.sourceSummary.batOut); // Speicher Out
     this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.usageSummary[0]);  // Export
     this.addLabel(svg, 0, this.height / 2 * 1 / 5, "middle", wbdata.usageSummary[1]); // Laden
     this.addLabel(svg, 0, this.height / 2 * 3 / 5, "middle", wbdata.usageSummary[2]); // Geräte

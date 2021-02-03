@@ -563,10 +563,12 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 
 	if (mqttmsg == 'openWB/housebattery/W') {
 		var speicherwatt = makeInt(mqttpayload);
-		if (speicherwatt > 0) {
+		if (speicherwatt >= 0) {
 			wbdata.updateBat("batteryPowerImport", speicherwatt);
+			wbdata.updateBat("batteryPowerExport", 0);
 		} else if (speicherwatt < 0) {
 			wbdata.updateBat("batteryPowerExport", -speicherwatt);
+			wbdata.updateBat("batteryPowerImport", 0);
 		}
 	}
 	else if (mqttmsg == 'openWB/housebattery/%Soc') {

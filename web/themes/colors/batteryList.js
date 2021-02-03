@@ -32,7 +32,7 @@ class BatteryList {
 
       const row = table.append("tbody")
         .append("tr")
-        .style("color", wbdata.sourceSummary.batIn.color)
+        .style("color", wbdata.sourceSummary.batOut.color)
         .style("text-align", "center");
 
       // current power
@@ -49,13 +49,13 @@ class BatteryList {
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
         .attr("style", "vertical-align: middle;")
-        .text(formatWattH(wbdata.batteryEnergyImport));
+        .text(formatWattH(wbdata.batteryEnergyImport*1000));
 
       // Daily Export
       row.append("td")
         .attr("class", "tablecell py-1 px-1")
         .attr("style", "vertical-align: middle;")
-        .text(formatWattH(wbdata.batteryEnergyExport));
+        .text(formatWattH(wbdata.batteryEnergyExport*1000));
 
       // SoC
       row.append("td")
