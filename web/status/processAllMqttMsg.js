@@ -445,7 +445,7 @@ function visibilityCard(card, mqttpayload) {
 			lpGesCardShown = true;
 		} else if ( card.match(/^[#]inverter[1-2]$/i) ) {
 			pvGesCardShown |= card.split(/^[#]inverter/)[1];
-			if (pvGesCardShown == 3)
+			if (pvGesCardShown > 0)
 			{
 				showSection('#pvGes');
 			}
