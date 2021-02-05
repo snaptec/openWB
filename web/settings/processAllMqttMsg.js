@@ -45,6 +45,7 @@ function processMessages(mqttmsg, mqttpayload) {
         var elementId = topicIdentifier;
     }
     // Could be a main on / off switch, check visibility func on main settings page
+    console.log(elementId, mqttpayload);
     visibiltycheck(elementId, mqttpayload);
     var element = $('#' + elementId);
     if ( element.attr('type') == 'number' || element.attr('type') == 'text' || element.attr('type') == 'password' || element.attr('type') == 'range' ) {

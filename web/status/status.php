@@ -626,9 +626,9 @@
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'status/processAllMqttMsg.js?ver=20210128',
+					'status/processAllMqttMsg.js?ver=20210205',
 					// functions performing mqtt and start mqtt-service
-					'status/setupMqttServices.js?ver=20210128',
+					'status/setupMqttServices.js?ver=20210205',
 				];
 				scriptsToLoad.forEach(function(src) {
 					var script = document.createElement('script');
