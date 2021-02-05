@@ -209,6 +209,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/smarthome_device_manual_7
 	echo 0 > $RamdiskPath/smarthome_device_manual_8
 	echo 0 > $RamdiskPath/smarthome_device_manual_9
+	echo 0 > $RamdiskPath/smarthomehandlermaxbatterypower
+	echo 0 > $RamdiskPath/smarthomehandlerloglevel
 
 	# evu
 	echo 0 > $RamdiskPath/bezuga1

@@ -143,7 +143,7 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_name", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            validDeviceTypes = ['shelly','tasmota','acthor','elwa','idm','stiebel','http','avm','pyt'] # 'pyt' is deprecated and will be removed!
+            validDeviceTypes = ['shelly','tasmota','acthor','elwa','idm','stiebel','http','avm','mystrom','pyt'] # 'pyt' is deprecated and will be removed!
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                 try:
                     # just check vor payload in list, deviceTypeIndex is not used
@@ -155,9 +155,14 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
+            validDeviceMeasureTypes = ['shelly','http','mystrom'] # 'pyt' is deprecated and will be removed!
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
-                if ( msg.payload.decode("utf-8") == "http" or msg.payload.decode("utf-8") == "shelly" or msg.payload.decode("utf-8") == "sdm630"):
-                    writetoconfig(shconfigfile,'smarthomedevices','device_measureType_'+str(devicenumb), msg.payload.decode("utf-8"))
+                try:
+                    deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))
+                except ValueError:
+                    pass
+                else:
+                    writetoconfig(shconfigfile,'smarthomedevices','device_type_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureType", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_temperatur_configured" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
@@ -263,6 +268,12 @@ def on_message(client, userdata, msg):
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
                 writetoconfig(shconfigfile,'smarthomedevices','device_actor_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_actor", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (msg.topic == "openWB/config/set/SmartHome/maxBatteryPower"):
+            if (0 <= int(msg.payload) <= 10000):
+                f = open('/var/www/html/openWB/ramdisk/smarthomehandlermaxbatterypower', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+                client.publish("openWB/config/get/SmartHome/maxBatteryPower", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
             if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                 f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')
