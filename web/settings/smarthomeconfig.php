@@ -105,8 +105,9 @@ $numDevices = 9;
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
-											<option value="http" data-option="http">Http (in Entwicklung)</option>
-											<option value="avm" data-option="avm">AVM (in Entwicklung)</option>
+											<option value="http" data-option="http">Http</option>
+											<option value="avm" data-option="avm">AVM</option>
+											<option value="mystrom" data-option="mystrom">MyStrom (in Entwicklung)</option>
 											<option value="pyt" data-option="pyt">Pyt (veraltet, bitte andere Option wählen)</option>
 										</select>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
@@ -138,17 +139,19 @@ $numDevices = 9;
 											Wenn die Ausbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 3 auf Betriebszustand 2 geschaltet.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
-											Mit diesem Typ werden alle Geräte unterstützt, welche sich durch einfache Http-Aufrufe schalten lassen.<br>
-											<span class="text-danger">Das Modul befindet sich noch in der Entwicklung und kann nicht genutzt werden!</span>
+											Mit diesem Typ werden alle Geräte unterstützt, welche sich durch einfache Http-Aufrufe schalten lassen.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-avm hide">
-											Mit diesem Typ werden SmartHome Geräte von AVM unterstützt, welche über eine Fritz!Box verbunden sind.<br>
+											Mit diesem Typ werden SmartHome Geräte von AVM unterstützt, welche über eine Fritz!Box verbunden sind.
+										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mystrom hide">
+											Mit diesem Typ werden SmartHome Geräte des Herstellers MyStrom unterstützt.<br>
 											<span class="text-danger">Das Modul befindet sich noch in der Entwicklung und wurde nicht ausgiebig getestet!</span>
 										</span>
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -399,20 +402,15 @@ $numDevices = 9;
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Gerätetyp</label>
 									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" id="device_measureTypeDevices<?php echo $devicenum; ?>" name="device_measureType" data-toggle="buttons" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-											<label class="btn btn-outline-info">
-												<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly" value="shelly" checked="checked">Shelly
-											</label>
-											<label class="btn btn-outline-info btn-toggle">
-												<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>SDM630" data-option="sdm630" value="sdm630"> SDM630
-											</label>
-											<label class="btn btn-outline-info">
-												<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http" value="http">Http
-											</label>
-										</div>
+										<select class="form-control" name="device_measureType" id="device_measureTypeDevices<?php echo $devicenum; ?>" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<option value ="" data-option="" disabled="disabled" selected="selected">-- Bitte auswählen --</option>
+											<option value="shelly" data-option="shelly">Shelly</option>
+											<option value="http" data-option="http">Http</option>
+											<option value="mystrom" data-option="mystrom">MyStrom (in Entwicklung)</option>
+										</select>
 									</div>
 								</div>
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-mystrom hide">
 									<label for="device_measureipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -440,6 +438,17 @@ $numDevices = 9;
 						Übergreifende Einstellungen
 					</div>
 					<div class="card-body">
+						<div  class="device-option-housebattery hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="maxBatteryPower" class="col-md-4 col-form-label">maximale Speicherleistung in W</label>
+									<div class="col">
+										<input id="maxBatteryPower" name="maxBatteryPower" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
+									</div>
+								</div>
+							</div>
+							<hr>
+						</div>
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<label for="logLevel" class="col-md-4 col-form-label">SmartHome Loglevel</label>
@@ -546,7 +555,7 @@ $numDevices = 9;
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20210104" ></script>
+		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20210205" ></script>
 		<!-- load helper functions -->
 		<script src = "settings/helperFunctions.js?ver=20210104" ></script>
 		<!-- load service -->
@@ -590,7 +599,7 @@ $numDevices = 9;
 
 				function visibility_device_measureTypeDevices<?php echo $devicenum; ?>( data ){
 					if( typeof data == 'undefined' ){
-						data = $('input[name=device_measureTypeDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+						data = $('#device_measureTypeDevices<?php echo $devicenum; ?>').val();
 					}
 					hideSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option");
 					showSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-"+data);
