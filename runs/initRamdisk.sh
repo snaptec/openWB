@@ -255,7 +255,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/pvkwhk
 	echo 0 > $RamdiskPath/pvkwhk1
 	echo 0 > $RamdiskPath/pvkwhk2
-	echo 0 > $RamdiskPath/pvvorhanden
+	echo 0 > $RamdiskPath/pv1vorhanden
+	echo 0 > $RamdiskPath/pv2vorhanden
 	echo 0 > $RamdiskPath/pvwatt
 	echo 0 > $RamdiskPath/pvwatt1
 	echo 0 > $RamdiskPath/pvwatt2
@@ -287,7 +288,8 @@ initRamdisk(){
 	echo -1 > $RamdiskPath/mqttlastladestatus
 	echo -1 > $RamdiskPath/mqttlastplugstat
 	echo -1 > $RamdiskPath/mqttlastplugstats1
-	echo -1 > $RamdiskPath/mqttpvvorhanden
+	echo -1 > $RamdiskPath/mqttpv1vorhanden
+	echo -1 > $RamdiskPath/mqttpv2vorhanden
 	echo -1 > $RamdiskPath/mqttetprovidermaxprice
 	echo -1 > $RamdiskPath/mqttetproviderprice
 	echo -1 > $RamdiskPath/mqttlademkwhs1

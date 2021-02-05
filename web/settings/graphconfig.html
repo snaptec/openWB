@@ -383,7 +383,7 @@
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_graphconfig.js?ver=20200415-a" ></script>
+		<script src = "settings/topicsToSubscribe_graphconfig.js?ver=20210205-a" ></script>
 		<!-- load helper functions -->
 		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<!-- load service -->
@@ -402,13 +402,18 @@
 				}
 			);
 
+			var pvOpt = 0;
 			function visibiltycheck(elementId, mqttpayload) {
 				// PV
-				if ( elementId == "boolPVConfigured") {
-					if ( mqttpayload == 0 ) {
-						hideSection('.pvoptions');
-					} else {
+				if ( ( elementId == "boolPVConfiguredPv1") || ( elementId == "boolPVConfiguredPv2") ) {
+					if ( mqttpayload == 1 ) {
+						pvOpt |= 1;
+					}
+
+					if ( pvOpt > 0 ) {
 						showSection('.pvoptions');
+					} else {
+						hideSection('.pvoptions')
 					}
 				}
 				// House Battery
