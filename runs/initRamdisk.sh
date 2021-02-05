@@ -580,5 +580,12 @@ initRamdisk(){
 
 	sudo chmod 777 $RamdiskPath/*
 
+	# read values from mosquitto and store them to ramdisk for smarthomehandler.py
+  ra='^-?[0-9]+$'
+  importtemp=$(timeout 4 mosquitto_sub -t openWB/config/get/SmartHome/maxBatteryPower)
+	if ! [[ $importtemp =~ $ra ]] ; then
+		importtemp="0"
+  fi
+  echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 	echo "Ramdisk init done."
 }
