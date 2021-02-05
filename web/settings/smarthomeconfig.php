@@ -406,6 +406,7 @@ $numDevices = 9;
 											<option value ="" data-option="" disabled="disabled" selected="selected">-- Bitte auswählen --</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
 											<option value="http" data-option="http">Http</option>
+											<option value="sdm630" data-option="sdm630">SDM630</option>
 											<option value="mystrom" data-option="mystrom">MyStrom (in Entwicklung)</option>
 										</select>
 									</div>
