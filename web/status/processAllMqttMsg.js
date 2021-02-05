@@ -124,38 +124,38 @@ function processEvuMsg (mqttmsg, mqttpayload) {
 }
 
 function processPvMsg (mqttmsg, mqttpayload) {
-	if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/.*$/i) )
+	if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/.*$/i) )
 	{
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/W$/i) )
+		if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/W$/i) )
 		{
 			absShow(mqttpayload, '#inverter' + index + ' .powerInverter');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/WhCounter$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/WhCounter$/i) )
 		{
 			directShow(mqttpayload, '#inverter' + index + ' .yieldInverter');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/DailyYieldKwh$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/DailyYieldKwh$/i) )
 		{
 			directShow(mqttpayload, '#inverter' + index + ' .dYieldInverter');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/MonthlyYieldKwh$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/MonthlyYieldKwh$/i) )
 		{
 			directShow(mqttpayload, '#inverter' + index + ' .mYieldInverter');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/YearlyYieldKwh$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/YearlyYieldKwh$/i) )
 		{
 			directShow(mqttpayload, '#inverter' + index + ' .yYieldInverter');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/faultState$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/faultState$/i) )
 		{
 			setWarningLevel(mqttpayload, '#inverter' + index + ' .faultStrPvRow');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/faultStr$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/faultStr$/i) )
 		{
 			textShow(mqttpayload, '#inverter' + index + ' .faultStrPv');
 		}
-		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]*\/boolPVConfigured$/i) )
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/boolPVConfigured$/i) )
 		{
 			visibilityCard('#inverter' + index, mqttpayload);
 		}
