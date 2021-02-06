@@ -317,6 +317,16 @@ class PowerGraph {
     if (wbdata.chargePoint[0].isSocConfigured) {
       svg.append("path")
         .datum(this.graphData)
+        .attr("stroke", this.bgcolor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
+        //.style("stroke-dasharray", ("3, 3"))
+        .attr("d", d3.line()
+          .x((d, i) => xScale(this.graphData[i].date))
+          .y(d => yScale(d.soc1))
+        );
+      svg.append("path")
+        .datum(this.graphData)
         .attr("stroke", this.lp1color)
         .attr("stroke-width", 1)
         .attr("fill", "none")
@@ -338,6 +348,16 @@ class PowerGraph {
     if (wbdata.chargePoint[1].isSocConfigured) {
       svg.append("path")
         .datum(this.graphData)
+        .attr("stroke", this.bgcolor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
+       // .style("stroke-dasharray", ("3, 3"))
+        .attr("d", d3.line()
+          .x((d, i) => xScale(this.graphData[i].date))
+          .y(d => yScale(d.soc2))
+        );
+        svg.append("path")
+        .datum(this.graphData)
         .attr("stroke", this.lp2color)
         .attr("stroke-width", 1)
         .attr("fill", "none")
@@ -357,6 +377,16 @@ class PowerGraph {
 
     // Battery
     if (wbdata.isBatteryConfigured) {
+      svg.append("path")
+        .datum(this.graphData)
+        .attr("stroke", this.bgcolor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
+        //.style("stroke-dasharray", ("3, 3"))
+        .attr("d", d3.line()
+          .x((d, i) => xScale(this.graphData[i].date))
+          .y(d => yScale(d.batterySoc))
+        );
       svg.append("path")
         .datum(this.graphData)
         .attr("stroke", this.batteryColor)

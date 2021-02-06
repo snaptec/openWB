@@ -482,7 +482,10 @@ th {
 .table-borderless td {
 	border: 0;
 }
+.popup-header {
+	color: midnightblue;
 
+}
 /* Colors for the charts */
 
 
