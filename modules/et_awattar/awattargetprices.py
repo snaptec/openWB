@@ -182,7 +182,7 @@ now = datetime.now(timezone.utc)  # timezone-aware datetime-object
 now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
 preisliste = []
 for price_data in sorted_marketprices:
-    startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt in UTC mit Millisekunden, die nicht benötigt werden
+    startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt in UTC mit Millisekunden, UNIX ist ohne
     startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # timezone-aware, hier UTC benutzen
     if (startzeit_utc >= now_full_hour):
         if (landeskennung == 'de'):

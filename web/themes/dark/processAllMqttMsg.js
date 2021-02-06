@@ -79,13 +79,16 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 		// read etprovider values and trigger graph creation
 		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
-		var csvaData = [];
-		var rawacsv = mqttpayload.split(/\r?\n|\r/);
-		for (var i = 0; i < rawacsv.length; i++) {
-			csvaData.push(rawacsv[i].split(','));
+		var csvData = [];
+		var rawcsv = mqttpayload.split(/\r?\n|\r/);
+		for (var i = 0; i < rawcsv.length; i++) {
+			csvData.push(rawcsv[i].split(','));
 		}
-		electricityPriceTimeline = getCol(csvaData, 0);
-		electricityPriceChartline = getCol(csvaData, 1);
+		// Timeline (x-Achse) ist UNIX Timestamp in UTC, deshalb Umrechnung (*1000) in Javascript-Timestamp (mit Millisekunden)
+		electricityPriceTimeline = getCol(csvData, 0).map(function(x) { return x * 1000; });
+		// Chartline (y-Achse) ist Preis in ct/kWh
+		electricityPriceChartline = getCol(csvData, 1);
+
 		loadElectricityPriceChart();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
