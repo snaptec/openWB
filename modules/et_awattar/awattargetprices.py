@@ -23,7 +23,7 @@ import os
 import sys
 import json
 from time import sleep
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import requests
 
 laenderdaten = {
@@ -61,13 +61,15 @@ def exit_on_invalid_price_data(error):
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
         etprovider_pricefile.write('99.99\n')
-        current_hour = datetime.now().hour
-        for hour in range(current_hour, current_hour+12):
-            if hour > 23:
-                etprovider_graphlistfile.write('%i,99.99\n' % (hour-24))
-            else:
-                etprovider_graphlistfile.write('%i,99.99\n' % hour)
+        now = datetime.now(timezone.utc)  # timezone-aware datetime-object
+        timestamp = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
+        for i in range(12):
+            etprovider_graphlistfile.write('%d, 99.99\n' % timestamp.timestamp())
+            timestamp = timestamp + timedelta(hours=1)
     write_log_entry(error + ', setze Preis auf 99.99ct/kWh.')
+    #publish MQTT-Daten für Preis und Graph
+    os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
+    os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
     exit()
 
 def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=None):
@@ -180,10 +182,13 @@ sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
 now = datetime.now(timezone.utc)  # timezone-aware datetime-object
 now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
 preisliste = []
+preise_ok = False
 for price_data in sorted_marketprices:
     startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt in UTC mit Millisekunden, UNIX ist ohne
     startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # timezone-aware, hier UTC benutzen
     if (startzeit_utc >= now_full_hour):
+        if (startzeit_utc == now_full_hour):
+            preise_ok = True
         if (landeskennung == 'de'):
             # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
             bruttopreis = (price_data['marketprice']/10 * laenderdaten[landeskennung]['umsatzsteuer']) + laenderdaten[landeskennung]['awattargebuehr'] + basispreis
@@ -193,16 +198,19 @@ for price_data in sorted_marketprices:
             bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
         preisliste.append({str('%d' % startzeit_utc.replace(tzinfo=timezone.utc).timestamp()) : bruttopreis_str})
 
-# Preisliste liegt jetzt vor in UTC und ct/kWh, sortiert nach Zeit
-with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
-     open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
-    # Preisliste durchlaufen und in ramdisk
-    for index, preise in enumerate(preisliste):
-        for startzeit, preis in preise.items():
-            etprovider_graphlistfile.write('%s, %s\n' % (startzeit, preis))
-            if (index == 0):
-                # erster Eintrag ist aktueller Preis
-                etprovider_pricefile.write('%s\n' % preis)
+if (preise_ok):
+    # Preisliste liegt jetzt vor in UTC und ct/kWh, sortiert nach Zeit
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
+         open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
+        # Preisliste durchlaufen und in ramdisk
+        for index, preise in enumerate(preisliste):
+            for startzeit, preis in preise.items():
+                etprovider_graphlistfile.write('%s, %s\n' % (startzeit, preis))
+                if (index == 0):
+                    # erster Eintrag ist aktueller Preis
+                    etprovider_pricefile.write('%s\n' % preis)
+else:
+    exit_on_invalid_price_data('Preisliste unvollständig')
 
 #publish MQTT-Daten für Preis und Graph
 os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
