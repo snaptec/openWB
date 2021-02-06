@@ -29,7 +29,7 @@ import requests
 laenderdaten = {
     'at': {
         'url': 'https://api.awattar.at/v1/marketdata',
-        # Berechnung für Österreich nicht möglich da wesentlich komplexer.
+        # Berechnung Brutto-Arbeitspreis für Österreich nicht möglich, da wesentlich komplexer.
         # Antwort aWATTar:
         # In Österreich werden Netzentgelte/Abgaben ganz anderes behandelt und sind im Unterschied zu Deutschland
         # auch nicht Teil des Vertrages mit aWATTar. In Österreich haben wir keine Möglichkeit, die Netzentgelte
@@ -133,6 +133,7 @@ def readAPI(url):
     return response
 
 def utc_to_local(utc_dt):
+    # converts datetime-object from utc to local timezone
     return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 # Hauptprogramm
@@ -176,14 +177,13 @@ except:
 # Liste sortiert nach Zeitstempel
 sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
 
-# erst einmal alle Zeiten in UTC verarbeiten
-now = datetime.now(timezone.utc)  # timezone-aware, hier UTC benutzen
+# alle Zeiten in UTC verarbeiten
+now = datetime.now(timezone.utc)  # timezone-aware datetime-object
 now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
 preisliste = []
 for price_data in sorted_marketprices:
     startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt in UTC mit Millisekunden, die nicht benötigt werden
     startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # timezone-aware, hier UTC benutzen
-    #startzeit = utc_to_local(startzeit_utc)
     if (startzeit_utc >= now_full_hour):
         if (landeskennung == 'de'):
             # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
