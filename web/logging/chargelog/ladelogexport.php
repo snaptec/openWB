@@ -43,15 +43,38 @@
 
 			<h1>Ladelog Export</h1>
 
-			<?php
-				$files = glob($_SERVER['DOCUMENT_ROOT'] . "/openWB/web/logging/data/ladelog/*.csv");
-				echo '<ul>'.implode('', array_map('sprintf', array_fill(0, count($files), '<li><a href="%s">%s</a></li>'), $files, $files)).'</ul>';
-			?>
+			<div class="card border-secondary">
+				<div class="card-header bg-secondary">
+					Aufgezeichnete Logdateien
+				</div>
+				<div class="card-body">
+					<?php
+						$files = glob($_SERVER['DOCUMENT_ROOT'] . "/openWB/web/logging/data/ladelog/*.csv");
+						foreach ($files as $current) {
+					?>
+					<hr>
+						<div class="row">
+							<label for="downloadBtn" class="col-6 col-form-label">
+								<?php 
+									preg_match('/\/var\/www\/html\/openWB\/web\/logging\/data\/ladelog\/([0-9]{4})([0-9]{2})\.csv/',$current,$m); 
+									$month = $m[2];
+									setlocale(LC_TIME, "de_DE.UTF-8");
+									$month_name = strftime('%B', mktime(0, 0, 0, $month));
+									echo $month_name, " ", $m[1];
+								?>
+							</label>
+							<div class="col-6 text-right">
+								<a class="btn downloadBtn btn-info" style="margin-bottom:12px" href=<?php echo preg_split('/\/var\/www\/html\/openWB\/web\//', $current)[1]; ?> download><i class="fas fa-download"></i> Download</a>
+							</div>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
 		</div>
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Ladelog Export</small>
+				<small>Sie befinden sich hier: <a href="logging/chargelog/ladelog.php">Ladelog</a> - Ladelog Exprt</small>
 			</div>
 		</footer>
 

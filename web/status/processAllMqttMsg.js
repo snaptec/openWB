@@ -124,46 +124,67 @@ function processEvuMsg (mqttmsg, mqttpayload) {
 }
 
 function processPvMsg (mqttmsg, mqttpayload) {
-	switch(mqttmsg){
-		case "openWB/pv/boolPVConfigured":
-			visibilityCard('#pvGes', mqttpayload);
-			visibilityCard('#inverter1', mqttpayload);
-			visibilityCard('#inverter2', mqttpayload);
-			break;
-		case "openWB/pv/CounterTillStartPvCharging":
-			directShow(mqttpayload, '#pvcounterdiv');
-			break;
-		case "openWB/pv/W":
-			absShow(mqttpayload, '#pvwattdiv');
-			break;
-		case "openWB/pv/WhCounter":
-			kShow(mqttpayload, '#pvkwhdiv');
-			//noZeroShow($('#pvkwhdiv').text(), '#pvkwhdiv');
-			break;
-		case "openWB/pv/DailyYieldKwh":
-			fractionDigitsShow(mqttpayload, '#daily_pvkwhdiv');
-			//noZeroShow($('#daily_pvkwhdiv').text(), '#daily_pvkwhdiv');
-			break;
-		case "openWB/pv/MonthlyYieldKwh":
-			fractionDigitsShow(mqttpayload, '#monthly_pvkwhdiv');
-			//noZeroShow($('#monthly_pvkwhdiv').text(), '#monthly_pvkwhdiv');
-			break;
-		case "openWB/pv/YearlyYieldKwh":
-			fractionDigitsShow(mqttpayload, '#yearly_pvkwhdiv');
-			//noZeroShow($('#yearly_pvkwhdiv').text(), '#yearly_pvkwhdiv');
-			break;
-		case "openWB/pv/Modul1W":
-			absShow(mqttpayload, '#inverter1 .pvwattdiv');
-			break;
-		case "openWB/pv/Modul2W":
-			absShow(mqttpayload, '#inverter2 .pvwattdiv');
-			break;
-		case "openWB/pv/1/faultState":
-			setWarningLevel(mqttpayload, '#faultStrPvRow');
-			break;
-		case "openWB/pv/1/faultStr":
-			textShow(mqttpayload, '#faultStrPv');
-			break;
+	if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/.*$/i) )
+	{
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/W$/i) )
+		{
+			absShow(mqttpayload, '#inverter' + index + ' .powerInverter');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/WhCounter$/i) )
+		{
+			directShow(mqttpayload, '#inverter' + index + ' .yieldInverter');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/DailyYieldKwh$/i) )
+		{
+			directShow(mqttpayload, '#inverter' + index + ' .dYieldInverter');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/MonthlyYieldKwh$/i) )
+		{
+			directShow(mqttpayload, '#inverter' + index + ' .mYieldInverter');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/YearlyYieldKwh$/i) )
+		{
+			directShow(mqttpayload, '#inverter' + index + ' .yYieldInverter');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/faultState$/i) )
+		{
+			setWarningLevel(mqttpayload, '#inverter' + index + ' .faultStrPvRow');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/faultStr$/i) )
+		{
+			textShow(mqttpayload, '#inverter' + index + ' .faultStrPv');
+		}
+		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/boolPVConfigured$/i) )
+		{
+			visibilityCard('#inverter' + index, mqttpayload);
+		}
+	}
+	else {
+		switch(mqttmsg){
+			case "openWB/pv/CounterTillStartPvCharging":
+				directShow(mqttpayload, '#pvcounterdiv');
+				break;
+			case "openWB/pv/W":
+				absShow(mqttpayload, '#pvwattdiv');
+				break;
+			case "openWB/pv/WhCounter":
+				kShow(mqttpayload, '#pvkwhdiv');
+				//noZeroShow($('#pvkwhdiv').text(), '#pvkwhdiv');
+				break;
+			case "openWB/pv/DailyYieldKwh":
+				fractionDigitsShow(mqttpayload, '#daily_pvkwhdiv');
+				//noZeroShow($('#daily_pvkwhdiv').text(), '#daily_pvkwhdiv');
+				break;
+			case "openWB/pv/MonthlyYieldKwh":
+				fractionDigitsShow(mqttpayload, '#monthly_pvkwhdiv');
+				//noZeroShow($('#monthly_pvkwhdiv').text(), '#monthly_pvkwhdiv');
+				break;
+			case "openWB/pv/YearlyYieldKwh":
+				fractionDigitsShow(mqttpayload, '#yearly_pvkwhdiv');
+				//noZeroShow($('#yearly_pvkwhdiv').text(), '#yearly_pvkwhdiv');
+				break;
+		}
 	}
 }
 
@@ -410,6 +431,7 @@ function visibilityRow(row, var1, var2, var3) {
 }
 
 var lpGesCardShown = false; // flag, show lpGes-Card if any other cp than cp1 is configured
+var pvGesCardShown = 0;
 
 //show/hide card, if module is configured
 function visibilityCard(card, mqttpayload) {
@@ -421,6 +443,12 @@ function visibilityCard(card, mqttpayload) {
 		if ( (card.match( /^[#]lp[2-8]$/i)) && lpGesCardShown == false ) {
 			showSection('#lpges');
 			lpGesCardShown = true;
+		} else if ( card.match(/^[#]inverter[1-2]$/i) ) {
+			pvGesCardShown |= card.split(/^[#]inverter/)[1];
+			if (pvGesCardShown == 3)
+			{
+				showSection('#pvGes');
+			}
 		}
 	}
 }
