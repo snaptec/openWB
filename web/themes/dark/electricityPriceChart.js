@@ -8,8 +8,6 @@ function createPriceAnnotations(){
 		// initially set to index found
 		xMin = 0;
 		xMax = 0;
-		yMin = Math.floor(Math.min(...electricityPriceChartline));
-		yMax = Math.ceil(Math.max(...electricityPriceChartline));
 		borderColor = 'rgba(73, 238, 73, 0.3)';
 		borderWidth = 2;
 		backgroundColor = 'rgba(73, 238, 73, 0.3)';
@@ -37,15 +35,11 @@ function createPriceAnnotations(){
 	return annotations;
 }
 
-function formatTimeLabels(chart) {
-
-}
-
 function loadElectricityPriceChart() {
 	var electricityPriceChartData = {
 		labels: electricityPriceTimeline,
 		datasets: [{
-			yAxisID: 'y-axis-left',
+			//yAxisID: 'y-axis-left',
 			data: electricityPriceChartline,
 			borderColor: evuCol,  // from liveChart
 			backgroundColor: "rgba(0, 0, 255, 0.7)",
@@ -55,14 +49,27 @@ function loadElectricityPriceChart() {
 		}]
 	}
 	var ctxElectricityPricechart = $('#electricityPriceChartCanvas')[0].getContext('2d');
-	var priceAnnotations = createPriceAnnotations();
-
 
 	window.electricityPricechart = new Chart.Line(ctxElectricityPricechart, {
 		data: electricityPriceChartData,
 		options: {
 			tooltips: {
-				enabled: true
+				enabled: true,
+				callbacks: {
+                    label: function(tooltipItem, data) {
+						let i = tooltipItem.index;
+                        return data.datasets[0].data[i] + ' ct/kWh';
+                    },
+					title: function(tooltipItem, data) {
+						let i = tooltipItem[0].index;
+						let title = 'jetzt';
+						if ( i > 0 ) {
+							let ticks = this._data.datasets[0]._meta[0].data[0]._chart.scales["x-axis-0"].ticks;
+							title =  'ab ' + ticks[i];
+						}
+                        return title;
+                    }
+                }
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -79,23 +86,16 @@ function loadElectricityPriceChart() {
 			},
 			scales: {
 				xAxes: [{
-					type: 'time',
-      				time: {
-				        unit: 'hour',
-				        unitStepSize: 1,
-				        displayFormats: {
-           					hour: "HH"
-						}
-        			},
 					gridLines: {
 						color: xgridCol  // from liveChart
 					},
 					ticks: {
 						fontColor: tickCol,  // from liveChart
-						callback: function(value, index, values) {
-							var tick = value + ' Uhr';
-							var tickDate = new Date(values[index].value);
-							var theDate = new Date();
+						callback: function(value, index) {
+							var tickDate = new Date(value);
+							console.log(value);
+							var theDate = new Date();  // now
+							var tick = tickDate.getHours() + ' Uhr';
 							if ( tickDate.getYear() == theDate.getYear() && tickDate.getMonth() == theDate.getMonth() && tickDate.getDate() == theDate.getDate() ) {
 								tick = 'heute ' + tick;
 							} else {
@@ -111,7 +111,7 @@ function loadElectricityPriceChart() {
 					}
 				}],
 				yAxes: [{
-					// values price
+					// values = price
 					position: 'left',
 					id: 'y-axis-left',
 					type: 'linear',
@@ -122,7 +122,8 @@ function loadElectricityPriceChart() {
 						fontColor: fontCol  // from liveChart
 					},
 					gridLines: {
-						color: gridCol  // from liveChart
+						color: gridCol,  // from liveChart
+						zeroLineColor: gridCol
 					},
 					ticks: {
 						fontColor: tickCol,  // from liveChart
@@ -131,7 +132,7 @@ function loadElectricityPriceChart() {
 				}]
 			},
 			annotation: {
-		        annotations: priceAnnotations,
+		        annotations: createPriceAnnotations(),
 		        drawTime: "beforeDatasetsDraw" // (default)
 		    }
 		}
