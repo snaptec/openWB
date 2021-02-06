@@ -9,12 +9,12 @@ class PowerGraph {
     this.initialized = false;
     this.colors = [];
     this.gridColors = [];
-    this.bgcolor="";
+    this.bgcolor = "";
     this.axiscolor = "";
-    this.chargeColor="";
-    this.lp1color="";
-    this.lp2color="";
-    this.batteryColor="";
+    this.chargeColor = "";
+    this.lp1color = "";
+    this.lp2color = "";
+    this.batteryColor = "";
     this.graphRefreshCounter = 0;
     this.width = 500;
     this.height = 500;
@@ -56,19 +56,22 @@ class PowerGraph {
   }
 
   update(topic, payload) {
-
     if (this.initialized) { // steady state
 
       if (topic === "openWB/graph/lastlivevalues") {
         const values = this.extractValues(payload.toString());
         this.graphRefreshCounter++;
         this.graphData.push(values);
-        
+
         this.updateGraph();
 
         if (this.graphRefreshCounter > 60) {
+          // fresh reloas of the graph
           this.initialized = false;
+          this.initCounter = 0;
           this.initialGraphData = [];
+          this.graphData = [];
+          this.graphRefreshCounter = 0;
           subscribeMqttGraphSegments();
         }
       }
@@ -96,9 +99,6 @@ class PowerGraph {
             });
           });
 
-         /*  this.graphData = this.graphData.sort((a, b) =>
-            a.date > b.date ? 1 : -1 
-          );*/
           this.updateGraph();
           unsubscribeMqttGraphSegments();
         }
@@ -141,7 +141,7 @@ class PowerGraph {
     }
     values.soc1 = +elements[9];
     values.soc2 = +elements[10];
-    
+
     // smart home
     for (i = 0; i < 8; i++) {
       values["sh" + i] = +elements[20 + i];
@@ -161,7 +161,7 @@ class PowerGraph {
       values.batOut = 0;
     };
     values.batterySoc = +elements[8];
-    
+
     return values;
   }
 
@@ -279,7 +279,7 @@ class PowerGraph {
   }
 
   drawXAxis(svg, width, height) {
-    const fontsize=12;
+    const fontsize = 12;
     const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
 
@@ -301,7 +301,7 @@ class PowerGraph {
       ;
     svg.append("text")
       .attr("x", - this.margin.left)
-      .attr("y", height/2 +5)
+      .attr("y", height / 2 + 5)
       .attr("fill", this.axiscolor)
       .attr("font-size", fontsize)
       .text("kW")
@@ -351,12 +351,12 @@ class PowerGraph {
         .attr("stroke", this.bgcolor)
         .attr("stroke-width", 1)
         .attr("fill", "none")
-       // .style("stroke-dasharray", ("3, 3"))
+        // .style("stroke-dasharray", ("3, 3"))
         .attr("d", d3.line()
           .x((d, i) => xScale(this.graphData[i].date))
           .y(d => yScale(d.soc2))
         );
-        svg.append("path")
+      svg.append("path")
         .datum(this.graphData)
         .attr("stroke", this.lp2color)
         .attr("stroke-width", 1)
