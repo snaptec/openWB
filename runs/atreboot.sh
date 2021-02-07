@@ -131,7 +131,7 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 fi
-python3 /var/www/html/openWB/runs/smarthomehandler.py >> /var/www/html/openWB/ramdisk/smarthomehandler.log 2>&1 & 
+python3 /var/www/html/openWB/runs/smarthomehandler.py >> /var/www/html/openWB/ramdisk/smarthomehandler.log 2>&1 &
 # restart mqttsub handler
 echo "mqtt handler..."
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
@@ -388,3 +388,9 @@ echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor2 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor2 -m ""
