@@ -114,12 +114,10 @@ def sepwatt(oldwatt,oldwattk,nummer):
     except:
        configuredName = "(unknown name)"
     if difmes == 0:
-       logDebug("0","(" + str(nummer) + ") " + str(configuredName) + " keine separate Leistungsmessung")
        newwatt = oldwatt
        # simcount verwenden wenn newwattk = 0
        newwattk = oldwattk
        return (newwatt, newwattk)
-    logDebug("0","(" + str(nummer) + ") " + str(configuredName) + " hat separate Leistungsmessung")
     try:
        meastyp = str(config.get('smarthomedevices', 'device_measuretype_'+str(nummer)))
     except:
@@ -138,6 +136,8 @@ def sepwatt(oldwatt,oldwattk,nummer):
        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
     elif meastyp == "shelly":
        argumentList[1] = prefixpy + 'shelly/watt.py'
+    elif meastyp == "mystrom":
+       argumentList[1] = prefixpy + 'mystrom/watt.py'
     elif meastyp == "http":
        argumentList[1] = prefixpy + 'http/watt.py'
        try:
@@ -531,9 +531,11 @@ def getdevicevalues():
                 if (switchtyp == "shelly") and (canswitch == 1):
                    try:
                        anzahltemp = int(config.get('smarthomedevices', 'device_temperatur_configured_'+str(numberOfDevices)))
-                       if ( anzahltemp > 0) and ( canswitch == 1 ):
+                       if ( anzahltemp > 0):
                           for i in range(anzahltemp):
-                              temp = str(answer['ext_temperature'][str(i)]['tC'])
+#                              temp = str(answer['ext_temperature'][str(i)]['tC'])
+                              temp = str(answer['temp' +  str(i)])
+                              logDebug("2", "(" + str(numberOfDevices) + ") Shelly temp sensor: " + str(i+1) + " Grad: " +  temp)
                               DeviceValues.update( {str(numberOfDevices) + "temp" + str(i) : temp })
                               f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_temp'+ str(i), 'w')
                               f.write(str(temp))
@@ -541,6 +543,13 @@ def getdevicevalues():
                    except:
                       pass
                 # Separate Leistungs messung ?
+                if (switchtyp == "mystrom") and (canswitch == 1):
+                   temp = str(answer['temp0'])
+                   logDebug("2", "(" + str(numberOfDevices) + ") mystrom temp sensor: 1 Grad: " +  temp)
+                   DeviceValues.update( {str(numberOfDevices) + "temp0"  : temp })
+                   f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_temp0', 'w')
+                   f.write(str(temp))
+                   f.close()
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
                 if abschalt == 1:
                    totalwatt = totalwatt + watt
@@ -670,7 +679,7 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung):
               argumentList[5] = device_ausschalturl
               proc=subprocess.Popen(argumentList)
               proc.communicate()
-              logDebug("1", "(" + str(nummer) + ")" + str(devicename) + " ausgeschaltet")
+              logDebug("1", "(" + str(nummer) + ") " + str(devicename) + " ausgeschaltet")
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
               f.write(str(zustand))
               f.close()
