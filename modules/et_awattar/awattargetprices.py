@@ -61,7 +61,7 @@ def exit_on_invalid_price_data(error):
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
         etprovider_pricefile.write('99.99\n')
-        now = datetime.now(timezone.utc)  # timezone-aware datetime-object
+        now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         timestamp = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
         for i in range(12):
             etprovider_graphlistfile.write('%d, 99.99\n' % timestamp.timestamp())
@@ -133,10 +133,6 @@ def readAPI(url):
     response = requests.get(url, headers={'Content-Type': 'application/json'}, timeout=(2, 6))
     return response
 
-def utc_to_local(utc_dt):
-    # converts datetime-object from utc to local timezone
-    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
-
 # Hauptprogramm
 
 # übergebene Paremeter auslesen
@@ -179,13 +175,13 @@ except:
 sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
 
 # alle Zeiten in UTC verarbeiten
-now = datetime.now(timezone.utc)  # timezone-aware datetime-object
+now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
 now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
 preisliste = []
 preise_ok = False
 for price_data in sorted_marketprices:
-    startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt in UTC mit Millisekunden, UNIX ist ohne
-    startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # timezone-aware, hier UTC benutzen
+    startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
+    startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # Objekt von naive nach timezone-aware, hier UTC
     if (startzeit_utc >= now_full_hour):
         if (startzeit_utc == now_full_hour):
             preise_ok = True
@@ -196,7 +192,7 @@ for price_data in sorted_marketprices:
         else:
             # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
             bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
-        preisliste.append({str('%d' % startzeit_utc.replace(tzinfo=timezone.utc).timestamp()) : bruttopreis_str})
+        preisliste.append({str('%d' % startzeit_utc.timestamp()) : bruttopreis_str})
 
 if (preise_ok):
     # Preisliste liegt jetzt vor in UTC und ct/kWh, sortiert nach Zeit

@@ -116,10 +116,6 @@ def readAPI(token, id):
     response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data, timeout=(2, 6))
     return response
 
-def utc_to_local(utc_dt):
-    # converts datetime-object from utc to local timezone
-    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
-
 # Hauptprogramm
 
 # übergebene Paremeter auslesen
@@ -162,7 +158,7 @@ if not 'errors' in tibber_json:
         exit_on_invalid_price_data('Korrupte Preisdaten')
 
     # alle Zeiten in UTC verarbeiten
-    now = datetime.now(timezone.utc)  # timezone-aware datetime-object
+    now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
     now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
     preisliste = []
     preise_ok = False
