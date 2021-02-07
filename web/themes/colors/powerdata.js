@@ -43,6 +43,8 @@ class WbData {
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
 		this.usageDetails = [this.usageSummary[0]];
+		this.showLiveGraph = true;
+		this.prefs = {};
 	};
 
 	init() {
@@ -63,15 +65,24 @@ class WbData {
 			this.shDevice[i].color = style.getPropertyValue('--color-sh' + (i + 1));
 		}
 		// read preferences stored in cookie
-		const myCookies = document.cookie.split(';');
-		const deviceCookie = myCookies.filter(entry => entry.split('=')[0] === "openWBColorThemeHideDevices");
-		if (deviceCookie.length > 0) {
-			const devicesToHideString = deviceCookie[0].split('=')[1];
-			if (devicesToHideString != "") {
-				const devicesToHide = JSON.parse(devicesToHideString);
-				devicesToHide.map(i => this.shDevice[i].showInGraph = false)
+		const wbCookies = document.cookie.split(';');
+		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
+		if (myCookie.length > 0) {
+			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
+			if ('hideSH' in this.prefs) {
+				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
+			}
+			if ('showLG' in this.prefs) {
+				this.showLiveGraph = this.prefs.showLG;
 			}
 		}
+		if (this.showLiveGraph) {
+			dayGraph.deactivate();
+			powerGraph.activate();
+			} else {
+				powerGraph.deactivate();
+				dayGraph.activate();
+			}
 	}
 
 	updateEvu(field, value) {
@@ -250,20 +261,9 @@ class WbData {
 
 	//update cookie
 	persistGraphPreferences() {
-		var idlist = "["
-			+ wbdata.shDevice.reduce((str, device, i) => {
-				var result = str;
-				if (!device.showInGraph) {
-					if (result === "") {
-						result = device.id;
-					} else {
-						result = result + "," + device.id;
-					}
-				}
-				return result
-			}, "")
-			+ "]";
-		document.cookie = "openWBColorThemeHideDevices=" + idlist + "; max-age=16000000";
+		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
+		this.prefs.showLG = this.showLiveGraph;
+		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs);
 	}
 }
 
