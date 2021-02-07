@@ -31,7 +31,6 @@ def write_log_entry(message):
     # schreibt Eintrag ins Log
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     line = timestamp + ' Modul tibbergetprices.py: ' + message + '\n'
-    print (line)
     with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
         f.write(line)
 
