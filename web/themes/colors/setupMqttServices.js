@@ -78,14 +78,14 @@ var topicsToSubscribe = [
 	["openWB/graph/14alllivevalues", 1],
 	["openWB/graph/15alllivevalues", 1],
 	["openWB/graph/16alllivevalues", 1],
-    ["openWB/graph/boolDisplayLp1", 1],
-    ["openWB/graph/boolDisplayLp2", 1],
-    ["openWB/graph/boolDisplayLp3", 1],
-    ["openWB/graph/boolDisplayLp4", 1],
-    ["openWB/graph/boolDisplayLp5", 1],
-    ["openWB/graph/boolDisplayLp6", 1],
-    ["openWB/graph/boolDisplayLp7", 1],
-    ["openWB/graph/boolDisplayLp8", 1],
+	["openWB/graph/boolDisplayLp1", 1],
+	["openWB/graph/boolDisplayLp2", 1],
+	["openWB/graph/boolDisplayLp3", 1],
+	["openWB/graph/boolDisplayLp4", 1],
+	["openWB/graph/boolDisplayLp5", 1],
+	["openWB/graph/boolDisplayLp6", 1],
+	["openWB/graph/boolDisplayLp7", 1],
+	["openWB/graph/boolDisplayLp8", 1],
 	["openWB/graph/boolDisplayHouseConsumption", 1],
 	["openWB/graph/boolDisplayLoad1", 1],
 	["openWB/graph/boolDisplayLoad2", 1],
@@ -177,6 +177,9 @@ var topicsToSubscribe = [
 	// Status Konfiguration SoC
 	["openWB/lp/1/boolSocConfigured", 1],
 	["openWB/lp/2/boolSocConfigured", 1],
+	// manual SoC
+	["openWB/lp/1/boolSocManual", 1],
+	["openWB/lp/2/boolSocManual", 1],
 	// Status Nachtladen
 	["openWB/lp/1/boolChargeAtNight", 1],
 	["openWB/lp/2/boolChargeAtNight", 1],
@@ -340,15 +343,15 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
 	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
 
-    ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/5/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
 	["openWB/config/get/pv/nurpv70dynact", 1]
 ];
@@ -367,19 +370,19 @@ var options = {
 	onSuccess: function () {
 		retries = 0;
 		topicsToSubscribe.forEach((topic) => {
-			client.subscribe(topic[0], {qos: 0});
+			client.subscribe(topic[0], { qos: 0 });
 		});
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		setTimeout(function() { client.connect(options); }, 5000);
+		setTimeout(function () { client.connect(options); }, 5000);
 	}
 };
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
-$(document).ready(function(){
+$(document).ready(function () {
 	client.connect(options);
 	timeOfLastMqttMessage = Date.now();
 });

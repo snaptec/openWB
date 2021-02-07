@@ -18,7 +18,6 @@ class SmartHomeList {
 
   // update if data has changed
   update() {
-   
     this.updateValues();
     this.div.selectAll("*").remove();
 
@@ -26,8 +25,7 @@ class SmartHomeList {
       d3.select("div#smartHomeWidget").classed("hide", false);
       var table = this.div.append("table")
         .attr("class", "table table-borderless table-condensed p-0 m-0");
-      // table.attr("style", "border-spacing:0;")
-
+      
       const headers = ["Gerät", "Verbrauch", "Laufzeit", "Modus"];
       const thead = table.append("thead");
       thead

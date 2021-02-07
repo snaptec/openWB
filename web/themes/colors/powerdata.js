@@ -176,6 +176,7 @@ class WbData {
 				break;
 			case 'soc':
 				powerMeter.update();
+				break;
 			default:
 				break;
 		}
@@ -276,13 +277,13 @@ class Consumer {
 };
 
 class ChargePoint {
-	constructor(index, name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, isSocConfigured = false, isSocManual = false) {
 		this.name = name;
 		this.power = power;
 		this.energy = dailyYield;
 		this.configured = configured;
-
-
+		this.isSocConfigured = isSocConfigured;
+		this.isSocManual = isSocManual;
 	}
 };
 

@@ -865,6 +865,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// soc-module configured for respective charge point
 		wbdata.updateCP(index, "isSocConfigured", (mqttpayload == 1));
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
+		// manual soc-module configured for respective charge point
+		wbdata.updateCP(index, "isSocManual", (mqttpayload == 1));			
+	}
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolchargepointconfigured$/i)) {
 		// respective charge point configured
 		wbdata.updateCP(index, "configured", (mqttpayload == 1));
