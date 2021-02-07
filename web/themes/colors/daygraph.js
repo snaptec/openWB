@@ -119,8 +119,11 @@ class DayGraph {
     // charge points
     values.charging = this.calcValue(7, elements, oldElements);
     var i;
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 3; i++) {
       values["lp" + i] = this.calcValue(4 + i, elements, oldElements);
+    }
+    for (i = 3; i < 8; i++) {
+      values["lp" + i] = this.calcValue(12 + i, elements, oldElements);
     }
     values.soc1 = +elements[21];
     values.soc2 = +elements[22];
