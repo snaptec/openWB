@@ -3,21 +3,22 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-LOGFILE="$RAMDISKDIR/evu.log"
+MODULE="EVU"
+LOGFILE="$RAMDISKDIR/openWB.log"
 Debug=$debug
 myPid=$$
 
 
 #For development only
-Debug=1
+#Debug=1
 
 DebugLog(){
         if (( Debug > 0 )); then
                 timestamp=`date +"%Y-%m-%d %H:%M:%S"`
                 if (( Debug == 2 )); then
-                      echo "$timestamp: PID:$myPid: $@" >> $LOGFILE
+                      echo "$timestamp: ${MODULE}: PID:$myPid: $@" >> $LOGFILE
                 else
-                      echo "$timestamp: $@" >> $LOGFILE
+                      echo "$timestamp: ${MODULE}: $@" >> $LOGFILE
                 fi
         fi
 }
