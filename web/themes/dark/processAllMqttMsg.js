@@ -995,7 +995,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(actualPower);
 	}
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualDailyYieldDevice');  // now get parents respective child element
