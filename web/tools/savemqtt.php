@@ -119,8 +119,8 @@ $remoteHost = $_POST['RemoteAddress'];
 if ($remoteHost == "entfernter.mqtt.host:8883") {
 	exit("Bitte die Adresse und den Port des entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
-if(!preg_match('/^([a-zA-Z0-9][a-zA-Z0-9.-]+):{0,1}([0-9]{0,5})$/', $remoteHost, $matches)) {
-	exit("Der Bezeichener f&uuml;r den Namen oder die IP Adresse des entfernten MQTT-Servers ('" . htmlentities($remoteHost) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 und Punkt sind erlaubt vor dem Doppelpunkt erlaubt. Nach dem Doppelpunkt sind nur noch Ziffern 0-9 erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+if(!preg_match('/^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$/', $remoteHost, $matches)) {
+	exit("Der Bezeichener f&uuml;r den Namen oder die IP Adresse des entfernten MQTT-Servers ('" . htmlentities($remoteHost) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 und Punkt sind vor dem Doppelpunkt erlaubt. Nach dem Doppelpunkt sind nur noch Ziffern 0-9 erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 $hostOrAddress = $matches[1];

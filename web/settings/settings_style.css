@@ -183,7 +183,8 @@ h1 {
     vertical-align: middle;
 }
 
-input:invalid {
+input:invalid,
+textarea:invalid {
     border-bottom: 2px solid red !important;
 }
 

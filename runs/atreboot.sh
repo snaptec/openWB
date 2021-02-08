@@ -30,15 +30,15 @@ if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ] && [ ! -f "/var/www/ht
 	mv "/var/www/html/openWB/modules/soc_i3/auth.json" "/var/www/html/openWB/modules/soc_i3/auth1.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth2.json"]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth2.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3s1/auth.json" "/var/www/html/openWB/modules/soc_i3/auth2.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token1.json"]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token1.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3/token.json" "/var/www/html/openWB/modules/soc_i3/token1.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token2.json"]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token2.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3s1/token.json" "/var/www/html/openWB/modules/soc_i3/token2.json"
 fi
 
@@ -131,7 +131,7 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 fi
-python3 /var/www/html/openWB/runs/smarthomehandler.py &
+python3 /var/www/html/openWB/runs/smarthomehandler.py >> /var/www/html/openWB/ramdisk/smarthome.log 2>&1 &
 
 # restart mqttsub handler
 echo "mqtt handler..."
@@ -389,3 +389,9 @@ echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor2 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor2 -m ""

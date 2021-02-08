@@ -18,7 +18,6 @@ class SmartHomeList {
 
   // update if data has changed
   update() {
-   
     this.updateValues();
     this.div.selectAll("*").remove();
 
@@ -26,21 +25,20 @@ class SmartHomeList {
       d3.select("div#smartHomeWidget").classed("hide", false);
       var table = this.div.append("table")
         .attr("class", "table table-borderless table-condensed p-0 m-0");
-      // table.attr("style", "border-spacing:0;")
-
+      
       const headers = ["Gerät", "Verbrauch", "Laufzeit", "Modus"];
       const thead = table.append("thead");
       thead
         .selectAll("headers")
         .data(headers).enter()
         .append("th")
-        .attr("style", (data, i) => (i == 0) ? "color:white;text-align:left;"
-          : "color:white;text-align:center;")
+        .attr("style", (data, i) => (i == 0) ? "text-align:left;"
+          : "text-align:center;")
         .attr("class", "tablecell ")
         .text((data) => data)
         ;
       thead.append("th")
-        .attr("style", "color:white; text-align:right")
+        .attr("style", "text-align:right")
         .attr("class", "tablecell")
         .append("span")
         .attr("class", "fa fa-chart-area px-0");
@@ -65,12 +63,12 @@ class SmartHomeList {
       // Power/energy
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .attr("style", "vertical-align: middle;")
+        .attr("style", "vertical-align: middle;color:white")
         .text(row => formatWatt(row.power) + " (" + formatWattH(row.energy * 1000) + ")");
       // Running time
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .attr("style", "vertical-align: middle;")
+        .attr("style", "vertical-align: middle;color:white")
         .text(row => formatTime(row.runningTime))
       // Automatic mode button
       rows.append("td")
@@ -78,7 +76,7 @@ class SmartHomeList {
         .append("button")
         .attr("id", (row) => "shmodebutton-" + row.id)
         .attr("class", row => this.modeClass(row))
-        .attr("style", row => this.calcColor(row))
+        .attr("style", "color:white; text-align:center;")
         .attr("onClick", (row) => "shModeClicked(" + row.id + ")")
         .classed("disabled", false)
         .text(row => row.isAutomatic ? "Automatik" : "Manuell");

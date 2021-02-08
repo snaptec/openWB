@@ -438,33 +438,32 @@ h3 {
 	--d9bgCol: blue;
 	--color-bg: midnightblue;
 	--color-evu: firebrick;
-	--color-pv: goldenrod;
-	--color-house: grey;
-	--color-devices: cornflowerblue;
-	--color-charging: mediumseagreen;
-	--color-export: khaki;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-devices: #cab2d6;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
 	--color-axis: steelblue;
-	--color-battery: darkkhaki;
-	--color-lp1: mediumseagreen;
-	--color-lp2: lightseagreen;
-	--color-lp3: mediumspringgreen;
-	--color-lp4: mediumturquoise;
-	--color-lp5: darkseagreen;
-	--color-lp6: darkolivegreen;
-	--color-lp7: olive;
-	--color-lp8: palegreen;
-	--color-sh1: lightblue;
-	--color-sh2: deepskyblue;
-	--color-sh3: aqua;
-	--color-sh4: cadetblue;
-	--color-sh5: dodgerblue;
-	--color-sh6: lightsteelblue;
-	--color-sh7: skyblue;
-	--color-sh8: mediumslateblue;
-	--color-sh9: paleturquoise;
-	--color-co1: skyblue;
-	--color-co2: cadetblue;
-
+	--color-battery: goldenrod;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
 }
 
 .openwb-devices {
@@ -477,11 +476,16 @@ h3 {
 	border:1px solid  lightskyblue;
 }
 
-
+th {
+	color: steelblue;
+}
 .table-borderless td {
 	border: 0;
 }
+.popup-header {
+	color: midnightblue;
 
+}
 /* Colors for the charts */
 
 

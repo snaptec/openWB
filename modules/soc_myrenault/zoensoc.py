@@ -36,7 +36,8 @@ android_config = json.loads(responsetext)
 gigyarooturl = android_config['servers']['gigyaProd']['target'] 
 gigyaapikey = android_config['servers']['gigyaProd']['apikey'] 
 kamereonrooturl = android_config['servers']['wiredProd']['target']
-kamereonapikey = android_config['servers']['wiredProd']['apikey']
+#kamereonapikey = android_config['servers']['wiredProd']['apikey']
+kamereonapikey = 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2'
 #print(time_string, 'gigyarooturl',gigyarooturl,gigyaapikey,kamereonrooturl,kamereonapikey)
 #
 payload = {'loginID': loginID, 'password': password, 'apiKey': gigyaapikey} 

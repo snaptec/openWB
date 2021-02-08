@@ -32,7 +32,7 @@ class WbData {
 		this.sourceSummary = {
 			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "Speicher out", power: 0, energy: 0, color: "white" }
+			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" }
 
 		};
 		this.usageSummary = [
@@ -43,13 +43,15 @@ class WbData {
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
 		this.usageDetails = [this.usageSummary[0]];
+		this.showLiveGraph = true;
+		this.prefs = {};
 	};
 
 	init() {
 		var style = getComputedStyle(document.body);
 		this.sourceSummary.pv.color = style.getPropertyValue('--color-pv');
 		this.sourceSummary.evuIn.color = style.getPropertyValue('--color-evu');
-		this.sourceSummary.batIn.color = style.getPropertyValue('--color-battery');
+		this.sourceSummary.batOut.color = style.getPropertyValue('--color-battery');
 		this.usageSummary[0].color = style.getPropertyValue('--color-export');
 		this.usageSummary[1].color = style.getPropertyValue('--color-charging');
 		this.usageSummary[2].color = style.getPropertyValue('--color-devices');
@@ -63,15 +65,24 @@ class WbData {
 			this.shDevice[i].color = style.getPropertyValue('--color-sh' + (i + 1));
 		}
 		// read preferences stored in cookie
-		const myCookies = document.cookie.split(';');
-		const deviceCookie = myCookies.filter(entry => entry.split('=')[0] === "openWBColorThemeHideDevices");
-		if (deviceCookie.length > 0) {
-			const devicesToHideString = deviceCookie[0].split('=')[1];
-			if (devicesToHideString != "") {
-				const devicesToHide = JSON.parse(devicesToHideString);
-				devicesToHide.map(i => this.shDevice[i].showInGraph = false)
+		const wbCookies = document.cookie.split(';');
+		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
+		if (myCookie.length > 0) {
+			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
+			if ('hideSH' in this.prefs) {
+				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
+			}
+			if ('showLG' in this.prefs) {
+				this.showLiveGraph = this.prefs.showLG;
 			}
 		}
+		if (this.showLiveGraph) {
+			dayGraph.deactivate();
+			powerGraph.activate();
+			} else {
+				powerGraph.deactivate();
+				dayGraph.activate();
+			}
 	}
 
 	updateEvu(field, value) {
@@ -176,6 +187,7 @@ class WbData {
 				break;
 			case 'soc':
 				powerMeter.update();
+				break;
 			default:
 				break;
 		}
@@ -185,18 +197,23 @@ class WbData {
 	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
-			case 'batteryPowerImport': this.usageSummary[3].power = value;
+			case 'batteryPowerImport': 
+				this.usageSummary[3].power = value;
 				powerMeter.update();
 				break;
-			case 'batteryPowerExport': this.updateSourceSummary("batIn", "power", value);
+			case 'batteryPowerExport': 
+				this.updateSourceSummary("batOut", "power", value);
 				powerMeter.update();
 				break;
-			case 'batteryEnergyExport': this.usageSummary[3].energy = value;
+			case 'batteryEnergyImport': 
+				this.usageSummary[3].energy = value;
 				yieldMeter.update();
 				break;
-			case 'batteryEnergyImport': this.updateSourceSummary("batIn", "energy", value);
+			case 'batteryEnergyExport': 
+				this.updateSourceSummary("batOut", "energy", value);
 				yieldMeter.update();
 				break;
+			
 			default:
 				break;
 		}
@@ -244,20 +261,9 @@ class WbData {
 
 	//update cookie
 	persistGraphPreferences() {
-		var idlist = "["
-			+ wbdata.shDevice.reduce((str, device, i) => {
-				var result = str;
-				if (!device.showInGraph) {
-					if (result === "") {
-						result = device.id;
-					} else {
-						result = result + "," + device.id;
-					}
-				}
-				return result
-			}, "")
-			+ "]";
-		document.cookie = "openWBColorThemeHideDevices=" + idlist + "; max-age=16000000";
+		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
+		this.prefs.showLG = this.showLiveGraph;
+		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs);
 	}
 }
 
@@ -271,13 +277,13 @@ class Consumer {
 };
 
 class ChargePoint {
-	constructor(index, name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, isSocConfigured = false, isSocManual = false) {
 		this.name = name;
 		this.power = power;
 		this.energy = dailyYield;
 		this.configured = configured;
-
-
+		this.isSocConfigured = isSocConfigured;
+		this.isSocManual = isSocManual;
 	}
 };
 
