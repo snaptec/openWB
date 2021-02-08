@@ -64,6 +64,7 @@ function loadElectricityPriceChart() {
 						let i = tooltipItem[0].index;
 						let title = 'jetzt';
 						if ( i > 0 ) {
+							// verursacht ab und an fehlermeldung data property of undefinded
 							let ticks = this._data.datasets[0]._meta[0].data[0]._chart.scales["x-axis-0"].ticks;
 							title =  'ab ' + ticks[i];
 						}
@@ -96,10 +97,9 @@ function loadElectricityPriceChart() {
 							console.log(value);
 							var theDate = new Date();  // now
 							var tick = tickDate.getHours() + ' Uhr';
-							if ( tickDate.getYear() == theDate.getYear() && tickDate.getMonth() == theDate.getMonth() && tickDate.getDate() == theDate.getDate() ) {
-								tick = 'heute ' + tick;
-							} else {
-								theDate.setDate(theDate.getDate() + 1);  // now it is tomorrow
+							var datumIstHeute = tickDate.getYear() == theDate.getYear() && tickDate.getMonth() == theDate.getMonth() && tickDate.getDate() == theDate.getDate();
+							if ( !datumIstHeute ) {
+								theDate.setDate(theDate.getDate() + 1);  // set date to tomorrow
 								if ( tickDate.getYear() == theDate.getYear() && tickDate.getMonth() == theDate.getMonth() && tickDate.getDate() == theDate.getDate() ) {
 									tick = 'morgen ' + tick;
 								} else {
