@@ -70,21 +70,21 @@ graphing(){
 	mosquitto_pub -t openWB/graph/lastlivevalues -r -m "$(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt,$ladeleistunglp3,$ladeleistunglp4,$ladeleistunglp5,$ladeleistunglp6,$ladeleistunglp7,$ladeleistunglp8,$shd1_w,$shd2_w,$shd3_w,$shd4_w,$shd5_w,$shd6_w,$shd7_w,$shd8_w" &
 	mosquitto_pub -t openWB/system/lastlivevalues -r -m "$(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt,$ladeleistunglp3,$ladeleistunglp4,$ladeleistunglp5,$ladeleistunglp6,$ladeleistunglp7,$ladeleistunglp8,$shd1_w,$shd2_w,$shd3_w,$shd4_w,$shd5_w,$shd6_w,$shd7_w,$shd8_w" &
 	mosquitto_pub -t openWB/graph/1alllivevalues -r -m "$(< ramdisk/all-live.graph tail -n +"0" | head -n "$((50 - 0))")" &
-	all2livevalues=$(< ramdisk/all-live.graph tail -n +"100" | head -n "$((100 - 50))")
-	all3livevalues="$(< ramdisk/all-live.graph tail -n +"150" | head -n "$((150 - 100))")"
-	all4livevalues="$(< ramdisk/all-live.graph tail -n +"200" | head -n "$((200 - 150))")"
-	all5livevalues="$(< ramdisk/all-live.graph tail -n +"250" | head -n "$((250 - 200))")"
-	all6livevalues="$(< ramdisk/all-live.graph tail -n +"300" | head -n "$((300 - 250))")"
-	all7livevalues="$(< ramdisk/all-live.graph tail -n +"350" | head -n "$((350 - 300))")"
-	all8livevalues="$(< ramdisk/all-live.graph tail -n +"400" | head -n "$((400 - 350))")"
-	all9livevalues="$(< ramdisk/all-live.graph tail -n +"450" | head -n "$((450 - 400))")"
-	all10livevalues="$(< ramdisk/all-live.graph tail -n +"500" | head -n "$((500 - 450))")"
-	all11livevalues="$(< ramdisk/all-live.graph tail -n +"550" | head -n "$((550 - 500))")"
-	all12livevalues="$(< ramdisk/all-live.graph tail -n +"600" | head -n "$((600 - 550))")"
-	all13livevalues="$(< ramdisk/all-live.graph tail -n +"650" | head -n "$((650 - 600))")"
-	all14livevalues="$(< ramdisk/all-live.graph tail -n +"700" | head -n "$((700 - 650))")"
-	all15livevalues="$(< ramdisk/all-live.graph tail -n +"750" | head -n "$((750 - 700))")"
-	all16livevalues="$(< ramdisk/all-live.graph tail -n +"800" | head -n "$((800 - 750))")"
+	all2livevalues=$(< ramdisk/all-live.graph tail -n +"50" | head -n "$((100 - 50))")
+	all3livevalues="$(< ramdisk/all-live.graph tail -n +"100" | head -n "$((150 - 100))")"
+	all4livevalues="$(< ramdisk/all-live.graph tail -n +"150" | head -n "$((200 - 150))")"
+	all5livevalues="$(< ramdisk/all-live.graph tail -n +"200" | head -n "$((250 - 200))")"
+	all6livevalues="$(< ramdisk/all-live.graph tail -n +"250" | head -n "$((300 - 250))")"
+	all7livevalues="$(< ramdisk/all-live.graph tail -n +"300" | head -n "$((350 - 300))")"
+	all8livevalues="$(< ramdisk/all-live.graph tail -n +"350" | head -n "$((400 - 350))")"
+	all9livevalues="$(< ramdisk/all-live.graph tail -n +"400" | head -n "$((450 - 400))")"
+	all10livevalues="$(< ramdisk/all-live.graph tail -n +"450" | head -n "$((500 - 450))")"
+	all11livevalues="$(< ramdisk/all-live.graph tail -n +"500" | head -n "$((550 - 500))")"
+	all12livevalues="$(< ramdisk/all-live.graph tail -n +"550" | head -n "$((600 - 550))")"
+	all13livevalues="$(< ramdisk/all-live.graph tail -n +"600" | head -n "$((650 - 600))")"
+	all14livevalues="$(< ramdisk/all-live.graph tail -n +"650" | head -n "$((700 - 650))")"
+	all15livevalues="$(< ramdisk/all-live.graph tail -n +"700" | head -n "$((750 - 700))")"
+	all16livevalues="$(< ramdisk/all-live.graph tail -n +"750" | head -n "$((800 - 750))")"
 	mosquitto_pub -t openWB/graph/2alllivevalues -r -m "$([ ${#all2livevalues} -ge 10 ] && echo "$all2livevalues" || echo "-")" &
 	mosquitto_pub -t openWB/graph/3alllivevalues -r -m "$([ ${#all3livevalues} -ge 10 ] && echo "$all3livevalues" || echo "-")" &
 	mosquitto_pub -t openWB/graph/4alllivevalues -r -m "$([ ${#all4livevalues} -ge 10 ] && echo "$all4livevalues" || echo "-")" &

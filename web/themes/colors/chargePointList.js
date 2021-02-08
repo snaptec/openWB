@@ -10,7 +10,8 @@ class ChargePointList {
   constructor() {
     this.chargepoints = [];
     this.phaseSymbols = ['/', '\u2460', '\u2461', '\u2462']
-    this.headers = ["Ladepunkt", "Ladeparameter", "geladen", "Soc"];
+    this.headers = ["Ladepunkt", "Ladeparameter", "geladen", "Ladestand"];
+    this.manualSoc = 0;
   };
 
   // initialize after document is created
@@ -25,8 +26,8 @@ class ChargePointList {
       .data(this.headers).enter()
       .append("th")
       .attr("class", "tablecell")
-      .style("color", "white")
-      .style("text-align", "center")
+      // .style("color", "white")
+      .style("text-align", (data, i) => (i == 0) ? "left" : "center")
       //.classed ("tablecell", true)
       //.classed ("px-1", true)
       .text((data) => data)
@@ -42,11 +43,12 @@ class ChargePointList {
     this.tbody.selectAll("*").remove();
     this.footer.selectAll("*").remove();
 
-    const rows = this.tbody
+    const chargePoint = this.tbody
       .selectAll("rows")
       .data(this.chargepoints).enter()
-      .append("tr")
-      .style("color", row => row.color)
+      ;
+    const rows = chargePoint.append("tr")
+      .style("color", "white")
       .style("text-align", "center")
       .style("vertical-align", "middle");
 
@@ -55,8 +57,8 @@ class ChargePointList {
     rows.selectAll("cells")
       .data(row => [
         formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A",
-        row.energy + " kWh / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
-        //  row.soc + " %"
+        formatWattH(row.energy * 1000) + " / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
+
       ]).enter()
       .append("td")
       .attr("class", "tablecell px-1 py-1")
@@ -65,15 +67,12 @@ class ChargePointList {
     rows.append((row, i) => this.cpSocButtonCell(row, i));
 
     if (wbdata.isPriceChartEnabled) {
-      this.footer.append ('p')
-      .attr ("class", "pt-3 pb-0 m-0")
-      .style("text-align" ,"center")
-        .text ("Aktueller Strompreis: " + wbdata.currentPowerPrice + " Cent/kWh");
+      this.footer.append('p')
+        .attr("class", "pt-3 pb-0 m-0")
+        .style("text-align", "center")
+        .text("Aktueller Strompreis: " + wbdata.currentPowerPrice + " Cent/kWh");
     }
   }
-
-
-
 
   updateValues() {
     this.chargepoints = wbdata.chargePoint.filter(cp => cp.configured);
@@ -81,66 +80,137 @@ class ChargePointList {
 
   cpNameButtonCell(row, index) {
     const cell = d3.create("td")
-      .attr("class", "tablecell px-1 py-1");
-    const button = cell
-      .append("button")
-      .attr("class", "btn btn-sm")
-      .attr("id", "lpbutton-" + index)
-      .style("text-align", "center")
-      .style("vertical-align", "middle")
+      .attr("class", "tablecell px-1 py-1")
       .style("color", row.color)
-      .classed("disabled", false)
-      .attr("onClick", (row, i) => ("lpButtonClicked(" + i + ")"));
-    button
-      .text(row.name);
+      .style("vertical-align", "middle")
+      .style("text-align", "left")
+      .attr("onClick", "lpButtonClicked(" + index + ")");
 
     if (row.isEnabled) {
-      button.classed("btn-outline-success", true);
+      cell.append("span")
+        .attr("class", "fa fa-toggle-on text-green px-0")
     } else {
-      button.classed("btn-outline-danger", true);
+      cell.append("span")
+        .attr("class", "fa fa-toggle-off text-red px-0")
     }
-    button.append("span").text(" ");
+
+    cell
+      .append("span").text(row.name)
+      .attr("class", "px-2");
+
     if (row.isPluggedIn) {
-      const span = 
-      button.append("span")
-        .attr("class", "fa fa-xs fa-plug")
+      const span =
+        cell.append("span")
+          .attr("class", "fa fa-xs fa-plug")
         ;
-        span.classed("text-orange", (!row.isCharging))
-        span.classed("text-green", row.isCharging)
+      span.classed("text-orange", (!row.isCharging))
+      span.classed("text-green", row.isCharging)
     }
     if (row.willFinishAtTime) {
-      button.append("span")
+      cell.append("span")
         .attr("class", "fa fa-xs fa-flag-checkered");
     }
     if (row.chargeAtNight) {
-      button.append("span")
+      cell.append("span")
         .attr("fa fa-xs fa-moon");
     }
     return cell.node();
   }
 
   cpSocButtonCell(row, index) {
-
     const cell = d3.create("td")
       .attr("class", "tablecell px-1 py-1")
+      .attr("onClick", (row) => ("socButtonClicked(" + index + ")"))
       .style("text-align", "center")
       .style("vertical-align", "middle");
     if (row.isSocConfigured) {
-      cell.text(row.soc + " %");
-      cell.append("span").text("   ");
-      const button = cell
-        .append("button")
-        .attr("class", "btn btn-outline-basic px-2 pt-0 mt-0 pb-1")
-        .style("text-align", "center")
-        .style("vertical-align", "middle")
-        .style("color", "white")
-        .attr("onClick", (row, i) => ("socButtonClicked(" + i + ")"))
-      button.append("i")
-        .attr("class", "small reloadLpSoc fas fa-redo-alt")
-        .attr("id", "soclabel-" + index)
-        ;
+      cell.append("span").text(row.soc + " %")
+        .attr("class", "px-2");
+      if (row.isSocManual) {
+        cell.append("i")
+          .attr("class", "small fas fa-edit")
+          .style("color", "white");
+      } else {
+        cell.append("i")
+          .attr("class", "small fas fa-redo-alt")
+          .attr("id", "soclabel-" + index)
+          .style("color", "white");
+      }
     }
     return cell.node();
+  }
+
+  editManualSoc(i) {
+    this.manualSoc = wbdata.chargePoint[i].soc;
+    const div = d3.select("div#socSelector");
+    div.selectAll("*").remove();
+
+    const col = div.append("div")
+      .style("background-color", "steelblue")
+      .attr("class", "px-2 py-1");
+
+    col.append("div")
+      .attr("class", "row justify-content-center")
+      .append("p")
+      .attr("class", "largeTextSize popup-header")
+      .style("text-align", "center")
+      .text("Manuelle SoC-Eingabe - Ladepunkt " + (i + 1));
+
+    const row2 = col.append("div")
+      .attr("class", "row justify-content-center")
+    row2.append("div")
+      .attr("class", "col-2 px-1 py-1")
+      .append("button")
+      .attr("class", "btn btn-block btn-sm btn-secondary")
+      .text("-")
+      .on("click", () => {
+        if (this.manualSoc > 0) {
+          this.manualSoc--;
+        }
+        box.node().value = this.manualSoc;
+      });
+    const col22 = row2.append("div").attr("class", "col-5 py-1")
+      .append("div").attr("class", "input-group");
+    const box = col22.append("input")
+      .attr("type", "text")
+      .attr("value", this.manualSoc)
+      .attr("class", "form-control text-right")
+      .on("input", () => {
+        const v = box.node().value;
+        if (v >= 0 && v <= 100) {
+          this.manualSoc = box.node().value;
+        }
+      });
+    col22.append("div").attr("class", "input-group-append")
+      .append("div").attr("class", "input-group-text")
+      .text("%");
+    row2.append("div").attr("class", "col-2 px-1 py-1")
+      .append("button")
+      .attr("class", "btn btn-block btn-sm btn-secondary")
+      .text("+")
+      .on("click", () => {
+        if (this.manualSoc < 100) {
+          this.manualSoc++;
+        }
+        box.node().value = this.manualSoc;
+      });
+
+    const row3 = col.append("div").attr("class", "row justify-content-center");
+    const button1 = row3.append("button")
+      .attr("type", "submit")
+      .attr("class", "btn btn-sm  btn-secondary")
+      .text("Abbrechen")
+      .on("click", () => {
+        div.selectAll("*").remove();
+      })
+    const button2 = row3.append("button")
+      .attr("id", "socSubmitButton")
+      .attr("class", "btn btn-sm btn-primary")
+      .text("Übernehmen")
+      .on("click", () => {
+        publish("" + this.manualSoc, "openWB/set/lp/" + (i + 1) + "/manualSoc");
+        div.selectAll("*").remove();
+      })
   }
 }
 
@@ -155,9 +225,13 @@ function lpButtonClicked(i) {
 }
 
 function socButtonClicked(i) {
-  publish("1", "openWB/set/lp/" + (+i + 1) + "/ForceSoCUpdate");
-  d3.select("i#soclabel-" + i)
-    .classed("fa-spin", true)
+  if (wbdata.chargePoint[i].isSocManual) {
+    chargePointList.editManualSoc(i);
+  } else {
+    publish("1", "openWB/set/lp/" + (+i + 1) + "/ForceSoCUpdate");
+    d3.select("i#soclabel-" + i)
+      .classed("fa-spin", true)
+  }
 }
 
 var chargePointList = new ChargePointList();

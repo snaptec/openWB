@@ -181,6 +181,10 @@
 							<div class="table-responsive">
 								<table class="table table-sm ">
 									<tbody>
+										<tr class="faultStrLpRow hide">
+											<th scope="row">Störungsbeschreibung</th>
+											<td class="faultStrLp"></td>
+										</tr>
 										<tr class="stromvorgabeRow">
 											<th scope="row">Ladestromvorgabe [A]</th>
 											<td class="stromvorgabe">--</td>
@@ -196,6 +200,10 @@
 										<tr class="socRow hide">
 											<th scope="row">SoC [%]</th>
 											<td class="soc">--</td>
+										</tr>
+										<tr class="faultStrSocLpRow hide">
+											<th scope="row">Störungsbeschreibung</th>
+											<td class="faultStrSocLp"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -268,6 +276,10 @@
 						<div class="table-responsive">
 							<table class="table" id="evu1">
 								<tbody>
+									<tr id="faultStrEvuRow" class="hide">
+										<th scope="row">Störungsbeschreibung</th>
+										<td><div id="faultStrEvu"></div></td>
+									</tr>
 									<tr id="gesamtleistungEvuStatusId">
 										<th scope="row">Gesamtleistung [W]</th>
 										<td><div id="wattbezugdiv">--</div></td>
@@ -302,25 +314,25 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id ="spannungEvuStatusId">
+									<tr id="spannungEvuStatusId">
 										<th scope="row">Spannung [V]</th>
 										<td><div id="evuv1div">--</div></td>
 										<td><div id="evuv2div">--</div></td>
 										<td><div id="evuv3div">--</div></td>
 									</tr>
-									<tr id ="stromstaerkeEvuStatusId">
+									<tr id="stromstaerkeEvuStatusId">
 										<th scope="row">Stromstärke [A]</th>
 										<td><div id="bezuga1div">--</div></td>
 										<td><div id="bezuga2div">--</div></td>
 										<td><div id="bezuga3div">--</div></td>
 									</tr>
-									<tr id ="leistungEvuStatusId">
+									<tr id="leistungEvuStatusId">
 										<th scope="row">Leistung [W]</th>
 										<td><div id="bezugw1div">--</div></td>
 										<td><div id="bezugw2div">--</div></td>
 										<td><div id="bezugw3div">--</div></td>
 									</tr>
-									<tr id ="powerfaktorEvuStatusId">
+									<tr id="powerfaktorEvuStatusId">
 										<th scope="row">Power Faktor</th>
 										<td><div id="evupf1div">--</div></td>
 										<td><div id="evupf2div">--</div></td>
@@ -387,25 +399,29 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<tr class="leistungPvRow">
+										<tr id="faultStrPvRow" class="hide">
+											<th scope="row">Störungsbeschreibung</th>
+											<td id="faultStrPv"></td>
+										</tr>
+										<tr>
 											<th scope="row">Leistung [W]</th>
-											<td class="pvwattdiv">--</td>
+											<td class="powerInverter">--</td>
 										</tr>
-										<tr class="gesamtertragPvRow">
+										<tr>
 											<th scope="row">Gesamtertrag [kWh]</th>
-											<td><div class="pvkwhdiv">--</div></td>
+											<td><div class="yieldInverter">--</div></td>
 										</tr>
-										<tr class="tagesertragPvRow">
+										<tr>
 											<th scope="row">Tagesertrag [kWh]</th>
-											<td><div class="daily_pvkwhdiv">--</div></td>
+											<td><div class="dYieldInverter">--</div></td>
 										</tr>
-										<tr class="monatsertragPvRow">
+										<tr>
 											<th scope="row">Monatsertrag [kWh]</th>
-											<td><div class="monthly_pvkwhdiv">--</div></td>
+											<td><div class="mYieldInverter">--</div></td>
 										</tr>
-										<tr class="jahresertragPvRow">
+										<tr>
 											<th scope="row">Jahresertrag [kWh]</th>
-											<td><div class="yearly_pvkwhdiv">--</div></td>
+											<td><div class="yYieldInverter">--</div></td>
 										</tr>
 									</tbody>
 								</table>
@@ -423,6 +439,10 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
+									<tr id="faultStrBatRow" class="hide">
+										<th scope="row">Störungsbeschreibung</th>
+										<td><div id="faultStrBat"></div></td>
+									</tr>
 									<tr id="geladenRow">
 										<th scope="row">geladen [kWh]</th>
 										<td><div id="speicherikwhdiv"></div></td>
@@ -541,7 +561,7 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101', disableMenuItem);
+			$("#nav-placeholder").load('themes/navbar.html?v=20210101', disableMenuItem);
 			function disableMenuItem() {
 				$('#navStatus').addClass('disabled');
 			}
@@ -606,9 +626,9 @@
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'status/processAllMqttMsg.js?ver=20210128',
+					'status/processAllMqttMsg.js?ver=20210208a',
 					// functions performing mqtt and start mqtt-service
-					'status/setupMqttServices.js?ver=20210128',
+					'status/setupMqttServices.js?ver=20210205',
 				];
 				scriptsToLoad.forEach(function(src) {
 					var script = document.createElement('script');

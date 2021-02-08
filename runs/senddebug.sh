@@ -18,6 +18,8 @@ echo "############################ ladestatus.log ##############" >> $debugFile
 echo "$(tail -800 /var/www/html/openWB/ramdisk/ladestatus.log)" >> $debugFile
 echo "############################ soc.log ##############" >> $debugFile
 echo "$(cat /var/www/html/openWB/ramdisk/soc.log)" >> $debugFile
+echo "############################ rfid.log ##############" >> $debugFile
+echo "$(cat /var/www/html/openWB/ramdisk/rfid.log)" >> $debugFile
 
 for currentConfig in /etc/mosquitto/conf.d/99-bridge-*; do
     if [ -f "$currentConfig" ]; then

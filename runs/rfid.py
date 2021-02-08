@@ -177,7 +177,7 @@ def getplugstat():
 
 def conditions():
     if ( Values["lastpluggedlp"] != "0"):
-        logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
+        #logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
         try:
             with open('ramdisk/readtag', 'r') as value:
                 Values.update({'lastscannedtag' : str(value.read().rstrip())})

@@ -29,6 +29,49 @@ body > .container {
     line-height: 30px; /* vertically center the text there */
 }
 
+.hide {
+    display: none!important;
+}
+
+.card {
+    margin-bottom: 1rem;
+}
+
+.card .card-header {
+    font-weight: bold;
+}
+
+.bg-primary,
+.bg-secondary,
+.bg-danger,
+.bg-success {
+    color: white;
+}
+
+.bg-warning,
+.bg-info {
+    color: #212529;
+}
+
+.card-header[data-toggle="collapse"].collapsed:after {
+    content: "\f0fe";
+}
+
+.card-header[data-toggle="collapse"]:after {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: "\f146";
+    float: right;
+}
+
+.text-monospace {
+    font-family: monospace, monospace;
+    font-size: 0.7rem;
+}
+
+#ladelogtablediv {
+    overflow-x: scroll;
+}
 /* very Small devices (up to 575.98px) */
 @media screen and (max-width: 575.98px) {
     .navbar-collapse a {
@@ -37,6 +80,13 @@ body > .container {
     .navbar-brand {
         font-size: 2.0em;
     }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        row-gap: 10px;
+        column-gap: 30px;
+    }
 }
 
 /* Small devices (landscape phones, 576px and up) */
@@ -44,12 +94,26 @@ body > .container {
     html {
         font-size: 0.8rem;
     }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        row-gap: 10px;
+        column-gap: 30px;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media screen and (min-width: 768px) {
     html {
         font-size: 0.9rem;
+    }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 10px;
+        column-gap: 30px;
     }
 }
 

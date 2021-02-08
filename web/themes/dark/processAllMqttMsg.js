@@ -792,9 +792,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		$('.nameLp').each(function() {  // fill in name for all element of class '.nameLp'
 			var lp = $(this).closest('[data-lp]').data('lp');  // get attribute lp from parent
 			if ( lp == index ) {
-	    		$(this).text(mqttpayload);
+				$(this).text(mqttpayload);
 			}
-	    });
+		});
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -876,7 +876,6 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			case '1':
 				$('[data-lp="' + index + '"]').show();
 				break;
-
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {
@@ -984,7 +983,6 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Watt$/i ) ) {
-
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualPowerDevice');  // now get parents respective child element
@@ -1000,8 +998,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(actualPower);
 	}
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i ) ) {
-
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualDailyYieldDevice');  // now get parents respective child element
@@ -1015,8 +1012,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		} else {
 			element.text("");
 		}
-
-		}
+	}
 	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device

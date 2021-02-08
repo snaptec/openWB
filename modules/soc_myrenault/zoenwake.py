@@ -23,7 +23,8 @@ f.close()
 gigyarooturl = android_config['servers']['gigyaProd']['target'] 
 gigyaapikey = android_config['servers']['gigyaProd']['apikey'] 
 kamereonrooturl = android_config['servers']['wiredProd']['target']
-kamereonapikey = android_config['servers']['wiredProd']['apikey']
+#kamereonapikey = android_config['servers']['wiredProd']['apikey']
+kamereonapikey = 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2'
 #print(time_string, 'gigyarooturl',gigyarooturl,gigyaapikey,kamereonrooturl,kamereonapikey)
 #
 f = open('/var/www/html/openWB/ramdisk/zoereply4lp'+chargepoint, 'r')

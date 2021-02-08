@@ -23,6 +23,7 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc1"
 		username=$soc_teslalp2_username
 		passwordConfigText="soc_teslalp2_password"
+		mfaPasscodeConfigText="soc_teslalp2_mfapasscode"
 		carnumber=$soc_teslalp2_carnumber
 		tokensfile="$MODULEDIR/tokens.lp2"
 		;;
@@ -37,12 +38,14 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc"
 		username=$soc_tesla_username
 		passwordConfigText="soc_tesla_password"
+		mfaPasscodeConfigText="soc_tesla_mfapasscode"
 		carnumber=$soc_tesla_carnumber
 		tokensfile="$MODULEDIR/tokens.lp1"
 		;;
 esac
 
 password="${!passwordConfigText}"
+mfapasscode="${!mfaPasscodeConfigText}"
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
@@ -53,11 +56,14 @@ socDebugLog(){
 
 getAndWriteSoc(){
 	re='^-?[0-9]+$'
-	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
+	# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
+	response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --data="vehicles/#/vehicle_data")
 	# current state of car
-	state=$(echo $response | jq .response.state)
+	# state=$(echo $response | jq .response.state)
+	state=$(echo $response | jq .state)
 	socDebugLog "State: $state"
-	soclevel=$(echo $response | jq .response.charge_state.battery_level)
+	# soclevel=$(echo $response | jq .response.charge_state.battery_level)
+	soclevel=$(echo $response | jq .charge_state.battery_level)
 	socDebugLog "SoC: $soclevel"
 
 	if  [[ $soclevel =~ $re ]] ; then
@@ -80,6 +86,7 @@ clearPassword(){
 setTokenPassword(){
 	socDebugLog "Writing token password to config."
 	sed -i "s/$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
+	sed -i "s/$mfaPasscodeConfigText=.*/$mfaPasscodeConfigText=XXX/" $CONFIGFILE
 }
 
 checkToken(){
@@ -110,7 +117,8 @@ checkToken(){
 			fi
 			# Request new token with user/pass.
 			socDebugLog "Requesting new token..."
-			response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
+			# response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
+			response=$(python3 $MODULEDIR/tesla.py --email="$username" --password="$password" --mfapasscode="$mfapasscode" --tokensfile="$tokensfile")
 			# password in response, so do not log it!
 			if [ -f $tokensfile ]; then
 				socDebugLog "...all done, removing password from config file."
@@ -129,8 +137,10 @@ wakeUpCar(){
 	socDebugLog "Waking up car."
 	counter=0
 	until [ $counter -ge 12 ]; do
-		response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
-		state=$(echo $response | jq .response.state)
+		# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
+		response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --command="vehicles/#/wake_up")
+		# state=$(echo $response | jq .response.state)
+		state=$(echo $response | jq .state)
 		if [ "$state" = "\"online\"" ]; then
 			break
 		fi
