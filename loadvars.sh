@@ -231,12 +231,7 @@ loadvars(){
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 			fi
 		fi
-		if [[ $evsecons2 == "extopenwb" ]]; then
-			evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolPlugStat)
-			ladestatuslp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolChargeStat)
-			echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstatlp3
-			echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestatlp3
-		fi
+
 
 		if [[ $evsecons2 == "modbusevse" ]]; then
 			evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
