@@ -394,7 +394,7 @@ $numDevices = 9;
 												<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 											</label>
 										</div>
-										<span class="form-text small">Wenn diese Option aktiviert wird, wird für die Leistungserfassung einseparates Gerät abgefragt. Das kann genutzt werden, wenn z. B. ein Gerät über keine Leistungsmessung verfügt, jedoch ein Zwischenstecker mit Messung eingesetzt wird.</span>
+										<span class="form-text small">Wenn diese Option aktiviert wird, wird für die Leistungserfassung ein separates Gerät abgefragt. Das kann genutzt werden, wenn z. B. ein Gerät über keine Leistungsmessung verfügt, jedoch ein Zwischenstecker mit Messung eingesetzt wird.</span>
 									</div>
 								</div>
 							</div>
