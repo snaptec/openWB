@@ -131,7 +131,8 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 fi
-python3 /var/www/html/openWB/runs/smarthomehandler.py >> /var/www/html/openWB/ramdisk/smarthomehandler.log 2>&1 &
+python3 /var/www/html/openWB/runs/smarthomehandler.py >> /var/www/html/openWB/ramdisk/smarthome.log 2>&1 &
+
 # restart mqttsub handler
 echo "mqtt handler..."
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null

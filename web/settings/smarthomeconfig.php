@@ -337,8 +337,8 @@ $numDevices = 9;
 														<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													</div>
 												</div>
-												<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br> 
-												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle die Speicherleistung und die maximal mögliche Speicherladung (als Offset) relevant.</span>
+												<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br>
+												Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle nur die aktuelle Leisung am EVU Punkt und die maximal mögliche Speicherladung (als Offset) relevant.</span>
 											</div>
 										</div>
 									</div>
@@ -394,7 +394,7 @@ $numDevices = 9;
 												<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 											</label>
 										</div>
-										<span class="form-text small">Wenn diese Option aktiviert wird, wird für die Leistungserfassung einseparates Gerät abgefragt. Das kann genutzt werden, wenn z. B. ein Gerät über keine Leistungsmessung verfügt, jedoch ein Zwischenstecker mit Messung eingesetzt wird.</span>
+										<span class="form-text small">Wenn diese Option aktiviert wird, wird für die Leistungserfassung ein separates Gerät abgefragt. Das kann genutzt werden, wenn z. B. ein Gerät über keine Leistungsmessung verfügt, jedoch ein Zwischenstecker mit Messung eingesetzt wird.</span>
 									</div>
 								</div>
 							</div>
@@ -442,7 +442,7 @@ $numDevices = 9;
 						<div  class="device-option-housebattery hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="maxBatteryPower" class="col-md-4 col-form-label">maximale Speicherleistung in W</label>
+									<label for="maxBatteryPower" class="col-md-4 col-form-label">maximale Speicherladung in W</label>
 									<div class="col">
 										<input id="maxBatteryPower" name="maxBatteryPower" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
 									</div>
