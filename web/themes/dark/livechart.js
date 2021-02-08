@@ -505,6 +505,7 @@ function loadgraph() {
 			},
 			responsive: true,
 			maintainAspectRatio: false,
+			animation: false,
 			hover: {
 				mode: 'null'
 			},
