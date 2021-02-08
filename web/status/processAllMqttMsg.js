@@ -133,19 +133,19 @@ function processPvMsg (mqttmsg, mqttpayload) {
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/WhCounter$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .yieldInverter');
+			kShow(mqttpayload, '#inverter' + index + ' .yieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/DailyYieldKwh$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .dYieldInverter');
+			fractionDigitsShow(mqttpayload, '#inverter' + index + ' .dYieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/MonthlyYieldKwh$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .mYieldInverter');
+			fractionDigitsShow(mqttpayload, '#inverter' + index + ' .mYieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/YearlyYieldKwh$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .yYieldInverter');
+			fractionDigitsShow(mqttpayload, '#inverter' + index + ' .yYieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/faultState$/i) )
 		{
