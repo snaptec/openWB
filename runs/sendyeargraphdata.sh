@@ -6,18 +6,42 @@ nextyear=$(( input + 1 ))
 echo ""  > /var/www/html/openWB/ramdisk/yearlydata
 echo "" > /var/www/html/openWB/ramdisk/yearlydata00
 
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"01.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"02.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"03.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"04.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"05.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"06.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"07.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"08.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"09.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"10.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"11.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"12.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}01.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"01.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}02.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"02.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}03.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"03.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}04.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"04.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}05.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"05.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}06.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"06.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}07.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"07.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}08.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"08.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}09.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"09.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}10.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"10.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}11.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"11.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
+if [ -s /var/www/html/openWB/web/logging/data/monthly/${input}12.csv ]; then
+    echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"12.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
+fi
 
 grep . /var/www/html/openWB/ramdisk/yearlydata > /var/www/html/openWB/ramdisk/yearlydatas
 
