@@ -3,14 +3,14 @@
 
 #########################################################
 #
-# liest von Tibber die stündlichen Preise für heute und morgen,
+# liest von aWATTar die stündlichen Preise für heute und morgen,
 # erstellt daraus die Datei für den Graphen und liefert den aktuell
 # gültigen Strompreis
 #
 # setzt aktuellen Strompreis auf 99.99ct/kWh, wenn nichts empfangen wird
 #
-# benötigt als Parameter den persönlichen Tibber-Token und die homeID
-# des Anschlusses
+# benötigt als Parameter die Landeskennung (at/de) und den
+# individuellen Basispreis (kann auch 0 sein) des Anschlusses
 #
 # Preisliste in UTC und ct/kWh
 #
@@ -26,11 +26,31 @@ from time import sleep
 from datetime import datetime, timezone, timedelta
 import requests
 
+laenderdaten = {
+    'at': {
+        'url': 'https://api.awattar.at/v1/marketdata',
+        # Berechnung Brutto-Arbeitspreis für Österreich nicht möglich, da wesentlich komplexer.
+        # Antwort aWATTar:
+        # In Österreich werden Netzentgelte/Abgaben ganz anderes behandelt und sind im Unterschied zu Deutschland
+        # auch nicht Teil des Vertrages mit aWATTar. In Österreich haben wir keine Möglichkeit, die Netzentgelte
+        # vorab eindeutig zu bestimmen und führen dies normalerweise auch nicht auf. Es ist in Österreich auch möglich,
+        # dass die Netzentgelte nicht an uns, sondern direkt an den Netzbetreiber entrichtet werden.
+        # In anderen Worten, leider kann man das Verfahren aus Deutschland in Österreich nicht anwenden.
+        'umsatzsteuer': 1,
+        'awattargebuehr': 0
+    },
+    'de': {
+        'url': 'https://api.awattar.de/v1/marketdata',
+        'umsatzsteuer': 1.19,
+        'awattargebuehr': 0.25
+    }
+}
+
 # Hilfsfunktionen
 def write_log_entry(message):
     # schreibt Eintrag ins Log
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    line = timestamp + ' Modul tibbergetprices.py: ' + message + '\n'
+    line = timestamp + ' Modul awattargetprices.py: ' + message + '\n'
     with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
         f.write(line)
 
@@ -108,11 +128,9 @@ def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=
     return dec
 
 @try_api_call()
-def readAPI(token, id):
-    headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
-    data = '{ "query": "{viewer {home(id:\\"' + id + '\\") {currentSubscription {priceInfo {today {total startsAt} tomorrow {total startsAt}}}}}}" }'
+def readAPI(url):
     # Timeout für Verbindung = 2 sek und Antwort = 6 sek
-    response = requests.post('https://api.tibber.com/v1-beta/gql', headers=headers, data=data, timeout=(2, 6))
+    response = requests.get(url, headers={'Content-Type': 'application/json'}, timeout=(2, 6))
     return response
 
 # Hauptprogramm
@@ -120,16 +138,25 @@ def readAPI(token, id):
 # übergebene Paremeter auslesen
 argumentsOK = False
 if len(sys.argv) == 3:
-    tibberToken = str(sys.argv[1])
-    homeID = str(sys.argv[2])
-else:
+    landeskennung = str(sys.argv[1])
+    basispreis = str(sys.argv[2])
+    if landeskennung in laenderdaten:
+        try:
+            basispreis = float(basispreis)
+            argumentsOK = True
+        except ValueError:
+            write_log_entry('Basispreis fehlerhaft')
+    else:
+        write_log_entry('unbekannte Landeskennung')
+
+if  not argumentsOK:
     # Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
     exit_on_invalid_price_data('Argumente fehlen oder sind fehlerhaft')
 
 readPriceSuccessfull = False
 # API abfragen
 try:
-    response = readAPI(tibberToken, homeID)
+    response = readAPI(laenderdaten[landeskennung]['url'])
     response.raise_for_status()
 except requests.exceptions.HTTPError as errh:
     exit_on_invalid_price_data('Http Error: ' + str(errh))
@@ -140,52 +167,35 @@ except requests.exceptions.RequestException as err:
 
 # Bei Erfolg JSON auswerten
 try:
-    tibber_json = response.json()
+    marketprices = json.loads(response.text)['data']
 except:
     exit_on_invalid_price_data('Korruptes JSON')
 
-if not 'errors' in tibber_json:
-    # extrahiere Preise für heute, sortiert nach Zeitstempel
-    try:
-        today_prices = sorted(tibber_json['data']['viewer']['home']['currentSubscription']['priceInfo']['today'], key=lambda k: (k['startsAt'], k['total']))
-    except:
-        exit_on_invalid_price_data('Korrupte Preisdaten')
-    # extrahiere Preise für morgen, sortiert nach Zeitstempel
-    try:
-        tomorrow_prices = sorted(tibber_json['data']['viewer']['home']['currentSubscription']['priceInfo']['tomorrow'], key=lambda k: (k['startsAt'], k['total']))
-    except:
-        exit_on_invalid_price_data('Korrupte Preisdaten')
+# Liste sortiert nach Zeitstempel
+sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
 
-    # alle Zeiten in UTC verarbeiten
-    now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
-    now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-    preisliste = []
-    preise_ok = False
-    for price_data in today_prices:
-        # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
-        # entferne ':' in Timezone, da nicht von strptime unterstützt
-        time_str = ''.join(price_data['startsAt'].rsplit(':', 1))
-        startzeit_localized = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S%z')
-        # und konvertiere nach UTC
-        startzeit_utc = startzeit_localized.astimezone(timezone.utc)
-        #Preisliste beginnt immer mit aktueller Stunde
-        if (startzeit_utc >= now_full_hour):
-            if (startzeit_utc == now_full_hour):
-                preise_ok = True
-            bruttopreis = price_data['total'] * 100
+# alle Zeiten in UTC verarbeiten
+now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
+now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
+preisliste = []
+preise_ok = False
+for price_data in sorted_marketprices:
+    startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
+    startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # Objekt von naive nach timezone-aware, hier UTC
+    if (startzeit_utc >= now_full_hour):
+        if (startzeit_utc == now_full_hour):
+            preise_ok = True
+        if (landeskennung == 'de'):
+            # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
+            bruttopreis = (price_data['marketprice']/10 * laenderdaten[landeskennung]['umsatzsteuer']) + laenderdaten[landeskennung]['awattargebuehr'] + basispreis
             bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-            preisliste.append({str('%d' % startzeit_utc.timestamp()) : bruttopreis_str})
-    if (not preise_ok):
-        exit_on_invalid_price_data('Aktueller Preis nicht gefunden')
-    for price_data in tomorrow_prices:
-        # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
-        # entferne ':' in Timezone, da nicht von strptime unterstützt
-        time_str = ''.join(price_data['startsAt'].rsplit(':', 1))
-        startzeit_utc = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S%z')
-        bruttopreis = price_data['total'] * 100
-        bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
+        else:
+            # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
+            bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
         preisliste.append({str('%d' % startzeit_utc.timestamp()) : bruttopreis_str})
 
+if (preise_ok):
+    # Preisliste liegt jetzt vor in UTC und ct/kWh, sortiert nach Zeit
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
         # Preisliste durchlaufen und in ramdisk
@@ -195,12 +205,9 @@ if not 'errors' in tibber_json:
                 if (index == 0):
                     # erster Eintrag ist aktueller Preis
                     etprovider_pricefile.write('%s\n' % preis)
-
-    #publish MQTT-Daten für Preis und Graph
-    os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
-    os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
-
 else:
-    # Fehler in Antwort
-    error = tibber_json['errors'][0]['message']
-    exit_on_invalid_price_data('Fehler in Tibber-Antwort: ' + error)
+    exit_on_invalid_price_data('Preisliste unvollständig')
+
+#publish MQTT-Daten für Preis und Graph
+os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
+os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
