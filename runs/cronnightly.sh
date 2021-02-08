@@ -7,10 +7,6 @@ echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
 echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
 
-
-
-
-
 monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m)"
 
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
@@ -92,10 +88,12 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /v
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
-randomSleep=$(<ramdisk/randomSleepValue)
+if [[ -s /var/www/html/openWB/ramdisk/randomSleepValue ]]; then
+	randomSleep=$(</var/www/html/openWB/ramdisk/randomSleepValue)
+fi
 if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
-    echo $(date +%s): Deleting ramdisk/randomSleepValue to force new randomization
-    rm /var/www/html/openWB/ramdisk/randomSleepValue
+	echo $(date +%s): Deleting randomSleepValue to force new randomization
+	rm /var/www/html/openWB/ramdisk/randomSleepValue
 else
-    echo "Not deleting randomSleepValue"
+	echo "Not deleting randomSleepValue of \"$randomSleep\""
 fi
