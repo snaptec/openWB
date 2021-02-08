@@ -98,6 +98,19 @@ var topicsToSubscribe = [
 	["openWB/graph/boolDisplayLegend", 1],
 	["openWB/graph/boolDisplayLiveGraph", 1],
 	["openWB/graph/boolDisplayPv", 1],
+	// daily graph
+	["openWB/system/DayGraphData1", 0],
+	["openWB/system/DayGraphData2", 0],
+	["openWB/system/DayGraphData3", 0],
+	["openWB/system/DayGraphData4", 0],
+	["openWB/system/DayGraphData5", 0],
+	["openWB/system/DayGraphData6", 0],
+	["openWB/system/DayGraphData7", 0],
+	["openWB/system/DayGraphData8", 0],
+	["openWB/system/DayGraphData9", 0],
+	["openWB/system/DayGraphData10", 0],
+	["openWB/system/DayGraphData11", 0],
+	["openWB/system/DayGraphData12", 0],
 
 	// global topics
 	["openWB/global/WHouseConsumption", 1],
@@ -372,6 +385,7 @@ var options = {
 		topicsToSubscribe.forEach((topic) => {
 			client.subscribe(topic[0], { qos: 0 });
 		});
+		subscribeDayGraph();
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {

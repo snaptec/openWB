@@ -111,6 +111,7 @@
 	<script src="themes/colors/powermeter.js"></script>
 	<script src="themes/colors/yieldmeter.js"></script>
 	<script src="themes/colors/powergraph.js"></script>
+	<script src="themes/colors/daygraph.js"></script>	
 	<script src="themes/colors/chargePointList.js"></script>
 	<script src="themes/colors/smartHomeList.js"></script>
 	<script src="themes/colors/batteryList.js"></script>
@@ -170,8 +171,18 @@
 				<figure id="powermeter" class=" mb-0"></figure>
 			</div>
 			<div class="wb-widget col-md p-2 m-1">
-				<h3>Leistung / Ladestand</h3>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-8 px-0">
+							<h3>Leistung / Ladestand</h3>
+						</div>
+						<div class="col-4 px-0" style="text-align: right;">
+							<button class="btn btn-outline-secondary btn-sm " id="graphModeButton"><span class="fa fa-chart-area px-0"></span></button>
+						</div>
+					</div>
+				</div>
 				<figure id="powergraph" class="mb-0"></figure>
+				<figure id="daygraph" class="mb-0 hide"></figure>
 			</div>
 			<div class="wb-widget col-md p-2 m-1 ">
 				<h3>Energie heute</h3>
@@ -887,6 +898,7 @@
 
 			wbdata.init();
 			powerGraph.init();
+			dayGraph.init();
 			powerMeter.init();
 			yieldMeter.init();
 			chargePointList.init();
@@ -1068,24 +1080,7 @@
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
 					// once page is unhidden... reload graph completety
-					initialread = 0;
-					all1 = 0;
-					all2 = 0;
-					all3 = 0;
-					all4 = 0;
-					all5 = 0;
-					all6 = 0;
-					all7 = 0;
-					all8 = 0;
-					all9 = 0;
-					all10 = 0;
-					all11 = 0;
-					all12 = 0;
-					all13 = 0;
-					all14 = 0;
-					all15 = 0;
-					all16 = 0;
-
+					powerGraph.reset();
 					subscribeMqttGraphSegments();
 				}
 			});

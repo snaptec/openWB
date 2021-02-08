@@ -335,7 +335,6 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 		} else {
 			wbdata.updateEvu("evueDailyYield", 0);
 		}
-
 	};
 	// end color theme
 
@@ -456,7 +455,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 		electricityPriceTimeline = getCol(csvaData, 0);
 		electricityPriceChartline = getCol(csvaData, 1);
-		loadElectricityPriceChart(); 
+		loadElectricityPriceChart();
 	}
 	else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
 		setInputValue('MaxPriceForCharging', mqttpayload);
@@ -582,10 +581,10 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		wbdata.updateBat("isBatteryConfigured", (mqttpayload == 1));
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
-		wbdata.updateBat("batteryEnergyExport", makeFloat (mqttpayload));
+		wbdata.updateBat("batteryEnergyExport", makeFloat(mqttpayload));
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
-		wbdata.updateBat("batteryEnergyImport", makeFloat (mqttpayload))
+		wbdata.updateBat("batteryEnergyImport", makeFloat(mqttpayload))
 	}
 	// end color theme
 
@@ -627,6 +626,9 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 		}
 		$('#time').text(time);
 		$('#date').text(date);
+	}
+	else if (mqttmsg.match(/^openwb\/system\/daygraphdata[1-9][0-9]*$/i)) {
+		dayGraph.update(mqttmsg, mqttpayload);
 	}
 }
 
@@ -865,9 +867,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// soc-module configured for respective charge point
 		wbdata.updateCP(index, "isSocConfigured", (mqttpayload == 1));
 	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
+	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i)) {
 		// manual soc-module configured for respective charge point
-		wbdata.updateCP(index, "isSocManual", (mqttpayload == 1));			
+		wbdata.updateCP(index, "isSocManual", (mqttpayload == 1));
 	}
 	else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/boolchargepointconfigured$/i)) {
 		// respective charge point configured
@@ -1203,6 +1205,23 @@ function unsubscribeMqttGraphSegments() {
 		topic = "openWB/graph/" + segments + "alllivevalues";
 		client.unsubscribe(topic);
 	}
+}
+
+function subscribeDayGraph() {
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	graphdate = yyyy + mm + dd;
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/DayGraphData" + segment;
+		client.subscribe(topic, { qos: 0 });
+	}
+	publish(graphdate, "openWB/set/graph/RequestDayGraph");
+}
+
+function unsubscribeDayGraph() {
+	publish("0", "openWB/set/graph/RequestDayGraph");
 }
 
 function makeInt(message) {
