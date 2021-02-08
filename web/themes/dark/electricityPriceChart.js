@@ -2,8 +2,8 @@ function createPriceAnnotations(){
 	// creates green annotation boxes for all times where price is <= maxPrice
 	class Annotation {
 		type = 'box';
+		drawTime = "beforeDatasetsDraw"; // (default)
 		xScaleID = 'x-axis-0';
-		yScaleID = 'y-axis-left';
 		// left and right edge of the box, units are x-axis index
 		// initially set to index found
 		xMin = 0;
@@ -35,9 +35,37 @@ function createPriceAnnotations(){
 	return annotations;
 }
 
+function buildXLabel(value) {
+	// builds a string like "morgen 13 Uhr" from timestamp
+	var xLabelDate = new Date(value);  // date-object from timestamp
+	var theDate = new Date();  // now
+	var xLabel = xLabelDate.getHours() + ' Uhr';
+	var datumIstHeute = xLabelDate.getYear() == theDate.getYear() && xLabelDate.getMonth() == theDate.getMonth() && xLabelDate.getDate() == theDate.getDate();
+	if ( !datumIstHeute ) {
+		theDate.setDate(theDate.getDate() + 1);  // set date to tomorrow
+		if ( xLabelDate.getYear() == theDate.getYear() && xLabelDate.getMonth() == theDate.getMonth() && xLabelDate.getDate() == theDate.getDate() ) {
+			xLabel = 'morgen ' + xLabel;
+		} else {
+			xLabel = xLabelDate.getDate() + '.' + xLabelDate.getMonth() + '.' + xLabelDate.getFullYear() + ', ' + xLabel;
+		}
+	}
+	return xLabel;
+}
+
+function getXLabels(timestampLabels){
+	// converts array of timestamps and returns converted array
+	var labels = [];
+	for (i=0; i<timestampLabels.length; i++) {
+		labels.push(buildXLabel(timestampLabels[i]));
+	}
+	return labels;
+}
+
 function loadElectricityPriceChart() {
+	var xLabels = getXLabels(electricityPriceTimeline);
+
 	var electricityPriceChartData = {
-		labels: electricityPriceTimeline,
+		labels: xLabels,
 		datasets: [{
 			//yAxisID: 'y-axis-left',
 			data: electricityPriceChartline,
@@ -48,6 +76,7 @@ function loadElectricityPriceChart() {
 			steppedLine: true
 		}]
 	}
+
 	var ctxElectricityPricechart = $('#electricityPriceChartCanvas')[0].getContext('2d');
 
 	window.electricityPricechart = new Chart.Line(ctxElectricityPricechart, {
@@ -64,9 +93,7 @@ function loadElectricityPriceChart() {
 						let i = tooltipItem[0].index;
 						let title = 'jetzt';
 						if ( i > 0 ) {
-							// verursacht ab und an fehlermeldung data property of undefinded
-							let ticks = this._data.datasets[0]._meta[0].data[0]._chart.scales["x-axis-0"].ticks;
-							title =  'ab ' + ticks[i];
+							title =  'ab ' + xLabels[i];
 						}
                         return title;
                     }
@@ -75,10 +102,6 @@ function loadElectricityPriceChart() {
 			responsive: true,
 			maintainAspectRatio: false,
 			animation: false,
-			hover: {
-				mode: 'null'
-			},
-			stacked: false,
 			legend: {
 				display: false
 			},
@@ -91,23 +114,7 @@ function loadElectricityPriceChart() {
 						color: xgridCol  // from liveChart
 					},
 					ticks: {
-						fontColor: tickCol,  // from liveChart
-						callback: function(value, index) {
-							var tickDate = new Date(value);
-							console.log(value);
-							var theDate = new Date();  // now
-							var tick = tickDate.getHours() + ' Uhr';
-							var datumIstHeute = tickDate.getYear() == theDate.getYear() && tickDate.getMonth() == theDate.getMonth() && tickDate.getDate() == theDate.getDate();
-							if ( !datumIstHeute ) {
-								theDate.setDate(theDate.getDate() + 1);  // set date to tomorrow
-								if ( tickDate.getYear() == theDate.getYear() && tickDate.getMonth() == theDate.getMonth() && tickDate.getDate() == theDate.getDate() ) {
-									tick = 'morgen ' + tick;
-								} else {
-									tick = tickDate.getDate() + '.' + tickDate.getMonth() + '.' + tickDate.getFullYear() + ', ' + tick;
-								}
-							}
-							return tick;
-						}
+						fontColor: tickCol  // from liveChart
 					}
 				}],
 				yAxes: [{
@@ -118,7 +125,7 @@ function loadElectricityPriceChart() {
 					display: true,
 					scaleLabel: {
 						display: true,
-						labelString: 'Strompreis [ct/kWh]',
+						labelString: 'Preis [ct/kWh]',
 						fontColor: fontCol  // from liveChart
 					},
 					gridLines: {
@@ -132,8 +139,7 @@ function loadElectricityPriceChart() {
 				}]
 			},
 			annotation: {
-		        annotations: createPriceAnnotations(),
-		        drawTime: "beforeDatasetsDraw" // (default)
+		        annotations: createPriceAnnotations()
 		    }
 		}
 	});
