@@ -1041,12 +1041,12 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-        if (msg.topic == "openWB/set/pv/WhCounter"):
+        if (msg.topic == "openWB/set/pv/1/WhCounter"):
             if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
                 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-        if (msg.topic == "openWB/set/pv/W"):
+        if (msg.topic == "openWB/set/pv/1/W"):
             if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
                 if (float(msg.payload) > 1):
                     pvwatt=int(msg.payload.decode("utf-8")) * -1
