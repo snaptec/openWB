@@ -29,7 +29,7 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="status/status_style.css">
+		<link rel="stylesheet" type="text/css" href="status/status_style.css?ver=20210209">
 		<!-- local css due to async loading of theme css -->
 		<style>
 			#preloader {
@@ -77,6 +77,10 @@
 				return '';
 			}
 			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210209">');
+			}
 		</script>
 
 		<script>
