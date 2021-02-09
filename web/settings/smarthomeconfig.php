@@ -444,7 +444,7 @@ $numDevices = 9;
 								<div class="form-row mb-1">
 									<label for="maxBatteryPower" class="col-md-4 col-form-label">maximale Speicherladung in W</label>
 									<div class="col">
-										<input id="maxBatteryPower" name="maxBatteryPower" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
+										<input id="maxBatteryPower" name="maxBatteryPower" class="form-control naturalNumber" type="number" required="required" min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
 									</div>
 								</div>
 							</div>
