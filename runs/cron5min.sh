@@ -230,7 +230,7 @@ if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomehandler.py" >
 then
 	echo "test" > /dev/null
 else
-	python3 $OPENWBBASEDIR/runs/smarthomehandler.py  >> $RAMDISKDIR/smarthomehandler.log 2>&1 &
+	python3 $OPENWBBASEDIR/runs/smarthomehandler.py >> $RAMDISKDIR/smarthome.log 2>&1 &
 fi
 
 # if this is a remote controlled system check if our isss handler is running

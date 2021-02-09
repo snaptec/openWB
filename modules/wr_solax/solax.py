@@ -30,17 +30,24 @@ ipaddress = str(sys.argv[1])
 client = ModbusTcpClient(ipaddress, port=502)
 
 
-resp=client.read_input_registers(0, 114)
-
-pv1 = unsigned16(resp, 10)
-pv2 = unsigned16(resp, 11)
-
-
+resp=client.read_input_registers(10, 2)
+pv1 = unsigned16(resp, 0)
+pv2 = unsigned16(resp, 1)
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(pv1+pv2))
+f.write(str( (pv1 + pv2) * -1   ) )  # Erzeugung negativ  
 f.close()
 
-pvall = unsigned32(resp,80) / 10   # yield today
+resp=client.read_input_registers(80, 4)
+pvtoday = unsigned32(resp,0) / 10   # yield today
+f = open('/var/www/html/openWB/ramdisk/daily_pvkwh', 'w')
+f.write(str(pvtoday))
+f.close()
+pvall = unsigned32(resp,2)       # yield overall
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(pvall))
 f.close()
+f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
+f.write(str(pvall / 1000))
+f.close()
+
+client.close()

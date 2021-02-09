@@ -402,18 +402,21 @@
 				}
 			);
 
-			var pvOpt = 0;
+			var pv1 = 0;
+			var pv2 = 0;
 			function visibiltycheck(elementId, mqttpayload) {
 				// PV
 				if ( ( elementId == "boolPVConfiguredPv1") || ( elementId == "boolPVConfiguredPv2") ) {
-					if ( mqttpayload == 1 ) {
-						pvOpt |= 1;
+					if ( elementId == "boolPVConfiguredPv1" ) {
+						pv1 = mqttpayload;
+					} else {
+						pv2 = mqttpayload;
 					}
 
-					if ( pvOpt > 0 ) {
+					if ( (pv1 + pv2) > 0 ) {
 						showSection('.pvoptions');
 					} else {
-						hideSection('.pvoptions')
+						hideSection('.pvoptions');
 					}
 				}
 				// House Battery

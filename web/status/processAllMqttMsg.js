@@ -133,19 +133,19 @@ function processPvMsg (mqttmsg, mqttpayload) {
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/WhCounter$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .yieldInverter');
+			kShow(mqttpayload, '#inverter' + index + ' .yieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/DailyYieldKwh$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .dYieldInverter');
+			fractionDigitsShow(mqttpayload, '#inverter' + index + ' .dYieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/MonthlyYieldKwh$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .mYieldInverter');
+			fractionDigitsShow(mqttpayload, '#inverter' + index + ' .mYieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/YearlyYieldKwh$/i) )
 		{
-			directShow(mqttpayload, '#inverter' + index + ' .yYieldInverter');
+			fractionDigitsShow(mqttpayload, '#inverter' + index + ' .yYieldInverter');
 		}
 		else if ( mqttmsg.match(/^openWB\/pv\/[0-9]+\/faultState$/i) )
 		{
@@ -431,7 +431,8 @@ function visibilityRow(row, var1, var2, var3) {
 }
 
 var lpGesCardShown = false; // flag, show lpGes-Card if any other cp than cp1 is configured
-var pvGesCardShown = 0;
+var pv1 = 0;
+var pv2 = 0;
 
 //show/hide card, if module is configured
 function visibilityCard(card, mqttpayload) {
@@ -443,11 +444,17 @@ function visibilityCard(card, mqttpayload) {
 		if ( (card.match( /^[#]lp[2-8]$/i)) && lpGesCardShown == false ) {
 			showSection('#lpges');
 			lpGesCardShown = true;
-		} else if ( card.match(/^[#]inverter[1-2]$/i) ) {
-			pvGesCardShown |= card.split(/^[#]inverter/)[1];
-			if (pvGesCardShown == 3)
-			{
+		} else if ( card.match(/^[#]inverter[1-2]+$/i) ) {
+			if ( card == "#inverter1" ) {
+				pv1 = mqttpayload;
+			} else {
+				pv2 = mqttpayload;
+			}
+
+			if ( (pv1 + pv2) > 0 ) {
 				showSection('#pvGes');
+			} else {
+				hideSection('#pvGes');
 			}
 		}
 	}
