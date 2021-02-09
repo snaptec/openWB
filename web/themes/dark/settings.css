@@ -23,7 +23,9 @@ body {
 	color: #212529;
 }
 
-.btn-outline-secondary {
+.btn-outline-secondary,
+.table,
+pre {
 	color: #ffffff;
 }
 
@@ -35,16 +37,16 @@ body {
 .card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
 .card-header.bg-success .btn-outline-info:not(.active):not(:hover),
 .card-header.bg-primary .btn-outline-info:not(.active):not(:hover) {
-    background-color: #212529;
+	background-color: #212529;
 }
 
 .card-header.bg-success .btn-outline-info.focus {
-    box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
+	box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
 }
 
 .card-header.bg-success .btn-outline-info.active,
 .card-header.bg-success .btn-outline-info:hover {
-    border-color: #212529;
+	border-color: #212529;
 }
 
 .form-control,
@@ -90,7 +92,8 @@ hr {
 	border-color: dimgrey;
 }
 
-.clockpicker-popover {
+.clockpicker-popover,
+.datepicker.datepicker-dropdown {
 	background-color: #343a40;
 }
 
@@ -101,6 +104,29 @@ hr {
 
 .clockpicker-plate {
 	background-color: black;
+}
+
+.datepicker .datepicker-switch,
+.datepicker .prev:not(.disabled),
+.datepicker .next:not(.disabled),
+.datepicker .today,
+.datepicker .month,
+.datepicker .year {
+	color: #ffffff;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover {
+	background: #eeeeee;
+	color: #000000;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover {
+	background: #eeeeee;
+	color: #000000;
 }
 
 .carousel-caption,

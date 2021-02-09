@@ -34,6 +34,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210209">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -50,10 +72,10 @@
 				<div class="card-body">
 					<?php
 						$files = glob($_SERVER['DOCUMENT_ROOT'] . "/openWB/web/logging/data/ladelog/*.csv");
+						$rowClasses = "";
 						foreach ($files as $current) {
 					?>
-					<hr>
-						<div class="row">
+						<div class="row<?php echo $rowClasses; ?>">
 							<label for="downloadBtn" class="col-6 col-form-label">
 								<?php 
 									preg_match('/\/var\/www\/html\/openWB\/web\/logging\/data\/ladelog\/([0-9]{4})([0-9]{2})\.csv/',$current,$m); 
@@ -67,7 +89,10 @@
 								<a class="btn downloadBtn btn-info" style="margin-bottom:12px" href=<?php echo preg_split('/\/var\/www\/html\/openWB\/web\//', $current)[1]; ?> download><i class="fas fa-download"></i> Download</a>
 							</div>
 						</div>
-					<?php } ?>
+					<?php
+						$rowClasses = " border-top pt-2";
+						}
+					?>
 				</div>
 			</div>
 		</div>
