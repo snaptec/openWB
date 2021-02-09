@@ -1,15 +1,13 @@
 function createPriceAnnotations(){
-	// creates annotation boxes for all times when price is <= maxPrice
+	// creates green annotation boxes for all times where price is <= maxPrice
 	class Annotation {
 		type = 'box';
+		drawTime = "beforeDatasetsDraw"; // (default)
 		xScaleID = 'x-axis-0';
-		yScaleID = 'y-axis-left';
 		// left and right edge of the box, units are x-axis index
 		// initially set to index found
 		xMin = 0;
 		xMax = 0;
-		yMin = Math.floor(Math.min(...electricityPriceChartline));
-		yMax = Math.ceil(Math.max(...electricityPriceChartline));
 		borderColor = 'rgba(73, 238, 73, 0.3)';
 		borderWidth = 2;
 		backgroundColor = 'rgba(73, 238, 73, 0.3)';
@@ -37,35 +35,73 @@ function createPriceAnnotations(){
 	return annotations;
 }
 
+function buildXLabel(value) {
+	// builds a string like "morgen 13 Uhr" from timestamp
+	var xLabelDate = new Date(value);  // date-object from timestamp
+	var theDate = new Date();  // now
+	var xLabel = xLabelDate.getHours() + ' Uhr';
+	var datumIstHeute = xLabelDate.getYear() == theDate.getYear() && xLabelDate.getMonth() == theDate.getMonth() && xLabelDate.getDate() == theDate.getDate();
+	if ( !datumIstHeute ) {
+		theDate.setDate(theDate.getDate() + 1);  // set date to tomorrow
+		if ( xLabelDate.getYear() == theDate.getYear() && xLabelDate.getMonth() == theDate.getMonth() && xLabelDate.getDate() == theDate.getDate() ) {
+			xLabel = 'morgen ' + xLabel;
+		} else {
+			xLabel = xLabelDate.getDate() + '.' + xLabelDate.getMonth() + '.' + xLabelDate.getFullYear() + ', ' + xLabel;
+		}
+	}
+	return xLabel;
+}
+
+function getXLabels(timestampLabels){
+	// converts array of timestamps and returns converted array
+	var labels = [];
+	for (i=0; i<timestampLabels.length; i++) {
+		labels.push(buildXLabel(timestampLabels[i]));
+	}
+	return labels;
+}
+
 function loadElectricityPriceChart() {
+	var xLabels = getXLabels(electricityPriceTimeline);
+
 	var electricityPriceChartData = {
-		labels: electricityPriceTimeline,
+		labels: xLabels,
 		datasets: [{
-			yAxisID: 'y-axis-left',
+			//yAxisID: 'y-axis-left',
 			data: electricityPriceChartline,
-			borderColor: "rgba(255, 155, 155, 0.9)",
+			borderColor: evuCol,  // from liveChart
 			backgroundColor: "rgba(0, 0, 255, 0.7)",
-			borderWidth: 2,
+			borderWidth: 3,
 			fill: false,
 			steppedLine: true
 		}]
 	}
+
 	var ctxElectricityPricechart = $('#electricityPriceChartCanvas')[0].getContext('2d');
-	var priceAnnotations = createPriceAnnotations();
 
 	window.electricityPricechart = new Chart.Line(ctxElectricityPricechart, {
 		data: electricityPriceChartData,
 		options: {
 			tooltips: {
-				enabled: true
+				enabled: true,
+				callbacks: {
+                    label: function(tooltipItem, data) {
+						let i = tooltipItem.index;
+                        return data.datasets[0].data[i] + ' ct/kWh';
+                    },
+					title: function(tooltipItem, data) {
+						let i = tooltipItem[0].index;
+						let title = 'jetzt';
+						if ( i > 0 ) {
+							title =  'ab ' + xLabels[i];
+						}
+                        return title;
+                    }
+                }
 			},
 			responsive: true,
 			maintainAspectRatio: false,
 			animation: false,
-			hover: {
-				mode: 'null'
-			},
-			stacked: false,
 			legend: {
 				display: false
 			},
@@ -73,40 +109,37 @@ function loadElectricityPriceChart() {
 				display: false
 			},
 			scales: {
-				xAxes: [
-					{
+				xAxes: [{
 					gridLines: {
-							// light grey, opacy = 100% (visible)
-							color: "rgba(204, 204, 204, 1)",
-						},
-
+						color: xgridCol  // from liveChart
+					},
 					ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+						fontColor: tickCol  // from liveChart
 					}
 				}],
 				yAxes: [{
-					// values price
+					// values = price
 					position: 'left',
 					id: 'y-axis-left',
 					type: 'linear',
 					display: true,
 					scaleLabel: {
 						display: true,
-						labelString: 'Strompreis [ct/kWh]',
-						fontColor: "rgba(153, 153, 153, 1)"
+						labelString: 'Preis [ct/kWh]',
+						fontColor: fontCol  // from liveChart
 					},
 					gridLines: {
-						color: "rgba(204, 204, 204, 1)",
+						color: gridCol,  // from liveChart
+						zeroLineColor: gridCol
 					},
 					ticks: {
-						fontColor: "rgba(153, 153, 153, 1)"
+						fontColor: tickCol,  // from liveChart
+						maxTicksLimit: 7.1
 					}
 				}]
 			},
 			annotation: {
-		        annotations: priceAnnotations,
-		        drawTime: "beforeDatasetsDraw" // (default)
+		        annotations: createPriceAnnotations()
 		    }
 		}
 	});

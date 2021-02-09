@@ -759,7 +759,7 @@ function loadgraph() {
 				enabled: false
 			},
 			plugins: {
-					zoom: {
+				zoom: {
 					// Container for pan options
 					pan: {
 						// Boolean to enable panning
@@ -806,7 +806,9 @@ function loadgraph() {
 				display: boolDisplayLegend,
 				position: 'bottom',
 				labels: {
-					filter: function(item, chart) {
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)",
+						filter: function(item, chart) {
 						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeicheri) || item.text.includes(hidespeichere) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)|| item.text.includes(hidedevice3)|| item.text.includes(hidedevice4)|| item.text.includes(hidedevice5)|| item.text.includes(hidedevice6)|| item.text.includes(hidedevice7)|| item.text.includes(hidedevice8)|| item.text.includes(hidedevice9)|| item.text.includes(hidedevice10)|| item.text.includes(hidedevice1)|| item.text.includes(hidedevice2)|| item.text.includes(hidetemp1)|| item.text.includes(hidetemp2)|| item.text.includes(hidetemp3)|| item.text.includes(hidetemp4)|| item.text.includes(hidetemp5)|| item.text.includes(hidetemp6)) {
 							return false
 						} else {
@@ -821,6 +823,10 @@ function loadgraph() {
 			scales: {
 				xAxes: [{
 					type: 'category',
+					ticks: {
+						//source: 'data',
+						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+					}
 				}],
 				yAxes: [
 					{
@@ -831,6 +837,14 @@ function loadgraph() {
 						scaleLabel: {
 							display: true,
 							labelString: 'Leistung [kW]',
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						gridLines: {
+							// light grey, opacy = 100% (visible)
+							color: "rgba(204, 204, 204, 1)",
+						},
+						ticks: {
 							// middle grey, opacy = 100% (visible)
 							fontColor: "rgba(153, 153, 153, 1)"
 						},
@@ -857,6 +871,8 @@ function loadgraph() {
 							color: "rgba(0, 0, 0, 0)",
 						},
 						ticks: {
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)",
 							min: 1,
 							suggestedMax: 100
 						}

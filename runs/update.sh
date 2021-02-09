@@ -14,8 +14,6 @@ chmod 777 var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 
 if [[ "$releasetrain" == "stable" ]]; then
 	train=stable17
-elif [[ "$releasetrain" == "stableold" ]]; then
-	train=stable
 else
 	train=$releasetrain
 fi
