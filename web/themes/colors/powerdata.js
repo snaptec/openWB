@@ -160,10 +160,10 @@ class WbData {
 		this.shDevice[index - 1][field] = value;
 		switch (field) {
 			case 'power':
-				this.updateUsageSummary(2, "power", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
+				this.updateConsumerSummary("power");
 				break;
 			case 'energy':
-				this.updateUsageSummary(2, "energy", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
+				this.updateConsumerSummary("energy");
 				break;
 			case 'showInGraph':
 				this.persistGraphPreferences();
@@ -255,7 +255,7 @@ class WbData {
 	}
 
 	updateConsumerSummary(cat) {
-		this.updateUsageSummary(3, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
+		this.updateUsageSummary(2, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
 			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0));
 	}
 
