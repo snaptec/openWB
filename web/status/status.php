@@ -411,15 +411,15 @@
 											<th scope="row">Gesamtertrag [kWh]</th>
 											<td><div class="yieldInverter">--</div></td>
 										</tr>
-										<tr>
+										<tr class="hide">
 											<th scope="row">Tagesertrag [kWh]</th>
 											<td><div class="dYieldInverter">--</div></td>
 										</tr>
-										<tr>
+										<tr class="hide">
 											<th scope="row">Monatsertrag [kWh]</th>
 											<td><div class="mYieldInverter">--</div></td>
 										</tr>
-										<tr>
+										<tr class="hide">
 											<th scope="row">Jahresertrag [kWh]</th>
 											<td><div class="yYieldInverter">--</div></td>
 										</tr>
@@ -626,9 +626,9 @@
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'status/processAllMqttMsg.js?ver=20210208a',
+					'status/processAllMqttMsg.js?ver=20210209',
 					// functions performing mqtt and start mqtt-service
-					'status/setupMqttServices.js?ver=20210205',
+					'status/setupMqttServices.js?ver=20210209',
 				];
 				scriptsToLoad.forEach(function(src) {
 					var script = document.createElement('script');
