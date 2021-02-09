@@ -27,9 +27,6 @@ DebugLog(){
 
 answer=$(curl --connect-timeout 5 -s $battjsonurl)
 speicherleistung=$(echo $answer | jq -r "$battjsonwatt" | sed 's/\..*$//')
-	if (( $speicherleistung > 5 )); then
-		speicherleistung=$(echo "$speicherleistung*-1" |bc)
-	fi	
 DebugLog "BattLeistung: ${speicherleistung}"
 echo ${speicherleistung}
 echo $speicherleistung > /var/www/html/openWB/ramdisk/speicherleistung
