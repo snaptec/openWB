@@ -1736,6 +1736,11 @@ updateConfig(){
 		echo "soc_tesla_mfapasscode=XXX" >> $ConfigFile
 		echo "soc_teslalp2_mfapasscode=XXX" >> $ConfigFile
 	fi
+	if ! grep -Fq "speicherpwloginneeded=" $ConfigFile; then
+		echo "speicherpwloginneeded=0" >> $ConfigFile
+		echo "speicherpwuser=Username" >> $ConfigFile
+		echo "speicherpwpass='XXX'" >> $ConfigFile
+	fi
 
 	echo "Config file Update done."
 }

@@ -250,6 +250,30 @@
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
+								<div class="form-row mb-1">
+									<label for="speicherpwloginneeded" class="col-md-4 col-form-label">Anmeldung erforderlich</label>
+									<div class="col">
+										<select name="speicherpwloginneeded" id="speicherpwloginneeded" class="form-control">
+											<option <?php if($speicherpwloginneededold == "0") echo "selected" ?> value="0">Nein</option>
+											<option <?php if($speicherpwloginneededold == "1") echo "selected" ?> value="1">Ja</option>
+										</select>
+										<span class="form-text small">Ab Version 20.49 stehen die Daten erst nach einer Anmeldung an der Powerwall zur Verfügung. Bei "Ja" müssen auch Benutzername und Passwort angegeben werden.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="speicherpwuser" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<input class="form-control" type="text" name="speicherpwuser" id="speicherpwuser" value="<?php echo $speicherpwuserold ?>">
+										<span class="form-text small">Benutzername für den lokalen Login auf der Powerwall.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="speicherpwpass" class="col-md-4 col-form-label">Passwort</label>
+									<div class="col">
+										<input class="form-control" type="password" name="speicherpwpass" id="speicherpwpass" value="<?php echo $speicherpwpassold ?>">
+										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall.</span>
+									</div>
+								</div>
 							</div>
 						</div>
 
