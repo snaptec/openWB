@@ -263,7 +263,7 @@ class WbData {
 	persistGraphPreferences() {
 		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
 		this.prefs.showLG = this.showLiveGraph;
-		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs);
+		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 }
 
