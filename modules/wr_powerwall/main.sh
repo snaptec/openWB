@@ -1,7 +1,7 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULE="BATT"
+MODULE="PV"
 #LOGFILE="$RAMDISKDIR/speicher.log"
 LOGFILE="$RAMDISKDIR/openwb.log"
 Debug=$debug
