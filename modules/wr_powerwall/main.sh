@@ -8,7 +8,7 @@ Debug=$debug
 myPid=$$
 
 #For Development only
-Debug=1
+#Debug=1
 
 COOKIEFILE="$RAMDISKDIR/powerwall_cookie.txt"
 cookieOptions=""
