@@ -30,6 +30,13 @@ speicherleistung=$(echo $answer | jq -r "$battjsonwatt" | sed 's/\..*$//')
 DebugLog "BattLeistung: ${speicherleistung}"
 echo ${speicherleistung}
 echo $speicherleistung > /var/www/html/openWB/ramdisk/speicherleistung
-battsoc=$(echo $answer | jq -r "$battjsonsoc")
-DebugLog "BattSoC: ${battsoc}"
+
+if [ ! -z "$battjsonsoc" ]; then
+    battsoc=$(echo $answer | jq -r "$battjsonsoc")
+    DebugLog "BattSoC: ${battsoc}"
+else
+    battsoc=0
+    DebugLog "BattSoC: ${battsoc}"
+fi
+
 echo $battsoc > /var/www/html/openWB/ramdisk/speichersoc
