@@ -5,7 +5,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 MODULE="PV"
 #LOGFILE="$RAMDISKDIR/pv_wr.log"
-LOGFILE="$RAMDISKDIR/openwb.log"
+LOGFILE="$RAMDISKDIR/openWB.log"
 Debug=$debug
 myPid=$$
 

@@ -3,7 +3,7 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULE="BATT"
 #LOGFILE="$RAMDISKDIR/speicher.log"
-LOGFILE="$RAMDISKDIR/openwb.log"
+LOGFILE="$RAMDISKDIR/openWB.log"
 Debug=$debug
 myPid=$$
 
