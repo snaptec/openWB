@@ -1630,6 +1630,11 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wizzarddone=" $ConfigFile; then
 		echo "wizzarddone=100" >> $ConfigFile
+	else
+		# fix wizzarddone value
+		if grep -Fq "wizzarddone=1[0-9][0-9]" $ConfigFile; then
+			sed -i 's/^wizzarddone=1[0-9][0-9]/wizzarddone=100/g' $ConfigFile
+		fi
 	fi
 	if ! grep -Fq "preisjekwh=" $ConfigFile; then
 		echo "preisjekwh=0.30" >> $ConfigFile
