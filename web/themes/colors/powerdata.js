@@ -64,6 +64,8 @@ class WbData {
 		for (i = 0; i < 9; i++) {
 			this.shDevice[i].color = style.getPropertyValue('--color-sh' + (i + 1));
 		}
+			this.consumer[0].color = style.getPropertyValue('--color-co1');
+			this.consumer[1].color = style.getPropertyValue('--color-co2');
 		// read preferences stored in cookie
 		const wbCookies = document.cookie.split(';');
 		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
@@ -268,11 +270,12 @@ class WbData {
 }
 
 class Consumer {
-	constructor(name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(name = "", power = 0, dailyYield = 0, configured = false, color="white") {
 		this.name = name;
 		this.power = power;
 		this.dailyYield = dailyYield;
 		this.configured = configured;
+		this.color=color;
 	}
 };
 
@@ -288,7 +291,7 @@ class ChargePoint {
 };
 
 class SHDevice {
-	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, color = "") {
+	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, color = "white") {
 		this.id = index;
 		this.name = name;
 		this.power = power;
