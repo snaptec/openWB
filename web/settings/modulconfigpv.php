@@ -962,11 +962,10 @@
 
 				<div class="row justify-content-center">
 					<div class="col-3 text-center">
-						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
 						<button class="btn btn-success" type="submit" id="saveBtn">Speichern</button>
 					</div>
 					<div class="col-1 wizzard hide">
-						&nbsp;
+						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
 					</div>
 					<div class="col-3 text-center wizzard hide">
 						<button class="btn btn-danger" id="abortWizzardBtn" type="button">Assistent beenden</button>
