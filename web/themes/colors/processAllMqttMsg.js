@@ -1207,6 +1207,15 @@ function unsubscribeMqttGraphSegments() {
 	}
 }
 
+function subscribeGraphUpdates() {
+	topic = "openWB/graph/lastlivevalues";
+	client.subscribe(topic, { qos: 0 });
+}
+
+function unsubscribeGraphUpdates() {
+topic = "openWB/graph/lastlivevalues";
+		client.unsubscribe(topic);	
+}
 function subscribeDayGraph() {
 	var today = new Date();
 	var dd = String(today.getDate()).padStart(2, '0');

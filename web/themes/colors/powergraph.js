@@ -57,6 +57,7 @@ class PowerGraph {
     try {
       this.reset();
       subscribeMqttGraphSegments();
+      subscribeGraphUpdates();
     } catch (err) {
       // on initial invocation this method is not existing
     }
@@ -67,6 +68,7 @@ class PowerGraph {
     d3.select("figure#powergraph").classed("hide",true);
     try {
       unsubscribeMqttGraphSegments();
+      unsubscribeGraphUpdates();
     } catch (err) {
       // on intial run this method is not existing
     }

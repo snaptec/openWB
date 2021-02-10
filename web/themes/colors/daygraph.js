@@ -142,10 +142,9 @@ class DayGraph {
     values.housePower = values.gridPull + values.solarPower + values.batOut
       - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
       - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9;
-    values.selfUsage = values.solarPower - values.gridPush;
-    if (values.selfUsage < 0) {
-      values.selfUsage = 0;
-    }
+    if (values.housePower < 0) {values.housePower = 0;};
+	  values.selfUsage = values.solarPower - values.gridPush;
+	if (values.selfUsage < 0) {values.selfUsage = 0;};	  
     return values;
   }
 
@@ -157,10 +156,9 @@ class DayGraph {
     return val;
   }
 
-
   updateGraph() {
     const svg = this.createOrUpdateSvg();
-    this.drawChart(svg);
+	  this.drawChart(svg);
   };
 
   createOrUpdateSvg() {
