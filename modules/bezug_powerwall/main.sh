@@ -3,12 +3,12 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULE="EVU"
 #LOGFILE="$RAMDISKDIR/speicher.log"
-LOGFILE="$RAMDISKDIR/openwb.log"
+LOGFILE="$RAMDISKDIR/openWB.log"
 Debug=$debug
 myPid=$$
 
 #For Development only
-Debug=1
+#Debug=1
 
 COOKIEFILE="$RAMDISKDIR/powerwall_cookie.txt"
 cookieOptions=""
