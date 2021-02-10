@@ -441,6 +441,15 @@ updateConfig(){
 		echo "speicherekwh_http=192.168.0.10/eWh" >> $ConfigFile
 		echo "speicherikwh_http=192.168.0.10/iWh" >> $ConfigFile
 	fi
+	if ! grep -Fq "battjsonurl=" $ConfigFile; then
+		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
+	fi
+	if ! grep -Fq "battjsonsoc"=" $ConfigFile; then
+		echo "speichersoc_json=.RSOC" >> $ConfigFile
+	fi
+	if ! grep -Fq "battjsonwatt"=" $ConfigFile; then
+		echo "battjsonwatt=.Consumption_W" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
 	fi
