@@ -2,14 +2,14 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-
+COOKIEFILE="$RAMDISKDIR/powerwall_cookie.txt"
 cookieOptions=""
 
 if (( speicherpwloginneeded == 1 )); then
 	# log in and save cookie for later use
-	curl -s -k -i -c $MODULEDIR/cookie.txt -X POST -H "Content-Type: application/json" -d "{\"username\":\"customer\",\"password\":\"$speicherpwpass\", \"email\":\"$speicherpwuser\",\"force_sm_off\":false}" "https://$speicherpwip/api/login/Basic"
+	curl -s -k -i -c $COOKIEFILE -X POST -H "Content-Type: application/json" -d "{\"username\":\"customer\",\"password\":\"$speicherpwpass\", \"email\":\"$speicherpwuser\",\"force_sm_off\":false}" "https://$speicherpwip/api/login/Basic"
 	# tell next curl calls to use saved cookie
-	cookieOptions="-b $MODULEDIR/cookie.txt -c $MODULEDIR/cookie.txt"
+	cookieOptions="-b $COOKIEFILE -c $COOKIEFILE"
 fi
 
 # read current load
