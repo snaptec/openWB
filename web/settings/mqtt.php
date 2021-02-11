@@ -140,7 +140,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 						<u>ACHTUNG</u>: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen!<br/>
-						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit personfiziertem Login und 
+						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und 
 						strenger Zugriffskontrolle (zumindest für die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
 						</div>
 						<div class="form-group">
@@ -163,14 +163,15 @@
 						<div class="form-row mb-1">
 							<label for="ConnectionName" class="col-md-4 col-form-label">Name der Brücke</label>
 							<div class="col">
-								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>"><br/>
+								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>">
+								<span class="form-text small">Der Name darf nur aus Buchstaben und Zahlen bestehen, keine Sonderzeichen oder Umlaute.</span>
 								<?php if($debugold >= 1) echo "<small>in Datei '$currentFile'</small>"; ?>
 							</div>
 						</div>
 						<div class="form-row mb-1">
 							<label for="RemoteAddress" class="col-md-4 col-form-label">Addresse und Portnummer des entfernten MQTT-Servers</label>
 							<div class="col">
-								<input class="form-control" type="text" size="50" name="RemoteAddress" id="RemoteAddress" pattern="^([a-zA-Z0-9][a-zA-Z0-9.-]+):{0,1}([0-9]{0,5})$" value="<?php echo $remoteAddressAndPort; ?>">
+								<input class="form-control" type="text" size="50" name="RemoteAddress" id="RemoteAddress" pattern="^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$" value="<?php echo $remoteAddressAndPort; ?>">
 								<span class="form-text small">Entfernter MQTT-Server und Port-Nummer. Standard Port ist 8883 für eine TLS-geschützte Verbindung.</span>
 							</div>
 						</div>
@@ -199,40 +200,32 @@
 						<div class="form-row mb-1">
 							<label for="mqttProtocol" class="col-md-4 col-form-label">MQTT Protokoll</label>
 							<div class="col">
-								<fieldset>
-									<table>
-										<tr>
-											<td style="text-align: left; vertical-align: center; padding: 10px;">
-												<input type="radio" name="mqttProtocol" value="mqttv31" <?php echo $mqttProtocol == "mqttv31" ? "checked=\"checked\"" : "" ?>>&nbsp;v3.1
-											</td>
-											<td style="text-align: left; vertical-align: center; padding: 10px;">
-												<input type="radio" name="mqttProtocol" value="mqttv311" <?php echo $mqttProtocol == "mqttv311" ? "checked=\"checked\"" : "" ?>>&nbsp;v3.1.1
-											</td>
-										</tr>
-									</table>
-								</fieldset>
+								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($mqttProtocol == "mqttv31") echo " active" ?>">
+										<input type="radio" name="mqttProtocol" id="mqttProtocol31" value="mqttv31" <?php if($mqttProtocol == "mqttv31") echo " checked=\"checked\"" ?>>v3.1
+									</label>
+									<label class="btn btn-outline-info<?php if($mqttProtocol == "mqttv311") echo " active" ?>">
+										<input type="radio" name="mqttProtocol" id="mqttProtocol311" value="mqttv311" <?php if($mqttProtocol == "mqttv311") echo " checked=\"checked\"" ?>>v3.1.1
+									</label>
+								</div>
 								<span class="form-text small">Version des MQTT Protokolls, welches zur Kommunikation mit dem entfernten Server verwendet wird.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
 							<label for="tlsProtocol" class="col-md-4 col-form-label">TLS Protokoll</label>
 							<div class="col">
-								<fieldset>
-									<table>
-										<tr>
-											<td style="text-align: left; vertical-align: center; padding: 10px;">
-												<input type="radio" name="tlsProtocol" value="tlsv1.3" <?php if (!$tlsv13Supported) echo "disabled"; ?> 
-												<?php echo $tlsVersion == "tlsv1.3" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.3
-												<span style="color: green; font-size:small;"><?php echo $tlsv13Supported ? "Bevorzugt" : "<br/>Auf Debian Versionen kleiner<br/>'Buster' nicht unterstützt"; ?></span>
-											</td>
-											<td style="text-align: left; vertical-align: center; padding: 10px;">
-												<input type="radio" name="tlsProtocol" value="tlsv1.2" <?php echo $tlsVersion == "tlsv1.2" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.2
-												<span style="color: green; font-size:small;"><?php if (!$tlsv13Supported) echo "<br/>Empfohlen"; ?></span>
-											</td>
-										</tr>
-									</table>
-								</fieldset>
-								<span class="form-text small">Version des TLS Protokolls, welches zur Verschlüsselung der Kommunikation mit dem entfernten Server verwendet wird.</span>
+								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($tlsVersion == "tlsv1.3") echo " active"; if(!$tlsv13Supported) echo " disabled"; ?>">
+										<input type="radio" name="tlsProtocol" id="tlsProtocol13" value="tlsv1.3" <?php if($tlsVersion == "tlsv1.3") echo " checked=\"checked\""; if(!$tlsv13Supported) echo " disabled";  ?>>TLS v1.3
+									</label>
+									<label class="btn btn-outline-info<?php if($tlsVersion == "tlsv1.2") echo " active" ?>">
+										<input type="radio" name="tlsProtocol" id="tlsProtocol12" value="tlsv1.2" <?php if($tlsVersion == "tlsv1.2") echo " checked=\"checked\"" ?>>TLS v1.2
+									</label>
+								</div>
+								<span class="form-text small">
+									Version des TLS Protokolls, welches zur Verschlüsselung der Kommunikation mit dem entfernten Server verwendet wird.
+									TLSv 1.3 ist empfohlen, wird jedoch erst ab Debian Version "Buster" unterstützt.
+								</span>
 							</div>
 						</div>
 					</div>
@@ -286,15 +279,15 @@
 				</div>
 
 				<!-- Fernkonfiguration -->
-				<div class="card border-secondary">
-					<div class="card-header bg-secondary">
+				<div class="card border-danger">
+					<div class="card-header bg-danger">
 						<div >Fernkonfiguration der openWB</div>
 					</div>
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 							<u>ACHTUNG</u>: Dies erlaubt jedem Nutzer des entfernten MQTT-Servers mit Zugriff auf die entsprechenden Themen, diese openWB fern zu steuern!<br/>
-							Es wird schwer empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit 
-							personfiziertem Login und strenger Zugriffskontrolle zu aktivieren!<br/>
+							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit 
+							persönlichem Login und strenger Zugriffskontrolle zu aktivieren!<br/>
 							KEINESFALLS AUF <u>ÖFFENTLICH ZUGÄNGLICHEN</u> MQTT-SERVERN AKTIVEREN!!!
 						</div>
 						<div class="form-group">
@@ -320,11 +313,11 @@
 				<div class="row justify-content-center py-1">
 					<div class="col text-center">
 						Das Anwenden der Änderungen dauert <?php echo $refreshDuration ?> Sekunden. Bitte die openWB in dieser Zeit nicht vom Strom trennen!<br><br>
-						<button type="submit" class="btn btn-info" name="action" value="saveBridge">Einstellungen für Brücke '<?php echo urlencode($connectionName); ?>' speichern</button>
+						<button type="submit" class="btn btn-success" name="action" value="saveBridge">Einstellungen für Brücke '<?php echo urlencode($connectionName); ?>' speichern</button>
 					</div>
 				</div>
 				<div class="row justify-content-center py-1">
-					<button type="submit" class="btn btn-info" name="action" value="deleteBridge">Brücke '<?php echo urlencode($connectionName); ?>' löschen</button>
+					<button type="submit" class="btn btn-danger" name="action" value="deleteBridge">Brücke '<?php echo urlencode($connectionName); ?>' löschen</button>
 				</div>
 
 			</form>

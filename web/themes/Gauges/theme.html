@@ -674,7 +674,7 @@
 					<div class="col">
 						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
-					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="ct/kWh"></label>
 				</div>
 				<div class="row justify-content-center regularTextSize vaRow">
 					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
@@ -1264,7 +1264,7 @@
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
 		// load navbar, be carefull: it loads asynchonously
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210115');
+		$("#nav-placeholder").load('themes/navbar.html?v=20210130');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1692,13 +1692,13 @@
 				// some helper functions
 				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20210114',
+				'themes/Gauges/processAllMqttMsg.js?ver=20210129',
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20201218',
 				// respective Chart.js definition pricechart
-				'themes/dark/electricityPriceChart.js?ver=20210120',
+				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
-				'themes/Gauges/setupMqttServices.js?ver=20201228'
+				'themes/Gauges/setupMqttServices.js?ver=20210129'
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');

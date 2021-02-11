@@ -2,11 +2,12 @@
 
 import os, requests, json, time, sys, os
 from datetime import datetime, timezone
+from requests.exceptions import Timeout
 
 ramdiskdir = '/var/www/html/openWB/ramdisk/'
 moduledir = '/var/www/html/openWB/modules/soc_eq/'
 
-req_timeout=15 #Timeout for requests in seconds
+req_timeout=(30,30) #timeout for requests in seconds
 
 client_id     = str(sys.argv[1])
 client_secret = str(sys.argv[2])
@@ -15,11 +16,12 @@ soc_file      = str(sys.argv[4])
 ChargePoint   = str(sys.argv[5])
 
 Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
 
 def socDebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": PID:"+ myPid + ": " + message)
 
 if Debug >= 1:
     socDebugLog("Debug Level: " + str(Debug))
@@ -49,7 +51,8 @@ fd.close()
 
 if int(expires_in) < int(time.time()):
   #Access Token is exired
-  socDebugLog("Acc Token Expired")
+  if Debug >= 1:
+     socDebugLog("Acc Token Expired")
   
   #get new Access Token with referesh token
   data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
@@ -121,8 +124,14 @@ if int(expires_in) < int(time.time()):
 
 #call API for SoC
 header = {'authorization': 'Bearer ' + access_token}
-req_soc = requests.get(soc_url, headers=header, verify=True)
-#req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
+try:
+
+    req_soc = requests.get(soc_url, headers=header, verify=True)
+    #req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
+
+except Timeout:
+    socDebugLog("Soc Request Timed Out")
+    exit(5)
 if Debug >= 1:
     socDebugLog("SOC Request: " + str(req_soc.status_code))
     socDebugLog("SOC Response: " + req_soc.text)

@@ -710,7 +710,7 @@ function loadgraph() {
 						sensitivity: 0.01
 
 					}
-					}
+				}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -721,13 +721,21 @@ function loadgraph() {
 			legend: {
 				display: boolDisplayLegend,
 				position: 'bottom',
+				labels: {
+					// middle grey, opacy = 100% (visible)
+					fontColor: "rgba(153, 153, 153, 1)",
+				}
 			},
 			title: {
 				display: false
 			},
 			scales: {
 				xAxes: [{
-					type: 'category'
+					type: 'category',
+					ticks: {
+						//source: 'data',
+						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+					}
 				}],
 				yAxes: [{
 					type: 'linear',
@@ -739,7 +747,15 @@ function loadgraph() {
 						labelString: 'Energie [kWh]',
 						// middle grey, opacy = 100% (visible)
 						fontColor: "rgba(153, 153, 153, 1)"
-					}
+					},
+					gridLines: {
+						// light grey, opacy = 100% (visible)
+						color: "rgba(204, 204, 204, 1)",
+					},
+					ticks: {
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					},
 				}]
 			}
 		}

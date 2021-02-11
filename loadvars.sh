@@ -231,12 +231,7 @@ loadvars(){
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 			fi
 		fi
-		if [[ $evsecons2 == "extopenwb" ]]; then
-			evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolPlugStat)
-			ladestatuslp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolChargeStat)
-			echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstatlp3
-			echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestatlp3
-		fi
+
 
 		if [[ $evsecons2 == "modbusevse" ]]; then
 			evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
@@ -412,8 +407,8 @@ loadvars(){
 
 	#PV Leistung ermitteln
 	if [[ $pvwattmodul != "none" ]]; then
-		pvvorhanden="1"
-		echo 1 > /var/www/html/openWB/ramdisk/pvvorhanden
+		pv1vorhanden="1"
+		echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
 		pvwatt=$(modules/$pvwattmodul/main.sh || true)
 		if ! [[ $pvwatt =~ $re ]] ; then
 			pvwatt="0"
@@ -421,11 +416,13 @@ loadvars(){
 		pv1watt=$pvwatt
 		echo $pv1watt > ramdisk/pv1watt
 	else
-		pvvorhanden="0"
-		echo 0 > /var/www/html/openWB/ramdisk/pvvorhanden
+		pv1vorhanden="0"
+		echo 0 > /var/www/html/openWB/ramdisk/pv1vorhanden
 		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 	fi
 	if [[ $pv2wattmodul != "none" ]]; then
+		pv2vorhanden="1"
+		echo 1 > /var/www/html/openWB/ramdisk/pv2vorhanden
 		pv2watt=$(modules/$pv2wattmodul/main.sh || true)
 		echo $pv2watt > ramdisk/pv2watt
 		pvwatt=$(( pvwatt + pv2watt ))
@@ -440,6 +437,8 @@ loadvars(){
 		fi
 	else
 		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+		pv2vorhanden="0"
+		echo 0 > /var/www/html/openWB/ramdisk/pv2vorhanden
 		echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
 		echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
 	fi
@@ -1379,10 +1378,15 @@ loadvars(){
 		tempPubList="${tempPubList}\nopenWB/housebattery/boolHouseBatteryConfigured=${speichervorhanden}"
 		echo $speichervorhanden > ramdisk/mqttspeichervorhanden
 	fi
-	opvvorhanden=$(<ramdisk/mqttpvvorhanden)
-	if (( opvvorhanden != pvvorhanden )); then
-		tempPubList="${tempPubList}\nopenWB/pv/boolPVConfigured=${pvvorhanden}"
-		echo $pvvorhanden > ramdisk/mqttpvvorhanden
+	opv1vorhanden=$(<ramdisk/mqttpv1vorhanden)
+	if (( opv1vorhanden != pv1vorhanden )); then
+		tempPubList="${tempPubList}\nopenWB/pv/1/boolPVConfigured=${pv1vorhanden}"
+		echo $pv1vorhanden > ramdisk/mqttpv1vorhanden
+	fi
+	opv2vorhanden=$(<ramdisk/mqttpv2vorhanden)
+	if (( opv2vorhanden != pv2vorhanden )); then
+		tempPubList="${tempPubList}\nopenWB/pv/2/boolPVConfigured=${pv2vorhanden}"
+		echo $pv2vorhanden > ramdisk/mqttpv2vorhanden
 	fi
 	olp1name=$(<ramdisk/mqttlp1name)
 	if [[ "$olp1name" != "$lp1name" ]]; then
@@ -1519,6 +1523,11 @@ loadvars(){
 	if [[ "$oetprovideraktiv" != "$etprovideraktiv" ]]; then
 		tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${etprovideraktiv}"
 		echo $etprovideraktiv > ramdisk/mqttetprovideraktiv
+	fi
+	oetprovider=$(<ramdisk/mqttetprovider)
+	if [[ "$oetprovider" != "$etprovider" ]]; then
+		tempPubList="${tempPubList}\nopenWB/global/ETProvider/modulePath=${etprovider}"
+		echo $etprovider > ramdisk/mqttetprovider
 	fi
 	oetproviderprice=$(<ramdisk/mqttetproviderprice)
 	etproviderprice=$(<ramdisk/etproviderprice)

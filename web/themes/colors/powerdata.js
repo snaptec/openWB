@@ -29,12 +29,12 @@ class WbData {
 
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
-		// this.chargeColors = d3.schemeGreens[9];
-		this.sourceSummary = [
-			{ name: "PV", power: 0, energy: 0, color: "white" },
-			{ name: "Netz", power: 0, energy: 0, color: "white" },
-			{ name: "Speicher out", power: 0, energy: 0, color: "white" }
-		];
+		this.sourceSummary = {
+			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
+			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
+			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" }
+
+		};
 		this.usageSummary = [
 			{ name: "Export", power: 0, energy: 0, color: "white" },
 			{ name: "Laden", power: 0, energy: 0, color: "white" },
@@ -43,13 +43,15 @@ class WbData {
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
 		this.usageDetails = [this.usageSummary[0]];
+		this.showLiveGraph = true;
+		this.prefs = {};
 	};
 
 	init() {
 		var style = getComputedStyle(document.body);
-		this.sourceSummary[0].color = style.getPropertyValue('--color-pv');
-		this.sourceSummary[1].color = style.getPropertyValue('--color-evu');
-		this.sourceSummary[2].color = style.getPropertyValue('--color-battery');
+		this.sourceSummary.pv.color = style.getPropertyValue('--color-pv');
+		this.sourceSummary.evuIn.color = style.getPropertyValue('--color-evu');
+		this.sourceSummary.batOut.color = style.getPropertyValue('--color-battery');
 		this.usageSummary[0].color = style.getPropertyValue('--color-export');
 		this.usageSummary[1].color = style.getPropertyValue('--color-charging');
 		this.usageSummary[2].color = style.getPropertyValue('--color-devices');
@@ -62,6 +64,27 @@ class WbData {
 		for (i = 0; i < 9; i++) {
 			this.shDevice[i].color = style.getPropertyValue('--color-sh' + (i + 1));
 		}
+			this.consumer[0].color = style.getPropertyValue('--color-co1');
+			this.consumer[1].color = style.getPropertyValue('--color-co2');
+		// read preferences stored in cookie
+		const wbCookies = document.cookie.split(';');
+		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
+		if (myCookie.length > 0) {
+			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
+			if ('hideSH' in this.prefs) {
+				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
+			}
+			if ('showLG' in this.prefs) {
+				this.showLiveGraph = this.prefs.showLG;
+			}
+		}
+		if (this.showLiveGraph) {
+			dayGraph.deactivate();
+			powerGraph.activate();
+			} else {
+				powerGraph.deactivate();
+				dayGraph.activate();
+			}
 	}
 
 	updateEvu(field, value) {
@@ -69,11 +92,11 @@ class WbData {
 		switch (field) {
 			case 'powerEvuIn':
 			case 'powerEvuOut':
-				this.updateSourceSummary(1, "power", this.powerEvuIn);
+				this.updateSourceSummary("evuIn", "power", this.powerEvuIn);
 				this.updateUsageSummary(0, "power", this.powerEvuOut);
 				break;
 			case 'evuiDailyYield':
-				this.updateSourceSummary(1, "energy", this.evuiDailyYield);
+				this.updateSourceSummary("evuIn", "energy", this.evuiDailyYield);
 
 				break;
 			case 'evueDailyYield':
@@ -110,10 +133,10 @@ class WbData {
 		this[field] = value;
 		switch (field) {
 			case 'pvwatt':
-				this.updateSourceSummary(0, "power", this.pvwatt);
+				this.updateSourceSummary("pv", "power", this.pvwatt);
 				break;
 			case 'pvDailyYield':
-				this.updateSourceSummary(0, "energy", this.pvDailyYield);
+				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
 				break;
 			default:
 				break;
@@ -139,10 +162,15 @@ class WbData {
 		this.shDevice[index - 1][field] = value;
 		switch (field) {
 			case 'power':
-				this.updateUsageSummary(2, "power", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
+				this.updateConsumerSummary("power");
 				break;
 			case 'energy':
-				this.updateUsageSummary(2, "energy", this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
+				this.updateConsumerSummary("energy");
+				break;
+			case 'showInGraph':
+				this.persistGraphPreferences();
+				this.updateUsageDetails();
+				yieldMeter.update();
 				break;
 			default:
 				break;
@@ -161,6 +189,7 @@ class WbData {
 				break;
 			case 'soc':
 				powerMeter.update();
+				break;
 			default:
 				break;
 		}
@@ -170,22 +199,31 @@ class WbData {
 	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
-			case 'batteryPowerImport': this.usageSummary[3].power = value;
+			case 'batteryPowerImport': 
+				this.usageSummary[3].power = value;
+				powerMeter.update();
 				break;
-			case 'batteryPowerExport': this.sourceSummary[2].power = value;
+			case 'batteryPowerExport': 
+				this.updateSourceSummary("batOut", "power", value);
+				powerMeter.update();
 				break;
-			case 'batteryEnergyExport': this.usageSummary[3].energy = value;
+			case 'batteryEnergyImport': 
+				this.usageSummary[3].energy = value;
+				yieldMeter.update();
 				break;
-			case 'batteryEnergyImport': this.sourceSummary[2].energy = value;
+			case 'batteryEnergyExport': 
+				this.updateSourceSummary("batOut", "energy", value);
+				yieldMeter.update();
 				break;
+			
 			default:
 				break;
 		}
 		batteryList.update();
 	}
 
-	updateSourceSummary(index, field, value) {
-		this.sourceSummary[index][field] = value;
+	updateSourceSummary(cat, field, value) {
+		this.sourceSummary[cat][field] = value;
 		if (field == "power") {
 			this.updateUsageDetails();
 			powerMeter.update();
@@ -213,44 +251,54 @@ class WbData {
 	updateUsageDetails() {
 		this.usageDetails = [this.usageSummary[0],
 		this.usageSummary[1]]
-			.concat(this.shDevice.filter(row => (row.configured)))
+			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary[3], this.usageSummary[4]]);
 	}
 
 	updateConsumerSummary(cat) {
-		this.updateUsageSummary(3, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
+		this.updateUsageSummary(2, cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
 			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0));
+	}
+
+	//update cookie
+	persistGraphPreferences() {
+		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
+		this.prefs.showLG = this.showLiveGraph;
+		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 }
 
 class Consumer {
-	constructor(name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(name = "", power = 0, dailyYield = 0, configured = false, color="white") {
 		this.name = name;
 		this.power = power;
 		this.dailyYield = dailyYield;
 		this.configured = configured;
+		this.color=color;
 	}
 };
 
 class ChargePoint {
-	constructor(index, name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, isSocConfigured = false, isSocManual = false) {
 		this.name = name;
 		this.power = power;
 		this.energy = dailyYield;
 		this.configured = configured;
-
-
+		this.isSocConfigured = isSocConfigured;
+		this.isSocManual = isSocManual;
 	}
 };
 
 class SHDevice {
-	constructor(index, name = "", power = 0, dailyYield = 0, configured = false) {
+	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, color = "white") {
+		this.id = index;
 		this.name = name;
 		this.power = power;
 		this.energy = dailyYield;
 		this.configured = configured;
-		//	this.color = d3.interpolateBlues (index / 10 + 0.3);
+		this.showInGraph = true;
+		this.color = color;
 	}
 };
 

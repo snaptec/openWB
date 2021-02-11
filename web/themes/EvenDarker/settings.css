@@ -6,7 +6,9 @@
 	color: #212529;
 }
 
-.btn-outline-secondary {
+.btn-outline-secondary,
+.table,
+pre {
 	color: #ffffff;
 }
 
@@ -79,7 +81,8 @@ hr {
 	border-color: dimgrey;
 }
 
-.clockpicker-popover {
+.clockpicker-popover,
+.datepicker.datepicker-dropdown {
 	background-color: #343a40;
 }
 
@@ -90,6 +93,29 @@ hr {
 
 .clockpicker-plate {
 	background-color: black;
+}
+
+.datepicker .datepicker-switch,
+.datepicker .prev:not(.disabled),
+.datepicker .next:not(.disabled),
+.datepicker .today,
+.datepicker .month,
+.datepicker .year {
+	color: #ffffff;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover {
+	background: #eeeeee;
+	color: #000000;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover {
+	background: #eeeeee;
+	color: #000000;
 }
 
 .carousel-caption,
@@ -117,4 +143,8 @@ hr {
 
 .cssload-inner.cssload-three {
 	border-top: 5px solid #ffffff;
+}
+
+canvas.chartjs-render-monitor {
+	background: #343a40;
 }

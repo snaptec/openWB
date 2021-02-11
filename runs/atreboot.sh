@@ -26,19 +26,19 @@ if [ -d "/var/www/html/openWB/modules/soc_i3s1" ]; then
 	sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth1.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3/auth.json" "/var/www/html/openWB/modules/soc_i3/auth1.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth2.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3s1/auth.json" "/var/www/html/openWB/modules/soc_i3/auth2.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token1.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3/token.json" "/var/www/html/openWB/modules/soc_i3/token1.json"
 fi
 
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ]; then
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token2.json" ]; then
 	mv "/var/www/html/openWB/modules/soc_i3s1/token.json" "/var/www/html/openWB/modules/soc_i3/token2.json"
 fi
 
@@ -131,7 +131,7 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 fi
-python3 /var/www/html/openWB/runs/smarthomehandler.py &
+python3 /var/www/html/openWB/runs/smarthomehandler.py >> /var/www/html/openWB/ramdisk/smarthome.log 2>&1 &
 
 # restart mqttsub handler
 echo "mqtt handler..."
@@ -358,7 +358,7 @@ sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /v
 echo "update broker..."
 for i in $(seq 1 9);
 do
-	configured=$(timeout 2 mosquitto_sub -C 1 -t openWB/config/get/SmartHome/Devices/$i/device_configured)
+	configured=$(timeout 1 mosquitto_sub -C 1 -t openWB/config/get/SmartHome/Devices/$i/device_configured)
 	if ! [[ "$configured" == 0 || "$configured" == 1 ]]; then
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
@@ -370,6 +370,12 @@ mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
 mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor2 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor2 -m ""
 rm -rf /var/www/html/openWB/web/themes/dark19_01
 (sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m "$bootmodus") &
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m "$bootmodus") &
