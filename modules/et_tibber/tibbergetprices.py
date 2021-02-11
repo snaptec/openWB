@@ -9,8 +9,8 @@
 #
 # setzt aktuellen Strompreis auf 99.99ct/kWh, wenn nichts empfangen wird
 #
-# benötigt als Parameter den persönlichen Tibber-Token und die homeID
-# des Anschlusses
+# benötigt als Parameter den persönlichen Tibber-Token, die homeID
+# des Anschlusses und das Debug-Level
 #
 # Preisliste in UTC und ct/kWh
 #
@@ -98,17 +98,20 @@ def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=
             tries = list(range(max_tries))
             tries.reverse()
             for tries_remaining in tries:
+                if debugLevel > 0:
+                    write_log_entry("Abfrage Tibber-API")
                 try:
                     return func(*args, **kwargs)
                 except exceptions as e:
                     if tries_remaining > 0:
-                        write_log_entry("Fehler bei der API-Abfrage, %d Versuche übrig, versuche erneut in %s Sekunden" % (tries_remaining, mydelay))
+                        if debugLevel > 0:
+                            write_log_entry("Fehler bei der API-Abfrage, %d Versuche übrig, versuche erneut in %s Sekunden" % (tries_remaining, mydelay))
                         if hook is not None:
                             hook(tries_remaining, e, mydelay)
                         sleep(mydelay)
                         mydelay = mydelay * backoff
                     else:
-                        exit_on_invalid_price_data('Kein aktueller Preis erkannt')
+                        raise
                 else:
                     break
         return f2
@@ -130,19 +133,20 @@ if len(sys.argv) == 4:
     homeID = str(sys.argv[2])
     debugLevel = int(sys.argv[3])
 else:
-    # Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
     exit_on_invalid_price_data('Argumente fehlen oder sind fehlerhaft')
 
-# API abfragen
+# Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
+# API abfragen, retry bei Timeout
 try:
     response = readAPI(tibberToken, homeID)
+except:
+    exit_on_invalid_price_data('Fataler Fehler bei API-Abfrage')
+
+# sind sonstige-Fehler aufgetreten?
+try:
     response.raise_for_status()
-except requests.exceptions.HTTPError as errh:
-    exit_on_invalid_price_data('Http Error: ' + str(errh))
-except requests.exceptions.ConnectionError as errc:
-    exit_on_invalid_price_data('Error Connecting:' + str(errc))
-except requests.exceptions.RequestException as err:
-    exit_on_invalid_price_data('OOps: sonstiger Fehler:' + str(err))
+except Exception as e:
+    exit_on_invalid_price_data(str(e))
 
 # Bei Erfolg JSON auswerten
 try:
@@ -151,6 +155,8 @@ except:
     exit_on_invalid_price_data('Korruptes JSON')
 
 if not 'errors' in tibber_json:
+    if debugLevel > 0:
+        write_log_entry("Keine Fehlermeldung in Tibber-Antwort, lese JSON")
     # extrahiere Preise für heute, sortiert nach Zeitstempel
     try:
         today_prices = sorted(tibber_json['data']['viewer']['home']['currentSubscription']['priceInfo']['today'], key=lambda k: (k['startsAt'], k['total']))
@@ -161,6 +167,8 @@ if not 'errors' in tibber_json:
         tomorrow_prices = sorted(tibber_json['data']['viewer']['home']['currentSubscription']['priceInfo']['tomorrow'], key=lambda k: (k['startsAt'], k['total']))
     except:
         exit_on_invalid_price_data('Korrupte Preisdaten')
+    if debugLevel > 0:
+        write_log_entry("Tibber-Preisliste extrahiert")
 
     # alle Zeiten in UTC verarbeiten
     now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
@@ -175,12 +183,14 @@ if not 'errors' in tibber_json:
         #Preisliste beginnt immer mit aktueller Stunde
         if (startzeit_utc >= now_full_hour):
             if (startzeit_utc == now_full_hour):
+                if debugLevel > 0:
+                    write_log_entry("Aktueller Preis wurde gelesen")
                 preise_ok = True
             bruttopreis = price_data['total'] * 100
             bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
             preisliste.append({str('%d' % startzeit_utc.timestamp()) : bruttopreis_str})
     if (not preise_ok):
-        exit_on_invalid_price_data('Aktueller Preis nicht gefunden')
+        exit_on_invalid_price_data('Aktueller Preis nicht lesbar')
     for price_data in tomorrow_prices:
         # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
         # entferne ':' in Timezone, da nicht von strptime unterstützt
