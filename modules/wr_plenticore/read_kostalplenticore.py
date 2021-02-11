@@ -68,7 +68,6 @@ boolspeicher = 0
 ipaddress = '0.0.0.0'
 ipaddress2 = '0.0.0.0'
 
-
 def write_log_entry(message):
     # schreibt Eintrag ins Log
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
