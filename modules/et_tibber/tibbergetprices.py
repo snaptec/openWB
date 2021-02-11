@@ -26,6 +26,13 @@ from time import sleep
 from datetime import datetime, timezone, timedelta
 import requests
 
+tibberToken = ''
+homeID = ''
+debugLevel = 0  # eingeteilt in 0=aus, 1=wenig, 3=alles
+readPriceSuccessfull = False
+preisliste = []
+preise_ok = False
+
 # Hilfsfunktionen
 def write_log_entry(message):
     # schreibt Eintrag ins Log
@@ -118,15 +125,14 @@ def readAPI(token, id):
 # Hauptprogramm
 
 # übergebene Paremeter auslesen
-argumentsOK = False
-if len(sys.argv) == 3:
+if len(sys.argv) == 4:
     tibberToken = str(sys.argv[1])
     homeID = str(sys.argv[2])
+    debugLevel = int(sys.argv[3])
 else:
     # Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
     exit_on_invalid_price_data('Argumente fehlen oder sind fehlerhaft')
 
-readPriceSuccessfull = False
 # API abfragen
 try:
     response = readAPI(tibberToken, homeID)
@@ -159,8 +165,6 @@ if not 'errors' in tibber_json:
     # alle Zeiten in UTC verarbeiten
     now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
     now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-    preisliste = []
-    preise_ok = False
     for price_data in today_prices:
         # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
         # entferne ':' in Timezone, da nicht von strptime unterstützt
