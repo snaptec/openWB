@@ -9,8 +9,8 @@
 #
 # setzt aktuellen Strompreis auf 99.99ct/kWh, wenn nichts empfangen wird
 #
-# benötigt als Parameter die Landeskennung (at/de) und den
-# individuellen Basispreis (kann auch 0 sein) des Anschlusses
+# benötigt als Parameter die Landeskennung (at/de), den individuellen Basispreis
+# des Anschlusses (kann auch 0 sein) und das Debug-Level
 #
 # Preisliste in UTC und ct/kWh
 #
