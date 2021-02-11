@@ -70,7 +70,7 @@
 		#thegraph > div {
 			height: 350px;
 		}
-		#awattarcanvasdiv {
+		#electricityPriceChartCanvasDiv {
 			height: 150px;
 		}
 	</style>
@@ -95,7 +95,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=23122020">');
 	</script>
 </head>
 
@@ -126,8 +126,7 @@
 	</div>
 
 	<!-- Landing Page -->
-	<div id="nav-placeholder">
-	</div>
+	<div id="nav-placeholder"></div>
 	<div class="container">
 		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
@@ -168,7 +167,11 @@
 				<span class="smallTextSize">Speicher<span id="speicherleistung">: lade Daten</span></span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> <span class="smallTextSize">- Ladestand: <span id="speichersoc"> lade Daten</span></span>
 			</div>
 		</div>
-
+		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-rose">
+				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
+			</div>
+		</div>
 		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
 			<div id="verbraucher1" class="col-sm hide">
 				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
@@ -217,7 +220,7 @@
 		</div>
 
 		<!-- interactive chart.js -->
-		<!-- will be refreshed using MQTT (in live.js)-->
+		<!-- will be refreshed using MQTT (in livechart.js)-->
 		<div class="row justify-content-center my-2" id="thegraph">
 			<div class="col-sm-12 text-center smallTextSize">
 				<div id="waitforgraphloadingdiv">
@@ -236,7 +239,7 @@
 		<!-- chargepoint info header -->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
 			<div class="col-3 px-0">
-				Ladepunkt <span id="awattarEnabledIcon" class="fa fa-chart-line hide"></span>
+				Ladepunkt <span id="etproviderEnabledIcon" class="fa fa-chart-line hide"></span>
 			</div>
 			<div class="col-3 px-0">
 				Ladeparameter
@@ -268,8 +271,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
-				<span class="socLp"></span>
+				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
 			</div>
 		</div>
 
@@ -292,8 +296,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
-				<span class="socLp"></span>
+				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
 			</div>
 		</div>
 
@@ -316,7 +321,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
-				<span class="socLp"></span>
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
 			</div>
 		</div>
 
@@ -339,7 +346,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
-				<span class="socLp"></span>
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
 			</div>
 		</div>
 
@@ -362,7 +371,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
-				<span class="socLp"></span>
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
 			</div>
 		</div>
 
@@ -385,7 +396,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
-				<span class="socLp"></span>
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
 			</div>
 		</div>
 
@@ -408,7 +421,9 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
-				<span class="socLp"></span>
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<span class="socLp"></span> %
 			</div>
 		</div>
 
@@ -431,12 +446,14 @@
 				--
 			</div>
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
-				<span class="socLp"></span>
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<span class="socLp"></span> %
 			</div>
 		</div>
 
 		<div class="smartHome">
-			<hr color="white">
+			<hr class="border-secondary">
 
 			<!-- SmartHome info header -->
 			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
@@ -598,11 +615,11 @@
 					<span class="actualRunningTimeDevice">lade Daten</span>
 				</div>
 			</div>
+		</div>  <!-- and smarthome -->
 
-
-	</div>  <!-- and smarthome -->
+		<!-- depending on charge mode show options -->
 		<form id="minundpvladenEinstellungen" class="hide">
-			<hr color="white">
+			<hr class="border-secondary">
 			<div class="row justify-content-center">
 				<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 			</div>
@@ -617,17 +634,40 @@
 				<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 		</form>
-		<!-- depending on charge mode show options -->
+
 		<form id="sofortladenEinstellungen" class="hide">
-
-			<hr color="white">
+			<div class="hide" id="priceBasedCharging">
+				<hr class="border-secondary">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">preisbasiertes Laden</h3>
+				</div>
+				<div class="row justify-content-center my-2">
+					<div id="electricityPriceChartCanvasDiv" class="col text-center">
+						<canvas id="electricityPriceChartCanvas"></canvas>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize">
+					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
+					</div>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="ct/kWh"></label>
+				</div>
+				<div class="row justify-content-center regularTextSize vaRow">
+					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
+					Preis
+					<button type="button" class="btn btn-secondary ml-3 priceMore"><i class="far fa-plus-square"></i></button>
+				</div>
+			</div>  <!--/ priceBasedCharging -->
+			<hr class="border-secondary">
 			<div class="row justify-content-center">
-				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
+				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
 			</div>
+			<div class="row justify-content-center">
 
-
+			</div>
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
-				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -637,7 +677,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
-				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp">LP2</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -647,7 +687,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
-				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp">LP3</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -656,7 +696,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
-				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp">LP4</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -665,7 +705,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
-				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp">LP5</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -675,7 +715,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
-				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp">LP6</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -685,7 +725,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
-				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp">LP7</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -695,7 +735,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
-				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp">LP8</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -703,34 +743,10 @@
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="hide" id="awattar">
-				<hr color="white">
-				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-lightgrey">Awattar</h3>
-				</div>
-				<div class="row regularTextSize">
-					<div class="col text-center">
-						aktueller Awattar-Preis: <span id="ActualPriceForCharging"></span> Cent/kWh
-					</div>
-				</div>
-				<div class="row justify-content-center my-2">
-					<div id="awattarcanvasdiv" class="col text-center">
-						<canvas id="awattarcanvas"></canvas>
-					</div>
-				</div>
-				<div class="form-row form-group mb-1 vaRow regularTextSize">
-					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
-					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="25" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
-					</div>
-					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
-				</div>
-			</div>  <!--/ awattar -->
-
 			<div class="chargeLimitation" data-lp="1">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 					<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -773,9 +789,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="2">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 					<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -818,9 +834,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="3">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 					<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -853,9 +869,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="4">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 					<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -888,9 +904,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="5">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 					<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -923,9 +939,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="6">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 					<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -958,9 +974,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="7">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 					<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -993,9 +1009,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="8">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 					<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -1028,95 +1044,180 @@
 			</div>
 
 		</form>
-		<br>
-	<!-- modal chargemode-select-window -->
-	<div class="modal fade" id="chargeModeModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
 
-				<!-- modal header -->
-				<div class="modal-header bg-success">
-					<h4 class="modal-title">Lademodus-Auswahl</h4>
+		<!-- modal chargemode-select-window -->
+		<div class="modal fade" id="chargeModeModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!-- modal header -->
+					<div class="modal-header bg-success">
+						<h4 class="modal-title">Lademodus-Auswahl</h4>
+					</div>
+
+					<!-- modal body -->
+					<div class="modal-body">
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="0">Sofort</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 order-first order-sm-last py-1">
+								<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="2">PV</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="1">Min + PV</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="4">Standby</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
+							</div>
+						</div>
+						<div id='priorityModeBtns'>
+							<hr>
+							<div class="row">
+								<div class="col text-center text-grey">
+									Vorrang im Lademodus PV-Laden:
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col-sm-5 py-1">
+									<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">
+										EV <span class="fas fa-car">&nbsp;</span>
+									</button>
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col-sm-5 py-1">
+									<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">
+										Speicher <span class="fas fa-car-battery">&nbsp;</span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div id='70ModeBtn'>
+							<hr>
+
+							<div class="row">
+								<div class="col text-center text-grey">
+									70% beachten im Lademodus PV-Laden:
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col-sm-5 py-1">
+									<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
+										70 % beachten
+									</button>
+								</div>
+							</div>
+						</div>
+
+					</div> <!-- /modal body -->
+
+					<!-- no modal footer -->
 				</div>
-
-				<!-- modal body -->
-				<div class="modal-body">
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="0">Sofort</button>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 order-first order-sm-last py-1">
-							<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="2">PV</button>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="1">Min + PV</button>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="4">Standby</button>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
-						</div>
-					</div>
-					<span id='priorityModeBtns'>
-						<hr>
-						<div class="row">
-							<div class="col text-center text-grey">
-								Vorrang im Lademodus PV-Laden:
-							</div>
-						</div>
-						<div class="row justify-content-center">
-							<div class="col-sm-5 py-1">
-								<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">
-									EV <span class="fas fa-car">&nbsp;</span>
-								</button>
-							</div>
-						</div>
-						<div class="row justify-content-center">
-							<div class="col-sm-5 py-1">
-								<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">
-									Speicher <span class="fas fa-car-battery">&nbsp;</span>
-								</button>
-							</div>
-						</div>
-					</span>
-					<span id='70ModeBtn'>
-						<hr>
-
-						<div class="row">
-							<div class="col text-center text-grey">
-								70% beachten im Lademodus PV-Laden:
-							</div>
-						</div>
-						<div class="row justify-content-center">
-							<div class="col-sm-5 py-1">
-								<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
-									70 % beachten
-								</button>
-							</div>
-						</div>
-					</span>
-
-				</div> <!-- /modal body -->
-
-				<!-- no modal footer -->
 			</div>
 		</div>
-	</div>
 
-	<!-- some scripts -->
+		<!-- modal SoC-window -->
+		<div class="modal fade" id="socModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- modal header -->
+					<div class="modal-header bg-warning">
+						<h4 class="modal-title text-dark">Manuelle SoC-Eingabe - Ladepunkt <span class="socLp"></span></h4>
+					</div>
+					<!-- modal body -->
+					<div class="modal-body">
+						<div class="row justify-content-center">
+							<div class="col-2 px-1 py-1">
+								<button type="button" id="manualSocDecrement" class="btn btn-block btn-secondary">-</button>
+							</div>
+							<div class="col-5 py-1">
+								<div class="input-group">
+									<input id="manualSocBox" type="number" min="0" max="100" step="1" value="0" name="socBox" class="form-control text-right">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											%
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-2 px-1 py-1">
+								<button type="button" id="manualSocIncrement" class="btn btn-block btn-secondary">+</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button type="button" id="manualSocOk" class="btn btn-lg btn-block btn-success" data-dismiss="modal">Übernehmen</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button type="button" id="manualSocCancel" class="btn btn-lg btn-block btn-secondary" data-dismiss="modal">Abbrechen</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				function clearSocForm(){
+					$("#manualSocBox").val("0");
+				}
+
+				function submitSocForm() {
+					var currentLp = $('#socModal').find('.socLp').text();
+					var manualSoc = $("#manualSocBox").val();
+					console.log("SoC for LP"+currentLp+": "+manualSoc);
+					publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
+					// reset input after publishing
+					clearSocForm();
+				};
+				$(document).ready(function(){
+
+					$('#manualSocDecrement').click(function() {
+						var newValue = parseInt($('#manualSocBox').val()) - 1;
+						if( newValue < 0 ){
+							newValue = 0;
+						}
+						$('#manualSocBox').val(newValue);
+					});
+
+					$('#manualSocIncrement').click(function() {
+						var newValue = parseInt($('#manualSocBox').val()) + 1;
+						if( newValue > 100 ){
+							newValue = 100;
+						}
+						$('#manualSocBox').val(newValue);
+					});
+
+					$('#manualSocCancel').click(function() {
+						clearSocForm();
+					});
+
+					$('#manualSocOk').click(function() {
+						submitSocForm();
+					});
+
+				});
+			</script>
+		</div>
+
+	</div>  <!-- container -->
+
 	<script>
 
-		// load navbar
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html');
+		// load navbar, be carefull: it loads asynchonously
+		$("#nav-placeholder").load('themes/navbar.html?ver=20210130');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1190,19 +1291,21 @@
 			// load scripts synchronously in order specified
 			var scriptsToLoad = [
 				// load Chart.js library
-				'js/Chart.bundle.js',
+				'js/Chart.bundle.min.js',
+				// load Chart.js annotation plugin
+				'js/chartjs-plugin-annotation.min.js',
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/dark/helperFunctions.js?ver=20200526-c',
+				'themes/dark/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20200924-a',
+				'themes/dark/processAllMqttMsg.js?ver=20210129',
 				// respective Chart.js definition live
-				'themes/dark/livechart.js?ver=20200530-b',
-				// respective Chart.js definition awattar
-				'themes/dark/awattarchart.js?ver=20200331-c',
+				'themes/dark/livechart.js?ver=20201218',
+				// respective Chart.js definition
+				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20200924-a',
+				'themes/dark/setupMqttServices.js?ver=20210129',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1214,7 +1317,7 @@
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
 				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-				if ( !isNaN(parseInt(lp)) && lp > 0 && lp < 9 ) {
+				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
 					var isEnabled = $(this).hasClass("lpEnabledStyle")
 					if ( isEnabled ) {
 						publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
@@ -1228,11 +1331,18 @@
 				// send mqtt set to force reload of charge point SoC after click
 				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
 				if ( !isNaN(parseInt(lp)) && lp > 0 && lp < 9 ) {
-					var spinner = $(this).find('.reloadLpSoc');
-					var isRunning = spinner.hasClass("fa-spin");
-					if ( !isRunning ) {
-						spinner.addClass("fa-spin");
-						publish("1", "openWB/set/lp/" + lp + "/ForceSoCUpdate");
+					if ( $(this).hasClass('manualSoC') ) {
+						var currentSoc = $(this).find('.socLp').text();
+						$('#socModal').find('.socLp').text(lp);
+						$("#manualSocBox").val(currentSoc);
+						$('#socModal').modal("show");
+					} else {
+						var spinner = $(this).find('.reloadLpSoc');
+						var isRunning = spinner.hasClass("fa-spin");
+						if ( !isRunning ) {
+							spinner.addClass("fa-spin");
+							publish("1", "openWB/set/lp/" + lp + "/ForceSoCUpdate");
+						}
 					}
 				}
 			});
@@ -1242,7 +1352,7 @@
 				var dev = parseInt($(this).closest('[data-dev]').data('dev'));  // get attribute device-# of parent element
 				var isLocked = $(this).hasClass("locked");
 				if ( isLocked ) {
-					if ( !isNaN(parseInt(dev)) && dev > 0 && dev < 10 ) {
+					if ( !isNaN(dev) && dev > 0 && dev < 10 ) {
 						var isEnabled = $(this).hasClass("lpEnabledStyle")
 						if ( isEnabled ) {
 							publish("0", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
@@ -1334,6 +1444,28 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
+			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
+				event.preventDefault();
+				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
+				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
+				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
+				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
+				if ( $(this).hasClass ('priceLess') ) {
+					currentMaxPrice -= step;
+				} else {
+					currentMaxPrice += step;
+				}
+				// prevent timeout of delayUserInput when clicking "beyond" range
+				if ( currentMaxPrice < rangeMin ) {
+					currentMaxPrice = rangeMin;
+				} else if ( currentMaxPrice > rangeMax ) {
+					currentMaxPrice = rangeMax;
+				}
+				$('#MaxPriceForCharging').val(currentMaxPrice);
+				$('#MaxPriceForCharging').trigger('input');
+			});
+
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
@@ -1341,6 +1473,12 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
+				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
+					// marks times in the pricechart where the price is low enough so charging would be allowed
+	 				var priceAnnotations = createPriceAnnotations();
+	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
+	 				electricityPricechart.update();
+				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt

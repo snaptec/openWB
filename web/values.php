@@ -2,8 +2,8 @@
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	if(strpos($line, "awattaraktiv=") !== false) {
-		list(, $awattaraktivold) = explode("=", $line);
+	if(strpos($line, "etprovideraktiv=") !== false) {
+		list(, $etprovideraktivold) = explode("=", $line);
 	}
 	if(strpos($line, "minimalstromstaerke=") !== false) {
 		list(, $minimalstromstaerkeold) = explode("=", $line);
@@ -154,6 +154,9 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "hook3_aktiv=") !== false) {
 		list(, $hook3_aktivold) = explode("=", $line);
+	}
+	if(strpos($line, "ssdisplay=") !== false) {
+		list(, $ssdisplayold) = explode("=", $line);
 	}
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);

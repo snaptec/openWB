@@ -383,9 +383,9 @@
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_graphconfig.js?ver=20200415-a" ></script>
+		<script src = "settings/topicsToSubscribe_graphconfig.js?ver=20210205-a" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200415-a" ></script>
 		<!-- load mqtt handler-->
@@ -402,136 +402,144 @@
 				}
 			);
 
+			var pv1 = 0;
+			var pv2 = 0;
 			function visibiltycheck(elementId, mqttpayload) {
 				// PV
-				if ( elementId == "boolPVConfigured") {
-					if ( mqttpayload == 0 ) {
-						$('.pvoptions').addClass("hide");
+				if ( ( elementId == "boolPVConfiguredPv1") || ( elementId == "boolPVConfiguredPv2") ) {
+					if ( elementId == "boolPVConfiguredPv1" ) {
+						pv1 = mqttpayload;
 					} else {
-						$('.pvoptions').removeClass("hide");
+						pv2 = mqttpayload;
+					}
+
+					if ( (pv1 + pv2) > 0 ) {
+						showSection('.pvoptions');
+					} else {
+						hideSection('.pvoptions');
 					}
 				}
 				// House Battery
 				if ( elementId == "boolHouseBatteryConfigured") {
 					if ( mqttpayload == 0 ) {
-						$('.housebatteryoptions').addClass("hide");
-						$('.nohousebattery').removeClass("hide");
+						hideSection('.housebatteryoptions');
+						showSection('.nohousebattery');
 						publish("0", "openWB/graph/boolDisplaySpeicher");
 						publish("0", "openWB/graph/boolDisplaySpeicherSoc");
 					} else {
-						$('.housebatteryoptions').removeClass("hide");
-						$('.nohousebattery').addClass("hide");
+						showSection('.housebatteryoptions');
+						hideSection('.nohousebattery');
 					}
 				}
 				// Chargepoint SoC
 				if ( elementId == "boolSocConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp1options').addClass("hide");
+						hideSection('.soclp1options');
 						publish("0", "openWB/graph/boolDisplayLp1Soc");
 					} else {
-						$('.soclpoptions').removeClass("hide");
-						$('.soclp1options').removeClass("hide");
+						showSection('.soclpoptions');
+						showSection('.soclp1options');
 					}
 				}
 				if ( elementId == "boolSocConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp2options').addClass("hide");
+						hideSection('.soclp2options');
 						publish("0", "openWB/graph/boolDisplayLp2Soc");
 					} else {
-						$('.soclpoptions').removeClass("hide");
-						$('.soclp2options').removeClass("hide");
+						showSection('.soclpoptions');
+						showSection('.soclp2options');
 					}
 				}
 				// Chargepoints
 				if ( elementId == "ConfiguredChargePoints") {
 					if ( mqttpayload < 2 ) {
-						$('.alllpoptions').addClass("hide");
+						hideSection('.alllpoptions');
 						publish("0", "openWB/graph/boolDisplayLpAll");
 					} else {
-						$('.alllpoptions').removeClass("hide");
+						showSection('.alllpoptions');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.lp1options').addClass("hide");
+						hideSection('.lp1options');
 						publish("0", "openWB/graph/boolDisplayLp1");
 					} else {
-						$('.lp1options').removeClass("hide");
+						showSection('.lp1options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.lp2options').addClass("hide");
+						hideSection('.lp2options');
 						publish("0", "openWB/graph/boolDisplayLp2");
 					} else {
-						$('.lp2options').removeClass("hide");
+						showSection('.lp2options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp3") {
 					if ( mqttpayload == 0 ) {
-						$('.lp3options').addClass("hide");
+						hideSection('.lp3options');
 						publish("0", "openWB/graph/boolDisplayLp3");
 					} else {
-						$('.lp3options').removeClass("hide");
+						showSection('.lp3options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp4") {
 					if ( mqttpayload == 0 ) {
-						$('.lp4options').addClass("hide");
+						hideSection('.lp4options');
 						publish("0", "openWB/graph/boolDisplayLp4");
 					} else {
-						$('.lp4options').removeClass("hide");
+						show('.lp4options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp5") {
 					if ( mqttpayload == 0 ) {
-						$('.lp5options').addClass("hide");
+						hideSection('.lp5options');
 						publish("0", "openWB/graph/boolDisplayLp5");
 					} else {
-						$('.lp5options').removeClass("hide");
+						show('.lp5options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp6") {
 					if ( mqttpayload == 0 ) {
-						$('.lp6options').addClass("hide");
+						hideSection('.lp6options');
 						publish("0", "openWB/graph/boolDisplayLp6");
 					} else {
-						$('.lp6options').removeClass("hide");
+						showSection('.lp6options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp7") {
 					if ( mqttpayload == 0 ) {
-						$('.lp7options').addClass("hide");
+						hideSection('.lp7options');
 						publish("0", "openWB/graph/boolDisplayLp7");
 					} else {
-						$('.lp7options').removeClass("hide");
+						show('.lp7options');
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp8") {
 					if ( mqttpayload == 0 ) {
-						$('.lp8options').addClass("hide");
+						hideSection('.lp8options');
 						publish("0", "openWB/graph/boolDisplayLp8");
 					} else {
-						$('.lp8options').removeClass("hide");
+						showSection('.lp8options');
 					}
 				}
 				// Verbraucher
 				if ( elementId == "ConfiguredVerbraucher1") {
 					if ( mqttpayload == 0 ) {
-						$('.verbraucher1options').addClass("hide");
+						hideSection('.verbraucher1options');
 						publish("0", "openWB/graph/boolDisplayLoad1");
 					} else {
-						$('.verbraucher1options').removeClass("hide");
-						$('.noverbraucher').addClass("hide");
+						showSection('.verbraucher1options');
+						hideSection('.noverbraucher');
 					}
 				}
 				if ( elementId == "ConfiguredVerbraucher2") {
 					if ( mqttpayload == 0 ) {
-						$('.verbraucher2options').addClass("hide");
+						hideSection('.verbraucher2options');
 						publish("0", "openWB/graph/boolDisplayLoad2");
 					} else {
-						$('.verbraucher2options').removeClass("hide");
-						$('.noverbraucher').addClass("hide");
+						showSection('.verbraucher2options');
+						hideSection('.noverbraucher');
 					}
 				}
 			}

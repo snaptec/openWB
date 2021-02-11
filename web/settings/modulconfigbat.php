@@ -33,33 +33,9 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -118,6 +94,7 @@
 									<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
 									<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 									<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
+									<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
 									<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
 									<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 									<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
@@ -126,6 +103,7 @@
 									<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 									<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
 									<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
+									<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 									<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
 									<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 									<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
@@ -273,6 +251,30 @@
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
+								<div class="form-row mb-1">
+									<label for="speicherpwloginneeded" class="col-md-4 col-form-label">Anmeldung erforderlich</label>
+									<div class="col">
+										<select name="speicherpwloginneeded" id="speicherpwloginneeded" class="form-control">
+											<option <?php if($speicherpwloginneededold == "0") echo "selected" ?> value="0">Nein</option>
+											<option <?php if($speicherpwloginneededold == "1") echo "selected" ?> value="1">Ja</option>
+										</select>
+										<span class="form-text small">Ab Version 20.49 stehen die Daten erst nach einer Anmeldung an der Powerwall zur Verfügung. Bei "Ja" müssen auch Benutzername und Passwort angegeben werden.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="speicherpwuser" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<input class="form-control" type="text" name="speicherpwuser" id="speicherpwuser" value="<?php echo $speicherpwuserold ?>">
+										<span class="form-text small">Benutzername für den lokalen Login auf der Powerwall.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="speicherpwpass" class="col-md-4 col-form-label">Passwort</label>
+									<div class="col">
+										<input class="form-control" type="password" name="speicherpwpass" id="speicherpwpass" value="<?php echo $speicherpwpassold ?>">
+										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall.</span>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -375,6 +377,12 @@
 							</div>
 						</div>
 
+						<div id="divspeichersolax" class="hide">
+							<div class="alert alert-info">
+								Die IP des Wechselrichters wird im dazugehörigen Solax PV-Modul eingestellt.
+							</div>
+						</div>
+
 						<div id="divspeicherplenti" class="hide">
 							<div class="alert alert-info">
 								Ein am 1. Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus.
@@ -432,6 +440,40 @@
 								</div>
 							</div>
 						</div>
+
+						<div id="divspeicherjson" class="hide">
+                                                        <div class="form-row mb-1">
+                                                                <label for="battjsonurl" class="col-md-4 col-form-label">Speicher URL</label>
+                                                                <div class="col">
+                                                                        <input class="form-control" type="text" name="battjsonurl" id="battjsonurl" value="<?php echo $battjsonurlold ?>">
+                                                                        <span class="form-text small">
+                                                                                Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
+                                                                        </span>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-row mb-1">
+                                                                <label for="battjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
+                                                                <div class="col">
+                                                                        <input class="form-control" type="text" name="battjsonwatt" id="battjsonwatt" value="<?php echo htmlspecialchars($battjsonwattold) ?>">
+                                                                        <span class="form-text small">
+                                                                                Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+                                                                                Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied"
+:234.9182763744428}</span> So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
+                                                                        </span>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-row mb-1">
+                                                                <label for="battjsonsoc" class="col-md-4 col-form-label">Json Abfrage für SoC</label>
+                                                                <div class="col">
+                                                                        <input class="form-control" type="text" name="battjsonsoc" id="battjsonsoc" value="<?php echo $battjsonsocold ?>">
+                                                                        <span class="form-text small">
+                                                                                Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+                                                                                Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied"
+:234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
+                                                                        </span>
+                                                                </div>
+                                                        </div>
+                                                </div>
 
 						<div id="divspeicherbydhv" class="hide">
 							<div class="form-group">
@@ -500,97 +542,104 @@
 
 						<script>
 							function display_speichermodul() {
-								hideSection('divspeichermqtt');
-								hideSection('divspeicherhttp');
-								hideSection('divspeichermpm3pm');
-								hideSection('divspeicherbydhv');
-								hideSection('divspeicherfronius');
-								hideSection('divspeichere3dc');
-								hideSection('divspeichersbs25');
-								hideSection('divspeichersolaredge');
-								hideSection('divspeicherpw');
-								hideSection('divspeicherplenti');
-								hideSection('divspeichersunnyisland');
-								hideSection('divspeicherseco');
-								hideSection('divspeicherkit');
-								hideSection('divspeichervarta');
-								hideSection('divspeicheralphaess');
-								hideSection('divspeichervictron');
-								hideSection('divspeicherlgessv1');
-								hideSection('divspeicherfems');
-								hideSection('divspeicherip');
-								hideSection('divspeichersiemens');
-								hideSection('divspeicherrct');
-								hideSection('divspeichersungrow');
+								hideSection('#divspeichermqtt');
+								hideSection('#divspeicherhttp');
+								hideSection('#divspeichermpm3pm');
+								hideSection('#divspeicherbydhv');
+								hideSection('#divspeicherfronius');
+								hideSection('#divspeichere3dc');
+								hideSection('#divspeichersbs25');
+								hideSection('#divspeichersolaredge');
+								hideSection('#divspeichersolax');
+								hideSection('#divspeicherpw');
+								hideSection('#divspeicherplenti');
+								hideSection('#divspeichersunnyisland');
+								hideSection('#divspeicherseco');
+								hideSection('#divspeicherkit');
+								hideSection('#divspeichervarta');
+								hideSection('#divspeicheralphaess');
+								hideSection('#divspeichervictron');
+								hideSection('#divspeicherlgessv1');
+								hideSection('#divspeicherfems');
+								hideSection('#divspeicherip');
+								hideSection('#divspeichersiemens');
+								hideSection('#divspeicherrct');
+								hideSection('#divspeichersungrow');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
-									showSection('divspeicherfems');
+									showSection('#divspeicherfems');
 								}
 								if($('#speichermodul').val() == 'speicher_rct') {
-									showSection('divspeicherrct');
+									showSection('#divspeicherrct');
 								}
 								if($('#speichermodul').val() == 'speicher_siemens') {
-									showSection('divspeicherip');
-									showSection('divspeichersiemens');
+									showSection('#divspeicherip');
+									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
-									showSection('divspeicherip');
+									showSection('#divspeicherip');
 								}
 
 								if($('#speichermodul').val() == 'speicher_sungrow') {
-									showSection('divspeicherip');
-									showSection('divspeichersungrow');
+									showSection('#divspeicherip');
+									showSection('#divspeichersungrow');
 								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
-									showSection('divspeicheralphaess');
+									showSection('#divspeicheralphaess');
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
-									showSection('divspeichermqtt');
+									showSection('#divspeichermqtt');
 								}
 								if($('#speichermodul').val() == 'speicher_victron') {
-									showSection('divspeichervictron');
+									showSection('#divspeichervictron');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
-									showSection('divspeicherkit');
+									showSection('#divspeicherkit');
 								}
 								if($('#speichermodul').val() == 'speicher_sonneneco') {
-									showSection('divspeicherseco');
+									showSection('#divspeicherseco');
 								}
 								if($('#speichermodul').val() == 'speicher_http')   {
-									showSection('divspeicherhttp');
+									showSection('#divspeicherhttp');
+								}
+								if($('#speichermodul').val() == 'speicher_json')   {
+									showSection('#divspeicherjson');
 								}
 								if($('#speichermodul').val() == 'mpm3pmspeicher')   {
-									showSection('divspeichermpm3pm');
+									showSection('#divspeichermpm3pm');
 								}
 								if($('#speichermodul').val() == 'speicher_bydhv')   {
-									showSection('divspeicherbydhv');
+									showSection('#divspeicherbydhv');
 								}
 								if($('#speichermodul').val() == 'speicher_fronius')   {
-									showSection('divspeicherfronius');
+									showSection('#divspeicherfronius');
 								}
 								if($('#speichermodul').val() == 'speicher_e3dc')   {
-									showSection('divspeichere3dc');
+									showSection('#divspeichere3dc');
 								}
 								if($('#speichermodul').val() == 'speicher_sbs25')   {
-									showSection('divspeichersbs25');
+									showSection('#divspeichersbs25');
 								}
 								if($('#speichermodul').val() == 'speicher_solaredge')   {
-									showSection('divspeichersolaredge');
+									showSection('#divspeichersolaredge');
+								}
+								if($('#speichermodul').val() == 'speicher_solax')   {
+									showSection('#divspeichersolax');
 								}
 								if($('#speichermodul').val() == 'speicher_varta')   {
-									showSection('divspeichervarta');
+									showSection('#divspeichervarta');
 								}
 								if($('#speichermodul').val() == 'speicher_powerwall')   {
-									showSection('divspeicherpw');
+									showSection('#divspeicherpw');
 								}
 								if($('#speichermodul').val() == 'speicher_kostalplenticore')   {
-									showSection('divspeicherplenti');
+									showSection('#divspeicherplenti');
 								}
 								if($('#speichermodul').val() == 'speicher_sunnyisland')   {
-									showSection('divspeichersunnyisland');
+									showSection('#divspeichersunnyisland');
 								}
 								if($('#speichermodul').val() == 'speicher_lgessv1')   {
-									showSection('divspeicherlgessv1');
+									showSection('#divspeicherlgessv1');
 								}
 							}
 
@@ -607,11 +656,10 @@
 
 				<div class="row justify-content-center">
 					<div class="col-3 text-center">
-						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
 						<button class="btn btn-success" type="submit" id="saveBtn">Speichern</button>
 					</div>
 					<div class="col-1 wizzard hide">
-						&nbsp;
+						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
 					</div>
 					<div class="col-3 text-center wizzard hide">
 						<button class="btn btn-danger" id="abortWizzardBtn" type="button">Assistent beenden</button>
@@ -707,6 +755,10 @@
 						$('#saveBtn').html("Speichern und weiter...");
 						// display wizzard specific elements
 						$('.wizzard').removeClass('hide');
+					} else {
+						// disable hidden wizzarddone input
+						// on some browsers hidden input fields cannot be initially disabled
+						$('#wizzarddoneInput').attr('disabled', true);
 					}
 				}
 			);

@@ -44,7 +44,8 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
 	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
 
-	// awattar topcis
+	// etprovider topcis
+	["openWB/global/ETProvider/modulePath", 1],
 	["openWB/global/awattar/boolAwattarEnabled", 1],
 	["openWB/global/awattar/MaxPriceForCharging", 1],
 	["openWB/global/awattar/ActualPriceForCharging", 1],
@@ -166,6 +167,9 @@ var topicsToSubscribe = [
 	// Status Konfiguration SoC
 	["openWB/lp/1/boolSocConfigured", 1],
 	["openWB/lp/2/boolSocConfigured", 1],
+	// manual SoC
+	["openWB/lp/1/boolSocManual", 1],
+	["openWB/lp/2/boolSocManual", 1],
 	// Status Nachtladen
 	["openWB/lp/1/boolChargeAtNight", 1],
 	["openWB/lp/2/boolChargeAtNight", 1],
@@ -343,7 +347,7 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		client.connect(options);
+		setTimeout(function() { client.conect(options); }, 5000);
 	}
 };
 

@@ -65,11 +65,15 @@
 		</header>
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Einstellungen werden gespeichert</h1>
+			<div id="feedbackdiv" class="alert alert-info">
+				Bitte warten ... <i class="fas fa-cog fa-spin"></i>
+			</div>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: System/Einstellungen</small>
 			</div>
 		</footer>
 <?php
@@ -121,8 +125,29 @@
 		}
 		fclose($fp);
 
+		// handling of different actions required by some modules
+
+		// check for manual ev soc module on lp1
+		if( array_key_exists( 'socmodul', $_POST ) ){
+			if( $_POST['socmodul'] == 'soc_manual' ){
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "0"' );
+			}
+		}
+		// check for manual ev soc module on lp2
+		if( array_key_exists( 'socmodul1', $_POST ) ){
+			if( $_POST['socmodul1'] == 'soc_manuallp2' ){
+				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "0"' );
+			}
+		}
+
 		// update display process if in POST data
-		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){
+		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){ ?>
+			<script>$('#feedbackdiv').append("<br>Displays werden neu geladen.");</script>
+			<?php
 			exec( 'mosquitto_pub -t openWB/system/reloadDisplay -m "1"' );
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
 		}
@@ -144,17 +169,25 @@
 		// update i3 SoC auth files if in POST data
 		if( array_key_exists( 'i3username', $_POST ) ){
 			// charge point 1
-			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3/auth.json";
+			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3/auth1.json";
 			$i3auth_fp = fopen($i3authfile, 'w');
 			fwrite($i3auth_fp,"{".PHP_EOL.'"username": "'.$settingsArray['i3username'].'",'.PHP_EOL.'"password": "'.$settingsArray['i3passwort'].'",'.PHP_EOL.'"vehicle": "'.$settingsArray['i3vin'].'"'.PHP_EOL."}".PHP_EOL);
 			fclose($i3auth_fp);
 		}
 		if( array_key_exists( 'i3usernames1', $_POST ) ){
 			// charge point 2
-			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3s1/auth.json";
+			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3/auth2.json";
 			$i3auth_fp = fopen($i3authfile, 'w');
 			fwrite($i3auth_fp,"{".PHP_EOL.'"username": "'.$settingsArray['i3usernames1'].'",'.PHP_EOL.'"password": "'.$settingsArray['i3passworts1'].'",'.PHP_EOL.'"vehicle": "'.$settingsArray['i3vins1'].'"'.PHP_EOL."}".PHP_EOL);
 			fclose($i3auth_fp);
+		}
+
+		// start etprovider update if in POST data
+		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){ ?>
+			<script>$('#feedbackdiv').append("<br>Update des Stromtarifanbieters gestartet.");</script>
+			<?php
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['etprovider'] . "/main.sh > /var/log/openWB.log 2>&1 &" );
+			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m "' . $_POST['etprovider'] . '"' );
 		}
 
 	} catch ( Exception $e ) {
@@ -163,7 +196,13 @@
 	}
 
 	// return to theme
-	echo "<script>window.location.href='index.php';</script>";
+	?>
+		<script>
+			window.setTimeout( function(){
+				window.location.href='index.php';
+			}, 3000);
+		</script>
+	<?php
 ?>
 	</body>
 </html>

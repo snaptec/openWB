@@ -7,9 +7,9 @@ Die Software steht frei für jeden zur Verfügung, siehe GPLv3 Bedingungen.
 
 	Unterstüztung ist gerne gesehen!
 	Sei es in Form von Code oder durch Spenden
-	Spenden bitte an info@snaptec.org
+	Spenden bitte an spenden@openwb.de
 
-Anfragen für Supportverträge ebenso an info@snaptec.org
+Anfragen für Supportverträge an info@openwb.de
 Weitere Infos unter https://openwb.de
 
 # Haftungsausschluss
@@ -22,43 +22,23 @@ Keine Gewährleistung für die Software - use at your own RISK!
 # Wofür?
 Steuerung einer EVSE DIN oder anderer Ladepunkte für sofortiges laden, Überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
 
-Unterstützt wird jedes EV das den AC Ladestandard mit Typ 1 oder Typ 2 Stecker unterstützt.
-
-
-# Was wird benötigt?
-Hardware:
-
-
-- EVSE DIN
-- Raspberry Pi 3 + Gehäuse (ev. gleich Hutschienengehäuse zur Installation in der WB)
-- USB RS 485 Adapter
-- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. MPM3PM
-- Bezugsstromzähler für +Bezug (positiv) bzw. -Überschuss (z.B. vorh. Smartmeter mit IR Lesekopf und VZLogger, separater Modbuszähler oder bereits vorhandene Lösung mit API, openWB EVU Kit)
-- Auslesen der PV-Leistung (entsprechendes Softwaremodul fuer den Wechselrichter (z.B. Fronius) oder separater Zähler)
-- Schuetz entsprechend der max. Leistung
-- Ladekabel mit CP-Steuerleitung (CP => Control Pilot)
-- Typ1/2 Stecker
-- Ggf. ein FI Typ B
+Unterstützt wird jedes EV das den AC Ladestandard unterstützt.
 
 
 
-# Bausatz
-OpenWB gibt es unter 
+
+
+# Bezug
+openWB gibt es unter 
 
 	https://openwb.de/shop/
-
-auch als Bausatz fertig vorkonfiguriert inkl Anleitung zu kaufen.
-
-Bausatz Anleitung:
-	
-	https://openwb.de/main/?page_id=135
 
 
 
 # Installation
 
 
-Siehe Verdrahtungsplan für die Hardware Verkabelung
+Bei fertigen openWB vorinstalliert
 
 
 
@@ -91,7 +71,6 @@ hier einfügen:
 
 
 
-Zum Updaten im Webinterface unter Misc den Update Button drücken.
  
 
 
@@ -129,97 +108,15 @@ Hierzu müssen schließer Taster von GND (Pin 34) nach Gpio X  angeschlossen wer
 	Aus Gpio 13, Pin 33
 	
 
-# Danke geht an:
-
-	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
-
-# API für Remotesteuerung, Einbindung in Hausautomation,  etc..
-
-Die openWB lässt sich per GET Requests fernsteuern. Derzeit implementiert:
-- Lademodus
-- Sofort Laden Stromstärke
-
-Beispiel:
-
-	curl -X GET 'http://ipdesraspi/openWB/web/api.php?jetztll=16'
-stellt die Ladeleistung auf 16A
-
-	curl -X GET 'http://ipdesraspi/openWB/web/api.php?lademodus=jetzt'
-stellt den Lademodus auf Sofort Laden.
-
-Gültige Werte:
-
-jetztll
-
-	10-32
-
-lademodus
-
-	jetzt
-	minundpv
-	pvuberschuss
-	stop
 
 
-Die API kann auch abgefragt werden und antwortet im Json Format
-Nachfolgend die Werte zur Erklärung durch deren Einheit ersetzt
-
-	curl -X GET 'http://ipdesraspi/openWB/web/api.php?get=all'
-	{
-	  "date": "2019:02:19-18:10:44", # aktuelles datum
-	  "lademodus": "2", # lademodus (0 Sofort, 1 Min+PV, 2 NurPV, 3 Standby, 4 Stop)
-	  "minimalstromstaerke": "6", # konfigurierte Minimalstromstärke
-	  "maximalstromstaerke": "32", # konfigurierte Maximalstromstärke
-	  "llsoll": "0", # Soll Ladestromvorgabe
-	  "restzeitlp1": "5 Min", 
-	  "restzeitlp2": "1 H 30 Min",
-	  "restzeitlp3": "--",
-	  "gelkwhlp1": "0", # im aktuellen Ladevorgang
-	  "gelkwhlp2": "0", # im aktuellen Ladevorgang
-	  "gelkwhlp3": "0", # im aktuellen Ladevorgang
-	  "gelrlp1": "3", # im aktuellen Ladevorgang geladene km
-	  "gelrlp2": "50", # im aktuellen Ladevorgang geladene km
-	  "gelrlp3": "0", # im aktuellen Ladevorgang geladene km
-	  "llgesamt": "0", # Ladeleistung aller Ladepunkte summiert
-	  "evua1": "2.5657", # Ampere Bezug am EVU
-	  "evua2": "2.6333", # Ampere Bezug am EVU
-	  "evua3": "5.0019", # Ampere Bezug am EVU
-	  "lllp1": "1315",# Ladeleistung
-	  "lllp2": "0",# Ladeleistung
-	  "lllp3": "0",# Ladeleistung
-	  "evuw": "-9",# Bezug/Überschuss am EVU
-	  "pvw": "21",# PV Leistung
-	  "evuv1": "231", #Volt am EVU
-	  "evuv2": "232", #Volt am EVU
-	  "evuv3": "229", #Volt am EVU
-	  "ladestatusLP1": "1", # ob geladen wird aktuell
-	  "ladestatusLP2": "1", # ob geladen wird aktuell
-	  "ladestatusLP3": "0", # ob geladen wird aktuell
-	  "zielladungaktiv": "0", #ob Zielladen aktiv
-	  "lla1LP1": "6", #Ampere 
-	  "lla2LP1": "0", #Ampere 
-	  "lla3LP1": "0", #Ampere 
-	  "lla1LP2": "10", #Ampere 
-	  "lla2LP2": "0.000", #Ampere 
-	  "lla3LP2": "0.000", #Ampere 
-	  "llkwhLP1": "665.43", #Zäherstand am Ladepunktzähler
-	  "llkwhLP2": "269.233", #Zäherstand am Ladepunktzähler
-	  "llkwhLP3": "358.23", #Zäherstand am Ladepunktzähler
-	  "evubezugWh": "1968573", #Zäherstand Bezug in Wh
-	  "evueinspeisungWh": "10021315", #Zäherstand Einspeisung in Wh
-	  "pvWh": "425299.8047", #Zählerstand PV in Wh
-	  "speichersoc": "40.8",# SoC des Speichers in %
-	  "socLP1": "66", # SoC des EV in %
-	  "socLP2": "63", # SoC des EV in %
-	  "speicherleistung": "-1302" #Lade / Entladeleistung des Speichers
-	}
 
 # Module erstellen
 
 Ist ein Modul für den gewünscht Einsatszweck noch nicht verfügbar kann man dies selbst erstellen.
-Wenn es läuft bitte reporten und ich füge es (einstellbar) dem Projekt hinzu.
+Wenn es läuft bitte reporten und es (einstellbar) dem Projekt hinzugefügt.
 
-Ein Modul ist immer ein Ordner mit dem Modulnamen im Ordner openWB/modules. Es besteht aus einem Shell script mit dem Namen main.sh. Sollten weitere Dateien benötigt werden liegen diese mit im Ordner. Bitte immer einen Timeout mit definieren um im Fehlerfall nicht hängen zu bleiben.
+Ein Modul ist immer ein Ordner mit dem Modulnamen im Ordner openWB/modules. Es besteht aus einem Shell script mit dem Namen main.sh. Sollten weitere Dateien benötigt werden liegen diese mit im Ordner. 
 
 Exemplarisch der Aufbau erklärt am bezug_http Modul:
 

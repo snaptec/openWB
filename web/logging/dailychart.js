@@ -587,81 +587,81 @@ function loadgraph() {
 			hidden: boolDisplayLoad2,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d1name + ' Import' + overalldevice1 + ' kWh',
-			borderColor: "rgba(230, 40, 220, 0.7)",
-			backgroundColor: "rgba(230, 40, 220, 0.7)",
+			label: d1name + ' Import ' + overalldevice1 + ' kWh',
+			borderColor: "rgba(200, 150, 200, 0.7)",
+			backgroundColor: "rgba(200, 150, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice1,
 			hidden: boolDisplayDevice1,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d2name + ' Import' + overalldevice2 + ' kWh',
-			borderColor: "rgba(230, 50, 220, 0.7)",
-			backgroundColor: "rgba(230, 50, 220, 0.7",
+			label: d2name + ' Import ' + overalldevice2 + ' kWh',
+			borderColor: "rgba(200, 100, 200, 0.7)",
+			backgroundColor: "rgba(200, 100, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice2,
 			hidden: boolDisplayDevice2,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d3name + ' Import' + overalldevice3 + ' kWh',
-			borderColor: "rgba(230, 60, 220, 0.7",
-			backgroundColor: "rgba(230, 60, 220, 0.7",
+			label: d3name + ' Import ' + overalldevice3 + ' kWh',
+			borderColor: "rgba(200, 50, 200, 0.7)",
+			backgroundColor: "rgba(200, 50, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice3,
 			hidden: boolDisplayDevice3,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d4name + ' Import' + overalldevice4 + ' kWh',
-			borderColor: "rgba(230, 70, 220, 0.7",
-			backgroundColor: "rgba(230, 50, 220, 0.7",
+			label: d4name + ' Import ' + overalldevice4 + ' kWh',
+			borderColor: "rgba(200, 0, 200, 0.7)",
+			backgroundColor: "rgba(200, 0, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice4,
 			hidden: boolDisplayDevice4,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d5name + ' Import' + overalldevice5 + ' kWh',
-			borderColor: "rgba(230, 50, 220, 0.7",
-			backgroundColor: "rgba(230, 50, 220, 0.7",
+			label: d5name + ' Import ' + overalldevice5 + ' kWh',
+			borderColor: "rgba(150, 200, 200, 0.7)",
+			backgroundColor: "rgba(150, 200, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice5,
 			hidden: boolDisplayDevice5,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d6name + ' Import' + overalldevice6 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: d6name + ' Import ' + overalldevice6 + ' kWh',
+			borderColor: "rgba(100, 200, 200, 0.7)",
+			backgroundColor: "rgba(100, 200, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice6,
 			hidden: boolDisplayDevice6,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d7name + ' Import' + overalldevice7 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: d7name + ' Import ' + overalldevice7 + ' kWh',
+			borderColor: "rgba(50, 200, 200, 0.7)",
+			backgroundColor: "rgba(50, 200, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice7,
 			hidden: boolDisplayDevice7,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d8name + ' Import' + overalldevice8 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: d8name + ' Import ' + overalldevice8 + ' kWh',
+			borderColor: "rgba(0, 200, 200, 0.7)",
+			backgroundColor: "rgba(0, 200, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice8,
 			hidden: boolDisplayDevice8,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d9name + ' Import' + overalldevice9 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: d9name + ' Import ' + overalldevice9 + ' kWh',
+			borderColor: "rgba(200, 200, 200, 0.7)",
+			backgroundColor: "rgba(200, 200, 200, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice9,
@@ -759,7 +759,7 @@ function loadgraph() {
 				enabled: false
 			},
 			plugins: {
-					zoom: {
+				zoom: {
 					// Container for pan options
 					pan: {
 						// Boolean to enable panning
@@ -806,7 +806,9 @@ function loadgraph() {
 				display: boolDisplayLegend,
 				position: 'bottom',
 				labels: {
-					filter: function(item, chart) {
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)",
+						filter: function(item, chart) {
 						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeicheri) || item.text.includes(hidespeichere) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)|| item.text.includes(hidedevice3)|| item.text.includes(hidedevice4)|| item.text.includes(hidedevice5)|| item.text.includes(hidedevice6)|| item.text.includes(hidedevice7)|| item.text.includes(hidedevice8)|| item.text.includes(hidedevice9)|| item.text.includes(hidedevice10)|| item.text.includes(hidedevice1)|| item.text.includes(hidedevice2)|| item.text.includes(hidetemp1)|| item.text.includes(hidetemp2)|| item.text.includes(hidetemp3)|| item.text.includes(hidetemp4)|| item.text.includes(hidetemp5)|| item.text.includes(hidetemp6)) {
 							return false
 						} else {
@@ -821,6 +823,10 @@ function loadgraph() {
 			scales: {
 				xAxes: [{
 					type: 'category',
+					ticks: {
+						//source: 'data',
+						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+					}
 				}],
 				yAxes: [
 					{
@@ -831,6 +837,14 @@ function loadgraph() {
 						scaleLabel: {
 							display: true,
 							labelString: 'Leistung [kW]',
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						gridLines: {
+							// light grey, opacy = 100% (visible)
+							color: "rgba(204, 204, 204, 1)",
+						},
+						ticks: {
 							// middle grey, opacy = 100% (visible)
 							fontColor: "rgba(153, 153, 153, 1)"
 						},
@@ -857,6 +871,8 @@ function loadgraph() {
 							color: "rgba(0, 0, 0, 0)",
 						},
 						ticks: {
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)",
 							min: 1,
 							suggestedMax: 100
 						}

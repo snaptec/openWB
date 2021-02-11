@@ -73,20 +73,22 @@
 		</style>
 	</head>
 	<body>
-		<form action="display/display.php" method="post">
-			<div id="preload"> 
-				openWB startet... bitte warten
-			</div>
-			<div id="loaded" style="visibility: hidden">
-				<button type="submit">Klicken zum Interface laden</button>
-			</div>
-		</form>
+		<div id="preload"> 
+			openWB startet... bitte warten
+		</div>
+		<div id="loaded" style="visibility: hidden">
+			<button id="goButton">Klicken zum Interface laden</button>
+		</div>
 		<script>
 			function changevis(){
 				document.getElementById("preload").style.visibility = "hidden";
 				document.getElementById("loaded").style.visibility = "visible";
 			}
 			setTimeout(changevis, 30000);
+
+			$('#goButton').on("click", function(event){
+				window.location.href = "display/display.php";
+			});
 		</script>
 	</body>
 </html>

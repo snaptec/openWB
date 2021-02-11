@@ -33,7 +33,7 @@
 						<a class="dropdown-item" id="navGeneralLadeeinstellungen" href="./settings/generalchargeconfig.html">Übergreifendes</a>
 						<a class="dropdown-item" id="navSofortLadeeinstellungen" href="./settings/sofortconfig.php">Sofortladen</a>
 						<a class="dropdown-item" id="navPVLadeeinstellungen" href="./settings/pvconfig.html">PV & Min+PV</a>
-						<a class="dropdown-item" id="navNachtladen" href="./settings/nachtladenconfig.html">Nachtladen</a>
+						<!-- <a class="dropdown-item" id="navNachtladen" href="./settings/nachtladenconfig.html">Nachtladen</a> -->
 					</div>
 				</li>
 
@@ -71,6 +71,8 @@
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
 						<a class="dropdown-item" id="navFehlerbericht" href="./settings/fehlerbericht.html">Support</a>
 						<a class="dropdown-item" id="navPasswortschutz" href="./settings/setPassword.php">Passwortschutz</a>
+						<a class="dropdown-item" id="navSystemInfo" href="systeminfo/systeminfo.php">System-Info</a>
+						<a class="dropdown-item" id="navNetworkSettings" href="./settings/network.php">Netzwerk-Einstellungen</a>
 					</div>
 				</li>
 
@@ -115,7 +117,8 @@
 			<div class="modal-body text-center">
 				<p>
 					Soll wirklich ein gespeichertes Backup wiederhergestellt werden?<br>
-					Die Wiederherstellung kann einige Zeit in Anspruch nehmen. Aktuelle Einstellungen werden mit dem Backup überschrieben!
+					Die Wiederherstellung kann einige Zeit in Anspruch nehmen. Aktuelle Einstellungen als auch die installierte Version werden mit dem Backup überschrieben!<br>
+					Eventuell vorhandene externe openWB erhalten kein Backup/Downgrade.
 				</p>
 				<p>
 					<span class="text-danger">Fahrzeuge sind vor der Wiederherstellung abzustecken!</span>
@@ -143,7 +146,8 @@
 				<p>
 					<b>Soll die openWB wirklich neu gestartet werden?<br></b>
 					Wenn ein Problem mit der openWB vorliegt bitte Debug Daten senden.<br>
-					Ein Neustart löscht alle Debug Daten und macht es unmöglich die Problemursache festzustellen.
+					Ein Neustart löscht alle Debug Daten und macht es unmöglich, die Problemursache festzustellen.<br>
+					<span class="text-danger">Fahrzeuge sind vor dem Neustart abzustecken!</span>
 				</p>
 			</div>
 			<!-- modal footer -->

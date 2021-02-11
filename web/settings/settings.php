@@ -25,6 +25,8 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- Bootstrap Selectpicker-->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-selectpicker/bootstrap-select.min.css">
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
@@ -33,35 +35,10 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="js/bootstrap-selectpicker/bootstrap-select.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -105,46 +82,16 @@
 				<!-- Übergreifendes -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
-						Übergreifendes
-					</div>
-					<div class="card-body">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label class="col-md-4 col-form-label">openWB ist nur ein Ladepunkt</label>
-								<div class="col">
-									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($isssold == 0) echo " active" ?>">
-											<input type="radio" name="isss" id="isssOff" value="0"<?php if($isssold == 0) echo " checked=\"checked\"" ?>>Aus
-										</label>
-										<label class="btn btn-outline-info<?php if($isssold == 1) echo " active" ?>">
-											<input type="radio" name="isss" id="isssOn" value="1"<?php if($isssold == 1) echo " checked=\"checked\"" ?>>An
-										</label>
-									</div>
-									<span class="form-text small">
-										Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
-										Hier ist Ja zu wählen wenn bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
-										<span class="text-danger">Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
-										An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
-									</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Awattar -->
-				<div class="card border-secondary">
-					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Awattar</div>
+								<div class="col-4">openWB ist nur ein Ladepunkt</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-sm btn-outline-info<?php if($awattaraktivold == 0) echo " active" ?>">
-											<input type="radio" name="awattaraktiv" id="awattaraktivOff" value="0"<?php if($awattaraktivold == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-sm btn-outline-info<?php if($isssold == 0) echo " active" ?>">
+											<input type="radio" name="isss" id="isssOff" value="0"<?php if($isssold == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
-										<label class="btn btn-sm btn-outline-info<?php if($awattaraktivold == 1) echo " active" ?>">
-											<input type="radio" name="awattaraktiv" id="awattaraktivOn" value="1"<?php if($awattaraktivold == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-sm btn-outline-info<?php if($isssold == 1) echo " active" ?>">
+											<input type="radio" name="isss" id="isssOn" value="1"<?php if($isssold == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 								</div>
@@ -153,16 +100,19 @@
 					</div>
 					<div class="card-body">
 						<div class="card-text alert alert-info">
-							Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler. Die Awattar Funktion ist nur im SofortLaden Modus aktiv!
+							Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
+							Hier ist Ja zu wählen wenn, bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
+							<span class="text-danger">Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
+							An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
 						</div>
-						<div id="awattardiv" class="hide">
+						<div id="isssdiv" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
+									<label for="ssdisplay" class="col-md-4 col-form-label">Display-Theme</label>
 									<div class="col">
-										<select name="awattarlocation" id="awattarlocation" class="form-control">
-											<option <?php if($awattarlocationold == "de") echo "selected" ?> value="de">Deutschland</option>
-											<option <?php if($awattarlocationold == "at") echo "selected" ?> value="at">Österreich</option>
+										<select name="ssdisplay" id="ssdisplay" class="form-control">
+											<option <?php if($ssdisplayold == 0) echo "selected" ?> value="0">Normal</option>
+											<option <?php if($ssdisplayold == 1) echo "selected" ?> value="1">Display der übergeordneten openWB</option>
 										</select>
 									</div>
 								</div>
@@ -171,19 +121,327 @@
 					</div>
 					<script>
 						$(function() {
-							function visibility_awattaraktiv() {
-								if($('#awattaraktivOff').prop("checked")) {
-									hideSection('awattardiv');
+							function visibility_isss() {
+								if($('#isssOff').prop("checked")) {
+									hideSection('#isssdiv');
 								} else {
-									showSection('awattardiv');
+									showSection('#isssdiv');
 								}
 							}
 
-							$('input[type=radio][name=awattaraktiv]').change(function(){
-								visibility_awattaraktiv();
+							$('input[type=radio][name=isss]').change(function(){
+								visibility_isss();
 							});
 
-							visibility_awattaraktiv();
+							visibility_isss();
+						});
+					</script>
+				</div>
+
+				<!-- electricity tariff providers -->
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Stromanbieter</div>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-sm btn-outline-info<?php if($etprovideraktivold == 0) echo " active" ?>">
+											<input type="radio" name="etprovideraktiv" id="etprovideraktivOff" value="0"<?php if($etprovideraktivold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-sm btn-outline-info<?php if($etprovideraktivold == 1) echo " active" ?>">
+											<input type="radio" name="etprovideraktiv" id="etprovideraktivOn" value="1"<?php if($etprovideraktivold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info">
+							Ermöglicht Laden nach Strompreis. Hierfür wird ein unterstützter Anbieter benötigt. Die Funktion ist nur im Modus Sofortladen aktiv!
+						</div>
+						<div class="form-group mb-0" id="etproviderondiv">
+							<div class="form-row mb-1">
+								<label for="et_provider" class="col-md-4 col-form-label">Anbieter</label>
+								<div class="col">
+									<select name="etprovider" id="etprovider" class="form-control">
+										<option <?php if($etproviderold == "et_awattar") echo "selected" ?> value="et_awattar">aWATTar</option>
+										<option <?php if($etproviderold == "et_tibber") echo "selected" ?> value="et_tibber">Tibber</option>
+									</select>
+								</div>
+							</div>
+							<div id="awattardiv" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
+										<div class="col">
+											<select name="awattarlocation" id="awattarlocation" class="form-control">
+												<option <?php if($awattarlocationold == "de") echo "selected" ?> value="de">Deutschland</option>
+												<option <?php if($awattarlocationold == "at") echo "selected" ?> value="at">Österreich</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="tibberdiv" class="hide">
+								<script src = "../modules/et_tibber/tibber.js?ver=20210128" ></script>
+								<div class="card-text alert alert-primary">
+									<p>
+										Ihren persönlichen Tibber-Token erhalten Sie über die <a href="https://developer.tibber.com/explorer" target="_blank">Tibber-Developer-Seite</a>.
+									</p>
+									<p>
+										Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
+										in das Eingebafeld selbst eintragen oder <b>nach Eingabe Ihres Token</b> durch Klick auf den Button von der openWB ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
+									</p>
+									<p>
+										Bei einer fehlerhaften Tibber-Abfrage wird der Strompreis von der openWB bis zur nächsten erfolgreichen Abfrage mit 99.99ct/kWh festgelegt.
+									</p>
+									Bitte verifizieren Sie die Eingabe, bevor Sie die Einstellungen speichern.
+								</div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="tibbertoken" class="col-md-4 col-form-label">Tibber-Token</label>
+										<div class="col">
+											<input class="form-control" type="text" name="tibbertoken" id="tibbertoken" value="<?php echo $tibbertokenold; ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="tibberhomeid" class="col-md-4 col-form-label">Home-ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="tibberhomeid" id="tibberhomeid" value="<?php echo $tibberhomeidold; ?>">
+										</div>
+									</div>
+								</div>
+								<div class="row justify-content-center">
+									<button id="getTibberHomeIdBtn" type="button" class="btn btn-primary m-2">Home-ID ermitteln</button>
+									<button id="verifyTibberBtn" type="button" class="btn btn-secondary m-2">Tibber-Daten verifizieren</button>
+								</div>
+								<script type="text/javascript">
+									$(document).ready(function(){
+
+										$('#tibberHomesDropdown').selectpicker();
+
+										$('#tibbertoken').change(function(){
+											// after change of token check if only alphanumeric chars were entered
+											var currentVal = $(this).val();
+											// !Attention! Until now there are only alphanumeric characters in token.
+											// Function may be needed to be adjusted in future
+											newVal = currentVal.trim().replace(/[^a-z0-9]/gi,'');
+											$(this).val(newVal);
+										});
+
+										$('#tibberhomeid').change(function(){
+											// after change of homeID check if only alphanumeric chars and dash were entered
+											var currentVal = $(this).val();
+											// !Attention! Until now there are only alphanumeric characters and dash in homeID.
+											// Function may be needed to be adjusted in future
+											newVal = currentVal.trim().replace(/[^a-z0-9-]/gi,'');
+											$(this).val(newVal);
+										});
+
+										$('#tibberhomeIdModalOkBtn').click(function(){
+											$('#tibberhomeid').val($('#tibberHomesDropdown option:selected').val());
+										});
+
+										$('#getTibberHomeIdBtn').click(function(){
+											const tibberQuery = '{ "query": "{viewer {homes{id address{address1 address2 address3 postalCode city}}}}" }';
+											readTibberAPI($('#tibbertoken').val(), tibberQuery)
+												.then((queryData) => {
+													var homes = queryData.data.viewer.homes;
+													// clear selectpicker
+													$('#tibberHomesDropdown').empty();
+													// and fill with received address(es)
+													$(homes).each(function() {
+														var homeID = this.id;
+														var addressStr = this.address.address1;
+														if ( this.address.address2 !== null ) {
+															addressStr = addressStr + ', ' + this.address.address2;
+														}
+														if ( this.address.address3 !== null ) {
+															addressStr = addressStr + ', ' + this.address.address3;
+														}
+														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
+														$('#tibberHomesDropdown').append('<option value="' + homeID + '">' + addressStr + '</option>');
+    												});
+													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-danger');
+													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-success');
+													$('#tibberhomeIdModalOkBtn').show();
+													$('#tibberModalHomeIdErrorDiv').hide();
+													$('#tibberModalSelectHomeIdDiv').show();
+													// order of the following selectpicker commands is crucial for correct functionality!!
+													// make sure formerly hidden element is now enabled,
+													$('#tibberHomesDropdown').attr('disabled',false);
+													$('#tibberHomesDropdown').selectpicker('refresh');
+													// set the selectpicker to the first option
+													$('#tibberHomesDropdown').selectpicker('val', $('#tibberHomesDropdown option:first').val());
+													// show modal with unhidden div
+													$('#tibberhomeIdModal').modal("show");
+												})
+												.catch((error) => {
+													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-success');
+													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-danger');
+													$('#tibberhomeIdModalOkBtn').hide();
+													$('#tibberModalHomeIdErrorDiv').find('span').text(error);
+													//$('#tibberErrorText').text(error);
+													$('#tibberModalHomeIdErrorDiv').show();
+													$('#tibberModalSelectHomeIdDiv').hide();
+													$('#tibberhomeid').val('');
+													$('#tibberhomeIdModal').modal("show");
+								  				})
+										});
+
+										$('#verifyTibberBtn').click(function(){
+											const tibberQuery = '{ "query": "{viewer {name home(id:\\"' + $('#tibberhomeid').val() + '\\") {address {address1}}}}" }';
+											readTibberAPI($('#tibbertoken').val(), tibberQuery)
+												.then((queryData) => {
+													$('#tibberVerifyModal').find('.modal-header').removeClass('bg-danger');
+													$('#tibberVerifyModal').find('.modal-header').addClass('bg-success');
+													$('#tibberVerifyOkBtn').show();
+													$('#tibberVerifyModal').find('.btn-danger').hide();
+													$('#tibberModalVerifyErrorDiv').hide();
+													$('#tibberModalVerifySuccessDiv').show();
+													var name = queryData.data.viewer.name;
+													$('#tibberModalVerifySuccessDiv').find('span').text(name);
+													$('#tibberVerifyModal').modal("show");
+												})
+												.catch((error) => {
+													$('#tibberVerifyModal').find('.modal-header').removeClass('bg-success');
+													$('#tibberVerifyModal').find('.modal-header').addClass('bg-danger');
+													$('#tibberVerifyOkBtn').hide();
+													$('#tibberVerifyModal').find('.btn-danger').show();
+													$('#tibberModalVerifyErrorDiv').find('span').text(error);
+													$('#tibberModalVerifyErrorDiv').show();
+													$('#tibberModalVerifySuccessDiv').hide();
+													$('#tibberhomeid').val('');
+													$('#tibberVerifyModal').modal("show");
+												})
+										});
+
+									});  // end document ready
+								</script>
+
+								<!-- modal Tibber-homeID-window -->
+								<div class="modal fade" id="tibberhomeIdModal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+
+											<!-- modal header -->
+											<div class="modal-header">
+												<h4 class="modal-title">Tibber Home-ID ermitteln</h4>
+											</div>
+
+											<!-- modal body -->
+											<div class="modal-body">
+												<div id="tibberModalHomeIdErrorDiv" class="row justify-content-center hide">
+													<div class="col">
+														<p>
+															<span></span>
+														</p>
+														Home-ID-Ermittlung fehlgeschlagen.
+													</div>
+												</div>
+
+												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
+													<div class="col">
+														<div class="form-group">
+														<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
+														<select class="form-control selectpicker" id="tibberHomesDropdown">
+														</select>
+													  </div>
+													</div>
+												</div>
+
+											</div>
+
+											<!-- modal footer -->
+											<div class="modal-footer d-flex justify-content-center">
+												<button type="button" class="btn btn-success" data-dismiss="modal" id="tibberhomeIdModalOkBtn">Home-ID übernehmen</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+											</div>
+
+										</div>
+									</div>
+								</div>  <!-- end modal Tibber-homeID-window -->
+
+								<!-- modal Tibber-verify-data-window -->
+								<div class="modal fade" id="tibberVerifyModal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+
+											<!-- modal header -->
+											<div class="modal-header">
+												<h4 class="modal-title">Tibber-Daten verifizieren</h4>
+											</div>
+
+											<!-- modal body -->
+											<div class="modal-body">
+												<div id="tibberModalVerifyErrorDiv" class="row justify-content-center hide">
+													<div class="col">
+														<p>
+															<span></span>
+														</p>
+														Verifizierung der Tibber-Daten fehlgeschlagen.
+													</div>
+												</div>
+
+												<div id="tibberModalVerifySuccessDiv" class="row justify-content-center hide">
+													<div class="col">
+														<p>
+															Verifizierung der Tibber-Daten erfolgreich!
+														</p>
+														Registrierter Account-Inhaber: <span></span>
+													</div>
+												</div>
+											</div>
+
+											<!-- modal footer -->
+											<div class="modal-footer d-flex justify-content-center">
+												<button type="button" class="btn btn-success" data-dismiss="modal" id="tibberVerifyOkBtn">OK</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+											</div>
+
+										</div>
+									</div>
+								</div>  <!-- end modal Tibber-verify-data-window -->
+
+							</div>
+						</div>
+					</div>
+
+					<script>
+						$(function() {
+							function visibility_electricityprovider() {
+								if($('#etprovideraktivOff').prop("checked")) {
+									hideSection('#etproviderondiv');
+								} else {
+									showSection('#etproviderondiv');
+								}
+							}
+
+							function visibility_electricitytariff() {
+								hideSection('#awattardiv');
+								hideSection('#tibberdiv');
+								switch ($('#etprovider').val()) {
+									case 'et_awattar':
+										showSection('#awattardiv');
+									break;
+									case 'et_tibber':
+										showSection('#tibberdiv');
+									break;
+								}
+							}
+
+							$('#etprovider').change(function(){
+								visibility_electricitytariff();
+							});
+
+							$('input[type=radio][name=etprovideraktiv]').change(function(){
+								visibility_electricityprovider();
+							});
+
+							visibility_electricitytariff();
+							visibility_electricityprovider();
 						});
 					</script>
 				</div>
@@ -329,49 +587,49 @@
 							var lp8akt = <?php echo $lastmanagementlp8old ?>;
 
 							if(lp2akt == '0') {
-								hideSection('lp2aktdiv');
-								hideSection('loadsharingdiv');
-								showSection('loadsharingoffdiv');
-								hideSection('nachtladenlp2div');
-								hideSection('durchslp2div');
+								hideSection('#lp2aktdiv');
+								hideSection('#loadsharingdiv');
+								showSection('#loadsharingoffdiv');
+								hideSection('#nachtladenlp2div');
+								hideSection('#durchslp2div');
 							} else {
-								showSection('lp2aktdiv');
-								showSection('loadsharingdiv');
-								hideSection('loadsharingoffdiv');
-								showSection('nachtladenlp2div');
-								showSection('durchslp2div');
+								showSection('#lp2aktdiv');
+								showSection('#loadsharingdiv');
+								hideSection('#loadsharingoffdiv');
+								showSection('#nachtladenlp2div');
+								showSection('#durchslp2div');
 							}
 							if(lp3akt == '0') {
-								hideSection('lp3aktdiv');
-								hideSection('durchslp3div');
+								hideSection('#lp3aktdiv');
+								hideSection('#durchslp3div');
 							} else {
-								showSection('lp3aktdiv');
-								showSection('durchslp3div');
+								showSection('#lp3aktdiv');
+								showSection('#durchslp3div');
 							}
 							if(lp4akt == '0') {
-								hideSection('lp4aktdiv');
+								hideSection('#lp4aktdiv');
 							} else {
-								showSection('lp4aktdiv');
+								showSection('#lp4aktdiv');
 							}
 							if(lp5akt == '0') {
-								hideSection('lp5aktdiv');
+								hideSection('#lp5aktdiv');
 							} else {
-								showSection('lp5aktdiv');
+								showSection('#lp5aktdiv');
 							}
 							if(lp6akt == '0') {
-								hideSection('lp6aktdiv');
+								hideSection('#lp6aktdiv');
 							} else {
-								showSection('lp6aktdiv');
+								showSection('#lp6aktdiv');
 							}
 							if(lp7akt == '0') {
-								hideSection('lp7aktdiv');
+								hideSection('#lp7aktdiv');
 							} else {
-								showSection('lp7aktdiv');
+								showSection('#lp7aktdiv');
 							}
 							if(lp8akt == '0') {
-								hideSection('lp8aktdiv');
+								hideSection('#lp8aktdiv');
 							} else {
-								showSection('lp8aktdiv');
+								showSection('#lp8aktdiv');
 							}
 						});
 					</script>
@@ -442,9 +700,9 @@
 						$(function() {
 							function visibility_zielladenaktivlp1() {
 								if($('#zielladenaktivlp1Off').prop("checked")) {
-									hideSection('zielladenaktivlp1div');
+									hideSection('#zielladenaktivlp1div');
 								} else {
-									showSection('zielladenaktivlp1div');
+									showSection('#zielladenaktivlp1div');
 								}
 							}
 
@@ -471,7 +729,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="durchslp1" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh</label>
+									<label for="durchslp1" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
 									<div class="col">
 										<input class="form-control" type="number" min="1" step="0.1" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>">
 										<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
@@ -524,7 +782,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="durchslp2" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh</label>
+									<label for="durchslp2" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
 									<div class="col">
 										<input class="form-control" type="number" min="1" step=".1" name="durchslp2" id="durchslp2" value="<?php echo $durchslp2old ?>">
 										<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
@@ -548,7 +806,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="durchslp3" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh</label>
+									<label for="durchslp3" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
 									<div class="col">
 										<input class="form-control" type="number" min="1" step=".1" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>">
 										<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
@@ -634,7 +892,18 @@
 												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv4" value="4"<?php if($u1p3pnurpvold == 4) echo " checked=\"checked\"" ?>>Automatikmodus
 											</label>
 										</div>
-										<span class="form-text small">Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10 Minuten die Maximalstromstärke erreicht, wird die Ladung auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke, beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 8 Minuten bei der Minimalstromstärke, wird wieder auf einphasige Ladung gewechselt.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Schaltzeiten Automatikmodus</label>
+									<div class="col">
+										<div class="form-row vaRow mb-1">
+											<label for="u1p3schaltparam" class="col-2 col-form-label valueLabel" suffix="min"><?php echo $u1p3schaltparamold; ?> min</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" name="u1p3schaltparam" id="u1p3schaltparam" min="1" max="15" step="1" value="<?php echo $u1p3schaltparamold; ?>">
+											</div>
+										</div>
+										<span class="form-text small">Im Automatikmodus wird die PV Ladung einphasig begonnen. Um zu viele Schaltungen zu vermeiden wird Anhand dieses Wertes definiert wann die Umschaltung erfolgen soll. Ist für durchgehend x Minuten die Maximalstromstärke erreicht, wird auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke, beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 16 - x Minuten bei der Minimalstromstärke, wird wieder auf einphasige Ladung gewechselt. Standardmäßig ist dieser Wert bei 8 min, sprich nach 8 min Maximalstromstärke wird auf 3 Phasige Ladung umgestellt und nach 16 - 8 = 8 min bei Minimalstromstärke wird wieder auf einphasige Ladung gewechselt.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
@@ -681,18 +950,18 @@
 						$(function() {
 							function visibility_u1p3paktiv() {
 								if($('#u1p3paktivOff').prop("checked")) {
-									hideSection('u1p3pan');
+									hideSection('#u1p3pan');
 								} else {
-									showSection('u1p3pan');
+									showSection('#u1p3pan');
 									visibility_schieflastaktiv();
 								}
 							}
 
 							function visibility_schieflastaktiv() {
 								if($('#schieflastaktivOff').prop("checked")) {
-									hideSection('schieflastan');
+									hideSection('#schieflastan');
 								} else {
-									showSection('schieflastan');
+									showSection('#schieflastan');
 								}
 							}
 
@@ -808,7 +1077,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="nachtladenabuhr" id="nachtladenabuhr" class="form-control">
 														<option <?php if($nachtladenabuhrold == 17) echo "selected" ?> value="17">17:00</option>
 														<option <?php if($nachtladenabuhrold == 18) echo "selected" ?> value="18">18:00</option>
@@ -827,7 +1096,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="nachtladenbisuhr" id="nachtladenbisuhr" class="form-control">
 														<option <?php if($nachtladenbisuhrold == 0) echo "selected" ?> value="0">0:00</option>
 														<option <?php if($nachtladenbisuhrold == 1) echo "selected" ?> value="1">1:00</option>
@@ -876,18 +1145,30 @@
 										Morgensladen
 									</div>
 								</div>
+								<?php
+									function generateTimeOptions($hourStart, $minuteStart, $hourStop, $minuteStop, $minuteStep, $selectedValue) {
+										$minutesOfDayStop = $hourStop * 60 + $minuteStop;
+										for($minutesOfDay = $hourStart * 60 + $minuteStart; $minutesOfDay <= $minutesOfDayStop; $minutesOfDay += $minuteStep) {
+											$formattedTime = sprintf('%02d:%02d', (int)($minutesOfDay / 60), $minutesOfDay  % 60);
+											echo '<option value="', $formattedTime, '"', $formattedTime == $selectedValue ? ' selected' : '', '>', $formattedTime, "</option>\n";
+										}
+									}
+									function generateMorningChargeDayOptions($dayName, $dayShortcut) {
+										// mollp1 = "MOrgens Laden LadePunkt 1"
+										$prefix = "mollp1$dayShortcut"
+								?>
 								<div class="form-row mb-1">
 									<div class="col">
-										Montag
+										<?php echo $dayName; ?>
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1moll" class="col-md-4 col-form-label">Stromstärke in A</label>
+									<label for="<?php echo $prefix; ?>ll" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
-											<label for="mollp1moll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1mollold; ?> A</label>
+											<label for="<?php echo $prefix; ?>ll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $GLOBALS["${prefix}llold"]; ?> A</label>
 											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1moll" id="mollp1moll" min="6" max="32" step="1" value="<?php echo $mollp1mollold; ?>">
+												<input type="range" class="form-control-range rangeInput" name="<?php echo $prefix; ?>ll" id="<?php echo $prefix; ?>ll" min="6" max="32" step="1" value="<?php echo $GLOBALS["${prefix}llold"]; ?>">
 											</div>
 										</div>
 									</div>
@@ -904,40 +1185,9 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
-													<select name="mollp1moab" id="mollp1moab" class="form-control">
-														<option <?php if($mollp1moabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1moabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1moabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1moabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1moabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1moabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1moabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1moabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1moabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1moabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1moabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1moabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1moabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1moabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1moabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1moabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1moabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1moabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1moabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1moabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1moabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1moabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1moabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1moabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1moabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1moabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1moabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1moabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1moabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1moabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1moabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1moabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
+													</div>
+													<select name="<?php echo $prefix; ?>ab" id="<?php echo $prefix; ?>ab" class="form-control">
+														<?php generateTimeOptions(3, 0, 10, 45, 15, $GLOBALS["${prefix}abold"]); ?>
 													</select>
 												</div>
 											</div>
@@ -947,726 +1197,26 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
-													<select name="mollp1mobis" id="mollp1mobis" class="form-control">
-														<option <?php if($mollp1mobisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1mobisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1mobisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1mobisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1mobisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1mobisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1mobisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1mobisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1mobisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1mobisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1mobisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1mobisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1mobisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1mobisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1mobisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1mobisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1mobisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1mobisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1mobisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1mobisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1mobisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1mobisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1mobisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1mobisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1mobisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1mobisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1mobisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1mobisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1mobisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1mobisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1mobisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1mobisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1mobisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
+													</div>
+													<select name="<?php echo $prefix; ?>bis" id="<?php echo $prefix; ?>bis" class="form-control">
+														<?php generateTimeOptions(3, 0, 11, 0, 15, $GLOBALS["${prefix}bisold"]); ?>
 													</select>
 												</div>
 											</div>
 										</div>
-										<span class="form-text small">Zeitspanne, in der am Montag morgens geladen werden soll.</span>
+										<span class="form-text small">Zeitspanne, in der am <?php echo $dayName; ?> morgens geladen werden soll.</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<div class="col">
-										Dienstag
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="mollp1dill" class="col-md-4 col-form-label">Stromstärke in A</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="mollp1dill" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1dillold; ?> A</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1dill" id="mollp1dill" min="6" max="32" step="1" value="<?php echo $mollp1dillold; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col-md-4">
-										Zeitspanne
-									</div>
-									<div class="col">
-										<div class="form-row">
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Anfang
-														</div>
-													</div> 
-													<select name="mollp1diab" id="mollp1diab" class="form-control">
-														<option <?php if($mollp1diabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1diabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1diabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1diabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1diabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1diabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1diabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1diabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1diabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1diabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1diabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1diabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1diabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1diabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1diabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1diabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1diabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1diabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1diabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1diabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1diabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1diabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1diabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1diabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1diabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1diabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1diabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1diabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1diabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1diabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1diabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1diabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Ende
-														</div>
-													</div> 
-													<select name="mollp1dibis" id="mollp1dibis" class="form-control">
-														<option <?php if($mollp1dibisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1dibisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1dibisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1dibisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1dibisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1dibisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1dibisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1dibisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1dibisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1dibisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1dibisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1dibisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1dibisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1dibisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1dibisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1dibisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1dibisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1dibisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1dibisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1dibisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1dibisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1dibisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1dibisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1dibisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1dibisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1dibisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1dibisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1dibisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1dibisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1dibisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1dibisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1dibisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1dibisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										<span class="form-text small">Zeitspanne, in der am Dienstag morgens geladen werden soll.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col">
-										Mittwoch
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="mollp1mill" class="col-md-4 col-form-label">Stromstärke in A</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="mollp1mill" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1millold; ?> A</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1mill" id="mollp1mill" min="6" max="32" step="1" value="<?php echo $mollp1millold; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col-md-4">
-										Zeitspanne
-									</div>
-									<div class="col">
-										<div class="form-row">
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Anfang
-														</div>
-													</div> 
-													<select name="mollp1miab" id="mollp1miab" class="form-control">
-														<option <?php if($mollp1miabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1miabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1miabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1miabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1miabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1miabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1miabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1miabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1miabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1miabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1miabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1miabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1miabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1miabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1miabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1miabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1miabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1miabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1miabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1miabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1miabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1miabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1miabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1miabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1miabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1miabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1miabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1miabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1miabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1miabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1miabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1miabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Ende
-														</div>
-													</div> 
-													<select name="mollp1mibis" id="mollp1mibis" class="form-control">
-														<option <?php if($mollp1mibisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1mibisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1mibisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1mibisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1mibisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1mibisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1mibisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1mibisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1mibisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1mibisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1mibisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1mibisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1mibisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1mibisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1mibisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1mibisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1mibisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1mibisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1mibisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1mibisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1mibisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1mibisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1mibisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1mibisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1mibisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1mibisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1mibisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1mibisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1mibisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1mibisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1mibisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1mibisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1mibisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										<span class="form-text small">Zeitspanne, in der am Mittwoch morgens geladen werden soll.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col">
-										Donnerstag
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="mollp1doll" class="col-md-4 col-form-label">Stromstärke in A</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="mollp1doll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1dollold; ?> A</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1doll" id="mollp1doll" min="6" max="32" step="1" value="<?php echo $mollp1dollold; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col-md-4">
-										Zeitspanne
-									</div>
-									<div class="col">
-										<div class="form-row">
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Anfang
-														</div>
-													</div> 
-													<select name="mollp1doab" id="mollp1doab" class="form-control">
-														<option <?php if($mollp1doabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1doabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1doabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1doabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1doabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1doabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1doabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1doabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1doabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1doabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1doabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1doabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1doabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1doabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1doabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1doabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1doabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1doabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1doabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1doabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1doabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1doabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1doabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1doabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1doabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1doabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1doabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1doabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1doabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1doabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1doabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1doabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Ende
-														</div>
-													</div> 
-													<select name="mollp1dobis" id="mollp1dobis" class="form-control">
-														<option <?php if($mollp1dobisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1dobisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1dobisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1dobisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1dobisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1dobisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1dobisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1dobisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1dobisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1dobisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1dobisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1dobisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1dobisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1dobisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1dobisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1dobisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1dobisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1dobisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1dobisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1dobisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1dobisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1dobisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1dobisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1dobisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1dobisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1dobisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1dobisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1dobisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1dobisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1dobisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1dobisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1dobisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1dobisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										<span class="form-text small">Zeitspanne, in der am Donnerstag morgens geladen werden soll.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col">
-										Freitag
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="mollp1frll" class="col-md-4 col-form-label">Stromstärke in A</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="mollp1frll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1frllold; ?> A</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1frll" id="mollp1frll" min="6" max="32" step="1" value="<?php echo $mollp1frllold; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col-md-4">
-										Zeitspanne
-									</div>
-									<div class="col">
-										<div class="form-row">
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Anfang
-														</div>
-													</div> 
-													<select name="mollp1frab" id="mollp1frab" class="form-control">
-														<option <?php if($mollp1frabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1frabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1frabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1frabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1frabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1frabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1frabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1frabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1frabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1frabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1frabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1frabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1frabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1frabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1frabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1frabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1frabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1frabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1frabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1frabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1frabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1frabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1frabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1frabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1frabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1frabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1frabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1frabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1frabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1frabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1frabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1frabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Ende
-														</div>
-													</div> 
-													<select name="mollp1frbis" id="mollp1frbis" class="form-control">
-														<option <?php if($mollp1frbisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1frbisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1frbisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1frbisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1frbisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1frbisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1frbisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1frbisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1frbisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1frbisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1frbisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1frbisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1frbisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1frbisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1frbisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1frbisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1frbisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1frbisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1frbisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1frbisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1frbisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1frbisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1frbisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1frbisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1frbisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1frbisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1frbisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1frbisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1frbisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1frbisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1frbisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1frbisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1frbisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										<span class="form-text small">Zeitspanne, in der am Freitag morgens geladen werden soll.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col">
-										Samstag
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="mollp1sall" class="col-md-4 col-form-label">Stromstärke in A</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="mollp1sall" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1sallold; ?> A</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1sall" id="mollp1sall" min="6" max="32" step="1" value="<?php echo $mollp1sallold; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col-md-4">
-										Zeitspanne
-									</div>
-									<div class="col">
-										<div class="form-row">
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Anfang
-														</div>
-													</div> 
-													<select name="mollp1saab" id="mollp1saab" class="form-control">
-														<option <?php if($mollp1saabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1saabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1saabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1saabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1saabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1saabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1saabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1saabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1saabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1saabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1saabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1saabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1saabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1saabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1saabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1saabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1saabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1saabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1saabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1saabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1saabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1saabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1saabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1saabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1saabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1saabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1saabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1saabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1saabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1saabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1saabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1saabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Ende
-														</div>
-													</div> 
-													<select name="mollp1sabis" id="mollp1sabis" class="form-control">
-														<option <?php if($mollp1sabisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1sabisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1sabisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1sabisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1sabisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1sabisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1sabisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1sabisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1sabisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1sabisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1sabisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1sabisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1sabisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1sabisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1sabisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1sabisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1sabisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1sabisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1sabisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1sabisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1sabisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1sabisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1sabisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1sabisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1sabisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1sabisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1sabisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1sabisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1sabisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1sabisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1sabisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1sabisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1sabisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										<span class="form-text small">Zeitspanne, in der am Samstag morgens geladen werden soll.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col">
-										Sonntag
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="mollp1soll" class="col-md-4 col-form-label">Stromstärke in A</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="mollp1soll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo $mollp1sollold; ?> A</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="mollp1soll" id="mollp1soll" min="6" max="32" step="1" value="<?php echo $mollp1sollold; ?>">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<div class="col-md-4">
-										Zeitspanne
-									</div>
-									<div class="col">
-										<div class="form-row">
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Anfang
-														</div>
-													</div> 
-													<select name="mollp1soab" id="mollp1soab" class="form-control">
-														<option <?php if($mollp1soabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1soabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1soabold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1soabold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1soabold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1soabold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1soabold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1soabold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1soabold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1soabold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1soabold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1soabold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1soabold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1soabold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1soabold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1soabold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1soabold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1soabold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1soabold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1soabold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1soabold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1soabold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1soabold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1soabold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1soabold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1soabold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1soabold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1soabold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1soabold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1soabold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1soabold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1soabold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<div class="input-group-text">
-															Ende
-														</div>
-													</div> 
-													<select name="mollp1sobis" id="mollp1sobis" class="form-control">
-														<option <?php if($mollp1sobisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
-														<option <?php if($mollp1sobisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
-														<option <?php if($mollp1sobisold == "03:30") echo "selected" ?> value="03:30">03:30</option>
-														<option <?php if($mollp1sobisold == "03:45") echo "selected" ?> value="03:45">03:45</option>
-														<option <?php if($mollp1sobisold == "04:00") echo "selected" ?> value="04:00">04:00</option>
-														<option <?php if($mollp1sobisold == "04:15") echo "selected" ?> value="04:15">04:15</option>
-														<option <?php if($mollp1sobisold == "04:30") echo "selected" ?> value="04:30">04:30</option>
-														<option <?php if($mollp1sobisold == "04:45") echo "selected" ?> value="04:45">04:45</option>
-														<option <?php if($mollp1sobisold == "05:00") echo "selected" ?> value="05:00">05:00</option>
-														<option <?php if($mollp1sobisold == "05:15") echo "selected" ?> value="05:15">05:15</option>
-														<option <?php if($mollp1sobisold == "05:30") echo "selected" ?> value="05:30">05:30</option>
-														<option <?php if($mollp1sobisold == "05:45") echo "selected" ?> value="05:45">05:45</option>
-														<option <?php if($mollp1sobisold == "06:00") echo "selected" ?> value="06:00">06:00</option>
-														<option <?php if($mollp1sobisold == "06:15") echo "selected" ?> value="06:15">06:15</option>
-														<option <?php if($mollp1sobisold == "06:30") echo "selected" ?> value="06:30">06:30</option>
-														<option <?php if($mollp1sobisold == "06:45") echo "selected" ?> value="06:45">06:45</option>
-														<option <?php if($mollp1sobisold == "07:00") echo "selected" ?> value="07:00">07:00</option>
-														<option <?php if($mollp1sobisold == "07:15") echo "selected" ?> value="07:15">07:15</option>
-														<option <?php if($mollp1sobisold == "07:30") echo "selected" ?> value="07:30">07:30</option>
-														<option <?php if($mollp1sobisold == "07:45") echo "selected" ?> value="07:45">07:45</option>
-														<option <?php if($mollp1sobisold == "08:00") echo "selected" ?> value="08:00">08:00</option>
-														<option <?php if($mollp1sobisold == "08:15") echo "selected" ?> value="08:15">08:15</option>
-														<option <?php if($mollp1sobisold == "08:30") echo "selected" ?> value="08:30">08:30</option>
-														<option <?php if($mollp1sobisold == "08:45") echo "selected" ?> value="08:45">08:45</option>
-														<option <?php if($mollp1sobisold == "09:00") echo "selected" ?> value="09:00">09:00</option>
-														<option <?php if($mollp1sobisold == "09:15") echo "selected" ?> value="09:15">09:15</option>
-														<option <?php if($mollp1sobisold == "09:30") echo "selected" ?> value="09:30">09:30</option>
-														<option <?php if($mollp1sobisold == "09:45") echo "selected" ?> value="09:45">09:45</option>
-														<option <?php if($mollp1sobisold == "10:00") echo "selected" ?> value="10:00">10:00</option>
-														<option <?php if($mollp1sobisold == "10:15") echo "selected" ?> value="10:15">10:15</option>
-														<option <?php if($mollp1sobisold == "10:30") echo "selected" ?> value="10:30">10:30</option>
-														<option <?php if($mollp1sobisold == "10:45") echo "selected" ?> value="10:45">10:45</option>
-														<option <?php if($mollp1sobisold == "11:00") echo "selected" ?> value="11:00">11:00</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										<span class="form-text small">Zeitspanne, in der am Sonntag morgens geladen werden soll.</span>
-									</div>
-								</div>
+								<?php
+									}
+									generateMorningChargeDayOptions('Montag', 'mo');
+									generateMorningChargeDayOptions('Dienstag', 'di');
+									generateMorningChargeDayOptions('Mittwoch', 'mi');
+									generateMorningChargeDayOptions('Donnerstag', 'do');
+									generateMorningChargeDayOptions('Freitag', 'fr');
+									generateMorningChargeDayOptions('Samstag', 'sa');
+									generateMorningChargeDayOptions('Sonntag', 'so');
+								?>
 							</div>
 						</div>
 
@@ -1846,17 +1396,17 @@
 						$(function() {
 							function visibility_nachtladen() {
 								if($('#nachtladenOff').prop("checked")) {
-									hideSection('nachtladenan');
+									hideSection('#nachtladenan');
 								} else {
-									showSection('nachtladenan');
+									showSection('#nachtladenan');
 								}
 							}
 
 							function visibility_nachtladens1() {
 								if($('#nachtladens1Off').prop("checked")) {
-									hideSection('nachtladenans1');
+									hideSection('#nachtladenans1');
 								} else {
-									showSection('nachtladenans1');
+									showSection('#nachtladenans1');
 								}
 							}
 
@@ -1893,8 +1443,8 @@
 													<div class="input-group-text">
 														Phase 1
 													</div>
-												</div> 
-												<input type="number" min="7" max="1000" step="1" name="lastmaxap1" id="lastmaxap1" class="form-control" value="<?php echo $lastmaxap1old ?>">
+												</div>
+												<input type="number" min="7" step="1" name="lastmaxap1" id="lastmaxap1" class="form-control" value="<?php echo $lastmaxap1old ?>">
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -1903,8 +1453,8 @@
 													<div class="input-group-text">
 														Phase 2
 													</div>
-												</div> 
-												<input type="number" min="7" max="1000" step="1" name="lastmaxap2" id="lastmaxap2" class="form-control" value="<?php echo $lastmaxap2old ?>">
+												</div>
+												<input type="number" min="7" step="1" name="lastmaxap2" id="lastmaxap2" class="form-control" value="<?php echo $lastmaxap2old ?>">
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -1913,19 +1463,19 @@
 													<div class="input-group-text">
 														Phase 3
 													</div>
-												</div> 
-												<input type="number" min="7" max="1000" step="1" name="lastmaxap3" id="lastmaxap3" class="form-control" value="<?php echo $lastmaxap3old ?>">
+												</div>
+												<input type="number" min="7" step="1" name="lastmaxap3" id="lastmaxap3" class="form-control" value="<?php echo $lastmaxap3old ?>">
 											</div>
 										</div>
 									</div>
-									<span class="form-text small">Gültige Werte 7-125. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt.</span>
+									<span class="form-text small">Gültige Werte: ganze Zahl größer 7. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des <b>Hausanschlusses</b> im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt. Hiermit ist nicht der Anschluss der openWB gemeint! Übliche Werte für ein EFH/MFH sind im Bereich 35 bis 63A.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="lastmmaxw" class="col-md-4 col-form-label">maximaler Bezug in W</label>
 								<div class="col">
 									<input class="form-control" type="number" min="2000" max="1000000" step="1000" name="lastmmaxw" id="lastmmaxw" value="<?php echo $lastmmaxwold ?>">
-									<span class="form-text small">Gültige Werte 2000-200000. Definiert die maximal erlaubten bezogenen Watt des Hausanschlusses im Sofort Laden Modus, sofern die Bezugsleistung bekannt ist.</span>
+									<span class="form-text small">Gültige Werte: 2000-1000000W in ganzen 1000W-Schritten. Definiert die maximal erlaubten bezogenen Watt des Hausanschlusses im Sofort Laden Modus, sofern die Bezugsleistung bekannt ist.</span>
 								</div>
 							</div>
 						</div>
@@ -2006,9 +1556,9 @@
 						$(function() {
 							function visibility_loadsharinglp12() {
 								if($('#loadsharinglp12Off').prop("checked")) {
-									hideSection('loadsharinglp12div');
+									hideSection('#loadsharinglp12div');
 								} else {
-									showSection('loadsharinglp12div');
+									showSection('#loadsharinglp12div');
 								}
 							}
 
@@ -2037,10 +1587,6 @@
 
 
 		<script>
-			$('.rangeInput').on('input', function() {
-				// show slider value in label of class valueLabel
-				updateLabel($(this).attr('id'));
-			});
 
 			$.get(
 				{ url: "settings/navbar.html", cache: false },
@@ -2050,6 +1596,16 @@
 					$('#navAllgemein').addClass('disabled');
 				}
 			);
+
+			$(document).ready(function(){
+
+				$('.rangeInput').on('input', function() {
+					// show slider value in label of class valueLabel
+					updateLabel($(this).attr('id'));
+				});
+
+			});  // end document ready
+
 		</script>
 
 	</body>

@@ -34,34 +34,8 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -245,9 +219,9 @@
 							var lp2akt = <?php echo $lastmanagementold ?>;
 
 							if(lp2akt == '0') {
-								hideSection('lp2cpdiv');
+								hideSection('#lp2cpdiv');
 							} else {
-								showSection('lp2cpdiv');
+								showSection('#lp2cpdiv');
 							}
 						});
 					</script>
@@ -734,19 +708,19 @@
 						$(function() {
 							function visibility_rfidakt() {
 								if($('#rfidaktOff').prop("checked")) {
-									hideSection('rfidandiv');
-									hideSection('rfidan1div');
-									hideSection('rfidan2div');
+									hideSection('#rfidandiv');
+									hideSection('#rfidan1div');
+									hideSection('#rfidan2div');
 								} else {
 									if($('#rfidaktOn1').prop("checked")) {
-										showSection('rfidandiv', false);
-										showSection('rfidan1div');
-										hideSection('rfidan2div');
+										showSection('#rfidandiv', false);
+										showSection('#rfidan1div');
+										hideSection('#rfidan2div');
 
 									} else {
-										showSection('rfidandiv', false);
-										showSection('rfidan2div');
-										hideSection('rfidan1div');
+										showSection('#rfidandiv', false);
+										showSection('#rfidan2div');
+										hideSection('#rfidan1div');
 									}
 								}
 							}
@@ -880,9 +854,9 @@
 						$(function() {
 							function visibility_pushbenachrichtigung() {
 								if($('#pushbenachrichtigungOff').prop("checked")) {
-									hideSection('pushban');
+									hideSection('#pushban');
 								} else {
-									showSection('pushban');
+									showSection('#pushban');
 								}
 							}
 
@@ -1145,9 +1119,9 @@
 						$(function() {
 							function visibility_ledsakt() {
 								if($('#ledsaktOff').prop("checked")) {
-									hideSection('ledsan');
+									hideSection('#ledsan');
 								} else {
-									showSection('ledsan');
+									showSection('#ledsan');
 								}
 							}
 							$('input[type=radio][name=ledsakt]').change(function(){
@@ -1308,7 +1282,7 @@
 							<div class="form-row mb-1 hide" id="displaypin">
 								<label for="displaypincode" class="col-md-4 col-form-label">Pin (nur Zahlen von 1-9 erlaubt)</label>
 								<div class="col">
-									<input type="text" pattern="[1-9]*" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
+									<input type="text" pattern="[0-9]{4}" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
 								</div>
 							</div>
 						</div>
@@ -1346,9 +1320,9 @@
 						$(function() {
 							function visibility_displayaktiv() {
 								if($('#displayaktivOff').prop("checked")) {
-									hideSection('displayan');
+									hideSection('#displayan');
 								} else {
-									showSection('displayan');
+									showSection('#displayan');
 									visibility_displaypinaktiv();
 									visibility_displaytheme()
 								}
@@ -1356,25 +1330,25 @@
 
 							function visibility_displaypinaktiv() {
 								if($('#displaypinaktivOff').prop("checked")) {
-									hideSection('displaypin');
+									hideSection('#displaypin');
 								} else {
-									showSection('displaypin');
+									showSection('#displaypin');
 								}
 							}
 
 							function visibility_displaytheme() {
 								switch ($('#displaytheme').val()) {
 									case '0': // Cards
-										showSection('displaygauge');
-										showSection('displaycards');
+										showSection('#displaygauge');
+										showSection('#displaycards');
 										break;
 									case '3': // Gauges
-										showSection('displaygauge');
-										hideSection('displaycards');
+										showSection('#displaygauge');
+										hideSection('#displaycards');
 										break;
 									default:
-									hideSection('displaygauge');
-									hideSection('displaycards');
+									hideSection('#displaygauge');
+									hideSection('#displaycards');
 								}
 							}
 

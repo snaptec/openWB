@@ -6,7 +6,7 @@
  * fills data-gaps in timeline with respective values and hides empty data from being displayed
  */
 
-const DATACOLUMNCOUNT = 19;  // count of native data columns received by mqtt (including timestamp-column)
+const DATACOLUMNCOUNT = 28;  // count of native data columns received by mqtt (including timestamp-column)
 const LPCOLUMNS = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 
 var initialread = 0;
@@ -16,6 +16,16 @@ var graphDataSegments = new Array(12).fill('');  // all data segments
 var csvData = [];  // holds data as 2d-array after calculating values from graphDataStr
 var totalValues = [''];  // holds monthly totals for every data-column from csvData, starting with empty value at index 0 (equals timestamp index at csvData)
 var lpCounterValues = [];  // holds all counter values transformed to kWh
+var d1name = 'Device 1';
+var d2name = 'Device 2';
+var d3name = 'Device 3';
+var d4name = 'Device 4';
+var d5name = 'Device 5';
+var d6name = 'Device 6';
+var d7name = 'Device 7';
+var d8name = 'Device 8';
+var d9name = 'Device 9';
+var d10name = 'Device 10';
 var thevalues = [
 	["openWB/system/MonthGraphData1", "#"],
 	["openWB/system/MonthGraphData2", "#"],
@@ -29,6 +39,16 @@ var thevalues = [
 	["openWB/system/MonthGraphData10", "#"],
 	["openWB/system/MonthGraphData11", "#"],
 	["openWB/system/MonthGraphData12", "#"],
+	["openWB/config/get/SmartHome/Devices/1/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/2/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/3/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/4/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/5/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/6/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/7/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/8/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/9/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/10/device_name", "#"],
 ]
 
 var url_string = window.location.href
@@ -54,6 +74,10 @@ var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+	if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
+		var index = mqttmsg.match(/\d+/)[0];
+		window['d'+index+'name']=mqttpayload;
+	}
 	if ( mqttmsg.match( /^openwb\/system\/monthgraphdata[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing "openwb/graph/monthgraphdata#"
 		// where # is an integer > 0
@@ -119,81 +143,81 @@ function requestmonthgraph() {
 function getCol(matrix, col) {
 	var column = [];
 	for( var i = 0; i < matrix.length; i++) {
-    	column.push(matrix[i][col]);
-    }
-    return column;
+		column.push(matrix[i][col]);
+	}
+	return column;
 }
 
 function buildCsvDataArray() {
-    // build array for graph from data-segments
-    var rawcsv = [];
-    // first put lines containing data from received segments into raw-data-array
-    graphDataSegments.forEach((segment, i) => {
-        var trimmedSegment = segment.trim();
-        var splitSegment = trimmedSegment.split(/\r?\n|\r/);
-        splitSegment.forEach((splitSegmentRow) => {
-            var trimmedSplitSegmentRow = splitSegmentRow.trim();
-            if ( trimmedSplitSegmentRow != '' ) {
-                rawcsv.push(trimmedSplitSegmentRow);
-            }
-        });
-    });
+	// build array for graph from data-segments
+	var rawcsv = [];
+	// first put lines containing data from received segments into raw-data-array
+	graphDataSegments.forEach((segment, i) => {
+		var trimmedSegment = segment.trim();
+		var splitSegment = trimmedSegment.split(/\r?\n|\r/);
+		splitSegment.forEach((splitSegmentRow) => {
+			var trimmedSplitSegmentRow = splitSegmentRow.trim();
+			if ( trimmedSplitSegmentRow != '' ) {
+				rawcsv.push(trimmedSplitSegmentRow);
+			}
+		});
+	});
 
-    // rawdata date format is YYYYmmdd, so use this for comparison
-    var firstDayOfThisMonthDate = new Date(graphYear + '/' + graphMonth + '/01');
-    var firstDayOfNextMonthDate = new Date(firstDayOfThisMonthDate.setMonth(firstDayOfThisMonthDate.getMonth() + 1));
-    var nextMonth = String(firstDayOfNextMonthDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var nextMonthYear = firstDayOfNextMonthDate.getFullYear();
-    // for calculation of daily values the first day of next month may be included in dataset
-    var firstDayOfNextMonthStr = nextMonthYear + nextMonth + '01';
-    rawcsv.forEach((rawDataRowStr) => {
-        if ( /^\d{8},$/.test(rawDataRowStr.substring(0, 9)) ) {
-            // first 9 chars is possible date followed by comma (format YYYYmmdd,)
-            // so check if it is valid for selected month
-            var dataRowDateStr = rawDataRowStr.substring(0, 8);
-            var dataRowDayStr = dataRowDateStr.substr(6, 2);
-            var dataRowMonthStr = dataRowDateStr.substr(4, 2);
-            var dataRowYearStr = dataRowDateStr.substr(0, 4);
-            var dataRowDate = new Date(dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr);  // to avoid parsed dates like 20190245 convert string to date and back
-            if ( dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
-                // date is a valid date
-                var isSelectedMonth = (dataRowDateStr.substr(0, 6) == graphDate);
-                var isFirstDayOfNextMonth = (dataRowDateStr == firstDayOfNextMonthStr);
-                if ( dataRowDateStr.substr(0, 6) == graphDate || dataRowDateStr == firstDayOfNextMonthStr ) {
-                    // date falls within selected month or is first day of next month
-                    dataRowDateStr = dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr;
-                    var dataRow = rawDataRowStr.split(',');  // now split row into csv-array
-                    dataRow[0] = dataRowDateStr;  // replace first element with date in new format
-                    // now format the array
-                    var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
-                    if ( columnCountDifference > 0 ) {
-                        // not enough columns in dataset, maybe due to older logfile, so add zero-fields
-                        while ( columnCountDifference > 0 ) {
-                            dataRow.push(0);
-                            columnCountDifference--;
-                        }
-                    } else if ( columnCountDifference < 0 ) {
-                        // too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
-                        while ( columnCountDifference < 0 ) {
-                            dataRow.pop();
-                            columnCountDifference++;
-                        }
-                    }
-                    dataRow.forEach((value, columnIndex, theArray) => {
-                        // make sure all fields (except index 0 = timestamp) are numbers with two decimal places
-                        if ( columnIndex > 0 ) {
-                            if ( isNaN(value) ) {
-                                theArray[columnIndex] = 0;
-                            } else {
-                                theArray[columnIndex] = parseFloat(value);
-                            }
-                        }
-                    });
-                    csvData.push(dataRow);
-                }
-            }
-        }
-    });
+	// rawdata date format is YYYYmmdd, so use this for comparison
+	var firstDayOfThisMonthDate = new Date(graphYear + '/' + graphMonth + '/01');
+	var firstDayOfNextMonthDate = new Date(firstDayOfThisMonthDate.setMonth(firstDayOfThisMonthDate.getMonth() + 1));
+	var nextMonth = String(firstDayOfNextMonthDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var nextMonthYear = firstDayOfNextMonthDate.getFullYear();
+	// for calculation of daily values the first day of next month may be included in dataset
+	var firstDayOfNextMonthStr = nextMonthYear + nextMonth + '01';
+	rawcsv.forEach((rawDataRowStr) => {
+		if ( /^\d{8},$/.test(rawDataRowStr.substring(0, 9)) ) {
+			// first 9 chars is possible date followed by comma (format YYYYmmdd,)
+			// so check if it is valid for selected month
+			var dataRowDateStr = rawDataRowStr.substring(0, 8);
+			var dataRowDayStr = dataRowDateStr.substr(6, 2);
+			var dataRowMonthStr = dataRowDateStr.substr(4, 2);
+			var dataRowYearStr = dataRowDateStr.substr(0, 4);
+			var dataRowDate = new Date(dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr);  // to avoid parsed dates like 20190245 convert string to date and back
+			if ( dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
+				// date is a valid date
+				var isSelectedMonth = (dataRowDateStr.substr(0, 6) == graphDate);
+				var isFirstDayOfNextMonth = (dataRowDateStr == firstDayOfNextMonthStr);
+				if ( dataRowDateStr.substr(0, 6) == graphDate || dataRowDateStr == firstDayOfNextMonthStr ) {
+					// date falls within selected month or is first day of next month
+					dataRowDateStr = dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr;
+					var dataRow = rawDataRowStr.split(',');  // now split row into csv-array
+					dataRow[0] = dataRowDateStr;  // replace first element with date in new format
+					// now format the array
+					var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
+					if ( columnCountDifference > 0 ) {
+						// not enough columns in dataset, maybe due to older logfile, so add zero-fields
+						while ( columnCountDifference > 0 ) {
+							dataRow.push(0);
+							columnCountDifference--;
+						}
+					} else if ( columnCountDifference < 0 ) {
+						// too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
+						while ( columnCountDifference < 0 ) {
+							dataRow.pop();
+							columnCountDifference++;
+						}
+					}
+					dataRow.forEach((value, columnIndex, theArray) => {
+						// make sure all fields (except index 0 = timestamp) are numbers with two decimal places
+						if ( columnIndex > 0 ) {
+							if ( isNaN(value) ) {
+								theArray[columnIndex] = 0;
+							} else {
+								theArray[columnIndex] = parseFloat(value);
+							}
+						}
+					});
+					csvData.push(dataRow);
+				}
+			}
+		}
+	});
 }
 
 function fillDataGaps() {
@@ -219,8 +243,8 @@ function fillDataGaps() {
 }
 
 function fillLpCounterValuesArray() {
-    // fills an array with same size as csvData but holding counter values of all lp in kWh
-    // these values will be displayed at the graph tooltips
+	// fills an array with same size as csvData but holding counter values of all lp in kWh
+	// these values will be displayed at the graph tooltips
 	csvData.forEach((dataRow, rowIndex) => {
 		// process every day
 		var lpCounterValuesRow = [];  // row to hold the counter values of the day in kWh
@@ -270,52 +294,52 @@ function calcDailyValues() {
 }
 
 function completeMonth() {
-    // makes sure graph-length is always all days of the selected month
-    // no matter what day contains first or last logged data
-    // need to fill csvData and the lpCounterValues-array
-    var day;
-    var dayAtIndex;
-    var newDayStr;
-    var newDatasetDateStr;
-    var dateStrPart = graphYear + '/' + graphMonth + '/';
-    for ( var dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
-        // iterate over all days of the selected months
-        day = dayIndex + 1;
-        if ( typeof csvData[dayIndex] === 'undefined' ) {
-            // day-element does not exist, so array needs to be extended at the end
-            newDayStr = String(day).padStart(2, '0');  // day with leading zero
-            newDatasetDateStr = dateStrPart + newDayStr;
-            csvData.push(Array(DATACOLUMNCOUNT + 1).fill(0));  // add row to csvData
-            csvData[dayIndex][0] = newDatasetDateStr;  // and set correct date
-            lpCounterValues.push(Array(DATACOLUMNCOUNT + 1).fill(''));  // add row to lp-counter-values
-        } else {
-            // day-element does exist
-            dayAtIndex = parseInt(csvData[dayIndex][0].substring(8));
-            if ( dayAtIndex !== day ) {
-                // but day doesn't match the array position so array needs to be extended at the front
-                day = dayAtIndex - 1;  //
-                newDayStr = String(day).padStart(2, '0');  // day with leading zero
-                newDatasetDateStr = dateStrPart + newDayStr;
-                csvData.unshift(Array(DATACOLUMNCOUNT + 1).fill(0));  // add row to csvData
-                csvData[dayIndex][0] = newDatasetDateStr;  // and set correct date
-                lpCounterValues.unshift(Array(DATACOLUMNCOUNT + 1).fill(''));  // add row to lp-counter-values
-                dayIndex--;
-            }
-        }
-    }
+	// makes sure graph-length is always all days of the selected month
+	// no matter what day contains first or last logged data
+	// need to fill csvData and the lpCounterValues-array
+	var day;
+	var dayAtIndex;
+	var newDayStr;
+	var newDatasetDateStr;
+	var dateStrPart = graphYear + '/' + graphMonth + '/';
+	for ( var dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
+		// iterate over all days of the selected months
+		day = dayIndex + 1;
+		if ( typeof csvData[dayIndex] === 'undefined' ) {
+			// day-element does not exist, so array needs to be extended at the end
+			newDayStr = String(day).padStart(2, '0');  // day with leading zero
+			newDatasetDateStr = dateStrPart + newDayStr;
+			csvData.push(Array(DATACOLUMNCOUNT + 1).fill(0));  // add row to csvData
+			csvData[dayIndex][0] = newDatasetDateStr;  // and set correct date
+			lpCounterValues.push(Array(DATACOLUMNCOUNT + 1).fill(''));  // add row to lp-counter-values
+		} else {
+			// day-element does exist
+			dayAtIndex = parseInt(csvData[dayIndex][0].substring(8));
+			if ( dayAtIndex !== day ) {
+				// but day doesn't match the array position so array needs to be extended at the front
+				day = dayAtIndex - 1;  //
+				newDayStr = String(day).padStart(2, '0');  // day with leading zero
+				newDatasetDateStr = dateStrPart + newDayStr;
+				csvData.unshift(Array(DATACOLUMNCOUNT + 1).fill(0));  // add row to csvData
+				csvData[dayIndex][0] = newDatasetDateStr;  // and set correct date
+				lpCounterValues.unshift(Array(DATACOLUMNCOUNT + 1).fill(''));  // add row to lp-counter-values
+				dayIndex--;
+			}
+		}
+	}
 }
 
 function formatDateColumn() {
-    // formats the first csvdata-column so date is displayed at labels like 'Mo, 16.03.20'
-    for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
-        var theDate = new Date(csvData[rowIndex][0]);
-        var day = String(theDate.getDate()).padStart(2, '0');  // format with leading zeros
-        var dayOfWeek = theDate.toLocaleDateString('de-DE', { weekday: 'short'});
-        // old variant... just keep in case this format is wanted
-        // var theDateStr = dayOfWeek + ', ' + day + '.' + graphMonth + '.' + graphYear;
-        var theDateStr = dayOfWeek + ', ' + day + '.';
-        csvData[rowIndex][0] = theDateStr;
-    }
+	// formats the first csvdata-column so date is displayed at labels like 'Mo, 16.03.20'
+	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
+		var theDate = new Date(csvData[rowIndex][0]);
+		var day = String(theDate.getDate()).padStart(2, '0');  // format with leading zeros
+		var dayOfWeek = theDate.toLocaleDateString('de-DE', { weekday: 'short'});
+		// old variant... just keep in case this format is wanted
+		// var theDateStr = dayOfWeek + ', ' + day + '.' + graphMonth + '.' + graphYear;
+		var theDateStr = dayOfWeek + ', ' + day + '.';
+		csvData[rowIndex][0] = theDateStr;
+	}
 }
 
 function lpCount() {
@@ -331,7 +355,7 @@ function lpCount() {
 }
 
 function loadgraph() {
-    buildCsvDataArray();
+	buildCsvDataArray();
 
 	if ( csvData.length < 2 ) {
 		// not enough data rows: nothing to display
@@ -339,12 +363,12 @@ function loadgraph() {
 		$('#canvasdiv').hide();
 		return;
 	}
-    if ( csvData.length > (daysInMonth + 1) ) {
-        // too many data-rows have been transmitted, data may be corrupt
-        $("#waitforgraphloadingdiv").html('<br>Fehler bei der Übertragung der Daten für diesen Monat, bitte erneut versuchen.');
-        $('#canvasdiv').hide();
-        return;
-    }
+	if ( csvData.length > (daysInMonth + 1) ) {
+		// too many data-rows have been transmitted, data may be corrupt
+		$("#waitforgraphloadingdiv").html('<br>Fehler bei der Übertragung der Daten für diesen Monat, bitte erneut versuchen.');
+		$('#canvasdiv').hide();
+		return;
+	}
 
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
@@ -353,21 +377,21 @@ function loadgraph() {
 	fillDataGaps();  // completes gaps in data
 	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
 	calcDailyValues();  // sum up values for totals
-    csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
+	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
-    if ( csvData.length != daysInMonth ) {
-        // not all days of selected month have been logged,
-        // complete monthly csvData and counter values before/after first/last day logged
-        completeMonth();
-    }
+	if ( csvData.length != daysInMonth ) {
+		// not all days of selected month have been logged,
+		// complete monthly csvData and counter values before/after first/last day logged
+		completeMonth();
+	}
 
-    formatDateColumn();  // format date for labels
+	formatDateColumn();  // format date for labels
 
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
 		// and extend csvData by these values
 		// tägl. Hausverbrauch = Bezug - Einspeisung + PV - alle LP + Speicherentladung - Speicherladung ;
-		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] - csvData[rowIndex][8] + csvData[rowIndex][9] - csvData[rowIndex][10] + csvData[rowIndex][11] + csvData[rowIndex][18] - csvData[rowIndex][17];
+		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] - csvData[rowIndex][8] + csvData[rowIndex][9] - csvData[rowIndex][10] + csvData[rowIndex][11] + csvData[rowIndex][18] - csvData[rowIndex][17] - csvData[rowIndex][19] - csvData[rowIndex][20] - csvData[rowIndex][21] - csvData[rowIndex][22] - csvData[rowIndex][23] - csvData[rowIndex][24] - csvData[rowIndex][25] - csvData[rowIndex][26] - csvData[rowIndex][27];
 		if ( homeConsumption >= 0) {
 			csvData[rowIndex].push(homeConsumption);
 		} else {
@@ -397,7 +421,7 @@ function loadgraph() {
 			data: getCol(csvData, 1),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 1)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 1)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Einspeisung ' + totalValues[2].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 255, 105, 0.9)",
@@ -407,7 +431,7 @@ function loadgraph() {
 			data: getCol(csvData, 2),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 2)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 2)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'PV ' + totalValues[3].toFixed(2) + ' kWh',
 			borderColor: 'green',
@@ -417,7 +441,7 @@ function loadgraph() {
 			data: getCol(csvData, 3),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 3)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 3)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp1 ' + totalValues[4].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 0, 255, 0.7)",
@@ -427,7 +451,7 @@ function loadgraph() {
 			data: getCol(csvData, 4),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 4)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 4)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp2 ' + totalValues[5].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 30, 105, 0.7)",
@@ -437,7 +461,7 @@ function loadgraph() {
 			data: getCol(csvData, 5),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 5)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 5)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp3 ' + totalValues[6].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -447,7 +471,7 @@ function loadgraph() {
 			data: getCol(csvData, 6),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 6)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 6)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp Gesamt ' + totalValues[7].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -457,7 +481,7 @@ function loadgraph() {
 			data: getCol(csvData, 7),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 in ' + totalValues[8].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -467,7 +491,7 @@ function loadgraph() {
 			data: getCol(csvData, 8),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 out ' + totalValues[9].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -477,7 +501,7 @@ function loadgraph() {
 			data: getCol(csvData, 9),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 9)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 9)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 2 in ' + totalValues[10].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -487,7 +511,7 @@ function loadgraph() {
 			data: getCol(csvData, 10),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 10)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 10)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 2 out ' + totalValues[11].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -497,7 +521,7 @@ function loadgraph() {
 			data: getCol(csvData, 11),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 11)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 11)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp4 ' + totalValues[12].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -507,7 +531,7 @@ function loadgraph() {
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 12)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 12)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp5 ' + totalValues[13].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -517,7 +541,7 @@ function loadgraph() {
 			data: getCol(csvData, 13),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 13)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 13)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp6 ' + totalValues[14].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -527,7 +551,7 @@ function loadgraph() {
 			data: getCol(csvData, 14),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 14)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 14)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp7 ' + totalValues[15].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -537,7 +561,7 @@ function loadgraph() {
 			data: getCol(csvData, 15),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 15)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 15)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp8 ' + totalValues[16].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -547,7 +571,7 @@ function loadgraph() {
 			data: getCol(csvData, 16),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Speicherladung ' + totalValues[17].toFixed(2) + ' kWh',
 			borderColor: 'orange',
@@ -557,7 +581,7 @@ function loadgraph() {
 			data: getCol(csvData, 17),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Speicherentladung ' + totalValues[18].toFixed(2) + ' kWh',
 			borderColor: 'orange',
@@ -567,17 +591,108 @@ function loadgraph() {
 			data: getCol(csvData, 18),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 18)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 18)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Hausverbrauch ' + totalValues[19].toFixed(2) + ' kWh',
+			label: d1name + ' Import ' + totalValues[19].toFixed(2) + ' kWh',
+			borderColor:"rgba(200, 150, 200, 0.7)",
+			backgroundColor: "rgba(200, 150, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 19),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 19)  // custom added field, holds counter values or empty string
+		} , {
+			label: d2name + ' Import ' + totalValues[20].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 100, 200, 0.7)",
+			backgroundColor: "rgba(200, 100, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 20),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 20)  // custom added field, holds counter values or empty string
+		} , {
+			label: d3name + ' Import ' + totalValues[21].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 50, 200, 0.7)",
+			backgroundColor: "rgba(200, 50, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 21),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 21)  // custom added field, holds counter values or empty string
+		} , {
+			label: d4name + ' Import ' + totalValues[22].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 0, 200, 0.7)",
+			backgroundColor: "rgba(200, 0, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 22),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 22)  // custom added field, holds counter values or empty string
+		} , {
+			label: d5name + ' Import ' + totalValues[23].toFixed(2) + ' kWh',
+			borderColor: "rgba(150, 200, 200, 0.7)",
+			backgroundColor: "rgba(150, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 23),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 23)  // custom added field, holds counter values or empty string
+		} , {
+			label: d6name + ' Import ' + totalValues[24].toFixed(2) + ' kWh',
+			borderColor: "rgba(100, 200, 200, 0.7)",
+			backgroundColor: "rgba(100, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 24),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 24)  // custom added field, holds counter values or empty string
+		} , {
+			label: d7name + ' Import ' + totalValues[25].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 200, 200, 0.7)",
+			backgroundColor: "rgba(50, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 25),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 25)  // custom added field, holds counter values or empty string
+		} , {
+			label: d8name + ' Import ' + totalValues[26].toFixed(2) + ' kWh',
+			borderColor: "rgba(0, 200, 200, 0.7)",
+			backgroundColor: "rgba(0, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 26),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 26)  // custom added field, holds counter values or empty string
+		} , {
+			label: d9name + ' Import ' + totalValues[27].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 200, 200, 0.7)",
+			backgroundColor: "rgba(200, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 27),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+			toolTipData: getCol(lpCounterValues, 27)  // custom added field, holds counter values or empty string
+
+		} , {
+			label: 'Hausverbrauch ' + totalValues[28].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			data: getCol(csvData, 19),
+			data: getCol(csvData, 28),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 0)  // custom added field, always empty string at index 0
+			toolTipData: getCol(lpCounterValues, 0)  // custom added field, always empty string at index 0
 		}
 	];
 
@@ -613,53 +728,53 @@ function loadgraph() {
 				enabled: true,
 				mode: 'index',
 				callbacks: {
-                    title: function(dataPoint, graphData) {
-                        // return complete data as title
-                        return dataPoint[0].xLabel + graphMonth + '.' + graphYear;
-                    },
+					title: function(dataPoint, graphData) {
+						// return complete data as title
+						return dataPoint[0].xLabel + graphMonth + '.' + graphYear;
+					},
 					label: function(dataPoint, graphData) {
-                        // get only the name of the respective dataline since total value is visible at legend
-                        var xLabel = graphData.datasets[dataPoint.datasetIndex].label.split(' ', 1)[0];
-                        // get value for the tooltip-day
-                        var yLabel = ', Tageswert: ' + dataPoint.yLabel.toFixed(2) + ' kWh';
-                        // get counter value for the day (or empty string if not apliccable)
-                        var counter = graphData.datasets[dataPoint.datasetIndex].toolTipData[dataPoint.index];
-			   			return xLabel + counter + yLabel;
-                    }
+						// get only the name of the respective dataline since total value is visible at legend
+						var xLabel = graphData.datasets[dataPoint.datasetIndex].label.split(' ', 1)[0];
+						// get value for the tooltip-day
+						var yLabel = ', Tageswert: ' + dataPoint.yLabel.toFixed(2) + ' kWh';
+						// get counter value for the day (or empty string if not apliccable)
+						var counter = graphData.datasets[dataPoint.datasetIndex].toolTipData[dataPoint.index];
+						return xLabel + counter + yLabel;
+					}
 				}
 			},
 			plugins: {
-			    zoom: {
+				zoom: {
 					// Container for pan options
 					pan: {
-					    // Boolean to enable panning
-					    enabled: true,
+						// Boolean to enable panning
+						enabled: true,
 
-					    // Panning directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow panning in the y direction
-					    mode: 'x',
-					    rangeMin: {
-						    x: null
-					    },
-					    rangeMax: {
-						    x: null
-					    },
-					    speed: 1000
+						// Panning directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow panning in the y direction
+						mode: 'x',
+						rangeMin: {
+							x: null
+						},
+						rangeMax: {
+							x: null
+						},
+						speed: 1000
 					},
 
 					// Container for zoom options
 					zoom: {
-					    // Boolean to enable zooming
-					    enabled: true,
+						// Boolean to enable zooming
+						enabled: true,
 
-					    // Zooming directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow zooming in the y direction
-					    mode: 'x',
+						// Zooming directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow zooming in the y direction
+						mode: 'x',
 
-					    sensitivity: 0.01
+						sensitivity: 0.01
 
 					}
-				    }
+				}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -670,13 +785,21 @@ function loadgraph() {
 			legend: {
 				display: boolDisplayLegend,
 				position: 'bottom',
+				labels: {
+					// middle grey, opacy = 100% (visible)
+					fontColor: "rgba(153, 153, 153, 1)",
+				}
 			},
 			title: {
 				display: false
 			},
 			scales: {
 				xAxes: [{
-					type: 'category'
+					type: 'category',
+					ticks: {
+						//source: 'data',
+						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+					}
 				}],
 				yAxes: [{
 					type: 'linear',
@@ -688,7 +811,15 @@ function loadgraph() {
 						labelString: 'Energie [kWh]',
 						// middle grey, opacy = 100% (visible)
 						fontColor: "rgba(153, 153, 153, 1)"
-					}
+					},
+					gridLines: {
+						// light grey, opacy = 100% (visible)
+						color: "rgba(204, 204, 204, 1)",
+					},
+					ticks: {
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					},
 				}]
 			}
 		}
@@ -700,8 +831,8 @@ function loadgraph() {
 			var clickedElementindex = activePoint[0]._index;
 			var day = myLine.data.labels[clickedElementindex];  // get complete label of day clicked
 			// and format the string as needed to call daily graph: YYYY-mm-dd
-            day = day.replace(/[^\d]/g,'');  // only day as number left
-            var jumpToDate = graphYear + '-' + graphMonth + '-' + day;
+			day = day.replace(/[^\d]/g,'');  // only day as number left
+			var jumpToDate = graphYear + '-' + graphMonth + '-' + day;
 			window.location.href = "daily.php?date=" + jumpToDate;
 		}
 	});

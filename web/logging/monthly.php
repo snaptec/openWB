@@ -2,36 +2,59 @@
 <html lang="de">
 
 	<head>
+		<base href="/openWB/web/">
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>Logging Monatsansicht</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
-		<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
-		<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
-		<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-		<link rel="manifest" href="../manifest.json">
-		<link rel="shortcut icon" href="../img/favicons/favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="manifest.json">
+		<link rel="shortcut icon" href="img/favicons/favicon.ico">
 		<meta name="msapplication-TileColor" content="#00a8ff">
-		<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
+		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
-		<meta http-equiv="refresh" content="600; URL=index.php">
+		<meta http-equiv="refresh" content="600; URL=logging/monthly.php">
 
 		<!-- Bootstrap -->
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap-4.4.1/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
-		<link rel="stylesheet" type="text/css" href="../css/normalize-8.0.1.css">
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- Bootstrap-Datepicker -->
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker/bootstrap-datepicker3.min.css">
 		<!-- Font Awesome, all styles -->
-		<link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="logging_style.css">
+		<link rel="stylesheet" type="text/css" href="logging/logging_style.css?ver=20210209">
 
 		<!-- important scripts to be loaded -->
-		<script src="../js/jquery-3.4.1.min.js"></script>
-		<script src="../js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210209">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -79,15 +102,15 @@
 		</footer>
 
 		<!-- load Chart.js library -->
-		<script src="../js/Chart.bundle.js"></script>
-		<script src="../js/hammerjs@2.0.8"></script>
-		<script src="../js/chartjs-plugin-zoom@0.7.4"></script>
+		<script src="js/Chart.bundle.min.js"></script>
+		<script src="js/hammerjs@2.0.8"></script>
+		<script src="js/chartjs-plugin-zoom@0.7.4"></script>
 		<!-- load Bootstrap-Datepicker library -->
-		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
+		<script src="js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+		<script src="js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
 
 		<!-- load mqtt library -->
-		<script src = "../js/mqttws31.js" ></script>
+		<script src = "js/mqttws31.js" ></script>
 
 		<!-- get parsed date, setup datepicker and load respective Chart.js definition -->
 		<script>
@@ -118,7 +141,7 @@
 				var mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); // January is 0!, string with leading zeros
 				if ( reloadNeeded ) {
 					// date parsed was too early so reload with today
-					window.location.href = "monthly.php?date=" + parsedDate.getFullYear() + '-' + mm;
+					window.location.href = "logging/monthly.php?date=" + parsedDate.getFullYear() + '-' + mm;
 				}
 				var month = parsedDate.toLocaleDateString('de-DE', { month: 'long'});
 				var theDate = month + ' ' + parsedDate.getFullYear();
@@ -139,7 +162,7 @@
 					// `e` here contains the extra attributes
 					var mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!, string with leading zeros
 					var dateToParseStr = e.date.getFullYear() + '-' + mm;
-					window.location.href = "monthly.php?date=" + dateToParseStr;
+					window.location.href = "logging/monthly.php?date=" + dateToParseStr;
 				});
 
 				$('#prevmonth').click(function(e) {
@@ -149,7 +172,7 @@
 					if ( dateToParse >= earliestDate ) {
 						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
 						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
-						window.location.href = "monthly.php?date=" + dateToParseStr;
+						window.location.href = "logging/monthly.php?date=" + dateToParseStr;
 					}
 				});
 
@@ -162,12 +185,12 @@
 					if ( dateToParse <= today ) {
 						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
 						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
-						window.location.href = "monthly.php?date=" + dateToParseStr;
+						window.location.href = "logging/monthly.php?date=" + dateToParseStr;
 					}
 				});
 
 				// load graph
-				$.getScript("monthlychart.js?ver=1.0");
+				$.getScript("logging/monthlychart.js?ver=20210209");
 			})
 		</script>
 

@@ -128,7 +128,7 @@ body > .container {
 }
 
 .text-lightgrey {
-	color: rgba(0, 0, 0, 0.82);
+	color: #9c9b98;
 }
 
 .bg-darkgrey {
@@ -335,7 +335,7 @@ h3 {
 /* Livechart colors */
 :root {
 	--fontCol: rgba(153, 153, 153, 1);
-	--xgridCol: rgba(204, 204, 204, 1);	
+	--xgridCol: rgba(204, 204, 204, 1);
 	--gridCol: rgba(204, 204, 204, 1);
 	--gridSocCol: rgba(0, 0, 0, 0);
 	--tickCol: rgba(153, 153, 153, 1);
@@ -373,23 +373,23 @@ h3 {
 	--lp7bgCol: blue;
 	--lp8Col: rgba(50, 50, 55, 0.7);
 	--lp8bgCol: blue;
-	--d1Col: rgba(230, 50, 220, 0.7);
+	--d1Col: rgba(200, 150, 200, 0.7);
 	--d1bgCol: blue;
-	--d2Col: rgba(230, 50, 220, 0.7);
+	--d2Col: rgba(200, 100, 200, 0.7);
 	--d2bgCol: blue;
-	--d3Col: rgba(230, 50, 220, 0.7);
+	--d3Col: rgba(200, 50, 200, 0.7);
 	--d3bgCol: blue;
-	--d4Col: rgba(230, 50, 220, 0.7);
+	--d4Col: rgba(200, 0, 200, 0.7);
 	--d4bgCol: blue;
-	--d5Col: rgba(230, 50, 220, 0.7);
+	--d5Col: rgba(150, 200, 200, 0.7);
 	--d5bgCol: blue;
-	--d6Col: rgba(230, 50, 220, 0.7);
+	--d6Col: rgba(100, 200, 200, 0.7);
 	--d6bgCol: blue;
-	--d7Col: rgba(230, 50, 220, 0.7);
+	--d7Col: rgba(50, 200, 200, 0.7);
 	--d7bgCol: blue;
-	--d8Col: rgba(230, 50, 220, 0.7);
+	--d8Col: rgba(0, 200, 200, 0.7);
 	--d8bgCol: blue;
-	--d9Col: rgba(230, 50, 220, 0.7);
+	--d9Col: rgba(200, 200, 200, 0.7) ;
 	--d9bgCol: blue;
 }
 

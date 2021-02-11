@@ -27,6 +27,7 @@ function processMessages(mqttmsg, mqttpayload) {
      * @requires function:setInputValue - is declared in pvconfig.html
      * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
      */
+    // console.log("new message: "+mqttmsg+": "+mqttpayload);
     checkAllSaved(mqttmsg, mqttpayload);
     // last part of topic after /
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);
@@ -46,12 +47,15 @@ function processMessages(mqttmsg, mqttpayload) {
     // Could be a main on / off switch, check visibility func on main settings page
     visibiltycheck(elementId, mqttpayload);
     var element = $('#' + elementId);
-    if ( element.attr('type') == 'number' || element.attr('type') == 'text' || element.attr('type') == 'range' ) {
+    if ( element.attr('type') == 'number' || element.attr('type') == 'text' || element.attr('type') == 'password' || element.attr('type') == 'range' ) {
         originalValues[mqttmsg] = mqttpayload;
         setInputValue(elementId, mqttpayload);
     } else if ( element.hasClass('btn-group-toggle') ) {
         originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
+    } else if ( element.is('select') ) {
+        originalValues[mqttmsg] = mqttpayload;
+        setInputValue(elementId, mqttpayload);
     } else {
         console.log(elementId + ' not found');
     }

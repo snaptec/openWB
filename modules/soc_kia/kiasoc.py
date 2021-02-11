@@ -9,6 +9,7 @@ email = str(sys.argv[1])
 password = str(sys.argv[2])
 pin = str(sys.argv[3])
 vin = str(sys.argv[4])
+socfile = str(sys.argv[5])
 
 def main():
     #diviceID
@@ -31,14 +32,14 @@ def main():
         print('NOK diviceID')
         return
 
-    #cookie fÃ¼r login
+    #cookie for login
     session = requests.Session()
     response = session.get('https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=fdc85c00-0a2f-4c64-bcb4-2cfb1500730a&redirect_uri=https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/redirect')
     if response.status_code == 200:
         cookies = session.cookies.get_dict()
         #print(cookies)
     else:
-        print('NOK cookie fÃ¼r login')
+        print('NOK cookie for login')
         return
 
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/language' 
@@ -161,13 +162,12 @@ def main():
        charging = statusresponse['resMsg']['evStatus']['batteryCharge']
        print('charging: ', charging)
 
-       f = open('/var/www/html/openWB/ramdisk/soc', 'w')
+       f = open(socfile, 'w')
        f.write(str(soc))
-       f.close()   
+       f.close()
     else:
          print('NOK status')
          return
 
 if __name__ == '__main__':
     main()
-

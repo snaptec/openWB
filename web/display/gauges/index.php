@@ -36,6 +36,21 @@
 		<meta name="theme-color" content="#ffffff">
 		<meta name="google" content="notranslate">
 		<script src="js/jquery-1.11.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				/**
+				 * detect touch devices and map contextmenu (long press) to normal click
+				 */
+				$('body').on("contextmenu", function(event){
+					console.log("Contextmenu triggered");
+					if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+						console.log("Click event generated");
+						$(event.target).trigger("click"); // fire a click event
+						event.preventDefault();
+					}
+				});
+			});
+		</script>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<!-- Font Awesome, all styles -->
@@ -1170,7 +1185,7 @@
 			<script src="js/Chart.bundle.js"></script>
 			<script src="display/gauges/alllive.js?vers=20201201"></script>
 			<script src="display/gauges/symbollive.js?vers=20201201"></script>
-			<script src="display/gauges/live.js?vers=20201201"></script>
+			<script src="display/gauges/live.js?vers=20201203"></script>
 
 			<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
 				<div style="position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">

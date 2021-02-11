@@ -28,27 +28,17 @@
     color: #f1f1f1;
 } */
 
+.sidenav .btn {
+    margin-bottom: 0.5rem;
+}
+
 .sidenav .btn:hover {
     background-color: inherit;
     color: #818181;
 }
 
 /* Style page content */
-.dashboard {
-    margin-left: 190px; /* Same as the width of the sidebar */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 10px;
-}
-.code {
-    margin-left: 190px; /* Same as the width of the sidebar */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 10px;
-}
-.ladepunkte {
+.resume {
     margin-left: 190px; /* Same as the width of the sidebar */
     margin-right: 10px;
     padding-right: 10px;
@@ -80,7 +70,7 @@ body {
     color: #ffffff;
 }
 .btn-block {
-    font-size: 30px;
+    font-size: 24px;
 }
 .card {
     background-color: rgba(0, 0, 0, 0)!important;
@@ -142,10 +132,19 @@ hr {
     border-top-color: white;
 }
 
+.modal-dialog {
+    max-width: 600px;
+}
+
 .modal-content,
 .modal-header,
 .modal-footer {
     border-color: dimgrey;
+    font-size: 2rem;
+}
+
+.modal-content label {
+    font-weight: normal;
 }
 
 .clockpicker-popover {
@@ -201,11 +200,6 @@ hr {
 .lpDisabledStyle {
     color: #A30000;
     text-decoration: line-through;
-}
-
-.ladepunktConfig,
-.modal-title {
-    font-size: medium;
 }
 
 @keyframes alertPulsation {
@@ -337,11 +331,11 @@ hr {
     color: #7e7e7e;
     border: none;
     border-radius: 3px;
-    font-size: 3.5em;
+    font-size: 36px;
     text-align: center;
     width: 90px;
     height: 65px;
-    margin: 10px 10px;
+    margin: 5px 10px;
     padding: 0;
     box-shadow: #506CE8 0 0 1px 1px;
 }
@@ -352,10 +346,6 @@ hr {
 
 .PINbutton.enter {
     background-color: green;
-}
-
-.clear, .enter {
-    font-size: 3.5em;
 }
 
 .PINbutton:hover {

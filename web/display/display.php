@@ -2,7 +2,11 @@
 include ("../values.php");
 
 if ( $isssold == 1 ) {
-	include './minimal/index.php';
+	if ( $ssdisplayold == 1 ) {
+		include 'parentwb/index.html';
+	} else {
+		include './minimal/index.php';
+	}
 } else {
 	if ( $simplemodeold == 1 ) {
 		include 'simple/index.php';

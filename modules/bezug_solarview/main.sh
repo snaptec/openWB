@@ -25,7 +25,7 @@ command_bezug='22*'
 command_einspeisung='21*'
 
 log() {
-  echo "[bezug_solarview] $*" >>"$target/openwb.log"
+  echo "[bezug_solarview] $*" >>"$target/openWB.log"
 }
 
 request() {

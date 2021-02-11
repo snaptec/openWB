@@ -2,7 +2,50 @@
  * helper functions for setup-pages
  *
  * @author Michael Ortenstein
+ * @author Lutz Bender
  */
+
+/**
+ * hideSection
+ * add class 'hide' to element with selector 'section' in JQuery syntax
+ * disables all contained input and select elements if 'disableChildren' is not set to false
+**/
+function hideSection(section, disableChildren=true) {
+    $(section).addClass('hide');
+    updateFormFieldVisibility();
+}
+
+/**
+ * showSection
+ * remove class 'hide' from element with selector 'section' in JQuery syntax
+ * enables all contained input and select elements if 'enableChildren' is not set to false
+**/
+function showSection(section, enableChildren=true) {
+    $(section).removeClass('hide');
+    updateFormFieldVisibility();
+}
+
+/**
+ * updateFormFields
+ * checks every input and select element for a parent with class 'hide'
+ * if there is a match, disable this element
+**/
+function updateFormFieldVisibility() {
+    $('input').each(function() {
+        if( $(this).closest('.hide').length == 0 ) {
+            $(this).prop("disabled", false);
+        } else {
+            $(this).prop("disabled", true);
+        }
+    });
+    $('select').each(function() {
+        if( $(this).closest('.hide').length == 0 ) {
+            $(this).prop("disabled", false);
+        } else {
+            $(this).prop("disabled", true);
+        }
+    });
+}
 
 var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
 
@@ -12,7 +55,9 @@ var changedValuesHandler = {
         // if array is empty after delete, all send topics have been received with correct value
         // so redirect to main page
         // array is only filled by function getChangedValues!
+        // console.log("num changed values left: "+Object.keys(changedValues).length);
         if ( Object.keys(changedValues).length === 0 ) {
+            // console.log("done");
             window.location.href = './index.php';
         } else {
             return true;
@@ -107,8 +152,9 @@ function sendValues() {
         // then send changed values
 
         Object.keys(changedValues).forEach(function(topic, index) {
-        var value = this[topic].toString();
+            var value = this[topic].toString();
             setTimeout(function () {
+                // console.log("publishing changed value: "+topic+": "+value);
                 publish(value, topic);
             }, index * intervall);
         }, changedValues);
@@ -126,7 +172,7 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    $('.btn-group-toggle, input[type="number"], input[type="text"], input[type="range"]').each(function() {
+    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="password"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
         if ( typeof topicSubGroup == 'undefined' ) {
@@ -140,7 +186,9 @@ function getChangedValues() {
             var topicIdentifier = $(this).attr('name');
         }
         if ( $(this).hasClass('btn-group-toggle') ) {
-            var value = $('input[name="' + $(this).attr('id') + '"]:checked').data('option');
+            if ( $('input[name="' + $(this).attr('id') + '"]:checked').attr('disabled') != 'disabled' ) {
+                var value = $('input[name="' + $(this).attr('id') + '"]:checked').data('option');
+            }
         } else {
             var value = $(this).val();
             if ( $(this).attr('type') == 'number' || $(this).attr('type') == 'text' ) {
@@ -154,9 +202,10 @@ function getChangedValues() {
             }
         }
         var topic = topicPrefix + topicSubGroup + topicIdentifier;
-        if ( originalValues[topic] != value ) {
+        if ( ( value != undefined ) && ( originalValues[topic] != value ) ) {
             topic = topic.replace('/get/', '/set/');
             changedValues[topic] = value;
+            // console.log("ChangedValue found: "+topic+": "+value);
         }
     });
 }

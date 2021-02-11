@@ -32,6 +32,7 @@ userID=str(sys.argv[2])
 password=str(sys.argv[3])
 client_id=str(sys.argv[4])
 client_secret=str(sys.argv[5])
+soccalc=str(sys.argv[6])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S peugeotsoc lp"+chargepoint, named_tuple)
@@ -101,9 +102,36 @@ f.close()
 batt = json.loads(responsetext)
 soc = batt['energy'][0]['level']
 #print(time_string,'soc lp'+chargepoint,soc)
-if (int(chargepoint) == 1):
-    f = open('/var/www/html/openWB/ramdisk/soc', 'w')
-if (int(chargepoint) == 2):
-    f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
-f.write(str(soc))
-f.close()
+
+if (int(soccalc) == 0):
+	#manual calculation not enabled, using existing logic
+	if (int(chargepoint) == 1):
+		f = open('/var/www/html/openWB/ramdisk/soc', 'w')
+	if (int(chargepoint) == 2):
+		f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
+	f.write(str(soc))
+	f.close()
+else:
+	#manual calculation  enabled, using new logic with timestamp
+	if (int(chargepoint) == 1):
+		f = open('/var/www/html/openWB/ramdisk/peugeotsoc', 'w')
+	if (int(chargepoint) == 2):
+		f = open('/var/www/html/openWB/ramdisk/peugeotsoc1', 'w')
+	f.write(str(soc))
+	f.close()
+	# getting timestamp of fetched SoC
+	fetchedsoctime = batt['energy'][0]['updatedAt']
+	soct = time.strptime(fetchedsoctime, "%Y-%m-%dT%H:%M:%SZ")
+	soctime = time.mktime(soct)
+	# checking for daylight saving time
+	dst=time.localtime()
+	if (dst.tm_isdst == 0):
+		# adding one hour to fetched SoCtime if needed
+		soctime = soctime + 3600
+	# writing timestamp to ramdisk
+	if (int(chargepoint) == 1):
+		f = open('/var/www/html/openWB/ramdisk/peugeotsoctime', 'w')
+	if (int(chargepoint) == 2):
+		f = open('/var/www/html/openWB/ramdisk/peugeotsoctime1', 'w')
+	f.write(str(int(soctime)))
+	f.close()
