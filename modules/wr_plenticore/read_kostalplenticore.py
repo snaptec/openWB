@@ -22,7 +22,6 @@
 
 import sys
 import os
-import time
 import getopt
 import socket
 import ConfigParser
@@ -32,11 +31,6 @@ from datetime import datetime
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
-
-# beide übergebene IP-Adressen und Status Speicherkonfiguration auslesen
-ipaddress = str(sys.argv[1])
-ipaddress2 = str(sys.argv[2])
-boolspeicher = int(sys.argv[3])
 
 # Variablen initialisieren
 # Summenwerte
@@ -70,14 +64,14 @@ Voltage_phase_2_powermeter = 0
 Voltage_phase_3_powermeter = 0
 Actual_cos_phi = 0
 
-def writeLogEntry(message):
+def write_log_entry(message):
     # schreibt Eintrag ins Log
-    t = time.time()
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t))
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    line = timestamp + ' Modul read_kostalplenticore.py: ' + message + '\n'
     with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
-        f.write(timestamp + ' Modul read_kostalplenticore: ' + message + '\n')
+        f.write(line)
 
-def writeToRamdisk():
+def write_to_ramdisk():
     # zunächst alle Summenwerte beider WR
     # Gesamtleistung AC PV-Module
     with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
@@ -184,23 +178,36 @@ def writeToRamdisk():
         f.write(str(Battery_actual_SOC))
 
 # Hauptprogramm
+
+# # übergebene Paremeter auslesen
+if len(sys.argv) == 4:
+    ipaddress = str(sys.argv[1])
+    ipaddress2 = str(sys.argv[2])
+    boolspeicher = int(sys.argv[3])
+else:
+    # Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
+    write_log_entry('Argumente fehlen oder sind fehlerhaft')
+    write_to_ramdisk()
+    exit()
+
+
 # Plenticore als Modbus Client einrichten
 try:
     client = ModbusTcpClient(ipaddress, port=1502)
 except:
     # kein Zugriff auf WR1, also Abbruch und mit Null initialisierte Variablen in die Ramdisk
-    writeLogEntry('Fehler beim Initialisieren des Modbus-Client WR1')
-    writeToRamdisk()
-    sys.exit(1)
+    write_log_entry('Fehler beim Initialisieren des Modbus-Client WR1')
+    write_to_ramdisk()
+    exit()
 
 if ipaddress2 != 'none':
     try:
         client2 = ModbusTcpClient(ipaddress2, port=1502)
     except:
         # kein Zugriff auf WR2, also Abbruch und mit Null initialisierte Variablen in die Ramdisk
-        writeLogEntry('Fehler beim Initialisieren des Modbus-Client WR2')
-        writeToRamdisk()
-        sys.exit(1)
+        write_log_entry('Fehler beim Initialisieren des Modbus-Client WR2')
+        write_to_ramdisk()
+        exit()
 
 # dann zunächst alle relevanten Register aus WR 1 auslesen:
 try:
@@ -278,9 +285,9 @@ try:
     reg_326 = client.read_holding_registers(326,2,unit=71)
 except:
     # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-    writeLogEntry('Fehler beim Lesen der Modbus-Register WR1 (falsche IP oder WR offline?)')
-    writeToRamdisk()
-    sys.exit(1)
+    write_log_entry('Fehler beim Lesen der Modbus-Register WR1 (falsche IP oder WR offline?)')
+    write_to_ramdisk()
+    exit()
 
 # ggf. WR 2 auslesen, es werden keine Register für Daten vom EM300/KSEM
 # gelesen, diese kommen ausschließlich über den WR 1
@@ -300,9 +307,9 @@ if ipaddress2 != 'none':
         reg2_326 = client2.read_holding_registers(326,2,unit=71)
     except:
         # Lesefehler bei den Registern, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-        writeLogEntry('Fehler beim Lesen der Modbus-Register WR2 (falsche IP oder WR offline?)')
-        writeToRamdisk()
-        sys.exit(1)
+        write_log_entry('Fehler beim Lesen der Modbus-Register WR2 (falsche IP oder WR offline?)')
+        write_to_ramdisk()
+        exit()
 
 # ausgelesene Register WR 1 dekodieren
 #FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
@@ -414,6 +421,11 @@ Bezug = Total_active_power_powermeter
 # Summe der jeweiligen AC-Leistungen bestimmen
 PV_power_total = PV_power_ac1 + PV_power_ac2
 
+# Ab und an liefert der WR Werte (gerade beim Anlaufen), die einen Verbrauch der PV-AC-Seite suggerieren
+# Da dies unplausibel ist, wird in diesem Fall die PV-Leistung auf 0 gesetzt
+if PV_power_total < 0:
+    PV_power_total = 0
+
 # Erzeugung wird in openWB als negativer Wert weiter verarbeitet
 PV_power_total *= -1
 Actual_batt_ch_disch_power *= -1
@@ -426,4 +438,4 @@ Monthly_yield = Monthly_yield1 + Monthly_yield2
 Yearly_yield = Yearly_yield1 + Yearly_yield2
 
 # und zur Weiterverarbeitung alle Werte in die ramdisk
-writeToRamdisk()
+write_to_ramdisk()
