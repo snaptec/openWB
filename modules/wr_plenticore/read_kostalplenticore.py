@@ -63,6 +63,11 @@ Voltage_phase_1_powermeter = 0
 Voltage_phase_2_powermeter = 0
 Voltage_phase_3_powermeter = 0
 Actual_cos_phi = 0
+# allg. Parameter
+boolspeicher = 0
+ipaddress = '0.0.0.0'
+ipaddress2 = '0.0.0.0'
+
 
 def write_log_entry(message):
     # schreibt Eintrag ins Log
