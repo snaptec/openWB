@@ -358,7 +358,7 @@ sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /v
 echo "update broker..."
 for i in $(seq 1 9);
 do
-	configured=$(timeout 2 mosquitto_sub -C 1 -t openWB/config/get/SmartHome/Devices/$i/device_configured)
+	configured=$(timeout 1 mosquitto_sub -C 1 -t openWB/config/get/SmartHome/Devices/$i/device_configured)
 	if ! [[ "$configured" == 0 || "$configured" == 1 ]]; then
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
@@ -370,6 +370,12 @@ mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
 mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor2 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor0 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor1 -m ""
+mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor2 -m ""
 rm -rf /var/www/html/openWB/web/themes/dark19_01
 (sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m "$bootmodus") &
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m "$bootmodus") &
@@ -389,9 +395,3 @@ echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
-mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor0 -m ""
-mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor1 -m ""
-mosquitto_pub -r -t openWB/SmartHome/Devices/1/TemperatureSensor2 -m ""
-mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor0 -m ""
-mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor1 -m ""
-mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor2 -m ""
