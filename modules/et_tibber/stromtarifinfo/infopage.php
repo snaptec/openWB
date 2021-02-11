@@ -33,7 +33,7 @@
 		<script src="js/Chart.bundle.min.js"></script>
 
 		<!-- special stromtarif scripts to be loaded -->
-		<script src="../modules/et_tibber/stromtarifinfo/tibber.js?ver=20210104-a"></script>
+		<script src="../modules/et_tibber/tibber.js?ver=20210128"></script>
 		<script src="../modules/et_tibber/stromtarifinfo/tibberElectricityPricechart.js?ver=20210104"></script>
 		<script src="../modules/et_tibber/stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20210104-b"></script>
 
@@ -62,14 +62,17 @@
 	</head>
 
 	<body>
+		<?php
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+		?>
 
 		<div id="nav-placeholder"></div>
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Stromtarif-Info Tibber</h1>
-			<div class="alert alert-info" role="alert">
-				Daten stellen lediglich beispielhaft das kommende Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.)
-				und der durch den Anbieter bereitgestellten Daten folgt.
-			</div>
 			<div id="waitForData">
 				<span>Tibber-Daten werden abgerufen, bitte warten... </span>
 				<div class="spinner-border spinner-border-sm" role="status">
@@ -189,15 +192,31 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
+			$("#nav-placeholder").load('themes/navbar.html?v=20210130', function() {
+				$('#navStromtarifInfo').removeClass('hide');
+				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
+			});
 
 			$(document).ready(function(){
-				$('#navStromtarifInfo').removeClass('hide');
 
-				readTibberAPI()
+				// calculate amount of datasets to be received since Tibber only sends valid data for
+				// past hours/days/months
+				var now = new Date();
+				const hoursToReceive = now.getHours() + 24; // Tibber sends hourly data for past hours
+				const daysToReceive = now.getDate() + 1;  // Tibber sends daily data for past days
+				var monthsToReceive = now.getMonth();  // no index correction since Tibber sends monthly data for past months
+				var tibberToken = "<?php echo $tibbertokenold; ?>";
+				var tibberHomeID = "<?php echo $tibberhomeidold; ?>";
+				const tibberAPI = "https://api.tibber.com/v1-beta/gql";
+				const tibberQueryHead = '{ "query": "{viewer {name home(id:\\"' + tibberHomeID + '\\") {';
+				const tibberQueryGetAdress = 'address {address1 postalCode city}';
+				const tibberQueryGetPriceInfo = 'currentSubscription {priceInfo {current{total energy tax startsAt} today {total startsAt} tomorrow {total startsAt}}}';
+				const tibberQueryGetHourlyConsumption = 'cons_hourly: consumption(resolution: HOURLY, last:' + hoursToReceive + ') {nodes {from to cost unitPrice unitPriceVAT consumption}}';
+				const tibberQueryTail = '}}}"}';
+				var tibberQuery = tibberQueryHead + tibberQueryGetAdress + tibberQueryGetPriceInfo + tibberQueryGetHourlyConsumption + tibberQueryTail;
+
+				readTibberAPI(tibberToken, tibberQuery)
 					.then((data) => {
-						console.log('erfolgreiche Abfrage');
-						console.log(data);
 	    				processTibberResponse(data)
 					})
 					.catch((error) => {

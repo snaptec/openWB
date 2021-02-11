@@ -17,13 +17,14 @@ chargepoint=str(sys.argv[6])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp"+chargepoint, named_tuple)
-f = open('/var/www/html/openWB/ramdisk/zoereply1lp1'+chargepoint, 'r')
+f = open('/var/www/html/openWB/ramdisk/zoereply1lp'+chargepoint, 'r')
 android_config = json.loads(f.read())
 f.close()
 gigyarooturl = android_config['servers']['gigyaProd']['target'] 
 gigyaapikey = android_config['servers']['gigyaProd']['apikey'] 
 kamereonrooturl = android_config['servers']['wiredProd']['target']
-kamereonapikey = android_config['servers']['wiredProd']['apikey']
+#kamereonapikey = android_config['servers']['wiredProd']['apikey']
+kamereonapikey = 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2'
 #print(time_string, 'gigyarooturl',gigyarooturl,gigyaapikey,kamereonrooturl,kamereonapikey)
 #
 f = open('/var/www/html/openWB/ramdisk/zoereply4lp'+chargepoint, 'r')

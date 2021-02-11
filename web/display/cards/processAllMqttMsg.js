@@ -447,6 +447,8 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 
 }
 
+var pv1 = 0;
+var pv2 = 0;
 function processPvMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/pv
 	// called by handlevar
@@ -484,8 +486,14 @@ function processPvMessages(mqttmsg, mqttpayload) {
 			break;
 		}
 	}
-	else if ( mqttmsg == 'openWB/pv/boolPVConfigured' ) {
-		if ( mqttpayload == 1 ) {
+	else if ( mqttmsg.match(/^openWB\/pv\/[1-2]+\/boolPVConfigured$/i) ) {
+		if (mqttmsg == 'openWB/pv/1/boolPVConfigured') {
+			pv1 = mqttpayload;
+		} else {
+			pv2 = mqttpayload;
+		}
+
+		if ( (pv1 + pv2) > 0 ) {
 			// if pv is configured, show info-cards
 			$('.pv').removeClass('hide');
 			// update sparklines

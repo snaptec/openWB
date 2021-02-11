@@ -37,6 +37,7 @@ DeviceValues.update({'lp1llkwh' : str(5)})
 DeviceValues.update({'lp1watt' : str(5)})
 DeviceValues.update({'lp1chargestat' : str(5)})
 DeviceValues.update({'lp1plugstat' : str(5)})
+DeviceValues.update({'lp1readerror' : str(0)})
 Values.update({'lp1plugstat' : str(5)})
 Values.update({'lp1chargestat' : str(5)})
 Values.update({'lp1evsell' : str(1)})
@@ -61,6 +62,7 @@ except:
     seradd = "/dev/serial0"
 
 loglevel = 1
+MaxEvseError = 5
 sdmid = 105
 actorstat = 0
 evsefailure = 0
@@ -163,11 +165,15 @@ def getmeter():
             rq = client.read_holding_registers(1002,1,unit=1)
             lp1var = rq.registers[0]
             evsefailure = 0
+            DeviceValues.update({'lp1readerror' : str(0)})
         except Exception as e:
+            DeviceValues.update({'lp1readerror' : str(int(DeviceValues['lp1readerror'])+1)})
             logDebug("2", "Fehler:" + str(e))
             lp1var = 5
             evsefailure = 1
-        if ( lp1var == 5 ):
+        if ( lp1var == 5 and int(DeviceValues['lp1readerror']) > MaxEvseError ):
+            logDebug("2", "Anhaltender Fehler beim Auslesen der EVSE von lp1! (" + str(DeviceValues['lp1readerror']) + ")" )
+            logDebug("2", "Plugstat und Chargestat werden zurückgesetzt.")
             Values.update({'lp1plugstat' : 0})
             Values.update({'lp1chargestat' : 0})
         elif ( lp1var == 1):

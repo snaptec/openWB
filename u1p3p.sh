@@ -9,9 +9,10 @@ u1p3pswitch(){
 		if [ -z "$u1p3schaltparam" ]; then
 			u1p3schaltparam = 8
 		fi
-		uhwaittime = u1p3schaltparam * 60
-		urwaittime = (16 - u1p3schaltparam) * 60 
+		uhwaittime=$(( $u1p3schaltparam * 60 ))
+		urwaittime=$(( (16 - $u1p3schaltparam) * 60 ))
 		openwbDebugLog "MAIN" 1 "automatische Umschaltung aktiv"
+		openwbDebugLog "MAIN" 1 "Timing Umschaltung: $uhwaittime / $urwaittime"
 		if (( ladestatus == 0)); then
 			if (( nachtladenstate == 1 )) || (( nachtladen2state == 1 )); then
 				if (( u1p3pstat != u1p3pnl )); then
@@ -45,7 +46,7 @@ u1p3pswitch(){
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 								if (( urcounter < urwaittime )); then
 									if (( urcounter < urwaittime - 60 )); then
-										urcounter=urwaittime - 60
+										urcounter=$((urwaittime - 60))
 									fi
 									urcounter=$((urcounter + 10))
 									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
@@ -76,7 +77,7 @@ u1p3pswitch(){
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 								if (( urcounter < urwaittime )); then
 									if (( urcounter < urwaittime - 60 )); then
-										urcounter=urwaittime - 60
+										urcounter=$((urwaittime - 60))
 									fi
 									urcounter=$((urcounter + 10))
 									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter

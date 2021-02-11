@@ -153,7 +153,7 @@
 													<i class="fa fa-user"></i>
 												</div>
 											</div>
-											<input type="text" name="username" id="connect_username" value="" aria-describedby="usernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]*">
+											<input type="text" name="username" id="connect_username" value="" aria-describedby="usernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]+">
 										</div>
 										<span id="usernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Zahlen, Sonderzeichen oder Leerzeichen.</span>
 									</div>
@@ -194,7 +194,7 @@
 													<i class="fa fa-user"></i>
 												</div>
 											</div>
-											<input type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]*">
+											<input type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]+">
 										</div>
 										<span id="registerUsernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Zahlen, Sonderzeichen oder Leerzeichen</span>
 									</div>

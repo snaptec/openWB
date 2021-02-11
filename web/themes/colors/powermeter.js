@@ -50,35 +50,42 @@ class PowerMeter {
     this.drawSourceArc(svg);
     this.drawUsageArc(svg);
 
-    this.addLabel(svg, 0, -this.height / 2 * 3 / 5, "middle", wbdata.sourceSummary[0]); // PV
-    this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.sourceSummary[1]); // Netz
-    this.addLabel(svg, -this.width / 2 + this.margin / 4, this.height / 2 - this.margin, "start", wbdata.sourceSummary[2]); // Speicher out
-    this.addLabel(svg, 0, -this.height / 2 * 1 / 5, "middle", wbdata.usageSummary[0]);  // Export
+    this.addLabel(svg, 0, -this.height / 2 * 3 / 5, "middle", wbdata.sourceSummary.pv); // PV
+    this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.sourceSummary.evuIn); // Netz
+    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.sourceSummary.batOut); // Speicher Out
+    this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.usageSummary[0]);  // Export
     this.addLabel(svg, 0, this.height / 2 * 1 / 5, "middle", wbdata.usageSummary[1]); // Laden
     this.addLabel(svg, 0, this.height / 2 * 3 / 5, "middle", wbdata.usageSummary[2]); // Geräte
-    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin, "end", wbdata.usageSummary[3]); // Speicher in
+    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.usageSummary[3]); // Speicher in
+   // this.addLabel(svg, -this.width / 2 + this.margin / 4, this.height / 2 - this.margin, "start", wbdata.batterySoc); // Speicher in
     this.addLabel(svg, 0, this.height / 2 * 2 / 5, "middle", wbdata.usageSummary[4]);  // Haus
 
     if (wbdata.chargePoint[0].isSocConfigured) {
-      svg.append("text")
-        .attr("x", -this.width / 2 - this.margin / 4 + 5)
-        .attr("y", -this.height / 2 + this.margin + 10)
-        .text(wbdata.chargePoint[0].name + ": " + (wbdata.chargePoint[0].soc) + "%")
-        .attr("fill", wbdata.chargePoint[0].color)
-        .attr("backgroundcolor", this.bgColor)
-        .style("text-anchor", "beginning")
-        .style("font-size", "22");
+      this.addLabelWithColor (svg, 
+        (-this.width/2 - this.margin/4 +5), 
+        (-this.height/2 + this.margin + 5), 
+        "start", 
+        (wbdata.chargePoint[0].name + ": " + (wbdata.chargePoint[0].soc) + "%"), 
+        wbdata.chargePoint[0].color);
     }
+  
     if (wbdata.chargePoint[1].isSocConfigured) {
-      svg.append("text")
-        .attr("x", this.width / 2 + this.margin / 4 - 5)
-        .attr("y", -this.height / 2 + this.margin + 10)
-        .text(wbdata.chargePoint[1].name + ": " + (wbdata.chargePoint[1].soc) + "%")
-        .attr("fill", wbdata.chargePoint[1].color)
-        .attr("backgroundcolor", this.bgColor)
-        .style("text-anchor", "end")
-        .style("font-size", "22");
+      this.addLabelWithColor (svg, 
+        (this.width/2 + this.margin/4 -5), 
+        (-this.height/2 + this.margin + 5), 
+        "end", 
+        (wbdata.chargePoint[1].name + ": " + (wbdata.chargePoint[1].soc) + "%"), 
+        wbdata.chargePoint[1].color);
     }
+    if (wbdata.batterySoc > 0)  {
+    this.addLabelWithColor (svg, 
+      (-this.width/2 - this.margin/4 +5), 
+      (this.height/2 - this.margin +15), 
+      "start", 
+      ("Speicher: " + wbdata.batterySoc + "%"), 
+      wbdata.usageSummary[3].color);
+    }
+
     svg.append("text")
       .attr("x", 0)
       .attr("y", 0)
@@ -106,7 +113,7 @@ class PowerMeter {
 
     // Add the chart to the svg
     svg.selectAll("sources")
-      .data(pieGenerator(wbdata.sourceSummary)).enter()
+      .data(pieGenerator(Object.values (wbdata.sourceSummary))).enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color);
@@ -143,7 +150,6 @@ class PowerMeter {
         .append("text")
         .attr("x", x)
         .attr("y", y)
-        .attr("dy", ".35em")
         .text(data.name + " : " + formatWatt(data.power))
         .attr("fill", data.color)
         .attr("text-anchor", anchor)
@@ -151,6 +157,19 @@ class PowerMeter {
         ;
     }
   }
+
+  addLabelWithColor (svg, x, y, anchor, labeltext, color) {
+    const labelFontSize = 22;
+   svg.append("text")
+      .attr("x", x)
+      .attr("y", y)
+      .text(labeltext)
+      .attr("fill", color)
+      .attr("text-anchor", anchor)
+      .style("font-size", labelFontSize)
+      ;
+  }
+
 
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");

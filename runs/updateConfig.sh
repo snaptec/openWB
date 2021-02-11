@@ -170,6 +170,25 @@ updateConfig(){
 	if ! grep -Fq "sdm120modbusllid3s2=" $ConfigFile; then
 		echo "sdm120modbusllid3s2=10" >> $ConfigFile
 	fi
+	# upgrade from old "none" to 254
+	if grep -Fq "sdm120modbusllid2=none" $ConfigFile; then
+		echo "sdm120modbusllid2=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3=none" $ConfigFile; then
+		echo "sdm120modbusllid3=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid2s1=none" $ConfigFile; then
+		echo "sdm120modbusllid2s1=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3s1=none" $ConfigFile; then
+		echo "sdm120modbusllid3s1=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid2s2=none" $ConfigFile; then
+		echo "sdm120modbusllid2s2=254" >> $ConfigFile
+	fi
+	if grep -Fq "sdm120modbusllid3s2=none" $ConfigFile; then
+		echo "sdm120modbusllid3s2=254" >> $ConfigFile
+	fi
 	if ! grep -Fq "evsewifiiplp1=" $ConfigFile; then
 		echo "evsewifiiplp1=192.168.0.25" >> $ConfigFile
 	fi
@@ -421,6 +440,15 @@ updateConfig(){
 	if ! grep -Fq "speicherekwh_http=" $ConfigFile; then
 		echo "speicherekwh_http=192.168.0.10/eWh" >> $ConfigFile
 		echo "speicherikwh_http=192.168.0.10/iWh" >> $ConfigFile
+	fi
+	if ! grep -Fq "battjsonurl=" $ConfigFile; then
+		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
+	fi
+	if ! grep -Fq "battjsonsoc"=" $ConfigFile; then
+		echo "speichersoc_json=.RSOC" >> $ConfigFile
+	fi
+	if ! grep -Fq "battjsonwatt"=" $ConfigFile; then
+		echo "battjsonwatt=.Consumption_W" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
@@ -1602,6 +1630,11 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wizzarddone=" $ConfigFile; then
 		echo "wizzarddone=100" >> $ConfigFile
+	else
+		# fix wizzarddone value
+		if grep -Fq "wizzarddone=1[0-9][0-9]" $ConfigFile; then
+			sed -i 's/^wizzarddone=1[0-9][0-9]/wizzarddone=100/g' $ConfigFile
+		fi
 	fi
 	if ! grep -Fq "preisjekwh=" $ConfigFile; then
 		echo "preisjekwh=0.30" >> $ConfigFile
@@ -1712,6 +1745,15 @@ updateConfig(){
 	fi
 	if ! grep -Fq "u1p3schaltparam=" $ConfigFile; then
 		echo "u1p3schaltparam=8" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_tesla_mfapasscode=" $ConfigFile; then
+		echo "soc_tesla_mfapasscode=XXX" >> $ConfigFile
+		echo "soc_teslalp2_mfapasscode=XXX" >> $ConfigFile
+	fi
+	if ! grep -Fq "speicherpwloginneeded=" $ConfigFile; then
+		echo "speicherpwloginneeded=0" >> $ConfigFile
+		echo "speicherpwuser=Username" >> $ConfigFile
+		echo "speicherpwpass='XXX'" >> $ConfigFile
 	fi
 
 	echo "Config file Update done."
