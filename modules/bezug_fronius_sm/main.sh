@@ -18,7 +18,9 @@ elif [[ $froniusvar2 == "1" ]]; then
 	# Hole die JSON-Daten
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
 	# TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
-	# response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung&DataCollection=MeterRealtimeData")
+	# response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=$froniuserzeugung&DataCollection=MeterRealtimeData")
+	# "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=$froniuserzeugung" funktioniert auch - entscheidend ist hier das klein "d" in DeviceId - die neue FW scheint case sensitiv zu sein
+	# sofern die alte Version auch mit kleinem "d" antwortet, ist Variante1 wahrscheinlich überflüssig
 	# dann auch json_id wieder gleich:
 	# json_id=".Body.Data"
 
