@@ -430,7 +430,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 	} else if ( mqttmsg == 'openWB/system/IpAddress') {
 		$('.systemIpAddress').text(mqttpayload);
 	} else if ( mqttmsg == 'openWB/system/wizzardDone' ) {
-		if( mqttpayload == '100' ){
+		if( mqttpayload > 99 ){
 			$("#wizzardModal").modal("hide");
 		} else {
 			$("#wizzardModal").modal("show");
