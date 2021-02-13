@@ -770,7 +770,7 @@ function loadgraph() {
 			monthstr = monthstr.substring(0,3); // get month in short description
 			var month = monthName.indexOf(monthstr);
 			var jumpToDate = String(graphYear) + '-' + String(month).padStart(2, '0');  // month with leading zero
-			window.location.href = "monthly.php?date=" + jumpToDate;
+			window.location.href = "logging/monthly.php?date=" + jumpToDate;
 	 	}
 	});
 
