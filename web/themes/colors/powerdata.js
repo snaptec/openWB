@@ -79,11 +79,11 @@ class WbData {
 			}
 		}
 		if (this.showLiveGraph) {
-			dayGraph.deactivate();
-			powerGraph.activate();
+			powerGraph.deactivateDay();
+			powerGraph.activateLive();
 			} else {
-				powerGraph.deactivate();
-				dayGraph.activate();
+				powerGraph.deactivateLive();
+				powerGraph.activateDay();
 			}
 	}
 

@@ -111,7 +111,6 @@
 	<script src="themes/colors/powermeter.js"></script>
 	<script src="themes/colors/yieldmeter.js"></script>
 	<script src="themes/colors/powergraph.js"></script>
-	<script src="themes/colors/daygraph.js"></script>	
 	<script src="themes/colors/chargePointList.js"></script>
 	<script src="themes/colors/smartHomeList.js"></script>
 	<script src="themes/colors/batteryList.js"></script>
@@ -166,39 +165,40 @@
 			</div>
 		</div>
 		<div class="row py-0">
+			<!-- Aktuelle Leistung (powermeter) -->
 			<div class="wb-widget col-md p-2 m-1">
 				<h3>Aktuelle Leistung</h3>
 				<figure id="powermeter" class=" mb-0"></figure>
 			</div>
+			<!-- Graph - Live, Tag (powergraph) -->
 			<div class="wb-widget col-md p-2 m-1">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-8 px-0">
-							<h3>Leistung / Ladestand</h3>
+							<h3 id="graphheading">Leistung / Ladestand</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm " id="graphModeButton"><span class="fa fa-chart-area px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphLeftButton"><span class="fa fa-chevron-circle-left px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphRightButton"><span class="fa fa-chevron-circle-right px-0"></span></button>
 						</div>
 					</div>
 				</div>
 				<figure id="powergraph" class="mb-0"></figure>
-				<figure id="daygraph" class="mb-0 hide"></figure>
 			</div>
+			<!-- Energie heute (yieldmeter) -->
 			<div class="wb-widget col-md p-2 m-1 ">
 				<h3>Energie heute</h3>
 				<figure id="energymeter" class="mb-0"></figure>
 			</div>
 		</div>
 		<div class="row py-0">
+			<!-- Ladepunkte (chargePointList) -->
 			<div class="wb-widget col-md-6 p-2 m-1">
-
 				<h3 class="mt-0">Ladepunkte</h3>
 				<div class="pb-3">
-
 					<div style="text-align:center;">
 						<span id="lastregelungaktiv" class="regularTextSize text-red animate-alertPulsation"></span>
 					</div>
-
 					<div id="socSelector"></div>
 					<div id="chargePointTable"></div>
 					<form id="minundpvladenEinstellungen" class="hide">
@@ -206,8 +206,6 @@
 						<div class="row justify-content-center">
 							<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 						</div>
-
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 							<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
 							<div class="col">
@@ -685,12 +683,14 @@
 					<br>
 				</div>
 			</div>
+			<!-- Smart Home (smartHomeList) -->
 			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
 				<h3>Geräte</h3>
 				<div class=" pb-3 ">
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
+			<!-- Speicher (batteryList) -->
 			<div class="wb-widget col-md-6 p-2 m-1" id="batteryWidget">
 				<h3>Speicher</h3>
 				<div class=" pb-3 ">
@@ -898,7 +898,6 @@
 
 			wbdata.init();
 			powerGraph.init();
-			dayGraph.init();
 			powerMeter.init();
 			yieldMeter.init();
 			chargePointList.init();

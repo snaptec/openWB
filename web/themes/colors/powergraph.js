@@ -4,6 +4,8 @@ class PowerGraph {
   constructor() {
     this.graphData = [];
     this.initCounter = 0;
+    this.staging = [];
+    this.rawData = [];
     this.graphdata = []
     this.initialGraphData = [];
     this.initialized = false;
@@ -19,6 +21,7 @@ class PowerGraph {
     this.width = 500;
     this.height = 500;
     this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
+    this.graphDate = new Date();
   }
 
   init() {
@@ -49,23 +52,24 @@ class PowerGraph {
     this.svg = figure.append("svg")
       .attr("viewBox", `0 0 500 500`);
 
-    d3.select("button#graphModeButton")
-      .on("click", switchGraph)
+    d3.select("button#graphLeftButton")
+      .on("click", shiftLeft)
+    d3.select("button#graphRightButton")
+      .on("click", shiftRight)
   }
 
-  activate() {
+  activateLive() {
     try {
-      this.reset();
+      this.resetLiveGraph();
       subscribeMqttGraphSegments();
       subscribeGraphUpdates();
     } catch (err) {
       // on initial invocation this method is not existing
     }
-    d3.select("figure#powergraph").classed("hide", false);
+    d3.select("h3#graphheading").text("Leistung / Ladestand")
   }
-  
-  deactivate() {
-    d3.select("figure#powergraph").classed("hide",true);
+
+  deactivateLive() {
     try {
       unsubscribeMqttGraphSegments();
       unsubscribeGraphUpdates();
@@ -73,62 +77,161 @@ class PowerGraph {
       // on intial run this method is not existing
     }
   }
-
-  update(topic, payload) {
-    if (this.initialized) { // steady state
-
-      if (topic === "openWB/graph/lastlivevalues") {
-        const values = this.extractValues(payload.toString());
-        this.graphRefreshCounter++;
-        this.graphData.push(values);
-
-        this.updateGraph();
-
-        if (this.graphRefreshCounter > 60) {
-          this.reset();
-          subscribeMqttGraphSegments();
-        }
+  activateDay() {
+    if (!wbdata.showLiveGraph) {
+      this.resetDayGraph();
+      try {
+        subscribeDayGraph(this.graphDate);
+      } catch (err) {
+        //on initial run of activate, subscribeDayGraph is not yet initialized. 
+        // the error can be ignored
       }
-    } else { // init phase
-      const t = topic;
-      if (t.substring(t.length - 13, t.length) === "alllivevalues") {
-        // init message
-        const serialNo = t.substring(13, t.length - 13);
-        var bulkdata = payload.toString().split("\n");
-        if (bulkdata.length <= 1) {
-          bulkdata = [];
-        }
-        if (serialNo != "") {
-          if (typeof (this.initialGraphData[+serialNo - 1]) === 'undefined') {
-            this.initialGraphData[+serialNo - 1] = bulkdata;
-            this.initCounter++;
+      d3.select("h3#graphheading").text("Leistung / Ladestand " + this.graphDate.getDate() + "." + (this.graphDate.getMonth() + 1) + ".");
+    }
+  }
+
+  deactivateDay() {
+  }
+  updateLive(topic, payload) {
+    if (wbdata.showLiveGraph) { // only udpdate if live graph is active
+      if (this.initialized) { // steady state
+        if (topic === "openWB/graph/lastlivevalues") {
+          const values = this.extractLiveValues(payload.toString());
+          this.graphRefreshCounter++;
+          this.graphData.push(values);
+          this.updateGraph();
+          if (this.graphRefreshCounter > 60) {
+            this.resetLiveGraph();
+            subscribeMqttGraphSegments();
           }
         }
-        if (this.initCounter == 16) {// Initialization complete
-          this.initialized = true;
-          this.initialGraphData.map(bulkdata => {
-            bulkdata.map((line) => {
-              const values = this.extractValues(line);
-              this.graphData.push(values);
+      } else { // init phase
+        const t = topic;
+        if (t.substring(t.length - 13, t.length) === "alllivevalues") {
+          // init message
+          const serialNo = t.substring(13, t.length - 13);
+          var bulkdata = payload.toString().split("\n");
+          if (bulkdata.length <= 1) {
+            bulkdata = [];
+          }
+          if (serialNo != "") {
+            if (typeof (this.initialGraphData[+serialNo - 1]) === 'undefined') {
+              this.initialGraphData[+serialNo - 1] = bulkdata;
+              this.initCounter++;
+            }
+          }
+          if (this.initCounter == 16) {// Initialization complete
+            this.initialized = true;
+            this.initialGraphData.map(bulkdata => {
+              bulkdata.map((line) => {
+                const values = this.extractLiveValues(line);
+                this.graphData.push(values);
+              });
             });
-          });
-          this.updateGraph();
-          unsubscribeMqttGraphSegments();
+            this.updateGraph();
+            unsubscribeMqttGraphSegments();
+          }
         }
       }
     }
   }
 
+  updateDay(topic, payload) {
+    if (payload != 'empty') {
+      var segment = payload.toString().split("\n");
+      if (segment.length <= 1) {
+        segment = [];
+      }
+      const serialNo = topic.substring(26, topic.length);
+      if (serialNo != "") {
+        if (typeof (this.staging[+serialNo - 1]) === 'undefined') {
+          this.staging[+serialNo - 1] = segment;
+          this.initCounter++;
+        }
+      }
+      if (this.initCounter == 12) {// Initialization complete
+        unsubscribeDayGraph();
+        this.initCounter = 0;
+        this.staging.map(segment =>
+          segment.map(line => this.rawData.push(line))
+        )
+        this.rawData.map((line, i, a) => {
+          if (i > 0) {
+            const values = this.extractDayValues(line, a[i - 1]);
+            this.graphData.push(values);
+          } else {
+            // const values = this.extractValues(line, []);                
+          }
+        });
+        this.updateGraph();
+        setTimeout(() => this.activateLive(), 300000)
+      }
+    }
+  }
+
+  extractDayValues(payload, oldPayload) {
+    const elements = payload.split(",");
+    const oldElements = oldPayload.split(",");
+    var values = {};
+    values.date = new Date(d3.timeParse("%H%M")(elements[0]));
+    // evu
+    values.gridPull = this.calcValue(1, elements, oldElements);
+    values.gridPush = this.calcValue(2, elements, oldElements);
+    // pv
+    values.solarPower = this.calcValue(3, elements, oldElements);
+    values.inverter = 0;
+    // charge points
+    values.charging = this.calcValue(7, elements, oldElements);
+    var i;
+    for (i = 0; i < 3; i++) {
+      values["lp" + i] = this.calcValue(4 + i, elements, oldElements);
+    }
+    for (i = 3; i < 8; i++) {
+      values["lp" + i] = this.calcValue(12 + i, elements, oldElements);
+    }
+    values.soc1 = +elements[21];
+    values.soc2 = +elements[22];
+    // smart home
+    for (i = 0; i < 10; i++) {
+      values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
+    }
+    //consumers
+    values.co0 = this.calcValue(10, elements, oldElements);
+    values.co1 = this.calcValue(12, elements, oldElements);
+    //battery
+    values.batIn = this.calcValue(8, elements, oldElements);
+    values.batOut = this.calcValue(9, elements, oldElements);
+    values.batterySoc = +elements[20];
+    // calculated values
+    values.housePower = values.gridPull + values.solarPower + values.batOut
+      - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
+      - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9;
+    if (values.housePower < 0) { values.housePower = 0; };
+    values.selfUsage = values.solarPower - values.gridPush;
+    if (values.selfUsage < 0) { values.selfUsage = 0; };
+    return values;
+  }
+
   reset() {
-    // fresh reloas of the graph
+    this.resetLiveGraph();
+    this.resetDayGraph();
+  }
+  resetLiveGraph() {
+    // fresh reload of the graph
     this.initialized = false;
     this.initCounter = 0;
     this.initialGraphData = [];
     this.graphData = [];
     this.graphRefreshCounter = 0;
   }
-
-  extractValues(payload) {
+  resetDayGraph() {
+    this.initialized = false;
+    this.initCounter = 0;
+    this.staging = [];
+    this.rawData = [];
+    this.graphData = [];
+  }
+  extractLiveValues(payload) {
     const elements = payload.split(",");
     var values = {};
     values.date = new Date(d3.timeParse("%H:%M:%S")(elements[0]));
@@ -187,6 +290,13 @@ class PowerGraph {
     return values;
   }
 
+  calcValue(i, array, oldArray) {
+    var val = (array[i] - oldArray[i]) * 12;
+    if (val < 0 || val > 150000) {
+      val = 0;
+    }
+    return val;
+  }
 
 
 
@@ -216,13 +326,8 @@ class PowerGraph {
     this.drawUsageGraph(svg, width, height / 2);
     this.drawXAxis(svg, width, height);
     this.drawSoc(svg, width, height / 2);
-    svg.append("text")
-      .attr("x", width+this.margin.right)
-      .attr("y", height + this.margin.top)
-      .attr("text-anchor", "end")
-      .attr("font-size", 12)
-      .attr("fill", this.axiscolor)
-      .text("Kürzlich")
+
+
   }
 
   drawSourceGraph(svg, width, height) {
@@ -452,19 +557,38 @@ class PowerGraph {
   }
 }
 
-function switchGraph() {
+function shiftLeft() {
   if (wbdata.showLiveGraph) {
     wbdata.showLiveGraph = false;
-    powerGraph.deactivate();
-    dayGraph.activate();
+    powerGraph.deactivateLive();
+    powerGraph.activateDay();
     wbdata.prefs.showLG = false;
     wbdata.persistGraphPreferences();
-} else {
-  wbdata.showLiveGraph = true;
-  dayGraph.deactivate();
-  powerGraph.activate();
-    wbdata.prefs.showLG = true;
-    wbdata.persistGraphPreferences();
+    d3.select("button#graphRightButton").classed("disabled", false)
+
+  } else {
+    powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() - 86400000);
+    powerGraph.activateDay();
+  }
+}
+function shiftRight() {
+  today = new Date();
+  d = powerGraph.graphDate;
+  if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()) {
+
+
+    if (!wbdata.showLiveGraph) {
+      wbdata.showLiveGraph = true;
+      powerGraph.deactivateDay();
+      powerGraph.activateLive();
+      wbdata.prefs.showLG = true;
+      wbdata.persistGraphPreferences();
+      d3.select("button#graphLeftButton").classed("disabled", false)
+      d3.select("button#graphRightButton").classed("disabled", true)
+    }
+  } else {
+    powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() + 86400000);
+    powerGraph.activateDay();
   }
 }
 
