@@ -121,9 +121,9 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 			elif (( $(($(<$socFile))) == 0 )); then
 				echo $(<$peugeotSocFile) > $socFile
 				echo $(<$peugeotSocFile) > $manualSocFile
-				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but nevertheless using it, because SoC was 0."
+				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% and using it as previous SoC was 0."
 			else
-				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but skipping it, because it is older than known SoC."
+				socLog "Fetched from myPeugeot: $(<$peugeotSocFile)% but skipping as not newer than current known SoC."
 			fi
 		fi
 	# if charging is active calculate SoC manually
