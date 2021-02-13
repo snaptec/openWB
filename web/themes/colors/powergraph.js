@@ -9,12 +9,12 @@ class PowerGraph {
     this.initialized = false;
     this.colors = [];
     this.gridColors = [];
-    this.bgcolor="";
+    this.bgcolor = "";
     this.axiscolor = "";
-    this.chargeColor="";
-    this.lp1color="";
-    this.lp2color="";
-    this.batteryColor="";
+    this.chargeColor = "";
+    this.lp1color = "";
+    this.lp2color = "";
+    this.batteryColor = "";
     this.graphRefreshCounter = 0;
     this.width = 500;
     this.height = 500;
@@ -36,10 +36,6 @@ class PowerGraph {
     this.lp1color = style.getPropertyValue('--color-lp1');
     this.lp2color = style.getPropertyValue('--color-lp2');
     this.batteryColor = style.getPropertyValue('--color-battery');
-
-
-
-
     var i;
     for (i = 0; i < 8; i++) {
       this.colors[i] = wbdata.chargePoint[i].color;
@@ -53,22 +49,43 @@ class PowerGraph {
     this.svg = figure.append("svg")
       .attr("viewBox", `0 0 500 500`);
 
+    d3.select("button#graphModeButton")
+      .on("click", switchGraph)
+  }
+
+  activate() {
+    try {
+      this.reset();
+      subscribeMqttGraphSegments();
+      subscribeGraphUpdates();
+    } catch (err) {
+      // on initial invocation this method is not existing
+    }
+    d3.select("figure#powergraph").classed("hide", false);
+  }
+  
+  deactivate() {
+    d3.select("figure#powergraph").classed("hide",true);
+    try {
+      unsubscribeMqttGraphSegments();
+      unsubscribeGraphUpdates();
+    } catch (err) {
+      // on intial run this method is not existing
+    }
   }
 
   update(topic, payload) {
-
     if (this.initialized) { // steady state
 
       if (topic === "openWB/graph/lastlivevalues") {
         const values = this.extractValues(payload.toString());
         this.graphRefreshCounter++;
         this.graphData.push(values);
-        
+
         this.updateGraph();
 
         if (this.graphRefreshCounter > 60) {
-          this.initialized = false;
-          this.initialGraphData = [];
+          this.reset();
           subscribeMqttGraphSegments();
         }
       }
@@ -95,15 +112,20 @@ class PowerGraph {
               this.graphData.push(values);
             });
           });
-
-         /*  this.graphData = this.graphData.sort((a, b) =>
-            a.date > b.date ? 1 : -1 
-          );*/
           this.updateGraph();
           unsubscribeMqttGraphSegments();
         }
       }
     }
+  }
+
+  reset() {
+    // fresh reloas of the graph
+    this.initialized = false;
+    this.initCounter = 0;
+    this.initialGraphData = [];
+    this.graphData = [];
+    this.graphRefreshCounter = 0;
   }
 
   extractValues(payload) {
@@ -141,7 +163,7 @@ class PowerGraph {
     }
     values.soc1 = +elements[9];
     values.soc2 = +elements[10];
-    
+
     // smart home
     for (i = 0; i < 8; i++) {
       values["sh" + i] = +elements[20 + i];
@@ -161,7 +183,7 @@ class PowerGraph {
       values.batOut = 0;
     };
     values.batterySoc = +elements[8];
-    
+
     return values;
   }
 
@@ -194,6 +216,13 @@ class PowerGraph {
     this.drawUsageGraph(svg, width, height / 2);
     this.drawXAxis(svg, width, height);
     this.drawSoc(svg, width, height / 2);
+    svg.append("text")
+      .attr("x", width+this.margin.right)
+      .attr("y", height + this.margin.top)
+      .attr("text-anchor", "end")
+      .attr("font-size", 12)
+      .attr("fill", this.axiscolor)
+      .text("Kürzlich")
   }
 
   drawSourceGraph(svg, width, height) {
@@ -279,7 +308,7 @@ class PowerGraph {
   }
 
   drawXAxis(svg, width, height) {
-    const fontsize=12;
+    const fontsize = 12;
     const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
 
@@ -301,7 +330,7 @@ class PowerGraph {
       ;
     svg.append("text")
       .attr("x", - this.margin.left)
-      .attr("y", height/2 +5)
+      .attr("y", height / 2 + 5)
       .attr("fill", this.axiscolor)
       .attr("font-size", fontsize)
       .text("kW")
@@ -315,6 +344,16 @@ class PowerGraph {
 
     // Chargepoint 1
     if (wbdata.chargePoint[0].isSocConfigured) {
+      svg.append("path")
+        .datum(this.graphData)
+        .attr("stroke", this.bgcolor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
+        //.style("stroke-dasharray", ("3, 3"))
+        .attr("d", d3.line()
+          .x((d, i) => xScale(this.graphData[i].date))
+          .y(d => yScale(d.soc1))
+        );
       svg.append("path")
         .datum(this.graphData)
         .attr("stroke", this.lp1color)
@@ -338,6 +377,16 @@ class PowerGraph {
     if (wbdata.chargePoint[1].isSocConfigured) {
       svg.append("path")
         .datum(this.graphData)
+        .attr("stroke", this.bgcolor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
+        // .style("stroke-dasharray", ("3, 3"))
+        .attr("d", d3.line()
+          .x((d, i) => xScale(this.graphData[i].date))
+          .y(d => yScale(d.soc2))
+        );
+      svg.append("path")
+        .datum(this.graphData)
         .attr("stroke", this.lp2color)
         .attr("stroke-width", 1)
         .attr("fill", "none")
@@ -357,6 +406,16 @@ class PowerGraph {
 
     // Battery
     if (wbdata.isBatteryConfigured) {
+      svg.append("path")
+        .datum(this.graphData)
+        .attr("stroke", this.bgcolor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
+        //.style("stroke-dasharray", ("3, 3"))
+        .attr("d", d3.line()
+          .x((d, i) => xScale(this.graphData[i].date))
+          .y(d => yScale(d.batterySoc))
+        );
       svg.append("path")
         .datum(this.graphData)
         .attr("stroke", this.batteryColor)
@@ -393,6 +452,21 @@ class PowerGraph {
   }
 }
 
+function switchGraph() {
+  if (wbdata.showLiveGraph) {
+    wbdata.showLiveGraph = false;
+    powerGraph.deactivate();
+    dayGraph.activate();
+    wbdata.prefs.showLG = false;
+    wbdata.persistGraphPreferences();
+} else {
+  wbdata.showLiveGraph = true;
+  dayGraph.deactivate();
+  powerGraph.activate();
+    wbdata.prefs.showLG = true;
+    wbdata.persistGraphPreferences();
+  }
+}
 
 var powerGraph = new PowerGraph();
 

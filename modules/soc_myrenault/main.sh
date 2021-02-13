@@ -8,7 +8,8 @@ CHARGEPOINT=$1
 socDebug=$debug
 # for developement only
 socDebug=1
-
+touch $RAMDISKDIR/zoereply8lp1
+touch $RAMDISKDIR/zoereply8lp2
 case $CHARGEPOINT in
 	2)
 		# second charge point

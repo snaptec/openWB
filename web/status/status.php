@@ -29,7 +29,7 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="status/status_style.css">
+		<link rel="stylesheet" type="text/css" href="status/status_style.css?ver=20210209">
 		<!-- local css due to async loading of theme css -->
 		<style>
 			#preloader {
@@ -77,6 +77,10 @@
 				return '';
 			}
 			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210209">');
+			}
 		</script>
 
 		<script>
@@ -353,10 +357,6 @@
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
-									<tr id="faultStrPvRow" class="hide">
-										<th scope="row">Störungsbeschreibung</th>
-										<td id="faultStrPv"></td>
-									</tr>
 									<tr id="pvCounterRow">
 										<th scope="row">Counter</th>
 										<td><div id="pvcounterdiv">--</div></td>
@@ -403,25 +403,29 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<tr class="leistungPvRow">
+										<tr id="faultStrPvRow" class="hide">
+											<th scope="row">Störungsbeschreibung</th>
+											<td id="faultStrPv"></td>
+										</tr>
+										<tr>
 											<th scope="row">Leistung [W]</th>
-											<td class="pvwattdiv">--</td>
+											<td class="powerInverter">--</td>
 										</tr>
-										<tr class="gesamtertragPvRow">
+										<tr>
 											<th scope="row">Gesamtertrag [kWh]</th>
-											<td><div class="pvkwhdiv">--</div></td>
+											<td><div class="yieldInverter">--</div></td>
 										</tr>
-										<tr class="tagesertragPvRow">
+										<tr class="hide">
 											<th scope="row">Tagesertrag [kWh]</th>
-											<td><div class="daily_pvkwhdiv">--</div></td>
+											<td><div class="dYieldInverter">--</div></td>
 										</tr>
-										<tr class="monatsertragPvRow">
+										<tr class="hide">
 											<th scope="row">Monatsertrag [kWh]</th>
-											<td><div class="monthly_pvkwhdiv">--</div></td>
+											<td><div class="mYieldInverter">--</div></td>
 										</tr>
-										<tr class="jahresertragPvRow">
+										<tr class="hide">
 											<th scope="row">Jahresertrag [kWh]</th>
-											<td><div class="yearly_pvkwhdiv">--</div></td>
+											<td><div class="yYieldInverter">--</div></td>
 										</tr>
 									</tbody>
 								</table>
@@ -626,9 +630,9 @@
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'status/processAllMqttMsg.js?ver=20210128',
+					'status/processAllMqttMsg.js?ver=20210209',
 					// functions performing mqtt and start mqtt-service
-					'status/setupMqttServices.js?ver=20210128',
+					'status/setupMqttServices.js?ver=20210209',
 				];
 				scriptsToLoad.forEach(function(src) {
 					var script = document.createElement('script');

@@ -6,7 +6,9 @@ initRamdisk(){
 	echo "Initializing Ramdisk $RamdiskPath"
 
 	# Logfiles erstellen
-	ln -s /var/log/openWB.log $RamdiskPath/openWB.log
+	if [[ ! -L $RamdiskPath/openWB.log ]]; then
+		ln -s /var/log/openWB.log $RamdiskPath/openWB.log
+	fi
 	echo "**** REBOOT ****" >> $RamdiskPath/mqtt.log
 	echo "**** REBOOT ****" >> $RamdiskPath/ladestatus.log
 	echo "**** REBOOT ****" >> $RamdiskPath/soc.log
@@ -209,6 +211,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/smarthome_device_manual_7
 	echo 0 > $RamdiskPath/smarthome_device_manual_8
 	echo 0 > $RamdiskPath/smarthome_device_manual_9
+	echo 0 > $RamdiskPath/smarthomehandlermaxbatterypower
+	echo 0 > $RamdiskPath/smarthomehandlerloglevel
 
 	# evu
 	echo 0 > $RamdiskPath/bezuga1
@@ -253,7 +257,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/pvkwhk
 	echo 0 > $RamdiskPath/pvkwhk1
 	echo 0 > $RamdiskPath/pvkwhk2
-	echo 0 > $RamdiskPath/pvvorhanden
+	echo 0 > $RamdiskPath/pv1vorhanden
+	echo 0 > $RamdiskPath/pv2vorhanden
 	echo 0 > $RamdiskPath/pvwatt
 	echo 0 > $RamdiskPath/pvwatt1
 	echo 0 > $RamdiskPath/pvwatt2
@@ -285,7 +290,8 @@ initRamdisk(){
 	echo -1 > $RamdiskPath/mqttlastladestatus
 	echo -1 > $RamdiskPath/mqttlastplugstat
 	echo -1 > $RamdiskPath/mqttlastplugstats1
-	echo -1 > $RamdiskPath/mqttpvvorhanden
+	echo -1 > $RamdiskPath/mqttpv1vorhanden
+	echo -1 > $RamdiskPath/mqttpv2vorhanden
 	echo -1 > $RamdiskPath/mqttetprovidermaxprice
 	echo -1 > $RamdiskPath/mqttetproviderprice
 	echo -1 > $RamdiskPath/mqttlademkwhs1
@@ -574,7 +580,14 @@ initRamdisk(){
 		fi
 	done
 
-	sudo chmod 777 $RamdiskPath/*
+	# read values from mosquitto and store them to ramdisk for smarthomehandler.py
+	ra='^-?[0-9]+$'
+	importtemp=$(timeout 1 mosquitto_sub -t openWB/config/get/SmartHome/maxBatteryPower)
+	if ! [[ $importtemp =~ $ra ]] ; then
+		importtemp="0"
+	fi
+	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 
+	sudo chmod 777 $RamdiskPath/*
 	echo "Ramdisk init done."
 }

@@ -768,6 +768,15 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
+										<label for="soc_tesla_mfapasscode" class="col-md-4 col-form-label">MFA-PassCode</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_tesla_mfapasscode" id="soc_tesla_mfapasscode" value="<?php echo $soc_tesla_mfapasscodeold ?>">
+											<span class="form-text small">
+												Optionaler PassCode für eine aktivierte 2-Faktor-Anmeldung. Der PassCode wird nur benötigt, wenn noch keine Token vorhanden sind. Nach erfolgreicher Anmeldung wid der PassCode entfernt.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soc_tesla_carnumber" class="col-md-4 col-form-label">Auto im Account</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_tesla_carnumber" id="soc_tesla_carnumber" value="<?php echo $soc_tesla_carnumberold ?>">
@@ -1201,7 +1210,7 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
 										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
@@ -2271,6 +2280,15 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
+										<label for="soc_teslalp2_mfapasscode" class="col-md-4 col-form-label">MFA-PassCode</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_teslalp2_mfapasscode" id="soc_teslalp2_mfapasscode" value="<?php echo $soc_teslalp2_mfapasscodeold ?>">
+											<span class="form-text small">
+												Optionaler PassCode für eine aktivierte 2-Faktor-Anmeldung. Der PassCode wird nur benötigt, wenn noch keine Token vorhanden sind. Nach erfolgreicher Anmeldung wid der PassCode entfernt.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soc_teslalp2_carnumber" class="col-md-4 col-form-label">Auto im Account</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_teslalp2_carnumber" id="soc_teslalp2_carnumber" value="<?php echo $soc_teslalp2_carnumberold ?>">
@@ -2561,6 +2579,11 @@
 							</div>
 							<div id="socmypeugeotlp2" class="hide">
 								<div class="form-group">
+									<div class="card-text alert alert-info">
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
@@ -2649,6 +2672,11 @@
 							</div>
 							<div id="socmyopellp2" class="hide">
 								<div class="form-group">
+									<div class="card-text alert alert-info">
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">

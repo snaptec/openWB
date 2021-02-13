@@ -67,4 +67,7 @@ else
   socDebugLog "Requesting SoC"
   echo 0 > $soctimerfile
   $MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$LOGFILE
+  ret=$?
+  socDebugLog "Py Return: ${ret}"
+  openwbModulePublishState "EVSOC" "${ret}" "Code: ${ret}" "$CHARGEPOINT"
 fi

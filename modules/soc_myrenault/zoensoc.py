@@ -21,7 +21,7 @@ country=str(sys.argv[4])
 vin=str(sys.argv[5])
 
 #print(time_string, ' start ', loginID)
-#
+# 
 reg='https://renault-wrd-prod-1-euw1-myrapp-one.s3-eu-west-1.amazonaws.com/configuration/android/config_' + location + '.json'
 #print ('c1',reg)
 f = open('/var/www/html/openWB/ramdisk/zoereq1lp'+chargepoint, 'w')
@@ -36,9 +36,10 @@ android_config = json.loads(responsetext)
 gigyarooturl = android_config['servers']['gigyaProd']['target'] 
 gigyaapikey = android_config['servers']['gigyaProd']['apikey'] 
 kamereonrooturl = android_config['servers']['wiredProd']['target']
-kamereonapikey = android_config['servers']['wiredProd']['apikey']
+#kamereonapikey = android_config['servers']['wiredProd']['apikey']
+kamereonapikey = 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2'
 #print(time_string, 'gigyarooturl',gigyarooturl,gigyaapikey,kamereonrooturl,kamereonapikey)
-#
+# accounts.login
 payload = {'loginID': loginID, 'password': password, 'apiKey': gigyaapikey} 
 data = urllib.urlencode(payload) 
 data = data.encode('Big5') 
@@ -55,8 +56,8 @@ f.close()
 gigya_session = json.loads(responsetext)
 gigyacookievalue = gigya_session['sessionInfo']['cookieValue']
 #print(time_string,'gigyacookievalue',gigyacookievalue)
-#
-payload = {'oauth_token': gigyacookievalue} 
+# accounts.getAccountInfo
+payload = {'login_token': gigyacookievalue , 'apiKey': gigyaapikey } 
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
 reg= gigyarooturl + '/accounts.getAccountInfo?' + data
@@ -72,7 +73,8 @@ f.close()
 gigya_account = json.loads(responsetext)
 kamereonpersonid = gigya_account['data']['personId']
 #print(time_string,'kamereonpersonid',kamereonpersonid)
-payload = {'oauth_token': gigyacookievalue, 'fields': 'data.personId,data.gigyaDataCenter', 'expiration': 900} 
+# accounts.getJWT
+payload = {'login_token': gigyacookievalue, 'apiKey': gigyaapikey, 'fields': 'data.personId,data.gigyaDataCenter', 'expiration': 900} 
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
 reg= gigyarooturl + '/accounts.getJWT?' + data
@@ -88,7 +90,7 @@ f.close()
 gigya_jwt = json.loads(responsetext)
 gigya_jwttoken= gigya_jwt['id_token']
 #print(time_string,'gigya_jwttoken',gigya_jwttoken)
-#
+# commerce/v1/persons
 payload = {'country': country} 
 headers = {'x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
 data = urllib.urlencode(payload) 
@@ -122,7 +124,7 @@ kamereonaccountid = kamereon_per['accounts'][0]['accountId']
 #kamereon_token = json.loads(responsetext)
 #kamereonaccesstoken = kamereon_token['accessToken']
 #print(time_string,'kamereonaccesstoken',kamereonaccesstoken)
-#
+# vehicles
 payload = {'country': country} 
 headers = {'x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
 data = urllib.urlencode(payload) 
@@ -140,7 +142,7 @@ f.close()
 if len(vin) < 10:
     vin = vehic['vehicleLinks'][0]['vin']
 #print(vin)
-#
+# battery-status
 payload = {'country': country} 
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
