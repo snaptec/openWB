@@ -187,7 +187,7 @@ def get_updated_pricelist():
         response = readAPI(tibber_token, home_id)
     except:
         return False, 'Fataler Fehler bei API-Abfrage'
-    write_log_entry('Antwort der Abfrage erhalten', 2)
+    write_log_entry('Antwort auf Abfrage erhalten', 2)
     # sind sonstige-Fehler aufgetreten?
     try:
         response.raise_for_status()
@@ -298,7 +298,7 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
             write_log_entry('Versuche, weitere Preise abzufragen', 1)
             read_price_successfull, error_msg = get_updated_pricelist()
             if read_price_successfull:
-                write_log_entry('Abfrage weiterer Preise erfolgreich', 2)
+                write_log_entry('Abfrage der Preise erfolgreich', 2)
                 write_log_entry('Publiziere Preisliste', 1)
                 publish_price_data()
                 exit()
