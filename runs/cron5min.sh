@@ -70,7 +70,7 @@ echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speic
 
 # grid protection
 # temporary disabled
-netzabschaltunghz=0
+# netzabschaltunghz=0
 if (( netzabschaltunghz == 1 )); then
 	hz=$(<$RAMDISKDIR/llhz)
 	hz=$(echo "$hz * 100" | bc | sed 's/\..*$//')
@@ -87,6 +87,7 @@ if (( netzabschaltunghz == 1 )); then
 				echo 3 > $RAMDISKDIR/lademodus
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
+				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
 			fi
 			if (( hz < 4920 )); then
 				# grid power underload detected
@@ -95,6 +96,7 @@ if (( netzabschaltunghz == 1 )); then
 				echo $lademodus > $RAMDISKDIR/templademodus
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
+				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
 				# wait a random interval and set charge mode to stop
 				(sleep $(shuf -i1-90 -n1) && echo 3 > $RAMDISKDIR/lademodus) &
 			fi
@@ -108,6 +110,7 @@ if (( netzabschaltunghz == 1 )); then
 			echo $templademodus > $RAMDISKDIR/lademodus
 			# remove grid protection
 			echo 0 > $RAMDISKDIR/netzschutz
+			echo "Netzfrequenz wieder im normalen Bereich." > $RAMDISKDIR/lastregelungaktiv
 		fi
 	fi
 fi

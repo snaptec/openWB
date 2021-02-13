@@ -22,7 +22,7 @@ if [ "${solarview_port}" ]; then
 fi
 
 log() {
-  echo "[wr_solarview] $*" >>"$target/openwb.log"
+  echo "[wr_solarview] $*" >>"$target/openWB.log"
 }
 
 request() {

@@ -11,4 +11,4 @@ fi
 # abort if we try to use unset variables
 set -o nounset
 
-sudo python3 /var/www/html/openWB/modules/et_tibber/tibbergetprices.py $tibbertoken $tibberhomeid
+sudo python3 /var/www/html/openWB/modules/et_tibber/tibbergetprices.py $tibbertoken $tibberhomeid $debug

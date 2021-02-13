@@ -363,7 +363,7 @@
 							<div class="form-row mb-1">
 								<label for="wrjsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>">
+									<input class="form-control" type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo htmlspecialchars($wrjsonkwhold) ?>">
 									<span class="form-text small">
 										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
@@ -962,11 +962,10 @@
 
 				<div class="row justify-content-center">
 					<div class="col-3 text-center">
-						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
 						<button class="btn btn-success" type="submit" id="saveBtn">Speichern</button>
 					</div>
 					<div class="col-1 wizzard hide">
-						&nbsp;
+						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
 					</div>
 					<div class="col-3 text-center wizzard hide">
 						<button class="btn btn-danger" id="abortWizzardBtn" type="button">Assistent beenden</button>

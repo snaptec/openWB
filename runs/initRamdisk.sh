@@ -6,7 +6,9 @@ initRamdisk(){
 	echo "Initializing Ramdisk $RamdiskPath"
 
 	# Logfiles erstellen
-	ln -s /var/log/openWB.log $RamdiskPath/openWB.log
+	if [[ ! -L $RamdiskPath/openWB.log ]]; then
+		ln -s /var/log/openWB.log $RamdiskPath/openWB.log
+	fi
 	echo "**** REBOOT ****" >> $RamdiskPath/mqtt.log
 	echo "**** REBOOT ****" >> $RamdiskPath/ladestatus.log
 	echo "**** REBOOT ****" >> $RamdiskPath/soc.log
@@ -578,14 +580,14 @@ initRamdisk(){
 		fi
 	done
 
-	sudo chmod 777 $RamdiskPath/*
-
 	# read values from mosquitto and store them to ramdisk for smarthomehandler.py
-  ra='^-?[0-9]+$'
-  importtemp=$(timeout 4 mosquitto_sub -t openWB/config/get/SmartHome/maxBatteryPower)
+	ra='^-?[0-9]+$'
+	importtemp=$(timeout 1 mosquitto_sub -t openWB/config/get/SmartHome/maxBatteryPower)
 	if ! [[ $importtemp =~ $ra ]] ; then
 		importtemp="0"
-  fi
-  echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
+	fi
+	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
+
+	sudo chmod 777 $RamdiskPath/*
 	echo "Ramdisk init done."
 }

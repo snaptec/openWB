@@ -10,7 +10,7 @@ import codecs
 import binascii
 import urllib.request
 
-def totalPowerFromShellyJson(json):
+def totalPowerFromShellyJson(answer):
     if 'meters' in answer:
         meters = answer['meters'] # shelly
     else:

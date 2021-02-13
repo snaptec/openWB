@@ -9,8 +9,8 @@
 #
 # setzt aktuellen Strompreis auf 99.99ct/kWh, wenn nichts empfangen wird
 #
-# benötigt als Parameter die Landeskennung (at/de) und den
-# individuellen Basispreis (kann auch 0 sein) des Anschlusses
+# benötigt als Parameter die Landeskennung (at/de), den individuellen Basispreis
+# des Anschlusses (kann auch 0 sein) und das Debug-Level
 #
 # Preisliste in UTC und ct/kWh
 #
@@ -26,6 +26,11 @@ from time import sleep
 from datetime import datetime, timezone, timedelta
 import requests
 
+readPriceSuccessfull = False
+preise_ok = False
+preisliste = []
+landeskennung = ''
+basispreis = ''
 laenderdaten = {
     'at': {
         'url': 'https://api.awattar.at/v1/marketdata',
@@ -111,6 +116,8 @@ def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=
             tries = list(range(max_tries))
             tries.reverse()
             for tries_remaining in tries:
+                if debugLevel > 0:
+                    write_log_entry("Abfrage aWATTar-API")
                 try:
                     return func(*args, **kwargs)
                 except exceptions as e:
@@ -121,7 +128,7 @@ def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=
                         sleep(mydelay)
                         mydelay = mydelay * backoff
                     else:
-                        exit_on_invalid_price_data('Kein aktueller Preis erkannt')
+                        raise
                 else:
                     break
         return f2
@@ -136,40 +143,44 @@ def readAPI(url):
 # Hauptprogramm
 
 # übergebene Paremeter auslesen
-argumentsOK = False
-if len(sys.argv) == 3:
+if len(sys.argv) == 4:
     landeskennung = str(sys.argv[1])
     basispreis = str(sys.argv[2])
+    debugLevel = int(sys.argv[3])
     if landeskennung in laenderdaten:
         try:
             basispreis = float(basispreis)
-            argumentsOK = True
         except ValueError:
-            write_log_entry('Basispreis fehlerhaft')
+            exit_on_invalid_price_data('Basispreis fehlerhaft')
     else:
-        write_log_entry('unbekannte Landeskennung')
+        exit_on_invalid_price_data('Landeskennung unbekannt')
+else:
+    exit_on_invalid_price_data('Argumente fehlen')
 
-if  not argumentsOK:
-    # Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
-    exit_on_invalid_price_data('Argumente fehlen oder sind fehlerhaft')
-
-readPriceSuccessfull = False
-# API abfragen
+# Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
+# API abfragen, retry bei Timeout
 try:
     response = readAPI(laenderdaten[landeskennung]['url'])
+except:
+    exit_on_invalid_price_data('Fataler Fehler bei API-Abfrage')
+
+# sind sonstige-Fehler aufgetreten?
+try:
     response.raise_for_status()
-except requests.exceptions.HTTPError as errh:
-    exit_on_invalid_price_data('Http Error: ' + str(errh))
-except requests.exceptions.ConnectionError as errc:
-    exit_on_invalid_price_data('Error Connecting:' + str(errc))
-except requests.exceptions.RequestException as err:
-    exit_on_invalid_price_data('OOps: sonstiger Fehler:' + str(err))
+except Exception as e:
+    exit_on_invalid_price_data(str(e))
 
 # Bei Erfolg JSON auswerten
+if debugLevel > 0:
+    write_log_entry("Keine Fehlermeldung in aWATTar-Antwort, lese JSON")
+
 try:
     marketprices = json.loads(response.text)['data']
 except:
     exit_on_invalid_price_data('Korruptes JSON')
+
+if debugLevel > 0:
+    write_log_entry("aWATTar-Preisliste extrahiert")
 
 # Liste sortiert nach Zeitstempel
 sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
@@ -177,13 +188,13 @@ sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
 # alle Zeiten in UTC verarbeiten
 now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
 now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-preisliste = []
-preise_ok = False
 for price_data in sorted_marketprices:
     startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
     startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # Objekt von naive nach timezone-aware, hier UTC
     if (startzeit_utc >= now_full_hour):
         if (startzeit_utc == now_full_hour):
+            if debugLevel > 0:
+                write_log_entry("Aktueller Preis wurde gelesen")
             preise_ok = True
         if (landeskennung == 'de'):
             # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis

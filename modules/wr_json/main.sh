@@ -5,7 +5,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 MODULE="PV"
 #LOGFILE="$RAMDISKDIR/pv_wr.log"
-LOGFILE="$RAMDISKDIR/openwb.log"
+LOGFILE="$RAMDISKDIR/openWB.log"
 Debug=$debug
 myPid=$$
 
@@ -33,6 +33,12 @@ pvwatt=$(echo $answer | jq -r "$wrjsonwatt" | sed 's/\..*$//')
 DebugLog "PVWatt: ${pvwatt}"
 echo ${pvwatt}
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-pvkwh=$(echo $answer | jq -r "$wrjsonkwh")
-DebugLog "PVkWh: ${pvkwh}"
+
+if [ ! -z "$wrjsonkwh" ]; then
+    pvkwh=$(echo $answer | jq -r "$wrjsonkwh")
+    DebugLog "PVkWh: ${pvkwh}"
+else
+    pvkwh=0
+    DebugLog "PVkWh: ${pvkwh}"
+fi
 echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
