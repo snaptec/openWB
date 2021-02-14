@@ -41,13 +41,14 @@ tibber_pricelist = []  # neue Liste
 tibber_pricelist_old = []  #  vorhandene Liste
 pricelist_provider_old = ''  # für vorhandene Liste veranwtortliches Modul
 prices_ok = False
+module_starttime = datetime.now()
 
 # Hilfsfunktionen
 
 def publish_price_data():
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
-        pricelist_file.write('%s\n' % (pricelist_provider))  # erster Eintrag ist für Preisliste verantwortliches Modul
+        pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
         # Preisliste durchlaufen und in ramdisk
         for index, price_data in enumerate(tibber_pricelist):
             pricelist_file.write('%s, %s\n' % (price_data[0], price_data[1]))  # Timestamp, Preis
@@ -57,6 +58,9 @@ def publish_price_data():
     #publish MQTT-Daten für Preis und Graph
     os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
+    module_runtime = datetime.now() - module_starttime
+    module_runtime = module_runtime.total_seconds()
+    write_log_entry('Modullaufzeit ' + str(module_runtime) + ' s', 1)
 
 def write_log_entry(message, min_debug_level):
     # schreibt Eintrag ins Log wenn der mindest debug_level >= der übergebene ist
@@ -73,7 +77,7 @@ def exit_on_invalid_price_data(error):
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
         current_price_file.write('99.99\n')
-        pricelist_file.write('%s\n' % (pricelist_provider))  # erster Eintrag ist für Preisliste verantwortliches Modul
+        pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         timestamp = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
         for i in range(9):
@@ -286,12 +290,9 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
     tibber_pricelist_old = cleanup_pricelist(tibber_pricelist_old)
     write_log_entry('Bisherige openWB-Strom-Preisliste bereinigt', 2)
 
-    tibber_pricelist_old = tibber_pricelist_old[:3]
-
     if len(tibber_pricelist_old) > 0:
         # mindestens der aktuelle Preis ist in der Liste
         write_log_entry('Bisherige openWB-Strom-Preisliste hat %d Eintraege' % len(tibber_pricelist_old), 2)
-        print(tibber_pricelist_old)
         if len(tibber_pricelist_old) < 11:
             # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
             # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
@@ -304,13 +305,19 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
                 exit()
             else:
                 write_log_entry('Abfrage weiterer Preise nicht erfolgreich', 1)
+        else:
+            write_log_entry('Ausreichend zukuenftige Preise in bisheriger openWB-Strom-Preisliste', 2)
         # bisherige Liste hat ausreichend Preise für die Zukunft bzw.
         # mindestens den aktuellen Preis und Fehler bei der API-Abfrage
         tibber_pricelist = tibber_pricelist_old  # neue Liste ist bereinigte bisherige
-        write_log_entry('Verwende Preise aus bisheriger openWB-Strom-Preisliste', 1)
+        write_log_entry('Verwende Preise aus bereinigter bisheriger openWB-Strom-Preisliste', 1)
         write_log_entry('Publiziere Preisliste', 1)
         publish_price_data()
         exit()
+
+if pricelist_provider != pricelist_provider_old:
+    write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % pricelist_provider_old, 1)
+    write_log_entry('Wechsel auf Modul %s' % pricelist_provider, 1)
 
 # bisherige Preisliste leer, oder neuer Provider: in jedem Fall neue Abfrage und
 # bei andauerndem Fehler Preis auf 99.99ct/kWh setzen
