@@ -160,11 +160,14 @@ class PowerMeter {
       .cornerRadius(this.cornerRadius);
 
     // Add the chart to the svg
+    const arcCount = Object.values(wbdata.sourceSummary).length;
+    
     svg.selectAll("sources")
-      .data(pieGenerator(Object.values (wbdata.sourceSummary).concat ([{"power": this.emptyPower, "color": "black"}]))).enter()
+      .data(pieGenerator(Object.values (wbdata.sourceSummary).concat ([{"power": this.emptyPower, "color": this.bgColor}]))).enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d) => d.data.color);
+      .attr("fill", (d) => d.data.color)
+      .attr("stroke", (d,i) => (i==arcCount) ? this.axisColor : "null");
   }
 
   drawUsageArc(svg) {
@@ -183,11 +186,13 @@ class PowerMeter {
       .cornerRadius(this.cornerRadius);
 
     // Add the chart to the svg
+    const arcCount = wbdata.usageSummary.length;
     svg.selectAll("consumers")
-      .data(pieGenerator(wbdata.usageSummary.concat ([{"power": this.emptyPower, "color": "black"}]))).enter()
+      .data(pieGenerator(wbdata.usageSummary.concat ([{"power": this.emptyPower, "color": this.bgColor}]))).enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d) => d.data.color);
+      .attr("fill", (d) => d.data.color)
+      .attr("stroke", (d,i) => (i==arcCount) ? this.axisColor : "null");
   }
 
   addLabel(svg, x, y, anchor, data) {
