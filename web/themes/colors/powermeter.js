@@ -167,7 +167,7 @@ class PowerMeter {
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color)
-      .attr("stroke", (d,i) => (i==arcCount) ? this.axisColor : "null");
+      .attr("stroke", (d,i) => (i==arcCount && d.data.power > 0) ? this.axisColor : "null");
   }
 
   drawUsageArc(svg) {
@@ -192,7 +192,7 @@ class PowerMeter {
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color)
-      .attr("stroke", (d,i) => (i==arcCount) ? this.axisColor : "null");
+      .attr("stroke", (d,i) => (i==arcCount && d.data.power > 0) ? this.axisColor : "null");
   }
 
   addLabel(svg, x, y, anchor, data) {
