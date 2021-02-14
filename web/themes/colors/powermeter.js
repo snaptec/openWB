@@ -14,7 +14,7 @@ class PowerMeter {
     this.circleGapSize = (Math.PI / 40);
     this.maxPower = 4000;
     this.showRelativeArcs = false;
-    this.displayRatio = 1;
+    this.emptyPower = 0;
   }
 
   // public method to initialize
@@ -150,7 +150,7 @@ class PowerMeter {
     const pieGenerator = d3.pie()
       .value((record) => Number(record.power))
       .startAngle(-Math.PI / 2 + this.circleGapSize)
-      .endAngle(Math.PI / 2 - this.circleGapSize - Math.PI * (1-this.displayRatio))
+      .endAngle(Math.PI / 2 - this.circleGapSize)
       .sort(null);
 
     // Generator for the pie chart
@@ -161,7 +161,7 @@ class PowerMeter {
 
     // Add the chart to the svg
     svg.selectAll("sources")
-      .data(pieGenerator(Object.values (wbdata.sourceSummary))).enter()
+      .data(pieGenerator(Object.values (wbdata.sourceSummary).concat ([{"power": this.emptyPower, "color": "black"}]))).enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color);
@@ -173,7 +173,7 @@ class PowerMeter {
     const pieGenerator = d3.pie()
       .value((record) => Number(record.power))
       .startAngle(Math.PI * 1.5 - this.circleGapSize)
-      .endAngle(Math.PI / 2 + this.circleGapSize + Math.PI * (1-this.displayRatio))
+      .endAngle(Math.PI / 2 + this.circleGapSize )
       .sort(null);
 
     // Generator for the pie chart
@@ -184,7 +184,7 @@ class PowerMeter {
 
     // Add the chart to the svg
     svg.selectAll("consumers")
-      .data(pieGenerator(wbdata.usageSummary)).enter()
+      .data(pieGenerator(wbdata.usageSummary.concat ([{"power": this.emptyPower, "color": "black"}]))).enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color);
@@ -226,20 +226,21 @@ class PowerMeter {
   updateDisplayRatio() {
     if (this.showRelativeArcs) {
       this.displayRatio = (+wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power) / this.maxPower;
-      if (this.displayRatio > 1) {
+      this.emptyPower = this.maxPower - (+wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power);
+      if (this.emptyPower < 0) {
         this.maxPower = +wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power;
-        this.displayRatio = 1;
+        this.emptyPower = 0;
         wbdata.prefs.maxPow = this.maxPower;
         wbdata.persistGraphPreferences();
       }
     } else {
-      this.displayRatio = 1;
+      this.emptyPower = 0;
     }
   }
 
   resetDisplayRatio() {
     this.maxPower = +wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power;
-    this.displayRatio = 1;
+    this.emptyPower = 0;
     wbdata.prefs.maxPow = this.maxPower;
     wbdata.persistGraphPreferences(); 
   }

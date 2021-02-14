@@ -151,6 +151,7 @@ class PowerGraph {
       }
       if (this.initCounter == 12) {// Initialization complete
         unsubscribeDayGraph();
+        
         this.initCounter = 0;
         this.staging.map(segment =>
           segment.map(line => this.rawData.push(line))
@@ -326,8 +327,6 @@ class PowerGraph {
     this.drawUsageGraph(svg, width, height / 2);
     this.drawXAxis(svg, width, height);
     this.drawSoc(svg, width, height / 2);
-
-
   }
 
   drawSourceGraph(svg, width, height) {
@@ -446,7 +445,6 @@ class PowerGraph {
     const yScale = d3.scaleLinear().range([height - 10, 0]);
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
     yScale.domain([0, 100]);
-
     // Chargepoint 1
     if (wbdata.chargePoint[0].isSocConfigured) {
       svg.append("path")
@@ -469,7 +467,6 @@ class PowerGraph {
           .x((d, i) => xScale(this.graphData[i].date))
           .y(d => yScale(d.soc1))
         );
-
       svg.append("text")
         .attr("x", width - this.margin.right - 3)
         .attr("y", yScale(this.graphData[this.graphData.length - 1].soc1 + 2))
@@ -508,7 +505,6 @@ class PowerGraph {
         .style("font-size", 10)
         .attr("text-anchor", "start");
     }
-
     // Battery
     if (wbdata.isBatteryConfigured) {
       svg.append("path")
@@ -539,7 +535,6 @@ class PowerGraph {
         .style("background-color", "black")
         .style("font-size", 10)
         .attr("text-anchor", "middle");
-
     }
     const socAxis = svg.append("g")
       .attr("class", "axis")
@@ -547,8 +542,7 @@ class PowerGraph {
       .call(d3.axisRight(yScale)
         .ticks(5)
         .tickFormat((d) => (d + "%")))
-
-      ;
+    ;
     socAxis.selectAll(".tick").attr("font-size", 12);
     socAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     socAxis.select(".domain")
@@ -565,7 +559,6 @@ function shiftLeft() {
     wbdata.prefs.showLG = false;
     wbdata.persistGraphPreferences();
     d3.select("button#graphRightButton").classed("disabled", false)
-
   } else {
     powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() - 86400000);
     powerGraph.activateDay();
@@ -575,8 +568,6 @@ function shiftRight() {
   today = new Date();
   d = powerGraph.graphDate;
   if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()) {
-
-
     if (!wbdata.showLiveGraph) {
       wbdata.showLiveGraph = true;
       powerGraph.deactivateDay();

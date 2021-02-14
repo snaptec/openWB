@@ -77,6 +77,12 @@ class WbData {
 			if ('showLG' in this.prefs) {
 				this.showLiveGraph = this.prefs.showLG;
 			}
+			if ('maxPow' in this.prefs) {
+				powerMeter.maxPower = +this.prefs.maxPow;
+			}
+			if ('relPM' in this.prefs) {
+				powerMeter.showRelativeArcs = this.prefs.relPM;
+			}
 		}
 		if (this.showLiveGraph) {
 			powerGraph.deactivateDay();
