@@ -35,15 +35,19 @@ tibber_token = ''
 home_id = ''
 debug_level = 0  # eingeteilt in 0=aus, 1=wenig, 3=alles
 # sonstiges
+module_starttime = datetime.now()
 pricelist_provider = 'Tibber'
 read_price_successfull = False
 tibber_pricelist = []  # neue Liste
-tibber_pricelist_old = []  #  vorhandene Liste
+pricelist_in_file = []  # vorhandene Liste
 pricelist_provider_old = ''  # für vorhandene Liste veranwtortliches Modul
 prices_ok = False
-module_starttime = datetime.now()
 
+#########################################################
+#
 # Hilfsfunktionen
+#
+#########################################################
 
 def publish_price_data():
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
@@ -257,7 +261,11 @@ def get_updated_pricelist():
         error = tibber_json['errors'][0]['message']
         return False, 'Fehler: ' + error
 
+#########################################################
+#
 # Hauptprogramm
+#
+#########################################################
 
 # übergebene Paremeter auslesen
 write_log_entry('Lese Argumente', 1)
@@ -278,7 +286,7 @@ try:
         for prices in pricelist_file:  # dann restliche Zeilen als Preise mit Timestamp lesen
             price_items = prices.split(',')
             price_items = [item.strip() for item in price_items]
-            tibber_pricelist_old.append(price_items)
+            pricelist_in_file.append(price_items)
     write_log_entry('Bisherige openWB-Strom-Preisliste gelesen', 2)
     read_price_successfull = True
 except:
@@ -287,13 +295,13 @@ except:
 if read_price_successfull and pricelist_provider == pricelist_provider_old:
     # Modul der bisherigen Liste ist mit diesem identisch, also Einträge in alter Preisliste benutzen und aufräumen
     write_log_entry('Bereinige bisherige openWB-Strom-Preisliste', 1)
-    tibber_pricelist_old = cleanup_pricelist(tibber_pricelist_old)
+    pricelist_in_file = cleanup_pricelist(pricelist_in_file)
     write_log_entry('Bisherige openWB-Strom-Preisliste bereinigt', 2)
 
-    if len(tibber_pricelist_old) > 0:
+    if len(pricelist_in_file) > 0:
         # mindestens der aktuelle Preis ist in der Liste
-        write_log_entry('Bisherige openWB-Strom-Preisliste hat %d Eintraege' % len(tibber_pricelist_old), 2)
-        if len(tibber_pricelist_old) < 11:
+        write_log_entry('Bisherige openWB-Strom-Preisliste hat %d Eintraege' % len(pricelist_in_file), 2)
+        if len(pricelist_in_file) < 11:
             # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
             # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
             write_log_entry('Versuche, weitere Preise abzufragen', 1)
@@ -309,7 +317,7 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
             write_log_entry('Ausreichend zukuenftige Preise in bisheriger openWB-Strom-Preisliste', 2)
         # bisherige Liste hat ausreichend Preise für die Zukunft bzw.
         # mindestens den aktuellen Preis und Fehler bei der API-Abfrage
-        tibber_pricelist = tibber_pricelist_old  # neue Liste ist bereinigte bisherige
+        tibber_pricelist = pricelist_in_file  # neue Liste ist bereinigte bisherige
         write_log_entry('Verwende Preise aus bereinigter bisheriger openWB-Strom-Preisliste', 1)
         write_log_entry('Publiziere Preisliste', 1)
         publish_price_data()
