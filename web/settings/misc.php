@@ -1133,26 +1133,60 @@
 					</script>
 				</div>
 
-				<!-- integriertes Display -->
+				<!-- Display intern/extern -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
+						Display (intern oder extern)
+					</div>
+					<div class="card-body">
 						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div class="col-4">integriertes Display</div>
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">integriertes Display</label>
+								</div>
 								<div class="col">
-									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-										<label class="btn btn-sm btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
 											<input type="radio" name="displayaktiv" id="displayaktivOff" value="0"<?php if($displayaktivold == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
-										<label class="btn btn-sm btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
 											<input type="radio" name="displayaktiv" id="displayaktivOn" value="1"<?php if($displayaktivold == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="card-body hide" id="displayan">
+						<div class="hide" id="displayan">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<div class="col">
+										Display Standby
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1">
+									<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
+									<div class="col">
+										<input type="number" min="5" step="5" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo $displaysleepold ?>">
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
+									</div>
+									<div class="col">
+										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 0) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenold == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 1) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenold == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row vaRow mb-1">
 								<label for="displaytheme" class="col-md-4 col-form-label">Theme des Displays</label>
@@ -1261,12 +1295,12 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col">
-									Pin-Sperre
+									PIN-Sperre
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label class="col-form-label">Pin nötig zum ändern des Lademodus</label>
+									<label class="col-form-label">Display mit PIN schützen</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
@@ -1280,38 +1314,9 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 hide" id="displaypin">
-								<label for="displaypincode" class="col-md-4 col-form-label">Pin (nur Zahlen von 1-9 erlaubt)</label>
+								<label for="displaypincode" class="col-md-4 col-form-label">PIN (4 Stellen, nur Zahlen erlaubt)</label>
 								<div class="col">
 									<input type="text" pattern="[0-9]{4}" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
-								</div>
-							</div>
-						</div>
-						<hr class="border-secondary">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<div class="col">
-									Display Standby
-								</div>
-							</div>
-							<div class="form-row vaRow mb-1">
-								<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
-								<div class="col">
-									<input type="number" min="5" step="5" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo $displaysleepold ?>">
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<div class="col-md-4">
-									<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
-								</div>
-								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 0) echo " active" ?>">
-											<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenold == 0) echo " checked=\"checked\"" ?>>Nein
-										</label>
-										<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 1) echo " active" ?>">
-											<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenold == 1) echo " checked=\"checked\"" ?>>Ja
-										</label>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -1433,6 +1438,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="form-row text-center">
 					<div class="col">
 						<button id="saveSettingsBtn" type="submit" class="btn btn-success">Speichern</button>

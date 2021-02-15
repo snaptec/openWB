@@ -71,6 +71,18 @@ function createXLabel(dateFrom, dateTo){
     var result = dateFromObj.getHours();
     if (!isNaN(dateToObj.getHours())) {
         result += " - " + dateToObj.getHours();
+    } else {
+        var theDate = new Date();  // now
+        var dateIsToday = dateFromObj.getYear() == theDate.getYear() && dateFromObj.getMonth() == theDate.getMonth() && dateFromObj.getDate() == theDate.getDate();
+        if ( !dateIsToday ) {
+            theDate.setDate(theDate.getDate() + 1);  // set date to tomorrow
+            var dateIsTomorrow = dateFromObj.getYear() == theDate.getYear() && dateFromObj.getMonth() == theDate.getMonth() && dateFromObj.getDate() == theDate.getDate();
+            if ( dateIsTomorrow ) {
+                result = 'morgen ' + result;
+            } else {
+                result = dateFromObj.getDate() + '.' + dateFromObj.getMonth() + '.' + dateFromObj.getFullYear() + ', ' + result;
+            }
+        }
     }
     result += " Uhr";
     return result;

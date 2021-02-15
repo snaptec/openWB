@@ -12,4 +12,4 @@ fi
 set -o nounset
 
 # call module with parameters: location = at or de and baseprice (only for Germany, 0 if not set)
-sudo python3 /var/www/html/openWB/modules/et_awattar/awattargetprices.py $awattarlocation 0
+sudo python3 /var/www/html/openWB/modules/et_awattar/awattargetprices.py $awattarlocation 0 $debug
