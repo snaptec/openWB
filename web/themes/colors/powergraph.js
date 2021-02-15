@@ -86,7 +86,14 @@ class PowerGraph {
         //on initial run of activate, subscribeDayGraph is not yet initialized. 
         // the error can be ignored
       }
-      d3.select("h3#graphheading").text("Leistung / Ladestand " + this.graphDate.getDate() + "." + (this.graphDate.getMonth() + 1) + ".");
+      var heading = "Leistung / Ladestand ";
+      const today = new Date();
+      if (today.getDate() == this.graphDate.getDate() && today.getMonth() == this.graphDate.getMonth() && today.getFullYear() == this.graphDate.getFullYear()) {
+        heading = heading + "heute";
+      } else {
+        heading = heading + this.graphDate.getDate() + "." + (this.graphDate.getMonth() + 1) + ".";
+      }
+      d3.select("h3#graphheading").text(heading);
     }
   }
 
