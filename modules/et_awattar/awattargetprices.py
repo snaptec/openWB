@@ -213,6 +213,7 @@ def get_updated_pricelist():
         response = readAPI(laenderdaten[landeskennung]['url'])
     except:
         return False, 'Fataler Fehler bei API-Abfrage'
+    write_log_entry('Antwort auf Abfrage erhalten', 2)
     # sind sonstige-Fehler aufgetreten?
     try:
         response.raise_for_status()
@@ -235,7 +236,7 @@ def get_updated_pricelist():
         startzeit_utc = get_utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
         if (startzeit_utc >= now_full_hour):
             if (startzeit_utc == now_full_hour):
-                write_log_entry('Aktueller Preis wurde gelesen', 1)
+                write_log_entry('Aktueller Preis wurde gefunden', 1)
                 prices_ok = True
             if (landeskennung == 'de'):
                 # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
@@ -246,7 +247,7 @@ def get_updated_pricelist():
                 bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
             pricelist_from_provider.append([str('%d' % startzeit_utc.timestamp()), bruttopreis_str])
     if (not prices_ok):
-        return False, 'Aktueller Preis nicht lesbar'
+        return False, 'Aktueller Preis wurde nicht gefunden'
     return True, ''
 
 def convert_timestamp_to_str(timestamp):
@@ -351,7 +352,6 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
                 write_log_entry('Abfrage weiterer Preise nicht erfolgreich', 1)
         else:
             write_log_entry('Ausreichend zukuenftige Preise in bisheriger Preisliste', 2)
-            write_log_entry('Bereinigte bisherige Preisliste wird verwendet', 2)
         # bisherige Liste hat ausreichend Preise für die Zukunft bzw.
         # mindestens den aktuellen Preis und Fehler bei der API-Abfrage
         if prices_count_before_cleanup - prices_count_after_cleanup > 0:

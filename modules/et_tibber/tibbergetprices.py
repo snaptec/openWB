@@ -235,13 +235,13 @@ def get_updated_pricelist():
             #Preisliste beginnt immer mit aktueller Stunde
             if (starttime_utc >= now_full_hour):
                 if (starttime_utc == now_full_hour):
-                    write_log_entry("Aktueller Preis wurde gelesen", 1)
+                    write_log_entry("Aktueller Preis wurde gefunden", 1)
                     prices_ok = True
                 bruttopreis = price_data['total'] * 100
                 bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
                 pricelist_from_provider.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
         if (not prices_ok):
-            return False, 'Aktueller Preis nicht lesbar'
+            return False, 'Aktueller Preis wurde nicht gefunden'
         write_log_entry('Preise von heute gelesen', 2)
         write_log_entry('Formatiere und analysiere Preisliste morgen', 1)
         for price_data in tomorrow_prices:
@@ -357,7 +357,6 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
                 write_log_entry('Abfrage weiterer Preise nicht erfolgreich', 1)
         else:
             write_log_entry('Ausreichend zukuenftige Preise in bisheriger Preisliste', 2)
-            write_log_entry('Bereinigte bisherige Preisliste wird verwendet', 2)
         # bisherige Liste hat ausreichend Preise für die Zukunft bzw.
         # mindestens den aktuellen Preis und Fehler bei der API-Abfrage
         if prices_count_before_cleanup - prices_count_after_cleanup > 0:
