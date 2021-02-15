@@ -29,6 +29,7 @@ import json
 from time import sleep
 from datetime import datetime, timezone, timedelta
 import requests
+import atexit
 
 # aus Parameterübergabe
 tibber_token = ''
@@ -38,7 +39,7 @@ debug_level = 0  # eingeteilt in 0=aus, 1=wenig, 3=alles
 module_starttime = datetime.now()
 pricelist_provider = 'Tibber'
 read_price_successfull = False
-tibber_pricelist = []  # neue Liste
+pricelist_from_provider = []  # neue Liste
 pricelist_in_file = []  # vorhandene Liste
 pricelist_provider_old = ''  # für vorhandene Liste veranwtortliches Modul
 prices_ok = False
@@ -49,22 +50,20 @@ prices_ok = False
 #
 #########################################################
 
-def publish_price_data():
+def publish_price_data(pricelist_to_publish):
+    # schreibt Preisliste und aktuellen Preis in Dateien und veröffentlicht die MQTT-Topics
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
         pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
         # Preisliste durchlaufen und in ramdisk
-        for index, price_data in enumerate(tibber_pricelist):
-            pricelist_file.write('%s, %s\n' % (price_data[0], price_data[1]))  # Timestamp, Preis
+        for index, price_data in enumerate(pricelist_to_publish):
+            pricelist_file.write('%s,%s\n' % (price_data[0], price_data[1]))  # Timestamp, Preis
             if (index == 0):
                 # erster Eintrag ist aktueller Preis
                 current_price_file.write('%s\n' % price_data[1])
     #publish MQTT-Daten für Preis und Graph
     os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
-    module_runtime = datetime.now() - module_starttime
-    module_runtime = module_runtime.total_seconds()
-    write_log_entry('Modullaufzeit ' + str(module_runtime) + ' s', 1)
 
 def write_log_entry(message, min_debug_level):
     # schreibt Eintrag ins Log wenn der mindest debug_level >= der übergebene ist
@@ -133,12 +132,12 @@ def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=
             tries = list(range(max_tries))
             tries.reverse()
             for tries_remaining in tries:
-                write_log_entry("Versuch Abfrage Tibber-API", 1)
+                write_log_entry('Versuch Abfrage Tibber-API', 1)
                 try:
                     return func(*args, **kwargs)
                 except exceptions as e:
                     if tries_remaining > 0:
-                        write_log_entry("Fehler bei der API-Abfrage, %d Versuche übrig, versuche erneut in %s Sekunden" % (tries_remaining, mydelay), 1)
+                        write_log_entry('Fehler bei der API-Abfrage, %d Versuche übrig, versuche erneut in %s Sekunden' % (tries_remaining, mydelay), 1)
                         if hook is not None:
                             hook(tries_remaining, e, mydelay)
                         sleep(mydelay)
@@ -159,8 +158,9 @@ def readAPI(token, id):
     return response
 
 def get_utcfromtimestamp(timestamp):
+    # erwartet timestamp Typ float
     # gibt timezone-aware Datetime-Objekt zurück in UTC
-    datetime_obj = datetime.utcfromtimestamp(float(timestamp))  # Zeitstempel von String nach Datetime-Objekt
+    datetime_obj = datetime.utcfromtimestamp(timestamp)  # Zeitstempel von String nach Datetime-Objekt
     datetime_obj = datetime_obj.replace(tzinfo=timezone.utc)  # Objekt von naive nach timezone-aware, hier UTC
     return datetime_obj
 
@@ -168,13 +168,13 @@ def cleanup_pricelist(pricelist):
     # bereinigt Preisliste, löscht Einträge die älter als aktuelle Stunde sind
     # und über morgen hinausgehen
     # wenn der erste Preis nicht für die aktuelle Stunde ist, wird leere Liste zurückgegeben
-    # prüft auf Abstand der Preise: ist dieser >1h, wird Liste ab diesem Punkt ignoriert
+    # prüft auf Abstand der Preise: ist dieser >1h, wird Liste ab diesem Punkt abgeschnitten
     if len(pricelist) > 0:
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
         starttime_utc_prev = now  # speichert in Schleife Zeitstempel des vorherigen Listeneintrags
         for index, price in enumerate(pricelist[:]):  # über Kopie der Liste iterieren, um das Original zu manipulieren
-            starttime_utc = get_utcfromtimestamp(price[0])  # Start-Zeitstempel aus Preisliste umwandeln
+            starttime_utc = get_utcfromtimestamp(float(price[0]))  # Start-Zeitstempel aus Preisliste umwandeln
             if starttime_utc < now_full_hour or starttime_utc.date() > now.date() + timedelta(days=1):
                 pricelist.remove(price)
             if index > 0:
@@ -184,13 +184,14 @@ def cleanup_pricelist(pricelist):
                     del pricelist[index:]
                     break
             starttime_utc_prev = starttime_utc
-        starttime_utc = get_utcfromtimestamp(pricelist[0][0])
+        starttime_utc = get_utcfromtimestamp(float(pricelist[0][0]))
         if starttime_utc != now_full_hour:  # erster Preis nicht der aktuelle
             return []
     return pricelist
 
 def get_updated_pricelist():
     # API abfragen, retry bei Timeout
+    # Rückgabe ist Tupel aus Boolean = Erfolg und String = Fehlermeldung
     try:
         response = readAPI(tibber_token, home_id)
     except:
@@ -238,7 +239,7 @@ def get_updated_pricelist():
                     prices_ok = True
                 bruttopreis = price_data['total'] * 100
                 bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-                tibber_pricelist.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
+                pricelist_from_provider.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
         if (not prices_ok):
             return False, 'Aktueller Preis nicht lesbar'
         write_log_entry('Preise von heute gelesen', 2)
@@ -250,7 +251,7 @@ def get_updated_pricelist():
             starttime_utc = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S%z')
             bruttopreis = price_data['total'] * 100
             bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-            tibber_pricelist.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
+            pricelist_from_provider.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
         if len(tomorrow_prices) > 0:
             write_log_entry('Preise von morgen gelesen', 2)
         else:
@@ -261,25 +262,44 @@ def get_updated_pricelist():
         error = tibber_json['errors'][0]['message']
         return False, 'Fehler: ' + error
 
+def convert_timestamp_to_str(timestamp):
+    # konvertiert timestamp in UTC zu String (in Lokalzeit) Format: 11.01., 23:00
+    datetime_obj = get_utcfromtimestamp(timestamp)
+    datetime_obj = datetime_obj.astimezone(tz=None)  # und nach lokal
+    return datetime_obj.strftime('%d.%m., %H:%M')
+
+def get_module_runtime():
+    # errechnet die Laufzeit des Moduls und schreibt Logeintrag
+    module_runtime = datetime.now() - module_starttime
+    module_runtime = module_runtime.total_seconds()
+    write_log_entry('Modullaufzeit ' + str(module_runtime) + ' s', 1)
+
 #########################################################
 #
 # Hauptprogramm
 #
 #########################################################
 
+# bei exit immer Laufzeit des Moduls bestimmen
+atexit.register(get_module_runtime)
+
 # übergebene Paremeter auslesen
-write_log_entry('Lese Argumente', 1)
+write_log_entry('Lese Parameter aus Uebergabe', 1)
 if len(sys.argv) == 4:
+    # sys.argv[0] : erstes Argument ist immer Dateiname
     tibber_token = str(sys.argv[1])
     home_id = str(sys.argv[2])
-    debug_level = int(sys.argv[3])
+    try:
+        debugLevel = int(sys.argv[3])
+    except:
+        write_log_entry('Debug-Level ist kein Integer-Wert, setze für Modul = 0', 0)
+        debugLevel = 0
 else:
-    exit_on_invalid_price_data('Argumente fehlen oder sind fehlerhaft')
-write_log_entry('Argumente OK', 2)
+    exit_on_invalid_price_data('Parameter fehlen')
+write_log_entry('Parameter OK', 2)
 
-# Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
-# bisherige Preisliste lesen
-write_log_entry('Lese bisherige openWB-Strom-Preisliste', 1)
+# Hauptprogramm nur ausführen, wenn Parameter stimmen
+write_log_entry('Lese bisherige Preisliste', 1)
 try:
     with open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'r') as pricelist_file:
         pricelist_provider_old = pricelist_file.readline().rstrip('\n')  # erste Zeile sollte für Preisliste verantwortliches Modul sein
@@ -287,40 +307,64 @@ try:
             price_items = prices.split(',')
             price_items = [item.strip() for item in price_items]
             pricelist_in_file.append(price_items)
-    write_log_entry('Bisherige openWB-Strom-Preisliste gelesen', 2)
+    write_log_entry('Bisherige Preisliste gelesen', 2)
     read_price_successfull = True
 except:
-    write_log_entry("openWB-Strom-Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
+    write_log_entry("Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
 
 if read_price_successfull and pricelist_provider == pricelist_provider_old:
     # Modul der bisherigen Liste ist mit diesem identisch, also Einträge in alter Preisliste benutzen und aufräumen
-    write_log_entry('Bereinige bisherige openWB-Strom-Preisliste', 1)
+    prices_count_before_cleanup = len(pricelist_in_file)
+    write_log_entry('Bereinige bisherige Preisliste', 1)
     pricelist_in_file = cleanup_pricelist(pricelist_in_file)
-    write_log_entry('Bisherige openWB-Strom-Preisliste bereinigt', 2)
-
-    if len(pricelist_in_file) > 0:
+    prices_count_after_cleanup = len(pricelist_in_file)
+    write_log_entry('Bisherige Preisliste bereinigt', 2)
+    prices_count_diff = prices_count_before_cleanup - prices_count_after_cleanup
+    if prices_count_diff == 0:
+        write_log_entry('Es wurde kein Preis geloescht', 2)
+    elif prices_count_diff == 1:
+        write_log_entry('Es wurde 1 Preis geloescht', 2)
+    elif prices_count_diff > 1:
+        write_log_entry('Es wurden %d Preise geloescht' % prices_count_diff, 2)
+    if prices_count_after_cleanup > 0:
         # mindestens der aktuelle Preis ist in der Liste
-        write_log_entry('Bisherige openWB-Strom-Preisliste hat %d Eintraege' % len(pricelist_in_file), 2)
-        if len(pricelist_in_file) < 11:
+        write_log_entry('Bisherige Preisliste hat noch %d Eintraege' % prices_count_after_cleanup, 2)
+        pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_in_file[-1][0]))  # timestamp von letztem Element in Liste
+        write_log_entry('Letzter Preis in bisherige Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
+        if prices_count_after_cleanup < 11:
             # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
             # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
-            write_log_entry('Versuche, weitere Preise abzufragen', 1)
+            write_log_entry('Teste auf weitere Preise von Tibber', 1)
             read_price_successfull, error_msg = get_updated_pricelist()
             if read_price_successfull:
                 write_log_entry('Abfrage der Preise erfolgreich', 2)
-                write_log_entry('Publiziere Preisliste', 1)
-                publish_price_data()
-                exit()
+                write_log_entry('Abgefragte Preisliste hat %d Eintraege' % len(pricelist_from_provider), 2)
+                pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_from_provider[-1][0]))  # timestamp von letztem Element in Liste
+                write_log_entry('Letzter Preis in abgefragter Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
+                prices_count_diff = len(pricelist_from_provider) - prices_count_after_cleanup
+                if prices_count_diff == 0:
+                    write_log_entry('Keine neuen Preise empfangen', 2)
+                    write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
+                elif prices_count_diff < 0:
+                    write_log_entry('Empfangene Preisliste kuerzer als bereits vorhandene', 2)
+                    write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
+                else:
+                    write_log_entry('%d neue Preise empfangen' % prices_count_diff, 2)
+                    write_log_entry('Publiziere Preisliste', 1)
+                    publish_price_data(pricelist_from_provider)
+                    exit()
             else:
                 write_log_entry('Abfrage weiterer Preise nicht erfolgreich', 1)
         else:
-            write_log_entry('Ausreichend zukuenftige Preise in bisheriger openWB-Strom-Preisliste', 2)
+            write_log_entry('Ausreichend zukuenftige Preise in bisheriger Preisliste', 2)
+            write_log_entry('Bereinigte bisherige Preisliste wird verwendet', 2)
         # bisherige Liste hat ausreichend Preise für die Zukunft bzw.
         # mindestens den aktuellen Preis und Fehler bei der API-Abfrage
-        tibber_pricelist = pricelist_in_file  # neue Liste ist bereinigte bisherige
-        write_log_entry('Verwende Preise aus bereinigter bisheriger openWB-Strom-Preisliste', 1)
-        write_log_entry('Publiziere Preisliste', 1)
-        publish_price_data()
+        if prices_count_before_cleanup - prices_count_after_cleanup > 0:
+            # es wurden Preise aus der bisherigen Liste bereinigt, also veröffentlichen
+            write_log_entry('Verwende Preise aus bereinigter bisheriger Preisliste', 1)
+            write_log_entry('Publiziere Preisliste', 1)
+            publish_price_data(pricelist_in_file)
         exit()
 
 if pricelist_provider != pricelist_provider_old:
@@ -331,7 +375,9 @@ if pricelist_provider != pricelist_provider_old:
 # bei andauerndem Fehler Preis auf 99.99ct/kWh setzen
 read_price_successfull, error_msg = get_updated_pricelist()
 if read_price_successfull:
+    pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_from_provider[-1][0]))  # timestamp von letztem Element in Liste
+    write_log_entry('Letzter Preis in abgefragter Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
     write_log_entry('Publiziere Preisliste', 1)
-    publish_price_data()
+    publish_price_data(pricelist_from_provider)
 else:
     exit_on_invalid_price_data(error_msg)
