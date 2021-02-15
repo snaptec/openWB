@@ -67,7 +67,7 @@ def publish_price_data(pricelist_to_publish):
 
 def write_log_entry(message, min_debug_level):
     # schreibt Eintrag ins Log wenn der mindest debug_level >= der übergebene ist
-    if min_debug_level >= 0: #debug_level:
+    if min_debug_level >= debug_level:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         line = timestamp + ' Modul tibbergetprices.py: ' + message + '\n'
         with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
