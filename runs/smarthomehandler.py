@@ -190,6 +190,11 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(measureurl)
         except:
             argumentList.append("undef")
+        try:
+            measureurlc = str(config.get('smarthomedevices', 'device_measureurlc_'+str(nummer)))
+            argumentList.append(measureurlc)
+        except:
+            argumentList.append("none")
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
@@ -537,15 +542,27 @@ def getdevicevalues():
                 device_ip = str(config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)))
             except:
                 device_ip = "undef"
+            try:
+                device_acthortype = str(config.get('smarthomedevices', 'device_acthortype_'+str(numberOfDevices)))
+            except:
+                device_acthortype = "undef"
+            try:
+                device_acthorpower = int(config.get('smarthomedevices', 'device_acthorpower_'+str(numberOfDevices)))
+            except:
+                device_acthorpower = 0
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
-                if os.path.isfile(pyname) and (canswitch == 1):
+                if os.path.isfile(pyname) and (switchtyp != "none"):
                     argumentList = ['python3', pyname, str(numberOfDevices)]
                     argumentList.append(device_ip)
                     argumentList.append(str(devuberschuss))
-                    argumentList.append(device_leistungurl)
-                    argumentList.append(device_actor)
+                    if (switchtyp == "acthor"):
+                        argumentList.append(device_acthortype)
+                        argumentList.append(str(device_acthorpower))
+                    else:
+                        argumentList.append(device_leistungurl)
+                        argumentList.append(device_actor)
                     argumentList.append(device_username)
                     argumentList.append(device_password)
                     proc=subprocess.Popen(argumentList)
@@ -561,7 +578,7 @@ def getdevicevalues():
                     else:
                         relais=0
                     #Shelly temp sensor
-                    if (switchtyp == "shelly"):
+                    if (switchtyp == "shelly")  and (canswitch == 1):
                         try:
                             anzahltemp = int(config.get('smarthomedevices', 'device_temperatur_configured_'+str(numberOfDevices)))
                             if ( anzahltemp > 0):
@@ -575,7 +592,7 @@ def getdevicevalues():
                         except:
                             pass
                     #mystrom temp sensor
-                    if (switchtyp == "mystrom"):
+                    if (switchtyp == "mystrom")  and (canswitch == 1):
                         temp = str(answer['temp0'])
                         logDebug(LOGLEVELERROR, "(" + str(numberOfDevices) + ") mystrom temp sensor: 1 Grad: " +  temp)
                         DeviceValues.update( {str(numberOfDevices) + "temp0"  : temp })
