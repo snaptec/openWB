@@ -77,13 +77,19 @@ class WbData {
 			if ('showLG' in this.prefs) {
 				this.showLiveGraph = this.prefs.showLG;
 			}
+			if ('maxPow' in this.prefs) {
+				powerMeter.maxPower = +this.prefs.maxPow;
+			}
+			if ('relPM' in this.prefs) {
+				powerMeter.showRelativeArcs = this.prefs.relPM;
+			}
 		}
 		if (this.showLiveGraph) {
-			dayGraph.deactivate();
-			powerGraph.activate();
+			powerGraph.deactivateDay();
+			powerGraph.activateLive();
 			} else {
-				powerGraph.deactivate();
-				dayGraph.activate();
+				powerGraph.deactivateLive();
+				powerGraph.activateDay();
 			}
 	}
 
