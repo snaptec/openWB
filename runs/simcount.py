@@ -3,10 +3,12 @@ import sys
 import os
 import time
 import getopt
+
 watt2 = int(sys.argv[1])
 pref = str(sys.argv[2])
 importfn = str(sys.argv[3])
 exportfn = str(sys.argv[4])
+
 # emulate import  export
 seconds2= time.time()
 watt1=0
@@ -63,11 +65,9 @@ if os.path.isfile('/var/www/html/openWB/ramdisk/'+pref+'sec0'):
     f.write(str(wattnegh))
     f.close()
     f = open('/var/www/html/openWB/ramdisk/'+ importfn,'w')
-#    f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
     f.write(str(wattposkh))
     f.close()
     f = open('/var/www/html/openWB/ramdisk/' +exportfn , 'w')
-#   f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
     f.write(str(wattnegkh))
     f.close()
 else: 
