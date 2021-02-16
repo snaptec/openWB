@@ -126,6 +126,7 @@ class WbData {
 				this.updateUsageSummary(1, "energy", value)
 				break;
 			case 'houseEnergy':
+				console.log ("Update House Energy: " + value);
 				this.updateUsageSummary(4, "energy", value);
 				break;
 			case 'currentPowerPrice':
