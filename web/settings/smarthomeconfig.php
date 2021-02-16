@@ -98,7 +98,7 @@ $numDevices = 9;
 									<label class="col-md-4 col-form-label">Gerätetyp</label>
 									<div class="col">
 										<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="none" value="none" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-											<option value ="none" data-option="none" selected="selected">Kein Gerät</option>
+											<option value="none" data-option="none" selected="selected">Kein Gerät</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
 											<option value="tasmota" data-option="tasmota">Tasmota</option>
 											<option value="acthor" data-option="acthor">Acthor</option>
@@ -199,6 +199,33 @@ $numDevices = 9;
 												Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.<br>
 												In der URL kann ein Parameter angegeben werden, der den aktuellen Überschuss an das Gerät übermittelt. Hierzu ist folgender Platzhalter in der URL zu verwenden (inklusive der spitzen Klammern):<br>
 												<span class="text-info">&lt;openwb-ueberschuss&gt;</span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_acthortypeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modell</label>
+										<div class="col">
+											<select class="form-control" name="device_acthortype" id="device_acthortypeDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<option value="M1" data-option="M1" selected="selected">Acthor M1</option>
+												<option value="M3" data-option="M3" selected="selected">Acthor M3</option>
+												<option value="9s" data-option="9s" selected="selected">Acthor 9s</option>
+											</select>
+											<span class="form-text small">
+												Hier ist das installierte Modell auszuwählen.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="device_acthorpowerDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Installierte Leistung</label>
+										<div class="col">
+											<input id="device_acthorpowerDevices<?php echo $devicenum; ?>" name="device_acthorpower" class="form-control" type="number" min="0" max="9000" step="100" required="required" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">
+												Hier bitte die an den Acthor angeschlossene Leistung in Watt angeben.
 											</span>
 										</div>
 									</div>
@@ -435,6 +462,16 @@ $numDevices = 9;
 										<input id="device_measureurlDevices<?php echo $devicenum; ?>" name="device_measureurl" class="form-control" type="text" required="required" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 									</div>
 								</div>
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-http hide">
+									<label for="device_measureurlcDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Zähler-URL</label>
+									<div class="col">
+										<input id="device_measureurlcDevices<?php echo $devicenum; ?>" name="device_measureurlc" class="form-control" type="text" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">
+											Hier bitte eine URL angeben, die einen absoluten Zählerstand übermittelt.
+											Diese Einstellung ist optional. Wird das Feld leer gelassen, dann wird intern ein Zähler simuliert.
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>  <!-- end card body Allgemeine Einstellungen Gerät <?php echo $devicenum; ?> -->
 					</div>  <!-- end card Allgemeine Einstellungen Gerät <?php echo $devicenum; ?> -->
@@ -562,9 +599,9 @@ $numDevices = 9;
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20210205" ></script>
+		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20210215" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210104" ></script>
+		<script src = "settings/helperFunctions.js?ver=20210215" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20201207" ></script>
 		<!-- load mqtt handler-->
