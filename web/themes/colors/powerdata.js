@@ -144,6 +144,7 @@ class WbData {
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
+				console.log ("Update PV Energy: " + value);
 				break;
 			default:
 				break;
