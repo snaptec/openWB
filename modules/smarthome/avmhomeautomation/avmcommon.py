@@ -204,6 +204,9 @@ class AVMHomeAutomation:
                 name = device.find("name").text
                 ain = device.attrib["identifier"]
                 next_device_infos[name] = {'ain': ain}
+                presentText = device.find("present").text
+                if presentText != '1':
+                    continue
 
                 hkrBlock = device.find("hkr")
                 if hkrBlock != None:
