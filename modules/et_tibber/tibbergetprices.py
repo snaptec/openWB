@@ -3,7 +3,7 @@
 
 #########################################################
 #
-# liest von Tibber die stündlichen Preise für heute und wenn verfügbar morgen,
+# liest von Tibber die stündlichen Preise,
 # erstellt daraus die Datei für den Chart und liefert den aktuell
 # gültigen Strompreis
 #
@@ -15,7 +15,7 @@
 #
 # Preisliste in UTC und ct/kWh
 # Aufbau Datei:
-# Zeile 1: Dateiname des Moduls
+# Zeile 1: Name des Moduls
 # Zeile 2 ff: timestamp, price
 #
 # 2021 Michael Ortenstein
@@ -42,7 +42,6 @@ read_price_successfull = False
 pricelist_from_provider = []  # neue Liste
 pricelist_in_file = []  # vorhandene Liste
 pricelist_provider_old = ''  # für vorhandene Liste veranwtortliches Modul
-prices_ok = False
 
 #########################################################
 #
@@ -67,7 +66,7 @@ def publish_price_data(pricelist_to_publish):
 
 def write_log_entry(message, min_debug_level):
     # schreibt Eintrag ins Log wenn der mindest debug_level >= der übergebene ist
-    if min_debug_level >= debug_level:
+    if min_debug_level >= 0: #debug_level:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         line = timestamp + ' Modul tibbergetprices.py: ' + message + '\n'
         with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
@@ -187,6 +186,8 @@ def cleanup_pricelist(pricelist):
         starttime_utc = get_utcfromtimestamp(float(pricelist[0][0]))
         if starttime_utc != now_full_hour:  # erster Preis nicht der aktuelle
             return []
+    else:
+        write_log_entry('Preisliste ist leer', 2)
     return pricelist
 
 def get_updated_pricelist():
@@ -224,7 +225,9 @@ def get_updated_pricelist():
         # alle Zeiten in UTC verarbeiten
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-        write_log_entry('Formatiere und analysiere Preisliste von heute', 1)
+        write_log_entry('Formatiere und analysiere Preisliste', 1)
+        # alle Preise mit timestamp in Liste
+        pricelist_new = []
         for price_data in today_prices:
             # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
             # entferne ':' in Timezone, da nicht von strptime unterstützt
@@ -233,17 +236,9 @@ def get_updated_pricelist():
             # und konvertiere nach UTC
             starttime_utc = startzeit_localized.astimezone(timezone.utc)
             #Preisliste beginnt immer mit aktueller Stunde
-            if (starttime_utc >= now_full_hour):
-                if (starttime_utc == now_full_hour):
-                    write_log_entry("Aktueller Preis wurde gefunden", 1)
-                    prices_ok = True
-                bruttopreis = price_data['total'] * 100
-                bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-                pricelist_from_provider.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
-        if (not prices_ok):
-            return False, 'Aktueller Preis wurde nicht gefunden'
-        write_log_entry('Preise von heute gelesen', 2)
-        write_log_entry('Formatiere und analysiere Preisliste morgen', 1)
+            bruttopreis = price_data['total'] * 100
+            bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
+            pricelist_new.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
         for price_data in tomorrow_prices:
             # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
             # entferne ':' in Timezone, da nicht von strptime unterstützt
@@ -251,12 +246,11 @@ def get_updated_pricelist():
             starttime_utc = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S%z')
             bruttopreis = price_data['total'] * 100
             bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-            pricelist_from_provider.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
-        if len(tomorrow_prices) > 0:
-            write_log_entry('Preise von morgen gelesen', 2)
-        else:
-            write_log_entry('Keine Preise von morgen empfangen', 2)
-        return True, ''
+            pricelist_new.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
+        pricelist_new = cleanup_pricelist(pricelist_new)
+        if len(pricelist_new) == 0:
+            return False, 'Aktueller Preis wurde nicht gefunden', []
+        return True, '', pricelist_new
     else:
         # Fehler in Antwort
         error = tibber_json['errors'][0]['message']
@@ -349,7 +343,7 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
                     write_log_entry('Empfangene Preisliste kuerzer als bereits vorhandene', 2)
                     write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
                 else:
-                    write_log_entry('%d neue Preise empfangen' % prices_count_diff, 2)
+                    write_log_entry('%d zusaetzliche Preise empfangen' % prices_count_diff, 2)
                     write_log_entry('Publiziere Preisliste', 1)
                     publish_price_data(pricelist_from_provider)
                     exit()

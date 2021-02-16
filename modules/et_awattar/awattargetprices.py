@@ -31,18 +31,26 @@ from datetime import datetime, timezone, timedelta
 import requests
 import atexit
 
+class ModuleRuntimeCounter:
+    # return: module runtime in seconds
+    def __init__(self):
+        self._starttime = datetime.now()
+
+    def runtime(self):
+        runtime = datetime.now() - self._starttime
+        runtime = runtime.total_seconds()
+        return runtime
+
 # aus Parameterübergabe
 landeskennung = ''
 basispreis = ''
 debug_level = 0  # eingeteilt in 0=aus, 1=wenig, 3=alles
 # sonstiges
-module_starttime = datetime.now()
-pricelist_provider = 'aWATTar'
-readPriceSuccessfull = False
-pricelist_from_provider = []  # neue Liste
+module_name = 'aWATTar'
+read_price_successfull = False
+pricelist_received = []  # neue Liste
 pricelist_in_file = []  # vorhandene Liste
-pricelist_provider_old = ''  # für vorhandene Liste veranwtortliches Modul
-prices_ok = False
+module_name_in_file = ''  # für vorhandene Liste veranwtortliches Modul
 laenderdaten = {
     'at': {
         'url': 'https://api.awattar.at/v1/marketdata',
@@ -73,7 +81,7 @@ def publish_price_data(pricelist_to_publish):
     # schreibt Preisliste und aktuellen Preis in Dateien und veröffentlicht die MQTT-Topics
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
-        pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
+        pricelist_file.write('%s\n' % module_name)  # erster Eintrag ist für Preisliste verantwortliches Modul
         # Preisliste durchlaufen und in ramdisk
         for index, price_data in enumerate(pricelist_to_publish):
             pricelist_file.write('%s,%s\n' % (price_data[0], price_data[1]))  # Timestamp, Preis
@@ -99,7 +107,7 @@ def exit_on_invalid_price_data(error):
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
         current_price_file.write('99.99\n')
-        pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
+        pricelist_file.write('%s\n' % module_name)  # erster Eintrag ist für Preisliste verantwortliches Modul
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         timestamp = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
         for i in range(9):
@@ -209,6 +217,7 @@ def cleanup_pricelist(pricelist):
 def get_updated_pricelist():
     # API abfragen, retry bei Timeout
     # Rückgabe ist Tupel aus Boolean = Erfolg und String = Fehlermeldung
+    global pricelist_received
     try:
         response = readAPI(laenderdaten[landeskennung]['url'])
     except:
@@ -234,19 +243,16 @@ def get_updated_pricelist():
     write_log_entry('Formatiere und analysiere Preisliste', 1)
     for price_data in sorted_marketprices:
         startzeit_utc = get_utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
-        if (startzeit_utc >= now_full_hour):
-            if (startzeit_utc == now_full_hour):
-                write_log_entry('Aktueller Preis wurde gefunden', 1)
-                prices_ok = True
-            if (landeskennung == 'de'):
-                # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
-                bruttopreis = (price_data['marketprice']/10 * laenderdaten[landeskennung]['umsatzsteuer']) + laenderdaten[landeskennung]['awattargebuehr'] + basispreis
-                bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-            else:
-                # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
-                bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
-            pricelist_from_provider.append([str('%d' % startzeit_utc.timestamp()), bruttopreis_str])
-    if (not prices_ok):
+        if (landeskennung == 'de'):
+            # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
+            bruttopreis = (price_data['marketprice']/10 * laenderdaten[landeskennung]['umsatzsteuer']) + laenderdaten[landeskennung]['awattargebuehr'] + basispreis
+            bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
+        else:
+            # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
+            bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
+        pricelist_received.append([str('%d' % startzeit_utc.timestamp()), bruttopreis_str])
+    pricelist_received = cleanup_pricelist(pricelist_received)
+    if len(pricelist_received) == 0:
         return False, 'Aktueller Preis wurde nicht gefunden'
     return True, ''
 
@@ -256,39 +262,37 @@ def convert_timestamp_to_str(timestamp):
     datetime_obj = datetime_obj.astimezone(tz=None)  # und nach lokal
     return datetime_obj.strftime('%d.%m., %H:%M')
 
-def get_module_runtime():
-    # errechnet die Laufzeit des Moduls und schreibt Logeintrag
-    module_runtime = datetime.now() - module_starttime
-    module_runtime = module_runtime.total_seconds()
-    write_log_entry('Modullaufzeit ' + str(module_runtime) + ' s', 1)
+def _log_module_runtime(counter):
+    runtime = counter.runtime()
+    print(runtime)
+    write_log_entry('Modullaufzeit ' + str(runtime) + ' s', 1)
 
 #########################################################
 #
-# Hauptprogramm
+# Main:
 #
 #########################################################
 
+module_runtime_counter = ModuleRuntimeCounter()
 # bei exit immer Laufzeit des Moduls bestimmen
-atexit.register(get_module_runtime)
+atexit.register(_log_module_runtime, module_runtime_counter)
 
 # übergebene Paremeter auslesen
 write_log_entry('Lese Parameter aus Uebergabe', 1)
 if len(sys.argv) == 4:
     # sys.argv[0] : erstes Argument ist immer Dateiname
     landeskennung = str(sys.argv[1])
-    basispreis = str(sys.argv[2])
+    if not landeskennung in laenderdaten:
+        exit_on_invalid_price_data('Landeskennung unbekannt')
+    try:
+        basispreis = float(sys.argv[2])
+    except:
+        exit_on_invalid_price_data('Basispreis ist keine Zahl')
     try:
         debugLevel = int(sys.argv[3])
     except:
-        write_log_entry('Debug-Level ist kein Integer-Wert, setze für Modul = 0', 0)
+        write_log_entry('Debug-Level ist keine Zahl, setze für Modul = 0', 0)
         debugLevel = 0
-    if landeskennung in laenderdaten:
-        try:
-            basispreis = float(basispreis)
-        except ValueError:
-            exit_on_invalid_price_data('Basispreis ist keine Zahl')
-    else:
-        exit_on_invalid_price_data('Landeskennung unbekannt')
 else:
     exit_on_invalid_price_data('Parameter fehlen')
 write_log_entry('Parameter OK', 2)
@@ -297,7 +301,7 @@ write_log_entry('Parameter OK', 2)
 write_log_entry('Lese bisherige Preisliste', 1)
 try:
     with open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'r') as pricelist_file:
-        pricelist_provider_old = pricelist_file.readline().rstrip('\n')  # erste Zeile sollte für Preisliste verantwortliches Modul sein
+        module_name_in_file = pricelist_file.readline().rstrip('\n')  # erste Zeile sollte für Preisliste verantwortliches Modul sein
         for prices in pricelist_file:  # dann restliche Zeilen als Preise mit Timestamp lesen
             price_items = prices.split(',')
             price_items = [item.strip() for item in price_items]
@@ -307,7 +311,7 @@ try:
 except:
     write_log_entry("Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
 
-if read_price_successfull and pricelist_provider == pricelist_provider_old:
+if read_price_successfull and module_name == module_name_in_file:
     # Modul der bisherigen Liste ist mit diesem identisch, also Einträge in alter Preisliste benutzen und aufräumen
     prices_count_before_cleanup = len(pricelist_in_file)
     write_log_entry('Bereinige bisherige Preisliste', 1)
@@ -333,10 +337,10 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
             read_price_successfull, error_msg = get_updated_pricelist()
             if read_price_successfull:
                 write_log_entry('Abfrage der Preise erfolgreich', 2)
-                write_log_entry('Abgefragte Preisliste hat %d Eintraege' % len(pricelist_from_provider), 2)
-                pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_from_provider[-1][0]))  # timestamp von letztem Element in Liste
+                write_log_entry('Abgefragte Preisliste hat %d Eintraege' % len(pricelist_received), 2)
+                pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_received[-1][0]))  # timestamp von letztem Element in Liste
                 write_log_entry('Letzter Preis in abgefragter Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
-                prices_count_diff = len(pricelist_from_provider) - prices_count_after_cleanup
+                prices_count_diff = len(pricelist_received) - prices_count_after_cleanup
                 if prices_count_diff == 0:
                     write_log_entry('Keine neuen Preise empfangen', 2)
                     write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
@@ -344,9 +348,9 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
                     write_log_entry('Empfangene Preisliste kuerzer als bereits vorhandene', 2)
                     write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
                 else:
-                    write_log_entry('%d neue Preise empfangen' % prices_count_diff, 2)
+                    write_log_entry('%d zusaetzliche Preise empfangen' % prices_count_diff, 2)
                     write_log_entry('Publiziere Preisliste', 1)
-                    publish_price_data(pricelist_from_provider)
+                    publish_price_data(pricelist_received)
                     exit()
             else:
                 write_log_entry('Abfrage weiterer Preise nicht erfolgreich', 1)
@@ -361,17 +365,17 @@ if read_price_successfull and pricelist_provider == pricelist_provider_old:
             publish_price_data(pricelist_in_file)
         exit()
 
-if pricelist_provider != pricelist_provider_old:
-    write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % pricelist_provider_old, 1)
-    write_log_entry('Wechsel auf Modul %s' % pricelist_provider, 1)
+if module_name != module_name_in_file:
+    write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % module_name_in_file, 1)
+    write_log_entry('Wechsel auf Modul %s' % module_name, 1)
 
 # bisherige Preisliste leer, oder neuer Provider: in jedem Fall neue Abfrage und
 # bei andauerndem Fehler Preis auf 99.99ct/kWh setzen
 read_price_successfull, error_msg = get_updated_pricelist()
 if read_price_successfull:
-    pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_from_provider[-1][0]))  # timestamp von letztem Element in Liste
+    pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_received[-1][0]))  # timestamp von letztem Element in Liste
     write_log_entry('Letzter Preis in abgefragter Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
     write_log_entry('Publiziere Preisliste', 1)
-    publish_price_data(pricelist_from_provider)
+    publish_price_data(pricelist_received)
 else:
     exit_on_invalid_price_data(error_msg)
