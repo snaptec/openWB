@@ -81,7 +81,8 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvData = [];
 		var rawcsv = mqttpayload.split(/\r?\n|\r/);
-		for (var i = 0; i < rawcsv.length; i++) {
+		// skip first entry: it is module-name responsible for list
+		for (var i = 1; i < rawcsv.length; i++) {
 			csvData.push(rawcsv[i].split(','));
 		}
 		// Timeline (x-Achse) ist UNIX Timestamp in UTC, deshalb Umrechnung (*1000) in Javascript-Timestamp (mit Millisekunden)

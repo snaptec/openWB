@@ -7,12 +7,16 @@
 # erstellt daraus die Datei für den Graphen und liefert den aktuell
 # gültigen Strompreis
 #
-# setzt aktuellen Strompreis auf 99.99ct/kWh, wenn nichts empfangen wird
+# erwartet Stundenpreise, d.h. für jede Stunde eine Preisauskunft
+# setzt aktuellen Strompreis im Fehlerfall auf 99.99ct/kWh
 #
 # benötigt als Parameter die Landeskennung (at/de), den individuellen Basispreis
 # des Anschlusses (kann auch 0 sein) und das Debug-Level
 #
 # Preisliste in UTC und ct/kWh
+# Aufbau Datei:
+# Zeile 1: Dateiname des Moduls
+# Zeile 2 ff: timestamp, price
 #
 # 2021 Michael Ortenstein
 # This file is part of openWB
@@ -25,12 +29,20 @@ import json
 from time import sleep
 from datetime import datetime, timezone, timedelta
 import requests
+import atexit
 
-readPriceSuccessfull = False
-preise_ok = False
-preisliste = []
+# aus Parameterübergabe
 landeskennung = ''
 basispreis = ''
+debug_level = 0  # eingeteilt in 0=aus, 1=wenig, 3=alles
+# sonstiges
+module_starttime = datetime.now()
+pricelist_provider = 'aWATTar'
+readPriceSuccessfull = False
+pricelist_from_provider = []  # neue Liste
+pricelist_in_file = []  # vorhandene Liste
+pricelist_provider_old = ''  # für vorhandene Liste veranwtortliches Modul
+prices_ok = False
 laenderdaten = {
     'at': {
         'url': 'https://api.awattar.at/v1/marketdata',
@@ -51,27 +63,50 @@ laenderdaten = {
     }
 }
 
+#########################################################
+#
 # Hilfsfunktionen
-def write_log_entry(message):
-    # schreibt Eintrag ins Log
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    line = timestamp + ' Modul awattargetprices.py: ' + message + '\n'
-    with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
-        f.write(line)
+#
+#########################################################
+
+def publish_price_data(pricelist_to_publish):
+    # schreibt Preisliste und aktuellen Preis in Dateien und veröffentlicht die MQTT-Topics
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
+         open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
+        pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
+        # Preisliste durchlaufen und in ramdisk
+        for index, price_data in enumerate(pricelist_to_publish):
+            pricelist_file.write('%s,%s\n' % (price_data[0], price_data[1]))  # Timestamp, Preis
+            if (index == 0):
+                # erster Eintrag ist aktueller Preis
+                current_price_file.write('%s\n' % price_data[1])
+    #publish MQTT-Daten für Preis und Graph
+    os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
+    os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
+
+def write_log_entry(message, min_debug_level):
+    # schreibt Eintrag ins Log wenn der mindest debug_level >= der übergebene ist
+    if min_debug_level >= debug_level:
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        line = timestamp + ' Modul awattargetprices.py: ' + message + '\n'
+        with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
+            f.write(line)
 
 def exit_on_invalid_price_data(error):
     # wenn kein aktueller Preis erkannt wurde,
-    # schreibt 99.99ct/kWh in Preis-Datei und füllt Chart-Array für die nächsten 12 Stunden damit,
+    # schreibt 99.99ct/kWh in Preis-Datei und füllt Chart-Array für die nächsten 9 Stunden damit,
     # schreibt Fehler ins Log
-    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
-         open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
-        etprovider_pricefile.write('99.99\n')
+    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as current_price_file, \
+         open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as pricelist_file:
+        current_price_file.write('99.99\n')
+        pricelist_file.write('%s\n' % pricelist_provider)  # erster Eintrag ist für Preisliste verantwortliches Modul
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         timestamp = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-        for i in range(12):
-            etprovider_graphlistfile.write('%d, 99.99\n' % timestamp.timestamp())
+        for i in range(9):
+            pricelist_file.write('%d, 99.99\n' % timestamp.timestamp())
             timestamp = timestamp + timedelta(hours=1)
-    write_log_entry(error + ', setze Preis auf 99.99ct/kWh.')
+    write_log_entry(error, 0)
+    write_log_entry('Setze Preis auf 99.99ct/kWh.', 0)
     #publish MQTT-Daten für Preis und Graph
     os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
@@ -116,8 +151,7 @@ def try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook=
             tries = list(range(max_tries))
             tries.reverse()
             for tries_remaining in tries:
-                if debugLevel > 0:
-                    write_log_entry("Abfrage aWATTar-API")
+                write_log_entry('Versuch Abfrage aWATTar-API', 1)
                 try:
                     return func(*args, **kwargs)
                 except exceptions as e:
@@ -140,85 +174,204 @@ def readAPI(url):
     response = requests.get(url, headers={'Content-Type': 'application/json'}, timeout=(2, 6))
     return response
 
+def get_utcfromtimestamp(timestamp):
+    # erwartet timestamp Typ float
+    # gibt timezone-aware Datetime-Objekt zurück in UTC
+    datetime_obj = datetime.utcfromtimestamp(timestamp)  # Zeitstempel von String nach Datetime-Objekt
+    datetime_obj = datetime_obj.replace(tzinfo=timezone.utc)  # Objekt von naive nach timezone-aware, hier UTC
+    return datetime_obj
+
+def cleanup_pricelist(pricelist):
+    # bereinigt Preisliste, löscht Einträge die älter als aktuelle Stunde sind
+    # und über morgen hinausgehen
+    # wenn der erste Preis nicht für die aktuelle Stunde ist, wird leere Liste zurückgegeben
+    # prüft auf Abstand der Preise: ist dieser >1h, wird Liste ab diesem Punkt abgeschnitten
+    if len(pricelist) > 0:
+        now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
+        now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
+        starttime_utc_prev = now  # speichert in Schleife Zeitstempel des vorherigen Listeneintrags
+        for index, price in enumerate(pricelist[:]):  # über Kopie der Liste iterieren, um das Original zu manipulieren
+            starttime_utc = get_utcfromtimestamp(float(price[0]))  # Start-Zeitstempel aus Preisliste umwandeln
+            if starttime_utc < now_full_hour or starttime_utc.date() > now.date() + timedelta(days=1):
+                pricelist.remove(price)
+            if index > 0:
+                # wenn der Abstand zum letzten Preis in Liste > 1 Std, dann Rest der Liste entfernen und Ende
+                hourdiff = divmod((starttime_utc - starttime_utc_prev).total_seconds(), 60)
+                if hourdiff != (60.0, 0.0):
+                    del pricelist[index:]
+                    break
+            starttime_utc_prev = starttime_utc
+        starttime_utc = get_utcfromtimestamp(float(pricelist[0][0]))
+        if starttime_utc != now_full_hour:  # erster Preis nicht der aktuelle
+            return []
+    return pricelist
+
+def get_updated_pricelist():
+    # API abfragen, retry bei Timeout
+    # Rückgabe ist Tupel aus Boolean = Erfolg und String = Fehlermeldung
+    try:
+        response = readAPI(laenderdaten[landeskennung]['url'])
+    except:
+        return False, 'Fataler Fehler bei API-Abfrage'
+    write_log_entry('Antwort auf Abfrage erhalten', 2)
+    # sind sonstige-Fehler aufgetreten?
+    try:
+        response.raise_for_status()
+    except Exception as e:
+        return False, str(e)
+    # Bei Erfolg JSON auswerten
+    write_log_entry('Ermittle JSON aus aWATTar-Antwort', 1)
+    try:
+        marketprices = json.loads(response.text)['data']
+    except:
+        return False, 'Korruptes JSON'
+    write_log_entry("aWATTar-Preisliste extrahiert", 1)
+    # Liste sortiert nach Zeitstempel
+    sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
+    # alle Zeiten in UTC verarbeiten
+    now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
+    now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
+    write_log_entry('Formatiere und analysiere Preisliste', 1)
+    for price_data in sorted_marketprices:
+        startzeit_utc = get_utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
+        if (startzeit_utc >= now_full_hour):
+            if (startzeit_utc == now_full_hour):
+                write_log_entry('Aktueller Preis wurde gefunden', 1)
+                prices_ok = True
+            if (landeskennung == 'de'):
+                # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
+                bruttopreis = (price_data['marketprice']/10 * laenderdaten[landeskennung]['umsatzsteuer']) + laenderdaten[landeskennung]['awattargebuehr'] + basispreis
+                bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
+            else:
+                # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
+                bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
+            pricelist_from_provider.append([str('%d' % startzeit_utc.timestamp()), bruttopreis_str])
+    if (not prices_ok):
+        return False, 'Aktueller Preis wurde nicht gefunden'
+    return True, ''
+
+def convert_timestamp_to_str(timestamp):
+    # konvertiert timestamp in UTC zu String (in Lokalzeit) Format: 11.01., 23:00
+    datetime_obj = get_utcfromtimestamp(timestamp)
+    datetime_obj = datetime_obj.astimezone(tz=None)  # und nach lokal
+    return datetime_obj.strftime('%d.%m., %H:%M')
+
+def get_module_runtime():
+    # errechnet die Laufzeit des Moduls und schreibt Logeintrag
+    module_runtime = datetime.now() - module_starttime
+    module_runtime = module_runtime.total_seconds()
+    write_log_entry('Modullaufzeit ' + str(module_runtime) + ' s', 1)
+
+#########################################################
+#
 # Hauptprogramm
+#
+#########################################################
+
+# bei exit immer Laufzeit des Moduls bestimmen
+atexit.register(get_module_runtime)
 
 # übergebene Paremeter auslesen
+write_log_entry('Lese Parameter aus Uebergabe', 1)
 if len(sys.argv) == 4:
+    # sys.argv[0] : erstes Argument ist immer Dateiname
     landeskennung = str(sys.argv[1])
     basispreis = str(sys.argv[2])
-    debugLevel = int(sys.argv[3])
+    try:
+        debugLevel = int(sys.argv[3])
+    except:
+        write_log_entry('Debug-Level ist kein Integer-Wert, setze für Modul = 0', 0)
+        debugLevel = 0
     if landeskennung in laenderdaten:
         try:
             basispreis = float(basispreis)
         except ValueError:
-            exit_on_invalid_price_data('Basispreis fehlerhaft')
+            exit_on_invalid_price_data('Basispreis ist keine Zahl')
     else:
         exit_on_invalid_price_data('Landeskennung unbekannt')
 else:
-    exit_on_invalid_price_data('Argumente fehlen')
+    exit_on_invalid_price_data('Parameter fehlen')
+write_log_entry('Parameter OK', 2)
 
-# Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
-# API abfragen, retry bei Timeout
+# Hauptprogramm nur ausführen, wenn Parameter stimmen
+write_log_entry('Lese bisherige Preisliste', 1)
 try:
-    response = readAPI(laenderdaten[landeskennung]['url'])
+    with open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'r') as pricelist_file:
+        pricelist_provider_old = pricelist_file.readline().rstrip('\n')  # erste Zeile sollte für Preisliste verantwortliches Modul sein
+        for prices in pricelist_file:  # dann restliche Zeilen als Preise mit Timestamp lesen
+            price_items = prices.split(',')
+            price_items = [item.strip() for item in price_items]
+            pricelist_in_file.append(price_items)
+    write_log_entry('Bisherige Preisliste gelesen', 2)
+    read_price_successfull = True
 except:
-    exit_on_invalid_price_data('Fataler Fehler bei API-Abfrage')
+    write_log_entry("Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
 
-# sind sonstige-Fehler aufgetreten?
-try:
-    response.raise_for_status()
-except Exception as e:
-    exit_on_invalid_price_data(str(e))
-
-# Bei Erfolg JSON auswerten
-if debugLevel > 0:
-    write_log_entry("Keine Fehlermeldung in aWATTar-Antwort, lese JSON")
-
-try:
-    marketprices = json.loads(response.text)['data']
-except:
-    exit_on_invalid_price_data('Korruptes JSON')
-
-if debugLevel > 0:
-    write_log_entry("aWATTar-Preisliste extrahiert")
-
-# Liste sortiert nach Zeitstempel
-sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
-
-# alle Zeiten in UTC verarbeiten
-now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
-now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-for price_data in sorted_marketprices:
-    startzeit_utc = datetime.utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
-    startzeit_utc = startzeit_utc.replace(tzinfo=timezone.utc)  # Objekt von naive nach timezone-aware, hier UTC
-    if (startzeit_utc >= now_full_hour):
-        if (startzeit_utc == now_full_hour):
-            if debugLevel > 0:
-                write_log_entry("Aktueller Preis wurde gelesen")
-            preise_ok = True
-        if (landeskennung == 'de'):
-            # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
-            bruttopreis = (price_data['marketprice']/10 * laenderdaten[landeskennung]['umsatzsteuer']) + laenderdaten[landeskennung]['awattargebuehr'] + basispreis
-            bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
+if read_price_successfull and pricelist_provider == pricelist_provider_old:
+    # Modul der bisherigen Liste ist mit diesem identisch, also Einträge in alter Preisliste benutzen und aufräumen
+    prices_count_before_cleanup = len(pricelist_in_file)
+    write_log_entry('Bereinige bisherige Preisliste', 1)
+    pricelist_in_file = cleanup_pricelist(pricelist_in_file)
+    prices_count_after_cleanup = len(pricelist_in_file)
+    write_log_entry('Bisherige Preisliste bereinigt', 2)
+    prices_count_diff = prices_count_before_cleanup - prices_count_after_cleanup
+    if prices_count_diff == 0:
+        write_log_entry('Es wurde kein Preis geloescht', 2)
+    elif prices_count_diff == 1:
+        write_log_entry('Es wurde 1 Preis geloescht', 2)
+    elif prices_count_diff > 1:
+        write_log_entry('Es wurden %d Preise geloescht' % prices_count_diff, 2)
+    if prices_count_after_cleanup > 0:
+        # mindestens der aktuelle Preis ist in der Liste
+        write_log_entry('Bisherige Preisliste hat noch %d Eintraege' % prices_count_after_cleanup, 2)
+        pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_in_file[-1][0]))  # timestamp von letztem Element in Liste
+        write_log_entry('Letzter Preis in bisherige Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
+        if prices_count_after_cleanup < 11:
+            # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
+            # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
+            write_log_entry('Teste auf weitere Preise von aWATTar', 1)
+            read_price_successfull, error_msg = get_updated_pricelist()
+            if read_price_successfull:
+                write_log_entry('Abfrage der Preise erfolgreich', 2)
+                write_log_entry('Abgefragte Preisliste hat %d Eintraege' % len(pricelist_from_provider), 2)
+                pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_from_provider[-1][0]))  # timestamp von letztem Element in Liste
+                write_log_entry('Letzter Preis in abgefragter Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
+                prices_count_diff = len(pricelist_from_provider) - prices_count_after_cleanup
+                if prices_count_diff == 0:
+                    write_log_entry('Keine neuen Preise empfangen', 2)
+                    write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
+                elif prices_count_diff < 0:
+                    write_log_entry('Empfangene Preisliste kuerzer als bereits vorhandene', 2)
+                    write_log_entry('Bereinigte bisherige Preisliste wird weiter verwendet', 2)
+                else:
+                    write_log_entry('%d neue Preise empfangen' % prices_count_diff, 2)
+                    write_log_entry('Publiziere Preisliste', 1)
+                    publish_price_data(pricelist_from_provider)
+                    exit()
+            else:
+                write_log_entry('Abfrage weiterer Preise nicht erfolgreich', 1)
         else:
-            # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
-            bruttopreis_str = str('%.2f' % round(price_data['marketprice']/10, 2))
-        preisliste.append({str('%d' % startzeit_utc.timestamp()) : bruttopreis_str})
+            write_log_entry('Ausreichend zukuenftige Preise in bisheriger Preisliste', 2)
+        # bisherige Liste hat ausreichend Preise für die Zukunft bzw.
+        # mindestens den aktuellen Preis und Fehler bei der API-Abfrage
+        if prices_count_before_cleanup - prices_count_after_cleanup > 0:
+            # es wurden Preise aus der bisherigen Liste bereinigt, also veröffentlichen
+            write_log_entry('Verwende Preise aus bereinigter bisheriger Preisliste', 1)
+            write_log_entry('Publiziere Preisliste', 1)
+            publish_price_data(pricelist_in_file)
+        exit()
 
-if (preise_ok):
-    # Preisliste liegt jetzt vor in UTC und ct/kWh, sortiert nach Zeit
-    with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as etprovider_pricefile, \
-         open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as etprovider_graphlistfile:
-        # Preisliste durchlaufen und in ramdisk
-        for index, preise in enumerate(preisliste):
-            for startzeit, preis in preise.items():
-                etprovider_graphlistfile.write('%s, %s\n' % (startzeit, preis))
-                if (index == 0):
-                    # erster Eintrag ist aktueller Preis
-                    etprovider_pricefile.write('%s\n' % preis)
+if pricelist_provider != pricelist_provider_old:
+    write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % pricelist_provider_old, 1)
+    write_log_entry('Wechsel auf Modul %s' % pricelist_provider, 1)
+
+# bisherige Preisliste leer, oder neuer Provider: in jedem Fall neue Abfrage und
+# bei andauerndem Fehler Preis auf 99.99ct/kWh setzen
+read_price_successfull, error_msg = get_updated_pricelist()
+if read_price_successfull:
+    pricelist_valid_until_str = convert_timestamp_to_str(float(pricelist_from_provider[-1][0]))  # timestamp von letztem Element in Liste
+    write_log_entry('Letzter Preis in abgefragter Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
+    write_log_entry('Publiziere Preisliste', 1)
+    publish_price_data(pricelist_from_provider)
 else:
-    exit_on_invalid_price_data('Preisliste unvollständig')
-
-#publish MQTT-Daten für Preis und Graph
-os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
-os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
+    exit_on_invalid_price_data(error_msg)
