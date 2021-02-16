@@ -385,7 +385,7 @@ var options = {
 		topicsToSubscribe.forEach((topic) => {
 			client.subscribe(topic[0], { qos: 0 });
 		});
-		subscribeDayGraph();
+		subscribeDayGraph(new Date());
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {

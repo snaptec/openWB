@@ -46,7 +46,7 @@ u1p3pswitch(){
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 								if (( urcounter < urwaittime )); then
 									if (( urcounter < urwaittime - 60 )); then
-										urcounter=urwaittime - 60
+										urcounter=$((urwaittime - 60))
 									fi
 									urcounter=$((urcounter + 10))
 									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
@@ -77,7 +77,7 @@ u1p3pswitch(){
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 								if (( urcounter < urwaittime )); then
 									if (( urcounter < urwaittime - 60 )); then
-										urcounter=urwaittime - 60
+										urcounter=$((urwaittime - 60))
 									fi
 									urcounter=$((urcounter + 10))
 									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter

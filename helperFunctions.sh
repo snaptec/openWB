@@ -4,7 +4,7 @@ openwbModulePublishState() {
 	# $1: Modultyp (EVU, LP, EVSOC, PV, BAT)
 	# $2: Status (0=Ok, 1=Warning, 2=Error)
 	# $3: Meldung (String)
-	# $4: Index (bei LP und PV)
+	# $4: Index (bei LP und PV und EVSOC)
 	case $1 in
 		"EVU")
 			if (( $# != 3 )); then
