@@ -734,7 +734,7 @@
 											Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 											Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 											SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-											SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+											SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen
 										</span>
 									</div>
 								</div>
@@ -1252,7 +1252,7 @@
 											<span class="form-text small">
 												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
 												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.<br>
 											</span>
 										</div>
 										<div id="peugeotmanualcalcdiv" class="hide">
@@ -1261,7 +1261,7 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="peugeot_akkuglp1" value="<?php echo $akkuglp1old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 45-46kWh
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
@@ -1270,13 +1270,12 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="peugeot_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Peugeot e208 und e2008: 96-98 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen<br>
 													</span>
 												</div>
 											</div>
@@ -1346,7 +1345,7 @@
 											<span class="form-text small">
 												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
 												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.<br>
 											</span>
 										</div>
 										<div id="opelmanualcalclp1div" class="hide">
@@ -1355,8 +1354,7 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="opel_akkuglp1" value="<?php echo $akkuglp1old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Corsa-e: 45-46kWh
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Corsa-e: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
@@ -1365,13 +1363,12 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="opel_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Corsa-e: 96-98 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Corsa-e: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
 													</span>
 												</div>
 											</div>
@@ -1453,7 +1450,7 @@
 											<span class="form-text small">
 												Aktuell liefert die PSA API keine SoC Aktualisierung während des Ladevorgangs.<br>
 												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.<br>
 											</span>
 										</div>
 										<div id="psamanualcalcdiv" class="hide">
@@ -1462,8 +1459,7 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="psa_akkuglp1" value="<?php echo $akkuglp1old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Opel Corsa-e und Peugeot e208/e2008: 45-46kWh
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Opel Corsa-e und Peugeot e208/e2008: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
@@ -1472,36 +1468,36 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="psa_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Opel Corsa-e und Peugeot e208/e2008: 96-98 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Opel Corsa-e und Peugeot e208/e2008: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen<br>
 													</span>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<script>
-								$(function() {
-									function visibility_psa_soccalclp1() {
-										if($('#psa_soccalclp1Off').prop("checked")) {
-											hideSection('#psamanualcalcdiv');
-										} else {
-											showSection('#psamanualcalcdiv');
-										}
+							</div>
+							<script>
+							$(function() {
+								function visibility_psa_soccalclp1() {
+									if($('#psa_soccalclp1Off').prop("checked")) {
+										hideSection('#psamanualcalcdiv');
+									} else {
+										showSection('#psamanualcalcdiv');
 									}
+								}
 
-									$('input[type=radio][name=psa_soccalclp1]').change(function(){
-										visibility_psa_soccalclp1();
-									});
-
+								$('input[type=radio][name=psa_soccalclp1]').change(function(){
 									visibility_psa_soccalclp1();
 								});
-								</script>
+
+								visibility_psa_soccalclp1();
+							});
+							</script>
 							<div id="socmeq" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2320,7 +2316,7 @@
 											Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 											Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 											SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-											SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+											SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen
 										</span>
 									</div>
 								</div>
@@ -2737,7 +2733,7 @@
 											<span class="form-text small">
 												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
 												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.<br>
 											</span>
 										</div>
 										<div id="peugeotmanualcalclp2div" class="hide">
@@ -2746,8 +2742,7 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="peugeot_akkuglp2" value="<?php echo $akkuglp2old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Peugeot e208 und e2008: 46kWh
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 46kWh<br>
 													</span>
 												</div>
 											</div>
@@ -2756,13 +2751,12 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="peugeot_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Peugeot e208 und e2008: 94-96 Prozent
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Peugeot e208 und e2008: 94-96 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
 													</span>
 												</div>
 											</div>
@@ -2832,7 +2826,7 @@
 											<span class="form-text small">
 												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
 												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.<br>
 											</span>
 										</div>
 										<div id="opelmanualcalclp2div" class="hide">
@@ -2841,8 +2835,7 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="opel_akkuglp2" value="<?php echo $akkuglp2old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Corsa-e: 46kWh
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Corsa-e: 46kWh<br>
 													</span>
 												</div>
 											</div>
@@ -2851,13 +2844,12 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="opel_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Corsa-e: 94-96 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Corsa-e: 94-96 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+														SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen<br>
 													</span>
 												</div>
 											</div>
@@ -2939,7 +2931,7 @@
 											<span class="form-text small">
 												Aktuell liefert die PSA API keine SoC Aktualisierung während des Ladevorgangs.<br>
 												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
+												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.<br>
 											</span>
 										</div>
 										<div id="psamanualcalclp2div" class="hide">
@@ -2948,8 +2940,7 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="psa_akkuglp2" value="<?php echo $akkuglp2old ?>">
 													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Opel Corsa-e und Peugeot e208/e2008: 45-46kWh
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Opel Corsa-e und Peugeot e208/e2008: 45-46kWh<br>
 													</span>
 												</div>
 											</div>
@@ -2958,13 +2949,12 @@
 												<div class="col">
 													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="psa_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
 													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Opel Corsa-e und Peugeot e208/e2008: 96-98 Prozent<br>
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>Für Opel Corsa-e und Peugeot e208/e2008: 96-98 Prozent<br>
 														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
 														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
 														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
 														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen<br>
 													</span>
 												</div>
 											</div>
