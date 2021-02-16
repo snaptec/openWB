@@ -1485,23 +1485,24 @@
 										</div>
 									</div>
 								</div>
-								<script>
-								$(function() {
-									function visibility_psa_soccalclp1() {
-										if($('#psa_soccalclp1Off').prop("checked")) {
-											hideSection('#psamanualcalcdiv');
-										} else {
-											showSection('#psamanualcalcdiv');
-										}
+							</div>
+							<script>
+							$(function() {
+								function visibility_psa_soccalclp1() {
+									if($('#psa_soccalclp1Off').prop("checked")) {
+										hideSection('#psamanualcalcdiv');
+									} else {
+										showSection('#psamanualcalcdiv');
 									}
+								}
 
-									$('input[type=radio][name=psa_soccalclp1]').change(function(){
-										visibility_psa_soccalclp1();
-									});
-
+								$('input[type=radio][name=psa_soccalclp1]').change(function(){
 									visibility_psa_soccalclp1();
 								});
-								</script>
+
+								visibility_psa_soccalclp1();
+							});
+							</script>
 							<div id="socmeq" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
