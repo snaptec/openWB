@@ -37,7 +37,7 @@ function handlevar(mqttmsg, mqttpayload) {
 		processBatMsg(mqttmsg, mqttpayload);
 	}
 		else if ( mqttmsg.match( /^openwb\/SmartHome\//i) ) {
-		processSmartMsg(mqttmsg, mqttpayload);
+		processSmartHomeMsg(mqttmsg, mqttpayload);
 	}
 	
 	else if ( mqttmsg.match( /^openwb\/global\//i) ) {
@@ -214,7 +214,7 @@ function processBatMsg (mqttmsg, mqttpayload) {
 	}
 }
 
-function processSmartMsg (mqttmsg, mqttpayload) {
+function processSmartHomeMsg (mqttmsg, mqttpayload) {
 	switch(mqttmsg){
 		case "openWB/SmartHome/Status/maxspeicherladung":
 			directShow(mqttpayload, '#wmaxspeicherladung');

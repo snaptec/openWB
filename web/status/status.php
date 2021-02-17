@@ -470,8 +470,8 @@
 				</div>
 				
 				<!-- Smarthome -->
-				<div class="card border-warning " id="Smarthome">
-					<div class="card-header bg-success">
+				<div class="card border-info " id="Smarthome">
+					<div class="card-header bg-info">
 						Smarthome 2.0
 					</div>
 					<div class="card-body">
