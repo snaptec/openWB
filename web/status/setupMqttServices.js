@@ -204,6 +204,12 @@ var topicsToSubscribe = [
 	["openWB/housebattery/faultState", 1],
 	["openWB/housebattery/faultStr", 1],
 
+	["openWB/SmartHome/Status/maxspeicherladung", 1],
+	["openWB/SmartHome/Status/wattschalt", 1],
+	["openWB/SmartHome/Status/wattnichtschalt", 1],
+	["openWB/SmartHome/Status/uberschuss", 1],
+	["openWB/SmartHome/Status/uberschussoffset", 1],
+
 	["openWB/Verbraucher/1/Configured", 1],
 	["openWB/Verbraucher/1/Watt", 1],
 	["openWB/Verbraucher/1/WhImported", 1],

@@ -450,7 +450,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		 var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
-		for (var i = 0; i < rawacsv.length; i++) {
+		// skip first entry: it is module-name responsible for list
+		for (var i = 1; i < rawcsv.length; i++) {
 			csvaData.push(rawacsv[i].split(','));
 		}
 		electricityPriceTimeline = getCol(csvaData, 0);
@@ -1214,7 +1215,7 @@ function subscribeGraphUpdates() {
 
 function unsubscribeGraphUpdates() {
 topic = "openWB/graph/lastlivevalues";
-		client.unsubscribe(topic);	
+		client.unsubscribe(topic);
 }
 function subscribeDayGraph(date) {
 	// var today = new Date();
