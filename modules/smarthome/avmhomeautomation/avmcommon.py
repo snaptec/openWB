@@ -10,6 +10,9 @@ import xml.etree.ElementTree as ET
 
 INVALID_SESSIONID =  "0000000000000000"
 CACHEFILE = "/var/www/html/openWB/ramdisk/smarthome_avmautomation_cache"
+LOGLEVELDEBUG = 0
+LOGLEVELINFO = 1
+LOGLEVELERROR = 2
 
 class AVMHomeAutomation:
     # Parse configuration from command line arguments as proviced by /runs/smarthomehandler.py
@@ -34,13 +37,13 @@ class AVMHomeAutomation:
 
         self.cache = {}
         if os.path.isfile(CACHEFILE):
-            self.logMessage(0, "found an AVM cache file, trying to load")
+            self.logMessage(LOGLEVELDEBUG, "found an AVM cache file, trying to load")
             try:
                 f = open(CACHEFILE, 'r')
                 self.cache = json.loads(f.read().strip())
                 f.close()
             except Exception as e:
-                self.logMessage(0, "unable to load cache file: %s" % (e))
+                self.logMessage(LOGLEVELDEBUG, "unable to load cache file: %s" % (e))
 
     def cachedOwnInfo(self):
         key = self.cacheKey
@@ -55,7 +58,7 @@ class AVMHomeAutomation:
                 mtime = self.cache[login]["session_mtime"]
                 age = time.time() - mtime
                 if age > 450:
-                    self.logMessage(0, "removing stale cache for %s (%.1fs old)" % (login, age))
+                    self.logMessage(LOGLEVELDEBUG, "removing stale cache for %s (%.1fs old)" % (login, age))
                 else:
                     cacheToWrite[login] = self.cache[login]
         try:
@@ -63,7 +66,7 @@ class AVMHomeAutomation:
             json.dump(cacheToWrite, f)
             f.close()
         except Exception as e:
-            self.logMessage(0, "unable to write cache file: %s" % (e))
+            self.logMessage(LOGLEVELDEBUG, "unable to write cache file: %s" % (e))
 
     # getAVMSessionID retrieves a session ID for issuing commands to a
     # FRITZ!Box webinterface. See
@@ -76,25 +79,25 @@ class AVMHomeAutomation:
         if self.password == '':
             self.password = credentials.password
 
-        self.logMessage(0, "checking existing sessionID: %s" % (self.sessionID))
+        self.logMessage(LOGLEVELDEBUG, "checking existing sessionID: %s" % (self.sessionID))
         loginurl = self.baseURL + '/login_sid.lua'
         challengeURL = loginurl + "?sid="+self.sessionID
         challengeResponse = ET.fromstring(urllib.request.urlopen(loginurl, timeout = 5).read())
         sessionid = challengeResponse.find('SID').text
         if sessionid != INVALID_SESSIONID:
             # We already had valid session id, so return directly
-            self.logMessage(0, "last sessionID was accepted as valid")
+            self.logMessage(LOGLEVELDEBUG, "last sessionID was accepted as valid")
             self.sessionID = sessionid
             return
         blockTimeXML = challengeResponse.find('BlockTime')
         if blockTimeXML != None and int(blockTimeXML.text) > 0:
-            self.logMessage(2, "Durch Anmeldefehler in der Vergangenheit ist der Zugang zur FRITZ!Box noch fuer %s Sekunden gesperrt." % (blockTimeXML.text))
+            self.logMessage(LOGLEVELERROR, "Durch Anmeldefehler in der Vergangenheit ist der Zugang zur FRITZ!Box noch fuer %s Sekunden gesperrt." % (blockTimeXML.text))
             self.errorListCredentials()
             self.sessionID = INVALID_SESSIONID
             return
-        self.logMessage(0, "last sessionID was invalid, performing new challenge-response authentication")
+        self.logMessage(LOGLEVELDEBUG, "last sessionID was invalid, performing new challenge-response authentication")
         challenge = challengeResponse.find('Challenge').text
-        self.logMessage(0, "challenge: %s" % (challenge))
+        self.logMessage(LOGLEVELDEBUG, "challenge: %s" % (challenge))
         m = hashlib.md5()
         m.update((challenge + "-" + self.password).encode('utf-16le'))
         hashedPassword = m.hexdigest()
@@ -103,7 +106,7 @@ class AVMHomeAutomation:
                 'response': challenge + "-" + hashedPassword
                 }
         data = urllib.parse.urlencode(dataDict).encode()
-        self.logMessage(0, "response: %s" % (dataDict))
+        self.logMessage(LOGLEVELDEBUG, "response: %s" % (dataDict))
         # with data parameter, the request will be of HTTP method POST
         try:
             loginRequest = urllib.request.Request(loginurl, data = data)
@@ -112,17 +115,17 @@ class AVMHomeAutomation:
             sessionid = sessioninfo.find('SID').text
             self.sessionID = sessionid
         except BaseException as e:
-            self.logMessage(2, "error completing auth: %s" % (e))
+            self.logMessage(LOGLEVELERROR, "error completing auth: %s" % (e))
         if self.sessionID == INVALID_SESSIONID:
             blockTime = sessioninfo.find('BlockTime').text
-            self.logMessage(2, "Anmeldung fehlgeschlagen, bitte Nutzernamen und Passwort ueberpruefen. Anmeldung fuer die naechsten %s Sekunden durch FRITZ!Box-Webinterface gesperrt." % (blockTime))
+            self.logMessage(LOGLEVELERROR, "Anmeldung fehlgeschlagen, bitte Nutzernamen und Passwort ueberpruefen. Anmeldung fuer die naechsten %s Sekunden durch FRITZ!Box-Webinterface gesperrt." % (blockTime))
             self.errorListCredentials()
 
     def errorListCredentials(self):
         errorMessage = "Folgende Anmeldungen sind im System bekannt: "
         for login in self.cache:
             errorMessage += "%s " % (login)
-        self.logMessage(2, errorMessage)
+        self.logMessage(LOGLEVELERROR, errorMessage)
 
 
     # connect checks the currently known session ID for validity and performs
@@ -139,13 +142,13 @@ class AVMHomeAutomation:
             should_authenticate = self.sessionID == INVALID_SESSIONID or age_of_id_in_seconds >= 5 * 60
 
         if should_authenticate:
-            self.logMessage(0, "(re-)authenticate at FRITZ!Box, old sessionID: %s" % (self.sessionID))
+            self.logMessage(LOGLEVELDEBUG, "(re-)authenticate at FRITZ!Box, old sessionID: %s" % (self.sessionID))
             try:
                 self.getAVMSessionID()
             except Exception as e:
-                self.logMessage(2, "unexpected error while negotiating session id: %s" % (e))
+                self.logMessage(LOGLEVELERROR, "unexpected error while negotiating session id: %s" % (e))
                 self.sessionID = INVALID_SESSIONID
-            self.logMessage(0, "retrieved sessionID from FRITZ!Box: %s" % (self.sessionID))
+            self.logMessage(LOGLEVELDEBUG, "retrieved sessionID from FRITZ!Box: %s" % (self.sessionID))
 
             # Try to store potentially new session id to ramdisk for next run
             # If this operations fails, no harm is done as we can always authenticate
@@ -169,11 +172,11 @@ class AVMHomeAutomation:
             else:
                 f = open( logfile_string , 'w') 
             prefix = ""
-            if level == 0:
+            if level == LOGLEVELDEBUG:
                 prefix = "[DEBUG] "
-            if level == 1:
+            if level == LOGLEVELINFO:
                 prefix = "[INFO] "
-            if level == 2:
+            if level == LOGLEVELERROR:
                 prefix = "[ERROR] "
             print ('%s: (%s) AVM (actor: %s) %s%s' % (time_string, self.devicenumber, self.switchname, prefix, message), file = f)
             f.close()
@@ -192,7 +195,7 @@ class AVMHomeAutomation:
             getDeviceListInfosResponseBody = str(getDeviceListInfosResponseBodyRaw, "utf-8").strip()
             deviceListElementTree = ET.fromstring(getDeviceListInfosResponseBody)
         except BaseException as e:
-            self.logMessage(2, "error while requesting device infos from FRITZ!Box:" % (e))
+            self.logMessage(LOGLEVELERROR, "error while requesting device infos from FRITZ!Box:" % (e))
             self.device_infos = {}
             return
         next_device_infos = {}
@@ -201,6 +204,9 @@ class AVMHomeAutomation:
                 name = device.find("name").text
                 ain = device.attrib["identifier"]
                 next_device_infos[name] = {'ain': ain}
+                presentText = device.find("present").text
+                if presentText != '1':
+                    continue
 
                 hkrBlock = device.find("hkr")
                 if hkrBlock != None:
@@ -229,7 +235,7 @@ class AVMHomeAutomation:
                     else:
                         next_device_infos[name]['state'] = False
         except BaseException as e:
-            self.logMessage(2, "unable to parse device infos: %s" % (e))
+            self.logMessage(LOGLEVELERROR, "unable to parse device infos: %s" % (e))
         self.device_infos = next_device_infos
 
 
@@ -238,51 +244,51 @@ class AVMHomeAutomation:
     # The main purpose of this cache is to skip looking up the AIN via network
     # every time.
     def readOrBuildDeviceInfoCache(self):
-        self.logMessage(0, "start of readOrBuildDeviceInfoCache")
+        self.logMessage(LOGLEVELDEBUG, "start of readOrBuildDeviceInfoCache")
         should_fetch = True
         ownInfo = self.cachedOwnInfo()
         if "device_infos_mtime" in ownInfo and "device_infos" in ownInfo:
             self.device_infos = ownInfo["device_infos"]
             mtime = ownInfo["device_infos_mtime"]
             age_of_infos_in_seconds = time.time() - mtime
-            self.logMessage(0, "age of cached device infos: %.1f seconds" % (age_of_infos_in_seconds))
+            self.logMessage(LOGLEVELDEBUG, "age of cached device infos: %.1f seconds" % (age_of_infos_in_seconds))
             should_fetch = self.device_infos == INVALID_SESSIONID or age_of_infos_in_seconds >= 5
 
-        self.logMessage(0, "should fetch new info from FRITZ!Box: %s" % (should_fetch))
+        self.logMessage(LOGLEVELDEBUG, "should fetch new info from FRITZ!Box: %s" % (should_fetch))
         if should_fetch:
-            self.logMessage(0, "fetching device info for all devices from FRITZ!Box")
+            self.logMessage(LOGLEVELDEBUG, "fetching device info for all devices from FRITZ!Box")
             try:
                 self.getDevicesDict()
             except:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.logMessage(2, "unexpected error during getDevicesDict: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
-            self.logMessage(0, "device info fetched: %s" % (self.device_infos))
+                self.logMessage(LOGLEVELERROR, "unexpected error during getDevicesDict: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+            self.logMessage(LOGLEVELDEBUG, "device info fetched: %s" % (self.device_infos))
             if self.sessionID != INVALID_SESSIONID:
                 if not self.cacheKey in self.cache: 
                     self.cache[self.cacheKey] = {}
                 self.cache[self.cacheKey]["device_infos_mtime"] = time.time()
                 self.cache[self.cacheKey]["device_infos"] = self.device_infos
                 self.writeCacheToRamdisk()
-                self.logMessage(0, "written device infos to ramdisk cache")
+                self.logMessage(LOGLEVELDEBUG, "written device infos to ramdisk cache")
         else:
-            self.logMessage(0, "using cached device infos from ramdisk")
+            self.logMessage(LOGLEVELDEBUG, "using cached device infos from ramdisk")
 
-        self.logMessage(0, "end of readOrBuildDeviceInfoCache")
+        self.logMessage(LOGLEVELDEBUG, "end of readOrBuildDeviceInfoCache")
 
 
     # switchDevice sets the relais of the AVM Home Automation actor
     # state parameter: true -> on, false -> off
     def switchDevice(self, state):
         if self.sessionID == INVALID_SESSIONID:
-            self.logMessage(2, "Kann ohne valide Anmeldung nicht schalten.")
+            self.logMessage(LOGLEVELERROR, "Kann ohne valide Anmeldung nicht schalten.")
             return
-        self.logMessage(0, "start of switchDevice")
+        self.logMessage(LOGLEVELDEBUG, "start of switchDevice")
         if state:
             cmd = "setswitchon"
         else:
             cmd = "setswitchoff"
-        self.logMessage(1, cmd)
+        self.logMessage(LOGLEVELINFO, cmd)
 
         if not self.switchname in self.device_infos:
             # try updating the info, first
@@ -290,7 +296,7 @@ class AVMHomeAutomation:
 
         if not self.switchname in self.device_infos:
             # still not found -> bail out
-            self.logMessage(2, "no such device found at FRITZ!Box: %s" % (self.switchname))
+            self.logMessage(LOGLEVELERROR, "no such device found at FRITZ!Box: %s" % (self.switchname))
             return
 
         switch = self.device_infos[self.switchname]
@@ -302,7 +308,7 @@ class AVMHomeAutomation:
             "&switchcmd=" + cmd + \
             "&ain=" + ain
         urllib.request.urlopen(commandURL, timeout = 5)
-        self.logMessage(0, "end of switchDevice")
+        self.logMessage(LOGLEVELDEBUG, "end of switchDevice")
 
 
     # getActualPowerForce returns current observed power and the state of the switch relais.
@@ -310,12 +316,12 @@ class AVMHomeAutomation:
     # or dumped to stdout if no such file exists (for local development)
     def getActualPower(self):
         if self.sessionID == INVALID_SESSIONID:
-            self.logMessage(2, "Kann ohne valide Anmeldung keine neuen Daten holen.")
+            self.logMessage(LOGLEVELERROR, "Kann ohne valide Anmeldung keine neuen Daten holen.")
             return
-        self.logMessage(0, "start of getActualPower")
+        self.logMessage(LOGLEVELDEBUG, "start of getActualPower")
         self.readOrBuildDeviceInfoCache()
         if not self.switchname in self.device_infos:
-            self.logMessage(2, "no such device found at FRITZ!Box: %s" % (self.switchname))
+            self.logMessage(LOGLEVELERROR, "no such device found at FRITZ!Box: %s" % (self.switchname))
             return
 
         try:
@@ -324,39 +330,39 @@ class AVMHomeAutomation:
                 aktpower = switch['power']
             else:
                 aktpower = 0
-                self.logMessage(2, "device does not provide power measurement, falling back to 0")
+                self.logMessage(LOGLEVELERROR, "device does not provide power measurement, falling back to 0")
             if 'energy' in switch:
                 powerc = switch['energy']
             else:
                 powerc = 0
-                self.logMessage(2, "device does not provide energy measurement, falling back to 0")
+                self.logMessage(LOGLEVELERROR, "device does not provide energy measurement, falling back to 0")
             if 'state' in switch:
                 if switch['state']:
                     relais = 1
                 else:
                     relais = 0
             else:
-                self.logMessage(2, "device does not provider switch state, falling back to OFF")
+                self.logMessage(LOGLEVELERROR, "device does not provider switch state, falling back to OFF")
                 relais = 0
             answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '}'
         except:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            self.logMessage(2, "unexpected error getActualPower build JSON string: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+            self.logMessage(LOGLEVELERROR, "unexpected error getActualPower build JSON string: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
 
-        self.logMessage(0, "constructed JSON answer: %s" % (answer))
+        self.logMessage(LOGLEVELDEBUG, "constructed JSON answer: %s" % (answer))
         outFileString ='/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(self.devicenumber);
-        self.logMessage(0, "handing answer back to smarthomehandler via %s" % (outFileString))
+        self.logMessage(LOGLEVELDEBUG, "handing answer back to smarthomehandler via %s" % (outFileString))
         try:
             f1 = open(outFileString, 'w')
             json.dump(answer, f1)
             f1.close()
         except IOError as e:
-            self.logMessage(2, "error writing power result %s" % (e))
+            self.logMessage(LOGLEVELERROR, "error writing power result %s" % (e))
             print(answer) # dump answer to stdout if file cannot be written
         except:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            self.logMessage(2, "unexpected error getActualPower write JSON %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
-        self.logMessage(0, "end of getActualPower")
+            self.logMessage(LOGLEVELERROR, "unexpected error getActualPower write JSON %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
+        self.logMessage(LOGLEVELDEBUG, "end of getActualPower")
 

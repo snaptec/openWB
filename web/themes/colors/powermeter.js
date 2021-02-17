@@ -12,6 +12,9 @@ class PowerMeter {
     this.radius = this.width / 2 - this.margin;
     this.cornerRadius = 1;
     this.circleGapSize = (Math.PI / 40);
+    this.maxPower = 4000;
+    this.showRelativeArcs = false;
+    this.emptyPower = 0;
   }
 
   // public method to initialize
@@ -26,6 +29,9 @@ class PowerMeter {
     this.gridColor = style.getPropertyValue('--color-evu');
     this.bgColor = style.getPropertyValue('--color-bg');
     this.chargeColor = style.getPropertyValue('--color-charging');
+    this.axisColor = style.getPropertyValue('--color-axis');
+    d3.select("button#powerMeterButton")
+      .on("click", switchDisplay)
   }
 
   // public method to update the graph
@@ -43,10 +49,29 @@ class PowerMeter {
         "transform",
         "translate(" + this.width / 2 + "," + this.height / 2 + ")"
       );
+
+      if (this.showRelativeArcs) {
+        this.svg.append("g")
+          
+          .append("text")
+          .attr("x", this.width)
+          .attr("y", this.height)
+          .attr("fill", this.axisColor)
+          .attr("text-anchor", "end")
+          .attr("font-size", 20)
+          .attr("id", "powerMeterReset")
+          .text("RESET")
+          .on("click", resetButtonClicked);
+      }
+
     return g;
-  }
+      
+    }
+  
 
   drawGraph(svg) {
+    this.updateDisplayRatio();
+    
     this.drawSourceArc(svg);
     this.drawUsageArc(svg);
 
@@ -86,7 +111,27 @@ class PowerMeter {
       wbdata.usageSummary[3].color);
     }
 
+    if (this.showRelativeArcs) {
     svg.append("text")
+      .attr("x", 0)
+      .attr("y", 5)
+      .text("Verbrauch: " + formatWatt(wbdata.housePower + wbdata.usageSummary[1].power + wbdata.usageSummary[2].power + wbdata.usageSummary[3].power))
+      .attr("fill", "white")
+      .attr("backgroundcolor", this.bgColor)
+      .style("text-anchor", "middle")
+      .style("font-size", "22")
+      ;
+      svg.append("text")
+      .attr("x", this.width / 2 -44)
+      .attr("y", 2)
+      .text("Peak: " + formatWatt(this.maxPower))
+      .attr("fill", this.axisColor)
+      .attr("backgroundcolor", this.bgColor)
+      .style("text-anchor", "middle")
+      .style("font-size", "12")
+      ;
+    } else {
+      svg.append("text")
       .attr("x", 0)
       .attr("y", 0)
       .text("Aktueller Verbrauch: " + formatWatt(wbdata.housePower + wbdata.usageSummary[1].power + wbdata.usageSummary[2].power + wbdata.usageSummary[3].power))
@@ -95,6 +140,9 @@ class PowerMeter {
       .style("text-anchor", "middle")
       .style("font-size", "22")
       ;
+    }
+
+
   }
 
   drawSourceArc(svg) {
@@ -112,20 +160,23 @@ class PowerMeter {
       .cornerRadius(this.cornerRadius);
 
     // Add the chart to the svg
+    const arcCount = Object.values(wbdata.sourceSummary).length;
+    
     svg.selectAll("sources")
-      .data(pieGenerator(Object.values (wbdata.sourceSummary))).enter()
+      .data(pieGenerator(Object.values (wbdata.sourceSummary).concat ([{"power": this.emptyPower, "color": this.bgColor}]))).enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d) => d.data.color);
+      .attr("fill", (d) => d.data.color)
+      .attr("stroke", (d,i) => (i==arcCount && d.data.power > 0) ? this.axisColor : "null");
   }
 
   drawUsageArc(svg) {
-
+   
     // Define the generator for the segments
     const pieGenerator = d3.pie()
       .value((record) => Number(record.power))
       .startAngle(Math.PI * 1.5 - this.circleGapSize)
-      .endAngle(Math.PI / 2 + this.circleGapSize)
+      .endAngle(Math.PI / 2 + this.circleGapSize )
       .sort(null);
 
     // Generator for the pie chart
@@ -135,11 +186,13 @@ class PowerMeter {
       .cornerRadius(this.cornerRadius);
 
     // Add the chart to the svg
+    const arcCount = wbdata.usageSummary.length;
     svg.selectAll("consumers")
-      .data(pieGenerator(wbdata.usageSummary)).enter()
+      .data(pieGenerator(wbdata.usageSummary.concat ([{"power": this.emptyPower, "color": this.bgColor}]))).enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d) => d.data.color);
+      .attr("fill", (d) => d.data.color)
+      .attr("stroke", (d,i) => (i==arcCount && d.data.power > 0) ? this.axisColor : "null");
   }
 
   addLabel(svg, x, y, anchor, data) {
@@ -174,6 +227,39 @@ class PowerMeter {
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");
   }
+
+  updateDisplayRatio() {
+    if (this.showRelativeArcs) {
+      this.displayRatio = (+wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power) / this.maxPower;
+      this.emptyPower = this.maxPower - (+wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power);
+      if (this.emptyPower < 0) {
+        this.maxPower = +wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power;
+        this.emptyPower = 0;
+        wbdata.prefs.maxPow = this.maxPower;
+        wbdata.persistGraphPreferences();
+      }
+    } else {
+      this.emptyPower = 0;
+    }
+  }
+
+  resetDisplayRatio() {
+    this.maxPower = +wbdata.sourceSummary.pv.power + wbdata.sourceSummary.evuIn.power + wbdata.sourceSummary.batOut.power;
+    this.emptyPower = 0;
+    wbdata.prefs.maxPow = this.maxPower;
+    wbdata.persistGraphPreferences(); 
+  }
 }
 
+function switchDisplay () {
+  powerMeter.showRelativeArcs = powerMeter.showRelativeArcs ? false : true;
+  wbdata.prefs.relPM = powerMeter.showRelativeArcs;
+  wbdata.persistGraphPreferences();
+  powerMeter.update();
+}
+
+function resetButtonClicked() {
+  powerMeter.resetDisplayRatio();
+  powerMeter.update();
+}
 var powerMeter = new PowerMeter();

@@ -833,7 +833,7 @@ function loadgraph() {
 			// and format the string as needed to call daily graph: YYYY-mm-dd
 			day = day.replace(/[^\d]/g,'');  // only day as number left
 			var jumpToDate = graphYear + '-' + graphMonth + '-' + day;
-			window.location.href = "daily.php?date=" + jumpToDate;
+			window.location.href = "logging/daily.php?date=" + jumpToDate;
 		}
 	});
 
