@@ -122,9 +122,9 @@ class PowerMeter {
       .style("font-size", "22")
       ;
       svg.append("text")
-      .attr("x", this.width / 2 -42)
+      .attr("x", this.width / 2 -44)
       .attr("y", 2)
-      .text("Max: " + formatWatt(this.maxPower))
+      .text("Peak: " + formatWatt(this.maxPower))
       .attr("fill", this.axisColor)
       .attr("backgroundcolor", this.bgColor)
       .style("text-anchor", "middle")
