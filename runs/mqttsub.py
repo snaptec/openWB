@@ -448,7 +448,7 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/get/pv/lp/1/minCurrent", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/config/set/pv/lp/2/minCurrent"):
             if (int(msg.payload) >= 6 and int(msg.payload) <= 16):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalalp2mpv=", msg.payload.decode("utf-8")]
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalalp2pv=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/pv/lp/2/minCurrent", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/set/pv" in msg.topic) and ("faultState" in msg.topic)):
