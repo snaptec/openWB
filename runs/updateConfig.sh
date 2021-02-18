@@ -339,19 +339,19 @@ updateConfig(){
 		echo "evnotifytokenlp2=token" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonwatt=" $ConfigFile; then
-		echo "wrjsonwatt=.watt" >> $ConfigFile
+		echo "wrjsonwatt='.watt'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonkwh=" $ConfigFile; then
-		echo "wrjsonkwh=.kwh" >> $ConfigFile
+		echo "wrjsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonurl=" $ConfigFile; then
 		echo "wrjsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonwatt=" $ConfigFile; then
-		echo "wr2jsonwatt=.watt" >> $ConfigFile
+		echo "wr2jsonwatt='.watt'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonkwh=" $ConfigFile; then
-		echo "wr2jsonkwh=.kwh" >> $ConfigFile
+		echo "wr2jsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonurl=" $ConfigFile; then
 		echo "wr2jsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
@@ -378,13 +378,13 @@ updateConfig(){
 		echo "mpm3pmpvlanip=192.168.1.12" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonwatt=" $ConfigFile; then
-		echo "bezugjsonwatt=.watt" >> $ConfigFile
+		echo "bezugjsonwatt='.watt'" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonkwh=" $ConfigFile; then
-		echo "bezugjsonkwh=.kwh" >> $ConfigFile
+		echo "bezugjsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "einspeisungjsonkwh=" $ConfigFile; then
-		echo "einspeisungjsonkwh=.kwh" >> $ConfigFile
+		echo "einspeisungjsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonurl=" $ConfigFile; then
 		echo "bezugjsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
@@ -445,10 +445,10 @@ updateConfig(){
 		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
 	fi
 	if ! grep -Fq "battjsonsoc"=" $ConfigFile; then
-		echo "speichersoc_json=.RSOC" >> $ConfigFile
+		echo "speichersoc_json='.RSOC'" >> $ConfigFile
 	fi
 	if ! grep -Fq "battjsonwatt"=" $ConfigFile; then
-		echo "battjsonwatt=.Consumption_W" >> $ConfigFile
+		echo "battjsonwatt='.Consumption_Wi'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
