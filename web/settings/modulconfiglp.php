@@ -106,7 +106,7 @@
 									<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
 									<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
 									<option <?php if($evseconold == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
-									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
+									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "0" || $mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
 									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi / smartWB</option>
 									<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
 									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
@@ -142,7 +142,8 @@
 							<input type="hidden" name="mpm3pmllid" value="0">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
-								Dies ist die richtige Option für fertige openWB series1 oder series2.
+								Dies ist die richtige Option für fertige openWB series1 oder series2.<br>
+								<span class="text-danger">Diese Option befindet sich noch in der Testphase!</span>
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
