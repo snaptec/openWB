@@ -444,10 +444,10 @@ updateConfig(){
 	if ! grep -Fq "battjsonurl=" $ConfigFile; then
 		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
 	fi
-	if ! grep -Fq "battjsonsoc"=" $ConfigFile; then
-		echo "speichersoc_json='.RSOC'" >> $ConfigFile
+	if ! grep -Fq "battjsonsoc=" $ConfigFile; then
+		echo "battjsonsoc='.RSOC'" >> $ConfigFile
 	fi
-	if ! grep -Fq "battjsonwatt"=" $ConfigFile; then
+	if ! grep -Fq "battjsonwatt=" $ConfigFile; then
 		echo "battjsonwatt='.Consumption_Wi'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
@@ -716,6 +716,12 @@ updateConfig(){
 	fi
 	if ! grep -Fq "angesteckthooklp1_url=" $ConfigFile; then
 		echo "angesteckthooklp1_url='https://webhook.com/ein.php'" >> $ConfigFile
+	fi
+	if ! grep -Fq "ladestarthooklp1_url=" $ConfigFile; then
+		echo "ladestarthooklp1_url='https://webhook.com/ein.php'" >> $ConfigFile
+	fi
+	if ! grep -Fq "ladestophooklp1_url=" $ConfigFile; then
+		echo "ladestophooklp1_url='https://webhook.com/aus.php'" >> $ConfigFile
 	fi
 	if ! grep -Fq "hook1aus_url=" $ConfigFile; then
 		echo "hook1aus_url='https://webhook.com/aus.php'" >> $ConfigFile
