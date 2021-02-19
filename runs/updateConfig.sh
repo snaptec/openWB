@@ -1677,6 +1677,16 @@ updateConfig(){
 		echo "myopel_clientidlp2=ID" >> $ConfigFile
 		echo "myopel_clientsecretlp2=Secret" >> $ConfigFile
 	fi
+	if ! grep -Fq "psa_userlp1=" $ConfigFile; then
+		echo "psa_userlp1=User" >> $ConfigFile
+		echo "psa_passlp1=Pass" >> $ConfigFile
+		echo "psa_clientidlp1=ID" >> $ConfigFile
+		echo "psa_clientsecretlp1=Secret" >> $ConfigFile
+		echo "psa_userlp2=User" >> $ConfigFile
+		echo "psa_passlp2=Pass" >> $ConfigFile
+		echo "psa_clientidlp2=ID" >> $ConfigFile
+		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		echo "soc_eq_client_id_lp1=ID" >> $ConfigFile
 		echo "soc_eq_client_secret_lp1=Secret" >> $ConfigFile
@@ -1712,6 +1722,12 @@ updateConfig(){
 	fi 
 	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
 		echo "myopel_soccalclp2=0" >> $ConfigFile;
+	fi
+	if ! grep -Fq "psa_soccalclp1=" $ConfigFile; then
+		echo "psa_soccalclp1=0" >> $ConfigFile; 
+	fi 
+	if ! grep -Fq "psa_soccalclp2=" $ConfigFile; then
+		echo "psa_soccalclp2=0" >> $ConfigFile;
 	fi
 	if ! grep -Fq "wr1extprod=" $ConfigFile; then
 		echo "wr1extprod=0" >> $ConfigFile
