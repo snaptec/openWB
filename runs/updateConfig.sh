@@ -717,12 +717,6 @@ updateConfig(){
 	if ! grep -Fq "angesteckthooklp1_url=" $ConfigFile; then
 		echo "angesteckthooklp1_url='https://webhook.com/ein.php'" >> $ConfigFile
 	fi
-	if ! grep -Fq "ladestarthooklp1_url=" $ConfigFile; then
-		echo "ladestarthooklp1_url='https://webhook.com/ein.php'" >> $ConfigFile
-	fi
-	if ! grep -Fq "ladestophooklp1_url=" $ConfigFile; then
-		echo "ladestophooklp1_url='https://webhook.com/aus.php'" >> $ConfigFile
-	fi
 	if ! grep -Fq "hook1aus_url=" $ConfigFile; then
 		echo "hook1aus_url='https://webhook.com/aus.php'" >> $ConfigFile
 	fi
