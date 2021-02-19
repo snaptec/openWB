@@ -905,7 +905,7 @@
 							<div class="form-row mb-1">
 								<label for="wr2jsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr2jsonkwh" id="wr2jsonkwh" value="<?php echo $wr2jsonkwhold ?>">
+									<input class="form-control" type="text" name="wr2jsonkwh" id="wr2jsonkwh" value="<?php echo htmlspecialchars($wr2jsonkwhold) ?>">
 									<span class="form-text small">
 										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
