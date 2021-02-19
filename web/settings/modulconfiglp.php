@@ -94,6 +94,8 @@
 							<label for="evsecon" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "0") echo "selected" ?> value="modbusevse" data-id="openwb auto">openWB series1/2 Autoerkennung</option>
+
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">openWB series1/2</option>
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">openWB series1/2 mit geeichtem Zähler Variante 1</option>
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v2">openWB series1/2 mit geeichtem Zähler Variante 2</option>
@@ -129,6 +131,18 @@
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
+							</div>
+						</div>
+						<div id="openwbauto" class="hide">
+							<!-- default values for openwbauto -->
+							<input type="hidden" name="modbusevseid" value="1">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
+							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
+							<input type="hidden" name="modbusevsesource" value="/dev/ttyUSB0">
+							<input type="hidden" name="mpm3pmllid" value="0">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für fertige openWB series1 oder series2.
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
@@ -1562,6 +1576,7 @@
 							hideSection('#evseconmastereth');
 							hideSection('#evseconkeba');
 							hideSection('#openwb12');
+							hideSection('#openwbauto');
 							hideSection('#openwb12mid');
 							hideSection('#openwb12v2mid');
 							hideSection('#evseconhttp');
@@ -1575,6 +1590,9 @@
 								switch( $("#evsecon option:selected").attr('data-id') ){
 									case "openwb series1/2":
 										showSection('#openwb12');
+									break;
+									case "openwb auto":
+										showSection('#openwbauto');
 									break;
 									case "openwb series1/2 mid v1":
 										showSection('#openwb12mid');
