@@ -448,7 +448,7 @@ updateConfig(){
 		echo "battjsonsoc='.RSOC'" >> $ConfigFile
 	fi
 	if ! grep -Fq "battjsonwatt=" $ConfigFile; then
-		echo "battjsonwatt='.Consumption_Wi'" >> $ConfigFile
+		echo "battjsonwatt='.Consumption_W'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
