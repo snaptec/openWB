@@ -14,10 +14,10 @@ GPIO.setup(15, GPIO.OUT)
 
 f = open('/var/www/html/openWB/ramdisk/socketActivated', 'w')
 
-if (onOff == "on"):
+if (onOff == "off"):
     GPIO.output(15, GPIO.HIGH)
     f.write(str(1))
-elif (onOff == "off"):
+elif (onOff == "on"):
     GPIO.output(15, GPIO.LOW)
     f.write(str(0))
 else:
