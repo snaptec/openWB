@@ -269,5 +269,35 @@ hook(){
 			fi
 		fi
 	fi
+	if (( ladestarthooklp1 == 1 )); then
+		ladungaktivlp1=$(<ramdisk/ladungaktivlp1)
+		if (( ladungaktivlp1 == 1 )); then
+			if [ ! -e ramdisk/ladestarthooklp1aktiv ]; then
+				touch ramdisk/ladestarthooklp1aktiv
+				curl -s --connect-timeout 5 $ladestarthooklp1_url > /dev/null
+				openwbDebugLog "CHARGESTAT" 0 "Ladestart Hook LP1 ausgeführt"
+				openwbDebugLog "MAIN" 1 "Ladestart Hook LP1 ausgeführt"
+			fi
+		else
+			if [  -e ramdisk/ladestarthooklp1aktiv ]; then
+				rm ramdisk/ladestarthooklp1aktiv
+			fi
+		fi
+	fi
+	if (( ladestophooklp1 == 1 )); then
+		ladungaktivlp1=$(<ramdisk/ladungaktivlp1)
+		if (( ladungaktivlp1 == 0 )); then
+			if [ ! -e ramdisk/ladestophooklp1aktiv ]; then
+				touch ramdisk/ladestophooklp1aktiv
+				curl -s --connect-timeout 5 $ladestophooklp1_url > /dev/null
+				openwbDebugLog "CHARGESTAT" 0 "Ladestop Hook LP1 ausgeführt"
+				openwbDebugLog "MAIN" 1 "Ladestop Hook LP1 ausgeführt"
+			fi
+		else
+			if [  -e ramdisk/ladestophooklp1aktiv ]; then
+				rm ramdisk/ladestophooklp1aktiv
+			fi
+		fi
+	fi
 
 }
