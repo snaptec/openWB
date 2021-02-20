@@ -85,6 +85,12 @@
 				if(strpos($line, "angesteckthooklp1_url=") !== false) {
 					list(, $angesteckthooklp1_urlold) = explode("=", $line, 2);
 				}
+				if(strpos($line, "ladestarthooklp1_url=") !== false) {
+					list(, $ladestarthooklp1_urlold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "ladestophooklp1_url=") !== false) {
+					list(, $ladestophooklp1_urlold) = explode("=", $line, 2);
+				}
 				if(strpos($line, "hook1aus_url=") !== false) {
 					list(, $hook1aus_urlold) = explode("=", $line, 2);
 				}
@@ -99,6 +105,12 @@
 				}
 				if(strpos($line, "angesteckthooklp1=") !== false) {
 					list(, $angesteckthooklp1old) = explode("=", $line, 2);
+				}
+				if(strpos($line, "ladestarthooklp1=") !== false) {
+					list(, $ladestarthooklp1old) = explode("=", $line, 2);
+				}
+				if(strpos($line, "ladestophooklp1=") !== false) {
+					list(, $ladestophooklp1old) = explode("=", $line, 2);
 				}
 
 				if(strpos($line, "hook1_dauer=") !== false) {
@@ -191,6 +203,8 @@
 			}
 
 			$angesteckthooklp1_urlold = str_replace( "'", "", $angesteckthooklp1_urlold);
+			$ladestarthooklp1_urlold = str_replace( "'", "", $ladestarthooklp1_urlold);
+			$ladestophooklp1_urlold = str_replace( "'", "", $ladestophooklp1_urlold);
 
 			$hook1ein_urlold = str_replace( "'", "", $hook1ein_urlold);
 			$hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
@@ -238,6 +252,52 @@
 									</div>
 								</div>
 							</div>
+							<hr class="border-secondary">
+							<div class="form-row mb-1">
+								<label for="ladestarthooklp1" class="col-md-4 col-form-label">Nach Ladestart an Ladepunkt 1</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($ladestarthooklp1old == 0) echo " active" ?>">
+											<input type="radio" name="ladestarthooklp1" id="ladestarthooklp1Off" value="0"<?php if($ladestarthooklp1old == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($ladestarthooklp1old == 1) echo " active" ?>">
+											<input type="radio" name="ladestarthooklp1" id="ladestarthooklp1On" value="1"<?php if($ladestarthooklp1old == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div id="ladestarthooklp1andiv">
+								<div class="form-row mb-1">
+									<label for="ladestarthooklp1_url" class="col-md-4 col-form-label">URL</label>
+									<div class="col">
+										<input class="form-control" type="text" name="ladestarthooklp1_url" id="ladestarthooklp1_url" value="<?php echo trim(htmlspecialchars($ladestarthooklp1_urlold)) ?>">
+										<span class="form-text small">URL die jedes Mal aufgerufen wird wenn ein Ladevorgang an LP1 startet.</span>
+									</div>
+								</div>
+							</div>
+							<hr class="border-secondary">
+							<div class="form-row mb-1">
+								<label for="ladestophooklp1" class="col-md-4 col-form-label">Nach Ladestopp an Ladepunkt 1</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($ladestophooklp1old == 0) echo " active" ?>">
+											<input type="radio" name="ladestophooklp1" id="ladestophooklp1Off" value="0"<?php if($ladestophooklp1old == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($ladestophooklp1old == 1) echo " active" ?>">
+											<input type="radio" name="ladestophooklp1" id="ladestophooklp1On" value="1"<?php if($ladestophooklp1old == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div id="ladestophooklp1andiv">
+								<div class="form-row mb-1">
+									<label for="ladestophooklp1_url" class="col-md-4 col-form-label">URL</label>
+									<div class="col">
+										<input class="form-control" type="text" name="ladestophooklp1_url" id="ladestophooklp1_url" value="<?php echo trim(htmlspecialchars($ladestophooklp1_urlold)) ?>">
+										<span class="form-text small">URL die jedes Mal aufgerufen wird wenn ein Ladevorgang an LP1 stoppt.</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -253,6 +313,32 @@
 									hideSection('#angesteckthooklp1andiv');
 								} else {
 									showSection('#angesteckthooklp1andiv');
+								}
+							});
+							if($('#ladestarthooklp1Off').prop("checked")) {
+								hideSection('#ladestarthooklp1andiv');
+							} else {
+								showSection('#ladestarthooklp1andiv');
+							}
+
+							$('input[type=radio][name=ladestarthooklp1]').change(function(){
+								if(this.value == '0') {
+									hideSection('#ladestarthooklp1andiv');
+								} else {
+									showSection('#ladestarthooklp1andiv');
+								}
+							});
+							if($('#ladestophooklp1Off').prop("checked")) {
+								hideSection('#ladestophooklp1andiv');
+							} else {
+								showSection('#ladestophooklp1andiv');
+							}
+
+							$('input[type=radio][name=ladestophooklp1]').change(function(){
+								if(this.value == '0') {
+									hideSection('#ladestophooklp1andiv');
+								} else {
+									showSection('#ladestophooklp1andiv');
 								}
 							});
 						});
