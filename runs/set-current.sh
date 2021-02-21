@@ -252,6 +252,23 @@ function setChargingCurrent () {
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
+		if [[ "$modbusevseid" == 0 ]]; then
+			if [ -f /var/www/html/openWB/ramdisk/evsemodulconfig ]; then
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			else
+				if [ -f /dev/ttyUSB0 ]; then
+					echo "/dev/ttyUSB" > ramdisk/evsemodulconfig
+				else
+					echo "/dev/serial0" > ramdisk/evsemodulconfig
+				fi
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			fi
+		fi
+
 		setChargingCurrentModbus $current $modbusevsesource $modbusevseid 
 	fi
 
