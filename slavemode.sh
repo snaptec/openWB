@@ -53,6 +53,7 @@ openwbisslave() {
 		# handle disapprove of active socket
 		elif (( SocketActivated > 0 )) && (( SocketApproved == 0 )); then
 			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Active socket disapproved by controller. Socket will now be turned off."
+			echo "Slave Mode Socket: Active socket disapproved by controller. Socket will now be turned off."
 			sudo python runs/standardSocket.py off
 
 		# handle approved activation request

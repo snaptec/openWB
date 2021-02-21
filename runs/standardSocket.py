@@ -16,10 +16,10 @@ f = open('/var/www/html/openWB/ramdisk/socketActivated', 'w')
 
 if (onOff == "off"):
     GPIO.output(15, GPIO.HIGH)
-    f.write(str(1))
+    f.write(str(0))
 elif (onOff == "on"):
     GPIO.output(15, GPIO.LOW)
-    f.write(str(0))
+    f.write(str(1))
 else:
     print("Invalid argument: '" + onOff + "'. Supporting only [on,off]")
 

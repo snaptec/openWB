@@ -602,6 +602,12 @@ def on_message(client, userdata, msg):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeSlowRamping=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/slave/SlowRamping", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (msg.topic == "openWB/config/set/slave/StandardSocketInstalled"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                standardSocketInstalled=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "standardSocketInstalled=", standardSocketInstalled]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/slave/StandardSocketInstalled", standardSocketInstalled, qos=0, retain=True)
         if (msg.topic == "openWB/config/set/slave/UseLastChargingPhase"):
             if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeUseLastChargingPhase=", msg.payload.decode("utf-8")]
@@ -711,12 +717,6 @@ def on_message(client, userdata, msg):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slavemode=", slaveMode]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/global/slaveMode", slaveMode, qos=0, retain=True)
-        if (msg.topic == "openWB/config/set/global/standardSocketInstalled"):
-            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-                standardSocketInstalled=msg.payload.decode("utf-8")
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "standardSocketInstalled=", standardSocketInstalled]
-                subprocess.Popen(sendcommand)
-                client.publish("openWB/config/get/global/standardSocketInstalled", standardSocketInstalled, qos=0, retain=True)
         if (msg.topic == "openWB/config/set/global/lp/1/cpInterrupt"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=1):
                 einbeziehen=msg.payload.decode("utf-8")
