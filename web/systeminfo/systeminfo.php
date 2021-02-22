@@ -223,13 +223,13 @@
 						}
 						if (json.wlanaddr != '') {
 							$('#ipwifi').text(json.wlanaddr);
-                                                        $('#wifiqualy').text(json.wlanqualy);
-                                                        $('#wifissid').text(json.wlanssid);
-                                                        $('#wifimode').text(json.wlanmode);
-                                                        $('#wifibitrate').text(json.wlanbitrate);
-                                                        $('#wifipower').text(json.wlanpower);
-                                                        $('#wifirx').text(json.wlanrx);
-                                                        $('#wifitx').text(json.wlantx);
+							$('#wifiqualy').text(json.wlanqualy);
+							$('#wifissid').text(json.wlanssid);
+							$('#wifimode').text(json.wlanmode);
+							$('#wifibitrate').text(json.wlanbitrate);
+							$('#wifipower').text(json.wlanpower);
+							$('#wifirx').text(json.wlanrx);
+							$('#wifitx').text(json.wlantx);
 						} else {
 							$('#ipwifi').text('--');
 						}
