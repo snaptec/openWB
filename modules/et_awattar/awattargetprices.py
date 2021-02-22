@@ -31,7 +31,7 @@ import sys
 import re
 import json
 from time import sleep
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, date, timezone, timedelta
 import requests
 import atexit
 
@@ -72,9 +72,10 @@ _module_starttime = 0
 #########################################################
 
 def _check_args(arg1, arg2, arg3):
-    arg1 = re.sub('\W+', '', arg1)
-    if not arg1 in LAENDERDATEN:
-        raise ValueError('1. Parameter (Landeskennung = "' + arg1 + '") unbekannt')
+    arg1_str = re.sub('\W+', '', arg1)
+    if not arg1_str in LAENDERDATEN:
+        raise ValueError('1. Parameter (Landeskennung = "' + arg1_str + '") unbekannt')
+    arg1 = arg1_str
     try:
         arg2_str = re.sub('\W+', '', arg2)
         arg2 = float(arg2_str)
@@ -102,7 +103,7 @@ def _read_args():
 def _write_log_entry(message, msg_debug_level):
     # schreibt Eintrag ins Log je nach Level
     global _openWB_debug_level
-    if _openWB_debug_level is None or msg_debug_level <= 3: #_openWB_debug_level:
+    if _openWB_debug_level is None or msg_debug_level <= _openWB_debug_level:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         line = timestamp + ' Modul awattargetprices.py: ' + message + '\n'
         with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
@@ -304,10 +305,21 @@ def _get_existing_pricelist():
     return existing_pricelist, module_name_in_file
 
 def _convert_timestamp_to_str(timestamp):
-    # konvertiert timestamp in UTC zu String (in Lokalzeit) Format: 11.01., 23:00
+    # konvertiert timestamp in UTC zu String (in Lokalzeit) Format: 11.01., 23:00 Uhr
+    # ist das Datum heute, dann Format heute, 23:00 Uhr
+    # ist das Datum morgen, dann Format morgen, 23:00 Uhr
+    today = date.today()
+    tomorrow = today + timedelta(days=1)
     datetime_obj = _get_utcfromtimestamp(timestamp)
     datetime_obj = datetime_obj.astimezone(tz=None)  # und nach lokal
-    return datetime_obj.strftime('%d.%m., %H:%M Uhr')
+    if today == datetime_obj.date():
+        the_date = 'heute, '
+    elif tomorrow == datetime_obj.date():
+        the_date = 'morgen, '
+    else:
+        the_date = datetime_obj.strftime('%d.%m., ')
+    the_time = datetime_obj.strftime('%H:%M Uhr')
+    return (the_date + the_time)
 
 def _log_module_runtime():
     # schreibt Modullaufzeit ins Logfile
