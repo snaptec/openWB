@@ -444,11 +444,11 @@ updateConfig(){
 	if ! grep -Fq "battjsonurl=" $ConfigFile; then
 		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
 	fi
-	if ! grep -Fq "battjsonsoc"=" $ConfigFile; then
-		echo "speichersoc_json='.RSOC'" >> $ConfigFile
+	if ! grep -Fq "battjsonsoc=" $ConfigFile; then
+		echo "battjsonsoc='.RSOC'" >> $ConfigFile
 	fi
-	if ! grep -Fq "battjsonwatt"=" $ConfigFile; then
-		echo "battjsonwatt='.Consumption_Wi'" >> $ConfigFile
+	if ! grep -Fq "battjsonwatt=" $ConfigFile; then
+		echo "battjsonwatt='.Consumption_W'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
