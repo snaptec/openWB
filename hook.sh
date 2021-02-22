@@ -305,7 +305,7 @@ hook(){
 			if [ ! -e ramdisk/ladestophooklp1aktiv ]; then
 				touch ramdisk/ladestophooklp1aktiv
 				curl -s --connect-timeout 5 $ladestophooklp1_url > /dev/null
-				openwbDebugLog "CHARGESTAT" 0 "Ladestop-WebHook LP1 ausgeführt"
+				openwbDebugLog "CHARGESTAT" 0 "Ladestopp-WebHook LP1 ausgeführt"
 				openwbDebugLog "MAIN" 1 "Ladestopp-WebHook LP1 ausgeführt"
 			fi
 		else
