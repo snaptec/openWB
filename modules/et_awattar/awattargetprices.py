@@ -75,18 +75,17 @@ def _check_args(arg1, arg2, arg3):
     arg1_str = re.sub('\W+', '', arg1)
     if not arg1_str in LAENDERDATEN:
         raise ValueError('1. Parameter (Landeskennung = "' + arg1_str + '") unbekannt')
-    arg1 = arg1_str
+    arg2_str = re.sub('\W+', '', arg2)
     try:
-        arg2_str = re.sub('\W+', '', arg2)
-        arg2 = float(arg2_str)
+        arg2_float = float(arg2_str)
     except:
-        raise ValueError('2. Parameter (Basispreis = "' + arg2_str + '") ist keine Zahl')
+        raise ValueError('2. Parameter (Basispreis = "' + arg2_str + '") ist keine Zahl') from None
+    arg3_str = re.sub('\W+', '', arg3)
     try:
-        arg3_str = re.sub('\W+', '', arg3)
-        arg3 = int(arg3_str)
+        arg3_int = int(arg3_str)
     except:
-        raise ValueError('3. Parameter (Debug-Level = "' + arg3_str + '") ist keine Zahl')
-    return arg1, arg2, arg3
+        raise ValueError('3. Parameter (Debug-Level = "' + arg3_str + '") ist keine Zahl') from None
+    return arg1, arg2_float, arg3_int
 
 def _read_args():
     # gibt Kommandozeilenparameter zurück
@@ -103,7 +102,7 @@ def _read_args():
 def _write_log_entry(message, msg_debug_level):
     # schreibt Eintrag ins Log je nach Level
     global _openWB_debug_level
-    if _openWB_debug_level is None or msg_debug_level <= _openWB_debug_level:
+    if msg_debug_level == 0 or _openWB_debug_level is None or msg_debug_level <= _openWB_debug_level:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         line = timestamp + ' Modul awattargetprices.py: ' + message + '\n'
         with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
@@ -225,7 +224,7 @@ def _cleanup_pricelist(pricelist):
             try:
                 starttime_utc = _get_utcfromtimestamp(float(price[0]))  # Start-Zeitstempel aus Preisliste umwandeln
             except:
-                raise TypeError('Zeitstempel-Umwandlung fehlgeschlagen')
+                raise TypeError('Zeitstempel-Umwandlung fehlgeschlagen') from None
             if starttime_utc < now_full_hour or starttime_utc.date() > now.date() + timedelta(days=1):
                 pricelist.remove(price)
             if index > 0:
@@ -249,19 +248,19 @@ def _get_updated_pricelist():
     try:
         response = _readAPI(LAENDERDATEN[landeskennung]['url'])
     except:
-        raise RuntimeError('Fataler Fehler bei API-Abfrage')
+        raise RuntimeError('Fataler Fehler bei API-Abfrage') from None
     _write_log_entry('Antwort auf Abfrage erhalten', 2)
     # sind sonstige-Fehler aufgetreten?
     try:
         response.raise_for_status()
-    except Exception as e:
+    except:
         raise
     # Bei Erfolg JSON auswerten
     _write_log_entry('Ermittle JSON aus aWATTar-Antwort', 1)
     try:
         marketprices = json.loads(response.text)['data']
     except:
-        raise RuntimeError('Korruptes JSON')
+        raise RuntimeError('Korruptes JSON') from None
     _write_log_entry("aWATTar-Preisliste extrahiert", 1)
     # Liste sortiert nach Zeitstempel
     sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
@@ -282,7 +281,7 @@ def _get_updated_pricelist():
         pricelist.append([str('%d' % startzeit_utc.timestamp()), bruttopreis_str])
     try:
         pricelist = _cleanup_pricelist(pricelist)
-    except Exception as e:
+    except:
         raise
     if len(pricelist) == 0:
         raise RuntimeError('Aktueller Preis konnte nicht ermittelt werden')
@@ -335,11 +334,18 @@ def _log_module_runtime():
 
 def update_pricedata(landeskennung, basispreis, debug_level):
     global _openWB_debug_level
-    _openWB_debug_level = debug_level  # zwecks Nutzung in Hilfsfunktionen
+    global _module_starttime
 
+    _module_starttime = datetime.now()
+    # bei exit immer Laufzeit des Moduls bestimmen, Funktion aber nicht doppelt registrieren
+    atexit.register(_log_module_runtime)
     if __name__ != '__main__':
-        # bei exit immer Laufzeit des Moduls bestimmen, Funktion aber nicht doppelt registrieren
-        atexit.register(_log_module_runtime)
+        try:
+            _check_args(landeskennung, basispreis, debug_level)
+        except Exception as e:
+            _exit_on_invalid_price_data('Modul-Abbruch: ' + str(e), MODULE_NAME)
+
+    _openWB_debug_level = debug_level  # zwecks Nutzung in Hilfsfunktionen
 
     _write_log_entry('Lese bisherige Preisliste', 1)
     pricelist_in_file = []
@@ -351,12 +357,12 @@ def update_pricedata(landeskennung, basispreis, debug_level):
         _write_log_entry("Vorhandene Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
 
     current_module_name = MODULE_NAME + '_' + landeskennung
-    if module_name_in_file != None and current_module_name != module_name_in_file:
-        _write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % module_name_in_file, 1)
-        _write_log_entry('Wechsel auf Modul %s' % current_module_name, 1)
-    elif len(pricelist_in_file) > 0 and pricelist_in_file[0][1] == '99.99':
+    if len(pricelist_in_file) > 0 and pricelist_in_file[0][1] == '99.99':
         _write_log_entry('Bisherige Preisliste enthaelt nur Fehlerpreise 99.99ct/kWh', 1)
         _write_log_entry('Versuche, neue Preise von aWATTar zu empfangen', 1)
+    elif module_name_in_file != None and current_module_name != module_name_in_file:
+        _write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % module_name_in_file, 1)
+        _write_log_entry('Wechsel auf Modul %s' % current_module_name, 1)
     elif len(pricelist_in_file) > 0:
         _write_log_entry('Bisherige Preisliste gelesen', 2)
         # Modul der bisherigen Liste ist mit diesem identisch, also Einträge in alter Preisliste benutzen und aufräumen
@@ -446,11 +452,9 @@ def update_pricedata(landeskennung, basispreis, debug_level):
 #########################################################
 
 if __name__ == '__main__':
-    _module_starttime = datetime.now()
-    # bei exit immer Laufzeit des Moduls bestimmen
-    atexit.register(_log_module_runtime)
     try:
         landeskennung, basispreis, debug_level = _read_args()
     except Exception as e:
         _exit_on_invalid_price_data('Modul-Abbruch: ' + str(e), MODULE_NAME)
+
     update_pricedata(landeskennung, basispreis, debug_level)
