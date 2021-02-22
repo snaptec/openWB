@@ -37,13 +37,13 @@ $arr = array(
 	'diskfree' => trim($diskfree),
 	'ethaddr' => $ethaddr,
 	'wlanaddr' => $wlanaddr,
-        'wlanqualy' => $wlanqualy,
-        'wlanbitrate' => $wlanbitrate,
-        'wlanmode' => $wlanmode,
-        'wlanssid' => $wlanssid,
-        'wlanpower' => $wlanpower,
-        'wlanrx' => $wlanrx,
-        'wlantx' => $wlantx
+	'wlanqualy' => $wlanqualy,
+	'wlanbitrate' => $wlanbitrate,
+	'wlanmode' => $wlanmode,
+	'wlanssid' => $wlanssid,
+	'wlanpower' => $wlanpower,
+	'wlanrx' => $wlanrx,
+	'wlantx' => $wlantx
 );
 
 header("Content-type: application/json");
