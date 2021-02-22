@@ -137,7 +137,7 @@
 							</p>
 							IP-Adresse LAN: <span id="iplan">--</span><br>
 							IP-Adresse WLAN: <span id="ipwifi">--</span>
-                                                        <ul>
+							<ul>
 								<li><span id="wifissid">--</span></li>
 								<li><span id="wifimode">--</span></li>
 								<li><span id="wifiqualy">--</span></li>
@@ -145,7 +145,7 @@
 								<li><span id="wifipower">--</span></li>
 								<li><span id="wifirx">--</span></li>
 								<li><span id="wifitx">--</span>
-                                                        </ul>
+							</ul>
 						</div>
 					</div>
 				</div>
