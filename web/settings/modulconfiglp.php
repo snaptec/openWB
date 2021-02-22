@@ -135,7 +135,7 @@
 						</div>
 						<div id="openwbauto" class="hide">
 							<!-- default values for openwbauto -->
-							<input type="hidden" name="modbusevseid" value="1">
+							<input type="hidden" name="modbusevseid" value="0">
 							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
 							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
 							<input type="hidden" name="modbusevsesource" value="/dev/ttyUSB0">

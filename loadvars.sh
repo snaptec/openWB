@@ -61,6 +61,21 @@ loadvars(){
 	# EVSE DIN Plug State
 	declare -r IsNumberRegex='^[0-9]+$'
 	if [[ $evsecon == "modbusevse" ]]; then
+		if [[ "$modbusevseid" == 0 ]]; then
+			if [ -f /var/www/html/openWB/ramdisk/evsemodulconfig ]; then
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+			else
+				if [ -f /dev/ttyUSB0 ]; then
+					echo "/dev/ttyUSB0" > ramdisk/evsemodulconfig
+				else
+					echo "/dev/serial0" > ramdisk/evsemodulconfig
+				fi
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			fi
+		fi
 		evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
 		if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
 			# EVSE read returned empty or non-numeric value --> use last state for this loop
