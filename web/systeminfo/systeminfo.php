@@ -137,6 +137,15 @@
 							</p>
 							IP-Adresse LAN: <span id="iplan">--</span><br>
 							IP-Adresse WLAN: <span id="ipwifi">--</span>
+							<ul>
+								<li><span id="wifissid">--</span></li>
+								<li><span id="wifimode">--</span></li>
+								<li><span id="wifiqualy">--</span></li>
+								<li><span id="wifibitrate">--</span></li>
+								<li><span id="wifipower">--</span></li>
+								<li><span id="wifirx">--</span></li>
+								<li><span id="wifitx">--</span>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -214,6 +223,13 @@
 						}
 						if (json.wlanaddr != '') {
 							$('#ipwifi').text(json.wlanaddr);
+							$('#wifiqualy').text(json.wlanqualy);
+							$('#wifissid').text(json.wlanssid);
+							$('#wifimode').text(json.wlanmode);
+							$('#wifibitrate').text(json.wlanbitrate);
+							$('#wifipower').text(json.wlanpower);
+							$('#wifirx').text(json.wlanrx);
+							$('#wifitx').text(json.wlantx);
 						} else {
 							$('#ipwifi').text('--');
 						}
