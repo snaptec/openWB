@@ -251,13 +251,14 @@ def _get_updated_pricelist():
             tomorrow_prices = sorted(tibber_json['data']['viewer']['home']['currentSubscription']['priceInfo']['tomorrow'], key=lambda k: (k['startsAt'], k['total']))
         except:
             raise RuntimeError('Korruptes JSON') from None
+        sorted_marketprices = today_prices + tomorrow_prices
         _write_log_entry("Tibber-Preisliste extrahiert", 1)
         # alle Zeiten in UTC verarbeiten
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
         _write_log_entry('Formatiere und analysiere Preisliste', 1)
         pricelist = []
-        for price_data in today_prices:
+        for price_data in sorted_marketprices:
             # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
             # entferne ':' in Timezone, da nicht von strptime unterstützt
             time_str = ''.join(price_data['startsAt'].rsplit(':', 1))
@@ -265,14 +266,6 @@ def _get_updated_pricelist():
             # und konvertiere nach UTC
             starttime_utc = startzeit_localized.astimezone(timezone.utc)
             #Preisliste beginnt immer mit aktueller Stunde
-            bruttopreis = price_data['total'] * 100
-            bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
-            pricelist.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
-        for price_data in tomorrow_prices:
-            # konvertiere Time-String (Format 2021-02-06T00:00:00+01:00) in Datetime-Object
-            # entferne ':' in Timezone, da nicht von strptime unterstützt
-            time_str = ''.join(price_data['startsAt'].rsplit(':', 1))
-            starttime_utc = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S%z')
             bruttopreis = price_data['total'] * 100
             bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
             pricelist.append([str('%d' % starttime_utc.timestamp()), bruttopreis_str])
