@@ -72,15 +72,15 @@ _module_starttime = 0
 #########################################################
 
 def _check_args(arg1, arg2, arg3):
-    arg1_str = re.sub('\W+', '', arg1)
+    arg1_str = re.sub('\W+', '', arg1)  # Landeskennung
     if not arg1_str in LAENDERDATEN:
         raise ValueError('1. Parameter (Landeskennung = "' + arg1_str + '") unbekannt')
-    arg2_str = re.sub('\W+', '', arg2)
+    arg2_str = re.sub('\W+', '', arg2)  # Basispreis
     try:
         arg2_float = float(arg2_str)
     except:
         raise ValueError('2. Parameter (Basispreis = "' + arg2_str + '") ist keine Zahl') from None
-    arg3_str = re.sub('\W+', '', arg3)
+    arg3_str = re.sub('\W+', '', arg3)  # Debug-Level
     try:
         arg3_int = int(arg3_str)
     except:
