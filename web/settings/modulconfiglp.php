@@ -937,6 +937,15 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="soc_audi_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_audi_vin" id="soc_audi_vin" value="<?php echo $soc_audi_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socmid" class="hide">
@@ -3210,6 +3219,7 @@
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
+								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_bluelinklp2') {
 								showSection('#socmuser2');
