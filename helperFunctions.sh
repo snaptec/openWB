@@ -67,7 +67,7 @@ openwbDebugLog() {
 	else
 		DEBUGLEVEL=$debug
 	fi
-	echo "LVL: $2 DEBUG: $debug DEBUGLEVEL: $DEBUGLEVEL" >> $LOGFILE
+	# echo "LVL: $2 DEBUG: $debug DEBUGLEVEL: $DEBUGLEVEL" >> $LOGFILE
 	if (( $2 <= $DEBUGLEVEL )); then
 		case $1 in
 			"EVSOC")
