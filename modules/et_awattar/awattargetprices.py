@@ -72,15 +72,15 @@ _module_starttime = 0
 #########################################################
 
 def _check_args(arg1, arg2, arg3):
-    arg1_str = re.sub('\W+', '', arg1)  # Landeskennung
+    arg1_str = re.sub('[^A-Za-z]+', '', arg1)  # Landeskennung
     if not arg1_str in LAENDERDATEN:
         raise ValueError('1. Parameter (Landeskennung = "' + arg1_str + '") unbekannt')
-    arg2_str = re.sub('\W+', '', arg2)  # Basispreis
+    arg2_str = re.sub('[^0-9.,]', '', arg2)  # Basispreis
     try:
         arg2_float = float(arg2_str)
     except:
         raise ValueError('2. Parameter (Basispreis = "' + arg2_str + '") ist keine Zahl') from None
-    arg3_str = re.sub('\W+', '', arg3)  # Debug-Level
+    arg3_str = re.sub('[^0-9]+', '', arg3)  # Debug-Level
     try:
         arg3_int = int(arg3_str)
     except:
@@ -285,6 +285,8 @@ def _get_updated_pricelist():
         raise
     if len(pricelist) == 0:
         raise RuntimeError('Aktueller Preis konnte nicht ermittelt werden')
+    else:
+        _write_log_entry('Aktueller Preis ist %s ct/kWh' % pricelist[0][1], 2)
     return pricelist
 
 def _get_existing_pricelist():
@@ -294,7 +296,7 @@ def _get_existing_pricelist():
     try:
         with open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'r') as file_pricelist:
             module_name_in_file = file_pricelist.readline().rstrip('\n')  # erste Zeile sollte für Preisliste verantwortliches Modul sein
-            module_name_in_file = re.sub('\W+', '', module_name_in_file)  # ggf. unerwünschte Zeichen entfernen
+            module_name_in_file = re.sub('[^A-Za-z0-9_-]', '', module_name_in_file)  # ggf. unerwünschte Zeichen entfernen
             for prices in file_pricelist:  # dann restliche Zeilen als Preise mit Timestamp lesen
                 price_items = prices.split(',')
                 price_items = [item.strip() for item in price_items]
