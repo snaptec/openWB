@@ -77,13 +77,19 @@ class WbData {
 			if ('showLG' in this.prefs) {
 				this.showLiveGraph = this.prefs.showLG;
 			}
+			if ('maxPow' in this.prefs) {
+				powerMeter.maxPower = +this.prefs.maxPow;
+			}
+			if ('relPM' in this.prefs) {
+				powerMeter.showRelativeArcs = this.prefs.relPM;
+			}
 		}
 		if (this.showLiveGraph) {
-			dayGraph.deactivate();
-			powerGraph.activate();
+			powerGraph.deactivateDay();
+			powerGraph.activateLive();
 			} else {
-				powerGraph.deactivate();
-				dayGraph.activate();
+				powerGraph.deactivateLive();
+				powerGraph.activateDay();
 			}
 	}
 
@@ -120,6 +126,7 @@ class WbData {
 				this.updateUsageSummary(1, "energy", value)
 				break;
 			case 'houseEnergy':
+				console.log ("Update House Energy: " + value);
 				this.updateUsageSummary(4, "energy", value);
 				break;
 			case 'currentPowerPrice':
@@ -137,6 +144,7 @@ class WbData {
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
+				console.log ("Update PV Energy: " + value);
 				break;
 			default:
 				break;

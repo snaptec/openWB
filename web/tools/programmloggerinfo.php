@@ -16,6 +16,13 @@ $diskuse = exec($DISKUSE);
 $diskfree = exec($DISKFREE);
 $ethaddr = exec("ifconfig eth0 |grep 'inet ' |awk '{print $2}'");
 $wlanaddr = exec("ifconfig wlan0 |grep 'inet ' |awk '{print $2}'");
+$wlanqualy = exec("iwconfig wlan0 |grep 'Link'");
+$wlanbitrate = exec("iwconfig wlan0 |grep 'Bit'");
+$wlanrx = exec("iwconfig wlan0 |grep 'Rx'");
+$wlantx = exec("iwconfig wlan0 |grep 'Tx'");
+$wlanpower = exec("iwconfig wlan0 |grep 'Power'");
+$wlanmode = exec("iwconfig wlan0 |grep 'Mode'");
+$wlanssid = exec("iwconfig wlan0 |grep 'ESSID'|awk '{print $4}'");
 $arr = array(
 	'uptime' => trim($uptime),
 	'systime' => trim($systime),
@@ -29,7 +36,14 @@ $arr = array(
 	'diskuse' => trim($diskuse),
 	'diskfree' => trim($diskfree),
 	'ethaddr' => $ethaddr,
-	'wlanaddr' => $wlanaddr
+	'wlanaddr' => $wlanaddr,
+	'wlanqualy' => $wlanqualy,
+	'wlanbitrate' => $wlanbitrate,
+	'wlanmode' => $wlanmode,
+	'wlanssid' => $wlanssid,
+	'wlanpower' => $wlanpower,
+	'wlanrx' => $wlanrx,
+	'wlantx' => $wlantx
 );
 
 header("Content-type: application/json");

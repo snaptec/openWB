@@ -11,7 +11,10 @@ then
 else
 	echo "echo" > /dev/null
 fi
-sudo python /var/www/html/openWB/modules/mpm3pmll/readmpm3pm.py $mpm3pmllsource $mpm3pmllid
-
+if [[ $mpm3pmllid = "0" ]]; then
+	python /var/www/html/openWB/modules/mpm3pmll/readall.py
+else
+	python /var/www/html/openWB/modules/mpm3pmll/readmpm3pm.py $mpm3pmllsource $mpm3pmllid
+fi
 
 

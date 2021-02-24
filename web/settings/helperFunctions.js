@@ -58,7 +58,9 @@ var changedValuesHandler = {
         // console.log("num changed values left: "+Object.keys(changedValues).length);
         if ( Object.keys(changedValues).length === 0 ) {
             // console.log("done");
-            window.location.href = './index.php';
+            setTimeout( function(){
+                window.location.href = './index.php';
+            }, 200);
         } else {
             return true;
         }
@@ -155,7 +157,15 @@ function sendValues() {
             var value = this[topic].toString();
             setTimeout(function () {
                 // console.log("publishing changed value: "+topic+": "+value);
-                publish(value, topic);
+                // as all empty messages are not processed by mqttsub.py, we have to send something usefull
+                if ( value.length == 0 ) {
+                    publish("none", topic);
+                    // delete empty values as we will never get an answer
+                    console.log("deleting empty changedValue: "+topic)
+                    delete changedValues[topic];
+                } else {
+                    publish(value, topic);
+                }
             }, index * intervall);
         }, changedValues);
 

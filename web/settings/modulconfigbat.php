@@ -442,38 +442,38 @@
 						</div>
 
 						<div id="divspeicherjson" class="hide">
-                                                        <div class="form-row mb-1">
-                                                                <label for="battjsonurl" class="col-md-4 col-form-label">Speicher URL</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" name="battjsonurl" id="battjsonurl" value="<?php echo $battjsonurlold ?>">
-                                                                        <span class="form-text small">
-                                                                                Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                                <label for="battjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" name="battjsonwatt" id="battjsonwatt" value="<?php echo htmlspecialchars($battjsonwattold) ?>">
-                                                                        <span class="form-text small">
-                                                                                Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
-                                                                                Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied"
-:234.9182763744428}</span> So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                                <label for="battjsonsoc" class="col-md-4 col-form-label">Json Abfrage für SoC</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" name="battjsonsoc" id="battjsonsoc" value="<?php echo $battjsonsocold ?>">
-                                                                        <span class="form-text small">
-                                                                                Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
-                                                                                Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied"
-:234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                </div>
+							<div class="form-row mb-1">
+								<label for="battjsonurl" class="col-md-4 col-form-label">Speicher URL</label>
+								<div class="col">
+									<input class="form-control" type="text" name="battjsonurl" id="battjsonurl" value="<?php echo $battjsonurlold ?>">
+									<span class="form-text small">
+										Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="battjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
+								<div class="col">
+									<input class="form-control" type="text" name="battjsonwatt" id="battjsonwatt" value="<?php echo htmlspecialchars($battjsonwattold) ?>">
+									<span class="form-text small">
+										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span>
+										So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="battjsonsoc" class="col-md-4 col-form-label">Json Abfrage für SoC</label>
+								<div class="col">
+									<input class="form-control" type="text" name="battjsonsoc" id="battjsonsoc" value="<?php echo htmlspecialchars($battjsonsocold) ?>">
+									<span class="form-text small">
+										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span>
+										So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
+									</span>
+								</div>
+							</div>
+						</div>
 
 						<div id="divspeicherbydhv" class="hide">
 							<div class="form-group">

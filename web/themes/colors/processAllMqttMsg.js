@@ -255,7 +255,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		//checkgraphload();
 	}
 	else if (mqttmsg.match(/^openwb\/graph\/[1-9][0-9]*alllivevalues$/i)) {
-		powerGraph.update(mqttmsg, mqttpayload);
+		powerGraph.updateLive(mqttmsg, mqttpayload);
 		/* var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
@@ -265,7 +265,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		}*/
 	}
 	else if (mqttmsg == 'openWB/graph/lastlivevalues') {
-		powerGraph.update(mqttmsg, mqttpayload);
+		powerGraph.updateLive(mqttmsg, mqttpayload);
 		/* 	if ( initialread > 0) {
 				//updateGraph(mqttpayload);
 			}
@@ -450,7 +450,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		 var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
-		for (var i = 0; i < rawacsv.length; i++) {
+		// skip first entry: it is module-name responsible for list
+		for (var i = 1; i < rawcsv.length; i++) {
 			csvaData.push(rawacsv[i].split(','));
 		}
 		electricityPriceTimeline = getCol(csvaData, 0);
@@ -628,7 +629,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 		$('#date').text(date);
 	}
 	else if (mqttmsg.match(/^openwb\/system\/daygraphdata[1-9][0-9]*$/i)) {
-		dayGraph.update(mqttmsg, mqttpayload);
+		powerGraph.updateDay(mqttmsg, mqttpayload);
 	}
 }
 
@@ -1214,13 +1215,13 @@ function subscribeGraphUpdates() {
 
 function unsubscribeGraphUpdates() {
 topic = "openWB/graph/lastlivevalues";
-		client.unsubscribe(topic);	
+		client.unsubscribe(topic);
 }
-function subscribeDayGraph() {
-	var today = new Date();
-	var dd = String(today.getDate()).padStart(2, '0');
-	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var yyyy = today.getFullYear();
+function subscribeDayGraph(date) {
+	// var today = new Date();
+	var dd = String(date.getDate()).padStart(2, '0');
+	var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = date.getFullYear();
 	graphdate = yyyy + mm + dd;
 	for (var segment = 1; segment < 13; segment++) {
 		var topic = "openWB/system/DayGraphData" + segment;

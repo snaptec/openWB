@@ -36,6 +36,10 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/housebattery\//i) ) {
 		processBatMsg(mqttmsg, mqttpayload);
 	}
+		else if ( mqttmsg.match( /^openwb\/SmartHome\//i) ) {
+		processSmartHomeMsg(mqttmsg, mqttpayload);
+	}
+	
 	else if ( mqttmsg.match( /^openwb\/global\//i) ) {
 		processGlobalMsg(mqttmsg, mqttpayload);
 	}
@@ -206,6 +210,26 @@ function processBatMsg (mqttmsg, mqttpayload) {
 			break;
 		case "openWB/housebattery/faultStr":
 			textShow(mqttpayload, '#faultStrBat');
+			break;
+	}
+}
+
+function processSmartHomeMsg (mqttmsg, mqttpayload) {
+	switch(mqttmsg){
+		case "openWB/SmartHome/Status/maxspeicherladung":
+			directShow(mqttpayload, '#wmaxspeicherladung');
+			break;
+		case "openWB/SmartHome/Status/wattschalt":
+			directShow(mqttpayload, '#wwattschalt');
+			break;
+		case "openWB/SmartHome/Status/wattnichtschalt":
+			directShow(mqttpayload, '#wwattnichtschalt');
+			break;
+		case "openWB/SmartHome/Status/uberschuss":
+			directShow(mqttpayload, '#wuberschuss');
+			break;
+		case "openWB/SmartHome/Status/uberschussoffset":
+			directShow(mqttpayload, '#wuberschussoffset');
 			break;
 	}
 }
