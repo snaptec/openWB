@@ -474,6 +474,9 @@ updateConfig(){
 	if ! grep -Fq "solaredgeip=" $ConfigFile; then
 		echo "solaredgeip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "solaredgemodbusport=" $ConfigFile; then
+		echo "solaredgemodbusport=502" >> $ConfigFile
+	fi
 	if ! grep -Fq "solaredgepvip=" $ConfigFile; then
 		echo "solaredgepvip=192.168.0.10" >> $ConfigFile
 	fi
