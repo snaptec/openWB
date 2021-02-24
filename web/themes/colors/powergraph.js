@@ -26,19 +26,19 @@ class PowerGraph {
 
   init() {
     var style = getComputedStyle(document.body);
-    this.colors[18] = style.getPropertyValue('--color-house');
-    this.colors[19] = style.getPropertyValue('--color-battery');
-    this.colors[20] = style.getPropertyValue('--color-pv');
-    this.gridColors[0] = style.getPropertyValue('--color-battery');
-    this.gridColors[1] = style.getPropertyValue('--color-pv');
-    this.gridColors[2] = style.getPropertyValue('--color-export');
-    this.gridColors[3] = style.getPropertyValue('--color-evu');
-    this.bgcolor = style.getPropertyValue('--color-bg');
-    this.chargeColor = style.getPropertyValue('--color-charging');
-    this.axiscolor = style.getPropertyValue('--color-axis');
-    this.lp1color = style.getPropertyValue('--color-lp1');
-    this.lp2color = style.getPropertyValue('--color-lp2');
-    this.batteryColor = style.getPropertyValue('--color-battery');
+    this.colors[18] = 'var(--color-house)';
+    this.colors[19] = 'var(--color-battery)';
+    this.colors[20] = 'var(--color-pv)';
+    this.gridColors[0] = 'var(--color-battery)';
+    this.gridColors[1] = 'var(--color-pv)';
+    this.gridColors[2] = 'var(--color-export)';
+    this.gridColors[3] = 'var(--color-evu)';
+    this.bgcolor = 'var(--color-bg)';
+    this.chargeColor = 'var(--color-charging)';
+    this.axiscolor = 'var(--color-axis)';
+    this.lp1color = 'var(--color-lp1)';
+    this.lp2color = 'var(--color-lp2)';
+    this.batteryColor = 'var(--color-battery)';
     var i;
     for (i = 0; i < 8; i++) {
       this.colors[i] = wbdata.chargePoint[i].color;
@@ -46,8 +46,8 @@ class PowerGraph {
     for (i = 0; i < 8; i++) {
       this.colors[8 + i] = wbdata.shDevice[i].color;
     }
-    this.colors[16] = style.getPropertyValue('--color-co1');
-    this.colors[17] = style.getPropertyValue('--color-co2');
+    this.colors[16] = 'var(--color-co1)';
+    this.colors[17] = 'var(--color-co2)';
     var figure = d3.select("figure#powergraph");
     this.svg = figure.append("svg")
       .attr("viewBox", `0 0 500 500`);
@@ -225,6 +225,7 @@ class PowerGraph {
     this.resetDayGraph();
   }
   resetLiveGraph() {
+    console.log ("reset live graph");
     // fresh reload of the graph
     this.initialized = false;
     this.initCounter = 0;

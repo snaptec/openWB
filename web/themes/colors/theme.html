@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="theme-dark">
 
 <head>
 	<!-- theme for openWB layout for standard and dark, only css is different-->
@@ -148,7 +148,7 @@
 	<div id="nav-placeholder">
 	</div>
 	<div class="container-fluid">
-		<div class="row py-1 verySmallTextSize text-white">
+		<div class="row py-1 verySmallTextSize" style="color: var(--color-fg)">
 			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
@@ -173,11 +173,12 @@
 							<h3>Aktuelle Leistung</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
+							<button class="btn btn-outline-secondary btn-sm " id="themeSwitchButton"><span class="fa fa-paint-brush px-0"></span></button>						
 							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span class="fa fa-chart-area px-0"></span></button>
 							</div>
 					</div>
 				</div>		
-				<figure id="powermeter" class=" mb-0"></figure>
+				<figure id="powermeter" class="wb-subwidget mb-0"></figure>
 			</div>
 			<!-- Graph - Live, Tag (powergraph) -->
 			<div class="wb-widget col-md p-2 m-1">
@@ -192,19 +193,19 @@
 						</div>
 					</div>
 				</div>
-				<figure id="powergraph" class="mb-0"></figure>
+				<figure id="powergraph" class="wb-subwidget mb-0"></figure>
 			</div>
 			<!-- Energie heute (yieldmeter) -->
 			<div class="wb-widget col-md p-2 m-1 ">
 				<h3>Energie heute</h3>
-				<figure id="energymeter" class="mb-0"></figure>
+				<figure id="energymeter" class="wb-subwidget mb-0"></figure>
 			</div>
 		</div>
 		<div class="row py-0">
 			<!-- Ladepunkte (chargePointList) -->
 			<div class="wb-widget col-md-6 p-2 m-1">
 				<h3 class="mt-0">Ladepunkte</h3>
-				<div class="pb-3">
+				<div class="pb-3 wb-subwidget">
 					<div style="text-align:center;">
 						<span id="lastregelungaktiv" class="regularTextSize text-red animate-alertPulsation"></span>
 					</div>
@@ -695,7 +696,7 @@
 			<!-- Smart Home (smartHomeList) -->
 			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
 				<h3>Geräte</h3>
-				<div class=" pb-3 ">
+				<div class="wb-subwidget pb-3 ">
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
