@@ -713,7 +713,7 @@
 										Modbus/TCP Port der im Wechselrichter konfiguriert ist. Standardmäßig ist das 502 oder 1502.<br>
 									</span>
 								</div>
-							</div>	
+							</div>
 						</div>
 						<div id="wattbezugsolax" class="hide">
 							<div class="alert alert-info">
