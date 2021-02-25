@@ -118,14 +118,14 @@
 										<label class="btn btn-outline-info btn-toggle">
 											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="0" value="0"> keine
 										</label>
-										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Energiemenge
-										</label>
 										<?php if( $chargepoint <= 2 ){ ?>
-										<label class="btn btn-outline-info btn-toggle">
+										<label class="btn btn-outline-info btn-toggle lp<?php echo $chargepoint; ?>socoptions">
 											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="2" value="2"> EV-SoC
 										</label>
 										<?php } ?>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Energiemenge
+										</label>
 									</div>
 									<span class="form-text small">Auswahl der Lademengen-Begrenzung im Modus Sofortladen.
 										<span class="text-danger">
@@ -321,6 +321,15 @@
 						showSection('.lp' + index + 'options');
 					} else {
 						hideSection('.lp' + index + 'options');
+					}
+				}
+				if ( elementId.match( /^boolSocConfiguredLp[1-9]*$/i ) ) {
+					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
+					// now call functions or set variables corresponding to the index
+					if ( mqttpayload == 1) {
+						showSection('.lp' + index + 'socoptions');
+					} else {
+						hideSection('.lp' + index + 'socoptions');
 					}
 				}
 				if ( elementId.match( /^chargeLimitationLp[1-2]*$/i ) ) {

@@ -86,40 +86,46 @@
 							<div class="col">
 								<select name="pvwattmodul" id="pvwattmodul" class="form-control">
 									<option <?php if($pvwattmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu") echo "selected" ?> value="wr_ethmpm3pmaevu">Zähler an openWB EVU Kit</option>
-									<option <?php if($pvwattmodulold == "wr_ethsdm120") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
-									<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
-									<option <?php if($pvwattmodulold == "sdm630modbuswr") echo "selected" ?> value="sdm630modbuswr">SDM 630 Modbus</option>
-									<option <?php if($pvwattmodulold == "vzloggerpv") echo "selected" ?> value="vzloggerpv">VZLogger</option>
-									<option <?php if($pvwattmodulold == "wr_http") echo "selected" ?> value="wr_http">WR mit URL abfragen</option>
-									<option <?php if($pvwattmodulold == "smaemd_pv") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
-									<option <?php if($pvwattmodulold == "wr_json") echo "selected" ?> value="wr_json">WR mit Json abfragen</option>
-									<option <?php if($pvwattmodulold == "mpm3pmpv") echo "selected" ?> value="mpm3pmpv">MPM3PM </option>
-									<option <?php if($pvwattmodulold == "wr_kostalpiko") echo "selected" ?> value="wr_kostalpiko">Kostal Piko</option>
-									<option <?php if($pvwattmodulold == "wr_solaredge") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
-									<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
-									<option <?php if($pvwattmodulold == "wr_smartme") echo "selected" ?> value="wr_smartme">SmartMe</option>
-									<option <?php if($pvwattmodulold == "wr_tripower9000") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
-									<option <?php if($pvwattmodulold == "wr_plenticore") echo "selected" ?> value="wr_plenticore">Kostal Plenticore</option>
-									<option <?php if($pvwattmodulold == "wr_solarlog") echo "selected" ?> value="wr_solarlog">SolarLog</option>
-									<option <?php if($pvwattmodulold == "wr_kostalpikovar2") echo "selected" ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
-									<option <?php if($pvwattmodulold == "wr_powerwall") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
-									<option <?php if($pvwattmodulold == "wr_solarview") echo "selected" ?> value="wr_solarview">Solarview</option>
-									<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
-									<option <?php if($pvwattmodulold == "wr_youless120") echo "selected" ?> value="wr_youless120">Youless 120</option>
-									<option <?php if($pvwattmodulold == "wr_lgessv1") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
-									<option <?php if($pvwattmodulold == "wr_mqtt") echo "selected" ?> value="wr_mqtt">MQTT</option>
-									<option <?php if($pvwattmodulold == "wr_sunways") echo "selected" ?> value="wr_sunways">Sunways</option>
-									<option <?php if($pvwattmodulold == "wr_fems") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
-									<option <?php if($pvwattmodulold == "wr_solarwatt") echo "selected" ?> value="wr_solarwatt">Solarwatt / My Reserver Speicher</option>
-									<option <?php if($pvwattmodulold == "wr_solarworld") echo "selected" ?> value="wr_solarworld">Solarworld</option>
-									<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
-									<option <?php if($pvwattmodulold == "wr_powerdog") echo "selected" ?> value="wr_powerdog">Powerdog</option>
-									<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
-									<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
-									<option <?php if($pvwattmodulold == "wr_shelly") echo "selected" ?> value="wr_shelly">Shelly</option>
-									<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
-									<option <?php if($pvwattmodulold == "wr_victron") echo "selected" ?> value="wr_victron">Victron</option>
+									<optgroup label="openWB">
+										<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu") echo "selected" ?> value="wr_ethmpm3pmaevu">Zähler an openWB EVU Kit</option>
+										<option <?php if($pvwattmodulold == "wr_ethsdm120") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
+									</optgroup>
+									<optgroup label="andere Hersteller">
+										<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
+										<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
+										<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
+										<option <?php if($pvwattmodulold == "wr_kostalpiko") echo "selected" ?> value="wr_kostalpiko">Kostal Piko</option>
+										<option <?php if($pvwattmodulold == "wr_kostalpikovar2") echo "selected" ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
+										<option <?php if($pvwattmodulold == "wr_plenticore") echo "selected" ?> value="wr_plenticore">Kostal Plenticore</option>
+										<option <?php if($pvwattmodulold == "wr_lgessv1") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
+										<option <?php if($pvwattmodulold == "wr_fems") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
+										<option <?php if($pvwattmodulold == "wr_powerdog") echo "selected" ?> value="wr_powerdog">Powerdog</option>
+										<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
+										<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
+										<option <?php if($pvwattmodulold == "smaemd_pv") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
+										<option <?php if($pvwattmodulold == "wr_tripower9000") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
+										<option <?php if($pvwattmodulold == "wr_smartme") echo "selected" ?> value="wr_smartme">SmartMe</option>
+										<option <?php if($pvwattmodulold == "wr_solaredge") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
+										<option <?php if($pvwattmodulold == "wr_solarlog") echo "selected" ?> value="wr_solarlog">SolarLog</option>
+										<option <?php if($pvwattmodulold == "wr_solarview") echo "selected" ?> value="wr_solarview">Solarview</option>
+										<option <?php if($pvwattmodulold == "wr_solarwatt") echo "selected" ?> value="wr_solarwatt">Solarwatt / My Reserver Speicher</option>
+										<option <?php if($pvwattmodulold == "wr_solarworld") echo "selected" ?> value="wr_solarworld">Solarworld</option>
+										<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
+										<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
+										<option <?php if($pvwattmodulold == "wr_sunways") echo "selected" ?> value="wr_sunways">Sunways</option>
+										<option <?php if($pvwattmodulold == "wr_powerwall") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
+										<option <?php if($pvwattmodulold == "wr_victron") echo "selected" ?> value="wr_victron">Victron</option>
+										<option <?php if($pvwattmodulold == "wr_youless120") echo "selected" ?> value="wr_youless120">Youless 120</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($pvwattmodulold == "wr_http") echo "selected" ?> value="wr_http">Http</option>
+										<option <?php if($pvwattmodulold == "wr_json") echo "selected" ?> value="wr_json">Json</option>
+										<option <?php if($pvwattmodulold == "mpm3pmpv") echo "selected" ?> value="mpm3pmpv">MPM3PM </option>
+										<option <?php if($pvwattmodulold == "wr_mqtt") echo "selected" ?> value="wr_mqtt">MQTT</option>
+										<option <?php if($pvwattmodulold == "sdm630modbuswr") echo "selected" ?> value="sdm630modbuswr">SDM 630 Modbus</option>
+										<option <?php if($pvwattmodulold == "wr_shelly") echo "selected" ?> value="wr_shelly">Shelly</option>
+										<option <?php if($pvwattmodulold == "vzloggerpv") echo "selected" ?> value="vzloggerpv">VZLogger</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -835,14 +841,20 @@
 							<div class="col">
 								<select name="pv2wattmodul" id="pv2wattmodul" class="form-control">
 									<option <?php if($pv2wattmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu") echo "selected" ?> value="wr2_ethlovatoaevu">PV Zähler an openWB EVU Kit</option>
-									<option <?php if($pv2wattmodulold == "wr2_ethlovato") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit</option>
-									<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
-									<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
-									<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
-									<option <?php if($pv2wattmodulold == "wr2_ethsdm120") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
-									<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
-									<option <?php if($pv2wattmodulold == "wr2_json") echo "selected" ?> value="wr2_json">Json Abfrage</option>
+									<optgroup label="openWB">
+										<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu") echo "selected" ?> value="wr2_ethlovatoaevu">PV Zähler an openWB EVU Kit</option>
+										<option <?php if($pv2wattmodulold == "wr2_ethlovato") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit</option>
+									</optgroup>
+									<optgroup label="andere Hersteller">
+										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
+										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
+										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
+										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($pv2wattmodulold == "wr2_json") echo "selected" ?> value="wr2_json">Json Abfrage</option>
+										<option <?php if($pv2wattmodulold == "wr2_ethsdm120") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>

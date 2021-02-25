@@ -86,30 +86,36 @@
 							<div class="col">
 								<select name="speichermodul" id="speichermodul" class="form-control">
 									<option <?php if($speichermodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($speichermodulold == "speicher_mpm3pm") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
-									<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
-									<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
-									<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
-									<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
-									<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
-									<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
-									<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
-									<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
-									<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
-									<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
-									<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
-									<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
-									<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
-									<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
-									<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
-									<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
-									<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
-									<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
-									<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
-									<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
-									<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
-									<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
-									<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+									<optgroup label="openWB">
+										<option <?php if($speichermodulold == "speicher_mpm3pm") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
+									</optgroup>
+									<optgroup label="andere Hersteller">
+										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
+										<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
+										<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+										<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
+										<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
+										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
+										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
+										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
+										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
+										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
+										<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
+										<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
+										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
+										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
+										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
+										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
+										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
+										<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
+										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
+										<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
+										<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
