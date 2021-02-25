@@ -86,30 +86,36 @@
 							<div class="col">
 								<select name="speichermodul" id="speichermodul" class="form-control">
 									<option <?php if($speichermodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($speichermodulold == "speicher_mpm3pm") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
-									<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
-									<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
-									<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
-									<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
-									<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
-									<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
-									<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
-									<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
-									<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
-									<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
-									<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
-									<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
-									<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
-									<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
-									<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
-									<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
-									<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
-									<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
-									<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
-									<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
-									<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
-									<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
-									<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+									<optgroup label="openWB">
+										<option <?php if($speichermodulold == "speicher_mpm3pm") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
+									</optgroup>
+									<optgroup label="andere Hersteller">
+										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
+										<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
+										<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+										<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
+										<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
+										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
+										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
+										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
+										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
+										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
+										<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
+										<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
+										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
+										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
+										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
+										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
+										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
+										<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
+										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
+										<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
+										<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -442,38 +448,38 @@
 						</div>
 
 						<div id="divspeicherjson" class="hide">
-                                                        <div class="form-row mb-1">
-                                                                <label for="battjsonurl" class="col-md-4 col-form-label">Speicher URL</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" name="battjsonurl" id="battjsonurl" value="<?php echo $battjsonurlold ?>">
-                                                                        <span class="form-text small">
-                                                                                Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                                <label for="battjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" name="battjsonwatt" id="battjsonwatt" value="<?php echo htmlspecialchars($battjsonwattold) ?>">
-                                                                        <span class="form-text small">
-                                                                                Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
-                                                                                Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied"
-:234.9182763744428}</span> So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                                <label for="battjsonsoc" class="col-md-4 col-form-label">Json Abfrage für SoC</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" name="battjsonsoc" id="battjsonsoc" value="<?php echo $battjsonsocold ?>">
-                                                                        <span class="form-text small">
-                                                                                Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
-                                                                                Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied"
-:234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                </div>
+							<div class="form-row mb-1">
+								<label for="battjsonurl" class="col-md-4 col-form-label">Speicher URL</label>
+								<div class="col">
+									<input class="form-control" type="text" name="battjsonurl" id="battjsonurl" value="<?php echo $battjsonurlold ?>">
+									<span class="form-text small">
+										Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="battjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
+								<div class="col">
+									<input class="form-control" type="text" name="battjsonwatt" id="battjsonwatt" value="<?php echo htmlspecialchars($battjsonwattold) ?>">
+									<span class="form-text small">
+										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span>
+										So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="battjsonsoc" class="col-md-4 col-form-label">Json Abfrage für SoC</label>
+								<div class="col">
+									<input class="form-control" type="text" name="battjsonsoc" id="battjsonsoc" value="<?php echo htmlspecialchars($battjsonsocold) ?>">
+									<span class="form-text small">
+										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span>
+										So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
+									</span>
+								</div>
+							</div>
+						</div>
 
 						<div id="divspeicherbydhv" class="hide">
 							<div class="form-group">

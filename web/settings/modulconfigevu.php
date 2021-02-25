@@ -86,41 +86,47 @@
 							<div class="col">
 								<select name="wattbezugmodul" id="wattbezugmodul" class="form-control">
 									<option <?php if($wattbezugmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm") echo "selected" ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
-									<option <?php if($wattbezugmodulold == "vzlogger") echo "selected" ?> value="vzlogger">VZLogger</option>
-									<option <?php if($wattbezugmodulold == "sdm630modbusbezug") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
-									<option <?php if($wattbezugmodulold == "bezug_http") echo "selected" ?> value="bezug_http">HTTP</option>
-									<option <?php if($wattbezugmodulold == "bezug_json") echo "selected" ?> value="bezug_json">Json</option>
-									<option <?php if($wattbezugmodulold == "bezug_mpm3pm") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
-									<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
-									<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
-									<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarlog") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
-									<option <?php if($wattbezugmodulold == "bezug_solaredge") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
-									<option <?php if($wattbezugmodulold == "bezug_smartme") echo "selected" ?> value="bezug_smartme">Smartme</option>
-									<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
-									<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
-									<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
-									<option <?php if($wattbezugmodulold == "bezug_ksem") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
-									<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
-									<option <?php if($wattbezugmodulold == "bezug_powerwall") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
-									<option <?php if($wattbezugmodulold == "bezug_victrongx") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
-									<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarview") echo "selected" ?> value="bezug_solarview">Solarview</option>
-									<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
-									<option <?php if($wattbezugmodulold == "bezug_lgessv1") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
-									<option <?php if($wattbezugmodulold == "bezug_mqtt") echo "selected" ?> value="bezug_mqtt">MQTT</option>
-									<option <?php if($wattbezugmodulold == "bezug_sonneneco") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
-									<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarwatt") echo "selected" ?> value="bezug_solarwatt">Solarwatt / My Reserve Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
-									<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
-									<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
-									<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
-									<option <?php if($wattbezugmodulold == "bezug_varta") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
+									<optgroup label="openWB">
+										<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm") echo "selected" ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
+									</optgroup>
+									<optgroup label="andere Hersteller">
+										<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
+										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
+										<option <?php if($wattbezugmodulold == "bezug_ksem") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
+										<option <?php if($wattbezugmodulold == "bezug_lgessv1") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
+										<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
+										<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
+										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
+										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
+										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
+										<option <?php if($wattbezugmodulold == "bezug_smartme") echo "selected" ?> value="bezug_smartme">Smartme</option>
+										<option <?php if($wattbezugmodulold == "bezug_solaredge") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarlog") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarview") echo "selected" ?> value="bezug_solarview">Solarview</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarwatt") echo "selected" ?> value="bezug_solarwatt">Solarwatt / My Reserve Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
+										<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
+										<option <?php if($wattbezugmodulold == "bezug_sonneneco") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
+										<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_powerwall") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
+										<option <?php if($wattbezugmodulold == "bezug_varta") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_victrongx") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($wattbezugmodulold == "bezug_http") echo "selected" ?> value="bezug_http">HTTP</option>
+										<option <?php if($wattbezugmodulold == "bezug_json") echo "selected" ?> value="bezug_json">Json</option>
+										<option <?php if($wattbezugmodulold == "bezug_mpm3pm") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
+										<option <?php if($wattbezugmodulold == "bezug_mqtt") echo "selected" ?> value="bezug_mqtt">MQTT</option>
+										<option <?php if($wattbezugmodulold == "sdm630modbusbezug") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
+										<option <?php if($wattbezugmodulold == "vzlogger") echo "selected" ?> value="vzlogger">VZLogger</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -158,7 +164,7 @@
 								<span class="text-info">openWB/set/evu/VPhase1</span> Spannung in Volt für Phase 1, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase2</span> Spannung in Volt für Phase 2, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase3</span> Spannung in Volt für Phase 3, float, Punkt als Trenner<br>
-								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner<br>
+								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner
 							</div>
 						</div>
 						<div id="wattbezuglgessv1" class="hide">

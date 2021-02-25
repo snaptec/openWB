@@ -55,6 +55,7 @@ function setChargingCurrentDAC () {
 	# INFO: needs new dac.py to accept current and use translation table 
 	sudo python /var/www/html/openWB/runs/dac.py $current $dacregister
 }
+
 # function for setting the current - extopenwb
 # Parameters:
 # 1: current
@@ -70,6 +71,7 @@ function setChargingCurrentExtopenwb () {
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$current"
 	fi
 }
+
 # function for setting the current - modbusevse
 # Parameters:
 # 1: current
@@ -82,12 +84,14 @@ function setChargingCurrentModbus () {
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 }
+
 function setChargingCurrentBuchse () {
 	current=$1
 	# set desired charging current
 	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
-	#Will be handled in buchsecontrol.py
+	# Is handled in buchse.py
 }
+
 # function for setting the current - IP modbusevse
 # Parameters:
 # 1: current
@@ -101,18 +105,19 @@ function setChargingCurrentIpModbus () {
 	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $ipevseid
 }
 
-
 # function for openwb slave kit
 function setChargingCurrentSlaveeth () {
 	current=$1
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
 }
+
 function setChargingCurrentMasterethframer () {
 	current=$1
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
 }
+
 # function for openwb third kit
 function setChargingCurrentThirdeth () {
 	current=$1
@@ -150,16 +155,19 @@ function setChargingCurrentWifi () {
 		fi
 	fi
 }
+
 function setChargingCurrenttwcmanager () {
 	if [[ $evsecon == "twcmanager" ]]; then
 		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
 	fi
 }
+
 function setChargingCurrenthttp () {
 	if [[ $evsecon == "httpevse" ]]; then
 		curl -s --connect-timeout 3 "http://$httpevseip/setcurrent?current=$current" > /dev/null
 	fi
 }
+
 # function for setting the current - go-e charger
 # Parameters:
 # 1: current
@@ -186,6 +194,7 @@ function setChargingCurrentgoe () {
 		fi
 	fi
 }
+
 # function for setting the current - keba charger
 # Parameters:
 # 1: current
@@ -202,7 +211,6 @@ function setChargingCurrentkeba () {
 		fi
 	fi
 }
-
 
 function setChargingCurrentnrgkick () {
 	if [[ $evsecon == "nrgkick" ]]; then
@@ -227,11 +235,6 @@ function setChargingCurrentnrgkick () {
 	fi
 }
 
-
-
-
-
-
 # function for setting the charging current
 # no parameters, variables need to be set before...
 function setChargingCurrent () {
@@ -249,6 +252,23 @@ function setChargingCurrent () {
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
+		if [[ "$modbusevseid" == 0 ]]; then
+			if [ -f /var/www/html/openWB/ramdisk/evsemodulconfig ]; then
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			else
+				if [ -f /dev/ttyUSB0 ]; then
+					echo "/dev/ttyUSB" > ramdisk/evsemodulconfig
+				else
+					echo "/dev/serial0" > ramdisk/evsemodulconfig
+				fi
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			fi
+		fi
+
 		setChargingCurrentModbus $current $modbusevsesource $modbusevseid 
 	fi
 

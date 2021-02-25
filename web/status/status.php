@@ -468,6 +468,42 @@
 						</div>
 					</div>
 				</div>
+				
+				<!-- Smarthome -->
+				<div class="card border-info " id="Smarthome">
+					<div class="card-header bg-info">
+						Smarthome 2.0
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table">
+								<tbody>
+									<tr id="wwattschaltRow">
+										<th scope="row">Gesamtleistung abschaltbar [W]</th>
+										<td><div id="wwattschalt"></div></td>
+									</tr>
+									<tr id="wwattnichtschaltRow">
+										<th scope="row">Gesamtleistung übrige [W]</th>
+										<td><div id="wwattnichtschalt"></div></td>
+									</tr>
+									<tr id="wuberschussRow">
+										<th scope="row">Überschuss [W]</th>
+										<td><div id="wuberschuss"></div></td>
+									</tr>
+									<tr id="wuberschussoffsetRow">
+										<th scope="row">Überschuss mit Offset [W]</th>
+										<td><div id="wuberschussoffset"></div></td>
+									</tr>
+									<tr id="wmaxspeicherladungRow">
+										<th scope="row">Maximale Speicherladung [W]</th>
+										<td><div id="wmaxspeicherladung"></div></td>
+									</tr>
+								</tbody>								
+							</table>
+						</div>
+					</div>
+				</div>			
+				
 
 				<!--Verbraucher-->
 				<?php for( $loadsNum = 1; $loadsNum <= 2; $loadsNum++ ){ ?>

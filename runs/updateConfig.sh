@@ -339,19 +339,19 @@ updateConfig(){
 		echo "evnotifytokenlp2=token" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonwatt=" $ConfigFile; then
-		echo "wrjsonwatt=.watt" >> $ConfigFile
+		echo "wrjsonwatt='.watt'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonkwh=" $ConfigFile; then
-		echo "wrjsonkwh=.kwh" >> $ConfigFile
+		echo "wrjsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonurl=" $ConfigFile; then
 		echo "wrjsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonwatt=" $ConfigFile; then
-		echo "wr2jsonwatt=.watt" >> $ConfigFile
+		echo "wr2jsonwatt='.watt'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonkwh=" $ConfigFile; then
-		echo "wr2jsonkwh=.kwh" >> $ConfigFile
+		echo "wr2jsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonurl=" $ConfigFile; then
 		echo "wr2jsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
@@ -378,13 +378,13 @@ updateConfig(){
 		echo "mpm3pmpvlanip=192.168.1.12" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonwatt=" $ConfigFile; then
-		echo "bezugjsonwatt=.watt" >> $ConfigFile
+		echo "bezugjsonwatt='.watt'" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonkwh=" $ConfigFile; then
-		echo "bezugjsonkwh=.kwh" >> $ConfigFile
+		echo "bezugjsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "einspeisungjsonkwh=" $ConfigFile; then
-		echo "einspeisungjsonkwh=.kwh" >> $ConfigFile
+		echo "einspeisungjsonkwh='.kwh'" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonurl=" $ConfigFile; then
 		echo "bezugjsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
@@ -444,11 +444,11 @@ updateConfig(){
 	if ! grep -Fq "battjsonurl=" $ConfigFile; then
 		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
 	fi
-	if ! grep -Fq "battjsonsoc"=" $ConfigFile; then
-		echo "speichersoc_json=.RSOC" >> $ConfigFile
+	if ! grep -Fq "battjsonsoc=" $ConfigFile; then
+		echo "battjsonsoc='.RSOC'" >> $ConfigFile
 	fi
-	if ! grep -Fq "battjsonwatt"=" $ConfigFile; then
-		echo "battjsonwatt=.Consumption_W" >> $ConfigFile
+	if ! grep -Fq "battjsonwatt=" $ConfigFile; then
+		echo "battjsonwatt='.Consumption_W'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
@@ -1677,6 +1677,16 @@ updateConfig(){
 		echo "myopel_clientidlp2=ID" >> $ConfigFile
 		echo "myopel_clientsecretlp2=Secret" >> $ConfigFile
 	fi
+	if ! grep -Fq "psa_userlp1=" $ConfigFile; then
+		echo "psa_userlp1=User" >> $ConfigFile
+		echo "psa_passlp1=Pass" >> $ConfigFile
+		echo "psa_clientidlp1=ID" >> $ConfigFile
+		echo "psa_clientsecretlp1=Secret" >> $ConfigFile
+		echo "psa_userlp2=User" >> $ConfigFile
+		echo "psa_passlp2=Pass" >> $ConfigFile
+		echo "psa_clientidlp2=ID" >> $ConfigFile
+		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		echo "soc_eq_client_id_lp1=ID" >> $ConfigFile
 		echo "soc_eq_client_secret_lp1=Secret" >> $ConfigFile
@@ -1712,6 +1722,12 @@ updateConfig(){
 	fi 
 	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
 		echo "myopel_soccalclp2=0" >> $ConfigFile;
+	fi
+	if ! grep -Fq "psa_soccalclp1=" $ConfigFile; then
+		echo "psa_soccalclp1=0" >> $ConfigFile; 
+	fi 
+	if ! grep -Fq "psa_soccalclp2=" $ConfigFile; then
+		echo "psa_soccalclp2=0" >> $ConfigFile;
 	fi
 	if ! grep -Fq "wr1extprod=" $ConfigFile; then
 		echo "wr1extprod=0" >> $ConfigFile

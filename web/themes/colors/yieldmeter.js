@@ -30,13 +30,13 @@ class YieldMeter {
 			.attr("viewBox", `0 0 500 500`);
 
 		const style = getComputedStyle(document.body);
-		this.houseColor = style.getPropertyValue('--color-house');
-		this.pvColor = style.getPropertyValue('--color-pv');
-		this.exportColor = style.getPropertyValue('--color-export');
-		this.gridColor = style.getPropertyValue('--color-evu');
-		this.bgColor = style.getPropertyValue('--color-bg');
-		this.chargeColor = style.getPropertyValue('--color-charging');
-		this.axisColor = style.getPropertyValue('--color-axis');
+		this.houseColor = 'var(--color-house)';
+		this.pvColor = 'var(--color-pv)';
+		this.exportColor = 'var(--color-export)';
+		this.gridColor = 'var(--color-evu)';
+		this.bgColor = 'var(--color-bg)';
+		this.chargeColor = 'var(--color-charging)';
+		this.axisColor = 'var(--color-axis)';
 	}
 
 	// to be called when values have changed
