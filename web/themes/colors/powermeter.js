@@ -32,6 +32,11 @@ class PowerMeter {
     this.axisColor = 'var(--color-axis)';
     this.fgColor = "var(--color-fg)";
     this.scaleColor = "var(--color-scale)";
+    if (wbdata.showLightMode) {
+      const doc = d3.select("html");
+      doc.classed ("theme-dark", false);
+      doc.classed ("theme-light", true);
+    }
     
     d3.select("button#powerMeterButton")
       .on("click", switchDisplay);
@@ -152,7 +157,6 @@ class PowerMeter {
       .style("font-size", "12")
       ;
     } else {
-      console.log (this.fgColor);
       svg.append("text")
       .attr("x", 0)
       .attr("y", 0)
@@ -287,12 +291,13 @@ function switchTheme () {
   if (doc.classed ("theme-dark")) {
     doc.classed ("theme-dark", false);
     doc.classed ("theme-light", true);
+    wbdata.showLightMode = true;
   } else {
     doc.classed ("theme-dark", true);
     doc.classed ("theme-light", false);
+    wbdata.showLightMode = false;
   }
-  
-
+  wbdata.persistGraphPreferences();
 }
 function resetButtonClicked() {
   powerMeter.resetDisplayRatio();

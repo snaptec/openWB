@@ -225,7 +225,6 @@ class PowerGraph {
     this.resetDayGraph();
   }
   resetLiveGraph() {
-    console.log ("reset live graph");
     // fresh reload of the graph
     this.initialized = false;
     this.initCounter = 0;
