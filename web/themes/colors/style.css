@@ -10,16 +10,16 @@ html{
 }
 
 body {
-	color: lightgrey;
+	color: var(--color-fg);
 	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
 	/* Old browsers */
-	background: midnightblue;
+	background: var(--color-bg);
 }
 body > .container {
 	padding: 55px 15px 0;
 }
 h3 {
-	color: lightgrey;
+	color: var(--color-title);
 }
 body > .container-fluid {
 	padding: 55px 15px 0;
@@ -377,65 +377,46 @@ h3 {
 	}
 }
 
-/* Livechart colors */
-:root {
-	--fontCol: rgba(153, 153, 153, 1);
-	--xgridCol: rgba(204, 204, 204, 1);	
-	--gridCol: rgba(204, 204, 204, 1);
-	--gridSocCol: rgba(0, 0, 0, 0);
-	--tickCol: rgba(153, 153, 153, 1);
-	--lp1Col: rgba(0, 0, 255, 0.7);
-	--lp1bgCol: rgba(0, 0, 255, 0.7);
-	--lp2Col: rgba(50, 30, 105, 0.7);
-	--lp2bgCol: rgba(50, 30, 105, 0.7);
-	--evuCol: rgba(255, 0, 0, 0.7);
-	--evubgCol: rgba(255, 10, 13, 0.3);
-	--pvCol: rgba(0, 255, 0, 0.7);;
-	--pvbgCol: rgba(10, 255, 13, 0.3);
-	--speicherCol: rgba(255, 153, 13, 0.7);
-	--speicherbgCol: rgba(200, 255, 13, 0.3);
-	--speicherSocCol: rgba(255, 153, 13, 0.7);
-	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
-	--lp1SocCol: rgba(0, 0, 255, 0.5);
-	--lp2SocCol: rgba(50, 50, 55, 0.5);
-	--hausverbrauchCol: rgba(0, 0, 0, 0.7);
-	--hausverbrauchbgCol: rgba(200, 255, 13, 0.3);
-	--verbraucher1Col: rgba(0, 150, 150, 0.7);
-	--verbraucher1bgCol: rgba(200, 255, 13, 0.3);
-	--verbraucher2Col: rgba(150, 150, 0, 0.7);
-	--verbraucher2bgCol: rgba(200, 255, 13, 0.3);
-	--lpgesamtCol: rgba(50, 50, 55, 0.1);
-	--lpgesamtbgCol: rgba(0, 0, 255, 0.1);
-	--lp3Col: rgba(50, 50, 55, 0.7);
-	--lp3bgCol: blue;
-	--lp4Col: rgba(50, 50, 55, 0.7);
-	--lp4bgCol: blue;
-	--lp5Col: rgba(50, 50, 55, 0.7);
-	--lp5bgCol: blue;
-	--lp6Col: rgba(50, 50, 55, 0.7);
-	--lp6bgCol: blue;
-	--lp7Col: rgba(50, 50, 55, 0.7);
-	--lp7bgCol: blue;
-	--lp8Col: rgba(50, 50, 55, 0.7);
-	--lp8bgCol: blue;
-	--d1Col: rgba(230, 50, 220, 0.7);
-	--d1bgCol: blue;
-	--d2Col: rgba(230, 50, 220, 0.7);
-	--d2bgCol: blue;
-	--d3Col: rgba(230, 50, 220, 0.7);
-	--d3bgCol: blue;
-	--d4Col: rgba(230, 50, 220, 0.7);
-	--d4bgCol: blue;
-	--d5Col: rgba(230, 50, 220, 0.7);
-	--d5bgCol: blue;
-	--d6Col: rgba(230, 50, 220, 0.7);
-	--d6bgCol: blue;
-	--d7Col: rgba(230, 50, 220, 0.7);
-	--d7bgCol: blue;
-	--d8Col: rgba(230, 50, 220, 0.7);
-	--d8bgCol: blue;
-	--d9Col: rgba(230, 50, 220, 0.7);
-	--d9bgCol: blue;
+
+/* Light theme colors */
+
+.theme-light {
+	--color-bg: white;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-devices: #bb7bdb;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
+	--color-axis: black;
+	--color-frame: white;
+	--color-subframe: lightgrey;
+	--color-fg: black;
+	--color-scale: lightgrey;
+	--color-title: black;
+	--color-battery: goldenrod;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
+}
+
+.theme-dark {
 	--color-bg: midnightblue;
 	--color-evu: firebrick;
 	--color-pv: #33a02c;
@@ -444,6 +425,11 @@ h3 {
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: steelblue;
+	--color-frame: lightskyblue;
+	--color-subframe: midnightblue;
+	--color-fg: white;
+	--color-scale: steelblue;
+	--color-title: lightgrey;
 	--color-battery: goldenrod;
 	--color-lp1: #6baed6;
 	--color-lp2: #4292c6;
@@ -472,10 +458,14 @@ h3 {
 }
 
 .wb-widget {
-	background-color: midnightblue;
-	border:1px solid  lightskyblue;
+	background-color: var(--color-bg);
+	border:1px solid var(--color-frame) ;
 }
 
+.wb-subwidget {
+	border:1px solid var(--color-subframe) ;
+
+}
 th {
 	color: steelblue;
 }
@@ -491,6 +481,6 @@ th {
 
 
 .axis text {
-	color: steelblue;
+	color: var(--color-axis);
 	stroke-width: 0;
 	} 
