@@ -78,7 +78,7 @@ def _read_args():
 def _write_log_entry(message, msg_debug_level):
     # schreibt Eintrag ins Log je nach Level
     global _openWB_debug_level
-    if msg_debug_level == 0 or _openWB_debug_level is None or msg_debug_level <= 3: #_openWB_debug_level:
+    if msg_debug_level == 0 or _openWB_debug_level is None or msg_debug_level <= _openWB_debug_level:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         line = timestamp + ' Modul tibbergetprices.py: ' + message + '\n'
         with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
