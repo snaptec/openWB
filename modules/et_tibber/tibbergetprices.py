@@ -58,10 +58,10 @@ def _check_args(arg1, arg2, arg3):
     arg2_str = re.sub('[^A-Za-z0-9_-]+', '', arg2)  # home_id
     arg3_str = re.sub('[^0-9]+', '', arg3)  # Debug-Level
     try:
-        arg3 = int(arg3_str)
+        arg3_int = int(arg3_str)
     except:
         raise ValueError('3. Parameter (Debug-Level = "' + arg3_str + '") ist keine Zahl') from None
-    return arg1_str, arg2_str, arg3_str
+    return arg1_str, arg2_str, arg3_int
 
 def _read_args():
     # gibt Kommandozeilenparameter zurück
