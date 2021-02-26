@@ -172,6 +172,7 @@
 				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
 			</div>
 		</div>
+
 		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
 			<div id="verbraucher1" class="col-sm hide">
 				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
@@ -192,16 +193,14 @@
 				<span class="actualTemp2Device"></span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp0Device"></span>
 			</div>
-
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp1Device"></span>
 			</div>
-
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp2Device"></span>
 			</div>
@@ -615,7 +614,7 @@
 					<span class="actualRunningTimeDevice">lade Daten</span>
 				</div>
 			</div>
-		</div>  <!-- and smarthome -->
+		</div>  <!-- end smarthome -->
 
 		<!-- depending on charge mode show options -->
 		<form id="minundpvladenEinstellungen" class="hide">
@@ -624,11 +623,9 @@
 				<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 			</div>
 
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 				<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
 				</div>
 				<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -659,85 +656,64 @@
 					<button type="button" class="btn btn-secondary ml-3 priceMore"><i class="far fa-plus-square"></i></button>
 				</div>
 			</div>  <!--/ priceBasedCharging -->
+
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
 			</div>
-			<div class="row justify-content-center">
 
-			</div>
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/1/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
 				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp">LP2</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/2/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
 				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp">LP3</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/3/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
 				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp">LP4</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/4/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
 				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp">LP5</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/5/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
 				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp">LP6</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/6/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
 				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp">LP7</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/7/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
 				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp">LP8</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -1106,7 +1082,6 @@
 						</div>
 						<div id='70ModeBtn'>
 							<hr>
-
 							<div class="row">
 								<div class="col text-center text-grey">
 									70% beachten im Lademodus PV-Laden:
@@ -1177,7 +1152,7 @@
 				function submitSocForm() {
 					var currentLp = $('#socModal').find('.socLp').text();
 					var manualSoc = $("#manualSocBox").val();
-					console.log("SoC for LP"+currentLp+": "+manualSoc);
+					// console.log("SoC for LP"+currentLp+": "+manualSoc);
 					publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
 					// reset input after publishing
 					clearSocForm();
@@ -1217,7 +1192,12 @@
 	<script>
 
 		// load navbar, be carefull: it loads asynchonously
-		$("#nav-placeholder").load('themes/navbar.html?ver=20210130');
+		$.get(
+			{ url: "themes/navbar.html", cache: false },
+			function(data){
+				$("#nav-placeholder").replaceWith(data);
+			}
+		);
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown

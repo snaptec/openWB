@@ -266,7 +266,7 @@ $(document).ready(function(){
 
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
-	client.connect(options);
+	setTimeout(function() { client.conect(options); }, 5000);
 };
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
