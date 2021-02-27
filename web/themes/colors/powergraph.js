@@ -82,6 +82,7 @@ class PowerGraph {
       // on intial run this method is not existing
     }
   }
+
   activateDay() {
     if (!wbdata.showLiveGraph) {
       this.resetDayGraph();
@@ -190,7 +191,7 @@ class PowerGraph {
           }
         });
         this.updateGraph();
-        setTimeout(() => this.activateLive(), 300000)
+        setTimeout(() => this.activateDay(), 300000)
       }
     }
   }
