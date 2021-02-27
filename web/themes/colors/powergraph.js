@@ -10,7 +10,7 @@ class PowerGraph {
     this.initialGraphData = [];
     this.initialized = false;
     this.colors = [];
-    this.gridColors = [];
+    this.gridColors = {};
     this.bgcolor = "";
     this.axiscolor = "";
     this.chargeColor = "";
@@ -23,13 +23,14 @@ class PowerGraph {
     this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
     this.graphDate = new Date();
     this.liveGraphMinutes = 0;
+    this.usageStackOrder = 2;
   }
 
   init() {
     var style = getComputedStyle(document.body);
-    this.colors[18] = 'var(--color-house)';
-    this.colors[19] = 'var(--color-battery)';
-    this.colors[20] = 'var(--color-pv)';
+    this.colors.housePower = 'var(--color-house)';
+    this.colors.batIn = 'var(--color-battery)';
+    this.colors.inverter = 'var(--color-pv)';
     this.gridColors[0] = 'var(--color-battery)';
     this.gridColors[1] = 'var(--color-pv)';
     this.gridColors[2] = 'var(--color-export)';
@@ -42,13 +43,14 @@ class PowerGraph {
     this.batteryColor = 'var(--color-battery)';
     var i;
     for (i = 0; i < 8; i++) {
-      this.colors[i] = wbdata.chargePoint[i].color;
+      this.colors["lp" + i] = wbdata.chargePoint[i].color;
     }
     for (i = 0; i < 8; i++) {
-      this.colors[8 + i] = wbdata.shDevice[i].color;
+      this.colors["sh" + i] = wbdata.shDevice[i].color;
     }
-    this.colors[16] = 'var(--color-co1)';
-    this.colors[17] = 'var(--color-co2)';
+    this.colors.co0 = 'var(--color-co1)';
+    this.colors.co1 = 'var(--color-co2)';
+
     var figure = d3.select("figure#powergraph");
     this.svg = figure.append("svg")
       .attr("viewBox", `0 0 500 500`);
@@ -57,6 +59,8 @@ class PowerGraph {
       .on("click", shiftLeft)
     d3.select("button#graphRightButton")
       .on("click", shiftRight)
+    d3.select("button#graphChangeButton")
+      .on("click", changeStack)
   }
 
   activateLive() {
@@ -68,7 +72,7 @@ class PowerGraph {
       // on initial invocation this method is not existing
     }
     this.updateHeading();
-    }
+  }
 
   deactivateLive() {
     try {
@@ -146,8 +150,8 @@ class PowerGraph {
               });
             });
             const startTime = this.graphData[0].date;
-            const endTime = this.graphData[this.graphData.length-1].date;
-            this.liveGraphMinutes = Math.round((endTime - startTime)/60000);
+            const endTime = this.graphData[this.graphData.length - 1].date;
+            this.liveGraphMinutes = Math.round((endTime - startTime) / 60000);
             this.updateHeading();
             this.updateGraph();
             unsubscribeMqttGraphSegments();
@@ -172,7 +176,7 @@ class PowerGraph {
       }
       if (this.initCounter == 12) {// Initialization complete
         unsubscribeDayGraph();
-        
+
         this.initCounter = 0;
         this.staging.map(segment =>
           segment.map(line => this.rawData.push(line))
@@ -399,14 +403,22 @@ class PowerGraph {
       + d.sh5 + d.sh6 + d.sh7 + d.co0 + d.co1 + d.batIn + d.inverter)
     );
     yScale.domain([0, (extent[1])]);
-    const keys = ["lp0", "lp1", "lp2", "lp3", "lp4",
+    const keys = [["lp0", "lp1", "lp2", "lp3", "lp4",
       "lp5", "lp6", "lp7",
       "sh0", "sh1", "sh2", "sh3", "sh4",
-      "sh5", "sh6", "sh7", "co0", "co1", "housePower", "batIn", "inverter"];
+      "sh5", "sh6", "sh7", "co0", "co1", "housePower", "batIn", "inverter"],
+    ["housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+      "lp5", "lp6", "lp7",
+      "sh0", "sh1", "sh2", "sh3", "sh4",
+      "sh5", "sh6", "sh7", "co0", "co1", "batIn", "inverter"],
+    ["sh0", "sh1", "sh2", "sh3", "sh4",
+      "sh5", "sh6", "sh7", "co0", "co1", "housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+      "lp5", "lp6", "lp7",
+      "batIn", "inverter"]
+    ];
 
-    const stackGen = d3.stack().keys(keys);
+    const stackGen = d3.stack().keys(keys[this.usageStackOrder]);
     const stackedSeries = stackGen(this.graphData);
-
     svg.selectAll(".targetareas")
       .data(stackedSeries)
       .join("path")
@@ -415,7 +427,7 @@ class PowerGraph {
         .y0((d) => yScale(d[0]))
         .y1((d) => yScale(d[1]))
       )
-      .attr("fill", (d, i) => this.colors[i]);
+      .attr("fill", (d, i) => this.colors[keys[this.usageStackOrder][i]]);
 
     const yAxis = svg.append("g")
       .attr("class", "axis")
@@ -563,7 +575,7 @@ class PowerGraph {
       .call(d3.axisRight(yScale)
         .ticks(5)
         .tickFormat((d) => (d + "%")))
-    ;
+      ;
     socAxis.selectAll(".tick").attr("font-size", 12);
     socAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     socAxis.select(".domain")
@@ -602,6 +614,15 @@ function shiftRight() {
     powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() + 86400000);
     powerGraph.activateDay();
   }
+}
+
+// Change the order of values in the stack
+function changeStack() {
+  powerGraph.usageStackOrder = powerGraph.usageStackOrder+1;
+  if (powerGraph.usageStackOrder > 2) {
+    powerGraph.usageStackOrder = 0;
+  }
+  powerGraph.updateGraph();
 }
 
 var powerGraph = new PowerGraph();
