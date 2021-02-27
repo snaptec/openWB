@@ -22,6 +22,7 @@ class PowerGraph {
     this.height = 500;
     this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
     this.graphDate = new Date();
+    this.liveGraphMinutes = 0;
   }
 
   init() {
@@ -66,8 +67,8 @@ class PowerGraph {
     } catch (err) {
       // on initial invocation this method is not existing
     }
-    d3.select("h3#graphheading").text("Leistung / Ladestand")
-  }
+    this.updateHeading();
+    }
 
   deactivateLive() {
     try {
@@ -86,15 +87,24 @@ class PowerGraph {
         //on initial run of activate, subscribeDayGraph is not yet initialized. 
         // the error can be ignored
       }
-      var heading = "Leistung / Ladestand ";
+      this.updateHeading();
+    }
+  }
+
+  updateHeading() {
+    var heading = "Leistung / Ladestand ";
+
+    if (wbdata.showLiveGraph) {
+      heading = heading + this.liveGraphMinutes + " min";
+    } else {
       const today = new Date();
       if (today.getDate() == this.graphDate.getDate() && today.getMonth() == this.graphDate.getMonth() && today.getFullYear() == this.graphDate.getFullYear()) {
         heading = heading + "heute";
       } else {
         heading = heading + this.graphDate.getDate() + "." + (this.graphDate.getMonth() + 1) + ".";
       }
-      d3.select("h3#graphheading").text(heading);
     }
+    d3.select("h3#graphheading").text(heading);
   }
 
   deactivateDay() {
@@ -135,6 +145,10 @@ class PowerGraph {
                 this.graphData.push(values);
               });
             });
+            const startTime = this.graphData[0].date;
+            const endTime = this.graphData[this.graphData.length-1].date;
+            this.liveGraphMinutes = Math.round((endTime - startTime)/60000);
+            this.updateHeading();
             this.updateGraph();
             unsubscribeMqttGraphSegments();
           }
