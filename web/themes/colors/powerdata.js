@@ -50,23 +50,23 @@ class WbData {
 
 	init() {
 		var style = getComputedStyle(document.body);
-		this.sourceSummary.pv.color = style.getPropertyValue('--color-pv');
-		this.sourceSummary.evuIn.color = style.getPropertyValue('--color-evu');
-		this.sourceSummary.batOut.color = style.getPropertyValue('--color-battery');
-		this.usageSummary[0].color = style.getPropertyValue('--color-export');
-		this.usageSummary[1].color = style.getPropertyValue('--color-charging');
-		this.usageSummary[2].color = style.getPropertyValue('--color-devices');
-		this.usageSummary[3].color = style.getPropertyValue('--color-battery');
-		this.usageSummary[4].color = style.getPropertyValue('--color-house');
+		this.sourceSummary.pv.color = 'var(--color-pv)';
+		this.sourceSummary.evuIn.color = 'var(--color-evu)';
+		this.sourceSummary.batOut.color = 'var(--color-battery)';
+		this.usageSummary[0].color = 'var(--color-export)';
+		this.usageSummary[1].color = 'var(--color-charging)';
+		this.usageSummary[2].color = 'var(--color-devices)';
+		this.usageSummary[3].color = 'var(--color-battery)';
+		this.usageSummary[4].color = 'var(--color-house)';
 		var i;
 		for (i = 0; i < 8; i++) {
-			this.chargePoint[i].color = style.getPropertyValue('--color-lp' + (i + 1));
+			this.chargePoint[i].color = 'var(--color-lp' + (i + 1) + ')';
 		}
 		for (i = 0; i < 9; i++) {
-			this.shDevice[i].color = style.getPropertyValue('--color-sh' + (i + 1));
+			this.shDevice[i].color = 'var(--color-sh' + (i + 1) + ')';
 		}
-			this.consumer[0].color = style.getPropertyValue('--color-co1');
-			this.consumer[1].color = style.getPropertyValue('--color-co2');
+			this.consumer[0].color = 'var(--color-co1)';
+			this.consumer[1].color = 'var(--color-co2)';
 		// read preferences stored in cookie
 		const wbCookies = document.cookie.split(';');
 		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
