@@ -245,6 +245,10 @@ var options = {
 	useSSL: isSSL,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
+		$('#backend .connectionState').text("verbunden");
+		// $('#backend .reloadBtn').addClass('hide');
+		$('#backend .counter').text(retries+1);
+		console.log("connected, resetting counter");
 		retries = 0;
 		topicsToSubscribe.forEach((topic) => {
 			client.subscribe(topic[0], {qos: 0});
@@ -252,7 +256,12 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		setTimeout(function() { client.conect(options); }, 5000);
+		retries = retries + 1;
+		console.log("connection failed, incrementing counter: " + retries);
+		$('#backend .connectionState').text("getrennt");
+		// $('#backend .reloadBtn').removeClass('hide');
+		$('#backend .counter').text(retries+1);
+		setTimeout(function() { client.connect(options); }, 5000);
 	}
 };
 
@@ -266,7 +275,10 @@ $(document).ready(function(){
 
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
-	setTimeout(function() { client.conect(options); }, 5000);
+	$('#backend .connectionState').text("getrennt");
+	$('#backend .reloadBtn').removeClass('hide');
+	$('#backend .counter').text(retries+1);
+	setTimeout(function() { client.connect(options); }, 5000);
 };
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {

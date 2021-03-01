@@ -788,6 +788,38 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12 card">
+                    <div class="card-header bg-secondary">
+                        Verbindung zum Backend
+                    </div>
+                    <div id="backend" class="card-body">
+                        <div class="form-row">
+                            <div class="col-4">
+                                Status:
+                            </div>
+                            <div class="col">
+                                <span class="connectionState">-</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-4">
+                                Verbindungsversuche:
+                            </div>
+                            <div class="col">
+                                <span class="counter">-</span>
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-end">
+                            <div class="col-8">
+                                <button class="btn btn-block btn-danger reloadBtn" type="button">
+                                    Display neu Laden
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <script>
                 // TODO: replace by MQTT topics
                 function updateit() {
@@ -805,9 +837,14 @@
                         $('#diskfree').html(json.diskfree);
                     })
                 };
+
                 $(document).ready(function() {
                     updateit();
                     setInterval(updateit, 10000);
+                });
+
+                $('#backend .reloadBtn').click(function() {
+                    location.reload();
                 });
             </script>
         </div>
@@ -1984,7 +2021,7 @@
                 function submitSocForm() {
                     var currentLp = $('#socModal').find('.socLp').text();
                     var manualSoc = $("#manualSocBox").val();
-                    console.log("SoC for LP"+currentLp+": "+manualSoc);
+                    // console.log("SoC for LP"+currentLp+": "+manualSoc);
                     publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
                     // reset input after publishing
                     clearSocForm();
@@ -2195,7 +2232,7 @@
                     $('#displaylock').find('.fa-lock').removeClass('hide');
                     $('#displaylock').find('.fa-unlock').addClass('hide');
                     if( $('.sidenav').find('.btn.active').hasClass('displayLock') ) {
-                        console.log('changing panel');
+                        // console.log('changing panel');
                         initPanels();
                     }
                     window.clearTimeout(lockTimeoutHandler);
@@ -2268,9 +2305,9 @@
                     // some helper functions
                     'display/cards/helperFunctions.js?ver=20210113',
                     // functions for processing messages
-                    'display/cards/processAllMqttMsg.js?ver=20210208',
+                    'display/cards/processAllMqttMsg.js?ver=20210301',
                     // functions performing mqtt and start mqtt-service
-                    'display/cards/setupMqttServices.js?ver=20210205',
+                    'display/cards/setupMqttServices.js?ver=20210301',
                 ];
 
                 scriptsToLoad.forEach(function(src) {
