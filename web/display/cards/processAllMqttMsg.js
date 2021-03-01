@@ -669,7 +669,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
-		console.log(mqttmsg+': '+mqttpayload);
+		// console.log(mqttmsg+': '+mqttpayload);
 		// manual soc-module configured for respective charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
