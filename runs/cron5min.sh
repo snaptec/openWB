@@ -296,5 +296,8 @@ else
 	sudo python3 $OPENWBBASEDIR/runs/modbusserver/modbusserver.py &
 fi
 
+#Pingchecker
+$OPENWBBASEDIR/runs/pingcheck.sh &
+
 # truncate all logs in ramdisk
 $OPENWBBASEDIR/runs/cleanup.sh >> $RAMDISKDIR/cleanup.log 2>&1
