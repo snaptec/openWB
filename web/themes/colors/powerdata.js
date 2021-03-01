@@ -44,7 +44,7 @@ class WbData {
 		];
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
-		this.showLightMode = false;
+		this.displayMode = "dark";
 		this.prefs = {};
 	};
 
@@ -84,8 +84,8 @@ class WbData {
 			if ('relPM' in this.prefs) {
 				powerMeter.showRelativeArcs = this.prefs.relPM;
 			}
-			if ('lightM' in this.prefs) {
-				this.showLightMode = this.prefs.lightM;
+			if ('displayM' in this.prefs) {
+				this.displayMode = this.prefs.displayM;
 			}
 		}
 		if (this.showLiveGraph) {
@@ -95,6 +95,13 @@ class WbData {
 				powerGraph.deactivateLive();
 				powerGraph.activateDay();
 			}
+			const doc = d3.select("html");
+    doc.classed ("theme-dark", (this.displayMode == "dark"));
+    doc.classed ("theme-light", (this.displayMode == "light"));
+    doc.classed ("theme-gray", (this.displayMode == "gray"));
+    
+    
+
 	}
 
 	updateEvu(field, value) {
@@ -277,7 +284,7 @@ class WbData {
 	persistGraphPreferences() {
 		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
 		this.prefs.showLG = this.showLiveGraph;
-		this.prefs.lightM = this.showLightMode;
+		this.prefs.displayM = this.displayMode;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 }

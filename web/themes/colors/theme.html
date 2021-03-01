@@ -173,11 +173,15 @@
 							<h3>Aktuelle Leistung</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm " id="themeSwitchButton"><span class="fa fa-paint-brush px-0"></span></button>						
-							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span class="fa fa-chart-area px-0"></span></button>
-							</div>
+							<button class="btn btn-outline-secondary btn-sm hide" id="meterResetButton"><span
+									class="fa fa-undo px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span
+									class="fa fa-chart-area px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="themeSwitchButton"><span
+									class="fa fa-adjust px-0"></span></button>
+						</div>
 					</div>
-				</div>		
+				</div>
 				<figure id="powermeter" class="wb-subwidget mb-0"></figure>
 			</div>
 			<!-- Graph - Live, Tag (powergraph) -->
@@ -188,8 +192,12 @@
 							<h3 id="graphheading">Leistung / Ladestand</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm " id="graphLeftButton"><span class="fa fa-chevron-circle-left px-0"></span></button>
-							<button class="btn btn-outline-secondary btn-sm " id="graphRightButton"><span class="fa fa-chevron-circle-right px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphChangeButton"><span
+									class="fa fa-sort px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphLeftButton"><span
+									class="fa fa-chevron-circle-left px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphRightButton"><span
+									class="fa fa-chevron-circle-right px-0"></span></button>
 						</div>
 					</div>
 				</div>
@@ -813,10 +821,11 @@
 		// load navbar, be carefull: it loads asynchonously
 		$.get(
 			{ url: "themes/navbar.html", cache: false },
-			function(data){
+			function (data) {
 				$("#nav-placeholder").replaceWith(data);
 			}
 		);
+
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
