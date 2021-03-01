@@ -191,11 +191,15 @@
 
 		<script>
 
-			// load navbar
-			$("#nav-placeholder").load('themes/navbar.html?v=20210130', function() {
-				$('#navStromtarifInfo').removeClass('hide');
-				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
-			});
+			// load navbar, be carefull: it loads asynchonously
+			$.get(
+				{ url: "themes/navbar.html", cache: false },
+				function(data){
+					$("#nav-placeholder").replaceWith(data);
+					$('#navStromtarifInfo').removeClass('hide');
+					$('#navStromtarifInfo .etproviderLink').addClass('disabled');
+				}
+			);
 
 			$(document).ready(function(){
 

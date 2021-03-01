@@ -385,10 +385,10 @@ h3 {
 	--color-evu: firebrick;
 	--color-pv: #33a02c;
 	--color-house: #7f7f7f;
-	--color-devices: #bb7bdb;
+	--color-devices: #f16913;
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
-	--color-axis: black;
+	--color-axis: gray;
 	--color-frame: white;
 	--color-subframe: lightgrey;
 	--color-fg: black;
@@ -414,6 +414,7 @@ h3 {
 	--color-sh9: #e4419d;
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
+	--padding-widget: 5px;
 }
 
 .theme-dark {
@@ -421,7 +422,7 @@ h3 {
 	--color-evu: firebrick;
 	--color-pv: #33a02c;
 	--color-house: #7f7f7f;
-	--color-devices: #cab2d6;
+	--color-devices: #f16913;
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: steelblue;
@@ -450,6 +451,7 @@ h3 {
 	--color-sh9: #e4419d;
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
+	--padding-widget: 0px;
 }
 
 .openwb-devices {
@@ -464,10 +466,11 @@ h3 {
 
 .wb-subwidget {
 	border:1px solid var(--color-subframe) ;
+	padding:var(--padding-widget);
 
 }
 th {
-	color: steelblue;
+	color: var(--color-axis);
 }
 .table-borderless td {
 	border: 0;
