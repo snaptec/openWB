@@ -8,7 +8,7 @@
 # Datei mit aktuell gültigem Strompreis
 #
 # erwartet von API Stundenpreise, d.h. für jede Stunde eine Preisauskunft
-# setzt aktuellen Strompreis (und für kommende 9 Std) im Fehlerfall auf 99.99ct/kWh
+# setzt aktuellen Strompreis (und für kommenden 9 Std) im Fehlerfall auf 99.99ct/kWh
 #
 # Aufruf als Main
 # oder nach Import: update_pricedata(landeskennung, basispreis, debug_level)
@@ -245,8 +245,20 @@ def _get_updated_pricelist():
     # API abfragen, retry bei Timeout
     # Rückgabe ist empfangene bereinigte Preisliste mit aktuellem Preis als ersten Eintrag
     # Bei Fehler oder leerer Liste wird Exception geworfen
+    # Da aWATTar pro Abruf nur max. 24h Preise liefert, benötigt man für eine komplette Liste
+    # einschl. aller morgiger Preise 2 Abfragen
+    #
+    # zunächst Abfragen der heutigen Preise in local-time
+    date_obj = datetime.now()
+    start_obj = date_obj.replace(minute=0, second=0, microsecond=0)  # aktuelle volle Stunde
+    start_timestamp = start_obj.timestamp() * 1000
+    date_obj = date_obj + timedelta(days=1)
+    end_obj = date_obj.replace(hour=0, minute=0, second=0, microsecond=0)  # Mitternacht
+    end_timestamp = end_obj.timestamp() * 1000
+    api_url = LAENDERDATEN[landeskennung]['url'] + '?start=' + str('%d' % start_timestamp) + '&end=' + str('%d' % end_timestamp)
+    # Abfrage der Preise bis Mitternacht
     try:
-        response = _readAPI(LAENDERDATEN[landeskennung]['url'])
+        response = _readAPI(api_url)
     except:
         raise RuntimeError('Fataler Fehler bei API-Abfrage') from None
     _write_log_entry('Antwort auf Abfrage erhalten', 2)
@@ -256,20 +268,42 @@ def _get_updated_pricelist():
     except:
         raise
     # Bei Erfolg JSON auswerten
-    _write_log_entry('Ermittle JSON aus aWATTar-Antwort', 1)
+    _write_log_entry('Ermittle JSON fuer heutige Preise aus aWATTar-Antwort', 1)
     try:
         marketprices = json.loads(response.text)['data']
     except:
         raise RuntimeError('Korruptes JSON') from None
-    _write_log_entry("aWATTar-Preisliste extrahiert", 1)
-    # Liste sortiert nach Zeitstempel
-    sorted_marketprices = sorted(marketprices, key=lambda k: k['start_timestamp'])
+    _write_log_entry("aWATTar-Preisliste fuer heute extrahiert", 1)
+    # dann Abfragen der morgigen Preise in local-time
+    start_timestamp = end_timestamp  # Mitternacht
+    end_obj = end_obj + timedelta(days=1) # Mitternacht des Übermorgen
+    end_timestamp = end_obj.timestamp() * 1000
+    api_url = LAENDERDATEN[landeskennung]['url'] + '?start=' + str('%d' % start_timestamp) + '&end=' + str('%d' % end_timestamp)
+    # Abfrage der Preise morgen bis Mitternacht
+    try:
+        response = _readAPI(api_url)
+    except:
+        raise RuntimeError('Fataler Fehler bei API-Abfrage') from None
+    _write_log_entry('Antwort auf Abfrage erhalten', 2)
+    # sind sonstige-Fehler aufgetreten?
+    try:
+        response.raise_for_status()
+    except:
+        raise
+    # Bei Erfolg JSON auswerten
+    _write_log_entry('Ermittle JSON fuer morgige Preise aus aWATTar-Antwort', 1)
+    try:
+        marketprices = marketprices + json.loads(response.text)['data']
+    except:
+        raise RuntimeError('Korruptes JSON') from None
+    _write_log_entry("aWATTar-Preisliste für morgen extrahiert", 1)
+
     # alle Zeiten in UTC verarbeiten
     now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
     now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
     _write_log_entry('Formatiere und analysiere Preisliste', 1)
     pricelist = []
-    for price_data in sorted_marketprices:
+    for price_data in marketprices:
         startzeit_utc = _get_utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
         if landeskennung == 'de':
             if basispreis == 0:
@@ -397,8 +431,7 @@ def update_pricedata(landeskennung, basispreis, debug_level):
                 pricelist_valid_until_str = _convert_timestamp_to_str(float(pricelist_in_file[-1][0]))  # timestamp von letztem Element in Liste
                 _write_log_entry('Letzter Preis in bisherige Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
                 if prices_count_after_cleanup < 11:
-                    # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
-                    # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
+                    # mit 10 Preisen des Tages übrig: gegen 14 Uhr gibt es neue Preise
                     _write_log_entry('Versuche, weitere Preise von aWATTar zu empfangen', 1)
                     try:
                         pricelist_received = _get_updated_pricelist()
