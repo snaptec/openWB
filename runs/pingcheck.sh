@@ -3,7 +3,6 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MYLOGFILE="$RAMDISKDIR/openWB.log"
-echo $MYLOGFILE
 
 
 DebugLog(){
