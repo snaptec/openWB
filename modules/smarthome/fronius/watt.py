@@ -13,10 +13,12 @@ ipadr=str(sys.argv[2])        #IP-ADresse des Fronius Wechselrichters, mit dem d
 smid=int(sys.argv[3])         #ID des Zählers im Wechselrichter (Hauptzähler 0, weitere fortlaufend)
 
 answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID="+str(smid), timeout=3).read().decode("utf-8")))
-aktpower = answer['Body']['Data']['PowerReal_P_Sum']*-1
+power = answer['Body']['Data']['PowerReal_P_Sum']
 powerc = answer['Body']['Data']['EnergyReal_WAC_Sum_Consumed']
+power = abs(aktpower)
+powerc = abs(powerc)
 
-answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)  + '} '
+answer = '{"power":' + str(power) + ',"powerc":' + str(powerc)  + '} '
 f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
 json.dump(answer,f1)
 f1.close()
