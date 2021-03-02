@@ -579,6 +579,11 @@
 					Disk Usage: <span id='diskuse'>--</span>, <span id='diskfree'>--</span> avail.<br>
 					openWB Version: <?php echo $owbversion; ?>
 				</div>
+				<div id="backend" class="row col-xs-12 text-left" style="font-size: 22px; height: 100px; top: 250px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;"> 
+					Backend: <span class="connectionState">-</span><br>
+					Verbindungsversuche: <span class="counter">-</span><br>
+					<button class="btn btn-block btn-red reloadBtn" type="button">Display neu Laden</button>
+				</div>
 				<script>
 					function updateit() {
 						$.getJSON('tools/programmloggerinfo.php', function(data){
@@ -597,10 +602,15 @@
 							document.getElementById('wlanaddr').innerHTML = json.wlanaddr; 
 						})
 					};
+
 					$(document).ready(function() {
 						updateit();
 						setInterval(updateit, 10000);
-					})
+					});
+
+					$('#backend .reloadBtn').click(function() {
+						location.reload();
+					});
 				</script>
 			</div>
 
@@ -1182,10 +1192,10 @@
 
 			<script src="livechart_chartjs.js"></script>
 			<script src="js/mqttws31.js"></script>
-			<script src="js/Chart.bundle.js"></script>
+			<script src="js/Chart.bundle.min.js"></script>
 			<script src="display/gauges/alllive.js?vers=20201201"></script>
 			<script src="display/gauges/symbollive.js?vers=20201201"></script>
-			<script src="display/gauges/live.js?vers=20201203"></script>
+			<script src="display/gauges/live.js?vers=20210301"></script>
 
 			<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
 				<div style="position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
