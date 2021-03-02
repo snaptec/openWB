@@ -271,9 +271,13 @@ def _get_updated_pricelist():
     pricelist = []
     for price_data in sorted_marketprices:
         startzeit_utc = _get_utcfromtimestamp(price_data['start_timestamp']/1000)  # Zeitstempel kommt von API in UTC mit Millisekunden, UNIX ist ohne
-        if (landeskennung == 'de'):
-            # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
-            bruttopreis = (price_data['marketprice']/10 * LAENDERDATEN[landeskennung]['umsatzsteuer']) + LAENDERDATEN[landeskennung]['awattargebuehr'] + basispreis
+        if landeskennung == 'de':
+            if basispreis == 0:
+                # Kein Basispreis, dann nur Anzeige des Börsenpreises [ct/kWh] ohne weitere Bestandteile
+                bruttopreis = price_data['marketprice']/10
+            else:
+                # Bruttopreis Deutschland [ct/kWh] = ((marketpriceAusAPI/10) * 1.19) + Awattargebühr + Basispreis
+                bruttopreis = (price_data['marketprice']/10 * LAENDERDATEN[landeskennung]['umsatzsteuer']) + LAENDERDATEN[landeskennung]['awattargebuehr'] + basispreis
             bruttopreis_str = str('%.2f' % round(bruttopreis, 2))
         else:
             # für Österreich keine Berechnung möglich, daher nur marketpriceAusAPI benutzen
