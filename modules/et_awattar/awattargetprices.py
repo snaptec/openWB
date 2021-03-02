@@ -276,7 +276,7 @@ def _get_updated_pricelist():
     _write_log_entry("aWATTar-Preisliste fuer heute extrahiert", 1)
     # dann Abfragen der morgigen Preise in local-time
     start_timestamp = end_timestamp  # Mitternacht
-    end_obj = end_obj + timedelta(days=1) # Mitternacht des Übermorgen
+    end_obj = end_obj + timedelta(days=1) # Mitternacht Übermorgen
     end_timestamp = end_obj.timestamp() * 1000
     api_url = LAENDERDATEN[landeskennung]['url'] + '?start=' + str('%d' % start_timestamp) + '&end=' + str('%d' % end_timestamp)
     # Abfrage der Preise morgen bis Mitternacht
