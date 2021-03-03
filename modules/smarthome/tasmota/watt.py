@@ -17,7 +17,7 @@ uberschuss=int(sys.argv[3])
 relais=0
 try:
     answer2 = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/cm?cmnd=Status", timeout=3).read().decode("utf-8")))
-    r_status = int(answer2['Status']['POWER'])
+    r_status = int(answer2['Status']['Power'])
 except:
     r_status = 0
 answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/cm?cmnd=Status%208", timeout=3).read().decode("utf-8")))
