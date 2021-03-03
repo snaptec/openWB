@@ -289,7 +289,7 @@
 											<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" name="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="0" data-default="0" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 										</div>
 									</div>
-									<span class="form-text small">Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.</span>
+									<span class="form-text small">Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer mit der Mindest-SoC-Stromstärke</b> geladen wird. Der Wert 0 schaltet die Funktion aus.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -301,7 +301,7 @@
 											<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" name="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 										</div>
 									</div>
-									<span class="form-text small">Parameter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden. Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.</span>
+									<span class="form-text small">Parameter in Ampere [A] für den Strom bei Mindest-SoC-Ladung im Modus PV-Laden. Definiert den Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
