@@ -118,7 +118,10 @@
 						if(preg_match('/^\s*topic\s+openWB\/housebattery\/#/', $bridgeLine) === 1) {
 							$exportStatus = true;
 						}
-						if(preg_match('/^\s*topic\s+openWB\/graph\/#/', $bridgeLine) === 1) {
+						if(preg_match('/^\s*topic\s+openWB\/config\/get\/#/', $bridgeLine) === 1) {
+							$exportGraph = true;
+						}
+						if(preg_match('/^\s*topic\s+openWB\/SmartHome\/#/', $bridgeLine) === 1) {
 							$exportGraph = true;
 						}
 						if(preg_match('/^\s*topic\s+openWB\/set\//', $bridgeLine) === 1) {
