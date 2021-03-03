@@ -324,7 +324,9 @@ then
 fi
 
 # get local ip
-ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
+#ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
+#prepare for Buster
+ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
 echo "load versions..."
