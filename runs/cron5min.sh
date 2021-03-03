@@ -220,7 +220,7 @@ echo $hausdailyyield > $RAMDISKDIR/daily_hausverbrauchkwh
 # get our current ip address
 #ip route get 1 | awk '{print $NF;exit}' > $RAMDISKDIR/ipaddress
 #prepare for Buster
-ip route get 1 |  awk '{print $7}' > $RAMDISKDIR/ipaddress
+ip route get 1 |  awk '{print $7;exit}' > $RAMDISKDIR/ipaddress
 
 # check if our mqtt handler is running
 if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/mqttsub.py" > /dev/null
