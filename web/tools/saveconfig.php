@@ -166,22 +166,6 @@
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/web/files/smashm.conf', $result);
 		}
 
-		// update i3 SoC auth files if in POST data
-		if( array_key_exists( 'i3username', $_POST ) ){
-			// charge point 1
-			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3/auth1.json";
-			$i3auth_fp = fopen($i3authfile, 'w');
-			fwrite($i3auth_fp,"{".PHP_EOL.'"username": "'.$settingsArray['i3username'].'",'.PHP_EOL.'"password": "'.$settingsArray['i3passwort'].'",'.PHP_EOL.'"vehicle": "'.$settingsArray['i3vin'].'"'.PHP_EOL."}".PHP_EOL);
-			fclose($i3auth_fp);
-		}
-		if( array_key_exists( 'i3usernames1', $_POST ) ){
-			// charge point 2
-			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3/auth2.json";
-			$i3auth_fp = fopen($i3authfile, 'w');
-			fwrite($i3auth_fp,"{".PHP_EOL.'"username": "'.$settingsArray['i3usernames1'].'",'.PHP_EOL.'"password": "'.$settingsArray['i3passworts1'].'",'.PHP_EOL.'"vehicle": "'.$settingsArray['i3vins1'].'"'.PHP_EOL."}".PHP_EOL);
-			fclose($i3auth_fp);
-		}
-
 		// start etprovider update if in POST data
 		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){ ?>
 			<script>$('#feedbackdiv').append("<br>Update des Stromtarifanbieters gestartet.");</script>
