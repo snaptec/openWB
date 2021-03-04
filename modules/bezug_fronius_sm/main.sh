@@ -1,5 +1,22 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+DMOD="MAIN"
+
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "bezug_fronius_sm: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
+
+# for developement only
+# debug=1
+
 # Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
 # Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv).
 # Einspeiseleistung: PV-Leistung > Verbrauch, es wird Strom eingespeist
@@ -52,8 +69,9 @@ elif [[ $froniusvar2 == "2" ]]; then
 	evupf3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_03_F64')/1" | bc)
 	ikwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64')
 	ekwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
-
 fi
+
+openwbDebugLog ${DMOD} 1 "EVU: response_sm: $response_sm"
 
 # Auswertung für Variante0 und Variante1 gebündelt
 if [[ $froniusvar2 != "2" ]]; then
@@ -82,6 +100,8 @@ if [[ $froniusvar2 != "2" ]]; then
 
 fi
 
+openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
+
 if [[ $meter_location == "1" ]]; then
 	# wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
 	# PV Leistung wird gleichmäßig auf alle Phasen verteilt
@@ -89,6 +109,7 @@ if [[ $meter_location == "1" ]]; then
 
 	# Lese die aktuelle PV-Leistung des Wechselrichters ein.
 	response_fi=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
+	openwbDebugLog ${DMOD} 1 "EVU: response_fi: $response_fi"
 	pvwatt=$(echo $response_fi | jq '.Body.Data.Site.P_PV' | sed 's/\..*$//')
 	# Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
 	re='^-?[0-9]+$'
@@ -99,6 +120,10 @@ if [[ $meter_location == "1" ]]; then
 	bezugw1=$(echo "scale=2; (-1 * $(echo $bezugw1) - $pvwatt/3)/1" | bc)
 	bezugw2=$(echo "scale=2; (-1 * $(echo $bezugw2) - $pvwatt/3)/1" | bc)
 	bezugw3=$(echo "scale=2; (-1 * $(echo $bezugw3) - $pvwatt/3)/1" | bc)
+	# Wegen der geänderten Leistungen sind die Ströme erneut zu berechnen
+	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
+	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
+	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
 	# Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus dem Wechselrichter kam.
 	#ikwh=$(echo $response_sm | jq '.Body.Data.EnergyReal_WAC_Sum_Consumed')
 	ikwh=0
@@ -106,8 +131,8 @@ if [[ $meter_location == "1" ]]; then
 	#ekwh=$(echo $response_fi | jq '.Body.Data.Site.E_Total')
 	ekwh=0
 fi
-	
 
+openwbDebugLog ${DMOD} 1 "EVU: V: ${evuv1}/${evuv2}/${evuv3} A: ${bezuga1}/${bezuga2}/${bezuga3} W: ${bezugw1}/${bezugw2}/${bezugw3}/T${wattbezug}"
 
 # Gib den wichtigsten Wert direkt zurück (auch sinnvoll beim Debuggen).
 echo $wattbezug
