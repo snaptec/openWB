@@ -5,13 +5,21 @@ response=''
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
+DMOD="EVSOC"
 CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
-LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 
-socDebug=$debug
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_tesla: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
+
 # for developement only
-socDebug=1
+# debug=1
 
 case $CHARGEPOINT in
 	2)
@@ -47,13 +55,6 @@ esac
 password="${!passwordConfigText}"
 mfapasscode="${!mfaPasscodeConfigText}"
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
-}
-
 getAndWriteSoc(){
 	re='^-?[0-9]+$'
 	# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
@@ -61,10 +62,10 @@ getAndWriteSoc(){
 	# current state of car
 	# state=$(echo $response | jq .response.state)
 	state=$(echo $response | jq .state)
-	socDebugLog "State: $state"
+	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: State: $state"
 	# soclevel=$(echo $response | jq .response.charge_state.battery_level)
 	soclevel=$(echo $response | jq .charge_state.battery_level)
-	socDebugLog "SoC: $soclevel"
+	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $soclevel"
 
 	if  [[ $soclevel =~ $re ]] ; then
 		if (( $soclevel != 0 )) ; then
@@ -79,12 +80,12 @@ incrementTimer(){
 }
 
 clearPassword(){
-	socDebugLog "Removing password from config."
+	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Removing password from config."
 	sed -i "s/$passwordConfigText=.*/$passwordConfigText=''/" $CONFIGFILE
 }
 
 setTokenPassword(){
-	socDebugLog "Writing token password to config."
+	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Writing token password to config."
 	sed -i "s/$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
 	sed -i "s/$mfaPasscodeConfigText=.*/$mfaPasscodeConfigText=XXX/" $CONFIGFILE
 }
@@ -95,16 +96,16 @@ checkToken(){
 		'')
 			# empty password tells us to remove a possible saved token
 			if [ -f $tokensfile ]; then
-				socDebugLog "Empty password set: removing tokensfile."
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Empty password set: removing tokensfile."
 				rm $tokensfile
 			fi
-			socDebugLog "Empty Password - nothing to do."
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Empty Password - nothing to do."
 			returnValue=1
 			;;
 		$TOKENPASSWORD)
 			# check if token is present
 			if [ ! -f $tokensfile ]; then
-				socDebugLog "Tokenpassword set but no token found: clearing password in config."
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Tokenpassword set but no token found: clearing password in config."
 				clearPassword
 				returnValue=2
 			fi
@@ -112,19 +113,19 @@ checkToken(){
 		*)
 			# new password entered
 			if [ -f $tokensfile ]; then
-				socDebugLog "New password set: removing tokensfile."
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: New password set: removing tokensfile."
 				rm $tokensfile
 			fi
 			# Request new token with user/pass.
-			socDebugLog "Requesting new token..."
+			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting new token..."
 			# response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
 			response=$(python3 $MODULEDIR/tesla.py --email="$username" --password="$password" --mfapasscode="$mfapasscode" --tokensfile="$tokensfile")
 			# password in response, so do not log it!
 			if [ -f $tokensfile ]; then
-				socDebugLog "...all done, removing password from config file."
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ...all done, removing password from config file."
 				setTokenPassword
 			else
-				socDebugLog "ERROR: Auth with user/pass failed!"
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ERROR: Auth with user/pass failed!"
 				echo "Fehler: Anmeldung bei Tesla gescheitert!" > $RAMDISKDIR/lastregelungaktiv
 				returnValue=3
 			fi
@@ -134,7 +135,7 @@ checkToken(){
 }
 
 wakeUpCar(){
-	socDebugLog "Waking up car."
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Waking up car."
 	counter=0
 	until [ $counter -ge 12 ]; do
 		# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
@@ -146,9 +147,9 @@ wakeUpCar(){
 		fi
 		counter=$((counter+1))
 		sleep 5
-		socDebugLog "Loop: $counter State: $state"
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Loop: $counter State: $state"
 	done
-	socDebugLog "Car state after wakeup: $state"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car state after wakeup: $state"
 	if [ "$state" = "\"online\"" ]; then
 		return 0
 	else
@@ -158,12 +159,12 @@ wakeUpCar(){
 
 soctimer=$(<$soctimerfile)
 if (( ladeleistung > 1000 )); then
-	# socDebugLog "Car is charging"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is charging"
 	if (( soctimer < socintervallladen )); then
-		# socDebugLog "Nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
-		socDebugLog "Requesting SoC"
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
 		checkToken
 		checkResult=$?
@@ -173,12 +174,12 @@ if (( ladeleistung > 1000 )); then
 		fi
 	fi
 else
-	# socDebugLog "Car is not charging"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
 	if (( soctimer < socintervall )); then
-		# socDebugLog "Nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
-		socDebugLog "Requesting SoC"
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
 		checkToken
 		checkResult=$?
@@ -187,9 +188,9 @@ else
 			wakeUpCar
 			wakeUpResult=$?
 			if [ $wakeUpResult -eq 0 ]; then
-				socDebugLog "Update SoC"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Update SoC"
 			else
-				socDebugLog "Car not online after timeout. SoC will be outdated!"
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Car not online after timeout. SoC will be outdated!"
 			fi
 			getAndWriteSoc
 		fi
