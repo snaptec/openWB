@@ -41,14 +41,14 @@ socDebugLog(){
 
 soctimer=$(<$soctimerfile)
 
-tmpintervall=$(( 480 * 6 ))
+tmpintervall=$(( 180 ))
 
 if (( soctimer < tmpintervall )); then
 	socDebugLog "Nothing to do yet. Incrementing timer."
 	soctimer=$((soctimer+1))
 	if (( ladeleistung > 500 ));then
 		socDebugLog "Car is charging"
-		soctimer=$((soctimer+47))
+		soctimer=$((soctimer+2))
 	fi
 	echo $soctimer > $soctimerfile
 else
