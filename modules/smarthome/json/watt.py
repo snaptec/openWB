@@ -56,13 +56,13 @@ try:
     json.dump('{"power":' + str(power) + '} '
 ,f1)
 except:
-    power = None
+    pass
     
 try:
     powerc = int(abs(powercfaktor*powerc))
     json.dump('{"powerc":' + str(powerc) + '} '
 ,f1)
 except:
-    powerc = None
+    pass
 
 f1.close()
