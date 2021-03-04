@@ -110,6 +110,8 @@ if [[ $meter_location == "1" ]]; then
 	# Lese die aktuelle PV-Leistung des Wechselrichters ein.
 	response_fi=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
 	openwbDebugLog ${DMOD} 1 "EVU: response_fi: $response_fi"
+	# Basis ist die Leistungsangabe aus dem WR!
+	wattbezug=$(echo "scale=0; $(echo $response_fi | jq '.Body.Data.Site.P_Grid')/1" | bc)
 	pvwatt=$(echo $response_fi | jq '.Body.Data.Site.P_PV' | sed 's/\..*$//')
 	# Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
 	re='^-?[0-9]+$'
