@@ -454,6 +454,43 @@ h3 {
 	--padding-widget: 0px;
 }
 
+.theme-gray {
+	--color-bg: #333333;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-devices: #f16913;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
+	--color-axis: #666666;
+	--color-frame: #999999;
+	--color-subframe: #333333;
+	--color-fg: white;
+	--color-scale: #999999;
+	--color-title: lightgrey;
+	--color-battery: goldenrod;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
+	--padding-widget: 0px;
+}
+
 .openwb-devices {
 	color: #ccffff;
 	background-color: #009696;

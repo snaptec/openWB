@@ -20,27 +20,8 @@ sudo chmod 777 /var/www/html/openWB/ramdisk
 sudo chmod 777 /var/www/html/openWB/ramdisk/
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
+
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
-
-if [ -d "/var/www/html/openWB/modules/soc_i3s1" ]; then
-	sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth1.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3/auth.json" "/var/www/html/openWB/modules/soc_i3/auth1.json"
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth2.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3s1/auth.json" "/var/www/html/openWB/modules/soc_i3/auth2.json"
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token1.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3/token.json" "/var/www/html/openWB/modules/soc_i3/token1.json"
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token2.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3s1/token.json" "/var/www/html/openWB/modules/soc_i3/token2.json"
-fi
 
 sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
@@ -343,7 +324,9 @@ then
 fi
 
 # get local ip
-ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
+#ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
+#prepare for Buster
+ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
 echo "load versions..."
