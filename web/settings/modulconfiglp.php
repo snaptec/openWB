@@ -995,7 +995,7 @@
 																		<div class="form-row mb-1">
 										<label for="soc_id_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervall" id="soc_id_intervall" value="<?php echo $soc_zerong_intervallold ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervall" id="soc_id_intervall" value="<?php echo $soc_id_intervallold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 											</span>
@@ -1004,7 +1004,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_zerong_intervallladenold ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.
 											</span>
