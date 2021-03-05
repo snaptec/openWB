@@ -361,6 +361,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/devicetotal_watt
 	echo 0 > $RamdiskPath/etprovidermaxprice
 	echo 0 > $RamdiskPath/etproviderprice
+	touch $RamdiskPath/etprovidergraphlist
 	echo 0 > $RamdiskPath/ev-live.graph
 	echo 0 > $RamdiskPath/ev.graph
 	echo 0 > $RamdiskPath/evseausgelesen

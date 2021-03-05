@@ -324,8 +324,6 @@ then
 fi
 
 # get local ip
-#ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
-#prepare for Buster
 ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
@@ -366,6 +364,16 @@ echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
+
+# update etprovider pricelist
+echo "etprovider..."
+if [[ "$etprovideraktiv" == "1" ]]; then
+	echo "update pricelist..."
+	mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
+	/var/www/html/openWB/modules/$etprovider/main.sh > /var/log/openWB.log 2>&1 &
+else
+	echo "not activated, skipping"
+fi
 
 # set upload limit in php
 echo "fix upload limit..."
