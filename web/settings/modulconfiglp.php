@@ -702,6 +702,7 @@
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -989,6 +990,56 @@
 											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
 											<span class="form-text small">
 												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div id="socvag" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_vag_type" class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_vag_type" id="soc_vag_type" value="<?php echo $soc_vag_typeold ?>">
+											<span class="form-text small">
+												Auswahl Fahrzeugtyp: vw, id oder audi
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_vag_username" id="soc_vag_username" value="<?php echo $soc_vag_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_vag_passwort" id="soc_vag_passwort" value="<?php echo $soc_vag_passwortold ?>">
+											<span class="form-text small">
+												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_vag_vin" id="soc_vag_vin" value="<?php echo $soc_vag_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervall" id="soc_vag_intervall" value="<?php echo $soc_vag_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
@@ -1750,6 +1801,7 @@
 							hideSection('#socmeq');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
+							hideSection('#socvag');
 							hideSection('#socmqtt');
 							hideSection('#socmbluelink');
 							hideSection('#socmkia');
@@ -1780,6 +1832,9 @@
 							}
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('#socmid');
+							}
+							if($('#socmodul').val() == 'soc_vag') {
+								showSection('#socvag');
 							}
 							if($('#socmodul').val() == 'soc_kia') {
 								showSection('#socmkia');
@@ -2314,6 +2369,7 @@
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -2330,6 +2386,16 @@
 							<!-- soc is always requested, ignoring plug stat -->
 							<div id="socmnone1" class="hide">
 								<!-- nothing here -->
+							</div>
+							<div id="socmtype2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2type" class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2type" id="soc2type" value="<?php echo $soc2typeold ?>">
+										</div>
+									</div>
+								</div>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3266,6 +3332,13 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+							}
+							if($('#socmodul1').val() == 'soc_vaglp2') {
+								showSection('#socmtype2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('#socleaf1');
