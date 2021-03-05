@@ -220,7 +220,7 @@ def getmeter():
             amp = resp.registers[1]
             lp1lla3 = float(amp) / 100
             f = open('/var/www/html/openWB/ramdisk/lla3', 'w')
-            f.write(str(lpa1lla3))
+            f.write(str(lp1lla3))
             f.close()
 
             #Gesamt watt 
