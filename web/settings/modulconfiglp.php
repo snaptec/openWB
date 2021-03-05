@@ -1006,7 +1006,7 @@
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
 											<span class="form-text small">
-												Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.
+												Wie oft das Fahrzeug abgefragt wird während geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
