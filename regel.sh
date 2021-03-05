@@ -59,7 +59,11 @@ if (( slavemode == 1)); then
 		echo $randomSleep > ramdisk/randomSleepValue
 	fi
 
+	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Waiting ${randomSleep}s"
+
 	sleep $randomSleep
+
+	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Wait end"
 fi
 
 source minundpv.sh

@@ -240,7 +240,7 @@ checkTagValidForSocket() {
 	fi
 
 	local rfidlist=$(<"$ramdiskFileForSocket")
-	$dbgWrite "$NowItIs: rfidlist(Socket)='${rfidlist}'"
+	openwbDebugLog "MAIN" 0 "rfidlist(Socket)='${rfidlist}'"
 
 	# leave right away if we have no list of valid RFID tags for the charge point
 	if [ -z "$rfidlist" ]; then

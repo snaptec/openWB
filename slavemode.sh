@@ -72,6 +72,7 @@ openwbisslave() {
 		# handle socket approval while we're not expecting it
 		elif (( SocketActivationRequested == 0 )) && (( SocketActivated == 0 )) && (( SocketApproved > 0 )); then
 			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket aproval while we're not expecting it. Restting the approval."
+			echo 0 > $SocketRequestedFile
 			echo 0 > $SocketApprovedFile
 
 		# no change required

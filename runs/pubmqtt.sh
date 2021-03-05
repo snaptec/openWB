@@ -236,9 +236,16 @@ mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
-mqttvar["config/get/slave/SocketActivated"]=socketActivated
-mqttvar["config/get/slave/SocketRequested"]=socketActivationRequested
-mqttvar["config/get/slave/SocketApproved"]=socketApproved
+if [[ "$standardSocketInstalled" == "1" ]]; then
+	mqttvar["config/get/slave/SocketActivated"]=socketActivated
+	mqttvar["config/get/slave/SocketRequested"]=socketActivationRequested
+	mqttvar["config/get/slave/SocketApproved"]=socketApproved
+	mqttvar["socket/A"]=socketa
+	mqttvar["socket/V"]=socketv
+	mqttvar["socket/W"]=socketp
+	mqttvar["socket/kWhCounter"]=socketkwh
+	mqttvar["socket/Pf"]=socketpf
+fi
 
 for i in $(seq 1 8);
 do
