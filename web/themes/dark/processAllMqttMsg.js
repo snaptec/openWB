@@ -64,14 +64,14 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
 		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
-			$('#etproviderEnabledIcon').show();
-			$('#priceBasedCharging').show();
-			$('#strompreis').show();
+			$('#etproviderEnabledIcon').removeClass('hide');
+			$('#priceBasedCharging').removeClass('hide');
+			$('#strompreis').removeClass('hide');
 			$('#navStromtarifInfo').removeClass('hide');
 		} else {
-			$('#etproviderEnabledIcon').hide();
-			$('#priceBasedCharging').hide();
-			$('#strompreis').hide();
+			$('#etproviderEnabledIcon').addClass('hide');
+			$('#priceBasedCharging').addClass('hide');
+			$('#strompreis').addClass('hide');
 			$('#navStromtarifInfo').addClass('hide');
 		}
 	}
@@ -125,11 +125,11 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 		switch (mqttpayload) {
 			case '0':
 				// deaktiviert
-				$('#70ModeBtn').hide();
+				$('#70ModeBtn').addClass('hide');
 				break;
 			case '1':
 				// activiert
-				$('#70ModeBtn').show();
+				$('#70ModeBtn').removeClass('hide');
 			break;
 		}
 	}
@@ -149,12 +149,12 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 	} else if ( element.hasClass('btn-group-toggle') ) {
 		setToggleBtnGroup(elementId, mqttpayload);
 	}
-
 }
 
 function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
+	// console.log("received graph msg: " + mqttmsg + ": " + mqttpayload);
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/graph/boolDisplayHouseConsumption' ) {
 		if ( mqttpayload == 1) {
@@ -176,10 +176,10 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayLiveGraph' ) {
 		if ( mqttpayload == 0) {
-			$('#thegraph').hide();
+			$('#thegraph').addClass('hide');
 			boolDisplayLiveGraph = false;
 		} else {
-			$('#thegraph').show();
+			$('#thegraph').removeClass('hide');
 			boolDisplayLiveGraph = true;
 		}
 	}
@@ -248,11 +248,11 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplaylp[1-9][0-9]*soc$/i ) ) {
 		var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 		if ( mqttpayload == 1) {
-			$('#socenabledlp' + index).show();
+			$('#socenabledlp' + index).removeClass('hide');
 			window['boolDisplayLp' + index + 'Soc'] = false;
 			window['hidelp' + index + 'soc'] = 'foo';
 		} else {
-			$('#socenabledlp' + index).hide();
+			$('#socenabledlp' + index).addClass('hide');
 			window['boolDisplayLp' + index + 'Soc'] = true;
 			window['hidelp' + index + 'soc'] = 'LP' + index + ' SoC';
 		}
@@ -271,6 +271,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		checkgraphload();
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/[1-9][0-9]*alllivevalues$/i ) ) {
+		// graph messages if local connection
 		var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
@@ -280,6 +281,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if ( mqttmsg == 'openWB/graph/lastlivevalues' ) {
+		// graph messages if local connection
 		if ( initialread > 0) {
 			updateGraph(mqttpayload);
 		}
@@ -408,10 +410,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#chargeModeSelectBtnText').text('Sofortladen');  // text btn mainpage
 				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
 				$('#chargeModeSofortBtn').addClass('btn-success');
-				$('#targetChargingProgress').show();  // visibility of divs for special settings
-				$('#sofortladenEinstellungen').show();
-				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
-				$('#minundpvladenEinstellungen').hide();
+				$('#targetChargingProgress').removeClass('hide');  // visibility of divs for special settings
+				$('#sofortladenEinstellungen').removeClass('hide');
+				$('#priorityEvBatteryIcon').addClass('hide');  // visibility of priority icon
+				$('#minundpvladenEinstellungen').addClass('hide');
 
 				break;
 			case '1':
@@ -419,10 +421,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#chargeModeSelectBtnText').text('Min+PV-Laden');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('#chargeModeMinPVBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').hide();
-				$('#minundpvladenEinstellungen').show();
+				$('#targetChargingProgress').addClass('hide');
+				$('#sofortladenEinstellungen').addClass('hide');
+				$('#priorityEvBatteryIcon').addClass('hide');
+				$('#minundpvladenEinstellungen').removeClass('hide');
 
 				break;
 			case '2':
@@ -430,10 +432,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#chargeModeSelectBtnText').text('PV-Laden');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('#chargeModePVBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').show();
-				$('#minundpvladenEinstellungen').hide();
+				$('#targetChargingProgress').addClass('hide');
+				$('#sofortladenEinstellungen').addClass('hide');
+				$('#priorityEvBatteryIcon').removeClass('hide');
+				$('#minundpvladenEinstellungen').addClass('hide');
 
 				break;
 			case '3':
@@ -441,10 +443,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#chargeModeSelectBtnText').text('Stop');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('#chargeModeStopBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').hide();
-				$('#minundpvladenEinstellungen').hide();
+				$('#targetChargingProgress').addClass('hide');
+				$('#sofortladenEinstellungen').addClass('hide');
+				$('#priorityEvBatteryIcon').addClass('hide');
+				$('#minundpvladenEinstellungen').addClass('hide');
 
 				break;
 			case '4':
@@ -452,11 +454,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#chargeModeSelectBtnText').text('Standby');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('#chargeModeStdbyBtn').addClass('btn-success');
-				$('#targetChargingProgress').hide();
-				$('#sofortladenEinstellungen').hide();
-				$('#priorityEvBatteryIcon').hide();
-				$('#minundpvladenEinstellungen').hide();
-
+				$('#targetChargingProgress').addClass('hide');
+				$('#sofortladenEinstellungen').addClass('hide');
+				$('#priorityEvBatteryIcon').addClass('hide');
+				$('#minundpvladenEinstellungen').addClass('hide');
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
@@ -521,15 +522,15 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
 		if ( mqttpayload == 1 ) {
 			// if housebattery is configured, show info-div
-			$('#speicher').show();
+			$('#speicher').removeClass('hide');
 			// and outer element for priority icon in pv mode
-			$('#priorityEvBattery').show();
+			$('#priorityEvBattery').removeClass('hide');
 			// priority buttons in modal
-			$('#priorityModeBtns').show();
+			$('#priorityModeBtns').removeClass('hide');
 		} else {
-			$('#speicher').hide();
-			$('#priorityEvBattery').hide();
-			$('#priorityModeBtns').hide();
+			$('#speicher').addClass('hide');
+			$('#priorityEvBattery').addClass('hide');
+			$('#priorityModeBtns').addClass('hide');
 		}
 	}
 
@@ -564,6 +565,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 function processSystemMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
+	// console.log("received system msg: " + mqttmsg + ": " + mqttpayload);
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/system/Timestamp') {
 		var dateObject = new Date(mqttpayload * 1000);  // Unix timestamp to date-object
@@ -762,9 +764,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.nightChargingLp');  // now get parents respective child element
 		if ( mqttpayload == 1 ) {
-			element.show();
+			element.removeClass('hide');
 		} else {
-			element.hide();
+			element.addClass('hide');
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
@@ -773,9 +775,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.plugstatLp');  // now get parents respective child element
 		if ( mqttpayload == 1 ) {
-			element.show();
+			element.removeClass('hide');
 		} else {
-			element.hide();
+			element.addClass('hide');
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargestat$/i ) ) {
@@ -844,11 +846,11 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var elementIsConfigured = $(parent).find('.socConfiguredLp');  // now get parents respective child element
 		var elementIsNotConfigured = $(parent).find('.socNotConfiguredLp');  // now get parents respective child element
 		if (mqttpayload == 1) {
-			$(elementIsNotConfigured).hide();
-			$(elementIsConfigured).show();
+			$(elementIsNotConfigured).addClass('hide');
+			$(elementIsConfigured).removeClass('hide');
 		} else {
-			$(elementIsNotConfigured).show();
-			$(elementIsConfigured).hide();
+			$(elementIsNotConfigured).removeClass('hide');
+			$(elementIsConfigured).addClass('hide');
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
@@ -872,10 +874,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// now show/hide element containing data-lp attribute with value=index
 		switch (mqttpayload) {
 			case '0':
-				$('[data-lp="' + index + '"]').hide();
+				$('[data-lp="' + index + '"]').addClass('hide');
 				break;
 			case '1':
-				$('[data-lp="' + index + '"]').show();
+				$('[data-lp="' + index + '"]').removeClass('hide');
 				break;
 		}
 	}
@@ -884,9 +886,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.autolockConfiguredLp');  // now get parents respective child element
 		if ( mqttpayload == 0 ) {
-			element.hide();
+			element.addClass('hide');
 		} else {
-			element.show();
+			element.removeClass('hide');
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockstatus$/i ) ) {
@@ -950,9 +952,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.targetChargingLp');  // now get parents respective child element
 		if (mqttpayload == 1) {
-			element.show();
+			element.removeClass('hide');
 		} else {
-			element.hide();
+			element.addClass('hide');
 		}
 	}
 }
@@ -972,9 +974,9 @@ function processHookMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/hook\/[1-9][0-9]*\/boolhookconfigured$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		if ( mqttpayload == 1 ) {
-			$('#hook' + index).show();
+			$('#hook' + index).removeClass('hide');
 		} else {
-			$('#hook' + index).hide();
+			$('#hook' + index).addClass('hide');
 		}
 	}
 }
@@ -1055,14 +1057,14 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		var actualTemp = parseFloat(mqttpayload);
 		if ( isNaN(actualTemp) ) {
 			StringTemp = '';
-			parent.hide();
+			parent.addClass('hide');
 		} else {
 			if (actualTemp > 200) {
 				StringTemp = ''; // display only something if we got a value
-				parent.hide();
+				parent.addClass('hide');
 			} else {
 				StringTemp = 'Temp1 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
-				parent.show();
+				parent.removeClass('hide');
 			}
 		}
 		element.text(StringTemp);
@@ -1110,15 +1112,15 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var infoElement = $('[data-dev="' + index + '"]');  // get row of SH Device
 		if (mqttpayload == 1) {
-			infoElement.show();
+			infoElement.removeClass('hide');
 		} else {
-			infoElement.hide();
+			infoElement.addClass('hide');
 		}
 		var visibleRows = $('[data-dev]:visible');  // show/hide complete block depending on visible rows within
 		if ( visibleRows.length > 0 ) {
-			$('.smartHome').show();
+			$('.smartHome').removeClass('hide');
 		} else {
-			$('.smartHome').hide();
+			$('.smartHome').addClass('hide');
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/mode$/i ) ) {

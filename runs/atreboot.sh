@@ -20,27 +20,8 @@ sudo chmod 777 /var/www/html/openWB/ramdisk
 sudo chmod 777 /var/www/html/openWB/ramdisk/
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
+
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
-
-if [ -d "/var/www/html/openWB/modules/soc_i3s1" ]; then
-	sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth1.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3/auth.json" "/var/www/html/openWB/modules/soc_i3/auth1.json"
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/auth2.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3s1/auth.json" "/var/www/html/openWB/modules/soc_i3/auth2.json"
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token1.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3/token.json" "/var/www/html/openWB/modules/soc_i3/token1.json"
-fi
-
-if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ] && [ ! -f "/var/www/html/openWB/modules/soc_i3/token2.json" ]; then
-	mv "/var/www/html/openWB/modules/soc_i3s1/token.json" "/var/www/html/openWB/modules/soc_i3/token2.json"
-fi
 
 sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
@@ -343,7 +324,7 @@ then
 fi
 
 # get local ip
-ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
+ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
 echo "load versions..."
@@ -363,7 +344,6 @@ do
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
 done
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 mosquitto_pub -r -t openWB/graph/boolDisplayLiveGraph -m "1"
 mosquitto_pub -t openWB/global/strLastmanagementActive -r -m ""
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
@@ -384,10 +364,23 @@ chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 
+# update etprovider pricelist
+echo "etprovider..."
+if [[ "$etprovideraktiv" == "1" ]]; then
+	echo "update electricity pricelist..."
+	echo "" > /var/www/html/openWB/ramdisk/etprovidergraphlist
+	mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
+	/var/www/html/openWB/modules/$etprovider/main.sh > /var/log/openWB.log 2>&1 &
+else
+	echo "not activated, skipping"
+	mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
+fi
+
 # set upload limit in php
 echo "fix upload limit..."
 sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+sudo /usr/sbin/apachectl -k graceful
 
 # all done, remove boot and update status
 echo "boot done..."

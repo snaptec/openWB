@@ -218,7 +218,9 @@ hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield
 echo $hausdailyyield > $RAMDISKDIR/daily_hausverbrauchkwh
 
 # get our current ip address
-ip route get 1 | awk '{print $NF;exit}' > $RAMDISKDIR/ipaddress
+#ip route get 1 | awk '{print $NF;exit}' > $RAMDISKDIR/ipaddress
+#prepare for Buster
+ip route get 1 |  awk '{print $7;exit}' > $RAMDISKDIR/ipaddress
 
 # check if our mqtt handler is running
 if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/mqttsub.py" > /dev/null
@@ -293,6 +295,9 @@ then
 else
 	sudo python3 $OPENWBBASEDIR/runs/modbusserver/modbusserver.py &
 fi
+
+#Pingchecker
+$OPENWBBASEDIR/runs/pingcheck.sh &
 
 # truncate all logs in ramdisk
 $OPENWBBASEDIR/runs/cleanup.sh >> $RAMDISKDIR/cleanup.log 2>&1

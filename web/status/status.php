@@ -600,11 +600,14 @@
 
 		<script>
 
-			// load navbar
-			$("#nav-placeholder").load('themes/navbar.html?v=20210101', disableMenuItem);
-			function disableMenuItem() {
-				$('#navStatus').addClass('disabled');
-			}
+			// load navbar, be carefull: it loads asynchonously
+			$.get(
+				{ url: "themes/navbar.html", cache: false },
+				function(data){
+					$("#nav-placeholder").replaceWith(data);
+					$('#navStatus').addClass('disabled');
+				}
+			);
 
 			$(function() {
 				if('<?php echo $kostalplenticoreip2old ?>' == 'none') {
