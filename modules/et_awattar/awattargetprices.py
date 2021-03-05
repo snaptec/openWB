@@ -8,7 +8,7 @@
 # Datei mit aktuell gültigem Strompreis
 #
 # erwartet von API Stundenpreise, d.h. für jede Stunde eine Preisauskunft
-# setzt aktuellen Strompreis (und für kommenden 9 Std) im Fehlerfall auf 99.99ct/kWh
+# setzt aktuellen Strompreis (und für kommende 9 Std) im Fehlerfall auf 99.99ct/kWh
 #
 # Aufruf als Main
 # oder nach Import: update_pricedata(landeskennung, basispreis, debug_level)
@@ -401,7 +401,11 @@ def update_pricedata(landeskennung, basispreis, debug_level):
         _write_log_entry('Bisherige Preisliste enthaelt nur Fehlerpreise 99.99ct/kWh', 1)
         _write_log_entry('Versuche, neue Preise von aWATTar zu empfangen', 1)
     elif module_name_in_file != None and current_module_name != module_name_in_file:
-        _write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % module_name_in_file, 1)
+        if module_name_in_file == '':
+            log_text = 'Kein Modul für bisherige Preisliste identifizierbar'
+        else:
+            log_text = 'Bisherige Preiliste wurde von Modul ' + module_name_in_file + ' erstellt'
+        _write_log_entry(log_text, 1)
         _write_log_entry('Wechsel auf Modul %s' % current_module_name, 1)
     elif len(pricelist_in_file) > 0:
         _write_log_entry('Bisherige Preisliste gelesen', 2)
