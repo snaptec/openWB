@@ -344,7 +344,6 @@ do
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
 done
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 mosquitto_pub -r -t openWB/graph/boolDisplayLiveGraph -m "1"
 mosquitto_pub -t openWB/global/strLastmanagementActive -r -m ""
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
@@ -368,11 +367,13 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 # update etprovider pricelist
 echo "etprovider..."
 if [[ "$etprovideraktiv" == "1" ]]; then
-	echo "update pricelist..."
+	echo "update electricity pricelist..."
+	echo "" > /var/www/html/openWB/ramdisk/etprovidergraphlist
 	mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
 	/var/www/html/openWB/modules/$etprovider/main.sh > /var/log/openWB.log 2>&1 &
 else
 	echo "not activated, skipping"
+	mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 fi
 
 # set upload limit in php
