@@ -21,7 +21,6 @@ class PowerGraph {
     this.width = 500;
     this.height = 500;
     this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
-    this.graphDate = new Date();
     this.liveGraphMinutes = 0;
     wbdata.usageStackOrder = 2;
   }
@@ -86,11 +85,11 @@ class PowerGraph {
   activateDay() {
     if (!wbdata.showLiveGraph) {
       if (wbdata.showTodayGraph) {
-        this.graphDate = new Date(); // ensure we update todays date if day changes during display
+        wbdata.graphDate = new Date(); // ensure we update todays date if day changes during display
       }
       this.resetDayGraph();
       try {
-        subscribeDayGraph(this.graphDate);
+        subscribeDayGraph(wbdata.graphDate);
       } catch (err) {
         //on initial run of activate, subscribeDayGraph is not yet initialized. 
         // the error can be ignored
@@ -106,10 +105,10 @@ class PowerGraph {
       heading = heading + this.liveGraphMinutes + " min";
     } else {
       const today = new Date();
-      if (today.getDate() == this.graphDate.getDate() && today.getMonth() == this.graphDate.getMonth() && today.getFullYear() == this.graphDate.getFullYear()) {
+      if (today.getDate() == wbdata.graphDate.getDate() && today.getMonth() == wbdata.graphDate.getMonth() && today.getFullYear() == wbdata.graphDate.getFullYear()) {
         heading = heading + "heute";
       } else {
-        heading = heading + this.graphDate.getDate() + "." + (this.graphDate.getMonth() + 1) + ".";
+        heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
       }
     }
     d3.select("h3#graphheading").text(heading);
@@ -242,9 +241,31 @@ class PowerGraph {
           }
         });
         this.updateGraph();
+        this.updateEnergyValues();
+        wbdata.dayGraphUpdated();
         setTimeout(() => this.activateDay(), 300000)
       }
     }
+  }
+
+  updateEnergyValues () {
+    const startValues = this.rawData[0].split(',');
+    const endValues = this.rawData[this.rawData.length-1].split(',');
+    wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3])/1000 ;
+    wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1])/1000 ;
+    wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9])/1000 ;
+    wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2])/1000 ;
+    wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7])/1000 ;
+    var deviceEnergy = 0;
+    for (var i=0; i<10; i++) {
+      deviceEnergy = deviceEnergy + (endValues[26+i] - startValues[26+i])/1000 ; 
+    }
+    deviceEnergy = deviceEnergy + (endValues[10] - startValues[10])/1000 ;
+    deviceEnergy = deviceEnergy + (endValues[12] - startValues[12])/1000 ;
+    wbdata.historicSummary.devices.energy = deviceEnergy ;
+    wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8])/1000 ;
+    wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
+      - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
   }
 
   extractDayValues(payload, oldPayload) {
@@ -634,45 +655,9 @@ class PowerGraph {
       .attr("stroke", this.bgcolor)
       ;
   }
-}
 
-function shiftLeft() {
-  if (wbdata.showLiveGraph) {
-    wbdata.showLiveGraph = false;
-    wbdata.showTodayGraph = true;
-    powerGraph.deactivateLive();
-    powerGraph.activateDay();
-    wbdata.prefs.showLG = false;
-    wbdata.persistGraphPreferences();
-    d3.select("button#graphRightButton").classed("disabled", false)
-  } else { 
-    if (wbdata.showTodayGraph) {
-      wbdata.showTodayGraph = false;
-    }
-    powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() - 86400000);
-    powerGraph.activateDay();
-  }
-}
-function shiftRight() {
-  today = new Date();
-  const d = powerGraph.graphDate;
-  if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()) {
-    if (!wbdata.showLiveGraph) {
-      wbdata.showLiveGraph = true;
-      powerGraph.deactivateDay();
-      powerGraph.activateLive();
-      wbdata.prefs.showLG = true;
-      wbdata.persistGraphPreferences();
-      d3.select("button#graphLeftButton").classed("disabled", false)
-      d3.select("button#graphRightButton").classed("disabled", true)
-    }
-  } else {
-    powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() + 86400000);
-    const nd = powerGraph.graphDate;
-    if (nd.getDate() == today.getDate() && nd.getMonth() == today.getMonth() && nd.getFullYear() == today.getFullYear()) {
-      wbdata.showTodayGraph = true;
-    }
-    powerGraph.activateDay();
+  getEnergyValues () {
+
   }
 }
 

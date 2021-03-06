@@ -205,7 +205,19 @@
 			</div>
 			<!-- Energie heute (yieldmeter) -->
 			<div class="wb-widget col-md p-2 m-1 ">
-				<h3>Energie heute</h3>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-8 px-0">
+							<h3 id="energyheading">Energie heute</h3>
+						</div>
+						<div class="col-4 px-0" style="text-align: right;">
+							<button class="btn btn-outline-secondary btn-sm " id="energyLeftButton"><span
+									class="fa fa-chevron-circle-left px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="energyRightButton"><span
+									class="fa fa-chevron-circle-right px-0"></span></button>
+						</div>
+					</div>
+				</div>
 				<figure id="energymeter" class="wb-subwidget mb-0"></figure>
 			</div>
 		</div>
