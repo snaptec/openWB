@@ -133,7 +133,7 @@ var all16p;
 var hidehaus;
 var myLine;
 
-function loadgraph() {
+function loadgraph(animationDuration = 1000) {
 	var lineChartData = {
 		labels: atime,
 		datasets: [{
@@ -503,6 +503,9 @@ function loadgraph() {
 					radius: 0
 				}
 			},
+			animation: {
+				duration: animationDuration
+			},
 			responsive: true,
 			maintainAspectRatio: false,
 			hover: {
@@ -769,7 +772,7 @@ function updateGraph(dataset) {
 function checkgraphload(){
 	if ( graphloaded == 1 ) {
        	myLine.destroy();
-		loadgraph();
+		loadgraph(0);  // when reloading graph, no more "pumping" animations
 		return;
 	}
 	if ( typeof boolDisplayHouseConsumption === "boolean" &&
