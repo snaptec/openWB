@@ -504,7 +504,11 @@ function loadgraph(animationDuration = 1000) {
 				}
 			},
 			animation: {
-				duration: animationDuration
+				duration: animationDuration,
+				onComplete: function(animation) {
+					// if duration was set to 0 to avoid pumping after reload, set back to default
+					this.options.animation.duration = 1000
+        		}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
