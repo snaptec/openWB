@@ -44,6 +44,7 @@ class WbData {
 		];
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
+		this.showTodayGraph = false;
 		this.displayMode = "dark";
 		this.usageStackOrder = 0;
 		this.prefs = {};
@@ -279,6 +280,7 @@ class WbData {
 			}
 			if ('showLG' in this.prefs) {
 				this.showLiveGraph = this.prefs.showLG;
+				this.showTodayGraph = !this.prefs.showLG;
 			}
 			if ('maxPow' in this.prefs) {
 				powerMeter.maxPower = +this.prefs.maxPow;

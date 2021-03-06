@@ -85,6 +85,9 @@ class PowerGraph {
 
   activateDay() {
     if (!wbdata.showLiveGraph) {
+      if (wbdata.showTodayGraph) {
+        this.graphDate = new Date(); // ensure we update todays date if day changes during display
+      }
       this.resetDayGraph();
       try {
         subscribeDayGraph(this.graphDate);
@@ -113,6 +116,11 @@ class PowerGraph {
   }
 
   deactivateDay() {
+    try {
+      unsubscribeDayGraph();
+    } catch (err) {
+      // ignore error 
+    }
   }
   updateLive(topic, payload) {
     if (wbdata.showLiveGraph) { // only udpdate if live graph is active
@@ -157,25 +165,7 @@ class PowerGraph {
             this.updateGraph();
             unsubscribeMqttGraphSegments();
           }
-        }
-      }
-      if (this.initCounter == 12) {// Initialization complete
-        unsubscribeDayGraph();
-        
-        this.initCounter = 0;
-        this.staging.map(segment =>
-          segment.map(line => this.rawData.push(line))
-        )
-        this.rawData.map((line, i, a) => {
-          if (i > 0) {
-            const values = this.extractDayValues(line, a[i - 1]);
-            this.graphData.push(values);
-          } else {
-            // const values = this.extractValues(line, []);                
-          }
-        });
-        this.updateGraph();
-        setTimeout(() => this.activateLive(), 300000)
+        }      
       }
     }
   }
@@ -649,19 +639,23 @@ class PowerGraph {
 function shiftLeft() {
   if (wbdata.showLiveGraph) {
     wbdata.showLiveGraph = false;
+    wbdata.showTodayGraph = true;
     powerGraph.deactivateLive();
     powerGraph.activateDay();
     wbdata.prefs.showLG = false;
     wbdata.persistGraphPreferences();
     d3.select("button#graphRightButton").classed("disabled", false)
-  } else {
+  } else { 
+    if (wbdata.showTodayGraph) {
+      wbdata.showTodayGraph = false;
+    }
     powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() - 86400000);
     powerGraph.activateDay();
   }
 }
 function shiftRight() {
   today = new Date();
-  d = powerGraph.graphDate;
+  const d = powerGraph.graphDate;
   if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()) {
     if (!wbdata.showLiveGraph) {
       wbdata.showLiveGraph = true;
@@ -674,6 +668,10 @@ function shiftRight() {
     }
   } else {
     powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() + 86400000);
+    const nd = powerGraph.graphDate;
+    if (nd.getDate() == today.getDate() && nd.getMonth() == today.getMonth() && nd.getFullYear() == today.getFullYear()) {
+      wbdata.showTodayGraph = true;
+    }
     powerGraph.activateDay();
   }
 }
