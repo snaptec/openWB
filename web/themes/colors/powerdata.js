@@ -45,6 +45,7 @@ class WbData {
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
 		this.displayMode = "dark";
+		this.usageStackOrder = 0;
 		this.prefs = {};
 	};
 
@@ -65,43 +66,22 @@ class WbData {
 		for (i = 0; i < 9; i++) {
 			this.shDevice[i].color = 'var(--color-sh' + (i + 1) + ')';
 		}
-			this.consumer[0].color = 'var(--color-co1)';
-			this.consumer[1].color = 'var(--color-co2)';
-		// read preferences stored in cookie
-		const wbCookies = document.cookie.split(';');
-		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
-		if (myCookie.length > 0) {
-			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
-			if ('hideSH' in this.prefs) {
-				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
-			}
-			if ('showLG' in this.prefs) {
-				this.showLiveGraph = this.prefs.showLG;
-			}
-			if ('maxPow' in this.prefs) {
-				powerMeter.maxPower = +this.prefs.maxPow;
-			}
-			if ('relPM' in this.prefs) {
-				powerMeter.showRelativeArcs = this.prefs.relPM;
-			}
-			if ('displayM' in this.prefs) {
-				this.displayMode = this.prefs.displayM;
-			}
-		}
+		this.consumer[0].color = 'var(--color-co1)';
+		this.consumer[1].color = 'var(--color-co2)';
+		this.readGraphPreferences();
+
 		if (this.showLiveGraph) {
 			powerGraph.deactivateDay();
 			powerGraph.activateLive();
-			} else {
-				powerGraph.deactivateLive();
-				powerGraph.activateDay();
-			}
-			const doc = d3.select("html");
-    doc.classed ("theme-dark", (this.displayMode == "dark"));
-    doc.classed ("theme-light", (this.displayMode == "light"));
-    doc.classed ("theme-gray", (this.displayMode == "gray"));
-    
-    
-
+		} else {
+			powerGraph.deactivateLive();
+			powerGraph.activateDay();
+		}
+		// set display mode
+		const doc = d3.select("html");
+		doc.classed("theme-dark", (this.displayMode == "dark"));
+		doc.classed("theme-light", (this.displayMode == "light"));
+		doc.classed("theme-gray", (this.displayMode == "gray"));
 	}
 
 	updateEvu(field, value) {
@@ -137,7 +117,7 @@ class WbData {
 				this.updateUsageSummary(1, "energy", value)
 				break;
 			case 'houseEnergy':
-				console.log ("Update House Energy: " + value);
+				console.log("Update House Energy: " + value);
 				this.updateUsageSummary(4, "energy", value);
 				break;
 			case 'currentPowerPrice':
@@ -155,7 +135,7 @@ class WbData {
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
-				console.log ("Update PV Energy: " + value);
+				console.log("Update PV Energy: " + value);
 				break;
 			default:
 				break;
@@ -218,23 +198,23 @@ class WbData {
 	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
-			case 'batteryPowerImport': 
+			case 'batteryPowerImport':
 				this.usageSummary[3].power = value;
 				powerMeter.update();
 				break;
-			case 'batteryPowerExport': 
+			case 'batteryPowerExport':
 				this.updateSourceSummary("batOut", "power", value);
 				powerMeter.update();
 				break;
-			case 'batteryEnergyImport': 
+			case 'batteryEnergyImport':
 				this.usageSummary[3].energy = value;
 				yieldMeter.update();
 				break;
-			case 'batteryEnergyExport': 
+			case 'batteryEnergyExport':
 				this.updateSourceSummary("batOut", "energy", value);
 				yieldMeter.update();
 				break;
-			
+
 			default:
 				break;
 		}
@@ -282,20 +262,48 @@ class WbData {
 
 	//update cookie
 	persistGraphPreferences() {
-		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
+		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device => device.id);
 		this.prefs.showLG = this.showLiveGraph;
 		this.prefs.displayM = this.displayMode;
+		this.prefs.stackO = this.usageStackOrder;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
+	}
+	// read cookies and update settings
+	readGraphPreferences() {
+		const wbCookies = document.cookie.split(';');
+		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
+		if (myCookie.length > 0) {
+			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
+			if ('hideSH' in this.prefs) {
+				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
+			}
+			if ('showLG' in this.prefs) {
+				this.showLiveGraph = this.prefs.showLG;
+			}
+			if ('maxPow' in this.prefs) {
+				powerMeter.maxPower = +this.prefs.maxPow;
+			}
+			if ('relPM' in this.prefs) {
+				powerMeter.showRelativeArcs = this.prefs.relPM;
+			}
+			if ('displayM' in this.prefs) {
+				this.displayMode = this.prefs.displayM;
+			}
+			if ('stackO' in this.prefs) {
+				this.usageStackOrder = this.prefs.stackO;
+			}
+		}
 	}
 }
 
+
 class Consumer {
-	constructor(name = "", power = 0, dailyYield = 0, configured = false, color="white") {
+	constructor(name = "", power = 0, dailyYield = 0, configured = false, color = "white") {
 		this.name = name;
 		this.power = power;
 		this.dailyYield = dailyYield;
 		this.configured = configured;
-		this.color=color;
+		this.color = color;
 	}
 };
 

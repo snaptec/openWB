@@ -23,7 +23,7 @@ class PowerGraph {
     this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
     this.graphDate = new Date();
     this.liveGraphMinutes = 0;
-    this.usageStackOrder = 2;
+    wbdata.usageStackOrder = 2;
   }
 
   init() {
@@ -479,7 +479,7 @@ class PowerGraph {
       "batIn", "inverter"]
     ];
 
-    const stackGen = d3.stack().keys(keys[this.usageStackOrder]);
+    const stackGen = d3.stack().keys(keys[wbdata.usageStackOrder]);
     const stackedSeries = stackGen(this.graphData);
     svg.selectAll(".targetareas")
       .data(stackedSeries)
@@ -489,7 +489,7 @@ class PowerGraph {
         .y0((d) => yScale(d[0]))
         .y1((d) => yScale(d[1]))
       )
-      .attr("fill", (d, i) => this.colors[keys[this.usageStackOrder][i]]);
+      .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]]);
 
     const yAxis = svg.append("g")
       .attr("class", "axis")
@@ -680,10 +680,11 @@ function shiftRight() {
 
 // Change the order of values in the stack
 function changeStack() {
-  powerGraph.usageStackOrder = powerGraph.usageStackOrder+1;
-  if (powerGraph.usageStackOrder > 2) {
-    powerGraph.usageStackOrder = 0;
+  wbdata.usageStackOrder = wbdata.usageStackOrder+1;
+  if (wbdata.usageStackOrder > 2) {
+    wbdata.usageStackOrder = 0;
   }
+  wbdata.persistGraphPreferences();
   powerGraph.updateGraph();
 }
 
