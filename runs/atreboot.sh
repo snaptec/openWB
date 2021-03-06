@@ -383,7 +383,7 @@ sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-u
 sudo /usr/sbin/apachectl -k graceful
 
 # all done, remove boot and update status
-echo "boot done..."
+echo $(date +"%Y-%m-%d %H:%M:%S:") "boot done :-)"
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
