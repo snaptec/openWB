@@ -2401,10 +2401,10 @@
 										<label for="soc2type" class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc2type" id="soc2type" value="<?php echo $soc2typeold ?>">
-										</div>
-										<span class="form-text small">
+											<span class="form-text small">
 												Auswahl Fahrzeugtyp: vw, id oder audi
-										</span>
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
