@@ -90,6 +90,13 @@ class WbData {
 		this.historicSummary.devices.color = 'var(--color-devices)';
 		this.historicSummary.batIn.color = 'var(--color-battery)';
 		this.historicSummary.house.color = 'var(--color-house)';
+		evuCol = style.getPropertyValue('--evuCol');
+		xgridCol = style.getPropertyValue('--xgridCol');
+		tickCol = style.getPropertyValue('--tickCol');
+		fontCol = style.getPropertyValue('--fontCol');
+		gridCol = style.getPropertyValue('--gridCol');
+		evuCol = style.getPropertyValue('--evuCol');
+
 		
 
 		this.readGraphPreferences();
@@ -422,6 +429,12 @@ function shiftRight() {
     powerGraph.activateDay();
   }
 }
+// required for pricechart to work
+var evuCol;
+var xgridCol;
+var gridCol;
+var tickCol;
+var fontCol;
 
 var wbdata = new WbData(new Date(Date.now()));
 

@@ -21,6 +21,11 @@ body > .container {
 h3 {
 	color: var(--color-title);
 }
+
+h4 {
+	color: var(--color-axis);
+}
+
 body > .container-fluid {
 	padding: 55px 15px 0;
 }
@@ -104,9 +109,9 @@ body > .container-fluid {
 	text-decoration: line-through;
 }
 
-input[type=range]::-webkit-slider-runnable-track {
+/* input[type=range]::-webkit-slider-runnable-track {
 	background: grey;
-	}
+	} */
 
 .text-green {
 	color: #4db662;
@@ -310,7 +315,7 @@ h3 {
 	}
 
 	.verySmallTextSize {
-		font-size: 1.2rem;
+		font-size: 0.5rem;
 	}
 
 	.smallTextSize {
@@ -377,8 +382,17 @@ h3 {
 	}
 }
 
+/* Overarching colors */
+:root {
+	--fontCol: rgba(160, 160, 160, 0.82);
+	--gridCol: rgba(160,160,160, 0.82);
+	--xgridCol: rgba(160,160,160, 0.82);
+	--tickCol: rgba(160,160,160, 0.82);
+	--evuCol: rgba(178, 34, 34, 1);
+	}
 
-/* Light theme colors */
+
+/* Theme color sets */
 
 .theme-light {
 	--color-bg: white;
@@ -415,6 +429,11 @@ h3 {
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 5px;
+	--fontCol: rgba(255, 255, 255, 0.82);
+	--gridCol: rgba(255, 255, 255, 0.82);
+	--xgridCol: rgba(255, 255, 255, 0.1);
+	--tickCol: rgba(255, 255, 255, 0.82);
+	--evuCol: rgba(255, 0, 0, 0.7);
 }
 
 .theme-dark {
@@ -504,7 +523,6 @@ h3 {
 .wb-subwidget {
 	border:1px solid var(--color-subframe) ;
 	padding:var(--padding-widget);
-
 }
 th {
 	color: var(--color-axis);
@@ -514,12 +532,7 @@ th {
 }
 .popup-header {
 	color: midnightblue;
-
 }
-/* Colors for the charts */
-
-
-
 .axis text {
 	color: var(--color-axis);
 	stroke-width: 0;
