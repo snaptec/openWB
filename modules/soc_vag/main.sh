@@ -38,6 +38,21 @@ case $CHARGEPOINT in
 		;;
 esac
 
+getAndWriteSoc(){
+		echo 0 > $soctimerfile
+		socDebugLog "Requesting SoC"
+		echo 0 > $soctimerfile
+		answer=$($MODULEDIR/../evcc-soc $fztype --user "$username" --password "$password" --vin "$vin" 2>&1)
+		if [ $? -eq 0 ]; then
+			# we got a valid answer
+			echo $answer > $socfile
+			socDebugLog "SoC: $answer"
+		else
+			# we have a problem
+			socDebugLog "Error from evcc-soc: $answer"
+		fi
+}
+
 socDebugLog(){
 	if (( socDebug > 0 )); then
 		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
@@ -46,22 +61,20 @@ socDebugLog(){
 }
 
 soctimer=$(<$soctimerfile)
-
-if ( (( $ladeleistung > 500 )) && (( soctimer < intervallladen )) ) || (( soctimer < intervall )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	soctimer=$((soctimer+1))
-	echo $soctimer > $soctimerfile
-else
-	echo 0 > $soctimerfile
-	socDebugLog "Requesting SoC"
-	echo 0 > $soctimerfile
-	answer=$($MODULEDIR/../evcc-soc $fztype --user "$username" --password "$password" --vin "$vin" 2>&1)
-	if [ $? -eq 0 ]; then
-		# we got a valid answer
-		echo $answer > $socfile
-		socDebugLog "SoC: $answer"
+if (( ladeleistung > 500 )); then
+	if (( soctimer < intervallladen )); then
+		socDebugLog "Charging, but nothing to do yet. Incrementing timer."
+		soctimer=$((soctimer+1))
+		echo $soctimer > $soctimerfile
 	else
-		# we have a problem
-		socDebugLog "Error from evcc-soc: $answer"
+		getAndWriteSoc
+	fi
+else
+	if (( soctimer < intervall )); then
+		socDebugLog "Nothing to do yet. Incrementing timer."
+		soctimer=$((soctimer+1))
+		echo $soctimer > $soctimerfile
+	else
+		getAndWriteSoc
 	fi
 fi
