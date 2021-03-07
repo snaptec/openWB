@@ -26,6 +26,6 @@ except:
  powerc = 0
  
 f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
-answer = '{"power":' + str(power) + '}{"powerc":' + str(powerc) + '} '
+answer = '{"power":' + str(power) + ',"powerc":' + str(powerc) + '}'
 json.dump(answer, f1)
 f1.close()
