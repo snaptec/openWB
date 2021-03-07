@@ -46,23 +46,19 @@ powerlist = list(filter(None, powerstring.split(".")))   # entferne leere Eintr√
 powerclist = list(filter(None, powercstring.split("."))) # entferne leere Eintr√§ge
 
 power = get_nested_value(answer, powerlist)
-powerc =get_nested_value(answer, powerclist)
-
-
-f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
+powerc = get_nested_value(answer, powerclist)
 
 try:
     power = int(abs(powerfaktor*power))
-    json.dump('{"power":' + str(power) + '} '
-,f1)
 except:
-    pass
+    power = 0
     
 try:
     powerc = int(abs(powercfaktor*powerc))
-    json.dump('{"powerc":' + str(powerc) + '} '
-,f1)
 except:
-    pass
+    powerc = 0
 
+f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
+answer = '{"power":' + str(power) + ',"powerc":' + str(powerc) + '}'
+json.dump(answer, f1)
 f1.close()
