@@ -15,26 +15,17 @@ smid=int(sys.argv[3])         #ID des Zählers im Wechselrichter (Hauptzähler 0
 answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID="+str(smid), timeout=3).read().decode("utf-8")))
 try:
  power = answer['Body']['Data']['PowerReal_P_Sum']
+ power = int(abs(power))
 except:
- pass
+ power = 0
 
 try:
  powerc = answer['Body']['Data']['EnergyReal_WAC_Sum_Consumed']
+ powerc = int(abs(powerc))
 except:
- pass
+ powerc = 0
  
 f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
-
-try:
- power = int(abs(power))
- json.dump('{"power":' + str(power) + '} ',f1)
-except:
- pass
- 
-try:
- powerc = int(abs(powerc))
- json.dump('{"powerc":' + str(powerc) + '} ',f1)
-except:
- pass
-
+answer = '{"power":' + str(power) + '}{"powerc":' + str(powerc) + '} '
+json.dump(answer, f1)
 f1.close()
