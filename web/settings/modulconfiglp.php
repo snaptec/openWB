@@ -1012,7 +1012,7 @@
 										<div class="col">
 											<input class="form-control" type="email" name="soc_vag_username" id="soc_vag_username" value="<?php echo $soc_vag_usernameold ?>">
 											<span class="form-text small">
-												Email Adresse des Logins.
+												Email Adresse des Logins
 											</span>
 										</div>
 									</div>
@@ -1021,7 +1021,7 @@
 										<div class="col">
 											<input class="form-control" type="password" name="soc_vag_passwort" id="soc_vag_passwort" value="<?php echo $soc_vag_passwortold ?>">
 											<span class="form-text small">
-												Password des Logins.
+												Password des Logins
 											</span>
 										</div>
 									</div>
@@ -1030,7 +1030,7 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc_vag_vin" id="soc_vag_vin" value="<?php echo $soc_vag_vinold ?>">
 											<span class="form-text small">
-												Vollständige VIN des Fahrzeugs.
+												Vollständige VIN des Fahrzeugs
 											</span>
 										</div>
 									</div>
@@ -1039,11 +1039,19 @@
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervall" id="soc_vag_intervall" value="<?php echo $soc_vag_intervallold ?>">
 											<span class="form-text small">
-												Wie oft das Fahrzeug abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
-
+									<div class="form-row mb-1">
+										<label for="soc_vag_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervallladen" id="soc_vag_intervallladen" value="<?php echo $soc_vag_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socmhttp" class="hide">
@@ -2394,6 +2402,9 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc2type" id="soc2type" value="<?php echo $soc2typeold ?>">
 										</div>
+										<span class="form-text small">
+												Auswahl Fahrzeugtyp: vw, id oder audi
+										</span>
 									</div>
 								</div>
 							</div>
@@ -2810,7 +2821,7 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc2vin" id="soc2vin" value="<?php echo $soc2vinold ?>">
 											<span class="form-text small">
-												VIN des Autos.
+												Vollständige VIN des Fahrzeugs
 											</span>
 										</div>
 									</div>
@@ -3161,11 +3172,24 @@
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc2intervall" id="soc2intervall" value="<?php echo $soc2intervallold ?>">
 											<span class="form-text small">
-												Wie oft abgefragt wird. Angabe in Minuten.
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmintervallladen2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2intervallladen" id="soc2intervallladen" value="<?php echo $soc2intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
@@ -3297,6 +3321,7 @@
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
 							hideSection('#socmintervall2');
+							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
 
 
@@ -3339,6 +3364,7 @@
 								showSection('#socmpass2');
 								showSection('#socmvin2');
 								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('#socleaf1');

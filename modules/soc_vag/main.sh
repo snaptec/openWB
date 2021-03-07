@@ -20,6 +20,7 @@ case $CHARGEPOINT in
 		password=$soc2pass
 		vin=$soc2vin
 		intervall=$(( soc2intervall * 6 ))
+		intervallladen=$(( soc2intervallladen * 6 ))
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -29,10 +30,11 @@ case $CHARGEPOINT in
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		fztype=$soc_vag_type
-		username=$soc_id_username
-		password=$soc_id_passwort
+		username=$soc_vag_username
+		password=$soc_vag_passwort
 		vin=$soc_id_vin
 		intervall=$(( soc_vag_intervall * 6 ))
+		intervallladen=$(( soc_vag_intervallladen * 6 ))
 		;;
 esac
 
@@ -45,17 +47,12 @@ socDebugLog(){
 
 soctimer=$(<$soctimerfile)
 
-
-
-if (( soctimer < intervall )); then
+if ( (( $ladeleistung > 500 )) && (( soctimer < intervallladen )) ) || (( soctimer < intervall )); then
 	socDebugLog "Nothing to do yet. Incrementing timer."
 	soctimer=$((soctimer+1))
-	if (( ladeleistung > 500 ));then
-		socDebugLog "Car is charging"
-		soctimer=$((soctimer+2))
-	fi
 	echo $soctimer > $soctimerfile
 else
+	echo 0 > $soctimerfile
 	socDebugLog "Requesting SoC"
 	echo 0 > $soctimerfile
 	answer=$($MODULEDIR/../evcc-soc $fztype --user "$username" --password "$password" --vin "$vin" 2>&1)
