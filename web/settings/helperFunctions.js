@@ -113,8 +113,8 @@ function setInputValue(elementId, value) {
             updateLabel(elementId);
         }
     } else {
-	var element = $('#' + elementId);
-	element.val(value);
+        var element = $('#' + elementId);
+        element.val(value);
     }
 }
 
