@@ -23,6 +23,7 @@ class WbData {
 		this.batteryEnergyImport = 0;
 		this.batteryPowerExport = 0;
 		this.batteryPowerImport = 0;
+		this.graphDate = new Date();
 
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
@@ -42,9 +43,22 @@ class WbData {
 			{ name: "Speicher in", power: 0, energy: 0, color: "white" },
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
+		this.historicSummary = {
+			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
+			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
+			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" },
+			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
+			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
+			"batIn": { name: "Speicher in", power: 0, energy: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
+
+		}
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
+		this.showTodayGraph = false;
 		this.displayMode = "dark";
+		this.usageStackOrder = 0;
 		this.prefs = {};
 	};
 
@@ -65,43 +79,40 @@ class WbData {
 		for (i = 0; i < 9; i++) {
 			this.shDevice[i].color = 'var(--color-sh' + (i + 1) + ')';
 		}
-			this.consumer[0].color = 'var(--color-co1)';
-			this.consumer[1].color = 'var(--color-co2)';
-		// read preferences stored in cookie
-		const wbCookies = document.cookie.split(';');
-		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
-		if (myCookie.length > 0) {
-			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
-			if ('hideSH' in this.prefs) {
-				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
-			}
-			if ('showLG' in this.prefs) {
-				this.showLiveGraph = this.prefs.showLG;
-			}
-			if ('maxPow' in this.prefs) {
-				powerMeter.maxPower = +this.prefs.maxPow;
-			}
-			if ('relPM' in this.prefs) {
-				powerMeter.showRelativeArcs = this.prefs.relPM;
-			}
-			if ('displayM' in this.prefs) {
-				this.displayMode = this.prefs.displayM;
-			}
-		}
+		this.consumer[0].color = 'var(--color-co1)';
+		this.consumer[1].color = 'var(--color-co2)';
+
+		this.historicSummary.pv.color = 'var(--color-pv)';
+		this.historicSummary.evuIn.color = 'var(--color-evu)';
+		this.historicSummary.batOut.color = 'var(--color-battery)';
+		this.historicSummary.evuOut.color = 'var(--color-export)';
+		this.historicSummary.charging.color = 'var(--color-charging)';
+		this.historicSummary.devices.color = 'var(--color-devices)';
+		this.historicSummary.batIn.color = 'var(--color-battery)';
+		this.historicSummary.house.color = 'var(--color-house)';
+		evuCol = style.getPropertyValue('--evuCol');
+		xgridCol = style.getPropertyValue('--xgridCol');
+		tickCol = style.getPropertyValue('--tickCol');
+		fontCol = style.getPropertyValue('--fontCol');
+		gridCol = style.getPropertyValue('--gridCol');
+		evuCol = style.getPropertyValue('--evuCol');
+
+		
+
+		this.readGraphPreferences();
+
 		if (this.showLiveGraph) {
 			powerGraph.deactivateDay();
 			powerGraph.activateLive();
-			} else {
-				powerGraph.deactivateLive();
-				powerGraph.activateDay();
-			}
-			const doc = d3.select("html");
-    doc.classed ("theme-dark", (this.displayMode == "dark"));
-    doc.classed ("theme-light", (this.displayMode == "light"));
-    doc.classed ("theme-gray", (this.displayMode == "gray"));
-    
-    
-
+		} else {
+			powerGraph.deactivateLive();
+			powerGraph.activateDay();
+		}
+		// set display mode
+		const doc = d3.select("html");
+		doc.classed("theme-dark", (this.displayMode == "dark"));
+		doc.classed("theme-light", (this.displayMode == "light"));
+		doc.classed("theme-gray", (this.displayMode == "gray"));
 	}
 
 	updateEvu(field, value) {
@@ -137,7 +148,7 @@ class WbData {
 				this.updateUsageSummary(1, "energy", value)
 				break;
 			case 'houseEnergy':
-				console.log ("Update House Energy: " + value);
+				console.log("Update House Energy: " + value);
 				this.updateUsageSummary(4, "energy", value);
 				break;
 			case 'currentPowerPrice':
@@ -155,7 +166,7 @@ class WbData {
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
-				console.log ("Update PV Energy: " + value);
+				console.log("Update PV Energy: " + value);
 				break;
 			default:
 				break;
@@ -218,23 +229,23 @@ class WbData {
 	updateBat(field, value) {
 		this[field] = value;
 		switch (field) {
-			case 'batteryPowerImport': 
+			case 'batteryPowerImport':
 				this.usageSummary[3].power = value;
 				powerMeter.update();
 				break;
-			case 'batteryPowerExport': 
+			case 'batteryPowerExport':
 				this.updateSourceSummary("batOut", "power", value);
 				powerMeter.update();
 				break;
-			case 'batteryEnergyImport': 
+			case 'batteryEnergyImport':
 				this.usageSummary[3].energy = value;
 				yieldMeter.update();
 				break;
-			case 'batteryEnergyExport': 
+			case 'batteryEnergyExport':
 				this.updateSourceSummary("batOut", "energy", value);
 				yieldMeter.update();
 				break;
-			
+
 			default:
 				break;
 		}
@@ -282,20 +293,52 @@ class WbData {
 
 	//update cookie
 	persistGraphPreferences() {
-		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device=>device.id);
+		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device => device.id);
 		this.prefs.showLG = this.showLiveGraph;
 		this.prefs.displayM = this.displayMode;
+		this.prefs.stackO = this.usageStackOrder;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
+	}
+	// read cookies and update settings
+	readGraphPreferences() {
+		const wbCookies = document.cookie.split(';');
+		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
+		if (myCookie.length > 0) {
+			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
+			if ('hideSH' in this.prefs) {
+				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
+			}
+			if ('showLG' in this.prefs) {
+				this.showLiveGraph = this.prefs.showLG;
+				this.showTodayGraph = !this.prefs.showLG;
+			}
+			if ('maxPow' in this.prefs) {
+				powerMeter.maxPower = +this.prefs.maxPow;
+			}
+			if ('relPM' in this.prefs) {
+				powerMeter.showRelativeArcs = this.prefs.relPM;
+			}
+			if ('displayM' in this.prefs) {
+				this.displayMode = this.prefs.displayM;
+			}
+			if ('stackO' in this.prefs) {
+				this.usageStackOrder = this.prefs.stackO;
+			}
+		}
+	}
+	dayGraphUpdated() {
+		yieldMeter.update();
 	}
 }
 
+
 class Consumer {
-	constructor(name = "", power = 0, dailyYield = 0, configured = false, color="white") {
+	constructor(name = "", power = 0, dailyYield = 0, configured = false, color = "white") {
 		this.name = name;
 		this.power = power;
 		this.dailyYield = dailyYield;
 		this.configured = configured;
-		this.color=color;
+		this.color = color;
 	}
 };
 
@@ -334,7 +377,7 @@ function formatWattH(watt) {
 	if (watt >= 1000) {
 		return ((Math.round(watt / 100) / 10) + " kWh");
 	} else {
-		return (watt + " Wh");
+		return (Math.round(watt) + " Wh");
 	}
 }
 function formatTime(seconds) {
@@ -346,6 +389,52 @@ function formatTime(seconds) {
 		return (minutes + " min");
 	}
 }
+
+function shiftLeft() {
+  if (wbdata.showLiveGraph) {
+    wbdata.showLiveGraph = false;
+    wbdata.showTodayGraph = true;
+    powerGraph.deactivateLive();
+    powerGraph.activateDay();
+    wbdata.prefs.showLG = false;
+    wbdata.persistGraphPreferences();
+    d3.select("button#graphRightButton").classed("disabled", false)
+  } else { 
+    if (wbdata.showTodayGraph) {
+      wbdata.showTodayGraph = false;
+    }
+    wbdata.graphDate.setTime(wbdata.graphDate.getTime() - 86400000);
+    powerGraph.activateDay();
+  }
+}
+function shiftRight() {
+  today = new Date();
+  const d = wbdata.graphDate;
+  if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()) {
+    if (!wbdata.showLiveGraph) {
+      wbdata.showLiveGraph = true;
+      powerGraph.deactivateDay();
+      powerGraph.activateLive();
+      wbdata.prefs.showLG = true;
+      wbdata.persistGraphPreferences();
+      d3.select("button#graphLeftButton").classed("disabled", false)
+      d3.select("button#graphRightButton").classed("disabled", true)
+    }
+  } else {
+    wbdata.graphDate.setTime(wbdata.graphDate.getTime() + 86400000);
+    const nd = wbdata.graphDate;
+    if (nd.getDate() == today.getDate() && nd.getMonth() == today.getMonth() && nd.getFullYear() == today.getFullYear()) {
+      wbdata.showTodayGraph = true;
+    }
+    powerGraph.activateDay();
+  }
+}
+// required for pricechart to work
+var evuCol;
+var xgridCol;
+var gridCol;
+var tickCol;
+var fontCol;
 
 var wbdata = new WbData(new Date(Date.now()));
 

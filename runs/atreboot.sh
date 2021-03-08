@@ -324,8 +324,6 @@ then
 fi
 
 # get local ip
-#ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
-#prepare for Buster
 ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
@@ -346,7 +344,6 @@ do
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
 done
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 mosquitto_pub -r -t openWB/graph/boolDisplayLiveGraph -m "1"
 mosquitto_pub -t openWB/global/strLastmanagementActive -r -m ""
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
@@ -367,13 +364,26 @@ chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 
+# update etprovider pricelist
+echo "etprovider..."
+if [[ "$etprovideraktiv" == "1" ]]; then
+	echo "update electricity pricelist..."
+	echo "" > /var/www/html/openWB/ramdisk/etprovidergraphlist
+	mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
+	/var/www/html/openWB/modules/$etprovider/main.sh > /var/log/openWB.log 2>&1 &
+else
+	echo "not activated, skipping"
+	mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
+fi
+
 # set upload limit in php
 echo "fix upload limit..."
 sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+sudo /usr/sbin/apachectl -k graceful
 
 # all done, remove boot and update status
-echo "boot done..."
+echo $(date +"%Y-%m-%d %H:%M:%S:") "boot done :-)"
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"

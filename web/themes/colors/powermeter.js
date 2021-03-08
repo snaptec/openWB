@@ -73,6 +73,19 @@ class PowerMeter {
         "transform",
         "translate(" + this.width / 2 + "," + this.height / 2 + ")"
       );
+
+    if (this.showRelativeArcs) {
+      this.svg.append("g")
+        .append("text")
+        .attr("x", this.width - 5)
+        .attr("y", this.height - 5)
+        .attr("fill", this.axisColor)
+        .attr("text-anchor", "end")
+        .attr("font-size", 20)
+        .attr("id", "powerMeterReset")
+        .text("RESET")
+        .on("click", resetButtonClicked);
+    }
     return g;
   }
 
@@ -206,7 +219,7 @@ class PowerMeter {
         .append("text")
         .attr("x", x)
         .attr("y", y)
-        .text(data.name + " : " + formatWatt(data.power))
+        .text(data.name + ": " + formatWatt(data.power))
         .attr("fill", data.color)
         .attr("text-anchor", anchor)
         .style("font-size", labelFontSize)

@@ -79,7 +79,7 @@ def _write_log_entry(message, msg_debug_level):
     # schreibt Eintrag ins Log je nach Level
     global _openWB_debug_level
     if msg_debug_level == 0 or _openWB_debug_level is None or msg_debug_level <= _openWB_debug_level:
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S:')
         line = timestamp + ' Modul tibbergetprices.py: ' + message + '\n'
         with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
             f.write(line)
@@ -357,7 +357,11 @@ def update_pricedata(tibber_token, home_id, debug_level):
         _write_log_entry('Bisherige Preisliste enthaelt nur Fehlerpreise 99.99ct/kWh', 1)
         _write_log_entry('Versuche, neue Preise von Tibber zu empfangen', 1)
     elif module_name_in_file != None and current_module_name != module_name_in_file:
-        _write_log_entry('Bisherige Preiliste wurde von Modul %s erstellt' % module_name_in_file, 1)
+        if module_name_in_file == '':
+            log_text = 'Kein Modul für bisherige Preisliste identifizierbar'
+        else:
+            log_text = 'Bisherige Preiliste wurde von Modul ' + module_name_in_file + ' erstellt'
+        _write_log_entry(log_text, 1)
         _write_log_entry('Wechsel auf Modul %s' % current_module_name, 1)
     elif len(pricelist_in_file) > 0:
         _write_log_entry('Bisherige Preisliste gelesen', 2)
