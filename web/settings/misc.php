@@ -756,7 +756,7 @@
 					<div class="card-body">
 						<div class="alert alert-info">
 							<p>Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden. Der Token der App, sowie das User Token nachfolgend eintragen.</p>
-							Wenn Pushover konfiguriert ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats gepusht. 
+							Wenn Pushover eingeschaltet ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats gepusht. 
 						</div>
 						<div id="pushban" class="hide">
 							<div class="form-group">
