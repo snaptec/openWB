@@ -754,14 +754,14 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<div class="alert alert-info">
-							<p>Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden. Der Token der App, sowie das User Token nachfolgend eintragen.</p>
-							Wenn Pushover eingeschaltet ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats gepusht. 
+						<div class="card-text alert alert-info">
+							<p>Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Zudem muss im Pushover-Nutzerkonto eine Applikation openWB eingerichtet werden, um den benötigten API-Token/Key zu erhalten.</p>
+							Wenn Pushover eingeschaltet ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats gepusht.
 						</div>
 						<div id="pushban" class="hide">
 							<div class="form-group">
-								<div class="form-row">
-									<label for="pushoveruser" class="col-md-4 col-form-label">Pushover User String</label>
+								<div class="form-row mb-1">
+									<label for="pushoveruser" class="col-md-4 col-form-label">Pushover User Key</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
@@ -771,11 +771,10 @@
 											</div>
 											<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>" placeholder="User Token" class="form-control">
 										</div>
-										<span class="form-text small">Hier das User Token von Pushover eintragen</span>
 									</div>
 								</div>
 								<div class="form-row">
-									<label for="pushovertoken" class="col-md-4 col-form-label">Pushover App Token</label>
+									<label for="pushovertoken" class="col-md-4 col-form-label">Pushover API-Token/Key</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
@@ -785,7 +784,6 @@
 											</div>
 											<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>" placeholder="App Token" class="form-control">
 										</div>
-										<span class="form-text small">Hier das Application Token von Pushover eintragen</span>
 									</div>
 								</div>
 							</div>
