@@ -1,5 +1,10 @@
 #!/bin/bash
-soc=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/Soc" | jq .value)
+
+if [[ $multifems == "0" ]]; then
+	soc=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/Soc" | jq .value)
+else
+	soc=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess2/Soc" | jq .value)
+fi
 #leistung=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActivePower" | jq .value)
 grid=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/GridActivePower" | jq .value)
 pv=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)

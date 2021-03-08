@@ -186,8 +186,16 @@
 						</div>
 
 						<div id="divspeicherfems" class="hide">
-							<div class="alert alert-info">
-								Konfiguration im Bezug Fenecon Modul.
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="multifems" class="col-md-4 col-form-label">Anzahl der verbauten Speicher</label>
+									<div class="col">
+										<select name="multifems" id="multifems" class="form-control">
+											<option <?php if($multifemsold == 0) echo "selected" ?> value="0">Ein Speicher vorhanden</option>
+											<option <?php if($multifemsold == 1) echo "selected" ?> value="1">Zwei Speicher vorhanden</option>
+										</select>
+									</div>
+								</div>
 							</div>
 						</div>
 
