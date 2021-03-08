@@ -74,24 +74,20 @@ class PowerMeter {
         "translate(" + this.width / 2 + "," + this.height / 2 + ")"
       );
 
-      if (this.showRelativeArcs) {
-        this.svg.append("g")
-          
-          .append("text")
-          .attr("x", this.width -5)
-          .attr("y", this.height -5)
-          .attr("fill", this.axisColor)
-          .attr("text-anchor", "end")
-          .attr("font-size", 20)
-          .attr("id", "powerMeterReset")
-          .text("RESET")
-          .on("click", resetButtonClicked);
-      }
-
-    return g;
-      
+    if (this.showRelativeArcs) {
+      this.svg.append("g")
+        .append("text")
+        .attr("x", this.width - 5)
+        .attr("y", this.height - 5)
+        .attr("fill", this.axisColor)
+        .attr("text-anchor", "end")
+        .attr("font-size", 20)
+        .attr("id", "powerMeterReset")
+        .text("RESET")
+        .on("click", resetButtonClicked);
     }
-  
+    return g;
+  }
 
   drawGraph(svg) {
     this.updateDisplayRatio();
@@ -191,12 +187,12 @@ class PowerMeter {
   }
 
   drawUsageArc(svg) {
-   
+
     // Define the generator for the segments
     const pieGenerator = d3.pie()
       .value((record) => Number(record.power))
       .startAngle(Math.PI * 1.5 - this.circleGapSize)
-      .endAngle(Math.PI / 2 + this.circleGapSize )
+      .endAngle(Math.PI / 2 + this.circleGapSize)
       .sort(null);
 
     // Generator for the pie chart
@@ -223,7 +219,7 @@ class PowerMeter {
         .append("text")
         .attr("x", x)
         .attr("y", y)
-        .text(data.name + " : " + formatWatt(data.power))
+        .text(data.name + ": " + formatWatt(data.power))
         .attr("fill", data.color)
         .attr("text-anchor", anchor)
         .style("font-size", labelFontSize)
