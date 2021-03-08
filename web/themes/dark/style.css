@@ -1,7 +1,7 @@
 /*!
 Stylesheet zum openWB Dark-Theme
 
-2019-2020 Michael Ortenstein
+2019-2021 Michael Ortenstein
 */
 
 html{
@@ -182,11 +182,11 @@ h3 {
 }
 
 .verySmallTextSize {
-	font-size: 0.5rem;
+	font-size: 0.55rem;
 }
 
 .smallTextSize {
-	font-size: 0.5rem;
+	font-size: 0.6rem;
 }
 
 .regularTextSize {
@@ -199,6 +199,10 @@ h3 {
 
 .buttonTextSize {
 	font-size: 0.9rem;
+}
+
+.topValuesTextSize {
+	font-size: 1.1rem;
 }
 
 /* Small devices (landscape phones, 576px and up) */
@@ -233,6 +237,10 @@ h3 {
 
 	.buttonTextSize {
 		font-size: 1.0rem;
+	}
+
+	.topValuesTextSize {
+		font-size: 1.1rem;
 	}
 }
 
@@ -269,6 +277,10 @@ h3 {
 	.buttonTextSize {
 		font-size: 1.2rem;
 	}
+
+	.topValuesTextSize {
+		font-size: 1.1rem;
+	}
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -304,6 +316,10 @@ h3 {
 	.buttonTextSize {
 		font-size: 1.6rem;
 	}
+
+	.topValuesTextSize {
+		font-size: 1.25rem;
+	}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -338,6 +354,10 @@ h3 {
 
 	.buttonTextSize {
 		font-size: 2.0rem;
+	}
+
+	.topValuesTextSize {
+		font-size: 1.65rem;
 	}
 }
 

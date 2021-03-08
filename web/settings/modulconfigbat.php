@@ -107,6 +107,7 @@
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
 										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
+										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
 										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
 										<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 									</optgroup>
@@ -185,8 +186,16 @@
 						</div>
 
 						<div id="divspeicherfems" class="hide">
-							<div class="alert alert-info">
-								Konfiguration im Bezug Fenecon Modul.
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="multifems" class="col-md-4 col-form-label">Anzahl der verbauten Speicher</label>
+									<div class="col">
+										<select name="multifems" id="multifems" class="form-control">
+											<option <?php if($multifemsold == 0) echo "selected" ?> value="0">Ein Speicher vorhanden</option>
+											<option <?php if($multifemsold == 1) echo "selected" ?> value="1">Zwei Speicher vorhanden</option>
+										</select>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -585,7 +594,9 @@
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
 									showSection('#divspeicherip');
 								}
-
+								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
+									showSection('#divspeicherip');
+								}
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');
