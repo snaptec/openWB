@@ -107,6 +107,7 @@
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
 										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
+										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
 										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
 										<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 									</optgroup>
@@ -585,7 +586,9 @@
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
 									showSection('#divspeicherip');
 								}
-
+								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
+									showSection('#divspeicherip');
+								}
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');
