@@ -213,15 +213,7 @@ def getmeter():
         else:
             #llkwh
             resp = client.read_holding_registers(0x5000,4, unit=sdmid)
-            value1 = resp.registers[0]
-            value2 = resp.registers[1]
-            value3 = resp.registers[2]
-            value4 = resp.registers[3]
-            all = format(value3, '04x') + format(value4, '04x')
-            lp1llkwh = int(struct.unpack('>i', all.decode('hex'))[0])
-            #resp = client.read_input_registers(0x0002,2, unit=sdmid)
-            #ikwh = resp.registers[3]
-            lp1llkwh = float(lp1llkwh)/1000
+            lp1llkwh = struct.unpack('>Q',struct.pack('>HHHH',*resp.registers))[0]/100
             f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
             f.write(str(lp1llkwh))
             f.close()
@@ -261,15 +253,12 @@ def getmeter():
             amp = resp.registers[1] 
             lp1lla3 = float(amp) / 100 
             f = open('/var/www/html/openWB/ramdisk/lla3', 'w') 
-            f.write(str(lpa1lla3)) 
+            f.write(str(lp1lla3)) 
             f.close() 
      
             #Gesamt watt 
             resp = client.read_holding_registers(0x5B14,2, unit=sdmid) 
-            value1 = resp.registers[0]  
-            value2 = resp.registers[1]  
-            all = format(value1, '04x') + format(value2, '04x') 
-            lp1llg = int(struct.unpack('>i', all.decode('hex'))[0]) / 100 
+            lp1llg = int(struct.unpack('>i',struct.pack('>HH',*resp.registers))[0]/100)
             #if final < 15: 
             #    final = 0 
             f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w') 

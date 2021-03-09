@@ -73,6 +73,7 @@ class PowerMeter {
         "transform",
         "translate(" + this.width / 2 + "," + this.height / 2 + ")"
       );
+
     return g;
   }
 
@@ -206,7 +207,7 @@ class PowerMeter {
         .append("text")
         .attr("x", x)
         .attr("y", y)
-        .text(data.name + " : " + formatWatt(data.power))
+        .text(data.name + ": " + formatWatt(data.power))
         .attr("fill", data.color)
         .attr("text-anchor", anchor)
         .style("font-size", labelFontSize)
