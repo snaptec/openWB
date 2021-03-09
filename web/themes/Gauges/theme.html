@@ -110,7 +110,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210306">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210307">');
 	</script>
 </head>
 
@@ -186,23 +186,23 @@
 				</canvas>
 			</div>
 		</div>
-		<div class="row justify-content-center topValuesTextSize font-weight-bold text-center text-grey">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-grey">
 			<div class="col bg-lightgrey">
 				Ladeleistung: <span id="powerAllLp">lade Daten</span>
 			</div>
 		</div>
-		<div id="strompreis" class="row justify-content-center topValuesTextSize font-weight-bold text-center text-black hide">
+		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="col-sm bg-rose">
-				aktueller Strompreis: <span id="aktuellerStrompreis">lade Daten</span>
+				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
 			</div>
 		</div>
 
-		<div id="verbraucher" class="row justify-content-center smallTextSize font-weight-bold text-center openwb-devices hide">
+		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
 			<div id="verbraucher1" class="col-sm hide">
-				<span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
+				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
 			</div>
 			<div id="verbraucher2" class="col-sm hide">
-				<span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
+				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
 			</div>
 		</div>
 
@@ -1673,9 +1673,9 @@
 				// some helper functions
 				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20210306',
+				'themes/Gauges/processAllMqttMsg.js?ver=20210307',
 				// respective Chart.js definition live
-				'themes/Gauges/livechart.js?ver=20210306',
+				'themes/Gauges/livechart.js?ver=20210307',
 				// respective Chart.js definition pricechart
 				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
