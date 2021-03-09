@@ -21,8 +21,6 @@ else
 	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
 fi
 
-chargePointsConfiguredCount=$(<$RAMDISKDIR/ConfiguredChargePoints)  # Anzahl der konfigurierten Ladepunkte
-
 ll1=$(<$RAMDISKDIR/llkwh)  # Zählerstand LP1
 ll2=$(<$RAMDISKDIR/llkwhs1)  # Zählerstand LP2
 ll3=$(<$RAMDISKDIR/llkwhs2)  # Zählerstand LP3
@@ -33,19 +31,29 @@ ll7=$(<$RAMDISKDIR/llkwhlp7)  # Zählerstand LP7
 ll8=$(<$RAMDISKDIR/llkwhlp8)  # Zählerstand LP8
 llg=$(<$RAMDISKDIR/llkwhges)
 
-chargePointsConfiguredCount=$(<$RAMDISKDIR/ConfiguredChargePoints)  # Anzahl der konfigurierten Ladepunkte
+is_configured_cp1="1"                 #Ladepunkt 1 ist immer konfiguriert
+is_configured_cp2=$lastmanagement     # LP2 konfiguriert?
+is_configured_cp3=$lastmanagements2   # LP3 konfiguriert?
+is_configured_cp4=$lastmanagementlp4  # LP4 konfiguriert?
+is_configured_cp5=$lastmanagementlp5  # ...
+is_configured_cp6=$lastmanagementlp6
+is_configured_cp7=$lastmanagementlp7
+is_configured_cp8=$lastmanagementlp8
+
 # wenn Pushover aktiviert, Zählerstände senden
-if ((pushbenachrichtigung == "1")) ; then
+if (( pushbenachrichtigung == "1" )) ; then
 	if [ $(date +%d) == "01" ] ; then
 		msg_header="Zählerstände zum $(date +%d.%m.%y:)"$'\n'
 		msg_text=""
-		for (( i=1; i<=$chargePointsConfiguredCount; i++))
+		for (( i=1; i<=8; i++ ))
 		do
 			var_name_energy="ll$i"
 			var_name_cpname="lp${i}name"
-			msg_text+="LP$i (${!var_name_cpname}): ${!var_name_energy} kWh"$'\n'
+			var_name_cp_configured="is_configured_cp${i}"
+			if (( ${!var_name_cp_configured} == "1" )) ; then
+				msg_text+="LP$i (${!var_name_cpname}): ${!var_name_energy} kWh"$'\n'
+			fi
 		done
-
 		$OPENWBBASEDIR/runs/pushover.sh "$msg_header$msg_text"
 	fi
 fi
