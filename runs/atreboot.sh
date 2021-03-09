@@ -30,6 +30,7 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 mkdir -p /var/www/html/openWB/web/logging/data/ladelog
+mkdir -p /var/www/html/openWB/web/logging/data/excel
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 
 # update openwb.conf
