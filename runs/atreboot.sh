@@ -377,9 +377,17 @@ else
 fi
 
 # set upload limit in php
-echo "fix upload limit..."
-sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+#prepare for Buster
+echo -n "fix upload limit..."
+if [ -d "/etc/php/7.0/" ]; then
+        echo "OS Stretch"
+        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+elif [ -d "/etc/php/7.3/" ]; then
+        echo "OS Buster"
+        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+fi
 sudo /usr/sbin/apachectl -k graceful
 
 # all done, remove boot and update status
