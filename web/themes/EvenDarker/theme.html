@@ -98,7 +98,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210306">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210307">');
 	</script>
 </head>
 
@@ -148,40 +148,40 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center topValuesTextSize font-weight-bold text-center">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center">
 			<div class="col-sm openwb-pv">
-				PV: <span id="pvleistung">lade Daten</span><span class="verySmallTextSize" id="pvdailyyield"></span>
+				<span class="smallTextSize">PV: <span id="pvleistung">lade Daten</span></span><span class="verySmallTextSize" id="pvdailyyield"></span>
 			</div>
 			<div id="evudiv" class="col-sm openwb-evu">
-				Netz<span id="bezug">: lade Daten</span><span class="verySmallTextSize" id="evuidailyyield"></span><span class="verySmallTextSize" id="evuedailyyield"></span>
+				<span class="smallTextSize">Netz<span id="bezug">: lade Daten</span></span><span class="verySmallTextSize" id="evuidailyyield"></span><span class="verySmallTextSize" id="evuedailyyield"></span>
 			</div>
 		</div>
 
-		<div class="row justify-content-center topValuesTextSize font-weight-bold text-center">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center">
 			<div class="col-sm openwb-house">
-				Hausverbrauch: <span id="hausverbrauch">lade Daten</span><span class="verySmallTextSize" id="hausverbrauchdailyyield"></span>
+				<span class="smallTextSize">Hausverbrauch: <span id="hausverbrauch">lade Daten</span></span><span class="verySmallTextSize" id="hausverbrauchdailyyield"></span>
 			</div>
 			<div class="col-sm openwb-lp">
-				Ladeleistung: <span id="powerAllLp">lade Daten</span><span class="verySmallTextSize" id="lladailyyield"></span>
+				<span class="smallTextSize">Ladeleistung: <span id="powerAllLp">lade Daten</span></span><span class="verySmallTextSize" id="lladailyyield"></span>
 			</div>
 		</div>
-		<div id="speicher" class="row justify-content-center topValuesTextSize font-weight-bold text-center">
+		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center">
 			<div class="col-sm openwb-housebat">
-				Speicher<span id="speicherleistung">: lade Daten</span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> - Ladestand: <span id="speichersoc"> lade Daten</span>
+				<span class="smallTextSize">Speicher<span id="speicherleistung">: lade Daten</span></span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> <span class="smallTextSize">- Ladestand: <span id="speichersoc"> lade Daten</span></span>
 			</div>
 		</div>
-		<div id="strompreis" class="row justify-content-center topValuesTextSize font-weight-bold text-center text-black">
+		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="col-sm bg-rose">
-				aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span>
+				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
 			</div>
 		</div>
 
-		<div id="verbraucher" class="row justify-content-center topValuesTextSize font-weight-bold text-center openwb-devices hide">
+		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
 			<div id="verbraucher1" class="col-sm hide">
-				<span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
+				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
 			</div>
 			<div id="verbraucher2" class="col-sm hide">
-				<span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
+				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
 			</div>
 		</div>
 
@@ -1282,9 +1282,9 @@
 				// some helper functions
 				'themes/dark/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20210306',
+				'themes/dark/processAllMqttMsg.js?ver=20210307',
 				// respective Chart.js definition live
-				'themes/dark/livechart.js?ver=20210306',
+				'themes/dark/livechart.js?ver=20210307',
 				// respective Chart.js definition
 				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service

@@ -169,49 +169,6 @@ class PowerGraph {
     }
   }
 
-  extractDayValues(payload, oldPayload) {
-    const elements = payload.split(",");
-    const oldElements = oldPayload.split(",");
-    var values = {};
-    values.date = new Date(d3.timeParse("%H%M")(elements[0]));
-    // evu
-    values.gridPull = this.calcValue(1, elements, oldElements);
-    values.gridPush = this.calcValue(2, elements, oldElements);
-    // pv
-    values.solarPower = this.calcValue(3, elements, oldElements);
-    values.inverter = 0;
-    // charge points
-    values.charging = this.calcValue(7, elements, oldElements);
-    var i;
-    for (i = 0; i < 3; i++) {
-      values["lp" + i] = this.calcValue(4 + i, elements, oldElements);
-    }
-    for (i = 3; i < 8; i++) {
-      values["lp" + i] = this.calcValue(12 + i, elements, oldElements);
-    }
-    values.soc1 = +elements[21];
-    values.soc2 = +elements[22];
-    // smart home
-    for (i = 0; i < 10; i++) {
-      values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
-    }
-    //consumers
-    values.co0 = this.calcValue(10, elements, oldElements);
-    values.co1 = this.calcValue(12, elements, oldElements);
-    //battery
-    values.batIn = this.calcValue(8, elements, oldElements);
-    values.batOut = this.calcValue(9, elements, oldElements);
-    values.batterySoc = +elements[20];
-    // calculated values
-    values.housePower = values.gridPull + values.solarPower + values.batOut
-      - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
-      - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9;
-    if (values.housePower < 0) { values.housePower = 0; };
-    values.selfUsage = values.solarPower - values.gridPush;
-    if (values.selfUsage < 0) { values.selfUsage = 0; };
-    return values;
-  }
-
   updateDay(topic, payload) {
     if (payload != 'empty') {
       var segment = payload.toString().split("\n");
