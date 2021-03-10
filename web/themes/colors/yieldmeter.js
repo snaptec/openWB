@@ -5,9 +5,6 @@
  */
 
 class YieldMeter {
-
-
-
 	bardata;
 	xScale;
 	yScale;
@@ -37,16 +34,27 @@ class YieldMeter {
 		this.bgColor = 'var(--color-bg)';
 		this.chargeColor = 'var(--color-charging)';
 		this.axisColor = 'var(--color-axis)';
+		d3.select("button#energyLeftButton")
+			.on("click", shiftLeft)
+		d3.select("button#energyRightButton")
+			.on("click", shiftRight)
 	}
 
 	// to be called when values have changed
 	update() {
-		this.plotdata = Object.values(wbdata.sourceSummary)
-			.filter((row) => (row.energy > 0))
-			.concat(wbdata.usageDetails
-				.filter((row) => (row.energy > 0)));
+		if (wbdata.showLiveGraph || wbdata.showTodayGraph) {
+			this.plotdata = Object.values(wbdata.sourceSummary)
+				.filter((row) => (row.energy > 0))
+				.concat(wbdata.usageDetails
+					.filter((row) => (row.energy > 0)));
+		} else {
+			// show values for previous days
+			this.plotdata = Object.values(wbdata.historicSummary)
+				.filter((row) => (row.energy > 0));
+		}
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
+		this.updateHeading();
 	};
 
 	createOrUpdateSvg() {
@@ -54,7 +62,7 @@ class YieldMeter {
 		const g = this.svg.append("g")
 			.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 		this.xScale = d3.scaleBand()
-			.range([0, this.width - this.margin.left - this.margin.right ])
+			.range([0, this.width - this.margin.left - this.margin.right])
 			.padding(0.4);
 		this.yScale = d3.scaleLinear()
 			.range([this.height - this.margin.bottom - this.margin.top, 0]);
@@ -106,7 +114,7 @@ class YieldMeter {
 			.attr("stroke", this.bgcolor);
 
 		svg.append("text")
-			.attr("x",-this.margin.left)
+			.attr("x", -this.margin.left)
 			.attr("y", -15)
 			.style("fill", this.axisColor)
 			.attr("font-size", this.axisFontSize)
@@ -138,6 +146,18 @@ class YieldMeter {
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (d.name));
+	}
+
+	updateHeading() {
+		var heading = "Energie ";
+
+		if (wbdata.showLiveGraph || wbdata.showTodayGraph) {
+			heading = heading + " heute";
+		} else {
+			heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
+		}
+
+		d3.select("h3#energyheading").text(heading);
 	}
 }
 var yieldMeter = new YieldMeter();

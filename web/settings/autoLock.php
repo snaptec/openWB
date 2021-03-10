@@ -241,6 +241,10 @@ ECHODAYROWTAIL;
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Autolock Einstellungen</h1>
+			<div class="alert alert-info">
+				Diese Einstellungen ermöglichen es, dass man jeden konfigurierten Ladepunkt zu bestimmten Zeiten automatisiert sperren bzw. wieder entsperren kann.
+				Ein möglicher Anwendungsfall wäre das Bereitstellen von Lademöglichkeiten nur während der Öffnungszeiten.
+			</div>
 			<form class="form" action="./tools/saveautolock.php" method="POST">
 
 				<?php
@@ -292,7 +296,7 @@ ECHOFORMGROUPHEAD;
 						echo <<<ECHOFORMGROUPTAIL
 					</div> <!-- card body -->
 					<div class="card-footer text-center">
-						<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
+						<button type="button" class="btn btn-sm btn-danger resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
 					</div>
 				</div>  <!-- end form-group charge point {$lp} -->
 
@@ -471,7 +475,7 @@ ECHOFORMGROUPTAIL;
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-green" data-dismiss="modal">OK</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>

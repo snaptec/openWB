@@ -58,6 +58,15 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
 	processPreloader(mqttmsg);
+
+	// color theme
+	if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));
+	} else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		wbdata.updateGlobal("currentPowerPrice", parseFloat(mqttpayload));
+	}
+	// end color theme
+
 	if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
 		$('.etproviderName').text(mqttpayload);
 	}
@@ -65,24 +74,42 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 		$('.etproviderLink').attr("href", "/openWB/modules/"+mqttpayload+"/stromtarifinfo/infopage.php");
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
-		wbdata.updateGlobal("isPriceChartEnabled", (mqttpayload == '1'));
-		// show navbar link
+		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
+			$('#etproviderEnabledIcon').removeClass('hide');
+			$('#priceBasedCharging').removeClass('hide');
+			$('#strompreis').removeClass('hide');
 			$('#navStromtarifInfo').removeClass('hide');
 		} else {
+			$('#etproviderEnabledIcon').addClass('hide');
+			$('#priceBasedCharging').addClass('hide');
+			$('#strompreis').addClass('hide');
 			$('#navStromtarifInfo').addClass('hide');
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-		// currently not implemented for color theme
+		// read etprovider values and trigger graph creation
+		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
+		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
+		var csvData = [];
+		var rawcsv = mqttpayload.split(/\r?\n|\r/);
+		// skip first entry: it is module-name responsible for list
+		for (var i = 1; i < rawcsv.length; i++) {
+			csvData.push(rawcsv[i].split(','));
+		}
+		// Timeline (x-Achse) ist UNIX Timestamp in UTC, deshalb Umrechnung (*1000) in Javascript-Timestamp (mit Millisekunden)
+		electricityPriceTimeline = getCol(csvData, 0).map(function(x) { return x * 1000; });
+		// Chartline (y-Achse) ist Preis in ct/kWh
+		electricityPriceChartline = getCol(csvData, 1);
+
+		loadElectricityPriceChart();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
-		// currently not implemented for color theme
+		setInputValue('MaxPriceForCharging', mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-		wbdata.updateGlobal("currentPowerPrice", parseFloat(mqttpayload));
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' ct/kWh');
 	}
-
 }
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
