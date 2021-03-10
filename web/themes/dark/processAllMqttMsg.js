@@ -516,7 +516,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(speicherSoc) || speicherSoc < 0 || speicherSoc > 100 ) {
 			speicherSoc = '--';
 		}
-		speichersoc = speicherSoc + ' % SoC';
+		speichersoc = speicherSoc + ' %';
 		$('#speichersoc').text(speichersoc);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {

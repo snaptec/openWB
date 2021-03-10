@@ -61,9 +61,57 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>openWB aus Backup wiederherstellen</h1>
-			<div class="alert alert-warning text-center">
+			<div class="alert alert-warning">
 				Wiederherstellen der openWB-Einstellungen und Log-Daten aus einer Backup-Datei (Dateiendung gz).<br>
 				Sollte die Wiederherstellung fehlschlagen, bitte ein Update der openWB auf die gewünschte Version durchführen. Im Anschluss die openWB neu starten und das Wiederherstellen erneut versuchen.
+			</div>
+
+			<?php
+				// Returns a file size limit in bytes based on the PHP upload_max_filesize
+				// and post_max_size
+				function file_upload_max_size() {
+					static $max_size = -1;
+					static $sizeLimit = "";
+
+					if ($max_size < 0) {
+						// Start with post_max_size.
+						$post_max_size = parse_size(ini_get('post_max_size'));
+						if ($post_max_size > 0) {
+							$max_size = $post_max_size;
+							$sizeLimit = "post_max_size";
+						}
+
+						// If upload_max_size is less, then reduce. Except if upload_max_size is
+						// zero, which indicates no limit.
+						$upload_max = parse_size(ini_get('upload_max_filesize'));
+						if ($upload_max > 0 && $upload_max < $max_size) {
+							$max_size = $upload_max;
+							$sizeLimit = "upload_max_filesize";
+						}
+					}
+					return array($max_size, $sizeLimit);
+				}
+
+				function parse_size($size) {
+					$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
+					$size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
+					if ($unit) {
+						// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+						return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+					} else {
+						return round($size);
+					}
+				}
+
+				$target_dir = $_SERVER['DOCUMENT_ROOT'] . "/openWB/web/tools/upload/";
+				$targetPath = $target_dir . "backup.tar.gz";
+				$ext = pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION);
+				$uploadOk = false;
+				list($max_size, $sizeLimit) = file_upload_max_size();
+				$maxSizeMB = number_format(($max_size / (1024 * 1024)), 2, ',', '.');  // german format
+			?>
+			<div class="alert alert-info">
+				max. erlaubte Dateigröße: <?php echo $maxSizeMB ?> MB (begrenzt durch "<?php echo $sizeLimit ?>")
 			</div>
 
 			<div class="card border-secondary">
