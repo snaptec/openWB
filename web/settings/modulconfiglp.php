@@ -3302,6 +3302,7 @@
 
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
+							hideSection('#socmtype2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
