@@ -164,7 +164,7 @@ class PowerGraph {
             this.updateGraph();
             unsubscribeMqttGraphSegments();
           }
-        }      
+        }
       }
     }
   }
@@ -625,6 +625,15 @@ function changeStack() {
     wbdata.usageStackOrder = 0;
   }
   wbdata.persistGraphPreferences();
+  powerGraph.updateGraph();
+}
+
+// Change the order of values in the stack
+function changeStack() {
+  powerGraph.usageStackOrder = powerGraph.usageStackOrder+1;
+  if (powerGraph.usageStackOrder > 2) {
+    powerGraph.usageStackOrder = 0;
+  }
   powerGraph.updateGraph();
 }
 
