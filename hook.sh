@@ -156,8 +156,10 @@ hook(){
 		if [[ $verbraucher1_typ == "mpm3pm" ]]; then
 			if [[ $verbraucher1_source == *"dev"* ]]; then
 				sudo python modules/verbraucher/mpm3pmlocal.py 1 $verbraucher1_source $verbraucher1_id &
+				verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 			else
 				sudo python modules/verbraucher/mpm3pmremote.py 1 $verbraucher1_source $verbraucher1_id &
+				verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 			fi
 		fi
 		if [[ $verbraucher1_typ == "sdm630" ]]; then
