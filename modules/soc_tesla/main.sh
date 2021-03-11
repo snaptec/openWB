@@ -8,6 +8,7 @@ MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="EVSOC"
 CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
 CHARGEPOINT=$1
+MYLOGFILE="$RAMDISKDIR/soc.log"
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
@@ -58,7 +59,7 @@ mfapasscode="${!mfaPasscodeConfigText}"
 getAndWriteSoc(){
 	re='^-?[0-9]+$'
 	# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
-	response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --data="vehicles/#/vehicle_data")
+	response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --data="vehicles/#/vehicle_data" --logprefix="Lp$CHARGEPOINT" 2>>$MYLOGFILE)
 	# current state of car
 	# state=$(echo $response | jq .response.state)
 	state=$(echo $response | jq .state)
@@ -100,12 +101,14 @@ checkToken(){
 				rm $tokensfile
 			fi
 			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Empty Password - nothing to do."
+			openwbModulePublishState "EVSOC" 0 "Keine Zugangsdaten eingetragen" $CHARGEPOINT
 			returnValue=1
 			;;
 		$TOKENPASSWORD)
 			# check if token is present
 			if [ ! -f $tokensfile ]; then
 				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Tokenpassword set but no token found: clearing password in config."
+				openwbModulePublishState "EVSOC" 0 "Keine Zugangsdaten eingetragen" $CHARGEPOINT
 				clearPassword
 				returnValue=2
 			fi
@@ -119,14 +122,14 @@ checkToken(){
 			# Request new token with user/pass.
 			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting new token..."
 			# response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
-			response=$(python3 $MODULEDIR/tesla.py --email="$username" --password="$password" --mfapasscode="$mfapasscode" --tokensfile="$tokensfile")
+			response=$(python3 $MODULEDIR/tesla.py --email="$username" --password="$password" --mfapasscode="$mfapasscode" --tokensfile="$tokensfile" --logprefix="Lp$CHARGEPOINT" 2>>$MYLOGFILE)
 			# password in response, so do not log it!
 			if [ -f $tokensfile ]; then
 				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ...all done, removing password from config file."
 				setTokenPassword
 			else
 				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ERROR: Auth with user/pass failed!"
-				echo "Fehler: Anmeldung bei Tesla gescheitert!" > $RAMDISKDIR/lastregelungaktiv
+				openwbModulePublishState "EVSOC" 2 "Anmeldung fehlgeschlagen!" $CHARGEPOINT
 				returnValue=3
 			fi
 			;;
@@ -139,7 +142,7 @@ wakeUpCar(){
 	counter=0
 	until [ $counter -ge 12 ]; do
 		# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
-		response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --command="vehicles/#/wake_up")
+		response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --command="vehicles/#/wake_up" --logprefix="Lp$CHARGEPOINT" 2>>$MYLOGFILE)
 		# state=$(echo $response | jq .response.state)
 		state=$(echo $response | jq .state)
 		if [ "$state" = "\"online\"" ]; then
@@ -171,6 +174,10 @@ if (( ladeleistung > 1000 )); then
 		if [ "$checkResult" == 0 ]; then
 			# car cannot be asleep while charging
 			getAndWriteSoc
+			checkResult=$?
+			if [ "$checkResult" == 0 ]; then
+				openwbModulePublishState "EVSOC" 0 "Erfolgreich" $CHARGEPOINT
+			fi
 		fi
 	fi
 else
@@ -191,8 +198,13 @@ else
 				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Update SoC"
 			else
 				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Car not online after timeout. SoC will be outdated!"
+				openwbModulePublishState "EVSOC" 1 "WakeUp fehlgeschlagen" $CHARGEPOINT
 			fi
 			getAndWriteSoc
+			checkResult=$?
+			if [ "$checkResult" == 0 ]; then
+				openwbModulePublishState "EVSOC" 0 "Erfolgreich" $CHARGEPOINT
+			fi
 		fi
 	fi
 fi
