@@ -7,7 +7,7 @@ class Battery_API {
 	private $token_file = 'token.json';
 
 	private $auth_api = 'https://customer.bmwgroup.com/gcdm/oauth/authenticate';
-	private $vehicle_api = 'https://www.bmw-connecteddrive.de/api/vehicle';
+	private $vehicle_api = 'https://www.bmw-connecteddrive.com/api/vehicle';
 
 	private $auth;
 	private $token;
