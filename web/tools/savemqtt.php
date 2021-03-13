@@ -97,7 +97,7 @@ $len = strlen($bridgeFileName);
 foreach($files as $currentFile) {
 	if (strpos($currentFile, $bridgeFileName) !== false) {
 		debugPrint("Deleting: $currentFile");
-    file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", "$currentFile\n", FILE_APPEND);
+		file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", "$currentFile\n", FILE_APPEND);
 	}
 }
 
