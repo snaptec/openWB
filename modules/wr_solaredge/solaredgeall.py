@@ -194,6 +194,8 @@ if extprodakt == 1:
 else:
     extprod = 0
 allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower+extprod
+if allwatt > 0:
+    allwatt=0
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(allwatt))
 f.close()

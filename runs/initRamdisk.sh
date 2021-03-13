@@ -150,14 +150,14 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/llpf1
 	echo 0 > $RamdiskPath/llpf2
 	echo 0 > $RamdiskPath/llpf3
-	echo 1 > $RamdiskPath/llaktuell
-	echo 1 > $RamdiskPath/llaktuells1
-	echo 1 > $RamdiskPath/llaktuells2
-	echo 1 > $RamdiskPath/llaktuelllp4
-	echo 1 > $RamdiskPath/llaktuelllp5
-	echo 1 > $RamdiskPath/llaktuelllp6
-	echo 1 > $RamdiskPath/llaktuelllp7
-	echo 1 > $RamdiskPath/llaktuelllp8
+	echo 0 > $RamdiskPath/llaktuell
+	echo 0 > $RamdiskPath/llaktuells1
+	echo 0 > $RamdiskPath/llaktuells2
+	echo 0 > $RamdiskPath/llaktuelllp4
+	echo 0 > $RamdiskPath/llaktuelllp5
+	echo 0 > $RamdiskPath/llaktuelllp6
+	echo 0 > $RamdiskPath/llaktuelllp7
+	echo 0 > $RamdiskPath/llaktuelllp8
 	echo 0 > $RamdiskPath/nachtladen2state
 	echo 0 > $RamdiskPath/nachtladen2states1
 	echo 0 > $RamdiskPath/nachtladenstate
@@ -179,6 +179,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/tmpsoc
 	echo 0 > $RamdiskPath/tmpsoc1
 	echo 0 > $RamdiskPath/zielladenkorrektura
+	echo 0 > $RamdiskPath/ladungdurchziel
 	echo 20000 > $RamdiskPath/soctimer
 	echo 20000 > $RamdiskPath/soctimer1
 	echo 28 > $RamdiskPath/evsemodbustimer

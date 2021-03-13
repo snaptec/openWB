@@ -1781,6 +1781,8 @@ updateConfig(){
 		echo "speicherpwuser=Username" >> $ConfigFile
 		echo "speicherpwpass='XXX'" >> $ConfigFile
 	fi
-
+	if ! grep -Fq "multifems=" $ConfigFile; then
+		echo "multifems=1" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
