@@ -26,7 +26,7 @@ function debugPrint($message){
 }
 
 function cleanAndExit($message){
-    // delete bridges-to-delete file, so that a bridge can't be deleted accidentally
+    	// delete bridges-to-delete file, so that a bridge can't be deleted accidentally
 	$fileToClean = "/var/www/html/openWB/ramdisk/99-bridgesToDelete";
 	if(is_writable($fileToClean)){
 		debugPrint("deleting $fileToClean");
