@@ -10,7 +10,7 @@ class PowerGraph {
     this.initialGraphData = [];
     this.initialized = false;
     this.colors = [];
-    this.gridColors = [];
+    this.gridColors = {};
     this.bgcolor = "";
     this.axiscolor = "";
     this.chargeColor = "";
@@ -21,33 +21,35 @@ class PowerGraph {
     this.width = 500;
     this.height = 500;
     this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
-    this.graphDate = new Date();
+    this.liveGraphMinutes = 0;
+    wbdata.usageStackOrder = 2;
   }
 
   init() {
     var style = getComputedStyle(document.body);
-    this.colors[18] = style.getPropertyValue('--color-house');
-    this.colors[19] = style.getPropertyValue('--color-battery');
-    this.colors[20] = style.getPropertyValue('--color-pv');
-    this.gridColors[0] = style.getPropertyValue('--color-battery');
-    this.gridColors[1] = style.getPropertyValue('--color-pv');
-    this.gridColors[2] = style.getPropertyValue('--color-export');
-    this.gridColors[3] = style.getPropertyValue('--color-evu');
-    this.bgcolor = style.getPropertyValue('--color-bg');
-    this.chargeColor = style.getPropertyValue('--color-charging');
-    this.axiscolor = style.getPropertyValue('--color-axis');
-    this.lp1color = style.getPropertyValue('--color-lp1');
-    this.lp2color = style.getPropertyValue('--color-lp2');
-    this.batteryColor = style.getPropertyValue('--color-battery');
+    this.colors.housePower = 'var(--color-house)';
+    this.colors.batIn = 'var(--color-battery)';
+    this.colors.inverter = 'var(--color-pv)';
+    this.gridColors[0] = 'var(--color-battery)';
+    this.gridColors[1] = 'var(--color-pv)';
+    this.gridColors[2] = 'var(--color-export)';
+    this.gridColors[3] = 'var(--color-evu)';
+    this.bgcolor = 'var(--color-bg)';
+    this.chargeColor = 'var(--color-charging)';
+    this.axiscolor = 'var(--color-axis)';
+    this.lp1color = 'var(--color-lp1)';
+    this.lp2color = 'var(--color-lp2)';
+    this.batteryColor = 'var(--color-battery)';
     var i;
     for (i = 0; i < 8; i++) {
-      this.colors[i] = wbdata.chargePoint[i].color;
+      this.colors["lp" + i] = wbdata.chargePoint[i].color;
     }
     for (i = 0; i < 8; i++) {
-      this.colors[8 + i] = wbdata.shDevice[i].color;
+      this.colors["sh" + i] = wbdata.shDevice[i].color;
     }
-    this.colors[16] = style.getPropertyValue('--color-co1');
-    this.colors[17] = style.getPropertyValue('--color-co2');
+    this.colors.co0 = 'var(--color-co1)';
+    this.colors.co1 = 'var(--color-co2)';
+
     var figure = d3.select("figure#powergraph");
     this.svg = figure.append("svg")
       .attr("viewBox", `0 0 500 500`);
@@ -56,6 +58,8 @@ class PowerGraph {
       .on("click", shiftLeft)
     d3.select("button#graphRightButton")
       .on("click", shiftRight)
+    d3.select("button#graphChangeButton")
+      .on("click", changeStack)
   }
 
   activateLive() {
@@ -66,7 +70,7 @@ class PowerGraph {
     } catch (err) {
       // on initial invocation this method is not existing
     }
-    d3.select("h3#graphheading").text("Leistung / Ladestand")
+    this.updateHeading();
   }
 
   deactivateLive() {
@@ -77,27 +81,45 @@ class PowerGraph {
       // on intial run this method is not existing
     }
   }
+
   activateDay() {
     if (!wbdata.showLiveGraph) {
+      if (wbdata.showTodayGraph) {
+        wbdata.graphDate = new Date(); // ensure we update todays date if day changes during display
+      }
       this.resetDayGraph();
       try {
-        subscribeDayGraph(this.graphDate);
+        subscribeDayGraph(wbdata.graphDate);
       } catch (err) {
         //on initial run of activate, subscribeDayGraph is not yet initialized. 
         // the error can be ignored
       }
-      var heading = "Leistung / Ladestand ";
-      const today = new Date();
-      if (today.getDate() == this.graphDate.getDate() && today.getMonth() == this.graphDate.getMonth() && today.getFullYear() == this.graphDate.getFullYear()) {
-        heading = heading + "heute";
-      } else {
-        heading = heading + this.graphDate.getDate() + "." + (this.graphDate.getMonth() + 1) + ".";
-      }
-      d3.select("h3#graphheading").text(heading);
+      this.updateHeading();
     }
   }
 
+  updateHeading() {
+    var heading = "Leistung / Ladestand ";
+
+    if (wbdata.showLiveGraph) {
+      heading = heading + this.liveGraphMinutes + " min";
+    } else {
+      const today = new Date();
+      if (today.getDate() == wbdata.graphDate.getDate() && today.getMonth() == wbdata.graphDate.getMonth() && today.getFullYear() == wbdata.graphDate.getFullYear()) {
+        heading = heading + "heute";
+      } else {
+        heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
+      }
+    }
+    d3.select("h3#graphheading").text(heading);
+  }
+
   deactivateDay() {
+    try {
+      unsubscribeDayGraph();
+    } catch (err) {
+      // ignore error 
+    }
   }
   updateLive(topic, payload) {
     if (wbdata.showLiveGraph) { // only udpdate if live graph is active
@@ -135,10 +157,14 @@ class PowerGraph {
                 this.graphData.push(values);
               });
             });
+            const startTime = this.graphData[0].date;
+            const endTime = this.graphData[this.graphData.length - 1].date;
+            this.liveGraphMinutes = Math.round((endTime - startTime) / 60000);
+            this.updateHeading();
             this.updateGraph();
             unsubscribeMqttGraphSegments();
           }
-        }
+        }      
       }
     }
   }
@@ -158,7 +184,7 @@ class PowerGraph {
       }
       if (this.initCounter == 12) {// Initialization complete
         unsubscribeDayGraph();
-        
+
         this.initCounter = 0;
         this.staging.map(segment =>
           segment.map(line => this.rawData.push(line))
@@ -172,9 +198,31 @@ class PowerGraph {
           }
         });
         this.updateGraph();
-        setTimeout(() => this.activateLive(), 300000)
+        this.updateEnergyValues();
+        wbdata.dayGraphUpdated();
+        setTimeout(() => this.activateDay(), 300000)
       }
     }
+  }
+
+  updateEnergyValues () {
+    const startValues = this.rawData[0].split(',');
+    const endValues = this.rawData[this.rawData.length-1].split(',');
+    wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3])/1000 ;
+    wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1])/1000 ;
+    wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9])/1000 ;
+    wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2])/1000 ;
+    wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7])/1000 ;
+    var deviceEnergy = 0;
+    for (var i=0; i<10; i++) {
+      deviceEnergy = deviceEnergy + (endValues[26+i] - startValues[26+i])/1000 ; 
+    }
+    deviceEnergy = deviceEnergy + (endValues[10] - startValues[10])/1000 ;
+    deviceEnergy = deviceEnergy + (endValues[12] - startValues[12])/1000 ;
+    wbdata.historicSummary.devices.energy = deviceEnergy ;
+    wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8])/1000 ;
+    wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
+      - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
   }
 
   extractDayValues(payload, oldPayload) {
@@ -385,14 +433,22 @@ class PowerGraph {
       + d.sh5 + d.sh6 + d.sh7 + d.co0 + d.co1 + d.batIn + d.inverter)
     );
     yScale.domain([0, (extent[1])]);
-    const keys = ["lp0", "lp1", "lp2", "lp3", "lp4",
+    const keys = [["lp0", "lp1", "lp2", "lp3", "lp4",
       "lp5", "lp6", "lp7",
       "sh0", "sh1", "sh2", "sh3", "sh4",
-      "sh5", "sh6", "sh7", "co0", "co1", "housePower", "batIn", "inverter"];
+      "sh5", "sh6", "sh7", "co0", "co1", "housePower", "batIn", "inverter"],
+    ["housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+      "lp5", "lp6", "lp7",
+      "sh0", "sh1", "sh2", "sh3", "sh4",
+      "sh5", "sh6", "sh7", "co0", "co1", "batIn", "inverter"],
+    ["sh0", "sh1", "sh2", "sh3", "sh4",
+      "sh5", "sh6", "sh7", "co0", "co1", "housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+      "lp5", "lp6", "lp7",
+      "batIn", "inverter"]
+    ];
 
-    const stackGen = d3.stack().keys(keys);
+    const stackGen = d3.stack().keys(keys[wbdata.usageStackOrder]);
     const stackedSeries = stackGen(this.graphData);
-
     svg.selectAll(".targetareas")
       .data(stackedSeries)
       .join("path")
@@ -401,7 +457,7 @@ class PowerGraph {
         .y0((d) => yScale(d[0]))
         .y1((d) => yScale(d[1]))
       )
-      .attr("fill", (d, i) => this.colors[i]);
+      .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]]);
 
     const yAxis = svg.append("g")
       .attr("class", "axis")
@@ -549,45 +605,27 @@ class PowerGraph {
       .call(d3.axisRight(yScale)
         .ticks(5)
         .tickFormat((d) => (d + "%")))
-    ;
+      ;
     socAxis.selectAll(".tick").attr("font-size", 12);
     socAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
     socAxis.select(".domain")
       .attr("stroke", this.bgcolor)
       ;
   }
+
+  getEnergyValues () {
+
+  }
 }
 
-function shiftLeft() {
-  if (wbdata.showLiveGraph) {
-    wbdata.showLiveGraph = false;
-    powerGraph.deactivateLive();
-    powerGraph.activateDay();
-    wbdata.prefs.showLG = false;
-    wbdata.persistGraphPreferences();
-    d3.select("button#graphRightButton").classed("disabled", false)
-  } else {
-    powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() - 86400000);
-    powerGraph.activateDay();
+// Change the order of values in the stack
+function changeStack() {
+  wbdata.usageStackOrder = wbdata.usageStackOrder+1;
+  if (wbdata.usageStackOrder > 2) {
+    wbdata.usageStackOrder = 0;
   }
-}
-function shiftRight() {
-  today = new Date();
-  d = powerGraph.graphDate;
-  if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()) {
-    if (!wbdata.showLiveGraph) {
-      wbdata.showLiveGraph = true;
-      powerGraph.deactivateDay();
-      powerGraph.activateLive();
-      wbdata.prefs.showLG = true;
-      wbdata.persistGraphPreferences();
-      d3.select("button#graphLeftButton").classed("disabled", false)
-      d3.select("button#graphRightButton").classed("disabled", true)
-    }
-  } else {
-    powerGraph.graphDate.setTime(powerGraph.graphDate.getTime() + 86400000);
-    powerGraph.activateDay();
-  }
+  wbdata.persistGraphPreferences();
+  powerGraph.updateGraph();
 }
 
 var powerGraph = new PowerGraph();

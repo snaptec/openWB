@@ -31,7 +31,14 @@
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 		<script>
-			function getCookie(cname) {
+				function setCookie(cname, cvalue, exdays) {
+					var d = new Date();
+					d.setTime(d.getTime() + (exdays*24*60*60*1000));
+					var expires = "expires=" + d.toGMTString();
+					document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/openWB/";
+				}
+
+				function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
 				var ca = decodedCookie.split(';');
@@ -104,7 +111,7 @@
 			}
 
 			// call function to read all directories to $allThemes
-			$allThemes = dir_list('/var/www/html/openWB/web/themes');
+			$allThemes = dir_list($_SERVER['DOCUMENT_ROOT'] . '/openWB/web/themes');
 			// set default theme
 			$themeCookie = 'standard';
 			// check if theme cookie exists
@@ -174,14 +181,11 @@
 
 			function saveTheme() {
 				var selectedTheme = $('.carousel-item.active').find('img').attr('title');  // get theme name from active carousel item
-				$.ajax({
-					type: "GET",
-					url: "setThemeCookie.php" ,
-					data: { theme: selectedTheme },
-					success : function() {
-						window.location.href = "index.php";
-					}
-				});
+				// console.log("selected Theme: " + selectedTheme);
+				$('link[rel="stylesheet"][href^="themes/' + themeCookie + '/settings.css"]').remove();
+				$('head').append('<link rel="stylesheet" href="themes/' + selectedTheme + '/settings.css?v=20200801">');
+				setCookie("openWBTheme", selectedTheme, 365);
+				themeCookie = selectedTheme;
 			}
 		</script>
 

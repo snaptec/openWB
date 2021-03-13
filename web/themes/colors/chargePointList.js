@@ -48,7 +48,7 @@ class ChargePointList {
       .data(this.chargepoints).enter()
       ;
     const rows = chargePoint.append("tr")
-      .style("color", "white")
+      .style("color", "var(--color-fg)")
       .style("text-align", "center")
       .style("vertical-align", "middle");
 
@@ -129,12 +129,12 @@ class ChargePointList {
       if (row.isSocManual) {
         cell.append("i")
           .attr("class", "small fas fa-edit")
-          .style("color", "white");
+          .style("color", "var(--color-fg");
       } else {
         cell.append("i")
           .attr("class", "small fas fa-redo-alt")
           .attr("id", "soclabel-" + index)
-          .style("color", "white");
+          .style("color", "var(--color-fg)");
       }
     }
     return cell.node();
