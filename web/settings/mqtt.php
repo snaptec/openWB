@@ -50,7 +50,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<?php
 				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
-                		$filesCount = count($files);
+				$filesCount = count($files);
                 		// give the user the option to configure more than one bridge
 				array_push($files, "");
 
