@@ -97,3 +97,6 @@ if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
 else
 	echo "Not deleting randomSleepValue of \"$randomSleep\""
 fi
+
+# monthly . csv updaten
+#python3 /var/www/html/openWB/runs/csvcalc.py /var/www/html/openWB/web/logging/data/daily/ /var/www/html/openWB/web/logging/data/v001/ /var/www/html/openWB/ramdisk/ A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
