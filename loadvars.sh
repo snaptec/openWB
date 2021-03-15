@@ -941,8 +941,9 @@ loadvars(){
 		hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
+	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
 		usesimbezug=1
 	fi
 	if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
