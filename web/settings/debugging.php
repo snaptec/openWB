@@ -132,18 +132,50 @@
 						<?php } ?>
 						<div class="form-group mb-0">
 							<span id="textHelpBlock" class="form-text">Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt. openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.</span>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<div class="input-group-text">
-										<i class="fa fa-key"></i>
+							<?php
+								$remoteSupportRunning = false;
+								$pidFile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/remotesupportpid';
+								if( file_exists($pidFile) ){
+									echo "<!-- file exists -->\n";
+									$remoteSupportPid = trim(file_get_contents($pidFile));
+									if( file_exists('/proc/'.$remoteSupportPid) ){
+										echo "<!-- process is running -->\n";
+										if( substr(file_get_contents('/proc/'.$remoteSupportPid.'/cmdline'), 0, 7) == 'sshpass' ){
+											echo "<!-- process is sshpass -->\n";
+											$remoteSupportRunning = true;
+											?>
+												<div class="alert alert-warning">
+													Es ist bereits ein Support-Tunnel aufgebaut.
+												</div>
+											<?php
+										} else {
+											echo "<!-- process is not sshpass -->\n";
+											// process is not a sshpass, remove outdated pid file
+											unlink($pidFile);
+										}
+									} else {
+										echo "<!-- process is not running -->\n";
+										// process not running, remove pid file
+										unlink($pidFile);
+									}
+								}
+								if( !$remoteSupportRunning ){
+									?>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												<i class="fa fa-key"></i>
+											</div>
+										</div>
+										<input type="text" class="form-control" id="token" name="token" placeholder="Token" aria-describedby="textHelpBlock" required="required">
 									</div>
-								</div>
-								<input type="text" class="form-control" id="token" name="token" placeholder="Token" aria-describedby="textHelpBlock" required="required">
-							</div>
+									<?php
+								}
+							?>
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Tunnel herstellen</button>
+						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 || $remoteSupportRunning ) echo ' disabled="disabled"'; ?>>Tunnel herstellen</button>
 					</div>
 				</form>
 			</div>
