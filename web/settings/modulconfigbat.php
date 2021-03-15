@@ -110,6 +110,7 @@
 										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
 										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
 										<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
@@ -184,7 +185,20 @@
 								Konfiguration im Bezug Victron Modul.
 							</div>
 						</div>
-
+                        <div id="divspeicherstuder" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="studer_ip" id="studer_ip" value="<?php echo $studer_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+							</div>
+							<div class="alert alert-info">
+								Hier bitte die IP Adresse des ModbusGateway's eintragen.
+							</div>
+						</div>
 						<div id="divspeicherfems" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -574,6 +588,7 @@
 								hideSection('#divspeichervarta');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichervictron');
+								hideSection('#divspeicherstuder');
 								hideSection('#divspeicherlgessv1');
 								hideSection('#divspeicherfems');
 								hideSection('#divspeicherip');
@@ -609,6 +624,9 @@
 								}
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
+								}
+                                                                if($('#speichermodul').val() == 'speicher_studer') {
+									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
 									showSection('#divspeicherkit');
