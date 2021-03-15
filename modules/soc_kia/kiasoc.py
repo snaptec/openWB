@@ -13,6 +13,11 @@ pin = str(sys.argv[3])
 vin = str(sys.argv[4])
 socfile = str(sys.argv[5])
 
+# Kia API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
+# For more information: https://github.com/Hacksore/bluelinky/pull/105
+# A random stamp from the list in the file stamps.py is used here.
+# Instruction for generating new stamps can be found in stamps.py
+#
 def get_stamp(): 
     return stamps.stamps[random.randint(0,len(stamps.stamps))]
 

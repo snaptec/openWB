@@ -1,6 +1,7 @@
 # New stamps can be generated with the following command (docker is needed).
 # docker pull hacksore/hks
 # docker run hacksore/hks 'kia' 'list' '693a33fa-c117-43f2-aef2-ae3b-61a02d24f417' > stamp_list.txt
+# More information can be found at: https://github.com/Hacksore/hyundai-kia-stamp
 #
 stamps = [
     "9o3mpjuu/h4vH6cwbgTzPD70J+JaprZSWlyFNmfNg2qhql7gngJHhJp2Ck0XTN0=",
