@@ -175,7 +175,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Tunnel herstellen</button>
+						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 || $remoteSupportRunning ) echo ' disabled="disabled"'; ?>>Tunnel herstellen</button>
 					</div>
 				</form>
 			</div>
