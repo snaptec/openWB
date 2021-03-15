@@ -383,6 +383,9 @@ initRamdisk(){
 	echo 1 > $RamdiskPath/bootinprogress
 	echo 1 > $RamdiskPath/execdisplay
 	echo 4 > $RamdiskPath/graphtimer
+	echo 0 > $RamdiskPath/fronius_sm_bezug_meterlocation
+
+
 
 	# temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 	# bei Anschluss von Speicher und Energiemanager direkt am WR
