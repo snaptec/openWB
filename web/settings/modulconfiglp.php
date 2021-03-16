@@ -1014,6 +1014,9 @@
 												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'seat') echo " active" ?>">
 													<input type="radio" name="soc_vag_type" id="soc_vag_type_seat" value="seat"<?php if($soc_vag_typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
 												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'skoda') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_skoda" value="skoda"<?php if($soc_vag_typeold == 'skoda') echo " checked=\"checked\"" ?>>Skoda
+												</label>
 												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'porsche') echo " active" ?>">
 													<input type="radio" name="soc_vag_type" id="soc_vag_type_porsche" value="porsche"<?php if($soc_vag_typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
 												</label>
@@ -2426,6 +2429,9 @@
 												</label>
 												<label class="btn btn-outline-info<?php if($soc2typeold == 'seat') echo " active" ?>">
 													<input type="radio" name="soc2type" id="soc2type_seat" value="seat"<?php if($soc2typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'skoda') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_skoda" value="skoda"<?php if($soc2typeold == 'skoda') echo " checked=\"checked\"" ?>>Skoda
 												</label>
 												<label class="btn btn-outline-info<?php if($soc2typeold == 'porsche') echo " active" ?>">
 													<input type="radio" name="soc2type" id="soc2type_porsche" value="porsche"<?php if($soc2typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
