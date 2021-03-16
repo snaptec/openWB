@@ -616,6 +616,7 @@ class PowerGraph {
   getEnergyValues () {
 
   }
+
 }
 
 // Change the order of values in the stack
