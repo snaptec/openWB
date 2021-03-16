@@ -700,11 +700,15 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung):
         device_password = str(config.get('smarthomedevices','device_password_'+str(nummer)))
     except:
         device_password = "undef"
+    try:
+        device_ip = str(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    except:
+        device_ip = "undef"
     pyname0 = getdir(switchtyp,devicename)
     setueb(nummer,ueberschussberechnung)
     (devuberschuss, ueberschussberechnung) = getueb(nummer)
     argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
-    argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    argumentList.append(device_ip)
     argumentList.append(str(devuberschuss))
     argumentList.append("") # element with index 5 will be set on URL for switch on or off
     argumentList.append(device_actor)
