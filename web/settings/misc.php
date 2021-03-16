@@ -94,10 +94,10 @@
 											<input type="radio" name="dspeed" id="dspeed0" value="0"<?php if($dspeedold == 0) echo " checked=\"checked\"" ?>>Normal
 										</label>
 										<label class="btn btn-outline-info<?php if($dspeedold == 2) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed2" value="2"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Langsam
+											<input type="radio" name="dspeed" id="dspeed2" value="2"<?php if($dspeedold == 2) echo " checked=\"checked\"" ?>>Langsam
 										</label>
 										<label class="btn btn-outline-info<?php if($dspeedold == 3) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed3" value="3"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Sehr Langsam
+											<input type="radio" name="dspeed" id="dspeed3" value="3"<?php if($dspeedold == 3) echo " checked=\"checked\"" ?>>Sehr Langsam
 										</label>
 									</div>
 									<span class="form-text small">
@@ -132,16 +132,16 @@
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 3) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus3" value="3"<?php if($bootmodusold == 3) echo " checked=\"checked\"" ?>>Stop
 										</label>
-										<label class="btn btn-outline-info<?php if($bootmodusold == 1) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 4) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus4" value="4"<?php if($bootmodusold == 4) echo " checked=\"checked\"" ?>>Standby
 										</label>
-										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 2) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus2" value="2"<?php if($bootmodusold == 2) echo " checked=\"checked\"" ?>>Nur PV
 										</label>
-										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 1) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus1" value="1"<?php if($bootmodusold == 1) echo " checked=\"checked\"" ?>>Min + PV
 										</label>
 										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
@@ -215,9 +215,9 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							var lp2akt = <?php echo $lastmanagementold ?>;
+						var lp2akt = <?php echo $lastmanagementold ?>;
 
+						$(document).ready(function(){
 							if(lp2akt == '0') {
 								hideSection('#lp2cpdiv');
 							} else {
@@ -705,26 +705,26 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_rfidakt() {
-								if($('#rfidaktOff').prop("checked")) {
-									hideSection('#rfidandiv');
-									hideSection('#rfidan1div');
+						function visibility_rfidakt() {
+							if($('#rfidaktOff').prop("checked")) {
+								hideSection('#rfidandiv');
+								hideSection('#rfidan1div');
+								hideSection('#rfidan2div');
+							} else {
+								if($('#rfidaktOn1').prop("checked")) {
+									showSection('#rfidandiv', false);
+									showSection('#rfidan1div');
 									hideSection('#rfidan2div');
-								} else {
-									if($('#rfidaktOn1').prop("checked")) {
-										showSection('#rfidandiv', false);
-										showSection('#rfidan1div');
-										hideSection('#rfidan2div');
 
-									} else {
-										showSection('#rfidandiv', false);
-										showSection('#rfidan2div');
-										hideSection('#rfidan1div');
-									}
+								} else {
+									showSection('#rfidandiv', false);
+									showSection('#rfidan2div');
+									hideSection('#rfidan1div');
 								}
 							}
+						}
 
+						$(document).ready(function(){
 							$('input[type=radio][name=rfidakt]').change(function(){
 								visibility_rfidakt();
 							});
@@ -851,15 +851,15 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_pushbenachrichtigung() {
-								if($('#pushbenachrichtigungOff').prop("checked")) {
-									hideSection('#pushban');
-								} else {
-									showSection('#pushban');
-								}
+						function visibility_pushbenachrichtigung() {
+							if($('#pushbenachrichtigungOff').prop("checked")) {
+								hideSection('#pushban');
+							} else {
+								showSection('#pushban');
 							}
+						}
 
+						$(document).ready(function(){
 							$('input[type=radio][name=pushbenachrichtigung]').change(function(){
 								visibility_pushbenachrichtigung();
 							});
@@ -1116,14 +1116,15 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_ledsakt() {
-								if($('#ledsaktOff').prop("checked")) {
-									hideSection('#ledsan');
-								} else {
-									showSection('#ledsan');
-								}
+						function visibility_ledsakt() {
+							if($('#ledsaktOff').prop("checked")) {
+								hideSection('#ledsan');
+							} else {
+								showSection('#ledsan');
 							}
+						}
+
+						$(document).ready(function(){
 							$('input[type=radio][name=ledsakt]').change(function(){
 								visibility_ledsakt();
 							});
@@ -1322,41 +1323,41 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_displayaktiv() {
-								if($('#displayaktivOff').prop("checked")) {
-									hideSection('#displayan');
-								} else {
-									showSection('#displayan');
-									visibility_displaypinaktiv();
-									visibility_displaytheme()
-								}
+						function visibility_displayaktiv() {
+							if($('#displayaktivOff').prop("checked")) {
+								hideSection('#displayan');
+							} else {
+								showSection('#displayan');
+								visibility_displaypinaktiv();
+								visibility_displaytheme()
 							}
+						}
 
-							function visibility_displaypinaktiv() {
-								if($('#displaypinaktivOff').prop("checked")) {
-									hideSection('#displaypin');
-								} else {
-									showSection('#displaypin');
-								}
+						function visibility_displaypinaktiv() {
+							if($('#displaypinaktivOff').prop("checked")) {
+								hideSection('#displaypin');
+							} else {
+								showSection('#displaypin');
 							}
+						}
 
-							function visibility_displaytheme() {
-								switch ($('#displaytheme').val()) {
-									case '0': // Cards
-										showSection('#displaygauge');
-										showSection('#displaycards');
-										break;
-									case '3': // Gauges
-										showSection('#displaygauge');
-										hideSection('#displaycards');
-										break;
-									default:
-									hideSection('#displaygauge');
+						function visibility_displaytheme() {
+							switch ($('#displaytheme').val()) {
+								case '0': // Cards
+									showSection('#displaygauge');
+									showSection('#displaycards');
+									break;
+								case '3': // Gauges
+									showSection('#displaygauge');
 									hideSection('#displaycards');
-								}
+									break;
+								default:
+								hideSection('#displaygauge');
+								hideSection('#displaycards');
 							}
+						}
 
+						$(document).ready(function(){
 							$('input[type=radio][name=displayaktiv]').change(function(){
 								visibility_displayaktiv();
 							});
