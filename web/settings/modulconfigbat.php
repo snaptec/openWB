@@ -105,12 +105,12 @@
 										<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
 										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
+										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
 										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
 										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
 										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
 										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
 										<option <?php if($speichermodulold == "speicher_victron") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
-										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
@@ -185,6 +185,7 @@
 								Konfiguration im Bezug Victron Modul.
 							</div>
 						</div>
+
                         <div id="divspeicherstuder" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -199,6 +200,7 @@
 								Hier bitte die IP Adresse des ModbusGateway's eintragen.
 							</div>
 						</div>
+						
 						<div id="divspeicherfems" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -625,7 +627,7 @@
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
 								}
-                                                                if($('#speichermodul').val() == 'speicher_studer') {
+                                if($('#speichermodul').val() == 'speicher_studer') {
 									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
