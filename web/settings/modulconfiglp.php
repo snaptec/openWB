@@ -999,12 +999,26 @@
 							<div id="socvag" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc_vag_type" class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_vag_type" id="soc_vag_type" value="<?php echo $soc_vag_typeold ?>">
-											<span class="form-text small">
-												Auswahl Fahrzeugtyp: vw, id oder audi
-											</span>
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'vw') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_vw" value="vw"<?php if($soc_vag_typeold == 'vw') echo " checked=\"checked\"" ?>>VW
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'id') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_id" value="id"<?php if($soc_vag_typeold == 'id') echo " checked=\"checked\"" ?>>ID
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'audi') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_audi" value="audi"<?php if($soc_vag_typeold == 'audi') echo " checked=\"checked\"" ?>>Audi
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'seat') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_seat" value="seat"<?php if($soc_vag_typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'porsche') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_porsche" value="porsche"<?php if($soc_vag_typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+												</label>
+											</div>
+											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -2398,12 +2412,26 @@
 							<div id="socmtype2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc2type" class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc2type" id="soc2type" value="<?php echo $soc2typeold ?>">
-											<span class="form-text small">
-												Auswahl Fahrzeugtyp: vw, id oder audi
-											</span>
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($socttypeold == 'vw') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_vw" value="vw"<?php if($soc2typeold == 'vw') echo " checked=\"checked\"" ?>>VW
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_id" value="id"<?php if($soc2typeold == 'id') echo " checked=\"checked\"" ?>>ID
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'audi') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_audi" value="audi"<?php if($soc2typeold == 'audi') echo " checked=\"checked\"" ?>>Audi
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'seat') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_seat" value="seat"<?php if($soc2typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'porsche') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_porsche" value="porsche"<?php if($soc2typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+												</label>
+											</div>
+											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
 									</div>
 								</div>
