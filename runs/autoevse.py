@@ -89,32 +89,31 @@ sdm2id = 106
 actorstat = 0
 evsefailure = 0
 rfidtag = 0
-
-# check for openWB DUO in slave mode
-try:
-    with open('ramdisk/issslp2act', 'r') as value:
-        if (int(value.read()) == 1 ):
-            lp2installed=2
-        else:
-            lp2installed=1
-except:
-    lp2installed=1
-
-# connect with USB/modbus device
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
-
 # handling of all logging statements
 def logDebug(level, msg): 
     if (int(level) >= int(loglevel)): 
-        file = open('/var/www/html/openWB/ramdisk/isss.log', 'a')
+        file = open('/var/www/html/openWB/ramdisk/openWB.log', 'a')
         if (int(level) == 0): 
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(time.ctime() + ' ModbusHandler: ' + str(msg)+ '\n')
         if (int(level) == 1): 
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(time.ctime() + ' ModbusHandler: ' + str(msg)+ '\n')
         if (int(level) == 2): 
-            file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n')
+            file.write(time.ctime() + ' ModbusHandler: ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n')
         file.close()
 
+
+
+# connect with USB/modbus device
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
+# check for openWB DUO in slave mode
+try:
+    time.sleep(0.1)
+    rq = client.read_holding_registers(1000,1,unit=1)
+    lp1ll = rq.registers[0]
+    lp2installed=2
+    logDebug("2", "Zweiten Ladepunkt erkannt")
+except:
+    lp2installed=1
 # read all meter values and publish to mqtt broker
 def getmeter():
     global evsefailure
@@ -270,6 +269,9 @@ def getmeter():
             f = open('/var/www/html/openWB/ramdisk/llhz', 'w') 
             f.write(str(hz)) 
             f.close()
+    except:
+        logDebug("1", "Fehler Auslesung Ladepunkt 1 Meter")
+    try:
         if ( lp2installed == 2 ):
             try:
                 resp = client.read_input_registers(0x0C,2, unit=sdm2id)
@@ -329,6 +331,9 @@ def getmeter():
                 f = open('/var/www/html/openWB/ramdisk/llvs13', 'w')
                 f.write(str(lp2voltage3))
                 f.close()
+            except:
+                logDebug("1", "Fehler Auslesung Ladepunkt 2 Meter")
+            try:
                 try:
                     time.sleep(0.1)
                     rq = client.read_holding_registers(1000,1,unit=2) 
@@ -364,8 +369,11 @@ def getmeter():
                 Values.update({'lp2evsell' : lp2ll})
                 logDebug("0", "EVSE lp2plugstat: " + str(lp2var) + " EVSE lp2LL: " + str(lp2ll))
             except:
+                logDebug("1", "Fehler Auslesung Ladepunkt 2 EVSE")
                 pass
-
+    except:
+        logDebug("1", "Fehler Auslesung Ladepunkt 2 Meter")
+    try:
         try:
             time.sleep(0.1)
             rq = client.read_holding_registers(1000,1,unit=1)
@@ -410,6 +418,9 @@ def getmeter():
         f.close()
         Values.update({'lp1evsell' : lp1ll})
         logDebug("0", "EVSE lp1plugstat: " + str(lp1var) + " EVSE lp1LL: " + str(lp1ll))
+    except:
+        logDebug("1", "Fehler Auslesung Ladepunkt 1 EVSE")
+    try:
         try:
             with open('ramdisk/readtag', 'r') as value:
                 rfidtag = str(value.read())
@@ -484,57 +495,57 @@ def getmeter():
             if ( lp2installed == 2 ):
                 if ( "lp2watt" in key):
                     if ( DeviceValues[str(key)] != str(lp2llg)):
-                        mclient.publish("openWB/lp/1/W", payload=str(lp2llg), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/W", payload=str(lp2llg), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2watt' : str(lp2llg)})
                 if ( "lp2voltage1" in key):
                     if ( DeviceValues[str(key)] != str(lp2voltage1)):
-                        mclient.publish("openWB/lp/1/VPhase1", payload=str(lp2voltage1), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/VPhase1", payload=str(lp2voltage1), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2voltage1' : str(lp2voltage1)})
                 if ( "lp2voltage2" in key):
                     if ( DeviceValues[str(key)] != str(lp2voltage2)):
-                        mclient.publish("openWB/lp/1/VPhase2", payload=str(lp2voltage2), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/VPhase2", payload=str(lp2voltage2), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2voltage2' : str(lp2voltage2)})
                 if ( "lp2voltage3" in key):
                     if ( DeviceValues[str(key)] != str(lp2voltage3)):
-                        mclient.publish("openWB/lp/1/VPhase3", payload=str(lp2voltage3), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/VPhase3", payload=str(lp2voltage3), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2voltage3' : str(lp2voltage3)})
                 if ( "lp2lla1" in key):
                     if ( DeviceValues[str(key)] != str(lp2lla1)):
-                        mclient.publish("openWB/lp/1/APhase1", payload=str(lp2lla1), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/APhase1", payload=str(lp2lla1), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2lla1' : str(lp2lla1)})
                 if ( "lp2lla2" in key):
                     if ( DeviceValues[str(key)] != str(lp2lla2)):
-                        mclient.publish("openWB/lp/1/APhase2", payload=str(lp2lla2), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/APhase2", payload=str(lp2lla2), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2lla2' : str(lp2lla2)})
                 if ( "lp2lla3" in key):
                     if ( DeviceValues[str(key)] != str(lp2lla3)):
-                        mclient.publish("openWB/lp/1/APhase3", payload=str(lp2lla3), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/APhase3", payload=str(lp2lla3), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2lla3' : str(lp2lla3)})
                 if ( "lp2llkwh" in key):
                     if ( DeviceValues[str(key)] != str(lp2llkwh)):
-                        mclient.publish("openWB/lp/1/kWhCounter", payload=str(lp2llkwh), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/kWhCounter", payload=str(lp2llkwh), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2llkwh' : str(lp2llkwh)})
                 if ( "lp2plugstat" in key):
                     if ( DeviceValues[str(key)] != Values["lp2plugstat"]):
-                        mclient.publish("openWB/lp/1/boolPlugStat", payload=Values["lp2plugstat"], qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/boolPlugStat", payload=Values["lp2plugstat"], qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2plugstat' : Values["lp2plugstat"]})
                 if ( "lp2chargestat" in key):
                     if ( DeviceValues[str(key)] != Values["lp2chargestat"]):
-                        mclient.publish("openWB/lp/1/boolChargeStat", payload=Values["lp2chargestat"], qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/boolChargeStat", payload=Values["lp2chargestat"], qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2chargestat' : Values["lp2chargestat"]})
                 if ( "rfidtag" in key):
                     if ( DeviceValues[str(key)] != str(rfidtag)):
-                        mclient.publish("openWB/lp/1/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
+                        mclient.publish("openWB/lp/2/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'rfidtag' : str(rfidtag)})
         mclient.disconnect()
@@ -658,4 +669,4 @@ def writelp1evse(lla):
 while True:
     getmeter()
     loadregelvars()
-    time.sleep(1)
+    time.sleep(0.1)

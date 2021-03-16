@@ -383,6 +383,9 @@ initRamdisk(){
 	echo 1 > $RamdiskPath/bootinprogress
 	echo 1 > $RamdiskPath/execdisplay
 	echo 4 > $RamdiskPath/graphtimer
+	echo 0 > $RamdiskPath/fronius_sm_bezug_meterlocation
+
+
 
 	# temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 	# bei Anschluss von Speicher und Energiemanager direkt am WR
@@ -591,5 +594,6 @@ initRamdisk(){
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 
 	sudo chmod 777 $RamdiskPath/*
+	#python3 /var/www/html/openWB/runs/csvcalc.py /var/www/html/openWB/web/logging/data/daily/ /var/www/html/openWB/web/logging/data/v001/ /var/www/html/openWB/ramdisk/ M >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
 	echo "Ramdisk init done."
 }

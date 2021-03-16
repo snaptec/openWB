@@ -211,7 +211,7 @@ try:
         ikwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
         #resp = client.read_input_registers(0x0002,2, unit=sdmid)
         #ikwh = resp.registers[3]
-        ikwh = float(ikwh)/1000
+        ikwh = float(ikwh)/100
         f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
         f.write(str(ikwh))
         f.close()

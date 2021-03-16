@@ -21,7 +21,10 @@ try:
 except:
     r_status = 0
 answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/cm?cmnd=Status%208", timeout=3).read().decode("utf-8")))
-aktpower = int(answer['StatusSNS']['ENERGY']['Power'])
+try:
+    aktpower = int(answer['StatusSNS']['ENERGY']['Power'])
+except:
+    aktpower = 0
 if (aktpower > 50) or (r_status == 1):
    relais=1
 powerc = 0
