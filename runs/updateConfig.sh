@@ -663,6 +663,30 @@ updateConfig(){
 	if ! grep -Fq "soccarnetintervall=" $ConfigFile; then
 		echo "soccarnetintervall=10" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_vag_type=" $ConfigFile; then
+		echo "soc_vag_type=vw" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_vag_username=" $ConfigFile; then
+		echo "soc_vag_username=user" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_vag_password=" $ConfigFile; then
+		echo "soc_vag_password=pass" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_vag_vin=" $ConfigFile; then
+		echo "soc_vag_vin=vin (WVWZZZ...)" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_vag_intervall=" $ConfigFile; then
+		echo "soc_vag_intervall=60" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2type=" $ConfigFile; then
+		echo "soc2type=vw" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_vag_intervallladen=" $ConfigFile; then
+		echo "soc_vag_intervallladen=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2intervallladen=" $ConfigFile; then
+		echo "soc2intervallladen=10" >> $ConfigFile
+	fi
 	if ! grep -Fq "bydhvuser=" $ConfigFile; then
 		echo "bydhvuser=benutzer" >> $ConfigFile
 	fi
@@ -1773,6 +1797,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "multifems=" $ConfigFile; then
 		echo "multifems=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
+		echo "solaredgezweiterspeicher=0" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }

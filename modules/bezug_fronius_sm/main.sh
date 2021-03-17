@@ -100,6 +100,8 @@ if [[ $froniusvar2 != "2" ]]; then
 
 fi
 
+
+
 openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
 
 if [[ $meter_location == "1" ]]; then

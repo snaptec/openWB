@@ -702,6 +702,7 @@
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -993,6 +994,81 @@
 										</div>
 									</div>
 
+								</div>
+							</div>
+							<div id="socvag" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'vw') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_vw" value="vw"<?php if($soc_vag_typeold == 'vw') echo " checked=\"checked\"" ?>>VW
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'id') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_id" value="id"<?php if($soc_vag_typeold == 'id') echo " checked=\"checked\"" ?>>ID
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'audi') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_audi" value="audi"<?php if($soc_vag_typeold == 'audi') echo " checked=\"checked\"" ?>>Audi
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'seat') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_seat" value="seat"<?php if($soc_vag_typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'skoda') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_skoda" value="skoda"<?php if($soc_vag_typeold == 'skoda') echo " checked=\"checked\"" ?>>Skoda
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'porsche') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_porsche" value="porsche"<?php if($soc_vag_typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+												</label>
+											</div>
+											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_vag_username" id="soc_vag_username" value="<?php echo $soc_vag_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_vag_passwort" id="soc_vag_passwort" value="<?php echo $soc_vag_passwortold ?>">
+											<span class="form-text small">
+												Password des Logins
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_vag_vin" id="soc_vag_vin" value="<?php echo $soc_vag_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervall" id="soc_vag_intervall" value="<?php echo $soc_vag_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervallladen" id="soc_vag_intervallladen" value="<?php echo $soc_vag_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socmhttp" class="hide">
@@ -1750,6 +1826,7 @@
 							hideSection('#socmeq');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
+							hideSection('#socvag');
 							hideSection('#socmqtt');
 							hideSection('#socmbluelink');
 							hideSection('#socmkia');
@@ -1780,6 +1857,9 @@
 							}
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('#socmid');
+							}
+							if($('#socmodul').val() == 'soc_vag') {
+								showSection('#socvag');
 							}
 							if($('#socmodul').val() == 'soc_kia') {
 								showSection('#socmkia');
@@ -2314,6 +2394,7 @@
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -2330,6 +2411,36 @@
 							<!-- soc is always requested, ignoring plug stat -->
 							<div id="socmnone1" class="hide">
 								<!-- nothing here -->
+							</div>
+							<div id="socmtype2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($socttypeold == 'vw') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_vw" value="vw"<?php if($soc2typeold == 'vw') echo " checked=\"checked\"" ?>>VW
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_id" value="id"<?php if($soc2typeold == 'id') echo " checked=\"checked\"" ?>>ID
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'audi') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_audi" value="audi"<?php if($soc2typeold == 'audi') echo " checked=\"checked\"" ?>>Audi
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'seat') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_seat" value="seat"<?php if($soc2typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'skoda') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_skoda" value="skoda"<?php if($soc2typeold == 'skoda') echo " checked=\"checked\"" ?>>Skoda
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'porsche') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_porsche" value="porsche"<?php if($soc2typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+												</label>
+											</div>
+											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -2744,7 +2855,7 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc2vin" id="soc2vin" value="<?php echo $soc2vinold ?>">
 											<span class="form-text small">
-												VIN des Autos.
+												Vollständige VIN des Fahrzeugs
 											</span>
 										</div>
 									</div>
@@ -3095,11 +3206,24 @@
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc2intervall" id="soc2intervall" value="<?php echo $soc2intervallold ?>">
 											<span class="form-text small">
-												Wie oft abgefragt wird. Angabe in Minuten.
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmintervallladen2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2intervallladen" id="soc2intervallladen" value="<?php echo $soc2intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
@@ -3212,6 +3336,7 @@
 
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
+							hideSection('#socmtype2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
@@ -3231,6 +3356,7 @@
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
 							hideSection('#socmintervall2');
+							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
 
 
@@ -3266,6 +3392,14 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+							}
+							if($('#socmodul1').val() == 'soc_vaglp2') {
+								showSection('#socmtype2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('#socleaf1');
