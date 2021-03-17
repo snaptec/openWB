@@ -1,13 +1,8 @@
 #!/usr/bin/python3
 import sys
-import os
-import time
 import json
 import jq
 import urllib.request
-
-named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S json watty.py", named_tuple)
 
 devicenumber=str(sys.argv[1])
 jsonurl=str(sys.argv[2])      #Abfrage-URL, die die .json Antwort liefert. Z.B. "http://192.168.0.150/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=1"
@@ -16,15 +11,14 @@ jsonpowerc=str(sys.argv[4])   #json Key in dem der summierte Verbrauch steht, z.
 
 answer = json.loads(str(urllib.request.urlopen(jsonurl, timeout=3).read().decode("utf-8")))
 
-power = jq.compile(jsonpower).input(answer).first()
-powerc = jq.compile(jsonpowerc).input(answer).first()
-
 try:
+    power = jq.compile(jsonpower).input(answer).first()
     power = int(abs(power))
 except:
     power = 0
     
 try:
+    powerc = jq.compile(jsonpowerc).input(answer).first()
     powerc = int(abs(powerc))
 except:
     powerc = 0
