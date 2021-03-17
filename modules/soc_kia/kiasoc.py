@@ -2,14 +2,24 @@ import sys
 import requests
 import uuid
 import json
+import random
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
+import stamps
 
 email = str(sys.argv[1])
 password = str(sys.argv[2])
 pin = str(sys.argv[3])
 vin = str(sys.argv[4])
 socfile = str(sys.argv[5])
+
+# Kia API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
+# For more information: https://github.com/Hacksore/bluelinky/pull/105
+# A random stamp from the list in the file stamps.py is used here.
+# Instruction for generating new stamps can be found in stamps.py
+#
+def get_stamp(): 
+    return stamps.stamps[random.randint(0,len(stamps.stamps))]
 
 def main():
     #diviceID
@@ -21,7 +31,8 @@ def main():
         'Host': 'prd.eu-ccapi.kia.com:8080',
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.10.0',
+        'Stamp': get_stamp()}
     data = {"pushRegId":"1","pushType":"GCM","uuid": str(uuid.uuid1())}
     response = requests.post(url, json = data, headers = headers)
     if response.status_code == 200:
@@ -93,7 +104,8 @@ def main():
         'Host': 'prd.eu-ccapi.kia.com:8080',
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.10.0',
+        'Stamp': get_stamp()}
     response = requests.get(url, headers = headers)
     if response.status_code == 200:
         response = json.loads(response.text)
@@ -117,7 +129,8 @@ def main():
         'Host': 'prd.eu-ccapi.kia.com:8080',
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.10.0',
+        'Stamp': get_stamp()}
     data = {"action":"prewakeup","deviceId": deviceId}
     response = requests.post(url, json = data, headers = headers)
     if response.status_code == 200:
@@ -152,7 +165,8 @@ def main():
     headers = {
         'Authorization': controlToken,
         'ccsp-device-id': deviceId,
-        'Content-Type': 'application/json'}
+        'Content-Type': 'application/json',
+        'Stamp': get_stamp()}
     response = requests.get(url, headers = headers)
     if response.status_code == 200:
        statusresponse = json.loads(response.text)
