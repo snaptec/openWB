@@ -438,7 +438,7 @@ $numDevices = 9;
 										<select class="form-control" name="device_measureType" id="device_measureTypeDevices<?php echo $devicenum; ?>" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value ="" data-option="" disabled="disabled" selected="selected">-- Bitte auswählen --</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
-											<option value="http" data-option="http">Http</option>
+											<option value="http" data-option="http">Http1</option>
 											<option value="sdm630" data-option="sdm630">SDM630</option>
 											<option value="mystrom" data-option="mystrom">MyStrom (in Entwicklung)</option>
 											<option value="we514" data-option="we514">WE514 (in Entwicklung)</option>
@@ -451,13 +451,7 @@ $numDevices = 9;
 										<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 									</div>
 								</div>
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
-									<label for="device_measureidDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">ID des Zählers am Netzwerk/Modbus Wandler</label>
-									<div class="col">
-										<input id="device_measureidDevices<?php echo $devicenum; ?>" name="device_measureid" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="255" data-default="1" value="1"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-									</div>
-								</div>
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 hide">
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 hide">
 									<label for="device_measureidDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">ID des Zählers am Netzwerk/Modbus Wandler</label>
 									<div class="col">
 										<input id="device_measureidDevices<?php echo $devicenum; ?>" name="device_measureid" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="255" data-default="1" value="1"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
