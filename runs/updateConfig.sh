@@ -1774,5 +1774,8 @@ updateConfig(){
 	if ! grep -Fq "multifems=" $ConfigFile; then
 		echo "multifems=1" >> $ConfigFile
 	fi
+	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
+		echo "solaredgezweiterspeicher=0" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
