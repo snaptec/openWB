@@ -99,6 +99,7 @@ sofortlademodus(){
 						if (( llalt < minimalstromstaerke )); then
 							llneu=$minimalstromstaerke
 							runs/set-current.sh $llneu m
+							echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
 							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
 							openwbDebugLog "MAIN" 1 "Sofort ladung erhöht auf $llneu bei minimal A $minimalstromstaerke"
 							exit 0
@@ -168,8 +169,9 @@ sofortlademodus(){
 							if (( llneu < minimalstromstaerke )); then
 								llneu=$minimalstromstaerke
 								runs/set-current.sh "$llneu" m
+								echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
 								openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-								openwbDebugLog "MAIN" 1 "Sofort ladung auf $llneu reduziert, unter eingestellter max A $minimalstromstaerke"
+								openwbDebugLog "MAIN" 1 "Sofort ladung auf $llneu erhöht, war unter eingestellter min A $minimalstromstaerke"
 								exit 0
 							fi
 
@@ -255,217 +257,106 @@ sofortlademodus(){
 			fi
 
 			#Ladepunkt 1
-			if (( msmoduslp1 == "2" )); then
-				if (( soc > sofortsoclp1 )); then
-					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-						runs/set-current.sh 0 m
-						openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung gestoppt, $sofortsoclp1 % SoC erreicht"
-						openwbDebugLog "MAIN" 1 "Beende Sofort Laden da $sofortsoclp1 % erreicht"
-					fi
-				else
-					if (( ladeleistunglp1 < 100 )); then
-						if (( llalt > minimalstromstaerke )); then
-							llneu=$((llalt - 1 ))
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-						if (( llalt == minimalstromstaerke )); then
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-						if (( llalt < minimalstromstaerke )); then
-							llneu=$minimalstromstaerke
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-					else
-						if (( llalt == sofortll )); then
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erreicht bei $sofortll A"
-						fi
-						if (( llalt > maximalstromstaerke )); then
-							llneu=$((llalt - 1 ))
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
-						else
-							if (( llalt < sofortll)); then
-
-								llneu=$((llalt + maxdiff))
-								if (( llneu > sofortll )); then
-									llneu=$sofortll
-								fi
-								if (( llneu < sofortll )); then
-									echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-								fi
-								if (( llneu > maximalstromstaerke )); then
-									llneu=$maximalstromstaerke
-								fi
-								runs/set-current.sh "$llneu" m
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 um $maxdiff A Differenz auf $llneu A erhoeht, war kleiner als sofortll $sofortll"
-							fi
-							if (( llalt > sofortll)); then
-								llneu=$sofortll
-								if (( llneu > minimalstromstaerke )); then
-									llneu=$minimalstromstaerke
-								fi
-								runs/set-current.sh "$llneu" m
-								openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 von $llalt A llalt auf $llneu A reduziert, war größer als sofortll $sofortll"
-							fi
-						fi
-						if (( llalt < minimalstromstaerke )); then
-							llneu=$minimalstromstaerke
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-
-					fi
+			if (( msmoduslp1 == "2" )) && (( soc > sofortsoclp1 )); then
+				# SoC-Limit gesetzt und erreicht
+				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+					runs/set-current.sh 0 m
+					openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung gestoppt, $sofortsoclp1 % SoC erreicht"
+					openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 1 da $sofortsoclp1 % erreicht"
 				fi
-
+			elif (( msmoduslp1 == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+				# Ernergie-Limit gesetzt und erreicht
+				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+					runs/set-current.sh 0 m
+					openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung gestoppt da $lademkwh kWh Limit erreicht"
+					openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
+				fi
 			else
-				if (( msmoduslp1 == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
-					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-						runs/set-current.sh 0 m
-						openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung gestoppt da $lademkwh kWh Limit erreicht"
-						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
+				# kein gesetztes Limit erreicht, normale Ladung
+				if (( ladeleistunglp1 < 100 )); then
+					if (( llalt > minimalstromstaerke )); then
+						llneu=$((llalt - 1 ))
+						runs/set-current.sh "$llneu" m
+						openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
+						openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+					fi
+					if (( llalt == minimalstromstaerke )); then
+						openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+					fi
+					if (( llalt < minimalstromstaerke )); then
+						llneu=$minimalstromstaerke
+						runs/set-current.sh "$llneu" m
+						openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
+						openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
 				else
-					if (( ladeleistunglp1 < 100 )); then
-						if (( llalt > minimalstromstaerke )); then
-							llneu=$((llalt - 1 ))
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-						if (( llalt == minimalstromstaerke )); then
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-						if (( llalt < minimalstromstaerke )); then
-							llneu=$minimalstromstaerke
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
+					if (( llalt == sofortll )); then
+						openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erreicht bei $sofortll A"
+					fi
+					if (( llalt > maximalstromstaerke )); then
+						llneu=$((llalt - 1 ))
+						runs/set-current.sh "$llneu" m
+						openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
+						openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
 					else
-						if (( llalt == sofortll )); then
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erreicht bei $sofortll A"
-						fi
-						if (( llalt > maximalstromstaerke )); then
-							llneu=$((llalt - 1 ))
-							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
-						else
-							if (( llalt < sofortll)); then
-								llneu=$((llalt + maxdiff))
-								if (( llneu > sofortll )); then
-									llneu=$sofortll
-								fi
-								if (( llneu < sofortll )); then
-									echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-								fi
-								if (( llneu > maximalstromstaerke )); then
-									llneu=$maximalstromstaerke
-								fi
-								runs/set-current.sh "$llneu" m
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 um $maxdiff A Differenz auf $llneu A erhoeht, war kleiner als sofortll $sofortll"
-							fi
-							if (( llalt > sofortll)); then
+						if (( llalt < sofortll)); then
+							llneu=$((llalt + maxdiff))
+							if (( llneu > sofortll )); then
 								llneu=$sofortll
-								runs/set-current.sh "$llneu" m
+							fi
+							if (( llneu < sofortll )); then
+								echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
+							fi
+							if (( llneu > maximalstromstaerke )); then
+								llneu=$maximalstromstaerke
+							fi
+							if (( llneu < minimalstromstaerke )); then
+								llneu=$minimalstromstaerke
+							fi
+							runs/set-current.sh "$llneu" m
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 um $maxdiff A Differenz auf $llneu A erhoeht, war kleiner als sofortll $sofortll"
+						fi
+						if (( llalt > sofortll)); then
+							llneu=$sofortll
+							if (( llneu < minimalstromstaerke )); then
+								llneu=$minimalstromstaerke
+								echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+								openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneu Ampere"
+								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke"
+							else
 								openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 von $llalt A llalt auf $llneu A reduziert, war größer als sofortll $sofortll"
 							fi
-						fi
-						if (( llalt < minimalstromstaerke )); then
-							llneu=$minimalstromstaerke
 							runs/set-current.sh "$llneu" m
-							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
+					fi
+					if (( llalt < minimalstromstaerke )); then
+						llneu=$minimalstromstaerke
+						runs/set-current.sh "$llneu" m
+						openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneu Ampere"
+						openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
 				fi
 			fi
+
 			#Ladepunkt 2
-			if (( msmoduslp2 == 2 )); then
-				if (( soc1 > sofortsoclp2 )); then
+			if [[ $lastmanagement == "1" ]]; then
+				if (( msmoduslp2 == 2 )) && (( soc1 > sofortsoclp2 )); then
+					# SoC-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						runs/set-current.sh 0 s1
-						openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung gestoppt da $sofortsoclp2 % SoC erreicht"
+						openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung gestoppt, $sofortsoclp2 % SoC erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 2 da  $sofortsoclp2 % erreicht"
 					fi
-				else
-					if (( ladeleistungs1 < 100 )); then
-						if (( llalts1 > minimalstromstaerke )); then
-							llneus1=$((llalts1 - 1 ))
-							runs/set-current.sh "$llneus1" s1
-							openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 reudziert auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-						if (( llalts1 == minimalstromstaerke )); then
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-						if (( llalts1 < minimalstromstaerke )); then
-							llneus1=$minimalstromstaerke
-							runs/set-current.sh "$llneus1" s1
-							openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-					else
-						if (( llalts1 == sofortlls1 )); then
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 erreicht bei $sofortlls1 A"
-						fi
-						if (( llalts1 > maximalstromstaerke )); then
-							llneus1=$((llalts1 - 1 ))
-							runs/set-current.sh "$llneus1" s1
-							openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 auf $llneus1 reduziert, über eingestellter max A $maximalstromstaerke"
-						else
-							if (( llalts1 < sofortlls1)); then
-								llneus1=$((llalts1 + maxdiff))
-								if (( llneus1 > sofortlls1 )); then
-									llneus1=$sofortlls1
-								fi
-								if (( llneus1 < sofortlls1 )); then
-									echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-								fi
-								if (( llneus1 > maximalstromstaerke )); then
-									llneus1=$maximalstromstaerke
-								fi
-								if (( llneus1 < minimalstromstaerke )); then
-									llneus1=$minimalstromstaerke
-								fi
-								runs/set-current.sh "$llneus1" s1
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 um $maxdiff A Differenz auf $llneus1 A erhoeht, war kleiner als sofortll $sofortlls1"
-							fi
-							if (( llalts1 > sofortlls1)); then
-								llneus1=$sofortlls1
-								if (( llneus1 < minimalstromstaerke )); then
-									llneus1=$minimalstromstaerke
-								fi
-								runs/set-current.sh "$llneus1" s1
-								openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 von $llalts1 A llalt auf $llneus1 A reduziert, war größer als sofortll $sofortlls1"
-							fi
-						fi
-						if (( llalts1 < minimalstromstaerke )); then
-							llneus1=$minimalstromstaerke
-							runs/set-current.sh "$llneus1" s1
-							openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-						fi
-					fi
-				fi
-			else
-				if (( msmoduslp2 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+				elif (( msmoduslp2 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						runs/set-current.sh 0 s1
-						openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung gestoppt da $lademkwhs1 kWh erreicht"
+						openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung gestoppt da $lademkwhs1 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistungs1 < 100 )); then
 						if (( llalts1 > minimalstromstaerke )); then
 							llneus1=$((llalts1 - 1 ))
@@ -513,17 +404,20 @@ sofortlademodus(){
 								llneus1=$sofortlls1
 								if (( llneus1 < minimalstromstaerke )); then
 									llneus1=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneus1 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 von $llalts1 A llalt auf $llneus1 A reduziert, war größer als sofortll $sofortlls1"
 								fi
-
 								runs/set-current.sh "$llneus1" s1
-								openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 von $llalts1 A llalt auf $llneus1 A reduziert, war größer als sofortll $sofortlls1"
 							fi
 						fi
 						if (( llalts1 < minimalstromstaerke )); then
 							llneus1=$minimalstromstaerke
 							runs/set-current.sh "$llneus1" s1
-							openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere"
+							openwbDebugLog "CHARGESTAT" 0 "LP2, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneus1 Ampere"
 							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
@@ -534,12 +428,14 @@ sofortlademodus(){
 			if [[ $lastmanagements2 == "1" ]]; then
 				aktgeladens2=$(<ramdisk/aktgeladens2)
 				if (( msmoduslp3 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
 						runs/set-current.sh 0 s2
 						openwbDebugLog "CHARGESTAT" 0 "LP3, Lademodus Sofort. Ladung gestoppt da $lademkwhs2 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 3 da  $lademkwhs2 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistungs2 < 100 )); then
 						if (( llalts2 > minimalstromstaerke )); then
 							llneus2=$((llalts2 - 1 ))
@@ -577,29 +473,48 @@ sofortlademodus(){
 								if (( llneus2 > maximalstromstaerke )); then
 									llneus2=$maximalstromstaerke
 								fi
+								if (( llneus2 < minimalstromstaerke )); then
+									llneus2=$minimalstromstaerke
+								fi
 								runs/set-current.sh "$llneus2" s2
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 3 um $maxdiff A Differenz auf $llneus2 A erhoeht, war kleiner als sofortll $sofortlls2"
 							fi
 							if (( llalts2 > sofortlls2)); then
 								llneus2=$sofortlls2
+								if (( llneus2 < minimalstromstaerke )); then
+									llneus2=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP3, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneus2 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 3 erhöht auf $llneus2 bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 3 von $llalts2 A llalt auf $llneus2 A reduziert, war größer als sofortll $sofortlls2"
+								fi
 								runs/set-current.sh "$llneus2" s2
-								openwbDebugLog "CHARGESTAT" 0 "LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere, Lastmanagement aktiv"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 3 von $llalts2 A llalt auf $llneus2 A reduziert, war größer als sofortll $sofortlls2"
 							fi
+						fi
+						if (( llalts2 < minimalstromstaerke )); then
+							llneus2=$minimalstromstaerke
+							runs/set-current.sh "$llneus2" m
+							openwbDebugLog "CHARGESTAT" 0 "LP3, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneus2 Ampere"
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 3 erhöht auf $llneus2 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
 				fi
 			fi
+
 			#Ladepunkt 4
 			if [[ $lastmanagementlp4 == "1" ]]; then
 				aktgeladenlp4=$(<ramdisk/aktgeladenlp4)
 				if (( msmoduslp4 == "1" )) && (( $(echo "$aktgeladenlp4 > $lademkwhlp4" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp4"; then
 						runs/set-current.sh 0 lp4
 						openwbDebugLog "CHARGESTAT" 0 "LP4, Lademodus Sofort. Ladung gestoppt da $lademkwhlp4 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 4 da  $lademkwhlp4 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistunglp4 < 100 )); then
 						if (( llaltlp4 > minimalstromstaerke )); then
 							llneulp4=$((llaltlp4 - 1 ))
@@ -637,29 +552,48 @@ sofortlademodus(){
 								if (( llneulp4 > maximalstromstaerke )); then
 									llneulp4=$maximalstromstaerke
 								fi
+								if (( llneulp4 < minimalstromstaerke )); then
+									llneulp4=$minimalstromstaerke
+								fi
 								runs/set-current.sh "$llneulp4" lp4
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 4 um $maxdiff A Differenz auf $llneulp4 A erhoeht, war kleiner als sofortll $sofortlllp4"
 							fi
 							if (( llaltlp4 > sofortlllp4)); then
 								llneulp4=$sofortlllp4
+								if (( llneulp4 < minimalstromstaerke )); then
+									llneulp4=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP4, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneu Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 4 erhöht auf $llneu bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP4, Lademodus Sofort. Ladung geändert auf $llneulp4 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 4 von $llaltlp4 A llalt auf $llneulp4 A reduziert, war größer als sofortll $sofortlllp4"
+								fi
 								runs/set-current.sh "$llneulp4" lp4
-								openwbDebugLog "CHARGESTAT" 0 "LP4, Lademodus Sofort. Ladung geändert auf $llneulp4 Ampere, Lastmanagement aktiv"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 4 von $llaltlp4 A llalt auf $llneulp4 A reduziert, war größer als sofortll $sofortlllp4"
 							fi
+						fi
+						if (( llaltlp4 < minimalstromstaerke )); then
+							llneulp4=$minimalstromstaerke
+							runs/set-current.sh "$llneulp4" m
+							openwbDebugLog "CHARGESTAT" 0 "LP4, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp4 Ampere"
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 4 erhöht auf $llneulp4 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
 				fi
 			fi
+
 			#Ladepunkt 5
 			if [[ $lastmanagementlp5 == "1" ]]; then
 				aktgeladenlp5=$(<ramdisk/aktgeladenlp5)
 				if (( msmoduslp5 == "1" )) && (( $(echo "$aktgeladenlp5 > $lademkwhlp5" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp5"; then
 						runs/set-current.sh 0 lp5
 						openwbDebugLog "CHARGESTAT" 0 "LP5, Lademodus Sofort. Ladung gestoppt da $lademkwhlp5 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 5 da  $lademkwhlp5 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistunglp5 < 100 )); then
 						if (( llaltlp5 > minimalstromstaerke )); then
 							llneulp5=$((llaltlp5 - 1 ))
@@ -697,29 +631,48 @@ sofortlademodus(){
 								if (( llneulp5 > maximalstromstaerke )); then
 									llneulp5=$maximalstromstaerke
 								fi
+								if (( llneulp5 < minimalstromstaerke )); then
+									llneulp5=$minimalstromstaerke
+								fi
 								runs/set-current.sh "$llneulp5" lp5
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 5 um $maxdiff A Differenz auf $llneulp5 A erhoeht, war kleiner als sofortll $sofortlllp5"
 							fi
 							if (( llaltlp5 > sofortlllp5)); then
 								llneulp5=$sofortlllp5
+								if (( llneulp5 < minimalstromstaerke )); then
+									llneulp5=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP5, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp5 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 5 erhöht auf $llneulp5 bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP5, Lademodus Sofort. Ladung geändert auf $llneulp5 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 5 von $llaltlp5 A llalt auf $llneulp5 A reduziert, war größer als sofortll $sofortlllp5"
+								fi
 								runs/set-current.sh "$llneulp5" lp5
-								openwbDebugLog "CHARGESTAT" 0 "LP5, Lademodus Sofort. Ladung geändert auf $llneulp5 Ampere, Lastmanagement aktiv"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 5 von $llaltlp5 A llalt auf $llneulp5 A reduziert, war größer als sofortll $sofortlllp5"
 							fi
+						fi
+						if (( llaltlp5 < minimalstromstaerke )); then
+							llneulp5=$minimalstromstaerke
+							runs/set-current.sh "$llneulp5" m
+							openwbDebugLog "CHARGESTAT" 0 "LP5, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp5 Ampere"
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 5 erhöht auf $llneulp5 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
 				fi
 			fi
+
 			#Ladepunkt 6
 			if [[ $lastmanagementlp6 == "1" ]]; then
 				aktgeladenlp6=$(<ramdisk/aktgeladenlp6)
 				if (( msmoduslp6 == "1" )) && (( $(echo "$aktgeladenlp6 > $lademkwhlp6" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp6"; then
 						runs/set-current.sh 0 lp6
 						openwbDebugLog "CHARGESTAT" 0 "LP6, Lademodus Sofort. Ladung gestoppt da $lademkwhlp6 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 6 da  $lademkwhlp6 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistunglp6 < 600 )); then
 						if (( llaltlp6 > minimalstromstaerke )); then
 							llneulp6=$((llaltlp6 - 1 ))
@@ -757,29 +710,48 @@ sofortlademodus(){
 								if (( llneulp6 > maximalstromstaerke )); then
 									llneulp6=$maximalstromstaerke
 								fi
+								if (( llneulp6 < minimalstromstaerke )); then
+									llneulp6=$minimalstromstaerke
+								fi
 								runs/set-current.sh "$llneulp6" lp6
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 6 um $maxdiff A Differenz auf $llneulp6 A erhoeht, war kleiner als sofortll $sofortlllp6"
 							fi
 							if (( llaltlp6 > sofortlllp6)); then
 								llneulp6=$sofortlllp6
+								if (( llneulp6 < minimalstromstaerke )); then
+									llneulp6=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP6, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp6 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 6 erhöht auf $llneulp6 bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP6, Lademodus Sofort. Ladung geändert auf $llneulp6 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 6 von $llaltlp6 A llalt auf $llneulp6 A reduziert, war größer als sofortll $sofortlllp6"
+								fi
 								runs/set-current.sh "$llneulp6" lp6
-								openwbDebugLog "CHARGESTAT" 0 "LP6, Lademodus Sofort. Ladung geändert auf $llneulp6 Ampere, Lastmanagement aktiv"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 6 von $llaltlp6 A llalt auf $llneulp6 A reduziert, war größer als sofortll $sofortlllp6"
 							fi
+						fi
+						if (( llaltlp6 < minimalstromstaerke )); then
+							llneulp6=$minimalstromstaerke
+							runs/set-current.sh "$llneulp6" m
+							openwbDebugLog "CHARGESTAT" 0 "LP6, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp6 Ampere"
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 6 erhöht auf $llneulp6 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
 				fi
 			fi
+
 			#Ladepunkt 7
 			if [[ $lastmanagementlp7 == "1" ]]; then
 				aktgeladenlp7=$(<ramdisk/aktgeladenlp7)
 				if (( msmoduslp7 == "1" )) && (( $(echo "$aktgeladenlp7 > $lademkwhlp7" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp7"; then
 						runs/set-current.sh 0 lp7
 						openwbDebugLog "CHARGESTAT" 0 "LP7, Lademodus Sofort. Ladung gestoppt da $lademkwhlp7 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 7 da  $lademkwhlp7 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistunglp7 < 700 )); then
 						if (( llaltlp7 > minimalstromstaerke )); then
 							llneulp7=$((llaltlp7 - 1 ))
@@ -817,29 +789,48 @@ sofortlademodus(){
 								if (( llneulp7 > maximalstromstaerke )); then
 									llneulp7=$maximalstromstaerke
 								fi
+								if (( llneulp7 < minimalstromstaerke )); then
+									llneulp7=$minimalstromstaerke
+								fi
 								runs/set-current.sh "$llneulp7" lp7
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 7 um $maxdiff A Differenz auf $llneulp7 A erhoeht, war kleiner als sofortll $sofortlllp7"
 							fi
 							if (( llaltlp7 > sofortlllp7)); then
 								llneulp7=$sofortlllp7
+								if (( llneulp7 < minimalstromstaerke )); then
+									llneulp7=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP7, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp7 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 7 erhöht auf $llneulp7 bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP7, Lademodus Sofort. Ladung geändert auf $llneulp7 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 7 von $llaltlp7 A llalt auf $llneulp7 A reduziert, war größer als sofortll $sofortlllp7"
+								fi
 								runs/set-current.sh "$llneulp7" lp7
-								openwbDebugLog "CHARGESTAT" 0 "LP7, Lademodus Sofort. Ladung geändert auf $llneulp7 Ampere, Lastmanagement aktiv"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 7 von $llaltlp7 A llalt auf $llneulp7 A reduziert, war größer als sofortll $sofortlllp7"
 							fi
+						fi
+						if (( llaltlp7 < minimalstromstaerke )); then
+							llneulp7=$minimalstromstaerke
+							runs/set-current.sh "$llneulp7" m
+							openwbDebugLog "CHARGESTAT" 0 "LP7, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp7 Ampere"
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 7 erhöht auf $llneulp7 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
 				fi
 			fi
+
 			#Ladepunkt 8
 			if [[ $lastmanagementlp8 == "1" ]]; then
 				aktgeladenlp8=$(<ramdisk/aktgeladenlp8)
 				if (( msmoduslp8 == "1" )) && (( $(echo "$aktgeladenlp8 > $lademkwhlp8" |bc -l) )); then
+					# Ernergie-Limit gesetzt und erreicht
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp8"; then
 						runs/set-current.sh 0 lp8
 						openwbDebugLog "CHARGESTAT" 0 "LP8, Lademodus Sofort. Ladung gestoppt da $lademkwhlp8 kWh Limit erreicht"
 						openwbDebugLog "MAIN" 1 "Beende Sofort Laden an Ladepunkt 8 da  $lademkwhlp8 kWh erreicht"
 					fi
 				else
+					# kein gesetztes Limit erreicht, normale Ladung
 					if (( ladeleistunglp8 < 800 )); then
 						if (( llaltlp8 > minimalstromstaerke )); then
 							llneulp8=$((llaltlp8 - 1 ))
@@ -877,15 +868,31 @@ sofortlademodus(){
 								if (( llneulp8 > maximalstromstaerke )); then
 									llneulp8=$maximalstromstaerke
 								fi
+								if (( llneulp8 < minimalstromstaerke )); then
+									llneulp8=$minimalstromstaerke
+								fi
 								runs/set-current.sh "$llneulp8" lp8
 								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 8 um $maxdiff A Differenz auf $llneulp8 A erhoeht, war kleiner als sofortll $sofortlllp8"
 							fi
 							if (( llaltlp8 > sofortlllp8)); then
 								llneulp8=$sofortlllp8
+								if (( llneus2 < minimalstromstaerke )); then
+									llneulp8=$minimalstromstaerke
+									echo "Mindeststrom aktiv: $minimalstromstaerke A" > ramdisk/lastregelungaktiv
+									openwbDebugLog "CHARGESTAT" 0 "LP8, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp8 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 8 erhöht auf $llneulp8 bei minimal A $minimalstromstaerke"
+								else
+									openwbDebugLog "CHARGESTAT" 0 "LP8, Lademodus Sofort. Ladung geändert auf $llneulp8 Ampere"
+									openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 8 von $llaltlp8 A llalt auf $llneulp8 A reduziert, war größer als sofortll $sofortlllp8"
+								fi
 								runs/set-current.sh "$llneulp8" lp8
-								openwbDebugLog "CHARGESTAT" 0 "LP8, Lademodus Sofort. Ladung geändert auf $llneulp8 Ampere, Lastmanagement aktiv"
-								openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 8 von $llaltlp8 A llalt auf $llneulp8 A reduziert, war größer als sofortll $sofortlllp8"
 							fi
+						fi
+						if (( llaltlp8 < minimalstromstaerke )); then
+							llneulp8=$minimalstromstaerke
+							runs/set-current.sh "$llneulp8" m
+							openwbDebugLog "CHARGESTAT" 0 "LP8, Lademodus Sofort. Ladung geändert auf Mindeststrom: $llneulp8 Ampere"
+							openwbDebugLog "MAIN" 1 "Sofort ladung Ladepunkt 8 erhöht auf $llneulp8 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
 					fi
 				fi
