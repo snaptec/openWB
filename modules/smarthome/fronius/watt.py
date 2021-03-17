@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 import sys
-import os
-import time
 import json
 import jq
 import urllib.request
@@ -16,15 +14,14 @@ jsonpowerc = ".Body.Data.EnergyReal_WAC_Sum_Consumed"   #json Key in dem der sum
 
 answer = json.loads(str(urllib.request.urlopen(jsonurl, timeout=3).read().decode("utf-8")))
 
-power = jq.compile(jsonpower).input(answer).first()
-powerc = jq.compile(jsonpowerc).input(answer).first()
-
 try:
+    power = jq.compile(jsonpower).input(answer).first()
     power = int(abs(power))
 except:
     power = 0
     
 try:
+    powerc = jq.compile(jsonpowerc).input(answer).first()
     powerc = int(abs(powerc))
 except:
     powerc = 0
