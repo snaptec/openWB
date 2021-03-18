@@ -51,7 +51,7 @@
 			<?php
 				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
 				$filesCount = count($files);
-                		// give the user the option to configure more than one bridge
+				// give the user the option to configure more than one bridge
 				array_push($files, "");
 
 				$loopCount = 0;
@@ -130,8 +130,8 @@
 
 					if ($loopCount != 0) echo "<hr>";
 			?>
-			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke $connectionName"; else echo "Neue MQTT-Brücke"; ?></h1>
-           		<form action="./tools/savemqtt.php" method="POST">
+			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke \"$connectionName\""; else echo "Neue MQTT-Brücke"; ?></h1>
+			<form action="./tools/savemqtt.php" method="POST">
 				<!-- previous bridge name, needed for renaming a bridge -->
 				<input type="hidden" readonly="readonly" name="bridge" value="<?php echo($connectionName); ?>">
 
