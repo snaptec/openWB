@@ -687,6 +687,12 @@ updateConfig(){
 	if ! grep -Fq "soc2intervallladen=" $ConfigFile; then
 		echo "soc2intervallladen=10" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc1intervall=" $ConfigFile; then
+		echo "socsoc1intervall=60" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc1intervallladen=" $ConfigFile; then
+		echo "soc1intervallladen=10" >> $ConfigFile
+	fi
 	if ! grep -Fq "bydhvuser=" $ConfigFile; then
 		echo "bydhvuser=benutzer" >> $ConfigFile
 	fi
