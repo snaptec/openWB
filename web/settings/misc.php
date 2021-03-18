@@ -239,10 +239,10 @@
 											<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
+											<input type="radio" name="rfidakt" id="rfidaktOn1" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn2" autocomplete="off" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
+											<input type="radio" name="rfidakt" id="rfidaktOn2" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
 										</label>
 
 									</div>
@@ -691,14 +691,14 @@
 								</div>
 								<div class="form-row">
 									<div class="col-lg-12">
-										<label for="rfidlist" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Liste
 												</div>
 											</div> 
 											<input type="text" name="rfidlist" id="rfidlist" class="form-control" value="<?php echo $rfidlistold ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1430,7 +1430,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="durchslp1" class="col-md-4 col-form-label">Preis je kWh</label>
+								<label for="preisjekwh" class="col-md-4 col-form-label">Preis je kWh</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="0.0001" name="preisjekwh" id="preisjekwh" value="<?php echo $preisjekwhold ?>">
 									<span class="form-text small">Gültige Werte xx.xx, z.B. 0.2833. Dient zur Berechnung der Ladekosten im Ladelog.</span>
