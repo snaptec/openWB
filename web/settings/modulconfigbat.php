@@ -186,7 +186,7 @@
 							</div>
 						</div>
 
-                        <div id="divspeicherstuder" class="hide">
+						<div id="divspeicherstuder" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
