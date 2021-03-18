@@ -61,147 +61,11 @@
 
 	<body>
 		<?php
-
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "hook1einschaltverz=") !== false) {
-					list(, $hook1einschaltverzold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2einschaltverz=") !== false) {
-					list(, $hook2einschaltverzold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2_ausverz=") !== false) {
-					list(, $hook2_ausverzold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3_ausverz=") !== false) {
-					list(, $hook3_ausverzold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook1_ausverz=") !== false) {
-					list(, $hook1_ausverzold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook1ein_url=") !== false) {
-					list(, $hook1ein_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "angesteckthooklp1_url=") !== false) {
-					list(, $angesteckthooklp1_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook1aus_url=") !== false) {
-					list(, $hook1aus_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook1ein_watt=") !== false) {
-					list(, $hook1ein_wattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook1aus_watt=") !== false) {
-					list(, $hook1aus_wattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook1_aktiv=") !== false) {
-					list(, $hook1_aktivold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "angesteckthooklp1=") !== false) {
-					list(, $angesteckthooklp1old) = explode("=", $line, 2);
-				}
-
-				if(strpos($line, "hook1_dauer=") !== false) {
-					list(, $hook1_dauerold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2ein_url=") !== false) {
-					list(, $hook2ein_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2aus_url=") !== false) {
-					list(, $hook2aus_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2ein_watt=") !== false) {
-					list(, $hook2ein_wattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2aus_watt=") !== false) {
-					list(, $hook2aus_wattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2_aktiv=") !== false) {
-					list(, $hook2_aktivold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook2_dauer=") !== false) {
-					list(, $hook2_dauerold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3ein_url=") !== false) {
-					list(, $hook3ein_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3aus_url=") !== false) {
-					list(, $hook3aus_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3ein_watt=") !== false) {
-					list(, $hook3ein_wattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3aus_watt=") !== false) {
-					list(, $hook3aus_wattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3_aktiv=") !== false) {
-					list(, $hook3_aktivold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hook3_dauer=") !== false) {
-					list(, $hook3_dauerold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_aktiv=") !== false) {
-					list(, $verbraucher1_aktivold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_typ=") !== false) {
-					list(, $verbraucher1_typold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_urlw=") !== false) {
-					list(, $verbraucher1_urlwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_urlh=") !== false) {
-					list(, $verbraucher1_urlhold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_name=") !== false) {
-					list(, $verbraucher1_nameold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_id=") !== false) {
-					list(, $verbraucher1_idold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_ip=") !== false) {
-					list(, $verbraucher1_ipold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher1_source=") !== false) {
-					list(, $verbraucher1_sourceold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_aktiv=") !== false) {
-					list(, $verbraucher2_aktivold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_typ=") !== false) {
-					list(, $verbraucher2_typold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_urlw=") !== false) {
-					list(, $verbraucher2_urlwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_urlh=") !== false) {
-					list(, $verbraucher2_urlhold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_name=") !== false) {
-					list(, $verbraucher2_nameold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_id=") !== false) {
-					list(, $verbraucher2_idold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_ip=") !== false) {
-					list(, $verbraucher2_ipold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "verbraucher2_source=") !== false) {
-					list(, $verbraucher2_sourceold) = explode("=", $line, 2);
-				}
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-
-			$angesteckthooklp1_urlold = str_replace( "'", "", $angesteckthooklp1_urlold);
-
-			$hook1ein_urlold = str_replace( "'", "", $hook1ein_urlold);
-			$hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
-			$hook2ein_urlold = str_replace( "'", "", $hook2ein_urlold);
-			$hook2aus_urlold = str_replace( "'", "", $hook2aus_urlold);
-			$hook3ein_urlold = str_replace( "'", "", $hook3ein_urlold);
-			$hook3aus_urlold = str_replace( "'", "", $hook3aus_urlold);
-			$verbraucher1_urlwold = str_replace( "'", "", $verbraucher1_urlwold);
-			$verbraucher1_urlhold = str_replace( "'", "", $verbraucher1_urlhold);
-			$verbraucher2_urlwold = str_replace( "'", "", $verbraucher2_urlwold);
-			$verbraucher2_urlhold = str_replace( "'", "", $verbraucher2_urlhold);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -217,7 +81,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="angesteckthooklp1" class="col-md-4 col-form-label">Nach Anstecken an Ladepunkt 1</label>
+								<label class="col-md-4 col-form-label">Nach Anstecken an Ladepunkt 1</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($angesteckthooklp1old == 0) echo " active" ?>">
@@ -273,7 +137,7 @@
 							<?php } ?>
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="hook<?php echo $deviceNum; ?>_aktiv" class="col-md-4 col-form-label">Gerät <?php echo $deviceNum; ?></label>
+									<label class="col-md-4 col-form-label">Gerät <?php echo $deviceNum; ?></label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if(${"hook" . $deviceNum . "_aktivold"} == 0) echo " active" ?>">
@@ -374,7 +238,7 @@
 							<?php } ?>
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="verbraucher<?php echo $deviceNum; ?>_aktiv" class="col-md-4 col-form-label">Verbraucher <?php echo $deviceNum; ?></label>
+									<label class="col-md-4 col-form-label">Verbraucher <?php echo $deviceNum; ?></label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if(${"hook" . $deviceNum . "_aktivold"} == 0) echo " active" ?>">

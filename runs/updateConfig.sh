@@ -1762,6 +1762,9 @@ updateConfig(){
 	if ! grep -Fq "hook2einschaltverz=" $ConfigFile; then
 		echo "hook2einschaltverz=20" >> $ConfigFile
 	fi
+	if ! grep -Fq "hook3einschaltverz=" $ConfigFile; then
+		echo "hook3einschaltverz=20" >> $ConfigFile
+	fi
 	if ! grep -Fq "stopsocnotpluggedlp1=" $ConfigFile; then
 		echo "stopsocnotpluggedlp1=0" >> $ConfigFile
 	fi

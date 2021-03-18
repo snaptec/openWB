@@ -97,7 +97,7 @@ $numDevices = 9;
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Gerätetyp</label>
 									<div class="col">
-										<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="none" value="none" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="none" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value="none" data-option="none" selected="selected">Kein Gerät</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
 											<option value="tasmota" data-option="tasmota">Tasmota</option>
@@ -211,9 +211,9 @@ $numDevices = 9;
 										<label for="device_acthortypeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modell</label>
 										<div class="col">
 											<select class="form-control" name="device_acthortype" id="device_acthortypeDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<option value="M1" data-option="M1" selected="selected">Acthor M1</option>
-												<option value="M3" data-option="M3" selected="selected">Acthor M3</option>
-												<option value="9s" data-option="9s" selected="selected">Acthor 9s</option>
+												<option value="M1" data-option="M1">Acthor M1</option>
+												<option value="M3" data-option="M3">Acthor M3</option>
+												<option value="9s" data-option="9s">Acthor 9s</option>
 											</select>
 											<span class="form-text small">
 												Hier ist das installierte Modell auszuwählen.
@@ -366,7 +366,7 @@ $numDevices = 9;
 													<div class="form-row vaRow mb-1">
 														<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">0 %</label>
 														<div class="col-10">
-															<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+															<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 														</div>
 													</div>
 													<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br>
@@ -381,7 +381,7 @@ $numDevices = 9;
 													<div class="form-row vaRow mb-1">
 														<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">100 %</label>
 														<div class="col-10">
-															<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestop" min="0" max="100" step="5" data-default="100" value="100" data-default="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+															<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestop" min="0" max="100" step="5" data-default="100" value="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 														</div>
 													</div>
 													<span class="form-text small">Parameter in % Ladezustand. Überhalb dieses Wertes wird das Gerät nicht abgeschaltet. 100% deaktiviert die Funktion.</span>
@@ -435,7 +435,7 @@ $numDevices = 9;
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Gerätetyp</label>
 									<div class="col">
-										<select class="form-control" name="device_measureType" id="device_measureTypeDevices<?php echo $devicenum; ?>" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<select class="form-control" name="device_measureType" id="device_measureTypeDevices<?php echo $devicenum; ?>" data-default="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value ="" data-option="" disabled="disabled" selected="selected">-- Bitte auswählen --</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
 											<option value="http" data-option="http">Http</option>
@@ -497,10 +497,10 @@ $numDevices = 9;
 							<div class="form-row mb-1">
 								<label for="logLevel" class="col-md-4 col-form-label">SmartHome Loglevel</label>
 								<div class="col">
-									<select name="logLevel" id="logLevel" class="form-control" data-default="2" value="2" data-topicprefix="openWB/config/get/SmartHome/">
+									<select name="logLevel" id="logLevel" class="form-control" data-default="2" data-topicprefix="openWB/config/get/SmartHome/">
 										<option value="0" data-option="0">0</option>
 										<option value="1" data-option="1">1</option>
-										<option value="2" data-option="2" checked="checked">2</option>
+										<option value="2" data-option="2">2</option>
 									</select>
 								</div>
 							</div>
