@@ -438,7 +438,7 @@ $numDevices = 9;
 										<select class="form-control" name="device_measureType" id="device_measureTypeDevices<?php echo $devicenum; ?>" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value ="" data-option="" disabled="disabled" selected="selected">-- Bitte auswählen --</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
-											<option value="http" data-option="http">Http1</option>
+											<option value="http" data-option="http">Http</option>
 											<option value="sdm630" data-option="sdm630">SDM630</option>
 											<option value="mystrom" data-option="mystrom">MyStrom (in Entwicklung)</option>
 											<option value="we514" data-option="we514">WE514 (in Entwicklung)</option>
