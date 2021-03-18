@@ -54,6 +54,10 @@ try:
     #read multiplier
     multiplier=format(resp.registers[1], '04x')
     fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
+    if fmultiplier == 2:
+        fwr1watt = wr1watt * 100
+    if fmultiplier == 1:
+        fwr1watt = wr1watt * 10
     if fmultiplier == 0:
         fwr1watt = wr1watt
     if fmultiplier == -1:
@@ -82,7 +86,10 @@ if slave2id != 0:
         #read multiplier
         multiplier=format(resp.registers[1], '04x')
         fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
-
+        if fmultiplier == 2:
+            fwr2watt = wr2watt * 100
+        if fmultiplier == 1:
+            fwr2watt = wr2watt * 10
         if fmultiplier == 0:
             fwr2watt = wr2watt
         if fmultiplier == -1:
@@ -113,6 +120,10 @@ if slave3id != 0:
         #read multiplier
         multiplier=format(resp.registers[1], '04x')
         fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
+        if fmultiplier == 2:
+            fwr3watt = wr3watt * 100
+        if fmultiplier == 1:
+            fwr3watt = wr3watt * 10
 
         if fmultiplier == 0:
             fwr3watt = wr3watt
@@ -144,6 +155,10 @@ if slave4id != 0:
         #read multiplier
         multiplier=format(resp.registers[1], '04x')
         fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
+        if fmultiplier == 2:
+            fwr4watt = wr4watt * 100
+        if fmultiplier == 1:
+            fwr4watt = wr4watt * 10
 
         if fmultiplier == 0:
             fwr4watt = wr4watt
@@ -179,6 +194,8 @@ if extprodakt == 1:
 else:
     extprod = 0
 allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower+extprod
+if allwatt > 0:
+    allwatt=0
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(allwatt))
 f.close()

@@ -213,15 +213,7 @@ def getmeter():
         else:
             #llkwh
             resp = client.read_holding_registers(0x5000,4, unit=sdmid)
-            value1 = resp.registers[0]
-            value2 = resp.registers[1]
-            value3 = resp.registers[2]
-            value4 = resp.registers[3]
-            all = format(value3, '04x') + format(value4, '04x')
-            lp1llkwh = int(struct.unpack('>i', all.decode('hex'))[0])
-            #resp = client.read_input_registers(0x0002,2, unit=sdmid)
-            #ikwh = resp.registers[3]
-            lp1llkwh = float(lp1llkwh)/1000
+            lp1llkwh = struct.unpack('>Q',struct.pack('>HHHH',*resp.registers))[0]/100
             f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
             f.write(str(lp1llkwh))
             f.close()
@@ -261,15 +253,12 @@ def getmeter():
             amp = resp.registers[1] 
             lp1lla3 = float(amp) / 100 
             f = open('/var/www/html/openWB/ramdisk/lla3', 'w') 
-            f.write(str(lpa1lla3)) 
+            f.write(str(lp1lla3)) 
             f.close() 
      
             #Gesamt watt 
             resp = client.read_holding_registers(0x5B14,2, unit=sdmid) 
-            value1 = resp.registers[0]  
-            value2 = resp.registers[1]  
-            all = format(value1, '04x') + format(value2, '04x') 
-            lp1llg = int(struct.unpack('>i', all.decode('hex'))[0]) / 100 
+            lp1llg = int(struct.unpack('>i',struct.pack('>HH',*resp.registers))[0]/100)
             #if final < 15: 
             #    final = 0 
             f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w') 
@@ -283,13 +272,13 @@ def getmeter():
             f.close()
         if ( lp2installed == 2 ):
             try:
-                resp = client.read_input_registers(0x0C,2, unit=sdmid)
+                resp = client.read_input_registers(0x0C,2, unit=sdm2id)
                 lp2llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2llw1 = int(lp2llw1)
-                resp = client.read_input_registers(0x0E,2, unit=sdmid)
+                resp = client.read_input_registers(0x0E,2, unit=sdm2id)
                 lp2llw2 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2llw2 = int(lp2llw2)
-                resp = client.read_input_registers(0x10,2, unit=sdmid)
+                resp = client.read_input_registers(0x10,2, unit=sdm2id)
                 lp2llw3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2llw3 = int(lp2llw3)
                 lp2llg= lp2llw1 + lp2llw2 + lp2llw3
@@ -298,43 +287,43 @@ def getmeter():
                 f = open('/var/www/html/openWB/ramdisk/llaktuells1', 'w')
                 f.write(str(lp2llg))
                 f.close()
-                resp = client.read_input_registers(0x00,2, unit=sdmid)
+                resp = client.read_input_registers(0x00,2, unit=sdm2id)
                 voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2voltage1 = float("%.1f" % voltage)
                 f = open('/var/www/html/openWB/ramdisk/llvs11', 'w')
                 f.write(str(lp2voltage1))
                 f.close()
-                resp = client.read_input_registers(0x06,2, unit=sdmid)
+                resp = client.read_input_registers(0x06,2, unit=sdm2id)
                 lp2lla1 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
                 lp2lla1 = float("%.1f" % lp2lla1)
                 f = open('/var/www/html/openWB/ramdisk/llas11', 'w')
                 f.write(str(lp2lla1))
                 f.close()
-                resp = client.read_input_registers(0x08,2, unit=sdmid)
+                resp = client.read_input_registers(0x08,2, unit=sdm2id)
                 lp2lla2 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
                 lp2lla2 = float("%.1f" % lp2lla2)
                 f = open('/var/www/html/openWB/ramdisk/llas12', 'w')
                 f.write(str(lp2lla2))
                 f.close()
-                resp = client.read_input_registers(0x0A,2, unit=sdmid)
+                resp = client.read_input_registers(0x0A,2, unit=sdm2id)
                 lp2lla3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2lla3 = float("%.1f" % lp2lla3)
                 f = open('/var/www/html/openWB/ramdisk/llas13', 'w')
                 f.write(str(lp2lla3))
                 f.close()
-                resp = client.read_input_registers(0x0156,2, unit=sdmid)
+                resp = client.read_input_registers(0x0156,2, unit=sdm2id)
                 lp2llkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2llkwh = float("%.3f" % lp2llkwh)
                 f = open('/var/www/html/openWB/ramdisk/llkwhs1', 'w')
                 f.write(str(lp2llkwh))
                 f.close()
-                resp = client.read_input_registers(0x02,2, unit=sdmid)
+                resp = client.read_input_registers(0x02,2, unit=sdm2id)
                 voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2voltage2 = float("%.1f" % voltage)
                 f = open('/var/www/html/openWB/ramdisk/llvs12', 'w')
                 f.write(str(lp2voltage2))
                 f.close() 
-                resp = client.read_input_registers(0x04,2, unit=sdmid)
+                resp = client.read_input_registers(0x04,2, unit=sdm2id)
                 voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
                 lp2voltage3 = float("%.1f" % voltage)
                 f = open('/var/www/html/openWB/ramdisk/llvs13', 'w')

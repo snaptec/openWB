@@ -76,7 +76,7 @@
 						foreach ($files as $current) {
 					?>
 						<div class="row<?php echo $rowClasses; ?>">
-							<label for="downloadBtn" class="col-6 col-form-label">
+							<label class="col-6 col-form-label">
 								<?php 
 									preg_match('/\/var\/www\/html\/openWB\/web\/logging\/data\/ladelog\/([0-9]{4})([0-9]{2})\.csv/',$current,$m); 
 									$month = $m[2];

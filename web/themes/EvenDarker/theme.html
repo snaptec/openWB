@@ -48,7 +48,7 @@
 	<!-- Font Awesome, all styles -->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 	<!-- local css due to async loading of theme css -->
-	<style type="text/css">
+	<style>
 		#preloader {
 			background-color:black;
 			position:fixed;
@@ -98,7 +98,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210307">');
 	</script>
 </head>
 
@@ -129,8 +129,7 @@
 	</div>
 
 	<!-- Landing Page -->
-	<div id="nav-placeholder">
-	</div>
+	<div id="nav-placeholder"></div>
 	<div class="container">
 		<div class="row middle py-1 regularTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
@@ -166,7 +165,6 @@
 				<span class="smallTextSize">Ladeleistung: <span id="powerAllLp">lade Daten</span></span><span class="verySmallTextSize" id="lladailyyield"></span>
 			</div>
 		</div>
-
 		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center">
 			<div class="col-sm openwb-housebat">
 				<span class="smallTextSize">Speicher<span id="speicherleistung">: lade Daten</span></span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> <span class="smallTextSize">- Ladestand: <span id="speichersoc"> lade Daten</span></span>
@@ -177,6 +175,7 @@
 				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
 			</div>
 		</div>
+
 		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
 			<div id="verbraucher1" class="col-sm hide">
 				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
@@ -197,16 +196,14 @@
 				<span class="actualTemp2Device"></span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp0Device"></span>
 			</div>
-
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp1Device"></span>
 			</div>
-
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp2Device"></span>
 			</div>
@@ -220,7 +217,7 @@
 				ext. Gerät 2
 			</div>
 			<div id="hook3" class="col-3 m-1 bg-danger hide">
-				ext. Gerät 2
+				ext. Gerät 3
 			</div>
 		</div>
 
@@ -283,7 +280,7 @@
 		</div>
 
 		<!-- chargepoint info data lp2-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="2">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="2">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -308,7 +305,7 @@
 		</div>
 
 		<!-- chargepoint info data lp3-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="3">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="3">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -333,7 +330,7 @@
 		</div>
 
 		<!-- chargepoint info data lp4-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="4">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="4">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -358,7 +355,7 @@
 		</div>
 
 		<!-- chargepoint info data lp5-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="5">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="5">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -383,7 +380,7 @@
 		</div>
 
 		<!-- chargepoint info data lp6-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="6">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="6">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -408,7 +405,7 @@
 		</div>
 
 		<!-- chargepoint info data lp7-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="7">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="7">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -433,7 +430,7 @@
 		</div>
 
 		<!-- chargepoint info data lp8-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="8">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-lp="8">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -457,7 +454,7 @@
 			</div>
 		</div>
 
-		<div class="smartHome">
+		<div class="smartHome hide">
 			<hr class="border-secondary">
 
 			<!-- SmartHome info header -->
@@ -477,7 +474,7 @@
 			</div>
 
 			<!-- SmartHome Device 1 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="1">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="1">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -494,7 +491,7 @@
 			</div>
 
 			<!-- SmartHome Device 2 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="2">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="2">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -510,7 +507,7 @@
 			</div>
 
 			<!-- SmartHome Device 3 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="3">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="3">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -526,7 +523,7 @@
 			</div>
 
 			<!-- SmartHome Device 4 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="4">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="4">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -542,7 +539,7 @@
 			</div>
 
 			<!-- SmartHome Device 5 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="5">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="5">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -558,7 +555,7 @@
 			</div>
 
 			<!-- SmartHome Device 6 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="6">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="6">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -574,7 +571,7 @@
 			</div>
 
 			<!-- SmartHome Device 7 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="7">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="7">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -590,7 +587,7 @@
 			</div>
 
 			<!-- SmartHome Device 8 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="8">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="8">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -606,7 +603,7 @@
 			</div>
 
 			<!-- SmartHome Device 9 data -->
-			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-dev="9">
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey hide" data-dev="9">
 				<div class="col-3 px-0">
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
@@ -620,7 +617,7 @@
 					<span class="actualRunningTimeDevice">lade Daten</span>
 				</div>
 			</div>
-		</div>  <!-- and smarthome -->
+		</div>  <!-- end smarthome -->
 
 		<!-- depending on charge mode show options -->
 		<form id="minundpvladenEinstellungen" class="hide">
@@ -629,11 +626,9 @@
 				<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 			</div>
 
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 				<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
 				</div>
 				<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -643,6 +638,9 @@
 		<form id="sofortladenEinstellungen" class="hide">
 			<div class="hide" id="priceBasedCharging">
 				<hr class="border-secondary">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">preisbasiertes Laden</h3>
+				</div>
 				<div class="row justify-content-center my-2">
 					<div id="electricityPriceChartCanvasDiv" class="col text-center">
 						<canvas id="electricityPriceChartCanvas"></canvas>
@@ -664,82 +662,61 @@
 
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
-				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
+				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
 			</div>
-
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/1/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
 				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp">LP2</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/2/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
 				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp">LP3</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/3/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
 				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp">LP4</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/4/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
 				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp">LP5</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/5/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
 				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp">LP6</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/6/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
 				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp">LP7</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/7/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
 				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp">LP8</span>:</label>
 				<div class="col">
-
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -1084,7 +1061,7 @@
 								<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
 							</div>
 						</div>
-						<div id='priorityModeBtns'>
+						<div id="priorityModeBtns" class="hide">
 							<hr>
 							<div class="row">
 								<div class="col text-center text-grey">
@@ -1106,9 +1083,8 @@
 								</div>
 							</div>
 						</div>
-						<div id='70ModeBtn'>
+						<div id="70ModeBtn" class="hide">
 							<hr>
-
 							<div class="row">
 								<div class="col text-center text-grey">
 									70% beachten im Lademodus PV-Laden:
@@ -1179,7 +1155,7 @@
 				function submitSocForm() {
 					var currentLp = $('#socModal').find('.socLp').text();
 					var manualSoc = $("#manualSocBox").val();
-					console.log("SoC for LP"+currentLp+": "+manualSoc);
+					// console.log("SoC for LP"+currentLp+": "+manualSoc);
 					publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
 					// reset input after publishing
 					clearSocForm();
@@ -1218,8 +1194,13 @@
 
 	<script>
 
-		// load navbar
-		$("#nav-placeholder").load('themes/navbar.html?ver=20210130');
+		// load navbar, be carefull: it loads asynchonously
+		$.get(
+			{ url: "themes/navbar.html", cache: false },
+			function(data){
+				$("#nav-placeholder").replaceWith(data);
+			}
+		);
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1301,9 +1282,9 @@
 				// some helper functions
 				'themes/dark/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20210129',
+				'themes/dark/processAllMqttMsg.js?ver=20210307',
 				// respective Chart.js definition live
-				'themes/dark/livechart.js?ver=20201218',
+				'themes/dark/livechart.js?ver=20210307',
 				// respective Chart.js definition
 				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
@@ -1418,19 +1399,19 @@
 				var divMengeId = selectorId.slice(0, 8) + 'm' + selectorId.slice(8);
 				switch ($(selectorId).val()) {
 					case '0':
-						$(divAusId).show();
-						$(divSocId).hide();
-						$(divMengeId).hide();
+						$(divAusId).removeClass('hide');
+						$(divSocId).addClass('hide');
+						$(divMengeId).addClass('hide');
 						break;
 					case '1':
-						$(divAusId).hide();
-						$(divSocId).hide();
-						$(divMengeId).show();
+						$(divAusId).addClass('hide');
+						$(divSocId).addClass('hide');
+						$(divMengeId).removeClass('hide');
 						break;
 					case '2':
-						$(divAusId).hide();
-						$(divSocId).show();
-						$(divMengeId).hide();
+						$(divAusId).addClass('hide');
+						$(divSocId).removeClass('hide');
+						$(divMengeId).addClass('hide');
 						break;
 				}
 			});
@@ -1467,7 +1448,6 @@
 				$('#MaxPriceForCharging').val(currentMaxPrice);
 				$('#MaxPriceForCharging').trigger('input');
 			});
-
 
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel

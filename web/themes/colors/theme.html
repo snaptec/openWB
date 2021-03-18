@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="theme-dark">
 
 <head>
 	<!-- theme for openWB layout for standard and dark, only css is different-->
@@ -50,7 +50,7 @@
 	<!-- Font Awesome, all styles -->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 	<!-- local css due to async loading of theme css -->
-	<style type="text/css">
+	<style>
 		#preloader {
 			background-color: white;
 			position: fixed;
@@ -148,7 +148,7 @@
 	<div id="nav-placeholder">
 	</div>
 	<div class="container-fluid">
-		<div class="row py-1 verySmallTextSize text-white">
+		<div class="row py-1 verySmallTextSize" style="color: var(--color-fg)">
 			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
@@ -173,11 +173,16 @@
 							<h3>Aktuelle Leistung</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span class="fa fa-chart-area px-0"></span></button>
-							</div>
+							<button class="btn btn-outline-secondary btn-sm hide" id="meterResetButton"><span
+									class="fa fa-undo px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span
+									class="fa fa-chart-area px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="themeSwitchButton"><span
+									class="fa fa-adjust px-0"></span></button>
+						</div>
 					</div>
-				</div>		
-				<figure id="powermeter" class=" mb-0"></figure>
+				</div>
+				<figure id="powermeter" class="wb-subwidget mb-0"></figure>
 			</div>
 			<!-- Graph - Live, Tag (powergraph) -->
 			<div class="wb-widget col-md p-2 m-1">
@@ -187,48 +192,68 @@
 							<h3 id="graphheading">Leistung / Ladestand</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm " id="graphLeftButton"><span class="fa fa-chevron-circle-left px-0"></span></button>
-							<button class="btn btn-outline-secondary btn-sm " id="graphRightButton"><span class="fa fa-chevron-circle-right px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphChangeButton"><span
+									class="fa fa-sort px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphLeftButton"><span
+									class="fa fa-chevron-circle-left px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="graphRightButton"><span
+									class="fa fa-chevron-circle-right px-0"></span></button>
 						</div>
 					</div>
 				</div>
-				<figure id="powergraph" class="mb-0"></figure>
+				<figure id="powergraph" class="wb-subwidget mb-0"></figure>
 			</div>
 			<!-- Energie heute (yieldmeter) -->
 			<div class="wb-widget col-md p-2 m-1 ">
-				<h3>Energie heute</h3>
-				<figure id="energymeter" class="mb-0"></figure>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-8 px-0">
+							<h3 id="energyheading">Energie heute</h3>
+						</div>
+						<div class="col-4 px-0" style="text-align: right;">
+							<button class="btn btn-outline-secondary btn-sm " id="energyLeftButton"><span
+									class="fa fa-chevron-circle-left px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="energyRightButton"><span
+									class="fa fa-chevron-circle-right px-0"></span></button>
+						</div>
+					</div>
+				</div>
+				<figure id="energymeter" class="wb-subwidget mb-0"></figure>
 			</div>
 		</div>
 		<div class="row py-0">
 			<!-- Ladepunkte (chargePointList) -->
 			<div class="wb-widget col-md-6 p-2 m-1">
 				<h3 class="mt-0">Ladepunkte</h3>
-				<div class="pb-3">
+				<div class="pb-3 wb-subwidget">
 					<div style="text-align:center;">
 						<span id="lastregelungaktiv" class="regularTextSize text-red animate-alertPulsation"></span>
 					</div>
 					<div id="socSelector"></div>
 					<div id="chargePointTable"></div>
+					<!-- depending on charge mode show options -->
 					<form id="minundpvladenEinstellungen" class="hide">
-						<hr color="white">
+						<hr class="border-secondary">
 						<div class="row justify-content-center">
 							<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 						</div>
+
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 							<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
 							</div>
 							<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
 					</form>
-					<!-- depending on charge mode show options -->
+
 					<form id="sofortladenEinstellungen" class="hide">
 						<div class="hide" id="priceBasedCharging">
 							<hr class="border-secondary">
+							<div class="row justify-content-center">
+								<h4 class=" text-center">Preisbasiertes Laden</h4>
+							</div>
 							<div class="row justify-content-center my-2">
 								<div id="electricityPriceChartCanvasDiv" class="col text-center">
 									<canvas id="electricityPriceChartCanvas"></canvas>
@@ -251,106 +276,82 @@
 							</div>
 						</div>
 						<!--/ priceBasedCharging -->
-						<hr color="white">
+
+						<hr class="border-secondary">
 						<div class="row justify-content-center">
-							<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span
-									class="nameLp"></span>
-							</h3>
+							<h4 class="text-center">Sofortladen Stromstärke</h4>
 						</div>
 
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
-							<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/1/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
-							<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp">LP2</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/2/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
-							<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp">LP3</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/3/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
-							<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp">LP4</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/4/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
-							<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp">LP5</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/5/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
-							<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp">LP6</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/6/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
-							<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp">LP7</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/7/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
-
-
 						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
-							<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+							<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp">LP8</span>:</label>
 							<div class="col">
-
 								<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1"
 									value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 							</div>
 							<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 						</div>
 
-
-
 						<div class="chargeLimitation" data-lp="1">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 								<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons"
@@ -398,10 +399,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="2">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 								<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons"
@@ -449,10 +450,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="3">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 								<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons"
@@ -489,10 +490,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="4">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 								<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons"
@@ -529,10 +530,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="5">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 								<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons"
@@ -569,10 +570,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="6">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 								<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons"
@@ -609,10 +610,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="7">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 								<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons"
@@ -649,10 +650,10 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="8">
-							<hr color="white">
+							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span
-										class="nameLp"></span></label></h3>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 								<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons"
@@ -695,7 +696,7 @@
 			<!-- Smart Home (smartHomeList) -->
 			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
 				<h3>Geräte</h3>
-				<div class=" pb-3 ">
+				<div class="wb-subwidget pb-3 ">
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
@@ -707,7 +708,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!-- ENDE COLOR THEME -->
 
@@ -809,8 +809,14 @@
 	<!-- some scripts -->
 	<script>
 
-		// load navbar
-		$("#nav-placeholder").load('themes/navbar.html?ver=20210130');
+		// load navbar, be carefull: it loads asynchonously
+		$.get(
+			{ url: "themes/navbar.html", cache: false },
+			function (data) {
+				$("#nav-placeholder").replaceWith(data);
+			}
+		);
+
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -894,7 +900,7 @@
 				// respective Chart.js definition live
 				// 'themes/dark/livechart.js?ver=20200530-b',
 				// respective Chart.js definition
-				'themes/dark/electricityPriceChart.js?ver=20210120',
+				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
 				'themes/colors/setupMqttServices.js?ver=20210129',
 			];
@@ -1034,6 +1040,28 @@
 				publish(option, topic);
 				// show/hide respective option-values and progress
 				chargeLimitationOptionsShowHide(this, option);
+			});
+
+			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
+				event.preventDefault();
+				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
+				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
+				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
+				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
+				if ( $(this).hasClass ('priceLess') ) {
+					currentMaxPrice -= step;
+				} else {
+					currentMaxPrice += step;
+				}
+				// prevent timeout of delayUserInput when clicking "beyond" range
+				if ( currentMaxPrice < rangeMin ) {
+					currentMaxPrice = rangeMin;
+				} else if ( currentMaxPrice > rangeMax ) {
+					currentMaxPrice = rangeMax;
+				}
+				$('#MaxPriceForCharging').val(currentMaxPrice);
+				$('#MaxPriceForCharging').trigger('input');
 			});
 
 			$('.rangeInput').on('input', function () {

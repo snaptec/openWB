@@ -150,14 +150,14 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/llpf1
 	echo 0 > $RamdiskPath/llpf2
 	echo 0 > $RamdiskPath/llpf3
-	echo 1 > $RamdiskPath/llaktuell
-	echo 1 > $RamdiskPath/llaktuells1
-	echo 1 > $RamdiskPath/llaktuells2
-	echo 1 > $RamdiskPath/llaktuelllp4
-	echo 1 > $RamdiskPath/llaktuelllp5
-	echo 1 > $RamdiskPath/llaktuelllp6
-	echo 1 > $RamdiskPath/llaktuelllp7
-	echo 1 > $RamdiskPath/llaktuelllp8
+	echo 0 > $RamdiskPath/llaktuell
+	echo 0 > $RamdiskPath/llaktuells1
+	echo 0 > $RamdiskPath/llaktuells2
+	echo 0 > $RamdiskPath/llaktuelllp4
+	echo 0 > $RamdiskPath/llaktuelllp5
+	echo 0 > $RamdiskPath/llaktuelllp6
+	echo 0 > $RamdiskPath/llaktuelllp7
+	echo 0 > $RamdiskPath/llaktuelllp8
 	echo 0 > $RamdiskPath/nachtladen2state
 	echo 0 > $RamdiskPath/nachtladen2states1
 	echo 0 > $RamdiskPath/nachtladenstate
@@ -179,6 +179,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/tmpsoc
 	echo 0 > $RamdiskPath/tmpsoc1
 	echo 0 > $RamdiskPath/zielladenkorrektura
+	echo 0 > $RamdiskPath/ladungdurchziel
 	echo 20000 > $RamdiskPath/soctimer
 	echo 20000 > $RamdiskPath/soctimer1
 	echo 28 > $RamdiskPath/evsemodbustimer
@@ -363,6 +364,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/devicetotal_watt
 	echo 0 > $RamdiskPath/etprovidermaxprice
 	echo 0 > $RamdiskPath/etproviderprice
+	touch $RamdiskPath/etprovidergraphlist
 	echo 0 > $RamdiskPath/ev-live.graph
 	echo 0 > $RamdiskPath/ev.graph
 	echo 0 > $RamdiskPath/evseausgelesen
@@ -383,6 +385,9 @@ initRamdisk(){
 	echo 1 > $RamdiskPath/bootinprogress
 	echo 1 > $RamdiskPath/execdisplay
 	echo 4 > $RamdiskPath/graphtimer
+	echo 0 > $RamdiskPath/fronius_sm_bezug_meterlocation
+
+
 
 	# temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 	# bei Anschluss von Speicher und Energiemanager direkt am WR
@@ -591,5 +596,6 @@ initRamdisk(){
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 
 	sudo chmod 777 $RamdiskPath/*
+	#python3 /var/www/html/openWB/runs/csvcalc.py /var/www/html/openWB/web/logging/data/daily/ /var/www/html/openWB/web/logging/data/v001/ /var/www/html/openWB/ramdisk/ M >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
 	echo "Ramdisk init done."
 }

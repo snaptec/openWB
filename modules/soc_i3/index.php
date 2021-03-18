@@ -4,26 +4,24 @@ class Battery_API {
 
 	private $token_file_prefix = 'token';
 	private $token_file_suffix = '.json';
-	private $auth_file_prefix = 'auth';
-	private $auth_file_suffix = '.json';
 	private $token_file = 'token.json';
-	private $auth_file = 'auth.json';
 
 	private $auth_api = 'https://customer.bmwgroup.com/gcdm/oauth/authenticate';
-	private $vehicle_api = 'https://www.bmw-connecteddrive.de/api/vehicle';
+	// private $vehicle_api = 'https://www.bmw-connecteddrive.de/api/vehicle';
+	// quick fix: .de url broken after 11.03.2021
+	private $vehicle_api = 'https://www.bmw-connecteddrive.com/api/vehicle';
 
 	private $auth;
 	private $token;
 	private $json;
 	
-	function __construct ( $chargepoint = null ) {
+	function __construct ( $chargepoint, $user, $password, $vin ) {
 
-		if( !is_null($chargepoint) ){
-			$this->auth_file = $this->auth_file_prefix . $chargepoint . $this->auth_file_suffix;
-			$this->token_file = $this->token_file_prefix . $chargepoint . $this->token_file_suffix;
-		}
-
-		$this->auth = $this->get_auth_data();
+		$this->auth = array(
+							"username" => $user,
+							"password" => $password,
+							"vehicle" => $vin
+						);
 		$this->token = $this->get_token();
 		$this->json = $this->get_vehicle_data();
 
@@ -35,15 +33,6 @@ class Battery_API {
 		if ( empty( $_SERVER['HTTP_REFERER'] ) OR strcmp( parse_url( $_SERVER['HTTP_REFERER'], PHP_URL_HOST ), $_SERVER['SERVER_NAME'] ) !== 0 ) {
 			http_response_code( 403 ) && exit;
 		}
-	}
-
-
-	function get_auth_data() {
-		return json_decode(
-			@file_get_contents(
-				$this->auth_file
-			)
-		);
 	}
 
 
@@ -97,7 +86,7 @@ class Battery_API {
 		curl_setopt( $ch, CURLOPT_COOKIESESSION, true );
 		curl_setopt( $ch, CURLOPT_POST, true );
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/x-www-form-urlencoded' ) );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth->username) . '&password=' . urlencode( $this->auth->password) . '&client_id=dbf0a542-ebd1-4ff0-a9a7-55172fbfce35&redirect_uri=https%3A%2F%2Fwww.bmw-connecteddrive.com%2Fapp%2Fdefault%2Fstatic%2Fexternal-dispatch.html&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=dbf0a542-ebd1-4ff0-a9a7-55172fbfce35&redirect_uri=https%3A%2F%2Fwww.bmw-connecteddrive.com%2Fapp%2Fdefault%2Fstatic%2Fexternal-dispatch.html&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
 
 		// Exec curl request
 		$response = curl_exec( $ch );
@@ -126,12 +115,12 @@ class Battery_API {
 		$ch_2 = curl_init();
 
 		// Set cURL options
-		curl_setopt( $ch_1, CURLOPT_URL, $this->vehicle_api . '/dynamic/v1/' . $this->auth->vehicle . '?offset=-60' );
+		curl_setopt( $ch_1, CURLOPT_URL, $this->vehicle_api . '/dynamic/v1/' . $this->auth["vehicle"] . '?offset=-60' );
 		curl_setopt( $ch_1, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json' , 'Authorization: Bearer ' . $this->token ) );
 		curl_setopt( $ch_1, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt( $ch_1, CURLOPT_FOLLOWLOCATION, true );
 
-		curl_setopt( $ch_2, CURLOPT_URL, $this->vehicle_api . '/navigation/v1/' . $this->auth->vehicle );
+		curl_setopt( $ch_2, CURLOPT_URL, $this->vehicle_api . '/navigation/v1/' . $this->auth["vehicle"] );
 		curl_setopt( $ch_2, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json' , 'Authorization: Bearer ' . $this->token ) );
 		curl_setopt( $ch_2, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt( $ch_2, CURLOPT_FOLLOWLOCATION, true );
@@ -214,15 +203,28 @@ class Battery_API {
 	}
 }
 
-$shortopts = "c:";
-$longopts = array( "chargepoint:" );
+$shortopts = "c:u:p:v:";
+$longopts = array( "chargepoint:", "username:", "password:", "vin:" );
 $cliargs = getopt( $shortopts, $longopts );
 
-// default to first chargepoint
-$chargepoint = 1;
 if( array_key_exists( "chargepoint", $cliargs ) ){
 	$chargepoint = $cliargs["chargepoint"];
 } else if( array_key_exists( "c", $cliargs ) ) {
 	$chargepoint = $cliargs["c"];
 }
-new Battery_API( $chargepoint );
+if( array_key_exists( "username", $cliargs ) ){
+	$username = $cliargs["username"];
+} else if( array_key_exists( "u", $cliargs ) ) {
+	$username = $cliargs["u"];
+}
+if( array_key_exists( "password", $cliargs ) ){
+	$password = $cliargs["password"];
+} else if( array_key_exists( "p", $cliargs ) ) {
+	$password = $cliargs["p"];
+}
+if( array_key_exists( "vin", $cliargs ) ){
+	$vin = $cliargs["vin"];
+} else if( array_key_exists( "v", $cliargs ) ) {
+	$vin = $cliargs["v"];
+}
+new Battery_API( $chargepoint, $username, $password, $vin );

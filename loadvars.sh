@@ -66,7 +66,7 @@ loadvars(){
 				modbusevsesource=$(<ramdisk/evsemodulconfig)
 				modbusevseid=1
 			else
-				if [ -f /dev/ttyUSB0 ]; then
+				if [[ -e "/dev/ttyUSB0" ]]; then
 					echo "/dev/ttyUSB0" > ramdisk/evsemodulconfig
 				else
 					echo "/dev/serial0" > ramdisk/evsemodulconfig
@@ -941,8 +941,9 @@ loadvars(){
 		hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
+	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
 		usesimbezug=1
 	fi
 	if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
@@ -1002,7 +1003,7 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
 		usesimpv=1
 	fi
-	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
 	if [[ $usesimpv == "1" ]]; then
@@ -1040,7 +1041,7 @@ loadvars(){
 		# sim pv end
 	fi
 
-	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_sungrow" ]]|| [[ $speichermodul == "speicher_alphaess" ]] || [[ $speichermodul == "speicher_siemens" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
+	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_sungrow" ]]|| [[ $speichermodul == "speicher_alphaess" ]] || [[ $speichermodul == "speicher_siemens" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then

@@ -119,15 +119,15 @@ def checkbootdone():
 #art der Ueberschussberechnung lesen, relevanten ueberschuss zurueckgeben
 def getueb(nummer):
 #    (1 = mit Speicher, 2 = mit offset , 0 = manual eingeschaltet)
-    ueberschussberechnung = 0
+    ueberschussberechnung = 1
     if os.path.isfile(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss'):
         f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'r')
         ueberschussberechnung=int(f.read())
         f.close()
     if (ueberschussberechnung == 2):
-        return uberschussoffset
+        return (uberschussoffset,2)
     else:
-        return uberschuss
+        return (uberschuss,1)
 # setze art der Ueberschussrechnung
 def setueb(nummer,ueberschussberechnung):
 #    (1 = mit Speicher, 2 = mit offset, 0 = manual eingeschaltet)
@@ -174,10 +174,13 @@ def sepwatt(oldwatt,oldwattk,nummer):
         argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
     except:
         argumentList.append("undef")
-    devuberschuss = getueb(nummer)
+    (devuberschuss,ueberschussberechnung )= getueb(nummer)
     argumentList.append(str(devuberschuss))
     if meastyp == "sdm630":
         argumentList[1] = prefixpy +'sdm630/sdm630.py'
+        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+    elif meastyp == "we514":
+        argumentList[1] = prefixpy +'we514/watt.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
     elif meastyp == "shelly":
         argumentList[1] = prefixpy + 'shelly/watt.py'
@@ -521,7 +524,7 @@ def getdevicevalues():
             #alle devices laufen gleich
             (switchtyp,canswitch) = gettyp(numberOfDevices)
             devicename = str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices)))
-            devuberschuss = getueb(numberOfDevices)
+            (devuberschuss,ueberschussberechnung) = getueb(numberOfDevices)
             try:
                 device_leistungurl = str(config.get('smarthomedevices', 'device_leistungurl_'+str(numberOfDevices)))
             except:
@@ -700,11 +703,15 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung):
         device_password = str(config.get('smarthomedevices','device_password_'+str(nummer)))
     except:
         device_password = "undef"
+    try:
+        device_ip = str(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    except:
+        device_ip = "undef"
     pyname0 = getdir(switchtyp,devicename)
     setueb(nummer,ueberschussberechnung)
-    devuberschuss = getueb(nummer)
+    (devuberschuss, ueberschussberechnung) = getueb(nummer)
     argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
-    argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    argumentList.append(device_ip)
     argumentList.append(str(devuberschuss))
     argumentList.append("") # element with index 5 will be set on URL for switch on or off
     argumentList.append(device_actor)
@@ -812,34 +819,28 @@ def conditions(nummer):
     # Auto ladung ende
     # Art vom ueberschussberechnung pruefen
     ueberschussberechnung = 0
+    oldueberschussberechnung = 0
     devuberschuss = 0
+    ( devuberschuss, oldueberschussberechnung)= getueb(nummer)
     if (speichersocbeforestart == 0):
-        deltasoc = 100
+        # Berechnung aus, Ueberschuss mit Speicher nehmen
+        devuberschuss = uberschuss
+        ueberschussberechnung = 1
     else:
-        deltasoc = abs(speichersoc - speichersocbeforestart)
-    if ( DeviceValues[str(nummer)+"relais"] == 1 ) and (deltasoc > 5):
-       #device laeuft schon,  alte Ueberschussberechnung nehmen
-       # wenn delta vom soc gross ist
-        devuberschuss = getueb(nummer)
-    else:
-        if (speichersocbeforestart == 0):
-            # Berechnung aus, Ueberschuss mit Speicher nehmen
+        if ( speichersoc < speichersocbeforestart ) and (speichersoc < 97):
+            # unter dem Speicher soc, nur EVU Ueberschuss
+            # Berechnung mit Ueberschuss nur mit Speicherentladung
+            devuberschuss = uberschussoffset
+            ueberschussberechnung = 2
+        else:
+            # sonst drueber oder gleich Speicher soc Berechnung mit Ueberschuss mit Speicher nehmen
+            # oder nehmen wenn speicher fast voll
             devuberschuss = uberschuss
             ueberschussberechnung = 1
-        else:
-            if ( speichersoc < speichersocbeforestart ):
-                # unter dem Speicher soc, nur EVU Ueberschuss
-                # Berechnung mit Ueberschuss nur mit Speicherentladung
-                devuberschuss = uberschussoffset
-                ueberschussberechnung = 2
-            else:
-             # sonst drueber oder gleich Speicher soc Berechnung mit Ueberschuss mit Speicher nehmen
-                devuberschuss = uberschuss
-                ueberschussberechnung = 1
-    if ( deltasoc <= 5):
+    if ( oldueberschussberechnung !=  ueberschussberechnung):
         setueb(nummer,ueberschussberechnung)
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) +  " Ueberschuss " + str(devuberschuss))
-        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung deltasoc (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung))
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung anders (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung))
     if ( devuberschuss > einschwelle):
         try:
             del DeviceCounters[str(nummer)+"ausverz"]
