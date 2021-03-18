@@ -673,7 +673,7 @@ updateConfig(){
 		echo "soc_vag_password=pass" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_vag_vin=" $ConfigFile; then
-		echo "soc_vag_vin=vin (WVWZZZ...)" >> $ConfigFile
+		echo "soc_vag_vin='vin (WVWZZZ...)'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_vag_intervall=" $ConfigFile; then
 		echo "soc_vag_intervall=60" >> $ConfigFile
