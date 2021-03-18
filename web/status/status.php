@@ -403,9 +403,9 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<tr id="faultStrPvRow" class="hide">
+										<tr class="faultStrPvRow hide">
 											<th scope="row">Störungsbeschreibung</th>
-											<td id="faultStrPv"></td>
+											<td class="faultStrPv"></td>
 										</tr>
 										<tr>
 											<th scope="row">Leistung [W]</th>

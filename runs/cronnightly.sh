@@ -1,5 +1,9 @@
 #!/bin/bash
-. /var/www/html/openWB/loadconfig.sh
+OPENWBBASEDIR=$(cd `dirname $0`/../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+
+. $OPENWBBASEDIR/loadconfig.sh
+
 echo "Start cron nightly @ $(date)"
 #logfile aufräumen
 echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
@@ -16,21 +20,61 @@ if [[ $pv2wattmodul != "none" ]]; then
 else
 	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
 fi
-ll1=$(</var/www/html/openWB/ramdisk/llkwh)
-ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
-ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
-llg=$(</var/www/html/openWB/ramdisk/llkwhges)
+
+ll1=$(<$RAMDISKDIR/llkwh)  # Zählerstand LP1
+ll2=$(<$RAMDISKDIR/llkwhs1)  # Zählerstand LP2
+ll3=$(<$RAMDISKDIR/llkwhs2)  # Zählerstand LP3
+ll4=$(<$RAMDISKDIR/llkwhlp4)  # Zählerstand LP4
+ll5=$(<$RAMDISKDIR/llkwhlp5)  # Zählerstand LP5
+ll6=$(<$RAMDISKDIR/llkwhlp6)  # Zählerstand LP6
+ll7=$(<$RAMDISKDIR/llkwhlp7)  # Zählerstand LP7
+ll8=$(<$RAMDISKDIR/llkwhlp8)  # Zählerstand LP8
+llg=$(<$RAMDISKDIR/llkwhges)
+
+is_configured_cp1="1"                 #Ladepunkt 1 ist immer konfiguriert
+is_configured_cp2=$lastmanagement     # LP2 konfiguriert?
+is_configured_cp3=$lastmanagements2   # LP3 konfiguriert?
+is_configured_cp4=$lastmanagementlp4  # LP4 konfiguriert?
+is_configured_cp5=$lastmanagementlp5  # ...
+is_configured_cp6=$lastmanagementlp6
+is_configured_cp7=$lastmanagementlp7
+is_configured_cp8=$lastmanagementlp8
+
+# wenn Pushover aktiviert, Zählerstände senden
+if (( pushbenachrichtigung == "1" )) ; then
+	if [ $(date +%d) == "01" ] ; then
+		msg_header="Zählerstände zum $(date +%d.%m.%y:)"$'\n'
+		msg_text=""
+		for (( i=1; i<=8; i++ ))
+		do
+			var_name_energy="ll$i"
+			var_name_cpname="lp${i}name"
+			var_name_cp_configured="is_configured_cp${i}"
+			if (( ${!var_name_cp_configured} == "1" )) ; then
+				msg_text+="LP$i (${!var_name_cpname}): ${!var_name_energy} kWh"$'\n'
+			fi
+		done
+		$OPENWBBASEDIR/runs/pushover.sh "$msg_header$msg_text"
+	fi
+fi
+
+# ins Log als Wh
+ll1=$(echo "$ll1 * 1000" | bc)
+ll2=$(echo "$ll2 * 1000" | bc)
+ll3=$(echo "$ll3 * 1000" | bc)
+ll4=$(echo "$ll4 * 1000" | bc)
+ll5=$(echo "$ll5 * 1000" | bc)
+ll6=$(echo "$ll6 * 1000" | bc)
+ll7=$(echo "$ll7 * 1000" | bc)
+ll8=$(echo "$ll8 * 1000" | bc)
+llg=$(echo "$llg * 1000" | bc)
+
 speicherikwh=$(</var/www/html/openWB/ramdisk/speicherikwh)
 speicherekwh=$(</var/www/html/openWB/ramdisk/speicherekwh)
 verbraucher1iwh=$(</var/www/html/openWB/ramdisk/verbraucher1_wh)
 verbraucher1ewh=$(</var/www/html/openWB/ramdisk/verbraucher1_whe)
 verbraucher2iwh=$(</var/www/html/openWB/ramdisk/verbraucher2_wh)
 verbraucher2ewh=$(</var/www/html/openWB/ramdisk/verbraucher2_whe)
-ll4=$(</var/www/html/openWB/ramdisk/llkwhlp4)
-ll5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
-ll6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
-ll7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
-ll8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
 d1=$(</var/www/html/openWB/ramdisk/device1_wh)
 d2=$(</var/www/html/openWB/ramdisk/device2_wh)
 d3=$(</var/www/html/openWB/ramdisk/device3_wh)
@@ -42,18 +86,7 @@ d8=$(</var/www/html/openWB/ramdisk/device8_wh)
 d9=$(</var/www/html/openWB/ramdisk/device9_wh)
 d10="0"
 
-ll1=$(echo "$ll1 * 1000" | bc)
-ll2=$(echo "$ll2 * 1000" | bc)
-ll3=$(echo "$ll3 * 1000" | bc)
-llg=$(echo "$llg * 1000" | bc)
-ll4=$(echo "$ll4 * 1000" | bc)
-ll5=$(echo "$ll5 * 1000" | bc)
-ll6=$(echo "$ll6 * 1000" | bc)
-ll7=$(echo "$ll7 * 1000" | bc)
-ll8=$(echo "$ll8 * 1000" | bc)
-
 echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile.csv
-
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then
 	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
