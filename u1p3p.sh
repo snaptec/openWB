@@ -200,7 +200,7 @@ u1p3pswitch(){
 								fi
 							else
 								if (( ladeleistung < 100 )); then
-									if (( uberschuss < ((3 * mindestuberschuss) + 1000) )); then
+									if (( uberschuss < (3 * mindestuberschuss) )); then
 										echo 0 > /var/www/html/openWB/ramdisk/urcounter
 										echo 1 > ramdisk/blockall
 										runs/u1p3pcheck.sh stop
@@ -294,7 +294,7 @@ u1p3pswitch(){
 								fi
 							else
 								if (( ladeleistung < 100 )); then
-									if (( uberschuss < ((3 * mindestuberschuss) + 1000) )); then
+									if (( uberschuss < (3 * mindestuberschuss) )); then
 										echo 0 > /var/www/html/openWB/ramdisk/urcounter
 										echo 1 > ramdisk/blockall
 										runs/u1p3pcheck.sh stop
