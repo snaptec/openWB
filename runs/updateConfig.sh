@@ -729,6 +729,9 @@ updateConfig(){
 	if ! grep -Fq "kostalplenticoreip2=" $ConfigFile; then
 		echo "kostalplenticoreip2=none" >> $ConfigFile
 	fi
+	if ! grep -Fq "kostalplenticoreip3=" $ConfigFile; then
+		echo "kostalplenticoreip3=none" >> $ConfigFile
+	fi
 	if ! grep -Fq "name_wechselrichter1=" $ConfigFile; then
 		echo "name_wechselrichter1=WR1" >> $ConfigFile
 	fi
