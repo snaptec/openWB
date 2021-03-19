@@ -1762,6 +1762,9 @@ updateConfig(){
 	if ! grep -Fq "hook2einschaltverz=" $ConfigFile; then
 		echo "hook2einschaltverz=20" >> $ConfigFile
 	fi
+	if ! grep -Fq "hook3einschaltverz=" $ConfigFile; then
+		echo "hook3einschaltverz=20" >> $ConfigFile
+	fi
 	if ! grep -Fq "stopsocnotpluggedlp1=" $ConfigFile; then
 		echo "stopsocnotpluggedlp1=0" >> $ConfigFile
 	fi
@@ -1800,6 +1803,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
 		echo "solaredgezweiterspeicher=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "studer_ip=" $ConfigFile; then
+		echo "studer_ip=192.168.1.1" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }

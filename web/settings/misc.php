@@ -239,10 +239,10 @@
 											<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
+											<input type="radio" name="rfidakt" id="rfidaktOn1" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn2" autocomplete="off" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
+											<input type="radio" name="rfidakt" id="rfidaktOn2" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
 										</label>
 
 									</div>
@@ -278,7 +278,7 @@
 												<div class="input-group-text">
 													Auto 1
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp1c1" id="rfidlp1c1" class="form-control" value="<?php echo $rfidlp1c1old ?>">
 										</div>
 									</div>
@@ -288,7 +288,7 @@
 												<div class="input-group-text">
 													Auto 2
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp1c2" id="rfidlp1c2" class="form-control" value="<?php echo $rfidlp1c2old ?>">
 										</div>
 									</div>
@@ -298,7 +298,7 @@
 												<div class="input-group-text">
 													Auto 3
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp1c3" id="rfidlp1c3" class="form-control" value="<?php echo $rfidlp1c3old ?>">
 										</div>
 									</div>
@@ -317,7 +317,7 @@
 												<div class="input-group-text">
 													Auto 1
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp2c1" id="rfidlp2c1" class="form-control" value="<?php echo $rfidlp2c1old ?>">
 										</div>
 									</div>
@@ -327,7 +327,7 @@
 												<div class="input-group-text">
 													Auto 2
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp2c2" id="rfidlp2c2" class="form-control" value="<?php echo $rfidlp2c2old ?>">
 										</div>
 									</div>
@@ -367,7 +367,7 @@
 												<div class="input-group-text">
 													Tag 1
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidstop" id="rfidstop" class="form-control" value="<?php echo $rfidstopold ?>">
 										</div>
 									</div>
@@ -377,7 +377,7 @@
 												<div class="input-group-text">
 													Tag 2
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidstop2" id="rfidstop2" class="form-control" value="<?php echo $rfidstop2old ?>">
 										</div>
 									</div>
@@ -691,14 +691,14 @@
 								</div>
 								<div class="form-row">
 									<div class="col-lg-12">
-										<label for="rfidlist" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Liste
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlist" id="rfidlist" class="form-control" value="<?php echo $rfidlistold ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -754,37 +754,36 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<div class="alert alert-info">
-							Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden. Der Token der App, sowie das User Token nachfolgend eintragen.
+						<div class="card-text alert alert-info">
+							<p>Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Zudem muss im Pushover-Nutzerkonto eine Applikation openWB eingerichtet werden, um den benötigten API-Token/Key zu erhalten.</p>
+							Wenn Pushover eingeschaltet ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats gepusht.
 						</div>
 						<div id="pushban" class="hide">
 							<div class="form-group">
-								<div class="form-row">
-									<label for="pushoveruser" class="col-md-4 col-form-label">Pushover User String</label>
+								<div class="form-row mb-1">
+									<label for="pushoveruser" class="col-md-4 col-form-label">Pushover User Key</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													<i class="fa fa-user"></i>
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>" placeholder="User Token" class="form-control">
 										</div>
-										<span class="form-text small">Hier das User Token von Pushover eintragen</span>
 									</div>
 								</div>
 								<div class="form-row">
-									<label for="pushovertoken" class="col-md-4 col-form-label">Pushover App Token</label>
+									<label for="pushovertoken" class="col-md-4 col-form-label">Pushover API-Token/Key</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													<i class="fa fa-lock"></i>
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>" placeholder="App Token" class="form-control">
 										</div>
-										<span class="form-text small">Hier das Application Token von Pushover eintragen</span>
 									</div>
 								</div>
 							</div>
@@ -1430,7 +1429,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="durchslp1" class="col-md-4 col-form-label">Preis je kWh</label>
+								<label for="preisjekwh" class="col-md-4 col-form-label">Preis je kWh</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="0.0001" name="preisjekwh" id="preisjekwh" value="<?php echo $preisjekwhold ?>">
 									<span class="form-text small">Gültige Werte xx.xx, z.B. 0.2833. Dient zur Berechnung der Ladekosten im Ladelog.</span>

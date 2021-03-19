@@ -107,11 +107,14 @@
 
 		// update chosen setting in array
 		foreach($_POST as $key => $value) {
-			// check if loaded config entry has single quotes
-			if( (strpos( $settingsArray[$key], "'" ) === 0) && (strrpos( $settingsArray[$key], "'" ) === strlen( $settingsArray[$key])-1) ){
-				$settingsArray[$key] = "'".$value."'";
-			} else {
-				$settingsArray[$key] = $value;
+			// only update settings already present in array
+			if( array_key_exists( $key, $settingsArray ) ){
+				// check if loaded config entry has single quotes
+				if( (strpos( $settingsArray[$key], "'" ) === 0) && (strrpos( $settingsArray[$key], "'" ) === strlen( $settingsArray[$key])-1) ){
+					$settingsArray[$key] = "'".$value."'";
+				} else {
+					$settingsArray[$key] = $value;
+				}
 			}
 		}
 
@@ -121,7 +124,10 @@
 			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
 		}
 		foreach($settingsArray as $key => $value) {
-			fwrite($fp, $key."=".$value."\n");
+			// only save to config if $key has some meaningful length
+			if( strlen($key) > 0 ){
+				fwrite($fp, $key."=".$value."\n");
+			}
 		}
 		fclose($fp);
 
