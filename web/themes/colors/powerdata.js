@@ -31,11 +31,11 @@ class WbData {
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
 		this.sourceSummary = {
-			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, color: "white" },			
 			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" }
-
 		};
+
 		this.usageSummary = [
 			{ name: "Export", power: 0, energy: 0, color: "white" },
 			{ name: "Laden", power: 0, energy: 0, color: "white" },
@@ -43,6 +43,7 @@ class WbData {
 			{ name: "Speicher in", power: 0, energy: 0, color: "white" },
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
+
 		this.historicSummary = {
 			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
@@ -52,8 +53,8 @@ class WbData {
 			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
 			"batIn": { name: "Speicher in", power: 0, energy: 0, color: "white" },
 			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
-
-		}
+		};
+		
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
 		this.showTodayGraph = false;

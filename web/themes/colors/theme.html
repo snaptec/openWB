@@ -350,8 +350,7 @@
 						<div class="chargeLimitation" data-lp="1">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 								<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons"
@@ -401,8 +400,7 @@
 						<div class="chargeLimitation" data-lp="2">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 								<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons"
@@ -452,8 +450,7 @@
 						<div class="chargeLimitation" data-lp="3">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 								<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons"
@@ -492,8 +489,7 @@
 						<div class="chargeLimitation" data-lp="4">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 								<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons"
@@ -532,8 +528,7 @@
 						<div class="chargeLimitation" data-lp="5">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 								<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons"
@@ -572,8 +567,7 @@
 						<div class="chargeLimitation" data-lp="6">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 								<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons"
@@ -612,8 +606,7 @@
 						<div class="chargeLimitation" data-lp="7">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 								<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons"
@@ -652,8 +645,7 @@
 						<div class="chargeLimitation" data-lp="8">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 								<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons"
@@ -693,20 +685,21 @@
 					<br>
 				</div>
 			</div>
-			<!-- Smart Home (smartHomeList) -->
+			<!-- Speicher (batteryList) -->
+			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
+				<h3>Speicher</h3>
+				<div class=" pb-3 ">
+					<div id="batteryStatus"></div>
+				</div>
+				
+			</div><!-- Smart Home (smartHomeList) -->
 			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
 				<h3>Geräte</h3>
 				<div class="wb-subwidget pb-3 ">
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
-			<!-- Speicher (batteryList) -->
-			<div class="wb-widget col-md-6 p-2 m-1" id="batteryWidget">
-				<h3>Speicher</h3>
-				<div class=" pb-3 ">
-					<div id="batteryStatus"></div>
-				</div>
-			</div>
+
 		</div>
 	</div>
 	<!-- ENDE COLOR THEME -->
@@ -1042,22 +1035,22 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
-			$('.priceMore, .priceLess').click(function(event){
+			$('.priceMore, .priceLess').click(function (event) {
 				// change Slider upon click on buttons
 				event.preventDefault();
 				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
 				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
 				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
 				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
-				if ( $(this).hasClass ('priceLess') ) {
+				if ($(this).hasClass('priceLess')) {
 					currentMaxPrice -= step;
 				} else {
 					currentMaxPrice += step;
 				}
 				// prevent timeout of delayUserInput when clicking "beyond" range
-				if ( currentMaxPrice < rangeMin ) {
+				if (currentMaxPrice < rangeMin) {
 					currentMaxPrice = rangeMin;
-				} else if ( currentMaxPrice > rangeMax ) {
+				} else if (currentMaxPrice > rangeMax) {
 					currentMaxPrice = rangeMax;
 				}
 				$('#MaxPriceForCharging').val(currentMaxPrice);
