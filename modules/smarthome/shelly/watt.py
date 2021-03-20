@@ -27,6 +27,9 @@ devicenumber=str(sys.argv[1])
 ipadr=str(sys.argv[2])
 uberschuss=int(sys.argv[3])
 answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
+f = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber) + '_shelly', 'w')
+f.write(str(answer))
+f.close()
 aktpower = totalPowerFromShellyJson(answer)
 relais = int(answer['relays'][0]['ison'])
 powerc = 0
@@ -35,7 +38,13 @@ temp1 = '0.0'
 temp2 = '0.0'
 try:
     temp0 = str(answer['ext_temperature'][0]['tC'])
+except:
+    pass
+try:
     temp1 = str(answer['ext_temperature'][1]['tC'])
+except:
+    pass
+try:
     temp2 = str(answer['ext_temperature'][2]['tC'])
 except:
     pass

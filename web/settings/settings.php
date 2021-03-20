@@ -163,7 +163,7 @@
 						</div>
 						<div class="form-group mb-0" id="etproviderondiv">
 							<div class="form-row mb-1">
-								<label for="et_provider" class="col-md-4 col-form-label">Anbieter</label>
+								<label for="etprovider" class="col-md-4 col-form-label">Anbieter</label>
 								<div class="col">
 									<select name="etprovider" id="etprovider" class="form-control">
 										<option <?php if($etproviderold == "et_awattar") echo "selected" ?> value="et_awattar">aWATTar</option>
@@ -217,7 +217,7 @@
 									<button id="getTibberHomeIdBtn" type="button" class="btn btn-primary m-2">Home-ID ermitteln</button>
 									<button id="verifyTibberBtn" type="button" class="btn btn-secondary m-2">Tibber-Daten verifizieren</button>
 								</div>
-								<script type="text/javascript">
+								<script>
 									$(document).ready(function(){
 
 										$('#tibberHomesDropdown').selectpicker();

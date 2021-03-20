@@ -100,6 +100,8 @@ if [[ $froniusvar2 != "2" ]]; then
 
 fi
 
+
+
 openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
 
 if [[ $meter_location == "1" ]]; then
@@ -132,6 +134,8 @@ if [[ $meter_location == "1" ]]; then
 	# Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
 	#ekwh=$(echo $response_fi | jq '.Body.Data.Site.E_Total')
 	ekwh=0
+	echo 1 > /var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation
+
 fi
 
 openwbDebugLog ${DMOD} 1 "EVU: V: ${evuv1}/${evuv2}/${evuv3} A: ${bezuga1}/${bezuga2}/${bezuga3} W: ${bezugw1}/${bezugw2}/${bezugw3}/T${wattbezug}"

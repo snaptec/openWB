@@ -179,6 +179,9 @@ def sepwatt(oldwatt,oldwattk,nummer):
     if meastyp == "sdm630":
         argumentList[1] = prefixpy +'sdm630/sdm630.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+    elif meastyp == "we514":
+        argumentList[1] = prefixpy +'we514/watt.py'
+        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
     elif meastyp == "shelly":
         argumentList[1] = prefixpy + 'shelly/watt.py'
     elif meastyp == "mystrom":
@@ -700,11 +703,15 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung):
         device_password = str(config.get('smarthomedevices','device_password_'+str(nummer)))
     except:
         device_password = "undef"
+    try:
+        device_ip = str(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    except:
+        device_ip = "undef"
     pyname0 = getdir(switchtyp,devicename)
     setueb(nummer,ueberschussberechnung)
     (devuberschuss, ueberschussberechnung) = getueb(nummer)
     argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
-    argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    argumentList.append(device_ip)
     argumentList.append(str(devuberschuss))
     argumentList.append("") # element with index 5 will be set on URL for switch on or off
     argumentList.append(device_actor)
