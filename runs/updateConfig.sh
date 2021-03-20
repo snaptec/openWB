@@ -1351,8 +1351,17 @@ updateConfig(){
 	if ! grep -Fq "discovergypvid=" $ConfigFile; then
 		echo "discovergypvid=idesmeters" >> $ConfigFile
 	fi
+	if ! grep -Fq "powerfoxuser=" $ConfigFile; then
+		echo "powerfoxuser=name@mail.de" >> $ConfigFile
+	fi
+	if ! grep -Fq "powerfoxpass=" $ConfigFile; then
+		echo "powerfoxpass=passwort" >> $ConfigFile
+	fi
 	if ! grep -Fq "powerfoxid=" $ConfigFile; then
 		echo "powerfoxid=idesmeters" >> $ConfigFile
+	fi
+	if ! grep -Fq "ksemip=" $ConfigFile; then
+		echo "ksemip=ipdesmeters" >> $ConfigFile
 	fi
 	
 	if ! grep -Fq "ksemip=" $ConfigFile; then
