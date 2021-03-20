@@ -1363,10 +1363,6 @@ updateConfig(){
 	if ! grep -Fq "ksemip=" $ConfigFile; then
 		echo "ksemip=ipdesmeters" >> $ConfigFile
 	fi
-	
-	if ! grep -Fq "ksemip=" $ConfigFile; then
-		echo "ksemip=ipdesmeters" >> $ConfigFile
-	fi
 	if ! grep -Fq "mollp1moab=" $ConfigFile; then
 		echo "mollp1moab=06:00" >> $ConfigFile
 	fi
