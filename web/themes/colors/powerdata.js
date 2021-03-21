@@ -58,7 +58,7 @@ class WbData {
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
 		this.showTodayGraph = false;
-		this.displayMode = "dark";
+		this.displayMode = "gray";
 		this.usageStackOrder = 0;
 		this.prefs = {};
 	};
