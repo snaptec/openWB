@@ -267,11 +267,11 @@ function switchDisplay() {
 function switchTheme() {
   const doc = d3.select("html");
   switch (wbdata.displayMode) {
-    case "dark": wbdata.displayMode = "light";
+    case "gray": wbdata.displayMode = "light";
       break;
-    case "light": wbdata.displayMode = "gray";
+    case "light": wbdata.displayMode = "dark";
       break;
-    case "gray": wbdata.displayMode = "dark"
+    case "dark": wbdata.displayMode = "gray"
       break;
     default: break;
   }
