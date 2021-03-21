@@ -50,7 +50,7 @@
 	<!-- Font Awesome, all styles -->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 	<!-- local css due to async loading of theme css -->
-	<style type="text/css">
+	<style>
 		#preloader {
 			background-color: white;
 			position: fixed;
@@ -231,21 +231,6 @@
 					</div>
 					<div id="socSelector"></div>
 					<div id="chargePointTable"></div>
-					<form id="minundpvladenEinstellungen" class="hide">
-						<hr color="white">
-						<div class="row justify-content-center">
-							<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
-						</div>
-						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
-							<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
-							<div class="col">
-
-								<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1"
-									value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-							</div>
-							<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
-						</div>
-					</form>
 					<!-- depending on charge mode show options -->
 					<form id="minundpvladenEinstellungen" class="hide">
 						<hr class="border-secondary">
@@ -365,8 +350,7 @@
 						<div class="chargeLimitation" data-lp="1">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 								<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons"
@@ -416,8 +400,7 @@
 						<div class="chargeLimitation" data-lp="2">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 								<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons"
@@ -467,8 +450,7 @@
 						<div class="chargeLimitation" data-lp="3">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 								<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons"
@@ -507,8 +489,7 @@
 						<div class="chargeLimitation" data-lp="4">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 								<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons"
@@ -547,8 +528,7 @@
 						<div class="chargeLimitation" data-lp="5">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 								<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons"
@@ -587,8 +567,7 @@
 						<div class="chargeLimitation" data-lp="6">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 								<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons"
@@ -627,8 +606,7 @@
 						<div class="chargeLimitation" data-lp="7">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 								<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons"
@@ -667,8 +645,7 @@
 						<div class="chargeLimitation" data-lp="8">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span
-										class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 								<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons"
@@ -708,22 +685,22 @@
 					<br>
 				</div>
 			</div>
-			<!-- Smart Home (smartHomeList) -->
+			<!-- Speicher (batteryList) -->
+			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
+				<h3>Speicher</h3>
+				<div class=" pb-3 ">
+					<div id="batteryStatus"></div>
+				</div>
+				
+			</div><!-- Smart Home (smartHomeList) -->
 			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
 				<h3>Geräte</h3>
 				<div class="wb-subwidget pb-3 ">
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
-			<!-- Speicher (batteryList) -->
-			<div class="wb-widget col-md-6 p-2 m-1" id="batteryWidget">
-				<h3>Speicher</h3>
-				<div class=" pb-3 ">
-					<div id="batteryStatus"></div>
-				</div>
-			</div>
+
 		</div>
-	</div>
 	</div>
 	<!-- ENDE COLOR THEME -->
 
@@ -1058,22 +1035,22 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
-			$('.priceMore, .priceLess').click(function(event){
+			$('.priceMore, .priceLess').click(function (event) {
 				// change Slider upon click on buttons
 				event.preventDefault();
 				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
 				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
 				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
 				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
-				if ( $(this).hasClass ('priceLess') ) {
+				if ($(this).hasClass('priceLess')) {
 					currentMaxPrice -= step;
 				} else {
 					currentMaxPrice += step;
 				}
 				// prevent timeout of delayUserInput when clicking "beyond" range
-				if ( currentMaxPrice < rangeMin ) {
+				if (currentMaxPrice < rangeMin) {
 					currentMaxPrice = rangeMin;
-				} else if ( currentMaxPrice > rangeMax ) {
+				} else if (currentMaxPrice > rangeMax) {
 					currentMaxPrice = rangeMax;
 				}
 				$('#MaxPriceForCharging').val(currentMaxPrice);

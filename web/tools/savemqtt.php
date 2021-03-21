@@ -25,6 +25,16 @@ function debugPrint($message){
 	}
 }
 
+function cleanAndExit($message){
+	// delete bridges-to-delete file, so that a bridge can't be deleted accidentally
+	$fileToClean = "/var/www/html/openWB/ramdisk/99-bridgesToDelete";
+	if(is_writable($fileToClean)){
+		debugPrint("deleting $fileToClean");
+		unlink($fileToClean);
+	}
+	exit($message);
+}
+
 if( $debug ){ ?>
 		<h3>Request parameters:</h3>
 		<pre>
@@ -36,8 +46,7 @@ if( $debug ){ ?>
 // validate bridge name and check if it had already been configured and
 // if it has already been configured, whether it has been enabled or disabled
 //
-parse_str($_SERVER['QUERY_STRING'], $queryArray);
-$previousBridgeName = $queryArray['bridge'];
+$previousBridgeName = $_POST['bridge'];
 
 debugPrint("Previous bridge name: '$previousBridgeName'");
 
@@ -45,11 +54,11 @@ $bridgeToConfig = $_POST['ConnectionName'];
 
 if ($bridgeToConfig == "eindeutiger-verbindungs-bezeichner")
 {
-	exit("Bitte eine eindeutige Bezeichnung f&uuml;r die Verbindung vergeben.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Bitte eine eindeutige Bezeichnung f&uuml;r die Verbindung vergeben.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 if(!preg_match('/^[a-zA-Z0-9]+$/', $bridgeToConfig)) {
-	exit("Der Bezeichener f&uuml;r die Bridge ('" . htmlentities($bridgeToConfig) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichener f&uuml;r die Bridge ('" . htmlentities($bridgeToConfig) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("Bridge to configure: '$bridgeToConfig'");
@@ -67,7 +76,7 @@ if ($previousBridgeName != $bridgeToConfig) {
 	foreach($files as $currentFile) {
 		if (strpos($currentFile, $previousBridgeName) !== false) {
 			//// print "Renaming bridge: Adding '$currentFile' to delete list<br/>";
-			file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
+			file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", "$currentFile\n", FILE_APPEND);
 		}
 	}
 }
@@ -88,7 +97,7 @@ $len = strlen($bridgeFileName);
 foreach($files as $currentFile) {
 	if (strpos($currentFile, $bridgeFileName) !== false) {
 		debugPrint("Deleting: $currentFile");
-		file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
+		file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", "$currentFile\n", FILE_APPEND);
 	}
 }
 
@@ -117,16 +126,16 @@ debugPrint("Bridge file name for new config: '$fileToUseForNewConfig'");
 
 $remoteHost = $_POST['RemoteAddress'];
 if ($remoteHost == "entfernter.mqtt.host:8883") {
-	exit("Bitte die Adresse und den Port des entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Bitte die Adresse und den Port des entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 if(!preg_match('/^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$/', $remoteHost, $matches)) {
-	exit("Der Bezeichener f&uuml;r den Namen oder die IP Adresse des entfernten MQTT-Servers ('" . htmlentities($remoteHost) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 und Punkt sind vor dem Doppelpunkt erlaubt. Nach dem Doppelpunkt sind nur noch Ziffern 0-9 erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichener f&uuml;r den Namen oder die IP Adresse des entfernten MQTT-Servers ('" . htmlentities($remoteHost) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 und Punkt sind vor dem Doppelpunkt erlaubt. Nach dem Doppelpunkt sind nur noch Ziffern 0-9 erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 $hostOrAddress = $matches[1];
 $port = $matches[2];
 if (!isset($hostOrAddress) || empty($hostOrAddress)) {
-	exit ("Die Address oder der Namen des entfernten MQTT-Servers ('" . htmlentities($hostOrAddress) . "') ist ung&uuml;tig oder nicht vorhanden.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit ("Die Address oder der Namen des entfernten MQTT-Servers ('" . htmlentities($hostOrAddress) . "') ist ung&uuml;tig oder nicht vorhanden.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 if (!isset($port) || empty($port)) {
@@ -137,38 +146,38 @@ debugPrint("HostOrAddress '$hostOrAddress', Port '$port'");
 
 $remoteUser = $_POST['RemoteUser'];
 if ($remoteUser == "nutzername-auf-dem-entfernten-host") {
-	exit("Bitte einen Benutzernamen f&uuml;r den entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Bitte einen Benutzernamen f&uuml;r den entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 if(!preg_match('/^([a-zA-Z0-9_\-+.]+)$/', $remoteUser)) {
-	exit("Der Bezeichener f&uuml;r den Benutzer auf dem entfernten MQTT-Servers ('" . htmlentities($remoteUser) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Punkt, Unterstrich, Minus und Plus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichener f&uuml;r den Benutzer auf dem entfernten MQTT-Servers ('" . htmlentities($remoteUser) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Punkt, Unterstrich, Minus und Plus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("RemoteUser: '$remoteUser'");
 
 $remotePass = $_POST['RemotePass'];
 if(!isset($remotePass) || empty($remotePass)) {
-	exit("Ung&uuml;tiges Pa&szlig;wort: Nicht vorhanden oder leer.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Ung&uuml;tiges Pa&szlig;wort: Nicht vorhanden oder leer.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("RemotePass: <em>&gt;vorhanden&lt;</em>");
 
 $remotePrefix = $_POST['RemotePrefix'];
 if(!preg_match('/^[a-zA-Z0-9_\-\/]+$/', $remotePrefix)) {
-	exit("Der Bezeichener f&uuml;r den Topic-Pr&auml;fix auf dem entfernten MQTT-Server ('" . htmlentities($remotePrefix) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Unterstrich, Schr&auml;gstrich und Minus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichener f&uuml;r den Topic-Pr&auml;fix auf dem entfernten MQTT-Server ('" . htmlentities($remotePrefix) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Unterstrich, Schr&auml;gstrich und Minus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("RemotePrefix: $remotePrefix");
 
 $mqttProtocol = $_POST['mqttProtocol'];
 if(!preg_match('/^(mqttv31|mqttv311)$/', $mqttProtocol)) {
-	exit("Interner Fehler: Ung&uuml;tiges MQTT Protokoll '" . htmlentities($mqttProtocol) . "'");
+	cleanAndExit("Interner Fehler: Ung&uuml;tiges MQTT Protokoll '" . htmlentities($mqttProtocol) . "'");
 }
 
 debugPrint("MQTT protocol: '$mqttProtocol'");
 
 $tlsProtocol = $_POST['tlsProtocol'];
 if(!preg_match('/^(tlsv1.2|tlsv1.3)$/', $tlsProtocol)) {
-	exit("Interner Fehler: Ung&uuml;tiges TLS Protokoll '" . htmlentities($tlsProtocol) . "'");
+	cleanAndExit("Interner Fehler: Ung&uuml;tiges TLS Protokoll '" . htmlentities($tlsProtocol) . "'");
 }
 
 $exportStatus = isset($_POST['exportStatus']) && ($_POST['exportStatus'] == 1);
@@ -176,7 +185,7 @@ $exportGraph = isset($_POST['exportGraph']) && ($_POST['exportGraph'] == 1);
 $subscribeConfigs = isset($_POST['subscribeConfigs']) && ($_POST['subscribeConfigs'] == 1);
 
 if (!$exportStatus && !$exportGraph && !$subscribeConfigs) {
-	exit("Es macht keinen Sinn eine MQTT-Br&uuml;cke zu konfigurieren welche weder Daten publiziert noch Konfigurationen empf&auml;ngt.<br/>Bitte mindestens eine Checkbox bei 'Zum entfernten Server weiterleiten' oder 'Konfiguration der openWB durch entfernten Server erm&ouml;glichen' aktivieren.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Es macht keinen Sinn eine MQTT-Br&uuml;cke zu konfigurieren welche weder Daten publiziert noch Konfigurationen empf&auml;ngt.<br/>Bitte mindestens eine Checkbox bei 'Zum entfernten Server weiterleiten' oder 'Konfiguration der openWB durch entfernten Server erm&ouml;glichen' aktivieren.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 //
@@ -184,7 +193,7 @@ if (!$exportStatus && !$exportGraph && !$subscribeConfigs) {
 //
 $configFile = fopen($fileToUseForNewConfig, 'w');
 if (!$configFile) {
-	exit("Interner Fehler: Kann die Konfigurationsdatei f&uuml;r die Br&uuml;cke nicht erzeugen.");
+	cleanAndExit("Interner Fehler: Kann die Konfigurationsdatei f&uuml;r die Br&uuml;cke nicht erzeugen.");
 }
 
 debugPrint("Openend '$fileToUseForNewConfig' and now writing configuration to it");

@@ -71,6 +71,35 @@ elif [[ $froniusvar2 == "2" ]]; then
 	ekwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
 fi
 
+openwbDebugLog ${DMOD} 1 "EVU: response_sm: $response_sm"
+
+# Auswertung für Variante0 und Variante1 gebündelt
+if [[ $froniusvar2 != "2" ]]; then
+	# Überprüfe den Einbauort des SmartMeters.
+	meter_location=$(echo $response_sm | jq $json_id'.Meter_Location_Current')
+	
+	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
+	wattbezug=$(echo "scale=0; $(echo $response_sm | jq $json_id'.PowerReal_P_Sum')/1" | bc)
+	evuv1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_1')/1" | bc)
+	evuv2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_2')/1" | bc)
+	evuv3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_3')/1" | bc)
+	bezugw1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_1')/1" | bc)
+	bezugw2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_2')/1" | bc)
+	bezugw3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_3')/1" | bc)
+	# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
+	# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
+	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
+	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
+	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
+	evuhz=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Frequency_Phase_Average')/1" | bc)
+	evupf1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_1')/1" | bc)
+	evupf2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_2')/1" | bc)
+	evupf3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_3')/1" | bc)
+	ikwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Consumed')
+	ekwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Produced')
+
+fi
+
 
 
 openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
@@ -105,38 +134,11 @@ if [[ $meter_location == "1" ]]; then
 	# Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
 	#ekwh=$(echo $response_fi | jq '.Body.Data.Site.E_Total')
 	ekwh=0
+	echo 1 > /var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation
+
 fi
 
 openwbDebugLog ${DMOD} 1 "EVU: V: ${evuv1}/${evuv2}/${evuv3} A: ${bezuga1}/${bezuga2}/${bezuga3} W: ${bezugw1}/${bezugw2}/${bezugw3}/T${wattbezug}"
-
-openwbDebugLog ${DMOD} 1 "EVU: response_sm: $response_sm"
-
-# Auswertung für Variante0 und Variante1 gebündelt
-if [[ $froniusvar2 != "2" ]]; then
-	# Überprüfe den Einbauort des SmartMeters.
-	meter_location=$(echo $response_sm | jq $json_id'.Meter_Location_Current')
-	
-	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
-	wattbezug=$(echo "scale=0; $(echo $response_sm | jq $json_id'.PowerReal_P_Sum')/1" | bc)
-	evuv1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_1')/1" | bc)
-	evuv2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_2')/1" | bc)
-	evuv3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_3')/1" | bc)
-	bezugw1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_1')/1" | bc)
-	bezugw2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_2')/1" | bc)
-	bezugw3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_3')/1" | bc)
-	# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
-	# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
-	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
-	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
-	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
-	evuhz=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Frequency_Phase_Average')/1" | bc)
-	evupf1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_1')/1" | bc)
-	evupf2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_2')/1" | bc)
-	evupf3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_3')/1" | bc)
-	ikwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Consumed')
-	ekwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Produced')
-
-fi
 
 # Gib den wichtigsten Wert direkt zurück (auch sinnvoll beim Debuggen).
 echo $wattbezug

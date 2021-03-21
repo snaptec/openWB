@@ -105,6 +105,7 @@
 										<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
 										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
+										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
 										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
 										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
 										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
@@ -185,6 +186,21 @@
 							</div>
 						</div>
 
+						<div id="divspeicherstuder" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="studer_ip" id="studer_ip" value="<?php echo $studer_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+							</div>
+							<div class="alert alert-info">
+								Hier bitte die IP Adresse des ModbusGateway's eintragen.
+							</div>
+						</div>
+						
 						<div id="divspeicherfems" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -389,6 +405,17 @@
 										</span>
 									</div>
 								</div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="solaredgezweiterspeicher" class="col-md-4 col-form-label">Ist ein zweiter Speicher am Wechselrichter angeschlossen?</label>
+										<div class="col">
+											<select name="solaredgezweiterspeicher" id="solaredgezweiterspeicher" class="form-control">
+												<option <?php if($solaredgezweiterspeicherold == 0) echo "selected" ?> value="0">Nein</option>
+												<option <?php if($solaredgezweiterspeicherold == 1) echo "selected" ?> value="1">Ja</option>
+											</select>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -574,6 +601,7 @@
 								hideSection('#divspeichervarta');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichervictron');
+								hideSection('#divspeicherstuder');
 								hideSection('#divspeicherlgessv1');
 								hideSection('#divspeicherfems');
 								hideSection('#divspeicherip');
@@ -609,6 +637,9 @@
 								}
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
+								}
+                                if($('#speichermodul').val() == 'speicher_studer') {
+									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
 									showSection('#divspeicherkit');

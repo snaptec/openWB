@@ -50,6 +50,11 @@ PV_power_ac2 = 0
 Total_yield2 = 0
 Yearly_yield2 = 0
 Monthly_yield2 = 0
+# Werte WR3
+PV_power_ac3 = 0
+Total_yield3 = 0
+Yearly_yield3 = 0
+Monthly_yield3 = 0
 # Werte EVU
 Bezug = 0
 Current_phase_1_powermeter = 0
@@ -67,7 +72,7 @@ Actual_cos_phi = 0
 boolspeicher = 0
 ipaddress = '0.0.0.0'
 ipaddress2 = '0.0.0.0'
-
+ipaddress3 = '0.0.0.0'
 def write_log_entry(message):
     # schreibt Eintrag ins Log
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -184,10 +189,12 @@ def write_to_ramdisk():
 # Hauptprogramm
 
 # # übergebene Paremeter auslesen
-if len(sys.argv) == 4:
+if len(sys.argv) == 5:
     ipaddress = str(sys.argv[1])
     ipaddress2 = str(sys.argv[2])
     boolspeicher = int(sys.argv[3])
+    ipaddress3 = str(sys.argv[4])
+
 else:
     # Hauptprogramm nur ausführen, wenn Argumente stimmen; erstes Argument ist immer Dateiname
     write_log_entry('Argumente fehlen oder sind fehlerhaft')
@@ -212,7 +219,14 @@ if ipaddress2 != 'none':
         write_log_entry('Fehler beim Initialisieren des Modbus-Client WR2')
         write_to_ramdisk()
         exit()
-
+if ipaddress3 != 'none':
+    try:
+        client3 = ModbusTcpClient(ipaddress3, port=1502)
+    except:
+        # kein Zugriff auf WR3, also Abbruch und mit Null initialisierte Variablen in die Ramdisk
+        write_log_entry('Fehler beim Initialisieren des Modbus-Client WR3')
+        write_to_ramdisk()
+        exit()
 # dann zunächst alle relevanten Register aus WR 1 auslesen:
 try:
     if boolspeicher == 1:
@@ -314,7 +328,27 @@ if ipaddress2 != 'none':
         write_log_entry('Fehler beim Lesen der Modbus-Register WR2 (falsche IP oder WR offline?)')
         write_to_ramdisk()
         exit()
-
+# ggf. WR 3 auslesen, es werden keine Register für Daten vom EM300/KSEM
+# gelesen, diese kommen ausschließlich über den WR 1
+if ipaddress3 != 'none':
+    try:
+        # Plenticore Register 575: Inverter_generation_power_actual [W]
+        # ist AC-Leistungsabgabe des Wechselrichters
+        reg3_575 = client3.read_holding_registers(575,1,unit=71)
+        # Plenticore Register 320: Total_yield [Wh]
+        # ist PV Gesamtertrag
+        reg3_320 = client3.read_holding_registers(320,2,unit=71)
+        # Plenticore Register 324: Yearly_yield [Wh]
+        # ist PV Jahresertrag
+        reg3_324 = client3.read_holding_registers(324,2,unit=71)
+        # Plenticore Register 326: Monthly_yield [Wh]
+        # ist PV Monatsertrag
+        reg3_326 = client3.read_holding_registers(326,2,unit=71)
+    except:
+        # Lesefehler bei den Registern, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
+        write_log_entry('Fehler beim Lesen der Modbus-Register WR3 (falsche IP oder WR offline?)')
+        write_to_ramdisk()
+        exit()
 # ausgelesene Register WR 1 dekodieren
 #FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_150 = BinaryPayloadDecoder.fromRegisters(reg_150.registers, byteorder=Endian.Big, wordorder=Endian.Little)
@@ -345,6 +379,12 @@ if ipaddress2 != 'none':
     FRegister2_324 = BinaryPayloadDecoder.fromRegisters(reg2_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     FRegister2_326 = BinaryPayloadDecoder.fromRegisters(reg2_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     FRegister2_575 = BinaryPayloadDecoder.fromRegisters(reg2_575.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+# ggf. ausgelesene Register WR 2 dekodieren
+if ipaddress3 != 'none':
+    FRegister3_320 = BinaryPayloadDecoder.fromRegisters(reg3_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+    FRegister3_324 = BinaryPayloadDecoder.fromRegisters(reg3_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+    FRegister3_326 = BinaryPayloadDecoder.fromRegisters(reg3_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+    FRegister3_575 = BinaryPayloadDecoder.fromRegisters(reg3_575.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 
 # dekodierte Register WR 1 in entsprechende Typen umwandeln
 #Total_DC_power1 = int(FRegister_100.decode_32bit_float())
@@ -418,12 +458,15 @@ else:
 # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
 if ipaddress2 != 'none':
     PV_power_ac2 = Inverter_generation_power_actual2
+# am WR3 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
+if ipaddress3 != 'none':
+    PV_power_ac3 = Inverter_generation_power_actual3
 
 # Bezug zunächst nur auslesen, Sensorposition wird im Strombezugsmessmodul betrachtet
 Bezug = Total_active_power_powermeter
 
 # Summe der jeweiligen AC-Leistungen bestimmen
-PV_power_total = PV_power_ac1 + PV_power_ac2
+PV_power_total = PV_power_ac1 + PV_power_ac2 + PV_power_ac3
 
 # Ab und an liefert der WR Werte (gerade beim Anlaufen), die einen Verbrauch der PV-AC-Seite suggerieren
 # Da dies unplausibel ist, wird in diesem Fall die PV-Leistung auf 0 gesetzt
@@ -435,11 +478,11 @@ PV_power_total *= -1
 Actual_batt_ch_disch_power *= -1
 PV_power_ac1 *= -1
 PV_power_ac2 *= -1
+PV_power_ac3 *= -1
 
 # Summen der Erträge bestimmen
-Total_yield = Total_yield1 + Total_yield2
-Monthly_yield = Monthly_yield1 + Monthly_yield2
-Yearly_yield = Yearly_yield1 + Yearly_yield2
-
+Total_yield = Total_yield1 + Total_yield2 + Total_yield3
+Monthly_yield = Monthly_yield1 + Monthly_yield2 + Monthly_yield3
+Yearly_yield = Yearly_yield1 + Yearly_yield2 + Yearly_yield3
 # und zur Weiterverarbeitung alle Werte in die ramdisk
 write_to_ramdisk()

@@ -48,14 +48,13 @@
 		?>
 		<div id="nav"></div> <!-- placeholder for navbar -->
 		<div role="main" class="container" style="margin-top:20px">
-			<h1>MQTT-Brücke</h1>
 			<?php
 				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
-				if (count($files) == 0) {
-					array_push($files, "");
-				}
+				$filesCount = count($files);
+				// give the user the option to configure more than one bridge
+				array_push($files, "");
 
-				$firstLoopDone = false;
+				$loopCount = 0;
 				foreach($files as $currentFile)
 				{
 					$currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
@@ -129,8 +128,9 @@
 						}
 					}
 
-					if ($firstLoopDone) echo "<hr>";
+					if ($loopCount != 0) echo "<hr>";
 			?>
+			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke \"$connectionName\""; else echo "Neue MQTT-Brücke"; ?></h1>
 			<form action="./tools/savemqtt.php" method="POST">
 				<!-- previous bridge name, needed for renaming a bridge -->
 				<input type="hidden" readonly="readonly" name="bridge" value="<?php echo($connectionName); ?>">
@@ -168,7 +168,7 @@
 							<div class="col">
 								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>">
 								<span class="form-text small">Der Name darf nur aus Buchstaben und Zahlen bestehen, keine Sonderzeichen oder Umlaute.</span>
-								<?php if($debugold >= 1) echo "<small>in Datei '$currentFile'</small>"; ?>
+								<?php if($debugold >= 1) echo "<small>Config-File befindet sich in Datei '$currentFile'</small>"; ?>
 							</div>
 						</div>
 						<div class="form-row mb-1">
@@ -325,7 +325,7 @@
 
 			</form>
 			<?php
-					$firstLoopDone = true;
+					$loopCount++;
 				}
 			?>
 

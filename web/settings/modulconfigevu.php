@@ -58,7 +58,6 @@
 			}
 		</script>
 	</head>
-
 	<body>
 
 		<?php
@@ -101,6 +100,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_lgessv1") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
+										<option <?php if($wattbezugmodulold == "bezug_powerfox") echo "selected" ?> value="bezug_powerfox">Powerfox</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
@@ -196,6 +196,30 @@
 						<div id="wattbezugpowerdog" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Powerdog eingeben. Im Powerdog muss die Schnittstelle ModbusTCP aktiviert werden.
+							</div>
+						</div>
+						
+						<div id="wattbezugpowerfox" class="hide">
+							<div class="form-row mb-1">
+								<label for="powerfoxuser" class="col-md-4 col-form-label">powerfox Username (Email)</label>
+								<div class="col">
+									<input class="form-control" type="email" name="powerfoxuser" id="powerfoxuser" value="<?php echo htmlspecialchars($powerfoxuserold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="powerfoxpass" class="col-md-4 col-form-label">Passwort</label>
+								<div class="col">
+									<input class="form-control" type="password" name="powerfoxpass" id="powerfoxpass" value="<?php echo htmlspecialchars($powerfoxpassold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="powerfoxid" class="col-md-4 col-form-label">Device ID</label>
+								<div class="col">
+									<input class="form-control" type="text" name="powerfoxid" id="powerfoxid" value="<?php echo $powerfoxidold ?>">
+									<span class="form-text small">
+										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.
+									</span>
+								</div>
 							</div>
 						</div>
 						<div id="wattbezugethmpm3pm" class="hide">
@@ -704,10 +728,11 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgeip" id="solaredgeip" value="<?php echo $solaredgeipold ?>">
 									<span class="form-text small">
-										Gültige Werte IP.<br>
+										Gültige Werte: IP.<br>
 										Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
 										Ebenso muss ModbusTCP am Wechselrichter aktiviert werden.<br>
-										Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.
+										Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.<br>
+										Es ist die IP-Adresse des SolarEdge Wechselrichters anzugeben.
 									</span>
 								</div>
 							</div>
@@ -808,6 +833,7 @@
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
 								hideSection('#wattbezugpowerdog');
+								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
@@ -851,6 +877,10 @@
 								if($('#wattbezugmodul').val() == 'bezug_powerdog') {
 									showSection('#wattbezugpowerdog');
 									showSection('#wattbezugip');
+									
+								if($('#wattbezugmodul').val() == 'bezug_powerfox') {
+									showSection('#wattbezugpowerfox');
+
 
 								}
 								if($('#wattbezugmodul').val() == 'bezug_fems') {

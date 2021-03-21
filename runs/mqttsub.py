@@ -155,7 +155,7 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630'] # 'pyt' is deprecated and will be removed!
+            validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514'] # 'pyt' is deprecated and will be removed!
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                 try:
                     deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))
@@ -581,8 +581,10 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/get/pv/nurpv70dynw", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/system/GetRemoteSupport"):
             if ( 5 <= len(msg.payload.decode("utf-8")) <=50 ):
-                token=msg.payload.decode("utf-8")
-                getsupport = ["/var/www/html/openWB/runs/startremotesupport.sh", token]
+                f = open('/var/www/html/openWB/ramdisk/remotetoken', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+                getsupport = ["/var/www/html/openWB/runs/initremote.sh"]
                 subprocess.Popen(getsupport)
         if (msg.topic == "openWB/set/hook/HookControl"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=30):
