@@ -672,8 +672,12 @@ updateConfig(){
 	if ! grep -Fq "soc_vag_password=" $ConfigFile; then
 		echo "soc_vag_password=pass" >> $ConfigFile
 	fi
+	# remove line with syntax error from config
+	if grep -Fq "soc_vag_vin=vin (WVWZZZ...)" $ConfigFile; then
+		sed -i '/^soc_vag_vin=/d' $ConfigFile
+	fi
 	if ! grep -Fq "soc_vag_vin=" $ConfigFile; then
-		echo "soc_vag_vin='vin (WVWZZZ...)'" >> $ConfigFile
+		echo "soc_vag_vin='WVWZZZ...'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_vag_intervall=" $ConfigFile; then
 		echo "soc_vag_intervall=60" >> $ConfigFile
@@ -1742,6 +1746,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "akkuglp2=" $ConfigFile; then
 		echo "akkuglp2=35" >> $ConfigFile
+	fi
+	if ! grep -Fq "wirkungsgradlp2=" $ConfigFile; then
 		echo "wirkungsgradlp2=90" >> $ConfigFile
 	fi
 	if ! grep -Fq "solaxip=" $ConfigFile; then
