@@ -1827,6 +1827,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "discovergypass=" $ConfigFile; then
 		echo "discovergypass='password'" >> $ConfigFile
+	else
+		sed -i "/discovergypass='/b; s/^discovergypass=\(.*\)/discovergypass=\'\1\'/g" $ConfigFile
 	fi
 	echo "Config file Update done."
 }
