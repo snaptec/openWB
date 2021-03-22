@@ -433,10 +433,10 @@ initRamdisk(){
 			"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt:0" \
 			"lp${i}phasen::0" \
 			"lp${i}enabled::1" \
-			"restzeitlp${i}::--" \
+			"restzeitlp${i}::0" \
 			"autolockstatuslp${i}::0" \
 			"autolockconfiguredlp${i}::0" \
-			"lp${i}sofortll::10" \
+			"lp${i}sofortll:openWB/config/get/sofort/lp/${i}/current:10" \
 			"rfidlp${i}::0" \
 			"boolstopchargeafterdisclp${i}::0" \
 			"mqttzielladenaktivlp${i}::-1" \
