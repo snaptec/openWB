@@ -1825,5 +1825,8 @@ updateConfig(){
 	if ! grep -Fq "studer_ip=" $ConfigFile; then
 		echo "studer_ip=192.168.1.1" >> $ConfigFile
 	fi
+	if ! grep -Fq "discovergypass=" $ConfigFile; then
+		echo "discovergypass='password'" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
