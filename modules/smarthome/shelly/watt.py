@@ -37,15 +37,15 @@ temp0 = '0.0'
 temp1 = '0.0'
 temp2 = '0.0'
 try:
-    temp0 = str(answer['ext_temperature'][0]['tC'])
+    temp0 = str(answer['ext_temperature']['0']['tC'])
 except:
     pass
 try:
-    temp1 = str(answer['ext_temperature'][1]['tC'])
+    temp1 = str(answer['ext_temperature']['1']['tC'])
 except:
     pass
 try:
-    temp2 = str(answer['ext_temperature'][2]['tC'])
+    temp2 = str(answer['ext_temperature']['2']['tC'])
 except:
     pass
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + ',"temp0":' + str(temp0) + ',"temp1":' + str(temp1) + ',"temp2":' + str(temp2) + '} '
