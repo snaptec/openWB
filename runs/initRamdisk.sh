@@ -346,6 +346,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/verbraucher3_watt
 	echo 0 > $RamdiskPath/verbraucher3_wh
 	echo 0 > $RamdiskPath/verbraucher3vorhanden
+	touch $RamdiskPath/ladestophooklp1aktiv # benötigt damit der Ladestopp-WebHook nicht beim Neustart auslöst
+	touch $RamdiskPath/abgesteckthooklp1aktiv # benötigt damit der Abgesteckt-WebHook nicht beim Neustart auslöst
 
 	# diverse Dateien
 	echo 0 > $RamdiskPath/AllowedTotalCurrentPerPhase
