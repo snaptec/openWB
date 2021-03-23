@@ -1764,6 +1764,12 @@ updateConfig(){
 		echo "psa_clientidlp2=ID" >> $ConfigFile
 		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
 	fi
+	if ! grep -Fq "psa_intervallp1=" $ConfigFile; then
+		echo "psa_intervallp1=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "psa_intervallp2=" $ConfigFile; then
+		echo "psa_intervallp2=10" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		echo "soc_eq_client_id_lp1=ID" >> $ConfigFile
 		echo "soc_eq_client_secret_lp1=Secret" >> $ConfigFile
