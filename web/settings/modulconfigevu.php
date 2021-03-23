@@ -853,7 +853,6 @@
 								if($('#wattbezugmodul').val() == 'bezug_sungrow') {
 									showSection('#wattbezugsungrow');
 								}
-
 								if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
 									showSection('#wattbezugsonneneco');
 								}
@@ -863,25 +862,20 @@
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_rct') {
 									showSection('#wattbezugrct');
 									showSection('#wattbezugip');
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_powerdog') {
 									showSection('#wattbezugpowerdog');
 									showSection('#wattbezugip');
-									
+								}
 								if($('#wattbezugmodul').val() == 'bezug_powerfox') {
 									showSection('#wattbezugpowerfox');
-
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_fems') {
 									showSection('#wattbezugfems');
@@ -889,7 +883,6 @@
 								if($('#wattbezugmodul').val() == 'bezug_solarworld') {
 									showSection('#wattbezugsolarworld');
 								}
-
 								if($('#wattbezugmodul').val() == 'bezug_solarview') {
 									showSection('#wattbezugsolarview');
 								}
