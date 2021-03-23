@@ -4,7 +4,8 @@
 if [[ "$1" == "1" ]]; then
 	# chargepoint 1
 	if [[ $evsecon == "modbusevse" ]]; then
-		sudo python runs/trigopen.py
+		openwbDebugLog "MAIN" 0 "Pause nach Umschaltung: ${u1p3ppause}s"
+		sudo python runs/trigopen.py $u1p3ppause
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 1
@@ -67,7 +68,8 @@ fi
 # change to 3 phases
 if [[ "$1" == "3" ]]; then
 	if [[ $evsecon == "modbusevse" ]]; then
-		sudo python runs/trigclose.py
+		openwbDebugLog "MAIN" 0 "Pause nach Umschaltung: ${u1p3ppause}s"
+		sudo python runs/trigclose.py $u1p3ppause
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "3"
