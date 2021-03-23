@@ -941,6 +941,9 @@ updateConfig(){
 	if ! grep -Fq "u1p3paktiv=" $ConfigFile; then
 		echo "u1p3paktiv=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "u1p3ppause=" $ConfigFile; then
+		echo "u1p3ppause=2" >> $ConfigFile
+	fi
 	if ! grep -Fq "u1p3psofort=" $ConfigFile; then
 		echo "u1p3psofort=3" >> $ConfigFile
 	fi
@@ -1307,8 +1310,14 @@ updateConfig(){
 	if ! grep -Fq "cpunterbrechunglp1=" $ConfigFile; then
 		echo "cpunterbrechunglp1=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "cpunterbrechungdauerlp1=" $ConfigFile; then
+		echo "cpunterbrechungdauerlp1=4" >> $ConfigFile
+	fi
 	if ! grep -Fq "cpunterbrechunglp2=" $ConfigFile; then
 		echo "cpunterbrechunglp2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "cpunterbrechungdauerlp2=" $ConfigFile; then
+		echo "cpunterbrechungdauerlp2=4" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_zerong_username=" $ConfigFile; then
 		echo "soc_zerong_username=deine@email.com" >> $ConfigFile
