@@ -672,8 +672,12 @@ updateConfig(){
 	if ! grep -Fq "soc_vag_password=" $ConfigFile; then
 		echo "soc_vag_password=pass" >> $ConfigFile
 	fi
+	# remove line with syntax error from config
+	if grep -Fq "soc_vag_vin=vin (WVWZZZ...)" $ConfigFile; then
+		sed -i '/^soc_vag_vin=/d' $ConfigFile
+	fi
 	if ! grep -Fq "soc_vag_vin=" $ConfigFile; then
-		echo "soc_vag_vin='vin (WVWZZZ...)'" >> $ConfigFile
+		echo "soc_vag_vin='WVWZZZ...'" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_vag_intervall=" $ConfigFile; then
 		echo "soc_vag_intervall=60" >> $ConfigFile
@@ -728,6 +732,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "kostalplenticoreip2=" $ConfigFile; then
 		echo "kostalplenticoreip2=none" >> $ConfigFile
+	fi
+	if ! grep -Fq "kostalplenticoreip3=" $ConfigFile; then
+		echo "kostalplenticoreip3=none" >> $ConfigFile
 	fi
 	if ! grep -Fq "name_wechselrichter1=" $ConfigFile; then
 		echo "name_wechselrichter1=WR1" >> $ConfigFile
@@ -933,6 +940,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "u1p3paktiv=" $ConfigFile; then
 		echo "u1p3paktiv=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "u1p3ppause=" $ConfigFile; then
+		echo "u1p3ppause=2" >> $ConfigFile
 	fi
 	if ! grep -Fq "u1p3psofort=" $ConfigFile; then
 		echo "u1p3psofort=3" >> $ConfigFile
@@ -1300,8 +1310,14 @@ updateConfig(){
 	if ! grep -Fq "cpunterbrechunglp1=" $ConfigFile; then
 		echo "cpunterbrechunglp1=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "cpunterbrechungdauerlp1=" $ConfigFile; then
+		echo "cpunterbrechungdauerlp1=4" >> $ConfigFile
+	fi
 	if ! grep -Fq "cpunterbrechunglp2=" $ConfigFile; then
 		echo "cpunterbrechunglp2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "cpunterbrechungdauerlp2=" $ConfigFile; then
+		echo "cpunterbrechungdauerlp2=4" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_zerong_username=" $ConfigFile; then
 		echo "soc_zerong_username=deine@email.com" >> $ConfigFile
@@ -1347,6 +1363,15 @@ updateConfig(){
 	fi
 	if ! grep -Fq "discovergypvid=" $ConfigFile; then
 		echo "discovergypvid=idesmeters" >> $ConfigFile
+	fi
+	if ! grep -Fq "powerfoxuser=" $ConfigFile; then
+		echo "powerfoxuser=name@mail.de" >> $ConfigFile
+	fi
+	if ! grep -Fq "powerfoxpass=" $ConfigFile; then
+		echo "powerfoxpass=passwort" >> $ConfigFile
+	fi
+	if ! grep -Fq "powerfoxid=" $ConfigFile; then
+		echo "powerfoxid=idesmeters" >> $ConfigFile
 	fi
 	if ! grep -Fq "ksemip=" $ConfigFile; then
 		echo "ksemip=ipdesmeters" >> $ConfigFile
@@ -1730,6 +1755,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "akkuglp2=" $ConfigFile; then
 		echo "akkuglp2=35" >> $ConfigFile
+	fi
+	if ! grep -Fq "wirkungsgradlp2=" $ConfigFile; then
 		echo "wirkungsgradlp2=90" >> $ConfigFile
 	fi
 	if ! grep -Fq "solaxip=" $ConfigFile; then

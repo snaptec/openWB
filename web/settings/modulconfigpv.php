@@ -297,6 +297,16 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
+								<label for="kostalplenticoreip3" class="col-md-4 col-form-label">WR 3 IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="kostalplenticoreip3" id="kostalplenticoreip3" value="<?php echo $kostalplenticoreip3old ?>">
+									<span class="form-text small">
+										Gültige Werte: IP-Adresse des 3. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein.
+										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
 								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
 								<div class="col">
 									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
