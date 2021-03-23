@@ -40,6 +40,12 @@ updateConfig
 # now setup all files in ramdisk
 initRamdisk
 
+# standard socket - activated after reboot due to RASPI init defaults so we need to disable it as soon as we can
+if [[ $standardSocketInstalled == "1" ]]; then
+	echo "turning off standard socket ..."
+	sudo python /var/www/html/openWB/runs/standardSocket.py off
+fi
+
 # initialize automatic phase switching
 if (( u1p3paktiv == 1 )); then
 	echo "triginit..."

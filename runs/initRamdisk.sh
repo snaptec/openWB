@@ -349,6 +349,16 @@ initRamdisk(){
 	touch $RamdiskPath/ladestophooklp1aktiv # benötigt damit der Ladestopp-WebHook nicht beim Neustart auslöst
 	touch $RamdiskPath/abgesteckthooklp1aktiv # benötigt damit der Abgesteckt-WebHook nicht beim Neustart auslöst
 
+	# standard socket
+	echo 0 > $RamdiskPath/socketa
+	echo 0 > $RamdiskPath/socketv
+	echo 0 > $RamdiskPath/socketp
+	echo 0 > $RamdiskPath/socketpf
+	echo 0 > $RamdiskPath/socketkwh
+	echo 0 > $RamdiskPath/socketApproved
+	echo 0 > $RamdiskPath/socketActivated
+	echo 0 > $RamdiskPath/socketActivationRequested
+
 	# diverse Dateien
 	echo 0 > $RamdiskPath/AllowedTotalCurrentPerPhase
 	echo 0 > $RamdiskPath/ChargingVehiclesOnL1
