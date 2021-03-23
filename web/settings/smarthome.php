@@ -102,6 +102,75 @@
 									</div>
 								</div>
 							</div>
+							<hr class="border-secondary">
+							<div class="form-row mb-1">
+								<label for="abgesteckthooklp1" class="col-md-4 col-form-label">Nach Abstecken an Ladepunkt 1</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($abgesteckthooklp1old == 0) echo " active" ?>">
+											<input type="radio" name="abgesteckthooklp1" id="abgesteckthooklp1Off" value="0"<?php if($abgesteckthooklp1old == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($angesteckthooklp1old == 1) echo " active" ?>">
+											<input type="radio" name="abgesteckthooklp1" id="abgesteckthooklp1On" value="1"<?php if($abgesteckthooklp1old == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div id="abgesteckthooklp1andiv">
+								<div class="form-row mb-1">
+									<label for="abgesteckthooklp1_url" class="col-md-4 col-form-label">URL</label>
+									<div class="col">
+										<input class="form-control" type="text" name="abgesteckthooklp1_url" id="abgesteckthooklp1_url" value="<?php echo trim(htmlspecialchars($abgesteckthooklp1_urlold)) ?>">
+										<span class="form-text small">URL die (einmalig) aufgerufen wird wenn ein Fahrzeug an LP1 abgesteckt wird. Erneutes Ausführen erfolgt erst nachdem angesteckt wurde.</span>
+									</div>
+								</div>
+							</div>
+							<hr class="border-secondary">
+							<div class="form-row mb-1">
+								<label for="ladestarthooklp1" class="col-md-4 col-form-label">Nach Ladestart an Ladepunkt 1</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($ladestarthooklp1old == 0) echo " active" ?>">
+											<input type="radio" name="ladestarthooklp1" id="ladestarthooklp1Off" value="0"<?php if($ladestarthooklp1old == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($ladestarthooklp1old == 1) echo " active" ?>">
+											<input type="radio" name="ladestarthooklp1" id="ladestarthooklp1On" value="1"<?php if($ladestarthooklp1old == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div id="ladestarthooklp1andiv">
+								<div class="form-row mb-1">
+									<label for="ladestarthooklp1_url" class="col-md-4 col-form-label">URL</label>
+									<div class="col">
+										<input class="form-control" type="text" name="ladestarthooklp1_url" id="ladestarthooklp1_url" value="<?php echo trim(htmlspecialchars($ladestarthooklp1_urlold)) ?>">
+										<span class="form-text small">URL die (einmalig) aufgerufen wird wenn ein Ladevorgang an LP1 startet. Erneutes Ausführen erfolgt erst nachdem der Ladevorgang gestoppt wurde.</span>
+									</div>
+								</div>
+							</div>
+							<hr class="border-secondary">
+							<div class="form-row mb-1">
+								<label for="ladestophooklp1" class="col-md-4 col-form-label">Nach Ladestopp an Ladepunkt 1</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($ladestophooklp1old == 0) echo " active" ?>">
+											<input type="radio" name="ladestophooklp1" id="ladestophooklp1Off" value="0"<?php if($ladestophooklp1old == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($ladestophooklp1old == 1) echo " active" ?>">
+											<input type="radio" name="ladestophooklp1" id="ladestophooklp1On" value="1"<?php if($ladestophooklp1old == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div id="ladestophooklp1andiv">
+								<div class="form-row mb-1">
+									<label for="ladestophooklp1_url" class="col-md-4 col-form-label">URL</label>
+									<div class="col">
+										<input class="form-control" type="text" name="ladestophooklp1_url" id="ladestophooklp1_url" value="<?php echo trim(htmlspecialchars($ladestophooklp1_urlold)) ?>">
+										<span class="form-text small">URL die (einmalig) aufgerufen wird wenn ein Ladevorgang an LP1 stoppt. Erneutes Ausführen erfolgt erst nachdem der Ladevorgang gestartet wurde.</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -117,6 +186,45 @@
 									hideSection('#angesteckthooklp1andiv');
 								} else {
 									showSection('#angesteckthooklp1andiv');
+								}
+							});
+							if($('#abgesteckthooklp1Off').prop("checked")) {
+								hideSection('#abgesteckthooklp1andiv');
+							} else {
+								showSection('#abgesteckthooklp1andiv');
+							}
+
+							$('input[type=radio][name=abgesteckthooklp1]').change(function(){
+								if(this.value == '0') {
+									hideSection('#abgesteckthooklp1andiv');
+								} else {
+									showSection('#abgesteckthooklp1andiv');
+								}
+							});
+							if($('#ladestarthooklp1Off').prop("checked")) {
+								hideSection('#ladestarthooklp1andiv');
+							} else {
+								showSection('#ladestarthooklp1andiv');
+							}
+
+							$('input[type=radio][name=ladestarthooklp1]').change(function(){
+								if(this.value == '0') {
+									hideSection('#ladestarthooklp1andiv');
+								} else {
+									showSection('#ladestarthooklp1andiv');
+								}
+							});
+							if($('#ladestophooklp1Off').prop("checked")) {
+								hideSection('#ladestophooklp1andiv');
+							} else {
+								showSection('#ladestophooklp1andiv');
+							}
+
+							$('input[type=radio][name=ladestophooklp1]').change(function(){
+								if(this.value == '0') {
+									hideSection('#ladestophooklp1andiv');
+								} else {
+									showSection('#ladestophooklp1andiv');
 								}
 							});
 						});

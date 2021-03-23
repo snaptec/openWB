@@ -262,12 +262,57 @@ hook(){
 			if [ ! -e ramdisk/angesteckthooklp1aktiv ]; then
 				touch ramdisk/angesteckthooklp1aktiv
 				curl -s --connect-timeout 5 $angesteckthooklp1_url > /dev/null
-				openwbDebugLog "CHARGESTAT" 0 "angesteckt Hook LP1 ausgeführt"
-				openwbDebugLog "MAIN" 1 "angesteckt Hook LP1 ausgeführt"
+				openwbDebugLog "CHARGESTAT" 0 "Angesteckt-WebHook LP1 ausgeführt"
+				openwbDebugLog "MAIN" 1 "Angesteckt-WebHook LP1 ausgeführt"
 			fi
 		else
 			if [  -e ramdisk/angesteckthooklp1aktiv ]; then
 				rm ramdisk/angesteckthooklp1aktiv
+			fi
+		fi
+	fi
+	if (( abgesteckthooklp1 == 1 )); then
+		plugstat=$(<ramdisk/plugstat)
+		if (( plugstat == 0 )); then
+			if [ ! -e ramdisk/abgesteckthooklp1aktiv ]; then
+				touch ramdisk/abgesteckthooklp1aktiv
+				curl -s --connect-timeout 5 $abgesteckthooklp1_url > /dev/null
+				openwbDebugLog "CHARGESTAT" 0 "Abgesteckt-WebHook LP1 ausgeführt"
+				openwbDebugLog "MAIN" 1 "Abgesteckt-WebHook LP1 ausgeführt"
+			fi
+		else
+			if [  -e ramdisk/abgesteckthooklp1aktiv ]; then
+				rm ramdisk/abgesteckthooklp1aktiv
+			fi
+		fi
+	fi
+	if (( ladestarthooklp1 == 1 )); then
+		ladungaktivlp1=$(<ramdisk/ladungaktivlp1)
+		if (( ladungaktivlp1 == 1 )); then
+			if [ ! -e ramdisk/ladestarthooklp1aktiv ]; then
+				touch ramdisk/ladestarthooklp1aktiv
+				curl -s --connect-timeout 5 $ladestarthooklp1_url > /dev/null
+				openwbDebugLog "CHARGESTAT" 0 "Ladestart-WebHook LP1 ausgeführt"
+				openwbDebugLog "MAIN" 1 "Ladestart-WebHook LP1 ausgeführt"
+			fi
+		else
+			if [  -e ramdisk/ladestarthooklp1aktiv ]; then
+				rm ramdisk/ladestarthooklp1aktiv
+			fi
+		fi
+	fi
+	if (( ladestophooklp1 == 1 )); then
+		ladungaktivlp1=$(<ramdisk/ladungaktivlp1)
+		if (( ladungaktivlp1 == 0 )); then
+			if [ ! -e ramdisk/ladestophooklp1aktiv ]; then
+				touch ramdisk/ladestophooklp1aktiv
+				curl -s --connect-timeout 5 $ladestophooklp1_url > /dev/null
+				openwbDebugLog "CHARGESTAT" 0 "Ladestopp-WebHook LP1 ausgeführt"
+				openwbDebugLog "MAIN" 1 "Ladestopp-WebHook LP1 ausgeführt"
+			fi
+		else
+			if [  -e ramdisk/ladestophooklp1aktiv ]; then
+				rm ramdisk/ladestophooklp1aktiv
 			fi
 		fi
 	fi

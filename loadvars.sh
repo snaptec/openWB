@@ -812,6 +812,20 @@ loadvars(){
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 	echo $llkwhges > ramdisk/llkwhges
 
+	#Schuko-Steckdose an openWB
+	if [[ $standardSocketInstalled == "1" ]]; then
+
+		timeout 10 modules/sdm120modbusSocket/main.sh || true
+		socketkwh=$(</var/www/html/openWB/ramdisk/socketkwh)
+		socketp=$(cat /var/www/html/openWB/ramdisk/socketp)
+		socketa=$(cat /var/www/html/openWB/ramdisk/socketa)
+		socketa=$(echo $socketa | sed 's/\..*$//')
+		socketv=$(cat /var/www/html/openWB/ramdisk/socketv)
+		if ! [[ $socketa =~ $re ]] ; then
+			socketa="0"
+		fi
+	fi
+
 	#Wattbezug
 	if [[ $wattbezugmodul != "none" ]]; then
 		wattbezug=$(modules/$wattbezugmodul/main.sh || true)
@@ -1131,6 +1145,9 @@ loadvars(){
 	openwbDebugLog "MAIN" 1 "$(echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled")"
 	openwbDebugLog "MAIN" 1 "$(echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3")"
 	openwbDebugLog "MAIN" 1 "$(echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3")"
+	if [[ $standardSocketInstalled == "1" ]]; then
+		openwbDebugLog "MAIN" 1 "socketa $socketa socketp $socketp socketkwh $socketkwh socketv $socketv"
+	fi
 
 	tempPubList=""
 
