@@ -1867,5 +1867,9 @@ updateConfig(){
 	else
 		sed -i "/discovergypass='/b; s/^discovergypass=\(.*\)/discovergypass=\'\1\'/g" $ConfigFile
 	fi
+	if ! grep -Fq "pingcheckactive=" $ConfigFile; then
+		echo "pingcheckactive=1" >> $ConfigFile
+	fi
+	
 	echo "Config file Update done."
 }

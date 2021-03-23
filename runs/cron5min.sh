@@ -300,7 +300,9 @@ else
 fi
 
 #Pingchecker
-$OPENWBBASEDIR/runs/pingcheck.sh &
+if (( $pingcheckactive == 1 )); then
+	$OPENWBBASEDIR/runs/pingcheck.sh &
+fi
 
 # truncate all logs in ramdisk
 $OPENWBBASEDIR/runs/cleanup.sh >> $RAMDISKDIR/cleanup.log 2>&1
