@@ -15,8 +15,8 @@ if(args.verbose):
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-
 GPIO.setup(15, GPIO.OUT)
+
 GPIO.output(15, GPIO.HIGH)
 time.sleep(args.duration)
 GPIO.output(15, GPIO.LOW)
