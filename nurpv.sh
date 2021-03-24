@@ -102,6 +102,16 @@ nurpvlademodus(){
 			openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Ladung gestoppt"
 		fi
 		openwbDebugLog "MAIN" 1 "Überschuss $uberschuss; mindestens $mindestuberschussphasen"
+		if [[ $speichervorhanden == "1" ]]; then
+			if (( speicherleistung > 0 )); then
+				if (( speichersoc > speichersocnurpv )); then
+					uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
+					openwbDebugLog "PV" 0 "SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss"
+				else
+					openwbDebugLog "PV" 0 "SpeicherSoc ($speichersoc) unter konfiguriertem Wert ($speichersocnurpv), neuer/alter Überschusswert: $uberschuss"
+				fi
+			fi
+		fi
 		if (( mindestuberschussphasen <= uberschuss )); then
 			openwbDebugLog "PV" 0 "Überschuss $uberschuss ist größer als nötiger Überschuss, Wert: $mindestuberschussphasen"
 			pvecounter=$(cat /var/www/html/openWB/ramdisk/pvecounter)
