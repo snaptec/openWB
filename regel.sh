@@ -224,7 +224,8 @@ if (( cpunterbrechunglp1 == 1 )); then
 						if [[ $evsecon == "simpleevsewifi" ]]; then
 							curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
 						elif [[ $evsecon == "ipevse" ]]; then
-							python runs/cpuremote.py $evseiplp1 4
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
+							python runs/cpuremote.py -a $evseiplp1 -i 4 -d $cpunterbrechungdauerlp1
 						elif [[ $evsecon == "extopenwb" ]]; then
 							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep1ip -m "1"
 						else
@@ -258,7 +259,8 @@ if (( cpunterbrechunglp2 == 1 )); then
 					if [[ $evsecons1 == "simpleevsewifi" ]]; then
 						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
 					elif [[ $evsecons1 == "ipevse" ]]; then
-						python runs/cpuremote.py $evseiplp2 7
+						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+						python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
 					elif [[ $evsecons1 == "extopenwb" ]]; then
 						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
 					else
