@@ -108,6 +108,16 @@ nurpvlademodus(){
 		if [[ $debug == "1" ]]; then
 			echo "Überschuss $uberschuss; mindestens $mindestuberschussphasen"
 		fi
+		if [[ $speichervorhanden == "1" ]]; then
+			if (( speicherleistung > 0 )); then
+				if (( speichersoc > speichersocnurpv )); then
+					uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
+					echo "$date SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss" >> ramdisk/nurpv.log
+				else
+					echo "$date SpeicherSoc ($speichersoc) unter konfiguriertem Wert ($speichersocnurpv), neuer/alter Überschusswert: $uberschuss" >> ramdisk/nurpv.log
+				fi
+			fi
+		fi		
 		if (( mindestuberschussphasen <= uberschuss )); then
 			echo "$date Uberschuss $uberschuss ist größer als nötiger Überschuss, Wert: $mindestuberschussphasen" >> ramdisk/nurpv.log
 			pvecounter=$(cat /var/www/html/openWB/ramdisk/pvecounter)
