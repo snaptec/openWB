@@ -151,6 +151,11 @@
 								Keine Konfiguration erforderlich. Es muss beim Speicher Varta ausgewählt werden.
 							</div>
 						</div>
+						<div id="wattbezugsolarwatt" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich. Es muss beim Speicher Solarwatt / My Reserve ausgewählt werden.
+							</div>
+						</div>
 						<div id="wattbezugmqtt" class="hide">
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
@@ -506,7 +511,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="bezug_http_ikwh_url" class="col-md-4 col-form-label">Vollständige URL für den kWh Bezug</label>
+									<label for="bezug_http_ikwh_url" class="col-md-4 col-form-label">Vollständige URL für den Wh Bezug</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>">
 										<span class="form-text small">
@@ -515,7 +520,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="bezug_http_ekwh_url" class="col-md-4 col-form-label">Vollständige URL für die kWh Einspeisung</label>
+									<label for="bezug_http_ekwh_url" class="col-md-4 col-form-label">Vollständige URL für die Wh Einspeisung</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>">
 										<span class="form-text small">
@@ -681,7 +686,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="bezugjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Bezug kWh</label>
+									<label for="bezugjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Bezug Wh</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo htmlspecialchars($bezugjsonkwhold) ?>">
 										<span class="form-text small">
@@ -691,7 +696,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="einspeisungjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Einspeisung kWh</label>
+									<label for="einspeisungjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Einspeisung Wh</label>
 									<div class="col">
 										<input class="form-control" type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo htmlspecialchars($einspeisungjsonkwhold) ?>">
 										<span class="form-text small">
@@ -838,6 +843,7 @@
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
 								hideSection('#wattbezugsungrow');
+								hideSection('#wattbezugsolarwatt');
 
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
@@ -967,6 +973,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_lgessv1')   {
 									showSection('#wattbezuglgessv1');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
+									showSection('#wattbezugsolarwatt');
 								}
 							}
 
