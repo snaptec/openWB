@@ -918,7 +918,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="u1p3ppause" class="col-md-4 col-form-label">Pause nach der Umschaltung</label>
+									<label for="u1p3ppause" class="col-md-4 col-form-label">Pause vor und nach der Umschaltung</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="u1p3ppause" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $u1p3ppauseold; ?> Sek</label>
