@@ -22,8 +22,9 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_eq
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_tesla
 
-sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
@@ -40,10 +41,16 @@ updateConfig
 # now setup all files in ramdisk
 initRamdisk
 
+# standard socket - activated after reboot due to RASPI init defaults so we need to disable it as soon as we can
+if [[ $standardSocketInstalled == "1" ]]; then
+	echo "turning off standard socket ..."
+	sudo python /var/www/html/openWB/runs/standardSocket.py off
+fi
+
 # initialize automatic phase switching
 if (( u1p3paktiv == 1 )); then
 	echo "triginit..."
-	sudo python /var/www/html/openWB/runs/triginit.py
+	sudo python /var/www/html/openWB/runs/triginit.py -d $u1p3ppause
 fi
 
 # check if buttons are configured and start daemon

@@ -20,9 +20,9 @@ case $CHARGEPOINT in
 		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		psaSocFile="$RAMDISKDIR/psasoc1"
 		psaSocTime="$RAMDISKDIR/psasoctime1"
-		socOnlineIntervall=60 # update every 10 minutes if script is called every 10 seconds
 		meterFile="$RAMDISKDIR/llkwhs1"
 		ladungaktivFile="$RAMDISKDIR/ladungaktivlp2"
+		psaSocFile_last="$RAMDISKDIR/psasoclastlp2"
 		akkug=$akkuglp2
 		efficiency=$wirkungsgradlp2
 		username=$psa_userlp2
@@ -31,7 +31,8 @@ case $CHARGEPOINT in
 		clientSecret=$psa_clientsecretlp2
 		soccalc=$psa_soccalclp2
 		manufacturer=$psa_manufacturerlp2
-		chargestat=$(</var/www/html/openWB/ramdisk/chargestats1)
+		socOnlineIntervall=$psa_intervallp2
+		plugstat="$RAMDISKDIR/plugstats1"
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -44,9 +45,9 @@ case $CHARGEPOINT in
 		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		psaSocFile="$RAMDISKDIR/psasoc"
 		psaSocTime="$RAMDISKDIR/psasoctime"
-		socOnlineIntervall=60 # update every 10 minutes if script is called every 10 seconds
 		meterFile="$RAMDISKDIR/llkwh"
 		ladungaktivFile="$RAMDISKDIR/ladungaktivlp1"
+		psaSocFile_last="$RAMDISKDIR/psasoclastlp1"
 		akkug=$akkuglp1
 		efficiency=$wirkungsgradlp1
 		username=$psa_userlp1
@@ -55,7 +56,8 @@ case $CHARGEPOINT in
 		clientSecret=$psa_clientsecretlp1
 		soccalc=$psa_soccalclp1
 		manufacturer=$psa_manufacturerlp1
-		chargestat=$(</var/www/html/openWB/ramdisk/chargestat)
+		socOnlineIntervall=$psa_intervallp1
+		plugstat="$RAMDISKDIR/plugstat"
 		;;
 esac
 
@@ -76,11 +78,13 @@ incrementTimer(){
 	echo $soctimer > $soctimerfile
 }
 
+ladungaktiv=$(<$ladungaktivFile)
 soctimer=$(<$soctimerfile)
+tmpintervall=$(( (socOnlineIntervall * 6) - 1 ))
 
 if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 	timer=$(<$soctimerfile)
-	if (( timer < $socOnlineIntervall )); then
+	if (( timer < $tmpintervall )); then
 		timer=$((timer+1))
 		echo $timer > $soctimerfile
 	else
@@ -91,49 +95,56 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 		fi
 	fi
 else	# manual calculation enabled, combining PSA module with manual calc method
-	# if charging started this round fetch once from myPeugeot out of order
-	if [[ $(<$ladungaktivFile) == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
-		socLog "Ladestatus changed to charging. Fetching SoC from $manufacturer out of order."
+	# if charging started this round fetch once from PSA out of order
+	if [[ $ladungaktiv == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
+		socLog "Charging started. Fetching SoC from $manufacturer out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
 		if [[ $? == 0 ]]; then
 			echo $(<$psaSocFile) > $socFile
 			echo $(<$psaSocFile) > $manualSocFile
-			socLog "Fetched from $manufacturer: $(<$psaSocFile)%"
+			echo $(<$psaSocFile) > $psaSocFile_last
+			socLog "Fetched from $manufacturer: $(<$psaSocFile)% and using it."
 		else
-			socLog "Fetching SoC from $manufacturer failed"
+			echo $(<$socFile) > $manualSocFile	# verhindert dauerhaftes Abrufen, falls Onlineabfrage fehlschlägt
+			socLog "Fetching SoC from $manufacturer failed. Setting $(<$socFile) as start SoC."
+			
 		fi
-	fi
-
-	# if charging ist not active fetch SoC from myPeugeot
-	if [[ $chargestat == "0" ]]; then
-		if (( soctimer < $socOnlineIntervall )); then
-			socDebugLog "Nothing to do yet. Incrementing timer. Extralong PSA wait: $soctimer"
+	# if charging is not active fetch SoC from PSA
+	elif [[ $ladungaktiv == 0 ]]; then
+		if (( soctimer < $tmpintervall )); then
+			socDebugLog "Nothing to do yet. Incrementing timer. $socOnlineIntervall min online interval wait: $soctimer"
 			incrementTimer
 		else
 			socLog "Fetching SoC from $manufacturer"
 			echo 0 > $soctimerfile
 			sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
 			if [[ $? == 0 ]]; then
-				dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file mofified date in epoch
-				diff=$(($dateofSoc - $(<$psaSocTime)))
-				socDebugLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
-				socDebugLog "Time of fetched SoC: $(date -d @$(<$psaSocTime) +'%F %T')"
-				socDebugLog "Fetched SoC time difference is $diff s"
-				
-				# if fetched SoC is newer than manualSoC
-				if (( $diff < 0 )); then
-					echo $(<$psaSocFile) > $socFile
-					echo $(<$psaSocFile) > $manualSocFile
-					socLog "Fetched from $manufacturer: $(<$psaSocFile)% and using it."
+				# if fetched SoC is equal from last used fetched SoC and car is plugged in
+				if [[ $(<$psaSocFile) == $(<$psaSocFile_last) ]] && [[ $(($(<$plugstat))) == 1 ]]; then
+					socLog "Fetched from $manufacturer: $(<$psaSocFile)% but skipping as not different from last fetched SoC and car is plugged in."		
 				# if SoC is 0, so probably there ist no valid SoC known
 				elif (( $(($(<$socFile))) == 0 )); then
 					echo $(<$psaSocFile) > $socFile
 					echo $(<$psaSocFile) > $manualSocFile
+					echo $(<$psaSocFile) > $psaSocFile_last
 					socLog "Fetched from $manufacturer: $(<$psaSocFile)% and using it as previous SoC was 0."
 				else
-					socLog "Fetched from $manufacturer: $(<$psaSocFile)% but skipping as not newer than current known SoC."
+					dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file modified date in epoch
+					diff=$(($dateofSoc - $(<$psaSocTime)))
+					socDebugLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
+					socDebugLog "Time of fetched SoC: $(date -d @$(<$psaSocTime) +'%F %T')"
+					socDebugLog "Fetched SoC time difference is $diff s"	
+					# if fetched SoC is newer than manualSoC
+					if (( $diff < 90 )); then	# 90 wegen evtl. Uhrzeitabweichung zwischen Server und openWB
+						echo $(<$psaSocFile) > $socFile
+						echo $(<$psaSocFile) > $manualSocFile
+						echo $(<$psaSocFile) > $psaSocFile_last
+						socLog "Fetched from $manufacturer: $(<$psaSocFile)% and using it."
+					else
+						socLog "Fetched from $manufacturer: $(<$psaSocFile)% but skipping as not newer than current known SoC."
+					fi
 				fi
 			else
 				socLog "Fetching SoC from $manufacturer failed"
