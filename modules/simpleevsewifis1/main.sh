@@ -13,13 +13,13 @@ watt=$(echo "scale=0;$watt * 1000 /1" |bc)
 if [[ $watt =~ $re ]] ; then
 	echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 fi
-if [[ $lla1 =~ $re ]] ; then
+if [[ $lla1 =~ $rekwh ]] ; then
 	echo $lla1 > /var/www/html/openWB/ramdisk/llas11
 fi
-if [[ $lla2 =~ $re ]] ; then
+if [[ $lla2 =~ $rekwh ]] ; then
 	echo $lla2 > /var/www/html/openWB/ramdisk/llas12
 fi
-if [[ $lla3 =~ $re ]] ; then
+if [[ $lla3 =~ $rekwh ]] ; then
 	echo $lla3 > /var/www/html/openWB/ramdisk/llas13
 fi
 if [[ $llkwh =~ $rekwh ]] ; then
