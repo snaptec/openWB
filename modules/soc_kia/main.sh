@@ -22,11 +22,10 @@ case $CHARGEPOINT in
 		kia_pin=$soc2pin
 		kia_vin=$soc2vin
 		kia_intervall=$soc2intervall
-		#soccalc=$kia_soccalclp2
-		soccalc=0
-		#akkug=$akkuglp2
-		#efficiency=$wirkungsgradlp2
-		#manualMeterFile="$RAMDISKDIR/kia_meter_lp2"
+		soccalc=$kia_soccalclp2
+		akkug=$akkuglp2
+		efficiency=$wirkungsgradlp2
+		manualMeterFile="$RAMDISKDIR/kia_meter_lp2"
 		meterFile="$RAMDISKDIR/llkwhs1"
 		;;
 	*)

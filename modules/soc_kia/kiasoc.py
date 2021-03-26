@@ -190,14 +190,15 @@ def main():
              charging = statusresponse['resMsg']['evStatus']['batteryCharge']
              print('charging: ', charging)          
 
-       f = open(socfile, 'w')
-       f.write(str(soc))
-       f.close()
+       if soc > 0:
+          f = open(socfile, 'w')
+          f.write(str(soc))
+          f.close()
        
-       soctime = time.time()
-       f = open(soctimefile, 'w')
-       f.write(str(int(soctime)))
-       f.close()
+          soctime = time.time()
+          f = open(soctimefile, 'w')
+          f.write(str(int(soctime)))
+          f.close()
 
     else:
          print('NOK status')
