@@ -146,7 +146,7 @@ class PowerMeter {
         .style("font-size", "22")
         ;
     }
-    d3.select("button#meterResetButton").classed("hide", !this.showRelativeArcs)
+    d3.select("a#meterResetButton").classed("hide", !this.showRelativeArcs);
   }
 
   drawSourceArc(svg) {
