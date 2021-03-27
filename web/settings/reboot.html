@@ -97,7 +97,7 @@
 
 				infoText.text("Neustart der openWB angefordert...");
 
-				$.get({ url: "tools/restart.php", cache: false }).always(function() {
+				$.get({ url: "settings/restart.php", cache: false }).always(function() {
 					infoText.text("Neustart läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
 					infoText.removeClass("alert-info");
 					infoText.addClass("alert-success");
