@@ -114,7 +114,7 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 sleep(5);
 
 if ($_POST['dataProtectionAcknoledged'] != 1) { ?>
-		<form id="formid" action="tools/savemqtt.php?bridge=cloud" method="POST">
+		<form id="formid" action="settings/savemqtt.php?bridge=cloud" method="POST">
 			<input type="hidden" name="ConnectionName" value="cloud"/>
 			<input type="hidden" name="action" value="deleteBridge"/>
 			<!--

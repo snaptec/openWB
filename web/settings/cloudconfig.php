@@ -128,7 +128,7 @@
 						</div>
 					</div>
 					<div class="card-footer">
-						<form action="./tools/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
+						<form action="./settings/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
 							<input type="hidden" name="ConnectionName" value="cloud"/>
 							<div class="row justify-content-center py-1">
 								<button type="submit" class="btn btn-success" name="action" value="deleteBridge">Brücke <?php echo urlencode($connectionName); ?> löschen</button>
