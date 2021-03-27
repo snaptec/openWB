@@ -72,7 +72,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration EVU</h1>
-			<form action="tools/saveconfig.php" method="POST">
+			<form action="settings/saveconfig.php" method="POST">
 
 				<!-- EVU -->
 				<div class="card border-danger">
@@ -1047,7 +1047,7 @@
 		</div>
 
 		<!-- hidden form to save wizzard done to config on abort -->
-		<form id="wizzarddoneForm" action="tools/saveconfig.php" method="POST">
+		<form id="wizzarddoneForm" action="settings/saveconfig.php" method="POST">
 			<input type="hidden" name="wizzarddone" value="100">
 		</form>
 

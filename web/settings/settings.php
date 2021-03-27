@@ -77,7 +77,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Allgemeine Einstellungen</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- Übergreifendes -->
 				<div class="card border-secondary">
