@@ -133,7 +133,7 @@
 			</div>
 
 			<div class="card border-secondary">
-				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
+				<form class="form" id="sendTokenForm" action="./settings/starttunnel.php" method="POST">
 					<div class="card-header bg-secondary">
 						Remote Support
 					</div>
