@@ -141,7 +141,7 @@
 					<div class="card-header bg-secondary">
 						Cloud Anmeldedaten
 					</div>
-					<form action="./tools/cloudregistrate.php" method="POST">
+					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="card-body">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -179,7 +179,7 @@
 					</form>
 				</div> <!-- card 1 -->
 				<div class="card border-secondary">
-					<form action="./tools/cloudregistrate.php" method="POST">
+					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="card-header bg-secondary">
 							Cloud neu einrichten
 						</div>
