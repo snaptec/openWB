@@ -400,7 +400,7 @@ class PowerGraph {
     const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height - 10, 0]);
     const extent = d3.extent(this.graphData, (d) =>
-      Math.max(d.solarPower + d.gridPull, d.selfUsage + d.gridPush));
+      Math.max(d.solarPower + d.gridPull + d.batOut, d.selfUsage + d.gridPush));
 
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
     yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
