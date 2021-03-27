@@ -58,21 +58,15 @@
 
 	<body>
 		<?php
-
-			// read selected debug mode from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "debug=") !== false) {
-					list(, $debugmode) = explode("=", $line);
-				}
-				if(strpos($line, "datenschutzack=") !== false) {
-					list(, $datenschutzackold) = explode("=", $line, 2);
-				}
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-			$debugmode = trim($debugmode);
-			if ( $debugmode == "" ) {
+
+			if ( $debugmodeold == "" ) {
 				// if no debug mode set, set 0 = off
-				$debugmode="0";
+				$debugmodeold = "0";
 			}
 
 		?>
@@ -83,29 +77,52 @@
 			<h1>Debugging und Support</h1>
 
 			<div class="card border-secondary">
-				<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
+				<form class="form" id="debugmodeForm" action="./tools/saveconfig.php" method="POST">
 					<div class="card-header bg-secondary">
-						Debug-Modus
+						Protokollierung
 					</div>
 					<div class="card-body">
-						<div class="form-group mb-0">
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0"<?php if($debugmode == "0") echo " checked"?>>
-								<label class="custom-control-label" for="mode0RadioBtn">
-									Mode 0 (aus)
-								</label>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Debug-Modus</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($debugold == 0) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode0" value="0"<?php if($debugold == 0) echo " checked=\"checked\"" ?>>Mode 0 (aus)
+										</label>
+										<label class="btn btn-outline-info<?php if($debugold == 2) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode1" value="1"<?php if($debugold == 1) echo " checked=\"checked\"" ?>>Mode 1 (Regelwerte)
+										</label>
+										<label class="btn btn-outline-info<?php if($debugold == 2) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode2" value="2"<?php if($debugold == 2) echo " checked=\"checked\"" ?>>Mode 2 (Berechnungsgrundlage)
+										</label>
+									</div>
+									<span class="form-text small">
+										Mit dieser Einstellung können zusätzliche Logmeldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.
+									</span>
+								</div>
 							</div>
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1"<?php if($debugmode == "1") echo " checked"?>>
-								<label class="custom-control-label" for="mode1RadioBtn">
-									Mode 1 (Regelwerte)
-								</label>
-							</div>
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2"<?php if($debugmode == "2") echo " checked"?>>
-								<label class="custom-control-label" for="mode2RadioBtn">
-									Mode 2 (Berechnungsgrundlage)
-								</label>
+						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Gateway prüfen</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pingcheckactiveold == 0) echo " active" ?>">
+											<input type="radio" name="pingcheckactive" id="pingcheckactive0" value="0"<?php if($pingcheckactiveold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pingcheckactiveold == 2) echo " active" ?>">
+											<input type="radio" name="pingcheckactive" id="pingcheckactive1" value="1"<?php if($pingcheckactiveold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">
+										Wird diese Option aktiviert, dann wird die Verbindung zum Netzwerk Gateway alle 5 Minuten mit einem Ping geprüft.
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>

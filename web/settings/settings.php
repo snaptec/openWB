@@ -865,6 +865,17 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Nachtladen</label>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($u1p3pnlold == 1) echo " active" ?>">
+											<input type="radio" name="u1p3pnl" id="u1p3pnl1" value="1"<?php if($u1p3pnlold == 1) echo " checked=\"checked\"" ?>>einphasig
+										</label>
+										<label class="btn btn-outline-info<?php if($u1p3pnlold == 3) echo " active" ?>">
+											<input type="radio" name="u1p3pnl" id="u1p3pnl3" value="3"<?php if($u1p3pnlold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Min + PV Laden</label>
 									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($u1p3pminundpvold == 1) echo " active" ?>">
@@ -898,7 +909,7 @@
 									<label class="col-md-4 col-form-label">Schaltzeiten Automatikmodus</label>
 									<div class="col">
 										<div class="form-row vaRow mb-1">
-											<label for="u1p3schaltparam" class="col-2 col-form-label valueLabel" suffix="min"><?php echo $u1p3schaltparamold; ?> min</label>
+											<label for="u1p3schaltparam" class="col-2 col-form-label valueLabel" suffix="Min"><?php echo $u1p3schaltparamold; ?> Min</label>
 											<div class="col-10">
 												<input type="range" class="form-control-range rangeInput" name="u1p3schaltparam" id="u1p3schaltparam" min="1" max="15" step="1" value="<?php echo $u1p3schaltparamold; ?>">
 											</div>
@@ -907,14 +918,18 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Nachtladen</label>
-									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($u1p3pnlold == 1) echo " active" ?>">
-											<input type="radio" name="u1p3pnl" id="u1p3pnl1" value="1"<?php if($u1p3pnlold == 1) echo " checked=\"checked\"" ?>>einphasig
-										</label>
-										<label class="btn btn-outline-info<?php if($u1p3pnlold == 3) echo " active" ?>">
-											<input type="radio" name="u1p3pnl" id="u1p3pnl3" value="3"<?php if($u1p3pnlold == 3) echo " checked=\"checked\"" ?>>dreiphasig
-										</label>
+									<label for="u1p3ppause" class="col-md-4 col-form-label">Pause vor und nach der Umschaltung</label>
+									<div class="col-md-8">
+										<div class="form-row vaRow mb-1">
+											<label for="u1p3ppause" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $u1p3ppauseold; ?> Sek</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" name="u1p3ppause" id="u1p3ppause" min="2" max="15" step="1" value="<?php echo $u1p3ppauseold; ?>">
+											</div>
+										</div>
+										<span class="form-text small">
+											Die Standardeinstellung ist 2 Sekunden. Falls ein Fahrzeug den Ladevorgang nach einer Umschaltung nicht zuverlässig startet, kann dieser Wert erhöht werden.
+											<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+										</span>
 									</div>
 								</div>
 							</div>

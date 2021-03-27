@@ -420,7 +420,11 @@ if ipaddress2 != 'none':
     Yearly_yield2 = round((FRegister2_324.decode_32bit_float()/1000),2)
     Monthly_yield2 = round((FRegister2_326.decode_32bit_float()/1000),2)
     Inverter_generation_power_actual2 = int(FRegister2_575.decode_16bit_int())
-
+if ipaddress3 != 'none':
+    Total_yield3 = int(FRegister3_320.decode_32bit_float())
+    Yearly_yield3 = round((FRegister3_324.decode_32bit_float()/1000),2)
+    Monthly_yield3 = round((FRegister3_326.decode_32bit_float()/1000),2)
+    Inverter_generation_power_actual3 = int(FRegister3_575.decode_16bit_int())
 # AC-Leistung der PV-Module/des Speichers für WR 1 bestimmen
 if boolspeicher == 0:
     # kein Speicher verbaut, dann ist PV-Leistung = AC-Leistung

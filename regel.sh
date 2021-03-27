@@ -59,7 +59,11 @@ if (( slavemode == 1)); then
 		echo $randomSleep > ramdisk/randomSleepValue
 	fi
 
+	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Waiting ${randomSleep}s"
+
 	sleep $randomSleep
+
+	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Wait end"
 fi
 
 source minundpv.sh
@@ -216,15 +220,17 @@ if (( cpunterbrechunglp1 == 1 )); then
 				cpulp1counter=$(<ramdisk/cpulp1counter)
 				if (( cpulp1counter > 5 )); then
 					if (( cpulp1waraktiv == 0 )); then
-						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP1 durchgeführt"
+						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP1 wird durchgeführt"
 						if [[ $evsecon == "simpleevsewifi" ]]; then
 							curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
 						elif [[ $evsecon == "ipevse" ]]; then
-							python runs/cpuremote.py $evseiplp1 4
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
+							python runs/cpuremote.py -a $evseiplp1 -i 4 -d $cpunterbrechungdauerlp1
 						elif [[ $evsecon == "extopenwb" ]]; then
 							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep1ip -m "1"
 						else
-							sudo python runs/cpulp1.py
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
+							sudo python runs/cpulp1.py -d $cpunterbrechungdauerlp1
 						fi
 						echo 1 > ramdisk/cpulp1waraktiv
 					fi
@@ -249,15 +255,17 @@ if (( cpunterbrechunglp2 == 1 )); then
 			if (( ladeleistunglp2 < 200 )); then
 				cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
 				if (( cpulp2waraktiv == 0 )); then
-					openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 durchgeführt"
+					openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
 					if [[ $evsecons1 == "simpleevsewifi" ]]; then
 						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
 					elif [[ $evsecons1 == "ipevse" ]]; then
-						python runs/cpuremote.py $evseiplp2 7
+						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+						python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
 					elif [[ $evsecons1 == "extopenwb" ]]; then
 						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
 					else
-						sudo python runs/cpulp2.py
+						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+						sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
 					fi
 					echo 1 > ramdisk/cpulp2waraktiv
 				fi

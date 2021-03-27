@@ -6,18 +6,30 @@ foreach($lines as $line) {
 	$writeit = '0';
 	foreach($_POST as $k => $v) {
 		if(strpos($line, $k.'=') !== false) {
-			if ( $k != "hook1ein_url" && $k != "hook1aus_url" && $k != "hook2ein_url" && $k != "hook2aus_url" && $k != "angesteckthooklp1_url" && $k != "hook3ein_url" && $k != "hook3aus_url" && $k != "verbraucher1_urlw" && $k != "verbraucher1_urlh" && $k != "verbraucher2_urlw" && $k != "verbraucher2_urlh") {   
+			if ( $k != "hook1ein_url" && $k != "hook1aus_url" && $k != "hook2ein_url" && $k != "hook2aus_url" && $k != "angesteckthooklp1_url" && $k != "abgesteckthooklp1_url" && $k != "ladestarthooklp1_url" && $k != "ladestophooklp1_url" && $k != "hook3ein_url" && $k != "hook3aus_url" && $k != "verbraucher1_urlw" && $k != "verbraucher1_urlh" && $k != "verbraucher2_urlw" && $k != "verbraucher2_urlh") {   
 				$result .= $k.'='.$v."\n";
 				$writeit = '1';
 			}
 		}
 	}
-	if(strpos($line, "hook1ein_url=") !== false) {
-		$result .= 'hook1ein_url=\''.$_POST['hook1ein_url']."'\n";
-		$writeit = '1';
-	}
 	if(strpos($line, "angesteckthooklp1_url=") !== false) {
 		$result .= 'angesteckthooklp1_url=\''.$_POST['angesteckthooklp1_url']."'\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "abgesteckthooklp1_url=") !== false) {
+		$result .= 'abgesteckthooklp1_url=\''.$_POST['abgesteckthooklp1_url']."'\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "ladestarthooklp1_url=") !== false) {
+		$result .= 'ladestarthooklp1_url=\''.$_POST['ladestarthooklp1_url']."'\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "ladestophooklp1_url=") !== false) {
+		$result .= 'ladestophooklp1_url=\''.$_POST['ladestophooklp1_url']."'\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "hook1ein_url=") !== false) {
+		$result .= 'hook1ein_url=\''.$_POST['hook1ein_url']."'\n";
 		$writeit = '1';
 	}
 	if(strpos($line, "hook1aus_url=") !== false) {
