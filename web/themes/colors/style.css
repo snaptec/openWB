@@ -403,6 +403,7 @@ h3 {
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: gray;
+	--color-grid: #bbbbbb;
 	--color-frame: white;
 	--color-subframe: lightgrey;
 	--color-fg: black;
@@ -445,6 +446,7 @@ h3 {
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: steelblue;
+	--color-grid: #BBBBBB;
 	--color-frame: lightskyblue;
 	--color-subframe: midnightblue;
 	--color-fg: white;
@@ -482,6 +484,7 @@ h3 {
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: #666666;
+	--color-grid: black;
 	--color-frame: #999999;
 	--color-subframe: #333333;
 	--color-fg: white;
@@ -515,6 +518,9 @@ h3 {
 	background-color: #009696;
 }
 
+.colormenu {
+	background-color: var(--color-frame);
+}
 .wb-widget {
 	background-color: var(--color-bg);
 	border:1px solid var(--color-frame) ;

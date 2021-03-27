@@ -20,7 +20,7 @@ class PowerGraph {
     this.graphRefreshCounter = 0;
     this.width = 500;
     this.height = 500;
-    this.margin = { top: 10, right: 20, bottom: 20, left: 25 };
+    this.margin = { top: 10, right: 20, bottom: 10, left: 25 };
     this.liveGraphMinutes = 0;
     wbdata.usageStackOrder = 2;
   }
@@ -37,6 +37,7 @@ class PowerGraph {
     this.bgcolor = 'var(--color-bg)';
     this.chargeColor = 'var(--color-charging)';
     this.axiscolor = 'var(--color-axis)';
+    this.gridcolor = 'var(--color-grid)';
     this.lp1color = 'var(--color-lp1)';
     this.lp2color = 'var(--color-lp2)';
     this.batteryColor = 'var(--color-battery)';
@@ -60,6 +61,9 @@ class PowerGraph {
       .on("click", shiftRight)
     d3.select("button#graphChangeButton")
       .on("click", changeStack)
+    d3.select("button#gridChangeButton")
+      .on("click", toggleGrid)
+
   }
 
   activateLive() {
@@ -164,14 +168,17 @@ class PowerGraph {
             this.updateGraph();
             unsubscribeMqttGraphSegments();
           }
-        }      
+        }
       }
     }
   }
 
   updateDay(topic, payload) {
-    if (payload != 'empty') {
-      var segment = payload.toString().split("\n");
+    var segment;
+    if (payload == 'empty') {
+      segment = [];
+    } else {
+      segment = payload.toString().split("\n");
       if (segment.length <= 1) {
         segment = [];
       }
@@ -182,45 +189,46 @@ class PowerGraph {
           this.initCounter++;
         }
       }
-      if (this.initCounter == 12) {// Initialization complete
-        unsubscribeDayGraph();
-
-        this.initCounter = 0;
-        this.staging.map(segment =>
-          segment.map(line => this.rawData.push(line))
-        )
-        this.rawData.map((line, i, a) => {
-          if (i > 0) {
-            const values = this.extractDayValues(line, a[i - 1]);
-            this.graphData.push(values);
-          } else {
-            // const values = this.extractValues(line, []);                
-          }
-        });
-        this.updateGraph();
-        this.updateEnergyValues();
-        wbdata.dayGraphUpdated();
-        setTimeout(() => this.activateDay(), 300000)
-      }
     }
+    if (this.initCounter == 12) {// Initialization complete
+      unsubscribeDayGraph();
+
+      this.initCounter = 0;
+      this.staging.map(segment =>
+        segment.map(line => this.rawData.push(line))
+      )
+      this.rawData.map((line, i, a) => {
+        if (i > 0) {
+          const values = this.extractDayValues(line, a[i - 1]);
+          this.graphData.push(values);
+        } else {
+          // const values = this.extractValues(line, []);                
+        }
+      });
+      this.updateGraph();
+      this.updateEnergyValues();
+      wbdata.dayGraphUpdated();
+      setTimeout(() => this.activateDay(), 300000)
+    }
+
   }
 
-  updateEnergyValues () {
+  updateEnergyValues() {
     const startValues = this.rawData[0].split(',');
-    const endValues = this.rawData[this.rawData.length-1].split(',');
-    wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3])/1000 ;
-    wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1])/1000 ;
-    wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9])/1000 ;
-    wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2])/1000 ;
-    wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7])/1000 ;
+    const endValues = this.rawData[this.rawData.length - 1].split(',');
+    wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3]) / 1000;
+    wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1]) / 1000;
+    wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9]) / 1000;
+    wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2]) / 1000;
+    wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000;
     var deviceEnergy = 0;
-    for (var i=0; i<10; i++) {
-      deviceEnergy = deviceEnergy + (endValues[26+i] - startValues[26+i])/1000 ; 
+    for (var i = 0; i < 10; i++) {
+      deviceEnergy = deviceEnergy + (endValues[26 + i] - startValues[26 + i]) / 1000;
     }
-    deviceEnergy = deviceEnergy + (endValues[10] - startValues[10])/1000 ;
-    deviceEnergy = deviceEnergy + (endValues[12] - startValues[12])/1000 ;
-    wbdata.historicSummary.devices.energy = deviceEnergy ;
-    wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8])/1000 ;
+    deviceEnergy = deviceEnergy + (endValues[10] - startValues[10]) / 1000;
+    deviceEnergy = deviceEnergy + (endValues[12] - startValues[12]) / 1000;
+    wbdata.historicSummary.devices.energy = deviceEnergy;
+    wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
     wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
       - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
   }
@@ -269,8 +277,10 @@ class PowerGraph {
   }
 
   reset() {
+    console.log ("reset graphs");
     this.resetLiveGraph();
     this.resetDayGraph();
+
   }
   resetLiveGraph() {
     // fresh reload of the graph
@@ -380,8 +390,9 @@ class PowerGraph {
 
     this.drawSourceGraph(svg, width, height / 2);
     this.drawUsageGraph(svg, width, height / 2);
-    this.drawXAxis(svg, width, height);
     this.drawSoc(svg, width, height / 2);
+    this.drawXAxis(svg, width, height);
+
   }
 
   drawSourceGraph(svg, width, height) {
@@ -392,7 +403,7 @@ class PowerGraph {
       Math.max(d.solarPower + d.gridPull, d.selfUsage + d.gridPush));
 
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
-    yScale.domain([0, extent[1]]);
+    yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
 
     const stackGen = d3.stack().keys(keys);
     const stackedSeries = stackGen(this.graphData);
@@ -410,13 +421,20 @@ class PowerGraph {
     const yAxis = svg.append("g")
       .attr("class", "axis")
       .call(d3.axisLeft(yScale)
-        .tickSizeInner(-width)
-        .ticks(6)
+        .tickSizeInner(-(width - this.margin.right))
+        .ticks(4)
         .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10)))
       ;
     yAxis.selectAll(".tick")
       .attr("font-size", 12);
-    yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
+
+    if (wbdata.showGrid) {
+      yAxis.selectAll(".tick line")
+        .attr("stroke", this.gridcolor)
+        .attr("stroke-width", "0.5");
+    } else {
+      yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
+    }
     yAxis.select(".domain")
       .attr("stroke", this.bgcolor)
       ;
@@ -424,7 +442,7 @@ class PowerGraph {
 
   drawUsageGraph(svg, width, height) {
     const xScale = d3.scaleTime().range([0, width - this.margin.right]);
-    const yScale = d3.scaleLinear().range([height + 10, 2 * height + 15]);
+    const yScale = d3.scaleLinear().range([height + 10, 2 * height]);
 
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
     const extent = d3.extent(this.graphData, (d) =>
@@ -432,7 +450,7 @@ class PowerGraph {
       + d.lp5 + d.lp6 + d.lp7 + d.sh0 + d.sh1 + d.sh2 + d.sh3 + d.sh4
       + d.sh5 + d.sh6 + d.sh7 + d.co0 + d.co1 + d.batIn + d.inverter)
     );
-    yScale.domain([0, (extent[1])]);
+    yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
     const keys = [["lp0", "lp1", "lp2", "lp3", "lp4",
       "lp5", "lp6", "lp7",
       "sh0", "sh1", "sh2", "sh3", "sh4",
@@ -462,13 +480,19 @@ class PowerGraph {
     const yAxis = svg.append("g")
       .attr("class", "axis")
       .call(d3.axisLeft(yScale)
-        .tickSizeInner(-width)
-        .ticks(6)
+        .tickSizeInner(-(width - this.margin.right))
+        .ticks(4)
         .tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10))
       );
     yAxis.selectAll(".tick")
       .attr("font-size", 12);
-    yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
+    if (wbdata.showGrid) {
+      yAxis.selectAll(".tick line")
+        .attr("stroke", this.gridcolor)
+        .attr("stroke-width", "0.5");
+    } else {
+      yAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
+    }
     yAxis.select(".domain")
       .attr("stroke", this.bgcolor)
       ;
@@ -479,10 +503,11 @@ class PowerGraph {
     const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
 
+    const ticksize = (wbdata.showGrid) ? -(height / 2 - 7) : -10
     const xAxisGenerator = d3
       .axisBottom(xScale)
       .ticks(4)
-      .tickSizeInner(-10)
+      .tickSizeInner(ticksize)
       .tickFormat(d3.timeFormat("%H:%M"));
 
     const xAxis = svg.append("g").attr("class", "axis")
@@ -490,8 +515,14 @@ class PowerGraph {
     xAxis.attr("transform", "translate(0," + (height / 2 - 6) + ")");
     xAxis.selectAll(".tick")
       .attr("color", this.axiscolor)
-      .attr("font-size", fontsize)
-    xAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
+      .attr("font-size", fontsize);
+    if (wbdata.showGrid) {
+      xAxis.selectAll(".tick line")
+        .attr("stroke", this.gridcolor)
+        .attr("stroke-width", "0.5");
+    } else {
+      xAxis.selectAll(".tick line").attr("stroke", this.bgcolor);
+    }
     xAxis.select(".domain")
       .attr("stroke", this.bgcolor)
       ;
@@ -501,6 +532,38 @@ class PowerGraph {
       .attr("fill", this.axiscolor)
       .attr("font-size", fontsize)
       .text("kW")
+
+    if (wbdata.showGrid) {
+      // second x axis for the grid
+      const ticksize2 = -(height / 2 - 10);
+      const xAxisGenerator2 = d3
+        .axisTop(xScale)
+        .ticks(4)
+        .tickSizeInner(ticksize2)
+        .tickFormat("");
+      const xAxis2 = svg.append("g").attr("class", "axis")
+        .call(xAxisGenerator2);
+      xAxis2.attr("transform", "translate(0," + (height / 2 + 10) + ")");
+      xAxis2.selectAll(".tick")
+        .attr("color", this.axiscolor)
+        .attr("font-size", fontsize);
+      xAxis2.selectAll(".tick line").attr("stroke", this.gridcolor).attr("stroke-width", "0.5");
+
+
+      xAxis2.select(".domain")
+        .attr("stroke", this.bgcolor)
+        ;
+      // add a rectangle around the graph
+      svg.append("g")
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width - this.margin.right)
+        .attr("height", height)
+        .attr("fill", "none")
+        .attr("stroke", this.gridcolor)
+        .attr("stroke-width", "0.5");
+    }
   }
 
   drawSoc(svg, width, height) {
@@ -613,14 +676,14 @@ class PowerGraph {
       ;
   }
 
-  getEnergyValues () {
+  getEnergyValues() {
 
   }
 }
 
 // Change the order of values in the stack
 function changeStack() {
-  wbdata.usageStackOrder = wbdata.usageStackOrder+1;
+  wbdata.usageStackOrder = wbdata.usageStackOrder + 1;
   if (wbdata.usageStackOrder > 2) {
     wbdata.usageStackOrder = 0;
   }
