@@ -1765,10 +1765,12 @@ updateConfig(){
 		echo "psa_passlp1=Pass" >> $ConfigFile
 		echo "psa_clientidlp1=ID" >> $ConfigFile
 		echo "psa_clientsecretlp1=Secret" >> $ConfigFile
+		echo "psa_manufacturerlp1=Peugeot" >> $ConfigFile
 		echo "psa_userlp2=User" >> $ConfigFile
 		echo "psa_passlp2=Pass" >> $ConfigFile
 		echo "psa_clientidlp2=ID" >> $ConfigFile
 		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
+		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
 	fi
 	if ! grep -Fq "psa_intervallp1=" $ConfigFile; then
 		echo "psa_intervallp1=10" >> $ConfigFile
