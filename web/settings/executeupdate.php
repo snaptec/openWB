@@ -97,7 +97,7 @@
 
 				infoText.text("Update der openWB angefordert...");
 
-				$.get({ url: "tools/updatePerformNow.php", cache: false }).done(function() {
+				$.get({ url: "settings/updatePerformNow.php", cache: false }).done(function() {
 					infoText.text("Update läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
 					infoText.removeClass("alert-info");
 					infoText.addClass("alert-success");

@@ -106,7 +106,7 @@
 		echo "<script>window.location.href='index.php';</script>";
 	}
 	// if successfully saved to config, start update
-	echo "<script>window.location.href='tools/update.php';</script>";
+	echo "<script>window.location.href='settings/executeupdate.php';</script>";
 ?>
 	</body>
 </html>
