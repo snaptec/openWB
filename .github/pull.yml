@@ -5,10 +5,10 @@ rules:                        # Array of rules
     mergeMethod: rebase       # Optional, one of [none, merge, squash, rebase, hardreset], Default: none.
     mergeUnstable: false      # Optional, merge pull request even when the mergeable_state is not clean. Default: false
   - base: updatemine
-    upstream: master          # Required. Can be a branch in the same forked repo.
+    upstream: snaptec:master
     mergeMethod: rebase
     mergeUnstable: false
   - base: securitySettings
-    upstream: master
+    upstream: snaptec:master 
     mergeMethod: rebase 
     mergeUnstable: false
