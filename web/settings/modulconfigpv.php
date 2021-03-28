@@ -133,13 +133,23 @@
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Per MQTT zu schreiben:<br>
-								<span class="text-info">openWB/set/pv/1/W</span> PVleistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/1/W</span> PV-Leistung in Watt, int, negativ<br>
 								<span class="text-info">openWB/set/pv/1/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
+						<div id="pvsungrow" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als EVU-Modul auch LG ESS 1.0VI wählen!
+							</div>
+						</div>
+						<div id="pvsolarwatt" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im zugehörigen Speichermodul des Solarwatt/My Reserve erforderlich.
 							</div>
 						</div>
 						<div id="pvip" class="hide">
@@ -377,7 +387,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label for="wrjsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
+								<label for="wrjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Wh</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo htmlspecialchars($wrjsonkwhold) ?>">
 									<span class="form-text small">
@@ -677,7 +687,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label for="wr_http_kwh_url" class="col-md-4 col-form-label">Vollständige URL für die Wechselrichter absolut kWh</label>
+								<label for="wr_http_kwh_url" class="col-md-4 col-form-label">Vollständige URL für die Wechselrichter absolut Wh</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>">
 									<span class="form-text small">
@@ -730,6 +740,8 @@
 								hideSection('#pvsiemens');
 								hideSection('#pvrct');
 								hideSection('#pvpowerdog');
+								hideSection('#pvsolarwatt');
+								hideSection('#pvsungrow');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -826,6 +838,12 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_lgessv1')   {
 									showSection('#pvlgessv1');
+								}
+								if($('#pvwattmodul').val() == 'wr_solarwatt')   {
+									showSection('#pvsolarwatt');
+								}
+								if($('#pvsungrow').val() == 'wr_sungrow')   {
+									showSection('#pvsungrow');
 								}
 							}
 
@@ -926,7 +944,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label for="wr2jsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
+								<label for="wr2jsonkwh" class="col-md-4 col-form-label">Json Abfrage für Wh</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr2jsonkwh" id="wr2jsonkwh" value="<?php echo htmlspecialchars($wr2jsonkwhold) ?>">
 									<span class="form-text small">

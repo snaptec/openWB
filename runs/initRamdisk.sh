@@ -251,7 +251,6 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/pv2a3
 	echo 0 > $RamdiskPath/pv2kwh
 	echo 0 > $RamdiskPath/pv2watt
-	echo 0 > $RamdiskPath/pv2watt
 	echo 0 > $RamdiskPath/pvcounter
 	echo 0 > $RamdiskPath/pvecounter
 	echo 0 > $RamdiskPath/pvkwh

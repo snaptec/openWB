@@ -608,6 +608,7 @@
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
 								hideSection('#divspeichersungrow');
+								hideSection('#divspeicherjson');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');

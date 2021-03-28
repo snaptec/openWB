@@ -173,12 +173,21 @@
 							<h3>Aktuelle Leistung</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm hide" id="meterResetButton"><span
-									class="fa fa-undo px-0"></span></button>
-							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span
-									class="fa fa-chart-area px-0"></span></button>
-							<button class="btn btn-outline-secondary btn-sm " id="themeSwitchButton"><span
-									class="fa fa-adjust px-0"></span></button>
+							<div class="dropdown">
+								<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+									<span	class="fa fa-bars fa-sm"></span>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right colormenu">
+									<a class="dropdown-item" href="#" onclick="switchTheme()"><span class="fa fa-adjust px-0"></span> Hintergrund ändern</a>
+									<a class="dropdown-item" href="#" onclick="toggleGrid()"><span
+										class="fa fa-th px-0"></span> Graph: Raster an/aus</a>
+									<a class="dropdown-item" href="#" onclick="switchDisplay()"><span
+										class="fa fa-chart-area px-0"></span> Fixe Bögen an/aus</a>
+									<a class="dropdown-item hide" id="meterResetButton" href="#" onclick="resetButtonClicked()"><span
+										class="fa fa-undo"></span> Bögen reset</a>									
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -688,7 +697,7 @@
 			<!-- Speicher (batteryList) -->
 			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
 				<h3>Speicher</h3>
-				<div class=" pb-3 ">
+				<div class="wb-subwidget pb-3 ">
 					<div id="batteryStatus"></div>
 				</div>
 				
@@ -1109,8 +1118,15 @@
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
 					// once page is unhidden... reload graph completety
-					powerGraph.reset();
-					subscribeMqttGraphSegments();
+					if (this.showLiveGraph) {
+						powerGraph.deactivateDay();
+							powerGraph.activateLive();
+					} else {
+						powerGraph.deactivateLive();
+						powerGraph.activateDay();
+					}
+					// powerGraph.reset();
+					// subscribeMqttGraphSegments();
 				}
 			});
 		});  // end document ready

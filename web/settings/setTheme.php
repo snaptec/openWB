@@ -157,7 +157,7 @@
 				</div> <!-- card-body -->
 				<div class="card-footer">
 					<div class="row justify-content-center">
-						<button onclick="saveTheme()" class="btn btn-success">Theme übernehmen</button>
+						<button id="saveButton" onclick="saveTheme()" class="btn btn-success">Theme übernehmen</button>
 					</div>
 				</div> <!-- card-footer -->
 			</div> <!-- card -->
@@ -186,7 +186,26 @@
 				$('head').append('<link rel="stylesheet" href="themes/' + selectedTheme + '/settings.css?v=20200801">');
 				setCookie("openWBTheme", selectedTheme, 365);
 				themeCookie = selectedTheme;
+				$('#saveButton').removeClass('btn-warning');
+				$('#saveButton').addClass('btn-success');
 			}
+
+			function notSaved() {
+				$('#saveButton').removeClass('btn-success');
+				$('#saveButton').addClass('btn-warning');
+			};
+
+			$(document).ready(function(){
+				$('.carousel-control-prev').click(function(){
+					notSaved();
+				});
+				$('.carousel-control-next').click(function(){
+					notSaved();
+				});
+				$('.carousel-indicators li').click(function(){
+					notSaved();
+				});
+			});
 		</script>
 
 	</body>

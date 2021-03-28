@@ -50,7 +50,7 @@ fi
 # initialize automatic phase switching
 if (( u1p3paktiv == 1 )); then
 	echo "triginit..."
-	sudo python /var/www/html/openWB/runs/triginit.py
+	sudo python /var/www/html/openWB/runs/triginit.py -d $u1p3ppause
 fi
 
 # check if buttons are configured and start daemon

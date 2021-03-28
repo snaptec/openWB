@@ -1653,6 +1653,12 @@ updateConfig(){
 	if ! grep -Fq "soc_vin=" $ConfigFile; then
 		echo "soc_vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "kia_soccalclp1=" $ConfigFile; then
+		echo "kia_soccalclp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_soccalclp2=" $ConfigFile; then
+		echo "kia_soccalclp2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile
 	fi

@@ -8,14 +8,14 @@ if [[ "$1" == "1" ]]; then
 		sudo python runs/trigopen.py -d $u1p3ppause
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 1
+		sudo python runs/u1p3premote.py -a $evseiplp1 -i $u1p3plp2id -p 1 -d $u1p3ppause
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "1"
 	fi
 	# chargepoint 2
 	if [[ $lastmanagement == 1 && $evsecons1 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp2 $u1p3plp2id 1
+		sudo python runs/u1p3premote.py -a $evseiplp2 -i $u1p3plp2id -p 1 -d $u1p3ppause
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep2ip -m "1"
@@ -25,42 +25,42 @@ if [[ "$1" == "1" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep3ip -m "1"
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp3 $u1p3plp3id 1
+		sudo python runs/u1p3premote.py -a $evseiplp3 -i $u1p3plp3id -p 1 -d $u1p3ppause
 	fi
 	# chargepoint 4
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep4ip -m "1"
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp4 $u1p3plp4id 1
+		sudo python runs/u1p3premote.py -a $evseiplp4 -i $u1p3plp4id -p 1 -d $u1p3ppause
 	fi
 	# chargepoint 5
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep5ip -m "1"
 	fi
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "ipevse" && $u1p3plp5aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp5 $u1p3plp5id 1
+		sudo python runs/u1p3premote.py -a $evseiplp5 -i $u1p3plp5id -p 1 -d $u1p3ppause
 	fi
 	# chargepoint 6
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep6ip -m "1"
 	fi
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "ipevse" && $u1p3plp6aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp6 $u1p3plp6id 1
+		sudo python runs/u1p3premote.py -a $evseiplp6 -i $u1p3plp6id -p 1 -d $u1p3ppause
 	fi
 	# chargepoint 7
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep7ip -m "1"
 	fi
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "ipevse" && $u1p3plp7aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp7 $u1p3plp7id 1
+		sudo python runs/u1p3premote.py -a $evseiplp7 -i $u1p3plp7id -p 1 -d $u1p3ppause
 	fi
 	# chargepoint 8
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep8ip -m "1"
 	fi
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "ipevse" && $u1p3plp8aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp8 $u1p3plp8id 1
+		sudo python runs/u1p3premote.py -a $evseiplp8 -i $u1p3plp8id -p 1 -d $u1p3ppause
 	fi
 	echo 1 > ramdisk/u1p3pstat
 fi
@@ -96,28 +96,28 @@ if [[ "$1" == "3" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep8ip -m "3"
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 3
+		sudo python runs/u1p3premote.py -a $evseiplp1 -i $u1p3plp2id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp2 $u1p3plp2id 3
+		sudo python runs/u1p3premote.py -a $evseiplp2 -i $u1p3plp2id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp3 $u1p3plp3id 3
+		sudo python runs/u1p3premote.py -a $evseiplp3 -i $u1p3plp3id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp4 $u1p3plp4id 3
+		sudo python runs/u1p3premote.py -a $evseiplp4 -i $u1p3plp4id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "ipevse" && $u1p3plp5aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp5 $u1p3plp5id 3
+		sudo python runs/u1p3premote.py -a $evseiplp5 -i $u1p3plp5id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "ipevse" && $u1p3plp6aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp6 $u1p3plp6id 3
+		sudo python runs/u1p3premote.py -a $evseiplp6 -i $u1p3plp6id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "ipevse" && $u1p3plp7aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp7 $u1p3plp7id 3
+		sudo python runs/u1p3premote.py -a $evseiplp7 -i $u1p3plp7id -p 3 -d $u1p3ppause
 	fi
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "ipevse" && $u1p3plp8aktiv == "1" ]]; then
-		sudo python runs/u1p3premote.py $evseiplp8 $u1p3plp8id 3
+		sudo python runs/u1p3premote.py -a $evseiplp8 -i $u1p3plp8id -p 3 -d $u1p3ppause
 	fi
 	echo 3 > ramdisk/u1p3pstat
 fi

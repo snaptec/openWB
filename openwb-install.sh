@@ -148,11 +148,11 @@ else
 fi
 
 echo "disable cronjob logging"
-if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron
+if grep -Fxq "EXTRA_OPTS=\"-L 0\"" /etc/default/cron
 then
 	echo "...ok"
 else
-	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
+	echo "EXTRA_OPTS=\"-L 0\"" >> /etc/default/cron
 fi
 
 #prepare for Buster
