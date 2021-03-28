@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>openWB Update wird gestartet</title>
+		<title>openWB Update</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -49,64 +49,63 @@
 			var themeCookie = getCookie('openWBTheme');
 			// include special Theme style
 			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20201019">');
 			}
 		</script>
 	</head>
 
 	<body>
-<?php
 
-	// receives chosen releasetrain from update-page via POST-request,
-	// writes value to config file and start update
-	// author: M. Ortenstein
+		<header>
+			<!-- Fixed navbar -->
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+				<div class="navbar-brand">
+					openWB
+				</div>
+			</nav>
+		</header>
 
-	$myConfigFile = '/var/www/html/openWB/openwb.conf';
+		<div role="main" class="container" style="margin-top:20px">
 
-	try {
-		if ( !file_exists($myConfigFile) ) {
-			throw new Exception('Konfigurationsdatei nicht gefunden.');
-		}
-		// first read config-lines in array
-		$settingsFile = file($myConfigFile);
-		// prepare key/value array
-		$settingsArray = [];
+			<div class="card border-secondary">
+				<div class="card-header bg-secondary">
+					Update
+				</div>
+				<div class="card-body">
+					<div id="infoText" class="alert alert-info"></div>
+					<div class="row">
+						<div class="cssload-loader text-center">
+							<div class="cssload-inner cssload-one"></div>
+							<div class="cssload-inner cssload-two"></div>
+							<div class="cssload-inner cssload-three"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-		// convert lines to key/value array for faster manipulation
-		foreach($settingsFile as $line) {
-			// check for comment-lines in older config files and don't process them
-			if ( strlen(trim($line)) > 3 && $line[0] != "#" ) {
-				// split line at char '='
-				$splitLine = explode('=', $line, 2);
-				// trim parts
-				$splitLine[0] = trim($splitLine[0]);
-				$splitLine[1] = trim($splitLine[1]);
-				// push key/value pair to new array
-				$settingsArray[$splitLine[0]] = $splitLine[1];
-			}
-		}
-		// now values can be accessed by $settingsArray[$key] = $value;
+		</div>  <!-- container -->
 
-		// update chosen setting in array
-		$settingsArray["releasetrain"] = $_POST["releasetrainRadioBtn"];
+		<footer class="footer bg-dark text-light font-small">
+			<div class="container text-center">
+				<small>Sie befinden sich hier: System/Update</small>
+			</div>
+		</footer>
 
-		// write config to file
-  		$fp = fopen($myConfigFile, "w");
-		if ( !$fp ) {
-			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
-  		}
-		foreach($settingsArray as $key => $value) {
-			fwrite($fp, $key.'='.$value."\n");
-		}
-		fclose($fp);
-	} catch ( Exception $e ) {
-		$msg = $e->getMessage();
-		echo "<script>alert('$msg');</script>";
-		// return to theme on error
-		echo "<script>window.location.href='index.php';</script>";
-	}
-	// if successfully saved to config, start update
-	echo "<script>window.location.href='tools/update.php';</script>";
-?>
+		<script>
+			$(document).ready(function(){
+				infoText = $("#infoText");
+
+				infoText.text("Update der openWB angefordert...");
+
+				$.get({ url: "tools/updatePerformNow.php", cache: false }).done(function() {
+					infoText.text("Update läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
+					infoText.removeClass("alert-info");
+					infoText.addClass("alert-success");
+					setTimeout(function() { window.location.href = "index.php"; }, 20000);
+				});
+
+			});
+		</script>
+
 	</body>
 </html>
