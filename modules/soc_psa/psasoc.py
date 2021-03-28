@@ -137,10 +137,12 @@ else:
 	fetchedsoctime = batt['energy'][0]['updatedAt']
 	soct = time.strptime(fetchedsoctime, "%Y-%m-%dT%H:%M:%SZ")
 	soctime = time.mktime(soct)
+	# adding one hour to UTC to get CET
+	soctime = soctime + 3600
 	# checking for daylight saving time
 	dst=time.localtime()
-	if (dst.tm_isdst == 0):
-		# adding one hour to fetched SoCtime if needed
+	if (dst.tm_isdst == 1):
+		# adding one hour to fetched SoCtime in daylight saving time
 		soctime = soctime + 3600
 	# writing timestamp to ramdisk
 	if (int(chargepoint) == 1):
