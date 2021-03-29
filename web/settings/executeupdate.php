@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>openWB Remote Sitzung</title>
+		<title>openWB Update</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -55,6 +55,7 @@
 	</head>
 
 	<body>
+
 		<header>
 			<!-- Fixed navbar -->
 			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -68,12 +69,10 @@
 
 			<div class="card border-secondary">
 				<div class="card-header bg-secondary">
-					Remote Sitzung
+					Update
 				</div>
 				<div class="card-body">
-					<div id="infoText" class="alert alert-info">
-						Tunnel wird initiiert... Bitte warten.
-					</div>
+					<div id="infoText" class="alert alert-info"></div>
 					<div class="row">
 						<div class="cssload-loader text-center">
 							<div class="cssload-inner cssload-one"></div>
@@ -88,12 +87,24 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Remote Sitzung</small>
+				<small>Sie befinden sich hier: System/Update</small>
 			</div>
 		</footer>
 
 		<script>
-			setTimeout(function() { window.location = "tools/remote.php"; }, 1000);
+			$(document).ready(function(){
+				infoText = $("#infoText");
+
+				infoText.text("Update der openWB angefordert...");
+
+				$.get({ url: "settings/updatePerformNow.php", cache: false }).done(function() {
+					infoText.text("Update läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
+					infoText.removeClass("alert-info");
+					infoText.addClass("alert-success");
+					setTimeout(function() { window.location.href = "index.php"; }, 20000);
+				});
+
+			});
 		</script>
 
 	</body>

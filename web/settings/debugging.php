@@ -77,7 +77,7 @@
 			<h1>Debugging und Support</h1>
 
 			<div class="card border-secondary">
-				<form class="form" id="debugmodeForm" action="./tools/saveconfig.php" method="POST">
+				<form class="form" id="debugmodeForm" action="./settings/saveconfig.php" method="POST">
 					<div class="card-header bg-secondary">
 						Protokollierung
 					</div>
@@ -133,7 +133,7 @@
 			</div>
 
 			<div class="card border-secondary">
-				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
+				<form class="form" id="sendTokenForm" action="./settings/starttunnel.php" method="POST">
 					<div class="card-header bg-secondary">
 						Remote Support
 					</div>

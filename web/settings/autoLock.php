@@ -245,7 +245,7 @@ ECHODAYROWTAIL;
 				Diese Einstellungen ermöglichen es, dass man jeden konfigurierten Ladepunkt zu bestimmten Zeiten automatisiert sperren bzw. wieder entsperren kann.
 				Ein möglicher Anwendungsfall wäre das Bereitstellen von Lademöglichkeiten nur während der Öffnungszeiten.
 			</div>
-			<form class="form" action="./tools/saveautolock.php" method="POST">
+			<form class="form" action="./settings/saveautolock.php" method="POST">
 
 				<?php
 

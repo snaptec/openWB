@@ -131,7 +131,7 @@
 					if ($loopCount != 0) echo "<hr>";
 			?>
 			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke \"$connectionName\""; else echo "Neue MQTT-Brücke"; ?></h1>
-			<form action="./tools/savemqtt.php" method="POST">
+			<form action="./settings/savemqtt.php" method="POST">
 				<!-- previous bridge name, needed for renaming a bridge -->
 				<input type="hidden" readonly="readonly" name="bridge" value="<?php echo($connectionName); ?>">
 
