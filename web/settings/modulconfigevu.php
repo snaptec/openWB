@@ -623,6 +623,20 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
+											</label>
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
@@ -635,9 +649,7 @@
 											<label class="btn btn-outline-info<?php if($froniusvar2old == 2) echo " active" ?>">
 												<input type="radio" name="froniusvar2" id="froniusvar2v2" value="2"<?php if($froniusvar2old == 2) echo " checked=\"checked\"" ?>>Variante 2
 											</label>
-											<label class="btn btn-outline-info<?php if($froniusvar2old == 2) echo " active" ?>">
-												<input type="radio" name="froniusvar2" id="froniusvar2v3" value="2"<?php if($froniusvar2old == 3) echo " checked=\"checked\"" ?>>Variante 3 (oft Gen 24)
-											</label>
+
 										</div>
 										<span class="form-text small">
 											Gegebenenfalls auch für alte Modelle nach einem Softwareupdate erforderlich. Fronius hat derzeit keine Konsistente Schnittstelle. Speziell beim Gen24 kann Variante 1 oder 2 erforderlich sein. Nach speichern sollten nach etwa 10-20 Sekunden Daten angezeigt werden. Ist dies nicht der Fall die andere Variante ausprobieren.

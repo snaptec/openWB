@@ -1900,6 +1900,8 @@ updateConfig(){
 	if ! grep -Fq "pingcheckactive=" $ConfigFile; then
 		echo "pingcheckactive=1" >> $ConfigFile
 	fi
-	
+	if ! grep -Fq "froniusmeterlocation=" $ConfigFile; then
+		echo "froniusmeterlocation=0" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
