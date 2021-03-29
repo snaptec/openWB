@@ -2,7 +2,7 @@
 	switch ( $wizzarddoneold ) {
 		case 0: // start of wizzard
 			echo "<!-- wizzard -- start -->";
-			include($_SERVER['DOCUMENT_ROOT'] . '/openWB/web/tools/wizzardstart.html');
+			include($_SERVER['DOCUMENT_ROOT'] . '/openWB/web/settings/wizzardstart.html');
 			break;
 		case 1: // EVU
 			echo "<!-- wizzard -- step 1 -->";
@@ -18,6 +18,6 @@
 			break;
 		default: // end of wizzard
 			echo "<!-- wizzard -- end -->";
-			include($_SERVER['DOCUMENT_ROOT'] . '/openWB/web/tools/wizzardend.html');
+			include($_SERVER['DOCUMENT_ROOT'] . '/openWB/web/settings/wizzardend.html');
 	}
 ?>
