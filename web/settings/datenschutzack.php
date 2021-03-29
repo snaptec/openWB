@@ -6,8 +6,9 @@
 
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>openWB Update</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Datenschutz</title>
+		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -24,6 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -49,63 +51,90 @@
 			var themeCookie = getCookie('openWBTheme');
 			// include special Theme style
 			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20201019">');
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
 			}
 		</script>
 	</head>
 
 	<body>
-
-		<header>
-			<!-- Fixed navbar -->
-			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-				<div class="navbar-brand">
-					openWB
-				</div>
-			</nav>
-		</header>
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 
-			<div class="card border-secondary">
-				<div class="card-header bg-secondary">
-					Update
-				</div>
-				<div class="card-body">
-					<div id="infoText" class="alert alert-info"></div>
-					<div class="row">
-						<div class="cssload-loader text-center">
-							<div class="cssload-inner cssload-one"></div>
-							<div class="cssload-inner cssload-two"></div>
-							<div class="cssload-inner cssload-three"></div>
-						</div>
-					</div>
-				</div>
+			<div class="alert alert-warning">
+				Einstellungen werden gespeichert...  <i class="fas fa-cog fa-spin"></i>
 			</div>
 
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Update</small>
+				<small>Sie befinden sich hier: System/Datenschutz</small>
 			</div>
 		</footer>
 
 		<script>
-			$(document).ready(function(){
-				infoText = $("#infoText");
 
-				infoText.text("Update der openWB angefordert...");
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					// no menue entry for this page
+					// $('#navXXXXXX').addClass('disabled');
+				}
+			);
 
-				$.get({ url: "tools/updatePerformNow.php", cache: false }).done(function() {
-					infoText.text("Update läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
-					infoText.removeClass("alert-info");
-					infoText.addClass("alert-success");
-					setTimeout(function() { window.location.href = "index.php"; }, 20000);
-				});
-
-			});
 		</script>
+
+<?php
+//print_r($_POST);
+
+$result = '';
+$lines = file($_SERVER["DOCUMENT_ROOT"].'/openWB/openwb.conf');
+foreach($lines as $line) {
+	$writeit = '0';
+	
+	if(strpos($line, "datenschutzack=") !== false) {
+		if ($_POST['dataProtectionAcknoledged'] == 1) {
+			$result .= 'datenschutzack=1'."\n";
+		} else {
+			$result .= 'datenschutzack=2'."\n";
+		}
+		$writeit = '1';
+	}
+	
+	if ( $writeit == '0' ) {
+		$result .= $line;
+	}
+}
+
+flush();
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+sleep(5);
+
+if ($_POST['dataProtectionAcknoledged'] != 1) { ?>
+		<form id="formid" action="settings/savemqtt.php?bridge=cloud" method="POST">
+			<input type="hidden" name="ConnectionName" value="cloud"/>
+			<input type="hidden" name="action" value="deleteBridge"/>
+			<!--
+			<div class="row col justify-content-center py-1">
+				<button type="submit" class="btn btn-green" name="action" value="deleteBridge">Brücke cloud löschen</button>
+			</div>
+			-->
+		</form>
+		<script>
+			setTimeout(function() { document.getElementById('formid').submit(value="deleteBridge"); }, 5000);
+		</script>
+<?php
+} else {
+?>
+		<script>
+			setTimeout(function() { window.location.href="index.php"; }, 5000);
+		</script>
+<?php
+}
+?>
 
 	</body>
 </html>

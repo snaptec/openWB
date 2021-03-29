@@ -72,7 +72,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>SmartHome</h1>
-			<form action="./tools/savesmarthome.php" method="POST">
+			<form action="./settings/savesmarthome.php" method="POST">
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
