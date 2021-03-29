@@ -223,20 +223,20 @@
 										$('#tibberHomesDropdown').selectpicker();
 
 										$('#tibbertoken').change(function(){
-											// after change of token check if only alphanumeric chars were entered
+											// after change of token check if no invalid chars were entered
 											var currentVal = $(this).val();
-											// !Attention! Until now there are only alphanumeric characters in token.
+											// !Attention! Until now there are only characters 0-9 a-Z A-Z _ and - in token.
 											// Function may be needed to be adjusted in future
-											newVal = currentVal.trim().replace(/[^a-z0-9]/gi,'');
+											newVal = currentVal.trim().replace(/[^\w-]/gi,'');
 											$(this).val(newVal);
 										});
 
 										$('#tibberhomeid').change(function(){
-											// after change of homeID check if only alphanumeric chars and dash were entered
+											// after change of token check if no invalid chars were entered
 											var currentVal = $(this).val();
-											// !Attention! Until now there are only alphanumeric characters and dash in homeID.
+											// !Attention! Until now there are only characters 0-9 a-Z A-Z _ and - in in homeID.
 											// Function may be needed to be adjusted in future
-											newVal = currentVal.trim().replace(/[^a-z0-9-]/gi,'');
+											newVal = currentVal.trim().replace(/[^\w-]/gi,'');
 											$(this).val(newVal);
 										});
 
