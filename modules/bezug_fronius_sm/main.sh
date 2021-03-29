@@ -71,7 +71,7 @@ elif [[ $froniusvar2 == "2" ]]; then
 	ekwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
 fi
 
-openwbDebugLog ${DMOD} 1 "EVU: response_sm: $response_sm"
+openwbDebugLog ${DMOD} 2 "EVU: response_sm: $response_sm"
 
 # Auswertung für Variante0 und Variante1 gebündelt
 if [[ $froniusvar2 != "2" ]]; then
@@ -99,8 +99,6 @@ if [[ $froniusvar2 != "2" ]]; then
 	ekwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Produced')
 
 fi
-
-
 
 openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
 
