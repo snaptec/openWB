@@ -891,8 +891,68 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere Kia SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 0) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp1" id="kia_soccalclp1Off" value="0"<?php if($kia_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp1" id="kia_soccalclp1On" value="1"<?php if($kia_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+										<div id="kiamanualcalcdiv" class="hide">
+											<div class="form-row mb-1">
+												<label for="kia_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="kia_akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="kia_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="kia_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
+							<script>
+							$(function() {
+								function visibility_kia_soccalclp1() {
+									if($('#kia_soccalclp1Off').prop("checked")) {
+										hideSection('#kiamanualcalcdiv');
+									} else {
+										showSection('#kiamanualcalcdiv');
+									}
+								}
+
+								$('input[type=radio][name=kia_soccalclp1]').change(function(){
+									visibility_kia_soccalclp1();
+								});
+
+								visibility_kia_soccalclp1();
+							});
+							</script>
 							<div id="socmzerong" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3234,6 +3294,70 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmkialp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere Kia SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 0) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2Off" value="0"<?php if($kia_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2On" value="1"<?php if($kia_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+										<div id="kiamanualcalclp2div" class="hide">
+											<div class="form-row mb-1">
+												<label for="kia_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="kia_akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="kia_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="kia_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<script>
+								$(function() {
+									function visibility_kia_soccalclp2() {
+										if($('#kia_soccalclp2Off').prop("checked")) {
+											hideSection('#kiamanualcalclp2div');
+										} else {
+											showSection('#kiamanualcalclp2div');
+										}
+									}
+
+									$('input[type=radio][name=kia_soccalclp2]').change(function(){
+										visibility_kia_soccalclp2();
+									});
+
+									visibility_kia_soccalclp2();
+								});
+								</script>
+							</div>
 							<div id="socmintervallladen2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3405,6 +3529,7 @@
 								showSection('#socmpin2');
 								showSection('#socmvin2');
 								showSection('#socmintervall2');
+								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_idlp2') {
 								showSection('#socmuser2');

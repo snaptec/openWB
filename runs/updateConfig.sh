@@ -1653,6 +1653,12 @@ updateConfig(){
 	if ! grep -Fq "soc_vin=" $ConfigFile; then
 		echo "soc_vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "kia_soccalclp1=" $ConfigFile; then
+		echo "kia_soccalclp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_soccalclp2=" $ConfigFile; then
+		echo "kia_soccalclp2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile
 	fi
@@ -1759,10 +1765,12 @@ updateConfig(){
 		echo "psa_passlp1=Pass" >> $ConfigFile
 		echo "psa_clientidlp1=ID" >> $ConfigFile
 		echo "psa_clientsecretlp1=Secret" >> $ConfigFile
+		echo "psa_manufacturerlp1=Peugeot" >> $ConfigFile
 		echo "psa_userlp2=User" >> $ConfigFile
 		echo "psa_passlp2=Pass" >> $ConfigFile
 		echo "psa_clientidlp2=ID" >> $ConfigFile
 		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
+		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
 	fi
 	if ! grep -Fq "psa_intervallp1=" $ConfigFile; then
 		echo "psa_intervallp1=10" >> $ConfigFile

@@ -24,29 +24,27 @@ class WbData {
 		this.batteryPowerExport = 0;
 		this.batteryPowerImport = 0;
 		this.graphDate = new Date();
-
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
-
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
 		this.sourceSummary = {
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
 			"pv": { name: "PV", power: 0, energy: 0, color: "white" },			
-			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" }
+			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" }
 		};
 
 		this.usageSummary = [
 			{ name: "Export", power: 0, energy: 0, color: "white" },
 			{ name: "Laden", power: 0, energy: 0, color: "white" },
 			{ name: "Geräte", power: 0, energy: 0, color: "white" },
-			{ name: "Speicher in", power: 0, energy: 0, color: "white" },
+			{ name: "> Bat", power: 0, energy: 0, color: "white" },
 			{ name: "Haus", power: 0, energy: 0, color: "white" }
 		];
 
 		this.historicSummary = {
-			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" },
 			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
 			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
@@ -58,6 +56,7 @@ class WbData {
 		this.usageDetails = [this.usageSummary[0]];
 		this.showLiveGraph = true;
 		this.showTodayGraph = false;
+		this.showGrid = false;
 		this.displayMode = "gray";
 		this.usageStackOrder = 0;
 		this.prefs = {};
@@ -298,6 +297,7 @@ class WbData {
 		this.prefs.showLG = this.showLiveGraph;
 		this.prefs.displayM = this.displayMode;
 		this.prefs.stackO = this.usageStackOrder;
+		this.prefs.showGr = this.showGrid;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 	// read cookies and update settings
@@ -324,6 +324,9 @@ class WbData {
 			}
 			if ('stackO' in this.prefs) {
 				this.usageStackOrder = this.prefs.stackO;
+			}
+			if ('showGr' in this.prefs) {
+				this.showGrid = this.prefs.showGr;
 			}
 		}
 	}
@@ -429,6 +432,12 @@ function shiftRight() {
     }
     powerGraph.activateDay();
   }
+}
+
+function toggleGrid() {
+	wbdata.showGrid = !wbdata.showGrid;
+	powerGraph.updateGraph();
+	wbdata.persistGraphPreferences();
 }
 // required for pricechart to work
 var evuCol;
