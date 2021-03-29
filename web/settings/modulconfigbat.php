@@ -639,7 +639,7 @@
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
 								}
-                                if($('#speichermodul').val() == 'speicher_studer') {
+								if($('#speichermodul').val() == 'speicher_studer') {
 									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
