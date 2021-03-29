@@ -45,11 +45,11 @@ class WbData {
 		this.historicSummary = {
 			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
 			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
-			"batOut": { name: "Speicher out", power: 0, energy: 0, color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" },
 			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
 			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
 			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "Speicher in", power: 0, energy: 0, color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
 			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
 		};
 		
