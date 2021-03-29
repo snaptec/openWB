@@ -224,20 +224,20 @@ function setToDefaults() {
     /** @function setToDefaults
      * sets all inputs and button-groups to their default value
      */
-     $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
-         // first all number-field and range sliders
-         var defaultValue = $(this).data('default');
-         if ( typeof defaultValue !== 'undefined' ) {
-             setInputValue($(this).attr('id'), defaultValue);
-         }
-     });
-     $('.btn-group-toggle').each(function() {
-         // then all toggle btn-groups
-         var defaultValue = $(this).data('default');
-         if ( typeof defaultValue !== 'undefined' ) {
-             setToggleBtnGroup($(this).attr('id'), defaultValue);
-         }
-     });
+    $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
+        // first all number-field and range sliders
+        var defaultValue = $(this).data('default');
+        if ( typeof defaultValue !== 'undefined' ) {
+            setInputValue($(this).attr('id'), defaultValue);
+        }
+    });
+    $('.btn-group-toggle').each(function() {
+        // then all toggle btn-groups
+        var defaultValue = $(this).data('default');
+        if ( typeof defaultValue !== 'undefined' ) {
+            setToggleBtnGroup($(this).attr('id'), defaultValue);
+        }
+    });
 }
 
 function formatToNaturalNumber(element) {
@@ -246,11 +246,11 @@ function formatToNaturalNumber(element) {
      * @param {object} element - the input element
      * @requires max value set up for input field properly
      */
-     if ( element.value.length > 0 ) {
-         element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
-     }
-     var max = $(element).attr('max');
-     if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
-         element.value = max;
-     }
+    if ( element.value.length > 0 ) {
+        element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
+    }
+    var max = $(element).attr('max');
+    if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
+        element.value = max;
+    }
 }

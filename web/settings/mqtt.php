@@ -143,7 +143,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 						<u>ACHTUNG</u>: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen!<br/>
-						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und 
+						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und
 						strenger Zugriffskontrolle (zumindest für die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
 						</div>
 						<div class="form-group">
@@ -289,7 +289,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 							<u>ACHTUNG</u>: Dies erlaubt jedem Nutzer des entfernten MQTT-Servers mit Zugriff auf die entsprechenden Themen, diese openWB fern zu steuern!<br/>
-							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit 
+							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit
 							persönlichem Login und strenger Zugriffskontrolle zu aktivieren!<br/>
 							KEINESFALLS AUF <u>ÖFFENTLICH ZUGÄNGLICHEN</u> MQTT-SERVERN AKTIVEREN!!!
 						</div>
