@@ -1466,6 +1466,9 @@ updateConfig(){
 	if ! grep -Fq "soc_audi_passwort=" $ConfigFile; then
 		echo "soc_audi_passwort=passwort" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_audi_vin=" $ConfigFile; then
+		echo "soc_audi_vin=VIN" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc2user=" $ConfigFile; then
 		echo "soc2user=demo@demo.de" >> $ConfigFile
 	fi
@@ -1765,18 +1768,22 @@ updateConfig(){
 		echo "psa_passlp1=Pass" >> $ConfigFile
 		echo "psa_clientidlp1=ID" >> $ConfigFile
 		echo "psa_clientsecretlp1=Secret" >> $ConfigFile
-		echo "psa_manufacturerlp1=Peugeot" >> $ConfigFile
 		echo "psa_userlp2=User" >> $ConfigFile
 		echo "psa_passlp2=Pass" >> $ConfigFile
 		echo "psa_clientidlp2=ID" >> $ConfigFile
 		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
-		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
 	fi
 	if ! grep -Fq "psa_intervallp1=" $ConfigFile; then
 		echo "psa_intervallp1=10" >> $ConfigFile
 	fi
 	if ! grep -Fq "psa_intervallp2=" $ConfigFile; then
 		echo "psa_intervallp2=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "psa_manufacturerlp1=" $ConfigFile; then
+		echo "psa_manufacturerlp1=Peugeot" >> $ConfigFile
+	fi
+	if ! grep -Fq "psa_manufacturerlp2=" $ConfigFile; then
+		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		echo "soc_eq_client_id_lp1=ID" >> $ConfigFile
@@ -1787,6 +1794,15 @@ updateConfig(){
 		echo "soc_eq_client_secret_lp2=Secret" >> $ConfigFile
 		echo "soc_eq_vin_lp2=VIN" >> $ConfigFile
 		echo "soc_eq_cb_lp2=http://openWB/openWB/modules/soc_eq/callback_lp2.php" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_username=" $ConfigFile; then
+		echo "soc_id_username=User" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_passwort=" $ConfigFile; then
+		echo "soc_id_passwort='Pass'" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_vin=" $ConfigFile; then
+		echo "soc_id_vin=VIN" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc2vin=" $ConfigFile; then
 		echo "soc2vin=" >> $ConfigFile

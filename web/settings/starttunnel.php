@@ -1,3 +1,11 @@
+<?php
+$result = '';
+
+if (isset($_POST['token'])) {
+	$result = $_POST['token'] . "\n";
+	file_put_contents('/var/www/html/openWB/ramdisk/remotetoken', $result);
+	header("Location: ./remoteredirect.html");
+} else { ?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -25,33 +33,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20201019">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -71,8 +59,9 @@
 					Remote Sitzung
 				</div>
 				<div class="card-body">
-					<div id="infoText" class="alert alert-info">
-						Tunnel wird initiiert... Bitte warten.
+					<div id="infoText" class="alert alert-danger">
+						Keine Token angegeben!<br>
+						Weiterleitung in 10 Sekunden...
 					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">
@@ -93,8 +82,9 @@
 		</footer>
 
 		<script>
-			setTimeout(function() { window.location = "tools/remote.php"; }, 1000);
+			setTimeout(function() { window.location = "index.php"; }, 10000);
 		</script>
 
 	</body>
 </html>
+<?php } ?>

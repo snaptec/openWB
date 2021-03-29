@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>openWB Reboot</title>
+		<title>openWB Remote Sitzung</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -25,37 +25,16 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
-
 		<header>
 			<!-- Fixed navbar -->
 			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -69,10 +48,12 @@
 
 			<div class="card border-secondary">
 				<div class="card-header bg-secondary">
-					Reboot
+					Remote Sitzung
 				</div>
 				<div class="card-body">
-					<div id="infoText" class="alert alert-info"></div>
+					<div id="infoText" class="alert alert-info">
+						Tunnel wird initiiert... Bitte warten.
+					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">
 							<div class="cssload-inner cssload-one"></div>
@@ -87,23 +68,12 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Reboot</small>
+				<small>Sie befinden sich hier: System/Remote Sitzung</small>
 			</div>
 		</footer>
 
 		<script>
-			$(document).ready(function(){
-				infoText = $("#infoText");
-
-				infoText.text("Neustart der openWB angefordert...");
-
-				$.get({ url: "tools/restart.php", cache: false }).always(function() {
-					infoText.text("Neustart läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
-					infoText.removeClass("alert-info");
-					infoText.addClass("alert-success");
-					setTimeout(function() { window.location.href = "index.php"; }, 50000);
-				});
-			});
+			setTimeout(function() { window.location = "settings/remote.php"; }, 1000);
 		</script>
 
 	</body>

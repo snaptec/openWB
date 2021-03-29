@@ -18,10 +18,10 @@
 		// check for acknoledgement of dataprotection
 		if ( $datenschutzackold == 0 && $clouduserold !== "leer") {
 			// load dataprotection page
-			include 'tools/datenschutz.html';
+			include 'settings/datenschutz.html';
 		} elseif ( !isset($wizzarddoneold) || ($wizzarddoneold < 100) ) {
 			// load wizzard page
-			include 'tools/wizzard.php';
+			include 'settings/wizzard.php';
 		} elseif ( $isssold == 1 ) {
 			// load chargepoint only page
 			include 'isss.html';

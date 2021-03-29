@@ -1,23 +1,3 @@
-<?php
-	// if paranmeter extendedFilename is passed with value 1 the filename changes
-	// from backup.tar.gz to openWB_backup_YYYY-MM-DD_HH-MM-SS.tar.gz
-	$useExtendedFilename = false;
-	if( isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1") {
-		$useExtendedFilename = true;
-	}
-	$backupPath = "/var/www/html/openWB/web/backup/";
-	$timestamp = date("Y-m-d") . "_" . date("H-i-s");
-	if ( $useExtendedFilename ) {
-		$filename = "openWB_backup_" . $timestamp . ".tar.gz" ;
-	} else {
-		$filename = "backup.tar.gz" ;
-	}
-
-	// first empty backup-directory
-	array_map( "unlink", array_filter((array) glob($backupPath . "*") ) );
-	// then create new backup-file
-	exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf ". $backupPath . $filename . " /var/www/html/");
-?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -27,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Backup erstellen</title>
+		<title>Datenschutz</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -47,33 +27,13 @@
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -81,22 +41,15 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
-			<h1>Backup erstellen</h1>
-			<div class="alert alert-success">
-				Backup-Datei <?php echo $filename; ?> erfoglreich erstellt.
-			</div>
-
-			<div class="row">
-				<div class="col text-center">
-					<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>" target="_blank"><i class="fas fa-download"></i> Backup herunterladen</a>
-				</div>
+			<div class="alert alert-warning">
+				Einstellungen werden gespeichert...  <i class="fas fa-cog fa-spin"></i>
 			</div>
 
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Backup erstellen</small>
+				<small>Sie befinden sich hier: System/Datenschutz</small>
 			</div>
 		</footer>
 
@@ -107,11 +60,61 @@
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
-					$('#navBackup').addClass('disabled');
+					// no menue entry for this page
+					// $('#navXXXXXX').addClass('disabled');
 				}
 			);
 
 		</script>
+
+<?php
+//print_r($_POST);
+
+$result = '';
+$lines = file($_SERVER["DOCUMENT_ROOT"].'/openWB/openwb.conf');
+foreach($lines as $line) {
+	$writeit = '0';
+	
+	if(strpos($line, "datenschutzack=") !== false) {
+		if ($_POST['dataProtectionAcknoledged'] == 1) {
+			$result .= 'datenschutzack=1'."\n";
+		} else {
+			$result .= 'datenschutzack=2'."\n";
+		}
+		$writeit = '1';
+	}
+	
+	if ( $writeit == '0' ) {
+		$result .= $line;
+	}
+}
+
+flush();
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+sleep(5);
+
+if ($_POST['dataProtectionAcknoledged'] != 1) { ?>
+		<form id="formid" action="settings/savemqtt.php?bridge=cloud" method="POST">
+			<input type="hidden" name="ConnectionName" value="cloud"/>
+			<input type="hidden" name="action" value="deleteBridge"/>
+			<!--
+			<div class="row col justify-content-center py-1">
+				<button type="submit" class="btn btn-green" name="action" value="deleteBridge">Brücke cloud löschen</button>
+			</div>
+			-->
+		</form>
+		<script>
+			setTimeout(function() { document.getElementById('formid').submit(value="deleteBridge"); }, 5000);
+		</script>
+<?php
+} else {
+?>
+		<script>
+			setTimeout(function() { window.location.href="index.php"; }, 5000);
+		</script>
+<?php
+}
+?>
 
 	</body>
 </html>
