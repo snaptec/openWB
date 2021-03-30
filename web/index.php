@@ -18,36 +18,28 @@
 		// check for acknoledgement of dataprotection
 		if ( $datenschutzackold == 0 && $clouduserold !== "leer") {
 			// load dataprotection page
-			include 'tools/datenschutz.html';
+			include 'settings/datenschutz.html';
 		} elseif ( !isset($wizzarddoneold) || ($wizzarddoneold < 100) ) {
 			// load wizzard page
-			include 'tools/wizzard.php';
+			include 'settings/wizzard.php';
 		} elseif ( $isssold == 1 ) {
 			// load chargepoint only page
 			include 'isss.html';
 		} else {
 			// load normal UI
-			// check if forced theme is activated in config file
-			if ( isset($simplemodeold) && $simplemodeold == 1 ) {
-				// force hidden theme
-				?><!-- including themes/hidden/simplemode.php --><?php
-				include 'themes/hidden/simplemode.php';
-			} else {
-				// check if theme cookie exists and theme is installed
-				// else set standard theme
-				if ( !(isset($_COOKIE['openWBTheme'] ) === true) || !(is_dir('themes/'.$_COOKIE['openWBTheme']) === true) ) {
-					$_COOKIE['openWBTheme'] = 'standard';
-				}
-				// expand expiring-date to now + 2 years
-				$expire = time()+(60*60*24*365*2);
-				setcookie('openWBTheme', $_COOKIE['openWBTheme'], $expire, '/openWB/');
-				// following line is needed because until now the cookie-path was accidently
-				// set to /openWB/web/. So from now on path is /openWB/ to access cookie from all subdirs
-				// therefore delete old cookies by having them expire immediatley
-				setcookie('openWBTheme', '', time() - 3600, '/openWB/web');
-				?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.html'; ?> --><?php
-				include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
+			// check if theme cookie exists and theme is installed
+			// else set standard theme
+			if ( !(isset($_COOKIE['openWBTheme'] ) === true) || !(is_dir('themes/'.$_COOKIE['openWBTheme']) === true) ) {
+				$_COOKIE['openWBTheme'] = 'standard';
 			}
+			// expand expiring-date to now + 2 years
+			$expire = time()+(60*60*24*365*2);
+			setcookie('openWBTheme', $_COOKIE['openWBTheme'], $expire, '/openWB/');
+			// following line is needed because until now the cookie-path was accidently
+			// set to /openWB/web/. So from now on path is /openWB/ to access cookie from all subdirs
+			// therefore delete old cookies by having them expire immediatley
+			setcookie('openWBTheme', '', time() - 3600, '/openWB/web');
+			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 		}
 	}
 ?>

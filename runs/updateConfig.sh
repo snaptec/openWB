@@ -1466,6 +1466,9 @@ updateConfig(){
 	if ! grep -Fq "soc_audi_passwort=" $ConfigFile; then
 		echo "soc_audi_passwort=passwort" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_audi_vin=" $ConfigFile; then
+		echo "soc_audi_vin=VIN" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc2user=" $ConfigFile; then
 		echo "soc2user=demo@demo.de" >> $ConfigFile
 	fi
@@ -1653,6 +1656,12 @@ updateConfig(){
 	if ! grep -Fq "soc_vin=" $ConfigFile; then
 		echo "soc_vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "kia_soccalclp1=" $ConfigFile; then
+		echo "kia_soccalclp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_soccalclp2=" $ConfigFile; then
+		echo "kia_soccalclp2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile
 	fi
@@ -1770,6 +1779,12 @@ updateConfig(){
 	if ! grep -Fq "psa_intervallp2=" $ConfigFile; then
 		echo "psa_intervallp2=10" >> $ConfigFile
 	fi
+	if ! grep -Fq "psa_manufacturerlp1=" $ConfigFile; then
+		echo "psa_manufacturerlp1=Peugeot" >> $ConfigFile
+	fi
+	if ! grep -Fq "psa_manufacturerlp2=" $ConfigFile; then
+		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		echo "soc_eq_client_id_lp1=ID" >> $ConfigFile
 		echo "soc_eq_client_secret_lp1=Secret" >> $ConfigFile
@@ -1779,6 +1794,15 @@ updateConfig(){
 		echo "soc_eq_client_secret_lp2=Secret" >> $ConfigFile
 		echo "soc_eq_vin_lp2=VIN" >> $ConfigFile
 		echo "soc_eq_cb_lp2=http://openWB/openWB/modules/soc_eq/callback_lp2.php" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_username=" $ConfigFile; then
+		echo "soc_id_username=User" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_passwort=" $ConfigFile; then
+		echo "soc_id_passwort='Pass'" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_vin=" $ConfigFile; then
+		echo "soc_id_vin=VIN" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc2vin=" $ConfigFile; then
 		echo "soc2vin=" >> $ConfigFile
@@ -1876,6 +1900,8 @@ updateConfig(){
 	if ! grep -Fq "pingcheckactive=" $ConfigFile; then
 		echo "pingcheckactive=1" >> $ConfigFile
 	fi
-	
+	if ! grep -Fq "froniusmeterlocation=" $ConfigFile; then
+		echo "froniusmeterlocation=0" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }

@@ -611,7 +611,9 @@ def getdevicevalues():
                         logDebug(LOGLEVELDEBUG, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " File not found: " + str(pyname))
                 # Separate Leistungs messung ?
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
-                if abschalt == 1:
+                # nur abschaltbar wenn openwb in pv modus gesetzt hat
+                # elwa Warmwassersicherstellung Problem
+                if (abschalt == 1) and (relais == 1):
                     totalwatt = totalwatt + watt
                 else:
                     totalwattot = totalwattot + watt
@@ -935,7 +937,7 @@ def resetmaxeinschaltdauerfunc():
                 resetmaxeinschaltdauer=1
         except:
             resetmaxeinschaltdauer=0
-    if (int(hour) == 2):
+    if (int(hour) == 1):
         resetmaxeinschaltdauer=0
 
 client = mqtt.Client("openWB-mqttsmarthome")

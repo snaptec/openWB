@@ -27,33 +27,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -84,7 +64,7 @@
 				$bridgeLines = $currentFile != "" ? file($currentFile) : array();
 				$connectionName = "eindeutiger-verbindungs-bezeichner";
 				foreach($bridgeLines as $bridgeLine) {
-					if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
+					if(isset($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
 						// echo "Matches: " . var_dump($matches);
 						$remotePrefix = trim($matches[5]);
 					} else if(preg_match('/^\s*connection\s+(.+)/', $bridgeLine, $matches) === 1) {
@@ -101,11 +81,11 @@
 			<h1>Einstellungen zur openWB Cloud</h1>
 			<?php if ( $datenschutzackold != 1 ) { ?>
 				<div class="alert alert-danger">
-					Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloudanbindung nutzen zu können.
+					Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloudanbindung nutzen zu können.
 				</div>
 			<?php } else { ?>
 				<div class="alert alert-success">
-					Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloudanbindung nutzen.
+					Sie haben der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloudanbindung nutzen.
 				</div>
 			<?php }
 			if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
@@ -128,7 +108,7 @@
 						</div>
 					</div>
 					<div class="card-footer">
-						<form action="./tools/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
+						<form action="./settings/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
 							<input type="hidden" name="ConnectionName" value="cloud"/>
 							<div class="row justify-content-center py-1">
 								<button type="submit" class="btn btn-success" name="action" value="deleteBridge">Brücke <?php echo urlencode($connectionName); ?> löschen</button>
@@ -141,7 +121,7 @@
 					<div class="card-header bg-secondary">
 						Cloud Anmeldedaten
 					</div>
-					<form action="./tools/cloudregistrate.php" method="POST">
+					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="card-body">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -179,7 +159,7 @@
 					</form>
 				</div> <!-- card 1 -->
 				<div class="card border-secondary">
-					<form action="./tools/cloudregistrate.php" method="POST">
+					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="card-header bg-secondary">
 							Cloud neu einrichten
 						</div>
