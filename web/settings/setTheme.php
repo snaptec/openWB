@@ -22,7 +22,7 @@
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
@@ -43,7 +43,7 @@
 				// except for themes hidden and standard
 				$dirList[] = "standard";  // standard always first
 				foreach( array_diff(scandir($rootDir),array('.','..')) as $subDir ) {
-					if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "hidden") !== 0 && strcasecmp($subDir, "standard") !== 0) {
+					if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "standard") !== 0) {
 						$dirList[] = $subDir;
 					}
 				}

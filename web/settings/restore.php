@@ -30,7 +30,7 @@
 		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
 		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
@@ -85,7 +85,6 @@
 
 				$target_dir = $_SERVER['DOCUMENT_ROOT'] . "/openWB/web/tools/upload/";
 				$targetPath = $target_dir . "backup.tar.gz";
-				$ext = pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION);
 				$uploadOk = false;
 				list($max_size, $sizeLimit) = file_upload_max_size();
 				$maxSizeMB = number_format(($max_size / (1024 * 1024)), 2, ',', '.');  // german format
