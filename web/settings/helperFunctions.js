@@ -44,7 +44,7 @@ function getCookie(cname) {
 // get selected theme and set style
 var themeCookie = getCookie('openWBTheme');
 if( '' != themeCookie ){
-    $('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+    $('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210330">');
 }
 
 /**

@@ -30,7 +30,7 @@
 		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
 		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
@@ -64,7 +64,7 @@
 				$bridgeLines = $currentFile != "" ? file($currentFile) : array();
 				$connectionName = "eindeutiger-verbindungs-bezeichner";
 				foreach($bridgeLines as $bridgeLine) {
-					if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
+					if(isset($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
 						// echo "Matches: " . var_dump($matches);
 						$remotePrefix = trim($matches[5]);
 					} else if(preg_match('/^\s*connection\s+(.+)/', $bridgeLine, $matches) === 1) {
