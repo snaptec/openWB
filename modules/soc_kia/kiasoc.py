@@ -6,6 +6,7 @@ import json
 import random
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
+from datetime import datetime
 import stamps
 
 email = str(sys.argv[1])
@@ -13,7 +14,11 @@ password = str(sys.argv[2])
 pin = str(sys.argv[3])
 vin = str(sys.argv[4])
 socfile = str(sys.argv[5])
-soctimefile = str(sys.argv[6])
+chargepoint = str(sys.argv[6])
+debuglevel = int(sys.argv[7])
+successfile = str(sys.argv[8])
+
+reqTimeout = 20
 
 # Kia API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
 # For more information: https://github.com/Hacksore/bluelinky/pull/105
@@ -23,8 +28,19 @@ soctimefile = str(sys.argv[6])
 def get_stamp(): 
     return stamps.stamps[random.randint(0,len(stamps.stamps)-1)]
 
-def main():
-    #deviceID
+def socDebugLog(msgLevel, msgText):
+    if debuglevel >= msgLevel:
+        now = datetime.now()
+        timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+        line = timestamp + ": LP" + chargepoint + ": " + msgText
+        print(line)
+    return
+
+def DownloadSoC():
+    
+    #Get deviceId   
+    socDebugLog(2, "            Requesting DeviceId")
+    
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/spa/notifications/register'
     headers = {
         'ccsp-service-id': 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a',
@@ -36,47 +52,83 @@ def main():
         'User-Agent': 'okhttp/3.10.0',
         'Stamp': get_stamp()}
     data = {"pushRegId":"1","pushType":"GCM","uuid": str(uuid.uuid1())}
-    response = requests.post(url, json = data, headers = headers)
+    
+    try:
+        response = requests.post(url, json = data, headers = headers, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1
+    
     if response.status_code == 200:
-        response = json.loads(response.text)
-        deviceId = response['resMsg']['deviceId']
-        print(deviceId)
+        responseDict = json.loads(response.text)
+        try:
+            deviceId = responseDict['resMsg']['deviceId']
+        except KeyError:
+            socDebugLog(1, "            Could not receive DeviceId, invalid response")
+            socDebugLog(2, "            " + response.text)
+            return -1
+        socDebugLog(2, "            DeviceId = " + deviceId)
     else:
-        print('NOK deviceID')
-        return
+        socDebugLog(1, "            Could not receive DeviceId, StatusCode: " + str(response.status_code))
+        return -1
 
     #cookie for login
-    session = requests.Session()
-    response = session.get('https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=fdc85c00-0a2f-4c64-bcb4-2cfb1500730a&redirect_uri=https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/redirect')
+    socDebugLog(2, "            Get cookies for login")
+    try:
+        session = requests.Session()
+        response = session.get('https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=fdc85c00-0a2f-4c64-bcb4-2cfb1500730a&redirect_uri=https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/redirect')
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1    
+    
     if response.status_code == 200:
         cookies = session.cookies.get_dict()
-        #print(cookies)
     else:
-        print('NOK cookie for login')
-        return
+        socDebugLog(1, "            Receiving cookies failed")
+        return -1
 
+    #Language
+    socDebugLog(2, "            Setting language")
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/language' 
     headers = {'Content-type': 'application/json'}
     data = {"lang": "en"}
-    response = requests.post(url, json = data, headers = headers, cookies = cookies)
-
+    
+    try:
+        response = requests.post(url, json = data, headers = headers, cookies = cookies, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1  
+        
     #login
+    socDebugLog(2, "            Sending username/password")
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/signin' 
     headers = {'Content-type': 'application/json'}
     data = {"email": email,"password": password}
-    response = requests.post(url, json = data, headers = headers, cookies = cookies)
+    
+    try:
+        response = requests.post(url, json = data, headers = headers, cookies = cookies, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1  
+    
     if response.status_code == 200:
-        response = json.loads(response.text)
-        response = response['redirectUrl']
-        parsed = urlparse.urlparse(response)
+        responseDict = json.loads(response.text)
+        try:
+            responseUrl = responseDict['redirectUrl']
+        except KeyError:
+            socDebugLog(1, "            Login failed, invalid response")
+            socDebugLog(2, "            " + response.text)     
+            return -1
+        parsed = urlparse.urlparse(responseUrl)
         authCode = ''.join(parse_qs(parsed.query)['code'])
-        #print(authCode)
-	
+        socDebugLog(2, "            AuthCode = " + authCode)
     else:
-        print('NOK login')
-        return
+        socDebugLog(1, "            Login failed, StatusCode: " + str(response.status_code))
+        return -1
 
     #token
+    socDebugLog(2, "            Requesting Token")
+    
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/token'
     headers = {
         'Authorization': 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA==',
@@ -87,16 +139,29 @@ def main():
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0'}
     data = 'grant_type=authorization_code&redirect_uri=https%3A%2F%2Fprd.eu-ccapi.kia.com%3A8080%2Fapi%2Fv1%2Fuser%2Foauth2%2Fredirect&code=' + authCode
-    response = requests.post(url, data = data, headers = headers)
+    
+    try:
+        response = requests.post(url, data = data, headers = headers, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1 
+        
     if response.status_code == 200:
-        response = json.loads(response.text)
-        access_token = response['token_type'] + ' ' + response['access_token']
-        #print(access_token)
+        responseDict = json.loads(response.text)
+        try:
+            access_token = responseDict['token_type'] + ' ' + responseDict['access_token']
+        except KeyError:
+            socDebugLog(1, "            Token request failed, invalid response")
+            socDebugLog(2, "            " + response.text)
+            return -1            
+        socDebugLog(2, "            Token = " + access_token)    
     else:
-        print('NOK token')
-        return
+        socDebugLog(1, "            Token request failed, StatusCode: " + str(response.status_code))
+        return -1
 
     #vehicles
+    socDebugLog(2, "            Requesting vehicle list")
+    
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/spa/vehicles'
     headers = {
         'Authorization': access_token,
@@ -108,18 +173,29 @@ def main():
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0',
         'Stamp': get_stamp()}
-    response = requests.get(url, headers = headers)
+    
+    try:
+        response = requests.get(url, headers = headers, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1 
+        
     if response.status_code == 200:
         response = json.loads(response.text)
-        vehicleId = response['resMsg']['vehicles'][0]['vehicleId']
-        #print(vehicleId)
+        try:
+            vehicleId = response['resMsg']['vehicles'][0]['vehicleId']
+        except KeyError:
+            socDebugLog(1, "            Vehicle request failed, invalid response")
+            socDebugLog(2, "            " + response.text)
+            return -1     
+        socDebugLog(2, "            VehicleId = " + vehicleId)
     else:
-        print('NOK vehicles')
-        return
-
-    #vehicles/profile
+        socDebugLog(1, "            Vehicle request failed, StatusCode: " + str(response.status_code))
+        return -1
 
     #prewakeup
+    socDebugLog(2, "            Triggering Pre-Wakeup")
+        
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/spa/vehicles/' + vehicleId + '/control/engine'
     headers = {
         'Authorization': access_token,
@@ -134,15 +210,22 @@ def main():
         'User-Agent': 'okhttp/3.10.0',
         'Stamp': get_stamp()}
     data = {"action":"prewakeup","deviceId": deviceId}
-    response = requests.post(url, json = data, headers = headers)
+    
+    try:    
+        response = requests.post(url, json = data, headers = headers, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1 
+        
     if response.status_code == 200:
-        #print(response.text)
         response = ''
     else:
-        print('NOK prewakeup')
-        return
+        socDebugLog(1, "            Pre-Wakeup request failed, StatusCode: " + str(response.status_code))
+        return -1
 
     #pin
+    socDebugLog(2, "            Sending PIN")
+    
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/pin'
     headers = {
         'Authorization': access_token,
@@ -153,56 +236,82 @@ def main():
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0'}
     data = {"deviceId": deviceId,"pin": pin}
-    response = requests.put(url, json = data, headers = headers)
+    
+    try:
+        response = requests.put(url, json = data, headers = headers, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1
+        
     if response.status_code == 200:
         response = json.loads(response.text)
-        controlToken = 'Bearer ' + response['controlToken']
-        #print(controlToken)
+        try:
+            controlToken = 'Bearer ' + response['controlToken']
+        except KeyError:
+            socDebugLog(1, "            Sending PIN failed, invalid response")
+            socDebugLog(2, "            " + response.text)
+            return -1     
+        
+        socDebugLog(2, "            controlToken = " + controlToken)
     else:
-        print('NOK pin')
-        return
+        socDebugLog(1, "            Sending PIN failed, StatusCode: " + str(response.status_code))
+        return -1
 
     #status
+    socDebugLog(2, "            Receiving status")
+    
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v2/spa/vehicles/' + vehicleId + '/status'
     headers = {
         'Authorization': controlToken,
         'ccsp-device-id': deviceId,
         'Content-Type': 'application/json',
         'Stamp': get_stamp()}
-    response = requests.get(url, headers = headers)
+    
+    try:
+        response = requests.get(url, headers = headers, timeout = reqTimeout)
+    except requests.Timeout as err:
+        socDebugLog(1, "            Connection Timeout")
+        return -1
+        
     if response.status_code == 200:
-       statusresponse = json.loads(response.text)
-       #log (statusresponse)
-       soc = statusresponse['resMsg']['evStatus']['batteryStatus']
-       print('soc: ',soc)
-       charging = statusresponse['resMsg']['evStatus']['batteryCharge']
-       print('charging: ', charging)
-       
-       #Retry if SoC returns 0 (also happens to the app sometimes)
-       if soc == 0:
-          print('Retry')
-          response = requests.get(url, headers = headers)
-          if response.status_code == 200:
-             statusresponse = json.loads(response.text)
-             #log (statusresponse)
-             soc = statusresponse['resMsg']['evStatus']['batteryStatus']
-             print('soc: ',soc)
-             charging = statusresponse['resMsg']['evStatus']['batteryCharge']
-             print('charging: ', charging)          
+        statusresponse = json.loads(response.text)
 
-       if soc > 0:
-          f = open(socfile, 'w')
-          f.write(str(soc))
-          f.close()
+        try:
+            soc = statusresponse['resMsg']['evStatus']['batteryStatus']
+            #charging = statusresponse['resMsg']['evStatus']['batteryCharge']
+        except KeyError:
+            socDebugLog(1, "            Receiving status failed, invalid response")
+            socDebugLog(2, "            " + response.text)
+            return -1        
        
-          soctime = time.time()
-          f = open(soctimefile, 'w')
-          f.write(str(int(soctime)))
-          f.close()
+        socDebugLog(2, "            soc = " + soc)
+
+        if soc > 0:
+            #Save SoC
+            f = open(socfile, 'w')
+            f.write(str(soc))
+            f.close()
+                    
+            #Save Status Successful
+            f = open(successfile, 'w')
+            f.write(str("1"))
+            f.close()
+          
+        return soc
 
     else:
-         print('NOK status')
-         return
+         socDebugLog(1, "            Receiving status failed, StatusCode: " + str(response.status_code))
+         return -1
+
+
+def main():
+    socDebugLog(1, "        SoC download starting")
+    soc = DownloadSoC()
+    if soc == 0:
+        socDebugLog(2, "        Retrying in 30 Seconds")
+        time.sleep(30)
+        soc = DownloadSoC()
+    socDebugLog(1, "        SoC download ending")    
 
 if __name__ == '__main__':
     main()
