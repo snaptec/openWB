@@ -35,7 +35,7 @@
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
 		<meta name="google" content="notranslate">
-		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script>
 			$(document).ready(function(){
 				/**

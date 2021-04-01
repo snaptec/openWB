@@ -28,35 +28,13 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -1094,9 +1072,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_vag_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_vag_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_vag_passwort" id="soc_vag_passwort" value="<?php echo $soc_vag_passwortold ?>">
+											<input class="form-control" type="password" name="soc_vag_password" id="soc_vag_password" value="<?php echo $soc_vag_passwordold ?>">
 											<span class="form-text small">
 												Password des Logins
 											</span>
@@ -2487,7 +2465,7 @@
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($socttypeold == 'vw') echo " active" ?>">
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'vw') echo " active" ?>">
 													<input type="radio" name="soc2type" id="soc2type_vw" value="vw"<?php if($soc2typeold == 'vw') echo " checked=\"checked\"" ?>>VW
 												</label>
 												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">

@@ -47,7 +47,7 @@ elif [[ $froniusvar2 == "2" ]]; then
 	
 	# TODO: meter_location für diese Variante korrekt ermitteln
 	# Überprüfe den Einbauort des SmartMeters.
-	meter_location=$(echo $response_sm | jq $json_id'.Meter_Location_Current')
+	meter_location=$froniusmeterlocation
 	
 	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
 	wattbezug=$(echo "scale=0; $(echo $response_sm | jq $json_id'.SMARTMETER_POWERACTIVE_MEAN_SUM_F64')/1" | bc)

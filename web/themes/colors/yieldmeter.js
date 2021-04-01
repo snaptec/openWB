@@ -30,11 +30,12 @@ class YieldMeter {
 		this.houseColor = 'var(--color-house)';
 		this.pvColor = 'var(--color-pv)';
 		this.exportColor = 'var(--color-export)';
-		this.gridColor = 'var(--color-evu)';
+		this.evuColor = 'var(--color-evu)';
 		this.bgColor = 'var(--color-bg)';
 		this.chargeColor = 'var(--color-charging)';
 		this.axisColor = 'var(--color-axis)';
-		d3.select("button#energyLeftButton")
+		this.gridColor = 'var(--color-grid)';
+   	d3.select("button#energyLeftButton")
 			.on("click", shiftLeft)
 		d3.select("button#energyRightButton")
 			.on("click", shiftRight)
@@ -109,7 +110,13 @@ class YieldMeter {
 			.text("energy");
 
 		yAxis.selectAll(".tick").attr("font-size", this.axisFontSize);
-		yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
+		if (wbdata.showGrid) {
+			yAxis.selectAll(".tick line")
+			.attr("stroke", this.gridColor)
+			.attr ("stroke-width", "0.5");			
+		} else {
+			yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
+		}
 		yAxis.select(".domain")
 			.attr("stroke", this.bgcolor);
 

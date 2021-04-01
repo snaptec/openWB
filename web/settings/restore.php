@@ -27,33 +27,13 @@
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -105,7 +85,6 @@
 
 				$target_dir = $_SERVER['DOCUMENT_ROOT'] . "/openWB/web/tools/upload/";
 				$targetPath = $target_dir . "backup.tar.gz";
-				$ext = pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION);
 				$uploadOk = false;
 				list($max_size, $sizeLimit) = file_upload_max_size();
 				$maxSizeMB = number_format(($max_size / (1024 * 1024)), 2, ',', '.');  // german format

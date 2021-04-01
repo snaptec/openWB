@@ -937,7 +937,7 @@ def resetmaxeinschaltdauerfunc():
                 resetmaxeinschaltdauer=1
         except:
             resetmaxeinschaltdauer=0
-    if (int(hour) == 2):
+    if (int(hour) == 1):
         resetmaxeinschaltdauer=0
 
 client = mqtt.Client("openWB-mqttsmarthome")

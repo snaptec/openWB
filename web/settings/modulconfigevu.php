@@ -28,36 +28,15 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
+
 	<body>
 
 		<?php
@@ -644,6 +623,20 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
+											</label>
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
@@ -656,6 +649,7 @@
 											<label class="btn btn-outline-info<?php if($froniusvar2old == 2) echo " active" ?>">
 												<input type="radio" name="froniusvar2" id="froniusvar2v2" value="2"<?php if($froniusvar2old == 2) echo " checked=\"checked\"" ?>>Variante 2
 											</label>
+
 										</div>
 										<span class="form-text small">
 											Gegebenenfalls auch für alte Modelle nach einem Softwareupdate erforderlich. Fronius hat derzeit keine Konsistente Schnittstelle. Speziell beim Gen24 kann Variante 1 oder 2 erforderlich sein. Nach speichern sollten nach etwa 10-20 Sekunden Daten angezeigt werden. Ist dies nicht der Fall die andere Variante ausprobieren.
