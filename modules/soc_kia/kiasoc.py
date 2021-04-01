@@ -284,7 +284,7 @@ def DownloadSoC():
             socDebugLog(2, "            " + response.text)
             return -1        
        
-        socDebugLog(2, "            soc = " + soc)
+        socDebugLog(2, "            soc = " + str(soc))
 
         if soc > 0:
             #Save SoC
