@@ -26,7 +26,8 @@ openwbDebugLog ${DMOD} 2 "PVWatt: $power_kostal_piko_MP"
 #pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/yields.xml | grep -Po "Value=\"\K[^\"]*" | sed -n 1p)
 pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/yields.xml |grep "YieldValue" | grep -Po "Value=\"\K[^\"]*" )
 if ! [[ $pvkwh_kostal_piko_MP =~ $re ]] ; then
-	pvkwh_kostal_piko_MP="0"
+	openwbDebugLog ${DMOD} 2 "PVkWh: NaN get prev. Value"
+	pvkwh_kostal_piko_MP=$(</var/www/html/openWB/ramdisk/pv2kwh)
 fi
 
 openwbDebugLog ${DMOD} 2 "PVkWh: $pvkwh_kostal_piko_MP"
