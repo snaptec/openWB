@@ -18,15 +18,15 @@ chargepoint = str(sys.argv[6])
 debuglevel = int(sys.argv[7])
 successfile = str(sys.argv[8])
 
-host = 'prd.eu-ccapi.kia.com:8080'
+host = 'prd.eu-ccapi.hyundai.com:8080'
 baseUrl = 'https://' + host
-clientId = 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a'
-appId = '693a33fa-c117-43f2-ae3b-61a02d24f417'
-basicToken = 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA=='
+clientId = '6d477c38-3ca4-4cf3-9557-2a1929a94654'
+appId = '99cfff84-f4e2-4be8-a5ed-e5b755eb6581'
+basicToken = 'Basic NmQ0NzdjMzgtM2NhNC00Y2YzLTk1NTctMmExOTI5YTk0NjU0OktVeTQ5WHhQekxwTHVvSzB4aEJDNzdXNlZYaG10UVI5aVFobUlGampvWTRJcHhzVg=='
 
 reqTimeout = 20
 
-# Kia API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
+# Bluelink API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
 # For more information: https://github.com/Hacksore/bluelinky/pull/105
 # A random stamp from the list in the file stamps.py is used here.
 # Instruction for generating new stamps can be found in stamps.py
@@ -123,7 +123,6 @@ def DownloadSoC():
             responseUrl = responseDict['redirectUrl']
         except KeyError:
             socDebugLog(1, "            Login failed, invalid response")
-            socDebugLog(2, "            " + response.text)     
             return -1
         parsed = urlparse.urlparse(responseUrl)
         authCode = ''.join(parse_qs(parsed.query)['code'])

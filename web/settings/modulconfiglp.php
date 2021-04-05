@@ -667,7 +667,7 @@
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
-										<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
+										<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
 										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
 										<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
@@ -870,7 +870,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Kia SoC Modul und manuelle Berechnung</label>
+									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 0) echo " active" ?>">
@@ -1900,6 +1900,7 @@
 								showSection('#socmqtt');
 							}
 							if($('#socmodul').val() == 'soc_bluelink') {
+								showSection('#socmkia');
 								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_id') {
@@ -2428,7 +2429,7 @@
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
-										<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
+										<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
 										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
 										<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
@@ -3275,7 +3276,7 @@
 							<div id="socmkialp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Kia SoC Modul und manuelle Berechnung</label>
+									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 0) echo " active" ?>">
@@ -3499,7 +3500,10 @@
 							if($('#socmodul1').val() == 'soc_bluelinklp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
-								// showSection('#socmpin2'); // not needed anymore 2020-12-16
+								showSection('#socmpin2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
 								showSection('#socmuser2');
