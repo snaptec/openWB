@@ -18,6 +18,12 @@ chargepoint = str(sys.argv[6])
 debuglevel = int(sys.argv[7])
 successfile = str(sys.argv[8])
 
+host = 'prd.eu-ccapi.kia.com:8080'
+baseUrl = 'https://' + host
+clientId = 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a'
+appId = '693a33fa-c117-43f2-ae3b-61a02d24f417'
+basicToken = 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA=='
+
 reqTimeout = 20
 
 # Kia API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
@@ -41,12 +47,12 @@ def DownloadSoC():
     #Get deviceId   
     socDebugLog(2, "            Requesting DeviceId")
     
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/spa/notifications/register'
+    url = baseUrl + '/api/v1/spa/notifications/register'
     headers = {
-        'ccsp-service-id': 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a',
+        'ccsp-service-id': clientId,
         'Content-type': 'application/json;charset=UTF-8',
         'Content-Length': '80',
-        'Host': 'prd.eu-ccapi.kia.com:8080',
+        'Host': host,
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0',
@@ -76,7 +82,7 @@ def DownloadSoC():
     socDebugLog(2, "            Get cookies for login")
     try:
         session = requests.Session()
-        response = session.get('https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=fdc85c00-0a2f-4c64-bcb4-2cfb1500730a&redirect_uri=https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/redirect')
+        response = session.get(baseUrl + '/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=' + clientId + '&redirect_uri=' + baseUrl + '/api/v1/user/oauth2/redirect')
     except requests.Timeout as err:
         socDebugLog(1, "            Connection Timeout")
         return -1    
@@ -89,7 +95,7 @@ def DownloadSoC():
 
     #Language
     socDebugLog(2, "            Setting language")
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/language' 
+    url = baseUrl + '/api/v1/user/language' 
     headers = {'Content-type': 'application/json'}
     data = {"lang": "en"}
     
@@ -101,7 +107,7 @@ def DownloadSoC():
         
     #login
     socDebugLog(2, "            Sending username/password")
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/signin' 
+    url = baseUrl + '/api/v1/user/signin' 
     headers = {'Content-type': 'application/json'}
     data = {"email": email,"password": password}
     
@@ -129,16 +135,16 @@ def DownloadSoC():
     #token
     socDebugLog(2, "            Requesting Token")
     
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/oauth2/token'
+    url = baseUrl + '/api/v1/user/oauth2/token'
     headers = {
-        'Authorization': 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA==',
+        'Authorization': basicToken,
         'Content-type': 'application/x-www-form-urlencoded',
         'Content-Length': '150',
-        'Host': 'prd.eu-ccapi.kia.com:8080',
+        'Host': host,
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0'}
-    data = 'grant_type=authorization_code&redirect_uri=https%3A%2F%2Fprd.eu-ccapi.kia.com%3A8080%2Fapi%2Fv1%2Fuser%2Foauth2%2Fredirect&code=' + authCode
+    data = 'grant_type=authorization_code&redirect_uri=' + baseUrl + '%2Fapi%2Fv1%2Fuser%2Foauth2%2Fredirect&code=' + authCode
     
     try:
         response = requests.post(url, data = data, headers = headers, timeout = reqTimeout)
@@ -162,13 +168,13 @@ def DownloadSoC():
     #vehicles
     socDebugLog(2, "            Requesting vehicle list")
     
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/spa/vehicles'
+    url = baseUrl + '/api/v1/spa/vehicles'
     headers = {
         'Authorization': access_token,
         'ccsp-device-id': deviceId,
-        'ccsp-application-id': '693a33fa-c117-43f2-ae3b-61a02d24f417',
+        'ccsp-application-id': appId,
         'offset': '1',
-        'Host': 'prd.eu-ccapi.kia.com:8080',
+        'Host': host,
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0',
@@ -181,9 +187,15 @@ def DownloadSoC():
         return -1 
         
     if response.status_code == 200:
-        response = json.loads(response.text)
+        responseDict = json.loads(response.text)
         try:
-            vehicleId = response['resMsg']['vehicles'][0]['vehicleId']
+            vehicleId = ''
+            for vehicle in responseDict['resMsg']['vehicles']:
+                if vehicle['vin'] == vin:
+                    vehicleId = vehicle['vehicleId']
+            if vehicleId == '':
+                socDebugLog(1, "            VIN " + vin + " unknown")
+                return -1;
         except KeyError:
             socDebugLog(1, "            Vehicle request failed, invalid response")
             socDebugLog(2, "            " + response.text)
@@ -196,15 +208,15 @@ def DownloadSoC():
     #prewakeup
     socDebugLog(2, "            Triggering Pre-Wakeup")
         
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/spa/vehicles/' + vehicleId + '/control/engine'
+    url = baseUrl + '/api/v1/spa/vehicles/' + vehicleId + '/control/engine'
     headers = {
         'Authorization': access_token,
         'ccsp-device-id': deviceId,
-        'ccsp-application-id': '693a33fa-c117-43f2-ae3b-61a02d24f417',
+        'ccsp-application-id': appId,
         'offset': '1',
         'Content-Type': 'application/json;charset=UTF-8',
         'Content-Length': '72',
-        'Host': 'prd.eu-ccapi.kia.com:8080',
+        'Host': host,
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0',
@@ -226,12 +238,12 @@ def DownloadSoC():
     #pin
     socDebugLog(2, "            Sending PIN")
     
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/pin'
+    url = baseUrl + '/api/v1/user/pin'
     headers = {
         'Authorization': access_token,
         'Content-type': 'application/json;charset=UTF-8',
         'Content-Length': '64',
-        'Host': 'prd.eu-ccapi.kia.com:8080',
+        'Host': host,
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
         'User-Agent': 'okhttp/3.10.0'}
@@ -244,9 +256,9 @@ def DownloadSoC():
         return -1
         
     if response.status_code == 200:
-        response = json.loads(response.text)
+        responseDict = json.loads(response.text)
         try:
-            controlToken = 'Bearer ' + response['controlToken']
+            controlToken = 'Bearer ' + responseDict['controlToken']
         except KeyError:
             socDebugLog(1, "            Sending PIN failed, invalid response")
             socDebugLog(2, "            " + response.text)
@@ -260,7 +272,7 @@ def DownloadSoC():
     #status
     socDebugLog(2, "            Receiving status")
     
-    url = 'https://prd.eu-ccapi.kia.com:8080/api/v2/spa/vehicles/' + vehicleId + '/status'
+    url = baseUrl + '/api/v2/spa/vehicles/' + vehicleId + '/status'
     headers = {
         'Authorization': controlToken,
         'ccsp-device-id': deviceId,
@@ -284,7 +296,7 @@ def DownloadSoC():
             socDebugLog(2, "            " + response.text)
             return -1        
        
-        socDebugLog(2, "            soc = " + str(soc))
+        socDebugLog(2, "            SoC = " + str(soc))
 
         if soc > 0:
             #Save SoC

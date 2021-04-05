@@ -171,6 +171,7 @@ else
 		socDebugLog 1 "        SoC download not successful"
 	fi
 	
+	touch $socFile
 	socDebugLog 1 "    SoC Update ending"
 fi
 
