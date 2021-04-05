@@ -28,35 +28,13 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -73,7 +51,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration Ladepunkte</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- Ladepunkt 1 -->
 				<div class="card border-primary">
@@ -691,7 +669,7 @@
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
-										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ (BETA!!!)</option>
+										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
 										<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
 										<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 										<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">MyRenault</option>
@@ -1094,9 +1072,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_vag_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_vag_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_vag_passwort" id="soc_vag_passwort" value="<?php echo $soc_vag_passwortold ?>">
+											<input class="form-control" type="password" name="soc_vag_password" id="soc_vag_password" value="<?php echo $soc_vag_passwordold ?>">
 											<span class="form-text small">
 												Password des Logins
 											</span>
@@ -2451,9 +2429,9 @@
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
-										<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
+										<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
-										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ (BETA!!!)</option>
+										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
 										<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
 										<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 										<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
@@ -2488,7 +2466,7 @@
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($socttypeold == 'vw') echo " active" ?>">
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'vw') echo " active" ?>">
 													<input type="radio" name="soc2type" id="soc2type_vw" value="vw"<?php if($soc2typeold == 'vw') echo " checked=\"checked\"" ?>>VW
 												</label>
 												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">
@@ -3298,7 +3276,7 @@
 							<div id="socmkialp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Kia SoC Modul und manuelle Berechnung</label>
+									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 0) echo " active" ?>">
