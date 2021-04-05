@@ -8,12 +8,12 @@ CHARGEPOINT=$1
 
 socDebug=$debug
 # for developement only
-socDebug=1
+# socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		socupdatetimefile="$RAMDISKDIR/kiasoctime1"
+		socsuccessfile="$RAMDISKDIR/socsuccess1"
 		soctimerfile="$RAMDISKDIR/soctimer1"
 		manualSocFile="$RAMDISKDIR/kiasoc1"
 		socFile="$RAMDISKDIR/soc1"
@@ -32,7 +32,7 @@ case $CHARGEPOINT in
 		# defaults to first charge point for backward compatibility
 		# set CHARGEPOINT in case it is empty (needed for logging)
 		CHARGEPOINT=1
-		socupdatetimefile="$RAMDISKDIR/kiasoctime"
+		socsuccessfile="$RAMDISKDIR/socsuccess"
 		soctimerfile="$RAMDISKDIR/soctimer"
 		manualSocFile="$RAMDISKDIR/kiasoc"
 		socFile="$RAMDISKDIR/soc"
@@ -49,28 +49,55 @@ case $CHARGEPOINT in
 		;;
 esac
 
+case $dspeed in
+	1)
+		# Regelgeschwindigkeit 10 Sekunden
+		ticksize=1
+		;;
+	2)
+		# Regelgeschwindigkeit 20 Sekunden
+		ticksize=2
+		;;
+	3)
+		# Regelgeschwindigkeit 60 Sekunden
+		ticksize=6
+		;;
+	*)
+		# Regelgeschwindigkeit unbekannt
+		ticksize=1
+		;;
+esac
+
 socDebugLog(){
-	if (( socDebug > 0 )); then
+	if (( socDebug >= $1 )); then
 		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+		echo "$timestamp: LP$CHARGEPOINT: $2" >> $LOGFILE
 	fi
 }
 
+socDebugLog 1 "-----------------------------------------------------------"
+socDebugLog 1 "Kia SoC Module starting"
+
 soctimervalue=$(<$soctimerfile)
 tmpintervall=$(( kia_intervall * 6 ))
-
-socDebugLog "SoCtimer: $soctimervalue, SoCIntervall: $tmpintervall"
+ticksLeft=$((tmpintervall - soctimervalue))
+timeLeft=$(echo "scale=1;$ticksLeft / 6" | bc | sed 's/^\./0./')
+socDebugLog 1 "    Next update: $timeLeft minutes ($ticksLeft ticks)"
 
 if (( soctimervalue < tmpintervall )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	soctimervalue=$((soctimervalue+1))
+	
+	soctimervalue=$((soctimervalue+ticksize))
 	echo $soctimervalue > $soctimerfile
+
+	if ((soccalc == 0)); then
+		socDebugLog 1 "    Nothing to do yet"	
+	fi
+
 	if ((soccalc == 1)); then
-		socDebugLog "Manual Calculation on"
+		socDebugLog 1 "    Manual Calculation starting"
 
 		if [[ -f "$meterFile" ]]; then
 			currentMeter=$(<$meterFile)
-			socDebugLog "currentMeter: $currentMeter"
 
 			# read manual Soc
 			if [[ -f "$manualSocFile" ]]; then
@@ -80,7 +107,6 @@ if (( soctimervalue < tmpintervall )); then
 				manualSoc=0
 				echo $manualSoc > $manualSocFile
 			fi
-			socDebugLog "manual SoC: $manualSoc"
 
 			# read manualMeterFile if file exists and manualMeterFile is newer than manualSocFile
 			if [[ -f "$manualMeterFile" ]] && [ "$manualMeterFile" -nt "$manualSocFile" ]; then
@@ -91,7 +117,6 @@ if (( soctimervalue < tmpintervall )); then
 				manualMeter=$currentMeter
 				echo $manualMeter > $manualMeterFile
 			fi
-			socDebugLog "manualMeter: $manualMeter"
 
 			# read current soc
 			if [[ -f "$socFile" ]]; then
@@ -100,15 +125,13 @@ if (( soctimervalue < tmpintervall )); then
 				currentSoc=$manualSoc
 				echo $currentSoc > $socFile
 			fi
-			socDebugLog "currentSoc: $currentSoc"
 
 			# calculate newSoc
-			currentMeterDiff=$(echo "scale=5;$currentMeter - $manualMeter" | bc)
-			socDebugLog "currentMeterDiff: $currentMeterDiff"
-			currentEffectiveMeterDiff=$(echo "scale=5;$currentMeterDiff * $efficiency / 100" | bc)
-			socDebugLog "currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
-			currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc)
-			socDebugLog "currentSocDiff: $currentSocDiff"
+			currentMeterDiff=$(echo "scale=3;$currentMeter - $manualMeter" | bc | sed 's/^\./0./')
+			currentEffectiveMeterDiff=$(echo "scale=3;$currentMeterDiff * $efficiency / 100" | bc | sed 's/^\./0./')
+			socDebugLog 1 "        Charged since last update: $currentMeterDiff kWh = $currentEffectiveMeterDiff kWh @ $efficiency% efficency"
+			currentSocDiff=$(echo "scale=2;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/^\./0./')
+			socDebugLog 1 "        Charged since last update: $currentEffectiveMeterDiff kWh of $akkug kWh = $currentSocDiff% SoC"
 			newSoc=$(echo "scale=0;($manualSoc + $currentSocDiff) / 1" | bc)
 			if (( newSoc > 100 )); then
 				newSoc=100
@@ -116,20 +139,40 @@ if (( soctimervalue < tmpintervall )); then
 			if (( newSoc < 0 )); then
 				newSoc=0
 			fi
-			socDebugLog "newSoc: $newSoc"
+			socDebugLog 1 "        Estimated SoC: $manualSoc% (last update) + $currentSocDiff% (extrapolation) = $newSoc% SoC"
 			echo $newSoc > $socFile
 		else
 			# no current meter value for calculation -> Exit
-			socDebugLog "ERROR: no meter value for calculation! ($meterFile)"
+			socDebugLog 1 "        ERROR: no meter value for calculation! ($meterFile)"
 		fi
+		socDebugLog 1 "    Manual Calculation ending"
 	fi
 else
-	socDebugLog "Requesting SoC"
+	socDebugLog 1 "    SoC Update starting (Timer expired)"
 	echo 0 > $soctimerfile
-	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $manualSocFile $socupdatetimefile >> $LOGFILE
-	if ((soccalc == 0)); then
-		socDebugLog "Manual Calculation off - Applying Online SoC"
+	echo 0 > $socsuccessfile
+	
+	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $manualSocFile $CHARGEPOINT $socDebug $socsuccessfile >> $LOGFILE
+	success=$(<$socsuccessfile)
+	
+	if ((success == 1)); then
 		soc=$(<$manualSocFile)
 		echo $soc > $socFile
+		socDebugLog 1 "        SoC received: $soc%"
+		
+		if ((soccalc == 0)); then
+			socDebugLog 1 "        Applying new SoC to openWB (no manual calculation)"
+
+		fi
+		if ((soccalc == 1)); then
+			socDebugLog 1 "        Applying SoC and saving for manual calculation"
+		fi
+	else
+		socDebugLog 1 "        SoC download not successful"
 	fi
+	
+	touch $socFile
+	socDebugLog 1 "    SoC Update ending"
 fi
+
+socDebugLog 1 "Kia SoC Module ending"
