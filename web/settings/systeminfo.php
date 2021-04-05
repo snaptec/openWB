@@ -217,6 +217,7 @@
 							$('#wifirx').text(json.wlanrx);
 							$('#wifitx').text(json.wlantx);
 						} else {
+							$('#wifidata').hide();
 							$('#ipwifi').text('--');
 						}
 
