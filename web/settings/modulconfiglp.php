@@ -664,6 +664,13 @@
 							<div class="col">
 								<select name="socmodul" id="socmodul" class="form-control">
 									<option <?php if($socmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
+									<optgroup label="universelle Module">
+										<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">EVNotify</option>
+										<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">HTTP</option>
+										<option <?php if($socmodulold == "soc_manual") echo "selected" ?> value="soc_manual">Manuell + Berechnung</option>
+										<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
+									</optgroup>
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
@@ -682,12 +689,6 @@
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
-									</optgroup>
-									<optgroup label="generische Module">
-										<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">EVNotify</option>
-										<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">HTTP</option>
-										<option <?php if($socmodulold == "soc_manual") echo "selected" ?> value="soc_manual">Manuell + Berechnung</option>
-										<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									</optgroup>
 								</select>
 							</div>
@@ -913,24 +914,24 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$(function() {
+										function visibility_kia_soccalclp1() {
+											if($('#kia_soccalclp1Off').prop("checked")) {
+												hideSection('#kiamanualcalcdiv');
+											} else {
+												showSection('#kiamanualcalcdiv');
+											}
+										}
+
+										$('input[type=radio][name=kia_soccalclp1]').change(function(){
+											visibility_kia_soccalclp1();
+										});
+
+										visibility_kia_soccalclp1();
+									});
+								</script>
 							</div>
-							<script>
-							$(function() {
-								function visibility_kia_soccalclp1() {
-									if($('#kia_soccalclp1Off').prop("checked")) {
-										hideSection('#kiamanualcalcdiv');
-									} else {
-										showSection('#kiamanualcalcdiv');
-									}
-								}
-
-								$('input[type=radio][name=kia_soccalclp1]').change(function(){
-									visibility_kia_soccalclp1();
-								});
-
-								visibility_kia_soccalclp1();
-							});
-							</script>
 							<div id="socmzerong" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -1363,9 +1364,9 @@
 							<div id="socmypeugeot" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
@@ -1457,9 +1458,9 @@
 							<div id="socmyopel" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
@@ -1552,9 +1553,9 @@
 							<div id="socpsa" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="psa_manufacturerlp1" class="col-md-4 col-form-label">Hersteller</label>
@@ -1647,31 +1648,32 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$(function() {
+										function visibility_psa_soccalclp1() {
+											if($('#psa_soccalclp1Off').prop("checked")) {
+												hideSection('#psamanualcalcdiv');
+											} else {
+												showSection('#psamanualcalcdiv');
+											}
+										}
+
+										$('input[type=radio][name=psa_soccalclp1]').change(function(){
+											visibility_psa_soccalclp1();
+										});
+
+										visibility_psa_soccalclp1();
+									});
+								</script>
 							</div>
-							<script>
-							$(function() {
-								function visibility_psa_soccalclp1() {
-									if($('#psa_soccalclp1Off').prop("checked")) {
-										hideSection('#psamanualcalcdiv');
-									} else {
-										showSection('#psamanualcalcdiv');
-									}
-								}
-
-								$('input[type=radio][name=psa_soccalclp1]').change(function(){
-									visibility_psa_soccalclp1();
-								});
-
-								visibility_psa_soccalclp1();
-							});
-							</script>
 							<div id="socmeq" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
-											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
-											<a href="<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?>" target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											<span class="form-text small font-weight-bold">
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
 									</div>
@@ -1704,11 +1706,135 @@
 										<div class="col">
 											<span class="form-text small">
 												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
-												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
+												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div id="soctronity" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io/" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_id_lp1" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_id_lp1" id="soc_tronity_client_id_lp1" value="<?php echo $soc_tronity_client_id_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_secret_lp1" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_secret_lp1" id="soc_tronity_client_secret_lp1" value="<?php echo $soc_tronity_client_secret_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_select_vehicle_lp1" class="col-md-4 col-form-label">Fahrzeug</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div id="soc_tronity_load_vehicles_lp1" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+													<option value="">Bitte aktualisieren</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_vehicle_id_lp1" class="col-md-4 col-form-label">Fahrzeug ID</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_tronity_vehicle_id_lp1" id="soc_tronity_vehicle_id_lp1" value="<?php echo $soc_tronity_vehicle_id_lp1old ?>">
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tronity_intervall" id="soc_tronity_intervall" value="<?php echo $soc_tronity_intervallold ?>">
+											<span class="form-text small">
+												Gibt an, in welchem Intervall in Minuten der Ladestand des Autos abgefragt werden soll, wenn nicht geladen wird.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tronity_intervallladen" id="soc_tronity_intervallladen" value="<?php echo $soc_tronity_intervallladenold ?>">
+											<span class="form-text small">
+												Gibt an, in welchem Intervall in Minuten der Ladestand des Autos während des Ladens abgefragt werden soll.
+											</span>
+										</div>
+									</div>
+								</div>
+								<script>
+									var TronityClientPattern = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+									$('#soc_tronity_select_vehicle_lp1').change(function(){
+										$('#soc_tronity_vehicle_id_lp1').val($(this).val());
+									});
+
+									$('#soc_tronity_load_vehicles_lp1').click(function(){
+										if( ! $('#soc_tronity_client_id_lp1').val().match(TronityClientPattern) || ! $('#soc_tronity_client_secret_lp1').val().match(TronityClientPattern) ){
+											alert("Bitte geben Sie eine gültige Client ID und ein Client Secret an.");
+										} else {
+											$('#soc_tronity_load_vehicles_lp1').removeClass("bg-warning");
+											$('#soc_tronity_load_vehicles_lp1').removeClass("bg-success");
+											$(this).find('.fa-sync').addClass('fa-spin');
+											$("#soc_tronity_select_vehicle_lp1").empty();
+											$.ajax({
+												type: "POST",
+												url: "https://api-eu.TRONITY.io/oauth/authentication",
+												data: JSON.stringify( { "client_id": $('#soc_tronity_client_id_lp1').val(), "client_secret": $('#soc_tronity_client_secret_lp1').val(), "grant_type": "app" } ),
+												contentType: "application/json",
+												dataType: "json",
+												success: function(authdata){
+													$('#soc_tronity_load_vehicles_lp1').addClass("bg-warning");
+													$.ajax({
+														type: "GET",
+														url: "https://api-eu.TRONITY.io/v1/vehicles",
+														headers: {
+															Authorization: 'Bearer '+authdata.access_token
+														},
+														success: function(vehicledata){
+															$('#soc_tronity_load_vehicles_lp1').removeClass("bg-warning");
+															$('#soc_tronity_load_vehicles_lp1').addClass("bg-success");
+															var vehicleid = $('#soc_tronity_vehicle_id_lp1').val();
+															$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_tronity_select_vehicle_lp1');
+															vehicledata.data.forEach(function(vehicle){
+																newVehicle = $("<option/>").val(vehicle.id).text(vehicle.displayName);
+																if( vehicleid == vehicle.id ){
+																	newVehicle.attr('selected','selected');
+																}
+																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
+															});
+															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
+														},
+														error: function(errMsg) {
+															alert("Fahrzeuge konnten nicht abgerufen werden!");
+														}
+													});
+												},
+												error: function(errMsg) {
+													alert("Anmeldung gescheitert!");
+												},
+												complete: function(){
+													$('#soc_tronity_load_vehicles_lp1').find('.fa-sync').removeClass('fa-spin');
+												}
+											});
+										};
+									});
+								</script>
 							</div>
 						</div>
 					</div>
@@ -1884,6 +2010,7 @@
 							hideSection('#socmyopel');
 							hideSection('#socpsa');
 							hideSection('#socmanual');
+							hideSection('#soctronity');
 
 
 							if($('#socmodul').val() == 'none') {
@@ -1957,6 +2084,9 @@
 							}
 							if($('#socmodul').val() == 'soc_manual') {
 								showSection('#socmanual');
+							}
+							if($('#socmodul').val() == 'soc_tronity') {
+								showSection('#soctronity');
 							}
 						}
 
@@ -2426,6 +2556,13 @@
 							<div class="col">
 								<select name="socmodul1" id="socmodul1" class="form-control">
 									<option <?php if($socmodul1old == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
+									<optgroup label="universelle Module">
+										<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
+										<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
+										<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
+										<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
+									</optgroup>
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
@@ -2445,13 +2582,6 @@
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
-									<optgroup label="generische Module">
-										<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
-										<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
-										<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
-										<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
-									</optgroup>
-
 								</select>
 							</div>
 						</div>
@@ -2912,9 +3042,9 @@
 							<div id="socmypeugeotlp2" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
@@ -3007,9 +3137,9 @@
 							<div id="socmyopellp2" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
@@ -3102,9 +3232,9 @@
 							<div id="socpsalp2" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="psa_manufacturerlp2" class="col-md-4 col-form-label">Hersteller</label>
@@ -3220,8 +3350,9 @@
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
-											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
-											<a href="<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?>" target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											<span class="form-text small font-weight-bold">
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
 									</div>
@@ -3253,25 +3384,12 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
 								</div>
 
-							</div>
-							<div id="socmintervall2" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc2intervall" id="soc2intervall" value="<?php echo $soc2intervallold ?>">
-											<span class="form-text small">
-												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
-											</span>
-										</div>
-									</div>
-								</div>
 							</div>
 							<div id="socmkialp2" class="hide">
 								<div class="form-group">
@@ -3336,6 +3454,124 @@
 									visibility_kia_soccalclp2();
 								});
 								</script>
+							</div>
+							<div id="soctronitylp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io/" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_id_lp2" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_id_lp2" id="soc_tronity_client_id_lp2" value="<?php echo $soc_tronity_client_id_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_secret_lp2" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_secret_lp2" id="soc_tronity_client_secret_lp2" value="<?php echo $soc_tronity_client_secret_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_select_vehicle_lp2" class="col-md-4 col-form-label">Fahrzeug</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div id="soc_tronity_load_vehicles_lp2" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+													<option value="">Bitte aktualisieren</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_vehicle_id_lp2" class="col-md-4 col-form-label">Fahrzeug ID</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_tronity_vehicle_id_lp2" id="soc_tronity_vehicle_id_lp2" value="<?php echo $soc_tronity_vehicle_id_lp2old ?>">
+											</div>
+										</div>
+									</div>
+								</div>
+								<script>
+									$('#soc_tronity_select_vehicle_lp2').change(function(){
+										$('#soc_tronity_vehicle_id_lp2').val($(this).val());
+									});
+
+									$('#soc_tronity_load_vehicles_lp2').click(function(){
+										if( ! $('#soc_tronity_client_id_lp2').val().match(TronityClientPattern) || ! $('#soc_tronity_client_secret_lp2').val().match(TronityClientPattern) ){
+											alert("Bitte geben Sie eine gültige Client ID und ein Client Secret an.");
+										} else {
+											$('#soc_tronity_load_vehicles_lp2').removeClass("bg-warning");
+											$('#soc_tronity_load_vehicles_lp2').removeClass("bg-success");
+											$(this).find('.fa-sync').addClass('fa-spin');
+											$("#soc_tronity_select_vehicle_lp2").empty();
+											$.ajax({
+												type: "POST",
+												url: "https://api-eu.TRONITY.io/oauth/authentication",
+												data: JSON.stringify( { "client_id": $('#soc_tronity_client_id_lp2').val(), "client_secret": $('#soc_tronity_client_secret_lp2').val(), "grant_type": "app" } ),
+												contentType: "application/json",
+												dataType: "json",
+												success: function(authdata){
+													$('#soc_tronity_load_vehicles_lp2').addClass("bg-warning");
+													$.ajax({
+														type: "GET",
+														url: "https://api-eu.TRONITY.io/v1/vehicles",
+														headers: {
+															Authorization: 'Bearer '+authdata.access_token
+														},
+														success: function(vehicledata){
+															$('#soc_tronity_load_vehicles_lp2').removeClass("bg-warning");
+															$('#soc_tronity_load_vehicles_lp2').addClass("bg-success");
+															var vehicleid = $('#soc_tronity_vehicle_id_lp2').val();
+															$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_tronity_select_vehicle_lp2');
+															vehicledata.data.forEach(function(vehicle){
+																newVehicle = $("<option/>").val(vehicle.id).text(vehicle.displayName);
+																if( vehicleid == vehicle.id ){
+																	newVehicle.attr('selected','selected');
+																}
+																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
+															});
+															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
+														},
+														error: function(errMsg) {
+															alert("Fahrzeuge konnten nicht abgerufen werden!");
+														}
+													});
+												},
+												error: function(errMsg) {
+													alert("Anmeldung gescheitert!");
+												},
+												complete: function(){
+													$('#soc_tronity_load_vehicles_lp2').find('.fa-sync').removeClass('fa-spin');
+												}
+											});
+										};
+									});
+								</script>
+							</div>
+							<div id="socmintervall2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2intervall" id="soc2intervall" value="<?php echo $soc2intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div id="socmintervallladen2" class="hide">
 								<div class="form-group">
@@ -3479,7 +3715,7 @@
 							hideSection('#socmintervall2');
 							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
-
+							hideSection('#soctronitylp2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('#socmnone1');
@@ -3568,6 +3804,11 @@
 							if($('#socmodul1').val() == 'soc_volvolp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
+							}
+							if($('#socmodul1').val() == 'soc_tronitylp2') {
+								showSection('#soctronitylp2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 						}
 

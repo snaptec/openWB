@@ -1903,5 +1903,15 @@ updateConfig(){
 	if ! grep -Fq "froniusmeterlocation=" $ConfigFile; then
 		echo "froniusmeterlocation=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_tronity_client_id_lp1=" $ConfigFile; then
+		echo "soc_tronity_client_id_lp1=''" >> $ConfigFile
+		echo "soc_tronity_client_secret_lp1=''" >> $ConfigFile
+		echo "soc_tronity_vehicle_id_lp1=''" >> $ConfigFile
+		echo "soc_tronity_intervall=720" >> $ConfigFile
+		echo "soc_tronity_intervallladen=15" >> $ConfigFile
+		echo "soc_tronity_client_id_lp2=''" >> $ConfigFile
+		echo "soc_tronity_client_secret_lp2=''" >> $ConfigFile
+		echo "soc_tronity_vehicle_id_lp2=''" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
