@@ -88,6 +88,7 @@ if (( netzabschaltunghz == 1 )); then
 				echo $lademodus > $RAMDISKDIR/templademodus
 				# set charge mode to stop
 				echo 3 > $RAMDISKDIR/lademodus
+				echo "Netzschutz aktiviert, Frequenz: $hz" >> $RAMDISKDIR/openWB.log
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
 				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
@@ -100,6 +101,8 @@ if (( netzabschaltunghz == 1 )); then
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
 				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
+				echo "Netzschutz aktiviert, Frequenz: $hz" >> $RAMDISKDIR/openWB.log
+
 				# wait a random interval and set charge mode to stop
 				(sleep $(shuf -i1-90 -n1) && echo 3 > $RAMDISKDIR/lademodus) &
 			fi
@@ -113,6 +116,7 @@ if (( netzabschaltunghz == 1 )); then
 			echo $templademodus > $RAMDISKDIR/lademodus
 			# remove grid protection
 			echo 0 > $RAMDISKDIR/netzschutz
+			echo "Netzschutz deaktiviert, Frequenz: $hz" >> $RAMDISKDIR/openWB.log
 			echo "Netzfrequenz wieder im normalen Bereich." > $RAMDISKDIR/lastregelungaktiv
 		fi
 	fi
