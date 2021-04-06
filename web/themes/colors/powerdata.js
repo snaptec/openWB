@@ -437,6 +437,7 @@ function shiftRight() {
 function toggleGrid() {
 	wbdata.showGrid = !wbdata.showGrid;
 	powerGraph.updateGraph();
+	yieldMeter.update();
 	wbdata.persistGraphPreferences();
 }
 // required for pricechart to work

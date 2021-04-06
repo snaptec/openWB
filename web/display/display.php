@@ -3,7 +3,7 @@ include ("../values.php");
 
 if ( $isssold == 1 ) {
 	if ( $ssdisplayold == 1 ) {
-		include 'parentwb/index.html';
+		include './parentwb/index.html';
 	} else {
 		include './minimal/index.php';
 	}
