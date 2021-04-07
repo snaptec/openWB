@@ -24,7 +24,8 @@ clientId = 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a'
 appId = '693a33fa-c117-43f2-ae3b-61a02d24f417'
 basicToken = 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA=='
 
-reqTimeout = 20
+reqTimeout = 10
+statusTimeout = 60
 
 # Kia API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
 # For more information: https://github.com/Hacksore/bluelinky/pull/105
@@ -280,7 +281,7 @@ def DownloadSoC():
         'Stamp': get_stamp()}
     
     try:
-        response = requests.get(url, headers = headers, timeout = reqTimeout)
+        response = requests.get(url, headers = headers, timeout = statusTimeout)
     except requests.Timeout as err:
         socDebugLog(1, "            Connection Timeout")
         return -1
