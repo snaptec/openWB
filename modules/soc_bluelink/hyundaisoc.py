@@ -24,7 +24,8 @@ clientId = '6d477c38-3ca4-4cf3-9557-2a1929a94654'
 appId = '99cfff84-f4e2-4be8-a5ed-e5b755eb6581'
 basicToken = 'Basic NmQ0NzdjMzgtM2NhNC00Y2YzLTk1NTctMmExOTI5YTk0NjU0OktVeTQ5WHhQekxwTHVvSzB4aEJDNzdXNlZYaG10UVI5aVFobUlGampvWTRJcHhzVg=='
 
-reqTimeout = 20
+reqTimeout = 10
+statusTimeout = 60
 
 # Bluelink API expects a stamp. The solution to handle this problem was implemented for bluelinky and is used here as well.
 # For more information: https://github.com/Hacksore/bluelinky/pull/105
@@ -279,7 +280,7 @@ def DownloadSoC():
         'Stamp': get_stamp()}
     
     try:
-        response = requests.get(url, headers = headers, timeout = reqTimeout)
+        response = requests.get(url, headers = headers, timeout = statusTimeout)
     except requests.Timeout as err:
         socDebugLog(1, "            Connection Timeout")
         return -1
