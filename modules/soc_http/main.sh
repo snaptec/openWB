@@ -33,8 +33,8 @@ case $CHARGEPOINT in
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		ip=$hsocip
-		intervall=$(( soc1intervall * 6 ))
-		intervallladen=$(( soc1intervallladen * 6 ))
+		intervall=$(( soc_http_intervall * 6 ))
+		intervallladen=$(( soc_http_intervallladen * 6 ))
 		;;
 esac
 
@@ -57,11 +57,11 @@ getAndWriteSoc(){
 			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $soc"
 		else
 		# we have a problem
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from http call: $soc"
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from http call"
 		fi
 	else
 		# we have a problem
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from http call: $soc"
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from http call"
 	fi
 }
 

@@ -1121,27 +1121,19 @@
 											</span>
 										</div>
 									</div>
-								</div>
-							</div>
-							<div id="socmintervall1" class="hide">
-								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc1intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_http_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc1intervall" id="soc1intervall" value="<?php echo $soc1intervallold ?>">
+											<input class="form-control" type="text" name="soc_http_intervall" id="soc_http_intervall" value="<?php echo $soc_http_intervallold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
-								</div>
-							</div>
-							<div id="socmintervallladen1" class="hide">
-								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc1intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<label for="soc_http_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc1intervallladen" id="soc1intervallladen" value="<?php echo $soc1intervallladenold ?>">
+											<input class="form-control" type="text" name="soc_http_intervallladen" id="soc_http_intervallladen" value="<?php echo $soc_http_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -2015,8 +2007,6 @@
 							hideSection('#socmodullp1');
 							hideSection('#socmnone');
 							hideSection('#socmhttp');
-							hideSection('#socmintervall1');
-							hideSection('#socmintervallladen1');
 							hideSection('#socleaf');
 							hideSection('#soci3');
 							hideSection('#soczoe');
@@ -2076,8 +2066,6 @@
 							}
 							if($('#socmodul').val() == 'soc_http') {
 								showSection('#socmhttp');
-								showSection('#socmintervall1');
-								showSection('#socmintervallladen1');
 							}
 							if($('#socmodul').val() == 'soc_zerong') {
 								showSection('#socmzerong');
