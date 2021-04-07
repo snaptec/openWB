@@ -456,23 +456,23 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="vzloggerkwhline" class="col-md-4 col-form-label">Vzlogger Bezug kWh Zeile</label>
+									<label for="vzloggerkwhline" class="col-md-4 col-form-label">Vzlogger Bezug Wh Zeile</label>
 									<div class="col">
 										<input class="form-control" type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq .|cat -n"<br>
-											Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging.
+											Nun zählen in welcher Zeile die Gesamt Wh stehen und diesen hier eintragen. Der Wert dient rein dem Logging.
 											Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 										</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="vzloggerekwhline" class="col-md-4 col-form-label">Vzlogger Einspeisung kWh Zeile</label>
+									<label for="vzloggerekwhline" class="col-md-4 col-form-label">Vzlogger Einspeisung Wh Zeile</label>
 									<div class="col">
 										<input class="form-control" type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq .|cat -n"<br>
-											Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.
+											Nun zählen in welcher Zeile die Gesamt eingespeisten Wh stehen und diesen hier eintragen.
 										</span>
 									</div>
 								</div>
