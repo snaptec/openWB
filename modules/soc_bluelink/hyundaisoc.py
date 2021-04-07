@@ -284,7 +284,7 @@ def DownloadSoC():
         response = requests.get(url, headers = headers, timeout = statusTimeout)
     except requests.Timeout as err:
         socDebugLog(0, "            Connection Timeout (To Car)")
-        return -1
+        return 0
         
     if response.status_code == 200:
         statusresponse = json.loads(response.text)
@@ -321,8 +321,8 @@ def main():
     socDebugLog(0, "        SoC download starting")
     soc = DownloadSoC()
     if soc == 0:
-        socDebugLog(2, "        Retrying in 30 Seconds")
-        time.sleep(30)
+        socDebugLog(2, "        Retrying in 60 Seconds")
+        time.sleep(60)
         soc = DownloadSoC()
     socDebugLog(1, "        SoC download ending")    
 
