@@ -140,7 +140,10 @@ if (( soctimervalue < tmpintervall )); then
 				newSoc=0
 			fi
 			socDebugLog 1 "        Estimated SoC: $manualSoc% (last update) + $currentSocDiff% (extrapolation) = $newSoc% SoC"
-			echo $newSoc > $socFile
+			if (( newSoc != currentSoc )); then
+				socDebugLog 0 "        New Manual SoC: $newSoc% SoC"
+				echo $newSoc > $socFile
+			fi
 		else
 			# no current meter value for calculation -> Exit
 			socDebugLog 1 "        ERROR: no meter value for calculation! ($meterFile)"
@@ -158,7 +161,7 @@ else
 	if ((success == 1)); then
 		soc=$(<$manualSocFile)
 		echo $soc > $socFile
-		socDebugLog 1 "        SoC received: $soc%"
+		socDebugLog 0 "        SoC received: $soc% SoC"
 		
 		if ((soccalc == 0)); then
 			socDebugLog 1 "        Applying new SoC to openWB (no manual calculation)"
