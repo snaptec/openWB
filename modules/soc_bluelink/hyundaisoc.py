@@ -63,7 +63,7 @@ def DownloadSoC():
     try:
         response = requests.post(url, json = data, headers = headers, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1
     
     if response.status_code == 200:
@@ -71,12 +71,12 @@ def DownloadSoC():
         try:
             deviceId = responseDict['resMsg']['deviceId']
         except KeyError:
-            socDebugLog(1, "            Could not receive DeviceId, invalid response")
+            socDebugLog(0, "            Could not receive DeviceId, invalid response")
             socDebugLog(2, "            " + response.text)
             return -1
         socDebugLog(2, "            DeviceId = " + deviceId)
     else:
-        socDebugLog(1, "            Could not receive DeviceId, StatusCode: " + str(response.status_code))
+        socDebugLog(0, "            Could not receive DeviceId, StatusCode: " + str(response.status_code))
         return -1
 
     #cookie for login
@@ -85,13 +85,13 @@ def DownloadSoC():
         session = requests.Session()
         response = session.get(baseUrl + '/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=' + clientId + '&redirect_uri=' + baseUrl + '/api/v1/user/oauth2/redirect')
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1    
     
     if response.status_code == 200:
         cookies = session.cookies.get_dict()
     else:
-        socDebugLog(1, "            Receiving cookies failed")
+        socDebugLog(0, "            Receiving cookies failed")
         return -1
 
     #Language
@@ -103,7 +103,7 @@ def DownloadSoC():
     try:
         response = requests.post(url, json = data, headers = headers, cookies = cookies, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1  
         
     #login
@@ -115,7 +115,7 @@ def DownloadSoC():
     try:
         response = requests.post(url, json = data, headers = headers, cookies = cookies, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1  
     
     if response.status_code == 200:
@@ -123,13 +123,14 @@ def DownloadSoC():
         try:
             responseUrl = responseDict['redirectUrl']
         except KeyError:
-            socDebugLog(1, "            Login failed, invalid response")
+            socDebugLog(0, "            Login failed, invalid response")
+            socDebugLog(2, "            " + response.text) 
             return -1
         parsed = urlparse.urlparse(responseUrl)
         authCode = ''.join(parse_qs(parsed.query)['code'])
         socDebugLog(2, "            AuthCode = " + authCode)
     else:
-        socDebugLog(1, "            Login failed, StatusCode: " + str(response.status_code))
+        socDebugLog(0, "            Login failed, StatusCode: " + str(response.status_code))
         return -1
 
     #token
@@ -149,7 +150,7 @@ def DownloadSoC():
     try:
         response = requests.post(url, data = data, headers = headers, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1 
         
     if response.status_code == 200:
@@ -157,12 +158,12 @@ def DownloadSoC():
         try:
             access_token = responseDict['token_type'] + ' ' + responseDict['access_token']
         except KeyError:
-            socDebugLog(1, "            Token request failed, invalid response")
+            socDebugLog(0, "            Token request failed, invalid response")
             socDebugLog(2, "            " + response.text)
             return -1            
         socDebugLog(2, "            Token = " + access_token)    
     else:
-        socDebugLog(1, "            Token request failed, StatusCode: " + str(response.status_code))
+        socDebugLog(0, "            Token request failed, StatusCode: " + str(response.status_code))
         return -1
 
     #vehicles
@@ -183,7 +184,7 @@ def DownloadSoC():
     try:
         response = requests.get(url, headers = headers, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1 
         
     if response.status_code == 200:
@@ -194,15 +195,15 @@ def DownloadSoC():
                 if vehicle['vin'] == vin:
                     vehicleId = vehicle['vehicleId']
             if vehicleId == '':
-                socDebugLog(1, "            VIN " + vin + " unknown")
+                socDebugLog(0, "            VIN " + vin + " unknown")
                 return -1;
         except KeyError:
-            socDebugLog(1, "            Vehicle request failed, invalid response")
+            socDebugLog(0, "            Vehicle request failed, invalid response")
             socDebugLog(2, "            " + response.text)
             return -1     
         socDebugLog(2, "            VehicleId = " + vehicleId)
     else:
-        socDebugLog(1, "            Vehicle request failed, StatusCode: " + str(response.status_code))
+        socDebugLog(0, "            Vehicle request failed, StatusCode: " + str(response.status_code))
         return -1
 
     #prewakeup
@@ -226,13 +227,13 @@ def DownloadSoC():
     try:    
         response = requests.post(url, json = data, headers = headers, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1 
         
     if response.status_code == 200:
         response = ''
     else:
-        socDebugLog(1, "            Pre-Wakeup request failed, StatusCode: " + str(response.status_code))
+        socDebugLog(0, "            Pre-Wakeup request failed, StatusCode: " + str(response.status_code))
         return -1
 
     #pin
@@ -252,7 +253,7 @@ def DownloadSoC():
     try:
         response = requests.put(url, json = data, headers = headers, timeout = reqTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout")
         return -1
         
     if response.status_code == 200:
@@ -260,13 +261,13 @@ def DownloadSoC():
         try:
             controlToken = 'Bearer ' + responseDict['controlToken']
         except KeyError:
-            socDebugLog(1, "            Sending PIN failed, invalid response")
+            socDebugLog(0, "            Sending PIN failed, invalid response")
             socDebugLog(2, "            " + response.text)
             return -1     
         
         socDebugLog(2, "            controlToken = " + controlToken)
     else:
-        socDebugLog(1, "            Sending PIN failed, StatusCode: " + str(response.status_code))
+        socDebugLog(0, "            Sending PIN failed, StatusCode: " + str(response.status_code))
         return -1
 
     #status
@@ -282,7 +283,7 @@ def DownloadSoC():
     try:
         response = requests.get(url, headers = headers, timeout = statusTimeout)
     except requests.Timeout as err:
-        socDebugLog(1, "            Connection Timeout")
+        socDebugLog(0, "            Connection Timeout (To Car)")
         return -1
         
     if response.status_code == 200:
@@ -292,11 +293,11 @@ def DownloadSoC():
             soc = statusresponse['resMsg']['evStatus']['batteryStatus']
             #charging = statusresponse['resMsg']['evStatus']['batteryCharge']
         except KeyError:
-            socDebugLog(1, "            Receiving status failed, invalid response")
+            socDebugLog(0, "            Receiving status failed, invalid response")
             socDebugLog(2, "            " + response.text)
             return -1        
        
-        socDebugLog(2, "            SoC = " + str(soc))
+        socDebugLog(2, "            New SoC = " + str(soc))
 
         if soc > 0:
             #Save SoC
@@ -312,12 +313,12 @@ def DownloadSoC():
         return soc
 
     else:
-         socDebugLog(1, "            Receiving status failed, StatusCode: " + str(response.status_code))
+         socDebugLog(0, "            Receiving status failed, StatusCode: " + str(response.status_code))
          return -1
 
 
 def main():
-    socDebugLog(1, "        SoC download starting")
+    socDebugLog(0, "        SoC download starting")
     soc = DownloadSoC()
     if soc == 0:
         socDebugLog(2, "        Retrying in 30 Seconds")
