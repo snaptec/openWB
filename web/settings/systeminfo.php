@@ -117,15 +117,17 @@
 							</p>
 							IP-Adresse LAN: <span id="iplan">--</span><br>
 							IP-Adresse WLAN: <span id="ipwifi">--</span>
-							<ul>
-								<li><span id="wifissid">--</span></li>
-								<li><span id="wifimode">--</span></li>
-								<li><span id="wifiqualy">--</span></li>
-								<li><span id="wifibitrate">--</span></li>
-								<li><span id="wifipower">--</span></li>
-								<li><span id="wifirx">--</span></li>
-								<li><span id="wifitx">--</span>
-							</ul>
+							<div class="hide" id="wifidata">
+								<ul>
+									<li><span id="wifissid">--</span></li>
+									<li><span id="wifimode">--</span></li>
+									<li><span id="wifiqualy">--</span></li>
+									<li><span id="wifibitrate">--</span></li>
+									<li><span id="wifipower">--</span></li>
+									<li><span id="wifirx">--</span></li>
+									<li><span id="wifitx">--</span>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -205,6 +207,7 @@
 							$('#iplan').text('--');
 						}
 						if (json.wlanaddr != '') {
+							$('#wifidata').show();
 							$('#ipwifi').text(json.wlanaddr);
 							$('#wifiqualy').text(json.wlanqualy);
 							$('#wifissid').text(json.wlanssid);
@@ -214,6 +217,7 @@
 							$('#wifirx').text(json.wlanrx);
 							$('#wifitx').text(json.wlantx);
 						} else {
+							$('#wifidata').hide();
 							$('#ipwifi').text('--');
 						}
 
@@ -222,7 +226,7 @@
 						var formattedSystemTime = systemTimeDate.toLocaleDateString(undefined, options);
 						$('#systemtime').text(formattedSystemTime);
 
-						var lastRebootTimeDate = new Date(json.lastreboot);
+						var lastRebootTimeDate = new Date(json.lastreboot.replace(/-/g, "/"));  // replacement needed for Safari
 						var formattedLastRebootTime = lastRebootTimeDate.toLocaleDateString(undefined, options);
 						$('#lastreboot').text(formattedLastRebootTime);
 
