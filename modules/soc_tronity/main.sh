@@ -68,15 +68,15 @@ login(){
 	returnValue=0
 	# TODO: Check if we have a valid access_token
 	if [ -f $tokensfile ]; then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: token present."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: token present."
 		tokentime=$(stat -c %Y $tokensfile)
 		validity=$(cat $tokensfile | jq --raw-output .expires_in)
 		timestamp=$(date +%s)
 		if (( tokentime + validity < timestamp )); then
-			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: removing expired token."
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: removing expired token."
 			rm $tokensfile
 		else
-			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: token stil valid."
+			openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: token stil valid."
 			authToken=$(cat $tokensfile | jq --raw-output .access_token)
 		fi
 	fi
@@ -85,7 +85,7 @@ login(){
 		response=$(curl --silent --connect-timeout 15 --header 'Content-Type: application/json' --request POST --data '{"client_id":"'${soc_tronity_client_id}'","client_secret":"'${soc_tronity_client_secret}'","grant_type": "app"}' https://api-eu.TRONITY.io/oauth/authentication)
 		if  [[ "$response" =~ '"access_token"' ]]; then
 			echo "$response" > $tokensfile
-			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: got new access_token."
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: got new access_token."
 			authToken=$(echo $response | jq --raw-output .access_token)
 		else
 			errCode=$(echo $response | jq .statusCode)
@@ -117,7 +117,6 @@ incrementTimer(){
 			ticksize=1
 			;;
 	esac
-	echo "ticksize: $ticksize"
 	soctimer=$((soctimer+$ticksize))
 	echo $soctimer > $soctimerfile
 }
@@ -127,15 +126,15 @@ soctimer=$(<$soctimerfile)
 ladeleistung=$(<$ladeleistungfile)
 
 if (( ladeleistung > 1000 )); then
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Car is charging"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is charging"
 	timerToCheck=$socintervallladen
 else
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Car is not charging"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
 	timerToCheck=$socintervall
 fi
 
 if (( soctimer < timerToCheck )); then
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 	incrementTimer
 else
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
