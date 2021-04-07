@@ -12,8 +12,8 @@ DebugLog(){
 
 #get Gateway for Connection
 gateway=$(ip route get 1 | awk '{print $3;exit}')
-if (( $DEBUG >= 1 )); then
-	load=$(uptime |cut -d ' ' -f 13-15)
+if (( $DEBUG >= 0 )); then
+	load=$( cat /proc/loadavg |cut -d ' ' -f 1-3)
 	DebugLog "Load: ${load}"
 fi
 #ping the gateway to see if the connection is OK
