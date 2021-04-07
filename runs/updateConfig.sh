@@ -681,15 +681,17 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_vag_intervall=" $ConfigFile; then
 		echo "soc_vag_intervall=60" >> $ConfigFile
+		echo "soc_vag_intervallladen=10" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc2type=" $ConfigFile; then
 		echo "soc2type=vw" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_vag_intervallladen=" $ConfigFile; then
-		echo "soc_vag_intervallladen=10" >> $ConfigFile
-	fi
 	if ! grep -Fq "soc2intervallladen=" $ConfigFile; then
 		echo "soc2intervallladen=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_http_intervall=" $ConfigFile; then
+		echo "soc_http_intervall=60" >> $ConfigFile
+		echo "soc_http_intervallladen=10" >> $ConfigFile
 	fi
 	if ! grep -Fq "bydhvuser=" $ConfigFile; then
 		echo "bydhvuser=benutzer" >> $ConfigFile
