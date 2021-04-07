@@ -73,13 +73,13 @@
 				if (window.ActiveXObject) {
 				// IE clear HTTP Authentication
 					document.execCommand("ClearAuthenticationCache");
-					window.location.href='/web/index.php';
+					window.location.href='index.php';
 				} else {
-					xmlhttp.open("GET", '/openWB/web/logout', true, "logout", "logout");
-					xmlhttp.send("");
+					xmlhttp.open("GET", 'logout', true, "logout", "logout");
+					xmlhttp.send();
 					xmlhttp.onreadystatechange = function() {
 						if (xmlhttp.readyState == 4) {
-							window.location.href='/openWB/web/index.php';
+							window.location.href='index.php';
 						}
 					}
 				}
