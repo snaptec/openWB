@@ -339,7 +339,7 @@ function getCol(matrix, col){
 // run
 initLadelog();
 
-var client = new Messaging.Client(location.host,9001, clientuid);
+var client = new Messaging.Client(location.hostname,9001, clientuid);
 client.onMessageArrived = function (message) {
 	handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
 };

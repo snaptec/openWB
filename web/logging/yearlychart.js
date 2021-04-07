@@ -69,7 +69,7 @@ var graphNextYear = Number(graphDate) + 1;
 var monthsInYear = 12;
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-var client = new Messaging.Client(location.host, 9001, clientuid);
+var client = new Messaging.Client(location.hostname, 9001, clientuid);
 
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
