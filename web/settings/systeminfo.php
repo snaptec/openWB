@@ -222,15 +222,14 @@
 						}
 
 						const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
-						var systemTimeDate = new Date(json.systime * 1000);
+						var systemTimeDate = new Date(json.systime * 1000);  // json comes in Unix-time without milliseconds
 						var formattedSystemTime = systemTimeDate.toLocaleDateString(undefined, options);
 						$('#systemtime').text(formattedSystemTime);
-
-						var lastRebootTimeDate = new Date(json.lastreboot.replace(/-/g, "/"));  // replacement needed for Safari
+						var lastRebootTimeDate = new Date(json.lastreboot * 1000);  // json comes in Unix-time without milliseconds
 						var formattedLastRebootTime = lastRebootTimeDate.toLocaleDateString(undefined, options);
 						$('#lastreboot').text(formattedLastRebootTime);
 
-						var upTimeUnix = (systemTimeDate - lastRebootTimeDate) / 1000;
+						var upTimeUnix = json.systime - json.lastreboot;
 						var weeksUp = Math.floor(upTimeUnix / 604800);
 						upTimeUnix -= weeksUp * 604800;
 						var daysUp = Math.floor(upTimeUnix / 86400);
