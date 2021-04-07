@@ -257,14 +257,18 @@ else
 	ethstate=$(</sys/class/net/eth0/carrier)
 	if (( ethstate == 1 )); then
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
-		wlanstate=$(</sys/class/net/wlan0/carrier)
-		if (( wlanstate == 1 )); then
-			sudo systemctl stop hostapd
-			sudo systemctl stop dnsmasq
+		if [ -d /sys/class/net/wlan0 ]; then
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+			wlanstate=$(</sys/class/net/wlan0/carrier)
+			if (( wlanstate == 1 )); then
+				sudo systemctl stop hostapd
+				sudo systemctl stop dnsmasq
+			fi
 		fi
 	else
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		if [ -d /sys/class/net/wlan0 ]; then
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		fi
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
 	fi
 fi
