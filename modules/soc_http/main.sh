@@ -53,7 +53,7 @@ getAndWriteSoc(){
 		
 	if  [[ $soc =~ $re ]] ; then
 		if (( $soc != 0 )) ; then
-			echo $soc > $soc_file
+			echo $soc > $socfile
 			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $soc"
 		else
 		# we have a problem
