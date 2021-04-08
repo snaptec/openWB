@@ -200,6 +200,9 @@ def sepwatt(oldwatt,oldwattk,nummer):
     elif meastyp == "we514":
         argumentList[1] = prefixpy +'we514/watt.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+    elif meastyp == "fronius":
+        argumentList[1] = prefixpy +'fronius/watt.py'
+        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
     elif meastyp == "shelly":
         argumentList[1] = prefixpy + 'shelly/watt.py'
     elif meastyp == "mystrom":
@@ -214,6 +217,20 @@ def sepwatt(oldwatt,oldwattk,nummer):
         try:
             measureurlc = str(config.get('smarthomedevices', 'device_measureurlc_'+str(nummer)))
             argumentList.append(measureurlc)
+        except:
+            argumentList.append("none")
+    elif meastyp == "json":
+        argumentList[1] = prefixpy + 'json/watt.py'
+        try:
+            argumentList[3] = str(config.get('smarthomedevices', 'device_measurejsonurl_'+str(nummer)))
+        except:
+            argumentList[3] = "undef"
+        try:
+            argumentList[4] = str(config.get('smarthomedevices', 'device_measurejsonpower_'+str(nummer)))
+        except:
+            argumentList[4] = "undef"
+        try:
+            argumentList.append(str(config.get('smarthomedevices', 'device_measurejsoncounter_'+str(nummer))))
         except:
             argumentList.append("none")
     else:
