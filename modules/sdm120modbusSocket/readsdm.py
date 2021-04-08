@@ -21,6 +21,7 @@ f = open('/var/www/html/openWB/ramdisk/socketv', 'w')
 f.write(str(socketv))
 f.close()
 
+time.sleep(0.1)
 resp = client.read_input_registers(0x06,2, unit=sdmid)
 socketa = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 socketa = float("%.3f" % socketa[0])
