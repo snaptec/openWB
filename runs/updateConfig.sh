@@ -1916,11 +1916,13 @@ updateConfig(){
 		echo "soc_tronity_vehicle_id_lp2=''" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc_evcc_type_lp1=" $ConfigFile; then
-		echo "soc_evcc_type_lp1=''" >> $ConfigFile
+		echo "soc_evcc_type_lp1=vw" >> $ConfigFile
 		echo "soc_evcc_username_lp1=''" >> $ConfigFile
 		echo "soc_evcc_password_lp1=''" >> $ConfigFile
 		echo "soc_evcc_vin_lp1=''" >> $ConfigFile
-		echo "soc_evcc_type_lp2=''" >> $ConfigFile
+		echo "soc_evcc_intervall=720" >> $ConfigFile
+		echo "soc_evcc_intervallladen=15" >> $ConfigFile
+		echo "soc_evcc_type_lp2=vw" >> $ConfigFile
 		echo "soc_evcc_username_lp2=''" >> $ConfigFile
 		echo "soc_evcc_password_lp2=''" >> $ConfigFile
 		echo "soc_evcc_vin_lp2=''" >> $ConfigFile

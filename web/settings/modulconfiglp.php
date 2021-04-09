@@ -670,6 +670,7 @@
 										<option <?php if($socmodulold == "soc_manual") echo "selected" ?> value="soc_manual">Manuell + Berechnung</option>
 										<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
+										<option <?php if($socmodulold == "soc_evcc") echo "selected" ?> value="soc_evcc">EVCC</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
@@ -688,7 +689,6 @@
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
-										<option <?php if($socmodulold == "soc_evcc") echo "selected" ?> value="soc_evcc">EVCC</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -1178,16 +1178,16 @@
 									<div class="form-row mb-1">
 										<label for="soc_evcc_intervall_lp1" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervall_lp1" id="soc_evcc_intervall_lp1" value="<?php echo $soc_evcc_intervall_lp1old ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervall" id="soc_evcc_intervall" value="<?php echo $soc_evcc_intervallold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_intervallladen_lp1" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<label for="soc_evcc_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervallladen_lp1" id="soc_evcc_intervallladen_lp1" value="<?php echo $soc_evcc_intervallladen_lp1old ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervallladen" id="soc_evcc_intervallladen" value="<?php echo $soc_evcc_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -2669,6 +2669,7 @@
 										<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
 										<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
+										<option <?php if($socmodul1old == "soc_evcclp2") echo "selected" ?> value="soc_evcclp2">EVCC</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
@@ -2687,7 +2688,6 @@
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
-										<option <?php if($socmodul1old == "soc_evcclp2") echo "selected" ?> value="soc_evcclp2">EVCC</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
@@ -3989,11 +3989,6 @@
 							}
 							if($('#socmodul1').val() == 'soc_tronitylp2') {
 								showSection('#soctronitylp2');
-								showSection('#socmintervall2');
-								showSection('#socmintervallladen2');
-							}
-							if($('#socmodul1').val() == 'soc_evcclp2') {
-								showSection('#socevcclp2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}

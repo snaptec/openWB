@@ -1,5 +1,4 @@
 #!/bin/bash
-
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
@@ -46,6 +45,29 @@ case $CHARGEPOINT in
 		;;
 esac
 
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=6
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
+}
+
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
@@ -59,7 +81,6 @@ getAndWriteSoc(){
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from EVCC: $answer"
 	fi
 }
-
 
 soctimer=$(<$soctimerfile)
 if (( ladeleistung > 500 )); then
