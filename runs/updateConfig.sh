@@ -1913,5 +1913,8 @@ updateConfig(){
 		echo "soc_tronity_client_secret_lp2=''" >> $ConfigFile
 		echo "soc_tronity_vehicle_id_lp2=''" >> $ConfigFile
 	fi
+	if ! grep -Fq "wrfroniusisgen24=" $ConfigFile; then
+		echo "wrfroniusisgen24=0" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }

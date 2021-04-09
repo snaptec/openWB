@@ -536,6 +536,22 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Handelt es sich um einen Gen24?</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 0) echo " active" ?>">
+											<input type="radio" name="froniusisgen24" id="froniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 1) echo " active" ?>">
+											<input type="radio" name="froniusisgen24" id="froniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren wenn es sich um einen Gen24 handelt.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
 								<label for="wrfronius2ip" class="col-md-4 col-form-label">WR Fronius 2 IP</label>
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>">
