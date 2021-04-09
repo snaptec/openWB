@@ -19,7 +19,9 @@ def outfiledef(jjjjmminput):
         file_stringo =  outputp + str(jjjjmminput) + 'onl.csv'
         file_stringos =  outputp + str(jjjjmminput) + 'onls.csv'
     return (file_stringo,file_stringos)
-
+def exceldate(datestring):
+    datestringexcel =  datestring[-2:]  + '.' + datestring[4:6] + '.' + datestring[:4]
+    return datestringexcel
 def prep():
     global headerst
     headerst = 'Datum,'
@@ -31,7 +33,7 @@ def prep():
                 headerst=headerst + ' ,'
         else:
             if (i-SUMCOLUMNSTART) < len(header):
-                headerst=headerst +  header[i-SUMCOLUMNSTART] 
+                headerst=headerst +  header[i-SUMCOLUMNSTART]
             if (i-SUMCOLUMNSTART) < (len(header)-1):
                 headerst=headerst + ','
     headerst=headerst + '\n'
@@ -164,7 +166,8 @@ def fillcount(row,  datestring  ,file_stringo,firstfile):
         os.chmod(file_stringo, 0o777)
     else:
         f1 = open(  file_stringo, 'a')
-        line = str(countercsv [0]) + ','
+        excelstring=exceldate(countercsv [0])
+        line = excelstring + ','
         for i in range (1,SUMCOLUMNSTART):
             line=line+ str(countercsv [i]) +','
         line=line+ str(-1) +','
@@ -189,7 +192,8 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
     line='Anzahl Spalten,' + str(SUMCOLUMNSTART*2) + ',Letzes Datum,' + lastdate + ',Letzte Zeit,' + lastzeit + ',  \n'
     f1.write(str(line))
     f1.write(str(headerst))
-    line = str(monhtrow [0]) + ','
+    excelstring=exceldate(monhtrow [0])
+    line = excelstring + ','
     for i in range (1,SUMCOLUMNSTART):
         if (i < len(monhtrow)):
             line=line+ str(monhtrow [i]) +','
@@ -371,7 +375,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', type=str, required=True, help='folder containing daily logfiles')
     parser.add_argument('-o', '--output', type=str, required=True, help='destination folder for complete logfiles')
-    parser.add_argument('-p', '--partial', type=str, required=True, help='destination folder for partial logfiles, should be in ramdisk')
+    parser.add_argument('-p', '--partial', type=str, required=True, help='destination folder for partial logfiles (actual month), should be in ramdisk')
     parser.add_argument('-m', '--mode', type=str, required=True, choices=["M", "A"], help='mode for calculation, M = month, A = all starting 2018/01')
     parser.add_argument('-d', '--date', type=int, required=False, default=time.strftime("%Y%m"), help='in mode M: month to calculate in format YYYYMM, defaults to current month')
     args = parser.parse_args()
@@ -404,7 +408,7 @@ if __name__ == "__main__":
             'Lp4','Lp5','Lp6','Lp7','Lp8','Speicherimp','Speicherexpt',
             'Device1','Device2','Device3','Device4','Device5','Device6','Device7','Device8','Device9','Device10'
         ]
-    SUMCOLUMNSTART = 40
+    SUMCOLUMNSTART = 41
     startjjjj= 2018
     inputp=args.input
     outputp=args.output
