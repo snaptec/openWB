@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<base href="/openWB/web/">
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>openWB | Abmelden...</title>
+		<meta http-equiv="refresh" content="5; URL=index.php">
+		<meta name="description" content="Control your charge" />
+		<meta name="author" content="Michael Ortenstein" />
+		<!-- Favicons (created with http://realfavicongenerator.net/)-->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="manifest.json">
+		<link rel="shortcut icon" href="img/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#00a8ff">
+		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
+		<!-- include settings-style -->
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
+
+		<!-- important scripts to be loaded -->
+		<script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			/**
+			 * getCookie
+			 * returns a cookie value
+			 * @param {string} cname cookie name
+			 * @returns {string}
+			 */
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+
+			// get selected theme and set style
+			var themeCookie = getCookie('openWBTheme');
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+
+			function logout() {
+				var xmlhttp;
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				}
+				// code for IE
+				else if (window.ActiveXObject) {
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				if (window.ActiveXObject) {
+				// IE clear HTTP Authentication
+					document.execCommand("ClearAuthenticationCache");
+					window.location.href='index.php';
+				} else {
+					xmlhttp.open("GET", 'logout', true, "logout", "logout");
+					xmlhttp.send();
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4) {
+							window.location.href='index.php';
+						}
+					}
+				}
+				return false;
+			}
+		</script>
+	</head>
+
+	<body onload="logout();">
+		<div role="main" class="container" style="margin-top:20px">
+			<div class="card border-secondary">
+				<div class="card-header bg-secondary">
+					Sie werden abgemeldet...
+				</div>
+				<div class="card-body p-0">
+					<div class="row mx-0">
+						<div class="col-md-4 py-3">
+							<div class="cssload-loader text-center">
+								<div class="cssload-inner cssload-one"></div>
+								<div class="cssload-inner cssload-two"></div>
+								<div class="cssload-inner cssload-three"></div>
+							</div>
+						</div>
+						<div class="col py-3 border-left bg-light">
+							Sollten Sie nicht automatisch weitergeleitet werden, klicken Sie bitte auf <a href="#" onclick="logout();"></a>diesen Link</a>.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
