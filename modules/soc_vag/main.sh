@@ -31,8 +31,8 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc"
 		fztype=$soc_vag_type
 		username=$soc_vag_username
-		password=$soc_vag_passwort
-		vin=$soc_id_vin
+		password=$soc_vag_password
+		vin=$soc_vag_vin
 		intervall=$(( soc_vag_intervall * 6 ))
 		intervallladen=$(( soc_vag_intervallladen * 6 ))
 		;;

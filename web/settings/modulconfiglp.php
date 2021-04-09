@@ -1121,6 +1121,24 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="soc_http_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_http_intervall" id="soc_http_intervall" value="<?php echo $soc_http_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_http_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_http_intervallladen" id="soc_http_intervallladen" value="<?php echo $soc_http_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socmuser" class="hide">
@@ -3727,6 +3745,8 @@
 							}
 							if($('#socmodul1').val() == 'soc_http1') {
 								showSection('#socmhttp1');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socmuser2');
