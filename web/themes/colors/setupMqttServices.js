@@ -111,6 +111,19 @@ var topicsToSubscribe = [
 	["openWB/system/DayGraphData10", 0],
 	["openWB/system/DayGraphData11", 0],
 	["openWB/system/DayGraphData12", 0],
+		// monthly graph
+		["openWB/system/MonthGraphData1", 0],
+		["openWB/system/MonthGraphData2", 0],
+		["openWB/system/MonthGraphData3", 0],
+		["openWB/system/MonthGraphData4", 0],
+		["openWB/system/MonthGraphData5", 0],
+		["openWB/system/MonthGraphData6", 0],
+		["openWB/system/MonthGraphData7", 0],
+		["openWB/system/MonthGraphData8", 0],
+		["openWB/system/MonthGraphData9", 0],
+		["openWB/system/MonthGraphData10", 0],
+		["openWB/system/MonthGraphData11", 0],
+		["openWB/system/MonthGraphData12", 0],
 
 	// global topics
 	["openWB/global/WHouseConsumption", 1],
