@@ -1115,26 +1115,50 @@
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'vw') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_vw_lp1" value="vw"<?php if($soc_evcc_type_lp1old == 'vw') echo " checked=\"checked\"" ?>>VW
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'id') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_id_lp1" value="id"<?php if($soc_evcc_type_lp1old == 'id') echo " checked=\"checked\"" ?>>ID
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'audi') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_audi_lp1" value="audi"<?php if($soc_evcc_type_lp1old == 'audi') echo " checked=\"checked\"" ?>>Audi
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'seat') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_seat_lp1" value="seat"<?php if($soc_evcc_type_lp1old == 'seat') echo " checked=\"checked\"" ?>>Seat
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'skoda') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_skoda_lp1" value="skoda"<?php if($soc_evcc_type_lp1old == 'skoda') echo " checked=\"checked\"" ?>>Skoda
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'porsche') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_porsche_lp1" value="porsche"<?php if($soc_evcc_type_lp1old == 'porsche') echo " checked=\"checked\"" ?>>Porsche
-												</label>
+											<div data-toggle="buttons">
+												<div class="btn-group btn-group-toggle btn-block">
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'vw') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_vw_lp1" value="vw"<?php if($soc_evcc_type_lp1old == 'vw') echo " checked=\"checked\"" ?>>VW
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'id') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_id_lp1" value="id"<?php if($soc_evcc_type_lp1old == 'id') echo " checked=\"checked\"" ?>>ID
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'audi') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_audi_lp1" value="audi"<?php if($soc_evcc_type_lp1old == 'audi') echo " checked=\"checked\"" ?>>Audi
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'seat') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_seat_lp1" value="seat"<?php if($soc_evcc_type_lp1old == 'seat') echo " checked=\"checked\"" ?>>Seat
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'skoda') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_skoda_lp1" value="skoda"<?php if($soc_evcc_type_lp1old == 'skoda') echo " checked=\"checked\"" ?>>Skoda
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'porsche') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_porsche_lp1" value="porsche"<?php if($soc_evcc_type_lp1old == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+													</label>
+												</div>
+												<div class="btn-group btn-group-toggle btn-block">
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'volvo') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_volvo_lp1" value="volvo"<?php if($soc_evcc_type_lp1old == 'volvo') echo " checked=\"checked\"" ?>>Volvo
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'bmw') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_bmw_lp1" value="bmw"<?php if($soc_evcc_type_lp1old == 'bmw') echo " checked=\"checked\"" ?>>BMW
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'ford') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_ford_lp1" value="ford"<?php if($soc_evcc_type_lp1old == 'ford') echo " checked=\"checked\"" ?>>Ford
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'kia') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_kia_lp1" value="kia"<?php if($soc_evcc_type_lp1old == 'kia') echo " checked=\"checked\"" ?>>Kia
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'hyundai') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_hyundai_lp1" value="hyundai"<?php if($soc_evcc_type_lp1old == 'hyundai') echo " checked=\"checked\"" ?>>Hyundai
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'nissan') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_nissan_lp1" value="nissan"<?php if($soc_evcc_type_lp1old == 'nissan') echo " checked=\"checked\"" ?>>Nissan
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'renault') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp1" id="soc_evcc_type_renault_lp1" value="renault"<?php if($soc_evcc_type_lp1old == 'renault') echo " checked=\"checked\"" ?>>Renault
+													</label>
+												</div>
 											</div>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
@@ -1171,7 +1195,7 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc_evcc_token" id="soc_evcc_token" value="<?php echo $soc_evcc_tokenold ?>">
 											<span class="form-text small">
-												EVCC Abo Token von www.evcc.io
+												EVCC Abo Token, zu beziehen unter https://cloud.evcc.io
 											</span>
 										</div>
 									</div>
@@ -3672,26 +3696,50 @@
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'vw') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_vw_lp2" value="vw"<?php if($soc_evcc_type_lp2old == 'vw') echo " checked=\"checked\"" ?>>VW
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'id') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_id_lp2" value="id"<?php if($soc_evcc_type_lp2old == 'id') echo " checked=\"checked\"" ?>>ID
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'audi') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_audi_lp2" value="audi"<?php if($soc_evcc_type_lp2old == 'audi') echo " checked=\"checked\"" ?>>Audi
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'seat') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_seat_lp2" value="seat"<?php if($soc_evcc_type_lp2old == 'seat') echo " checked=\"checked\"" ?>>Seat
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'skoda') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_skoda_lp2" value="skoda"<?php if($soc_evcc_type_lp2old == 'skoda') echo " checked=\"checked\"" ?>>Skoda
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'porsche') echo " active" ?>">
-													<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_porsche_lp2" value="porsche"<?php if($soc_evcc_type_lp2old == 'porsche') echo " checked=\"checked\"" ?>>Porsche
-												</label>
+											<div data-toggle="buttons">
+												<div class="btn-group btn-group-toggle btn-block">
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'vw') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_vw_lp2" value="vw"<?php if($soc_evcc_type_lp2old == 'vw') echo " checked=\"checked\"" ?>>VW
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'id') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_id_lp2" value="id"<?php if($soc_evcc_type_lp2old == 'id') echo " checked=\"checked\"" ?>>ID
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'audi') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_audi_lp2" value="audi"<?php if($soc_evcc_type_lp2old == 'audi') echo " checked=\"checked\"" ?>>Audi
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'seat') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_seat_lp2" value="seat"<?php if($soc_evcc_type_lp2old == 'seat') echo " checked=\"checked\"" ?>>Seat
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'skoda') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_skoda_lp2" value="skoda"<?php if($soc_evcc_type_lp2old == 'skoda') echo " checked=\"checked\"" ?>>Skoda
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'porsche') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_porsche_lp2" value="porsche"<?php if($soc_evcc_type_lp2old == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+													</label>
+												</div>
+												<div class="btn-group btn-group-toggle btn-block">
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'volvo') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_volvo_lp2" value="volvo"<?php if($soc_evcc_type_lp2old == 'volvo') echo " checked=\"checked\"" ?>>Volvo
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'bmw') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_bmw_lp2" value="bmw"<?php if($soc_evcc_type_lp2old == 'bmw') echo " checked=\"checked\"" ?>>BMW
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'ford') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_ford_lp2" value="ford"<?php if($soc_evcc_type_lp2old == 'ford') echo " checked=\"checked\"" ?>>Ford
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'kia') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_kia_lp2" value="kia"<?php if($soc_evcc_type_lp2old == 'kia') echo " checked=\"checked\"" ?>>Kia
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'hyundai') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_hyundai_lp2" value="hyundai"<?php if($soc_evcc_type_lp2old == 'hyundai') echo " checked=\"checked\"" ?>>Hyundai
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'nissan') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_nissan_lp2" value="nissan"<?php if($soc_evcc_type_lp2old == 'nissan') echo " checked=\"checked\"" ?>>Nissan
+													</label>
+													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'renault') echo " active" ?>">
+														<input type="radio" name="soc_evcc_type_lp2" id="soc_evcc_type_renault_lp2" value="renault"<?php if($soc_evcc_type_lp2old == 'renault') echo " checked=\"checked\"" ?>>Renault
+													</label>
+												</div>
 											</div>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
@@ -3728,7 +3776,7 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc_evcc_token" id="soc_evcc_token" value="<?php echo $soc_evcc_tokenold ?>">
 											<span class="form-text small">
-												EVCC Abo Token von www.evcc.io
+												EVCC Abo Token, zu beziehen unter https://cloud.evcc.io
 											</span>
 										</div>
 									</div>
