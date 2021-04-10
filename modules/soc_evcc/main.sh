@@ -86,16 +86,15 @@ soctimer=$(<$soctimerfile)
 if (( ladeleistung > 500 )); then
 	if (( soctimer < intervallladen )); then
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
-		soctimer=$((soctimer+1))
-		echo $soctimer > $soctimerfile
+		incrementTimer
 	else
 		getAndWriteSoc
 	fi
 else
 	if (( soctimer < intervall )); then
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-		soctimer=$((soctimer+1))
-		echo $soctimer > $soctimerfile
+		incrementTimer
+
 	else
 		getAndWriteSoc
 	fi
