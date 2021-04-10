@@ -1115,6 +1115,7 @@
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
 											<div data-toggle="buttons">
 												<div class="btn-group btn-group-toggle btn-block">
 													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp1old == 'vw') echo " active" ?>">
@@ -3696,6 +3697,7 @@
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
 											<div data-toggle="buttons">
 												<div class="btn-group btn-group-toggle btn-block">
 													<label class="btn btn-outline-info<?php if($soc_evcc_type_lp2old == 'vw') echo " active" ?>">
