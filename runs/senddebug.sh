@@ -4,6 +4,7 @@ sleep 60
 
 debugFile=/var/www/html/openWB/ramdisk/debug.log
 cat /var/www/html/openWB/ramdisk/debuguser > $debugFile
+debugemail=$(</var/www/html/openWB/ramdisk/debugemail)
 echo "############################ network ##############" >> $debugFile
 ifconfig >> $debugFile
 uptime >> $debugFile
@@ -41,8 +42,10 @@ echo "$(cat /var/www/html/openWB/ramdisk/smarthome.log)" >> $debugFile
 echo "############################ file and directory listing ##############" >> $debugFile
 ls -lRa /var/www/html/openWB/* >> $debugFile
 
-curl --upload $debugFile https://openwb.de/tools/debug.php
+curl --upload $debugFile "https://openwb.de/tools/debug2.php?debugemail=$debugemail"
+
 
 sed -i 's/debug.*/debug=0/' /var/www/html/openWB/openwb.conf
 rm $debugFile
 rm /var/www/html/openWB/ramdisk/debuguser
+rm /var/www/html/openWB/ramdisk/debugemail
