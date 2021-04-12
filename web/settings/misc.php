@@ -222,6 +222,42 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Ladung nach CP Unterbrechung aktiv halten</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($cpunterbrechungmindestlaufzeitaktivold == 0) echo " active" ?>">
+											<input type="radio" name="cpunterbrechungmindestlaufzeitaktiv" id="cpunterbrechungmindestlaufzeitaktivOff" value="0"<?php if($cpunterbrechungmindestlaufzeitaktivold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($cpunterbrechungmindestlaufzeitold == 1) echo " active" ?>">
+											<input type="radio" name="cpunterbrechungmindestlaufzeitaktiv" id="cpunterbrechungmindestlaufzeitaktivOn" value="1"<?php if($cpunterbrechungmindestlaufzeitaktivold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option hält die Ladung im nurPV Modus eine Zeit lang aktiv, auch wenn kurz nach der CP Unterbrechung die Mindestladeleistung unterschritten wird noch bevor die Ladung begonnen hat. 
+										Dies ist immer dann hilfreich wenn der Ladestart nach CP Unterbrechung erst verzögert erfolgt, z.b. bei PSA (Peugeot, Opel).
+										Wird nach CP Unterbrechung kein Ladestart registriert wird keine erneute CP Unterbrechung durchgeführt.<br>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1 cpminlaufzeit hide">
+								<label for="cpminlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="cpunterbrechungmindestlaufzeit" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungmindestlaufzeitold; ?> Sek</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungmindestlaufzeit" id="cpunterbrechungmindestlaufzeit" min="10" max="60" step="10" value="<?php echo $cpunterbrechungmindestlaufzeitold; ?>">
+										</div>
+									</div>
+									<span class="form-text small">
+										Die Standardeinstellung ist 30 Sekunden. Falls ein Fahrzeug den Ladevorgang nicht zuverlässig startet, kann dieser Wert erhöht werden.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<script>
@@ -242,6 +278,14 @@
 								showSection('.lp2cpon', false);
 							}
 						}
+						
+						function visibility_cpminlaufzeit() {
+							if($('#cpunterbrechungmindestlaufzeitaktivOff').prop("checked")) {
+								hideSection('.cpminlaufzeit');
+							} else {
+								showSection('.cpminlaufzeit', false);
+							}
+						}
 
 						$(document).ready(function(){
 							if(lp2akt == '0') {
@@ -258,8 +302,13 @@
 								visibility_lp2cp();
 							});
 
+							$('input[type=radio][name=cpunterbrechungmindestlaufzeitaktiv]').change(function(){
+								visibility_cpminlaufzeit();
+							});
+
 							visibility_lp1cp();
 							visibility_lp2cp();
+							visibility_cpminlaufzeit();
 						});
 					</script>
 				</div>

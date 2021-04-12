@@ -1918,5 +1918,10 @@ updateConfig(){
 	if ! grep -Fq "wrfroniusisgen24=" $ConfigFile; then
 		echo "wrfroniusisgen24=0" >> $ConfigFile
 	fi
-	echo "Config file Update done."
+	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
+		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
+		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
+	fi
+
+  echo "Config file Update done."
 }
