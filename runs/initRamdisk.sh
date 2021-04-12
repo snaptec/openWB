@@ -605,6 +605,8 @@ initRamdisk(){
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 
 	sudo chmod 777 $RamdiskPath/*
-	#python3 /var/www/html/openWB/runs/csvcalc.py /var/www/html/openWB/web/logging/data/daily/ /var/www/html/openWB/web/logging/data/v001/ /var/www/html/openWB/ramdisk/ M >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
+
+	echo "Trigger update of logfiles..."
+	python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode M >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
 	echo "Ramdisk init done."
 }
