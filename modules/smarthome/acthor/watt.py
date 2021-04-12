@@ -19,14 +19,13 @@ file_string= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber
 file_stringpv= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_pv'
 file_stringcount= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_count'
 file_stringcount5= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_count5'
-file_stringold= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_oldpower'
 count5 = 999
 if os.path.isfile(file_stringcount5):
    f = open( file_stringcount5, 'r')
    count5 =int(f.read())
    f.close()
 count5=count5+1
-if count5 > 6:
+if count5 > 3:
    count5=0
 f = open( file_stringcount5 , 'w')
 f.write(str(count5))
@@ -47,12 +46,6 @@ if count5==0:
    if os.path.isfile(file_stringpv):
       f = open( file_stringpv , 'r')
       pvmodus =int(f.read())
-      f.close()
-# letzte Leistungsvorgabe + 1000
-   oldpower = int(1000 * faktor)
-   if os.path.isfile(file_stringold):
-      f = open( file_stringold , 'r')
-      oldpower =int(f.read())
       f.close()
    # log counter
    count1 = 999
@@ -86,17 +79,14 @@ if count5==0:
       neupowertarget = int((uberschuss + aktpower) * faktor)
    if neupowertarget < 0:
       neupowertarget = 0
-   if neupowertarget > int(10000 * faktor):
-      neupowertarget = int(10000 * faktor)
+   if neupowertarget > int(9000 * faktor):
+      neupowertarget = int(9000 * faktor)
    # status nach handbuch Thor
    #0.. Aus
    #1-8 Geraetestart
    #9 Betrieb
    #>=200 Fehlerzustand Leistungsteil
-   if neupowertarget > oldpower:
-      neupower = oldpower
-   else:
-      neupower = neupowertarget
+   neupower = neupowertarget
    # wurde Thor gerade ausgeschaltet ?    (pvmodus == 99 ?)
    # dann 0 schicken wenn kein pvmodus mehr
    # und pv modus ausschalten
@@ -145,7 +135,4 @@ if count5==0:
          f.close()
    f = open( file_stringcount , 'w')
    f.write(str(count1))
-   f.close()
-   f = open( file_stringold , 'w')
-   f.write(str(int(neupower + int(1000 * faktor))))
    f.close()

@@ -5,9 +5,6 @@
  */
 
 class YieldMeter {
-
-
-
 	bardata;
 	xScale;
 	yScale;
@@ -17,7 +14,7 @@ class YieldMeter {
 		this.width = 500;
 		this.height = 500;
 		this.margin = {
-			top: 25, bottom: 30, left: 20, right: 0
+			top: 25, bottom: 30, left: 25, right: 0
 		};
 		this.labelfontsize = 16;
 		this.axisFontSize = 12;
@@ -28,25 +25,52 @@ class YieldMeter {
 		const figure = d3.select("figure#energymeter");
 		this.svg = figure.append("svg")
 			.attr("viewBox", `0 0 500 500`);
-
 		const style = getComputedStyle(document.body);
-		this.houseColor = style.getPropertyValue('--color-house');
-		this.pvColor = style.getPropertyValue('--color-pv');
-		this.exportColor = style.getPropertyValue('--color-export');
-		this.gridColor = style.getPropertyValue('--color-evu');
-		this.bgColor = style.getPropertyValue('--color-bg');
-		this.chargeColor = style.getPropertyValue('--color-charging');
-		this.axisColor = style.getPropertyValue('--color-axis');
+		this.houseColor = 'var(--color-house)';
+		this.pvColor = 'var(--color-pv)';
+		this.exportColor = 'var(--color-export)';
+		this.evuColor = 'var(--color-evu)';
+		this.bgColor = 'var(--color-bg)';
+		this.chargeColor = 'var(--color-charging)';
+		this.axisColor = 'var(--color-axis)';
+		this.gridColor = 'var(--color-grid)';
+   	d3.select("button#energyLeftButton")
+			.on("click", shiftLeft)
+		d3.select("button#energyRightButton")
+			.on("click", shiftRight)
+			d3.select("button#calendarButton")
+			.on("click", toggleMonthView)	
 	}
 
 	// to be called when values have changed
 	update() {
-		this.plotdata = Object.values(wbdata.sourceSummary)
-			.filter((row) => (row.energy > 0))
-			.concat(wbdata.usageDetails
-				.filter((row) => (row.energy > 0)));
+		switch (wbdata.graphMode) {
+			case 'live':
+				this.plotdata = Object.values(wbdata.sourceSummary)
+				.filter((row) => (row.energy > 0))
+				.concat(wbdata.usageDetails
+					.filter((row) => (row.energy > 0)));
+				break;
+			case 'day':
+				if (wbdata.showTodayGraph) {
+					this.plotdata = Object.values(wbdata.sourceSummary)
+						.filter((row) => (row.energy > 0))
+						.concat(wbdata.usageDetails
+							.filter((row) => (row.energy > 0)));			
+				} else {
+					this.plotdata = Object.values(wbdata.historicSummary)
+						.filter((row) => (row.energy > 0));		
+				}
+				break;
+			case 'month':
+				this.plotdata = Object.values(wbdata.historicSummary)
+					.filter((row) => (row.energy > 0));
+				break;
+			default: break;
+		}		
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
+		this.updateHeading();
 	};
 
 	createOrUpdateSvg() {
@@ -54,11 +78,10 @@ class YieldMeter {
 		const g = this.svg.append("g")
 			.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 		this.xScale = d3.scaleBand()
-			.range([0, this.width - this.margin.left - this.margin.right ])
+			.range([0, this.width - this.margin.left - this.margin.right])
 			.padding(0.4);
 		this.yScale = d3.scaleLinear()
 			.range([this.height - this.margin.bottom - this.margin.top, 0]);
-
 		return g;
 	}
 
@@ -80,7 +103,6 @@ class YieldMeter {
 			.attr("height", (d) => this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom)
 			.attr("fill", (d) => d.color);
 
-
 		const yAxisGenerator = d3.axisLeft(this.yScale)
 			.tickFormat(function (d) {
 				return ((d > 0) ? d : "");
@@ -91,7 +113,6 @@ class YieldMeter {
 		const yAxis = svg.append("g")
 			.attr("class", "axis")
 			.attr("transform", "translate(0," + 0 + ")")
-
 			.call(yAxisGenerator);
 
 		yAxis.append("text")
@@ -101,12 +122,18 @@ class YieldMeter {
 			.text("energy");
 
 		yAxis.selectAll(".tick").attr("font-size", this.axisFontSize);
-		yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
+		if (wbdata.showGrid) {
+			yAxis.selectAll(".tick line")
+			.attr("stroke", this.gridColor)
+			.attr ("stroke-width", "0.5");			
+		} else {
+			yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
+		}
 		yAxis.select(".domain")
 			.attr("stroke", this.bgcolor);
 
 		svg.append("text")
-			.attr("x",-this.margin.left)
+			.attr("x", -this.margin.left)
 			.attr("y", -15)
 			.style("fill", this.axisColor)
 			.attr("font-size", this.axisFontSize)
@@ -138,6 +165,28 @@ class YieldMeter {
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (d.name));
+	}
+
+	updateHeading() {
+		var heading = "Energie ";
+
+		switch (wbdata.graphMode) {
+			case 'live':
+				heading = heading + " heute";
+				break;
+			case 'day':
+				if (wbdata.showTodayGraph) {
+					heading = heading + " heute";
+				} else {
+					heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
+				}
+				break;
+			case 'month':
+				heading = "Monatswerte " + formatMonth (wbdata.graphMonth.month, wbdata.graphMonth.year);
+				break;
+			default: break;
+		}
+		d3.select("h3#energyheading").text(heading);
 	}
 }
 var yieldMeter = new YieldMeter();

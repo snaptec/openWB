@@ -23,7 +23,7 @@ if os.path.isfile(file_stringcount5):
    count5 =int(f.read())
    f.close()
 count5=count5+1
-if count5 > 6:
+if count5 > 3:
    count5=0
 f = open( file_stringcount5 , 'w')
 f.write(str(count5))
@@ -114,14 +114,14 @@ if count5==0:
    #json return power = aktuelle Leistungsaufnahme in Watt, on = 1 pvmodus, powerc = counter in kwh
    #answer = '{"power":225,"on":0} '
    powerc = 0
-   answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(pvmodus) + '} '   
+   answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(pvmodus) + '} '
    f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
    json.dump(answer,f1)
    f1.close()
    # logschreiben
    if count1 > 80:
       count1=0
-   #mehr log schreiben 
+   #mehr log schreiben
    if count1 < 3:
       if os.path.isfile(file_string):
          f = open( file_string , 'a')

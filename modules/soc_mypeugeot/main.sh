@@ -176,7 +176,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				socDebugLog "currentMeterDiff: $currentMeterDiff"
 				currentEffectiveMeterDiff=$(echo "scale=5;$currentMeterDiff * $efficiency / 100" | bc)
 				socDebugLog "currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
-				currentSocDiff=$(echo "100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/\..*$//')
+				currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/\..*$//')
 				socDebugLog "currentSocDiff: $currentSocDiff"
 				newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 				if (( newSoc > 100 )); then

@@ -28,35 +28,13 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -73,7 +51,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration EVU</h1>
-			<form action="tools/saveconfig.php" method="POST">
+			<form action="settings/saveconfig.php" method="POST">
 
 				<!-- EVU -->
 				<div class="card border-danger">
@@ -86,41 +64,48 @@
 							<div class="col">
 								<select name="wattbezugmodul" id="wattbezugmodul" class="form-control">
 									<option <?php if($wattbezugmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm") echo "selected" ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
-									<option <?php if($wattbezugmodulold == "vzlogger") echo "selected" ?> value="vzlogger">VZLogger</option>
-									<option <?php if($wattbezugmodulold == "sdm630modbusbezug") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
-									<option <?php if($wattbezugmodulold == "bezug_http") echo "selected" ?> value="bezug_http">HTTP</option>
-									<option <?php if($wattbezugmodulold == "bezug_json") echo "selected" ?> value="bezug_json">Json</option>
-									<option <?php if($wattbezugmodulold == "bezug_mpm3pm") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
-									<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
-									<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
-									<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarlog") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
-									<option <?php if($wattbezugmodulold == "bezug_solaredge") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
-									<option <?php if($wattbezugmodulold == "bezug_smartme") echo "selected" ?> value="bezug_smartme">Smartme</option>
-									<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
-									<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
-									<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
-									<option <?php if($wattbezugmodulold == "bezug_ksem") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
-									<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
-									<option <?php if($wattbezugmodulold == "bezug_powerwall") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
-									<option <?php if($wattbezugmodulold == "bezug_victrongx") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
-									<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarview") echo "selected" ?> value="bezug_solarview">Solarview</option>
-									<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
-									<option <?php if($wattbezugmodulold == "bezug_lgessv1") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
-									<option <?php if($wattbezugmodulold == "bezug_mqtt") echo "selected" ?> value="bezug_mqtt">MQTT</option>
-									<option <?php if($wattbezugmodulold == "bezug_sonneneco") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
-									<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarwatt") echo "selected" ?> value="bezug_solarwatt">Solarwatt / My Reserve Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
-									<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
-									<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
-									<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
-									<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
-									<option <?php if($wattbezugmodulold == "bezug_varta") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
+									<optgroup label="openWB">
+										<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm") echo "selected" ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
+									</optgroup>
+									<optgroup label="andere Hersteller">
+										<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
+										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
+										<option <?php if($wattbezugmodulold == "bezug_ksem") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
+										<option <?php if($wattbezugmodulold == "bezug_lgessv1") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
+										<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
+										<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
+										<option <?php if($wattbezugmodulold == "bezug_powerfox") echo "selected" ?> value="bezug_powerfox">Powerfox</option>
+										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
+										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
+										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
+										<option <?php if($wattbezugmodulold == "bezug_smartme") echo "selected" ?> value="bezug_smartme">Smartme</option>
+										<option <?php if($wattbezugmodulold == "bezug_solaredge") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarlog") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarview") echo "selected" ?> value="bezug_solarview">Solarview</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarwatt") echo "selected" ?> value="bezug_solarwatt">Solarwatt / My Reserve Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
+										<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
+										<option <?php if($wattbezugmodulold == "bezug_sonneneco") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
+										<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_powerwall") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
+										<option <?php if($wattbezugmodulold == "bezug_varta") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_victrongx") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($wattbezugmodulold == "bezug_http") echo "selected" ?> value="bezug_http">HTTP</option>
+										<option <?php if($wattbezugmodulold == "bezug_json") echo "selected" ?> value="bezug_json">Json</option>
+										<option <?php if($wattbezugmodulold == "bezug_mpm3pm") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
+										<option <?php if($wattbezugmodulold == "bezug_mqtt") echo "selected" ?> value="bezug_mqtt">MQTT</option>
+										<option <?php if($wattbezugmodulold == "sdm630modbusbezug") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
+										<option <?php if($wattbezugmodulold == "vzlogger") echo "selected" ?> value="vzlogger">VZLogger</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -143,6 +128,11 @@
 						<div id="wattbezugvarta" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich. Es muss beim Speicher Varta ausgewählt werden.
+							</div>
+						</div>
+						<div id="wattbezugsolarwatt" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich. Es muss beim Speicher Solarwatt / My Reserve ausgewählt werden.
 							</div>
 						</div>
 						<div id="wattbezugmqtt" class="hide">
@@ -190,6 +180,30 @@
 						<div id="wattbezugpowerdog" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Powerdog eingeben. Im Powerdog muss die Schnittstelle ModbusTCP aktiviert werden.
+							</div>
+						</div>
+						
+						<div id="wattbezugpowerfox" class="hide">
+							<div class="form-row mb-1">
+								<label for="powerfoxuser" class="col-md-4 col-form-label">powerfox Username (Email)</label>
+								<div class="col">
+									<input class="form-control" type="email" name="powerfoxuser" id="powerfoxuser" value="<?php echo htmlspecialchars($powerfoxuserold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="powerfoxpass" class="col-md-4 col-form-label">Passwort</label>
+								<div class="col">
+									<input class="form-control" type="password" name="powerfoxpass" id="powerfoxpass" value="<?php echo htmlspecialchars($powerfoxpassold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="powerfoxid" class="col-md-4 col-form-label">Device ID</label>
+								<div class="col">
+									<input class="form-control" type="text" name="powerfoxid" id="powerfoxid" value="<?php echo $powerfoxidold ?>">
+									<span class="form-text small">
+										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.
+									</span>
+								</div>
 							</div>
 						</div>
 						<div id="wattbezugethmpm3pm" class="hide">
@@ -442,23 +456,23 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="vzloggerkwhline" class="col-md-4 col-form-label">Vzlogger Bezug kWh Zeile</label>
+									<label for="vzloggerkwhline" class="col-md-4 col-form-label">Vzlogger Bezug Wh Zeile</label>
 									<div class="col">
 										<input class="form-control" type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq .|cat -n"<br>
-											Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging.
+											Nun zählen in welcher Zeile die Gesamt Wh stehen und diesen hier eintragen. Der Wert dient rein dem Logging.
 											Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 										</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="vzloggerekwhline" class="col-md-4 col-form-label">Vzlogger Einspeisung kWh Zeile</label>
+									<label for="vzloggerekwhline" class="col-md-4 col-form-label">Vzlogger Einspeisung Wh Zeile</label>
 									<div class="col">
 										<input class="form-control" type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq .|cat -n"<br>
-											Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.
+											Nun zählen in welcher Zeile die Gesamt eingespeisten Wh stehen und diesen hier eintragen.
 										</span>
 									</div>
 								</div>
@@ -476,7 +490,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="bezug_http_ikwh_url" class="col-md-4 col-form-label">Vollständige URL für den kWh Bezug</label>
+									<label for="bezug_http_ikwh_url" class="col-md-4 col-form-label">Vollständige URL für den Wh Bezug</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>">
 										<span class="form-text small">
@@ -485,7 +499,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="bezug_http_ekwh_url" class="col-md-4 col-form-label">Vollständige URL für die kWh Einspeisung</label>
+									<label for="bezug_http_ekwh_url" class="col-md-4 col-form-label">Vollständige URL für die Wh Einspeisung</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>">
 										<span class="form-text small">
@@ -609,6 +623,20 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
+											</label>
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
@@ -621,6 +649,7 @@
 											<label class="btn btn-outline-info<?php if($froniusvar2old == 2) echo " active" ?>">
 												<input type="radio" name="froniusvar2" id="froniusvar2v2" value="2"<?php if($froniusvar2old == 2) echo " checked=\"checked\"" ?>>Variante 2
 											</label>
+
 										</div>
 										<span class="form-text small">
 											Gegebenenfalls auch für alte Modelle nach einem Softwareupdate erforderlich. Fronius hat derzeit keine Konsistente Schnittstelle. Speziell beim Gen24 kann Variante 1 oder 2 erforderlich sein. Nach speichern sollten nach etwa 10-20 Sekunden Daten angezeigt werden. Ist dies nicht der Fall die andere Variante ausprobieren.
@@ -651,7 +680,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="bezugjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Bezug kWh</label>
+									<label for="bezugjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Bezug Wh</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo htmlspecialchars($bezugjsonkwhold) ?>">
 										<span class="form-text small">
@@ -661,7 +690,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="einspeisungjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Einspeisung kWh</label>
+									<label for="einspeisungjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Einspeisung Wh</label>
 									<div class="col">
 										<input class="form-control" type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo htmlspecialchars($einspeisungjsonkwhold) ?>">
 										<span class="form-text small">
@@ -701,7 +730,8 @@
 										IP Adresse des Solaredge Wechselrichters im lokalen Netzwerk.<br>
 										Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
 										Ebenso muss ModbusTCP am Wechselrichter aktiviert werden.<br>
-										Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.
+										Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.<br>
+										Es ist die IP-Adresse des SolarEdge Wechselrichters anzugeben.
 									</span>
 								</div>
 							</div>
@@ -811,10 +841,12 @@
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
 								hideSection('#wattbezugpowerdog');
+								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
 								hideSection('#wattbezugsungrow');
+								hideSection('#wattbezugsolarwatt');
 
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
@@ -830,7 +862,6 @@
 								if($('#wattbezugmodul').val() == 'bezug_sungrow') {
 									showSection('#wattbezugsungrow');
 								}
-
 								if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
 									showSection('#wattbezugsonneneco');
 								}
@@ -840,21 +871,20 @@
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_rct') {
 									showSection('#wattbezugrct');
 									showSection('#wattbezugip');
-
 								}
 								if($('#wattbezugmodul').val() == 'bezug_powerdog') {
 									showSection('#wattbezugpowerdog');
 									showSection('#wattbezugip');
-
+								}
+								if($('#wattbezugmodul').val() == 'bezug_powerfox') {
+									showSection('#wattbezugpowerfox');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_fems') {
 									showSection('#wattbezugfems');
@@ -862,7 +892,6 @@
 								if($('#wattbezugmodul').val() == 'bezug_solarworld') {
 									showSection('#wattbezugsolarworld');
 								}
-
 								if($('#wattbezugmodul').val() == 'bezug_solarview') {
 									showSection('#wattbezugsolarview');
 								}
@@ -948,6 +977,9 @@
 								if($('#wattbezugmodul').val() == 'bezug_lgessv1')   {
 									showSection('#wattbezuglgessv1');
 								}
+								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
+									showSection('#wattbezugsolarwatt');
+								}
 							}
 
 							$(function() {
@@ -1018,7 +1050,7 @@
 		</div>
 
 		<!-- hidden form to save wizzard done to config on abort -->
-		<form id="wizzarddoneForm" action="tools/saveconfig.php" method="POST">
+		<form id="wizzarddoneForm" action="settings/saveconfig.php" method="POST">
 			<input type="hidden" name="wizzarddone" value="100">
 		</form>
 

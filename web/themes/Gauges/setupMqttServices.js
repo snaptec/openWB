@@ -347,12 +347,12 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		setTimeout(function() { client.conect(options); }, 5000);
+		setTimeout(function() { client.connect(options); }, 5000);
 	}
 };
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-var client = new Messaging.Client(location.host, 9001, clientuid);
+var client = new Messaging.Client(location.hostname, 9001, clientuid);
 
 $(document).ready(function(){
 	client.connect(options);

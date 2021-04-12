@@ -63,12 +63,12 @@ class SmartHomeList {
       // Power/energy
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .attr("style", "vertical-align: middle;color:white")
+        .attr("style", "vertical-align: middle;color:var(--color-fg)")
         .text(row => formatWatt(row.power) + " (" + formatWattH(row.energy * 1000) + ")");
       // Running time
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
-        .attr("style", "vertical-align: middle;color:white")
+        .attr("style", "vertical-align: middle;color:var(--color-fg)")
         .text(row => formatTime(row.runningTime))
       // Automatic mode button
       rows.append("td")
@@ -76,7 +76,7 @@ class SmartHomeList {
         .append("button")
         .attr("id", (row) => "shmodebutton-" + row.id)
         .attr("class", row => this.modeClass(row))
-        .attr("style", "color:white; text-align:center;")
+        .attr("style", "color:var(--color-fg); text-align:center;")
         .attr("onClick", (row) => "shModeClicked(" + row.id + ")")
         .classed("disabled", false)
         .text(row => row.isAutomatic ? "Automatik" : "Manuell");

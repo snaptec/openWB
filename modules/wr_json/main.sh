@@ -12,9 +12,15 @@ Debug=$debug
 #For Development only
 #Debug=1
 
-
+re='^[-+]?[0-9]+\.?[0-9]*$'
 answer=$(curl --connect-timeout 5 -s $wrjsonurl)
 pvwatt=$(echo $answer | jq -r "$wrjsonwatt" | sed 's/\..*$//')
+# Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0
+if ! [[ $pvwatt =~ $re ]] ; then
+	openwbDebugLog ${DMOD} 1 "PVWatt Not Numeric: $pvwatt . Check if Filter is correct or WR is in standby"
+	pvwatt=0
+fi
+
 	if (( $pvwatt > 5 )); then
 		pvwatt=$(echo "$pvwatt*-1" |bc)
 	fi	

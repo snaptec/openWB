@@ -56,3 +56,29 @@ evuikwh=$(echo $answer | jq -r '.site.energy_imported')
 echo $evuikwh > /var/www/html/openWB/ramdisk/bezugkwh
 evuekwh=$(echo $answer | jq -r '.site.energy_exported')
 echo $evuekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+
+answer=$(curl -k $cookieOptions --connect-timeout 5 -s "https://$speicherpwip/api/status")
+powerwallfirmwareversion=$(echo $answer | jq -r '.version' | sed 's/\.//g' )
+echo $powerwallfirmwareversion > /var/www/html/openWB/ramdisk/powerwallfirmwareversion
+
+if (( $powerwallfirmwareversion >= 20490 )); then
+	answer=$(curl -k $cookieOptions --connect-timeout 5 -s "https://$speicherpwip/api/meters/site")
+	evuv1=$(echo $answer | jq -r '.[0].Cached_readings.v_l1n')
+	echo $evuv1 > /var/www/html/openWB/ramdisk/evuv1
+	evuv2=$(echo $answer | jq -r '.[0].Cached_readings.v_l2n')
+	echo $evuv2 > /var/www/html/openWB/ramdisk/evuv2
+	evuv3=$(echo $answer | jq -r '.[0].Cached_readings.v_l3n')
+	echo $evuv3 > /var/www/html/openWB/ramdisk/evuv3
+	bezuga1=$(echo $answer | jq -r '.[0].Cached_readings.i_a_current')
+	echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
+	bezuga2=$(echo $answer | jq -r '.[0].Cached_readings.i_b_current')
+	echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
+	bezuga3=$(echo $answer | jq -r '.[0].Cached_readings.i_c_current')
+	echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
+	bezugw1=$(echo $answer | jq -r '.[0].Cached_readings.real_power_a')
+	echo $bezugw1 > /var/www/html/openWB/ramdisk/bezugw1
+	bezugw2=$(echo $answer | jq -r '.[0].Cached_readings.real_power_b')
+	echo $bezugw2 > /var/www/html/openWB/ramdisk/bezugw2
+	bezugw3=$(echo $answer | jq -r '.[0].Cached_readings.real_power_c')
+	echo $bezugw3 > /var/www/html/openWB/ramdisk/bezugw3
+fi

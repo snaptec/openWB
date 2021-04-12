@@ -165,7 +165,7 @@ u1p3pswitch(){
 									maximalstromstaerke=$schieflastmaxa
 								fi
 								if (( ladeleistung < 100 )); then
-									if (( uberschuss > 7000 )); then
+									if (( uberschuss > ((3 * mindestuberschuss) + 1000) )); then
 										openwbDebugLog "MAIN" 1 "Min PV Laden derzeit $u1p3pstat Phasen, auf MinPV Automatik konfiguriert, aendere auf 3 Phasen da viel Überschuss vorhanden..."
 										echo 1 > ramdisk/blockall
 										runs/u1p3pcheck.sh stop
@@ -200,7 +200,7 @@ u1p3pswitch(){
 								fi
 							else
 								if (( ladeleistung < 100 )); then
-									if (( uberschuss < 5000 )); then
+									if (( uberschuss < (3 * mindestuberschuss) )); then
 										echo 0 > /var/www/html/openWB/ramdisk/urcounter
 										echo 1 > ramdisk/blockall
 										runs/u1p3pcheck.sh stop
@@ -259,7 +259,7 @@ u1p3pswitch(){
 									maximalstromstaerke=$schieflastmaxa
 								fi
 								if (( ladeleistung < 100 )); then
-									if (( uberschuss > 7000 )); then
+									if (( uberschuss > ((3 * mindestuberschuss) + 1000) )); then
 										openwbDebugLog "MAIN" 1 "Nur PV Laden derzeit $u1p3pstat Phasen, auf NurPV Automatik konfiguriert, aendere auf 3 Phasen da viel Überschuss vorhanden..."
 										echo 1 > ramdisk/blockall
 										runs/u1p3pcheck.sh stop
@@ -294,7 +294,7 @@ u1p3pswitch(){
 								fi
 							else
 								if (( ladeleistung < 100 )); then
-									if (( uberschuss < 5000 )); then
+									if (( uberschuss < (3 * mindestuberschuss) )); then
 										echo 0 > /var/www/html/openWB/ramdisk/urcounter
 										echo 1 > ramdisk/blockall
 										runs/u1p3pcheck.sh stop

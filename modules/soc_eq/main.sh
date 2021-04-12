@@ -4,7 +4,7 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="EVSOC"
-LOGFILE="$RAMDISKDIR/soc.log"
+MYLOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 myPid=$$
 socDebug=$debug
@@ -55,10 +55,10 @@ if (( soctimer < tmpintervall )); then
 	soctimer=$((soctimer+1))
 	echo $soctimer > $soctimerfile
 else
-  openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
-  echo 0 > $soctimerfile
-  $MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$LOGFILE
-  ret=$?
-  openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Py Return: ${ret}"
-  openwbModulePublishState "EVSOC" "${ret}" "Code: ${ret}" "$CHARGEPOINT"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+	echo 0 > $soctimerfile
+	$MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$MYLOGFILE 2>&1
+	ret=$?
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Py Return: ${ret}"
+	openwbModulePublishState "EVSOC" "${ret}" "Code: ${ret}" "$CHARGEPOINT"
 fi

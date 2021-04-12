@@ -28,35 +28,13 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -73,7 +51,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration Ladepunkte</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- Ladepunkt 1 -->
 				<div class="card border-primary">
@@ -94,24 +72,29 @@
 							<label for="evsecon" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "0") echo "selected" ?> value="modbusevse" data-id="openwb auto">openWB series1/2 Autoerkennung</option>
-
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">openWB series1/2</option>
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">openWB series1/2 mit geeichtem Zähler Variante 1</option>
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v2">openWB series1/2 mit geeichtem Zähler Variante 2</option>
-									<option <?php if($evseconold == "buchse") echo "selected" ?> value="buchse">openWB mit Buchse</option>
-									<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
-									<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit </option>
-									<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
-									<option <?php if($evseconold == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
-									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "0" || $mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
-									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi / smartWB</option>
-									<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
-									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
-									<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
-									<option <?php if($evseconold == "keba") echo "selected" ?> value="keba">Keba</option>
+									<optgroup label="openWB">
+										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "0") echo "selected" ?> value="modbusevse" data-id="openwb auto">Series1/2 Autoerkennung</option>
+										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">Series1/2</option>
+										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">Series1/2 mit geeichtem Zähler Variante 1</option>
+										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v2">Series1/2 mit geeichtem Zähler Variante 2</option>
+										<option <?php if($evseconold == "buchse") echo "selected" ?> value="buchse">Buchse</option>
+										<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">Ladepunkt in Verbindung mit Standalone</option>
+										<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">Satellit </option>
+									</optgroup>
+									<optgroup label="andere Ladepunkte">
+										<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
+										<option <?php if($evseconold == "keba") echo "selected" ?> value="keba">Keba</option>
+										<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+										<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi / smartWB</option>
+										<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
+										<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
+										<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "0" || $mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
+										<option <?php if($evseconold == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -421,16 +404,22 @@
 								<div class="col">
 									<select name="ladeleistungmodul" id="ladeleistungmodul" class="form-control">
 										<option <?php if($ladeleistungmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-										<option <?php if($ladeleistungmodulold == "sdm630modbusll") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungmodulold == "smaemd_ll") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
-										<option <?php if($ladeleistungmodulold == "sdm120modbusll") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungmodulold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungmodulold == "mpm3pmll") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
-										<option <?php if($ladeleistungmodulold == "fsm63a3modbusll") echo "selected" ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
-										<option <?php if($ladeleistungmodulold == "httpll") echo "selected" ?> value="httpll">HTTP</option>
-										<option <?php if($ladeleistungmodulold == "mpm3pmtripple") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
-										<option <?php if($ladeleistungmodulold == "mpm3pmlllp1") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
-										<option <?php if($ladeleistungmodulold == "mqttll") echo "selected" ?> value="mqttll">MQTT</option>
+										<optgroup label="openWB">
+											<option <?php if($ladeleistungmodulold == "mpm3pmlllp1") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
+											<option <?php if($ladeleistungmodulold == "mpm3pmtripple") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
+										</optgroup>
+										<optgroup label="andere Messgeräte">
+											<option <?php if($ladeleistungmodulold == "fsm63a3modbusll") echo "selected" ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
+											<option <?php if($ladeleistungmodulold == "mpm3pmll") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
+											<option <?php if($ladeleistungmodulold == "sdm120modbusll") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
+											<option <?php if($ladeleistungmodulold == "sdm630modbusll") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
+											<option <?php if($ladeleistungmodulold == "smaemd_ll") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
+											<option <?php if($ladeleistungmodulold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
+										</optgroup>
+										<optgroup label="generische Module">
+											<option <?php if($ladeleistungmodulold == "httpll") echo "selected" ?> value="httpll">HTTP</option>
+											<option <?php if($ladeleistungmodulold == "mqttll") echo "selected" ?> value="mqttll">MQTT</option>
+										</optgroup>
 									</select>
 								</div>
 							</div>
@@ -675,26 +664,32 @@
 							<div class="col">
 								<select name="socmodul" id="socmodul" class="form-control">
 									<option <?php if($socmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">HTTP</option>
-									<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
-									<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW & Mini</option>
-									<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
-									<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">Renault Zoe MyRenault</option>
-									<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">EVNotify</option>
-									<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
-									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
-									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
-									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
-									<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ (BETA!!!)</option>
-									<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
-									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
-									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
-									<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
-									<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
-									<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
-									<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
-									<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
-									<option <?php if($socmodulold == "soc_manual") echo "selected" ?> value="soc_manual">Manuell + Berechnung</option>
+									<optgroup label="universelle Module">
+										<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">EVNotify</option>
+										<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">HTTP</option>
+										<option <?php if($socmodulold == "soc_manual") echo "selected" ?> value="soc_manual">Manuell + Berechnung</option>
+										<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
+									</optgroup>
+									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
+										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
+										<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai</option>
+										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
+										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
+										<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
+										<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
+										<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">MyRenault</option>
+										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
+										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
+										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
+										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
+										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
+										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
+										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
+										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -875,7 +870,67 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 0) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp1" id="kia_soccalclp1Off" value="0"<?php if($kia_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp1" id="kia_soccalclp1On" value="1"<?php if($kia_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+										<div id="kiamanualcalcdiv" class="hide">
+											<div class="form-row mb-1">
+												<label for="kia_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="kia_akkuglp1" value="<?php echo $akkuglp1old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="kia_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="kia_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+									$(function() {
+										function visibility_kia_soccalclp1() {
+											if($('#kia_soccalclp1Off').prop("checked")) {
+												hideSection('#kiamanualcalcdiv');
+											} else {
+												showSection('#kiamanualcalcdiv');
+											}
+										}
+
+										$('input[type=radio][name=kia_soccalclp1]').change(function(){
+											visibility_kia_soccalclp1();
+										});
+
+										visibility_kia_soccalclp1();
+									});
+								</script>
 							</div>
 							<div id="socmzerong" class="hide">
 								<div class="form-group">
@@ -937,10 +992,24 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="soc_audi_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_audi_vin" id="soc_audi_vin" value="<?php echo $soc_audi_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socmid" class="hide">
 								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
@@ -971,6 +1040,72 @@
 
 								</div>
 							</div>
+							<div id="socvag" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'vw') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_vw" value="vw"<?php if($soc_vag_typeold == 'vw') echo " checked=\"checked\"" ?>>VW
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'id') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_id" value="id"<?php if($soc_vag_typeold == 'id') echo " checked=\"checked\"" ?>>ID
+												</label>
+												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'porsche') echo " active" ?>">
+													<input type="radio" name="soc_vag_type" id="soc_vag_type_porsche" value="porsche"<?php if($soc_vag_typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+												</label>
+											</div>
+											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_vag_username" id="soc_vag_username" value="<?php echo $soc_vag_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_password" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_vag_password" id="soc_vag_password" value="<?php echo $soc_vag_passwordold ?>">
+											<span class="form-text small">
+												Passwort des Logins
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_vag_vin" id="soc_vag_vin" value="<?php echo $soc_vag_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervall" id="soc_vag_intervall" value="<?php echo $soc_vag_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_vag_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervallladen" id="soc_vag_intervallladen" value="<?php echo $soc_vag_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div id="socmhttp" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -979,6 +1114,24 @@
 											<input class="form-control" type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars($hsocipold) ?>">
 											<span class="form-text small">
 												Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_http_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_http_intervall" id="soc_http_intervall" value="<?php echo $soc_http_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_http_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_http_intervallladen" id="soc_http_intervallladen" value="<?php echo $soc_http_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
@@ -1194,6 +1347,11 @@
 							<div id="soccarnet" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Das VAG Modul kann alternativ genutzt werden und ruft den SoC in 1-Prozent Schritten ab.
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="carnetuser" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
 											<input class="form-control" type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>">
@@ -1225,9 +1383,9 @@
 							<div id="socmypeugeot" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
@@ -1319,9 +1477,9 @@
 							<div id="socmyopel" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
@@ -1414,9 +1572,9 @@
 							<div id="socpsa" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="psa_manufacturerlp1" class="col-md-4 col-form-label">Hersteller</label>
@@ -1452,6 +1610,15 @@
 										<label for="psa_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
 										<div class="col">
 											<input class="form-control" type="text" name="psa_clientsecretlp1" id="psa_clientsecretlp1" value="<?php echo $psa_clientsecretlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="psa_intervallp1" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<div class="col">
+											<input class="form-control" type="number" min="1" step="1" name="psa_intervallp1" id="psa_intervallp1" value="<?php echo $psa_intervallp1old ?>">
+											<span class="form-text small">
+												Wie oft abgefragt wird. Angabe in Minuten.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -1500,31 +1667,32 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$(function() {
+										function visibility_psa_soccalclp1() {
+											if($('#psa_soccalclp1Off').prop("checked")) {
+												hideSection('#psamanualcalcdiv');
+											} else {
+												showSection('#psamanualcalcdiv');
+											}
+										}
+
+										$('input[type=radio][name=psa_soccalclp1]').change(function(){
+											visibility_psa_soccalclp1();
+										});
+
+										visibility_psa_soccalclp1();
+									});
+								</script>
 							</div>
-							<script>
-							$(function() {
-								function visibility_psa_soccalclp1() {
-									if($('#psa_soccalclp1Off').prop("checked")) {
-										hideSection('#psamanualcalcdiv');
-									} else {
-										showSection('#psamanualcalcdiv');
-									}
-								}
-
-								$('input[type=radio][name=psa_soccalclp1]').change(function(){
-									visibility_psa_soccalclp1();
-								});
-
-								visibility_psa_soccalclp1();
-							});
-							</script>
 							<div id="socmeq" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
-											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
-											<a href="<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?>" target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											<span class="form-text small font-weight-bold">
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
 									</div>
@@ -1557,11 +1725,135 @@
 										<div class="col">
 											<span class="form-text small">
 												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
-												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
+												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div id="soctronity" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io/" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_id_lp1" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_id_lp1" id="soc_tronity_client_id_lp1" value="<?php echo $soc_tronity_client_id_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_secret_lp1" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_secret_lp1" id="soc_tronity_client_secret_lp1" value="<?php echo $soc_tronity_client_secret_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_select_vehicle_lp1" class="col-md-4 col-form-label">Fahrzeug</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div id="soc_tronity_load_vehicles_lp1" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+													<option value="">Bitte aktualisieren</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_vehicle_id_lp1" class="col-md-4 col-form-label">Fahrzeug ID</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_tronity_vehicle_id_lp1" id="soc_tronity_vehicle_id_lp1" value="<?php echo $soc_tronity_vehicle_id_lp1old ?>">
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tronity_intervall" id="soc_tronity_intervall" value="<?php echo $soc_tronity_intervallold ?>">
+											<span class="form-text small">
+												Gibt an, in welchem Intervall in Minuten der Ladestand des Autos abgefragt werden soll, wenn nicht geladen wird.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tronity_intervallladen" id="soc_tronity_intervallladen" value="<?php echo $soc_tronity_intervallladenold ?>">
+											<span class="form-text small">
+												Gibt an, in welchem Intervall in Minuten der Ladestand des Autos während des Ladens abgefragt werden soll.
+											</span>
+										</div>
+									</div>
+								</div>
+								<script>
+									var TronityClientPattern = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+									$('#soc_tronity_select_vehicle_lp1').change(function(){
+										$('#soc_tronity_vehicle_id_lp1').val($(this).val());
+									});
+
+									$('#soc_tronity_load_vehicles_lp1').click(function(){
+										if( ! $('#soc_tronity_client_id_lp1').val().match(TronityClientPattern) || ! $('#soc_tronity_client_secret_lp1').val().match(TronityClientPattern) ){
+											alert("Bitte geben Sie eine gültige Client ID und ein Client Secret an.");
+										} else {
+											$('#soc_tronity_load_vehicles_lp1').removeClass("bg-warning");
+											$('#soc_tronity_load_vehicles_lp1').removeClass("bg-success");
+											$(this).find('.fa-sync').addClass('fa-spin');
+											$("#soc_tronity_select_vehicle_lp1").empty();
+											$.ajax({
+												type: "POST",
+												url: "https://api-eu.TRONITY.io/oauth/authentication",
+												data: JSON.stringify( { "client_id": $('#soc_tronity_client_id_lp1').val(), "client_secret": $('#soc_tronity_client_secret_lp1').val(), "grant_type": "app" } ),
+												contentType: "application/json",
+												dataType: "json",
+												success: function(authdata){
+													$('#soc_tronity_load_vehicles_lp1').addClass("bg-warning");
+													$.ajax({
+														type: "GET",
+														url: "https://api-eu.TRONITY.io/v1/vehicles",
+														headers: {
+															Authorization: 'Bearer '+authdata.access_token
+														},
+														success: function(vehicledata){
+															$('#soc_tronity_load_vehicles_lp1').removeClass("bg-warning");
+															$('#soc_tronity_load_vehicles_lp1').addClass("bg-success");
+															var vehicleid = $('#soc_tronity_vehicle_id_lp1').val();
+															$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_tronity_select_vehicle_lp1');
+															vehicledata.data.forEach(function(vehicle){
+																newVehicle = $("<option/>").val(vehicle.id).text(vehicle.displayName);
+																if( vehicleid == vehicle.id ){
+																	newVehicle.attr('selected','selected');
+																}
+																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
+															});
+															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
+														},
+														error: function(errMsg) {
+															alert("Fahrzeuge konnten nicht abgerufen werden!");
+														}
+													});
+												},
+												error: function(errMsg) {
+													alert("Anmeldung gescheitert!");
+												},
+												complete: function(){
+													$('#soc_tronity_load_vehicles_lp1').find('.fa-sync').removeClass('fa-spin');
+												}
+											});
+										};
+									});
+								</script>
 							</div>
 						</div>
 					</div>
@@ -1726,6 +2018,7 @@
 							hideSection('#socmeq');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
+							hideSection('#socvag');
 							hideSection('#socmqtt');
 							hideSection('#socmbluelink');
 							hideSection('#socmkia');
@@ -1736,6 +2029,7 @@
 							hideSection('#socmyopel');
 							hideSection('#socpsa');
 							hideSection('#socmanual');
+							hideSection('#soctronity');
 
 
 							if($('#socmodul').val() == 'none') {
@@ -1752,10 +2046,14 @@
 								showSection('#socmqtt');
 							}
 							if($('#socmodul').val() == 'soc_bluelink') {
+								showSection('#socmkia');
 								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('#socmid');
+							}
+							if($('#socmodul').val() == 'soc_vag') {
+								showSection('#socvag');
 							}
 							if($('#socmodul').val() == 'soc_kia') {
 								showSection('#socmkia');
@@ -1805,6 +2103,9 @@
 							}
 							if($('#socmodul').val() == 'soc_manual') {
 								showSection('#socmanual');
+							}
+							if($('#socmodul').val() == 'soc_tronity') {
+								showSection('#soctronity');
 							}
 						}
 
@@ -1861,21 +2162,24 @@
 							<label for="evsecons1" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecons1" id="evsecons1" class="form-control">
-									<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">openWB series1/2 Duo 1. Version</option>
-									<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">openWB series1/2 Duo (ab Herbst 2020)</option>
-									<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">openWB Slave</option>
-									<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
-									<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evsecons1old == "modbusevse"
-														&& !($evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1")
-														&& !($evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0")
-													) echo "selected" ?> value="modbusevse">Modbus</option>
-									<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evsecons1old == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
-									<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-									<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
-									<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
-									<option <?php if($evsecons1old == "keba") echo "selected" ?> value="keba">Keba</option>
+									<optgroup label="openWB">
+										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">Series1/2 Duo 1. Version</option>
+										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">Series1/2 Duo (ab Herbst 2020)</option>
+										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
+										<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+									</optgroup>
+									<optgroup label="andere Ladepunkte">
+										<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
+										<option <?php if($evsecons1old == "keba") echo "selected" ?> value="keba">Keba</option>
+										<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+										<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
+										<option <?php if($evsecons1old == "modbusevse" && !($evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") && !($evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") ) echo "selected" ?> value="modbusevse">Modbus</option>
+										<option <?php if($evsecons1old == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -2115,14 +2419,20 @@
 								<label for="ladeleistungs1modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
 									<select name="ladeleistungs1modul" id="ladeleistungs1modul" class="form-control">
-										<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1") echo "selected" ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1") echo "selected" ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungs1modulold == "simpleevsewifis1") echo "selected" ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungs1modulold == "mpm3pmlls1") echo "selected" ?> value="mpm3pmlls1">MPM3PM Modbus</option>
-										<option <?php if($ladeleistungs1modulold == "goelp2") echo "selected" ?> value="goelp2">Go-e</option> <!-- BUG go-E als LL-Modul? -->
-										<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
-										<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
-										<option <?php if($ladeleistungs1modulold == "mqttlllp2") echo "selected" ?> value="mqttlllp2">MQTT</option>
+										<optgroup label="openWB">
+											<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
+											<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
+										</optgroup>
+										<optgroup label="andere Messgeräte">
+											<option <?php if($ladeleistungs1modulold == "goelp2") echo "selected" ?> value="goelp2">Go-e</option>
+											<option <?php if($ladeleistungs1modulold == "mpm3pmlls1") echo "selected" ?> value="mpm3pmlls1">MPM3PM Modbus</option>
+											<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1") echo "selected" ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
+											<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1") echo "selected" ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
+											<option <?php if($ladeleistungs1modulold == "simpleevsewifis1") echo "selected" ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
+										</optgroup>
+										<optgroup label="generische Module">
+											<option <?php if($ladeleistungs1modulold == "mqttlllp2") echo "selected" ?> value="mqttlllp2">MQTT</option>
+										</optgroup>
 									</select>
 								</div>
 							</div>
@@ -2265,26 +2575,32 @@
 							<div class="col">
 								<select name="socmodul1" id="socmodul1" class="form-control">
 									<option <?php if($socmodul1old == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
-									<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
-									<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW i3</option>
-									<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
-									<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Zoe alt</option>
-									<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
-									<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
-									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
-									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
-									<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ (BETA!!!)</option>
-									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
-									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
-									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
-									<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
-									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
-									<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
-									<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
-									<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
-									<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
+									<optgroup label="universelle Module">
+										<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
+										<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
+										<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
+										<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
+									</optgroup>
+									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
+										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
+										<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai</option>
+										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
+										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
+										<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
+										<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
+										<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
+										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
+										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
+										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
+										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
+										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
+										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
+										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
+										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -2292,6 +2608,27 @@
 							<!-- soc is always requested, ignoring plug stat -->
 							<div id="socmnone1" class="hide">
 								<!-- nothing here -->
+							</div>
+							<div id="socmtype2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'vw') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_vw" value="vw"<?php if($soc2typeold == 'vw') echo " checked=\"checked\"" ?>>VW
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_id" value="id"<?php if($soc2typeold == 'id') echo " checked=\"checked\"" ?>>ID
+												</label>
+												<label class="btn btn-outline-info<?php if($soc2typeold == 'porsche') echo " active" ?>">
+													<input type="radio" name="soc2type" id="soc2type_porsche" value="porsche"<?php if($soc2typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
+												</label>
+											</div>
+											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -2706,7 +3043,7 @@
 										<div class="col">
 											<input class="form-control" type="text" name="soc2vin" id="soc2vin" value="<?php echo $soc2vinold ?>">
 											<span class="form-text small">
-												VIN des Autos.
+												Vollständige VIN des Fahrzeugs
 											</span>
 										</div>
 									</div>
@@ -2715,9 +3052,9 @@
 							<div id="socmypeugeotlp2" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
@@ -2810,9 +3147,9 @@
 							<div id="socmyopellp2" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
@@ -2905,9 +3242,9 @@
 							<div id="socpsalp2" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank">im Forum.</a>
+										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="psa_manufacturerlp2" class="col-md-4 col-form-label">Hersteller</label>
@@ -2943,6 +3280,15 @@
 										<label for="psa_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
 										<div class="col">
 											<input class="form-control" type="text" name="psa_clientsecretlp2" id="psa_clientsecretlp2" value="<?php echo $psa_clientsecretlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="psa_intervallp2" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<div class="col">
+											<input class="form-control" type="number" min="1" step="1" name="psa_intervallp2" id="psa_intervallp2" value="<?php echo $psa_intervallp2old ?>">
+											<span class="form-text small">
+												Wie oft abgefragt wird. Angabe in Minuten.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -3014,8 +3360,9 @@
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
-											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
-											<a href="<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?>" target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											<span class="form-text small font-weight-bold">
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
 									</div>
@@ -3047,21 +3394,203 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
 								</div>
 
 							</div>
+							<div id="socmkialp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 0) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2Off" value="0"<?php if($kia_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2On" value="1"<?php if($kia_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+										<div id="kiamanualcalclp2div" class="hide">
+											<div class="form-row mb-1">
+												<label for="kia_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="kia_akkuglp2" value="<?php echo $akkuglp2old ?>">
+													<span class="form-text small">
+														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+													</span>
+												</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="kia_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+												<div class="col">
+													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="kia_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+													<span class="form-text small">
+														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<script>
+								$(function() {
+									function visibility_kia_soccalclp2() {
+										if($('#kia_soccalclp2Off').prop("checked")) {
+											hideSection('#kiamanualcalclp2div');
+										} else {
+											showSection('#kiamanualcalclp2div');
+										}
+									}
+
+									$('input[type=radio][name=kia_soccalclp2]').change(function(){
+										visibility_kia_soccalclp2();
+									});
+
+									visibility_kia_soccalclp2();
+								});
+								</script>
+							</div>
+							<div id="soctronitylp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io/" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_id_lp2" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_id_lp2" id="soc_tronity_client_id_lp2" value="<?php echo $soc_tronity_client_id_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_client_secret_lp2" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" required placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" pattern="[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}" name="soc_tronity_client_secret_lp2" id="soc_tronity_client_secret_lp2" value="<?php echo $soc_tronity_client_secret_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_select_vehicle_lp2" class="col-md-4 col-form-label">Fahrzeug</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div id="soc_tronity_load_vehicles_lp2" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+													<option value="">Bitte aktualisieren</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_tronity_vehicle_id_lp2" class="col-md-4 col-form-label">Fahrzeug ID</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_tronity_vehicle_id_lp2" id="soc_tronity_vehicle_id_lp2" value="<?php echo $soc_tronity_vehicle_id_lp2old ?>">
+											</div>
+										</div>
+									</div>
+								</div>
+								<script>
+									$('#soc_tronity_select_vehicle_lp2').change(function(){
+										$('#soc_tronity_vehicle_id_lp2').val($(this).val());
+									});
+
+									$('#soc_tronity_load_vehicles_lp2').click(function(){
+										if( ! $('#soc_tronity_client_id_lp2').val().match(TronityClientPattern) || ! $('#soc_tronity_client_secret_lp2').val().match(TronityClientPattern) ){
+											alert("Bitte geben Sie eine gültige Client ID und ein Client Secret an.");
+										} else {
+											$('#soc_tronity_load_vehicles_lp2').removeClass("bg-warning");
+											$('#soc_tronity_load_vehicles_lp2').removeClass("bg-success");
+											$(this).find('.fa-sync').addClass('fa-spin');
+											$("#soc_tronity_select_vehicle_lp2").empty();
+											$.ajax({
+												type: "POST",
+												url: "https://api-eu.TRONITY.io/oauth/authentication",
+												data: JSON.stringify( { "client_id": $('#soc_tronity_client_id_lp2').val(), "client_secret": $('#soc_tronity_client_secret_lp2').val(), "grant_type": "app" } ),
+												contentType: "application/json",
+												dataType: "json",
+												success: function(authdata){
+													$('#soc_tronity_load_vehicles_lp2').addClass("bg-warning");
+													$.ajax({
+														type: "GET",
+														url: "https://api-eu.TRONITY.io/v1/vehicles",
+														headers: {
+															Authorization: 'Bearer '+authdata.access_token
+														},
+														success: function(vehicledata){
+															$('#soc_tronity_load_vehicles_lp2').removeClass("bg-warning");
+															$('#soc_tronity_load_vehicles_lp2').addClass("bg-success");
+															var vehicleid = $('#soc_tronity_vehicle_id_lp2').val();
+															$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_tronity_select_vehicle_lp2');
+															vehicledata.data.forEach(function(vehicle){
+																newVehicle = $("<option/>").val(vehicle.id).text(vehicle.displayName);
+																if( vehicleid == vehicle.id ){
+																	newVehicle.attr('selected','selected');
+																}
+																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
+															});
+															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
+														},
+														error: function(errMsg) {
+															alert("Fahrzeuge konnten nicht abgerufen werden!");
+														}
+													});
+												},
+												error: function(errMsg) {
+													alert("Anmeldung gescheitert!");
+												},
+												complete: function(){
+													$('#soc_tronity_load_vehicles_lp2').find('.fa-sync').removeClass('fa-spin');
+												}
+											});
+										};
+									});
+								</script>
+							</div>
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc2intervall" id="soc2intervall" value="<?php echo $soc2intervallold ?>">
 											<span class="form-text small">
-												Wie oft abgefragt wird. Angabe in Minuten.
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmintervallladen2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2intervallladen" id="soc2intervallladen" value="<?php echo $soc2intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
@@ -3174,6 +3703,7 @@
 
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
+							hideSection('#socmtype2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
@@ -3193,8 +3723,9 @@
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
 							hideSection('#socmintervall2');
+							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
-
+							hideSection('#soctronitylp2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('#socmnone1');
@@ -3206,15 +3737,21 @@
 							}
 							if($('#socmodul1').val() == 'soc_http1') {
 								showSection('#socmhttp1');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
+								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_bluelinklp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
-								// showSection('#socmpin2'); // not needed anymore 2020-12-16
+								showSection('#socmpin2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
 								showSection('#socmuser2');
@@ -3222,11 +3759,20 @@
 								showSection('#socmpin2');
 								showSection('#socmvin2');
 								showSection('#socmintervall2');
+								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_idlp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+							}
+							if($('#socmodul1').val() == 'soc_vaglp2') {
+								showSection('#socmtype2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('#socleaf1');
@@ -3270,6 +3816,11 @@
 							if($('#socmodul1').val() == 'soc_volvolp2') {
 								showSection('#socmuser2');
 								showSection('#socmpass2');
+							}
+							if($('#socmodul1').val() == 'soc_tronitylp2') {
+								showSection('#soctronitylp2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 						}
 
@@ -3343,14 +3894,20 @@
 							<label for="evsecons2" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecons2" id="evsecons2" class="form-control">
-									<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkt</option>
-									<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
-									<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evsecons2old == "modbusevse") echo "selected" ?> value="modbusevse">Modbus</option>
-									<option <?php if($evsecons2old == "dac") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evsecons2old == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
-									<option <?php if($evsecons2old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-									<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
+									<optgroup label="openWB">
+										<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">dritter Ladepunkt</option>
+										<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+									</optgroup>
+									<optgroup label="andere Ladepunkte">
+										<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
+										<option <?php if($evsecons2old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									</optgroup>
+									<optgroup label="generische Module">
+										<option <?php if($evsecons2old == "dac") echo "selected" ?> value="dac">DAC</option>
+										<option <?php if($evsecons2old == "modbusevse") echo "selected" ?> value="modbusevse">Modbus</option>
+										<option <?php if($evsecons2old == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
@@ -3509,13 +4066,19 @@
 								<label for="ladeleistungs2modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
 									<select name="ladeleistungs2modul" id="ladeleistungs2modul" class="form-control">
-										<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmlls2") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
-										<option <?php if($ladeleistungs2modulold == "mqttlllp3") echo "selected" ?> value="mqttlllp3">MQTT</option>
+										<optgroup label="openWB">
+											<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
+											<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+										</optgroup>
+										<optgroup label="andere Messgeräte">
+											<option <?php if($ladeleistungs2modulold == "mpm3pmlls2") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
+											<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+											<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
+											<option <?php if($ladeleistungs2modulold == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
+										</optgroup>
+										<optgroup label="generische Module">
+											<option <?php if($ladeleistungs2modulold == "mqttlllp3") echo "selected" ?> value="mqttlllp3">MQTT</option>
+										</optgroup>
 									</select>
 								</div>
 							</div>
@@ -3797,8 +4360,10 @@
 								<label for="evseconlp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">Anbindung</label>
 								<div class="col">
 									<select name="evseconlp<?php echo $chargepointNum; ?>" id="evseconlp<?php echo $chargepointNum; ?>" class="form-control">
-										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
-										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<optgroup label="openWB">
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+										</optgroup>
 									</select>
 								</div>
 							</div>

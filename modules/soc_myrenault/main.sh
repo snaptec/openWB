@@ -60,7 +60,17 @@ else
 	echo 0 > $soctimerfile
 	socDebugLog "Requesting SoC"
 	sudo python /var/www/html/openWB/modules/soc_myrenault/zoensoc.py $username $password $location $country $vin $CHARGEPOINT
-
+	case $CHARGEPOINT in
+		2)
+			# second charge point
+			soc=$(<$RAMDISKDIR/soc1)
+			;;
+		*)
+			# defaults to first charge point for backward compatibility
+			soc=$(<$RAMDISKDIR/soc)
+			;;
+	esac
+	socDebugLog "SoC from Server: $soc"
 	dtime=$(date +"%T")
 	charging=$(echo $r8 | jq -r .data.attributes.chargingStatus)
 	if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == '-1' ]] && [[ $soc -ne 100 ]] && [[ $wakeup == "1" ]] ; then

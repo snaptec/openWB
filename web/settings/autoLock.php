@@ -24,7 +24,7 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 
 		<!-- Bootstrap -->
@@ -35,36 +35,16 @@
 		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- clockpicker -->
 		<script src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/clockpicker/bootstrap-clockpicker.min.css">
 
-		<!-- global variables -->
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 		<script>
 			var oldClockpickerTime;  // holds old value of clockpicker during changing the time
-
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
 		</script>
 	</head>
 
@@ -241,7 +221,11 @@ ECHODAYROWTAIL;
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Autolock Einstellungen</h1>
-			<form class="form" action="./tools/saveautolock.php" method="POST">
+			<div class="alert alert-info">
+				Diese Einstellungen ermöglichen es, dass man jeden konfigurierten Ladepunkt zu bestimmten Zeiten automatisiert sperren bzw. wieder entsperren kann.
+				Ein möglicher Anwendungsfall wäre das Bereitstellen von Lademöglichkeiten nur während der Öffnungszeiten.
+			</div>
+			<form class="form" action="./settings/saveautolock.php" method="POST">
 
 				<?php
 
@@ -292,7 +276,7 @@ ECHOFORMGROUPHEAD;
 						echo <<<ECHOFORMGROUPTAIL
 					</div> <!-- card body -->
 					<div class="card-footer text-center">
-						<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
+						<button type="button" class="btn btn-sm btn-danger resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
 					</div>
 				</div>  <!-- end form-group charge point {$lp} -->
 
@@ -471,7 +455,7 @@ ECHOFORMGROUPTAIL;
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-green" data-dismiss="modal">OK</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>

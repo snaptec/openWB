@@ -56,7 +56,7 @@
 			}
 		</style>
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
 		<script src = "status/helperFunctions.js?ver=20210128" ></script>
@@ -403,9 +403,9 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<tr id="faultStrPvRow" class="hide">
+										<tr class="faultStrPvRow hide">
 											<th scope="row">Störungsbeschreibung</th>
-											<td id="faultStrPv"></td>
+											<td class="faultStrPv"></td>
 										</tr>
 										<tr>
 											<th scope="row">Leistung [W]</th>
@@ -600,11 +600,14 @@
 
 		<script>
 
-			// load navbar
-			$("#nav-placeholder").load('themes/navbar.html?v=20210101', disableMenuItem);
-			function disableMenuItem() {
-				$('#navStatus').addClass('disabled');
-			}
+			// load navbar, be carefull: it loads asynchonously
+			$.get(
+				{ url: "themes/navbar.html", cache: false },
+				function(data){
+					$("#nav-placeholder").replaceWith(data);
+					$('#navStatus').addClass('disabled');
+				}
+			);
 
 			$(function() {
 				if('<?php echo $kostalplenticoreip2old ?>' == 'none') {

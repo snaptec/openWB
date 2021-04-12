@@ -17,6 +17,7 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc1"
 		username=$soc2user
 		password=$soc2pass
+		vin=$soc2vin
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -26,6 +27,7 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc"
 		username=$soc_audi_username
 		password=$soc_audi_passwort
+		vin=$soc_audi_vin
 		;;
 esac
 
@@ -47,7 +49,7 @@ if (( auditimer < 180 )); then
 else
 	echo 0 > $soctimerfile
 	socDebugLog "Requesting SoC"
-	answer=$($MODULEDIR/../evcc-soc audi --user "$username" --password "$passsword" 2>&1)
+	answer=$($MODULEDIR/../evcc-soc audi --user "$username" --password "$passsword" --vin "$vin" 2>&1)
 	if [ $? -eq 0 ]; then
  		# we got a valid answer
  		echo $answer > $socfile

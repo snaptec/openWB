@@ -26,11 +26,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -48,14 +50,13 @@
 		?>
 		<div id="nav"></div> <!-- placeholder for navbar -->
 		<div role="main" class="container" style="margin-top:20px">
-			<h1>MQTT-Brücke</h1>
 			<?php
 				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
-				if (count($files) == 0) {
-					array_push($files, "");
-				}
+				$filesCount = count($files);
+				// give the user the option to configure more than one bridge
+				array_push($files, "");
 
-				$firstLoopDone = false;
+				$loopCount = 0;
 				foreach($files as $currentFile)
 				{
 					$currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
@@ -118,7 +119,10 @@
 						if(preg_match('/^\s*topic\s+openWB\/housebattery\/#/', $bridgeLine) === 1) {
 							$exportStatus = true;
 						}
-						if(preg_match('/^\s*topic\s+openWB\/graph\/#/', $bridgeLine) === 1) {
+						if(preg_match('/^\s*topic\s+openWB\/config\/get\/#/', $bridgeLine) === 1) {
+							$exportGraph = true;
+						}
+						if(preg_match('/^\s*topic\s+openWB\/SmartHome\/#/', $bridgeLine) === 1) {
 							$exportGraph = true;
 						}
 						if(preg_match('/^\s*topic\s+openWB\/set\//', $bridgeLine) === 1) {
@@ -126,9 +130,10 @@
 						}
 					}
 
-					if ($firstLoopDone) echo "<hr>";
+					if ($loopCount != 0) echo "<hr>";
 			?>
-			<form action="./tools/savemqtt.php" method="POST">
+			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke \"$connectionName\""; else echo "Neue MQTT-Brücke"; ?></h1>
+			<form action="./settings/savemqtt.php" method="POST">
 				<!-- previous bridge name, needed for renaming a bridge -->
 				<input type="hidden" readonly="readonly" name="bridge" value="<?php echo($connectionName); ?>">
 
@@ -140,7 +145,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 						<u>ACHTUNG</u>: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen!<br/>
-						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und 
+						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und
 						strenger Zugriffskontrolle (zumindest für die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
 						</div>
 						<div class="form-group">
@@ -165,7 +170,7 @@
 							<div class="col">
 								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>">
 								<span class="form-text small">Der Name darf nur aus Buchstaben und Zahlen bestehen, keine Sonderzeichen oder Umlaute.</span>
-								<?php if($debugold >= 1) echo "<small>in Datei '$currentFile'</small>"; ?>
+								<?php if($debugold >= 1) echo "<small>Config-File befindet sich in Datei '$currentFile'</small>"; ?>
 							</div>
 						</div>
 						<div class="form-row mb-1">
@@ -286,7 +291,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 							<u>ACHTUNG</u>: Dies erlaubt jedem Nutzer des entfernten MQTT-Servers mit Zugriff auf die entsprechenden Themen, diese openWB fern zu steuern!<br/>
-							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit 
+							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit
 							persönlichem Login und strenger Zugriffskontrolle zu aktivieren!<br/>
 							KEINESFALLS AUF <u>ÖFFENTLICH ZUGÄNGLICHEN</u> MQTT-SERVERN AKTIVEREN!!!
 						</div>
@@ -322,7 +327,7 @@
 
 			</form>
 			<?php
-					$firstLoopDone = true;
+					$loopCount++;
 				}
 			?>
 

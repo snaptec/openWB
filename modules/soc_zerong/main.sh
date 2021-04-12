@@ -35,22 +35,7 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( $socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
-}
-
-zerotimer=$(<$soctimerfile)
-# zerounitnumber=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_units -d format=json -d pass=$password -d user=$username | jq '.[].unitnumber')
-# ischarging=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].charging')
-
-if ( (( $ladeleistung > 800 )) && (( zerotimer < zintervallladen )) ) || (( zerotimer < zintervall )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	zerotimer=$((zerotimer+1))
-	echo $zerotimer > $soctimerfile
-else
+getAndWriteSoc(){
 	echo 0 > $soctimerfile
 	socDebugLog "Requesting SoC"
 	zerounitnumber=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_units -d format=json -d pass=$password -d user=$username | jq '.[].unitnumber')
@@ -66,5 +51,34 @@ else
 		fi
 	else
 		socDebugLog "SoC is invalid!"
+	fi
+}
+
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
+zerotimer=$(<$soctimerfile)
+# zerounitnumber=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_units -d format=json -d pass=$password -d user=$username | jq '.[].unitnumber')
+# ischarging=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].charging')
+
+if (( ladeleistung > 500 )); then
+	if (( zerotimer < zintervallladen )); then
+		socDebugLog "Charging, but nothing to do yet. Incrementing timer."
+		zerotimer=$((zerotimer+1))
+		echo $zerotimer > $soctimerfile
+	else
+		getAndWriteSoc
+	fi
+else
+	if (( zerotimer < zintervall )); then
+		socDebugLog "Nothing to do yet. Incrementing timer."
+		zerotimer=$((zerotimer+1))
+	echo $zerotimer > $soctimerfile
+	else
+		getAndWriteSoc
 	fi
 fi

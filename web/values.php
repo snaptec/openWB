@@ -1,6 +1,6 @@
 <?php
 $result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
+$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "etprovideraktiv=") !== false) {
 		list(, $etprovideraktivold) = explode("=", $line);
@@ -161,6 +161,8 @@ foreach($lines as $line) {
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);
+
+// load some ramdisk files
 $lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 $lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 $lp1nameold = str_replace( "'", "", $lp1nameold);
@@ -173,6 +175,7 @@ $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbrau
 $settingspwold = str_replace("\n", '', $settingspwold);
 
 $owbversion = file_get_contents('/var/www/html/openWB/web/version');
+
 if (isset($_GET['theme'])) {
 	$theme = $_GET['theme'];
 	$_SESSION['theme'] = $theme;
@@ -180,7 +183,6 @@ if (isset($_GET['theme'])) {
 	$theme = $themeold;
 	$_SESSION['theme'] = $theme;
 }
-
 
 // convert lines to key/value array for faster manipulation
 foreach($lines as $line) {
@@ -208,5 +210,4 @@ $countLpConfigured = array_sum($isConfiguredLp);
 for ( $lp = 1  ; $lp <= 8; $lp++) {
 	$settingsArray['lp'.$lp.'name'] = preg_replace('/[^A-Za-z0-9_ ]/', '', $settingsArray['lp'.$lp.'name']);
 }
-
 ?>

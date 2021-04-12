@@ -28,7 +28,7 @@
 		<link rel="stylesheet" type="text/css" href="../modules/et_tibber/stromtarifinfo/stromtarifinfo_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script src="js/Chart.bundle.min.js"></script>
 
@@ -191,11 +191,15 @@
 
 		<script>
 
-			// load navbar
-			$("#nav-placeholder").load('themes/navbar.html?v=20210130', function() {
-				$('#navStromtarifInfo').removeClass('hide');
-				$('#navStromtarifInfo .etproviderLink').addClass('disabled');
-			});
+			// load navbar, be carefull: it loads asynchonously
+			$.get(
+				{ url: "themes/navbar.html", cache: false },
+				function(data){
+					$("#nav-placeholder").replaceWith(data);
+					$('#navStromtarifInfo').removeClass('hide');
+					$('#navStromtarifInfo .etproviderLink').addClass('disabled');
+				}
+			);
 
 			$(document).ready(function(){
 

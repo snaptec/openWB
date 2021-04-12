@@ -17,7 +17,7 @@ nurpvlademodus(){
 		if [[ $u1p3paktiv == "1" ]]; then
 			u1p3pstat=$(<ramdisk/u1p3pstat)
 			if [[ $u1p3pstat == "1" ]]; then
-				if (( schieflastmax < maximalstromstaerke )); then
+				if (( schieflastmaxa < maximalstromstaerke )); then
 					maximalstromstaerke=$schieflastmaxa
 					openwbDebugLog "PV" 0 "Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert"
 				fi
@@ -181,8 +181,34 @@ nurpvlademodus(){
 						openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Ladefreigabe aufgehoben, Überschuss unterschritten"
 						openwbDebugLog "MAIN" 1 "pv ladung beendet"
 						rm ramdisk/nurpvoff
-					else
-						touch ramdisk/nurpvoff
+					else # Keine aktive Ladung erkannt, Mindestüberschuss unterschritten
+						if $cpunterbrechungmindestlaufzeitaktiv; then # Mindestwartezeit für Ladestopp nach CP Unterbrechung aktiviert	
+							# Lade letzte Timestamps der letzten CP Unterbrechungen				
+							currentTimestamp=$(date +%s)
+							if [ -e ramdisk/cpulp1timestamp ] ;
+							then
+								cpulp1timestamp=$(cat ramdisk/cpulp1timestamp) # Timestamp letzter CP Unterbrechung laden
+							else
+								cpulp1timestamp=$currentTimestamp # kein Timestamp gefunden, nutze aktuelle Zeit
+							fi
+							if [ -e ramdisk/cpulp2timestamp ] ;
+							then
+								cpulp2timestamp=$(cat ramdisk/cpulp2timestamp) # Timestamp letzter CP Unterbrechung laden
+							else
+								cpulp2timestamp=$currentTimestamp # kein Timestamp gefunden, nutze aktuelle Zeit
+							fi
+							
+							# Prüfe ob Mindestwartezeit nach CP Unterbrechung verstrichen ist
+							if (( $cpulp1timestamp + $cpunterbrechungmindestlaufzeit < $currentTimestamp )) || (( $cpulp2timestamp + $cpunterbrechungmindestlaufzeit < $currentTimestamp )); #Mehr als x Sekunden nach letzter CP Unterbrechung vergangen?
+							then
+								touch ramdisk/nurpvoff
+							else
+								openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Überschuss unterschritten, minimale Wartezeit nach CP Unterbrechung noch nicht abgelaufen."
+							fi
+						else
+							touch ramdisk/nurpvoff
+						fi
+						
 					fi
 					openwbDebugLog "PV" 0 "Ladefreigabe aufgehoben da zu wenig Uberschuss vorhanden"
 				#fi

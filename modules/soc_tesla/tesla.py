@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import base64
 import hashlib
 import os
@@ -9,6 +11,7 @@ import argparse
 import json
 from urllib.parse import parse_qs
 import requests
+from datetime import datetime, timezone
 
 MAX_ATTEMPTS = 10
 CLIENT_ID = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384"
@@ -24,6 +27,13 @@ tokens = {
 }
 expiration = 0
 verbose = False
+
+def eprint(*myargs, **mykwargs):
+    local_time = datetime.now(timezone.utc).astimezone()
+    prefix = local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +":"
+    if( args.chargepoint ):
+        prefix += " %s:"%(args.chargepoint)
+    print(prefix, *myargs, file=sys.stderr, **mykwargs)
 
 def gen_params():
     verifier_bytes = os.urandom(86)
@@ -41,7 +51,7 @@ def loadTokens():
             return True
     except IOError as e:
         if( verbose ):
-            print("Could not read from file %s: %s (pressing on in hopes of alternate authenticaiton)"%(tokensFilename, str(e)))
+            eprint("Could not read from file %s: %s (pressing on in hopes of alternate authenticaiton)"%(tokensFilename, str(e)))
         return False
 
 def saveTokens():
@@ -50,8 +60,7 @@ def saveTokens():
             W.write(json.dumps(tokens))
             return True
     except IOError as e:
-        if( verbose ):
-            print("Could not write to file %s: %s"%(tokensFilename, str(e)))
+        eprint("Could not write to file %s: %s"%(tokensFilename, str(e)))
         return False
 
 def login(email, password, mfaPasscode):
@@ -80,7 +89,7 @@ def login(email, password, mfaPasscode):
 
         if resp.ok and "<title>" in resp.text:
             if( verbose ):
-                print("Get auth form success - %d attempt(s)."%(attempt + 1))
+                eprint("Get auth form success - %d attempt(s)."%(attempt + 1))
             break
         time.sleep(3)
     else:
@@ -106,7 +115,7 @@ def login(email, password, mfaPasscode):
         )
         if resp.ok and (resp.status_code == 302 or "<title>" in resp.text):
             if( verbose ):
-                print("Post auth form success - %d attempt(s)."%(attempt + 1))
+                eprint("Post auth form success - %d attempt(s)."%(attempt + 1))
             break
         time.sleep(3)
     else:
@@ -135,7 +144,7 @@ def login(email, password, mfaPasscode):
         #     ]
         # }
         if( verbose ):
-            print(resp.text)
+            eprint(resp.text)
         factor_id = resp.json()["data"][0]["id"]
 
         # Can use Passcode
@@ -143,7 +152,7 @@ def login(email, password, mfaPasscode):
         resp = session.post("https://auth.tesla.com/oauth2/v3/authorize/mfa/verify", headers=headers, json=data)
         # ^^ Content-Type - application/json
         if( verbose ):
-            print(resp.text)
+            eprint(resp.text)
         # {
         #     "data": {
         #         "id": "63375dc0-3a11-11eb-8b23-75a3281a8aa8",
@@ -166,8 +175,8 @@ def login(email, password, mfaPasscode):
         #     "https://auth.tesla.com/oauth2/v3/authorize/mfa/backupcodes/attempt", headers=headers, json=data
         # )
         # # ^^ Content-Type - application/json
-        if( verbose ):
-            print(resp.text)
+        # if( verbose ):
+        #     eprint(resp.text)
         # # {
         # #     "data": {
         # #         "valid": true,
@@ -195,7 +204,7 @@ def login(email, password, mfaPasscode):
             )
             if resp.headers.get("location"):
                 if( verbose ):
-                    print("Got location in %d attempt(s)."%(attempt + 1))
+                    eprint("Got location in %d attempt(s)."%(attempt + 1))
                 break
         else:
             raise ValueError("Didn't get location in %d attempts."%(MAX_ATTEMPTS))
@@ -203,7 +212,8 @@ def login(email, password, mfaPasscode):
     # Step 3: Exchange authorization code for bearer token
     code = parse_qs(resp.headers["location"])["https://auth.tesla.com/void/callback?code"]
     if( verbose ):
-        print("Code -", code)
+        eprint("received callback code")
+        # eprint("Code -", code)
     
     headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
     payload = {
@@ -219,7 +229,8 @@ def login(email, password, mfaPasscode):
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
     if( verbose ):
-        print("{\"refresh_token\": \"" + refresh_token + "\"}")
+        eprint("received refresh token")
+        # eprint("{\"refresh_token\": \"" + refresh_token + "\"}")
 
     # Step 4: Exchange bearer token for access token
     headers["authorization"] = "bearer " + access_token
@@ -235,7 +246,7 @@ def login(email, password, mfaPasscode):
     tokens["access_token"] = resp_json["access_token"]
     tokens["created_at"] = resp_json["created_at"]
     tokens["expires_in"] = resp_json["expires_in"]
-    saveTokens()
+    return saveTokens()
 
 def refreshToken(email):
     global tokens
@@ -254,7 +265,8 @@ def refreshToken(email):
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
     if( verbose ):
-        print("{\"refresh_token\": \"" + refresh_token + "\"}")
+        eprint("received refresh token")
+        # eprint("{\"refresh_token\": \"" + refresh_token + "\"}")
 
     # Step 4: Exchange bearer token for access token
     headers["authorization"] = "bearer " + access_token
@@ -270,18 +282,18 @@ def refreshToken(email):
     tokens["access_token"] = resp_json["access_token"]
     tokens["created_at"] = resp_json["created_at"]
     tokens["expires_in"] = resp_json["expires_in"]
-    saveTokens()
+    return saveTokens()
 
 def getVehicleId(vehicle):
     myVehicles = requestData('vehicles')
     myVehicleId = json.loads(myVehicles)["response"][vehicle]["id"]
     if( verbose ):
-        print("vehicle_id for entry %d: %s"%(vehicle, str(myVehicleId)))
+        eprint("vehicle_id for entry %d: %s"%(vehicle, str(myVehicleId)))
     return myVehicleId
 
 def requestData(dataPart):
     if( verbose ):
-        print("Requesting data: \"%s\""%(dataPart))
+        eprint("Requesting data: \"%s\""%(dataPart))
     session = requests.Session()
     headers = {
         "user-agent": UA,
@@ -295,13 +307,12 @@ def requestData(dataPart):
 
     resp = session.get("https://owner-api.teslamotors.com/api/1/" + dataPart, headers=owner_headers)
     if( verbose ):
-        print(resp.text)
-        print()
+        eprint(resp.text, "\n")
     return resp.text
 
 def postCommand(command):
     if( verbose ):
-        print("Sending command: \"%s\""%(command))
+        eprint("Sending command: \"%s\""%(command))
     session = requests.Session()
     headers = {
         "user-agent": UA,
@@ -315,8 +326,7 @@ def postCommand(command):
 
     resp = session.post("https://owner-api.teslamotors.com/api/1/" + command, headers=owner_headers)
     if( verbose ):
-        print(resp.text)
-        print()
+        eprint(resp.text, "\n")
     return resp.text
 
 if __name__ == "__main__":
@@ -328,6 +338,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--data', type=str, required=False, default=None, help='data part to request, use "#" as placeholder for "vehicle_id" if required')
     parser.add_argument('-c', '--command', type=str, required=False, default=None, help='command to send, use "#" as placeholder for "vehicle_id" if required')
     parser.add_argument('-v', '--vehicle', type=int, required=False, default=0, help='vehicle number to use, dafeults to "0"')
+    parser.add_argument('-l', '--logprefix', type=str, required=False, default=None, help='identifier used for logging to stderr')
     parser.add_argument('--verbose', required=False, default=False, action='store_true', help='be verbose')
     args = parser.parse_args()
 
@@ -335,19 +346,35 @@ if __name__ == "__main__":
     tokensFilename = args.tokensfile
     if( not loadTokens() ):
         if( verbose ):
-            print("Tokens file not found: " + args.tokensfile)
-            print("Trying login with provided credentials")
+            eprint("Tokens file not found: " + args.tokensfile)
+            eprint("Trying login with provided credentials")
         if( args.password == None ):
-            sys.exit("No password provided.")
+            eprint("No password provided.")
+            sys.exit(1)
         else:
-            login(args.email, args.password, args.mfapasscode)
+            try:
+                if( login(args.email, args.password, args.mfapasscode) ):
+                    if( verbose ):
+                        eprint("Login succeeded")
+            except ValueError as err:
+                eprint(err)
+                eprint("Login failed")
+                sys.exit(2)
     else:
         if( verbose ):
-            print("No need to authenticate. Valid tokens already present in " + tokensFilename)
+            eprint("No need to authenticate. Valid tokens already present in " + tokensFilename)
         if( time.time() > expiration ):
             if( verbose ):
-                print("Access token expired. Refreshing token.")
-            refreshToken(args.email)
+                eprint("Access token expired. Refreshing token.")
+            try:
+                if( refreshToken(args.email) ):
+                    if( verbose ):
+                        eprint("Token Refresh succeeded")
+            except ValueError as err:
+                eprint(err)
+                eprint("Token Refresh failed")
+                sys.exit(2)
+
     vehicleID = getVehicleId(args.vehicle)
     if( args.data != None ):
         response = requestData(args.data.replace("#", str(vehicleID)))
@@ -355,3 +382,4 @@ if __name__ == "__main__":
     if( args.command != None ):
         response = postCommand(args.command.replace("#", str(vehicleID)))
         print(json.dumps(json.loads(response)["response"]))
+    sys.exit()
