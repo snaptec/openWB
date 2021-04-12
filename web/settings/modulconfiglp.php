@@ -1006,6 +1006,11 @@
 							<div id="socmid" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
 											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
@@ -1047,15 +1052,6 @@
 												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'id') echo " active" ?>">
 													<input type="radio" name="soc_vag_type" id="soc_vag_type_id" value="id"<?php if($soc_vag_typeold == 'id') echo " checked=\"checked\"" ?>>ID
 												</label>
-												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'audi') echo " active" ?>">
-													<input type="radio" name="soc_vag_type" id="soc_vag_type_audi" value="audi"<?php if($soc_vag_typeold == 'audi') echo " checked=\"checked\"" ?>>Audi
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'seat') echo " active" ?>">
-													<input type="radio" name="soc_vag_type" id="soc_vag_type_seat" value="seat"<?php if($soc_vag_typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'skoda') echo " active" ?>">
-													<input type="radio" name="soc_vag_type" id="soc_vag_type_skoda" value="skoda"<?php if($soc_vag_typeold == 'skoda') echo " checked=\"checked\"" ?>>Skoda
-												</label>
 												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'porsche') echo " active" ?>">
 													<input type="radio" name="soc_vag_type" id="soc_vag_type_porsche" value="porsche"<?php if($soc_vag_typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
 												</label>
@@ -1077,7 +1073,7 @@
 										<div class="col">
 											<input class="form-control" type="password" name="soc_vag_password" id="soc_vag_password" value="<?php echo $soc_vag_passwordold ?>">
 											<span class="form-text small">
-												Password des Logins
+												Passwort des Logins
 											</span>
 										</div>
 									</div>
@@ -1118,6 +1114,24 @@
 											<input class="form-control" type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars($hsocipold) ?>">
 											<span class="form-text small">
 												Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_http_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_http_intervall" id="soc_http_intervall" value="<?php echo $soc_http_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_http_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_http_intervallladen" id="soc_http_intervallladen" value="<?php echo $soc_http_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
@@ -1332,6 +1346,11 @@
 							</div>
 							<div id="soccarnet" class="hide">
 								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="alert alert-info">
+											Das VAG Modul kann alternativ genutzt werden und ruft den SoC in 1-Prozent Schritten ab.
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="carnetuser" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
@@ -2602,15 +2621,6 @@
 												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">
 													<input type="radio" name="soc2type" id="soc2type_id" value="id"<?php if($soc2typeold == 'id') echo " checked=\"checked\"" ?>>ID
 												</label>
-												<label class="btn btn-outline-info<?php if($soc2typeold == 'audi') echo " active" ?>">
-													<input type="radio" name="soc2type" id="soc2type_audi" value="audi"<?php if($soc2typeold == 'audi') echo " checked=\"checked\"" ?>>Audi
-												</label>
-												<label class="btn btn-outline-info<?php if($soc2typeold == 'seat') echo " active" ?>">
-													<input type="radio" name="soc2type" id="soc2type_seat" value="seat"<?php if($soc2typeold == 'seat') echo " checked=\"checked\"" ?>>Seat
-												</label>
-												<label class="btn btn-outline-info<?php if($soc2typeold == 'skoda') echo " active" ?>">
-													<input type="radio" name="soc2type" id="soc2type_skoda" value="skoda"<?php if($soc2typeold == 'skoda') echo " checked=\"checked\"" ?>>Skoda
-												</label>
 												<label class="btn btn-outline-info<?php if($soc2typeold == 'porsche') echo " active" ?>">
 													<input type="radio" name="soc2type" id="soc2type_porsche" value="porsche"<?php if($soc2typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
 												</label>
@@ -3727,6 +3737,8 @@
 							}
 							if($('#socmodul1').val() == 'soc_http1') {
 								showSection('#socmhttp1');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socmuser2');

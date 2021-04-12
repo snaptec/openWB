@@ -1,4 +1,5 @@
 web/ladelog
+web/logging/data/
 *.csv
 *.log
 *.pyc
