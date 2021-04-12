@@ -727,11 +727,20 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgeip" id="solaredgeip" value="<?php echo $solaredgeipold ?>">
 									<span class="form-text small">
-										Gültige Werte: IP.<br>
+										IP Adresse des Solaredge Wechselrichters im lokalen Netzwerk.<br>
 										Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
 										Ebenso muss ModbusTCP am Wechselrichter aktiviert werden.<br>
 										Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.<br>
 										Es ist die IP-Adresse des SolarEdge Wechselrichters anzugeben.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="solaredgemodbusport" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="solaredgemodbusport" id="solaredgemodbusport" value="<?php echo (empty($solaredgemodbusport)?'502':$solaredgemodbusport) ?>">
+									<span class="form-text small">
+										Modbus/TCP Port der im Wechselrichter konfiguriert ist. Standardmäßig ist das 502 oder 1502.<br>
 									</span>
 								</div>
 							</div>
