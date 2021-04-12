@@ -222,7 +222,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-row mb-1">
+							<div class="form-row mt-2 mb-1">
 								<div class="col-md-4">
 									<label class="col-form-label">Ladung nach CP Unterbrechung aktiv halten</label>
 								</div>
@@ -238,7 +238,8 @@
 									<span class="form-text small">
 										Diese Option hält die Ladung im nurPV Modus eine Zeit lang aktiv, auch wenn kurz nach der CP Unterbrechung die Mindestladeleistung unterschritten wird noch bevor die Ladung begonnen hat. 
 										Dies ist immer dann hilfreich wenn der Ladestart nach CP Unterbrechung erst verzögert erfolgt, z.b. bei PSA (Peugeot, Opel).
-										Wird nach CP Unterbrechung kein Ladestart registriert wird keine erneute CP Unterbrechung durchgeführt.<br>
+										Wird nach CP Unterbrechung kein Ladestart registriert wird keine erneute CP Unterbrechung durchgeführt.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
 									</span>
 								</div>
 							</div>
