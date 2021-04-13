@@ -268,12 +268,16 @@ updateConfig(){
 	fi
 	if ! grep -Fq "leafpasswort=" $ConfigFile; then
 		echo "leafpasswort=''" >> $ConfigFile
+	else
+		sed -i "/leafpasswort='/b; s/^leafpasswort=\(.*\)/leafpasswort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "leafusernames1=" $ConfigFile; then
 		echo "leafusernames1=username" >> $ConfigFile
 	fi
 	if ! grep -Fq "leafpassworts1=" $ConfigFile; then
 		echo "leafpassworts1=''" >> $ConfigFile
+	else
+		sed -i "/leafpassworts1='/b; s/^leafpassworts1=\(.*\)/leafpassworts1=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "i3username=" $ConfigFile; then
 		echo "i3username=username" >> $ConfigFile
@@ -286,12 +290,16 @@ updateConfig(){
 	fi
 	if ! grep -Fq "i3passwort=" $ConfigFile; then
 		echo "i3passwort=''" >> $ConfigFile
+	else
+		sed -i "/i3passwort='/b; s/^i3passwort=\(.*\)/i3passwort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "i3usernames1=" $ConfigFile; then
 		echo "i3usernames1=username" >> $ConfigFile
 	fi
 	if ! grep -Fq "i3passworts1=" $ConfigFile; then
 		echo "i3passworts1=''" >> $ConfigFile
+	else
+		sed -i "/i3passworts1='/b; s/^i3passworts1=\(.*\)/i3passworts1=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "i3vins1=" $ConfigFile; then
 		echo "i3vins1=VIN" >> $ConfigFile
@@ -304,9 +312,13 @@ updateConfig(){
 	fi
 	if ! grep -Fq "zoepasswort=" $ConfigFile; then
 		echo "zoepasswort=''" >> $ConfigFile
+	else
+		sed -i "/zoepasswort='/b; s/^zoepasswort=\(.*\)/zoepasswort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "socpass=" $ConfigFile; then
 		echo "socpass=''" >> $ConfigFile
+	else
+		sed -i "/socpass='/b; s/^socpass=\(.*\)/socpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "socuser=" $ConfigFile; then
 		echo "socuser=username" >> $ConfigFile
@@ -316,6 +328,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "zoelp2passwort=" $ConfigFile; then
 		echo "zoelp2passwort=''" >> $ConfigFile
+	else
+		sed -i "/zoelp2passwort='/b; s/^zoelp2passwort=\(.*\)/zoelp2passwort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "minnurpvsocll=" $ConfigFile; then
 		echo "minnurpvsocll=12" >> $ConfigFile
@@ -458,6 +472,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_tesla_password=" $ConfigFile; then
 		echo "soc_tesla_password=''" >> $ConfigFile
+	else
+		sed -i "/soc_tesla_password='/b; s/^soc_tesla_password=\(.*\)/soc_tesla_password=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_intervallladen=" $ConfigFile; then
 		echo "soc_tesla_intervallladen=20" >> $ConfigFile
@@ -632,6 +648,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "bezug_smartme_pass=" $ConfigFile; then
 		echo "bezug_smartme_pass=''" >> $ConfigFile
+	else
+		sed -i "/bezug_smartme_pass='/b; s/^bezug_smartme_pass=\(.*\)/bezug_smartme_pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "bezug_smartme_url=" $ConfigFile; then
 		echo "bezug_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> $ConfigFile
@@ -641,6 +659,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wr_smartme_pass=" $ConfigFile; then
 		echo "wr_smartme_pass=''" >> $ConfigFile
+	else
+		sed -i "/wr_smartme_pass='/b; s/^wr_smartme_pass=\(.*\)/wr_smartme_pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wr_smartme_url=" $ConfigFile; then
 		echo "wr_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> $ConfigFile
@@ -650,6 +670,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wr_piko2_pass=" $ConfigFile; then
 		echo "wr_piko2_pass=''" >> $ConfigFile
+	else
+		sed -i "/wr_piko2_pass='/b; s/^wr_piko2_pass=\(.*\)/wr_piko2_pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wr_piko2_url=" $ConfigFile; then
 		echo "wr_piko2_url='https://url'" >> $ConfigFile
@@ -659,6 +681,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "carnetpass=" $ConfigFile; then
 		echo "carnetpass=''" >> $ConfigFile
+	else
+		sed -i "/carnetpass='/b; s/^carnetpass=\(.*\)/carnetpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soccarnetintervall=" $ConfigFile; then
 		echo "soccarnetintervall=10" >> $ConfigFile
@@ -671,6 +695,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_vag_password=" $ConfigFile; then
 		echo "soc_vag_password=''" >> $ConfigFile
+	else
+		sed -i "/soc_vag_password='/b; s/^soc_vag_password=\(.*\)/soc_vag_password=\'\1\'/g" $ConfigFile
 	fi
 	# remove line with syntax error from config
 	if grep -Fq "soc_vag_vin=vin (WVWZZZ...)" $ConfigFile; then
@@ -698,6 +724,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "bydhvpass=" $ConfigFile; then
 		echo "bydhvpass=''" >> $ConfigFile
+	else
+		sed -i "/bydhvpass='/b; s/^bydhvpass=\(.*\)/bydhvpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "bydhvip=" $ConfigFile; then
 		echo "bydhvip=192.168.10.12" >> $ConfigFile
@@ -924,6 +952,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "carnetlp2pass=" $ConfigFile; then
 		echo "carnetlp2pass=''" >> $ConfigFile
+	else
+		sed -i "/carnetlp2pass='/b; s/^carnetlp2pass=\(.*\)/carnetlp2pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soccarnetlp2intervall=" $ConfigFile; then
 		echo "soccarnetlp2intervall=10" >> $ConfigFile
@@ -936,6 +966,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_teslalp2_password=" $ConfigFile; then
 		echo "soc_teslalp2_password=''" >> $ConfigFile
+	else
+		sed -i "/soc_teslalp2_password='/b; s/^soc_teslalp2_password=\(.*\)/soc_teslalp2_password=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_teslalp2_intervallladen=" $ConfigFile; then
 		echo "soc_teslalp2_intervallladen=20" >> $ConfigFile
@@ -1344,6 +1376,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_zerong_password=" $ConfigFile; then
 		echo "soc_zerong_password=''" >> $ConfigFile
+	else
+		sed -i "/soc_zerong_password='/b; s/^soc_zerong_password=\(.*\)/soc_zerong_password=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_zerong_intervallladen=" $ConfigFile; then
 		echo "soc_zerong_intervallladen=10" >> $ConfigFile
@@ -1356,6 +1390,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_zeronglp2_password=" $ConfigFile; then
 		echo "soc_zeronglp2_password=''" >> $ConfigFile
+	else
+		sed -i "/soc_zeronglp2_password='/b; s/^soc_zeronglp2_password=\(.*\)/soc_zeronglp2_password=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_zeronglp2_intervallladen=" $ConfigFile; then
 		echo "soc_zeronglp2_intervallladen=10" >> $ConfigFile
@@ -1377,6 +1413,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "discovergypass=" $ConfigFile; then
 		echo "discovergypass=''" >> $ConfigFile
+	else
+		sed -i "/discovergypass='/b; s/^discovergypass=\(.*\)/discovergypass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "discovergyevuid=" $ConfigFile; then
 		echo "discovergyevuid=idesmeters" >> $ConfigFile
@@ -1389,6 +1427,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "powerfoxpass=" $ConfigFile; then
 		echo "powerfoxpass=''" >> $ConfigFile
+	else
+		sed -i "/powerfoxpass='/b; s/^powerfoxpass=\(.*\)/powerfoxpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "powerfoxid=" $ConfigFile; then
 		echo "powerfoxid=idesmeters" >> $ConfigFile
@@ -1467,6 +1507,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_audi_passwort=" $ConfigFile; then
 		echo "soc_audi_passwort=''" >> $ConfigFile
+	else
+		sed -i "/soc_audi_passwort='/b; s/^soc_audi_passwort=\(.*\)/soc_audi_passwort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_audi_vin=" $ConfigFile; then
 		echo "soc_audi_vin=VIN" >> $ConfigFile
@@ -1476,6 +1518,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc2pass=" $ConfigFile; then
 		echo "soc2pass=''" >> $ConfigFile
+	else
+		sed -i "/soc2pass='/b; s/^soc2pass=\(.*\)/soc2pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc2pin=" $ConfigFile; then
 		echo "soc2pin=pin" >> $ConfigFile
@@ -1485,6 +1529,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "lgessv1pass=" $ConfigFile; then
 		echo "lgessv1pass='regnum_as_default_password'" >> $ConfigFile
+	else
+		sed -i "/lgessv1pass='/b; s/^lgessv1pass=\(.*\)/lgessv1pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "ess_api_ver=" $ConfigFile; then
 		echo "ess_api_ver=01.2020" >> $ConfigFile
@@ -1578,6 +1624,9 @@ updateConfig(){
 		echo "myrenault_passlp2=''" >> $ConfigFile
 		echo "myrenault_locationlp2=de_DE" >> $ConfigFile
 		echo "myrenault_countrylp2=DE" >> $ConfigFile
+	else
+		sed -i "/myrenault_passlp1='/b; s/^myrenault_passlp1=\(.*\)/myrenault_passlp1=\'\1\'/g" $ConfigFile
+		sed -i "/myrenault_passlp2='/b; s/^myrenault_passlp2=\(.*\)/myrenault_passlp2=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "evukitversion=" $ConfigFile; then
 		echo "evukitversion=0" >> $ConfigFile
@@ -1648,12 +1697,16 @@ updateConfig(){
 		echo "pv2id=none" >> $ConfigFile
 		echo "pv2user=none" >> $ConfigFile
 		echo "pv2pass=''" >> $ConfigFile
+	else
+		sed -i "/pv2pass='/b; s/^pv2pass=\(.*\)/pv2pass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_bluelink_email=" $ConfigFile; then
 		echo "soc_bluelink_email=mail@mail.de" >> $ConfigFile
 		echo "soc_bluelink_password=''" >> $ConfigFile
 		echo "soc_bluelink_pin=1111" >> $ConfigFile
 		echo "soc_bluelink_interval=30" >> $ConfigFile
+	else
+		sed -i "/soc_bluelink_password='/b; s/^soc_bluelink_password=\(.*\)/soc_bluelink_password=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_vin=" $ConfigFile; then
 		echo "soc_vin=VIN" >> $ConfigFile
@@ -1754,6 +1807,9 @@ updateConfig(){
 		echo "mypeugeot_passlp2=''" >> $ConfigFile
 		echo "mypeugeot_clientidlp2=ID" >> $ConfigFile
 		echo "mypeugeot_clientsecretlp2=Secret" >> $ConfigFile
+	else
+		sed -i "/mypeugeot_passlp1='/b; s/^mypeugeot_passlp1=\(.*\)/mypeugeot_passlp1=\'\1\'/g" $ConfigFile
+		sed -i "/mypeugeot_passlp2='/b; s/^mypeugeot_passlp2=\(.*\)/mypeugeot_passlp2=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "myopel_userlp1=" $ConfigFile; then
 		echo "myopel_userlp1=User" >> $ConfigFile
@@ -1764,6 +1820,9 @@ updateConfig(){
 		echo "myopel_passlp2=''" >> $ConfigFile
 		echo "myopel_clientidlp2=ID" >> $ConfigFile
 		echo "myopel_clientsecretlp2=Secret" >> $ConfigFile
+	else
+		sed -i "/myopel_passlp1='/b; s/^myopel_passlp1=\(.*\)/myopel_passlp1=\'\1\'/g" $ConfigFile
+		sed -i "/myopel_passlp2='/b; s/^myopel_passlp2=\(.*\)/myopel_passlp2=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "psa_userlp1=" $ConfigFile; then
 		echo "psa_userlp1=User" >> $ConfigFile
@@ -1774,6 +1833,9 @@ updateConfig(){
 		echo "psa_passlp2=''" >> $ConfigFile
 		echo "psa_clientidlp2=ID" >> $ConfigFile
 		echo "psa_clientsecretlp2=Secret" >> $ConfigFile
+	else
+		sed -i "/psa_passlp1='/b; s/^psa_passlp1=\(.*\)/psa_passlp1=\'\1\'/g" $ConfigFile
+		sed -i "/psa_passlp2='/b; s/^psa_passlp2=\(.*\)/psa_passlp2=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "psa_intervallp1=" $ConfigFile; then
 		echo "psa_intervallp1=10" >> $ConfigFile
@@ -1802,6 +1864,8 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_id_passwort=" $ConfigFile; then
 		echo "soc_id_passwort=''" >> $ConfigFile
+	else
+		sed -i "/soc_id_passwort='/b; s/^soc_id_passwort=\(.*\)/soc_id_passwort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_id_vin=" $ConfigFile; then
 		echo "soc_id_vin=VIN" >> $ConfigFile
@@ -1884,6 +1948,8 @@ updateConfig(){
 		echo "speicherpwloginneeded=0" >> $ConfigFile
 		echo "speicherpwuser=Username" >> $ConfigFile
 		echo "speicherpwpass=''" >> $ConfigFile
+	else
+		sed -i "/speicherpwpass='/b; s/^speicherpwpass=\(.*\)/speicherpwpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "multifems=" $ConfigFile; then
 		echo "multifems=1" >> $ConfigFile
@@ -1893,11 +1959,6 @@ updateConfig(){
 	fi
 	if ! grep -Fq "studer_ip=" $ConfigFile; then
 		echo "studer_ip=192.168.1.1" >> $ConfigFile
-	fi
-	if ! grep -Fq "discovergypass=" $ConfigFile; then
-		echo "discovergypass=''" >> $ConfigFile
-	else
-		sed -i "/discovergypass='/b; s/^discovergypass=\(.*\)/discovergypass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "pingcheckactive=" $ConfigFile; then
 		echo "pingcheckactive=0" >> $ConfigFile
