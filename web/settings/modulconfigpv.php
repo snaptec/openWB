@@ -248,7 +248,7 @@
 									<select name="pvkitversion" id="pvkitversion" class="form-control">
 										<option <?php if($pvkitversionold == 0) echo "selected" ?> value="0">PV Kit mit MPM3PM Zähler</option>
 										<option <?php if($pvkitversionold == 1) echo "selected" ?> value="1">PV Kit mit Lovato Zähler</option>
-										<option <?php if($pvkitversionold == 2) echo "selected" ?> value="1">PV Kit mit SDM630 Zähler</option>
+										<option <?php if($pvkitversionold == 2) echo "selected" ?> value="2">PV Kit mit SDM630 Zähler</option>
 
 									</select>
 								</div>
