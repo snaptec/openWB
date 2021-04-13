@@ -474,6 +474,9 @@ updateConfig(){
 	if ! grep -Fq "solaredgeip=" $ConfigFile; then
 		echo "solaredgeip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "solaredgemodbusport=" $ConfigFile; then
+		echo "solaredgemodbusport=502" >> $ConfigFile
+	fi
 	if ! grep -Fq "solaredgepvip=" $ConfigFile; then
 		echo "solaredgepvip=192.168.0.10" >> $ConfigFile
 	fi
@@ -1918,5 +1921,10 @@ updateConfig(){
 	if ! grep -Fq "wrfroniusisgen24=" $ConfigFile; then
 		echo "wrfroniusisgen24=0" >> $ConfigFile
 	fi
-	echo "Config file Update done."
+	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
+		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
+		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
+	fi
+
+  echo "Config file Update done."
 }
