@@ -29,7 +29,7 @@ ll5=$(<$RAMDISKDIR/llkwhlp5)  # Zählerstand LP5
 ll6=$(<$RAMDISKDIR/llkwhlp6)  # Zählerstand LP6
 ll7=$(<$RAMDISKDIR/llkwhlp7)  # Zählerstand LP7
 ll8=$(<$RAMDISKDIR/llkwhlp8)  # Zählerstand LP8
-llg=$(<$RAMDISKDIR/llkwhges)
+llg=$(<$RAMDISKDIR/llkwhges)  # Zählerstand Gesamt
 
 is_configured_cp1="1"                 #Ladepunkt 1 ist immer konfiguriert
 is_configured_cp2=$lastmanagement     # LP2 konfiguriert?
@@ -45,15 +45,20 @@ if (( pushbenachrichtigung == "1" )) ; then
 	if [ $(date +%d) == "01" ] ; then
 		msg_header="Zählerstände zum $(date +%d.%m.%y:)"$'\n'
 		msg_text=""
+		lp_count=0
 		for (( i=1; i<=8; i++ ))
 		do
 			var_name_energy="ll$i"
 			var_name_cpname="lp${i}name"
 			var_name_cp_configured="is_configured_cp${i}"
 			if (( ${!var_name_cp_configured} == "1" )) ; then
+				((lp_count++))
 				msg_text+="LP$i (${!var_name_cpname}): ${!var_name_energy} kWh"$'\n'
 			fi
 		done
+		if (( lp_count > 1 )) ; then
+			msg_text+="Gesamtzähler: $llg kWh"
+		fi
 		$OPENWBBASEDIR/runs/pushover.sh "$msg_header$msg_text"
 	fi
 fi
@@ -132,4 +137,5 @@ else
 fi
 
 # monthly . csv updaten
-#python3 /var/www/html/openWB/runs/csvcalc.py /var/www/html/openWB/web/logging/data/daily/ /var/www/html/openWB/web/logging/data/v001/ /var/www/html/openWB/ramdisk/ A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
+  echo "Trigger update of logfiles..."
+  python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &

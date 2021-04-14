@@ -71,7 +71,7 @@ fi
 #
 jahr=$(date +%Y)
 monat=$(date +%m)
-arr_pos=$(($monat))
+arr_pos=$monat
 year_of_stat='"'year'"':'"'$jahr'"'
 json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/load/year')
 ikwh=$(echo $json | jq '.loginfo['$arr_pos'].total_purchase' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')

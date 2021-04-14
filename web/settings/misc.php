@@ -28,35 +28,13 @@
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -75,7 +53,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Verschiedene Einstellungen</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- Allgemeine Funktionen -->
 				<div class="card border-secondary">
@@ -244,6 +222,43 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-row mt-2 mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Ladung nach CP Unterbrechung aktiv halten</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($cpunterbrechungmindestlaufzeitaktivold == 0) echo " active" ?>">
+											<input type="radio" name="cpunterbrechungmindestlaufzeitaktiv" id="cpunterbrechungmindestlaufzeitaktivOff" value="0"<?php if($cpunterbrechungmindestlaufzeitaktivold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($cpunterbrechungmindestlaufzeitold == 1) echo " active" ?>">
+											<input type="radio" name="cpunterbrechungmindestlaufzeitaktiv" id="cpunterbrechungmindestlaufzeitaktivOn" value="1"<?php if($cpunterbrechungmindestlaufzeitaktivold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option hält die Ladung im nurPV Modus eine Zeit lang aktiv, auch wenn kurz nach der CP Unterbrechung die Mindestladeleistung unterschritten wird noch bevor die Ladung begonnen hat. 
+										Dies ist immer dann hilfreich wenn der Ladestart nach CP Unterbrechung erst verzögert erfolgt, z.b. bei PSA (Peugeot, Opel).
+										Wird nach CP Unterbrechung kein Ladestart registriert wird keine erneute CP Unterbrechung durchgeführt.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1 cpminlaufzeit hide">
+								<label for="cpminlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="cpunterbrechungmindestlaufzeit" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungmindestlaufzeitold; ?> Sek</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungmindestlaufzeit" id="cpunterbrechungmindestlaufzeit" min="10" max="60" step="10" value="<?php echo $cpunterbrechungmindestlaufzeitold; ?>">
+										</div>
+									</div>
+									<span class="form-text small">
+										Die Standardeinstellung ist 30 Sekunden. Falls ein Fahrzeug den Ladevorgang nicht zuverlässig startet, kann dieser Wert erhöht werden.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<script>
@@ -264,6 +279,14 @@
 								showSection('.lp2cpon', false);
 							}
 						}
+						
+						function visibility_cpminlaufzeit() {
+							if($('#cpunterbrechungmindestlaufzeitaktivOff').prop("checked")) {
+								hideSection('.cpminlaufzeit');
+							} else {
+								showSection('.cpminlaufzeit', false);
+							}
+						}
 
 						$(document).ready(function(){
 							if(lp2akt == '0') {
@@ -280,8 +303,13 @@
 								visibility_lp2cp();
 							});
 
+							$('input[type=radio][name=cpunterbrechungmindestlaufzeitaktiv]').change(function(){
+								visibility_cpminlaufzeit();
+							});
+
 							visibility_lp1cp();
 							visibility_lp2cp();
+							visibility_cpminlaufzeit();
 						});
 					</script>
 				</div>

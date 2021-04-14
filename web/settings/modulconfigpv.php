@@ -28,35 +28,13 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -73,7 +51,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration PV</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- PV Module 1 -->
 				<div class="card border-success">
@@ -270,7 +248,7 @@
 									<select name="pvkitversion" id="pvkitversion" class="form-control">
 										<option <?php if($pvkitversionold == 0) echo "selected" ?> value="0">PV Kit mit MPM3PM Zähler</option>
 										<option <?php if($pvkitversionold == 1) echo "selected" ?> value="1">PV Kit mit Lovato Zähler</option>
-										<option <?php if($pvkitversionold == 2) echo "selected" ?> value="1">PV Kit mit SDM630 Zähler</option>
+										<option <?php if($pvkitversionold == 2) echo "selected" ?> value="2">PV Kit mit SDM630 Zähler</option>
 
 									</select>
 								</div>
@@ -554,6 +532,22 @@
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Handelt es sich um einen Gen24?</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 0) echo " active" ?>">
+											<input type="radio" name="froniusisgen24" id="froniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 1) echo " active" ?>">
+											<input type="radio" name="froniusisgen24" id="froniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren wenn es sich um einen Gen24 handelt.
 									</span>
 								</div>
 							</div>
@@ -878,6 +872,7 @@
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
+										<option <?php if($pv2wattmodulold == "wr2_solax") echo "selected" ?> value="wr2_solax">Solax</option>
 										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -974,6 +969,9 @@
 								if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
 									showSection('#pv2ipdiv');
 								}
+								if($('#pv2wattmodul').val() == 'wr2_solax') {
+									showSection('#pv2ipdiv');
+								}
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
 									showSection('#pv2ipdiv');
 								}
@@ -1056,7 +1054,7 @@
 			</div>
 
 			<!-- hidden form to save wizzard done to config on abort -->
-			<form id="wizzarddoneForm" action="tools/saveconfig.php" method="POST">
+			<form id="wizzarddoneForm" action="settings/saveconfig.php" method="POST">
 				<input type="hidden" name="wizzarddone" value="100">
 			</form>
 

@@ -658,6 +658,9 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/system\/daygraphdata[1-9][0-9]*$/i)) {
 		powerGraph.updateDay(mqttmsg, mqttpayload);
 	}
+	else if (mqttmsg.match(/^openwb\/system\/monthgraphdata[1-9][0-9]*$/i)) {
+		powerGraph.updateMonth(mqttmsg, mqttpayload);
+	}
 }
 
 function processPvMessages(mqttmsg, mqttpayload) {
@@ -1260,6 +1263,22 @@ function subscribeDayGraph(date) {
 
 function unsubscribeDayGraph() {
 	publish("0", "openWB/set/graph/RequestDayGraph");
+}
+
+function subscribeMonthGraph(date) {
+	// var today = new Date();
+	var mm = String(date.month + 1).padStart(2, '0'); //January is 0!
+	var yyyy = date.year;
+	graphdate = yyyy + mm;
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/MonthGraphData" + segment;
+		client.subscribe(topic, { qos: 0 });
+	}
+	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
+}
+
+function unsubscribeMonthGraph() {
+	publish("0", "openWB/set/graph/RequestMonthGraph");
 }
 
 function makeInt(message) {

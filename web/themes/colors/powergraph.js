@@ -1,5 +1,6 @@
 class PowerGraph {
   svg;
+  xScale;
 
   constructor() {
     this.graphData = [];
@@ -31,9 +32,13 @@ class PowerGraph {
     this.colors.batIn = 'var(--color-battery)';
     this.colors.inverter = 'var(--color-pv)';
     this.gridColors[0] = 'var(--color-battery)';
+    this.colors.batOut = 'var(--color-battery)';
     this.gridColors[1] = 'var(--color-pv)';
+    this.colors.selfUsage = 'var(--color-pv)';
     this.gridColors[2] = 'var(--color-export)';
+    this.colors.gridPush = 'var(--color-export)';
     this.gridColors[3] = 'var(--color-evu)';
+    this.colors.gridPull = 'var(--color-evu)';
     this.bgcolor = 'var(--color-bg)';
     this.chargeColor = 'var(--color-charging)';
     this.axiscolor = 'var(--color-axis)';
@@ -87,7 +92,7 @@ class PowerGraph {
   }
 
   activateDay() {
-    if (!wbdata.showLiveGraph) {
+    if (wbdata.graphMode == 'day') {
       if (wbdata.showTodayGraph) {
         wbdata.graphDate = new Date(); // ensure we update todays date if day changes during display
       }
@@ -104,16 +109,22 @@ class PowerGraph {
 
   updateHeading() {
     var heading = "Leistung / Ladestand ";
-
-    if (wbdata.showLiveGraph) {
-      heading = heading + this.liveGraphMinutes + " min";
-    } else {
-      const today = new Date();
-      if (today.getDate() == wbdata.graphDate.getDate() && today.getMonth() == wbdata.graphDate.getMonth() && today.getFullYear() == wbdata.graphDate.getFullYear()) {
-        heading = heading + "heute";
-      } else {
-        heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
-      }
+    switch (wbdata.graphMode) {
+      case 'live':
+        heading = heading + this.liveGraphMinutes + " min";
+        break;
+      case 'day':
+        const today = new Date();
+        if (today.getDate() == wbdata.graphDate.getDate() && today.getMonth() == wbdata.graphDate.getMonth() && today.getFullYear() == wbdata.graphDate.getFullYear()) {
+          heading = heading + "heute";
+        } else {
+          heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
+        }
+        break;
+      case 'month':
+        heading = "Tageswerte " +  formatMonth (wbdata.graphMonth.month, wbdata.graphMonth.year);
+        break;
+      default: break;
     }
     d3.select("h3#graphheading").text(heading);
   }
@@ -125,8 +136,28 @@ class PowerGraph {
       // ignore error 
     }
   }
+  
+  activateMonth() {
+    this.resetMonthGraph();
+    try {
+      subscribeMonthGraph(wbdata.graphMonth);
+    } catch (err) {
+      //on initial run of activate, subscribeDayGraph is not yet initialized. 
+      // the error can be ignored
+    }
+    this.updateHeading();
+  }
+
+  deactivateMonth() {
+    try {
+      unsubscribeMonthGraph();
+    } catch (err) {
+      // ignore error 
+    }
+  }
+  
   updateLive(topic, payload) {
-    if (wbdata.showLiveGraph) { // only udpdate if live graph is active
+    if (wbdata.graphMode == 'live') { // only udpdate if live graph is active
       if (this.initialized) { // steady state
         if (topic === "openWB/graph/lastlivevalues") {
           const values = this.extractLiveValues(payload.toString());
@@ -179,7 +210,7 @@ class PowerGraph {
       segment = [];
     } else {
       segment = payload.toString().split("\n");
-      if (segment.length <= 1) {
+      if (segment[0] == "") {
         segment = [];
       }
       const serialNo = topic.substring(26, topic.length);
@@ -210,7 +241,41 @@ class PowerGraph {
       wbdata.dayGraphUpdated();
       setTimeout(() => this.activateDay(), 300000)
     }
+  }
 
+  updateMonth(topic, payload) {
+    if (payload != 'empty') {
+      var segment = payload.toString().split("\n");
+      if (segment[0] == "") {
+        segment = [];
+      }
+      const serialNo = topic.substring(28, topic.length);
+      if (serialNo != "") {
+        if (typeof (this.staging[+serialNo - 1]) === 'undefined') {
+          this.staging[+serialNo - 1] = segment;
+          this.initCounter++;
+        }
+      }
+      if (this.initCounter == 12) {// Initialization complete
+        unsubscribeMonthGraph();
+        this.initCounter = 0;
+        this.staging.map(segment =>
+          segment.map(line => this.rawData.push(line))
+        )
+        this.rawData.map((line, i, a) => {
+          if (i > 0) {
+            const values = this.extractMonthValues(line, a[i - 1]);
+            this.graphData.push(values);
+          } else {
+            // const values = this.extractValues(line, []);                
+          }
+        });
+        this.updateGraph();
+        this.updateEnergyValues();
+        wbdata.monthGraphUpdated();
+        // setTimeout(() => this.activateDay(), 300000)
+      }
+    }
   }
 
   updateEnergyValues() {
@@ -223,8 +288,11 @@ class PowerGraph {
     wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000;
     var deviceEnergy = 0;
     for (var i = 0; i < 10; i++) {
-      deviceEnergy = deviceEnergy + (endValues[26 + i] - startValues[26 + i]) / 1000;
-    }
+      if (wbdata.graphMode == 'day') {
+        deviceEnergy = deviceEnergy + (endValues[26 + i] - startValues[26 + i]) / 1000;
+      } else {
+        deviceEnergy = deviceEnergy + (endValues[19 + i] - startValues[19 + i]) / 1000;
+      }}
     deviceEnergy = deviceEnergy + (endValues[10] - startValues[10]) / 1000;
     deviceEnergy = deviceEnergy + (endValues[12] - startValues[12]) / 1000;
     wbdata.historicSummary.devices.energy = deviceEnergy;
@@ -276,12 +344,52 @@ class PowerGraph {
     return values;
   }
 
+extractMonthValues(payload, oldPayload) {
+    const elements = payload.split(",");
+    const oldElements = oldPayload.split(",");
+    var values = {};
+    values.date = new Date(d3.timeParse("%Y%m%d%H%M")(oldElements[0] + '1200'));
+    // evu
+    values.gridPull = this.calcMonthlyValue(1, elements, oldElements);
+    values.gridPush = this.calcMonthlyValue(2, elements, oldElements);
+    // pv
+    values.solarPower = this.calcMonthlyValue(3, elements, oldElements);
+    values.inverter = 0;
+    // charge points
+    values.charging = this.calcMonthlyValue(7, elements, oldElements);
+    var i;
+    for (i = 0; i < 3; i++) {
+      values["lp" + i] = this.calcMonthlyValue(4 + i, elements, oldElements);
+    }
+    for (i = 3; i < 8; i++) {
+      values["lp" + i] = this.calcMonthlyValue(12 + i, elements, oldElements);
+    }
+    values.soc1 = +elements[21];
+    values.soc2 = +elements[22];
+    // smart home
+   for (i = 0; i < 10; i++) {
+      values["sh" + i] = this.calcMonthlyValue(19 + i, elements, oldElements);
+    } 
+    //consumers
+    values.co0 = this.calcMonthlyValue(10, elements, oldElements);
+    values.co1 = this.calcMonthlyValue(12, elements, oldElements);
+    //battery
+    values.batIn = this.calcMonthlyValue(8, elements, oldElements);
+    values.batOut = this.calcMonthlyValue(9, elements, oldElements);
+    values.batterySoc = +elements[20];
+    // calculated values
+    values.housePower = values.gridPull + values.solarPower + values.batOut
+    - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
+    - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9;if (values.housePower < 0) { values.housePower = 0; };
+    values.selfUsage = values.solarPower - values.gridPush;
+    if (values.selfUsage < 0) { values.selfUsage = 0; };
+    return values;
+  }
   reset() {
-    console.log ("reset graphs");
     this.resetLiveGraph();
     this.resetDayGraph();
-
   }
+
   resetLiveGraph() {
     // fresh reload of the graph
     this.initialized = false;
@@ -290,6 +398,7 @@ class PowerGraph {
     this.graphData = [];
     this.graphRefreshCounter = 0;
   }
+
   resetDayGraph() {
     this.initialized = false;
     this.initCounter = 0;
@@ -297,6 +406,15 @@ class PowerGraph {
     this.rawData = [];
     this.graphData = [];
   }
+
+  resetMonthGraph() {
+    this.initialized = false;
+    this.initCounter = false;
+    this.staging = [];
+    this.rawData = [];
+    this.graphData = [];
+  }
+
   extractLiveValues(payload) {
     const elements = payload.split(",");
     var values = {};
@@ -363,8 +481,14 @@ class PowerGraph {
     }
     return val;
   }
-
-
+  calcMonthlyValue(i, array, oldArray) {
+    var val = (array[i] - oldArray[i]);
+    
+    if (val < 0 || val > 150000) {
+      val = 0;
+    }
+    return val;
+  }
 
   updateGraph() {
     const svg = this.createOrUpdateSvg();
@@ -373,8 +497,6 @@ class PowerGraph {
 
   createOrUpdateSvg() {
     this.svg.selectAll("*").remove();
-
-
     this.g = this.svg
       .append("g")
       .attr(
@@ -387,36 +509,59 @@ class PowerGraph {
   drawChart(svg) {
     const height = this.height - this.margin.top - this.margin.bottom;
     const width = this.width - this.margin.left - this.margin.right;
-
     this.drawSourceGraph(svg, width, height / 2);
     this.drawUsageGraph(svg, width, height / 2);
-    this.drawSoc(svg, width, height / 2);
+    if (wbdata.graphMode != 'month') {
+      this.drawSoc(svg, width, height / 2);
+    }
     this.drawXAxis(svg, width, height);
-
   }
 
   drawSourceGraph(svg, width, height) {
-    const keys = ["batOut", "selfUsage", "gridPush", "gridPull"];
-    const xScale = d3.scaleTime().range([0, width - this.margin.right]);
+    var keys = (wbdata.graphMode == 'month') ? ["gridPull", "batOut", "selfUsage", "gridPush"] : ["batOut", "selfUsage", "gridPush", "gridPull"];
+    
+    if (wbdata.graphMode == 'month') {
+      const dayRange = d3.extent (this.graphData, d => d.date.getDate())
+      this.xScale = d3.scaleBand()
+        .domain (Array.from ({length: (dayRange[1] - dayRange[0] + 1)}, (v,k) => k + dayRange[0]))
+        .paddingInner (0.4);
+    } else {
+      this.xScale = d3.scaleTime().domain (d3.extent (this.graphData, d => d.date));
+    }
+    this.xScale.range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height - 10, 0]);
     const extent = d3.extent(this.graphData, (d) =>
       Math.max(d.solarPower + d.gridPull + d.batOut, d.selfUsage + d.gridPush));
 
-    xScale.domain(d3.extent(this.graphData, (d) => d.date));
     yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
 
     const stackGen = d3.stack().keys(keys);
     const stackedSeries = stackGen(this.graphData);
 
-    svg.selectAll(".sourceareas")
+    if (wbdata.graphMode == 'month') {
+      var rects = svg.selectAll(".sourcebar")
+        .data(stackedSeries).enter()
+        .append("g")
+        .attr("fill", (d, i) => this.colors[keys[i]])
+        .selectAll("rect")
+        .data((d) => d).enter()
+        .append("rect")
+          .attr("x", (d) => this.xScale(d.data.date.getDate()))
+          .attr("y", d => yScale(d[1]))
+          .attr("height", d => yScale(d[0]) - yScale(d[1]))
+          .attr("width", this.xScale.bandwidth())
+      rects.append("svg:title").text ((d) => formatWatt(d[1]-d[0]));
+    } else {
+      svg.selectAll(".sourceareas")
       .data(stackedSeries)
       .join("path")
       .attr("d", d3.area()
-        .x((d, i) => xScale(this.graphData[i].date))
+        .x((d, i) => this.xScale(this.graphData[i].date))
         .y0((d) => yScale(d[0]))
         .y1((d) => yScale(d[1]))
       )
-      .attr("fill", (d, i) => this.gridColors[i]);
+      .attr("fill", (d, i) => this.colors[keys[i]]);
+    }
 
     const yAxis = svg.append("g")
       .attr("class", "axis")
@@ -441,10 +586,8 @@ class PowerGraph {
   }
 
   drawUsageGraph(svg, width, height) {
-    const xScale = d3.scaleTime().range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height + 10, 2 * height]);
 
-    xScale.domain(d3.extent(this.graphData, (d) => d.date));
     const extent = d3.extent(this.graphData, (d) =>
     (d.housePower + d.lp0 + d.lp1 + d.lp2 + d.lp3 + d.lp4
       + d.lp5 + d.lp6 + d.lp7 + d.sh0 + d.sh1 + d.sh2 + d.sh3 + d.sh4
@@ -467,16 +610,29 @@ class PowerGraph {
 
     const stackGen = d3.stack().keys(keys[wbdata.usageStackOrder]);
     const stackedSeries = stackGen(this.graphData);
-    svg.selectAll(".targetareas")
+    if (wbdata.graphMode == 'month') {
+      svg.selectAll(".sourcebar")
+        .data(stackedSeries).enter()
+        .append("g")
+        .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]])
+        .selectAll("rect")
+        .data(d => d).enter()
+        .append("rect")
+          .attr("x", (d) => this.xScale(d.data.date.getDate()))
+          .attr("y", d => yScale(d[0]))
+          .attr("height", d => yScale(d[1]) - yScale(d[0]))
+          .attr("width", this.xScale.bandwidth())
+    } else {
+      svg.selectAll(".targetareas")
       .data(stackedSeries)
       .join("path")
       .attr("d", d3.area()
-        .x((d, i) => xScale(this.graphData[i].date))
+        .x((d, i) => this.xScale(this.graphData[i].date))
         .y0((d) => yScale(d[0]))
         .y1((d) => yScale(d[1]))
       )
       .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]]);
-
+    }
     const yAxis = svg.append("g")
       .attr("class", "axis")
       .call(d3.axisLeft(yScale)
@@ -505,10 +661,14 @@ class PowerGraph {
 
     const ticksize = (wbdata.showGrid) ? -(height / 2 - 7) : -10
     const xAxisGenerator = d3
-      .axisBottom(xScale)
+      .axisBottom(this.xScale)
       .ticks(4)
       .tickSizeInner(ticksize)
-      .tickFormat(d3.timeFormat("%H:%M"));
+
+      if (wbdata.graphMode != 'month') {
+        xAxisGenerator.tickFormat(d3.timeFormat("%H:%M"))
+          .ticks(4);
+      } 
 
     const xAxis = svg.append("g").attr("class", "axis")
       .call(xAxisGenerator);

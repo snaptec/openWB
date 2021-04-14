@@ -35,7 +35,7 @@
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
 		<meta name="google" content="notranslate">
-		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<!-- Font Awesome, all styles -->
@@ -63,40 +63,40 @@
 		</script>
 	</head>
 	<body>
-		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
-		<input type="hidden" name="lastmanagements2" id="lastmanagements2" value="<?php echo trim($lastmanagements2old); ?>" />
-		<input type="hidden" name="speicherstat" id="speicherstat" value="<?php echo trim($speicherstatold); ?>" />
-		<input type="hidden" name="lademlp1stat" id="lademlp1stat" value="<?php echo trim($lademstatold); ?>" />
-		<input type="hidden" name="lademlp2stat" id="lademlp2stat" value="<?php echo trim($lademstats1old); ?>" />
-		<input type="hidden" name="lademlp3stat" id="lademlp3stat" value="<?php echo trim($lademstats2old); ?>" />
-		<input type="hidden" name="evuglaettungakt" id="evuglaettungakt" value="<?php echo trim($evuglaettungaktold); ?>" />
-		<input type="hidden" name="nachtladenstate" id="nachtladenstate" value="<?php echo trim($nachtladenstate); ?>" />
-		<input type="hidden" name="nachtladenstates1" id="nachtladenstates1" value="<?php echo trim($nachtladenstates1); ?>" />
-		<input type="hidden" name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo trim($nlakt_nurpvold); ?>" />
-		<input type="hidden" name="nlakt_sofort" id="nlakt_sofort" value="<?php echo trim($nlakt_sofortold); ?>" />
-		<input type="hidden" name="nlakt_minpv" id="nlakt_minpv" value="<?php echo trim($nlakt_minpvold); ?>" />
-		<input type="hidden" name="nlakt_standby" id="nlakt_standby" value="<?php echo trim($nlakt_standbyold); ?>" />
-		<input type="hidden" name="lademodus" id="lademodus" value="<?php echo trim($lademodusold); ?>" />
-		<input type="hidden" name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo trim($hausverbrauchstatold); ?>" />
-		<input type="hidden" name="speicherpvui" id="speicherpvui" value="<?php echo trim($speicherpvuiold); ?>" />
-		<input type="hidden" name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo trim($zielladenaktivlp1old); ?>" />
-		<input type="hidden" name="sofortlm" id="sofortlm" value="<?php echo trim($lademodusold); ?>" />
-		<input type="hidden" name="heutegeladen" id="heutegeladen" value="<?php echo trim($heutegeladenold); ?>" />
+		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold; ?>" />
+		<input type="hidden" name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old; ?>" />
+		<input type="hidden" name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold; ?>" />
+		<input type="hidden" name="lademlp1stat" id="lademlp1stat" value="<?php echo $lademstatold; ?>" />
+		<input type="hidden" name="lademlp2stat" id="lademlp2stat" value="<?php echo $lademstats1old; ?>" />
+		<input type="hidden" name="lademlp3stat" id="lademlp3stat" value="<?php echo $lademstats2old; ?>" />
+		<input type="hidden" name="evuglaettungakt" id="evuglaettungakt" value="<?php echo $evuglaettungaktold; ?>" />
+		<input type="hidden" name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate; ?>" />
+		<input type="hidden" name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1; ?>" />
+		<input type="hidden" name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo $nlakt_nurpvold; ?>" />
+		<input type="hidden" name="nlakt_sofort" id="nlakt_sofort" value="<?php echo $nlakt_sofortold; ?>" />
+		<input type="hidden" name="nlakt_minpv" id="nlakt_minpv" value="<?php echo $nlakt_minpvold; ?>" />
+		<input type="hidden" name="nlakt_standby" id="nlakt_standby" value="<?php echo $nlakt_standbyold; ?>" />
+		<input type="hidden" name="lademodus" id="lademodus" value="<?php echo $lademodusold; ?>" />
+		<input type="hidden" name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo $hausverbrauchstatold; ?>" />
+		<input type="hidden" name="speicherpvui" id="speicherpvui" value="<?php echo $speicherpvuiold; ?>" />
+		<input type="hidden" name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo $zielladenaktivlp1old; ?>" />
+		<input type="hidden" name="sofortlm" id="sofortlm" value="<?php echo $lademodusold; ?>" />
+		<input type="hidden" name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold; ?>" />
 
 		<!-- minimal.html -->
 		<?php include ("gaugevalues.php"); ?>
 		<script src="display/minimal/gauge.min.js"></script>
 		<link rel="stylesheet" href="display/minimal/minimal.css">
 
-		<input type="hidden" name="displayevumax" id="displayevumax" value="<?php echo trim($displayevumaxold); ?>" />
-		<input type="hidden" name="displaypvmax" id="displaypvmax" value="<?php echo trim($displaypvmaxold); ?>" />
-		<input type="hidden" name="displayspeichermax" id="displayspeichermax" value="<?php echo trim($displayspeichermaxold); ?>" />
-		<input type="hidden" name="displayhausanzeigen" id="displayhausanzeigen" value="<?php echo trim($displayhausanzeigenold); ?>" />
-		<input type="hidden" name="displayhausmax" id="displayhausmax" value="<?php echo trim($displayhausmaxold); ?>" />
-		<input type="hidden" name="displaylp1max" id="displaylp1max" value="<?php echo trim($displaylp1maxold); ?>" />
-		<input type="hidden" name="displaylp2max" id="displaylp2max" value="<?php echo trim($displaylp2maxold); ?>" />
-		<input type="hidden" name="displaypinaktiv" id="displaypinaktiv" value="<?php echo trim($displaypinaktivold); ?>" />
-		<input type="hidden" name="displaypincode" id="displaypincode" value="<?php echo trim($displaypincodeold); ?>" />
+		<input type="hidden" name="displayevumax" id="displayevumax" value="<?php echo $displayevumaxold; ?>" />
+		<input type="hidden" name="displaypvmax" id="displaypvmax" value="<?php echo $displaypvmaxold; ?>" />
+		<input type="hidden" name="displayspeichermax" id="displayspeichermax" value="<?php echo $displayspeichermaxold; ?>" />
+		<input type="hidden" name="displayhausanzeigen" id="displayhausanzeigen" value="<?php echo $displayhausanzeigenold; ?>" />
+		<input type="hidden" name="displayhausmax" id="displayhausmax" value="<?php echo $displayhausmaxold; ?>" />
+		<input type="hidden" name="displaylp1max" id="displaylp1max" value="<?php echo $displaylp1maxold; ?>" />
+		<input type="hidden" name="displaylp2max" id="displaylp2max" value="<?php echo $displaylp2maxold; ?>" />
+		<input type="hidden" name="displaypinaktiv" id="displaypinaktiv" value="<?php echo $displaypinaktivold; ?>" />
+		<input type="hidden" name="displaypincode" id="displaypincode" value="<?php echo $displaypincodeold; ?>" />
 
 		<div id="main">
 			<div style="font-size: 18px; height: 20px; top: 0px; left: 740px; text-align:center; position: absolute; width: 65px; color: white;" id="theclock"></div>
@@ -128,16 +128,16 @@
 
 			startTime();
 
-			var displayhausmax = <?php echo trim($displayhausmaxold); ?>;
-			var displaylp2max = <?php echo trim($displaylp2maxold); ?>;
-			var displaylp1max = <?php echo trim($displaylp1maxold); ?>;
-			var displaypvmax = <?php echo trim($displaypvmaxold); ?>;
-			var displayevumax = <?php echo trim($displayevumaxold); ?>;
-			var displayspeichermax = <?php echo trim($displayspeichermaxold); ?>;
-			var displayhausanzeigen = <?php echo trim($displayhausanzeigenold); ?>;
-			var displaypincode = <?php echo trim($displaypincodeold); ?>;
-			var displaypinaktiv = <?php echo trim($displaypinaktivold); ?>;
-			// var lastmanagementold = <?php echo trim($lastmanagementold); ?>;
+			var displayhausmax = <?php echo $displayhausmaxold; ?>;
+			var displaylp2max = <?php echo $displaylp2maxold; ?>;
+			var displaylp1max = <?php echo $displaylp1maxold; ?>;
+			var displaypvmax = <?php echo $displaypvmaxold; ?>;
+			var displayevumax = <?php echo $displayevumaxold; ?>;
+			var displayspeichermax = <?php echo $displayspeichermaxold; ?>;
+			var displayhausanzeigen = <?php echo $displayhausanzeigenold; ?>;
+			var displaypincode = <?php echo $displaypincodeold; ?>;
+			var displaypinaktiv = <?php echo $displaypinaktivold; ?>;
+			// var lastmanagementold = <?php echo $lastmanagementold; ?>;
 		</script>
 		<script src="display/minimal/minimalgauge.js"></script>
 		<script>
@@ -170,9 +170,9 @@
 			doInterval = setInterval(getfile, 10000);
 			getfile();
 
-			var lastmanagements2 = <?php echo trim($lastmanagements2old); ?>;
-			var lastmanagement = <?php echo trim($lastmanagementold); ?>;
-			var soc1vorhanden = <?php echo trim($soc1vorhanden); ?>;
+			var lastmanagements2 = <?php echo $lastmanagements2old; ?>;
+			var lastmanagement = <?php echo $lastmanagementold; ?>;
+			var soc1vorhanden = <?php echo $soc1vorhanden; ?>;
 		</script>
 		<script src="display/minimal/alllive.js?vers=20201201"></script>
 		<script>

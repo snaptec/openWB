@@ -27,33 +27,13 @@
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -64,9 +44,9 @@
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
 
-			if ( $debugmodeold == "" ) {
+			if ( $debugold == "" ) {
 				// if no debug mode set, set 0 = off
-				$debugmodeold = "0";
+				$debugold = "0";
 			}
 
 		?>
@@ -77,7 +57,7 @@
 			<h1>Debugging und Support</h1>
 
 			<div class="card border-secondary">
-				<form class="form" id="debugmodeForm" action="./tools/saveconfig.php" method="POST">
+				<form class="form" id="debugmodeForm" action="./settings/saveconfig.php" method="POST">
 					<div class="card-header bg-secondary">
 						Protokollierung
 					</div>
@@ -133,18 +113,18 @@
 			</div>
 
 			<div class="card border-secondary">
-				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
+				<form class="form" id="sendTokenForm" action="./settings/starttunnel.php" method="POST">
 					<div class="card-header bg-secondary">
 						Remote Support
 					</div>
 					<div class="card-body">
 						<?php if ( $datenschutzackold != 1 ) { ?>
 						<div class="alert alert-danger">
-							Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
+							Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
 						</div>
 						<?php } else { ?>
 						<div class="alert alert-success">
-							Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
+							Sie haben der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
 						</div>
 						<?php } ?>
 						<div class="form-group mb-0">

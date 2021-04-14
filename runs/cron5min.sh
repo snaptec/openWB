@@ -88,6 +88,7 @@ if (( netzabschaltunghz == 1 )); then
 				echo $lademodus > $RAMDISKDIR/templademodus
 				# set charge mode to stop
 				echo 3 > $RAMDISKDIR/lademodus
+				echo "Netzschutz aktiviert, Frequenz: $hz" >> $RAMDISKDIR/openWB.log
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
 				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
@@ -100,6 +101,8 @@ if (( netzabschaltunghz == 1 )); then
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
 				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
+				echo "Netzschutz aktiviert, Frequenz: $hz" >> $RAMDISKDIR/openWB.log
+
 				# wait a random interval and set charge mode to stop
 				(sleep $(shuf -i1-90 -n1) && echo 3 > $RAMDISKDIR/lademodus) &
 			fi
@@ -113,6 +116,7 @@ if (( netzabschaltunghz == 1 )); then
 			echo $templademodus > $RAMDISKDIR/lademodus
 			# remove grid protection
 			echo 0 > $RAMDISKDIR/netzschutz
+			echo "Netzschutz deaktiviert, Frequenz: $hz" >> $RAMDISKDIR/openWB.log
 			echo "Netzfrequenz wieder im normalen Bereich." > $RAMDISKDIR/lastregelungaktiv
 		fi
 	fi
@@ -253,14 +257,18 @@ else
 	ethstate=$(</sys/class/net/eth0/carrier)
 	if (( ethstate == 1 )); then
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
-		wlanstate=$(</sys/class/net/wlan0/carrier)
-		if (( wlanstate == 1 )); then
-			sudo systemctl stop hostapd
-			sudo systemctl stop dnsmasq
+		if [ -d /sys/class/net/wlan0 ]; then
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+			wlanstate=$(</sys/class/net/wlan0/carrier)
+			if (( wlanstate == 1 )); then
+				sudo systemctl stop hostapd
+				sudo systemctl stop dnsmasq
+			fi
 		fi
 	else
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		if [ -d /sys/class/net/wlan0 ]; then
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		fi
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
 	fi
 fi

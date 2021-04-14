@@ -6,6 +6,48 @@
  */
 
 /**
+ * setCookie
+ * stores a cookie in the current browser
+ * @param {string} cname cookie name
+ * @param {string} cvalue cookie value
+ * @param {int} exdays expires in days
+ */
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/openWB/";
+}
+
+/**
+ * getCookie
+ * returns a cookie value
+ * @param {string} cname cookie name
+ * @returns {string}
+ */
+function getCookie(cname) {
+    var name = cname + '=';
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return '';
+}
+
+// get selected theme and set style
+var themeCookie = getCookie('openWBTheme');
+if( '' != themeCookie ){
+    $('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210330">');
+}
+
+/**
  * hideSection
  * add class 'hide' to element with selector 'section' in JQuery syntax
  * disables all contained input and select elements if 'disableChildren' is not set to false
@@ -182,7 +224,7 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="password"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
+    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="url"]:not(:disabled), input[type="password"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
         if ( typeof topicSubGroup == 'undefined' ) {
@@ -224,20 +266,20 @@ function setToDefaults() {
     /** @function setToDefaults
      * sets all inputs and button-groups to their default value
      */
-     $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
-         // first all number-field and range sliders
-         var defaultValue = $(this).data('default');
-         if ( typeof defaultValue !== 'undefined' ) {
-             setInputValue($(this).attr('id'), defaultValue);
-         }
-     });
-     $('.btn-group-toggle').each(function() {
-         // then all toggle btn-groups
-         var defaultValue = $(this).data('default');
-         if ( typeof defaultValue !== 'undefined' ) {
-             setToggleBtnGroup($(this).attr('id'), defaultValue);
-         }
-     });
+    $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
+        // first all number-field and range sliders
+        var defaultValue = $(this).data('default');
+        if ( typeof defaultValue !== 'undefined' ) {
+            setInputValue($(this).attr('id'), defaultValue);
+        }
+    });
+    $('.btn-group-toggle').each(function() {
+        // then all toggle btn-groups
+        var defaultValue = $(this).data('default');
+        if ( typeof defaultValue !== 'undefined' ) {
+            setToggleBtnGroup($(this).attr('id'), defaultValue);
+        }
+    });
 }
 
 function formatToNaturalNumber(element) {
@@ -246,11 +288,11 @@ function formatToNaturalNumber(element) {
      * @param {object} element - the input element
      * @requires max value set up for input field properly
      */
-     if ( element.value.length > 0 ) {
-         element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
-     }
-     var max = $(element).attr('max');
-     if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
-         element.value = max;
-     }
+    if ( element.value.length > 0 ) {
+        element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
+    }
+    var max = $(element).attr('max');
+    if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
+        element.value = max;
+    }
 }

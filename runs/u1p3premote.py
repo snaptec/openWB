@@ -6,11 +6,11 @@ import time
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("a", "address", type=str, help="ip address")
-parser.add_argument("i", "id", type=int, help="modbus id")
-parser.add_argument("p", "phases", type=int, choices=[1, 3], help="phases to activate")
-parser.add_argument("-d", "--duration", type=int, default=1, help="duration in seconds, defaults to 1")
-parser.add_argument("-v", "--verbose", action="store_true", help="verbose debug output")
+parser.add_argument("-a", "--address", required=True, type=str, help="ip address")
+parser.add_argument("-i", "--id", required=True, type=int, help="modbus id")
+parser.add_argument("-p", "--phases", required=True, type=int, choices=[1, 3], help="phases to activate")
+parser.add_argument("-d", "--duration", required=False, type=int, default=1, help="duration in seconds, defaults to 1")
+parser.add_argument("-v", "--verbose", required=False, action="store_true", help="verbose debug output")
 args = parser.parse_args()
 
 if(args.verbose):

@@ -74,7 +74,7 @@ fi
 jahr=$(date +%Y)
 year_of_stat='"'year'"':'"'$jahr'"'
 monat=$(date +%m)
-arr_pos=$($monat)
+arr_pos=$monat
 json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/batt/year')
 speicherikwh=$(echo $json | jq '.loginfo['$arr_pos'].total_charge' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 speicherekwh=$(echo $json | jq '.loginfo['$arr_pos'].total_discharge' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')

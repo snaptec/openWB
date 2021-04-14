@@ -31,7 +31,7 @@ client = ModbusTcpClient(SERVER_HOST, SERVER_PORT, framer=ModbusRtuFramer) # nee
 
 #KWH Total Import
 resp = client.read_holding_registers(TotalEnergyRegisterAddress,1, unit=MODBUS_DEVICEID)
-TotalEnergy = int(resp.registers[0])
+TotalEnergy = int(resp.registers[0]) * 10 #Value is in 0.01kWh, need to convert to Wh
 
 #Aktueller Verbrauch
 resp = client.read_holding_registers(CurrentPowerRegisterAddress,1, unit=MODBUS_DEVICEID)
