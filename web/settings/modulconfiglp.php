@@ -332,6 +332,12 @@
 							<input type="hidden" name="ladeleistungmodul" value="goelp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
+									<div class="alert alert-info">
+										Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
+										<span class="text-danger">
+											Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+										</span>
+									</div>
 									<label for="goeiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>">
@@ -2392,6 +2398,12 @@
 							<input type="hidden" name="ladeleistungs1modul" value="goelp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
+									<div class="alert alert-info">
+										Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
+										<span class="text-danger">
+											Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+										</span>
+									</div>
 									<label for="goeiplp2" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp2" id="goeiplp2" value="<?php echo $goeiplp2old ?>">
@@ -4039,6 +4051,12 @@
 							<input type="hidden" name="ladeleistungs2modul" value="goelp3">
 							<div class="form-group">
 								<div class="form-row mb-1">
+									<div class="alert alert-info">
+										Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
+										<span class="text-danger">
+											Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+										</span>
+									</div>
 									<label for="goeiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp3" id="goeiplp3" value="<?php echo $goeiplp3old ?>">
