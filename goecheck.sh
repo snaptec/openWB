@@ -18,7 +18,7 @@ goecheck(){
 				fi
 			fi
 			fwv=$(echo $output | jq -r '.fwv')
-			printf -v fwv %0.f "$fwv"
+			printf fwv %0.f "$fwv"
 			oldcurrent=$(echo $output | jq -r '.amp')
 			current=$(</var/www/html/openWB/ramdisk/llsoll)
 			if (( oldcurrent != $current )) ; then
@@ -48,7 +48,7 @@ goecheck(){
 					fi
 				fi
 				fwv=$(echo $output | jq -r '.fwv')
-				printf -v fwv %0.f "$fwv"
+				printf fwv %0.f "$fwv"
 				oldcurrent=$(echo $output | jq -r '.amp')
 				current=$(</var/www/html/openWB/ramdisk/llsolls1)
 				if (( oldcurrent != $current )) ; then
@@ -77,7 +77,7 @@ goecheck(){
 						fi
 					fi
 					fwv=$(echo $output | jq -r '.fwv')
-					printf -v fwv %0.f "$fwv"
+					printf fwv %0.f "$fwv"
 					oldcurrent=$(echo $output | jq -r '.amp')
 					current=$(</var/www/html/openWB/ramdisk/llsolls2)
 					if (( oldcurrent != $current )) ; then
