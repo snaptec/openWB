@@ -23,9 +23,9 @@ goecheck(){
 			current=$(</var/www/html/openWB/ramdisk/llsoll)
 			if (( oldcurrent != $current )) ; then
 				if (($fwv >= 40)) ; then
-				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amx=$current > /dev/null
+					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amx=$current > /dev/null
 				else 
-			    curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
+			    		curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
 				fi
 			fi
 		fi
@@ -53,9 +53,9 @@ goecheck(){
 				current=$(</var/www/html/openWB/ramdisk/llsolls1)
 				if (( oldcurrent != $current )) ; then
 					if (($fwv >= 40)) ; then
-					curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amx=$current > /dev/null
+						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amx=$current > /dev/null
 					else 
-					curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amp=$current > /dev/null
+						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amp=$current > /dev/null
 					fi
 				fi
 			fi
@@ -82,9 +82,9 @@ goecheck(){
 					current=$(</var/www/html/openWB/ramdisk/llsolls2)
 					if (( oldcurrent != $current )) ; then
 						if (($fwv >= 40)) ; then
-						curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=amx=$current > /dev/null
+							curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=amx=$current > /dev/null
 						else 
-						curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=amp=$current > /dev/null
+							curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=amp=$current > /dev/null
 						fi
 					fi
 				fi
