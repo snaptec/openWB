@@ -71,7 +71,7 @@ incrementTimer(){
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
-	answer=$($MODULEDIR/../soc_evcc/evcc-soc-abo $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" 2>&1)
+	answer=$($MODULEDIR/../soc_evcc/soc $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile
