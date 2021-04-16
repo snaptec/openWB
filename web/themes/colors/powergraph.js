@@ -660,6 +660,9 @@ extractMonthValues(payload, oldPayload) {
     xScale.domain(d3.extent(this.graphData, (d) => d.date));
 
     const ticksize = (wbdata.showGrid) ? -(height / 2 - 7) : -10
+    if (wbdata.graphMode == 'month') {
+      ticksize = 0;
+    }
     const xAxisGenerator = d3
       .axisBottom(this.xScale)
       .ticks(4)
