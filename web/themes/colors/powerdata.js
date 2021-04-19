@@ -407,7 +407,7 @@ function formatTime(seconds) {
 }
 
 function formatMonth (month, year) {
-	months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+	months = ['Jan', 'Feb', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 	return (months[month] + " "+ year);
 }
 function shiftLeft() {

@@ -182,7 +182,7 @@ nurpvlademodus(){
 						openwbDebugLog "MAIN" 1 "pv ladung beendet"
 						rm ramdisk/nurpvoff
 					else # Keine aktive Ladung erkannt, Mindestüberschuss unterschritten
-						if $cpunterbrechungmindestlaufzeitaktiv; then # Mindestwartezeit für Ladestopp nach CP Unterbrechung aktiviert	
+						if [[ $cpunterbrechungmindestlaufzeitaktiv == 1 ]]; then # Mindestwartezeit für Ladestopp nach CP Unterbrechung aktiviert	
 							# Lade letzte Timestamps der letzten CP Unterbrechungen				
 							currentTimestamp=$(date +%s)
 							if [ -e ramdisk/cpulp1timestamp ] ;
