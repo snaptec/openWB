@@ -155,6 +155,7 @@ def calcdelta(row,rowold,i,zeile,datestring):
     #	Lpalle EVU_______	31  7	$d6
     if (i >= 29) and (i<=31):
         try:
+            gesamtv = float(0)
             deltabezug =  float (row[1]) - float(rowold[1])
             deltaeinspeisung = float (row[2]) - float(rowold[2])
             deltapv = float (row[3]) - float(rowold[3])
@@ -178,11 +179,13 @@ def calcdelta(row,rowold,i,zeile,datestring):
                 delta = (deltabezug  / gesamtv) * (newvalue -  oldvalue)
         except:
             delta = 0
-            try:
-                textcol=header[i]
-            except:
-                textcol= ''
-            print ('%s i-err(R) %s:%s c %2d(%s) sum %.3f act %.3f prev %.3f' % (getTime(),datestring,str(row[0]),i,textcol,sumcsv [i] ,newvalue, oldvalue ))
+            # nur fehler wenn gesamtverbrauch > 0
+            if (gesamtv > 0):
+                try:
+                    textcol=header[i]
+                except:
+                    textcol= ''
+                print ('%s i-err(R) %s:%s c %2d(%s) sum %.3f act %.3f prev %.3f gesamtv %.3f' % (getTime(),datestring,str(row[0]),i,textcol,sumcsv [i] ,newvalue, oldvalue,gesamtv ))
     else:
         delta = newvalue -  oldvalue
     if (newvalue > oldvalue) and (delta < 12500) and (oldvalue > 0):
@@ -448,7 +451,8 @@ if __name__ == "__main__":
             'Device1','Device2','Device3','Device4','Device5','Device6','Device7','Device8','Device9','Device10',
             'Lpalle Pv','Lpalle Speicher','Lpalle EVU'
         ]
-    SUMCOLUMNSTART = 40
+    # not smaller than 40    
+    SUMCOLUMNSTART = 42
     startjjjj= 2018
     inputp=args.input
     outputp=args.output
