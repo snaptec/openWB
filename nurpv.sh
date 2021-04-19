@@ -184,7 +184,7 @@ nurpvlademodus(){
 					else # Keine aktive Ladung erkannt, Mindestüberschuss unterschritten
 						if [[ $cpunterbrechungmindestlaufzeitaktiv == "1" ]]; then # Mindestwartezeit für Ladestopp nach CP Unterbrechung aktiviert	
 							# Lade letzte Timestamps der letzten CP Unterbrechungen				
-							openwbDebugLog "CHARGESTAT" 1 "alle Ladepunkte, Lademodus NurPV. Prüfe minimale Wartezeit nach CP Unterbrechung"
+							openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Prüfe minimale Wartezeit nach CP Unterbrechung"
 							currentTimestamp=$(date +%s)
 							if [ -e ramdisk/cpulp1timestamp ] ;
 							then
