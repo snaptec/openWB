@@ -182,25 +182,31 @@ nurpvlademodus(){
 						openwbDebugLog "MAIN" 1 "pv ladung beendet"
 						rm ramdisk/nurpvoff
 					else # Keine aktive Ladung erkannt, Mindestüberschuss unterschritten
-						if [[ $cpunterbrechungmindestlaufzeitaktiv == 1 ]]; then # Mindestwartezeit für Ladestopp nach CP Unterbrechung aktiviert	
+						if [ "$cpunterbrechungmindestlaufzeitaktiv" == "1" ]; then # Mindestwartezeit für Ladestopp nach CP Unterbrechung aktiviert	
 							# Lade letzte Timestamps der letzten CP Unterbrechungen				
+							openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Prüfe minimale Wartezeit nach CP Unterbrechung"
 							currentTimestamp=$(date +%s)
 							if [ -e ramdisk/cpulp1timestamp ] ;
 							then
 								cpulp1timestamp=$(cat ramdisk/cpulp1timestamp) # Timestamp letzter CP Unterbrechung laden
+								openwbDebugLog "CHARGESTAT" 1 "LP1, Lademodus NurPV. Timestamp letzter CP Unterbrechung: ($cpulp1timestamp)"						
 							else
 								cpulp1timestamp=$currentTimestamp # kein Timestamp gefunden, nutze aktuelle Zeit
+								openwbDebugLog "CHARGESTAT" 1 "LP1, Lademodus NurPV. Kein Timestamp für LP1 gefunden, nutze aktuelle Zeit: ($cpulp1timestamp)"
 							fi
 							if [ -e ramdisk/cpulp2timestamp ] ;
 							then
 								cpulp2timestamp=$(cat ramdisk/cpulp2timestamp) # Timestamp letzter CP Unterbrechung laden
+								openwbDebugLog "CHARGESTAT" 1 "LP2, Lademodus NurPV. Timestamp letzter CP Unterbrechung: ($cpulp2timestamp)"
 							else
 								cpulp2timestamp=$currentTimestamp # kein Timestamp gefunden, nutze aktuelle Zeit
+								openwbDebugLog "CHARGESTAT" 1 "LP2, Lademodus NurPV. Kein Timestamp für LP2 gefunden, nutze aktuelle Zeit: ($cpulp2timestamp)"
 							fi
 							
 							# Prüfe ob Mindestwartezeit nach CP Unterbrechung verstrichen ist
 							if (( $cpulp1timestamp + $cpunterbrechungmindestlaufzeit < $currentTimestamp )) || (( $cpulp2timestamp + $cpunterbrechungmindestlaufzeit < $currentTimestamp )); #Mehr als x Sekunden nach letzter CP Unterbrechung vergangen?
 							then
+								openwbDebugLog "CHARGESTAT" 1 "alle Ladepunkte, Lademodus NurPV. Überschuss unterschritten, minimale Wartezeit nach CP Unterbrechung abgelaufen, setze nurpvoff."
 								touch ramdisk/nurpvoff
 							else
 								openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Überschuss unterschritten, minimale Wartezeit nach CP Unterbrechung noch nicht abgelaufen."
