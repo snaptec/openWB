@@ -1990,5 +1990,5 @@ updateConfig(){
 		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
 	fi
 
-  echo "Config file Update done."
+	echo "Config file Update done."
 }
