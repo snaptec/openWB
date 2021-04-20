@@ -15,7 +15,7 @@ if (( $Debug > 1 )); then
 	openwbDebugLog ${DMOD} 2 "MEASURE: $measure"
 fi
 # call for XML file and parse it for current PV power
-power_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/measurements.xml |python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'|grep -e "Type=\"AC_Power\""| grep -Po "Value=\"\K[^\"]*" )
+power_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/measurements.xml |python3 -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'|grep -e "Type=\"AC_Power\""| grep -Po "Value=\"\K[^\"]*" )
 
 # cut the comma and the digit behind the comma
 power_kostal_piko_MP=$(echo $power_kostal_piko_MP | sed 's/\..*$//')
@@ -33,7 +33,7 @@ if (( $Debug > 1 )); then
 	openwbDebugLog ${DMOD} 2 "YIELD: $yield"
 fi
 #pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/yields.xml | grep -Po "Value=\"\K[^\"]*" | sed -n 1p)
-pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/yields.xml |python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'|grep "YieldValue" | grep -Po "Value=\"\K[^\"]*" )
+pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/yields.xml |python3 -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'|grep "YieldValue" | grep -Po "Value=\"\K[^\"]*" )
 if ! [[ $pvkwh_kostal_piko_MP =~ $re ]] ; then
 	openwbDebugLog ${DMOD} 2 "PVkWh: NaN get prev. Value"
 	pvkwh_kostal_piko_MP=$(</var/www/html/openWB/ramdisk/pv2kwh)

@@ -40,7 +40,7 @@ echo "############################ smarthome.log ##############" >> $debugFile
 echo "$(cat /var/www/html/openWB/ramdisk/smarthome.log)" >> $debugFile
 
 echo "############################ file and directory listing ##############" >> $debugFile
-ls -lRa /var/www/html/openWB/* >> $debugFile
+ls -lRa /var/www/html/openWB/modules/soc_* >> $debugFile
 
 curl --upload $debugFile "https://openwb.de/tools/debug2.php?debugemail=$debugemail"
 
