@@ -90,6 +90,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_solarlog") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
 										<option <?php if($wattbezugmodulold == "bezug_solarview") echo "selected" ?> value="bezug_solarview">Solarview</option>
 										<option <?php if($wattbezugmodulold == "bezug_solarwatt") echo "selected" ?> value="bezug_solarwatt">Solarwatt / My Reserve Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_solarwatt2") echo "selected" ?> value="bezug_solarwatt2">Solarwatt / My Reserve Speicher (via GW)</option>
 										<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 										<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
 										<option <?php if($wattbezugmodulold == "bezug_sonneneco") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
@@ -978,6 +979,9 @@
 									showSection('#wattbezuglgessv1');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
+									showSection('#wattbezugsolarwatt');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_solarwatt2')   {
 									showSection('#wattbezugsolarwatt');
 								}
 							}

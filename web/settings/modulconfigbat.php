@@ -81,6 +81,7 @@
 										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
 										<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
 										<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
+										<option <?php if($speichermodulold == "speicher_solarwatt2") echo "selected" ?> value="speicher_solarwatt2">Solarwatt My Reserve (via GW)</option>
 										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
@@ -599,6 +600,9 @@
 									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
+									showSection('#divspeicherip');
+								}
+								if($('#speichermodul').val() == 'speicher_solarwatt2') {
 									showSection('#divspeicherip');
 								}
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
