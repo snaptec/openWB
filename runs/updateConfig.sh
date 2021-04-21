@@ -690,28 +690,6 @@ updateConfig(){
 	if ! grep -Fq "soccarnetintervall=" $ConfigFile; then
 		echo "soccarnetintervall=10" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_vag_type=" $ConfigFile; then
-		echo "soc_vag_type=vw" >> $ConfigFile
-	fi
-	if ! grep -Fq "soc_vag_username=" $ConfigFile; then
-		echo "soc_vag_username=user" >> $ConfigFile
-	fi
-	if ! grep -Fq "soc_vag_password=" $ConfigFile; then
-		echo "soc_vag_password=''" >> $ConfigFile
-	else
-		sed -i "/soc_vag_password='/b; s/^soc_vag_password=\(.*\)/soc_vag_password=\'\1\'/g" $ConfigFile
-	fi
-	# remove line with syntax error from config
-	if grep -Fq "soc_vag_vin=vin (WVWZZZ...)" $ConfigFile; then
-		sed -i '/^soc_vag_vin=/d' $ConfigFile
-	fi
-	if ! grep -Fq "soc_vag_vin=" $ConfigFile; then
-		echo "soc_vag_vin='WVWZZZ...'" >> $ConfigFile
-	fi
-	if ! grep -Fq "soc_vag_intervall=" $ConfigFile; then
-		echo "soc_vag_intervall=60" >> $ConfigFile
-		echo "soc_vag_intervallladen=10" >> $ConfigFile
-	fi
 	if ! grep -Fq "soc2type=" $ConfigFile; then
 		echo "soc2type=vw" >> $ConfigFile
 	fi
