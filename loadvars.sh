@@ -812,6 +812,20 @@ loadvars(){
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 	echo $llkwhges > ramdisk/llkwhges
 
+	#Schuko-Steckdose an openWB
+	if [[ $standardSocketInstalled == "1" ]]; then
+
+		timeout 10 modules/sdm120modbusSocket/main.sh || true
+		socketkwh=$(</var/www/html/openWB/ramdisk/socketkwh)
+		socketp=$(cat /var/www/html/openWB/ramdisk/socketp)
+		socketa=$(cat /var/www/html/openWB/ramdisk/socketa)
+		socketa=$(echo $socketa | sed 's/\..*$//')
+		socketv=$(cat /var/www/html/openWB/ramdisk/socketv)
+		if ! [[ $socketa =~ $re ]] ; then
+			socketa="0"
+		fi
+	fi
+
 	#Wattbezug
 	if [[ $wattbezugmodul != "none" ]]; then
 		wattbezug=$(modules/$wattbezugmodul/main.sh || true)
@@ -1003,6 +1017,9 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
 		usesimpv=1
 	fi
+	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $wrfroniusisgen24 == "1" ]]; then
+		usesimpv=1
+	fi
 	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
@@ -1131,6 +1148,9 @@ loadvars(){
 	openwbDebugLog "MAIN" 1 "$(echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled")"
 	openwbDebugLog "MAIN" 1 "$(echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3")"
 	openwbDebugLog "MAIN" 1 "$(echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3")"
+	if [[ $standardSocketInstalled == "1" ]]; then
+		openwbDebugLog "MAIN" 1 "socketa $socketa socketp $socketp socketkwh $socketkwh socketv $socketv"
+	fi
 
 	tempPubList=""
 
@@ -1191,9 +1211,13 @@ loadvars(){
 		rfid
 	fi
 
-	dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)
-	dailychargelp2=$(curl -s -X POST -d "dailychargelp2call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp2.php | jq -r .text)
-	dailychargelp3=$(curl -s -X POST -d "dailychargelp3call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp3.php | jq -r .text)
+	csvfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv"
+	first=$(head -n 1 "$csvfile")
+	last=$(tail -n 1 "$csvfile")
+	dailychargelp1=$(echo "$(echo "$first" | cut -d , -f 5) $(echo "$last" | cut -d , -f 5)" | awk '{printf "%0.2f", ($2 - $1)/1000}')
+	dailychargelp2=$(echo "$(echo "$first" | cut -d , -f 6) $(echo "$last" | cut -d , -f 6)" | awk '{printf "%0.2f", ($2 - $1)/1000}')
+	dailychargelp3=$(echo "$(echo "$first" | cut -d , -f 7) $(echo "$last" | cut -d , -f 7)" | awk '{printf "%0.2f", ($2 - $1)/1000}')
+
 	restzeitlp1=$(<ramdisk/restzeitlp1)
 	restzeitlp2=$(<ramdisk/restzeitlp2)
 	restzeitlp3=$(<ramdisk/restzeitlp3)

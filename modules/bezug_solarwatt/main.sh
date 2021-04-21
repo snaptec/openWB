@@ -4,7 +4,8 @@
 
 
 
-sresponse=$(curl --connect-timeout 3 -s "http://$speichersolarwattip/rest/kiwigrid/wizard/devices")
+#sresponse=$(curl --connect-timeout 3 -s "http://$speichersolarwattip/rest/kiwigrid/wizard/devices")
+sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip}/rest/kiwigrid/wizard/devices")
 
 #bezugwh=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.WorkConsumedFromGrid.value != null) | .tagValues.WorkConsumedFromGrid.value' | sed 's/\..*$//')
 #echo $bezugwh > /var/www/html/openWB/ramdisk/bezugkwh
