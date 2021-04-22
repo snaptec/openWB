@@ -16,6 +16,10 @@ DebugLog(){
 if (( $solarwattmethod == 0 )); then 	#Abruf über Energy Manager
 	sresponse=$(curl --connect-timeout 5 -s "http://${speicher1_ip}/rest/kiwigrid/wizard/devices")
 
+	if ((${#sresponse}  < 10)); then
+		exit 1
+	fi
+	
 	speichere=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerConsumedFromStorage.value != null) | .tagValues.PowerConsumedFromStorage.value' | sed 's/\..*$//')
 	speicherein=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerOutFromStorage.value != null) | .tagValues.PowerOutFromStorage.value' | sed 's/\..*$//') 
 	speicheri=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerBuffered.value != null) | .tagValues.PowerBuffered.value' | sed 's/\..*$//') 
@@ -27,6 +31,10 @@ fi
 if (( $solarwattmethod == 1 )); then 	#Abruf über Gateway
 	sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip}:8080/")
 
+	if ((${#sresponse}  < 10)); then
+		exit 1
+	fi
+	
 	ibat=$(echo $sresponse | jq '.FData.IBat') 
 	vbat=$(echo $sresponse | jq '.FData.VBat') 
 	speicherleistung=$(echo "($ibat * $vbat)" | bc) 
