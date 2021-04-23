@@ -27,7 +27,7 @@ if (( $solarwattmethod == 0 )); then 	#Abruf über Energy Manager
 	fi
 fi
 if (( $solarwattmethod == 1 )); then 	#Abruf über Gateway
-	sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip}:8080/")
+	sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip2}:8080/")
 
 	if ((${#sresponse}  < 10)); then
 		bezugwatt=$(<$BEZUGFILE)
