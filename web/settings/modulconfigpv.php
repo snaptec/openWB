@@ -89,6 +89,7 @@
 										<option <?php if($pvwattmodulold == "wr_solarwatt") echo "selected" ?> value="wr_solarwatt">Solarwatt / My Reserver Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_solarworld") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 										<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
+										<option <?php if($pvwattmodulold == "wr_studer") echo "selected" ?> value="wr_studer">Studer-Innotec System</option>
 										<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
 										<option <?php if($pvwattmodulold == "wr_sunways") echo "selected" ?> value="wr_sunways">Sunways</option>
 										<option <?php if($pvwattmodulold == "wr_powerwall") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
@@ -514,6 +515,45 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvwrstuder" class="hide">
+							<div class="form-row mb-1">
+								<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="studer_ip" id="studer_ip" value="<?php echo $studer_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="studer_xt" class="col-md-4 col-form-label">Anzahl XT-Devices</label>
+								<div class="col">
+										<input class="form-control" type="text" pattern="^([1-9])$" name="studer_xt" id="studer_xt" value="<?php echo $studer_xtold ?>">
+										<span class="form-text small">Anzahl (1-9) der Studer XT-Devices im System (XTS/XTM/XTH)</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Typ des MPPT Solarladeregler</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VT) echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeNo" value="VT"<?php if($studer_vc_typeold == VT) echo " checked=\"checked\"" ?>>VT
+										</label>
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VS) echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeYes" value="VS"<?php if($studer_vc_typeold == VS) echo " checked=\"checked\"" ?>>VS
+										</label>
+									</div>
+									<span class="form-text small">
+										Ist ein VarioString (VS-70/VS-120) oder ein Variotrack (VT-40/VT-65/VT-80) verbaut
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="studer_vc" class="col-md-4 col-form-label">Anzahl MPPT Solarladeregler</label>
+								<div class="col">
+										<input class="form-control" type="text" pattern="^([1-9])$" name="studer_vc" id="studer_vc" value="<?php echo $studer_vcold ?>">
+										<span class="form-text small">Anzahl (1-9) der Studer MPPT Solarladeregler im System (VS/VT)</span>
+								</div>
+							</div>
+						</div> 
 						<div id="pvwrsolax" class="hide">
 							<div class="form-row mb-1">
 								<label for="solaxip" class="col-md-4 col-form-label">WR Solax IP</label>
@@ -808,6 +848,9 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_solaredge')   {
 									showSection('#pvwrsolaredge');
+								}
+                                if($('#pvwattmodul').val() == 'wr_studer')   {
+									showSection('#pvwrstuder');
 								}
 								if($('#pvwattmodul').val() == 'wr_solax')   {
 									showSection('#pvwrsolax');
