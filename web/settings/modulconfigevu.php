@@ -592,12 +592,22 @@
 							</div>
 						</div>
 						<div id="wattbezugfronius" class="hide">
-							<div class="card-text alert alert-info">
-								Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
-							</div>
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Meter ID</label>
+									<label for="froniusip" class="col-md-4 col-form-label">Fronius IP</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											IP Adresse des Fronius WR.
+										</span>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
+										<span id="wattbezugfroniusloadmessage" class="form-text small"/>
+									</div>
+								</div>
+								<div id="wattbezugfroniusmeterid" class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Energymeter ID</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($froniuserzeugungold == 0) echo " active" ?>">
@@ -605,6 +615,27 @@
 											</label>
 											<label class="btn btn-outline-info<?php if($froniuserzeugungold == 1) echo " active" ?>">
 												<input type="radio" name="froniuserzeugung" id="froniuserzeugung1" value="1"<?php if($froniuserzeugungold == 1) echo " checked=\"checked\"" ?>>1
+											</label>
+										</div>
+									</div>
+								</div>
+								<div id="wattbezugfroniusmeterlist" class="form-row mb-1 hide">
+									<label class="col-md-4 col-form-label">Energymeter</label>
+									<div class="col">
+										<select name="froniuserzeugung" id="froniuserzeugung" class="form-control"<?php if (isset($froniuserzeugungold)) echo " data-old=\"$froniuserzeugungold\"" ?>>
+											<option>Nicht ermittelbar</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" data-option="0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
+											</label>
+											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
+												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" data-option="1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
 											</label>
 										</div>
 									</div>
@@ -618,19 +649,6 @@
 											</label>
 											<label class="btn btn-outline-info<?php if($froniusprimoold == 1) echo " active" ?>">
 												<input type="radio" name="froniusprimo" id="froniusprimoOn" value="1"<?php if($froniusprimoold == 1) echo " checked=\"checked\"" ?>>An
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
-											</label>
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
 											</label>
 										</div>
 									</div>
@@ -1073,6 +1091,50 @@
 					$('#wizzarddoneForm').submit();
 				});
 
+				$('#wattbezugfroniusload').on("click",function() {
+					$('#wattbezugfroniusload').attr("disabled", true);
+					$('#wattbezugfroniusloadmessage').text("Lade Daten...");
+					showSection('#wattbezugfroniusloadmessage');
+					$.getJSON('settings/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
+						var options = '';
+						for(var i in data.Body.Data) {
+							var meter = data.Body.Data[i];
+							options += '<option value="'+i+'" data-meterlocation="'+meter.Meter_Location_Current+'"'
+							if($('#froniuserzeugung').attr("data-old") == i) {
+								options += ' selected=true';
+							}
+							options += '>';
+							options += meter.Details.Manufacturer+' '+meter.Details.Model;
+							options += ' ('+meter.Details.Serial+')';
+							options += '</option>';
+						}
+						$('#froniuserzeugung').html(options);
+						setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
+						$('#wattbezugfroniusloadmessage').text("");
+						hideSection('#wattbezugfroniusload')
+						hideSection('#wattbezugfroniusmeterid');
+						showSection('#wattbezugfroniusmanual')
+						showSection('#wattbezugfroniusmeterlist');
+					})
+					.fail(function(jqXHR, textStatus, errorThrown) {
+						$('#wattbezugfroniusloadmessage').html(jqXHR.responseText);
+					})
+					.always(function() {
+						$('#wattbezugfroniusload').attr("disabled", false);
+					});
+					
+				});
+				
+				$('#wattbezugfroniusmanual').on("click",function() {
+					hideSection('#wattbezugfroniusmanual')
+					hideSection('#wattbezugfroniusmeterlist');
+					showSection('#wattbezugfroniusload')
+					showSection('#wattbezugfroniusmeterid');
+				});
+				
+				$('#froniuserzeugung').change(function() {
+					setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
+				});
 			});
 
 			var wizzarddone = <?php if(isset($wizzarddoneold)){ echo $wizzarddoneold; } else { echo 100; } ?>
