@@ -1094,7 +1094,6 @@
 				$('#wattbezugfroniusload').on("click",function() {
 					$('#wattbezugfroniusload').attr("disabled", true);
 					$('#wattbezugfroniusloadmessage').text("Lade Daten...");
-					showSection('#wattbezugfroniusloadmessage');
 					$.getJSON('settings/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
 						var options = '';
 						for(var i in data.Body.Data) {
@@ -1117,7 +1116,12 @@
 						showSection('#wattbezugfroniusmeterlist');
 					})
 					.fail(function(jqXHR, textStatus, errorThrown) {
-						$('#wattbezugfroniusloadmessage').html(jqXHR.responseText);
+						var errorMsg = 'Die Daten konnten nicht abgerufen werden. Eingabe pr&uuml;fen oder Daten manuell eingeben.';
+						if(jqXHR.responseText !== "") {
+							errorMsg += '<br>';
+							errorMsg += jqXHR.responseText;
+						}
+						$('#wattbezugfroniusloadmessage').html(errorMsg);
 					})
 					.always(function() {
 						$('#wattbezugfroniusload').attr("disabled", false);
