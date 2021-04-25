@@ -1091,11 +1091,13 @@
 					$('#wizzarddoneForm').submit();
 				});
 
+				// load meter data from Fronius inverter
 				$('#wattbezugfroniusload').on("click",function() {
 					$('#wattbezugfroniusload').attr("disabled", true);
 					$('#wattbezugfroniusloadmessage').text("Lade Daten...");
 					$.getJSON('settings/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
 						var options = '';
+						// fill listbox, format <manufacturer> <meter model> (<serial>)
 						for(var i in data.Body.Data) {
 							var meter = data.Body.Data[i];
 							options += '<option value="'+i+'" data-meterlocation="'+meter.Meter_Location_Current+'"'
@@ -1108,8 +1110,11 @@
 							options += '</option>';
 						}
 						$('#froniuserzeugung').html(options);
-						setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
 						$('#wattbezugfroniusloadmessage').text("");
+
+						// set meter location corresponding to displayed entry in listbox
+						setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
+
 						hideSection('#wattbezugfroniusload')
 						hideSection('#wattbezugfroniusmeterid');
 						showSection('#wattbezugfroniusmanual')
@@ -1130,6 +1135,7 @@
 				});
 				
 				$('#wattbezugfroniusmanual').on("click",function() {
+					// switch back to default configuration form
 					hideSection('#wattbezugfroniusmanual')
 					hideSection('#wattbezugfroniusmeterlist');
 					showSection('#wattbezugfroniusload')
@@ -1137,6 +1143,7 @@
 				});
 				
 				$('#froniuserzeugung').change(function() {
+					// on change entry of listbox, set corresponding meter location
 					setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
 				});
 			});
