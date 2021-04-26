@@ -26,7 +26,8 @@ except:
     slave4id=0
 batwrsame = int(sys.argv[6])
 extprodakt = int(sys.argv[7])
-
+zweiterspeicher = int(sys.argv[8])
+storage2power = 0
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 #batterie auslesen und pv leistung korrigieren
@@ -35,14 +36,32 @@ if batwrsame == 1:
     rr = client.read_holding_registers(62852, 2, unit=1)
     raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
     soc = int(struct.unpack('>f', raw)[0])
+    try:
+        if zweiterspeicher == 1:
+            rr = client.read_holding_registers(62852, 2, unit=1)
+            raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
+            soc2 = int(struct.unpack('>f', raw)[0])
+            fsoc=(soc+soc2)/2
+        else:
+            fsoc=soc
+    except:
+        fsoc=soc
     f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
-    f.write(str(soc))
+    f.write(str(fsoc))
     f.close()
     rr = client.read_holding_registers(62836, 2, unit=1)
     raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
     storagepower = int(struct.unpack('>f', raw)[0])
+    try:
+        if zweiterspeicher == 1:
+            rr = client.read_holding_registers(62836, 2, unit=2)
+            raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
+            storage2power = int(struct.unpack('>f', raw)[0])
+    except:
+        storage2power = 0
+    final=storagepower+storage2power
     f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
-    f.write(str(storagepower))
+    f.write(str(final))
     f.close()
 
 
