@@ -327,10 +327,10 @@
 									<label class="col-md-4 col-form-label">Verbraucher <?php echo $deviceNum; ?></label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if(${"hook" . $deviceNum . "_aktivold"} == 0) echo " active" ?>">
+											<label class="btn btn-outline-info<?php if(${"verbraucher" . $deviceNum . "_aktivold"} == 0) echo " active" ?>">
 												<input type="radio" name="verbraucher<?php echo $deviceNum; ?>_aktiv" id="verbraucher<?php echo $deviceNum; ?>_aktivOff" value="0"<?php if(${"verbraucher" . $deviceNum . "_aktivold"} == 0) echo " checked=\"checked\"" ?>>Aus
 											</label>
-											<label class="btn btn-outline-info<?php if(${"hook" . $deviceNum . "_aktivold"} == 1) echo " active" ?>">
+											<label class="btn btn-outline-info<?php if(${"verbraucher" . $deviceNum . "_aktivold"} == 1) echo " active" ?>">
 												<input type="radio" name="verbraucher<?php echo $deviceNum; ?>_aktiv" id="verbraucher<?php echo $deviceNum; ?>_aktivOn" value="1"<?php if(${"verbraucher" . $deviceNum . "_aktivold"} == 1) echo " checked=\"checked\"" ?>>An
 											</label>
 										</div>
