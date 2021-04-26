@@ -2,7 +2,7 @@
 
 #Auslesen eines Kostal Piko WR über die integrierte API des WR mit angeschlossenem Eigenverbrauchssensor.
 
-pvwatttmp=$(curl --connect-timeout 3 -s $wrkostalpikoip/api/dxs.json?dxsEntries=33556736'&'dxsEntries=251658753'&'dxsEntries=83887106'&'dxsEntries=83887362'&'dxsEntries=83887618)
+pvwatttmp=$(curl --connect-timeout 3 -s $wrkostalpikoip/api/dxs.json?dxsEntries=67109120'&'dxsEntries=251658753'&'dxsEntries=83887106'&'dxsEntries=83887362'&'dxsEntries=83887618)
 
 #aktuelle Ausgangsleistung am WR [W]
 pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
