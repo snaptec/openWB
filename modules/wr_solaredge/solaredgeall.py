@@ -32,6 +32,7 @@ from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 #batterie auslesen und pv leistung korrigieren
 storagepower = 0
+storage2power = 0
 if batwrsame == 1:
     rr = client.read_holding_registers(62852, 2, unit=1)
     raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
@@ -212,7 +213,7 @@ if extprodakt == 1:
         extprod = 0
 else:
     extprod = 0
-allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower+extprod
+allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower-storage2power+extprod
 if allwatt > 0:
     allwatt=0
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
