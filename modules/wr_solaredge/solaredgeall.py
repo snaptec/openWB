@@ -39,7 +39,7 @@ if batwrsame == 1:
     soc = int(struct.unpack('>f', raw)[0])
     try:
         if zweiterspeicher == 1:
-            rr = client.read_holding_registers(62852, 2, unit=1)
+            rr = client.read_holding_registers(62852, 2, unit=2)
             raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
             soc2 = int(struct.unpack('>f', raw)[0])
             fsoc=(soc+soc2)/2
