@@ -30,6 +30,7 @@ def totalPowercFromShellyJson(answer):
     # shellyEM has one meter, shelly3EM has three meters:
     for meter in meters:
         totalc = totalc + meter['total']
+    totalc = totalc/60 # Shelly returns Wm, we need Wh
     return int(totalc)
 
 named_tuple = time.localtime() # getstruct_time
