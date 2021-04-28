@@ -530,6 +530,14 @@ def getdevicevalues():
         if (DeviceConfigured[i-1] != DeviceConfiguredOld[i-1]) and (DeviceConfigured[i-1] == "0"):
             cleardef(i)
             DeviceOn[i-1]= str("0")
+        if (DeviceConfiguredOld[i-1] == "9") and (DeviceConfigured[i-1] == "1"):
+            try:
+                deactivatewhileevcharging = int(config.get('smarthomedevices', 'device_deactivatewhileevcharging_'+str(i)))
+            except:
+                deactivatewhileevcharging = 0
+            if deactivatewhileevcharging == 1:
+            # nach startup alle aktiven devices mit Autoladen aus als other fuehren
+                DeviceCounters.update( {str(i) + "mantime" : time.time()})
         DeviceConfiguredOld[i-1] = DeviceConfigured[i-1]
     numberOfDevices = 0
     totalwatt = 0
@@ -649,6 +657,18 @@ def getdevicevalues():
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
                 # nur abschaltbar wenn openwb in pv modus gesetzt hat und nicht manual gesteuert
                 # elwa Warmwassersicherstellung Problem
+                if str(numberOfDevices)+"mantime" in DeviceCounters and (DeviceValues[str(numberOfDevices)+"manual"] != 1):
+                    # nach Ausschalten manueller Modus mindestens 30 Sek + max( ausschaltverzögerung,mindeseinschaltdauer
+                    #  als nicht abschaltbarer
+                    # device fuehren, damit nicht ungewollt pv überwchuss erkannt wird
+                    manverz = max( int(config.get('smarthomedevices', 'device_ausschaltverzoegerung_'+str(numberOfDevices))) * 60, int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(numberOfDevices))) * 60) + 30
+                    timesince = int(time.time()) - int(DeviceCounters[str(numberOfDevices)+"mantime"])
+                    if ( manverz < timesince ):
+                        del DeviceCounters[str(numberOfDevices)+"mantime"]
+                        logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " von Manuell auf Automatisch gestellt oder startup, Uebergangsfrist abgelaufen")
+                    else:
+                        logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " von Manuell auf Automatisch gestellt oder startup, Uebergangsfrist laueft noch " + str(manverz) + " > " + str(timesince) )
+                        abschalt = 0
                 if (abschalt == 1) and (relais == 1) and (DeviceValues[str(numberOfDevices)+"manual"] != 1):
                     totalwatt = totalwatt + watt
                 else:
@@ -1021,6 +1041,7 @@ while True:
                         if ( DeviceValues[str(i)+"manualmodevar"] == 1 ):
                             if ( DeviceValues[str(i)+"relais"] == 0 ):
                                 turndevicerelais(i, 1,0)
+                        DeviceCounters.update( {str(i) + "mantime" : time.time()})
                         logDebug(LOGLEVELDEBUG,"(" + str(i) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, keine Regelung")
                     else:
                         (switchtyp,canswitch) = gettyp(i)
