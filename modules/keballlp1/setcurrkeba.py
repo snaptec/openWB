@@ -30,18 +30,22 @@ final = float( decoder.decode_32bit_uint()) / 1000
 #all = format(value1, '04x') + format(value2, '04x')
 #final = float(struct.unpack('>i', all.decode('hex'))[0]) / 1000
 oldcurr = int("%.f" % final)
-if (oldcurr != newcurr):
-    if (newcurr == 0):
-        # disable station
-        print ('%s oldcurr %.f, newcurr %.f, ipadr %s disable station' % (time_string,oldcurr,newcurr,ipaddress),file=f)
-        rq = client.write_register(5014,0,unit=255)
-    else:
-        if (oldcurr == 0):
-            # enable station
-            print ('%s oldcurr %.f, newcurr %.f, ipadr %s enable station' % (time_string,oldcurr,newcurr,ipaddress),file=f)
-            rq = client.write_register(5014,1,unit=255)
-        # setting new curr
-        print ('%s oldcurr %.f, newcurr %.f, ipadr %s setting new curr' % (time_string,oldcurr,newcurr,ipaddress),file=f)
-        newcurrt = newcurr * 1000
-        rq = client.write_register(5004,newcurrt,unit=255)
+resp= client.read_holding_registers(1004,2,unit=255)
+decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
+final2 = float( decoder.decode_32bit_uint())
+plugs  = "%.f" % final2
+if plugs == "7":
+    if (oldcurr != newcurr):
+        if (newcurr == 0):
+            # disable station
+            print ('%s oldcurr %.f, newcurr %.f, ipadr %s disable station' % (time_string,oldcurr,newcurr,ipaddress),file=f)
+            rq = client.write_register(5014,0,unit=255)
+        else:
+            if (oldcurr == 0):
+                print ('%s oldcurr %.f, newcurr %.f, ipadr %s enable station ' % (time_string,oldcurr,newcurr,ipaddress ),file=f)
+                rq = client.write_register(5014,1,unit=255)
+            # setting new curr
+            print ('%s oldcurr %.f, newcurr %.f, ipadr %s setting new curr' % (time_string,oldcurr,newcurr,ipaddress),file=f)
+            newcurrt = newcurr * 1000
+            rq = client.write_register(5004,newcurrt,unit=255)
 f.close()
