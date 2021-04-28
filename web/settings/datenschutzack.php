@@ -67,54 +67,48 @@
 
 		</script>
 
-<?php
-//print_r($_POST);
+		<?php
+			$result = '';
+			$lines = file($_SERVER["DOCUMENT_ROOT"].'/openWB/openwb.conf');
+			foreach($lines as $line) {
+				$writeit = '0';
 
-$result = '';
-$lines = file($_SERVER["DOCUMENT_ROOT"].'/openWB/openwb.conf');
-foreach($lines as $line) {
-	$writeit = '0';
-	
-	if(strpos($line, "datenschutzack=") !== false) {
-		if ($_POST['dataProtectionAcknoledged'] == 1) {
-			$result .= 'datenschutzack=1'."\n";
-		} else {
-			$result .= 'datenschutzack=2'."\n";
-		}
-		$writeit = '1';
-	}
-	
-	if ( $writeit == '0' ) {
-		$result .= $line;
-	}
-}
+				if(strpos($line, "datenschutzack=") !== false) {
+					if ($_POST['dataProtectionAcknoledged'] == 1) {
+						$result .= 'datenschutzack=1'."\n";
+					} else {
+						$result .= 'datenschutzack=2'."\n";
+					}
+					$writeit = '1';
+				}
 
-flush();
-file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-sleep(5);
+				if ( $writeit == '0' ) {
+					$result .= $line;
+				}
+			}
 
-if ($_POST['dataProtectionAcknoledged'] != 1) { ?>
-		<form id="formid" action="settings/savemqtt.php?bridge=cloud" method="POST">
-			<input type="hidden" name="ConnectionName" value="cloud"/>
-			<input type="hidden" name="action" value="deleteBridge"/>
-			<!--
-			<div class="row col justify-content-center py-1">
-				<button type="submit" class="btn btn-green" name="action" value="deleteBridge">Brücke cloud löschen</button>
-			</div>
-			-->
-		</form>
-		<script>
-			setTimeout(function() { document.getElementById('formid').submit(value="deleteBridge"); }, 5000);
-		</script>
-<?php
-} else {
-?>
-		<script>
-			setTimeout(function() { window.location.href="index.php"; }, 5000);
-		</script>
-<?php
-}
-?>
+			flush();
+			file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+			sleep(5);
+
+			if ($_POST['dataProtectionAcknoledged'] != 1) {
+				?>
+				<form id="formid" action="settings/savemqtt.php?bridge=cloud" method="POST">
+					<input type="hidden" name="ConnectionName" value="cloud"/>
+					<input type="hidden" name="action" value="deleteBridge"/>
+				</form>
+				<script>
+					setTimeout(function() { document.getElementById('formid').submit(value="deleteBridge"); }, 5000);
+				</script>
+				<?php
+			} else {
+				?>
+				<script>
+					setTimeout(function() { window.location.href="index.php"; }, 5000);
+				</script>
+				<?php
+			}
+		?>
 
 	</body>
 </html>

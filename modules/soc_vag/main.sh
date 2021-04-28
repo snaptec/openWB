@@ -55,7 +55,7 @@ incrementTimer(){
 			;;
 		3)
 			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=6
+			ticksize=1
 			;;
 		*)
 			# Regelgeschwindigkeit unbekannt
