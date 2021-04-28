@@ -1115,9 +1115,9 @@ def on_message(client, userdata, msg):
         if (msg.topic == "openWB/set/pv/1/W"):
             if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
                 if (float(msg.payload) > 1):
-                    pvwatt=int(msg.payload.decode("utf-8")) * -1
+                    pvwatt=int(float(msg.payload.decode("utf-8"))) * -1
                 else:
-                    pvwatt=int(msg.payload.decode("utf-8"))
+                    pvwatt=int(float(msg.payload.decode("utf-8")))
                 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
                 f.write(str(pvwatt))
                 f.close()

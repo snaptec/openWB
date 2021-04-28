@@ -647,9 +647,9 @@ def getdevicevalues():
                         logDebug(LOGLEVELDEBUG, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " File not found: " + str(pyname))
                 # Separate Leistungs messung ?
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
-                # nur abschaltbar wenn openwb in pv modus gesetzt hat
+                # nur abschaltbar wenn openwb in pv modus gesetzt hat und nicht manual gesteuert
                 # elwa Warmwassersicherstellung Problem
-                if (abschalt == 1) and (relais == 1):
+                if (abschalt == 1) and (relais == 1) and (DeviceValues[str(numberOfDevices)+"manual"] != 1):
                     totalwatt = totalwatt + watt
                 else:
                     totalwattot = totalwattot + watt
