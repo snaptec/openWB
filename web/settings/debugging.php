@@ -27,52 +27,26 @@
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
 		<?php
-
-			// read selected debug mode from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "debug=") !== false) {
-					list(, $debugmode) = explode("=", $line);
-				}
-				if(strpos($line, "datenschutzack=") !== false) {
-					list(, $datenschutzackold) = explode("=", $line, 2);
-				}
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-			$debugmode = trim($debugmode);
-			if ( $debugmode == "" ) {
+
+			if ( $debugold == "" ) {
 				// if no debug mode set, set 0 = off
-				$debugmode="0";
+				$debugold = "0";
 			}
 
 		?>
@@ -83,29 +57,52 @@
 			<h1>Debugging und Support</h1>
 
 			<div class="card border-secondary">
-				<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
+				<form class="form" id="debugmodeForm" action="./settings/saveconfig.php" method="POST">
 					<div class="card-header bg-secondary">
-						Debug-Modus
+						Protokollierung
 					</div>
 					<div class="card-body">
-						<div class="form-group mb-0">
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0"<?php if($debugmode == "0") echo " checked"?>>
-								<label class="custom-control-label" for="mode0RadioBtn">
-									Mode 0 (aus)
-								</label>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Debug-Modus</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($debugold == 0) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode0" value="0"<?php if($debugold == 0) echo " checked=\"checked\"" ?>>Mode 0 (aus)
+										</label>
+										<label class="btn btn-outline-info<?php if($debugold == 2) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode1" value="1"<?php if($debugold == 1) echo " checked=\"checked\"" ?>>Mode 1 (Regelwerte)
+										</label>
+										<label class="btn btn-outline-info<?php if($debugold == 2) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode2" value="2"<?php if($debugold == 2) echo " checked=\"checked\"" ?>>Mode 2 (Berechnungsgrundlage)
+										</label>
+									</div>
+									<span class="form-text small">
+										Mit dieser Einstellung können zusätzliche Logmeldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.
+									</span>
+								</div>
 							</div>
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1"<?php if($debugmode == "1") echo " checked"?>>
-								<label class="custom-control-label" for="mode1RadioBtn">
-									Mode 1 (Regelwerte)
-								</label>
-							</div>
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2"<?php if($debugmode == "2") echo " checked"?>>
-								<label class="custom-control-label" for="mode2RadioBtn">
-									Mode 2 (Berechnungsgrundlage)
-								</label>
+						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Gateway prüfen</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pingcheckactiveold == 0) echo " active" ?>">
+											<input type="radio" name="pingcheckactive" id="pingcheckactive0" value="0"<?php if($pingcheckactiveold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pingcheckactiveold == 2) echo " active" ?>">
+											<input type="radio" name="pingcheckactive" id="pingcheckactive1" value="1"<?php if($pingcheckactiveold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">
+										Wird diese Option aktiviert, dann wird die Verbindung zum Netzwerk Gateway alle 5 Minuten mit einem Ping geprüft.
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -116,18 +113,18 @@
 			</div>
 
 			<div class="card border-secondary">
-				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
+				<form class="form" id="sendTokenForm" action="./settings/starttunnel.php" method="POST">
 					<div class="card-header bg-secondary">
 						Remote Support
 					</div>
 					<div class="card-body">
 						<?php if ( $datenschutzackold != 1 ) { ?>
 						<div class="alert alert-danger">
-							Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
+							Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
 						</div>
 						<?php } else { ?>
 						<div class="alert alert-success">
-							Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
+							Sie haben der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
 						</div>
 						<?php } ?>
 						<div class="form-group mb-0">

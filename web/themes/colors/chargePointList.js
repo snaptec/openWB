@@ -35,7 +35,7 @@ class ChargePointList {
 
     this.tbody = table.append("tbody");
     this.footer = div.append("div");
-  }
+    this.fgColor = "var(--color-fg)";  }
 
   // update if data has changed
   update() {
@@ -108,11 +108,13 @@ class ChargePointList {
     }
     if (row.willFinishAtTime) {
       cell.append("span")
-        .attr("class", "fa fa-xs fa-flag-checkered");
+        .attr("class", "fa fa-xs fa-flag-checkered pl-1")
+        .style("color", this.fgColor);
     }
     if (row.chargeAtNight) {
       cell.append("span")
-        .attr("fa fa-xs fa-moon");
+        .attr("class", "fa fa-xs fa-moon pl-1")
+        .style("color", this.fgColor)
     }
     return cell.node();
   }

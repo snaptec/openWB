@@ -47,7 +47,7 @@ elif [[ $froniusvar2 == "2" ]]; then
 	
 	# TODO: meter_location für diese Variante korrekt ermitteln
 	# Überprüfe den Einbauort des SmartMeters.
-	meter_location=$(echo $response_sm | jq $json_id'.Meter_Location_Current')
+	meter_location=$froniusmeterlocation
 	
 	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
 	wattbezug=$(echo "scale=0; $(echo $response_sm | jq $json_id'.SMARTMETER_POWERACTIVE_MEAN_SUM_F64')/1" | bc)
@@ -71,7 +71,7 @@ elif [[ $froniusvar2 == "2" ]]; then
 	ekwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
 fi
 
-openwbDebugLog ${DMOD} 1 "EVU: response_sm: $response_sm"
+openwbDebugLog ${DMOD} 2 "EVU: response_sm: $response_sm"
 
 # Auswertung für Variante0 und Variante1 gebündelt
 if [[ $froniusvar2 != "2" ]]; then
@@ -99,8 +99,6 @@ if [[ $froniusvar2 != "2" ]]; then
 	ekwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Produced')
 
 fi
-
-
 
 openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
 

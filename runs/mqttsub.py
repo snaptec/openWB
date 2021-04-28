@@ -155,7 +155,7 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630'] # 'pyt' is deprecated and will be removed!
+            validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514','fronius','json'] # 'pyt' is deprecated and will be removed!
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                 try:
                     deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))
@@ -262,6 +262,21 @@ def on_message(client, userdata, msg):
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
                 writetoconfig(shconfigfile,'smarthomedevices','device_measureurl_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureurl", msg.payload.decode("utf-8"), qos=0, retain=True)
+        elif (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measurejsonurl" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_measurejsonurl_'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measurejsonurl", msg.payload.decode("utf-8"), qos=0, retain=True)
+        elif (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measurejsonpower" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_measurejsonpower_'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measurejsonpower", msg.payload.decode("utf-8"), qos=0, retain=True)
+        elif (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measurejsoncounter" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_measurejsoncounter_'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measurejsoncounter", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_username" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
@@ -604,41 +619,58 @@ def on_message(client, userdata, msg):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeSlowRamping=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/slave/SlowRamping", msg.payload.decode("utf-8"), qos=0, retain=True)
+        if (msg.topic == "openWB/config/set/slave/StandardSocketInstalled"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                standardSocketInstalled=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "standardSocketInstalled=", standardSocketInstalled]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/slave/StandardSocketInstalled", standardSocketInstalled, qos=0, retain=True)
         if (msg.topic == "openWB/config/set/slave/UseLastChargingPhase"):
             if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeUseLastChargingPhase=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/slave/UseLastChargingPhase", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
                 f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
+        if (msg.topic == "openWB/config/set/slave/SocketApproved"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+                f = open('/var/www/html/openWB/ramdisk/socketApproved', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+                client.publish("openWB/config/get/slave/SocketApproved", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/configure/AllowedPeakPower"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
+            if (float(msg.payload) >= 0 and float(msg.payload) <= 300000):
                 f = open('/var/www/html/openWB/ramdisk/AllowedPeakPower', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
         if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp1"):
-            if (int(msg.payload) >= -1 and int(msg.payload) <=32):
+            if (int(msg.payload) >= -1 and int(msg.payload) <= 32):
                 f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
         if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
-            if (int(msg.payload) >= -1 and int(msg.payload) <=32):
+            if (int(msg.payload) >= -1 and int(msg.payload) <= 32):
                 f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
         if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
                 f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
+        if (msg.topic == "openWB/set/configure/AllowedRfidsForSocket"):
+            f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForSocket', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            setTopicCleared = True
         if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
             f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
             f.write(msg.payload.decode("utf-8"))
@@ -696,6 +728,12 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
+        if (msg.topic == "openWB/config/set/global/slaveMode"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                slaveMode=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slavemode=", slaveMode]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/global/slaveMode", slaveMode, qos=0, retain=True)
         if (msg.topic == "openWB/config/set/global/lp/1/cpInterrupt"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=1):
                 einbeziehen=msg.payload.decode("utf-8")
@@ -1077,9 +1115,9 @@ def on_message(client, userdata, msg):
         if (msg.topic == "openWB/set/pv/1/W"):
             if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
                 if (float(msg.payload) > 1):
-                    pvwatt=int(msg.payload.decode("utf-8")) * -1
+                    pvwatt=int(float(msg.payload.decode("utf-8"))) * -1
                 else:
-                    pvwatt=int(msg.payload.decode("utf-8"))
+                    pvwatt=int(float(msg.payload.decode("utf-8")))
                 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
                 f.write(str(pvwatt))
                 f.close()

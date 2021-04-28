@@ -219,7 +219,9 @@ class AVMHomeAutomation:
                     # AVM returns mW, convert to W here
                     next_device_infos[name]['power'] = float(powermeterBlock.find("power").text)/1000.0
                     # AVM returns mV, convert to V here
-                    next_device_infos[name]['voltage'] = float(powermeterBlock.find("voltage").text)/1000.0
+                    voltageInfo = powermeterBlock.find("voltage")
+                    if voltageInfo != None:
+                        next_device_infos[name]['voltage'] = float(voltageInfo.text)/1000.0
                     # AVM returns Wh
                     next_device_infos[name]['energy'] = powermeterBlock.find("energy").text 
 

@@ -200,6 +200,25 @@ try:
         f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
         f.write(str(hz))
         f.close()
+
+        resp = client.read_input_registers(0x1E,2, unit=sdmid)
+        pf1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        pf1 = float("%.3f" % pf1)
+        f = open('/var/www/html/openWB/ramdisk/llpf1', 'w')
+        f.write(str(pf1))
+        f.close()
+        resp = client.read_input_registers(0x20,2, unit=sdmid)
+        pf2 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        pf2 = float("%.3f" % pf2)
+        f = open('/var/www/html/openWB/ramdisk/llpf2', 'w')
+        f.write(str(pf2))
+        f.close()
+        resp = client.read_input_registers(0x22,2, unit=sdmid)
+        pf3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        pf3 = float("%.3f" % pf3)
+        f = open('/var/www/html/openWB/ramdisk/llpf3', 'w')
+        f.write(str(pf3))
+        f.close()
     elif sdmid > 200:
         #llkwh
         resp = client.read_holding_registers(0x5000,4, unit=sdmid)

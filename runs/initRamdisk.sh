@@ -251,7 +251,6 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/pv2a3
 	echo 0 > $RamdiskPath/pv2kwh
 	echo 0 > $RamdiskPath/pv2watt
-	echo 0 > $RamdiskPath/pv2watt
 	echo 0 > $RamdiskPath/pvcounter
 	echo 0 > $RamdiskPath/pvecounter
 	echo 0 > $RamdiskPath/pvkwh
@@ -346,6 +345,18 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/verbraucher3_watt
 	echo 0 > $RamdiskPath/verbraucher3_wh
 	echo 0 > $RamdiskPath/verbraucher3vorhanden
+	touch $RamdiskPath/ladestophooklp1aktiv # benötigt damit der Ladestopp-WebHook nicht beim Neustart auslöst
+	touch $RamdiskPath/abgesteckthooklp1aktiv # benötigt damit der Abgesteckt-WebHook nicht beim Neustart auslöst
+
+	# standard socket
+	echo 0 > $RamdiskPath/socketa
+	echo 0 > $RamdiskPath/socketv
+	echo 0 > $RamdiskPath/socketp
+	echo 0 > $RamdiskPath/socketpf
+	echo 0 > $RamdiskPath/socketkwh
+	echo 0 > $RamdiskPath/socketApproved
+	echo 0 > $RamdiskPath/socketActivated
+	echo 0 > $RamdiskPath/socketActivationRequested
 
 	# diverse Dateien
 	echo 0 > $RamdiskPath/AllowedTotalCurrentPerPhase
@@ -433,10 +444,10 @@ initRamdisk(){
 			"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt:0" \
 			"lp${i}phasen::0" \
 			"lp${i}enabled::1" \
-			"restzeitlp${i}::--" \
+			"restzeitlp${i}::0" \
 			"autolockstatuslp${i}::0" \
 			"autolockconfiguredlp${i}::0" \
-			"lp${i}sofortll::10" \
+			"lp${i}sofortll:openWB/config/get/sofort/lp/${i}/current:10" \
 			"rfidlp${i}::0" \
 			"boolstopchargeafterdisclp${i}::0" \
 			"mqttzielladenaktivlp${i}::-1" \
@@ -594,6 +605,8 @@ initRamdisk(){
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 
 	sudo chmod 777 $RamdiskPath/*
-	#python3 /var/www/html/openWB/runs/csvcalc.py /var/www/html/openWB/web/logging/data/daily/ /var/www/html/openWB/web/logging/data/v001/ /var/www/html/openWB/ramdisk/ M >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
+
+	echo "Trigger update of logfiles..."
+	python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode M >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
 	echo "Ramdisk init done."
 }

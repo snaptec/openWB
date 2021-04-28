@@ -12,6 +12,8 @@ echo "loading config"
 . /var/www/html/openWB/runs/updateConfig.sh
 
 sleep 5
+mkdir -p /var/www/html/openWB/web/backup
+touch /var/www/html/openWB/web/backup/.donotdelete
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -22,8 +24,9 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_eq
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_tesla
 
-sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
@@ -40,10 +43,16 @@ updateConfig
 # now setup all files in ramdisk
 initRamdisk
 
+# standard socket - activated after reboot due to RASPI init defaults so we need to disable it as soon as we can
+if [[ $standardSocketInstalled == "1" ]]; then
+	echo "turning off standard socket ..."
+	sudo python /var/www/html/openWB/runs/standardSocket.py off
+fi
+
 # initialize automatic phase switching
 if (( u1p3paktiv == 1 )); then
 	echo "triginit..."
-	sudo python /var/www/html/openWB/runs/triginit.py
+	sudo python /var/www/html/openWB/runs/triginit.py -d $u1p3ppause
 fi
 
 # check if buttons are configured and start daemon
@@ -256,6 +265,12 @@ if python3 -c "import pymodbus" &> /dev/null; then
 else
 	sudo pip3 install pymodbus
 fi
+#Prepare for jq in Python
+if python3 -c "import jq" &> /dev/null; then
+	echo 'jq installed...'
+else
+	sudo pip3 install jq
+fi
 
 # update version
 echo "version..."
@@ -381,13 +396,13 @@ fi
 #prepare for Buster
 echo -n "fix upload limit..."
 if [ -d "/etc/php/7.0/" ]; then
-        echo "OS Stretch"
-        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+	echo "OS Stretch"
+	sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+	sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 elif [ -d "/etc/php/7.3/" ]; then
-        echo "OS Buster"
-        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
-        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+	echo "OS Buster"
+	sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+	sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
 fi
 sudo /usr/sbin/apachectl -k graceful
 
