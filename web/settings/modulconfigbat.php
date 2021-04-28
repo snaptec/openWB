@@ -28,35 +28,13 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -73,7 +51,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration Batteriespeicher</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- Speicher -->
 				<div class="card border-warning">
@@ -186,7 +164,7 @@
 							</div>
 						</div>
 
-                        <div id="divspeicherstuder" class="hide">
+						<div id="divspeicherstuder" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
@@ -405,6 +383,17 @@
 										</span>
 									</div>
 								</div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="solaredgezweiterspeicher" class="col-md-4 col-form-label">Ist ein zweiter Speicher am Wechselrichter angeschlossen?</label>
+										<div class="col">
+											<select name="solaredgezweiterspeicher" id="solaredgezweiterspeicher" class="form-control">
+												<option <?php if($solaredgezweiterspeicherold == 0) echo "selected" ?> value="0">Nein</option>
+												<option <?php if($solaredgezweiterspeicherold == 1) echo "selected" ?> value="1">Ja</option>
+											</select>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -597,6 +586,7 @@
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
 								hideSection('#divspeichersungrow');
+								hideSection('#divspeicherjson');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
@@ -627,7 +617,7 @@
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
 								}
-                                if($('#speichermodul').val() == 'speicher_studer') {
+								if($('#speichermodul').val() == 'speicher_studer') {
 									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
@@ -744,7 +734,7 @@
 			</div>
 
 			<!-- hidden form to save wizzard done to config on abort -->
-			<form id="wizzarddoneForm" action="tools/saveconfig.php" method="POST">
+			<form id="wizzarddoneForm" action="settings/saveconfig.php" method="POST">
 				<input type="hidden" name="wizzarddone" value="100">
 			</form>
 
