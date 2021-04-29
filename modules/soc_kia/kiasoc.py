@@ -50,7 +50,7 @@ glParams = {
 def setGlobalData(vin):
     glParams['reqTimeout'] = 60
     glParams['statusTimeout'] = 150
-    glParams['cacheValid'] = 10 * 60
+    glParams['cacheValid'] = 0 * 60
     glParams['soc12vLimit'] = 20
     
     if vin[:2]=='KN':
@@ -675,7 +675,6 @@ def DownloadSoC(email, password, pin, vin):
     except:
         logDebug(0, "Collecting data from server failed")
         raise 
-    logDebug(2, "Received SoC (12 V-battery): " + str(status['soc12v']) + "%")
 
     if (now - status['time']) < (glParams['cacheValid']):
         logDebug(2, "Cached data is current")
@@ -690,9 +689,16 @@ def DownloadSoC(email, password, pin, vin):
         except:
             logDebug(0, "Collecting data from vehicle failed")
             raise
+    
+    if status['soc12v'] >= 80:
+        logDebug(2, "Received SoC (12 V-battery): " + str(status['soc12v']) + "%")
+    elif status['soc12v'] >= 70 and status['soc12v'] < 80:
+        logDebug(1, "Received SoC (12 V-battery): " + str(status['soc12v']) + "%")
+    elif status['soc12v'] < 70:
+        logDebug(0, "Received SoC (12 V-battery): " + str(status['soc12v']) + "%")
         
     soc = status['socev']
-    logDebug(2, "Received SoC: " + str(soc) + "%")
+    logDebug(0, "Received SoC (HV-battery): " + str(soc) + "%")
     
     logDebug(1, "SoC download ending")
     
