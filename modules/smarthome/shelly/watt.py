@@ -21,17 +21,6 @@ def totalPowerFromShellyJson(answer):
         total = total + meter['power']
     return int(total)
 
-def totalPowercFromShellyJson(answer):
-    if 'meters' in answer:
-        meters = answer['meters'] # shelly
-    else:
-        meters = answer['emeters'] # shellyEM & shelly3EM
-    totalc = 0
-    # shellyEM has one meter, shelly3EM has three meters:
-    for meter in meters:
-        totalc = totalc + meter['total']
-    totalc = totalc/60 # Shelly returns Wm, we need Wh
-    return int(totalc)
 
 named_tuple = time.localtime() # getstruct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S shelly watty.py", named_tuple)
@@ -40,7 +29,7 @@ ipadr=str(sys.argv[2])
 uberschuss=int(sys.argv[3])
 
 # Setze Default-Werte, andernfalls wird der letzte Wert ewig fortgeschrieben. Insbesondere wichtig für aktuelle Leistung
-powerc = 0
+powerc = 0 # Zähler wird beim Neustart auf 0 gesetzt, darf daher nicht übergeben werden.
 temp0 = '0.0'
 temp1 = '0.0'
 temp2 = '0.0'
@@ -59,11 +48,6 @@ except:
 # Versuche Werte aus der Antwort zu extrahieren.
 try:
     aktpower = totalPowerFromShellyJson(answer)
-except:
-    pass
-
-try:
-    powerc = totalPowercFromShellyJson(answer)
 except:
     pass
 
