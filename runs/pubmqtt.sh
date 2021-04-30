@@ -252,7 +252,8 @@ do
 	for f in \
 		"lp/${i}/plugStartkWh:pluggedladunglp${i}startkwh" \
 		"lp/${i}/pluggedladungakt:pluggedladungaktlp${i}" \
-		"lp/${i}/lmStatus:lmStatusLp${i}"
+		"lp/${i}/lmStatus:lmStatusLp${i}" \
+		"lp/${i}/tagScanInfo:tagScanInfoLp${i}"
 	do
 		IFS=':' read -r -a tuple <<< "$f"
 		#echo "Setting mqttvar[${tuple[0]}]=${tuple[1]}"
