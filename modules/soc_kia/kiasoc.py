@@ -37,9 +37,13 @@ glParams = {
         'currentSocFile': '',
         'lastSocFile': '',
         'lastRunFile': '',
+        'lastTickFile': '',
         'timerFile': '',
         'meterFile': '',
-        'lastMeterFile': ''
+        'lastMeterFile': '',
+        'isChargingFile': '',
+        'isPluggedFile': '',
+        'unplugFile': ''
     },
     'args' : {
         'chargePoint': '',
@@ -120,16 +124,21 @@ def renderFileNames(ramDiskDir):
         glParams['files']['tokenFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_token"
         glParams['files']['lastSocFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_lastsoc"
         glParams['files']['lastRunFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_lastrun"
+        glParams['files']['lastTickFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_lasttick"
         glParams['files']['lastMeterFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_lastmeter"
+        glParams['files']['isChargingFile'] = ramDiskDir + "/ladungaktivlp" + glParams['args']['chargePoint']
+        glParams['files']['unplugFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_unplug"
         
         if glParams['args']['chargePoint'] == '1':
             glParams['files']['currentSocFile'] = ramDiskDir + "/soc"
             glParams['files']['timerFile'] = ramDiskDir + "/soctimer"
             glParams['files']['meterFile'] = ramDiskDir + "/llkwh"
+            glParams['files']['isPluggedFile'] = ramDiskDir + "/plugstat"
         elif glParams['args']['chargePoint'] == '2':
             glParams['files']['currentSocFile'] = ramDiskDir + "/soc1"
             glParams['files']['timerFile'] = ramDiskDir + "/soctimer1"
             glParams['files']['meterFile'] = ramDiskDir + "/llkwhs1"
+            glParams['files']['isPluggedFile'] = ramDiskDir + "/plugstats1"
         else:
             raise RuntimeError
     except:
@@ -649,12 +658,7 @@ def DownloadSoC(email, password, pin, vin):
     logDebug(0, "SoC download starting")
       
     try:
-        now = int(time.time())
-        
-        f = open(glParams['files']['lastRunFile'], 'w')
-        f.write(str(now))
-        f.close()
-        
+        now = int(time.time())       
         setGlobalData(vin)
     except:
         logDebug(0, "Initialisation failed")
@@ -704,9 +708,7 @@ def DownloadSoC(email, password, pin, vin):
 
 def doExternalUpdate(email, password, pin, vin):
     attempt = 0
-    
-    ackExternalTrigger()
-    
+   
     while attempt < 3:
         try:
             soc = DownloadSoC(email, password, pin, vin)
@@ -832,6 +834,125 @@ def ackExternalTrigger():
         
     return
     
+def ackTimerTrigger():
+    try:
+        now = int(time.time())
+        
+        f = open(glParams['files']['lastRunFile'], 'w')
+        f.write(str(now))
+        f.close()
+    except:
+        raise
+        
+    return
+
+def isCharging():
+    chargeState = 0
+    
+    try:  
+        f = open(glParams['files']['isChargingFile'], 'r')
+        chargeState = int(f.read())
+        f.close()    
+    except:
+        raise
+
+    return chargeState
+    
+def wasCharging():
+    chargedState = 0
+    
+    try:
+        f = open(glParams['files']['meterFile'], 'r')
+        meter = float(f.read())
+        f.close()
+    except:
+        meter = 0
+
+    try:
+        f = open(glParams['files']['lastMeterFile'], 'r')
+        lastMeter = float(f.read())
+        f.close()
+    except:
+        lastMeter = 0    
+
+    if meter > lastMeter:
+        chargedState = 1
+
+    return chargedState
+
+def isPlugged():
+    plugState = 0
+    
+    try:  
+        f = open(glParams['files']['isPluggedFile'], 'r')
+        plugState = int(f.read())
+        f.close()    
+    except:
+        raise
+
+    return plugState
+    
+def saveTickTime():
+    try:
+        now = int(time.time())
+        
+        f = open(glParams['files']['lastTickFile'], 'w')
+        f.write(str(now))
+        f.close()
+    except:
+        raise
+        
+    return
+    
+def saveUnplugState():
+    unplugState = 0
+    
+    try:  
+        f = open(glParams['files']['isPluggedFile'], 'r')
+        plugState = int(f.read())
+        f.close()
+        
+        if plugState == 0:
+            unplugState = 1
+    except:
+        raise
+        
+    try:  
+        now = int(time.time())
+        
+        f = open(glParams['files']['lastTickFile'], 'r')
+        lastTick = int(f.read())
+        f.close() 
+        
+        secsSinceLastTick = now - lastTick
+        if secsSinceLastTick > 60:
+            unplugState = 1
+    except:
+        raise
+    
+    if unplugState == 1:
+        f = open(glParams['files']['unplugFile'], 'w')
+        f.write(str(unplugState))
+        f.close()        
+        
+    return
+    
+def wasUnplugged():
+    unplugState = 1
+    
+    try:  
+        f = open(glParams['files']['unplugFile'], 'r')
+        unplugState = int(f.read())
+        f.close()    
+    except:
+        unplugState = 1
+    
+    f = open(glParams['files']['unplugFile'], 'w')
+    f.write(str(0))
+    f.close()  
+        
+    return unplugState
+    
 def isExternalTriggered():
     trigger = 0
     
@@ -863,8 +984,6 @@ def isMinimumTimerExpired(timerMinInterval):
 
     if secSince < timerMinInterval:
         trigger = 0
-        ackExternalTrigger()
-        logDebug(1, "Last Download less then "+ '{:.0f}'.format(timerMinInterval / 60) + " minutes ago. Cancelling download")
     else:
         trigger = 1
         
@@ -895,6 +1014,7 @@ def isDownloadTriggered(timerInterval, timerMinInterval):
 
     try:
         if isExternalTriggered() == 1:
+            ackExternalTrigger()
             trigger = 1
         elif isTimerExpired(timerInterval) == 1:
             trigger = 1
@@ -903,9 +1023,19 @@ def isDownloadTriggered(timerInterval, timerMinInterval):
 
         if trigger == 1:
             if isMinimumTimerExpired(timerMinInterval) == 1:
+                ackTimerTrigger()
                 trigger = 1
             else: 
+                logDebug(1, "Last Download less then "+ '{:.0f}'.format(timerMinInterval / 60) + " minutes ago. Cancelling download")
                 trigger = 0
+        
+        if trigger == 1:
+            if wasCharging() == 1 or wasUnplugged() == 1:
+                trigger = 1
+            else:
+                logDebug(1, "Vehicle was not unplugged or charging since last download. Cancelling download")
+                trigger = 0
+                
     except:
         raise
         
@@ -929,16 +1059,24 @@ def main():
     logDebug(1, "Kia/Hyundai SoC Module starting")
 
     try:
+        saveUnplugState()
+        
         if isDownloadTriggered(args['timerInterval'], glParams['timerMinInterval']) == 1:
             doExternalUpdate(args['accountName'], args['accountPassword'], args['accountPin'], args['vehicleVin'])
         elif args['manualCalc'] == 1:
-            logDebug(2, "Manual calculation starting")
-            doManualUpdate(args['batterySize'], args['efficiency'])
+            if isCharging() == 1:
+                logDebug(2, "Manual calculation starting")
+                doManualUpdate(args['batterySize'], args['efficiency'])
         else: 
             logDebug(2, "Nothing to do yet")
     except:
         pass
     
+    try:
+        saveTickTime()
+    except:
+        pass
+        
     logDebug(1, "Kia/Hyundai SoC Module ending")
     
     try:
