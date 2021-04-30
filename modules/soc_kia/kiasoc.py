@@ -21,6 +21,7 @@ glParams = {
     'reqTimeout': 0,
     'statusTimeout': 0,
     'cacheValid': 0,
+    'timerMinInterval': 0,
     'soc12vLimit': 0,
     'controlToken': '',
     'accessToken': {
@@ -48,11 +49,6 @@ glParams = {
      
 #---------------Initialization------------------------------------------ 
 def setGlobalData(vin):
-    glParams['reqTimeout'] = 60
-    glParams['statusTimeout'] = 150
-    glParams['cacheValid'] = 0 * 60
-    glParams['soc12vLimit'] = 20
-    
     if vin[:2]=='KN':
         glParams['brand'] = 'kia'
         logDebug(2, "Vehicle identified as Kia")
@@ -80,6 +76,12 @@ def setGlobalData(vin):
     return
 
 def loadArguments(argsFile):
+    glParams['reqTimeout'] = 60
+    glParams['statusTimeout'] = 150
+    glParams['cacheValid'] = 10 * 60
+    glParams['soc12vLimit'] = 20
+    glParams['timerMinInterval'] = 15 * 60
+    
     retDict = {
         'accountName': '',
         'accountPassword': '',
@@ -653,10 +655,6 @@ def DownloadSoC(email, password, pin, vin):
         f.write(str(now))
         f.close()
         
-        f = open(glParams['files']['timerFile'], 'w')
-        f.write(str(0))
-        f.close()
-        
         setGlobalData(vin)
     except:
         logDebug(0, "Initialisation failed")
@@ -706,6 +704,9 @@ def DownloadSoC(email, password, pin, vin):
 
 def doExternalUpdate(email, password, pin, vin):
     attempt = 0
+    
+    ackExternalTrigger()
+    
     while attempt < 3:
         try:
             soc = DownloadSoC(email, password, pin, vin)
@@ -821,6 +822,16 @@ def saveSoc(soc, manual):
     return
 
 #---------------Timer handling------------------------------------------
+def ackExternalTrigger():
+    try:
+        f = open(glParams['files']['timerFile'], 'w')
+        f.write(str(0))
+        f.close()
+    except:
+        raise
+        
+    return
+    
 def isExternalTriggered():
     trigger = 0
     
@@ -834,6 +845,28 @@ def isExternalTriggered():
     if ticksLeft > 0:
         trigger = 1
         logDebug(1, "SoC download triggered externally")
+        
+    return trigger
+    
+def isMinimumTimerExpired(timerMinInterval):
+    trigger = 0
+    now = int(time.time())
+
+    try:
+        f = open(glParams['files']['lastRunFile'], 'r')
+        lastRun = int(f.read())
+        f.close()
+    except:
+        lastRun = 0
+        
+    secSince = now - lastRun
+
+    if secSince < timerMinInterval:
+        trigger = 0
+        ackExternalTrigger()
+        logDebug(1, "Last Download less then "+ '{:.0f}'.format(timerMinInterval / 60) + " minutes ago. Cancelling download")
+    else:
+        trigger = 1
         
     return trigger
 
@@ -857,14 +890,22 @@ def isTimerExpired(timerInterval):
         
     return trigger
     
-def isDownloadTriggered(timerInterval):
+def isDownloadTriggered(timerInterval, timerMinInterval):
     trigger = 0
-    
+
     try:
         if isExternalTriggered() == 1:
             trigger = 1
         elif isTimerExpired(timerInterval) == 1:
             trigger = 1
+        else:
+            trigger = 0
+
+        if trigger == 1:
+            if isMinimumTimerExpired(timerMinInterval) == 1:
+                trigger = 1
+            else: 
+                trigger = 0
     except:
         raise
         
@@ -886,9 +927,9 @@ def main():
     
     logDebug(1, "-------------------------------")    
     logDebug(1, "Kia/Hyundai SoC Module starting")
-    
+
     try:
-        if isDownloadTriggered(args['timerInterval']) == 1:
+        if isDownloadTriggered(args['timerInterval'], glParams['timerMinInterval']) == 1:
             doExternalUpdate(args['accountName'], args['accountPassword'], args['accountPin'], args['vehicleVin'])
         elif args['manualCalc'] == 1:
             logDebug(2, "Manual calculation starting")
