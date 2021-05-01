@@ -820,6 +820,8 @@ def saveSoc(soc, manual):
         f = open(glParams['files']['lastMeterFile'], 'w')
         f.write(str(meter))
         f.close()
+        
+        resetUnplugState()
             
     return
 
@@ -936,7 +938,14 @@ def saveUnplugState():
         f.close()        
         
     return
-    
+
+def resetUnplugState():
+    f = open(glParams['files']['unplugFile'], 'w')
+    f.write(str(0))
+    f.close()  
+
+    return
+
 def wasUnplugged():
     unplugState = 1
     
@@ -947,10 +956,6 @@ def wasUnplugged():
     except:
         unplugState = 1
     
-    f = open(glParams['files']['unplugFile'], 'w')
-    f.write(str(0))
-    f.close()  
-        
     return unplugState
     
 def isExternalTriggered():
