@@ -77,6 +77,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
 										<option <?php if($wattbezugmodulold == "bezug_ksem") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
 										<option <?php if($wattbezugmodulold == "bezug_lgessv1") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
+										<option <?php if($wattbezugmodulold == "bezug_janitza") echo "selected" ?> value="bezug_janitza">Janitza</option>
 										<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 										<option <?php if($wattbezugmodulold == "bezug_powerfox") echo "selected" ?> value="bezug_powerfox">Powerfox</option>
@@ -128,6 +129,11 @@
 						<div id="wattbezugvarta" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich. Es muss beim Speicher Varta ausgewählt werden.
+							</div>
+						</div>
+						<div id="wattbezugjanitza" class="hide">
+							<div class="card-text alert alert-info">
+								Ausgelesen wird Register 19026 auf Port 502. ModbusTCP muss im Janitza aktiv sein.
 							</div>
 						</div>
 						<div id="wattbezugsolarwatt" class="hide">
@@ -847,6 +853,7 @@
 								hideSection('#wattbezugalphaess');
 								hideSection('#wattbezugsungrow');
 								hideSection('#wattbezugsolarwatt');
+								hideSection('#wattbezugjanitza');
 
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
@@ -872,6 +879,11 @@
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
 								}
+								if($('#wattbezugmodul').val() == 'bezug_janitza') {
+									showSection('#wattbezugjanitza');
+									showSection('#wattbezugip');
+								}
+
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
 								}
