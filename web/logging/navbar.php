@@ -25,6 +25,9 @@
                     <a class="nav-link" data-select="" href="logging/monthlyv1.php">Monat (nightly)</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" data-select="" href="logging/monthlyv2.php">Monat Aufteilung (nightly)</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" data-select="" href="logging/yearlyv1.php">Jahr (nighlty)</a>
                 </li>
             </ul>
