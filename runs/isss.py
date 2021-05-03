@@ -90,6 +90,8 @@ sdm2id = 106
 actorstat = 0
 evsefailure = 0
 rfidtag = 0
+lp1countphasesinuse = 1
+heartbeat = 0
 
 # check for openWB DUO in slave mode
 try:
@@ -122,6 +124,7 @@ def getmeter():
     global client
     global lp2installed
     global llmeterconfiglp1
+    global lp1countphasesinuse
     if ( llmeterconfiglp1 == 0 ):
         logDebug("2", "Erkenne verbauten Zaehler.")
         #check sdm
@@ -585,7 +588,7 @@ def loadregelvars():
     global u1p3ptmpstat
     global evsefailure
     global lp2installed
-
+    global heartbeat
     try:
         if GPIO.input(19) == False:
             actorstat=1
@@ -600,6 +603,15 @@ def loadregelvars():
     except:
         pass
         lp1solla = 0
+    try:
+        with open('ramdisk/heartbeat', 'r') as value:
+            heartbeat = int(value.read())
+        if heartbeat > 80:
+            lp1solla = 0
+            logDebug("2", "Heartbeat Fehler seit " + str(heartbeat) + "Sekunden keine Verbindung, Stoppe Ladung.")
+    except:
+        heartbeat=0
+        pass
     logDebug("0", "LL Soll: " + str(lp1solla) + " ActorStatus: " + str(actorstat))
     if ( buchseconfigured == 1 ):
         if ( evsefailure == 0 ):
