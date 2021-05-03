@@ -531,8 +531,8 @@ function loadgraph() {
 			data: getCol(csvData, 1),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:1,
+      		callv1:1,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 1)
 		} ,
 
@@ -545,8 +545,8 @@ function loadgraph() {
 			data: getCol(csvData, 2),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 2)  // custom added field, holds counter values or empty string
 		} ,
 		{
@@ -558,8 +558,8 @@ function loadgraph() {
 			data: getCol(csvData, 3),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:1,
+            callv1:1,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 3)  // custom added field, holds counter values or empty string
 		} ,
 
@@ -572,8 +572,8 @@ function loadgraph() {
 			data: getCol(csvData, 4),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+            callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 4)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp2 ' + totalValues[5].toFixed(2) + ' kWh',
@@ -584,8 +584,8 @@ function loadgraph() {
 			data: getCol(csvData, 5),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+			callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 5)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp3 ' + totalValues[6].toFixed(2) + ' kWh',
@@ -596,8 +596,8 @@ function loadgraph() {
 			data: getCol(csvData, 6),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+            callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 6)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp Gesamt ' + totalValues[7].toFixed(2) + ' kWh',
@@ -608,8 +608,8 @@ function loadgraph() {
 			data: getCol(csvData, 7),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:1,
+      		callv1:1,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 in ' + totalValues[8].toFixed(2) + ' kWh',
@@ -620,8 +620,8 @@ function loadgraph() {
 			data: getCol(csvData, 8),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+			callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 out ' + totalValues[9].toFixed(2) + ' kWh',
@@ -632,8 +632,8 @@ function loadgraph() {
 			data: getCol(csvData, 9),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 9)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 2 in ' + totalValues[10].toFixed(2) + ' kWh',
@@ -644,8 +644,8 @@ function loadgraph() {
 			data: getCol(csvData, 10),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 10)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 2 out ' + totalValues[11].toFixed(2) + ' kWh',
@@ -656,8 +656,8 @@ function loadgraph() {
 			data: getCol(csvData, 11),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+			callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 11)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp4 ' + totalValues[12].toFixed(2) + ' kWh',
@@ -668,8 +668,8 @@ function loadgraph() {
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 12)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp5 ' + totalValues[13].toFixed(2) + ' kWh',
@@ -680,8 +680,8 @@ function loadgraph() {
 			data: getCol(csvData, 13),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+			callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 13)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp6 ' + totalValues[14].toFixed(2) + ' kWh',
@@ -692,8 +692,8 @@ function loadgraph() {
 			data: getCol(csvData, 14),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 14)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp7 ' + totalValues[15].toFixed(2) + ' kWh',
@@ -704,8 +704,8 @@ function loadgraph() {
 			data: getCol(csvData, 15),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 15)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp8 ' + totalValues[16].toFixed(2) + ' kWh',
@@ -716,8 +716,8 @@ function loadgraph() {
 			data: getCol(csvData, 16),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Speicherladung ' + totalValues[17].toFixed(2) + ' kWh',
@@ -728,8 +728,8 @@ function loadgraph() {
 			data: getCol(csvData, 17),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+			callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
 		} ,
 		{
@@ -741,8 +741,8 @@ function loadgraph() {
 			data: getCol(csvData, 18),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:1,
+      		callv1:1,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 18)  // custom added field, holds counter values or empty string
 		} ,
 		{
@@ -754,8 +754,8 @@ function loadgraph() {
 			data: getCol(csvData, 19),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:1,
+      		callv1:1,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 19)  // custom added field, holds counter values or empty string
 		} , {
 			label: d2name + ' Import ' + totalValues[20].toFixed(2) + ' kWh',
@@ -766,8 +766,8 @@ function loadgraph() {
 			data: getCol(csvData, 20),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 20)  // custom added field, holds counter values or empty string
 		} , {
 			label: d3name + ' Import ' + totalValues[21].toFixed(2) + ' kWh',
@@ -778,8 +778,8 @@ function loadgraph() {
 			data: getCol(csvData, 21),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 21)  // custom added field, holds counter values or empty string
 		} , {
 			label: d4name + ' Import ' + totalValues[22].toFixed(2) + ' kWh',
@@ -790,8 +790,8 @@ function loadgraph() {
 			data: getCol(csvData, 22),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 22)  // custom added field, holds counter values or empty string
 		} , {
 			label: d5name + ' Import ' + totalValues[23].toFixed(2) + ' kWh',
@@ -802,8 +802,8 @@ function loadgraph() {
 			data: getCol(csvData, 23),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 23)  // custom added field, holds counter values or empty string
 		} , {
 			label: d6name + ' Import ' + totalValues[24].toFixed(2) + ' kWh',
@@ -814,8 +814,8 @@ function loadgraph() {
 			data: getCol(csvData, 24),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 24)  // custom added field, holds counter values or empty string
 		} , {
 			label: d7name + ' Import ' + totalValues[25].toFixed(2) + ' kWh',
@@ -826,8 +826,8 @@ function loadgraph() {
 			data: getCol(csvData, 25),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 25)  // custom added field, holds counter values or empty string
 		} , {
 			label: d8name + ' Import ' + totalValues[26].toFixed(2) + ' kWh',
@@ -838,8 +838,8 @@ function loadgraph() {
 			data: getCol(csvData, 26),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+			callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 26)  // custom added field, holds counter values or empty string
 		} , {
 			label: d9name + ' Import ' + totalValues[27].toFixed(2) + ' kWh',
@@ -850,8 +850,8 @@ function loadgraph() {
 			data: getCol(csvData, 27),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:1,
-      callv2:0,
+      		callv1:1,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 27)  // custom added field, holds counter values or empty string
 		} ,
 		 {
@@ -863,8 +863,8 @@ function loadgraph() {
 			data: getCol(csvData, 28),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:0,
-      callv2:0,
+      		callv1:0,
+      		callv2:0,
 			toolTipData: getCol(lpCounterValues, 28)  // custom added field, holds counter values or empty string
 		} ,
 
@@ -877,8 +877,10 @@ function loadgraph() {
 			data: getCol(csvData, 29),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:0,
-      callv2:1,
+			stack: 'LP-Alle',
+			type: 'bar',
+      		callv1:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 29)  // custom added field, holds counter values or empty string
 		} ,
 
@@ -891,8 +893,10 @@ function loadgraph() {
 			data: getCol(csvData, 30),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:0,
-      callv2:1,
+			stack: 'LP-Alle',
+			type: 'bar',
+      		callv1:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 30)  // custom added field, holds counter values or empty string
 		} ,
 
@@ -905,19 +909,23 @@ function loadgraph() {
 			data: getCol(csvData, 31),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      callv1:0,
-      callv2:1,
+			stack: 'LP-Alle',
+			type: 'bar',
+      		callv1:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 31)  // custom added field, holds counter values or empty string
 		} ,
     {
       label: d1name + ' PV ' + totalValues[32].toFixed(2) + ' kWh',
       borderColor: 'green',
-      backgroundColor: "rgba(10, 255, 13, 0.3)",
+	  backgroundColor: "rgba(10, 255, 13, 0.3)",
       fill: false,
       borderWidth: 1,
       data: getCol(csvData, 32),
       yAxisID: 'y-axis-1',
       lineTension: 0.2,
+	  stack: 'd1',
+	  type: 'bar',
       callv1:0,
       callv2:1,
       toolTipData: getCol(lpCounterValues, 32)  // custom added field, holds counter values or empty string
@@ -931,6 +939,8 @@ function loadgraph() {
       data: getCol(csvData, 33),
       yAxisID: 'y-axis-1',
       lineTension: 0.2,
+	  stack: 'd1',
+	  type: 'bar',
       callv1:0,
       callv2:1,
       toolTipData: getCol(lpCounterValues, 33)  // custom added field, holds counter values or empty string
@@ -938,12 +948,14 @@ function loadgraph() {
     {
       label: d1name + ' Bezug ' + totalValues[34].toFixed(2) + ' kWh',
       borderColor: "rgba(255, 0, 0, 0.7)",
-      backgroundColor: "rgba(255, 10, 13, 0.3)",
+	  backgroundColor: "rgba(255, 10, 13, 0.3)",
       borderWidth: 1,
       fill: false,
       data: getCol(csvData, 31),
       yAxisID: 'y-axis-1',
       lineTension: 0.2,
+	  stack: 'd1',
+	  type: 'bar',
       callv1:0,
       callv2:1,
       toolTipData: getCol(lpCounterValues, 34)  // custom added field, holds counter values or empty string
