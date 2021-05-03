@@ -38,6 +38,7 @@ DeviceValues.update({'lp1lla2' : str(5)})
 DeviceValues.update({'lp1lla3' : str(5)})
 DeviceValues.update({'lp1llkwh' : str(5)})
 DeviceValues.update({'lp1watt' : str(5)})
+DeviceValues.update({'lp1countphasesinuse' : str(5)})
 DeviceValues.update({'lp1chargestat' : str(5)})
 DeviceValues.update({'lp1plugstat' : str(5)})
 DeviceValues.update({'lp1readerror' : str(0)})
@@ -270,6 +271,16 @@ def getmeter():
             f = open('/var/www/html/openWB/ramdisk/llhz', 'w') 
             f.write(str(hz)) 
             f.close()
+        try:
+            if lp1lla1 > 3:
+                lp1countphasesinuse=1
+            if lp1lla2 > 3:
+                lp1countphasesinuse=2
+            if lp1lla3 > 3:
+                lp1countphasesinuse=3
+        except:
+            lp1countphasesinuse=1
+
         if ( lp2installed == 2 ):
             try:
                 resp = client.read_input_registers(0x0C,2, unit=sdm2id)
@@ -370,6 +381,7 @@ def getmeter():
             time.sleep(0.1)
             rq = client.read_holding_registers(1000,1,unit=1)
             lp1ll = rq.registers[0]
+            lp1ll=lp1ll/100
             evsefailure = 0
         except:
             lp1ll = 0
@@ -461,6 +473,12 @@ def getmeter():
                     mclient.publish("openWB/lp/1/APhase3", payload=str(lp1lla3), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'lp1lla3' : str(lp1lla3)})
+            if ( "lp1countphasesinuse" in key):
+                if ( DeviceValues[str(key)] != str(lp1countphasesinuse)):
+                    mclient.publish("openWB/lp/1/countPhasesInUse", payload=str(lp1countphasesinuse), qos=0, retain=True)
+                    mclient.loop(timeout=2.0)
+                    DeviceValues.update({'lp1countphasesinuse' : str(lp1countphasesinuse)})
+
             if ( "lp1llkwh" in key):
                 if ( DeviceValues[str(key)] != str(lp1llkwh)):
                     mclient.publish("openWB/lp/1/kWhCounter", payload=str(lp1llkwh), qos=0, retain=True)
@@ -652,7 +670,9 @@ def writelp2evse(lla):
 def writelp1evse(lla):
     if (lla > pp):
         lla=pp
+    lla=lla*100
     client.write_registers(1000, lla, unit=1)
+    lla=lla/100
     logDebug("1", "Write to EVSE lp1 " + str(lla))
 
 while True:
