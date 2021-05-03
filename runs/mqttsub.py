@@ -844,6 +844,24 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
                 client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
             setTopicCleared = True
+        if (msg.topic == "openWB/set/graph/RequestMonthGraphv1"):
+            if (int(msg.payload) >= 1 and int(msg.payload) <= 205012):
+                sendcommand = ["/var/www/html/openWB/runs/sendmonthgraphdatav1.sh", msg.payload]
+                subprocess.Popen(sendcommand)
+            else:
+                client.publish("openWB/system/MonthGraphDatan1", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan2", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan3", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan4", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan5", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan6", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan7", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan8", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan9", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan10", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan11", "empty", qos=0, retain=True)
+                client.publish("openWB/system/MonthGraphDatan12", "empty", qos=0, retain=True)
+            setTopicCleared = True
         if (msg.topic == "openWB/set/graph/RequestYearGraph"):
             if (int(msg.payload) >= 1 and int(msg.payload) <= 2050):
                 sendcommand = ["/var/www/html/openWB/runs/sendyeargraphdata.sh", msg.payload]
@@ -861,6 +879,24 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/system/YearGraphData10", "empty", qos=0, retain=True)
                 client.publish("openWB/system/YearGraphData11", "empty", qos=0, retain=True)
                 client.publish("openWB/system/YearGraphData12", "empty", qos=0, retain=True)
+            setTopicCleared = True
+        if (msg.topic == "openWB/set/graph/RequestYearGraphv1"):
+            if (int(msg.payload) >= 1 and int(msg.payload) <= 2050):
+                sendcommand = ["/var/www/html/openWB/runs/sendyeargraphdatav1.sh", msg.payload]
+                subprocess.Popen(sendcommand)
+            else:
+                client.publish("openWB/system/YearGraphDatan1", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan2", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan3", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan4", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan5", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan6", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan7", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan8", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan9", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan10", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan11", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphDatan12", "empty", qos=0, retain=True)
             setTopicCleared = True
         if (msg.topic == "openWB/set/system/debug/RequestDebugInfo"):
             if (int(msg.payload) == 1):
@@ -1010,6 +1046,11 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/extcpulp1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (msg.topic == "openWB/set/isss/heartbeat"):
+            if (int(msg.payload) >= -1 and int(msg.payload) <=5):
+                f = open('/var/www/html/openWB/ramdisk/heartbeat', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
         if (msg.topic == "openWB/set/isss/parentWB"):
             client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
@@ -1115,9 +1156,9 @@ def on_message(client, userdata, msg):
         if (msg.topic == "openWB/set/pv/1/W"):
             if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
                 if (float(msg.payload) > 1):
-                    pvwatt=int(msg.payload.decode("utf-8")) * -1
+                    pvwatt=int(float(msg.payload.decode("utf-8"))) * -1
                 else:
-                    pvwatt=int(msg.payload.decode("utf-8"))
+                    pvwatt=int(float(msg.payload.decode("utf-8")))
                 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
                 f.write(str(pvwatt))
                 f.close()

@@ -117,7 +117,7 @@ $numDevices = 9;
 											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von IDM nicht zu stören.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-stiebel hide">
-											Wärmepumpe der Firma Stiebel mit ISG Web (Servicewelt über Modbus) und SG Ready Eingang.<br>
+											Wärmepumpe der Firma Stiebel mit ISG Plus (Servicewelt über Modbus) und SG Ready Eingang.<br>
 											Im ISG web muss unter "Einstellungen / Energiemanagement" der Parameter "SGREADY = Ein" gesetzt werden.
 											Wenn die Einschaltbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 2 auf Betriebszustand 3 geschaltet.
 											Wenn die Ausbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 3 auf Betriebszustand 2 geschaltet.

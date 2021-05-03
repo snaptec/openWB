@@ -94,7 +94,8 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 	fi
 
 	mosquitto_pub -h $ip -r -t openWB/set/isss/parentWB -m "$myipaddress"
-        mosquitto_pub -h $ip -r -t openWB/set/isss/parentWB -m "$myipaddress"
+        mosquitto_pub -h $ip -r -t openWB/set/isss/heartbeat -m "0"
+
         openwbModulePublishState "LP" 0 "Kein Fehler" $chargep
 else
         openwbModulePublishState "LP" 1 "Keine Daten vom LP erhalten, IP Korrekt?" $chargep

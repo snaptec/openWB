@@ -86,6 +86,9 @@ source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
 if [[ $isss == "1" ]]; then
+	heartbeat=$(<ramdisk/heartbeat)
+	heartbeat=$((heartbeat+10))
+	echo $heartbeat > ramdisk/heartbeat
 	exit 0
 fi
 
@@ -233,6 +236,7 @@ if (( cpunterbrechunglp1 == 1 )); then
 							sudo python runs/cpulp1.py -d $cpunterbrechungdauerlp1
 						fi
 						echo 1 > ramdisk/cpulp1waraktiv
+						date +%s > ramdisk/cpulp1timestamp # Timestamp in epoch der CP Unterbrechung
 					fi
 				else
 					cpulp1counter=$((cpulp1counter+1))
@@ -268,6 +272,7 @@ if (( cpunterbrechunglp2 == 1 )); then
 						sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
 					fi
 					echo 1 > ramdisk/cpulp2waraktiv
+					date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
 				fi
 			else
 				echo 0 > ramdisk/cpulp2waraktiv

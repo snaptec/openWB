@@ -65,6 +65,7 @@
 								<select name="pvwattmodul" id="pvwattmodul" class="form-control">
 									<option <?php if($pvwattmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
 									<optgroup label="openWB">
+										<option <?php if($pvwattmodulold == "wr_pvkit") echo "selected" ?> value="wr_pvkit">openWB PV Kit</option>
 										<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu") echo "selected" ?> value="wr_ethmpm3pmaevu">Zähler an openWB EVU Kit</option>
 										<option <?php if($pvwattmodulold == "wr_ethsdm120") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
 									</optgroup>
@@ -241,15 +242,14 @@
 								Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert.
 							</div>
 						</div>
-						<div id="pvmpmevu" class="hide">
+						<div id="pvkitdiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="pvkitversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
 								<div class="col">
 									<select name="pvkitversion" id="pvkitversion" class="form-control">
 										<option <?php if($pvkitversionold == 0) echo "selected" ?> value="0">PV Kit mit MPM3PM Zähler</option>
 										<option <?php if($pvkitversionold == 1) echo "selected" ?> value="1">PV Kit mit Lovato Zähler</option>
-										<option <?php if($pvkitversionold == 2) echo "selected" ?> value="1">PV Kit mit SDM630 Zähler</option>
-
+										<option <?php if($pvkitversionold == 2) echo "selected" ?> value="2">PV Kit mit Eastron SDM630 Zähler</option>
 									</select>
 								</div>
 							</div>
@@ -720,7 +720,7 @@
 								hideSection('#pvsolarlog');
 								hideSection('#pvpiko2');
 								hideSection('#pvpowerwall');
-								hideSection('#pvmpmevu');
+								hideSection('#pvkitdiv');
 								hideSection('#pvethsdm120');
 								hideSection('#pvsolarview');
 								hideSection('#pvdiscovergy');
@@ -779,8 +779,11 @@
 								if($('#pvwattmodul').val() == 'wr_ethsdm120') {
 									showSection('#pvethsdm120');
 								}
+								if($('#pvwattmodul').val() == 'wr_pvkit') {
+									showSection('#pvkitdiv');
+								}
 								if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
-									showSection('#pvmpmevu');
+									showSection('#pvkitdiv');
 								}
 								if($('#pvwattmodul').val() == 'vzloggerpv') {
 									showSection('#pvvzl');

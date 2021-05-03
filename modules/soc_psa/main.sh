@@ -74,7 +74,25 @@ socLog(){
 }
 
 incrementTimer(){
-	soctimer=$((soctimer+1))
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
 	echo $soctimer > $soctimerfile
 }
 
@@ -83,14 +101,16 @@ soctimer=$(<$soctimerfile)
 tmpintervall=$(( (socOnlineIntervall * 6) - 1 ))
 
 if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
-	timer=$(<$soctimerfile)
-	if (( timer < $tmpintervall )); then
-		timer=$((timer+1))
-		echo $timer > $soctimerfile
+	soctimer=$(<$soctimerfile)
+	if (( soctimer < $tmpintervall )); then
+		socDebugLog "Nothing to do yet. Incrementing timer. $socOnlineIntervall min online interval wait: $soctimer"
+		incrementTimer
 	else
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
-		if [[ $? != 0 ]]; then
+		if [[ $? == 0 ]]; then
+			socLog "Fetched from $manufacturer: $(<$psaSocFile)%"
+		else
 			socLog "Fetching SoC from $manufacturer failed"
 		fi
 	fi
@@ -200,7 +220,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 				socDebugLog "currentMeterDiff: $currentMeterDiff"
 				currentEffectiveMeterDiff=$(echo "scale=5;$currentMeterDiff * $efficiency / 100" | bc)
 				socDebugLog "currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
-				currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/\..*$//')
+				currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | awk '{printf"%d\n",$1}')
 				socDebugLog "currentSocDiff: $currentSocDiff"
 				newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 				if (( newSoc > 100 )); then

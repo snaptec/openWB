@@ -31,8 +31,8 @@ verbose = False
 def eprint(*myargs, **mykwargs):
     local_time = datetime.now(timezone.utc).astimezone()
     prefix = local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +":"
-    if( args.chargepoint ):
-        prefix += " %s:"%(args.chargepoint)
+    if( args.logprefix ):
+        prefix += " %s:"%(args.logprefix)
     print(prefix, *myargs, file=sys.stderr, **mykwargs)
 
 def gen_params():
@@ -65,9 +65,9 @@ def saveTokens():
 
 def login(email, password, mfaPasscode):
     headers = {
-        "User-Agent": UA,
-        "x-tesla-user-agent": X_TESLA_USER_AGENT,
-        "X-Requested-With": "com.teslamotors.tesla",
+        # "User-Agent": UA,
+        # "x-tesla-user-agent": X_TESLA_USER_AGENT,
+        # "X-Requested-With": "com.teslamotors.tesla",
     }
 
     # Step 1: Obtain the login page
@@ -215,7 +215,8 @@ def login(email, password, mfaPasscode):
         eprint("received callback code")
         # eprint("Code -", code)
     
-    headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
+    # headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
+    headers = {}
     payload = {
         "grant_type": "authorization_code",
         "client_id": "ownerapi",
@@ -251,7 +252,8 @@ def login(email, password, mfaPasscode):
 def refreshToken(email):
     global tokens
 
-    headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
+    # headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
+    headers = {}
     payload = {
         "grant_type": "refresh_token",
         "client_id": "ownerapi",
@@ -296,8 +298,8 @@ def requestData(dataPart):
         eprint("Requesting data: \"%s\""%(dataPart))
     session = requests.Session()
     headers = {
-        "user-agent": UA,
-        "x-tesla-user-agent": X_TESLA_USER_AGENT,
+        # "user-agent": UA,
+        # "x-tesla-user-agent": X_TESLA_USER_AGENT,
         "authorization": "bearer " + tokens["access_token"]
         }
 
@@ -315,8 +317,8 @@ def postCommand(command):
         eprint("Sending command: \"%s\""%(command))
     session = requests.Session()
     headers = {
-        "user-agent": UA,
-        "x-tesla-user-agent": X_TESLA_USER_AGENT,
+        # "user-agent": UA,
+        # "x-tesla-user-agent": X_TESLA_USER_AGENT,
         "authorization": "bearer " + tokens["access_token"]
         }
  
