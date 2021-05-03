@@ -34,12 +34,12 @@ client = ModbusTcpClient(ipaddress, port=502)
 storagepower = 0
 storage2power = 0
 if batwrsame == 1:
-    rr = client.read_holding_registers(62852, 2, unit=1)
+    rr = client.read_holding_registers(62852, 2, unit=slave1id)
     raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
     soc = int(struct.unpack('>f', raw)[0])
     try:
         if zweiterspeicher == 1:
-            rr = client.read_holding_registers(62852, 2, unit=2)
+            rr = client.read_holding_registers(62852, 2, unit=slave2id)
             raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
             soc2 = int(struct.unpack('>f', raw)[0])
             fsoc=(soc+soc2)/2
@@ -50,12 +50,12 @@ if batwrsame == 1:
     f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
     f.write(str(fsoc))
     f.close()
-    rr = client.read_holding_registers(62836, 2, unit=1)
+    rr = client.read_holding_registers(62836, 2, unit=slave1id)
     raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
     storagepower = int(struct.unpack('>f', raw)[0])
     try:
         if zweiterspeicher == 1:
-            rr = client.read_holding_registers(62836, 2, unit=2)
+            rr = client.read_holding_registers(62836, 2, unit=slave2id)
             raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
             storage2power = int(struct.unpack('>f', raw)[0])
     except:
