@@ -869,7 +869,7 @@ function loadgraph() {
 		} ,
 
 				{
-			label: 'Lp alle PV ' + totalValues[29].toFixed(2) + ' kWh',
+			label: 'LP Gesamt PV ' + totalValues[29].toFixed(2) + ' kWh',
 			borderColor: 'green',
 			backgroundColor: "rgba(10, 255, 13, 0.3)",
 			fill: false,
@@ -877,7 +877,7 @@ function loadgraph() {
 			data: getCol(csvData, 29),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-			stack: 'LP-Alle',
+			stack: 'LP-Gesamt',
 			type: 'bar',
       		callv1:0,
       		callv2:1,
@@ -885,7 +885,7 @@ function loadgraph() {
 		} ,
 
 			{
-			label: 'Lp alle Speicherentladung ' + totalValues[30].toFixed(2) + ' kWh',
+			label: 'LP Gesamt Speicherentladung ' + totalValues[30].toFixed(2) + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(255, 155, 13, 0.3)",
 			fill: false,
@@ -893,7 +893,7 @@ function loadgraph() {
 			data: getCol(csvData, 30),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-			stack: 'LP-Alle',
+			stack: 'LP-Gesamt',
 			type: 'bar',
       		callv1:0,
       		callv2:1,
@@ -901,7 +901,7 @@ function loadgraph() {
 		} ,
 
 				{
-			label: 'Lp alle Bezug ' + totalValues[31].toFixed(2) + ' kWh',
+			label: 'LP Gesamt Bezug ' + totalValues[31].toFixed(2) + ' kWh',
 			borderColor: "rgba(255, 0, 0, 0.7)",
 			backgroundColor: "rgba(255, 10, 13, 0.3)",
 			borderWidth: 1,
@@ -909,7 +909,7 @@ function loadgraph() {
 			data: getCol(csvData, 31),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-			stack: 'LP-Alle',
+			stack: 'LP-Gesamt',
 			type: 'bar',
       		callv1:0,
       		callv2:1,
@@ -961,7 +961,7 @@ function loadgraph() {
       toolTipData: getCol(lpCounterValues, 34)  // custom added field, holds counter values or empty string
     } ,
 		{
-			label: 'Hausverbrauch x' + totalValues[35].toFixed(2) + ' kWh',
+			label: 'Hausverbrauch ' + totalValues[35].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
