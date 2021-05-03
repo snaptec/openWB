@@ -88,9 +88,9 @@ def trdaymonth(irow):
     #	Lpalle PV________	29	7	$d4
     #	Lpall Speicher___	30	7	$d5
     #	Lpalle EVU_______	31  7	$d6
-    #	_________________	32		$d7
-    #	_________________	33		$d8
-    #	_________________	34		$d9
+    #	Device 1 PV______	32	26  $d7
+    #	Device 1 Speicher	33	26	$d8
+    #	Device 1 EVU____ 	34	26	$d9
     #	_________________	35		$d10
     #	_________________	36		$temp4
     #	_________________	37		$temp5
@@ -119,9 +119,9 @@ def trdaymonth(irow):
     row [29] = inputrow [7]
     row [30] = inputrow [7]
     row [31] = inputrow [7]
-    row [32] = float(0)
-    row [33] = float(0)
-    row [34] = float(0)
+    row [32] = inputrow [26]
+    row [33] = inputrow [26]
+    row [34] = inputrow [26]
     row [35] = float(0)
     row [36] = float(0)
     row [37] = float(0)
@@ -153,7 +153,10 @@ def calcdelta(row,rowold,i,zeile,datestring):
     #	Lpalle PV________	29	7	$d4
     #	Lpall Speicher___	30	7	$d5
     #	Lpalle EVU_______	31  7	$d6
-    if (i >= 29) and (i<=31):
+    #	Device 1 PV______	32		$d7
+    #	Device 1 Speicher	33		$d8
+    #	Device 1 EVU____ 	34		$d9
+    if (i >= 29) and (i<=34):
         try:
             gesamtv = float(0)
             deltabezug =  float (row[1]) - float(rowold[1])
@@ -168,13 +171,13 @@ def calcdelta(row,rowold,i,zeile,datestring):
                 pass
             else:
                 raise Exception("error ratio calc")
-            if (i == 29):
+            if (i == 29) or (i == 32):
                 # (PV - Einspeisung - Speicherladung) / Gesamtverbrauch)
                 delta = ((deltapv - deltaeinspeisung - deltaspeicherladung)  / gesamtv) * (newvalue -  oldvalue)
-            if (i == 30):
+            if (i == 30) or (i == 33):
                 # Speicherentladung / Gesamtverbrauch
                 delta = (deltaspeicherentladung  / gesamtv) * (newvalue -  oldvalue)
-            if (i == 31):
+            if (i == 31) or (i == 34):
                 #Bezug EVU / Gesamtverbrauch
                 delta = (deltabezug  / gesamtv) * (newvalue -  oldvalue)
         except:
@@ -188,17 +191,19 @@ def calcdelta(row,rowold,i,zeile,datestring):
                 print ('%s i-err(R) %s:%s c %2d(%s) sum %.3f act %.3f prev %.3f gesamtv %.3f' % (getTime(),datestring,str(row[0]),i,textcol,sumcsv [i] ,newvalue, oldvalue,gesamtv ))
     else:
         delta = newvalue -  oldvalue
-    if (newvalue > oldvalue) and (delta < 12500) and (oldvalue > 0):
-        sumcsv [i] = float(sumcsv [i])  + delta
-        sumcsvt [i] = float(sumcsvt [i])  + delta
+    deltarund = float(str("%.6f" % delta))
+    if (deltarund < 0):
+        deltarund = 0
+    if (newvalue > oldvalue) and (deltarund < 12500) and (oldvalue > 0):
+        sumcsv [i] = float(sumcsv [i])  + deltarund
+        sumcsvt [i] = float(sumcsvt [i])  + deltarund
     else:
-        if (delta > 0):
+        if (deltarund > 0):
             try:
                 textcol=header[i]
             except:
                 textcol= ''
             print ('%s i-err %s:%s c %2d(%s) sum %.3f act %.3f prev %.3f' % (getTime(),datestring,str(row[0]),i,textcol,sumcsv [i] ,newvalue, oldvalue ))
-
 def fillcount(row,  datestring  ,file_stringo,firstfile):
     # letzen tag abschliesen, neuen vorbereiten
     if (firstfile == 1):
@@ -216,7 +221,7 @@ def fillcount(row,  datestring  ,file_stringo,firstfile):
         #print ('%s start write %s  ' % (getTime(), str(sumcsv [1])   ))
         for i in range (1,SUMCOLUMNSTART):
             sumt=float(sumcsv [i]/1000)
-            line=line+ str(float("%.6f" % sumt)) +','
+            line=line+ str(float("%.3f" % sumt)) +','
         line=line+ str(0) + '\n'
         f1.write(str(line))
         f1.close()
@@ -245,7 +250,7 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
     #print ('%s start write %.6f  ' % (getTime(),  sumcsv [1]   ))
     for i in range (1,SUMCOLUMNSTART):
         sumt=float(sumcsvt [i]/1000)
-        line=line+ str(float("%.6f" % sumt)) +','
+        line=line+ str(float("%.3f" % sumt)) +','
     line=line+ str(0) + '\n'
     f1.write(str(line))
     f1.close()
@@ -449,10 +454,10 @@ if __name__ == "__main__":
             'Verbraucher1imp','Verbraucher1exp','Verbraucher2imp','Verbraucher2exp',
             'Lp4','Lp5','Lp6','Lp7','Lp8','Speicherimp','Speicherexpt',
             'Device1','Device2','Device3','Device4','Device5','Device6','Device7','Device8','Device9','Device10',
-            'Lpalle Pv','Lpalle Speicher','Lpalle EVU'
+            'Lpalle Pv','Lpalle Speicher','Lpalle EVU','Device1 Pv','Device1 Speicher','Device1 EVU'
         ]
-    # not smaller than 40    
-    SUMCOLUMNSTART = 42
+    # not smaller than 40
+    SUMCOLUMNSTART = 40
     startjjjj= 2018
     inputp=args.input
     outputp=args.output
