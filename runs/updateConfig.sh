@@ -2004,9 +2004,6 @@ updateConfig(){
 		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
 		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
 	fi
-	if ! grep -Fq "solarwattmethod=" $ConfigFile; then
-		echo "solarwattmethod=0" >> $ConfigFile
-	fi
 
 	echo "Config file Update done."
 }
