@@ -281,7 +281,7 @@
 									<label for="speicherpwpass" class="col-md-4 col-form-label">Passwort</label>
 									<div class="col">
 										<input class="form-control" type="password" name="speicherpwpass" id="speicherpwpass" value="<?php echo $speicherpwpassold ?>">
-										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall.</span>
+										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall. Das Passwort sind üblicherweise die letzten 5 Stellen der Seriennummer.</span>
 									</div>
 								</div>
 							</div>
