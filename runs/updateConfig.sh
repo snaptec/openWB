@@ -1115,6 +1115,8 @@ updateConfig(){
 		echo "pv1_idc=1" >> $ConfigFile
 		echo "pv1_idd=1" >> $ConfigFile
 		echo "speicher1_ip=192.168.0.17" >> $ConfigFile
+	fi
+	if ! grep -Fq "speicher1_ip2=" $ConfigFile; then
 		echo "speicher1_ip2=192.168.0.17" >> $ConfigFile
 	fi
 	if ! grep -Fq "fsm63a3modbusllsource=" $ConfigFile; then
