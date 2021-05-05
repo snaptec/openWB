@@ -163,17 +163,36 @@
 								<div class="form-row mb-1">
 									<label for="solarwattmethod" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
 									<div class="col">
-										<select name="solarwattmethod" id="solarwattmethod" class="form-control">
-											<option <?php if($solarwattmethodold == 0) echo "selected" ?> value="0">Energy Manager</option>
-											<option <?php if($solarwattmethodold == 1) echo "selected" ?> value="1">Gateway</option>
-										</select>
-									</div>
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($solarwattmethodold == 0) echo " active" ?>">
+												<input type="radio" name="solarwattmethod" id="solarwattmethod1" value="0"<?php if($solarwattmethodold == 0) echo " checked=\"checked\"" ?>>Energy Manager
+											</label>
+											<label class="btn btn-outline-info<?php if($solarwattmethodold == 1) echo " active" ?>">
+												<input type="radio" name="solarwattmethod" id="solarwattmethod2" value="1"<?php if($solarwattmethodold == 1) echo " checked=\"checked\"" ?>>Gateway
+											</label>
+										</div>
+										<span class="form-text small">
+											IP-Adresse 1: Energy Manager (immer angeben)<br>
+											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+										</span>
+									</div>									
 								</div>
 							</div>
-								<div class="alert alert-info">
-								IP-Adresse 1: Energy Manager<br>
-								IP-Adresse 2: Gateway (bei Bedarf)
-							</div>
+							<script>
+								function visibility_solarwatt_ip2() {
+									if($('#solarwattmethod1').prop("checked")) {
+										hideSection('#divspeicherip2');
+									} else {
+										showSection('#divspeicherip2');
+									}
+								}
+								
+								$(function() {	
+									$('input[type=radio][name=solarwattmethod]').change(function(){
+										visibility_solarwatt_ip2();
+									});
+								});
+							</script>
 						</div>
 
 						<div id="divspeichervictron" class="hide">
@@ -633,7 +652,7 @@
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
 									showSection('#divspeichersolarwatt');
 									showSection('#divspeicherip');
-									showSection('#divspeicherip2');
+									visibility_solarwatt_ip2();
 								}
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
