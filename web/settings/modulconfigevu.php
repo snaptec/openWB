@@ -1095,7 +1095,7 @@
 				$('#wattbezugfroniusload').on("click",function() {
 					$('#wattbezugfroniusload').attr("disabled", true);
 					$('#wattbezugfroniusloadmessage').text("Lade Daten...");
-					$.getJSON('settings/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
+					$.getJSON('/openWB/modules/bezug_fronius_sm/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
 						var options = '';
 						// fill listbox, format <manufacturer> <meter model> (<serial>)
 						for(var i in data.Body.Data) {
