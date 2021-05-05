@@ -157,6 +157,24 @@
 								<span class="text-info">openWB/set/houseBattery/%Soc</span> Ladestand des Speichers, int, 0-100
 							</div>
 						</div>
+						
+						<div id="divspeichersolarwatt" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="solarwattmethod" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
+									<div class="col">
+										<select name="solarwattmethod" id="solarwattmethod" class="form-control">
+											<option <?php if($solarwattmethodold == 0) echo "selected" ?> value="0">Energy Manager</option>
+											<option <?php if($solarwattmethodold == 1) echo "selected" ?> value="1">Gateway</option>
+										</select>
+									</div>
+								</div>
+							</div>
+								<div class="alert alert-info">
+								IP-Adresse 1: Energy Manager<br>
+								IP-Adresse 2: Gateway (bei Bedarf)
+							</div>
+						</div>
 
 						<div id="divspeichervictron" class="hide">
 							<div class="alert alert-info">
@@ -199,6 +217,18 @@
 									<label for="speicher1_ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip" id="speicher1_ip" value="<?php echo $speicher1_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div id="divspeicherip2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="speicher1_ip2" class="col-md-4 col-form-label">IP Adresse 2</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip2" id="speicher1_ip2" value="<?php echo $speicher1_ip2old ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -587,6 +617,8 @@
 								hideSection('#divspeicherrct');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
+								hideSection('#divspeichersolarwatt');
+								hideSection('#divspeicherip2');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
@@ -599,7 +631,9 @@
 									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
+									showSection('#divspeichersolarwatt');
 									showSection('#divspeicherip');
+									showSection('#divspeicherip2');
 								}
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
