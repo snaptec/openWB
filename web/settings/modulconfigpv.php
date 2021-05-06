@@ -484,6 +484,22 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Batterieleistung von PV abziehen</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($solaredgesubbatold == 0) echo " active" ?>">
+											<input type="radio" name="solaredgesubbat" id="solaredgesubbatNo" value="0"<?php if($solaredgesubbatold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($solaredgesubbatold == 1) echo " active" ?>">
+											<input type="radio" name="solaredgesubbat" id="solaredgesubbatYes" value="1"<?php if($solaredgesubbatold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option ist im Normalfall immer Nein. Bitte nur aktivieren wenn die PV Leistung nicht korrekt dargestellt werden um den Wert den die Batterieleistung betrifft
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
 								<label for="solaredgepvslave1" class="col-md-4 col-form-label">WR 1 Solaredge ID</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="1" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgepvslave1old ?>">
