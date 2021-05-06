@@ -175,6 +175,20 @@
 									</span>
 								</div>
 							</div>
+							<label class="col-md-4 col-form-label">Alternative Auslesung</label>
+							<div class="col">
+								<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($wryoulessaltold == 0) echo " active" ?>">
+										<input type="radio" name="wryoulessalt" id="wryoulessaltNo" value="0"<?php if($wryoulessaltold == 0) echo " checked=\"checked\"" ?>>Nein (S0)
+									</label>
+									<label class="btn btn-outline-info<?php if($wryoulessaltold == 1) echo " active" ?>">
+										<input type="radio" name="wryoulessalt" id="wryoulessaltYes" value="1"<?php if($wryoulessaltold == 1) echo " checked=\"checked\"" ?>>Ja
+									</label>
+								</div>
+								<span class="form-text small">
+									Diese Option aktivieren wenn statt des S0 der andere Eingang des Youless genutzt wird.
+								</span>
+							</div>
 						</div>
 						<div id="pvsunways" class="hide">
 							<div class="form-row mb-1">
