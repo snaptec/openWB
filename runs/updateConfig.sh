@@ -1968,6 +1968,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "studer_ip=" $ConfigFile; then
 		echo "studer_ip=192.168.1.1" >> $ConfigFile
+		echo "studer_xt=1" >> $ConfigFile
+		echo "studer_vc=1" >> $ConfigFile
+		echo "studer_vc_type=VS" >> $ConfigFile
 	fi
 	if ! grep -Fq "pingcheckactive=" $ConfigFile; then
 		echo "pingcheckactive=0" >> $ConfigFile
