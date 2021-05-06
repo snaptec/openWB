@@ -53,7 +53,7 @@ glParams = {
      
 #---------------Initialization------------------------------------------ 
 def setGlobalData(vin):
-    if vin[:2]=='KN':
+    if vin[:2]=='KN' or vin[:3]=='U5Y' or vin[:3]=='U6Z':
         glParams['brand'] = 'kia'
         logDebug(2, "Vehicle identified as Kia")
     elif vin[:3]=='KMH' or vin[:3]=='TMA':
@@ -189,12 +189,12 @@ def getHTTP(url = '', headers = '', cookies = '', timeout = 30):
     else:
         try:
             responseDict = json.loads(response.text)
-            if response.status_code == 408:
+            if response.status_code == 400 or response.status_code == 408 or response.status_code == 503:
                 errorString = "[" + responseDict['resCode'] + "] " + responseDict['resMsg']
             else:
                 errorString = "[" + responseDict['errCode'] + "] " + responseDict['errMsg']
         except:
-            errorString = "[XXXX] Unidentified Error"
+            errorString = "[XXXX] Unidentified Error" + " " + response.text
         logDebug(1, 'Request failed, StatusCode: ' + str(response.status_code) + ', Error: ' + errorString)
         raise RuntimeError
         
@@ -276,7 +276,7 @@ def getHTTPCookies(url):
 
 #---------------Request handling----------------------------------------
 def getDeviceId():
-    logDebug(2, "            Requesting DeviceId")
+    logDebug(2, "Requesting DeviceId")
 
     url = glParams['baseUrl'] + '/api/v1/spa/notifications/register'
     data = {"pushRegId":"1","pushType":"GCM","uuid": str(uuid.uuid1())}
