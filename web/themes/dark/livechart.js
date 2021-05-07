@@ -809,9 +809,9 @@ function checkgraphload(){
 	}
 }
 
-window.onload = function(){
-	setTimeout(forcegraphload, 15000)
-}
+$(document).ready(function(){
+	setTimeout(forcegraphload, 15000);
+});
 
 function forcegraphload() {
 	if ( graphloaded == 0 ) {

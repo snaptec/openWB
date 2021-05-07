@@ -91,10 +91,30 @@ def trdaymonth(irow):
     #	Device 1 PV______	32	26  $d7
     #	Device 1 Speicher	33	26	$d8
     #	Device 1 EVU____ 	34	26	$d9
-    #	_________________	35		$d10
-    #	_________________	36		$temp4
-    #	_________________	37		$temp5
-    #	_________________	38		$temp6
+    #	Device 2 pv________	35	27 $d10
+    #	Device 2 Speicher_	36	27 $temp4
+    #	device 2_EVU_______	37	27 $temp5
+    #	Device 3 PV______	38	28 $temp6
+    #	Device 3 Speicher	39	28
+    #	Device 3 EVU____ 	40	28
+    #	Device 4 PV______	41	29
+    #	Device 4 Speicher	42	29
+    #	Device 4 EVU____ 	43	29
+    #	Device 5 PV______	44	30
+    #	Device 5 Speicher	45	30
+    #	Device 5 EVU____ 	46	30
+    #	Device 6 PV______	47	31
+    #	Device 6 Speicher	48	31
+    #	Device 6 EVU____ 	49	31
+    #	Device 7 PV______	50	32
+    #	Device 7 Speicher	51	32
+    #	Device 7 EVU____ 	52	32
+    #	Device 8 PV______	53	33
+    #	Device 8 Speicher	54	33
+    #	Device 8 EVU____ 	55	33
+    #	Device 9 PV______	56	34
+    #	Device 9 Speicher	57	34
+    #	Device 9 EVU____ 	58	34
     row [8] = inputrow [10]
     row [9] = inputrow [11]
     row [10] = inputrow [12]
@@ -122,10 +142,31 @@ def trdaymonth(irow):
     row [32] = inputrow [26]
     row [33] = inputrow [26]
     row [34] = inputrow [26]
-    row [35] = float(0)
-    row [36] = float(0)
-    row [37] = float(0)
-    row [38] = float(0)
+    row [35] = inputrow [27]
+    row [36] = inputrow [27]
+    row [37] = inputrow [27]
+    row [38] = inputrow [28]
+    row [39] = inputrow [28]
+    row [40] = inputrow [28]
+    row [41] = inputrow [29]
+    row [42] = inputrow [29]
+    row [43] = inputrow [29]
+    row [44] = inputrow [30]
+    row [45] = inputrow [30]
+    row [46] = inputrow [30]
+    row [47] = inputrow [31]
+    row [48] = inputrow [31]
+    row [49] = inputrow [31]
+    row [50] = inputrow [32]
+    row [51] = inputrow [32]
+    row [52] = inputrow [32]
+    row [53] = inputrow [33]
+    row [54] = inputrow [33]
+    row [55] = inputrow [33]
+    row [56] = inputrow [34]
+    row [57] = inputrow [34]
+    row [58] = inputrow [34]
+
     try:
         totalc = float(row [1]) + float(row [2]) + float(row [3]) + float(row [4]) + float(row [5])
     except:
@@ -156,7 +197,7 @@ def calcdelta(row,rowold,i,zeile,datestring):
     #	Device 1 PV______	32		$d7
     #	Device 1 Speicher	33		$d8
     #	Device 1 EVU____ 	34		$d9
-    if (i >= 29) and (i<=34):
+    if (i >= 29) and (i<=58):
         try:
             gesamtv = float(0)
             deltabezug =  float (row[1]) - float(rowold[1])
@@ -171,13 +212,13 @@ def calcdelta(row,rowold,i,zeile,datestring):
                 pass
             else:
                 raise Exception("error ratio calc")
-            if (i == 29) or (i == 32):
+            if (i == 29) or (i == 32) or (i == 35) or (i==38) or (i==41)  or (i==44) or (i==47)  or (i==50)  or (i==53) or (i==56):
                 # (PV - Einspeisung - Speicherladung) / Gesamtverbrauch)
                 delta = ((deltapv - deltaeinspeisung - deltaspeicherladung)  / gesamtv) * (newvalue -  oldvalue)
-            if (i == 30) or (i == 33):
+            if (i == 30) or (i == 33) or (i == 36) or (i==39) or (i==42)  or (i==45) or (i==48)  or (i==51)  or (i==54) or (i==57):
                 # Speicherentladung / Gesamtverbrauch
                 delta = (deltaspeicherentladung  / gesamtv) * (newvalue -  oldvalue)
-            if (i == 31) or (i == 34):
+            if (i == 31) or (i == 34) or (i == 37) or (i==40) or (i==43)  or (i==46) or (i==49)  or (i==52)  or (i==55) or (i==58):
                 #Bezug EVU / Gesamtverbrauch
                 delta = (deltabezug  / gesamtv) * (newvalue -  oldvalue)
         except:
@@ -454,10 +495,19 @@ if __name__ == "__main__":
             'Verbraucher1imp','Verbraucher1exp','Verbraucher2imp','Verbraucher2exp',
             'Lp4','Lp5','Lp6','Lp7','Lp8','Speicherimp','Speicherexpt',
             'Device1','Device2','Device3','Device4','Device5','Device6','Device7','Device8','Device9','Device10',
-            'Lpalle Pv','Lpalle Speicher','Lpalle EVU','Device1 Pv','Device1 Speicher','Device1 EVU'
+            'Lpalle Pv','Lpalle Speicher','Lpalle EVU',
+            'Device1 Pv','Device1 Speicher','Device1 EVU',
+            'Device2 Pv','Device2 Speicher','Device2 EVU',
+            'Device3 Pv','Device3 Speicher','Device3 EVU',
+            'Device4 Pv','Device4 Speicher','Device4 EVU',
+            'Device5 Pv','Device5 Speicher','Device5 EVU',
+            'Device6 Pv','Device6 Speicher','Device6 EVU',
+            'Device7 Pv','Device7 Speicher','Device7 EVU',
+            'Device8 Pv','Device8 Speicher','Device8 EVU',
+            'Device9 Pv','Device9 Speicher','Device9 EVU'
         ]
     # not smaller than 40
-    SUMCOLUMNSTART = 40
+    SUMCOLUMNSTART = 60
     startjjjj= 2018
     inputp=args.input
     outputp=args.output

@@ -27,6 +27,7 @@ except:
 batwrsame = int(sys.argv[6])
 extprodakt = int(sys.argv[7])
 zweiterspeicher = int(sys.argv[8])
+subbat = int(sys.argv[9])
 storage2power = 0
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
@@ -213,7 +214,10 @@ if extprodakt == 1:
         extprod = 0
 else:
     extprod = 0
-allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower-storage2power+extprod
+if subbat == 1:
+    allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt+extprod
+else:
+    allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower-storage2power+extprod
 if allwatt > 0:
     allwatt=0
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')

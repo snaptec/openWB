@@ -43,10 +43,13 @@ def seprow(usedspalten,compspalten,irow):
     #alles andere
     for i in range(2,usedspalten+1):
         #print ('I %s ' % (str(i)))
-        sumlinec=sumlinec+ str(irow [i-1]) +','
-        sumlineb=sumlineb+ str(irow [i-1+compspalten]) +','
-    sumlinec=sumlinec+ str(-1) + '\n'
-    sumlineb=sumlineb+ str(-1) + '\n'
+        sumlinec=sumlinec+ str(irow [i-1])
+        sumlineb=sumlineb+ str(irow [i-1+compspalten])
+        if i < (usedspalten):
+            sumlinec=sumlinec+ ','
+            sumlineb=sumlineb+ ','
+    sumlinec=sumlinec+ '\n'
+    sumlineb=sumlineb+ '\n'
     return (sumlinec,sumlineb,datestringitnext)
 def selmonth(jjjjmm):
     #lesen summenfile

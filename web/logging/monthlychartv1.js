@@ -6,7 +6,7 @@
  * fills data-gaps in timeline with respective values and hides empty data from being displayed
  */
 
-const DATACOLUMNCOUNT = 35;  // count of native data columns received by mqtt (including timestamp-column)
+const DATACOLUMNCOUNT = 59;  // count of native data columns received by mqtt (including timestamp-column)
 const LPCOLUMNS = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 
 var initialread = 0;
@@ -349,7 +349,8 @@ function fillDataGaps() {
 			var newDataSetb = [newDatasetDateStr];  // insert new date in new array-row
 			for ( var colIndex = 1; colIndex < csvData[rowIndex-1].length; colIndex++ ) {
 				newDataSet.push(csvData[rowIndex-1][colIndex]);  // copy data from older date
-        newDataSetb.push(csvDatab[rowIndex-1][colIndex]);  // copy data from older date
+				newDataSetb.push(0)
+    // newDataSetb.push(csvDatab[rowIndex-1][colIndex]);  // copy data from older date
 			}
 			csvData.splice(rowIndex, 0, newDataSet);  // insert row
       csvDatab.splice(rowIndex, 0, newDataSetb);  // insert row
@@ -464,8 +465,8 @@ function loadgraph() {
 
 	if ( csvData.length < 2 ) {
 		// not enough data rows: nothing to display
-    alert(" indexb "+ indexb+ " indexc " + indexc);
-    alert(" csvData.length "+ csvData [0]);
+  //  alert(" indexb "+ indexb+ " indexc " + indexc);
+  //  alert(" csvData.length "+ csvData [0]);
 		$("#waitforgraphloadingdiv").html('<br>Nicht genügend Daten für diesen Zeitraum verfügbar.');
 		$('#canvasdiv').hide();
 		return;
@@ -767,7 +768,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
       		callv1:1,
-      		callv2:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 20)  // custom added field, holds counter values or empty string
 		} , {
 			label: d3name + ' Import ' + totalValues[21].toFixed(2) + ' kWh',
@@ -779,7 +780,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
       		callv1:1,
-      		callv2:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 21)  // custom added field, holds counter values or empty string
 		} , {
 			label: d4name + ' Import ' + totalValues[22].toFixed(2) + ' kWh',
@@ -791,7 +792,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
       		callv1:1,
-      		callv2:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 22)  // custom added field, holds counter values or empty string
 		} , {
 			label: d5name + ' Import ' + totalValues[23].toFixed(2) + ' kWh',
@@ -803,7 +804,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
       		callv1:1,
-      		callv2:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 23)  // custom added field, holds counter values or empty string
 		} , {
 			label: d6name + ' Import ' + totalValues[24].toFixed(2) + ' kWh',
@@ -815,7 +816,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
       		callv1:1,
-      		callv2:0,
+      		callv2:1,
 			toolTipData: getCol(lpCounterValues, 24)  // custom added field, holds counter values or empty string
 		} , {
 			label: d7name + ' Import ' + totalValues[25].toFixed(2) + ' kWh',
@@ -826,8 +827,8 @@ function loadgraph() {
 			data: getCol(csvData, 25),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      		callv1:1,
-      		callv2:0,
+      callv1:1,
+      callv2:1,
 			toolTipData: getCol(lpCounterValues, 25)  // custom added field, holds counter values or empty string
 		} , {
 			label: d8name + ' Import ' + totalValues[26].toFixed(2) + ' kWh',
@@ -839,7 +840,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
 			callv1:1,
-      		callv2:0,
+  		callv2:1,
 			toolTipData: getCol(lpCounterValues, 26)  // custom added field, holds counter values or empty string
 		} , {
 			label: d9name + ' Import ' + totalValues[27].toFixed(2) + ' kWh',
@@ -850,8 +851,8 @@ function loadgraph() {
 			data: getCol(csvData, 27),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-      		callv1:1,
-      		callv2:0,
+      callv1:1,
+      callv2:1,
 			toolTipData: getCol(lpCounterValues, 27)  // custom added field, holds counter values or empty string
 		} ,
 		 {
@@ -869,7 +870,7 @@ function loadgraph() {
 		} ,
 
 				{
-			label: 'Lp alle PV ' + totalValues[29].toFixed(2) + ' kWh',
+			label: 'LP Gesamt PV ' + totalValues[29].toFixed(2) + ' kWh',
 			borderColor: 'green',
 			backgroundColor: "rgba(10, 255, 13, 0.3)",
 			fill: false,
@@ -877,7 +878,7 @@ function loadgraph() {
 			data: getCol(csvData, 29),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-			stack: 'LP-Alle',
+			stack: 'LP-Gesamt',
 			type: 'bar',
       		callv1:0,
       		callv2:1,
@@ -885,7 +886,7 @@ function loadgraph() {
 		} ,
 
 			{
-			label: 'Lp alle Speicherentladung ' + totalValues[30].toFixed(2) + ' kWh',
+			label: 'LP Gesamt Speicherentladung ' + totalValues[30].toFixed(2) + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(255, 155, 13, 0.3)",
 			fill: false,
@@ -893,7 +894,7 @@ function loadgraph() {
 			data: getCol(csvData, 30),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-			stack: 'LP-Alle',
+			stack: 'LP-Gesamt',
 			type: 'bar',
       		callv1:0,
       		callv2:1,
@@ -901,7 +902,7 @@ function loadgraph() {
 		} ,
 
 				{
-			label: 'Lp alle Bezug ' + totalValues[31].toFixed(2) + ' kWh',
+			label: 'LP Gesamt Bezug ' + totalValues[31].toFixed(2) + ' kWh',
 			borderColor: "rgba(255, 0, 0, 0.7)",
 			backgroundColor: "rgba(255, 10, 13, 0.3)",
 			borderWidth: 1,
@@ -909,64 +910,424 @@ function loadgraph() {
 			data: getCol(csvData, 31),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-			stack: 'LP-Alle',
+			stack: 'LP-Gesamt',
 			type: 'bar',
-      		callv1:0,
-      		callv2:1,
+			callv1:0,
+			callv2:1,
 			toolTipData: getCol(lpCounterValues, 31)  // custom added field, holds counter values or empty string
 		} ,
     {
       label: d1name + ' PV ' + totalValues[32].toFixed(2) + ' kWh',
-      borderColor: 'green',
-	  backgroundColor: "rgba(10, 255, 13, 0.3)",
+			borderColor:"rgba(200, 150, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
       fill: false,
-      borderWidth: 1,
+      borderWidth: 2,
       data: getCol(csvData, 32),
       yAxisID: 'y-axis-1',
       lineTension: 0.2,
-	  stack: 'd1',
-	  type: 'bar',
+			stack: 'd1',
+			type: 'bar',
       callv1:0,
       callv2:1,
       toolTipData: getCol(lpCounterValues, 32)  // custom added field, holds counter values or empty string
     } ,
     {
       label: d1name + ' Speicherentladung ' + totalValues[33].toFixed(2) + ' kWh',
-      borderColor: 'orange',
+    	borderColor:"rgba(200, 150, 200, 0.7)",
       backgroundColor: "rgba(255, 155, 13, 0.3)",
       fill: false,
-      borderWidth: 1,
+      borderWidth: 2,
       data: getCol(csvData, 33),
       yAxisID: 'y-axis-1',
       lineTension: 0.2,
-	  stack: 'd1',
-	  type: 'bar',
+	    stack: 'd1',
+	    type: 'bar',
       callv1:0,
       callv2:1,
       toolTipData: getCol(lpCounterValues, 33)  // custom added field, holds counter values or empty string
     } ,
     {
       label: d1name + ' Bezug ' + totalValues[34].toFixed(2) + ' kWh',
-      borderColor: "rgba(255, 0, 0, 0.7)",
-	  backgroundColor: "rgba(255, 10, 13, 0.3)",
-      borderWidth: 1,
+    	borderColor:"rgba(200, 150, 200, 0.7)",
+      backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
       fill: false,
-      data: getCol(csvData, 31),
+      data: getCol(csvData, 34),
       yAxisID: 'y-axis-1',
       lineTension: 0.2,
-	  stack: 'd1',
-	  type: 'bar',
+	    stack: 'd1',
+	    type: 'bar',
       callv1:0,
       callv2:1,
       toolTipData: getCol(lpCounterValues, 34)  // custom added field, holds counter values or empty string
     } ,
+    {
+      label: d2name + ' PV ' + totalValues[35].toFixed(2) + ' kWh',
+      borderColor: "rgba(200, 100, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 35),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd2',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 35)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d2name + ' Speicherentladung ' + totalValues[36].toFixed(2) + ' kWh',
+      borderColor: "rgba(200, 100, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 36),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd2',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 36)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d2name + ' Bezug ' + totalValues[37].toFixed(2) + ' kWh',
+      borderColor: "rgba(200, 100, 200, 0.7)",
+      backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 37),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd2',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 37)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d3name + ' PV ' + totalValues[38].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 50, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 38),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd3',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 38)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d3name + ' Speicherentladung ' + totalValues[39].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 50, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 39),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd3',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 39)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d3name + ' Bezug ' + totalValues[40].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 50, 200, 0.7)",
+	    backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 40),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd3',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 40)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d4name + ' PV ' + totalValues[41].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 0, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 41),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd4',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 41)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d4name + ' Speicherentladung ' + totalValues[42].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 0, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 42),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd4',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 42)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d4name + ' Bezug ' + totalValues[43].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 0, 200, 0.7)",
+      backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 43),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd4',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 43)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d5name + ' PV ' + totalValues[44].toFixed(2) + ' kWh',
+			borderColor: "rgba(150, 200, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 44),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd5',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 44)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d5name + ' Speicherentladung ' + totalValues[45].toFixed(2) + ' kWh',
+			borderColor: "rgba(150, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 45),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	  stack: 'd5',
+	  type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 45)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d5name + ' Bezug ' + totalValues[46].toFixed(2) + ' kWh',
+			borderColor: "rgba(150, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 46),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	  stack: 'd5',
+	  type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 46)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d6name + ' PV ' + totalValues[47].toFixed(2) + ' kWh',
+			borderColor: "rgba(100, 200, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 47),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd6',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 47)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d6name + ' Speicherentladung ' + totalValues[48].toFixed(2) + ' kWh',
+			borderColor: "rgba(100, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 48),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd6',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 48)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d6name + ' Bezug ' + totalValues[49].toFixed(2) + ' kWh',
+			borderColor: "rgba(100, 200, 200, 0.7)",
+	    backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 49),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd6',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 49)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d7name + ' PV ' + totalValues[50].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 200, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 50),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd7',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 50)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d7name + ' Speicherentladung ' + totalValues[51].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 51),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd7',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 51)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d7name + ' Bezug ' + totalValues[52].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 200, 200, 0.7)",
+	    backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 52),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd7',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 52)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d8name + ' PV ' + totalValues[53].toFixed(2) + ' kWh',
+      borderColor: "rgba(0, 200, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 53),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd8',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 53)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d8name + ' Speicherentladung ' + totalValues[54].toFixed(2) + ' kWh',
+      borderColor: "rgba(0, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 54),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	  stack: 'd8',
+	  type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 54)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d8name + ' Bezug ' + totalValues[55].toFixed(2) + ' kWh',
+      borderColor: "rgba(0, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 55),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	  stack: 'd8',
+	  type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 55)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d9name + ' PV ' + totalValues[56].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 200, 200, 0.7)",
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 56),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+			stack: 'd9',
+			type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 56)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d9name + ' Speicherentladung ' + totalValues[57].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 155, 13, 0.3)",
+      fill: false,
+      borderWidth: 2,
+      data: getCol(csvData, 57),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	  stack: 'd9',
+	  type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 57)  // custom added field, holds counter values or empty string
+    } ,
+    {
+      label: d9name + ' Bezug ' + totalValues[58].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 200, 200, 0.7)",
+      backgroundColor: "rgba(255, 10, 13, 0.3)",
+      borderWidth: 2,
+      fill: false,
+      data: getCol(csvData, 58),
+      yAxisID: 'y-axis-1',
+      lineTension: 0.2,
+	    stack: 'd9',
+	    type: 'bar',
+      callv1:0,
+      callv2:1,
+      toolTipData: getCol(lpCounterValues, 58)  // custom added field, holds counter values or empty string
+    } ,
 		{
-			label: 'Hausverbrauch x' + totalValues[35].toFixed(2) + ' kWh',
+			label: 'Hausverbrauch ' + totalValues[59].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			data: getCol(csvData, 35),
+			data: getCol(csvData, 59),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
       callv1:1,
