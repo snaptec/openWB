@@ -1356,9 +1356,6 @@ updateConfig(){
 	if ! grep -Fq "displaypincode=" $ConfigFile; then
 		echo "displaypincode=1234" >> $ConfigFile
 	fi
-	if ! grep -Fq "displayLockAfterSecs=" $ConfigFile; then
-		echo "displayLockAfterSecs=90" >> $ConfigFile
-	fi
 	if ! grep -Fq "settingspw=" $ConfigFile; then
 		echo "settingspw='openwb'" >> $ConfigFile
 	fi

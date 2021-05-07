@@ -609,11 +609,11 @@ def on_message(client, userdata, msg):
                 sendhook = ["/var/www/html/openWB/runs/hookcontrol.sh", hookmsg]
                 subprocess.Popen(sendhook)
                 client.publish("openWB/hook/"+hooknmb+"/BoolHookStatus", hookact, qos=0, retain=True)
-        if (msg.topic == "openWB/config/set/display/lockAfterSecs"):
+        if (msg.topic == "openWB/config/set/display/displaysleep"):
             if (int(msg.payload) >= 10 and int(msg.payload) <= 1800):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "displayLockAfterSecs=", msg.payload.decode("utf-8")]
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "displaysleep=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
-                client.publish("openWB/config/get/display/lockAfterSecs", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/get/display/displaysleep", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/config/set/display/displaypincode"):
             if (int(msg.payload) >= 1000 and int(msg.payload) <= 99999999):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "displaypincode=", msg.payload.decode("utf-8")]
