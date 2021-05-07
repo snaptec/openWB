@@ -945,6 +945,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($pv2wattmodulold == "wr2_kostalpiko") echo "selected" ?> value="wr2_kostalpiko">Kostal Piko</option>
+										<option <?php if($pv2wattmodulold == "wr2_kostalpikovar2") echo "selected" ?> value="wr2_kostalpikovar2">Kostal Piko alt</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
@@ -1025,6 +1026,26 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2piko2" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2_piko2_user" class="col-md-4 col-form-label">Benutzername</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2_piko2_user" id="wr2_piko2_user" value="<?php echo $wr2_piko2_userold ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2_piko2_pass" class="col-md-4 col-form-label">Passwort</label>
+								<div class="col">
+									<input class="form-control" type="password" name="wr2_piko2_pass" id="wr2_piko2_pass" value="<?php echo htmlspecialchars($wr2_piko2_passold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2_piko2_url" class="col-md-4 col-form-label">URL</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2_piko2_url" id="wr2_piko2_url" value="<?php echo $wr2_piko2_urlold ?>">
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
@@ -1032,7 +1053,8 @@
 								hideSection('#pv2iddiv');
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
-								
+								hideSection('#pv2piko2');
+	
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('#pv2wrjsondiv');
 								}
