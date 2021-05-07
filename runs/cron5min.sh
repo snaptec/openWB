@@ -311,6 +311,8 @@ fi
 if (( $pingcheckactive == 1 )); then
 	$OPENWBBASEDIR/runs/pingcheck.sh &
 fi
+# EVSE Check
+$OPENWBBASEDIR/runs/evsecheck
 
 # truncate all logs in ramdisk
 $OPENWBBASEDIR/runs/cleanup.sh >> $RAMDISKDIR/cleanup.log 2>&1

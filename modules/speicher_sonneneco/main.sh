@@ -52,7 +52,7 @@ else
 		speicherantwort=$(curl --connect-timeout 5 -s "$sonnenecoip/api/v1/status")
 		speicherwatt=$(echo $speicherantwort | jq .Pac_total_W)
 		speichersoc=$(echo $speicherantwort | jq .USOC)
-		if [[ $pvmodul == "none" ]]; then
+		if [[ $pvwattmodul == "none" ]]; then
 			speicherpvwatt=$(echo $speicherantwort | jq .Production_W)
 			speicherpvwatt=$((speicherpvwatt * -1))
 			echo $speicherpvwatt > /var/www/html/openWB/ramdisk/pvwatt

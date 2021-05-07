@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<title>Logging Monatsansicht (nightly)</title>
+		<title>Logging Monatsansicht Aufteilung (nightly)</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
@@ -66,7 +66,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
 				<div class="col" style="text-align: center;">
-					<h4>Logging Monatsansicht (nightly)</h4>
+					<h4>Logging Monatsansicht Aufteilung (nightly)</h4>
 				</div>
 			</div>
 			<div class="row justify-content-center">
@@ -141,7 +141,7 @@
 				var mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); // January is 0!, string with leading zeros
 				if ( reloadNeeded ) {
 					// date parsed was too early so reload with today
-					window.location.href = "logging/monthlyv1.php?date=" + parsedDate.getFullYear() + '-' + mm;
+					window.location.href = "logging/monthlyv2.php?date=" + parsedDate.getFullYear() + '-' + mm;
 				}
 				var month = parsedDate.toLocaleDateString('de-DE', { month: 'long'});
 				var theDate = month + ' ' + parsedDate.getFullYear();
@@ -162,7 +162,7 @@
 					// `e` here contains the extra attributes
 					var mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!, string with leading zeros
 					var dateToParseStr = e.date.getFullYear() + '-' + mm;
-					window.location.href = "logging/monthlyv1.php?date=" + dateToParseStr;
+					window.location.href = "logging/monthlyv2.php?date=" + dateToParseStr;
 				});
 
 				$('#prevmonth').click(function(e) {
@@ -172,7 +172,7 @@
 					if ( dateToParse >= earliestDate ) {
 						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
 						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
-						window.location.href = "logging/monthlyv1.php?date=" + dateToParseStr;
+						window.location.href = "logging/monthlyv2.php?date=" + dateToParseStr;
 					}
 				});
 
@@ -185,7 +185,7 @@
 					if ( dateToParse <= today ) {
 						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
 						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
-						window.location.href = "logging/monthlyv1.php?date=" + dateToParseStr;
+						window.location.href = "logging/monthlyv2.php?date=" + dateToParseStr;
 					}
 				});
 
