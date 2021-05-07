@@ -69,6 +69,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
@@ -136,6 +137,12 @@
 								Ausgelesen wird Register 19026 auf Port 502. ModbusTCP muss im Janitza aktiv sein.
 							</div>
 						</div>
+						<div id="wattbezugcarlogavazzilan" class="hide">
+							<div class="card-text alert alert-info">
+								Ausgelesen wird ID 1 auf Port 502. ModbusTCP muss aktiviert sein.
+							</div>
+						</div>
+
 						<div id="wattbezugsolarwatt" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich. Es muss beim Speicher Solarwatt / My Reserve ausgewählt werden.
@@ -854,7 +861,7 @@
 								hideSection('#wattbezugsungrow');
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
-
+								hideSection('#wattbezugcarlogavazzilan');
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
 								if($('#wattbezugmodul').val() != 'none') {
@@ -883,7 +890,10 @@
 									showSection('#wattbezugjanitza');
 									showSection('#wattbezugip');
 								}
-
+								if($('#wattbezugmodul').val() == 'bezug_carlogavazzilan') {
+									showSection('#wattbezugcarlogavazzilan');
+									showSection('#wattbezugip');
+								}
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
 								}
