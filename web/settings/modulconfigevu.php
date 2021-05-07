@@ -744,7 +744,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgemodbusport" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="number" min="1" step="1" name="solaredgemodbusport" id="solaredgemodbusport" value="<?php echo (empty($solaredgemodbusport)?'502':$solaredgemodbusport) ?>">
+									<input class="form-control" type="number" min="1" step="1" name="solaredgemodbusport" id="solaredgemodbusport" value="<?php echo (empty($solaredgemodbusportold)?'502':$solaredgemodbusportold) ?>">
 									<span class="form-text small">
 										Modbus/TCP Port der im Wechselrichter konfiguriert ist. Standardmäßig ist das 502 oder 1502.<br>
 									</span>
