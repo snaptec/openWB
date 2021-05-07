@@ -116,19 +116,4 @@ f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
 f.write(str(evuhz))
 f.close()
 
-resp = client.read_input_registers(0x34,2, unit=sdmid)
-bezugwh = resp.registers[0] * 100
-
-bezugwh = float("%.1f" % bezugwh)
-
-f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
-f.write(str(bezugwh))
-f.close()
-resp = client.read_input_registers(0x4E,2, unit=sdmid)
-bezugwh = resp.registers[0] * 100
-bezugwh = float("%.1f" % bezugwh)
-f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
-f.write(str(bezugwh))
-f.close()
-
 
