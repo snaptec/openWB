@@ -383,14 +383,14 @@ function calcDailyValuesNew() {
 	for ( var column = 1; column < csvData[0].length; column++ ) {
 		// process every column after date-column
 		var dataColumn = getCol(csvData, column);
-		if ( dataColumn.some(value => value > 0) ) {
+//		if ( dataColumn.some(value => value > 0) ) {
 			// don't process column if all values are zero
 			dataColumn.forEach((value, row) => {
 				if ( row > 0 ) {  // copy data only
 					csvData[row-1][column] = csvDatab[row-1][column];
 				}
 			});
-		}
+//		}
 	}
 }
 
