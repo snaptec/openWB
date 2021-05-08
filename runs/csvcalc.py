@@ -10,6 +10,15 @@ import codecs
 import csv
 import argparse
 
+def outfiledefyear(jjjjinput):
+    if (str(jjjjinput) == str(aktjjjj)):
+    # heutiges Jahr nachgerechnet, ramdisk nehmen
+        file_stringo =  outputa + 'logaktyearonl.csv'
+        file_stringos =  outputa + 'logaktyearonls.csv'
+    else:
+        file_stringo =  outputp + str(jjjjinput) + 'onl.csv'
+        file_stringos =  outputp + str(jjjjinput) + 'onls.csv'
+    return (file_stringo,file_stringos)
 def outfiledef(jjjjmminput):
     if (str(jjjjmminput) == str(aktjjjjmm)):
     # heutiger Monat nachgerechnet, ramdisk nehmen
@@ -302,7 +311,75 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
             monhtrow [i] = float(0)
         sumcsvt [i] = float(0)
     return
-
+def reyeardet(calcyear):
+    firstfile=1
+    validdata=0
+    #print ('%s actyear ' % (calcyear))
+    lastdate = ''
+    lastzeit = ''
+    compspalten = 0
+    startspalten = 0
+    for dd in range(1, 13):
+        dds = '0' + str (dd)
+        datestring = int(str(calcyear) + dds[-2:])
+        #summenfile montssuchen
+        (file_stringi,file_stringis) = outfiledef(datestring)
+        #outputfile year
+        (file_stringo,file_stringos) = outfiledefyear(calcyear)
+        if os.path.isfile(file_stringis):
+            ifile=1
+        else:
+            ifile=0
+        if (ifile == 1):
+            try:
+                f = open(  file_stringis, 'r')
+                if firstfile==1:
+                    print ('%s year output %s' % (getTime(),file_stringo))
+                print ('%s year input  %s' % (getTime(),file_stringis))
+                csv_os = csv.reader(f)
+                firstrow = next(csv_os)
+                if firstfile == 1:
+                    startspalten = int(firstrow[1])
+                compspalten = int(firstrow[1])
+                headerrow = next(csv_os)
+                sumrow = next(csv_os)
+                f.close()
+                if (startspalten == compspalten):
+                    complastdate = firstrow[3]
+                    complastzeit = firstrow[5]
+                    if (firstfile == 1):
+                        firstfile = 0
+                        validdata=1
+                        headerline = str(headerrow [0])
+                        for i in range (2,startspalten+1):
+                            if (i > len(headerrow)):
+                                break
+                            headerline=headerline+ ','
+                            headerline=headerline+ str(headerrow [i-1])
+                        headerline=headerline+  '\n'
+                        f1 = open(  file_stringo, 'w')
+                        f1.write(str(headerline))
+                    sumline=''
+                    for i in range(1,startspalten+2):
+                        #print ('I %s ' % (str(i-1)))
+                        sumline=sumline+ str(sumrow [i-1])
+                        if i < (startspalten+1):
+                            sumline=sumline+ ','
+                    sumline=sumline+ '\n'
+                    f1.write(str(sumline))
+            except Exception as e:
+                print ('%s Yearerror %s inhalt %s' % (getTime(),file_stringis, str(e) ))
+    if (validdata == 1):
+        f1.close()
+        os.chmod(file_stringo, 0o777)
+        f1 = open(  file_stringos, 'w')
+        line='Anzahl Spalten,' + str(startspalten) + ',Letzes Datum,' + complastdate + ',Letzte Zeit,' + complastzeit + ',  \n'
+        f1.write(str(line))
+        f1.write(str(headerline))
+        f1.close()
+        os.chmod(file_stringos, 0o777)
+        print ('%s %s written' % (getTime(),file_stringos))
+    return
 def remonth(jjjjmm):
     firstfile=1
     nextmonat = str(jjjjmm)[-2:]
@@ -389,7 +466,57 @@ def remonth(jjjjmm):
     #summenfile schreiben
     fillcounts(monhtrow,file_stringos,lastdate,lastzeit)
     return
-
+def checkyear(calcyear):
+    #lesen summenfile year
+    lastdate = ''
+    lastzeit = ''
+    complastdate = ''
+    complastzeit = ''
+    compspalten = 0
+    dfile=0
+    ifile=0
+    (file_stringo,file_stringos) = outfiledefyear(calcyear)
+    try:
+        if os.path.isfile(file_stringos):
+            ifile=1
+            f = open(file_stringos, 'r')
+            csv_os = csv.reader(f)
+            sumrow = next(csv_os)
+            compspalten = int(sumrow[1])
+            complastdate = sumrow[3]
+            complastzeit = sumrow[5]
+            f.close()
+        else:
+            ifile=0
+        for dd in range(12, 0,-1):
+            dds = '0' + str (dd)
+            datestring = int(str(calcyear) + dds[-2:])
+            #letzses summenfile montssuchen
+            (file_stringi,file_stringis) = outfiledef(datestring)
+            if os.path.isfile(file_stringis):
+                dfile=1
+                f = open(  file_stringis, 'r')
+                csv_os = csv.reader(f)
+                sumrow = next(csv_os)
+                lastspalten = int(sumrow[1])
+                lastdate = sumrow[3]
+                lastzeit = sumrow[5]
+                f.close()
+                break
+            else:
+                dfile=0
+    except Exception as e:
+            print ('%s yearerror3 %s inhalt %s' % (getTime(),datestring, str(e) ))
+    if (dfile==1) and (ifile == 0):
+        print ('%s checkyear jjjj %s Summenfile fehlt' % (getTime(),calcyear))
+        return 0
+    if ((complastdate !=lastdate) or (complastzeit != lastzeit))  and (ifile == 1) :
+        print ('%s checkyear jjjj %s neue Daten alt %s:%s neu %s:%s' % (getTime(),calcyear,complastdate,complastzeit,lastdate,lastzeit))
+        return 0
+    if (compspalten  != lastspalten) and (ifile == 1) :
+        print ('%s checkyear jjjj %s Spalten geaendert' % (getTime(),calcyear))
+        return 0
+    return 1
 def checkmonth(jjjjmm):
     #lesen summenfile
     lastdate = ''
@@ -457,8 +584,10 @@ def reyear():
                 checkflag=checkmonth(jis)
                 if (checkflag == 0):
                     remonth(jis)
+        checkflag=checkyear(ji)
+        if (checkflag == 0):
+            reyeardet(ji)
     return
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', type=str, required=True, help='folder containing daily logfiles')
@@ -487,7 +616,7 @@ if __name__ == "__main__":
     JJMM -> nur bei M relevant, Monat zum nachrechnen
     '''
 
-    aktjjjjmm  = args.date
+    aktjjjjmm  = time.strftime("%Y%m")
     aktjjjj = int(int(aktjjjjmm) / 100)
     header = [
             'Datum','Bezug','Einspeisung','Pv',
