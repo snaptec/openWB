@@ -1053,6 +1053,19 @@ def on_message(client, userdata, msg):
                 f.close()
         if (msg.topic == "openWB/set/isss/parentWB"):
             client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+        if (msg.topic == "openWB/set/isss/parentCPlp1"):
+            client.publish("openWB/system/parentCPlp1", msg.payload.decode("utf-8"), qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/parentCPlp1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+        if (msg.topic == "openWB/set/isss/parentCPlp2"):
+            client.publish("openWB/system/parentCPlp2", msg.payload.decode("utf-8"), qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/parentCPlp2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
         if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
             if (float(msg.payload) >= -50 and float(msg.payload) <=50):
                 f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')

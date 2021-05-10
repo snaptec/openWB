@@ -94,7 +94,12 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 	fi
 
 	mosquitto_pub -h $ip -r -t openWB/set/isss/parentWB -m "$myipaddress"
-        mosquitto_pub -h $ip -r -t openWB/set/isss/heartbeat -m "0"
+	if (( chargepcp == "1" )); then
+		mosquitto_pub -h $ip -r -t openWB/set/isss/parentCPlp1 -m "$chargep"
+	else
+		mosquitto_pub -h $ip -r -t openWB/set/isss/parentCPlp2 -m "$chargep"
+	fi
+	mosquitto_pub -h $ip -r -t openWB/set/isss/heartbeat -m "0"
 
         openwbModulePublishState "LP" 0 "Kein Fehler" $chargep
 else
