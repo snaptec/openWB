@@ -339,6 +339,61 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/manual_soc_lp'+str(devicenumb), 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+                    client.publish("openWB/lp/"+str(devicenumb)+"/%Soc", msg.payload.decode("utf-8"), qos=0, retain=True)
+                    if ( int(devicenumb) == 1 ):
+                        socFile = '/var/www/html/openWB/ramdisk/soc'
+                    elif ( int(devicenumb) == 2 ):
+                        socFile = '/var/www/html/openWB/ramdisk/soc1'
+                    f = open(socFile, 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (( "openWB/config/set/sofort/lp" in msg.topic) and ("energyToCharge" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 100):
+                    if ( int(devicenumb) == 1):
+                        sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademkwh=", msg.payload.decode("utf-8")]
+                        subprocess.run(sendcommand)
+                    if (int(devicenumb) == 2):
+                        sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademkwhs1=", msg.payload.decode("utf-8")]
+                        subprocess.run(sendcommand)
+                    if (int(devicenumb) == 3):
+                        sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademkwhs2=", msg.payload.decode("utf-8")]
+                        subprocess.run(sendcommand)
+                    if (int(devicenumb) >= 4):
+                        sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademkwhlp"+str(devicenumb)+"=", msg.payload.decode("utf-8")]
+                        subprocess.run(sendcommand)
+                    client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/energyToCharge", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/sofort/lp" in msg.topic) and ("resetEnergyToCharge" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= 8 and int(msg.payload) == 1):
+                    if ( int(devicenumb) == 1):
+                        f = open('/var/www/html/openWB/ramdisk/aktgeladen', 'w')
+                        f.write("0")
+                        f.close()
+                        f = open('/var/www/html/openWB/ramdisk/gelrlp1', 'w')
+                        f.write("0")
+                        f.close()
+                    if (int(devicenumb) == 2):
+                        f = open('/var/www/html/openWB/ramdisk/aktgeladens1', 'w')
+                        f.write("0")
+                        f.close()
+                        f = open('/var/www/html/openWB/ramdisk/gelrlp2', 'w')
+                        f.write("0")
+                        f.close()
+                    if (int(devicenumb) == 3):
+                        f = open('/var/www/html/openWB/ramdisk/aktgeladens2', 'w')
+                        f.write("0")
+                        f.close()
+                        f = open('/var/www/html/openWB/ramdisk/gelrlp3', 'w')
+                        f.write("0")
+                        f.close()
+                    if (int(devicenumb) >= 4):
+                        f = open('/var/www/html/openWB/ramdisk/aktgeladenlp'+str(devicenumb), 'w')
+                        f.write("0")
+                        f.close()
+                        f = open('/var/www/html/openWB/ramdisk/gelrlp'+str(devicenumb), 'w')
+                        f.write("0")
+                        f.close()
             if (( "openWB/config/set/sofort/lp" in msg.topic) and ("socToChargeTo" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
                 if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
@@ -613,6 +668,23 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
+                if (int(msg.payload) >= -1 and int(msg.payload) <= 32):
+                    f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
+                    f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/AllowedRfidsForSocket"):
+                f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForSocket', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+                setTopicCleared = True
             if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
                 f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
                 f.write(msg.payload.decode("utf-8"))
