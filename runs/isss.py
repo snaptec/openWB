@@ -680,7 +680,7 @@ def getmeter():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         metercounter=metercounter + 1
         if metercounter > 5:
-        logDebug("2", "Get meter Fehler:" + str(exc_type) + str(fname) + str(exc_tb.tb_lineno) + "Fehler:" + str(e))
+            logDebug("2", "Get meter Fehler:" + str(exc_type) + str(fname) + str(exc_tb.tb_lineno) + "Fehler:" + str(e))
         pass
 
 # crontol of socket lock
