@@ -16,6 +16,7 @@ function lockDisplay(lock = true) {
     lockTimeoutHandler = window.setTimeout(lockDisplay, lockTimeout);
   } else {
     displaylocked = true;
+    $("#changeLockModal,#changeDisplayTimeoutModal").modal("hide");
     $("#lockModal").modal("show");
     $("#main").addClass("blur");
     $("#displaylock").find(".fa-lock").removeClass("hide");
