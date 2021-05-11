@@ -113,6 +113,19 @@ loadvars(){
 			fi
 		fi
 	else
+		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
+		if [ "$pluggedin" -ge "0" ]; then
+			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+				/var/www/html/openWB/runs/pushover.sh "$message"
+			fi
+			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
+			fi
+			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
+			echo 0 > /var/www/html/openWB/ramdisk/pluggedin
+		fi
+
 		plugstat=$(<ramdisk/plugstat)
 		chargestat=$(<ramdisk/chargestat)
 	fi

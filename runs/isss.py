@@ -548,6 +548,10 @@ def getmeter():
                 if ( DeviceValues[str(key)] != Values["lp1plugstat"]):
                     mclient.publish("openWB/lp/1/boolPlugStat", payload=Values["lp1plugstat"], qos=0, retain=True)
                     mclient.loop(timeout=2.0)
+                    if ( int(Values["lp1plugstat"]) == "1"):
+                        f = open('/var/www/html/openWB/ramdisk/pluggedin', 'w')
+                        f.write(str(Values["lp1plugstat"]))
+                        f.close()
                     DeviceValues.update({'lp1plugstat' : Values["lp1plugstat"]})
                     if ( parentWB != "0" ):
                         remoteclient.publish("openWB/lp/"+parentCPlp1+"/boolPlugStat", payload=Values["lp1plugstat"], qos=0, retain=True)
@@ -646,6 +650,10 @@ def getmeter():
                         mclient.publish("openWB/lp/2/boolPlugStat", payload=Values["lp2plugstat"], qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2plugstat' : Values["lp2plugstat"]})
+                        if ( int(Values["lp2plugstat"]) == "1"):
+                            f = open('/var/www/html/openWB/ramdisk/pluggedin', 'w')
+                            f.write(str(Values["lp2plugstat"]))
+                            f.close()
                         if ( parentWB != "0" ):
                             remoteclient.publish("openWB/lp/"+parentCPlp2+"/boolPlugStat", payload=Values["lp2plugstat"], qos=0, retain=True)
                             remoteclient.loop(timeout=2.0)
