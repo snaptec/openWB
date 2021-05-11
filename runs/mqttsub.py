@@ -988,28 +988,6 @@ def on_message(client, userdata, msg):
                     replaceAll("lademstats1=",msg.payload.decode("utf-8"))
                     replaceAll("sofortsocstatlp2=","0")
                 if (int(msg.payload) == 2):
-                    client.publish("openWB/lp/2/boolDirectChargeModeSoc", "1", qos=0, retain=True)
-                else:
-                    client.publish("openWB/lp/2/boolDirectChargeModeSoc", "0", qos=0, retain=True)
-                client.publish("openWB/config/get/sofort/lp/2/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
-            if (msg.topic == "openWB/set/lp/1/DirectChargeSubMode"):
-                if (int(msg.payload) == 0):
-                    replaceAll("lademstat=",msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp1=",msg.payload.decode("utf-8"))
-                if (int(msg.payload) == 1):
-                    replaceAll("lademstat=",msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp1=","0")
-                if (int(msg.payload) == 2):
-                    replaceAll("lademstat=","0")
-                    replaceAll("sofortsocstatlp1=","1")
-            if (msg.topic == "openWB/set/lp/2/DirectChargeSubMode"):
-                if (int(msg.payload) == 0):
-                    replaceAll("lademstats1=",msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp2=",msg.payload.decode("utf-8"))
-                if (int(msg.payload) == 1):
-                    replaceAll("lademstats1=",msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp2=","0")
-                if (int(msg.payload) == 2):
                     replaceAll("lademstats1=","0")
                     replaceAll("sofortsocstatlp2=","1")
             if (msg.topic == "openWB/set/lp/3/DirectChargeSubMode"):
