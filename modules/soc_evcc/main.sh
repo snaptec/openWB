@@ -74,6 +74,8 @@ getAndWriteSoc(){
 	answer=$($MODULEDIR/../soc_evcc/soc $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
+		# catch float
+		answer=$(echo "$answer/1" | bc)
 		echo $answer > $socfile
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $answer"
 	else

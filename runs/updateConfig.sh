@@ -1966,6 +1966,9 @@ updateConfig(){
 	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
 		echo "solaredgezweiterspeicher=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "solaredgesubbat=" $ConfigFile; then
+		echo "solaredgesubbat=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "studer_ip=" $ConfigFile; then
 		echo "studer_ip=192.168.1.1" >> $ConfigFile
 		echo "studer_xt=1" >> $ConfigFile
