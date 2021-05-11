@@ -1,0 +1,47 @@
+.form-control {
+    background-color: #343a40;
+    border: 1px solid #ced4da;
+    color: #ffffff;
+    &:focus {
+        background-color: #343a40;
+        border: 1px solid #ced4da;
+        color: #ffffff;
+    }
+}
+.form-control[readonly] {
+    background-color: #343a40;
+    border: 1px solid #ced4da;
+    color: #ffffff;
+}
+.input-group-text {
+    background-color: #212529;
+    color: #ffffff;
+}
+input {
+    background-color: #6c757d;
+    color: #ffffff;
+    &[type="password"] {
+        border: 1px solid #ced4da;
+    }
+    &[type="text"] {
+        border: 1px solid #ced4da;
+    }
+}
+select {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: 1px solid #ced4da;
+}
+
+.clockpicker-popover {
+    background-color: #343a40;
+    .popover-title {
+        background-color: transparent;
+    }
+    .popover-content {
+        background-color: transparent;
+    }
+}
+.clockpicker-plate {
+    background-color: black;
+}
