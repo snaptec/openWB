@@ -1706,11 +1706,14 @@ updateConfig(){
 	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		echo "pv2ip=none" >> $ConfigFile
-		echo "pv2id=none" >> $ConfigFile
+		echo "pv2id=1" >> $ConfigFile
 		echo "pv2user=none" >> $ConfigFile
 		echo "pv2pass=''" >> $ConfigFile
 	else
 		sed -i "/pv2pass='/b; s/^pv2pass=\(.*\)/pv2pass=\'\1\'/g" $ConfigFile
+	fi
+	if grep -Fq "pv2id=none" $ConfigFile; then
+		sed -i "/^pv2id=none/pv2id=1/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_bluelink_email=" $ConfigFile; then
 		echo "soc_bluelink_email=mail@mail.de" >> $ConfigFile

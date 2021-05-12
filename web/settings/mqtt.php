@@ -135,7 +135,7 @@
 			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke \"$connectionName\""; else echo "Neue MQTT-Brücke"; ?></h1>
 			<form action="./settings/savemqtt.php" method="POST">
 				<!-- previous bridge name, needed for renaming a bridge -->
-				<input type="hidden" readonly="readonly" name="bridge" value="<?php echo($connectionName); ?>">
+				<input type="hidden" name="bridge" value="<?php echo($connectionName); ?>">
 
 				<!-- Konfiguration -->
 				<div class="card border-secondary">
@@ -190,20 +190,20 @@
 						<div class="form-row mb-1">
 							<label for="RemotePass" class="col-md-4 col-form-label">Passwort</label>
 							<div class="col">
-								<input class="form-control" ype="password" size="35" name="RemotePass" id="RemotePass" pattern="^\S.\S+$" value="<?php echo $remotePassword; ?>">
+								<input class="form-control" type="password" size="35" name="RemotePass" id="RemotePass" pattern="^\S.\S+$" value="<?php echo $remotePassword; ?>">
 								<span class="form-text small">Passwort für den Login auf dem entfernten MQTT-Server. Leerzeichen am Anfang und Ende des Passworts werden nicht unterstützt.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
 							<label for="RemotePrefix" class="col-md-4 col-form-label">Entfernter Präfix</label>
 							<div class="col">
-								<input class="form-control" ype="text" size="55" name="RemotePrefix" id="RemotePrefix" pattern="^[a-zA-Z0-9_\-\/]+[/]$" value="<?php echo $remotePrefix; ?>">
+								<input class="form-control" type="text" size="55" name="RemotePrefix" id="RemotePrefix" pattern="^[a-zA-Z0-9_\-\/]+[/]$" value="<?php echo $remotePrefix; ?>">
 								<span class="form-text small">MQTT-Thema Präfix, welches dem 'openWB/...' vorangestellt wird.<br/>
 									Beispiel: Wenn in diesem Feld 'pfx/' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="mqttProtocol" class="col-md-4 col-form-label">MQTT Protokoll</label>
+							<label class="col-md-4 col-form-label">MQTT Protokoll</label>
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($mqttProtocol == "mqttv31") echo " active" ?>">
@@ -217,7 +217,7 @@
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="tlsProtocol" class="col-md-4 col-form-label">TLS Protokoll</label>
+							<label class="col-md-4 col-form-label">TLS Protokoll</label>
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($tlsVersion == "tlsv1.3") echo " active"; if(!$tlsv13Supported) echo " disabled"; ?>">
@@ -343,27 +343,26 @@
 					</form>
 				</div>
 			</div>
-		</div>
-	</div>  <!-- container -->
+		</div>  <!-- container -->
 
-	<footer class="footer bg-dark text-light font-small">
-		<div class="container text-center">
-				<small>Sie befinden sich hier: Einstellungen/MQTT-Brücke</small>
-		</div>
-	</footer>
+		<footer class="footer bg-dark text-light font-small">
+			<div class="container text-center">
+					<small>Sie befinden sich hier: Einstellungen/MQTT-Brücke</small>
+			</div>
+		</footer>
 
-	<script>
+		<script>
 
-		$.get(
-			{ url: "settings/navbar.html", cache: false },
-			function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navMqttBruecke').addClass('disabled');
-			}
-		);
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navMqttBruecke').addClass('disabled');
+				}
+			);
 
-	</script>
+		</script>
 
 	</body>
 </html>

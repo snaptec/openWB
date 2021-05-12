@@ -161,7 +161,7 @@
 						<div id="divspeichersolarwatt" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="solarwattmethod" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
+									<label for="solarwattmethod1" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($solarwattmethodold == 0) echo " active" ?>">
