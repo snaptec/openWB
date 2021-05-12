@@ -70,9 +70,9 @@ def selyear(jjjjmm):
         else:
             ifile=0
     except Exception as e:
-            print ('%s error %s inhalt %s' % (getTime(),datestring, str(e) ))
+            print ('%s error %s inhalt %s' % (getTime(),file_cvsfinps, str(e) ))
     if (ifile == 0):
-        print ('%s summenfile nicht gefunden %s' % (getTime(),datestring,file_cvsfinps ))
+        print ('%s summenfile nicht gefunden %s' % (getTime(),file_cvsfinps ))
         return
     # header machen
     headerline = str(headerrow [0]) +','
@@ -119,9 +119,9 @@ def selyear(jjjjmm):
             os.chmod(outputfile + 'b_onl4', 0o777)
             os.chmod(outputfile + 'b_onl5', 0o777)
     except Exception as e:
-        print ('%s error1 %s inhalt %s' % (getTime(),datestring, str(e) ))
+        print ('%s error1 %s inhalt %s' % (getTime(),file_cvsfinp, str(e) ))
     if (ifile == 0):
-        print ('%s datenfile nicht gefunden %s' % (getTime(),datestring,file_cvsfinp ))
+        print ('%s datenfile nicht gefunden %s' % (getTime(),file_cvsfinp ))
     return
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
