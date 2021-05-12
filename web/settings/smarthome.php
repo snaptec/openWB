@@ -82,7 +82,7 @@
 							</div>
 							<hr class="border-secondary">
 							<div class="form-row mb-1">
-								<label for="abgesteckthooklp1" class="col-md-4 col-form-label">Nach Abstecken an Ladepunkt 1</label>
+								<label class="col-md-4 col-form-label">Nach Abstecken an Ladepunkt 1</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($abgesteckthooklp1old == 0) echo " active" ?>">
@@ -105,7 +105,7 @@
 							</div>
 							<hr class="border-secondary">
 							<div class="form-row mb-1">
-								<label for="ladestarthooklp1" class="col-md-4 col-form-label">Nach Ladestart an Ladepunkt 1</label>
+								<label class="col-md-4 col-form-label">Nach Ladestart an Ladepunkt 1</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($ladestarthooklp1old == 0) echo " active" ?>">
@@ -128,7 +128,7 @@
 							</div>
 							<hr class="border-secondary">
 							<div class="form-row mb-1">
-								<label for="ladestophooklp1" class="col-md-4 col-form-label">Nach Ladestopp an Ladepunkt 1</label>
+								<label class="col-md-4 col-form-label">Nach Ladestopp an Ladepunkt 1</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($ladestophooklp1old == 0) echo " active" ?>">

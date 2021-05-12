@@ -1188,7 +1188,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_intervall_lp1" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_evcc_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervall" id="soc_evcc_intervall" value="<?php echo $soc_evcc_intervallold ?>">
 											<span class="form-text small">
@@ -1858,7 +1858,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -1936,7 +1936,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
 															});
-															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp1').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -3647,7 +3647,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -3706,7 +3706,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
 															});
-															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp2').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
