@@ -607,7 +607,7 @@
 						<div id="wattbezugfronius" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="froniusip" class="col-md-4 col-form-label">Fronius IP</label>
+									<label for="wrfroniusip" class="col-md-4 col-form-label">Fronius IP</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
 										<span class="form-text small">
@@ -616,7 +616,7 @@
 										</span>
 										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php echo $wrfroniusip ?>">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
-										<span id="wattbezugfroniusloadmessage" class="form-text small"/>
+										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>
 								</div>
 								<div id="wattbezugfroniusmeterid" class="form-row mb-1">
@@ -653,6 +653,7 @@
 										</div>
 									</div>
 								</div>
+								<hr>
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für die Primo Reihe</label>
 									<div class="col">
@@ -666,7 +667,6 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
 									<div class="col">
