@@ -766,7 +766,7 @@
 								<div class="col">
 									<input class="form-control" type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>">
 									<span class="form-text small">
-									Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben.
+									Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben. <br>ACHTUNG! Dies ist nur das richtige Modul wenn ein extra EnergyMeter nur für die PV vorhanden ist. Im Normalfall ist immer "SMA ModbusTCP WR" zu wählen.<br>Ist nur ein HomeManager vorhanden ist dieses Modul nicht richtig.
 									</span>
 								</div>
 							</div>
