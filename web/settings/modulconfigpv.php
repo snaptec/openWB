@@ -1054,7 +1054,10 @@
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
 								hideSection('#pv2piko2');
-	
+
+								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
+									showSection('#pv2piko2');
+								}
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('#pv2wrjsondiv');
 								}
