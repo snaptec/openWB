@@ -99,7 +99,8 @@ lp1countphasesinuse = 1
 lp2countphasesinuse = 2
 heartbeat = 0
 metercounter = 0
-
+actcooldown=0
+actcooldowntimestamp=0
 # check for openWB DUO in slave mode
 try:
     with open('ramdisk/issslp2act', 'r') as value:
@@ -136,7 +137,6 @@ def getmeter():
     global lp2countphasesinuse
     if metercounter > 0:
         metercounter=metercounter -0.5
-
     if ( llmeterconfiglp1 == 0 ):
         logDebug("2", "Erkenne verbauten Zaehler.")
         #check sdm
@@ -159,6 +159,7 @@ def getmeter():
                 logDebug("2", "B23 Zaehler erkannt")
         except:
             pass
+
     else:
         sdmid=llmeterconfiglp1
     try:
@@ -227,7 +228,7 @@ def getmeter():
             f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
             f.write(str(hz))
             f.close()
-        else:
+        elif sdmid < 255:
             #llkwh
             resp = client.read_holding_registers(0x5000,4, unit=sdmid)
             lp1llkwh = struct.unpack('>Q',struct.pack('>HHHH',*resp.registers))[0]/100
@@ -287,6 +288,19 @@ def getmeter():
             f = open('/var/www/html/openWB/ramdisk/llhz', 'w') 
             f.write(str(hz)) 
             f.close()
+        else:
+            #dummy
+            lp1voltage1=230
+            lp1voltage2=230
+            lp1voltage3=230
+            lp1lla1=0
+            lp1lla2=0
+            lp1lla3=0
+            lp1llkwh=10
+            hz=0
+            lp1llg=0
+
+
         try:
             if lp1lla1 > 3:
                 lp1countphasesinuse=1
@@ -687,19 +701,33 @@ def getmeter():
 # GPIO 23: control direction of lock motor
 # GPIO 26: power to lock motor
 def controlact(action):
-    if action == "auf":
-        GPIO.output(23, GPIO.LOW)
-        GPIO.output(26, GPIO.HIGH)
-        time.sleep(2)
-        GPIO.output(26, GPIO.LOW)
-        logDebug("1", "Aktor auf")
-    if action == "zu":
-        GPIO.output(23, GPIO.HIGH)
-        GPIO.output(26, GPIO.HIGH)
-        time.sleep(3)
-        GPIO.output(26, GPIO.LOW)
-        logDebug("1", "Aktor zu")
+    global actcooldown
+    global actcooldowntimestamp
 
+    if (actcooldown < 10):
+        if action == "auf":
+            GPIO.output(23, GPIO.LOW)
+            GPIO.output(26, GPIO.HIGH)
+            time.sleep(2)
+            GPIO.output(26, GPIO.LOW)
+            logDebug("1", "Aktor auf")
+        if action == "zu":
+            GPIO.output(23, GPIO.HIGH)
+            GPIO.output(26, GPIO.HIGH)
+            time.sleep(3)
+            GPIO.output(26, GPIO.LOW)
+            logDebug("1", "Aktor zu")
+    else:
+        logDebug("2", "Cooldown für Aktor aktiv.")
+        if (actcooldowntimestamp < 50):
+            actcooldowntimestamp = int(time.time())
+            logDebug("1", "Beginne 5 Minuten Cooldown für Aktor")
+            f = open('/var/www/html/openWB/ramdisk/lastregelungaktiv', 'w')
+            f.write("Cooldown für Aktor der Verriegelung erforderlich. Steckt der Stecker richtig?")
+            f.close()
+
+
+    actcooldown=actcooldown+1
 # get all values to control our chargepoints
 def loadregelvars():
     global actorstat
@@ -709,6 +737,8 @@ def loadregelvars():
     global evsefailure
     global lp2installed
     global heartbeat
+    global actcooldown
+    global actcooldowntimestamp
     try:
         if GPIO.input(19) == False:
             actorstat=1
@@ -734,6 +764,17 @@ def loadregelvars():
         pass
     logDebug("0", "LL Soll: " + str(lp1solla) + " ActorStatus: " + str(actorstat))
     if ( buchseconfigured == 1 ):
+        logDebug("1", "in Buchse" + str(evsefailure)+"lp1plugstat:"+str(Values["lp1plugstat"]))
+        if ( actcooldowntimestamp > 50):
+            tst=actcooldowntimestamp+300
+            if (tst < int(time.time())):
+                actcooldowntimestamp=0
+                actcooldown=0
+                logDebug("1", "Cooldown für Aktor zurückgesetzt")
+            else:
+                timeleft=tst-int(time.time())
+                logDebug("1", str(timeleft)+ " Sekunden Cooldown für Aktor verbleiben.")
+
         if ( evsefailure == 0 ):
             if ( Values["lp1plugstat"] == 1):
                 if ( actorstat == 0 ):
