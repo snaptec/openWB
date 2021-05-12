@@ -48,7 +48,9 @@ openwbisslave() {
 		if (( SocketActivationRequested >= 2 )); then
 			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket DEactivation requested by socket or EV RFID tag scan. Socket will now be turned off."
 			sudo python runs/standardSocket.py off
-			echo 0 > $SocketRequestedFile
+			if (( SocketActivated == 0)) || (( SocketApproved == 0 )); then
+			  echo 0 > $SocketRequestedFile
+			fi
 
 		# handle disapprove of active socket
 		elif (( SocketActivated > 0 )) && (( SocketApproved == 0 )); then
