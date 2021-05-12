@@ -965,7 +965,20 @@ loadvars(){
 
 	hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shd1_w - shd2_w - shd3_w - shd4_w - shd5_w - shd6_w - shd7_w - shd8_w - shd9_w - verb1_w - verb2_w - verb3_w))
 	if (( hausverbrauch < 0 )); then
-		hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
+		if [ -f /var/www/html/openWB/ramdisk/hausverbrauch.invalid ]; then
+			hausverbrauchinvalid=$(</var/www/html/openWB/ramdisk/hausverbrauch.invalid)
+			let hausverbrauchinvalid+=1
+		else
+			hausverbrauchinvalid=1
+		fi
+		echo "$hausverbrauchinvalid" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
+		if (( hausverbrauchinvalid < 3 )); then
+			hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
+		else
+			hausverbrauch=0
+		fi
+	else
+		echo "0" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)

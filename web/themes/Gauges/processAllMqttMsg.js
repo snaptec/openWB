@@ -353,6 +353,17 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// Gauge mit Rückgabewert erneuern, kein Text, asymmetrische Gauge 0-Max, AutoRescale
 		updateGaugeValue(gaugeHome, anzeigeWert, '');
 	}
+	else if ( mqttmsg == 'openWB/global/DailyYieldHausverbrauchKwh') {
+		var houseDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(houseDailyYield) ) {
+			houseDailyYield = 0;
+		}
+		var houseDailyYieldStr = '';
+		if ( houseDailyYield >= 0 ) {
+			houseDailyYieldStr = houseDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh';
+		}
+		gaugeHome.set('titleBottom', houseDailyYieldStr).grow();
+	}
 	else if ( mqttmsg == 'openWB/global/WAllChargePoints') {
 		var powerAllLp = parseInt(mqttpayload, 10);
 		if ( isNaN(powerAllLp) ) {
