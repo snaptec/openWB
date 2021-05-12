@@ -1116,6 +1116,9 @@ updateConfig(){
 		echo "pv1_idd=1" >> $ConfigFile
 		echo "speicher1_ip=192.168.0.17" >> $ConfigFile
 	fi
+	if ! grep -Fq "speicher1_ip2=" $ConfigFile; then
+		echo "speicher1_ip2=192.168.0.17" >> $ConfigFile
+	fi
 	if ! grep -Fq "fsm63a3modbusllsource=" $ConfigFile; then
 		echo "fsm63a3modbusllsource=/dev/ttyUSB2" >> $ConfigFile
 	fi
@@ -2011,6 +2014,9 @@ updateConfig(){
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
 		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
+	fi
+	if ! grep -Fq "solarwattmethod=" $ConfigFile; then
+		echo "solarwattmethod=0" >> $ConfigFile
 	fi
 
 	echo "Config file Update done."
