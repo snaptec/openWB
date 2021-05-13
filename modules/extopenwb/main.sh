@@ -107,7 +107,7 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 else
         openwbModulePublishState "LP" 1 "Keine Daten vom LP erhalten, IP Korrekt?" $chargep
         openwbDebugLog "MAIN" 0 "Keine Daten von externe openWB LP $chargep empfangen"
-	errcounter=$(</var/www/html/openWB/ramdisk/errcounterextopenwb
+	errcounter=$(</var/www/html/openWB/ramdisk/errcounterextopenwb)
 	errcounter=$((errcounter+1))
 	echo $errcounter > /var/www/html/openWB/ramdisk/errcounterextopenwb
 	if (( errcounter > 5 )); then
