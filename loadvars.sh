@@ -1730,6 +1730,7 @@ loadvars(){
 	mqttconfvar["config/get/display/chartLp/6/max"]=displaylp6max
 	mqttconfvar["config/get/display/chartLp/7/max"]=displaylp7max
 	mqttconfvar["config/get/display/chartLp/8/max"]=displaylp8max
+	mqttconfvar["config/get/global/slaveMode"]=slavemode
 
 	for mq in "${!mqttconfvar[@]}"; do
 		theval=${!mqttconfvar[$mq]}
