@@ -114,7 +114,7 @@ loadvars(){
 		fi
 	else
 		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
-		if [ "$pluggedin" -ge "0" ]; then
+		if [ "$pluggedin" -gt "0" ]; then
 			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
 				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 				/var/www/html/openWB/runs/pushover.sh "$message"
