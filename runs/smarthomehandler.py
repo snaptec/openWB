@@ -833,7 +833,7 @@ def conditions(nummer):
         f = open( file_charge, 'r')
         testcharge =int(f.read())
         f.close()
-    if testcharge == 0:
+    if testcharge <= 1000:
         chargestatus = 0
     else:
         chargestatus = 1
@@ -856,7 +856,7 @@ def conditions(nummer):
     # Auto ladung
     if deactivatewhileevcharging == 1:
         if ( DeviceValues[str(nummer)+"relais"] == 1 ):
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll ausgeschaltet werden bei Ladung, pruefe")
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll ausgeschaltet werden bei Ladung, pruefe " + str( testcharge))
             if chargestatus == 1:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, pruefe Mindestlaufzeit")
                 if str(nummer)+"eintime" in DeviceCounters:
@@ -874,7 +874,7 @@ def conditions(nummer):
             else:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
         else:
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe")
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
             if chargestatus == 1:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
                 return
