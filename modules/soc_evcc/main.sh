@@ -4,6 +4,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="EVSOC"
 CHARGEPOINT=$1
+WAKEUP=$2
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
@@ -74,11 +75,24 @@ getAndWriteSoc(){
 	answer=$($MODULEDIR/../soc_evcc/soc $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
+		# catch float
+		answer=$(echo "$answer/1" | bc)
 		echo $answer > $socfile
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $answer"
 	else
 		# we have a problem
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from EVCC: $answer"
+	fi
+}
+wakeupCar(){
+	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Wakeup car"
+	answer=$($MODULEDIR/../soc_evcc/soc $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" --action wakeup 2>&1)
+	if [ $? -eq 0 ]; then
+		# we got a valid answer
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Wakeup Message from EVCC: $answer"
+	else
+		# we have a problem
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Wakeup Error from EVCC: $answer"
 	fi
 }
 
@@ -91,6 +105,9 @@ if (( ladeleistung > 500 )); then
 		getAndWriteSoc
 	fi
 else
+	if [ "$WAKEUP" == "wakeup" ]; then
+		wakeupCar
+	fi
 	if (( soctimer < intervall )); then
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 		incrementTimer
@@ -99,3 +116,7 @@ else
 		getAndWriteSoc
 	fi
 fi
+
+
+
+
