@@ -127,7 +127,6 @@
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option für fertige openWB series1 oder series2.<br>
-								<span class="text-danger">Diese Option befindet sich noch in der Testphase!</span>
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
