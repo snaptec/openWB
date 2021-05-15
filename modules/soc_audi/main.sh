@@ -1,25 +1,61 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
+CHARGEPOINT=$1
 
-auditimer=$(</var/www/html/openWB/ramdisk/soctimer)
+socDebug=$debug
+# for developement only
+socDebug=1
+
+case $CHARGEPOINT in
+	2) 
+		# second charge point
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
+		username=$soc2user
+		password=$soc2pass
+		vin=$soc2vin
+		;;
+	*)
+		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
+		username=$soc_audi_username
+		password=$soc_audi_passwort
+		vin=$soc_audi_vin
+		;;
+esac
+
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
+auditimer=$(<$soctimerfile)
 if (( auditimer < 180 )); then
+	socDebugLog "Nothing to do yet. Incrementing timer."
 	auditimer=$((auditimer+1))
 	if ((ladeleistung > 800 )); then
 		auditimer=$((auditimer+2))
 	fi
-	echo $auditimer > /var/www/html/openWB/ramdisk/soctimer
+	echo $auditimer > $soctimerfile
 else
-	answer=$(sudo python3 /var/www/html/openWB/modules/soc_audi/Run.py $soc_audi_username $soc_audi_passwort)
-	vin=$(echo $answer  | sed 's/.*: //' | head -c-3 | cut -c 2-)
-	acctoken=$(cat token.json | jq -r .access_token)
-	battsoc=$(curl -s --header "Accept: application/json" --header "X-App-Name: eRemote" --header "X-App-Version: 1.0.0" --header "User-Agent: okhttp/2.3.0" --header "Authorization: AudiAuth 1 $acctoken" https://msg.audi.de/fs-car/bs/batterycharge/v1/Audi/DE/vehicles/$vin/charger)
-	soclevel=$(echo $battsoc | jq .charger.status.batteryStatusData.stateOfCharge.content)
-
-	re='^-?[0-9]+$'
-	if  [[ $soclevel =~ $re ]] ; then
-		if (( $soclevel != 0 )) ; then
-			echo $soclevel > /var/www/html/openWB/ramdisk/soc
-		fi
-	fi
-	echo 1 > /var/www/html/openWB/ramdisk/soctimer
+	echo 0 > $soctimerfile
+	socDebugLog "Requesting SoC"
+	answer=$($MODULEDIR/../evcc-soc audi --user "$username" --password "$passsword" --vin "$vin" 2>&1)
+	if [ $? -eq 0 ]; then
+ 		# we got a valid answer
+ 		echo $answer > $socfile
+ 		socDebugLog "SoC: $answer"
+ 	else
+ 		# we have a problem
+ 		socDebugLog "Error from evcc-soc: $answer"
+ 	fi
 fi

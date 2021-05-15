@@ -1,0 +1,141 @@
+html{
+	min-height: 100%;
+	min-width: 100%;
+}
+
+body {
+	color: white;
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
+	/* Old browsers */
+	background: rgb(90,90,90);
+	/* FF3.6-15 */
+	background: -moz-linear-gradient(top,  rgba(90,90,90,1) 0%, rgba(14,14,14,1) 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: -webkit-linear-gradient(top,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
+	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background: linear-gradient(to bottom,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
+	/* IE6-9 */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', endColorstr='#0e0e0e',GradientType=0 );
+	background-attachment: fixed;
+}
+
+.bg-warning, .bg-info, .bg-success, .bg-light {
+	color: #212529;
+}
+
+.btn-outline-secondary,
+.table,
+pre {
+	color: #ffffff;
+}
+
+.card {
+	background-color: #212529;
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover) {
+	background-color: #212529;
+}
+
+.card-header.bg-success .btn-outline-info.focus {
+	box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
+}
+
+.card-header.bg-success .btn-outline-info.active,
+.card-header.bg-success .btn-outline-info:hover {
+	border-color: #212529;
+}
+
+.form-control, .form-control[readonly], .form-control:focus {
+	background-color: #343a40;
+	border: 1px solid #ced4da;
+	color: #ffffff;
+}
+
+.input-group-text {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+.modal-content {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+body {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+input, select {
+	background-color: #6c757d;
+	color: #ffffff;
+}
+
+input[type="text"], input[type="password"], select {
+	border: 1px solid #ced4da;
+}
+
+hr {
+	border-top-color: white;
+}
+
+.modal-content,
+.modal-header,
+.modal-footer {
+	border-color: dimgrey;
+}
+
+.clockpicker-popover,
+.datepicker.datepicker-dropdown {
+	background-color: #343a40;
+}
+
+.clockpicker-popover .popover-title,
+.clockpicker-popover .popover-content {
+	background-color: transparent;
+}
+
+.clockpicker-plate {
+	background-color: black;
+}
+
+.datepicker .datepicker-switch,
+.datepicker .prev:not(.disabled),
+.datepicker .next:not(.disabled),
+.datepicker .today,
+.datepicker .month,
+.datepicker .year {
+	color: #ffffff;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover {
+	background: #eeeeee;
+	color: #000000;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover {
+	background: #eeeeee;
+	color: #000000;
+}
+
+.carousel-caption,
+.carousel-control-next,
+.carousel-control-prev {
+	color: #ffffff;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+	filter: none;
+}
+
+.carousel-indicators li {
+	background-color: #ffffff;
+}

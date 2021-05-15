@@ -24,7 +24,7 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<!-- important scripts to be loaded -->
-		<script  src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 
 		<!-- Bootstrap -->
@@ -35,13 +35,14 @@
 		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- clockpicker -->
 		<script src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/clockpicker/bootstrap-clockpicker.min.css">
 
-		<!-- global variables -->
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 		<script>
 			var oldClockpickerTime;  // holds old value of clockpicker during changing the time
 		</script>
@@ -145,15 +146,15 @@
 					$elemValue = '';
 				}
 				echo <<<ECHOCHECKBOX
-													<div class="col-auto my-1">
-														<div class="form-check">
-															<input type="hidden" name="{$elemName}">
-															<input class="form-check-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-															<label class="form-check-label pl-10" for="{$elemId}">
-																{$label}
-															</label>
-														</div>
-													</div>
+									<div class="col-auto my-1">
+										<div class="custom-control custom-checkbox">
+											<input type="hidden" name="{$elemName}">
+											<input class="custom-control-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+											<label class="custom-control-label pl-10" for="{$elemId}">
+												{$label}
+											</label>
+										</div>
+									</div>
 
 ECHOCHECKBOX;
 			}
@@ -163,14 +164,14 @@ ECHOCHECKBOX;
 				global $elemName, $elemId, $elemValue;
 				buildElementProperties($elemType);
 				echo <<<ECHOCLOCKPICKER
-													<div class="col-sm-6 my-1">
-														<div class="input-group">
-															<input type="text" class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
-															<div class="input-group-append">
-																<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-															</div>
-														</div>
-													</div>\n
+									<div class="col-sm-6 my-1">
+										<div class="input-group">
+											<input type="text" class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
+											<div class="input-group-append">
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
+											</div>
+										</div>
+									</div>\n
 ECHOCLOCKPICKER;
 			}
 
@@ -180,31 +181,31 @@ ECHOCLOCKPICKER;
 				$dayOfWeekString = getDayOfWeekString($dayOfWeek);
 
 				echo <<<ECHODAYROWHEAD
-										<div class="row vaRow">  <!-- row {$dayOfWeekString} -->
-											<div class="col-2">
-									            {$dayOfWeekString}
-									        </div>
-											<div class="col-5">
-												<div class="form-row align-items-center">\n
+						<div class="row form-row vaRow">  <!-- {$dayOfWeekString} -->
+							<div class="col-sm">
+								{$dayOfWeekString}
+							</div>
+							<div class="col-5">
+								<div class="form-row align-items-center">\n
 ECHODAYROWHEAD;
 
 				echoCheckboxDiv("lockBoxLp", "sperren");
 				echoClockpickerDiv("lockTimeLp");
 
 				echo <<<ECHODAYROWMIDDLE
-												</div>
-									        </div>
-											<div class="col-5">
-												<div class="form-row align-items-center">\n
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="form-row align-items-center">\n
 ECHODAYROWMIDDLE;
 
 				echoCheckboxDiv("unlockBoxLp", "entsperren");
 				echoClockpickerDiv("unlockTimeLp");
 
 				echo <<<ECHODAYROWTAIL
-												</div>
-									        </div>
-										</div>  <!-- end row {$dayOfWeekString} -->\n
+								</div>
+							</div>
+						</div>  <!-- end {$dayOfWeekString} -->\n
 ECHODAYROWTAIL;
 
 				if ( $dayOfWeek < 7 ) {
@@ -219,9 +220,12 @@ ECHODAYROWTAIL;
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row justify-content-center">
-
-				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
+			<h1>Autolock Einstellungen</h1>
+			<div class="alert alert-info">
+				Diese Einstellungen ermöglichen es, dass man jeden konfigurierten Ladepunkt zu bestimmten Zeiten automatisiert sperren bzw. wieder entsperren kann.
+				Ein möglicher Anwendungsfall wäre das Bereitstellen von Lademöglichkeiten nur während der Öffnungszeiten.
+			</div>
+			<form class="form" action="./settings/saveautolock.php" method="POST">
 
 				<?php
 
@@ -229,10 +233,10 @@ ECHODAYROWTAIL;
 						// build form-groups for all lp
 						if ( $isConfiguredLp[$lp] ) {
 							// if lp is configured: display form-group
-							$visibility = '';
+							$visibilityClass = '';
 						} else {
 							// if lp is not configured: hide form-group
-							$visibility = ' display: none;';
+							$visibilityClass = ' hide';
 						}
 						// remove special characters except space and underscore... maybe dangerous
 						$nameLp = preg_replace('/[^A-Za-z0-9_ ]/', '', $settingsArray['lp'.$lp.'name']);
@@ -248,22 +252,20 @@ ECHODAYROWTAIL;
 						}
 
 						echo <<<ECHOFORMGROUPHEAD
-							<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
-								<h1>LP {$lp} ({$nameLp})</h1>\n
+				<div class="card border-secondary{$visibilityClass}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+					<div class="card-header bg-secondary">
+						Ladepunkt {$lp} ({$nameLp})
+					</div>
 
-								<div class="row mt-2">
-									<div class="col">
-										<div class="form-check">
-											<input type="hidden" name="{$elemName}">
-											<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-											<label class="form-check-label pl-10" for="{$elemId}">
-												sperren erst nach Ende lfd. Ladevorgang
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<hr>
+					<div class="card-body">
+						<div class="custom-control custom-checkbox">
+							<input type="hidden" name="{$elemName}">
+							<input class="custom-control-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+							<label class="custom-control-label pl-10" for="{$elemId}">
+								sperren erst nach Ende lfd. Ladevorgang
+							</label>
+						</div>
+						<hr>
 ECHOFORMGROUPHEAD;
 
 						for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
@@ -272,10 +274,11 @@ ECHOFORMGROUPHEAD;
 						}  // end all days
 
 						echo <<<ECHOFORMGROUPTAIL
-											<div class="row justify-content-center mt-2">
-												<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
-											</div>
-										</div>  <!-- end form-group charge point {$lp} -->
+					</div> <!-- card body -->
+					<div class="card-footer text-center">
+						<button type="button" class="btn btn-sm btn-danger resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
+					</div>
+				</div>  <!-- end form-group charge point {$lp} -->
 
 ECHOFORMGROUPTAIL;
 
@@ -283,12 +286,11 @@ ECHOFORMGROUPTAIL;
 
 				?>
 
-					<div class="row justify-content-center">
-						<button type="submit" class="btn btn-green">Einstellungen übernehmen</button>
-					</div>
+				<div class="row justify-content-center">
+					<button type="submit" class="btn btn-success">Einstellungen übernehmen</button>
+				</div>
 
-				</form>  <!-- end form -->
-			</div>
+			</form>  <!-- end form -->
 
 		</div>  <!-- end container -->
 
@@ -298,13 +300,16 @@ ECHOFORMGROUPTAIL;
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get("settings/navbar.html", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navAutolock').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navAutolock').addClass('disabled');
+				}
+			);
 
 			$(document).ready(function(){
 
@@ -450,7 +455,7 @@ ECHOFORMGROUPTAIL;
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-green" data-dismiss="modal">OK</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>

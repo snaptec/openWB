@@ -30,7 +30,7 @@
 		<link rel="stylesheet" type="text/css" href="hilfe/hilfe_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	</head>
 
@@ -47,6 +47,9 @@
 
 			<div id="indexDiv" style="display: none;">
 				<?php include '/var/www/html/openWB/web/hilfe/hilfe_index.php';?>
+			</div>
+			<div id="datenschutzDiv" style="display: none;">
+				<?php include '/var/www/html/openWB/web/hilfe/hilfe_datenschutz.php';?>
 			</div>
 
 		</div>  <!-- container -->

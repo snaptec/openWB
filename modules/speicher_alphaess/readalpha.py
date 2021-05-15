@@ -51,7 +51,9 @@ f.close()
 time.sleep(0.1)
 resp = client.read_holding_registers(0x0012,4, unit=sdmid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
-pvw = int(decoder.decode_32bit_int()) * -1
+pvw = int(decoder.decode_32bit_int())
+if ( pvw < 0 ):
+    pvw=pvw * -1
 #print('pvw'+str(pvw))
 time.sleep(0.1)
 

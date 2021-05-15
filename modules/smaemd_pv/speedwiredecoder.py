@@ -134,7 +134,7 @@ def decode_speedwire(datagram):
         value=datagram[position+4:position+8]
         if measurement in sma_channels.keys():
           bversion=(binascii.b2a_hex(value).decode("utf-8"))
-          version=str(int(bversion[0:2]))+"."+str(int(bversion[2:4]))+"."+str(int(bversion[4:6]))
+          version=str(int(bversion[0:2],16))+"."+str(int(bversion[2:4],16))+"."+str(int(bversion[4:6],16))
           revision=str(chr(int(bversion[6:8])))
           #revision definitions
           if revision=="1":

@@ -11,6 +11,8 @@ ipaddress = str(sys.argv[1])
 slave1id = int(sys.argv[2])
 slave2id = int(sys.argv[3])
 batwrsame = int(sys.argv[4])
+extprodakt = int(sys.argv[5])
+
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 #batterie auslesen und pv leistung korrigieren
@@ -66,7 +68,15 @@ if fmultiplint == -3:
     rawprod2w = rawprod2w / 1000
 if fmultiplint == -4:
     rawprod2w = rawprod2w / 10000
-realrawprodw = rawprodw + rawprod2w - storagepower
+
+if extprodakt == 1:    
+	resp= client.read_holding_registers(40380,1,unit=slave1id)
+	value1 = resp.registers[0]
+	all = format(value1, '04x')
+	extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+else:
+	extprod = 0
+realrawprodw = rawprodw + rawprod2w + extprod - storagepower
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(realrawprodw))
 f.close()

@@ -25,28 +25,28 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
 		<?php
-
-			// read selected debug mode from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "debug=") !== false) {
-					list(, $debugmode) = explode("=", $line);
-				}
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-			$debugmode = trim($debugmode);
-			if ( $debugmode == "" ) {
+
+			if ( $debugold == "" ) {
 				// if no debug mode set, set 0 = off
-				$debugmode="0";
+				$debugold = "0";
 			}
 
 		?>
@@ -54,106 +54,128 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row">
-				<div class="col">
-					<h1>Debug-Modus</h1>
-				</div>
-			</div>
-			<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
-				<div class="form-row">
-					<div class="col-auto">
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo checked?>>
-								<label class="form-check-label" for="mode0RadioBtn">
-								    Mode 0 (aus)
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo checked?>>
-								<label class="form-check-label" for="mode1RadioBtn">
-									Mode 1 (Regelwerte)
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo checked?>>
-								<label class="form-check-label" for="mode2RadioBtn">
-									Mode 2 (Berechnungsgrundlage)
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="col-auto vaRow">
-						<button type="submit" class="btn btn-green">Speichern</button>
-					</div>
-				</div>
-			</form>
+			<h1>Debugging und Support</h1>
 
-			<div class="row">
-				<div class="col">
-					<h1>Debug-Meldung</h1>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-7">
-					Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen.
-					<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b>
-					Der Debug Modus muss nicht verstellt werden.
-				</div>
-			</div>
-			<br>
-			<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
-				<div class="form-row">
-					<div class="form-group col-lg-7">
-						<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
-						<small id="textareaTextLength" class="form-text text-muted text-right">0/500</small>
+			<div class="card border-secondary">
+				<form class="form" id="debugmodeForm" action="./settings/saveconfig.php" method="POST">
+					<div class="card-header bg-secondary">
+						Protokollierung
 					</div>
-				</div>
-				<div class="form-row form-row-inline">
-					<div class="col-7 col-lg-5">
-						<div class="input-group mb-2">
-							<div class="input-group-prepend">
-								<div class="input-group-text">@</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Debug-Modus</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($debugold == 0) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode0" value="0"<?php if($debugold == 0) echo " checked=\"checked\"" ?>>Mode 0 (aus)
+										</label>
+										<label class="btn btn-outline-info<?php if($debugold == 2) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode1" value="1"<?php if($debugold == 1) echo " checked=\"checked\"" ?>>Mode 1 (Regelwerte)
+										</label>
+										<label class="btn btn-outline-info<?php if($debugold == 2) echo " active" ?>">
+											<input type="radio" name="debug" id="debugmode2" value="2"<?php if($debugold == 2) echo " checked=\"checked\"" ?>>Mode 2 (Berechnungsgrundlage)
+										</label>
+									</div>
+									<span class="form-text small">
+										Mit dieser Einstellung können zusätzliche Logmeldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.
+									</span>
+								</div>
 							</div>
-							<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required>
+						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Gateway prüfen</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pingcheckactiveold == 0) echo " active" ?>">
+											<input type="radio" name="pingcheckactive" id="pingcheckactive0" value="0"<?php if($pingcheckactiveold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pingcheckactiveold == 2) echo " active" ?>">
+											<input type="radio" name="pingcheckactive" id="pingcheckactive1" value="1"<?php if($pingcheckactiveold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">
+										Wird diese Option aktiviert, dann wird die Verbindung zum Netzwerk Gateway alle 5 Minuten mit einem Ping geprüft.
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="col-auto">
-						<button type="submit" class="btn btn-green mb-2">Absenden</button>
+					<div class="card-footer text-center">
+						<button type="submit" class="btn btn-success">Speichern</button>
 					</div>
-				</div>
-			</form>
-			<div class="row">
-				<div class="col">
-					<h1>Remote Support</h1>
-				</div>
+				</form>
 			</div>
-			<div class="row">
-				<div class="col-lg-7">
-					Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt.
-					openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
-				</div>
-			</div>
-			<form class="form" id="sendDebugMessageForm" action="./tools/starttunnel.php" method="POST">
-				<div class="col-7 col-lg-5">
-					<div class="input-group mb-2">
-						<div class="input-group-prepend">
-							<div class="input-group-text">Token</div>
-							</div>
-							<input type="text" class="form-control" id="token" name="token" placeholder="Token" required>
+
+			<div class="card border-secondary">
+				<form class="form" id="sendTokenForm" action="./settings/starttunnel.php" method="POST">
+					<div class="card-header bg-secondary">
+						Remote Support
+					</div>
+					<div class="card-body">
+						<?php if ( $datenschutzackold != 1 ) { ?>
+						<div class="alert alert-danger">
+							Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
+						</div>
+						<?php } else { ?>
+						<div class="alert alert-success">
+							Sie haben der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
+						</div>
+						<?php } ?>
+						<div class="form-group mb-0">
+							<span id="textHelpBlock" class="form-text">Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt. openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.</span>
+							<?php
+								$remoteSupportRunning = false;
+								$pidFile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/remotesupportpid';
+								if( file_exists($pidFile) ){
+									echo "<!-- file exists -->\n";
+									$remoteSupportPid = trim(file_get_contents($pidFile));
+									if( file_exists('/proc/'.$remoteSupportPid) ){
+										echo "<!-- process is running -->\n";
+										if( substr(file_get_contents('/proc/'.$remoteSupportPid.'/cmdline'), 0, 7) == 'sshpass' ){
+											echo "<!-- process is sshpass -->\n";
+											$remoteSupportRunning = true;
+											?>
+												<div class="alert alert-warning">
+													Es ist bereits ein Support-Tunnel aufgebaut.
+												</div>
+											<?php
+										} else {
+											echo "<!-- process is not sshpass -->\n";
+											// process is not a sshpass, remove outdated pid file
+											unlink($pidFile);
+										}
+									} else {
+										echo "<!-- process is not running -->\n";
+										// process not running, remove pid file
+										unlink($pidFile);
+									}
+								}
+								if( !$remoteSupportRunning ){
+									?>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												<i class="fa fa-key"></i>
+											</div>
+										</div>
+										<input type="text" class="form-control" id="token" name="token" placeholder="Token" aria-describedby="textHelpBlock" required="required">
+									</div>
+									<?php
+								}
+							?>
 						</div>
 					</div>
-					<div class="col-auto">
-						<button type="submit" class="btn btn-green mb-2">Tunnel herstellen</button>
+					<div class="card-footer text-center">
+						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 || $remoteSupportRunning ) echo ' disabled="disabled"'; ?>>Tunnel herstellen</button>
 					</div>
-				</div>
-			</form>
-
-
+				</form>
+			</div>
 
 		</div>  <!-- container -->
 
@@ -163,13 +185,16 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get("settings/navbar.html", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navDebugging').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navDebugging').addClass('disabled');
+				}
+			);
 
 			$(document).ready(function(){
 

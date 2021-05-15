@@ -17,10 +17,9 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" id="navAllgemein" href="./settings/settings.php">Allgemein</a>
 						<a class="dropdown-item" id="navSmartHome" href="./settings/smarthome.php">Smart Home</a>
-						<a class="dropdown-item" id="navSmartHomeBeta" href="./settings/smarthomeconfig.html">Smart Home Beta</a>
+						<a class="dropdown-item" id="navSmartHome2" href="./settings/smarthomeconfig.php">Smart Home 2.0</a>
 						<a class="dropdown-item" id="navOpenwbCloud" href="./settings/cloudconfig.php">openWB Cloud</a>
 						<a class="dropdown-item" id="navMqttBruecke" href="./settings/mqtt.php">MQTT-Brücke</a>
-						<a class="dropdown-item" id="navModulkonfiguration" data-toggle="modal" data-target="#modulconfigConfirmationModal" style="cursor: pointer;">Modulkonfiguration</a>
 						<a class="dropdown-item" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
 						<a class="dropdown-item" id="navVerschiedenes" href="./settings/misc.php">Verschiedenes</a>
 					</div>
@@ -32,9 +31,9 @@
 					</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" id="navGeneralLadeeinstellungen" href="./settings/generalchargeconfig.html">Übergreifendes</a>
-						<a class="dropdown-item" id="navSofortLadeeinstellungen" href="./settings/sofortconfig.html">Sofortladen</a>
+						<a class="dropdown-item" id="navSofortLadeeinstellungen" href="./settings/sofortconfig.php">Sofortladen</a>
 						<a class="dropdown-item" id="navPVLadeeinstellungen" href="./settings/pvconfig.html">PV & Min+PV</a>
-						<a class="dropdown-item" id="navNachtladen" href="./settings/nachtladenconfig.html">Nachtladen</a>
+						<!-- <a class="dropdown-item" id="navNachtladen" href="./settings/nachtladenconfig.html">Nachtladen</a> -->
 					</div>
 				</li>
 
@@ -49,20 +48,37 @@
 				</li>
 
 				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardropModulconfig" data-toggle="dropdown">
+						Modulkonfiguration
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" id="navModulkonfigurationLp" data-toggle="modal" data-target="#modulconfigConfirmationLPModal" style="cursor: pointer;">Ladepunkte</a>
+						<a class="dropdown-item" id="navModulkonfigurationEvu" data-toggle="modal" data-target="#modulconfigConfirmationEVUModal" style="cursor: pointer;">EVU</a>
+						<a class="dropdown-item" id="navModulkonfigurationPv" data-toggle="modal" data-target="#modulconfigConfirmationPVModal" style="cursor: pointer;">PV</a>
+						<a class="dropdown-item" id="navModulkonfigurationBat" data-toggle="modal" data-target="#modulconfigConfirmationBATModal" style="cursor: pointer;">Batteriespeicher</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbardropSystem" data-toggle="dropdown">
 						System
 					</a>
 					<div class="dropdown-menu">
-
 						<a class="dropdown-item" id="navBackup" data-toggle="modal" data-target="#backupConfirmationModal" style="cursor: pointer;">Backup erstellen</a>
 						<a class="dropdown-item" id="navWiederherstellen" data-toggle="modal" data-target="#restoreConfirmationModal" style="cursor: pointer;">Backup wiederherstellen</a>
 						<a class="dropdown-item" id="navReboot" data-toggle="modal" data-target="#rebootConfirmationModal" style="cursor: pointer;">Reboot</a>
+						<a class="dropdown-item" id="navShutdown" data-toggle="modal" data-target="#shutdownConfirmationModal" style="cursor: pointer;">Shutdown</a>
 						<a class="dropdown-item" id="navUpdate" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
+						<a class="dropdown-item" id="navFehlerbericht" href="./settings/fehlerbericht.html">Support</a>
 						<a class="dropdown-item" id="navPasswortschutz" href="./settings/setPassword.php">Passwortschutz</a>
+						<a class="dropdown-item" id="navSystemInfo" href="./settings/systeminfo.php">System-Info</a>
+						<a class="dropdown-item" id="navNetworkSettings" href="./settings/network.php">Netzwerk-Einstellungen</a>
 					</div>
 				</li>
-
+				<li class="nav-item">
+					<a class="nav-link" href="./logout.html" id="navbarLogout">Abmelden</a>
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -73,7 +89,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<!-- modal header -->
-			<div class="modal-header btn-blue">
+			<div class="modal-header bg-info">
 				<h4 class="modal-title text-light">Info</h4>
 			</div>
 			<!-- modal body -->
@@ -85,8 +101,8 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/bckredirect.html'">Backup</button>
-				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/bckredirect.html'">Backup</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
 	</div>
@@ -97,14 +113,15 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<!-- modal header -->
-			<div class="modal-header btn-red">
+			<div class="modal-header bg-danger">
 				<h4 class="modal-title text-light">Achtung</h4>
 			</div>
 			<!-- modal body -->
 			<div class="modal-body text-center">
 				<p>
 					Soll wirklich ein gespeichertes Backup wiederhergestellt werden?<br>
-					Die Wiederherstellung kann einige Zeit in Anspruch nehmen. Aktuelle Einstellungen werden mit dem Backup überschrieben!
+					Die Wiederherstellung kann einige Zeit in Anspruch nehmen. Aktuelle Einstellungen als auch die installierte Version werden mit dem Backup überschrieben!<br>
+					Eventuell vorhandene externe openWB erhalten kein Backup/Downgrade.
 				</p>
 				<p>
 					<span class="text-danger">Fahrzeuge sind vor der Wiederherstellung abzustecken!</span>
@@ -112,8 +129,8 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/upload.html'">Wiederherstellen</button>
-				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/restore.php'">Wiederherstellen</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
 	</div>
@@ -124,30 +141,83 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<!-- modal header -->
-			<div class="modal-header btn-red">
+			<div class="modal-header bg-danger">
 				<h4 class="modal-title text-light">Achtung</h4>
 			</div>
 			<!-- modal body -->
 			<div class="modal-body text-center">
 				<p>
-					Soll die openWB wirklich neu gestartet werden?
+					<b>Soll die openWB wirklich neu gestartet werden?<br></b>
+					Wenn ein Problem mit der openWB vorliegt bitte Debug Daten senden.<br>
+					Ein Neustart löscht alle Debug Daten und macht es unmöglich, die Problemursache festzustellen.<br>
+					<span class="text-danger">Fahrzeuge sind vor dem Neustart abzustecken!</span>
 				</p>
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/reboot.html'">Reboot</button>
-				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/reboot.html'">Reboot</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- modal modulkonfig-confirmation window -->
-<div class="modal fade" id="modulconfigConfirmationModal" role="dialog">
+<!-- modal shutdown-confirmation window -->
+<div class="modal fade" id="shutdownConfirmationModal" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<!-- modal header -->
-			<div class="modal-header btn-red">
+			<div class="modal-header bg-danger">
+				<h4 class="modal-title text-light">Achtung</h4>
+			</div>
+			<!-- modal body -->
+			<div class="modal-body text-center">
+				<p>
+					<b>Soll die openWB wirklich heruntergefahren werden?<br></b>
+					Wenn ein Problem mit der openWB vorliegt bitte Debug Daten senden.<br>
+					Ein Herunterfahren löscht alle Debug Daten und macht es unmöglich, die Problemursache festzustellen.<br>
+					Nach dem Herunterfahren kann die openWB nur durch Trennen und anschließendem Wiederverbinden mit dem Stromnetz erneut gestartet werden. (z.B. am Sicherungsautomat)<br>
+					<span class="text-danger">Fahrzeuge sind vor dem Herunterfahren abzustecken!</span>
+				</p>
+			</div>
+			<!-- modal footer -->
+			<div class="modal-footer d-flex justify-content-center">
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/shutdown.html'">Shutdown</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal modulkonfig-lp-confirmation window -->
+<div class="modal fade" id="modulconfigConfirmationLPModal" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- modal header -->
+			<div class="modal-header bg-danger">
+				<h4 class="modal-title text-light">Achtung</h4>
+			</div>
+			<!-- modal body -->
+			<div class="modal-body text-center">
+				<p>
+					Nach erfolgter Einrichtung der openWB ist in der Modulkonfiguration grundsätzlich <b>keine weitere Einstellung notwendig</b>.<br>
+				</p>
+			</div>
+			<!-- modal footer -->
+			<div class="modal-footer d-flex justify-content-center">
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/modulconfiglp.php'">Weiter</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal modulkonfig-evu-confirmation window -->
+<div class="modal fade" id="modulconfigConfirmationEVUModal" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- modal header -->
+			<div class="modal-header bg-danger">
 				<h4 class="modal-title text-light">Achtung</h4>
 			</div>
 			<!-- modal body -->
@@ -159,8 +229,56 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./settings/modulconfig.php'">Weiter</button>
-				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/modulconfigevu.php'">Weiter</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal modulkonfig-pv-confirmation window -->
+<div class="modal fade" id="modulconfigConfirmationPVModal" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- modal header -->
+			<div class="modal-header bg-danger">
+				<h4 class="modal-title text-light">Achtung</h4>
+			</div>
+			<!-- modal body -->
+			<div class="modal-body text-center">
+				<p>
+					Nach erfolgter Einrichtung der openWB ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung notwendig.<br>
+					Fortfahren?
+				</p>
+			</div>
+			<!-- modal footer -->
+			<div class="modal-footer d-flex justify-content-center">
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/modulconfigpv.php'">Weiter</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal modulkonfig-bat-confirmation window -->
+<div class="modal fade" id="modulconfigConfirmationBATModal" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- modal header -->
+			<div class="modal-header bg-danger">
+				<h4 class="modal-title text-light">Achtung</h4>
+			</div>
+			<!-- modal body -->
+			<div class="modal-body text-center">
+				<p>
+					Nach erfolgter Einrichtung der openWB ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung notwendig.<br>
+					Fortfahren?
+				</p>
+			</div>
+			<!-- modal footer -->
+			<div class="modal-footer d-flex justify-content-center">
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/modulconfigbat.php'">Weiter</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
 	</div>

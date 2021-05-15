@@ -42,7 +42,7 @@ lp8enabled=$(<ramdisk/lp8enabled)
 #####
 #
 # functions
-# 
+#
 #####
 # function for setting the current - dac
 # Parameters:
@@ -51,9 +51,25 @@ lp8enabled=$(<ramdisk/lp8enabled)
 function setChargingCurrentDAC () {
 	current=$1
 	dacregister=$2
-	# set desired charging current 
-	# INFO: needs new dac.py to accept current and use translation table 
+	# set desired charging current
+	# INFO: needs new dac.py to accept current and use translation table
 	sudo python /var/www/html/openWB/runs/dac.py $current $dacregister
+}
+
+# function for setting the current - extopenwb
+# Parameters:
+# 1: current
+# 2: chargep1ip
+function setChargingCurrentExtopenwb () {
+	current=$1
+	chargep1ip=$2
+	chargep1cp=$3
+	# set desired charging current
+	if [[ "$chargep1cp" == "2" ]]; then
+		mosquitto_pub -r -t openWB/set/isss/Lp2Current -h $chargep1ip -m "$current"
+	else
+		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$current"
+	fi
 }
 
 # function for setting the current - modbusevse
@@ -68,11 +84,17 @@ function setChargingCurrentModbus () {
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 }
+
 function setChargingCurrentBuchse () {
 	current=$1
 	# set desired charging current
 	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
-	#Will be handled in buchsecontrol.py
+	# Is handled in buchse.py
+}
+function setChargingCurrentDaemon () {
+	current=$1
+	# set desired charging current
+	# Is handled in lldaemon.py
 }
 # function for setting the current - IP modbusevse
 # Parameters:
@@ -87,18 +109,19 @@ function setChargingCurrentIpModbus () {
 	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $ipevseid
 }
 
-
 # function for openwb slave kit
 function setChargingCurrentSlaveeth () {
 	current=$1
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
 }
+
 function setChargingCurrentMasterethframer () {
 	current=$1
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
 }
+
 # function for openwb third kit
 function setChargingCurrentThirdeth () {
 	current=$1
@@ -109,7 +132,7 @@ function setChargingCurrentThirdeth () {
 # function for setting the current - WiFi
 # Parameters:
 # 1: current
-# 2: evsewifitimeoutlp1 
+# 2: evsewifitimeoutlp1
 # 3: evsewifiiplp1
 function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
@@ -136,20 +159,23 @@ function setChargingCurrentWifi () {
 		fi
 	fi
 }
+
 function setChargingCurrenttwcmanager () {
 	if [[ $evsecon == "twcmanager" ]]; then
 		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
 	fi
 }
+
 function setChargingCurrenthttp () {
 	if [[ $evsecon == "httpevse" ]]; then
 		curl -s --connect-timeout 3 "http://$httpevseip/setcurrent?current=$current" > /dev/null
 	fi
 }
+
 # function for setting the current - go-e charger
 # Parameters:
 # 1: current
-# 2: goetimeoutlp1 
+# 2: goetimeoutlp1
 # 3: goeiplp1
 function setChargingCurrentgoe () {
 	if [[ $evsecon == "goe" ]]; then
@@ -161,41 +187,54 @@ function setChargingCurrentgoe () {
 			fi
 		else
 			output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
+			fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
 			state=$(echo $output | jq -r '.alw')
 			if ((state == "0")) ; then
 				 curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
 			fi
 			oldgoecurrent=$(echo $output | jq -r '.amp')
 			if (( oldgoecurrent != $current )) ; then
-				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
+				if (($fwv >= 40)) ; then
+					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amx=$current > /dev/null
+				else
+					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
+				fi
 			fi
 		fi
 	fi
 }
+
 # function for setting the current - keba charger
 # Parameters:
 # 1: current
 # 2: goeiplp1
 function setChargingCurrentkeba () {
 	if [[ $evsecon == "keba" ]]; then
-		kebacurr=$(( current * 1000 ))
-		if [[ $current -eq 0 ]]; then
-			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+		sudo python3 /var/www/html/openWB/modules/keballlp1/check502.py $kebaiplp1 >> /var/www/html/openWB/ramdisk/port.log 2>&1
+		modbus=$(</var/www/html/openWB/ramdisk/port_502_$kebaiplp1 )
+		if [[ $modbus == "0" ]] ; then
+			#modbus 0 means udp interface
+			kebacurr=$(( current * 1000 ))
+			if [[ $current -eq 0 ]]; then
+				echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+			else
+				echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+				echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+				echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+			fi
 		else
-			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
-			echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
+			#modbus 1 means modbus interface 
+			sudo python3 /var/www/html/openWB/modules/keballlp1/setcurrkeba.py $kebaiplp1 $current >> /var/www/html/openWB/ramdisk/port.log 2>&1
 		fi
 	fi
 }
-
 
 function setChargingCurrentnrgkick () {
 	if [[ $evsecon == "nrgkick" ]]; then
 		if [[ $current -eq 0 ]]; then
 			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
 			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
-			if [[ $state == "false" ]] ; then
+			if [[ $state == "true" ]] ; then
 				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": false }, "ChargingCurrent": { "Value": "6" }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
 			fi
 		else
@@ -213,11 +252,6 @@ function setChargingCurrentnrgkick () {
 	fi
 }
 
-
-
-
-
-
 # function for setting the charging current
 # no parameters, variables need to be set before...
 function setChargingCurrent () {
@@ -227,12 +261,35 @@ function setChargingCurrent () {
 	if [[ $evsecon == "buchse" ]]; then
 		setChargingCurrentBuchse $current
 	fi
+	if [[ $evsecon == "daemon" ]]; then
+		setChargingCurrentDaemon $current
+	fi
 	if [[ $evsecon == "http" ]]; then
 		setChargingCurrenthttp $current
 	fi
+	if [[ $evsecon == "extopenwb" ]]; then
+		setChargingCurrentExtopenwb $current $chargep1ip $chargep1cp
+	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
-		setChargingCurrentModbus $current $modbusevsesource $modbusevseid 
+		if [[ "$modbusevseid" == 0 ]]; then
+			if [ -f /var/www/html/openWB/ramdisk/evsemodulconfig ]; then
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			else
+				if [ -f /dev/ttyUSB0 ]; then
+					echo "/dev/ttyUSB" > ramdisk/evsemodulconfig
+				else
+					echo "/dev/serial0" > ramdisk/evsemodulconfig
+				fi
+				modbusevsesource=$(<ramdisk/evsemodulconfig)
+				modbusevseid=1
+
+			fi
+		fi
+
+		setChargingCurrentModbus $current $modbusevsesource $modbusevseid
 	fi
 
 	if [[ $evsecon == "simpleevsewifi" ]]; then
@@ -242,14 +299,14 @@ function setChargingCurrent () {
 		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
 	fi
 	if [[ $evsecon == "slaveeth" ]]; then
-		setChargingCurrentSlaveeth $current 
+		setChargingCurrentSlaveeth $current
 	fi
 	if [[ $evsecon == "thirdeth" ]]; then
-		setChargingCurrentThirdeth $current 
+		setChargingCurrentThirdeth $current
 	fi
 
 	if [[ $evsecon == "masterethframer" ]]; then
-		setChargingCurrentMasterethframer $current 
+		setChargingCurrentMasterethframer $current
 	fi
 	if [[ $evsecon == "nrgkick" ]]; then
 		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
@@ -267,14 +324,14 @@ function setChargingCurrent () {
 
 #####
 #
-# main routine 
+# main routine
 #
 #####
 
 # input validation
 let current=$1
-if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then 
-	if [[ $debug == "2" ]]; then 
+if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then
+	if [[ $debug == "2" ]]; then
 		echo "ungültiger Wert für Ladestrom" > /var/www/html/openWB/web/lade.log
 	fi
 	exit 1
@@ -288,17 +345,17 @@ if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]
 fi
 
 # value below threshold
-if [[ current -lt 6 ]]; then 
-	if [[ $debug == "2" ]]; then 
+if [[ current -lt 6 ]]; then
+	if [[ $debug == "2" ]]; then
 		echo "Ladestrom < 6A, setze auf 0A"
 	fi
 	current=0
 	lstate=0
 else
 	lstate=1
-fi 
+fi
 
-# set desired charging current 
+# set desired charging current
 
 if [[ $debug == "2" ]]; then
 	echo "setze ladung auf $current" >> /var/www/html/openWB/web/lade.log
@@ -408,7 +465,8 @@ if [[ $lastmanagement == "1" ]]; then
 		nrgkickpwlp1=$nrgkickpwlp2
 		evseip=$evseiplp2
 		ipevseid=$evseidlp2
-
+		chargep1ip=$chargep2ip
+		chargep1cp=$chargep2cp
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then
 			oldcurrent=$current
@@ -427,7 +485,7 @@ fi
 
 # set charging current - third charging point
 if [[ $lastmanagements2 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then
 		evsecon=$evsecons2
 		dacregister=$dacregisters2
 		modbusevsesource=$evsesources2
@@ -438,7 +496,8 @@ if [[ $lastmanagements2 == "1" ]]; then
 		goetimeoutlp1=$goetimeoutlp3
 		evseip=$evseiplp3
 		ipevseid=$evseidlp3
-
+		chargep1ip=$chargep3ip
+		chargep1cp=$chargep3cp
 		if (( lp3enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -458,6 +517,8 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 		evsecon=$evseconlp4
 		evseip=$evseiplp4
 		ipevseid=$evseidlp4
+		chargep1ip=$chargep4ip
+		chargep1cp=$chargep4cp
 		if (( lp4enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -473,10 +534,12 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp5 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp5" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp5" ]]; then
 		evsecon=$evseconlp5
 		evseip=$evseiplp5
 		ipevseid=$evseidlp5
+		chargep1ip=$chargep5ip
+		chargep1cp=$chargep5cp
 		if (( lp5enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -492,10 +555,12 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp6 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp6" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp6" ]]; then
 		evsecon=$evseconlp6
 		evseip=$evseiplp6
 		ipevseid=$evseidlp6
+		chargep1ip=$chargep6ip
+		chargep1cp=$chargep6cp
 		if (( lp6enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -511,10 +576,12 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp7 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp7" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp7" ]]; then
 		evsecon=$evseconlp7
 		evseip=$evseiplp7
 		ipevseid=$evseidlp7
+		chargep1ip=$chargep7ip
+		chargep1cp=$chargep7cp
 		if (( lp7enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -530,10 +597,12 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp8 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp8" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp8" ]]; then
 		evsecon=$evseconlp8
 		evseip=$evseiplp8
 		ipevseid=$evseidlp8
+		chargep1ip=$chargep8ip
+		chargep1cp=$chargep8cp
 		if (( lp8enabled == 0 )); then
 			oldcurrent=$current
 			current=0

@@ -12,7 +12,7 @@ slave1id = int(sys.argv[2])
 slave2id = int(sys.argv[3])
 slave3id = int(sys.argv[4])
 batwrsame = int(sys.argv[5])
-
+extprodakt = int(sys.argv[6])
 
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
@@ -58,7 +58,7 @@ value1w = respw.registers[0]
 allw = format(value1w, '04x')
 rawprod3w = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 if fmultiplint == 0:
-    rawprod3w = rawprodw3w
+    rawprod3w = rawprod3w
 if fmultiplint == -1:
     rawprod3w = rawprod3w / 10 
 if fmultiplint == -2:
@@ -94,7 +94,15 @@ if fmultiplint == -3:
     rawprod2w = rawprod2w / 1000
 if fmultiplint == -4:
     rawprod2w = rawprod2w / 10000
-realrawprodw = rawprodw + rawprod2w + rawprod3w - storagepower    
+
+if extprodakt == 1:    
+	resp= client.read_holding_registers(40380,1,unit=slave1id)
+	value1 = resp.registers[0]
+	all = format(value1, '04x')
+	extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+else:
+	extprod = 0
+realrawprodw = rawprodw + rawprod2w + rawprod3w + extprod - storagepower    
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(realrawprodw))
 f.close()
