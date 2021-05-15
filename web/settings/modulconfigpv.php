@@ -951,6 +951,7 @@
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
 										<option <?php if($pv2wattmodulold == "wr2_solax") echo "selected" ?> value="wr2_solax">Solax</option>
 										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
+										<option <?php if($pv2wattmodulold == "wr2_huawei") echo "selected" ?> value="wr2_huawei">Huawei</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($pv2wattmodulold == "wr2_json") echo "selected" ?> value="wr2_json">Json Abfrage</option>
@@ -1084,6 +1085,10 @@
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solaredge') {
+									showSection('#pv2ipdiv');
+									showSection('#pv2iddiv');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_huawei') {
 									showSection('#pv2ipdiv');
 									showSection('#pv2iddiv');
 								}
