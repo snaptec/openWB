@@ -57,7 +57,7 @@ incrementTimer(){
 			;;
 		3)
 			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=6
+			ticksize=1
 			;;
 		*)
 			# Regelgeschwindigkeit unbekannt
@@ -85,6 +85,7 @@ getAndWriteSoc(){
 }
 
 soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 if (( ladeleistung > 500 )); then
 	if (( soctimer < intervallladen )); then
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
