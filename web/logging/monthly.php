@@ -1,3 +1,4 @@
+<?php header( 'Refresh:600;' ); ?>
 <!doctype html>
 <html lang="de">
 
@@ -17,7 +18,6 @@
 		<meta name="msapplication-TileColor" content="#00a8ff">
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
-		<meta http-equiv="refresh" content="600; URL=logging/monthly.php">
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">

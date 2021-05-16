@@ -33,11 +33,10 @@ graphing(){
 		echo $verbraucher2_watt >> /var/www/html/openWB/ramdisk/verbraucher2-live.graph
 	fi
 
-
 	if [[ $livegraph =~ $re ]] ; then
 		livegraph=$((livegraph * 6 ))
 		if ! [[ $livegraph =~ $re ]] ; then
-			livegraph="30"
+			livegraph="180"
 		fi
 	fi
 	echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt,$ladeleistunglp3,$ladeleistunglp4,$ladeleistunglp5,$ladeleistunglp6,$ladeleistunglp7,$ladeleistunglp8,$shd1_w,$shd2_w,$shd3_w,$shd4_w,$shd5_w,$shd6_w,$shd7_w,$shd8_w,$shd9_w,$shd1_t0,$shd1_t1,$shd1_t2 >> /var/www/html/openWB/ramdisk/all-live.graph

@@ -22,6 +22,8 @@ initRamdisk(){
 
 	# Ladepunkte
 	# Variablen noch nicht einheitlich benannt, daher individuelle Zeilen
+	echo 0 > $RamdiskPath/errcounterextopenwb
+	echo 0 > $RamdiskPath/pluggedin
 	echo "nicht angefragt" > $RamdiskPath/evsedintestlp1
 	echo "nicht angefragt" > $RamdiskPath/evsedintestlp2
 	echo "nicht angefragt" > $RamdiskPath/evsedintestlp3
@@ -52,6 +54,9 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/ladestatuslp6
 	echo 0 > $RamdiskPath/ladestatuslp7
 	echo 0 > $RamdiskPath/ladestatuslp8
+	echo 0 > $RamdiskPath/ladestart
+	echo 0 > $RamdiskPath/ladestarts1
+	echo 0 > $RamdiskPath/ladestarts2
 	echo 0 > $RamdiskPath/gelrlp1
 	echo 0 > $RamdiskPath/gelrlp2
 	echo 0 > $RamdiskPath/gelrlp3

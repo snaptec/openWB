@@ -86,6 +86,9 @@ source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
 if [[ $isss == "1" ]]; then
+	heartbeat=$(<ramdisk/heartbeat)
+	heartbeat=$((heartbeat+10))
+	echo $heartbeat > ramdisk/heartbeat
 	exit 0
 fi
 

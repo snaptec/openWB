@@ -113,6 +113,19 @@ loadvars(){
 			fi
 		fi
 	else
+		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
+		if [ "$pluggedin" -gt "0" ]; then
+			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+				/var/www/html/openWB/runs/pushover.sh "$message"
+			fi
+			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
+			fi
+			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
+			echo 0 > /var/www/html/openWB/ramdisk/pluggedin
+		fi
+
 		plugstat=$(<ramdisk/plugstat)
 		chargestat=$(<ramdisk/chargestat)
 	fi
@@ -469,12 +482,19 @@ loadvars(){
 		echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 		if [[ $speichermodul == "speicher_alphaess" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
+			pv1vorhanden="1"
 		fi
 		if [[ $speichermodul == "speicher_e3dc" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
+			pv1vorhanden="1"
+
 		fi
 		if [[ $speichermodul == "speicher_sonneneco" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
+			pv1vorhanden="1"
 		fi
 	else
 		speichervorhanden="0"
@@ -952,12 +972,25 @@ loadvars(){
 
 	hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shd1_w - shd2_w - shd3_w - shd4_w - shd5_w - shd6_w - shd7_w - shd8_w - shd9_w - verb1_w - verb2_w - verb3_w))
 	if (( hausverbrauch < 0 )); then
-		hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
+		if [ -f /var/www/html/openWB/ramdisk/hausverbrauch.invalid ]; then
+			hausverbrauchinvalid=$(</var/www/html/openWB/ramdisk/hausverbrauch.invalid)
+			let hausverbrauchinvalid+=1
+		else
+			hausverbrauchinvalid=1
+		fi
+		echo "$hausverbrauchinvalid" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
+		if (( hausverbrauchinvalid < 3 )); then
+			hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
+		else
+			hausverbrauch=0
+		fi
+	else
+		echo "0" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_carlogavazzilan" ]]|| [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
 		usesimbezug=1
 	fi
 	if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
