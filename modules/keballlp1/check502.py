@@ -23,11 +23,11 @@ else:
     f = open( file_string , 'w')
     if result_of_check == 0:
         f.write(str(1))
-        print ('%s devicenr %s Port 502 is open ' % (time_string,ipaddress))
+        print ('%s ipadr %s Port 502 is open ' % (time_string,ipaddress))
         #print(ipaddress," Port 502 is open")
     else:
         f.write(str(0))
-        print ('%s devicenr %s Port 502 is not open ' % (time_string,ipaddress))
+        print ('%s ipadr %s Port 502 is not open ' % (time_string,ipaddress))
         #print(ipaddress," Port 502 is not open")
     a_socket.close()
     f.close()
