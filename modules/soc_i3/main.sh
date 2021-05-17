@@ -3,7 +3,7 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
 # check if config file is already in env
@@ -40,21 +40,37 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
 }
 
-i3timer=$(<$soctimerfile)
+soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 cd /var/www/html/openWB/modules/soc_i3
-if (( i3timer < 60 )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	i3timer=$((i3timer+1))
-	echo $i3timer > $soctimerfile
+if (( soctimer < 60 )); then
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	incrementTimer
 else
-	socDebugLog "Requesting SoC"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
 	re='^-?[0-9]+$'
 	abfrage=$(sudo php index.php --chargepoint=$CHARGEPOINT --username=$user --password=$pass --vin=$vin | jq '.')
@@ -64,11 +80,11 @@ else
 			echo $soclevel > $socfile
 		fi
 	fi
-	socDebugLog "SoC: $soclevel"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"
 
 	#Abfrage Ladung aktiv. Setzen des soctimers.
 	charging=$(echo $abfrage | jq '.chargingActive')
-	socDebugLog "Charging: $charging"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Charging: $charging"
 	if [[ $charging != 0 ]] ; then
 		soctimer=$((60 * (10 - $intervall) / 10))
 		echo $soctimer > $soctimerfile
@@ -76,7 +92,7 @@ else
 
 	#Benachrichtigung bei Ladeabbruch
 	error=$(echo $abfrage | jq '.chargingError')
-	socDebugLog "chargingEror: $error"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: chargingEror: $error"
 	if [[ $error == 1 ]] && [[ $pushbenachrichtigung == 1 ]] ; then
 		#Abfrage, ob Fehler schon dokumentiert
 		chargingError=$(<$RAMDISKDIR/chargingerror)
