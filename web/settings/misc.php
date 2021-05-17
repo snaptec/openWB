@@ -244,7 +244,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 cpminlaufzeit hide">
-								<label for="cpminlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
+								<label for="cpunterbrechungmindestlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
 										<label for="cpunterbrechungmindestlaufzeit" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungmindestlaufzeitold; ?> Sek</label>

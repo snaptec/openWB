@@ -73,6 +73,7 @@
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
 									<optgroup label="openWB">
+										<option <?php if($evseconold == "daemon") echo "selected" ?> value="daemon">openWB Daemon</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "0") echo "selected" ?> value="modbusevse" data-id="openwb auto">Series1/2 Autoerkennung</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">Series1/2</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">Series1/2 mit geeichtem Zähler Variante 1</option>
@@ -126,7 +127,6 @@
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option für fertige openWB series1 oder series2.<br>
-								<span class="text-danger">Diese Option befindet sich noch in der Testphase!</span>
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
@@ -136,6 +136,14 @@
 								Dies ist die richtige Option für die openWB mit Buchse.
 							</div>
 						</div>
+						<div id="openwbdaemon" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="lldaemonlp1">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für eine fertige openWB und bietet eine optimale und schnelle Auslesung.
+							</div>
+						</div>
+
 						<div id="openwb12mid" class="hide">
 							<!-- default values for openwb12mid -->
 							<input type="hidden" name="modbusevseid" value="1">
@@ -1129,12 +1137,12 @@
 												<option <?php if($soc_evcc_type_lp1old == 'audi') echo "selected" ?> value="audi">Audi</option>
 												<option <?php if($soc_evcc_type_lp1old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
 												<option <?php if($soc_evcc_type_lp1old == 'ford') echo "selected" ?> value="ford">Ford</option>
-												<option <?php if($soc_evcc_type_lp1old == 'hyundai') echo "selected" ?> value="Hyundai">Hyundai</option>
+												<option <?php if($soc_evcc_type_lp1old == 'hyundai') echo "selected" ?> value="hyundai">Hyundai</option>
 												<option <?php if($soc_evcc_type_lp1old == 'id') echo "selected" ?> value="id">ID</option>
 												<option <?php if($soc_evcc_type_lp1old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp1old == 'nissan') echo "selected" ?> value="Nissan">Nissan</option>
+												<option <?php if($soc_evcc_type_lp1old == 'nissan') echo "selected" ?> value="nissan">Nissan</option>
 												<option <?php if($soc_evcc_type_lp1old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp1old == 'renault') echo "selected" ?> value="Renault">Renault</option>
+												<option <?php if($soc_evcc_type_lp1old == 'renault') echo "selected" ?> value="renault">Renault</option>
 												<option <?php if($soc_evcc_type_lp1old == 'seat') echo "selected" ?> value="seat">Seat</option>
 												<option <?php if($soc_evcc_type_lp1old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
 												<option <?php if($soc_evcc_type_lp1old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
@@ -1179,7 +1187,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_intervall_lp1" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_evcc_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervall" id="soc_evcc_intervall" value="<?php echo $soc_evcc_intervallold ?>">
 											<span class="form-text small">
@@ -1849,7 +1857,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -1927,7 +1935,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
 															});
-															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp1').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -1966,6 +1974,7 @@
 							hideSection('#evsecontwcmanager');
 							hideSection('#evseconipevse');
 							hideSection('#openwbbuchse');
+							hideSection('#openwbdaemon');
 							hideSection('#evseconextopenwb');
 							hideSection('#evseconmqtt');
 
@@ -1996,6 +2005,9 @@
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('#evseconextopenwb');
+							}
+							if($('#evsecon').val() == 'daemon') {
+								showSection('#openwbdaemon');
 							}
 							if($('#evsecon').val() == 'buchse') {
 								showSection('#openwbbuchse');
@@ -2285,6 +2297,7 @@
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">Series1/2 Duo 1. Version</option>
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">Series1/2 Duo (ab Herbst 2020)</option>
 										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evsecons1old == "daemon") echo "selected" ?> value="daemon">openWB Duo Daemon </option>
 										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
 										<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
 									</optgroup>
@@ -2322,6 +2335,13 @@
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="evsecondaemonlp2" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="lldaemonlp2">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für eine fertige openWB Duo und bietet eine optimale und schnelle Auslesung.
 							</div>
 						</div>
 						<div id="evseconipevselp2" class="hide">
@@ -3626,7 +3646,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -3685,7 +3705,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
 															});
-															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp2').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -3713,12 +3733,12 @@
 												<option <?php if($soc_evcc_type_lp2old == 'audi') echo "selected" ?> value="audi">Audi</option>
 												<option <?php if($soc_evcc_type_lp2old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
 												<option <?php if($soc_evcc_type_lp2old == 'ford') echo "selected" ?> value="ford">Ford</option>
-												<option <?php if($soc_evcc_type_lp2old == 'hyundai') echo "selected" ?> value="Hyundai">Hyundai</option>
+												<option <?php if($soc_evcc_type_lp2old == 'hyundai') echo "selected" ?> value="hyundai">Hyundai</option>
 												<option <?php if($soc_evcc_type_lp2old == 'id') echo "selected" ?> value="id">ID</option>
 												<option <?php if($soc_evcc_type_lp2old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp2old == 'nissan') echo "selected" ?> value="Nissan">Nissan</option>
+												<option <?php if($soc_evcc_type_lp2old == 'nissan') echo "selected" ?> value="nissan">Nissan</option>
 												<option <?php if($soc_evcc_type_lp2old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp2old == 'renault') echo "selected" ?> value="Renault">Renault</option>
+												<option <?php if($soc_evcc_type_lp2old == 'renault') echo "selected" ?> value="renault">Renault</option>
 												<option <?php if($soc_evcc_type_lp2old == 'seat') echo "selected" ?> value="seat">Seat</option>
 												<option <?php if($soc_evcc_type_lp2old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
 												<option <?php if($soc_evcc_type_lp2old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
@@ -3806,6 +3826,7 @@
 							hideSection('#openwb12s1v1');
 							hideSection('#openwb12s1v2');
 							hideSection('#evseconextopenwblp2');
+							hideSection('#evsecondaemonlp2');
 							hideSection('#evseconipevselp2');
 							hideSection('#evseconmqtts1');
 
@@ -3843,6 +3864,9 @@
 							}
 							if($('#evsecons1').val() == 'extopenwb') {
 								showSection('#evseconextopenwblp2');
+							}
+							if($('#evsecons1').val() == 'daemon') {
+								showSection('#evsecondaemonlp2');
 							}
 							if($('#evsecons1').val() == 'goe') {
 								showSection('#evsecongoes1');

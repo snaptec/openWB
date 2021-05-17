@@ -246,7 +246,7 @@ else
 fi
 
 # if this is a remote controlled system check if our isss handler is running
-if (( isss == 1 )); then
+if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]]; then
 	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/isss.py" > /dev/null
 	then
 		echo "test" > /dev/null
@@ -271,6 +271,10 @@ else
 		fi
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
 	fi
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+	then
+		sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
+	fi
 fi
 
 # if this is a socket system check for our handler to control the socket lock
@@ -281,8 +285,12 @@ if [[ "$evsecon" == "buchse" ]] && [[ "$isss" == "0" ]]; then
 	else
 		python3 $OPENWBBASEDIR/runs/buchse.py &
 	fi
+else
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+	then
+		sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
+	fi
 fi
-
 # if rfid mode 2 is configured check for our rfid handler
 if [[ "$rfidakt" == "2" ]]; then
 	echo $rfidlist > $RAMDISKDIR/rfidlist
@@ -311,6 +319,8 @@ fi
 if (( $pingcheckactive == 1 )); then
 	$OPENWBBASEDIR/runs/pingcheck.sh &
 fi
+# EVSE Check
+$OPENWBBASEDIR/runs/evsecheck
 
 # truncate all logs in ramdisk
 $OPENWBBASEDIR/runs/cleanup.sh >> $RAMDISKDIR/cleanup.log 2>&1

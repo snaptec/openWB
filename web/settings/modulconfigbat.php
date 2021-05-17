@@ -157,6 +157,43 @@
 								<span class="text-info">openWB/set/houseBattery/%Soc</span> Ladestand des Speichers, int, 0-100
 							</div>
 						</div>
+						
+						<div id="divspeichersolarwatt" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="solarwattmethod1" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($solarwattmethodold == 0) echo " active" ?>">
+												<input type="radio" name="solarwattmethod" id="solarwattmethod1" value="0"<?php if($solarwattmethodold == 0) echo " checked=\"checked\"" ?>>Energy Manager
+											</label>
+											<label class="btn btn-outline-info<?php if($solarwattmethodold == 1) echo " active" ?>">
+												<input type="radio" name="solarwattmethod" id="solarwattmethod2" value="1"<?php if($solarwattmethodold == 1) echo " checked=\"checked\"" ?>>Gateway
+											</label>
+										</div>
+										<span class="form-text small">
+											IP-Adresse 1: Energy Manager (immer angeben)<br>
+											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+										</span>
+									</div>									
+								</div>
+							</div>
+							<script>
+								function visibility_solarwatt_ip2() {
+									if($('#solarwattmethod1').prop("checked")) {
+										hideSection('#divspeicherip2');
+									} else {
+										showSection('#divspeicherip2');
+									}
+								}
+								
+								$(function() {	
+									$('input[type=radio][name=solarwattmethod]').change(function(){
+										visibility_solarwatt_ip2();
+									});
+								});
+							</script>
+						</div>
 
 						<div id="divspeichervictron" class="hide">
 							<div class="alert alert-info">
@@ -199,6 +236,18 @@
 									<label for="speicher1_ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip" id="speicher1_ip" value="<?php echo $speicher1_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div id="divspeicherip2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="speicher1_ip2" class="col-md-4 col-form-label">IP Adresse 2</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip2" id="speicher1_ip2" value="<?php echo $speicher1_ip2old ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -281,7 +330,7 @@
 									<label for="speicherpwpass" class="col-md-4 col-form-label">Passwort</label>
 									<div class="col">
 										<input class="form-control" type="password" name="speicherpwpass" id="speicherpwpass" value="<?php echo $speicherpwpassold ?>">
-										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall.</span>
+										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall. Das Passwort sind üblicherweise die letzten 5 Stellen der Seriennummer.</span>
 									</div>
 								</div>
 							</div>
@@ -587,6 +636,8 @@
 								hideSection('#divspeicherrct');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
+								hideSection('#divspeichersolarwatt');
+								hideSection('#divspeicherip2');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
@@ -599,7 +650,9 @@
 									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
+									showSection('#divspeichersolarwatt');
 									showSection('#divspeicherip');
+									visibility_solarwatt_ip2();
 								}
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');

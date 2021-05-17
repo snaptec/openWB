@@ -3,12 +3,17 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
-socDebug=$debug
-# for developement only
-socDebug=1
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_volvo: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
 
 case $CHARGEPOINT in
 	2)
@@ -29,28 +34,44 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
 }
 
 soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 
 if (( soctimer < 60 )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	soctimer=$((soctimer+1))
-	echo $soctimer > $soctimerfile
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	incrementTimer
 else
 	echo 0 > $soctimerfile
-	socDebugLog "Requesting SoC"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	re='^-?[0-9]+$'
 	soclevel=$(python3 $MODULEDIR/voc -u $username -p $password dashboard |grep 'Battery level' | cut -f2 -d":" |sed 's/[^0-9]*//g')
-	socDebugLog "Answer: $soclevel"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Answer: $soclevel"
 	if  [[ $soclevel =~ $re ]] ; then
 		if (( $soclevel != 0 )) ; then
-			socDebugLog "Valid SoC found: $soclevel"
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Valid SoC found: $soclevel"
 			echo $soclevel > $socfile
 		fi
 	fi
