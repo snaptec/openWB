@@ -837,16 +837,21 @@ def loadregelvars():
 
 
 def writelp2evse(lla):
-    client.write_registers(1000, lla, unit=2)
-    logDebug("1", "Write to EVSE lp2 " + str(lla))
-
+    try:
+        client.write_registers(1000, lla, unit=2)
+        logDebug("1", "Write to EVSE lp2 " + str(lla))
+    except:
+        logDebug("2", "FAILEDWrite to EVSE lp2 " + str(lla))
 def writelp1evse(lla):
     if (lla > pp):
         lla=pp
     lla=lla
-    client.write_registers(1000, lla, unit=1)
-    logDebug("1", "Write to EVSE lp1 " + str(lla))
-
+    try:
+        client.write_registers(1000, lla, unit=1)
+        logDebug("1", "Write to EVSE lp1 " + str(lla))
+    except:
+        logDebug("2", "FAILED Write to EVSE lp1 " + str(lla))
+    
 while True:
     getmeter()
     loadregelvars()
