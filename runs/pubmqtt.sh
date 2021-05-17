@@ -285,6 +285,7 @@ for mq in "${!mqttvar[@]}"; do
 	fi
 done
 
+tempPubList="${tempPubList}\nopenWB/global/cpuTemp=$(echo "scale=2; `cat /sys/class/thermal/thermal_zone0/temp` / 1000" | bc)"
 
 #echo "Publist:"
 #echo -e $tempPubList
