@@ -77,7 +77,7 @@ openwbisslave() {
 
 		# no change required
 		else
-			openwbDebugLog "MAIN" 0 "Slave Mode: Socket installed: No change required"
+			openwbDebugLog "MAIN" 2 "Slave Mode: Socket installed: No change required"
 		fi
 
 	else
