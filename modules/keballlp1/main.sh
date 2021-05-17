@@ -17,7 +17,7 @@ if [[ "$modbus" ==  "1" ]] ; then
 		#echo "startet kebanow $CHARGEPOINT $ipadr "  >> /var/www/html/openWB/ramdisk/port.log
 		sudo python3 /var/www/html/openWB/modules/keballlp1/info.py $CHARGEPOINT $ipadr >> /var/www/html/openWB/ramdisk/port.log 2>&1
 else
-  	# echo " modbus aus / chargepoint 1"
+  	# echo " modbus aus / chargepoint both"
 		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 		re='^-?[0-9]+$'
 		counter=0
@@ -53,13 +53,13 @@ else
 		kill $pidnc
 		rm /var/www/html/openWB/ramdisk/keballlp$CHARGEPOINT
 		rm /var/www/html/openWB/ramdisk/kebasync
+		rep3=$(echo $output | jq '.ID')
+		rep2=$(echo $output1 | jq '.ID')
+		rep3="${rep3%\"}"
+		rep3="${rep3#\"}"
+		rep2="${rep2%\"}"
+		rep2="${rep2#\"}"
 		if [[ $CHARGEPOINT == "1" ]] ; then
-			rep3=$(echo $output | jq '.ID')
-			rep2=$(echo $output1 | jq '.ID')
-			rep3="${rep3%\"}"
-			rep3="${rep3#\"}"
-			rep2="${rep2%\"}"
-			rep2="${rep2#\"}"
 			if [[ $rep3 == "3" ]] ; then
 			   watt=$(echo $output | jq '.P')
 			   watt=$(echo "($watt / 1000)/1" |bc)
