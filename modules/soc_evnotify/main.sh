@@ -3,12 +3,17 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
-socDebug=$debug
-# for developement only
-socDebug=1
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_evnotify: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
 
 case $CHARGEPOINT in
 	2)
@@ -29,31 +34,23 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
-}
-
 soctimer=$(<$soctimerfile)
-
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 if (( soctimer < 4 )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	soctimer=$((soctimer+1))
-	echo $soctimer > $soctimerfile
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	incrementTimer
 else
-	socDebugLog "Requesting SoC"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
 	answer=$(curl -s -X GET 'https://app.evnotify.de/soc?akey='$akey'&token='$token)
 	# extract the soc value
 	soc=$(echo $answer | jq .soc_display)
-	socDebugLog "SoC from Server: $soc"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC from Server: $soc"
 	# parse to int to be able to check in condition - to determine if valid or not
 	isvalid=$(echo $soc | cut -d "." -f 1 | cut -d "," -f 1)
 	if (( isvalid >= 0 && isvalid != null)); then
 		echo $isvalid > $socfile
 	else
-		socDebugLog "SoC is invalid!"
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC is invalid!"
 	fi
 fi

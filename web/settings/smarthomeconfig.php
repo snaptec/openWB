@@ -278,7 +278,7 @@ $numDevices = 9;
 														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 													</label>
 												</div>
-												<span class="form-text small">Diese Option sorgt dafür, dass das Gerät gezielt abgeschaltet wird, wenn ein Auto geladen wird. Dem Auto steht somit entweder mehr PV-Überschuss zur Verfügung oder der Bezug verringert sich.</span>
+												<span class="form-text small">Diese Option sorgt dafür, dass das Gerät gezielt abgeschaltet wird, wenn ein Auto geladen wird (> 1000 Watt Leistungsaufnahme). Dem Auto steht somit entweder mehr PV-Überschuss zur Verfügung oder der Bezug verringert sich.</span>
 											</div>
 										</div>
 									</div>

@@ -1116,6 +1116,9 @@ updateConfig(){
 		echo "pv1_idd=1" >> $ConfigFile
 		echo "speicher1_ip=192.168.0.17" >> $ConfigFile
 	fi
+	if ! grep -Fq "speicher1_ip2=" $ConfigFile; then
+		echo "speicher1_ip2=192.168.0.17" >> $ConfigFile
+	fi
 	if ! grep -Fq "fsm63a3modbusllsource=" $ConfigFile; then
 		echo "fsm63a3modbusllsource=/dev/ttyUSB2" >> $ConfigFile
 	fi
@@ -1703,11 +1706,14 @@ updateConfig(){
 	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		echo "pv2ip=none" >> $ConfigFile
-		echo "pv2id=none" >> $ConfigFile
+		echo "pv2id=1" >> $ConfigFile
 		echo "pv2user=none" >> $ConfigFile
 		echo "pv2pass=''" >> $ConfigFile
 	else
 		sed -i "/pv2pass='/b; s/^pv2pass=\(.*\)/pv2pass=\'\1\'/g" $ConfigFile
+	fi
+	if grep -Fq "pv2id=none" $ConfigFile; then
+		sed -i "/^pv2id=none/pv2id=1/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_bluelink_email=" $ConfigFile; then
 		echo "soc_bluelink_email=mail@mail.de" >> $ConfigFile
@@ -2011,6 +2017,9 @@ updateConfig(){
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
 		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
+	fi
+	if ! grep -Fq "solarwattmethod=" $ConfigFile; then
+		echo "solarwattmethod=0" >> $ConfigFile
 	fi
 
 	echo "Config file Update done."

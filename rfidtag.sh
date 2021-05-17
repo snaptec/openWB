@@ -257,9 +257,10 @@ checkTagValidForSocket() {
 
 			if [ -f $SocketActivationFile ]; then
 				# we have activate status ...
-				local active=$(<$SocketActivationFile)
-				if (( active > 0 )); then
-					# ... and it's already active --> request DEactivation
+				local requested=$(<$SocketActivationFile)
+				local active=$(<ramdisk/socketActivated)
+				if (( requested > 0 )) || (( active > 0 )); then
+					# ... and it's already requested or active --> request DEactivation
 					echo 2 > $SocketActivationFile
 				else
 					# ... and it's not active --> request Activation

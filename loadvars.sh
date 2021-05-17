@@ -113,6 +113,19 @@ loadvars(){
 			fi
 		fi
 	else
+		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
+		if [ "$pluggedin" -gt "0" ]; then
+			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+				/var/www/html/openWB/runs/pushover.sh "$message"
+			fi
+			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
+			fi
+			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
+			echo 0 > /var/www/html/openWB/ramdisk/pluggedin
+		fi
+
 		plugstat=$(<ramdisk/plugstat)
 		chargestat=$(<ramdisk/chargestat)
 	fi
@@ -469,12 +482,19 @@ loadvars(){
 		echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 		if [[ $speichermodul == "speicher_alphaess" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
+			pv1vorhanden="1"
 		fi
 		if [[ $speichermodul == "speicher_e3dc" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
+			pv1vorhanden="1"
+
 		fi
 		if [[ $speichermodul == "speicher_sonneneco" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
+			pv1vorhanden="1"
 		fi
 	else
 		speichervorhanden="0"
@@ -902,7 +922,9 @@ loadvars(){
 		socvorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 		if (( stopsocnotpluggedlp1 == 1 )); then
-			if (( plugstat == 1 )); then
+			soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
+			# if (( plugstat == 1 )); then
+			if [ $plugstat -eq 1 -o $soctimer -eq 20005 ]; then # force soc update button sends 20005
 				modules/$socmodul/main.sh &
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 				tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
@@ -952,7 +974,20 @@ loadvars(){
 
 	hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shd1_w - shd2_w - shd3_w - shd4_w - shd5_w - shd6_w - shd7_w - shd8_w - shd9_w - verb1_w - verb2_w - verb3_w))
 	if (( hausverbrauch < 0 )); then
-		hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
+		if [ -f /var/www/html/openWB/ramdisk/hausverbrauch.invalid ]; then
+			hausverbrauchinvalid=$(</var/www/html/openWB/ramdisk/hausverbrauch.invalid)
+			let hausverbrauchinvalid+=1
+		else
+			hausverbrauchinvalid=1
+		fi
+		echo "$hausverbrauchinvalid" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
+		if (( hausverbrauchinvalid < 3 )); then
+			hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
+		else
+			hausverbrauch=0
+		fi
+	else
+		echo "0" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
@@ -1704,6 +1739,7 @@ loadvars(){
 	mqttconfvar["config/get/display/chartLp/6/max"]=displaylp6max
 	mqttconfvar["config/get/display/chartLp/7/max"]=displaylp7max
 	mqttconfvar["config/get/display/chartLp/8/max"]=displaylp8max
+	mqttconfvar["config/get/global/slaveMode"]=slavemode
 
 	for mq in "${!mqttconfvar[@]}"; do
 		theval=${!mqttconfvar[$mq]}

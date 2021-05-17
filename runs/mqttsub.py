@@ -113,7 +113,7 @@ def on_message(client, userdata, msg):
                     elif ( int(devicenumb) == 2 ):
                         soctimerfile = '/var/www/html/openWB/ramdisk/soctimer1'
                     f = open(soctimerfile, 'w')
-                    f.write("20000")
+                    f.write("20005")
                     f.close()
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_configured" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
@@ -742,6 +742,12 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
+            if (msg.topic == "openWB/config/set/global/rfidConfigured"):
+                if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                    rfidMode=msg.payload.decode("utf-8")
+                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "rfidakt=", rfidMode]
+                    subprocess.run(sendcommand)
+                    client.publish("openWB/global/rfidConfigured", rfidMode, qos=0, retain=True)
             if (msg.topic == "openWB/config/set/global/slaveMode"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=1):
                     slaveMode=msg.payload.decode("utf-8")
@@ -1066,7 +1072,20 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/isss/parentWB"):
+                f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
                 client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (msg.topic == "openWB/set/isss/parentCPlp1"):
+                client.publish("openWB/system/parentCPlp1", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/parentCPlp1', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+            if (msg.topic == "openWB/set/isss/parentCPlp2"):
+                client.publish("openWB/system/parentCPlp2", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/parentCPlp2', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
             if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
                 if (float(msg.payload) >= -50 and float(msg.payload) <=50):
                     f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')

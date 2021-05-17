@@ -473,6 +473,7 @@ def checkyear(calcyear):
     complastdate = ''
     complastzeit = ''
     compspalten = 0
+    lastspalten = 0
     dfile=0
     ifile=0
     (file_stringo,file_stringos) = outfiledefyear(calcyear)

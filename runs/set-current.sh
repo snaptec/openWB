@@ -91,7 +91,11 @@ function setChargingCurrentBuchse () {
 	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 	# Is handled in buchse.py
 }
-
+function setChargingCurrentDaemon () {
+	current=$1
+	# set desired charging current
+	# Is handled in lldaemon.py
+}
 # function for setting the current - IP modbusevse
 # Parameters:
 # 1: current
@@ -256,6 +260,9 @@ function setChargingCurrent () {
 	fi
 	if [[ $evsecon == "buchse" ]]; then
 		setChargingCurrentBuchse $current
+	fi
+	if [[ $evsecon == "daemon" ]]; then
+		setChargingCurrentDaemon $current
 	fi
 	if [[ $evsecon == "http" ]]; then
 		setChargingCurrenthttp $current
