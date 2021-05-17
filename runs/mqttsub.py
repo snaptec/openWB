@@ -113,7 +113,7 @@ def on_message(client, userdata, msg):
                     elif ( int(devicenumb) == 2 ):
                         soctimerfile = '/var/www/html/openWB/ramdisk/soctimer1'
                     f = open(soctimerfile, 'w')
-                    f.write("20000")
+                    f.write("20005")
                     f.close()
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_configured" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
