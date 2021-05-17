@@ -3,12 +3,17 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
-socDebug=$debug
-# for developement only
-socDebug=1
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_zoe: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
 
 case $CHARGEPOINT in
 	2)
@@ -47,23 +52,39 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( $socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
 }
 
-timer=$(<$soctimerfile)
+soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 dtime=$(date +"%T")
 
-if (( timer < 60 )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	timer=$((timer+1))
-	echo $timer > $soctimerfile
+if (( soctimer < 60 )); then
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing soctimer."
+	incrementTimer
 else
 	echo 0 > $soctimerfile
-	socDebugLog "Requesting SoC"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	request=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username":"'$username'","password":"'$password'"}' https://www.services.renault-ze.com/api/user/login)
 	token=$(echo $request | jq -r .token)
 	vin=$(echo $request | jq -r .user.vehicle_details.VIN)
@@ -79,14 +100,14 @@ else
 	echo $request2 > $request2file
 	echo $soc > $socfile
 	if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $scheduler == "false" ]] && [[ $soc -ne 100 ]] && [[ $charging == "false" ]] && [[ $wakeup == "1" ]] ; then
-		socDebugLog "zoe ladung remote gestartet"
-		socDebugLog "zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: zoe ladung remote gestartet"
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
 		request3=$(curl -s -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $token" https://www.services.renault-ze.com/api/vehicle/$vin/charge)
 		echo 0 > $zoestatusfile
 		echo $request3 > $request3file
 	else
 		if [[ $debug = "1" ]] ; then
-			socDebugLog "zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeup"
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeup"
 		fi
 	fi
 fi

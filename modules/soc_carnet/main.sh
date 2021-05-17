@@ -3,12 +3,17 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
-socDebug=$debug
-# for developement only
-socDebug=1
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_carnet: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
 
 case $CHARGEPOINT in
 	2)
@@ -31,40 +36,57 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
-}
-
 reValidSoc='^-?[0-9]+$'
 
-vwtimer=$(<$soctimerfile)
-if (( vwtimer < 60 )); then
-	socDebugLog "Nothing to do yet. Incrementing timer."
-	vwtimer=$((vwtimer+1))
-	echo $vwtimer > $soctimerfile
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
+}
+
+soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
+if (( soctimer < 60 )); then
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	incrementTimer
 else
-	socDebugLog "Requesting SoC"
-	echo 0 > $soctimerfile
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+	#Abfrage Ladung aktiv. Hochsetzen des soctimers, um das Intervall zu verkürzen.
+	if (( ladeleistung > 800 )) ; then
+		soctimer=$((60 * (10 - $intervall) / 10))
+		echo $soctimer > $soctimerfile
+	else
+		echo 0 > $soctimerfile
+	fi
 
 	response=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/we_connect_client.py --user="$username" --password="$password")
 	soclevel=$(echo "$response" | grep batteryPercentage | jq -r .EManager.rbc.status.batteryPercentage)
-	socDebugLog "Filtered SoC from Server: $soclevel"
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Filtered SoC from Server: $soclevel"
 	if  [[ $soclevel =~ $reValidSoc ]] ; then
 		if (( $soclevel != 0 )) ; then
-			socDebugLog "SoC is valid"
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC is valid"
 			echo $soclevel > $socfile
 		fi
 	else
-		socDebugLog "SoC is not valid."
-		socDebugLog "Response from Server: ${response}"
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC is not valid."
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Response from Server: ${response}"
 	fi
 
-	#Abfrage Ladung aktiv. Setzen des soctimers. 
-	if (( ladeleistung > 800 )) ; then
-		vwtimer=$((60 * (10 - $intervall) / 10))
-		echo $vwtimer > $soctimerfile
-	fi
 fi
