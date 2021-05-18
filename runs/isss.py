@@ -412,6 +412,12 @@ def getmeter():
                 elif ( lp2var == 3 and lp2ll == 0 ):
                     Values.update({'lp2plugstat' : 1})
                     Values.update({'lp2chargestat' : 0})
+                f = open('/var/www/html/openWB/ramdisk/plugstats1', 'w')
+                f.write(str(Values["lp2plugstat"]))
+                f.close()
+                f = open('/var/www/html/openWB/ramdisk/chargestats1', 'w')
+                f.write(str(Values["lp2chargestat"]))
+                f.close()
                 Values.update({'lp2evsell' : lp2ll})
                 logDebug("0", "EVSE lp2plugstat: " + str(lp2var) + " EVSE lp2LL: " + str(lp2ll))
             except:
