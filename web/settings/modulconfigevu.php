@@ -134,7 +134,7 @@
 						</div>
 						<div id="wattbezugjanitza" class="hide">
 							<div class="card-text alert alert-info">
-								Ausgelesen wird Register 19026 auf Port 502. ModbusTCP muss im Janitza aktiv sein.
+								Ausgelesen wird Register 19026 auf Port 502. ModbusTCP muss im Janitza aktiv sein und die ID 1 vergeben sein.
 							</div>
 						</div>
 						<div id="wattbezugcarlogavazzilan" class="hide">
