@@ -24,8 +24,8 @@ function processMessages(mqttmsg, mqttpayload) {
      * sets input fields, range sliders and button-groups to values by mqtt
      * @param {string} mqttmsg - the complete mqtt topic
      * @param {string} mqttpayload - the value for the topic
-     * @requires function:setInputValue - is declared in pvconfig.html
-     * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
+     * @requires function:setInputValue - is declared in pvconfig.php
+     * @requires function:setToggleBtnGroup  - is declared in pvconfig.php
      */
     // console.log("new message: "+mqttmsg+": "+mqttpayload);
     checkAllSaved(mqttmsg, mqttpayload);

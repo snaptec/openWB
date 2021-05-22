@@ -297,95 +297,56 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group soclp1options">
-							<div class="form-row">
-								<div class="col">
-									SoC-Begrenzung
-								</div>
-								<div class="col-md-8 form-text small text-info">
-									Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist. Ist diese Funktion aktiviert lässt sich der Ladepunkt nicht mehr manuell (de-)aktivieren sondern wird ausschließlich anhand des SoC de- oder aktiviert. Aktiv im Min+PV und PV Lademodus.
-								</div>
+						<div class="form-row">
+							<div class="col">
+								SoC-Begrenzung
 							</div>
+							<div class="col-md-8 form-text small text-info">
+								Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist. Ist diese Funktion aktiviert lässt sich der Ladepunkt nicht mehr manuell (de-)aktivieren sondern wird ausschließlich anhand des SoC de- oder aktiviert. Aktiv im Min+PV und PV Lademodus.
+							</div>
+						</div>
+
+<?php for($lpNum = 1; $lpNum <= 2; $lpNum++): ?>
+						<div class="form-group soclp<?php echo $lpNum; ?>options">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label class="col-form-label">Ladepunkt 1</label>
+									<label class="col-form-label">Ladepunkt <?php echo $lpNum; ?></label>
 								</div>
 								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp1" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/1/">
+									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp<?php echo $lpNum; ?>" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/<?php echo $lpNum; ?>/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp1" id="socLimitationLp1Off" data-option="0" value="0">ausgeschaltet
+											<input type="radio" name="socLimitationLp<?php echo $lpNum; ?>" id="socLimitationLp<?php echo $lpNum; ?>Off" data-option="0" value="0">ausgeschaltet
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp1" id="socLimitationLp1On" data-option="1" value="1">eingeschaltet
+											<input type="radio" name="socLimitationLp<?php echo $lpNum; ?>" id="socLimitationLp<?php echo $lpNum; ?>On" data-option="1" value="1">eingeschaltet
 										</label>
 									</div>
 								</div>
 							</div>
-							<div class="form-row mb-1 soclp1optionsactive">
-								<label for="maxSocLp1" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt 1</label>
+							<div class="form-row mb-1 soclp<?php echo $lpNum; ?>optionsactive">
+								<label for="maxSocLp<?php echo $lpNum; ?>" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt <?php echo $lpNum; ?></label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
-										<label for="maxSocLp1" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<label for="maxSocLp<?php echo $lpNum; ?>" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+											<input type="range" class="form-control-range rangeInput" id="maxSocLp<?php echo $lpNum; ?>" name="maxSoc" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/<?php echo $lpNum; ?>/">
 										</div>
 									</div>
 									<span class="form-text small">
-										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 1 im Modus PV-Laden.
+										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt <?php echo $lpNum; ?> im Modus PV-Laden.
 										Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
 									</span>
 								</div>
 							</div>
 						</div>
-						<div class="form-group soclp2options">
-							<div class="form-row mb-1">
-								<div class="col-md-4">
-									<label class="col-form-label">Ladepunkt 2</label>
-								</div>
-								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp2" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/2/">
-										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp2" id="socLimitationLp2Off" data-option="0">ausgeschaltet
-										</label>
-										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp2" id="socLimitationLp2On" data-option="1">eingeschaltet
-										</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-row mb-1 soclp2optionsactive">
-								<label for="maxSocLp2" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt 2</label>
-								<div class="col-md-8">
-									<div class="form-row vaRow mb-1">
-										<label for="maxSocLp2" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
-										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="maxSocLp2" name="maxSoc" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
-										</div>
-									</div>
-									<span class="form-text small">
-										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 2 im Modus PV-Laden.
-										Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
-									</span>
-								</div>
-							</div>
-						</div>
+<?php endfor; ?>
+
 					</div>  <!-- end card body EV-SoC-Steuerung PV -->
 					<script>
 						$(document).ready(function(){
-							$('input[type=radio][name=socLimitationLp1]').change(function(){
-								if(this.value == '1') {
-									showSection('.soclp1optionsactive');
-								} else {
-									hideSection('.soclp1optionsactive');
-								}
-							})
-							$('input[type=radio][name=socLimitationLp2]').change(function(){
-								if(this.value == '1') {
-									showSection('.soclp2optionsactive');
-								} else {
-									hideSection('.soclp2optionsactive');
-								}
-							})
+							$('input[type=radio][name^=socLimitationLp]').change(function(){
+								(this.value === '1' ? showSection : hideSection)('.soclp' + this.name.substr('socLimitationLp'.length) + 'optionsactive');
+							});
 						});
 					</script>
 				</div>  <!-- end card EV-SoC-Steuerung PV -->
