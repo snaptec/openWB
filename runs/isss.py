@@ -798,6 +798,16 @@ def loadregelvars():
     else:
         if ( Values["lp1evsell"] != lp1solla ):
             writelp1evse(lp1solla)
+    if ( lp2installed == 2 ):
+        try:
+            with open('ramdisk/llsolls1', 'r') as value:
+                lp2solla = int(value.read())
+        except:
+            pass
+            lp2solla = 0
+        logDebug("0", "LL lp2 Soll: " + str(lp2solla) )
+        if ( Values["lp2evsell"] != lp2solla ):
+            writelp2evse(lp2solla)
     try:
         with open('ramdisk/u1p3pstat', 'r') as value:
             u1p3ptmpstat = int(value.read())
@@ -809,6 +819,11 @@ def loadregelvars():
     except:
         u1p3pstat = 3
     if ( u1p3pstat != u1p3ptmpstat ):
+        logDebug("1", "Umschaltung erfolgt auf " + str(u1p3ptmpstat)+ " Phasen")
+        writelp1evse(0)
+        if ( lp2installed == 2 ):
+            writelp2evse(0)
+
         if ( u1p3ptmpstat == 1 ):
             GPIO.output(22, GPIO.HIGH)
             GPIO.output(29, GPIO.HIGH)
@@ -830,15 +845,8 @@ def loadregelvars():
             GPIO.output(22, GPIO.LOW)
             time.sleep(1)
         u1p3pstat = u1p3ptmpstat
-    if ( lp2installed == 2 ):
-        try:
-            with open('ramdisk/llsolls1', 'r') as value:
-                lp2solla = int(value.read())
-        except:
-            pass
-            lp2solla = 0
-        logDebug("0", "LL lp2 Soll: " + str(lp2solla) + " ActorStatus: " + str(actorstat))
-        if ( Values["lp2evsell"] != lp2solla ):
+        writelp1evse(lp1solla)
+        if ( lp2installed == 2):
             writelp2evse(lp2solla)
 
 
