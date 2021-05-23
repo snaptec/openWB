@@ -8,12 +8,14 @@ import ConfigParser
 import struct
 import binascii
 ipaddress = str(sys.argv[1])
+srmode = int(sys.argv[2])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 
-
-
-resp= client.read_input_registers(13009,2,unit=1)
+if srmode == 1:
+    resp= client.read_input_registers(5082,2,unit=1)
+else:
+    resp= client.read_input_registers(13009,2,unit=1)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 

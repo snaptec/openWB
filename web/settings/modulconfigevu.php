@@ -118,7 +118,13 @@
 						</div>
 						<div id="wattbezugsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration erfolgt im Sungrow Speichermodul.
+								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
+								<div class="col">
+									<select name="sungrowsr" id="sungrowsr" class="form-control">
+										<option <?php if($sungrowsrold == 0) echo "selected" ?> value="0">SH (Hybrid)</option>
+										<option <?php if($sungrowsrold == 1) echo "selected" ?> value="1">SR (kein Hybrid)</option>
+									</select>
+								</div>
 							</div>
 						</div>
 

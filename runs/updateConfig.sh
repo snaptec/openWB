@@ -2021,6 +2021,8 @@ updateConfig(){
 	if ! grep -Fq "solarwattmethod=" $ConfigFile; then
 		echo "solarwattmethod=0" >> $ConfigFile
 	fi
-
+	if ! grep -Fq "sungrowsr=" $ConfigFile; then
+		echo "sungrowsr=0" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
