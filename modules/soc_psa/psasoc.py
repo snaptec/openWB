@@ -70,7 +70,7 @@ response=requests.post(reg,  data=data, headers=headers )
 responsetext  = response.text
 responestatus = response.status_code
 f = open('/var/www/html/openWB/ramdisk/psareply1lp'+chargepoint, 'w')
-f.write(str(responsetext))
+f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 psa_config = json.loads(responsetext)
@@ -88,9 +88,8 @@ f.close()
 response=requests.get(reg,headers=headers )
 f = open('/var/www/html/openWB/ramdisk/psareply2lp'+chargepoint, 'w')
 responsetext  = response.text
-responsetext  = responsetext.encode('ascii', 'replace')
 responestatus = response.status_code
-f.write(str(responsetext))
+f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 vin_list = json.loads(responsetext)
@@ -111,7 +110,7 @@ response=requests.get(reg,headers=headers )
 f = open('/var/www/html/openWB/ramdisk/psareply3lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
-f.write(str(responsetext))
+f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 batt = json.loads(responsetext)
