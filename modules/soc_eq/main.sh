@@ -7,6 +7,16 @@ DMOD="EVSOC"
 MYLOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 myPid=$$
+
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_eq: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
+
 socDebug=$debug
 # for developement only
 #socDebug=1
@@ -35,6 +45,28 @@ case $CHARGEPOINT in
 		;;
 esac
 
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
+}
 
 soctimer=$(<$soctimerfile)
 ladeleistung=$(<$ladeleistungfile)
@@ -48,12 +80,9 @@ if (( socDebug > 0 )); then
 	tmpintervall=6
 fi
 
-
-
 if (( soctimer < tmpintervall )); then
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer. ${soctimer} < ${tmpintervall}"
-	soctimer=$((soctimer+1))
-	echo $soctimer > $soctimerfile
+	incrementTimer
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile

@@ -57,6 +57,7 @@ mqttvar["evu/WhExported"]=einspeisungkwh
 mqttvar["evu/WhImported"]=bezugkwh
 mqttvar["housebattery/WhExported"]=speicherekwh
 mqttvar["housebattery/WhImported"]=speicherikwh
+mqttvar["lp/1/MeterSerialNumber"]=lp1Serial
 mqttvar["lp/1/PfPhase1"]=llpf1
 mqttvar["lp/1/PfPhase2"]=llpf2
 mqttvar["lp/1/PfPhase3"]=llpf3
@@ -245,6 +246,7 @@ if [[ "$standardSocketInstalled" == "1" ]]; then
 	mqttvar["socket/W"]=socketp
 	mqttvar["socket/kWhCounter"]=socketkwh
 	mqttvar["socket/Pf"]=socketpf
+	mqttvar["socket/MeterSerialNumber"]=socketSerial
 fi
 
 for i in $(seq 1 8);
@@ -285,6 +287,7 @@ for mq in "${!mqttvar[@]}"; do
 	fi
 done
 
+tempPubList="${tempPubList}\nopenWB/global/cpuTemp=$(echo "scale=2; `cat /sys/class/thermal/thermal_zone0/temp` / 1000" | bc)"
 
 #echo "Publist:"
 #echo -e $tempPubList

@@ -922,7 +922,9 @@ loadvars(){
 		socvorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 		if (( stopsocnotpluggedlp1 == 1 )); then
-			if (( plugstat == 1 )); then
+			soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
+			# if (( plugstat == 1 )); then
+			if [ $plugstat -eq 1 -o $soctimer -eq 20005 ]; then # force soc update button sends 20005
 				modules/$socmodul/main.sh &
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 				tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
@@ -1737,6 +1739,7 @@ loadvars(){
 	mqttconfvar["config/get/display/chartLp/6/max"]=displaylp6max
 	mqttconfvar["config/get/display/chartLp/7/max"]=displaylp7max
 	mqttconfvar["config/get/display/chartLp/8/max"]=displaylp8max
+	mqttconfvar["config/get/global/slaveMode"]=slavemode
 
 	for mq in "${!mqttconfvar[@]}"; do
 		theval=${!mqttconfvar[$mq]}
