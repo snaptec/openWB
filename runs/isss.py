@@ -492,7 +492,6 @@ def getmeter():
         # parser.set_defaults(retain=False)
         # args = parser.parse_args()
         if ( parentWB != "0" ):
-            print("initbulk")
             remoteclient= mqtt.Client("openWB-isss-bulkpublisher-" + str(os.getpid()))
             remoteclient.connect(str(parentWB))
             remoteclient.loop(timeout=2.0)
@@ -505,9 +504,7 @@ def getmeter():
                     mclient.publish("openWB/lp/1/W", payload=str(lp1llg), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'lp1watt' : str(lp1llg)})
-                print("parent:"+str(parentWB))
                 if ( parentWB != "0" ):
-                    print("sende")
                     remoteclient.publish("openWB/lp/"+parentCPlp1+"/W", payload=str(lp1llg), qos=0, retain=True)
                     remoteclient.publish("openWB/chargepoint/"+parentCPlp1+"/get/power_all", payload=str(lp1llg), qos=0, retain=True)
                     remoteclient.loop(timeout=2.0)
