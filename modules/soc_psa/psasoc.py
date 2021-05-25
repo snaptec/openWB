@@ -88,6 +88,7 @@ f.close()
 response=requests.get(reg,headers=headers )
 f = open('/var/www/html/openWB/ramdisk/psareply2lp'+chargepoint, 'w')
 responsetext  = response.text
+responsetext  = responsetext.encode('ascii', 'replace')
 responestatus = response.status_code
 f.write(str(responsetext))
 f.write(str(responestatus))
