@@ -679,6 +679,17 @@ updateConfig(){
 	if ! grep -Fq "wr_piko2_url=" $ConfigFile; then
 		echo "wr_piko2_url='https://url'" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2_piko2_user=" $ConfigFile; then
+		echo "wr2_piko2_user='user'" >> $ConfigFile
+	fi
+	if ! grep -Fq "wr2_piko2_pass=" $ConfigFile; then
+		echo "wr2_piko2_pass=''" >> $ConfigFile
+	else
+		sed -i "/wr2_piko2_pass='/b; s/^wr2_piko2_pass=\(.*\)/wr2_piko2_pass=\'\1\'/g" $ConfigFile
+	fi
+	if ! grep -Fq "wr2_piko2_url=" $ConfigFile; then
+		echo "wr2_piko2_url='https://url'" >> $ConfigFile
+	fi
 	if ! grep -Fq "carnetuser=" $ConfigFile; then
 		echo "carnetuser='user'" >> $ConfigFile
 	fi
