@@ -43,6 +43,7 @@ ziellademodus(){
 		if (( zuladendewh > moeglichewh )); then
 			if (( ladestatus == 0 )); then
 				runs/set-current.sh $zielladenalp1 m
+				openwbDebugLog "MAIN" 1 "setzte Soctimer hoch zum Abfragen des aktuellen SoC"
 				echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 				echo 1 > ramdisk/ladungdurchziel
 				exit 0

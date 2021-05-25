@@ -73,6 +73,7 @@
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
 									<optgroup label="openWB">
+										<option <?php if($evseconold == "daemon") echo "selected" ?> value="daemon">openWB Daemon</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "0") echo "selected" ?> value="modbusevse" data-id="openwb auto">Series1/2 Autoerkennung</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">Series1/2</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">Series1/2 mit geeichtem Zähler Variante 1</option>
@@ -126,7 +127,6 @@
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option für fertige openWB series1 oder series2.<br>
-								<span class="text-danger">Diese Option befindet sich noch in der Testphase!</span>
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
@@ -136,6 +136,14 @@
 								Dies ist die richtige Option für die openWB mit Buchse.
 							</div>
 						</div>
+						<div id="openwbdaemon" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="lldaemonlp1">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für eine fertige openWB und bietet eine optimale und schnelle Auslesung.
+							</div>
+						</div>
+
 						<div id="openwb12mid" class="hide">
 							<!-- default values for openwb12mid -->
 							<input type="hidden" name="modbusevseid" value="1">
@@ -698,6 +706,15 @@
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
+								<div id="socoldevccwarning" class="mt-1 alert alert-danger hide">
+									Dieses Modul nutzt eine nicht mehr unterstützte Version von EVCC-SOC und wird nicht weiter gepflegt.
+								</div>
+								<div id="socsupportinfo" class="mt-1 alert alert-success hide">
+									Support für dieses Modul gibt es im <a id="socsuportlink" href="#" target="_blank" rel="noopener noreferrer">openWB Forum</a>.
+								</div>
+								<div id="socnosupportinfo" class="mt-1 alert alert-warning hide">
+									Dieses Modul wird nicht aktiv gepflegt.
+								</div>
 							</div>
 						</div>
 						<div id="socmodullp1" class="hide">
@@ -728,7 +745,6 @@
 								<div class="alert alert-info">
 									Beim Anstecken des Fahrzeugs muss der aktuelle SoC (am Display oder über einen Browser) angegeben werden.
 									Anhand des Zählers im Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden Einstellungen "Akkugröße" und "Wirkungsgrad".<br>
-									<span class="text-danger">Das ist ein experimentelles Feature! Es wäre toll, wenn im Forum funktionierende Einstellungen für verschiedene Fahrzeuge gesammelt werden!</span>
 								</div>
 								<div class="form-row mb-1">
 									<label for="akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh</label>
@@ -1012,10 +1028,8 @@
 							</div>
 							<div id="socmid" class="hide">
 								<div class="form-group">
-									<div class="form-row mb-1">
-										<div class="alert alert-info">
-											Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
-										</div>
+									<div class="alert alert-info">
+										Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
 									</div>
 									<div class="form-row mb-1">
 										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
@@ -1120,19 +1134,20 @@
 										<div class="col">
 											<select name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" class="form-control">
 												<option <?php if($soc_evcc_type_lp1old == "none") echo "selected" ?> value="none">Bitte auswählen</option>
-												<option <?php if($soc_evcc_type_lp1old == 'vw') echo "selected" ?> value="vw">VW</option>
-												<option <?php if($soc_evcc_type_lp1old == 'id') echo "selected" ?> value="id">ID</option>
 												<option <?php if($soc_evcc_type_lp1old == 'audi') echo "selected" ?> value="audi">Audi</option>
-												<option <?php if($soc_evcc_type_lp1old == 'seat') echo "selected" ?> value="seat">Seat</option>
-												<option <?php if($soc_evcc_type_lp1old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp1old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
 												<option <?php if($soc_evcc_type_lp1old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
+												<option <?php if($soc_evcc_type_lp1old == 'enyaq') echo "selected" ?> value="enyaq">Enyaq</option>
 												<option <?php if($soc_evcc_type_lp1old == 'ford') echo "selected" ?> value="ford">Ford</option>
+												<option <?php if($soc_evcc_type_lp1old == 'hyundai') echo "selected" ?> value="hyundai">Hyundai</option>
+												<option <?php if($soc_evcc_type_lp1old == 'id') echo "selected" ?> value="id">ID</option>
 												<option <?php if($soc_evcc_type_lp1old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp1old == 'hyundai') echo "selected" ?> value="Hyundai">Hyundai</option>
-												<option <?php if($soc_evcc_type_lp1old == 'nissan') echo "selected" ?> value="Nissan">Nissan</option>
-												<option <?php if($soc_evcc_type_lp1old == 'renault') echo "selected" ?> value="Renault">Renault</option>
-											</select>
+												<option <?php if($soc_evcc_type_lp1old == 'nissan') echo "selected" ?> value="nissan">Nissan</option>
+												<option <?php if($soc_evcc_type_lp1old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
+												<option <?php if($soc_evcc_type_lp1old == 'renault') echo "selected" ?> value="renault">Renault</option>
+												<option <?php if($soc_evcc_type_lp1old == 'seat') echo "selected" ?> value="seat">Seat</option>
+												<option <?php if($soc_evcc_type_lp1old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
+												<option <?php if($soc_evcc_type_lp1old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
+												<option <?php if($soc_evcc_type_lp1old == 'vw') echo "selected" ?> value="vw">VW</option>											</select>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
 									</div>
@@ -1173,7 +1188,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_intervall_lp1" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_evcc_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervall" id="soc_evcc_intervall" value="<?php echo $soc_evcc_intervallold ?>">
 											<span class="form-text small">
@@ -1432,10 +1447,8 @@
 							</div>
 							<div id="soccarnet" class="hide">
 								<div class="form-group">
-									<div class="form-row mb-1">
-										<div class="alert alert-info">
-											Das VAG Modul kann alternativ genutzt werden und ruft den SoC in 1-Prozent Schritten ab.
-										</div>
+									<div class="alert alert-info">
+										Das VAG Modul kann alternativ genutzt werden und ruft den SoC in 1-Prozent Schritten ab.
 									</div>
 									<div class="form-row mb-1">
 										<label for="carnetuser" class="col-md-4 col-form-label">Benutzername</label>
@@ -1845,7 +1858,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -1923,7 +1936,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
 															});
-															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp1').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -1962,6 +1975,7 @@
 							hideSection('#evsecontwcmanager');
 							hideSection('#evseconipevse');
 							hideSection('#openwbbuchse');
+							hideSection('#openwbdaemon');
 							hideSection('#evseconextopenwb');
 							hideSection('#evseconmqtt');
 
@@ -1992,6 +2006,9 @@
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('#evseconextopenwb');
+							}
+							if($('#evsecon').val() == 'daemon') {
+								showSection('#openwbdaemon');
 							}
 							if($('#evsecon').val() == 'buchse') {
 								showSection('#openwbbuchse');
@@ -2117,7 +2134,9 @@
 							hideSection('#socpsa');
 							hideSection('#socmanual');
 							hideSection('#soctronity');
-
+							hideSection('#socoldevccwarning');
+							hideSection('#socsupportinfo');
+							hideSection('#socnosupportinfo');
 
 							if($('#socmodul').val() == 'none') {
 								showSection('#socmnone');
@@ -2130,38 +2149,55 @@
 								showSection('#socmpass');
 							}
 							if($('#socmodul').val() == 'soc_mqtt') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3145')
+								showSection('#socsupportinfo');
 								showSection('#socmqtt');
 							}
 							if($('#socmodul').val() == 'soc_bluelink') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3138')
+								showSection('#socsupportinfo');
 								showSection('#socmkia');
 								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_id') {
+								showSection('#socoldevccwarning');
 								showSection('#socmid');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
+								showSection('#socoldevccwarning');
 								showSection('#socvag');
 							}
 							if($('#socmodul').val() == 'soc_evcc') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3134')
+								showSection('#socsupportinfo');
 								showSection('#socevcc');
 							}
 							if($('#socmodul').val() == 'soc_kia') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3137')
+								showSection('#socsupportinfo');
 								showSection('#socmkia');
 								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_audi') {
+								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
 							}
 							if($('#socmodul').val() == 'soc_myrenault') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3139')
+								showSection('#socsupportinfo');
 								showSection('#socmyrenault');
 							}
 							if($('#socmodul').val() == 'soc_http') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3143')
+								showSection('#socsupportinfo');
 								showSection('#socmhttp');
 							}
 							if($('#socmodul').val() == 'soc_zerong') {
 								showSection('#socmzerong');
 							}
 							if($('#socmodul').val() == 'soc_eq') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3135')
+								showSection('#socsupportinfo');
 								showSection('#socmeq');
 							}
 							if($('#socmodul').val() == 'soc_leaf') {
@@ -2177,6 +2213,8 @@
 								showSection('#socevnotify');
 							}
 							if($('#socmodul').val() == 'soc_tesla') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3141')
+								showSection('#socsupportinfo');
 								showSection('#socmtesla');
 							}
 							if($('#socmodul').val() == 'soc_carnet') {
@@ -2192,9 +2230,13 @@
 								showSection('#socpsa');
 							}
 							if($('#socmodul').val() == 'soc_manual') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3144')
+								showSection('#socsupportinfo');
 								showSection('#socmanual');
 							}
 							if($('#socmodul').val() == 'soc_tronity') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3142')
+								showSection('#socsupportinfo');
 								showSection('#soctronity');
 							}
 						}
@@ -2256,6 +2298,7 @@
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">Series1/2 Duo 1. Version</option>
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">Series1/2 Duo (ab Herbst 2020)</option>
 										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evsecons1old == "daemon") echo "selected" ?> value="daemon">openWB Duo Daemon </option>
 										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
 										<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
 									</optgroup>
@@ -2293,6 +2336,13 @@
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="evsecondaemonlp2" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="lldaemonlp2">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für eine fertige openWB Duo und bietet eine optimale und schnelle Auslesung.
 							</div>
 						</div>
 						<div id="evseconipevselp2" class="hide">
@@ -2699,6 +2749,15 @@
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
+								<div id="socoldevccwarninglp2" class="mt-1 alert alert-danger hide">
+									Dieses Modul nutzt eine nicht mehr unterstützte Version von EVCC-SOC und wird nicht weiter gepflegt.
+								</div>
+								<div id="socsupportinfolp2" class="mt-1 alert alert-success hide">
+									Support für dieses Modul gibt es im <a id="socsuportlinklp2" href="#" target="_blank" rel="noopener noreferrer">openWB Forum</a>.
+								</div>
+								<div id="socnosupportinfolp2" class="mt-1 alert alert-warning hide">
+									Dieses Modul wird nicht aktiv gepflegt.
+								</div>
 							</div>
 						</div>
 						<div id="socmodullp2" class="hide">
@@ -2751,7 +2810,6 @@
 								<div class="alert alert-info">
 									Beim Anstecken des Fahrzeugs muss der aktuelle SoC (am Display oder über einen Browser) angegeben werden.
 									Anhand des Zählers im Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden Einstellungen "Akkugröße" und "Wirkungsgrad".<br>
-									<span class="text-danger">Das ist ein experimentelles Feature! Es wäre toll, wenn im Forum funktionierende Einstellungen für verschiedene Fahrzeuge gesammelt werden!</span>
 								</div>
 								<div class="form-row mb-1">
 									<label for="akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh</label>
@@ -3496,7 +3554,6 @@
 										</div>
 									</div>
 								</div>
-
 							</div>
 							<div id="socmkialp2" class="hide">
 								<div class="form-group">
@@ -3590,7 +3647,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -3649,7 +3706,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
 															});
-															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp2').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -3674,18 +3731,20 @@
 										<div class="col">
 											<select name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" class="form-control">
 												<option <?php if($soc_evcc_type_lp2old == "none") echo "selected" ?> value="none">Bitte auswählen</option>
-												<option <?php if($soc_evcc_type_lp2old == 'vw') echo "selected" ?> value="vw">VW</option>
-												<option <?php if($soc_evcc_type_lp2old == 'id') echo "selected" ?> value="id">ID</option>
 												<option <?php if($soc_evcc_type_lp2old == 'audi') echo "selected" ?> value="audi">Audi</option>
-												<option <?php if($soc_evcc_type_lp2old == 'seat') echo "selected" ?> value="seat">Seat</option>
-												<option <?php if($soc_evcc_type_lp2old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp2old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
 												<option <?php if($soc_evcc_type_lp2old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
+												<option <?php if($soc_evcc_type_lp2old == 'enyaq') echo "selected" ?> value="enyaq">Enyaq</option>
 												<option <?php if($soc_evcc_type_lp2old == 'ford') echo "selected" ?> value="ford">Ford</option>
+												<option <?php if($soc_evcc_type_lp2old == 'hyundai') echo "selected" ?> value="hyundai">Hyundai</option>
+												<option <?php if($soc_evcc_type_lp2old == 'id') echo "selected" ?> value="id">ID</option>
 												<option <?php if($soc_evcc_type_lp2old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp2old == 'hyundai') echo "selected" ?> value="Hyundai">Hyundai</option>
-												<option <?php if($soc_evcc_type_lp2old == 'nissan') echo "selected" ?> value="Nissan">Nissan</option>
-												<option <?php if($soc_evcc_type_lp2old == 'renault') echo "selected" ?> value="Renault">Renault</option>
+												<option <?php if($soc_evcc_type_lp2old == 'nissan') echo "selected" ?> value="nissan">Nissan</option>
+												<option <?php if($soc_evcc_type_lp2old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
+												<option <?php if($soc_evcc_type_lp2old == 'renault') echo "selected" ?> value="renault">Renault</option>
+												<option <?php if($soc_evcc_type_lp2old == 'seat') echo "selected" ?> value="seat">Seat</option>
+												<option <?php if($soc_evcc_type_lp2old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
+												<option <?php if($soc_evcc_type_lp2old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
+												<option <?php if($soc_evcc_type_lp2old == 'vw') echo "selected" ?> value="vw">VW</option>
 											</select>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
@@ -3769,6 +3828,7 @@
 							hideSection('#openwb12s1v1');
 							hideSection('#openwb12s1v2');
 							hideSection('#evseconextopenwblp2');
+							hideSection('#evsecondaemonlp2');
 							hideSection('#evseconipevselp2');
 							hideSection('#evseconmqtts1');
 
@@ -3806,6 +3866,9 @@
 							}
 							if($('#evsecons1').val() == 'extopenwb') {
 								showSection('#evseconextopenwblp2');
+							}
+							if($('#evsecons1').val() == 'daemon') {
+								showSection('#evsecondaemonlp2');
 							}
 							if($('#evsecons1').val() == 'goe') {
 								showSection('#evsecongoes1');
@@ -3885,6 +3948,10 @@
 							hideSection('#socmanuallp2');
 							hideSection('#soctronitylp2');
 							hideSection('#socevcclp2');
+							hideSection('#socmkialp2');
+							hideSection('#socoldevccwarninglp2');
+							hideSection('#socsupportinfolp2');
+							hideSection('#socnosupportinfolp2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('#socmnone1');
@@ -3892,19 +3959,26 @@
 								showSection('#socmodullp2', false); // do not enable all input child-elements!
 							}
 							if($('#socmodul1').val() == 'soc_mqtt') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3145')
+								showSection('#socsupportinfolp2');
 								showSection('#socmqtt1');
 							}
 							if($('#socmodul1').val() == 'soc_http1') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3143')
+								showSection('#socsupportinfolp2');
 								showSection('#socmhttp1');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
+								showSection('#socoldevccwarninglp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_bluelinklp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3138')
+								showSection('#socsupportinfolp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmpin2');
@@ -3913,6 +3987,8 @@
 								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3137')
+								showSection('#socsupportinfolp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmpin2');
@@ -3921,11 +3997,13 @@
 								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_idlp2') {
+								showSection('#socoldevccwarninglp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_vaglp2') {
+								showSection('#socoldevccwarninglp2');
 								showSection('#socmtype2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
@@ -3934,6 +4012,8 @@
 								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_evcclp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3134')
+								showSection('#socsupportinfolp2');
 								showSection('#socevcclp2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
@@ -3942,6 +4022,8 @@
 								showSection('#socleaf1');
 							}
 							if($('#socmodul1').val() == 'soc_myrenaultlp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3139')
+								showSection('#socsupportinfolp2');
 								showSection('#socmyrenaultlp2');
 							}
 							if($('#socmodul1').val() == 'soc_i3s1') {
@@ -3954,12 +4036,16 @@
 								showSection('#soczoelp2');
 							}
 							if($('#socmodul1').val() == 'soc_eqlp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3135')
+								showSection('#socsupportinfolp2');
 								showSection('#socmeqlp2');
 							}
 							if($('#socmodul1').val() == 'soc_carnetlp2') {
 								showSection('#soccarnetlp2');
 							}
 							if($('#socmodul1').val() == 'soc_teslalp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3141')
+								showSection('#socsupportinfolp2');
 								showSection('#socmteslalp2');
 							}
 							if($('#socmodul1').val() == 'soc_zeronglp2') {
@@ -3975,6 +4061,8 @@
 								showSection('#socpsalp2');
 							}
 							if($('#socmodul1').val() == 'soc_manuallp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3144')
+								showSection('#socsupportinfolp2');
 								showSection('#socmanuallp2');
 							}
 							if($('#socmodul1').val() == 'soc_volvolp2') {
@@ -3982,6 +4070,8 @@
 								showSection('#socmpass2');
 							}
 							if($('#socmodul1').val() == 'soc_tronitylp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3142')
+								showSection('#socsupportinfolp2');
 								showSection('#soctronitylp2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');

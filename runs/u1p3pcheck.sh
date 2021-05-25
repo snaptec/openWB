@@ -128,10 +128,20 @@ if [[ "$1" == "stop" ]]; then
 		echo $oldll > ramdisk/tmpllsoll
 		runs/set-current.sh 0 m
 	fi
+	if [[ $evsecon == "daemon" ]]; then
+		oldll=$(<ramdisk/llsoll)
+		echo $oldll > ramdisk/tmpllsoll
+		runs/set-current.sh 0 m
+	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "0"
 		oldll=$(<ramdisk/llsoll)
 		echo $oldll > ramdisk/tmpllsoll
+	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "daemon" ]]; then
+		oldlls1=$(<ramdisk/llsolls1)
+		echo $oldlls1 > ramdisk/tmpllsolls1
+		runs/set-current.sh 0 s1
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		oldlls1=$(<ramdisk/llsolls1)
@@ -221,6 +231,11 @@ if [[ "$1" == "start" ]]; then
 		oldll=$(<ramdisk/tmpllsoll)
 		runs/set-current.sh $oldll m
 	fi
+	if [[ $evsecon == "daemon" ]]; then
+		oldll=$(<ramdisk/tmpllsoll)
+		runs/set-current.sh $oldll m
+	fi
+
 	if [[ $evsecon == "ipevse" ]]; then
 		oldll=$(<ramdisk/tmpllsoll)
 		runs/set-current.sh $oldll m
@@ -262,6 +277,10 @@ if [[ "$1" == "start" ]]; then
 		oldlls1=$(<ramdisk/tmpllsolls1)
 		runs/set-current.sh $oldlls1 s1
 	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "daemon" && $u1p3plp2aktiv == "1" ]]; then
+		oldlls1=$(<ramdisk/tmpllsolls1)
+		runs/set-current.sh $oldlls1 s1
+	fi
 
 	if [[ $lastmanagement == 1 && $evsecons1 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
 		oldlls1=$(<ramdisk/tmpllsolls1)
@@ -297,6 +316,9 @@ if [[ "$1" == "startslow" ]]; then
 	if [[ $evsecon == "modbusevse" ]]; then
 		runs/set-current.sh $minimalapv m
 	fi
+	if [[ $evsecon == "daemon" ]]; then
+		runs/set-current.sh $minimalapv m
+	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$minimalapv"
 	fi
@@ -321,11 +343,13 @@ if [[ "$1" == "startslow" ]]; then
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep8ip -m "$minimalapv"
 	fi
-
 	if [[ $evsecon == "ipevse" ]]; then
 		runs/set-current.sh $minimalapv m
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "modbusevse" && $u1p3plp2aktiv == "1" ]]; then
+		runs/set-current.sh $minimalapv s1
+	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "daemon" && $u1p3plp2aktiv == "1" ]]; then
 		runs/set-current.sh $minimalapv s1
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then

@@ -18,6 +18,7 @@ class PowerGraph {
     this.lp1color = "";
     this.lp2color = "";
     this.batteryColor = "";
+    this.batSocColor = "";
     this.graphRefreshCounter = 0;
     this.width = 500;
     this.height = 500;
@@ -46,6 +47,7 @@ class PowerGraph {
     this.lp1color = 'var(--color-lp1)';
     this.lp2color = 'var(--color-lp2)';
     this.batteryColor = 'var(--color-battery)';
+    this.batSocColor = 'var(--color-title)';
     var i;
     for (i = 0; i < 8; i++) {
       this.colors["lp" + i] = wbdata.chargePoint[i].color;
@@ -518,7 +520,7 @@ extractMonthValues(payload, oldPayload) {
   }
 
   drawSourceGraph(svg, width, height) {
-    var keys = (wbdata.graphMode == 'month') ? ["gridPull", "batOut", "selfUsage", "gridPush"] : ["batOut", "selfUsage", "gridPush", "gridPull"];
+    var keys = (wbdata.graphMode == 'month') ? ["gridPull", "batOut", "selfUsage", "gridPush"] : ["selfUsage", "gridPush", "batOut", "gridPull"];
     
     if (wbdata.graphMode == 'month') {
       const dayRange = d3.extent (this.graphData, d => d.date.getDate())
@@ -799,7 +801,7 @@ extractMonthValues(payload, oldPayload) {
       svg.append("path")
         .datum(this.graphData)
         .attr("stroke", this.bgcolor)
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 2)
         .attr("fill", "none")
         //.style("stroke-dasharray", ("3, 3"))
         .attr("d", d3.line()
@@ -808,8 +810,8 @@ extractMonthValues(payload, oldPayload) {
         );
       svg.append("path")
         .datum(this.graphData)
-        .attr("stroke", this.batteryColor)
-        .attr("stroke-width", 1)
+        .attr("stroke", this.batSocColor)
+        .attr("stroke-width", 2)
         .attr("fill", "none")
         .style("stroke-dasharray", ("3, 3"))
         .attr("d", d3.line()

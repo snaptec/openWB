@@ -75,7 +75,7 @@ def _read_args():
         raise ValueError('Parameteranzahl falsch (' + str(len(sys.argv) - 1) + ' uebergeben aber 3 gefordert)')
     return tibber_token, home_id, debug_level
 
-def _write_log_entry(message, msg_debug_level):
+def _write_log_entry(message, msg_debug_level = 0):
     # schreibt Eintrag ins Log je nach Level
     global _openWB_debug_level
     if msg_debug_level == 0 or _openWB_debug_level is None or msg_debug_level <= _openWB_debug_level:
@@ -162,7 +162,7 @@ def _try_api_call(max_tries=3, delay=5, backoff=2, exceptions=(Exception,), hook
                     return func(*args, **kwargs)
                 except exceptions as e:
                     if tries_remaining > 0:
-                        _write_log_entry("Fehler bei der API-Abfrage, %d Versuche übrig, versuche erneut in %s Sekunden" % (tries_remaining, mydelay))
+                        _write_log_entry("Fehler bei der API-Abfrage, %d Versuche übrig, versuche erneut in %s Sekunden" % (tries_remaining, mydelay), 0)
                         if hook is not None:
                             hook(tries_remaining, e, mydelay)
                         sleep(mydelay)
@@ -397,7 +397,7 @@ def update_pricedata(tibber_token, home_id, debug_level):
                     try:
                         pricelist_received = _get_updated_pricelist()
                     except Exception as e:
-                        _write_log_entry(str(e))
+                        _write_log_entry(str(e), 0)
                     if len(pricelist_received) > 0:
                         _write_log_entry('Abfrage der Preise erfolgreich', 2)
                         _write_log_entry('Abgefragte Preisliste hat %d Eintraege' % len(pricelist_received), 2)

@@ -10,6 +10,15 @@ import codecs
 import csv
 import argparse
 
+def outfiledefyear(jjjjinput):
+    if (str(jjjjinput) == str(aktjjjj)):
+    # heutiges Jahr nachgerechnet, ramdisk nehmen
+        file_stringo =  outputa + 'logaktyearonl.csv'
+        file_stringos =  outputa + 'logaktyearonls.csv'
+    else:
+        file_stringo =  outputp + str(jjjjinput) + 'onl.csv'
+        file_stringos =  outputp + str(jjjjinput) + 'onls.csv'
+    return (file_stringo,file_stringos)
 def outfiledef(jjjjmminput):
     if (str(jjjjmminput) == str(aktjjjjmm)):
     # heutiger Monat nachgerechnet, ramdisk nehmen
@@ -88,13 +97,33 @@ def trdaymonth(irow):
     #	Lpalle PV________	29	7	$d4
     #	Lpall Speicher___	30	7	$d5
     #	Lpalle EVU_______	31  7	$d6
-    #	_________________	32		$d7
-    #	_________________	33		$d8
-    #	_________________	34		$d9
-    #	_________________	35		$d10
-    #	_________________	36		$temp4
-    #	_________________	37		$temp5
-    #	_________________	38		$temp6
+    #	Device 1 PV______	32	26  $d7
+    #	Device 1 Speicher	33	26	$d8
+    #	Device 1 EVU____ 	34	26	$d9
+    #	Device 2 pv________	35	27 $d10
+    #	Device 2 Speicher_	36	27 $temp4
+    #	device 2_EVU_______	37	27 $temp5
+    #	Device 3 PV______	38	28 $temp6
+    #	Device 3 Speicher	39	28
+    #	Device 3 EVU____ 	40	28
+    #	Device 4 PV______	41	29
+    #	Device 4 Speicher	42	29
+    #	Device 4 EVU____ 	43	29
+    #	Device 5 PV______	44	30
+    #	Device 5 Speicher	45	30
+    #	Device 5 EVU____ 	46	30
+    #	Device 6 PV______	47	31
+    #	Device 6 Speicher	48	31
+    #	Device 6 EVU____ 	49	31
+    #	Device 7 PV______	50	32
+    #	Device 7 Speicher	51	32
+    #	Device 7 EVU____ 	52	32
+    #	Device 8 PV______	53	33
+    #	Device 8 Speicher	54	33
+    #	Device 8 EVU____ 	55	33
+    #	Device 9 PV______	56	34
+    #	Device 9 Speicher	57	34
+    #	Device 9 EVU____ 	58	34
     row [8] = inputrow [10]
     row [9] = inputrow [11]
     row [10] = inputrow [12]
@@ -119,13 +148,34 @@ def trdaymonth(irow):
     row [29] = inputrow [7]
     row [30] = inputrow [7]
     row [31] = inputrow [7]
-    row [32] = float(0)
-    row [33] = float(0)
-    row [34] = float(0)
-    row [35] = float(0)
-    row [36] = float(0)
-    row [37] = float(0)
-    row [38] = float(0)
+    row [32] = inputrow [26]
+    row [33] = inputrow [26]
+    row [34] = inputrow [26]
+    row [35] = inputrow [27]
+    row [36] = inputrow [27]
+    row [37] = inputrow [27]
+    row [38] = inputrow [28]
+    row [39] = inputrow [28]
+    row [40] = inputrow [28]
+    row [41] = inputrow [29]
+    row [42] = inputrow [29]
+    row [43] = inputrow [29]
+    row [44] = inputrow [30]
+    row [45] = inputrow [30]
+    row [46] = inputrow [30]
+    row [47] = inputrow [31]
+    row [48] = inputrow [31]
+    row [49] = inputrow [31]
+    row [50] = inputrow [32]
+    row [51] = inputrow [32]
+    row [52] = inputrow [32]
+    row [53] = inputrow [33]
+    row [54] = inputrow [33]
+    row [55] = inputrow [33]
+    row [56] = inputrow [34]
+    row [57] = inputrow [34]
+    row [58] = inputrow [34]
+
     try:
         totalc = float(row [1]) + float(row [2]) + float(row [3]) + float(row [4]) + float(row [5])
     except:
@@ -153,7 +203,10 @@ def calcdelta(row,rowold,i,zeile,datestring):
     #	Lpalle PV________	29	7	$d4
     #	Lpall Speicher___	30	7	$d5
     #	Lpalle EVU_______	31  7	$d6
-    if (i >= 29) and (i<=31):
+    #	Device 1 PV______	32		$d7
+    #	Device 1 Speicher	33		$d8
+    #	Device 1 EVU____ 	34		$d9
+    if (i >= 29) and (i<=58):
         try:
             gesamtv = float(0)
             deltabezug =  float (row[1]) - float(rowold[1])
@@ -168,13 +221,13 @@ def calcdelta(row,rowold,i,zeile,datestring):
                 pass
             else:
                 raise Exception("error ratio calc")
-            if (i == 29):
+            if (i == 29) or (i == 32) or (i == 35) or (i==38) or (i==41)  or (i==44) or (i==47)  or (i==50)  or (i==53) or (i==56):
                 # (PV - Einspeisung - Speicherladung) / Gesamtverbrauch)
                 delta = ((deltapv - deltaeinspeisung - deltaspeicherladung)  / gesamtv) * (newvalue -  oldvalue)
-            if (i == 30):
+            if (i == 30) or (i == 33) or (i == 36) or (i==39) or (i==42)  or (i==45) or (i==48)  or (i==51)  or (i==54) or (i==57):
                 # Speicherentladung / Gesamtverbrauch
                 delta = (deltaspeicherentladung  / gesamtv) * (newvalue -  oldvalue)
-            if (i == 31):
+            if (i == 31) or (i == 34) or (i == 37) or (i==40) or (i==43)  or (i==46) or (i==49)  or (i==52)  or (i==55) or (i==58):
                 #Bezug EVU / Gesamtverbrauch
                 delta = (deltabezug  / gesamtv) * (newvalue -  oldvalue)
         except:
@@ -188,17 +241,19 @@ def calcdelta(row,rowold,i,zeile,datestring):
                 print ('%s i-err(R) %s:%s c %2d(%s) sum %.3f act %.3f prev %.3f gesamtv %.3f' % (getTime(),datestring,str(row[0]),i,textcol,sumcsv [i] ,newvalue, oldvalue,gesamtv ))
     else:
         delta = newvalue -  oldvalue
-    if (newvalue > oldvalue) and (delta < 12500) and (oldvalue > 0):
-        sumcsv [i] = float(sumcsv [i])  + delta
-        sumcsvt [i] = float(sumcsvt [i])  + delta
+    deltarund = float(str("%.6f" % delta))
+    if (deltarund < 0):
+        deltarund = 0
+    if (newvalue > oldvalue) and (deltarund < 12500) and (oldvalue > 0):
+        sumcsv [i] = float(sumcsv [i])  + deltarund
+        sumcsvt [i] = float(sumcsvt [i])  + deltarund
     else:
-        if (delta > 0):
+        if (deltarund > 0):
             try:
                 textcol=header[i]
             except:
                 textcol= ''
             print ('%s i-err %s:%s c %2d(%s) sum %.3f act %.3f prev %.3f' % (getTime(),datestring,str(row[0]),i,textcol,sumcsv [i] ,newvalue, oldvalue ))
-
 def fillcount(row,  datestring  ,file_stringo,firstfile):
     # letzen tag abschliesen, neuen vorbereiten
     if (firstfile == 1):
@@ -216,7 +271,7 @@ def fillcount(row,  datestring  ,file_stringo,firstfile):
         #print ('%s start write %s  ' % (getTime(), str(sumcsv [1])   ))
         for i in range (1,SUMCOLUMNSTART):
             sumt=float(sumcsv [i]/1000)
-            line=line+ str(float("%.6f" % sumt)) +','
+            line=line+ str(float("%.3f" % sumt)) +','
         line=line+ str(0) + '\n'
         f1.write(str(line))
         f1.close()
@@ -245,7 +300,7 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
     #print ('%s start write %.6f  ' % (getTime(),  sumcsv [1]   ))
     for i in range (1,SUMCOLUMNSTART):
         sumt=float(sumcsvt [i]/1000)
-        line=line+ str(float("%.6f" % sumt)) +','
+        line=line+ str(float("%.3f" % sumt)) +','
     line=line+ str(0) + '\n'
     f1.write(str(line))
     f1.close()
@@ -256,7 +311,75 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
             monhtrow [i] = float(0)
         sumcsvt [i] = float(0)
     return
-
+def reyeardet(calcyear):
+    firstfile=1
+    validdata=0
+    #print ('%s actyear ' % (calcyear))
+    lastdate = ''
+    lastzeit = ''
+    compspalten = 0
+    startspalten = 0
+    for dd in range(1, 13):
+        dds = '0' + str (dd)
+        datestring = int(str(calcyear) + dds[-2:])
+        #summenfile montssuchen
+        (file_stringi,file_stringis) = outfiledef(datestring)
+        #outputfile year
+        (file_stringo,file_stringos) = outfiledefyear(calcyear)
+        if os.path.isfile(file_stringis):
+            ifile=1
+        else:
+            ifile=0
+        if (ifile == 1):
+            try:
+                f = open(  file_stringis, 'r')
+                if firstfile==1:
+                    print ('%s year output %s' % (getTime(),file_stringo))
+                print ('%s year input  %s' % (getTime(),file_stringis))
+                csv_os = csv.reader(f)
+                firstrow = next(csv_os)
+                if firstfile == 1:
+                    startspalten = int(firstrow[1])
+                compspalten = int(firstrow[1])
+                headerrow = next(csv_os)
+                sumrow = next(csv_os)
+                f.close()
+                if (startspalten == compspalten):
+                    complastdate = firstrow[3]
+                    complastzeit = firstrow[5]
+                    if (firstfile == 1):
+                        firstfile = 0
+                        validdata=1
+                        headerline = str(headerrow [0])
+                        for i in range (2,startspalten+1):
+                            if (i > len(headerrow)):
+                                break
+                            headerline=headerline+ ','
+                            headerline=headerline+ str(headerrow [i-1])
+                        headerline=headerline+  '\n'
+                        f1 = open(  file_stringo, 'w')
+                        f1.write(str(headerline))
+                    sumline=''
+                    for i in range(1,startspalten+2):
+                        #print ('I %s ' % (str(i-1)))
+                        sumline=sumline+ str(sumrow [i-1])
+                        if i < (startspalten+1):
+                            sumline=sumline+ ','
+                    sumline=sumline+ '\n'
+                    f1.write(str(sumline))
+            except Exception as e:
+                print ('%s Yearerror %s inhalt %s' % (getTime(),file_stringis, str(e) ))
+    if (validdata == 1):
+        f1.close()
+        os.chmod(file_stringo, 0o777)
+        f1 = open(  file_stringos, 'w')
+        line='Anzahl Spalten,' + str(startspalten) + ',Letzes Datum,' + complastdate + ',Letzte Zeit,' + complastzeit + ',  \n'
+        f1.write(str(line))
+        f1.write(str(headerline))
+        f1.close()
+        os.chmod(file_stringos, 0o777)
+        print ('%s %s written' % (getTime(),file_stringos))
+    return
 def remonth(jjjjmm):
     firstfile=1
     nextmonat = str(jjjjmm)[-2:]
@@ -343,7 +466,58 @@ def remonth(jjjjmm):
     #summenfile schreiben
     fillcounts(monhtrow,file_stringos,lastdate,lastzeit)
     return
-
+def checkyear(calcyear):
+    #lesen summenfile year
+    lastdate = ''
+    lastzeit = ''
+    complastdate = ''
+    complastzeit = ''
+    compspalten = 0
+    lastspalten = 0
+    dfile=0
+    ifile=0
+    (file_stringo,file_stringos) = outfiledefyear(calcyear)
+    try:
+        if os.path.isfile(file_stringos):
+            ifile=1
+            f = open(file_stringos, 'r')
+            csv_os = csv.reader(f)
+            sumrow = next(csv_os)
+            compspalten = int(sumrow[1])
+            complastdate = sumrow[3]
+            complastzeit = sumrow[5]
+            f.close()
+        else:
+            ifile=0
+        for dd in range(12, 0,-1):
+            dds = '0' + str (dd)
+            datestring = int(str(calcyear) + dds[-2:])
+            #letzses summenfile montssuchen
+            (file_stringi,file_stringis) = outfiledef(datestring)
+            if os.path.isfile(file_stringis):
+                dfile=1
+                f = open(  file_stringis, 'r')
+                csv_os = csv.reader(f)
+                sumrow = next(csv_os)
+                lastspalten = int(sumrow[1])
+                lastdate = sumrow[3]
+                lastzeit = sumrow[5]
+                f.close()
+                break
+            else:
+                dfile=0
+    except Exception as e:
+            print ('%s yearerror3 %s inhalt %s' % (getTime(),datestring, str(e) ))
+    if (dfile==1) and (ifile == 0):
+        print ('%s checkyear jjjj %s Summenfile fehlt' % (getTime(),calcyear))
+        return 0
+    if ((complastdate !=lastdate) or (complastzeit != lastzeit))  and (ifile == 1) :
+        print ('%s checkyear jjjj %s neue Daten alt %s:%s neu %s:%s' % (getTime(),calcyear,complastdate,complastzeit,lastdate,lastzeit))
+        return 0
+    if (compspalten  != lastspalten) and (ifile == 1) :
+        print ('%s checkyear jjjj %s Spalten geaendert' % (getTime(),calcyear))
+        return 0
+    return 1
 def checkmonth(jjjjmm):
     #lesen summenfile
     lastdate = ''
@@ -411,8 +585,10 @@ def reyear():
                 checkflag=checkmonth(jis)
                 if (checkflag == 0):
                     remonth(jis)
+        checkflag=checkyear(ji)
+        if (checkflag == 0):
+            reyeardet(ji)
     return
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', type=str, required=True, help='folder containing daily logfiles')
@@ -441,7 +617,7 @@ if __name__ == "__main__":
     JJMM -> nur bei M relevant, Monat zum nachrechnen
     '''
 
-    aktjjjjmm  = args.date
+    aktjjjjmm  = time.strftime("%Y%m")
     aktjjjj = int(int(aktjjjjmm) / 100)
     header = [
             'Datum','Bezug','Einspeisung','Pv',
@@ -449,10 +625,19 @@ if __name__ == "__main__":
             'Verbraucher1imp','Verbraucher1exp','Verbraucher2imp','Verbraucher2exp',
             'Lp4','Lp5','Lp6','Lp7','Lp8','Speicherimp','Speicherexpt',
             'Device1','Device2','Device3','Device4','Device5','Device6','Device7','Device8','Device9','Device10',
-            'Lpalle Pv','Lpalle Speicher','Lpalle EVU'
+            'Lpalle Pv','Lpalle Speicher','Lpalle EVU',
+            'Device1 Pv','Device1 Speicher','Device1 EVU',
+            'Device2 Pv','Device2 Speicher','Device2 EVU',
+            'Device3 Pv','Device3 Speicher','Device3 EVU',
+            'Device4 Pv','Device4 Speicher','Device4 EVU',
+            'Device5 Pv','Device5 Speicher','Device5 EVU',
+            'Device6 Pv','Device6 Speicher','Device6 EVU',
+            'Device7 Pv','Device7 Speicher','Device7 EVU',
+            'Device8 Pv','Device8 Speicher','Device8 EVU',
+            'Device9 Pv','Device9 Speicher','Device9 EVU'
         ]
-    # not smaller than 40    
-    SUMCOLUMNSTART = 42
+    # not smaller than 40
+    SUMCOLUMNSTART = 60
     startjjjj= 2018
     inputp=args.input
     outputp=args.output
