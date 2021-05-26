@@ -215,7 +215,11 @@ if extprodakt == 1:
 else:
     extprod = 0
 if subbat == 1:
-    allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt+extprod
+    if storagepower > 0:
+        storagepower=0
+    if storage2power > 0:
+        storage2power=0
+    allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower-storage2power+extprod
 else:
     allwatt=fwr1watt+fwr2watt+fwr3watt+fwr4watt-storagepower-storage2power+extprod
 if allwatt > 0:
