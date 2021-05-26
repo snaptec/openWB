@@ -1,77 +1,64 @@
-#!/usr/bin/env python3
-
-import requests
+#!/usr/bin/python3
+import json
 import sys
-import traceback
+import urllib.request
+import urllib.parse
+import base64
+from datetime import datetime
 
-username = str(sys.argv[1])
-password = str(sys.argv[2])
-id = str(sys.argv[3])
+RAMDISK_PATH = "/var/www/html/openWB/ramdisk/"
 
-def get_value(key, file, div, toint = False):
-    value = response["values"][key] / div
-    f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
-    if(toint):
-        value = int(value)
-    f.write(str(value))
-    f.close()
-    return value
 
-params = (
-    ('meterId', id),
-)
+def log(msg: str):
+    with open("/var/log/openWB.log", "a") as fd:
+        fd.write("%s: Discovergy: %s\n" % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), msg))
 
-response = requests.get('https://api.discovergy.com/public/v1/last_reading', params=params, auth=(username, password), timeout = 3).json()
 
-get_value("energyOut", "einspeisungkwh", 10000000)
-get_value("energy", "bezugkwh", 10000000)
+def write_to_ramdisk_file(filename: str, content: str):
+    with open(RAMDISK_PATH + filename, 'w') as f:
+        f.write(content)
+        f.write("\n")
 
-try:
-    vl1=get_value("phase1Voltage", "evuv1", 1000)
-except KeyError:
-    vl1=0
-try:
-    vl2=get_value("phase2Voltage", "evuv2", 1000)
-except KeyError:
-    vl2=0
-try:
-    vl3=get_value("phase3Voltage", "evuv3", 1000)
-except KeyError:
-    vl3=0
 
-get_value("power", "wattbezug", 1000, True)
-try:
-    wattl1=get_value("phase1Power", "bezugw1", 1000)
-except KeyError:
-    wattl1=get_value("power1", "bezugw1", 1000)
-try:
-    wattl2=get_value("phase2Power", "bezugw2", 1000)
-except KeyError:
-    wattl2=get_value("power2", "bezugw2", 1000)
-try:
-    wattl3=get_value("phase3Power", "bezugw3", 1000)
-except KeyError:
-    wattl3=get_value("power3", "bezugw3", 1000)
+def write_float_to_ramdisk_file(filename: str, content: float):
+    write_to_ramdisk_file(filename, str(round(content)))
 
-if vl1 > 150:
-    al1 = wattl1 / vl1 
-else:
-    al1 = wattl1 / 230
-if vl2 > 150:
-    al2 = wattl2 / vl2
-else:
-    al2 = wattl2 / 230
-if vl3 > 150:
-    al3 = wattl3 / vl3
-else:
-    al3 = wattl3 / 230
 
-f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(al1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(al2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(al3))
-f.close()
+def get_last_reading(user: str, password: str, meter_id: str):
+    try:
+        return try_get_last_reading(user, password, meter_id)
+    except Exception as e:
+        log("Getting last readings failed: " + str(e))
+        raise e
+
+
+def try_get_last_reading(user: str, password: str, meter_id: str):
+    request = urllib.request.Request(
+        "https://api.discovergy.com/public/v1/last_reading?" + urllib.parse.urlencode({"meterId": meter_id}))
+    request.add_header("Authorization",
+                       "Basic " + base64.b64encode(bytes("%s:%s" % (user, password), "utf-8")).decode("utf-8"))
+    return json.loads(str(urllib.request.urlopen(request, timeout=3).read().decode("utf-8")))
+
+
+def write_readings_to_ramdisk(discovergy: dict):
+    values = discovergy["values"]
+    write_float_to_ramdisk_file("wattbezug", values["power"] / 1000)
+    write_float_to_ramdisk_file("einspeisungkwh", values["energyOut"] / 10000000)
+    write_float_to_ramdisk_file("bezugkwh", values["energy"] / 10000000)
+
+    for phase in range(1, 4):
+        str_phase = str(phase)
+        voltage = values["voltage" + str_phase] / 1000
+        power = values["power" + str_phase] / 1000
+        current = power / (voltage if voltage > 150 else 230)
+        write_float_to_ramdisk_file("evuv" + str_phase, voltage)
+        write_float_to_ramdisk_file("bezugw" + str_phase, power)
+        write_float_to_ramdisk_file("bezuga" + str_phase, current)
+
+
+def update(user: str, password: str, meter_id: str):
+    write_readings_to_ramdisk(get_last_reading(user, password, meter_id))
+
+
+if __name__ == '__main__':
+    update(sys.argv[1], sys.argv[2], sys.argv[3])
