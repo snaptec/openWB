@@ -167,6 +167,8 @@ fi
 
 # check for LAN/WLAN connection
 openwbDebugLog "MAIN" 0 "LAN/WLAN..."
+ethstate=$(</sys/class/net/eth0/carrier)
+if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
 else
 	sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
