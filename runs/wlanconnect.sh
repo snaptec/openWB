@@ -21,5 +21,5 @@ wlan0ip=$(ifconfig wlan0 |grep 'inet ' |awk '{print $2}')
 if [[ $wlan0state -eq 0 || $wlan0ip -eq "192.168.4.1"  ]]; then
 	sudo reboot now
 else
-	sed -i 's/displayconfigured.*/displayconfigured=1/' /var/www/html/openWB/openwb.conf
+	echo $(cat /var/www/html/openWB/openwb.conf | sed 's/displayconfigured.*/displayconfigured=1/') > /var/www/html/openWB/openwb.conf
 fi
