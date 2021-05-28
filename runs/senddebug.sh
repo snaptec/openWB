@@ -1,5 +1,9 @@
 #!/bin/bash
-sed -i 's/debug.*/debug=1/' /var/www/html/openWB/openwb.conf
+OPENWBBASEDIR=$(cd `dirname $0`/../ && pwd)
+
+. $OPENWBBASEDIR/helperFunctions.sh
+
+safeSed 's/debug.*/debug=1/' /var/www/html/openWB/openwb.conf
 sleep 60
 
 debugFile=/var/www/html/openWB/ramdisk/debug.log
@@ -50,7 +54,7 @@ ls -lRa /var/www/html/openWB/modules/soc_* >> $debugFile
 curl --upload $debugFile "https://openwb.de/tools/debug2.php?debugemail=$debugemail"
 
 
-sed -i 's/debug.*/debug=0/' /var/www/html/openWB/openwb.conf
+safeSed 's/debug.*/debug=0/' /var/www/html/openWB/openwb.conf
 rm $debugFile
 rm /var/www/html/openWB/ramdisk/debuguser
 rm /var/www/html/openWB/ramdisk/debugemail

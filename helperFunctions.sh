@@ -102,3 +102,14 @@ openwbDebugLog() {
 }
 
 export -f openwbDebugLog
+
+# safeSed wraps sed to safely perform in-place editing without using '-i' which
+# moves a temporary file into the original (changing the inode), which fails if
+# the file is bind-mounted in a container.
+safeSed() {
+	# $1: pattern
+	# $2: file
+	tmpfile=$(mktemp)
+	trap 'rm -f -- "$tmpfile"' 0 1 2 3 15
+	sed "$1" "$2" > "$tmpfile" && cat "$tmpfile" > "$2"
+}

@@ -1,4 +1,8 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../ && pwd)
+
+. $OPENWBBASEDIR/helperFunctions.sh
+
 wssid=$(</var/www/html/openWB/ramdisk/wssid)
 wpassword=$(</var/www/html/openWB/ramdisk/wpassword)
 echo "country=DE" > /etc/wpa_supplicant/wpa_supplicant.conf
@@ -21,5 +25,5 @@ wlan0ip=$(ifconfig wlan0 |grep 'inet ' |awk '{print $2}')
 if [[ $wlan0state -eq 0 || $wlan0ip -eq "192.168.4.1"  ]]; then
 	sudo reboot now
 else
-	sed -i 's/displayconfigured.*/displayconfigured=1/' /var/www/html/openWB/openwb.conf
+	safeSed 's/displayconfigured.*/displayconfigured=1/' /var/www/html/openWB/openwb.conf
 fi
