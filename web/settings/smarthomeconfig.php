@@ -269,6 +269,7 @@ $numDevices = 9;
 											<div class="col">
 												<input id="device_finishTimeDevices<?php echo $devicenum; ?>" name="device_finishTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<span class="form-text small">Uhrzeit im 24 Stunden-Format. Z.B. "14:45" Der Wert "00:00" schaltet die Funktion ab.</span>
+												<span class="form-text small text-danger">Das Feature befindet sich noch in der Entwicklung!</span>
 											</div>
 										</div>
 									</div>
@@ -290,6 +291,7 @@ $numDevices = 9;
 														Durch diese Option wird das angeschlossene Gerät täglich um 0:01 Uhr eingeschaltet. Wenn erkannt wird, dass das Gerät aktiviert wird (Leistungsaufnahme ist länger als "Zeit im Standby" größer als eingetragener "Verbrauch im Standby"), wird das Gerät direkt ausgeschaltet, falls die einschaltschwelle nicht erreicht ist. Sobald die einschaltschwelle erreicht wird, wird das Gerät erneut aktiviert.<br>
 														Somit kann z. B. eine Waschmaschine am Morgen im Standby befüllt und eingeschaltet werden. Sie läuft aber erst richtig an, wenn genügend Überschuss vorhanden ist.
 													</span>
+													<span class="form-text small text-danger">Das Feature befindet sich noch in der Entwicklung!</span>
 												</div>
 											</div>
 											<div class="device<?php echo $devicenum; ?>startupDetection hide">
