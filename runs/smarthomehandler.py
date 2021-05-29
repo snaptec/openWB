@@ -34,8 +34,11 @@ DeviceConfigured = []
 DeviceConfiguredOld = []
 
 DeviceOn = []
+DeviceOnOld = []
+
 
 for i in range(1, (numberOfSupportedDevices+1)):
+    DeviceTempValues.update({'oldWHI'+str(i) : '2'})
     DeviceTempValues.update({'oldw'+str(i) : '2'})
     DeviceTempValues.update({'oldwh'+str(i) : '2'})
     DeviceTempValues.update({'oldtemp'+str(i) : '2'})
@@ -46,6 +49,7 @@ for i in range(1, (numberOfSupportedDevices+1)):
     DeviceConfigured.append("0")
     DeviceConfiguredOld.append("9")
     DeviceOn.append("0")
+    DeviceOnOld.append("9999")
 
 global numberOfDevices
 
@@ -56,6 +60,8 @@ def cleardef(nummer):
     client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/Watt", "0", qos=0, retain=True)
     client.loop(timeout=2.0)
     client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/RunningTimeToday", "0", qos=0, retain=True)
+    client.loop(timeout=2.0)
+    client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/OnCount", "0", qos=0, retain=True)
     client.loop(timeout=2.0)
     try:
         DeviceValues.update({str(nummer) + "runningtime" : '0'})
@@ -133,7 +139,7 @@ def getueb(nummer):
         return (uberschuss,1)
 # setze art der Ueberschussrechnung
 def setueb(nummer,ueberschussberechnung):
-#    (1 = mit Speicher, 2 = mit offset, 0 = manual eingeschaltet)
+#    (1 = mit Speicher, 2 = mit offset, 0 = manual eingeschaltet oder finishtime)
     f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'w')
     f.write(str(ueberschussberechnung))
     f.close()
@@ -371,6 +377,7 @@ def publishmqtt():
     global olduberschussoffset
     global totalwatt
     global totalwattot
+    global numberOfSupportedDevices
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key in DeviceValues:
@@ -384,12 +391,14 @@ def publishmqtt():
             nummer = str(list(filter(str.isdigit, key))[0])
             if ( DeviceValues[str(key)] != DeviceTempValues['oldtime' + str(nummer)]):
                 client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/RunningTimeToday", payload=DeviceValues[str(key)], qos=0, retain=True)
+                client.loop(timeout=2.0)
                 DeviceTempValues.update({'oldtime'+str(nummer) : DeviceValues[str(key)]})
         if ( "temp" in key):
             nummer = str(list(filter(str.isdigit, key))[0])
             if ( DeviceValues[str(key)] != DeviceTempValues['oldtemp' + str(nummer)]):
                 sensor = str(list(filter(str.isdigit, key))[1])
                 client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/TemperatureSensor"+str(sensor), payload=DeviceValues[str(key)], qos=0, retain=True)
+                client.loop(timeout=2.0)
                 DeviceTempValues.update({'oldtemp'+str(nummer) : DeviceValues[str(key)]})
         if ( "watt" in key):
             nummer = int(list(filter(str.isdigit, key))[0])
@@ -403,10 +412,12 @@ def publishmqtt():
                 client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/Wh", payload=DeviceValues[str(key)], qos=0, retain=True)
                 client.loop(timeout=2.0)
                 DeviceTempValues.update({'oldwh'+str(nummer) : DeviceValues[str(key)]})
-        if ( "wpos" in key):
+        if ( "wpos" in key): 
             nummer = int(list(filter(str.isdigit, key))[0])
-            client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/WHImported_temp", payload=DeviceValues[str(key)], qos=0, retain=True)
-            client.loop(timeout=2.0)
+            if ( DeviceValues[str(key)] != DeviceTempValues['oldWHI' + str(nummer)]):
+                client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/WHImported_temp", payload=DeviceValues[str(key)], qos=0, retain=True)
+                client.loop(timeout=2.0)
+                DeviceTempValues.update({'oldWHI'+str(nummer) : DeviceValues[str(key)]})
     if (oldmaxspeicher != maxspeicher):
         client.publish("openWB/SmartHome/Status/maxspeicherladung", payload=str(maxspeicher), qos=0, retain=True)
         client.loop(timeout=2.0)
@@ -427,6 +438,11 @@ def publishmqtt():
         client.publish("openWB/SmartHome/Status/uberschussoffset", payload=str(uberschussoffset), qos=0, retain=True)
         client.loop(timeout=2.0)
         olduberschussoffset = uberschussoffset
+    for i in range(1, (numberOfSupportedDevices+1)):
+        if (DeviceOn[i-1] != DeviceOnOld [i-1]):
+            client.publish("openWB/SmartHome/Devices/"+str(i)+"/OnCount", payload=str(DeviceOn[i-1]) , qos=0, retain=True)
+            client.loop(timeout=2.0)
+            DeviceOnOld [i-1] =  DeviceOn[i-1]
     client.disconnect()
 # Lese aus der Ramdisk Regelrelevante Werte ein
 def loadregelvars():
@@ -512,15 +528,26 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
 
 def on_message(client, userdata, msg):
-    global numberOfSupportedDevices
+    global numberOfSupportedDevices    
+    #logDebug(LOGLEVELERROR, "(" + str(msg.topic) + ") " +   str(msg.payload) )    
     if (( "openWB/SmartHome/Device" in msg.topic) and ("WHImported_temp" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceValues.update( {str(devicenumb)+"WHImported_tmp": int(msg.payload)})
+            importtemp = int(DeviceValues[str(devicenumb)+"WHImported_tmp"])
+            logDebug(LOGLEVELERROR,"(" + str(devicenumb) + ") WHImported_temp read from mqtt " + str(importtemp))
     if (( "openWB/SmartHome/Device" in msg.topic) and ("RunningTimeToday" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceValues.update( {str(devicenumb)+"runningtime": int(msg.payload)})
+            runtime=DeviceValues[str(devicenumb)+"runningtime"]
+            if runtime != 0:
+                logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") runningtime read from mqtt: " +  str(runtime))
+    if (( "openWB/SmartHome/Device" in msg.topic) and ("OnCount" in msg.topic)):
+        devicenumb=re.sub(r'\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+            DeviceOn[int(devicenumb)-1] = str(int(msg.payload))
+            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") oncount read from mqtt " +  str(DeviceOn[int(devicenumb)-1]))
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
     global totalwatt
@@ -827,6 +854,10 @@ def conditions(nummer):
         deactivatewhileevcharging = int(config.get('smarthomedevices', 'device_deactivatewhileevcharging_'+str(nummer)))
     except:
         deactivatewhileevcharging = 0
+    try:
+        finishtime = str(config.get('smarthomedevices', 'device_finishtime_'+str(nummer)))
+    except:
+        finishtime = '00:00'
     file_charge= '/var/www/html/openWB/ramdisk/llkombiniert'
     testcharge = 0
     if os.path.isfile(file_charge):
@@ -844,6 +875,37 @@ def conditions(nummer):
     mineinschaltdauer = int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(nummer))) * 60
     maxeinschaltdauer = int(config.get('smarthomedevices', 'device_maxeinschaltdauer_'+str(nummer))) * 60
     name = str(config.get('smarthomedevices', 'device_name_'+str(nummer)))
+    #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime definiert " + str(finishtime) + ">" + str(DeviceOn[nummer-1]))
+    if (finishtime != '00:00') and (DeviceOn[nummer-1] ==str("0")):
+        local_time = datetime.now(timezone.utc).astimezone()
+        localhour = int(local_time.strftime(format = "%H"))
+        localminute = int(local_time.strftime(format = "%M"))
+        localinsec = int(( localhour * 60 * 60 )  + (localminute * 60))
+        finishhour = int(str("0") +str(finishtime).partition(':')[0])
+        finishminute = int(str(finishtime)[-2:] )
+        startspatsec = int(( finishhour * 60 * 60 )  + (finishminute * 60) - mineinschaltdauer)
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime definiert " + str(finishhour) + ":" +  str ('%.2d' % finishminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute) + " Anzahl Starts heute 0 Mineinschaltdauer (Sec) " + str (mineinschaltdauer))
+        if ((finishhour > localhour )  or  ((finishhour == localhour ) and (finishminute >=localminute) )) and (startspatsec <= localinsec):
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen finishtime, spaetester start in sec " + str(startspatsec) + " aktuelle sec " + str(localinsec))
+            turndevicerelais(nummer, 1,0)
+            setstat(nummer,30)
+            return
+    devstatus=getstat(nummer)
+    if devstatus == 30:
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime laueft, pruefe Mindestlaufzeit")
+        if str(nummer)+"eintime" in DeviceCounters:
+            timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
+            if ( mineinschaltdauer < timestart):
+                logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, finishtime erreicht")
+                setstat(nummer,10)
+                return
+            else:
+                logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " finishtime laueft, Mindesteinschaltdauer nicht erreicht, " + str(mineinschaltdauer) + " > " + str(timestart))
+                return
+        else:
+            logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, finishtime erreicht")
+            setstat(nummer,10)
+            return
     if ( maxeinschaltdauer > int(DeviceValues[str(nummer)+"runningtime"])):
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Maximale Einschaltdauer nicht erreicht")
     else:
@@ -1013,16 +1075,16 @@ client = mqtt.Client("openWB-mqttsmarthome")
 client.on_connect = on_connect
 client.on_message = on_message
 startTime = time.time()
-waitTime = 3
+waitTime = 5
 client.connect("localhost")
 while True:
     client.loop()
-    client.subscribe("openWB/SmartHome/#", 2)
+    #client.subscribe("openWB/SmartHome/#", 2)
     elapsedTime = time.time() - startTime
     if elapsedTime > waitTime:
         client.disconnect()
         break
-
+time.sleep(5)
 while True:
     config.read(shconfigfile)
     bootdone = checkbootdone()
