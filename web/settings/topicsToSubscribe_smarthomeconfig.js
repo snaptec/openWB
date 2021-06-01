@@ -18,6 +18,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_canSwitch", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_ip", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measureip", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_measureid", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_differentMeasurement", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_name", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_type", 0],
