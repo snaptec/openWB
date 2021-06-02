@@ -44,7 +44,8 @@ glParams = {
         'isChargingFile': '',
         'isPluggedFile': '',
         'chargedFile': '',
-        'unplugFile': ''
+        'unplugFile': '',
+        'auxDataFile': ''
     },
     'args' : {
         'chargePoint': '',
@@ -129,6 +130,7 @@ def renderFileNames(ramDiskDir):
         glParams['files']['lastMeterFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_lastmeter"
         glParams['files']['chargedFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_charged"
         glParams['files']['unplugFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_unplug"
+        glParams['files']['auxDataFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_auxdata"
         
         if glParams['args']['chargePoint'] == '1':
             glParams['files']['currentSocFile'] = ramDiskDir + "/soc"
@@ -499,7 +501,10 @@ def getStatusCached(vehicleId):
     statusDict = {
         'time': 0,
         'socev': 0,
-        'soc12v':0
+        'soc12v': 0,
+        'vehicleLocation': '',
+        'vehicleStatus': '',
+        'odometer': ''
     }
     
     url = glParams['baseUrl'] + '/api/v2/spa/vehicles/' + vehicleId + '/status/latest'
@@ -519,6 +524,9 @@ def getStatusCached(vehicleId):
         statusDict['time'] = timeToStamp(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['evStatus']['batteryStatus'])
         statusDict['soc12v'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['battery']['batSoc'])
+        statusDict['vehicleLocation'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleLocation']
+        statusDict['vehicleStatus'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']
+        statusDict['odometer'] = responseDict['resMsg']['vehicleStatusInfo']['odometer']
     except:
         logDebug(1, "Receiving cached status failed, invalid response")
         logDebug(2, response)
@@ -557,7 +565,8 @@ def getStatusFull(vehicleId):
     statusDict = {
         'time': 0,
         'socev': 0,
-        'soc12v':0
+        'soc12v': 0,
+        'vehicleStatus': ''
     }
     
     url = glParams['baseUrl'] + '/api/v2/spa/vehicles/' + vehicleId + '/status'
@@ -578,6 +587,7 @@ def getStatusFull(vehicleId):
         statusDict['time'] = timeToStamp(responseDict['resMsg']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['evStatus']['batteryStatus'])
         statusDict['soc12v'] = int(responseDict['resMsg']['battery']['batSoc'])
+        statusDict['vehicleStatus'] = responseDict['resMsg']
     except:
         logDebug(1, "Receiving current status failed, invalid response")
         logDebug(2, response)
@@ -660,6 +670,12 @@ def requestNewControlToken(pin):
 def DownloadSoC(email, password, pin, vin):
     logDebug(0, "SoC download starting")
       
+    auxData = {
+        'vehicleLocation': '',
+        'vehicleStatus': '',
+        'odometer': ''
+    }
+    
     try:
         now = int(time.time())       
         setGlobalData(vin)
@@ -679,7 +695,14 @@ def DownloadSoC(email, password, pin, vin):
         status = getStatusCached(vehicleId)
     except:
         logDebug(0, "Collecting data from server failed")
-        raise 
+        raise
+
+    try:
+        auxData['vehicleLocation'] = status['vehicleLocation']
+        auxData['vehicleStatus'] = status['vehicleStatus']
+        auxData['odometer'] = status['odometer']
+    except:
+        pass
 
     if (now - status['time']) < (glParams['cacheValid']) and status['socev'] > 0:
         logDebug(2, "Cached data is current")
@@ -694,6 +717,11 @@ def DownloadSoC(email, password, pin, vin):
         except:
             logDebug(0, "Collecting data from vehicle failed")
             raise
+        
+        try:
+            auxData['vehicleStatus'] = status['vehicleStatus']
+        except:
+            pass
     
     if status['soc12v'] >= 80:
         logDebug(2, "Received SoC (12 V-battery): " + str(status['soc12v']) + "%")
@@ -705,6 +733,13 @@ def DownloadSoC(email, password, pin, vin):
     soc = status['socev']
     logDebug(0, "Received SoC (HV-battery): " + str(soc) + "%")
     
+    try:
+        f = open(glParams['files']['auxDataFile'], 'w')
+        f.write(json.dumps(auxData))
+        f.close()
+    except:
+        pass
+        
     logDebug(1, "SoC download ending")
     
     return soc
