@@ -45,6 +45,7 @@ glParams = {
         'isPluggedFile': '',
         'chargedFile': '',
         'unplugFile': '',
+        'lastStampUpdateFile': '',
         'auxDataFile': ''
     },
     'args' : {
@@ -93,7 +94,12 @@ def loadArguments(argsFile):
         'accountPassword': '',
         'accountPin': '',
         'vehicleVin': '',
-        'ramDiskDir': ''
+        'timerInterval': '',
+        'manualCalc': '',
+        'batterySize': '',
+        'efficiency': '',
+        'ramDiskDir': '',
+        'moduleDir': ''
     }
     
     try:
@@ -114,6 +120,7 @@ def loadArguments(argsFile):
         retDict['accountPin'] = str(argsDict['accountPin'])
         retDict['vehicleVin'] = str(argsDict['vehicleVin'])
         retDict['ramDiskDir'] = str(argsDict['ramDiskDir'])
+        retDict['moduleDir'] = str(argsDict['moduleDir'])
     except:
         raise
         
@@ -131,6 +138,8 @@ def renderFileNames(ramDiskDir):
         glParams['files']['chargedFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_charged"
         glParams['files']['unplugFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_unplug"
         glParams['files']['auxDataFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_auxdata"
+        
+        glParams['files']['lastStampUpdateFile'] = ramDiskDir + "/soc_kia_laststampupdate"
         
         if glParams['args']['chargePoint'] == '1':
             glParams['files']['currentSocFile'] = ramDiskDir + "/soc"
@@ -152,7 +161,39 @@ def renderFileNames(ramDiskDir):
     return
 
 #---------------Access to stamps-----------------------------------------  
+def updateStamps(moduleDir):
+    try:
+        f = open(glParams['files']['lastStampUpdateFile'], 'r')
+        lastDownload = int(f.read())
+        f.close()
+    except:
+        lastDownload = 0
+        pass
+        
+    now = int(time.time())
+        
+    if lastDownload < (now - (3 * 24 * 60 * 60)):
+        logDebug(1, "Stamps expired - updating")
+        
+        url = 'https://gitcdn.link/repo/neoPix/bluelinky-stamps/master/hyundai.json'
+        r = requests.get(url, allow_redirects=True)
+        open( moduleDir + '/stamps_hyundai.py', 'w').write('stamps = ' + r.text)
+    
+        url = 'https://gitcdn.link/repo/neoPix/bluelinky-stamps/master/kia.json'
+        r = requests.get(url, allow_redirects=True)
+        open( moduleDir + '/stamps_kia.py', 'w').write('stamps = ' + r.text)
+        
+    try:
+        f = open(glParams['files']['lastStampUpdateFile'], 'w')
+        f.write(str(now))
+        f.close()
+    except:
+        raise
+        
+    return 
+
 def getStamp():
+    
     if glParams['brand'] == 'kia':
         stamp = stamps_kia.stamps[random.randint(0,len(stamps_kia.stamps)-1)]
     if glParams['brand'] == 'hyundai':
@@ -1118,6 +1159,11 @@ def main():
     logDebug(1, "-------------------------------")    
     logDebug(1, "Kia/Hyundai SoC Module starting")
 
+    try:
+        updateStamps(args['moduleDir'])
+    except:
+        pass
+                
     try:
         saveUnplugState()
         saveChargedState()
