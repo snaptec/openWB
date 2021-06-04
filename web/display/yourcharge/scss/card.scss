@@ -1,0 +1,90 @@
+@import "vars.scss";
+
+.card {
+    background-color: $dark-blue;
+    font-size: 1.5rem;
+    line-height: 1.7rem;
+    border: 0px !important;
+    min-height: 4rem;
+    margin-bottom: 3px;
+    border-right: 3px solid #000;
+}
+.card-body {
+    background-color: $dark-blue;
+    color: #ffffff;
+    padding: 1rem 1rem;
+    &.justify-content-between {
+        align-items: center;
+    }
+    .space {
+        margin-bottom: 8px;
+    }
+    span {
+        // background-color: $primary;
+        display: inline-table;
+        line-height: 1.5rem;
+    }
+    .icon {
+        height: 86px;
+        width: 160px;
+        max-width: 280px;
+        margin-bottom: 10px;
+        fill: #fff;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+        svg {
+            max-height: 120px;
+            height: 120px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        // transform: rotate(-20deg);
+        &.inactive {
+            fill: $dark-grey;
+        }
+        &.plugged {
+            fill: $light-grey;
+        }
+        &.active {
+            fill: $primary;
+        }
+    }
+    .sparkline {
+        min-height: 100px;
+    }
+}
+.card-header.bg-secondary {
+    .btn-outline-info {
+        &:not(.active) {
+            &:not(:hover) {
+                background-color: $dark-blue;
+            }
+        }
+    }
+}
+.card-header.bg-success {
+    .btn-outline-info {
+        &:not(.active) {
+            &:not(:hover) {
+                background-color: $dark-blue;
+            }
+        }
+        &:hover {
+            border-color: $dark-blue;
+        }
+    }
+    .btn-outline-info.focus {
+        // box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+    }
+    .btn-outline-info.active {
+        // border-color: #212529;
+    }
+}
+
+.flex-row {
+    display: flex;
+}

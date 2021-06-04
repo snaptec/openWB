@@ -1,0 +1,53 @@
+@keyframes alertPulsation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes alertPulsation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes alertPulsation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes alertPulsation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.animate-alertPulsation {
+    -webkit-animation: alertPulsation 1s infinite;
+    -moz-animation: alertPulsation 1s infinite;
+    -o-animation: alertPulsation 1s infinite;
+    animation: alertPulsation 1s infinite;
+}

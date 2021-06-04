@@ -1,0 +1,61 @@
+@import "vars.scss";
+
+.sidenav {
+    height: calc(100% - 70px);
+    width: $width;
+    display: flex;
+    position: fixed;
+    z-index: 1;
+    top: 73px;
+    left: 0;
+    background-color: $dark-blue;
+    overflow-x: hidden;
+    flex-direction: column;
+    padding-top: 0;
+    border-right: 3px solid #000;
+    .btn {
+        padding-top: 1.6rem;
+        padding-bottom: 1.6rem;
+        // margin-left: 10px;
+        // margin-right: 10px;
+        text-decoration: none;
+        font-size: 1.3rem;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 0;
+        border-bottom: 3px solid #000;
+        border-radius: 0;
+        text-transform: uppercase;
+        font-weight: 300;
+        outline: none;
+
+        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+        &:hover {
+            background-color: inherit;
+            color: #fff;
+
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+        }
+        &:focus {
+            box-shadow: none;
+            outline: none;
+
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+        }
+        &.active {
+            background-color: #000;
+            color: $primary;
+            outline: none;
+
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+        }
+    }
+    #displaylock {
+        margin-top: auto;
+        border: 0;
+        border-top: 3px solid #000;
+    }
+}
