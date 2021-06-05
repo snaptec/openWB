@@ -52,10 +52,16 @@ rfid() {
 		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] || [ "$lasttag" == "$rfidlp1start4" ] || [ "$lasttag" == "$rfidlp1start5" ]; then
 			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"
 			lp1enabled=1
+			tagScanInfo="$NowItIs,$lasttag,1"
+			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp1"
+			mosquitto_pub -r -q 2 -t "openWB/lp/1/tagScanInfo" -m "$tagScanInfo"
 		fi
 		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] || [ "$lasttag" == "$rfidlp2start4" ] || [ "$lasttag" == "$rfidlp2start5" ]; then
 			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "1"
 			lp2enabled=1
+			tagScanInfo="$NowItIs,$lasttag,1"
+			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp2"
+			mosquitto_pub -r -q 2 -t "openWB/lp/2/tagScanInfo" -m "$tagScanInfo"
 		fi
 
 		# check all CPs that we support for whether the tag is valid for that CP
