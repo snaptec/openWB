@@ -166,6 +166,13 @@ function setChargingCurrenttwcmanager () {
 	fi
 }
 
+function setChargingCurrenttwcngardiner () {
+	if [[ $evsecon == "twcngardiner" ]]; then
+		curl -s --connect-timeout 3 "http://$twcngardinerlp1ip:$twcngardinerlp1port/api/chargeNow" > /dev/null
+	fi
+}
+
+
 function setChargingCurrenthttp () {
 	if [[ $evsecon == "httpevse" ]]; then
 		curl -s --connect-timeout 3 "http://$httpevseip/setcurrent?current=$current" > /dev/null
@@ -317,6 +324,9 @@ function setChargingCurrent () {
 	if [[ $evsecon == "twcmanager" ]]; then
 		setChargingCurrenttwcmanager $current $twcmanagerlp1ip
 	fi
+	if [[ $evsecon == "twcngardiner" ]]; then
+		setChargingCurrenttwcngardiner $current $twcmanagerlp1ip
+	fi
 	if [[ $evsecon == "ipevse" ]]; then
 		setChargingCurrentIpModbus $current $evseip $ipevseid
 	fi
@@ -467,6 +477,9 @@ if [[ $lastmanagement == "1" ]]; then
 		ipevseid=$evseidlp2
 		chargep1ip=$chargep2ip
 		chargep1cp=$chargep2cp
+		twcmanagerlp1ip=$twcmanagerlp2ip
+		twcngardiner1ip=$twcngardinerlp2ip
+		twcngardiner1port=$twcngardiner2port
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then
 			oldcurrent=$current

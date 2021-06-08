@@ -89,6 +89,7 @@
 										<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 										<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi / smartWB</option>
 										<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
+										<option <?php if($evseconold == "twcngardiner") echo "selected" ?> value="twcngardiner">Tesla TWC mit TWCManager (HTTP Control / NGardiner Fork)</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
@@ -332,6 +333,27 @@
 									<div class="col">
 										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>">
 										<span class="form-text small">Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA).</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="evsecontwcngardiner" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="twcngardinerlp1">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="twcngardinerlp1ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcngardinerlp1ip" id="twcngardinerlp1ip" value="<?php echo $twcngardinerlp1ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="twcngardinerlp1port" class="col-md-4 col-form-label">Port</label>
+									<div class="col">
+										<input class="form-control" type="number" min="80" max="10000" step="1" name="twcngardinerlp1port" id="twcngardinerlp1port" value="<?php echo $twcngardinerlp1portold ?>">
+										<span class="form-text small">Port des HTTP Control Interface.</span>
 									</div>
 								</div>
 							</div>
@@ -1980,6 +2002,7 @@
 							hideSection('#openwb12v2mid');
 							hideSection('#evseconhttp');
 							hideSection('#evsecontwcmanager');
+							hideSection('#evsecontwcngardiner');
 							hideSection('#evseconipevse');
 							hideSection('#openwbbuchse');
 							hideSection('#openwbdaemon');
@@ -2052,6 +2075,9 @@
 							}
 							if($('#evsecon').val() == 'twcmanager') {
 								showSection('#evsecontwcmanager');
+							}
+							if($('#evsecon').val() == 'twcngardiner') {
+								showSection('#evsecontwcngardiner');
 							}
 							if($('#evsecon').val() == 'ipevse') {
 								showSection('#evseconipevse');
@@ -2314,6 +2340,8 @@
 										<option <?php if($evsecons1old == "keba") echo "selected" ?> value="keba">Keba</option>
 										<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 										<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+										<option <?php if($evsecons1old == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
+										<option <?php if($evsecons1old == "twcngardiner") echo "selected" ?> value="twcngardiner">Tesla TWC mit TWCManager (HTTP Control / NGardiner Fork)</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
@@ -2505,6 +2533,48 @@
 								Per MQTT zu schreiben:<br>
 								<span class="text-info">openWB/set/lp/2/plugStat</span> Status, ob ein Fahrzeug angesteckt ist, nur 0 (nein) oder 1 (ja)<br>
 								<span class="text-info">openWB/set/lp/2/chargeStat</span> Status, ob gerade geladen wird, nur 0 (nein) oder 1 (ja)
+							</div>
+						</div>
+						<div id="evsecontwcmanagers1" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp2">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="twcmanagerlp2ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp2ip" id="twcmanagerlp2ip" value="<?php echo $twcmanagerlp2ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="twcmanagerlp2phasen" class="col-md-4 col-form-label">Anzahl Phasen</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp2phasen" id="twcmanagerlp2phasen" value="<?php echo $twcmanagerlp2phasenold ?>">
+										<span class="form-text small">Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA).</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="evsecontwcngardiners1" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="twcngardinerlp2">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="twcngardinerlp2ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcngardinerlp2ip" id="twcngardinerlp2ip" value="<?php echo $twcngardinerlp2ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="twcngardinerlp2port" class="col-md-4 col-form-label">Port</label>
+									<div class="col">
+										<input class="form-control" type="number" min="80" max="10000" step="1" name="twcngardinerlp2port" id="twcngardinerlp2port" value="<?php echo $twcngardinerlp2portold ?>">
+										<span class="form-text small">Port des HTTP Control Interface.</span>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div id="evsecoslaveeth" class="hide">
@@ -3825,6 +3895,8 @@
 							hideSection('#evsecondaemonlp2');
 							hideSection('#evseconipevselp2');
 							hideSection('#evseconmqtts1');
+							hideSection('#evsecontwcmanagers1');
+							hideSection('#evsecontwcngardiners1');
 
 							if($('#evsecons1').val() == 'modbusevse') {
 								switch( $("#evsecons1 option:selected").attr('data-id') ){
@@ -3834,7 +3906,7 @@
 									case "openwb series1/2 duo v2":
 										showSection('#openwb12s1v2');
 									break;
-									default:
+						       			default:
 										showSection('#evseconmbs1');
 										showSection('#llmodullp2');
 										display_llmp2();
@@ -3875,6 +3947,12 @@
 							}
 							if($('#evsecons1').val() == 'nrgkick') {
 								showSection('#evseconnrgkicks1');
+							}
+							if($('#evsecons1').val() == 'twcmanager') {
+								showSection('#evsecontwcmanagers1');
+							}
+							if($('#evsecons1').val() == 'twcngardiner') {
+								showSection('#evsecontwcngardiners1');
 							}
 						}
 
