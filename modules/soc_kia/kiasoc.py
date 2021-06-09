@@ -71,7 +71,7 @@ def setGlobalData(vin):
         glParams['host'] = 'prd.eu-ccapi.kia.com:8080'
         glParams['baseUrl'] = 'https://' + glParams['host']
         glParams['clientId'] = 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a'
-        glParams['appId'] = '693a33fa-c117-43f2-ae3b-61a02d24f417'
+        glParams['appId'] = 'e7bcd186-a5fd-410d-92cb-6876a42288bd'
         glParams['basicToken'] = 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA=='
     if glParams['brand'] == 'hyundai':
         glParams['host'] = 'prd.eu-ccapi.hyundai.com:8080'
