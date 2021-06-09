@@ -313,6 +313,36 @@ def on_message(client, userdata, msg):
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 9000 ):
                     writetoconfig(shconfigfile,'smarthomedevices','device_acthorpower_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_acthorpower", msg.payload.decode("utf-8"), qos=0, retain=True)
+
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_finishTime" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and re.search(r'^([01]{0,1}\d|2[0-3]):[0-5]\d$', msg.payload.decode("utf-8") ) ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_finishtime_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_finishTime", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_startupDetection" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 1 ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_startupdetection_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_startupDetection", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_standbyPower" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 1000 ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_standbypower_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_standbyPower", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_standbyDuration" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 86400 ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_standbyduration_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_standbyDuration", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))
+
             if (msg.topic == "openWB/config/set/SmartHome/maxBatteryPower"):
                 if (0 <= int(msg.payload) <= 10000):
                     f = open('/var/www/html/openWB/ramdisk/smarthomehandlermaxbatterypower', 'w')
@@ -613,6 +643,16 @@ def on_message(client, userdata, msg):
                     sendhook = ["/var/www/html/openWB/runs/hookcontrol.sh", hookmsg]
                     subprocess.run(sendhook)
                     client.publish("openWB/hook/"+hooknmb+"/BoolHookStatus", hookact, qos=0, retain=True)
+            if (msg.topic == "openWB/config/set/display/displaysleep"):
+                if (int(msg.payload) >= 10 and int(msg.payload) <= 1800):
+                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "displaysleep=", msg.payload.decode("utf-8")]
+                    subprocess.run(sendcommand)
+                    client.publish("openWB/config/get/display/displaysleep", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (msg.topic == "openWB/config/set/display/displaypincode"):
+                if (int(msg.payload) >= 1000 and int(msg.payload) <= 99999999):
+                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "displaypincode=", msg.payload.decode("utf-8")]
+                    subprocess.run(sendcommand)
+                    # ! intentionally not publishing PIN code via MQTT !
             if (msg.topic == "openWB/config/set/slave/MinimumAdjustmentInterval"):
                 if (int(msg.payload) >= 10 and int(msg.payload) <= 300):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeMinimumAdjustmentInterval=", msg.payload.decode("utf-8")]

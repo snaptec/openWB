@@ -52,10 +52,16 @@ rfid() {
 		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] || [ "$lasttag" == "$rfidlp1start4" ] || [ "$lasttag" == "$rfidlp1start5" ]; then
 			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"
 			lp1enabled=1
+			tagScanInfo="$NowItIs,$lasttag,1"
+			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp1"
+			mosquitto_pub -r -q 2 -t "openWB/lp/1/tagScanInfo" -m "$tagScanInfo"
 		fi
 		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] || [ "$lasttag" == "$rfidlp2start4" ] || [ "$lasttag" == "$rfidlp2start5" ]; then
 			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "1"
 			lp2enabled=1
+			tagScanInfo="$NowItIs,$lasttag,1"
+			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp2"
+			mosquitto_pub -r -q 2 -t "openWB/lp/2/tagScanInfo" -m "$tagScanInfo"
 		fi
 
 		# check all CPs that we support for whether the tag is valid for that CP
@@ -273,11 +279,19 @@ checkTagValidForSocket() {
 
 			echo "$NowItIs: Detected RFID scan of '$lasttag' @ meter value $llkwh as socket control request"
 
+			local tagScanInfo="$NowItIs,$lasttag,2"
+			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp1"
+			mosquitto_pub -r -q 2 -t "openWB/lp/1/tagScanInfo" -m "$tagScanInfo"
+
 			return 0
 		fi
 	done
 
 	echo "$NowItIs: RFID tag '${lasttag}' is not authorized to control socket"
+
+	local tagScanInfo="$NowItIs,$lasttag,0"
+	echo "$tagScanInfo" > "ramdisk/tagScanInfoLp1"
+	mosquitto_pub -r -q 2 -t "openWB/lp/1/tagScanInfo" -m "$tagScanInfo"
 
 	return 1
 }
@@ -318,8 +332,11 @@ checkTagValidAndSetStartScanData() {
 
 			# and the ramdisk file for legacy ladelog
 			echo $lasttag > "ramdisk/rfidlp${chargePoint}"
-
+			local tagScanInfo="$NowItIs,$lasttag,1"
+			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp${chargePoint}"
+			mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/tagScanInfo" -m "$tagScanInfo"
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
+
 			eval lp${chargePoint}enabled=1
 			openwbDebugLog "MAIN" 0 "Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for CP #${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh (justPlugged == ${pluggedLps[$chargePoint]})"
 
@@ -331,6 +348,10 @@ checkTagValidAndSetStartScanData() {
 	done
 
 	openwbDebugLog "MAIN" 0 "RFID tag '${lasttag}' is not authorized to enable this CP"
+
+	local tagScanInfo="$NowItIs,$lasttag,0"
+	echo "$tagScanInfo" > "ramdisk/tagScanInfoLp${chargePoint}"
+	mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/tagScanInfo" -m "$tagScanInfo"
 
 	return 1
 }
