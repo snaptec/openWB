@@ -296,8 +296,11 @@
 
 						<div id="divspeicheralphaess" class="hide">
 							<div class="alert alert-info">
-								Keine Konfiguration erforderlich.
-							</div>
+										<select name="alphav123" id="alphav123" class="form-control">
+											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
+											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
+										</select>
+								</div>
 						</div>
 
 						<div id="divspeicherpw" class="hide">
