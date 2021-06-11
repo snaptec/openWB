@@ -176,7 +176,8 @@ $numDevices = 9;
 										<div class="col">
 											<input id="device_leistungurlDevices<?php echo $devicenum; ?>" name="device_leistungurl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<span class="form-text small">
-												Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.<br>
+												Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten. Falls keine URL vorhanden ist, kann die folgende URL angebenen werden:<br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurl.php. Diese URL gibt immer den Wert 0 zurück. <br>
 												In der URL kann ein Parameter angegeben werden, der den aktuellen Überschuss an das Gerät übermittelt. Hierzu ist folgender Platzhalter in der URL zu verwenden (inklusive der spitzen Klammern):<br>
 												<span class="text-info">&lt;openwb-ueberschuss&gt;</span>
 											</span>
@@ -254,21 +255,21 @@ $numDevices = 9;
 											<label for="device_mineinschaltdauerDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Mindesteinschaltdauer</label>
 											<div class="col">
 												<input id="device_mineinschaltdauerDevices<?php echo $devicenum; ?>" name="device_mineinschaltdauer" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Parameter in Minuten wie lange das Gerät nach Einschalten mindestens aktiviert bleibt.</span>
+												<span class="form-text small">Parameter in Minuten, wie lange das Gerät nach Einschalten mindestens aktiviert bleibt.</span>
 											</div>
 										</div>
 										<div class="form-row mb-1">
 											<label for="device_maxeinschaltdauerDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Maximaleinschaltdauer</label>
 											<div class="col">
 												<input id="device_maxeinschaltdauerDevices<?php echo $devicenum; ?>" name="device_maxeinschaltdauer" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1500" data-default="1440" value="1440" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Parameter in Minuten wie lange das Gerät pro Tag maximal aktiviert sein darf. Der Zähler wird nächtlich zurückgesetzt. 1440 Minuten sind 24 Stunden.</span>
+												<span class="form-text small">Parameter in Minuten, wie lange das Gerät pro Tag maximal aktiviert sein darf. Der Zähler wird nächtlich zurückgesetzt. 1440 Minuten sind 24 Stunden.</span>
 											</div>
 										</div>
 										<div class="form-row mb-1">
 											<label for="device_finishTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Spätestens fertig um</label>
 											<div class="col">
 												<input id="device_finishTimeDevices<?php echo $devicenum; ?>" name="device_finishTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Uhrzeit im 24 Stunden-Format. Z.B. "14:45" Der Wert "00:00" schaltet die Funktion ab.</span>
+												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab.</span>
 												<span class="form-text small text-danger">Das Feature befindet sich noch in der Entwicklung!</span>
 											</div>
 										</div>
@@ -288,7 +289,7 @@ $numDevices = 9;
 														</label>
 													</div>
 													<span class="form-text small">
-														Durch diese Option wird das angeschlossene Gerät täglich um 0:01 Uhr eingeschaltet. Wenn erkannt wird, dass das Gerät aktiviert wird (Leistungsaufnahme ist länger als "Zeit im Standby" größer als eingetragener "Verbrauch im Standby"), wird das Gerät direkt ausgeschaltet, falls die einschaltschwelle nicht erreicht ist. Sobald die einschaltschwelle erreicht wird, wird das Gerät erneut aktiviert.<br>
+														Durch diese Option wird das angeschlossene Gerät täglich um 0:01 Uhr eingeschaltet. Wenn erkannt wird, dass das Gerät aktiviert wird (Leistungsaufnahme ist länger als "Zeit im Standby" größer als eingetragener "Verbrauch im Standby"), wird das Gerät direkt ausgeschaltet, falls die Einschaltschwelle nicht erreicht ist. Sobald die Einschaltschwelle erreicht wird, wird das Gerät erneut aktiviert.<br>
 														Somit kann z. B. eine Waschmaschine am Morgen im Standby befüllt und eingeschaltet werden. Sie läuft aber erst richtig an, wenn genügend Überschuss vorhanden ist.
 													</span>
 													<span class="form-text small text-danger">Das Feature befindet sich noch in der Entwicklung!</span>
@@ -354,7 +355,7 @@ $numDevices = 9;
 											<label for="device_einschaltverzoegerungDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Einschaltverzögerung</label>
 											<div class="col">
 												<input id="device_einschaltverzoegerungDevices<?php echo $devicenum; ?>" name="device_einschaltverzoegerung" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Parameter in Minuten der bestimmt wie lange die Einschaltschwelle <b>am Stück</b> überschritten werden muss bevor das Gerät eingeschaltet wird.</span>
+												<span class="form-text small">Parameter in Minuten, der bestimmt, wie lange die Einschaltschwelle <b>am Stück</b> überschritten werden muss, bevor das Gerät eingeschaltet wird.</span>
 											</div>
 										</div>
 										<div class="form-row mb-1">
@@ -380,7 +381,7 @@ $numDevices = 9;
 											<label for="device_ausschaltverzoegerungDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Ausschaltverzögerung</label>
 											<div class="col">
 												<input id="device_ausschaltverzoegerungDevices<?php echo $devicenum; ?>" name="device_ausschaltverzoegerung" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Parameter in Minuten der bestimmt wie lange die Ausschaltschwelle <b>am Stück</b> überschritten werden muss bevor das Gerät ausgeschaltet wird.</span>
+												<span class="form-text small">Parameter in Minuten, der bestimmt, wie lange die Ausschaltschwelle <b>am Stück</b> überschritten werden muss, bevor das Gerät ausgeschaltet wird.</span>
 											</div>
 										</div>
 									</div>
@@ -396,7 +397,7 @@ $numDevices = 9;
 															<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 														</div>
 													</div>
-													<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktiverter Funktion oder wenn der Ladezustand grösser gleich Parameter wird die Speicherleistung bei der Berechnung der Ein und Ausschaltschwelle berücksichtigt.<br>
+													<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktivierter Funktion oder wenn der Ladezustand grösser gleich dem Parameter ist, wird die Speicherleistung bei der Berechnung der Ein- und Ausschaltschwelle berücksichtigt.<br>
 													Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle nur die aktuelle Leisung am EVU Punkt und die maximal mögliche Speicherladung (als Offset) relevant.</span>
 												</div>
 											</div>
