@@ -1,27 +1,32 @@
 #!/bin/bash
 re='^[-+]?[0-9]+\.?[0-9]*$'
-amps=$(curl --connect-timeout 3 -s "http://$twcmanagerlp1ip/index.php" |grep Charging | sed 's/^.*\(Charging at.*A\).*$/\1/' | cut -c 13- | tr -d A)
+
+if [ $twcmanagerlp1httpcontrol -eq 1 ]; then
+	twcmanagerlp1phasen=$(curl --connect-timeout 3 -s "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/getConfig" | jq .config.numberOfPhases)
+	status=$(curl --connect-timeout 3 -s "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/getStatus")
+	amps=$(echo $status | jq .consumptionAmps | sed -e 's/^"//' -e 's/"$//')
+	watts=$(echo $status | jq .consumptionWatts | sed -e 's/^"//' -e 's/"$//')
+	watt=$(echo "scale=0;$watts / $twcmanagerlp1phasen" | bc | sed 's/\..*$//')
+else
+	amps=$(curl --connect-timeout 3 -s "http://$twcmanagerlp1ip/index.php" |grep Charging | sed 's/^.*\(Charging at.*A\).*$/\1/' | cut -c 13- | tr -d A)
+	watt=$(echo "scale=0;$amps * 230  * $twcmanagerlp1phasen" | bc | sed 's/\..*$//')
+fi
 
 if ! [[ $amps =~ $re ]] ; then
 	amps="0"
 fi
 if (( twcmanagerlp1phasen == 1 )); then
-	watt=$(echo "scale=0;$amps * 230 /1" | bc | sed 's/\..*$//')
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
 fi
 if (( twcmanagerlp1phasen == 2 )); then
-	watt=$(echo "scale=0;$amps * 230 * 2" | bc | sed 's/\..*$//')
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
 	echo $amps > /var/www/html/openWB/ramdisk/lla2
 fi
 if (( twcmanagerlp1phasen == 3 )); then
-	watt=$(echo "scale=0;$amps * 230 * 3" | bc | sed 's/\..*$//')
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
 	echo $amps > /var/www/html/openWB/ramdisk/lla2
 	echo $amps > /var/www/html/openWB/ramdisk/lla3
 
 fi
+
 echo $watt > /var/www/html/openWB/ramdisk/llaktuell
-
-
-
