@@ -232,7 +232,8 @@ if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 fi
 
 # check for mosquitto configuration
-if [ ! -f /etc/mosquitto/conf.d/openwb.conf ]; then
+if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || [ ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf ]; then
+	echo "updating mosquitto config file"
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
 	sudo service mosquitto restart
 fi

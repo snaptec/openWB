@@ -111,47 +111,14 @@ setTokenPassword(){
 
 checkToken(){
 	returnValue=0
-	case $password in
-		'')
-			# empty password tells us to remove a possible saved token
-			if [ -f $tokensfile ]; then
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Empty password set: removing tokensfile."
-				rm $tokensfile
-			fi
-			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Empty Password - nothing to do."
-			openwbModulePublishState "EVSOC" 0 "Keine Zugangsdaten eingetragen" $CHARGEPOINT
-			returnValue=1
-			;;
-		$TOKENPASSWORD)
-			# check if token is present
-			if [ ! -f $tokensfile ]; then
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Tokenpassword set but no token found: clearing password in config."
-				openwbModulePublishState "EVSOC" 0 "Keine Zugangsdaten eingetragen" $CHARGEPOINT
-				clearPassword
-				returnValue=2
-			fi
-			;;
-		*)
-			# new password entered
-			if [ -f $tokensfile ]; then
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: New password set: removing tokensfile."
-				rm $tokensfile
-			fi
-			# Request new token with user/pass.
-			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting new token..."
-			# response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
-			response=$(python3 $MODULEDIR/tesla.py --email="$username" --password="$password" --mfapasscode="$mfapasscode" --tokensfile="$tokensfile" --logprefix="Lp$CHARGEPOINT" 2>>$MYLOGFILE)
-			# password in response, so do not log it!
-			if [ -f $tokensfile ]; then
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ...all done, removing password from config file."
-				setTokenPassword
-			else
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ERROR: Auth with user/pass failed!"
-				openwbModulePublishState "EVSOC" 2 "Anmeldung fehlgeschlagen!" $CHARGEPOINT
-				returnValue=3
-			fi
-			;;
-	esac
+
+	# check if token is present
+	if [ ! -f $tokensfile ]; then
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: No token found."
+		openwbModulePublishState "EVSOC" 0 "Keine Zugangsdaten eingetragen" $CHARGEPOINT
+		returnValue=2
+	fi
+
 	return "$returnValue"
 }
 

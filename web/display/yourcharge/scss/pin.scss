@@ -1,0 +1,169 @@
+@import "vars.scss";
+
+.blur {
+    filter: blur(6px);
+    transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+}
+#lockModal,
+#changeLockModal,
+#changeDisplayTimeoutModal {
+    transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+    .modal-dialog {
+        min-width: 460px;
+    }
+    border: 0;
+    .close {
+        position: absolute;
+        padding: 1rem;
+        right: 2.2rem;
+        opacity: 1;
+        text-shadow: none;
+        font-size: 2rem;
+        z-index: 2;
+    }
+
+    .modal-content {
+        border: 0;
+        max-width: 300px;
+        background: rgb(59, 63, 114);
+        background: linear-gradient(138deg, rgba(59, 63, 114, 1) 10%, rgba(27, 28, 52, 1) 180%);
+        padding: 1.4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+        span {
+            font-size: 1.8rem;
+            display: block;
+            text-align: center;
+            color: $primary;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .modal-header {
+            border: 0;
+            .logo {
+                max-width: 265px;
+                margin-left: auto;
+                margin-right: auto;
+                // margin-bottom: 1rem;
+            }
+        }
+
+        input {
+            background: transparent;
+            color: $primary !important;
+            padding: 0 4px;
+
+            border: 0;
+            width: 205px;
+            margin-bottom: 1.4rem;
+            border-bottom: 2px solid $primary;
+            font-size: 2.8rem;
+        }
+        .successIcon {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+            .icon {
+                margin-top: -20px;
+            }
+            &.show {
+                display: flex !important;
+                transform: translate(-50%, -50%) scale(0.55);
+                transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+            }
+        }
+        #Lockcode,
+        #changeDisplayTimeout {
+            width: 240px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .PINbutton {
+            background: transparent;
+            color: $primary;
+            border: 1px solid $primary;
+            border-radius: 300px;
+            font-size: 3rem;
+            text-align: center;
+            width: calc(20rem / 3 - 6px);
+            height: calc(20rem / 3 - 6px);
+            margin: 3px;
+            padding: 0;
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+
+            &.text-danger {
+                border-color: red;
+            }
+            &#continue,
+            &#continueDisplayTimeout {
+                display: block;
+                height: auto;
+                width: auto;
+                padding: 1.5rem 7rem;
+                font-size: 2.4rem;
+                margin-top: 2.8rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            // box-shadow: #506ce8 0 0 1px 1px;
+            &:hover {
+                // box-shadow: #506ce8 0 0 1px 1px;
+            }
+            &:active {
+                background: $primary;
+                color: $light-blue;
+                transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+            }
+
+            &.success {
+                background: $primary;
+                color: $light-blue;
+                height: 360px;
+                width: 360px;
+                transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+                .icon {
+                    height: 200px;
+                    width: 200px;
+                    max-width: 200px;
+                    margin-bottom: -10px;
+                    svg {
+                        height: 200px;
+                        width: 200px;
+                        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+                    }
+                    transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+                }
+            }
+            &.enter {
+                text-align: center;
+                transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+                .icon {
+                    // display: flex;
+                    // justify-content: center;
+                    // align-items: center;
+                    margin-left: auto;
+                    margin-right: auto;
+                    height: 28px;
+                    width: 28px;
+                    margin-bottom: 10px;
+                    transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+                    svg {
+                        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+                    }
+                }
+            }
+        }
+    }
+}
+.modal-backdrop {
+    transition: all 0.1s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.1);
+}
