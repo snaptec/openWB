@@ -402,7 +402,12 @@ h3 {
 	--d9bgCol: blue;
 }
 
-.openwb-devices {
-	color: #ccffff;
-	background-color: #009696;
+.openwb-device-1 {
+	color: rgb(204 255 255);
+	background-color: rgb(0 150 150);
+}
+
+.openwb-device-2 {
+	color: rgb(255 255 204);
+	background-color: rgb(150 150 0);
 }
