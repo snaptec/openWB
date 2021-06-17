@@ -394,6 +394,7 @@ def update_pricedata(tibber_token, home_id, debug_level):
                     # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
                     # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
                     _write_log_entry('Versuche, weitere Preise von Tibber zu empfangen', 1)
+                    pricelist_received = []
                     try:
                         pricelist_received = _get_updated_pricelist()
                     except Exception as e:
