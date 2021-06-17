@@ -228,14 +228,14 @@ echo "mosquitto..."
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
 	sudo apt-get -qq install -y mosquitto mosquitto-clients
-	sudo service mosquitto restart
+	sudo service mosquitto start
 fi
 
 # check for mosquitto configuration
 if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || [ ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf ]; then
 	echo "updating mosquitto config file"
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
-	sudo service mosquitto restart
+	sudo service mosquitto reload
 fi
 
 # check for other dependencies

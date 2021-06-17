@@ -98,10 +98,12 @@ if [ ! -d /var/www/html/openWB/web ]; then
 else
 	echo "...ok"
 fi
+
 if ! grep -Fq "bootmodus=" /var/www/html/openWB/openwb.conf
 then
 	echo "bootmodus=3" >> /var/www/html/openWB/openwb.conf
 fi
+
 echo "check for ramdisk" 
 if grep -Fxq "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" /etc/fstab 
 then
@@ -127,18 +129,23 @@ else
 	echo "...added"
 fi
 
-#echo "check for MCP4725"
-####### Library is deprecated. the manual install doesn't work anymore pip3 install for compatibility reasons
-#if [ ! -d /home/pi/Adafruit_Python_MCP4725 ]; then
-	#apt-get install build-essential python-dev
-	#cd /home/pi
-	#git clone https://github.com/adafruit/Adafruit_Python_MCP4725.git
-	#cd Adafruit_Python_MCP4725
-	#python setup.py install
-	#echo "... installed"
-#else
-	#echo "...ok"
-#fi
+# check for mosquitto packages
+echo "check for mosquitto"
+if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
+	sudo apt-get update
+	sudo apt-get -qq install -y mosquitto mosquitto-clients
+	sudo service mosquitto start
+	echo "... installed"
+else
+	echo "...ok"
+fi
+
+# check for mosquitto configuration
+if [ ! -f /etc/mosquitto/conf.d/openwb.conf ]; then
+	echo "updating mosquitto config file"
+	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
+	sudo service mosquitto reload
+fi
 
 echo "check for socat"
 if ! [ -x "$(command -v socat)" ]; then
@@ -159,29 +166,29 @@ fi
 #prepare for Buster
 echo -n "fix upload limit..."
 if [ -d "/etc/php/7.0/" ]; then
-        echo "OS Stretch"
-        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+	echo "OS Stretch"
+	sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+	sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 elif [ -d "/etc/php/7.3/" ]; then
-        echo "OS Buster"
-        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
-        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+	echo "OS Buster"
+	sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+	sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
 fi
 
 echo "checking for pip..."
 if ! [ -x "$(command -v pip)" ]; then
-        sudo apt-get -qq install -y python-pip
-        echo "...OK"
+	sudo apt-get -qq install -y python-pip
+	echo "...OK"
 else
-        echo "pip is installed"
+	echo "pip is installed"
 fi
 
 echo "checking for pip3..."
 if ! [ -x "$(command -v pip3)" ]; then
-        sudo apt-get -qq install -y python3-pip
-        echo "...OK"
+	sudo apt-get -qq install -y python3-pip
+	echo "...OK"
 else
-        echo "pip3 is installed"
+	echo "pip3 is installed"
 fi
 
 echo "installing pymodbus"
@@ -189,22 +196,17 @@ sudo pip install  -U pymodbus
 
 echo "check for paho-mqtt"
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
-        echo 'mqtt installed...'
+	echo 'mqtt installed...'
 else
-        sudo pip3 install paho-mqtt
+	sudo pip3 install paho-mqtt
 fi
 
 #Adafruit install
 echo "check for MCP4725"
-#if python3 -c "import Adafruit_MCP4725" &> /dev/null; then
-        #echo 'Adafruit_MCP4725 installed...'
-#else
-        #sudo pip3 install Adafruit_MCP4725
-#fi
 if python -c "import Adafruit_MCP4725" &> /dev/null; then
-        echo 'Adafruit_MCP4725 installed...'
+	echo 'Adafruit_MCP4725 installed...'
 else
-        sudo pip install Adafruit_MCP4725
+	sudo pip install Adafruit_MCP4725
 fi
 
 echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
