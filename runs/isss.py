@@ -11,7 +11,6 @@ import struct
 import binascii 
 import RPi.GPIO as GPIO
 from pymodbus.client.sync import ModbusSerialClient
-
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(37, GPIO.OUT)
@@ -19,6 +18,8 @@ GPIO.setup(13, GPIO.OUT)
 GPIO.setup(22, GPIO.OUT)
 GPIO.setup(29, GPIO.OUT)
 GPIO.setup(11, GPIO.OUT)
+GPIO.setup(15, GPIO.OUT)
+
 # GPIOs for socket
 GPIO.setup(23, GPIO.OUT)
 GPIO.setup(26, GPIO.OUT)
@@ -90,6 +91,8 @@ try:
         loglevel=int(value.read())
 except:
     loglevel = 1
+lp1evsehres=0
+lp2evsehres=0
 MaxEvseError = 5
 sdmid = 105
 sdm2id = 106
@@ -136,6 +139,8 @@ def getmeter():
     global llmeterconfiglp1
     global lp1countphasesinuse
     global lp2countphasesinuse
+    global lp1evsehres
+    global lp2evsehres
     if metercounter > 0:
         metercounter=metercounter -0.5
     if ( llmeterconfiglp1 == 0 ):
@@ -485,6 +490,7 @@ def getmeter():
         except Exception as e:
             parentWB=str("0")
             parentCPlp1=str("0")
+            parentCPlp2=str("0")
         # CLI args not used here
         # parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
         # parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
@@ -719,7 +725,6 @@ def getmeter():
         if ( parentWB != "0" ):
             remoteclient.disconnect()
     except Exception as e:
-        print(str(e))
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         metercounter=metercounter + 1
@@ -763,12 +768,16 @@ def loadregelvars():
     global actorstat
     global lp1solla
     global u1p3pstat
+    global u1p3plp2stat
     global u1p3ptmpstat
+    global u1p3plp2tmpstat
     global evsefailure
     global lp2installed
     global heartbeat
     global actcooldown
     global actcooldowntimestamp
+    global lp1evsehres
+    global lp2evsehres
     try:
         if GPIO.input(19) == False:
             actorstat=1
@@ -779,7 +788,10 @@ def loadregelvars():
         pass
     try:
         with open('ramdisk/llsoll', 'r') as value:
-            lp1solla = int(value.read())
+            if lp1evsehres == 0:
+                lp1solla = int(float(value.read()))
+            else:
+                lp1solla = int(float(value.read())*100)
     except:
         pass
         lp1solla = 0
@@ -825,8 +837,11 @@ def loadregelvars():
     if ( lp2installed == 2 ):
         try:
             with open('ramdisk/llsolls1', 'r') as value:
-                lp2solla = int(value.read())
-        except:
+                if lp2evsehres == 0:
+                    lp2solla = int(float(value.read()))
+                else:
+                    lp2solla = int(float(value.read())*100)
+        except Exception as e:
             pass
             lp2solla = 0
         logDebug("0", "LL lp2 Soll: " + str(lp2solla) )
@@ -843,36 +858,59 @@ def loadregelvars():
     except:
         u1p3pstat = 3
     if ( u1p3pstat != u1p3ptmpstat ):
-        logDebug("1", "Umschaltung erfolgt auf " + str(u1p3ptmpstat)+ " Phasen")
+        logDebug("1", "Umschaltung erfolgt auf " + str(u1p3ptmpstat)+ " Phasen an Lp1")
         writelp1evse(0)
-        if ( lp2installed == 2 ):
-            writelp2evse(0)
-
+        time.sleep(1)
         if ( u1p3ptmpstat == 1 ):
             GPIO.output(22, GPIO.HIGH)
             GPIO.output(29, GPIO.HIGH)
-            GPIO.output(11, GPIO.HIGH)
             time.sleep(2)
             GPIO.output(29, GPIO.LOW)
-            GPIO.output(11, GPIO.LOW)
             time.sleep(5)
             GPIO.output(22, GPIO.LOW)
             time.sleep(1)
         if ( u1p3ptmpstat == 3 ):
             GPIO.output(22, GPIO.HIGH)
             GPIO.output(37, GPIO.HIGH)
-            GPIO.output(13, GPIO.HIGH)
             time.sleep(2)
             GPIO.output(37, GPIO.LOW)
-            GPIO.output(13, GPIO.LOW)
             time.sleep(5)
             GPIO.output(22, GPIO.LOW)
             time.sleep(1)
         u1p3pstat = u1p3ptmpstat
         writelp1evse(lp1solla)
-        if ( lp2installed == 2):
-            writelp2evse(lp2solla)
-
+    try:
+        with open('ramdisk/u1p3plp2stat', 'r') as value:
+            u1p3plp2tmpstat = int(value.read())
+    except:
+        pass
+        u1p3plp2tmpstat = 3
+    try:
+        u1p3plp2stat
+    except:
+        u1p3plp2stat = 3
+    if ( u1p3plp2stat != u1p3plp2tmpstat ):
+        logDebug("1", "Umschaltung erfolgt auf " + str(u1p3plp2tmpstat)+ " Phasen an Lp2")
+        writelp2evse(0)
+        time.sleep(1)
+        if ( u1p3plp2tmpstat == 1 ):
+            GPIO.output(15, GPIO.HIGH)
+            GPIO.output(11, GPIO.HIGH)
+            time.sleep(2)
+            GPIO.output(11, GPIO.LOW)
+            time.sleep(5)
+            GPIO.output(15, GPIO.LOW)
+            time.sleep(1)
+        if ( u1p3plp2tmpstat == 3 ):
+            GPIO.output(15, GPIO.HIGH)
+            GPIO.output(13, GPIO.HIGH)
+            time.sleep(2)
+            GPIO.output(13, GPIO.LOW)
+            time.sleep(5)
+            GPIO.output(15, GPIO.LOW)
+            time.sleep(1)
+        u1p3plp2stat = u1p3plp2tmpstat
+        writelp2evse(lp2solla)
 
 def writelp2evse(lla):
     try:
@@ -881,9 +919,13 @@ def writelp2evse(lla):
     except:
         logDebug("2", "FAILEDWrite to EVSE lp2 " + str(lla))
 def writelp1evse(lla):
-    if (lla > pp):
-        lla=pp
-    lla=lla
+    if lp1evsehres == 1:
+        mpp=pp*100
+        if (lla > mpp):
+            lla=mpp
+    else:
+        if (lla > pp):
+            lla=pp
     try:
         client.write_registers(1000, lla, unit=1)
         logDebug("1", "Write to EVSE lp1 " + str(lla))
