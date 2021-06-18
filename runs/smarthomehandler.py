@@ -960,10 +960,10 @@ def conditions(nummer):
             if  str(nummer)+"anlaufz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"anlaufz"])
                 if ( standbyduration < timesince ):
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte ein " + str(standbypower))
-                    #wird beim naechsten check nun als aktiv und einegschalterkannt
+                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte aus " + str(standbypower))
                     setstat(nummer,10)
                     del DeviceCounters[str(nummer)+"anlaufz"]
+                    turndevicerelais(nummer, 0,0,1)
                     return
                 else:
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " standbycheck noch nicht erreicht " +  str(standbyduration)+ " > " + str(timesince))
