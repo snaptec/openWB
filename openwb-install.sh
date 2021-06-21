@@ -3,13 +3,10 @@
 echo "update system"
 apt-get update
 
-echo "check for vim"
-if ! [ -x "$(command -v vim)" ]; then
-	apt-get -qq install -y vim
-	echo "... installed"
-else
-	echo "...ok"
-fi
+echo "install required packages..."
+apt-get -q -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
+echo "...done"
+
 echo "check for timezone"
 if  grep -Fxq "Europe/Berlin" /etc/timezone
 then
@@ -19,46 +16,6 @@ else
 	dpkg-reconfigure -f noninteractive tzdata
 	cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 	echo "...changed"
-fi
-
-echo "check for bc"
-if ! [ -x "$(command -v bc)" ];then
-	apt-get -qq install bc
-	echo "...installed"
-else
-	echo "...ok"
-fi
-
-echo "check for apache"
-if ! [ -x "$(command -v apachectl)" ]; then
-	apt-get -qq install -y apache2
-	sleep 2
-	apt-get -qq install -y php
-	sleep 1
-	apt-get -qq install -y php-gd
-	sleep 1
-	#prepare for Buster
-	if [ -d "/etc/php/7.0/" ]; then 
-		apt-get -qq install -y php7.0-xml
-	elif [ -d "/etc/php/7.3/" ]; then
-		apt-get -qq install -y php7.3-xml
-	fi	
-	sleep 2
-	apt-get -qq install -y php-curl
-	sleep 1	
-	#prepare for Buster
-	if [ -d "/etc/php/7.0/" ]; then 
-		apt-get -qq install -y libapache2-mod-php7.0
-	elif [ -d "/etc/php/7.3/" ]; then
-		apt-get -qq install -y libapache2-mod-php7.3
-	fi	
-	sleep 2
-	apt-get -qq install -y jq
-	sleep 2
-	apt-get -qq install -y raspberrypi-kernel-headers
-	echo "... installed"
-else
-	echo "...ok"
 fi
 
 echo "check for i2c bus"
@@ -71,22 +28,6 @@ else
 	echo "snd-bcm2835" >> /etc/modules
 	echo "dtparam=i2c1=on" >> /etc/modules
 	echo "dtparam=i2c_arm=on" >> /etc/modules
-fi
-
-echo "check for i2c package"
-if ! [ -x "$(command -v i2cdetect)" ]; then
-	apt-get -qq install -y i2c-tools
-	echo "... installed"
-else
-	echo "...ok"
-fi
-
-echo "check for git"
-if ! [ -x "$(command -v git)" ]; then
-	apt-get -qq install -y git
-	echo "... installed"
-else
-	echo "...ok"
 fi
 
 echo "check for initial git clone"
@@ -129,30 +70,14 @@ else
 	echo "...added"
 fi
 
-# check for mosquitto packages
-echo "check for mosquitto"
-if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
-	sudo apt-get update
-	sudo apt-get -qq install -y mosquitto mosquitto-clients
-	sudo service mosquitto start
-	echo "... installed"
-else
-	echo "...ok"
-fi
+# start mosquitto
+sudo service mosquitto start
 
 # check for mosquitto configuration
 if [ ! -f /etc/mosquitto/conf.d/openwb.conf ]; then
 	echo "updating mosquitto config file"
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
 	sudo service mosquitto reload
-fi
-
-echo "check for socat"
-if ! [ -x "$(command -v socat)" ]; then
-	apt-get -qq install -y socat
-	echo "... installed"
-else
-	echo "...ok"
 fi
 
 echo "disable cronjob logging"
@@ -173,22 +98,6 @@ elif [ -d "/etc/php/7.3/" ]; then
 	echo "OS Buster"
 	sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
 	sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
-fi
-
-echo "checking for pip..."
-if ! [ -x "$(command -v pip)" ]; then
-	sudo apt-get -qq install -y python-pip
-	echo "...OK"
-else
-	echo "pip is installed"
-fi
-
-echo "checking for pip3..."
-if ! [ -x "$(command -v pip3)" ]; then
-	sudo apt-get -qq install -y python3-pip
-	echo "...OK"
-else
-	echo "pip3 is installed"
 fi
 
 echo "installing pymodbus"
