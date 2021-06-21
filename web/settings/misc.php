@@ -28,35 +28,13 @@
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -75,7 +53,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Verschiedene Einstellungen</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="./settings/saveconfig.php" method="POST">
 
 				<!-- Allgemeine Funktionen -->
 				<div class="card border-secondary">
@@ -102,7 +80,7 @@
 									</div>
 									<span class="form-text small">
 										Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen. Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (20 Sekunden) herabsetzen. Die Einstellungen „Sehr Langsam“ führt zu einer Regelzeit von 60 Sekunden.<br>
-										<span class="text-danger">Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“ etc., werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger.</span>
+										<span class="text-danger">Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“ etc., werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger. Ebenso können eingestellte Verzögerungen um den Faktor der Änderung langsamer ausgeführt werden. Solange es keinen triftiten Grund gibt sollte immer Normal gewählt werden.</span>
 									</span>
 								</div>
 							</div>
@@ -171,7 +149,7 @@
 										Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.
 										Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. Dies ist dann der Fall, wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet.
 										Die Erhöhung der Frequenz wird durchgeführt, um die PV Anlagen abzuschalten.<br>
-										<span class="text-danger">Die Option ist nur aktiv, wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.</span>
+										<span class="text-danger">Die Option ist nur aktiv, wenn der Ladepunkt die Frequenz übermittelt. Jede openWB Series1/2 unterstützt dies.</span>
 									</span>
 								</div>
 							</div>
@@ -199,23 +177,116 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-row mt-2 hide" id="lp2cpdiv">
-								<div class="col-md-4">
-									<label class="col-form-label">Ladepunkt 2</label>
-								</div>
-								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-									<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 0) echo " active" ?>">
-										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2Off" value="0"<?php if($cpunterbrechunglp2old == 0) echo " checked=\"checked\"" ?>>Aus
-									</label>
-									<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 1) echo " active" ?>">
-										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2On" value="1"<?php if($cpunterbrechunglp2old == 1) echo " checked=\"checked\"" ?>>An
-									</label>
+							<div class="form-row mb-1 lp1cpon hide">
+								<label for="cpunterbrechungdauerlp1" class="col-md-4 col-form-label">Dauer der Unterbrechung</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="cpunterbrechungdauerlp1" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungdauerlp1old; ?> Sek</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp1" id="cpunterbrechungdauerlp1" min="4" max="15" step="1" value="<?php echo $cpunterbrechungdauerlp1old; ?>">
+										</div>
+									</div>
+									<span class="form-text small">
+										Die Standardeinstellung ist 4 Sekunden. Falls ein Fahrzeug den Ladevorgang nicht zuverlässig startet, kann dieser Wert erhöht werden.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
 								</div>
 							</div>
+							<div id="lp2cpdiv" class="hide">
+								<div class="form-row mt-2">
+									<div class="col-md-4">
+										<label class="col-form-label">Ladepunkt 2</label>
+									</div>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 0) echo " active" ?>">
+											<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2Off" value="0"<?php if($cpunterbrechunglp2old == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 1) echo " active" ?>">
+											<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2On" value="1"<?php if($cpunterbrechunglp2old == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1 lp2cpon hide">
+									<label for="cpunterbrechungdauerlp2" class="col-md-4 col-form-label">Dauer der Unterbrechung</label>
+									<div class="col-md-8">
+										<div class="form-row vaRow mb-1">
+											<label for="cpunterbrechungdauerlp2" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungdauerlp2old; ?> Sek</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp2" id="cpunterbrechungdauerlp2" min="4" max="15" step="1" value="<?php echo $cpunterbrechungdauerlp2old; ?>">
+											</div>
+										</div>
+										<span class="form-text small">
+											Die Standardeinstellung ist 4 Sekunden. Falls ein Fahrzeug den Ladevorgang nicht zuverlässig startet, kann dieser Wert erhöht werden.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mt-2 mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">Ladung nach CP Unterbrechung aktiv halten</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($cpunterbrechungmindestlaufzeitaktivold == 0) echo " active" ?>">
+											<input type="radio" name="cpunterbrechungmindestlaufzeitaktiv" id="cpunterbrechungmindestlaufzeitaktivOff" value="0"<?php if($cpunterbrechungmindestlaufzeitaktivold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($cpunterbrechungmindestlaufzeitold == 1) echo " active" ?>">
+											<input type="radio" name="cpunterbrechungmindestlaufzeitaktiv" id="cpunterbrechungmindestlaufzeitaktivOn" value="1"<?php if($cpunterbrechungmindestlaufzeitaktivold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option hält die Ladung im nurPV Modus eine Zeit lang aktiv, auch wenn kurz nach der CP Unterbrechung die Mindestladeleistung unterschritten wird noch bevor die Ladung begonnen hat. 
+										Dies ist immer dann hilfreich wenn der Ladestart nach CP Unterbrechung erst verzögert erfolgt, z.b. bei PSA (Peugeot, Opel).
+										Wird nach CP Unterbrechung kein Ladestart registriert wird keine erneute CP Unterbrechung durchgeführt.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1 cpminlaufzeit hide">
+								<label for="cpunterbrechungmindestlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="cpunterbrechungmindestlaufzeit" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungmindestlaufzeitold; ?> Sek</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungmindestlaufzeit" id="cpunterbrechungmindestlaufzeit" min="10" max="60" step="10" value="<?php echo $cpunterbrechungmindestlaufzeitold; ?>">
+										</div>
+									</div>
+									<span class="form-text small">
+										Die Standardeinstellung ist 30 Sekunden. Falls ein Fahrzeug den Ladevorgang nicht zuverlässig startet, kann dieser Wert erhöht werden.
+										<span class="text-danger">Achtung: experimentelle Einstellung!</span>
+									</span>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<script>
 						var lp2akt = <?php echo $lastmanagementold ?>;
+
+						function visibility_lp1cp() {
+							if($('#cpunterbrechunglp1Off').prop("checked")) {
+								hideSection('.lp1cpon');
+							} else {
+								showSection('.lp1cpon', false);
+							}
+						}
+
+						function visibility_lp2cp() {
+							if($('#cpunterbrechunglp2Off').prop("checked")) {
+								hideSection('.lp2cpon');
+							} else {
+								showSection('.lp2cpon', false);
+							}
+						}
+						
+						function visibility_cpminlaufzeit() {
+							if($('#cpunterbrechungmindestlaufzeitaktivOff').prop("checked")) {
+								hideSection('.cpminlaufzeit');
+							} else {
+								showSection('.cpminlaufzeit', false);
+							}
+						}
 
 						$(document).ready(function(){
 							if(lp2akt == '0') {
@@ -223,6 +294,22 @@
 							} else {
 								showSection('#lp2cpdiv');
 							}
+
+							$('input[type=radio][name=cpunterbrechunglp1]').change(function(){
+								visibility_lp1cp();
+							});
+
+							$('input[type=radio][name=cpunterbrechunglp2]').change(function(){
+								visibility_lp2cp();
+							});
+
+							$('input[type=radio][name=cpunterbrechungmindestlaufzeitaktiv]').change(function(){
+								visibility_cpminlaufzeit();
+							});
+
+							visibility_lp1cp();
+							visibility_lp2cp();
+							visibility_cpminlaufzeit();
 						});
 					</script>
 				</div>
@@ -239,10 +326,10 @@
 											<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
+											<input type="radio" name="rfidakt" id="rfidaktOn1" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn2" autocomplete="off" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
+											<input type="radio" name="rfidakt" id="rfidaktOn2" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
 										</label>
 
 									</div>
@@ -278,7 +365,7 @@
 												<div class="input-group-text">
 													Auto 1
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp1c1" id="rfidlp1c1" class="form-control" value="<?php echo $rfidlp1c1old ?>">
 										</div>
 									</div>
@@ -288,7 +375,7 @@
 												<div class="input-group-text">
 													Auto 2
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp1c2" id="rfidlp1c2" class="form-control" value="<?php echo $rfidlp1c2old ?>">
 										</div>
 									</div>
@@ -298,7 +385,7 @@
 												<div class="input-group-text">
 													Auto 3
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp1c3" id="rfidlp1c3" class="form-control" value="<?php echo $rfidlp1c3old ?>">
 										</div>
 									</div>
@@ -317,7 +404,7 @@
 												<div class="input-group-text">
 													Auto 1
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp2c1" id="rfidlp2c1" class="form-control" value="<?php echo $rfidlp2c1old ?>">
 										</div>
 									</div>
@@ -327,7 +414,7 @@
 												<div class="input-group-text">
 													Auto 2
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlp2c2" id="rfidlp2c2" class="form-control" value="<?php echo $rfidlp2c2old ?>">
 										</div>
 									</div>
@@ -367,7 +454,7 @@
 												<div class="input-group-text">
 													Tag 1
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidstop" id="rfidstop" class="form-control" value="<?php echo $rfidstopold ?>">
 										</div>
 									</div>
@@ -377,7 +464,7 @@
 												<div class="input-group-text">
 													Tag 2
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidstop2" id="rfidstop2" class="form-control" value="<?php echo $rfidstop2old ?>">
 										</div>
 									</div>
@@ -691,14 +778,14 @@
 								</div>
 								<div class="form-row">
 									<div class="col-lg-12">
-										<label for="rfidlist" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Liste
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="rfidlist" id="rfidlist" class="form-control" value="<?php echo $rfidlistold ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -754,37 +841,36 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<div class="alert alert-info">
-							Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden. Der Token der App, sowie das User Token nachfolgend eintragen.
+						<div class="card-text alert alert-info">
+							<p>Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Zudem muss im Pushover-Nutzerkonto eine Applikation openWB eingerichtet werden, um den benötigten API-Token/Key zu erhalten.</p>
+							Wenn Pushover eingeschaltet ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats gepusht.
 						</div>
 						<div id="pushban" class="hide">
 							<div class="form-group">
-								<div class="form-row">
-									<label for="pushoveruser" class="col-md-4 col-form-label">Pushover User String</label>
+								<div class="form-row mb-1">
+									<label for="pushoveruser" class="col-md-4 col-form-label">Pushover User Key</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													<i class="fa fa-user"></i>
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>" placeholder="User Token" class="form-control">
 										</div>
-										<span class="form-text small">Hier das User Token von Pushover eintragen</span>
 									</div>
 								</div>
 								<div class="form-row">
-									<label for="pushovertoken" class="col-md-4 col-form-label">Pushover App Token</label>
+									<label for="pushovertoken" class="col-md-4 col-form-label">Pushover API-Token/Key</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													<i class="fa fa-lock"></i>
 												</div>
-											</div> 
+											</div>
 											<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>" placeholder="App Token" class="form-control">
 										</div>
-										<span class="form-text small">Hier das Application Token von Pushover eintragen</span>
 									</div>
 								</div>
 							</div>
@@ -1430,7 +1516,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="durchslp1" class="col-md-4 col-form-label">Preis je kWh</label>
+								<label for="preisjekwh" class="col-md-4 col-form-label">Preis je kWh</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="0.0001" name="preisjekwh" id="preisjekwh" value="<?php echo $preisjekwhold ?>">
 									<span class="form-text small">Gültige Werte xx.xx, z.B. 0.2833. Dient zur Berechnung der Ladekosten im Ladelog.</span>

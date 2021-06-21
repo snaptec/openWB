@@ -12,6 +12,8 @@ echo "loading config"
 . /var/www/html/openWB/runs/updateConfig.sh
 
 sleep 5
+mkdir -p /var/www/html/openWB/web/backup
+touch /var/www/html/openWB/web/backup/.donotdelete
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -22,8 +24,9 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_eq
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_tesla
 
-sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
@@ -40,10 +43,16 @@ updateConfig
 # now setup all files in ramdisk
 initRamdisk
 
+# standard socket - activated after reboot due to RASPI init defaults so we need to disable it as soon as we can
+if [[ $standardSocketInstalled == "1" ]]; then
+	echo "turning off standard socket ..."
+	sudo python /var/www/html/openWB/runs/standardSocket.py off
+fi
+
 # initialize automatic phase switching
 if (( u1p3paktiv == 1 )); then
 	echo "triginit..."
-	sudo python /var/www/html/openWB/runs/triginit.py
+	sudo python /var/www/html/openWB/runs/triginit.py -d $u1p3ppause
 fi
 
 # check if buttons are configured and start daemon
@@ -177,6 +186,12 @@ then
 	(crontab -l -u pi ; echo "@reboot /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
 fi
 
+# check for needed apt packages
+echo "install required packages..."
+apt-get update
+apt-get -q -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
+echo "...done"
+
 # check for needed packages
 echo "packages 1..."
 if python -c "import evdev" &> /dev/null; then
@@ -184,22 +199,6 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
-if ! [ -x "$(command -v sshpass)" ];then
-	apt-get -qq update
-	sleep 1
-	apt-get -qq install sshpass
-fi
-if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
-then
-	sudo apt-get -qq update
-	sleep 1
-	sudo apt-get -qq install -y php-gd
-	sleep 1
-	sudo apt-get -qq install -y php7.0-xml
-fi
-
-# no need to reload config
-# . /var/www/html/openWB/loadconfig.sh
 
 # update old ladelog
 /var/www/html/openWB/runs/transferladelog.sh
@@ -215,17 +214,13 @@ echo "timezone..."
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 # check for mosquitto packages
-echo "mosquitto..."
-if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
-	sudo apt-get update
-	sudo apt-get -qq install -y mosquitto mosquitto-clients
-	sudo service mosquitto restart
-fi
+sudo service mosquitto start
 
 # check for mosquitto configuration
-if [ ! -f /etc/mosquitto/conf.d/openwb.conf ]; then
+if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || [ ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf ]; then
+	echo "updating mosquitto config file"
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
-	sudo service mosquitto restart
+	sudo service mosquitto reload
 fi
 
 # check for other dependencies
@@ -233,7 +228,6 @@ echo "packages 2..."
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
 	echo 'mqtt installed...'
 else
-	sudo apt-get -qq install -y python3-pip
 	sudo pip3 install paho-mqtt
 fi
 if python3 -c "import docopt" &> /dev/null; then
@@ -274,12 +268,6 @@ echo "clear warning..."
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo "" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
-
-#if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
-#then
-#  sudo apt-get update
-#  sudo apt-get -qq install -y php-curl
-#fi
 
 # check for slave config and start handler
 if (( isss == 1 )); then

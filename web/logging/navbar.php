@@ -21,6 +21,18 @@
                 <li class="nav-item">
                     <a class="nav-link" data-select="" href="logging/yearly.php">Jahr</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-select="" href="logging/monthlyv1.php">Monat (nig)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-select="" href="logging/monthlyv2.php">Monat Aufteilung (nig)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-select="" href="logging/yearlyv1.php">Jahr (nig)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-select="" href="logging/yearlyv2.php">Jahr Aufteilung (nig)</a>
+                </li>
             </ul>
         </div>
     </nav>

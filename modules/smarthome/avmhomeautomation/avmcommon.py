@@ -132,7 +132,7 @@ class AVMHomeAutomation:
     # an authentication to obtain a new session ID if neccessary. A session ID
     # is assumed to be recent enough if it has been obtained ramdisk less than
     # 5 minutes ago in which case it is reused.
-    def connect(self): 
+    def connect(self):
         should_authenticate = True
         ownInfo = self.cachedOwnInfo()
         if "session_mtime" in ownInfo and "session_id" in ownInfo:
@@ -153,7 +153,7 @@ class AVMHomeAutomation:
             # Try to store potentially new session id to ramdisk for next run
             # If this operations fails, no harm is done as we can always authenticate
             # with username/password.
-            if not self.cacheKey in self.cache: 
+            if not self.cacheKey in self.cache:
                 self.cache[self.cacheKey] = {}
             self.cache[self.cacheKey]["session_mtime"] = time.time()
             self.cache[self.cacheKey]["session_id"] = self.sessionID
@@ -168,9 +168,9 @@ class AVMHomeAutomation:
         logfile_string = '/var/www/html/openWB/ramdisk/smarthome.log'
         try:
             if os.path.isfile(logfile_string):
-                f = open( logfile_string , 'a')
+                f = open( logfile_string , 'a',encoding='utf8')
             else:
-                f = open( logfile_string , 'w') 
+                f = open( logfile_string , 'w',encoding='utf8')
             prefix = ""
             if level == LOGLEVELDEBUG:
                 prefix = "[DEBUG] "
@@ -219,14 +219,16 @@ class AVMHomeAutomation:
                     # AVM returns mW, convert to W here
                     next_device_infos[name]['power'] = float(powermeterBlock.find("power").text)/1000.0
                     # AVM returns mV, convert to V here
-                    next_device_infos[name]['voltage'] = float(powermeterBlock.find("voltage").text)/1000.0
+                    voltageInfo = powermeterBlock.find("voltage")
+                    if voltageInfo != None:
+                        next_device_infos[name]['voltage'] = float(voltageInfo.text)/1000.0
                     # AVM returns Wh
-                    next_device_infos[name]['energy'] = powermeterBlock.find("energy").text 
+                    next_device_infos[name]['energy'] = powermeterBlock.find("energy").text
 
                 temperatureBlock = device.find("temperature")
                 if temperatureBlock != None:
                     # AVM returns tenths of degrees Celsius
-                    next_device_infos[name]['temperature'] = float(temperatureBlock.find("celsius").text)/10.0 
+                    next_device_infos[name]['temperature'] = float(temperatureBlock.find("celsius").text)/10.0
 
                 switchBlock = device.find("switch")
                 if switchBlock != None:
@@ -265,7 +267,7 @@ class AVMHomeAutomation:
                 self.logMessage(LOGLEVELERROR, "unexpected error during getDevicesDict: %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
             self.logMessage(LOGLEVELDEBUG, "device info fetched: %s" % (self.device_infos))
             if self.sessionID != INVALID_SESSIONID:
-                if not self.cacheKey in self.cache: 
+                if not self.cacheKey in self.cache:
                     self.cache[self.cacheKey] = {}
                 self.cache[self.cacheKey]["device_infos_mtime"] = time.time()
                 self.cache[self.cacheKey]["device_infos"] = self.device_infos
@@ -365,4 +367,3 @@ class AVMHomeAutomation:
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             self.logMessage(LOGLEVELERROR, "unexpected error getActualPower write JSON %s %s %s" % (exc_type, fname, exc_tb.tb_lineno))
         self.logMessage(LOGLEVELDEBUG, "end of getActualPower")
-

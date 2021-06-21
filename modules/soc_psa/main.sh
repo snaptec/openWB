@@ -3,12 +3,17 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
-socDebug=$debug
-# for developement only
-# socDebug=1
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_psa: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
 
 case $CHARGEPOINT in
 	2)
@@ -20,9 +25,9 @@ case $CHARGEPOINT in
 		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		psaSocFile="$RAMDISKDIR/psasoc1"
 		psaSocTime="$RAMDISKDIR/psasoctime1"
-		socOnlineIntervall=60 # update every 10 minutes if script is called every 10 seconds
 		meterFile="$RAMDISKDIR/llkwhs1"
 		ladungaktivFile="$RAMDISKDIR/ladungaktivlp2"
+		psaSocFile_last="$RAMDISKDIR/psasoclastlp2"
 		akkug=$akkuglp2
 		efficiency=$wirkungsgradlp2
 		username=$psa_userlp2
@@ -31,7 +36,8 @@ case $CHARGEPOINT in
 		clientSecret=$psa_clientsecretlp2
 		soccalc=$psa_soccalclp2
 		manufacturer=$psa_manufacturerlp2
-		chargestat=$(</var/www/html/openWB/ramdisk/chargestats1)
+		socOnlineIntervall=$psa_intervallp2
+		plugstat="$RAMDISKDIR/plugstats1"
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -44,9 +50,9 @@ case $CHARGEPOINT in
 		socIntervall=1 # update every 20 seconds if script is called every 10 seconds
 		psaSocFile="$RAMDISKDIR/psasoc"
 		psaSocTime="$RAMDISKDIR/psasoctime"
-		socOnlineIntervall=60 # update every 10 minutes if script is called every 10 seconds
 		meterFile="$RAMDISKDIR/llkwh"
 		ladungaktivFile="$RAMDISKDIR/ladungaktivlp1"
+		psaSocFile_last="$RAMDISKDIR/psasoclastlp1"
 		akkug=$akkuglp1
 		efficiency=$wirkungsgradlp1
 		username=$psa_userlp1
@@ -55,104 +61,122 @@ case $CHARGEPOINT in
 		clientSecret=$psa_clientsecretlp1
 		soccalc=$psa_soccalclp1
 		manufacturer=$psa_manufacturerlp1
-		chargestat=$(</var/www/html/openWB/ramdisk/chargestat)
+		socOnlineIntervall=$psa_intervallp1
+		plugstat="$RAMDISKDIR/plugstat"
 		;;
 esac
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
-}
-
-socLog(){
-	timestamp=`date +"%Y-%m-%d %H:%M:%S"`	
-	echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-}
-
 incrementTimer(){
-	soctimer=$((soctimer+1))
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
 	echo $soctimer > $soctimerfile
 }
 
+ladungaktiv=$(<$ladungaktivFile)
 soctimer=$(<$soctimerfile)
+tmpintervall=$(( (socOnlineIntervall * 6) - 1 ))
 
 if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
-	timer=$(<$soctimerfile)
-	if (( timer < $socOnlineIntervall )); then
-		timer=$((timer+1))
-		echo $timer > $soctimerfile
+	soctimer=$(<$soctimerfile)
+	if (( soctimer < $tmpintervall )); then
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer. $socOnlineIntervall min online interval wait: $soctimer"
+		incrementTimer
 	else
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
-		if [[ $? != 0 ]]; then
-			socLog "Fetching SoC from $manufacturer failed"
+		if [[ $? == 0 ]]; then
+			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)%"
+		else
+			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetching SoC from $manufacturer failed"
 		fi
 	fi
 else	# manual calculation enabled, combining PSA module with manual calc method
-	# if charging started this round fetch once from myPeugeot out of order
-	if [[ $(<$ladungaktivFile) == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
-		socLog "Ladestatus changed to charging. Fetching SoC from $manufacturer out of order."
+	# if charging started this round fetch once from PSA out of order
+	if [[ $ladungaktiv == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
+		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging started. Fetching SoC from $manufacturer out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
 		if [[ $? == 0 ]]; then
 			echo $(<$psaSocFile) > $socFile
 			echo $(<$psaSocFile) > $manualSocFile
-			socLog "Fetched from $manufacturer: $(<$psaSocFile)%"
+			echo $(<$psaSocFile) > $psaSocFile_last
+			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)% and using it."
 		else
-			socLog "Fetching SoC from $manufacturer failed"
+			echo $(<$socFile) > $manualSocFile	# verhindert dauerhaftes Abrufen, falls Onlineabfrage fehlschlägt
+			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetching SoC from $manufacturer failed. Setting $(<$socFile) as start SoC."
+			
 		fi
-	fi
-
-	# if charging ist not active fetch SoC from myPeugeot
-	if [[ $chargestat == "0" ]]; then
-		if (( soctimer < $socOnlineIntervall )); then
-			socDebugLog "Nothing to do yet. Incrementing timer. Extralong PSA wait: $soctimer"
+	# if charging is not active fetch SoC from PSA
+	elif [[ $ladungaktiv == 0 ]]; then
+		if (( soctimer < $tmpintervall )); then
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer. $socOnlineIntervall min online interval wait: $soctimer"
 			incrementTimer
 		else
-			socLog "Fetching SoC from $manufacturer"
+			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetching SoC from $manufacturer"
 			echo 0 > $soctimerfile
 			sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
 			if [[ $? == 0 ]]; then
-				dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file mofified date in epoch
-				diff=$(($dateofSoc - $(<$psaSocTime)))
-				socDebugLog "Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
-				socDebugLog "Time of fetched SoC: $(date -d @$(<$psaSocTime) +'%F %T')"
-				socDebugLog "Fetched SoC time difference is $diff s"
-				
-				# if fetched SoC is newer than manualSoC
-				if (( $diff < 0 )); then
-					echo $(<$psaSocFile) > $socFile
-					echo $(<$psaSocFile) > $manualSocFile
-					socLog "Fetched from $manufacturer: $(<$psaSocFile)% and using it."
+				# if fetched SoC is equal from last used fetched SoC and car is plugged in
+				if [[ $(<$psaSocFile) == $(<$psaSocFile_last) ]] && [[ $(($(<$plugstat))) == 1 ]]; then
+					openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)% but skipping as not different from last fetched SoC and car is plugged in."		
 				# if SoC is 0, so probably there ist no valid SoC known
 				elif (( $(($(<$socFile))) == 0 )); then
 					echo $(<$psaSocFile) > $socFile
 					echo $(<$psaSocFile) > $manualSocFile
-					socLog "Fetched from $manufacturer: $(<$psaSocFile)% and using it as previous SoC was 0."
+					echo $(<$psaSocFile) > $psaSocFile_last
+					openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)% and using it as previous SoC was 0."
 				else
-					socLog "Fetched from $manufacturer: $(<$psaSocFile)% but skipping as not newer than current known SoC."
+					dateofSoc=$(($(stat -c %Y "$socFile"))) # getting file modified date in epoch
+					diff=$(($dateofSoc - $(<$psaSocTime)))
+					openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Time of known SoC:   $(date -d @$dateofSoc +'%F %T')" # debug logging in readable time format
+					openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Time of fetched SoC: $(date -d @$(<$psaSocTime) +'%F %T')"
+					openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Fetched SoC time difference is $diff s"	
+					# if fetched SoC is newer than manualSoC
+					if (( $diff < 90 )); then	# 90 wegen evtl. Uhrzeitabweichung zwischen Server und openWB
+						echo $(<$psaSocFile) > $socFile
+						echo $(<$psaSocFile) > $manualSocFile
+						echo $(<$psaSocFile) > $psaSocFile_last
+						openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)% and using it."
+					else
+						openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)% but skipping as not newer than current known SoC."
+					fi
 				fi
 			else
-				socLog "Fetching SoC from $manufacturer failed"
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetching SoC from $manufacturer failed"
 			fi
 		fi
 	# if charging is active calculate SoC manually
 	else
 		if (( soctimer < socIntervall )); then
-			socDebugLog "Nothing to do yet. Incrementing timer."
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 			incrementTimer
 		else
-			socDebugLog "Calculating manual SoC"
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Calculating manual SoC"
 			# reset timer
 			echo 0 > $soctimerfile
 
 			# read current meter
 			if [[ -f "$meterFile" ]]; then
 				currentMeter=$(<$meterFile)
-				socDebugLog "currentMeter: $currentMeter"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentMeter: $currentMeter"
 
 				# read manual Soc
 				if [[ -f "$manualSocFile" ]]; then
@@ -162,7 +186,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					manualSoc=0
 					echo $manualSoc > $manualSocFile
 				fi
-				socDebugLog "manual SoC: $manualSoc"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: manual SoC: $manualSoc"
 
 				# read manualMeterFile if file exists and manualMeterFile is newer than manualSocFile
 				if [[ -f "$manualMeterFile" ]] && [ "$manualMeterFile" -nt "$manualSocFile" ]; then
@@ -173,7 +197,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					manualMeter=$currentMeter
 					echo $manualMeter > $manualMeterFile
 				fi
-				socDebugLog "manualMeter: $manualMeter"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: manualMeter: $manualMeter"
 
 				# read current soc
 				if [[ -f "$socFile" ]]; then
@@ -182,29 +206,29 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					currentSoc=$manualSoc
 					echo $currentSoc > $socFile
 				fi
-				socDebugLog "currentSoc: $currentSoc"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentSoc: $currentSoc"
 
 				# calculate newSoc
 				currentMeterDiff=$(echo "scale=5;$currentMeter - $manualMeter" | bc)
-				socDebugLog "currentMeterDiff: $currentMeterDiff"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentMeterDiff: $currentMeterDiff"
 				currentEffectiveMeterDiff=$(echo "scale=5;$currentMeterDiff * $efficiency / 100" | bc)
-				socDebugLog "currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
-				currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/\..*$//')
-				socDebugLog "currentSocDiff: $currentSocDiff"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
+				currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | awk '{printf"%d\n",$1}')
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentSocDiff: $currentSocDiff"
 				newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 				if (( newSoc > 100 )); then
-					socLog "newSoC above 100, setting to 100."
+					openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: newSoC above 100, setting to 100."
 					newSoc=100
 				fi
 				if (( newSoc < 0 )); then
-					socLog "newSoC below 100, setting to 0."
+					openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: newSoC below 0, setting to 0."
 					newSoc=0
 				fi
-				socDebugLog "newSoc: $newSoc"
+				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: newSoc: $newSoc"
 				echo $newSoc > $socFile
 			else
 				# no current meter value for calculation -> Exit
-				socLog "ERROR: no meter value for calculation! ($meterFile)"
+				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ERROR: no meter value for calculation! ($meterFile)"
 			fi
 		fi
 	fi

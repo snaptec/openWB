@@ -3,6 +3,9 @@ OPENWBBASEDIR=$(cd `dirname $0`/../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 
 . $OPENWBBASEDIR/loadconfig.sh
+. $OPENWBBASEDIR/helperFunctions.sh
+
+openwbDebugLog "MAIN" 0 "##### cron5min.sh started #####"
 
 dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d)"
 monthlyladelogfile="$OPENWBBASEDIR/web/logging/data/ladelog/$(date +%Y%m).csv"
@@ -10,8 +13,30 @@ monthlyladelogfile="$OPENWBBASEDIR/web/logging/data/ladelog/$(date +%Y%m).csv"
 # check if a monthly logfile exists and create a new one if not
 linesladelog=$(cat $monthlyladelogfile | wc -l)
 if [[ "$linesladelog" == 0 ]]; then
+	openwbDebugLog "MAIN" 1 "creating new monthly chargelog: $monthlyladelogfile"
 	echo > $monthlyladelogfile
 fi
+
+ll1=$(<$RAMDISKDIR/llkwh)  # Zählerstand LP1
+ll2=$(<$RAMDISKDIR/llkwhs1)  # Zählerstand LP2
+ll3=$(<$RAMDISKDIR/llkwhs2)  # Zählerstand LP3
+ll4=$(<$RAMDISKDIR/llkwhlp4)  # Zählerstand LP4
+ll5=$(<$RAMDISKDIR/llkwhlp5)  # Zählerstand LP5
+ll6=$(<$RAMDISKDIR/llkwhlp6)  # Zählerstand LP6
+ll7=$(<$RAMDISKDIR/llkwhlp7)  # Zählerstand LP7
+ll8=$(<$RAMDISKDIR/llkwhlp8)  # Zählerstand LP8
+llg=$(<$RAMDISKDIR/llkwhges)
+
+# ins Log als Wh
+ll1=$(echo "$ll1 * 1000" | bc)
+ll2=$(echo "$ll2 * 1000" | bc)
+ll3=$(echo "$ll3 * 1000" | bc)
+ll4=$(echo "$ll4 * 1000" | bc)
+ll5=$(echo "$ll5 * 1000" | bc)
+ll6=$(echo "$ll6 * 1000" | bc)
+ll7=$(echo "$ll7 * 1000" | bc)
+ll8=$(echo "$ll8 * 1000" | bc)
+llg=$(echo "$llg * 1000" | bc)
 
 # calculate daily stats
 bezug=$(<$RAMDISKDIR/bezugkwh)
@@ -21,34 +46,16 @@ if [[ $pv2wattmodul != "none" ]]; then
 else
 	pv=$(<$RAMDISKDIR/pvkwh)
 fi
-ll1=$(<$RAMDISKDIR/llkwh)
-ll2=$(<$RAMDISKDIR/llkwhs1)
-ll3=$(<$RAMDISKDIR/llkwhs2)
-llg=$(<$RAMDISKDIR/llkwhges)
 soc=$(<$RAMDISKDIR/soc)
 soc1=$(<$RAMDISKDIR/soc1)
 speicheri=$(<$RAMDISKDIR/speicherikwh)
 speichere=$(<$RAMDISKDIR/speicherekwh)
 speichersoc=$(<$RAMDISKDIR/speichersoc)
-ll1=$(echo "$ll1 * 1000" | bc)
-ll2=$(echo "$ll2 * 1000" | bc)
-ll3=$(echo "$ll3 * 1000" | bc)
-llg=$(echo "$llg * 1000" | bc)
 verbraucher1=$(<$RAMDISKDIR/verbraucher1_wh)
 verbraucher2=$(<$RAMDISKDIR/verbraucher2_wh)
 verbraucher3=$(<$RAMDISKDIR/verbraucher3_wh)
 verbrauchere1=$(<$RAMDISKDIR/verbraucher1_whe)
 verbrauchere2=$(<$RAMDISKDIR/verbraucher2_whe)
-ll4=$(<$RAMDISKDIR/llkwhlp4)
-ll5=$(<$RAMDISKDIR/llkwhlp5)
-ll6=$(<$RAMDISKDIR/llkwhlp6)
-ll7=$(<$RAMDISKDIR/llkwhlp7)
-ll8=$(<$RAMDISKDIR/llkwhlp8)
-ll4=$(echo "$ll4 * 1000" | bc)
-ll5=$(echo "$ll5 * 1000" | bc)
-ll6=$(echo "$ll6 * 1000" | bc)
-ll7=$(echo "$ll7 * 1000" | bc)
-ll8=$(echo "$ll8 * 1000" | bc)
 temp1=$(<$RAMDISKDIR/device1_temp0)
 temp2=$(<$RAMDISKDIR/device1_temp1)
 temp3=$(<$RAMDISKDIR/device1_temp2)
@@ -67,6 +74,7 @@ d9=$(<$RAMDISKDIR/device9_wh)
 d10="0"
 # now add a line to our daily csv
 echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile.csv
+openwbDebugLog "MAIN" 1 "daily csv updated: $dailyfile.csv"
 
 # grid protection
 # temporary disabled
@@ -74,6 +82,7 @@ echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speic
 if (( netzabschaltunghz == 1 )); then
 	hz=$(<$RAMDISKDIR/llhz)
 	hz=$(echo "$hz * 100" | bc | sed 's/\..*$//')
+	openwbDebugLog "MAIN" 1 "Netzschutz konfiguriert; aktuelle Frequenz: ${hz}"
 	netzschutz=$(<$RAMDISKDIR/netzschutz)
 	if (( netzschutz == 0 )); then
 		# grid protection is not set
@@ -85,6 +94,7 @@ if (( netzabschaltunghz == 1 )); then
 				echo $lademodus > $RAMDISKDIR/templademodus
 				# set charge mode to stop
 				echo 3 > $RAMDISKDIR/lademodus
+				openwbDebugLog "MAIN" 0 "Netzschutz aktiviert, Frequenz: ${hz}"
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
 				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
@@ -97,6 +107,8 @@ if (( netzabschaltunghz == 1 )); then
 				# set grid protection
 				echo 1 > $RAMDISKDIR/netzschutz
 				echo "!!! Netzschutz aktiv !!!" > $RAMDISKDIR/lastregelungaktiv
+				openwbDebugLog "MAIN" 0 "Netzschutz aktiviert, Frequenz: ${hz}"
+
 				# wait a random interval and set charge mode to stop
 				(sleep $(shuf -i1-90 -n1) && echo 3 > $RAMDISKDIR/lademodus) &
 			fi
@@ -110,6 +122,7 @@ if (( netzabschaltunghz == 1 )); then
 			echo $templademodus > $RAMDISKDIR/lademodus
 			# remove grid protection
 			echo 0 > $RAMDISKDIR/netzschutz
+			openwbDebugLog "MAIN" 0 "Netzschutz deaktiviert, Frequenz: ${hz}"
 			echo "Netzfrequenz wieder im normalen Bereich." > $RAMDISKDIR/lastregelungaktiv
 		fi
 	fi
@@ -117,10 +130,14 @@ fi
 
 # update electricity provider prices
 if (( etprovideraktiv == 1 )); then
+	openwbDebugLog "MAIN" 1 "electricity provider configured; trigger price update"
 	$OPENWBBASEDIR/modules/$etprovider/main.sh &
+else
+	openwbDebugLog "MAIN" 2 "electricity provider not set up; skipping price update"
 fi
 
 # update all daily yield stats
+openwbDebugLog "MAIN" 1 "updating daily yield stats"
 pvkwh=$pv
 pvdailyyieldstart=$(head -n 1 $OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d).csv)
 pvyieldcount=0
@@ -217,73 +234,97 @@ done
 hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $d6dailyyield - $d7dailyyield - $d8dailyyield - $d9dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
 echo $hausdailyyield > $RAMDISKDIR/daily_hausverbrauchkwh
 
-# get our current ip address
-#ip route get 1 | awk '{print $NF;exit}' > $RAMDISKDIR/ipaddress
-#prepare for Buster
+# get our current ip address (prepared for Buster)
 ip route get 1 |  awk '{print $7;exit}' > $RAMDISKDIR/ipaddress
+openwbDebugLog "MAIN" 1 "current ip: $(<$RAMDISKDIR/ipaddress)"
 
 # check if our mqtt handler is running
 if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/mqttsub.py" > /dev/null
 then
-	echo "test" > /dev/null
+	openwbDebugLog "MAIN" 1 "mqtt handler is already running"
 else
+	openwbDebugLog "MAIN" 0 "mqtt handler not running! restarting process"
 	python3 $OPENWBBASEDIR/runs/mqttsub.py &
 fi
 
 # check if our smarthome handler is running
 if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomehandler.py" > /dev/null
 then
-	echo "test" > /dev/null
+	openwbDebugLog "MAIN" 1 "smarthome handler is already running"
 else
+	openwbDebugLog "MAIN" 0 "smarthome handler not running! restarting process"
 	python3 $OPENWBBASEDIR/runs/smarthomehandler.py >> $RAMDISKDIR/smarthome.log 2>&1 &
 fi
 
 # if this is a remote controlled system check if our isss handler is running
-if (( isss == 1 )); then
+if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]]; then
+	openwbDebugLog "MAIN" 1 "external openWB or daemon mode configured"
 	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/isss.py" > /dev/null
 	then
-		echo "test" > /dev/null
+		openwbDebugLog "MAIN" 1 "isss handler already running"
 	else
+		openwbDebugLog "MAIN" 0 "isss handler not running! restarting process"
 		python3 $OPENWBBASEDIR/runs/isss.py &
 	fi
 else
+	openwbDebugLog "MAIN" 1 "external openWB or daemon mode not configured; checking network setup"
 	ethstate=$(</sys/class/net/eth0/carrier)
 	if (( ethstate == 1 )); then
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
-		wlanstate=$(</sys/class/net/wlan0/carrier)
-		if (( wlanstate == 1 )); then
-			sudo systemctl stop hostapd
-			sudo systemctl stop dnsmasq
+		if [ -d /sys/class/net/wlan0 ]; then
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+			wlanstate=$(</sys/class/net/wlan0/carrier)
+			if (( wlanstate == 1 )); then
+				sudo systemctl stop hostapd
+				sudo systemctl stop dnsmasq
+			fi
 		fi
 	else
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		if [ -d /sys/class/net/wlan0 ]; then
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		fi
 		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+	fi
+	# check for obsolete isss handler
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+	then
+		sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
 	fi
 fi
 
 # if this is a socket system check for our handler to control the socket lock
 if [[ "$evsecon" == "buchse" ]] && [[ "$isss" == "0" ]]; then
+	openwbDebugLog "MAIN" 1 "openWB socket configured"
 	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/buchse.py" > /dev/null
 	then
-		echo "test" > /dev/null
+		openwbDebugLog "MAIN" 1 "socket handler already running"
 	else
+		openwbDebugLog "MAIN" 0 "socket handler not running! restarting process"
 		python3 $OPENWBBASEDIR/runs/buchse.py &
+	fi
+else
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+	then
+		openwbDebugLog "MAIN" 0 "openWB socket not configured but socket handler is running; killing process"
+		sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
 	fi
 fi
 
 # if rfid mode 2 is configured check for our rfid handler
 if [[ "$rfidakt" == "2" ]]; then
+	openwbDebugLog "MAIN" 1 "rfid mode 2 configured"
 	echo $rfidlist > $RAMDISKDIR/rfidlist
 	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/rfid.py" > /dev/null
 	then
-		echo "test" > /dev/null
+		openwbDebugLog "MAIN" 1 "rfid handler already running"
 	else
+		openwbDebugLog "MAIN" 0 "rfid handler not running! restarting process"
 		python3 $OPENWBBASEDIR/runs/rfid.py &
 	fi
 else
 	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/rfid.py" > /dev/null
 	then
+		openwbDebugLog "MAIN" 0 "rfid mode 2 not configured but handler is running; killing process"
 		sudo kill $(ps aux |grep 'runs/[r]fid.py' | awk '{print $2}')
 	fi
 fi
@@ -291,13 +332,24 @@ fi
 # check if our modbus server is running
 if ps ax |grep -v grep |grep "sudo python3 $OPENWBBASEDIR/runs/modbusserver/modbusserver.py" > /dev/null
 then
-	echo "test" > /dev/null
+	openwbDebugLog "MAIN" 1 "modbus tcp server already running"
 else
+	openwbDebugLog "MAIN" 0 "modbus tcp server not running! restarting process"
 	sudo python3 $OPENWBBASEDIR/runs/modbusserver/modbusserver.py &
 fi
 
 #Pingchecker
-$OPENWBBASEDIR/runs/pingcheck.sh &
+if (( $pingcheckactive == 1 )); then
+	openwbDebugLog "MAIN" 1 "pingcheck configured; starting"
+	$OPENWBBASEDIR/runs/pingcheck.sh &
+fi
+
+# EVSE Check
+openwbDebugLog "MAIN" 1 "starting evsecheck"
+$OPENWBBASEDIR/runs/evsecheck
 
 # truncate all logs in ramdisk
+openwbDebugLog "MAIN" 1 "logfile cleanup triggered"
 $OPENWBBASEDIR/runs/cleanup.sh >> $RAMDISKDIR/cleanup.log 2>&1
+
+openwbDebugLog "MAIN" 0 "##### cron5min.sh finished #####"

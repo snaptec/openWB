@@ -6,6 +6,9 @@ declare -r CurrentLimitAmpereForCpCharging=0.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
 declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
+declare -r SocketActivatedFile="ramdisk/socketActivated"
+declare -r SocketApprovedFile="ramdisk/socketApproved"
+declare -r SocketRequestedFile="ramdisk/socketActivationRequested"
 declare -r SystemVoltage=240
 declare -r MaxCurrentOffset=1.0
 declare -r LmStatusFile="ramdisk/lmStatusLp"
@@ -16,6 +19,7 @@ declare -r LmStatusDownByLm=2
 declare -r LmStatusDownByEv=3
 declare -r LmStatusDownByError=4
 declare -r LmStatusDownByDisable=5
+declare -r LmStatusDownForSocket=8
 
 if (( lastmanagement > 0 )); then
 	declare -r -i NumberOfSupportedChargePoints=2
@@ -31,45 +35,97 @@ openwbisslave() {
 
 	checkControllerHeartbeat
 
-	for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
+	# socket mode, if either requested or already active,
+	# otherwise normal EV charge mode
+	if (( standardSocketInstalled > 0 )) && ( (( SocketActivationRequested > 0 )) || (( SocketActivated > 0 )) || (( SocketApproved > 0 )) ); then
 
-		# we have to do a slightly ugly if-else-cascade to determine whether the currentCp is actually present
-		# if not we continue the loop with the next CP
-		if (( currentCp == 1)); then
-			# CP1 exists unconditionally
-			:
-		elif (( currentCp == 2)) && (( lastmanagement == 0)); then
-			# CP2 does not actually exist
-			continue
-		elif (( currentCp == 2)) && (( lastmanagement > 0)); then
-			# CP2 does exist
-			:
-		elif (( currentCp == 3)) && (( lastmanagements2 == 0)); then
-			# CP3 does not actually exist
-			continue
-		elif (( currentCp == 3)) && (( lastmanagements2 > 0)); then
-			# CP3 does exist
-			:
-		elif (( currentCp >= 4)); then
-			local cpPresentVar="lastmanagementlp${currentCp}"
-			eval cpPresent=\$$cpPresentVar
-			if (( cpPresent == 0 )); then
+		# socket slave mode
+		openwbDebugLog "MAIN" 2 "Slave Socket mode: Checking: SocketActivationRequested == '${SocketActivationRequested}', SocketApproved == '${SocketApproved}', SocketActivated == '${SocketActivated}'"
 
-				# CPx (x >= 4) does not actually exist
-				continue
+		callSetCurrent 0 0  $LmStatusDownForSocket
+
+		# handle de-activation request by socket or EV RFID scan
+		if (( SocketActivationRequested >= 2 )); then
+			if (( SocketActivated == 0)) || (( SocketApproved == 0 )); then
+			  echo 0 > $SocketRequestedFile
+			else
+				openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket DEactivation requested by socket or EV RFID tag scan. Socket will now be turned off."
+				sudo python runs/standardSocket.py off
 			fi
+
+		# handle disapprove of active socket
+		elif (( SocketActivated > 0 )) && (( SocketApproved == 0 )); then
+			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Active socket disapproved by controller. Socket will now be turned off."
+			echo "Slave Mode Socket: Active socket disapproved by controller. Socket will now be turned off."
+			sudo python runs/standardSocket.py off
+
+		# handle approved activation request
+		elif (( SocketActivationRequested == 1 )) && (( SocketApproved == 1 )); then
+			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket activation request has been approved by controller. Socket will now be turned on."
+			sudo python runs/standardSocket.py on
+			echo 0 > $SocketRequestedFile
+
+		# handle explicit disapprove of activation
+		elif ( (( SocketActivationRequested > 0 )) || (( SocketActivated > 0 )) ) && (( SocketApproved == 2 )); then
+			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket activation has explicitly been DISapproved by controller."
+			sudo python runs/standardSocket.py off
+			echo 0 > $SocketRequestedFile
+			echo 0 > $SocketApprovedFile
+
+		# handle socket approval while we're not expecting it
+		elif (( SocketActivationRequested == 0 )) && (( SocketActivated == 0 )) && (( SocketApproved > 0 )); then
+			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket aproval while we're not expecting it. Restting the approval."
+			echo 0 > $SocketRequestedFile
+			echo 0 > $SocketApprovedFile
+
+		# no change required
 		else
-			openwbDebugLog "MAIN" 0 "Slave Mode charge point ERROR: Charge Point #${currentCp} is not supported"
-			continue
+			openwbDebugLog "MAIN" 2 "Slave Mode: Socket installed: No change required"
 		fi
 
-		# handle the currentCp: first aggregate the data ...
-		aggregateDataForChargePoint $currentCp
+	else
 
-		# ... then calculate the new possible charge current
-		computeAndSetCurrentForChargePoint $currentCp
+		# EV slave mode
+		for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
 
-	done
+			# we have to do a slightly ugly if-else-cascade to determine whether the currentCp is actually present
+			# if not we continue the loop with the next CP
+			if (( currentCp == 1)); then
+				# CP1 exists unconditionally
+				:
+			elif (( currentCp == 2)) && (( lastmanagement == 0)); then
+				# CP2 does not actually exist
+				continue
+			elif (( currentCp == 2)) && (( lastmanagement > 0)); then
+				# CP2 does exist
+				:
+			elif (( currentCp == 3)) && (( lastmanagements2 == 0)); then
+				# CP3 does not actually exist
+				continue
+			elif (( currentCp == 3)) && (( lastmanagements2 > 0)); then
+				# CP3 does exist
+				:
+			elif (( currentCp >= 4)); then
+				local cpPresentVar="lastmanagementlp${currentCp}"
+				eval cpPresent=\$$cpPresentVar
+				if (( cpPresent == 0 )); then
+
+					# CPx (x >= 4) does not actually exist
+					continue
+				fi
+			else
+				echo "$NowItIs: Slave Mode charge point ERROR: Charge Point #${currentCp} is not supported"
+				continue
+			fi
+
+			# handle the currentCp: first aggregate the data ...
+			aggregateDataForChargePoint $currentCp
+
+			# ... then calculate the new possible charge current
+			computeAndSetCurrentForChargePoint $currentCp
+
+		done
+	fi
 
 	echo "Slave Mode Aktiv, openWB NUR fernsteuerbar" > ramdisk/lastregelungaktiv
 
@@ -253,10 +309,17 @@ function computeLoadImbalanceCompensation() {
 	#  have been compensating in last loop?                are we contributing ?                   we're not contributing to minimal current phase             is imbalance limit newly exceeded?
 	if        (( lastImbalance < 0 ))         || ( (( ChargingOnPhase[$imbalPhase] == 1 )) && (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 0 )) && (( `echo "$imbalDiff < 0.0" | bc` == 1 )) ); then
 
-		# we're contributing to imbalance and imbalance actually needs adjustment, first calculate our part of the contribution
-		imbalDiff=$(echo "scale=3; ($imbalDiff / ${ChargingVehiclesOnPhase[$imbalPhase]})" | bc)
+		chargingVehiclesOnImbalPhase=${ChargingVehiclesOnPhase[$imbalPhase]}
+		if (( chargingVehiclesOnImbalPhase == 0 )); then
+			# there are no vehicles charging: shouldn't happen (likely a bug in controller)
+			# but we at leasts count ourself as we know that "we're contributing" and thereby prevent a div/0
+			chargingVehiclesOnImbalPhase=1;
+		fi
 
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: We're contributing! imbalPhase=$imbalPhase, ChargingVehiclesOnPhase[imbalPhase]=${ChargingVehiclesOnPhase[$imbalPhase]} ==> imbalDiff=${imbalDiff} A"
+		# we're contributing to imbalance and imbalance actually needs adjustment, first calculate our part of the contribution
+		imbalDiff=$(echo "scale=3; ($imbalDiff / ${chargingVehiclesOnImbalPhase})" | bc)
+
+		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: We're contributing! imbalPhase=$imbalPhase, ChargingVehiclesOnPhase[imbalPhase]=${ChargingVehiclesOnPhase[$imbalPhase]}, chargingVehiclesOnImbalPhase=${chargingVehiclesOnImbalPhase=} ==> imbalDiff=${imbalDiff} A"
 
 		# calculate new imbalance adjustement value in integer Ampere steps
 		# Note: We need to do the rounding to next lower Ampere of imbalance in order to really enforce an adjustement.
@@ -535,6 +598,24 @@ function setVariablesFromRamdisk() {
 	IFS=',' read -ra previousTotalCurrentAndTimestampArray <<< "$PreviousMaximumTotalCurrent"
 	heartbeatMissingFor=$(( NowItIs - previousTotalCurrentAndTimestampArray[1] ))
 
+	if [ -f "$SocketRequestedFile" ]; then
+		SocketActivationRequested=$(<"$SocketRequestedFile")
+	else
+		SocketActivationRequested=0
+	fi
+
+	if [ -f "$SocketActivatedFile" ]; then
+		SocketActivated=$(<"$SocketActivatedFile")
+	else
+		SocketActivated=0
+	fi
+
+	if [ -f "$SocketApprovedFile" ]; then
+		SocketApproved=$(<"$SocketApprovedFile")
+	else
+		SocketApproved=0
+	fi
+
 	return 0
 }
 
@@ -560,6 +641,9 @@ function checkControllerHeartbeat() {
 			echo "Slave Mode: Zentralserver Ausfall, Ladung auf allen LP deaktiviert !" > ramdisk/lastregelungaktiv
 			echo "0" > ramdisk/heartbeat
 			callSetCurrent 0 0 $LmStatusDownByError
+			if (( standardSocketInstalled > 0 )); then
+				sudo python runs/standardSocket.py off
+			fi
 			exit 1
 		else
 			echo "1" > ramdisk/heartbeat

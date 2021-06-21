@@ -26,33 +26,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css?ver=20200416-a">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -256,7 +236,7 @@
 								<label for="nurpv70dynw" class="col-md-4 col-form-label">70%-Regelpunkt</label>
 								<div class="col">
 									<input id="nurpv70dynw" class="form-control naturalNumber" type="number" required min="2000" max="50000" value="2000" data-default="2000" data-topicprefix="openWB/config/get/pv/">
-									<span class="form-text small">Parameter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet". Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp betragen.</span>
+									<span class="form-text small">Parameter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet". Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp betragen. Die Nutzung dieser Option ergibt nur Sinn wenn ein Wechselrichter und Smartmeter verbaut ist welches eine dynamische 70% Abriegelung bietet.</span>
 								</div>
 							</div>
 						</div>
@@ -365,10 +345,10 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp2" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/2/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp2" id="socLimitationLp2Off" data-option="0">ausgeschaltet
+											<input type="radio" name="socLimitationLp2" id="socLimitationLp2Off" data-option="0" value="0">ausgeschaltet
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp2" id="socLimitationLp2On" data-option="1">eingeschaltet
+											<input type="radio" name="socLimitationLp2" id="socLimitationLp2On" data-option="1" value="1">eingeschaltet
 										</label>
 									</div>
 								</div>
@@ -647,8 +627,6 @@
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200911" ></script>
-		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200505-a" ></script>
 		<!-- load mqtt handler-->

@@ -92,6 +92,7 @@ var topicsToSubscribe = [
 
 	// global topics
 	["openWB/global/WHouseConsumption", 1],
+	["openWB/global/DailyYieldHausverbrauchKwh", 1],
 	["openWB/global/ChargeMode", 1],
 	["openWB/global/WAllChargePoints", 1],
 	["openWB/global/strLastmanagementActive", 1],
@@ -315,15 +316,15 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
 	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
 
-    ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/5/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
 	["openWB/config/get/pv/nurpv70dynact", 1]
 ];
@@ -352,7 +353,7 @@ var options = {
 };
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-var client = new Messaging.Client(location.host, 9001, clientuid);
+var client = new Messaging.Client(location.hostname, 9001, clientuid);
 
 $(document).ready(function(){
 	client.connect(options);

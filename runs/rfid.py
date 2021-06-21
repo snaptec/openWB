@@ -1,15 +1,7 @@
 #!/usr/bin/python
-import argparse
 import paho.mqtt.client as mqtt
-import sys
 import os 
 import time 
-import datetime
-import getopt 
-import socket 
-import struct 
-import binascii 
-import RPi.GPIO as GPIO
 
 os.chdir('/var/www/html/openWB/')
 loglevel=1

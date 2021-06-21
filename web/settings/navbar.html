@@ -17,7 +17,7 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" id="navAllgemein" href="./settings/settings.php">Allgemein</a>
 						<a class="dropdown-item" id="navSmartHome" href="./settings/smarthome.php">Smart Home</a>
-						<a class="dropdown-item" id="navSmartHomeBeta" href="./settings/smarthomeconfig.php">Smart Home 2.0</a>
+						<a class="dropdown-item" id="navSmartHome2" href="./settings/smarthomeconfig.php">Smart Home 2.0</a>
 						<a class="dropdown-item" id="navOpenwbCloud" href="./settings/cloudconfig.php">openWB Cloud</a>
 						<a class="dropdown-item" id="navMqttBruecke" href="./settings/mqtt.php">MQTT-Brücke</a>
 						<a class="dropdown-item" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
@@ -72,11 +72,17 @@
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
 						<a class="dropdown-item" id="navFehlerbericht" href="./settings/fehlerbericht.html">Support</a>
 						<a class="dropdown-item" id="navPasswortschutz" href="./settings/setPassword.php">Passwortschutz</a>
-						<a class="dropdown-item" id="navSystemInfo" href="systeminfo/systeminfo.php">System-Info</a>
+						<a class="dropdown-item" id="navSystemInfo" href="./settings/systeminfo.php">System-Info</a>
 						<a class="dropdown-item" id="navNetworkSettings" href="./settings/network.php">Netzwerk-Einstellungen</a>
 					</div>
 				</li>
-
+				
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/snaptec/openWB/wiki" target="_blank" >Wiki</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./logout.html" id="navbarLogout">Abmelden</a>
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -99,7 +105,7 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./tools/bckredirect.html'">Backup</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/bckredirect.html'">Backup</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
@@ -153,7 +159,7 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./tools/reboot.html'">Reboot</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/reboot.html'">Reboot</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
@@ -180,7 +186,7 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./tools/shutdown.html'">Shutdown</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href='./settings/shutdown.html'">Shutdown</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>

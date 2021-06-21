@@ -70,7 +70,7 @@ response=requests.post(reg,  data=data, headers=headers )
 responsetext  = response.text
 responestatus = response.status_code
 f = open('/var/www/html/openWB/ramdisk/psareply1lp'+chargepoint, 'w')
-f.write(str(responsetext))
+f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 psa_config = json.loads(responsetext)
@@ -89,7 +89,7 @@ response=requests.get(reg,headers=headers )
 f = open('/var/www/html/openWB/ramdisk/psareply2lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
-f.write(str(responsetext))
+f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 vin_list = json.loads(responsetext)
@@ -110,7 +110,7 @@ response=requests.get(reg,headers=headers )
 f = open('/var/www/html/openWB/ramdisk/psareply3lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
-f.write(str(responsetext))
+f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 batt = json.loads(responsetext)
@@ -137,10 +137,12 @@ else:
 	fetchedsoctime = batt['energy'][0]['updatedAt']
 	soct = time.strptime(fetchedsoctime, "%Y-%m-%dT%H:%M:%SZ")
 	soctime = time.mktime(soct)
+	# adding one hour to UTC to get CET
+	soctime = soctime + 3600
 	# checking for daylight saving time
 	dst=time.localtime()
-	if (dst.tm_isdst == 0):
-		# adding one hour to fetched SoCtime if needed
+	if (dst.tm_isdst == 1):
+		# adding one hour to fetched SoCtime in daylight saving time
 		soctime = soctime + 3600
 	# writing timestamp to ramdisk
 	if (int(chargepoint) == 1):

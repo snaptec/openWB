@@ -56,7 +56,7 @@
 			}
 		</style>
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
 		<script src = "status/helperFunctions.js?ver=20210128" ></script>
@@ -131,6 +131,10 @@
 				readLogFile("/openWB/ramdisk/soc.log", "#socdiv");
 			}
 			soclog();
+			function llanbindunglog() {
+				readLogFile("/openWB/ramdisk/isss.log", "#llanbindungdiv");
+			}
+			llanbindunglog();
 		</script>
 
 	</head>
@@ -403,9 +407,9 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<tr id="faultStrPvRow" class="hide">
+										<tr class="faultStrPvRow hide">
 											<th scope="row">Störungsbeschreibung</th>
-											<td id="faultStrPv"></td>
+											<td class="faultStrPv"></td>
 										</tr>
 										<tr>
 											<th scope="row">Leistung [W]</th>
@@ -587,6 +591,10 @@
 						<button class="btn btn-info reloadSocLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
 						<pre id="socdiv"></pre>
 					</div>
+					<div id="collapseSeven" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadLLAnbindungLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<pre id="llanbindungdiv"></pre>
+					</div>
 				</div>
 			</div>
 
@@ -701,6 +709,9 @@
 			});
 			$('.reloadSocLog').click(function(event){
 				soclog();
+			});
+			$('.reloadLLAnbindungLog').click(function(event){
+				llanbindunglog();
 			});
 		</script>
 

@@ -47,7 +47,7 @@
 	<!-- Font Awesome, all styles -->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 	<!-- local css due to async loading of theme css -->
-	<style type="text/css">
+	<style>
 		#preloader {
 			background-color:white;
 			position:fixed;
@@ -75,7 +75,7 @@
 		}
 	</style>
 	<!-- important scripts to be loaded -->
-	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/jquery-3.6.0.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	<script src="js/RGraph.common.core.js"></script>
 	<script src="js/RGraph.common.dynamic.js"></script>
@@ -1639,6 +1639,8 @@
 					labelsValueBold: true,
 					labelsValueItalic: true,
 					labelsValueSize: 17,
+					titleBottomPos: 0.61,
+					titleBottomBold: true,
 					adjustable: false,
 					textAccessible: false,
 					colorsRanges: [[0, 1000, 'green', 3]],
