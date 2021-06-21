@@ -188,8 +188,8 @@ fi
 
 # check for needed apt packages
 echo "install required packages..."
-apt-get update
-apt-get -q -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
+sudo apt-get -qq update
+sudo apt-get -qq -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
 echo "...done"
 
 # check for needed packages
@@ -217,7 +217,7 @@ sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 sudo service mosquitto start
 
 # check for mosquitto configuration
-if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || [ ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf ]; then
+if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf; then
 	echo "updating mosquitto config file"
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
 	sudo service mosquitto reload
