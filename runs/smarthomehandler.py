@@ -33,29 +33,17 @@ DeviceCounters = { }
 DeviceConfigured = []
 DeviceConfiguredOld = []
 
-DeviceOn = []
-DeviceOnStandby = []
-DeviceOnOld = []
-DeviceOnOldStandby = []
-StatusOld = []
-
 for i in range(1, (numberOfSupportedDevices+1)):
-    DeviceTempValues.update({'oldWHI'+str(i) : '2'})
     DeviceTempValues.update({'oldw'+str(i) : '2'})
     DeviceTempValues.update({'oldwh'+str(i) : '2'})
     DeviceTempValues.update({'oldtemp'+str(i) : '2'})
     DeviceTempValues.update({'oldtime'+str(i) : '2'})
     DeviceTempValues.update({'oldrelais'+str(i) : '2'})
-    DeviceValues.update({ str(i)+"watt" : int(0)})
     DeviceValues.update({ str(i)+"runningtime" : int(0)})
     DeviceValues.update( {str(i)+"WHImported_tmp" : int(0)})
     DeviceConfigured.append("0")
     DeviceConfiguredOld.append("9")
-    DeviceOn.append("0")
-    DeviceOnStandby.append("0")
-    DeviceOnOld.append("9999")
-    DeviceOnOldStandby.append("9999")
-    StatusOld.append("9999")
+
 global numberOfDevices
 
 def cleardef(nummer):
@@ -65,12 +53,6 @@ def cleardef(nummer):
     client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/Watt", "0", qos=0, retain=True)
     client.loop(timeout=2.0)
     client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/RunningTimeToday", "0", qos=0, retain=True)
-    client.loop(timeout=2.0)
-    client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/OnCntStandby", "0", qos=0, retain=True)
-    client.loop(timeout=2.0)
-    client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/OnCountNor", "0", qos=0, retain=True)
-    client.loop(timeout=2.0)
-    client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/Status", "0", qos=0, retain=True)
     client.loop(timeout=2.0)
     try:
         DeviceValues.update({str(nummer) + "runningtime" : '0'})
@@ -148,25 +130,10 @@ def getueb(nummer):
         return (uberschuss,1)
 # setze art der Ueberschussrechnung
 def setueb(nummer,ueberschussberechnung):
-#    (1 = mit Speicher, 2 = mit offset, 0 = manual eingeschaltet oder finishtime)
+#    (1 = mit Speicher, 2 = mit offset, 0 = manual eingeschaltet)
     f = open(basePath+'/ramdisk/device' + str(nummer) + '_ueberschuss', 'w')
     f.write(str(ueberschussberechnung))
     f.close()
-# get status
-
-def getstat(nummer):
-#    (10 = ueberschuss gesteuert oder manual, 20 = Anlauferkennung aktiv (ausschalten wenn Leistungsaufnahme > Schwelle) , 30 = gestartet um fertig bis zu erreichen
-    status = 10
-    if os.path.isfile(basePath+'/ramdisk/device' + str(nummer) + '_status'):
-        f = open(basePath+'/ramdisk/device' + str(nummer) + '_status', 'r')
-        status=int(f.read())
-        f.close()
-    return status
-def setstat(nummer,status):
-    f = open(basePath+'/ramdisk/device' + str(nummer) + '_status', 'w')
-    f.write(str(status))
-    f.close()
-
 # support old smarttypes and new smarttypes
 def getdir(smarttype,name):
     if (smarttype == "shelly"):
@@ -212,12 +179,6 @@ def sepwatt(oldwatt,oldwattk,nummer):
     if meastyp == "sdm630":
         argumentList[1] = prefixpy +'sdm630/sdm630.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
-    elif meastyp == "we514":
-        argumentList[1] = prefixpy +'we514/watt.py'
-        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
-    elif meastyp == "fronius":
-        argumentList[1] = prefixpy +'fronius/watt.py'
-        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
     elif meastyp == "shelly":
         argumentList[1] = prefixpy + 'shelly/watt.py'
     elif meastyp == "mystrom":
@@ -232,20 +193,6 @@ def sepwatt(oldwatt,oldwattk,nummer):
         try:
             measureurlc = str(config.get('smarthomedevices', 'device_measureurlc_'+str(nummer)))
             argumentList.append(measureurlc)
-        except:
-            argumentList.append("none")
-    elif meastyp == "json":
-        argumentList[1] = prefixpy + 'json/watt.py'
-        try:
-            argumentList[3] = str(config.get('smarthomedevices', 'device_measurejsonurl_'+str(nummer)))
-        except:
-            argumentList[3] = "undef"
-        try:
-            argumentList[4] = str(config.get('smarthomedevices', 'device_measurejsonpower_'+str(nummer)))
-        except:
-            argumentList[4] = "undef"
-        try:
-            argumentList.append(str(config.get('smarthomedevices', 'device_measurejsoncounter_'+str(nummer))))
         except:
             argumentList.append("none")
     else:
@@ -386,7 +333,6 @@ def publishmqtt():
     global olduberschussoffset
     global totalwatt
     global totalwattot
-    global numberOfSupportedDevices
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key in DeviceValues:
@@ -400,14 +346,12 @@ def publishmqtt():
             nummer = str(list(filter(str.isdigit, key))[0])
             if ( DeviceValues[str(key)] != DeviceTempValues['oldtime' + str(nummer)]):
                 client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/RunningTimeToday", payload=DeviceValues[str(key)], qos=0, retain=True)
-                client.loop(timeout=2.0)
                 DeviceTempValues.update({'oldtime'+str(nummer) : DeviceValues[str(key)]})
         if ( "temp" in key):
             nummer = str(list(filter(str.isdigit, key))[0])
             if ( DeviceValues[str(key)] != DeviceTempValues['oldtemp' + str(nummer)]):
                 sensor = str(list(filter(str.isdigit, key))[1])
                 client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/TemperatureSensor"+str(sensor), payload=DeviceValues[str(key)], qos=0, retain=True)
-                client.loop(timeout=2.0)
                 DeviceTempValues.update({'oldtemp'+str(nummer) : DeviceValues[str(key)]})
         if ( "watt" in key):
             nummer = int(list(filter(str.isdigit, key))[0])
@@ -423,10 +367,8 @@ def publishmqtt():
                 DeviceTempValues.update({'oldwh'+str(nummer) : DeviceValues[str(key)]})
         if ( "wpos" in key):
             nummer = int(list(filter(str.isdigit, key))[0])
-            if ( DeviceValues[str(key)] != DeviceTempValues['oldWHI' + str(nummer)]):
-                client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/WHImported_temp", payload=DeviceValues[str(key)], qos=0, retain=True)
-                client.loop(timeout=2.0)
-                DeviceTempValues.update({'oldWHI'+str(nummer) : DeviceValues[str(key)]})
+            client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/WHImported_temp", payload=DeviceValues[str(key)], qos=0, retain=True)
+            client.loop(timeout=2.0)
     if (oldmaxspeicher != maxspeicher):
         client.publish("openWB/SmartHome/Status/maxspeicherladung", payload=str(maxspeicher), qos=0, retain=True)
         client.loop(timeout=2.0)
@@ -447,20 +389,6 @@ def publishmqtt():
         client.publish("openWB/SmartHome/Status/uberschussoffset", payload=str(uberschussoffset), qos=0, retain=True)
         client.loop(timeout=2.0)
         olduberschussoffset = uberschussoffset
-    for i in range(1, (numberOfSupportedDevices+1)):
-        if (DeviceOn[i-1] != DeviceOnOld [i-1]):
-            client.publish("openWB/SmartHome/Devices/"+str(i)+"/OnCountNor", payload=str(DeviceOn[i-1]) , qos=0, retain=True)
-            client.loop(timeout=2.0)
-            DeviceOnOld [i-1] =  DeviceOn[i-1]
-        if (DeviceOnStandby[i-1] != DeviceOnOldStandby [i-1]):
-            client.publish("openWB/SmartHome/Devices/"+str(i)+"/OnCntStandby", payload=str(DeviceOnStandby[i-1]) , qos=0, retain=True)
-            client.loop(timeout=2.0)
-            DeviceOnOldStandby [i-1] =  DeviceOnStandby[i-1]
-        devstatus=getstat(i-1)
-        if (devstatus != StatusOld [i-1]):
-            client.publish("openWB/SmartHome/Devices/"+str(i)+"/Status", payload=str(devstatus) , qos=0, retain=True)
-            client.loop(timeout=2.0)
-            StatusOld [i-1] =  devstatus
     client.disconnect()
 # Lese aus der Ramdisk Regelrelevante Werte ein
 def loadregelvars():
@@ -547,31 +475,14 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     global numberOfSupportedDevices
-    #logDebug(LOGLEVELERROR, "(" + str(msg.topic) + ") " +   str(msg.payload) )
     if (( "openWB/SmartHome/Device" in msg.topic) and ("WHImported_temp" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceValues.update( {str(devicenumb)+"WHImported_tmp": int(msg.payload)})
-            importtemp = int(DeviceValues[str(devicenumb)+"WHImported_tmp"])
-            logDebug(LOGLEVELERROR,"(" + str(devicenumb) + ") WHImported_temp read from mqtt " + str(importtemp))
     if (( "openWB/SmartHome/Device" in msg.topic) and ("RunningTimeToday" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceValues.update( {str(devicenumb)+"runningtime": int(msg.payload)})
-            runtime=DeviceValues[str(devicenumb)+"runningtime"]
-            if runtime != 0:
-                logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") runningtime read from mqtt: " +  str(runtime))
-    if (( "openWB/SmartHome/Device" in msg.topic) and ("OnCountNor" in msg.topic)):
-        devicenumb=re.sub(r'\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
-            DeviceOn[int(devicenumb)-1] = str(int(msg.payload))
-            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") onCountNor read from mqtt " +  str(DeviceOn[int(devicenumb)-1]))
-    if (( "openWB/SmartHome/Device" in msg.topic) and ("OnCntStandby" in msg.topic)):
-        devicenumb=re.sub(r'\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
-            DeviceOnStandby[int(devicenumb)-1] = str(int(msg.payload))
-            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") OnCntStandby read from mqtt " +  str(DeviceOnStandby[int(devicenumb)-1]))
-
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
     global totalwatt
@@ -580,16 +491,6 @@ def getdevicevalues():
         DeviceConfigured[i-1] = config.get('smarthomedevices', 'device_configured_'+str(i)) # list starts at 0
         if (DeviceConfigured[i-1] != DeviceConfiguredOld[i-1]) and (DeviceConfigured[i-1] == "0"):
             cleardef(i)
-            DeviceOn[i-1]= str("0")
-            DeviceOnStandby[i-1]= str("0")
-        if (DeviceConfiguredOld[i-1] == "9") and (DeviceConfigured[i-1] == "1"):
-            try:
-                deactivatewhileevcharging = int(config.get('smarthomedevices', 'device_deactivatewhileevcharging_'+str(i)))
-            except:
-                deactivatewhileevcharging = 0
-            if deactivatewhileevcharging == 1:
-            # nach startup alle aktiven devices mit Autoladen aus als other fuehren
-                DeviceCounters.update( {str(i) + "mantime" : time.time()})
         DeviceConfiguredOld[i-1] = DeviceConfigured[i-1]
     numberOfDevices = 0
     totalwatt = 0
@@ -672,9 +573,7 @@ def getdevicevalues():
                     answer = json.loads(answerj)
                     wattstart = int(answer['power'])
                     wattkstart = int(answer['powerc'])
-                    # bei laufender Anlauferkennung deivce nicht aktiv setzten
-                    devstatus=getstat(numberOfDevices)
-                    if (int(answer['on']) == 1) and (devstatus != 20):
+                    if (int(answer['on']) == 1):
                         relais=1
                     else:
                         relais=0
@@ -709,21 +608,7 @@ def getdevicevalues():
                         logDebug(LOGLEVELDEBUG, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " File not found: " + str(pyname))
                 # Separate Leistungs messung ?
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
-                # nur abschaltbar wenn openwb in pv modus gesetzt hat und nicht manual gesteuert
-                # elwa Warmwassersicherstellung Problem
-                if str(numberOfDevices)+"mantime" in DeviceCounters and (DeviceValues[str(numberOfDevices)+"manual"] != 1):
-                    # nach Ausschalten manueller Modus mindestens 30 Sek + max( ausschaltverzögerung,mindeseinschaltdauer
-                    #  als nicht abschaltbarer
-                    # device fuehren, damit nicht ungewollt pv überwchuss erkannt wird
-                    manverz = max( int(config.get('smarthomedevices', 'device_ausschaltverzoegerung_'+str(numberOfDevices))) * 60, int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(numberOfDevices))) * 60) + 30
-                    timesince = int(time.time()) - int(DeviceCounters[str(numberOfDevices)+"mantime"])
-                    if ( manverz < timesince ):
-                        del DeviceCounters[str(numberOfDevices)+"mantime"]
-                        logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " von Manuell auf Automatisch gestellt oder startup, Uebergangsfrist abgelaufen")
-                    else:
-                        logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " von Manuell auf Automatisch gestellt oder startup, Uebergangsfrist laueft noch " + str(manverz) + " > " + str(timesince) )
-                        abschalt = 0
-                if (abschalt == 1) and (relais == 1) and (DeviceValues[str(numberOfDevices)+"manual"] != 1):
+                if abschalt == 1:
                     totalwatt = totalwatt + watt
                 else:
                     totalwattot = totalwattot + watt
@@ -778,12 +663,7 @@ def getdevicevalues():
                             if str(numberOfDevices) + "eintime" in DeviceCounters:
                                 del DeviceCounters[str(numberOfDevices) + "eintime"]
                 DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                devstatus=getstat(numberOfDevices)
-                try:
-                    runtime=DeviceValues[str(numberOfDevices)+"runningtime"]
-                except:
-                    runtime=0
-                logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " rel: " + str(relais)  +  " oncnt/time: " + str(DeviceOn[numberOfDevices-1]) + "/" + str(runtime) + " Status: " + str(devstatus) + " akt: " + str(watt) + " Z Hw: " + str(wattk))
+                logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " relais: " + str(relais)  + " aktuell: " + str(watt) + " Zaehler Hw: " + str(wattk))
             except Exception as e:
                 DeviceValues.update( {str(numberOfDevices) : "error"})
                 logDebug(LOGLEVELERROR, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " Fehlermeldung: " + str(e))
@@ -797,7 +677,7 @@ def getdevicevalues():
     logDebug(LOGLEVELDEBUG, "Total Watt nichtabschaltbarer smarthomedevices: " + str(totalwattot) )
     publishmqtt()
 
-def turndevicerelais(nummer, zustand,ueberschussberechnung,updatecnt):
+def turndevicerelais(nummer, zustand,ueberschussberechnung):
     (switchtyp,canswitch) = gettyp(nummer)
     devicename = str(config.get('smarthomedevices', 'device_name_'+str(nummer)))
     try:
@@ -840,16 +720,11 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung,updatecnt):
             if os.path.isfile(pyname):
                 argumentList[1] = pyname
                 argumentList[5] = device_einschalturl
-                if updatecnt == 1:
-                    DeviceOn[nummer-1]= str(int(DeviceOn[nummer-1])+1)
-                else:
-                    DeviceOnStandby[nummer-1]= str(int(DeviceOnStandby[nummer-1])+1)
-                logDebug(LOGLEVELINFO, "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung) + " oncount: " + str(DeviceOn[nummer-1]))
+                logDebug(LOGLEVELINFO, "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung) )
                 f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
                 f.write(str(zustand))
                 f.close()
-                if updatecnt == 1:
-                    DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
+                DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
                 proc=subprocess.Popen(argumentList)
                 proc.communicate()
             else:
@@ -885,29 +760,13 @@ def conditions(nummer):
         deactivatewhileevcharging = int(config.get('smarthomedevices', 'device_deactivatewhileevcharging_'+str(nummer)))
     except:
         deactivatewhileevcharging = 0
-    try:
-        finishtime = str(config.get('smarthomedevices', 'device_finishtime_'+str(nummer)))
-    except:
-        finishtime = '00:00'
-    try:
-        startupdetection = int(config.get('smarthomedevices', 'device_startupdetection_'+str(nummer)))
-    except:
-        startupdetection = 0
-    try:
-        standbypower = int(config.get('smarthomedevices', 'device_standbypower_'+str(nummer)))
-    except:
-        standbypower = 0
-    try:
-        standbyduration = int(config.get('smarthomedevices', 'device_standbyduration_'+str(nummer)))
-    except:
-        standbyduration = 0
     file_charge= '/var/www/html/openWB/ramdisk/llkombiniert'
     testcharge = 0
     if os.path.isfile(file_charge):
         f = open( file_charge, 'r')
         testcharge =int(f.read())
         f.close()
-    if testcharge <= 1000:
+    if testcharge == 0:
         chargestatus = 0
     else:
         chargestatus = 1
@@ -918,93 +777,37 @@ def conditions(nummer):
     mineinschaltdauer = int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(nummer))) * 60
     maxeinschaltdauer = int(config.get('smarthomedevices', 'device_maxeinschaltdauer_'+str(nummer))) * 60
     name = str(config.get('smarthomedevices', 'device_name_'+str(nummer)))
-    #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime definiert " + str(finishtime) + ">" + str(DeviceOn[nummer-1]))
-    if (finishtime != '00:00') and (DeviceOn[nummer-1] ==str("0")):
-        local_time = datetime.now(timezone.utc).astimezone()
-        localhour = int(local_time.strftime(format = "%H"))
-        localminute = int(local_time.strftime(format = "%M"))
-        localinsec = int(( localhour * 60 * 60 )  + (localminute * 60))
-        finishhour = int(str("0") +str(finishtime).partition(':')[0])
-        finishminute = int(str(finishtime)[-2:] )
-        startspatsec = int(( finishhour * 60 * 60 )  + (finishminute * 60) - mineinschaltdauer)
-        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime definiert " + str(finishhour) + ":" +  str ('%.2d' % finishminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute) + " Anzahl Starts heute 0 Mineinschaltdauer (Sec) " + str (mineinschaltdauer))
-        if ((finishhour > localhour )  or  ((finishhour == localhour ) and (finishminute >=localminute) )) and (startspatsec <= localinsec):
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen finishtime, spaetester start in sec " + str(startspatsec) + " aktuelle sec " + str(localinsec))
-            turndevicerelais(nummer, 1,0,1)
-            setstat(nummer,30)
-            return
-    devstatus=getstat(nummer)
-    if devstatus == 30:
-        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime laueft, pruefe Mindestlaufzeit")
-        if str(nummer)+"eintime" in DeviceCounters:
-            timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
-            if ( mineinschaltdauer < timestart):
-                logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, finishtime erreicht")
-                setstat(nummer,10)
-                return
-            else:
-                logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " finishtime laueft, Mindesteinschaltdauer nicht erreicht, " + str(mineinschaltdauer) + " > " + str(timestart))
-                return
-        else:
-            logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, finishtime erreicht")
-            setstat(nummer,10)
-            return
-    # here startup device_startupdetection
-    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
-        setstat(nummer,20)
-        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
-        turndevicerelais(nummer, 1,0,0)
-        return
-    if (devstatus == 20):
-        if (int(DeviceValues[str(nummer)+"watt"]) > standbypower):
-            if  str(nummer)+"anlaufz" in DeviceCounters:
-                timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"anlaufz"])
-                if ( standbyduration < timesince ):
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte aus " + str(standbypower))
-                    setstat(nummer,10)
-                    del DeviceCounters[str(nummer)+"anlaufz"]
-                    turndevicerelais(nummer, 0,0,1)
-                    return
-                else:
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " standbycheck noch nicht erreicht " +  str(standbyduration)+ " > " + str(timesince))
-            else:
-                    DeviceCounters.update( {str(nummer) + "anlaufz" : time.time()})
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " standbycheck gestartet " + str (int(DeviceValues[str(nummer)+"watt"]))+  " > " + str(standbypower) )
-        else:
-            if  str(nummer)+"anlaufz" in DeviceCounters:
-                del DeviceCounters[str(nummer)+"anlaufz"]
-            logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " unter standbyschwelle , timer geloescht")
     if ( maxeinschaltdauer > int(DeviceValues[str(nummer)+"runningtime"])):
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Maximale Einschaltdauer nicht erreicht")
     else:
         if ( DeviceValues[str(nummer)+"relais"] == 1 ):
             logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " Maximale Einschaltdauer erreicht schalte ab")
-            turndevicerelais(nummer, 0,0,1)
+            turndevicerelais(nummer, 0,0)
         else:
             logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ")" + str(name) + " Maximale Einschaltdauer erreicht bereits abgeschaltet")
         return
     # Auto ladung
     if deactivatewhileevcharging == 1:
         if ( DeviceValues[str(nummer)+"relais"] == 1 ):
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll ausgeschaltet werden bei Ladung, pruefe " + str( testcharge))
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll ausgeschaltet werden bei Ladung, pruefe")
             if chargestatus == 1:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, pruefe Mindestlaufzeit")
                 if str(nummer)+"eintime" in DeviceCounters:
                     timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                     if ( mineinschaltdauer < timestart):
                         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, schalte aus ")
-                        turndevicerelais(nummer, 0,0,1)
+                        turndevicerelais(nummer, 0,0)
                         return
                     else:
                         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer nicht erreicht, " + str(mineinschaltdauer) + " > " + str(timestart))
                 else:
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
-                    turndevicerelais(nummer, 0,0,1)
+                    turndevicerelais(nummer, 0,0)
                     return
             else:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
         else:
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe")
             if chargestatus == 1:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
                 return
@@ -1055,7 +858,7 @@ def conditions(nummer):
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
                 if ( einverz < timesince ):
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Einschaltverzögerung erreicht, schalte ein " + str(einschwelle))
-                    turndevicerelais(nummer, 1,ueberschussberechnung,1)
+                    turndevicerelais(nummer, 1,ueberschussberechnung)
                     del DeviceCounters[str(nummer)+"einverz"]
                 else:
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " Einschaltverzögerung nicht erreicht. " + str(einverz) + " > " + str(timesince))
@@ -1079,7 +882,7 @@ def conditions(nummer):
                 return
             else:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " SoC niedriger als Abschalt SoC, prüfe weiter")
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Überschuss " + str(devuberschuss)  + " kleiner Ausschaltschwelle " + str(ausschwelle))
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Überschuss " + str(devuberschuss)  + " kleiner Ausschaltschwelle" + str(ausschwelle))
             if ( DeviceValues[str(nummer)+"relais"] == 1 ):
                 if  str(nummer)+"ausverz" in DeviceCounters:
                     timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"ausverz"])
@@ -1088,13 +891,13 @@ def conditions(nummer):
                             timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                             if ( mineinschaltdauer < timestart):
                                 logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Ausschaltverzögerung & Mindesteinschaltdauer erreicht, schalte aus " + str(ausschwelle))
-                                turndevicerelais(nummer, 0,0,1)
+                                turndevicerelais(nummer, 0,0)
                                 del DeviceCounters[str(nummer)+"ausverz"]
                             else:
                                 logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Ausschaltverzögerung erreicht, Mindesteinschaltdauer nicht erreicht, " + str(mineinschaltdauer) + " > " + str(timestart))
                         else:
                             logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
-                            turndevicerelais(nummer, 0,0,1)
+                            turndevicerelais(nummer, 0,0)
                     else:
                         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " Ausschaltverzögerung nicht erreicht. " + str(ausverz) + " > " + str(timesince))
                 else:
@@ -1126,34 +929,26 @@ def resetmaxeinschaltdauerfunc():
             if (int(resetmaxeinschaltdauer) == 0):
                 for i in range(1, (numberOfSupportedDevices+1)):
                     DeviceValues.update({str(i) + "runningtime" : '0'})
-                    DeviceTempValues.update({'oldtime'+str(i) : '2'})
-                    logDebug(LOGLEVELINFO, "(" + str(i) + ") RunningTime auf 0 gesetzt")
-                    DeviceOn[i-1]= str("0")
-                    DeviceOnStandby[i-1]= str("0")
-                    try:
-                        del DeviceCounters[str(i)+"oldstampeinschaltdauer"]
-                    except:
-                        pass
                 resetmaxeinschaltdauer=1
         except:
             resetmaxeinschaltdauer=0
-    if (int(hour) == 1):
+    if (int(hour) == 2):
         resetmaxeinschaltdauer=0
 
 client = mqtt.Client("openWB-mqttsmarthome")
 client.on_connect = on_connect
 client.on_message = on_message
 startTime = time.time()
-waitTime = 5
+waitTime = 3
 client.connect("localhost")
 while True:
     client.loop()
-    #client.subscribe("openWB/SmartHome/#", 2)
+    client.subscribe("openWB/SmartHome/#", 2)
     elapsedTime = time.time() - startTime
     if elapsedTime > waitTime:
         client.disconnect()
         break
-time.sleep(5)
+
 while True:
     config.read(shconfigfile)
     bootdone = checkbootdone()
@@ -1168,11 +963,10 @@ while True:
                     if ( DeviceValues[str(i)+"manual"] == 1 ):
                         if ( DeviceValues[str(i)+"manualmodevar"] == 0 ):
                             if ( DeviceValues[str(i)+"relais"] == 1 ):
-                                turndevicerelais(i, 0,0,1)
+                                turndevicerelais(i, 0,0)
                         if ( DeviceValues[str(i)+"manualmodevar"] == 1 ):
                             if ( DeviceValues[str(i)+"relais"] == 0 ):
-                                turndevicerelais(i, 1,0,1)
-                        DeviceCounters.update( {str(i) + "mantime" : time.time()})
+                                turndevicerelais(i, 1,0)
                         logDebug(LOGLEVELDEBUG,"(" + str(i) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, keine Regelung")
                     else:
                         (switchtyp,canswitch) = gettyp(i)

@@ -26,13 +26,11 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -50,13 +48,14 @@
 		?>
 		<div id="nav"></div> <!-- placeholder for navbar -->
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>MQTT-Brücke</h1>
 			<?php
 				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
-				$filesCount = count($files);
-				// give the user the option to configure more than one bridge
-				array_push($files, "");
+				if (count($files) == 0) {
+					array_push($files, "");
+				}
 
-				$loopCount = 0;
+				$firstLoopDone = false;
 				foreach($files as $currentFile)
 				{
 					$currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
@@ -130,12 +129,11 @@
 						}
 					}
 
-					if ($loopCount != 0) echo "<hr>";
+					if ($firstLoopDone) echo "<hr>";
 			?>
-			<h1> <?php if($loopCount != $filesCount) echo "MQTT-Brücke \"$connectionName\""; else echo "Neue MQTT-Brücke"; ?></h1>
-			<form action="./settings/savemqtt.php" method="POST">
+			<form action="./tools/savemqtt.php" method="POST">
 				<!-- previous bridge name, needed for renaming a bridge -->
-				<input type="hidden" name="bridge" value="<?php echo($connectionName); ?>">
+				<input type="hidden" readonly="readonly" name="bridge" value="<?php echo($connectionName); ?>">
 
 				<!-- Konfiguration -->
 				<div class="card border-secondary">
@@ -145,7 +143,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 						<u>ACHTUNG</u>: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen!<br/>
-						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und
+						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und 
 						strenger Zugriffskontrolle (zumindest für die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
 						</div>
 						<div class="form-group">
@@ -170,7 +168,7 @@
 							<div class="col">
 								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>">
 								<span class="form-text small">Der Name darf nur aus Buchstaben und Zahlen bestehen, keine Sonderzeichen oder Umlaute.</span>
-								<?php if($debugold >= 1) echo "<small>Config-File befindet sich in Datei '$currentFile'</small>"; ?>
+								<?php if($debugold >= 1) echo "<small>in Datei '$currentFile'</small>"; ?>
 							</div>
 						</div>
 						<div class="form-row mb-1">
@@ -190,20 +188,20 @@
 						<div class="form-row mb-1">
 							<label for="RemotePass" class="col-md-4 col-form-label">Passwort</label>
 							<div class="col">
-								<input class="form-control" type="password" size="35" name="RemotePass" id="RemotePass" pattern="^\S.\S+$" value="<?php echo $remotePassword; ?>">
+								<input class="form-control" ype="password" size="35" name="RemotePass" id="RemotePass" pattern="^\S.\S+$" value="<?php echo $remotePassword; ?>">
 								<span class="form-text small">Passwort für den Login auf dem entfernten MQTT-Server. Leerzeichen am Anfang und Ende des Passworts werden nicht unterstützt.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
 							<label for="RemotePrefix" class="col-md-4 col-form-label">Entfernter Präfix</label>
 							<div class="col">
-								<input class="form-control" type="text" size="55" name="RemotePrefix" id="RemotePrefix" pattern="^[a-zA-Z0-9_\-\/]+[/]$" value="<?php echo $remotePrefix; ?>">
+								<input class="form-control" ype="text" size="55" name="RemotePrefix" id="RemotePrefix" pattern="^[a-zA-Z0-9_\-\/]+[/]$" value="<?php echo $remotePrefix; ?>">
 								<span class="form-text small">MQTT-Thema Präfix, welches dem 'openWB/...' vorangestellt wird.<br/>
 									Beispiel: Wenn in diesem Feld 'pfx/' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">MQTT Protokoll</label>
+							<label for="mqttProtocol" class="col-md-4 col-form-label">MQTT Protokoll</label>
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($mqttProtocol == "mqttv31") echo " active" ?>">
@@ -217,7 +215,7 @@
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">TLS Protokoll</label>
+							<label for="tlsProtocol" class="col-md-4 col-form-label">TLS Protokoll</label>
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($tlsVersion == "tlsv1.3") echo " active"; if(!$tlsv13Supported) echo " disabled"; ?>">
@@ -291,7 +289,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 							<u>ACHTUNG</u>: Dies erlaubt jedem Nutzer des entfernten MQTT-Servers mit Zugriff auf die entsprechenden Themen, diese openWB fern zu steuern!<br/>
-							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit
+							Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit 
 							persönlichem Login und strenger Zugriffskontrolle zu aktivieren!<br/>
 							KEINESFALLS AUF <u>ÖFFENTLICH ZUGÄNGLICHEN</u> MQTT-SERVERN AKTIVEREN!!!
 						</div>
@@ -327,7 +325,7 @@
 
 			</form>
 			<?php
-					$loopCount++;
+					$firstLoopDone = true;
 				}
 			?>
 
@@ -343,26 +341,27 @@
 					</form>
 				</div>
 			</div>
-		</div>  <!-- container -->
+		</div>
+	</div>  <!-- container -->
 
-		<footer class="footer bg-dark text-light font-small">
-			<div class="container text-center">
-					<small>Sie befinden sich hier: Einstellungen/MQTT-Brücke</small>
-			</div>
-		</footer>
+	<footer class="footer bg-dark text-light font-small">
+		<div class="container text-center">
+				<small>Sie befinden sich hier: Einstellungen/MQTT-Brücke</small>
+		</div>
+	</footer>
 
-		<script>
+	<script>
 
-			$.get(
-				{ url: "settings/navbar.html", cache: false },
-				function(data){
-					$("#nav").replaceWith(data);
-					// disable navbar entry for current page
-					$('#navMqttBruecke').addClass('disabled');
-				}
-			);
+		$.get(
+			{ url: "settings/navbar.html", cache: false },
+			function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navMqttBruecke').addClass('disabled');
+			}
+		);
 
-		</script>
+	</script>
 
 	</body>
 </html>

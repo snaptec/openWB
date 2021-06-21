@@ -47,7 +47,7 @@
 	<!-- Font Awesome, all styles -->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 	<!-- local css due to async loading of theme css -->
-	<style>
+	<style type="text/css">
 		#preloader {
 			background-color:white;
 			position:fixed;
@@ -75,7 +75,7 @@
 		}
 	</style>
 	<!-- important scripts to be loaded -->
-	<script src="js/jquery-3.6.0.min.js"></script>
+	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	<script>
 		function getCookie(cname) {
@@ -146,74 +146,74 @@
 		</div>
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="col-sm bg-lightgreen px-1">
+			<div class="col-sm bg-lightgreen">
 				<span class="smallTextSize">PV: <span id="pvleistung">lade Daten</span></span><span class="verySmallTextSize" id="pvdailyyield"></span>
 			</div>
-			<div id="evudiv" class="col-sm bg-rose px-1">
+			<div id="evudiv" class="col-sm bg-rose">
 				<span class="smallTextSize">Netz<span id="bezug">: lade Daten</span></span><span class="verySmallTextSize" id="evuidailyyield"></span><span class="verySmallTextSize" id="evuedailyyield"></span>
 			</div>
 		</div>
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="col-sm bg-apricot px-1">
+			<div class="col-sm bg-apricot">
 				<span class="smallTextSize">Hausverbrauch: <span id="hausverbrauch">lade Daten</span></span><span class="verySmallTextSize" id="hausverbrauchdailyyield"></span>
 			</div>
-			<div class="col-sm bg-lightgrey px-1">
+			<div class="col-sm bg-lightgrey">
 				<span class="smallTextSize">Ladeleistung: <span id="powerAllLp">lade Daten</span></span><span class="verySmallTextSize" id="lladailyyield"></span>
 			</div>
 		</div>
 		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
-			<div class="col-sm bg-orange px-1">
+			<div class="col-sm bg-orange">
 				<span class="smallTextSize">Speicher<span id="speicherleistung">: lade Daten</span></span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> <span class="smallTextSize">- Ladestand: <span id="speichersoc"> lade Daten</span></span>
 			</div>
 		</div>
 		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
-			<div class="col-sm bg-rose px-1">
+			<div class="col-sm bg-rose">
 				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
 			</div>
 		</div>
 
-		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center hide">
-			<div id="verbraucher1" class="col-sm px-1 openwb-device-1 hide">
+		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
+			<div id="verbraucher1" class="col-sm hide">
 				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
 			</div>
-			<div id="verbraucher2" class="col-sm px-1 openwb-device-2 hide">
-				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 2</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
+			<div id="verbraucher2" class="col-sm hide">
+				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
 			</div>
 		</div>
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="hide bg-lightblue col-sm SmartHomeTemp px-1" data-dev="1">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="1">
 				<span class="actualTemp0Device"></span>
 			</div>
-			<div class="hide bg-lightblue col-sm SmartHomeTemp px-1" data-dev="1">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="1">
 				<span class="actualTemp1Device"></span>
 			</div>
-			<div class="hide bg-lightblue col-sm SmartHomeTemp px-1" data-dev="1">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="1">
 				<span class="actualTemp2Device"></span>
 			</div>
 		</div>
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="hide bg-lightblue col-sm SmartHomeTemp px-1" data-dev="2">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp0Device"></span>
 			</div>
-			<div class="hide bg-lightblue col-sm SmartHomeTemp px-1" data-dev="2">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp1Device"></span>
 			</div>
-			<div class="hide bg-lightblue col-sm SmartHomeTemp px-1" data-dev="2">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="2">
 				<span class="actualTemp2Device"></span>
 			</div>
 		</div>
 
 		<div id="webhooks" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">
-			<div id="hook1" class="col-3 m-1 bg-danger px-1 hide">
+			<div id="hook1" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 1
 			</div>
-			<div id="hook2" class="col-3 m-1 bg-danger px-1 hide">
+			<div id="hook2" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 2
 			</div>
-			<div id="hook3" class="col-3 m-1 bg-danger px-1 hide">
+			<div id="hook3" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 3
 			</div>
 		</div>

@@ -28,13 +28,35 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -51,7 +73,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration Batteriespeicher</h1>
-			<form action="./settings/saveconfig.php" method="POST">
+			<form action="./tools/saveconfig.php" method="POST">
 
 				<!-- Speicher -->
 				<div class="card border-warning">
@@ -83,7 +105,6 @@
 										<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
 										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
-										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
 										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
 										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
 										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
@@ -157,43 +178,6 @@
 								<span class="text-info">openWB/set/houseBattery/%Soc</span> Ladestand des Speichers, int, 0-100
 							</div>
 						</div>
-						
-						<div id="divspeichersolarwatt" class="hide">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<label for="solarwattmethod1" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($solarwattmethodold == 0) echo " active" ?>">
-												<input type="radio" name="solarwattmethod" id="solarwattmethod1" value="0"<?php if($solarwattmethodold == 0) echo " checked=\"checked\"" ?>>Energy Manager
-											</label>
-											<label class="btn btn-outline-info<?php if($solarwattmethodold == 1) echo " active" ?>">
-												<input type="radio" name="solarwattmethod" id="solarwattmethod2" value="1"<?php if($solarwattmethodold == 1) echo " checked=\"checked\"" ?>>Gateway
-											</label>
-										</div>
-										<span class="form-text small">
-											IP-Adresse 1: Energy Manager (immer angeben)<br>
-											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
-										</span>
-									</div>									
-								</div>
-							</div>
-							<script>
-								function visibility_solarwatt_ip2() {
-									if($('#solarwattmethod1').prop("checked")) {
-										hideSection('#divspeicherip2');
-									} else {
-										showSection('#divspeicherip2');
-									}
-								}
-								
-								$(function() {	
-									$('input[type=radio][name=solarwattmethod]').change(function(){
-										visibility_solarwatt_ip2();
-									});
-								});
-							</script>
-						</div>
 
 						<div id="divspeichervictron" class="hide">
 							<div class="alert alert-info">
@@ -201,21 +185,6 @@
 							</div>
 						</div>
 
-						<div id="divspeicherstuder" class="hide">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
-									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="studer_ip" id="studer_ip" value="<?php echo $studer_ipold ?>">
-										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
-									</div>
-								</div>
-							</div>
-							<div class="alert alert-info">
-								Hier bitte die IP Adresse des ModbusGateway's eintragen.
-							</div>
-						</div>
-						
 						<div id="divspeicherfems" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -236,18 +205,6 @@
 									<label for="speicher1_ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip" id="speicher1_ip" value="<?php echo $speicher1_ipold ?>">
-										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div id="divspeicherip2" class="hide">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<label for="speicher1_ip2" class="col-md-4 col-form-label">IP Adresse 2</label>
-									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip2" id="speicher1_ip2" value="<?php echo $speicher1_ip2old ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -295,16 +252,8 @@
 						</div>
 
 						<div id="divspeicheralphaess" class="hide">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
-									<div class="col">
-										<select name="alphav123" id="alphav123" class="form-control">
-											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
-											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
-										</select>
-									</div>
-								</div>
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 
@@ -338,7 +287,7 @@
 									<label for="speicherpwpass" class="col-md-4 col-form-label">Passwort</label>
 									<div class="col">
 										<input class="form-control" type="password" name="speicherpwpass" id="speicherpwpass" value="<?php echo $speicherpwpassold ?>">
-										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall. Das Passwort sind üblicherweise die letzten 5 Stellen der Seriennummer.</span>
+										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall.</span>
 									</div>
 								</div>
 							</div>
@@ -636,16 +585,12 @@
 								hideSection('#divspeichervarta');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichervictron');
-								hideSection('#divspeicherstuder');
 								hideSection('#divspeicherlgessv1');
 								hideSection('#divspeicherfems');
 								hideSection('#divspeicherip');
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
 								hideSection('#divspeichersungrow');
-								hideSection('#divspeicherjson');
-								hideSection('#divspeichersolarwatt');
-								hideSection('#divspeicherip2');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
@@ -658,9 +603,7 @@
 									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
-									showSection('#divspeichersolarwatt');
 									showSection('#divspeicherip');
-									visibility_solarwatt_ip2();
 								}
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
@@ -677,9 +620,6 @@
 								}
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
-								}
-								if($('#speichermodul').val() == 'speicher_studer') {
-									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
 									showSection('#divspeicherkit');
@@ -795,7 +735,7 @@
 			</div>
 
 			<!-- hidden form to save wizzard done to config on abort -->
-			<form id="wizzarddoneForm" action="settings/saveconfig.php" method="POST">
+			<form id="wizzarddoneForm" action="tools/saveconfig.php" method="POST">
 				<input type="hidden" name="wizzarddone" value="100">
 			</form>
 

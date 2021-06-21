@@ -1,7 +1,8 @@
 #!/bin/bash
 
+
 #Daten einlesen
-json=$(curl -s -u $bezug_smartme_user:$bezug_smartme_pass --connect-timeout 10 -s $bezug_smartme_url)
+json=$(curl -u $bezug_smartme_user:$bezug_smartme_pass --connect-timeout 10 -s $bezug_smartme_url)
 
 #Aktuelle Leistung (kW --> W)
 wattbezug=$(echo $json | jq .ActivePower)
@@ -47,19 +48,19 @@ bezuga1=$(echo $json | jq .CurrentL1)
 bezuga2=$(echo $json | jq .CurrentL2)
 bezuga3=$(echo $json | jq .CurrentL3)
 if [ $bezuga1 = 'null' ] ; then
-	bezuga1=$(echo $json | jq .Current)
+		bezuga1=$(echo $json | jq .Current)
 fi
 
 #Prüfen ob Werte gültig
 re='^[-+]?[0-9]+\.?[0-9]*$'
 if ! [[ $wattbezug =~ $re ]] ; then
-	wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+	   wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 fi
 if ! [[ $ikwh =~ $re ]] ; then
-	ikwh=$(</var/www/html/openWB/ramdisk/bezugkwh)
+	   ikwh=$(</var/www/html/openWB/ramdisk/bezugkwh)
 fi
 if ! [[ $ekwh =~ $re ]] ; then
-	ekwh=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
+	   ekwh=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
 fi
 
 #Ausgabe

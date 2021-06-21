@@ -2,8 +2,7 @@
 
 import os, requests, json, time, sys, os
 from datetime import datetime, timezone
-from requests.exceptions import Timeout, RequestException
-from json import JSONDecodeError
+from requests.exceptions import Timeout
 
 ramdiskdir = '/var/www/html/openWB/ramdisk/'
 moduledir = '/var/www/html/openWB/modules/soc_eq/'
@@ -29,39 +28,39 @@ def socDebugLog(message):
 def handleResponse(what, status_code, text):
 	if status_code == 204:
 		# this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)  
-		socDebugLog(what + " Request Code: " + str(status_code) + " (no data is available for the resource)")
-		socDebugLog(text)
+		socDebugLog(what + " Request Code: " + str(req_soc.status_code) + " (no data is available for the resource)")
+		socDebugLog(req_soc.text)
 	elif status_code == 400:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (Bad Request)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 401:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (Invalid or missing authorization in header)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 402:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (Payment required)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 403:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (Forbidden)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 404:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 429:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The service received too many requests in a given amount of time)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 500:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The service received too many requests in a given amount of time)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	elif status_code == 503:
 		socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")
-		socDebugLog(text)
+		socDebugLog(req_soc.text)
 		exit(1)
 	else:
 		socDebugLog(what + " Request fehlgeschlagen unbekannter Code: " + str(status_code))
@@ -128,7 +127,7 @@ if int(expires_in) < int(time.time()):
 		json.dump({'expires_in' : expires_in, 'refresh_token' : refresh_token, 'access_token' : access_token}, fd)
 		fd.close()
 	else:
-		handleResponse("Refresh",ref.status_code,ref.text)
+		handleResponse("Refresh",ref.status_code,ref.txt)
 
 #call API for SoC
 header = {'authorization': 'Bearer ' + access_token}
@@ -140,11 +139,6 @@ try:
 except Timeout:
 	socDebugLog("Soc Request Timed Out")
 	exit(2)
-
-except RequestException:
-	socDebugLog("Soc Request Request Exception occured " + soc_url)
-	exit(2)
-
 if Debug >= 1:
 	socDebugLog("SOC Request: " + str(req_soc.status_code))
 	socDebugLog("SOC Response: " + req_soc.text)
@@ -159,12 +153,7 @@ except:
 
 if req_soc.status_code == 200:
 	#valid Response
-	try:
-		res = json.loads(req_soc.text)
-	except JSONDecodeError:
-		socDebugLog("Soc Response NO VALID JSON " + req_soc.text)
-		exit(2)
-
+	res = json.loads(req_soc.text)
 	#Extract SoC value and write to file
 	for entry in res:
 		for values in entry:

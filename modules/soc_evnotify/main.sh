@@ -3,17 +3,12 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
-DMOD="EVSOC"
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "soc_evnotify: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
-	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
-fi
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -34,46 +29,31 @@ case $CHARGEPOINT in
 		;;
 esac
 
-incrementTimer(){
-	case $dspeed in
-		1)
-			# Regelgeschwindigkeit 10 Sekunden
-			ticksize=1
-			;;
-		2)
-			# Regelgeschwindigkeit 20 Sekunden
-			ticksize=2
-			;;
-		3)
-			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=1
-			;;
-		*)
-			# Regelgeschwindigkeit unbekannt
-			ticksize=1
-			;;
-	esac
-	soctimer=$((soctimer+$ticksize))
-	echo $soctimer > $soctimerfile
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
 }
 
 soctimer=$(<$soctimerfile)
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
+
 if (( soctimer < 4 )); then
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-	incrementTimer
+	socDebugLog "Nothing to do yet. Incrementing timer."
+	soctimer=$((soctimer+1))
+	echo $soctimer > $soctimerfile
 else
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+	socDebugLog "Requesting SoC"
 	echo 0 > $soctimerfile
 	answer=$(curl -s -X GET 'https://app.evnotify.de/soc?akey='$akey'&token='$token)
 	# extract the soc value
 	soc=$(echo $answer | jq .soc_display)
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC from Server: $soc"
+	socDebugLog "SoC from Server: $soc"
 	# parse to int to be able to check in condition - to determine if valid or not
 	isvalid=$(echo $soc | cut -d "." -f 1 | cut -d "," -f 1)
 	if (( isvalid >= 0 && isvalid != null)); then
 		echo $isvalid > $socfile
 	else
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC is invalid!"
+		socDebugLog "SoC is invalid!"
 	fi
 fi

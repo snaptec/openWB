@@ -50,7 +50,7 @@
 	<!-- Font Awesome, all styles -->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 	<!-- local css due to async loading of theme css -->
-	<style>
+	<style type="text/css">
 		#preloader {
 			background-color: white;
 			position: fixed;
@@ -83,7 +83,7 @@
 		}
 	</style>
 	<!-- important scripts to be loaded -->
-	<script src="js/jquery-3.6.0.min.js"></script>
+	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 
 	<script>
@@ -106,7 +106,7 @@
 		// include special Theme style
 		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
 	</script>
-	<script src="themes/colors/js/d3.v6.min.js"></script>
+	<script src="https://d3js.org/d3.v6.min.js"></script>
 	<script src="themes/colors/powerdata.js"></script>
 	<script src="themes/colors/powermeter.js"></script>
 	<script src="themes/colors/yieldmeter.js"></script>
@@ -173,21 +173,12 @@
 							<h3>Aktuelle Leistung</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<div class="dropdown">
-								<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-									<span	class="fa fa-bars fa-sm"></span>
-								</button>
-								<div class="dropdown-menu dropdown-menu-right colormenu">
-									<a class="dropdown-item" href="#" onclick="switchTheme()"><span class="fa fa-adjust px-0"></span> Hintergrund ändern</a>
-									<a class="dropdown-item" href="#" onclick="toggleGrid()"><span
-										class="fa fa-th px-0"></span> Graph: Raster an/aus</a>
-									<a class="dropdown-item" href="#" onclick="switchDisplay()"><span
-										class="fa fa-chart-area px-0"></span> Fixe Bögen an/aus</a>
-									<a class="dropdown-item hide" id="meterResetButton" href="#" onclick="resetButtonClicked()"><span
-										class="fa fa-undo"></span> Bögen reset</a>									
-								</div>
-							</div>
-							
+							<button class="btn btn-outline-secondary btn-sm hide" id="meterResetButton"><span
+									class="fa fa-undo px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="powerMeterButton"><span
+									class="fa fa-chart-area px-0"></span></button>
+							<button class="btn btn-outline-secondary btn-sm " id="themeSwitchButton"><span
+									class="fa fa-adjust px-0"></span></button>
 						</div>
 					</div>
 				</div>
@@ -220,8 +211,6 @@
 							<h3 id="energyheading">Energie heute</h3>
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
-							<button class="btn btn-outline-secondary btn-sm " id="calendarButton"><span
-								class="fa fa-calendar-alt px-0"></span></button>
 							<button class="btn btn-outline-secondary btn-sm " id="energyLeftButton"><span
 									class="fa fa-chevron-circle-left px-0"></span></button>
 							<button class="btn btn-outline-secondary btn-sm " id="energyRightButton"><span
@@ -242,6 +231,21 @@
 					</div>
 					<div id="socSelector"></div>
 					<div id="chargePointTable"></div>
+					<form id="minundpvladenEinstellungen" class="hide">
+						<hr color="white">
+						<div class="row justify-content-center">
+							<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
+						</div>
+						<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
+							<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
+							<div class="col">
+
+								<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1"
+									value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
+							</div>
+							<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
+						</div>
+					</form>
 					<!-- depending on charge mode show options -->
 					<form id="minundpvladenEinstellungen" class="hide">
 						<hr class="border-secondary">
@@ -361,7 +365,8 @@
 						<div class="chargeLimitation" data-lp="1">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 								<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons"
@@ -411,7 +416,8 @@
 						<div class="chargeLimitation" data-lp="2">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 								<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons"
@@ -461,7 +467,8 @@
 						<div class="chargeLimitation" data-lp="3">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 								<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons"
@@ -500,7 +507,8 @@
 						<div class="chargeLimitation" data-lp="4">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 								<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons"
@@ -539,7 +547,8 @@
 						<div class="chargeLimitation" data-lp="5">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 								<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons"
@@ -578,7 +587,8 @@
 						<div class="chargeLimitation" data-lp="6">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 								<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons"
@@ -617,7 +627,8 @@
 						<div class="chargeLimitation" data-lp="7">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 								<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons"
@@ -656,7 +667,8 @@
 						<div class="chargeLimitation" data-lp="8">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
+								<h4 class="text-center">Lademengenbegrenzung <span
+										class="nameLp"></span></h4>
 							</div>
 							<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 								<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons"
@@ -696,22 +708,22 @@
 					<br>
 				</div>
 			</div>
-			<!-- Speicher (batteryList) -->
-			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
-				<h3>Speicher</h3>
-				<div class="wb-subwidget pb-3 ">
-					<div id="batteryStatus"></div>
-				</div>
-				
-			</div><!-- Smart Home (smartHomeList) -->
+			<!-- Smart Home (smartHomeList) -->
 			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
 				<h3>Geräte</h3>
 				<div class="wb-subwidget pb-3 ">
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
-
+			<!-- Speicher (batteryList) -->
+			<div class="wb-widget col-md-6 p-2 m-1" id="batteryWidget">
+				<h3>Speicher</h3>
+				<div class=" pb-3 ">
+					<div id="batteryStatus"></div>
+				</div>
+			</div>
 		</div>
+	</div>
 	</div>
 	<!-- ENDE COLOR THEME -->
 
@@ -1046,22 +1058,22 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
-			$('.priceMore, .priceLess').click(function (event) {
+			$('.priceMore, .priceLess').click(function(event){
 				// change Slider upon click on buttons
 				event.preventDefault();
 				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
 				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
 				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
 				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
-				if ($(this).hasClass('priceLess')) {
+				if ( $(this).hasClass ('priceLess') ) {
 					currentMaxPrice -= step;
 				} else {
 					currentMaxPrice += step;
 				}
 				// prevent timeout of delayUserInput when clicking "beyond" range
-				if (currentMaxPrice < rangeMin) {
+				if ( currentMaxPrice < rangeMin ) {
 					currentMaxPrice = rangeMin;
-				} else if (currentMaxPrice > rangeMax) {
+				} else if ( currentMaxPrice > rangeMax ) {
 					currentMaxPrice = rangeMax;
 				}
 				$('#MaxPriceForCharging').val(currentMaxPrice);
@@ -1120,15 +1132,8 @@
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
 					// once page is unhidden... reload graph completety
-					if (wbdata.graphMode == 'live') {
-						powerGraph.deactivateDay();
-							powerGraph.activateLive();
-					} else {
-						powerGraph.deactivateLive();
-						powerGraph.activateDay();
-					}
-					// powerGraph.reset();
-					// subscribeMqttGraphSegments();
+					powerGraph.reset();
+					subscribeMqttGraphSegments();
 				}
 			});
 		});  // end document ready

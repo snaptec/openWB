@@ -3,17 +3,12 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-DMOD="EVSOC"
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "soc_manual: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
-	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
-fi
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -42,44 +37,32 @@ case $CHARGEPOINT in
 		;;
 esac
 
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
 incrementTimer(){
-	case $dspeed in
-		1)
-			# Regelgeschwindigkeit 10 Sekunden
-			ticksize=1
-			;;
-		2)
-			# Regelgeschwindigkeit 20 Sekunden
-			ticksize=2
-			;;
-		3)
-			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=1
-			;;
-		*)
-			# Regelgeschwindigkeit unbekannt
-			ticksize=1
-			;;
-	esac
-	soctimer=$((soctimer+$ticksize))
+	soctimer=$((soctimer+1))
 	echo $soctimer > $soctimerfile
 }
 
 soctimer=$(<$soctimerfile)
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 
 if (( soctimer < socIntervall )); then
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	socDebugLog "Nothing to do yet. Incrementing timer."
 	incrementTimer
 else
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Calculating manual SoC"
+	socDebugLog "Calculating manual SoC"
 	# reset timer
 	echo 0 > $soctimerfile
 
 	# read current meter
 	if [[ -f "$meterFile" ]]; then
 		currentMeter=$(<$meterFile)
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentMeter: $currentMeter"
+		socDebugLog "currentMeter: $currentMeter"
 
 		# read manual Soc
 		if [[ -f "$manualSocFile" ]]; then
@@ -89,7 +72,7 @@ else
 			manualSoc=0
 			echo $manualSoc > $manualSocFile
 		fi
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: manual SoC: $manualSoc"
+		socDebugLog "manual SoC: $manualSoc"
 
 		# read manualMeterFile if file exists and manualMeterFile is newer than manualSocFile
 		if [[ -f "$manualMeterFile" ]] && [ "$manualMeterFile" -nt "$manualSocFile" ]; then
@@ -100,7 +83,7 @@ else
 			manualMeter=$currentMeter
 			echo $manualMeter > $manualMeterFile
 		fi
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: manualMeter: $manualMeter"
+		socDebugLog "manualMeter: $manualMeter"
 
 		# read current soc
 		if [[ -f "$socFile" ]]; then
@@ -109,15 +92,15 @@ else
 			currentSoc=$manualSoc
 			echo $currentSoc > $socFile
 		fi
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentSoc: $currentSoc"
+		socDebugLog "currentSoc: $currentSoc"
 
 		# calculate newSoc
 		currentMeterDiff=$(echo "scale=5;$currentMeter - $manualMeter" | bc)
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentMeterDiff: $currentMeterDiff"
+		socDebugLog "currentMeterDiff: $currentMeterDiff"
 		currentEffectiveMeterDiff=$(echo "scale=5;$currentMeterDiff * $efficiency / 100" | bc)
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
-		currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | awk '{printf"%d\n",$1}')
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentSocDiff: $currentSocDiff"
+		socDebugLog "currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
+		currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/\..*$//')
+		socDebugLog "currentSocDiff: $currentSocDiff"
 		newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 		if (( newSoc > 100 )); then
 			newSoc=100
@@ -125,12 +108,12 @@ else
 		if (( newSoc < 0 )); then
 			newSoc=0
 		fi
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: newSoc: $newSoc"
+		socDebugLog "newSoc: $newSoc"
 		echo $newSoc > $socFile
 	else
 		# no current meter value for calculation -> Exit
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ERROR: no meter value for calculation! ($meterFile)"
+		socDebugLog "ERROR: no meter value for calculation! ($meterFile)"
 	fi
 fi
 
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: --- Manual SoC end ---"
+socDebugLog "--- Manual SoC end ---"

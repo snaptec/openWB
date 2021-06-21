@@ -113,19 +113,6 @@ loadvars(){
 			fi
 		fi
 	else
-		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
-		if [ "$pluggedin" -gt "0" ]; then
-			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-				/var/www/html/openWB/runs/pushover.sh "$message"
-			fi
-			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
-				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
-			fi
-			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
-			echo 0 > /var/www/html/openWB/ramdisk/pluggedin
-		fi
-
 		plugstat=$(<ramdisk/plugstat)
 		chargestat=$(<ramdisk/chargestat)
 	fi
@@ -482,19 +469,12 @@ loadvars(){
 		echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 		if [[ $speichermodul == "speicher_alphaess" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
-			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
-			pv1vorhanden="1"
 		fi
 		if [[ $speichermodul == "speicher_e3dc" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
-			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
-			pv1vorhanden="1"
-
 		fi
 		if [[ $speichermodul == "speicher_sonneneco" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
-			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
-			pv1vorhanden="1"
 		fi
 	else
 		speichervorhanden="0"
@@ -832,20 +812,6 @@ loadvars(){
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 	echo $llkwhges > ramdisk/llkwhges
 
-	#Schuko-Steckdose an openWB
-	if [[ $standardSocketInstalled == "1" ]]; then
-
-		timeout 10 modules/sdm120modbusSocket/main.sh || true
-		socketkwh=$(</var/www/html/openWB/ramdisk/socketkwh)
-		socketp=$(cat /var/www/html/openWB/ramdisk/socketp)
-		socketa=$(cat /var/www/html/openWB/ramdisk/socketa)
-		socketa=$(echo $socketa | sed 's/\..*$//')
-		socketv=$(cat /var/www/html/openWB/ramdisk/socketv)
-		if ! [[ $socketa =~ $re ]] ; then
-			socketa="0"
-		fi
-	fi
-
 	#Wattbezug
 	if [[ $wattbezugmodul != "none" ]]; then
 		wattbezug=$(modules/$wattbezugmodul/main.sh || true)
@@ -922,9 +888,7 @@ loadvars(){
 		socvorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 		if (( stopsocnotpluggedlp1 == 1 )); then
-			soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
-			# if (( plugstat == 1 )); then
-			if [ $plugstat -eq 1 -o $soctimer -eq 20005 ]; then # force soc update button sends 20005
+			if (( plugstat == 1 )); then
 				modules/$socmodul/main.sh &
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 				tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
@@ -974,25 +938,12 @@ loadvars(){
 
 	hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shd1_w - shd2_w - shd3_w - shd4_w - shd5_w - shd6_w - shd7_w - shd8_w - shd9_w - verb1_w - verb2_w - verb3_w))
 	if (( hausverbrauch < 0 )); then
-		if [ -f /var/www/html/openWB/ramdisk/hausverbrauch.invalid ]; then
-			hausverbrauchinvalid=$(</var/www/html/openWB/ramdisk/hausverbrauch.invalid)
-			let hausverbrauchinvalid+=1
-		else
-			hausverbrauchinvalid=1
-		fi
-		echo "$hausverbrauchinvalid" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
-		if (( hausverbrauchinvalid < 3 )); then
-			hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
-		else
-			hausverbrauch=0
-		fi
-	else
-		echo "0" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
+		hausverbrauch=$(</var/www/html/openWB/ramdisk/hausverbrauch)
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_carlogavazzilan" ]]|| [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
 		usesimbezug=1
 	fi
 	if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
@@ -1050,9 +1001,6 @@ loadvars(){
 		usesimpv=1
 	fi
 	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
-		usesimpv=1
-	fi
-	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $wrfroniusisgen24 == "1" ]]; then
 		usesimpv=1
 	fi
 	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
@@ -1183,9 +1131,6 @@ loadvars(){
 	openwbDebugLog "MAIN" 1 "$(echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled")"
 	openwbDebugLog "MAIN" 1 "$(echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3")"
 	openwbDebugLog "MAIN" 1 "$(echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3")"
-	if [[ $standardSocketInstalled == "1" ]]; then
-		openwbDebugLog "MAIN" 1 "socketa $socketa socketp $socketp socketkwh $socketkwh socketv $socketv"
-	fi
 
 	tempPubList=""
 
@@ -1246,13 +1191,9 @@ loadvars(){
 		rfid
 	fi
 
-	csvfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv"
-	first=$(head -n 1 "$csvfile")
-	last=$(tail -n 1 "$csvfile")
-	dailychargelp1=$(echo "$(echo "$first" | cut -d , -f 5) $(echo "$last" | cut -d , -f 5)" | awk '{printf "%0.2f", ($2 - $1)/1000}')
-	dailychargelp2=$(echo "$(echo "$first" | cut -d , -f 6) $(echo "$last" | cut -d , -f 6)" | awk '{printf "%0.2f", ($2 - $1)/1000}')
-	dailychargelp3=$(echo "$(echo "$first" | cut -d , -f 7) $(echo "$last" | cut -d , -f 7)" | awk '{printf "%0.2f", ($2 - $1)/1000}')
-
+	dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)
+	dailychargelp2=$(curl -s -X POST -d "dailychargelp2call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp2.php | jq -r .text)
+	dailychargelp3=$(curl -s -X POST -d "dailychargelp3call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp3.php | jq -r .text)
 	restzeitlp1=$(<ramdisk/restzeitlp1)
 	restzeitlp2=$(<ramdisk/restzeitlp2)
 	restzeitlp3=$(<ramdisk/restzeitlp3)
@@ -1739,7 +1680,6 @@ loadvars(){
 	mqttconfvar["config/get/display/chartLp/6/max"]=displaylp6max
 	mqttconfvar["config/get/display/chartLp/7/max"]=displaylp7max
 	mqttconfvar["config/get/display/chartLp/8/max"]=displaylp8max
-	mqttconfvar["config/get/global/slaveMode"]=slavemode
 
 	for mq in "${!mqttconfvar[@]}"; do
 		theval=${!mqttconfvar[$mq]}

@@ -84,11 +84,11 @@ class PowerMeter {
     this.addLabel(svg, 0, -this.height / 2 * 3 / 5, "middle", wbdata.sourceSummary.pv); // PV
     this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.sourceSummary.evuIn); // Netz
     this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.sourceSummary.batOut); // Speicher Out
-    this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.usageSummary.evuOut);  // Export
-    this.addLabel(svg, 0, this.height / 2 * 1 / 5, "middle", wbdata.usageSummary.charging); // Laden
-    this.addLabel(svg, 0, this.height / 2 * 3 / 5, "middle", wbdata.usageSummary.devices); // Geräte
-    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.usageSummary.batIn); // Speicher in
-    this.addLabel(svg, 0, this.height / 2 * 2 / 5, "middle", wbdata.usageSummary.house);  // Haus
+    this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.usageSummary[0]);  // Export
+    this.addLabel(svg, 0, this.height / 2 * 1 / 5, "middle", wbdata.usageSummary[1]); // Laden
+    this.addLabel(svg, 0, this.height / 2 * 3 / 5, "middle", wbdata.usageSummary[2]); // Geräte
+    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.usageSummary[3]); // Speicher in
+    this.addLabel(svg, 0, this.height / 2 * 2 / 5, "middle", wbdata.usageSummary[4]);  // Haus
 
     if (wbdata.chargePoint[0].isSocConfigured) {
       this.addLabelWithColor(svg,
@@ -113,14 +113,14 @@ class PowerMeter {
         (this.height / 2 - this.margin + 15),
         "start",
         ("Speicher: " + wbdata.batterySoc + "%"),
-        wbdata.usageSummary.batIn.color);
+        wbdata.usageSummary[3].color);
     }
 
     if (this.showRelativeArcs) {
       svg.append("text")
         .attr("x", 0)
         .attr("y", 5)
-        .text("Verbrauch: " + formatWatt(wbdata.housePower + wbdata.usageSummary.charging.power + wbdata.usageSummary.devices.power + wbdata.usageSummary.batIn.power))
+        .text("Verbrauch: " + formatWatt(wbdata.housePower + wbdata.usageSummary[1].power + wbdata.usageSummary[2].power + wbdata.usageSummary[3].power))
         .attr("fill", this.fgColor)
         .attr("backgroundcolor", this.bgColor)
         .style("text-anchor", "middle")
@@ -139,14 +139,14 @@ class PowerMeter {
       svg.append("text")
         .attr("x", 0)
         .attr("y", 0)
-        .text("Aktueller Verbrauch: " + formatWatt(wbdata.housePower + wbdata.usageSummary.charging.power + wbdata.usageSummary.devices.power + wbdata.usageSummary.batIn.power))
+        .text("Aktueller Verbrauch: " + formatWatt(wbdata.housePower + wbdata.usageSummary[1].power + wbdata.usageSummary[2].power + wbdata.usageSummary[3].power))
         .attr("fill", this.fgColor)
         .attr("backgroundcolor", this.bgColor)
         .style("text-anchor", "middle")
         .style("font-size", "22")
         ;
     }
-    d3.select("a#meterResetButton").classed("hide", !this.showRelativeArcs);
+    d3.select("button#meterResetButton").classed("hide", !this.showRelativeArcs)
   }
 
   drawSourceArc(svg) {
@@ -190,9 +190,9 @@ class PowerMeter {
       .cornerRadius(this.cornerRadius);
 
     // Add the chart to the svg
-    const arcCount = Object.values(wbdata.usageSummary).length;
+    const arcCount = wbdata.usageSummary.length;
     svg.selectAll("consumers")
-      .data(pieGenerator(Object.values(wbdata.usageSummary).concat([{ "power": this.emptyPower, "color": this.bgColor }]))).enter()
+      .data(pieGenerator(wbdata.usageSummary.concat([{ "power": this.emptyPower, "color": this.bgColor }]))).enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color)
@@ -267,11 +267,11 @@ function switchDisplay() {
 function switchTheme() {
   const doc = d3.select("html");
   switch (wbdata.displayMode) {
-    case "gray": wbdata.displayMode = "light";
+    case "dark": wbdata.displayMode = "light";
       break;
-    case "light": wbdata.displayMode = "dark";
+    case "light": wbdata.displayMode = "gray";
       break;
-    case "dark": wbdata.displayMode = "gray"
+    case "gray": wbdata.displayMode = "dark"
       break;
     default: break;
   }

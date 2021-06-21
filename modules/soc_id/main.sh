@@ -2,17 +2,12 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-DMOD="EVSOC"
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "soc_id: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
-	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
-fi
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -37,52 +32,35 @@ case $CHARGEPOINT in
 		;;
 esac
 
-incrementTimer(){
-	case $dspeed in
-		1)
-			# Regelgeschwindigkeit 10 Sekunden
-			ticksize=1
-			;;
-		2)
-			# Regelgeschwindigkeit 20 Sekunden
-			ticksize=2
-			;;
-		3)
-			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=1
-			;;
-		*)
-			# Regelgeschwindigkeit unbekannt
-			ticksize=1
-			;;
-	esac
-	# special handling for this module
-	if (( ladeleistung > 500 ));then
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is charging"
-		ticksize=47
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
-	soctimer=$((soctimer+$ticksize))
-	echo $soctimer > $soctimerfile
 }
 
 soctimer=$(<$soctimerfile)
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 
 tmpintervall=$(( 480 * 6 ))
 
 if (( soctimer < tmpintervall )); then
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-	incrementTimer
+	socDebugLog "Nothing to do yet. Incrementing timer."
+	soctimer=$((soctimer+1))
+	if (( ladeleistung > 500 ));then
+		socDebugLog "Car is charging"
+		soctimer=$((soctimer+47))
+	fi
+	echo $soctimer > $soctimerfile
 else
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+	socDebugLog "Requesting SoC"
 	echo 0 > $soctimerfile
 	answer=$($MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $answer"
+		socDebugLog "SoC: $answer"
 	else
 		# we have a problem
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from evcc-soc: $answer"
+		socDebugLog "Error from evcc-soc: $answer"
 	fi
 fi

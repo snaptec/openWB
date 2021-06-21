@@ -32,10 +32,8 @@ function TriggerMosquittoConfigRead {
         echo "Restarting Mosquitto server to trigger re-read of changed bridge config (SIGHUP would not remove deleted bridges)"
     fi
 
-    # $TEST $sudo kill -HUP $process_id
-    # $TEST $sudo service mosquitto restart
-    # sometimes the ports where still blocked on restart causing mosquitto to fail!
-    $TEST $sudo service mosquitto reload
+    #$TEST $sudo kill -HUP $process_id
+    $TEST $sudo service mosquitto restart
 }
 
 ###############

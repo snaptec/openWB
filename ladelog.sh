@@ -20,9 +20,9 @@ rfidlp6=$(<ramdisk/rfidlp6)
 rfidlp7=$(<ramdisk/rfidlp7)
 rfidlp8=$(<ramdisk/rfidlp8)
 
-if (( nachtladenstate == 0 )) && (( nachtladen2state == 0 )); then # Weder Nachtladen (nachtladestate) noch  Morgens laden (nachtladen2state) aktiv? nutze lademodus.
+if (( nachtladenstate == 0 )) || (( nachtladen2state == 0 )); then
 	lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
-else # Nachtladen oder Morgens laden ist aktiv, lademodus 7 setzen
+else
 	lmodus=7
 fi
 if [ -e ramdisk/loglademodus ]; then

@@ -32,7 +32,7 @@
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="logging/chargelog/ladelog_style.css?ver=20210202">
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script>
 			function getCookie(cname) {
@@ -76,7 +76,7 @@
 						foreach ($files as $current) {
 					?>
 						<div class="row<?php echo $rowClasses; ?>">
-							<label class="col-6 col-form-label">
+							<label for="downloadBtn" class="col-6 col-form-label">
 								<?php 
 									preg_match('/\/var\/www\/html\/openWB\/web\/logging\/data\/ladelog\/([0-9]{4})([0-9]{2})\.csv/',$current,$m); 
 									$month = $m[2];

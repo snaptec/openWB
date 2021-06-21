@@ -30,14 +30,36 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script src="js/bootstrap-selectpicker/bootstrap-select.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -55,7 +77,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Allgemeine Einstellungen</h1>
-			<form action="./settings/saveconfig.php" method="POST">
+			<form action="./tools/saveconfig.php" method="POST">
 
 				<!-- Übergreifendes -->
 				<div class="card border-secondary">
@@ -141,7 +163,7 @@
 						</div>
 						<div class="form-group mb-0" id="etproviderondiv">
 							<div class="form-row mb-1">
-								<label for="etprovider" class="col-md-4 col-form-label">Anbieter</label>
+								<label for="et_provider" class="col-md-4 col-form-label">Anbieter</label>
 								<div class="col">
 									<select name="etprovider" id="etprovider" class="form-control">
 										<option <?php if($etproviderold == "et_awattar") echo "selected" ?> value="et_awattar">aWATTar</option>
@@ -195,26 +217,26 @@
 									<button id="getTibberHomeIdBtn" type="button" class="btn btn-primary m-2">Home-ID ermitteln</button>
 									<button id="verifyTibberBtn" type="button" class="btn btn-secondary m-2">Tibber-Daten verifizieren</button>
 								</div>
-								<script>
+								<script type="text/javascript">
 									$(document).ready(function(){
 
 										$('#tibberHomesDropdown').selectpicker();
 
 										$('#tibbertoken').change(function(){
-											// after change of token check if no invalid chars were entered
+											// after change of token check if only alphanumeric chars were entered
 											var currentVal = $(this).val();
-											// !Attention! Until now there are only characters 0-9 a-Z A-Z _ and - in token.
+											// !Attention! Until now there are only alphanumeric characters in token.
 											// Function may be needed to be adjusted in future
-											newVal = currentVal.trim().replace(/[^\w-]/gi,'');
+											newVal = currentVal.trim().replace(/[^a-z0-9]/gi,'');
 											$(this).val(newVal);
 										});
 
 										$('#tibberhomeid').change(function(){
-											// after change of token check if no invalid chars were entered
+											// after change of homeID check if only alphanumeric chars and dash were entered
 											var currentVal = $(this).val();
-											// !Attention! Until now there are only characters 0-9 a-Z A-Z _ and - in in homeID.
+											// !Attention! Until now there are only alphanumeric characters and dash in homeID.
 											// Function may be needed to be adjusted in future
-											newVal = currentVal.trim().replace(/[^\w-]/gi,'');
+											newVal = currentVal.trim().replace(/[^a-z0-9-]/gi,'');
 											$(this).val(newVal);
 										});
 
@@ -843,17 +865,6 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Nachtladen</label>
-									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($u1p3pnlold == 1) echo " active" ?>">
-											<input type="radio" name="u1p3pnl" id="u1p3pnl1" value="1"<?php if($u1p3pnlold == 1) echo " checked=\"checked\"" ?>>einphasig
-										</label>
-										<label class="btn btn-outline-info<?php if($u1p3pnlold == 3) echo " active" ?>">
-											<input type="radio" name="u1p3pnl" id="u1p3pnl3" value="3"<?php if($u1p3pnlold == 3) echo " checked=\"checked\"" ?>>dreiphasig
-										</label>
-									</div>
-								</div>
-								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Min + PV Laden</label>
 									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($u1p3pminundpvold == 1) echo " active" ?>">
@@ -887,7 +898,7 @@
 									<label class="col-md-4 col-form-label">Schaltzeiten Automatikmodus</label>
 									<div class="col">
 										<div class="form-row vaRow mb-1">
-											<label for="u1p3schaltparam" class="col-2 col-form-label valueLabel" suffix="Min"><?php echo $u1p3schaltparamold; ?> Min</label>
+											<label for="u1p3schaltparam" class="col-2 col-form-label valueLabel" suffix="min"><?php echo $u1p3schaltparamold; ?> min</label>
 											<div class="col-10">
 												<input type="range" class="form-control-range rangeInput" name="u1p3schaltparam" id="u1p3schaltparam" min="1" max="15" step="1" value="<?php echo $u1p3schaltparamold; ?>">
 											</div>
@@ -896,18 +907,14 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="u1p3ppause" class="col-md-4 col-form-label">Pause vor und nach der Umschaltung</label>
-									<div class="col-md-8">
-										<div class="form-row vaRow mb-1">
-											<label for="u1p3ppause" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $u1p3ppauseold; ?> Sek</label>
-											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="u1p3ppause" id="u1p3ppause" min="2" max="15" step="1" value="<?php echo $u1p3ppauseold; ?>">
-											</div>
-										</div>
-										<span class="form-text small">
-											Die Standardeinstellung ist 2 Sekunden. Falls ein Fahrzeug den Ladevorgang nach einer Umschaltung nicht zuverlässig startet, kann dieser Wert erhöht werden.
-											<span class="text-danger">Achtung: experimentelle Einstellung!</span>
-										</span>
+									<label class="col-md-4 col-form-label">Nachtladen</label>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($u1p3pnlold == 1) echo " active" ?>">
+											<input type="radio" name="u1p3pnl" id="u1p3pnl1" value="1"<?php if($u1p3pnlold == 1) echo " checked=\"checked\"" ?>>einphasig
+										</label>
+										<label class="btn btn-outline-info<?php if($u1p3pnlold == 3) echo " active" ?>">
+											<input type="radio" name="u1p3pnl" id="u1p3pnl3" value="3"<?php if($u1p3pnlold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+										</label>
 									</div>
 								</div>
 							</div>

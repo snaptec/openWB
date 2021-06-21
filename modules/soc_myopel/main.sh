@@ -3,17 +3,12 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-DMOD="EVSOC"
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "soc_myopel: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
-	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
-fi
+socDebug=$debug
+# for developement only
+# socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -56,35 +51,30 @@ case $CHARGEPOINT in
 		;;
 esac
 
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
+socLog(){
+	timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+	echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+}
+
 incrementTimer(){
-	case $dspeed in
-		1)
-			# Regelgeschwindigkeit 10 Sekunden
-			ticksize=1
-			;;
-		2)
-			# Regelgeschwindigkeit 20 Sekunden
-			ticksize=2
-			;;
-		3)
-			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=1
-			;;
-		*)
-			# Regelgeschwindigkeit unbekannt
-			ticksize=1
-			;;
-	esac
-	soctimer=$((soctimer+$ticksize))
+	soctimer=$((soctimer+1))
 	echo $soctimer > $soctimerfile
 }
 
 soctimer=$(<$soctimerfile)
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 
 if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
-	if (( soctimer < 60 )); then
-		incrementTimer
+	timer=$(<$soctimerfile)
+	if (( timer < 60 )); then
+		timer=$((timer+1))
+		echo $timer > $soctimerfile
 	else
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/opelsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
@@ -92,18 +82,18 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 else	# manual calculation enabled, combining PSA module with manual calc method
 	# if charging started this round fetch once from myOpel out of order
 	if [[ $(<$ladungaktivFile) == 1 ]] && [ "$ladungaktivFile" -nt "$manualSocFile" ]; then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Ladestatus changed to laedt. Fetching SoC from myOpel out of order."
+		socLog "Ladestatus changed to laedt. Fetching SoC from myOpel out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
 		sudo python $MODULEDIR/opelsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 		echo $(<$socFile) > $manualSocFile
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from myOpel: $(<$socFile)%"
+		socLog "Fetched from myOpel: $(<$socFile)%"
 	fi
 
 	# if charging ist not active fetch SoC from myOpel
 	if [[ $chargestat == "0" ]] ; then
 		if (( soctimer < 60 )); then
-			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer. Extralong myOpel wait: $soctimer"
+			socDebugLog "Nothing to do yet. Incrementing timer. Extralong myOpel wait: $soctimer"
 			incrementTimer
 		else
 			socLog "Fetching SoC from myOpel"
@@ -115,17 +105,17 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 	# if charging ist active calculate SoC manually
 	else
 		if (( soctimer < socIntervall )); then
-			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+			socDebugLog "Nothing to do yet. Incrementing timer."
 			incrementTimer
 		else
-			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Calculating manual SoC"
+			socDebugLog "Calculating manual SoC"
 			# reset timer
 			echo 0 > $soctimerfile
 
 			# read current meter
 			if [[ -f "$meterFile" ]]; then
 				currentMeter=$(<$meterFile)
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentMeter: $currentMeter"
+				socDebugLog "currentMeter: $currentMeter"
 
 				# read manual Soc
 				if [[ -f "$manualSocFile" ]]; then
@@ -135,7 +125,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					manualSoc=0
 					echo $manualSoc > $manualSocFile
 				fi
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: manual SoC: $manualSoc"
+				socDebugLog "manual SoC: $manualSoc"
 
 				# read manualMeterFile if file exists and manualMeterFile is newer than manualSocFile
 				if [[ -f "$manualMeterFile" ]] && [ "$manualMeterFile" -nt "$manualSocFile" ]; then
@@ -146,7 +136,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					manualMeter=$currentMeter
 					echo $manualMeter > $manualMeterFile
 				fi
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: manualMeter: $manualMeter"
+				socDebugLog "manualMeter: $manualMeter"
 
 				# read current soc
 				if [[ -f "$socFile" ]]; then
@@ -155,15 +145,15 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					currentSoc=$manualSoc
 					echo $currentSoc > $socFile
 				fi
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentSoc: $currentSoc"
+				socDebugLog "currentSoc: $currentSoc"
 
 				# calculate newSoc
 				currentMeterDiff=$(echo "scale=5;$currentMeter - $manualMeter" | bc)
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentMeterDiff: $currentMeterDiff"
+				socDebugLog "currentMeterDiff: $currentMeterDiff"
 				currentEffectiveMeterDiff=$(echo "scale=5;$currentMeterDiff * $efficiency / 100" | bc)
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
+				socDebugLog "currentEffectiveMeterDiff: $currentEffectiveMeterDiff ($efficiency %)"
 				currentSocDiff=$(echo "scale=5;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/\..*$//')
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: currentSocDiff: $currentSocDiff"
+				socDebugLog "currentSocDiff: $currentSocDiff"
 				newSoc=$(echo "$manualSoc + $currentSocDiff" | bc)
 				if (( newSoc > 100 )); then
 					socLog "newSoC above 100, setting to 100."
@@ -173,11 +163,11 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 					socLog "newSoC below 100, setting to 0."
 					newSoc=0
 				fi
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: newSoc: $newSoc"
+				socDebugLog "newSoc: $newSoc"
 				echo $newSoc > $socFile
 			else
 				# no current meter value for calculation -> Exit
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: ERROR: no meter value for calculation! ($meterFile)"
+				socLog "ERROR: no meter value for calculation! ($meterFile)"
 			fi
 		fi
 	fi

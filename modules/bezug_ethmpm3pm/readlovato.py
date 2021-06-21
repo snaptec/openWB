@@ -29,7 +29,19 @@ f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
 f.write(str(voltage3))
 f.close()
 
-
+#Counters
+resp = client.read_input_registers(0x1a1f,2, unit=0x02)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+finalbezug = int(struct.unpack('>i', all.decode('hex'))[0])
+f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
+f.write(str(finalbezug))
+f.close()
+resp = client.read_input_registers(0x1a21,2, unit=0x02)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+finaleinspeisung = int(struct.unpack('>i', all.decode('hex'))[0])
+f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
+f.write(str(finaleinspeisung))
+f.close()
 
 
 #phasen watt

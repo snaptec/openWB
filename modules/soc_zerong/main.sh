@@ -3,17 +3,12 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-DMOD="EVSOC"
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "soc_zerong: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
-	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
-fi
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -40,65 +35,49 @@ case $CHARGEPOINT in
 		;;
 esac
 
-incrementTimer(){
-	case $dspeed in
-		1)
-			# Regelgeschwindigkeit 10 Sekunden
-			ticksize=1
-			;;
-		2)
-			# Regelgeschwindigkeit 20 Sekunden
-			ticksize=2
-			;;
-		3)
-			# Regelgeschwindigkeit 60 Sekunden
-			ticksize=1
-			;;
-		*)
-			# Regelgeschwindigkeit unbekannt
-			ticksize=1
-			;;
-	esac
-	soctimer=$((soctimer+$ticksize))
-	echo $soctimer > $soctimerfile
-}
-
 getAndWriteSoc(){
 	echo 0 > $soctimerfile
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+	socDebugLog "Requesting SoC"
 	zerounitnumber=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_units -d format=json -d pass=$password -d user=$username | jq '.[].unitnumber')
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Unitnumber: $zerounitnumber"
+	socDebugLog "Unitnumber: $zerounitnumber"
 	re='^-?[0-9]+$'
 	soclevel=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].soc')
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC from Server: $soclevel"
+	socDebugLog "SoC from Server: $soclevel"
 	if  [[ $soclevel =~ $re ]] ; then
 		if (( $soclevel != 0 )) ; then
 			echo $soclevel > $socfile
 		else
-			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Ignoring SoC of 0%"
+			socDebugLog "Ignoring SoC of 0%"
 		fi
 	else
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC is invalid!"
+		socDebugLog "SoC is invalid!"
 	fi
 }
 
-soctimer=$(<$soctimerfile)
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
 
+zerotimer=$(<$soctimerfile)
 # zerounitnumber=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_units -d format=json -d pass=$password -d user=$username | jq '.[].unitnumber')
 # ischarging=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].charging')
 
 if (( ladeleistung > 500 )); then
-	if (( soctimer < zintervallladen )); then
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
-		incrementTimer
+	if (( zerotimer < zintervallladen )); then
+		socDebugLog "Charging, but nothing to do yet. Incrementing timer."
+		zerotimer=$((zerotimer+1))
+		echo $zerotimer > $soctimerfile
 	else
 		getAndWriteSoc
 	fi
 else
-	if (( soctimer < zintervall )); then
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-		incrementTimer
+	if (( zerotimer < zintervall )); then
+		socDebugLog "Nothing to do yet. Incrementing timer."
+		zerotimer=$((zerotimer+1))
+	echo $zerotimer > $soctimerfile
 	else
 		getAndWriteSoc
 	fi

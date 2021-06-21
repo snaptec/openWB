@@ -5,7 +5,7 @@ include('./raspbian_ARM.php');
 
 $uptime = exec($UPTIME);
 $systime = exec("date +%s");
-$lastreboot = exec("cat /proc/stat | grep btime | awk '{print $2}'");
+$lastreboot = exec("uptime -s");
 $cpuuse = exec($CPUUSE);
 $cputemp = exec("cat /sys/class/thermal/thermal_zone0/temp");
 $cpufreq = exec("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq");

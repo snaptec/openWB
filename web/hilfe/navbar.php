@@ -20,10 +20,6 @@
 				<li class="nav-item">
 					<a class="nav-link" data-select="index">Index</a>
 				</li>
-				
-				<li class="nav-item">
-					<a class="nav-link" href="https://github.com/snaptec/openWB/wiki" target="_blank" >Wiki</a>
-				</li>
 				<li class="nav-item">
 					<a class="nav-link" data-select="datenschutz">Datenschutz</a>
 				</li>

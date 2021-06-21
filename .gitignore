@@ -1,9 +1,7 @@
 web/ladelog
-web/logging/data/
 *.csv
 *.log
 *.pyc
-*.bak
 ramdisk/
 .DS_Store
 .ftp*
@@ -12,5 +10,4 @@ web/settings/.passwd
 web/lastcommit
 modules/soc_tesla/tokens.*
 modules/soc_i3/token*
-modules/soc_eq/soc_eq_acc_*
 .vscode/settings.json
