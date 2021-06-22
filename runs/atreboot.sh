@@ -188,8 +188,8 @@ fi
 
 # check for needed apt packages
 echo "install required packages..."
-sudo apt-get -qq update
-sudo apt-get -qq -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
+sudo apt-get -q update
+sudo apt-get -q -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
 echo "...done"
 
 # check for needed packages
