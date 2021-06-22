@@ -113,7 +113,7 @@ class PowerGraph {
     var heading = "Leistung / Ladestand ";
     switch (wbdata.graphMode) {
       case 'live':
-        heading = heading + this.liveGraphMinutes + " min";
+        heading = heading + this.liveGraphMinutes + "&nbsp;min";
         break;
       case 'day':
         const today = new Date();
