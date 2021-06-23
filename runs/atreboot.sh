@@ -186,12 +186,6 @@ then
 	(crontab -l -u pi ; echo "@reboot /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
 fi
 
-# check for needed apt packages
-echo "install required packages..."
-sudo apt-get -q update
-sudo apt-get -q -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
-echo "...done"
-
 # check for needed packages
 echo "packages 1..."
 if python -c "import evdev" &> /dev/null; then
@@ -199,6 +193,22 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
+if ! [ -x "$(command -v sshpass)" ];then
+	sudo apt-get -qq update
+	sleep 1
+	sudo apt-get -qq install sshpass
+fi
+if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+	sudo apt-get -qq update
+	sleep 1
+	sudo apt-get -qq install -y php-gd
+	sleep 1
+	sudo apt-get -qq install -y php7.0-xml
+fi
+
+# no need to reload config
+# . /var/www/html/openWB/loadconfig.sh
 
 # update old ladelog
 /var/www/html/openWB/runs/transferladelog.sh
@@ -214,7 +224,12 @@ echo "timezone..."
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 # check for mosquitto packages
-sudo service mosquitto start
+echo "mosquitto..."
+if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
+	sudo apt-get update
+	sudo apt-get -qq install -y mosquitto mosquitto-clients
+	sudo service mosquitto start
+fi
 
 # check for mosquitto configuration
 if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf; then
@@ -228,6 +243,7 @@ echo "packages 2..."
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
 	echo 'mqtt installed...'
 else
+	sudo apt-get -qq install -y python3-pip
 	sudo pip3 install paho-mqtt
 fi
 if python3 -c "import docopt" &> /dev/null; then
