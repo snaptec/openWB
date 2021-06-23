@@ -7,6 +7,9 @@ watt=$(echo $output | jq '.list[] | .actualPower')
 lla1=$(echo $output | jq '.list[] | .currentP1')
 lla2=$(echo $output | jq '.list[] | .currentP2')
 lla3=$(echo $output | jq '.list[] | .currentP3')
+llv1=$(echo $output | jq '.list[] | .voltageP1')
+llv2=$(echo $output | jq '.list[] | .voltageP2')
+llv3=$(echo $output | jq '.list[] | .voltageP3')
 evsewifiplugstatelp1=$(echo $output | jq '.list[] | .vehicleState') 
 llkwh=$(echo $output | jq '.list[] | .meterReading')
 watt=$(echo "scale=0;$watt * 1000 /1" |bc)
@@ -21,6 +24,15 @@ if [[ $lla2 =~ $rekwh ]] ; then
 fi
 if [[ $lla3 =~ $rekwh ]] ; then
 	echo $lla3 > /var/www/html/openWB/ramdisk/lla3
+fi
+if [[ $llv1 =~ $rekwh ]] ; then
+        echo $llv1 > /var/www/html/openWB/ramdisk/llv1
+fi
+if [[ $llv2 =~ $rekwh ]] ; then
+        echo $llv2 > /var/www/html/openWB/ramdisk/llv2
+fi
+if [[ $llv3 =~ $rekwh ]] ; then
+        echo $llv3 > /var/www/html/openWB/ramdisk/llv3
 fi
 if [[ $llkwh =~ $rekwh ]] ; then
 	echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
