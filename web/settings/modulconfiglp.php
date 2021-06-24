@@ -791,23 +791,10 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_tesla_password" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_tesla_password" id="soc_tesla_password" value="<?php echo $soc_tesla_passwordold ?>">
-											<span class="form-text small">
-												Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
-												Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
-												Wenn das Eingabefeld geleert wird, dann werden auch die Anmeldetoken komplett entfernt.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_tesla_mfapasscode" class="col-md-4 col-form-label">MFA-PassCode</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_tesla_mfapasscode" id="soc_tesla_mfapasscode" value="<?php echo $soc_tesla_mfapasscodeold ?>">
-											<span class="form-text small">
-												Optionaler PassCode für eine aktivierte 2-Faktor-Anmeldung. Der PassCode wird nur benötigt, wenn noch keine Token vorhanden sind. Nach erfolgreicher Anmeldung wid der PassCode entfernt.
-											</span>
+											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_tesla_username" value="1">Bei Tesla anmelden</button>
+											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="1">Anmeldedaten entfernen</button>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -841,6 +828,26 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$(function() {
+										var teslaUrl = "/openWB/modules/soc_tesla/tesla.php";
+
+										$('.soc-tesla-login-btn').click(function(){
+											var chargepoint = $(this).val();
+											var email = $($(this).attr('data-email')).val();
+											var teslaLoginUrl = teslaUrl+"?chargepoint="+chargepoint+"&email="+email;
+											// console.log("chargepoint: "+chargepoint+" email: "+email+" url: "+teslaLoginUrl);
+											window.open(teslaLoginUrl, '_tesla_login').focus();
+										});
+
+										$('.soc-tesla-clear-btn').click(function(){
+											var chargepoint = $(this).val();
+											var teslaCleanupUrl = teslaUrl+"?chargepoint="+chargepoint+"&go=cleanup";
+											// console.log("chargepoint: "+chargepoint+" email: "+email+" url: "+teslaLoginUrl);
+											window.open(teslaCleanupUrl, '_tesla_login').focus();
+										});
+									});
+								</script>
 							</div>
 							<div id="socmbluelink" class="hide">
 								<div class="form-group">
@@ -2896,23 +2903,10 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_teslalp2_password" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_teslalp2_password" id="soc_teslalp2_password" value="<?php echo $soc_teslalp2_passwordold ?>">
-											<span class="form-text small">
-												Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
-												Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
-												Wenn das Eingabefeld geleert wird, dann werden auch die Anmeldetoken komplett entfernt.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_teslalp2_mfapasscode" class="col-md-4 col-form-label">MFA-PassCode</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_teslalp2_mfapasscode" id="soc_teslalp2_mfapasscode" value="<?php echo $soc_teslalp2_mfapasscodeold ?>">
-											<span class="form-text small">
-												Optionaler PassCode für eine aktivierte 2-Faktor-Anmeldung. Der PassCode wird nur benötigt, wenn noch keine Token vorhanden sind. Nach erfolgreicher Anmeldung wid der PassCode entfernt.
-											</span>
+											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_teslalp2_username" value="2">Bei Tesla anmelden</button>
+											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="2">Anmeldedaten entfernen</button>
 										</div>
 									</div>
 									<div class="form-row mb-1">
