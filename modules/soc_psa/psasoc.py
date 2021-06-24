@@ -114,7 +114,7 @@ f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
 batt = json.loads(responsetext)
-soc = batt['energy'][0]['level']
+soc = batt['energy'][1]['level']
 #print(time_string,'soc lp'+chargepoint,soc)
 
 if (int(soccalc) == 0):
@@ -134,7 +134,7 @@ else:
 	f.write(str(soc))
 	f.close()
 	# getting timestamp of fetched SoC
-	fetchedsoctime = batt['energy'][0]['updatedAt']
+	fetchedsoctime = batt['energy'][1]['updatedAt']
 	soct = time.strptime(fetchedsoctime, "%Y-%m-%dT%H:%M:%SZ")
 	soctime = time.mktime(soct)
 	# adding one hour to UTC to get CET
