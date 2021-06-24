@@ -141,6 +141,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="1">SDM630 an EVU Kit angeschlossen</option>
 										</select>
 									</div>
 								</div>
@@ -295,8 +296,16 @@
 						</div>
 
 						<div id="divspeicheralphaess" class="hide">
-							<div class="alert alert-info">
-								Keine Konfiguration erforderlich.
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
+									<div class="col">
+										<select name="alphav123" id="alphav123" class="form-control">
+											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
+											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
+										</select>
+									</div>
+								</div>
 							</div>
 						</div>
 

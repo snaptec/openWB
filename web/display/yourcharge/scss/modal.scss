@@ -1,0 +1,21 @@
+.modal-content {
+    background-color: #212529;
+    color: #ffffff;
+    border-color: dimgrey;
+    font-size: 2rem;
+    label {
+        font-weight: normal;
+    }
+}
+
+.modal-dialog {
+    max-width: 600px;
+}
+.modal-header {
+    border-color: dimgrey;
+    font-size: 2rem;
+}
+.modal-footer {
+    border-color: dimgrey;
+    font-size: 2rem;
+}

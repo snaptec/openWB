@@ -38,11 +38,27 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
 }
 
 getAndWriteSoc(){
@@ -54,7 +70,7 @@ getAndWriteSoc(){
 	if  [[ $soc =~ $re ]] ; then
 		if (( $soc != 0 )) ; then
 			echo $soc > $socfile
-			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $soc"
+			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soc"
 		else
 		# we have a problem
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from http call"
@@ -66,19 +82,18 @@ getAndWriteSoc(){
 }
 
 soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 if (( ladeleistung > 500 )); then
 	if (( soctimer < intervallladen )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
-		soctimer=$((soctimer+1))
-		echo $soctimer > $soctimerfile
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
+		incrementTimer
 	else
 		getAndWriteSoc
 	fi
 else
 	if (( soctimer < intervall )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-		soctimer=$((soctimer+1))
-		echo $soctimer > $soctimerfile
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		incrementTimer
 	else
 		getAndWriteSoc
 	fi

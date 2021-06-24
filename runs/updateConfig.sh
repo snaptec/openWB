@@ -679,6 +679,17 @@ updateConfig(){
 	if ! grep -Fq "wr_piko2_url=" $ConfigFile; then
 		echo "wr_piko2_url='https://url'" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2_piko2_user=" $ConfigFile; then
+		echo "wr2_piko2_user='user'" >> $ConfigFile
+	fi
+	if ! grep -Fq "wr2_piko2_pass=" $ConfigFile; then
+		echo "wr2_piko2_pass=''" >> $ConfigFile
+	else
+		sed -i "/wr2_piko2_pass='/b; s/^wr2_piko2_pass=\(.*\)/wr2_piko2_pass=\'\1\'/g" $ConfigFile
+	fi
+	if ! grep -Fq "wr2_piko2_url=" $ConfigFile; then
+		echo "wr2_piko2_url='https://url'" >> $ConfigFile
+	fi
 	if ! grep -Fq "carnetuser=" $ConfigFile; then
 		echo "carnetuser='user'" >> $ConfigFile
 	fi
@@ -1713,7 +1724,7 @@ updateConfig(){
 		sed -i "/pv2pass='/b; s/^pv2pass=\(.*\)/pv2pass=\'\1\'/g" $ConfigFile
 	fi
 	if grep -Fq "pv2id=none" $ConfigFile; then
-		sed -i "/^pv2id=none/pv2id=1/g" $ConfigFile
+		sed -i "s/^pv2id=none/pv2id=1/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_bluelink_email=" $ConfigFile; then
 		echo "soc_bluelink_email=mail@mail.de" >> $ConfigFile
@@ -2021,6 +2032,11 @@ updateConfig(){
 	if ! grep -Fq "solarwattmethod=" $ConfigFile; then
 		echo "solarwattmethod=0" >> $ConfigFile
 	fi
-
+	if ! grep -Fq "sungrowsr=" $ConfigFile; then
+		echo "sungrowsr=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "alphav123=" $ConfigFile; then
+		echo "alphav123=0" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }

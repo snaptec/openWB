@@ -44,7 +44,9 @@ glParams = {
         'isChargingFile': '',
         'isPluggedFile': '',
         'chargedFile': '',
-        'unplugFile': ''
+        'unplugFile': '',
+#        'lastStampUpdateFile': '',
+        'auxDataFile': ''
     },
     'args' : {
         'chargePoint': '',
@@ -69,7 +71,7 @@ def setGlobalData(vin):
         glParams['host'] = 'prd.eu-ccapi.kia.com:8080'
         glParams['baseUrl'] = 'https://' + glParams['host']
         glParams['clientId'] = 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a'
-        glParams['appId'] = '693a33fa-c117-43f2-ae3b-61a02d24f417'
+        glParams['appId'] = 'e7bcd186-a5fd-410d-92cb-6876a42288bd'
         glParams['basicToken'] = 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA=='
     if glParams['brand'] == 'hyundai':
         glParams['host'] = 'prd.eu-ccapi.hyundai.com:8080'
@@ -92,7 +94,12 @@ def loadArguments(argsFile):
         'accountPassword': '',
         'accountPin': '',
         'vehicleVin': '',
-        'ramDiskDir': ''
+        'timerInterval': '',
+        'manualCalc': '',
+        'batterySize': '',
+        'efficiency': '',
+        'ramDiskDir': '',
+        'moduleDir': ''
     }
     
     try:
@@ -113,6 +120,7 @@ def loadArguments(argsFile):
         retDict['accountPin'] = str(argsDict['accountPin'])
         retDict['vehicleVin'] = str(argsDict['vehicleVin'])
         retDict['ramDiskDir'] = str(argsDict['ramDiskDir'])
+        retDict['moduleDir'] = str(argsDict['moduleDir'])
     except:
         raise
         
@@ -129,6 +137,9 @@ def renderFileNames(ramDiskDir):
         glParams['files']['lastMeterFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_lastmeter"
         glParams['files']['chargedFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_charged"
         glParams['files']['unplugFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_unplug"
+        glParams['files']['auxDataFile'] = ramDiskDir + "/soc_kia_lp" + glParams['args']['chargePoint'] + "_auxdata"
+        
+#        glParams['files']['lastStampUpdateFile'] = ramDiskDir + "/soc_kia_laststampupdate"
         
         if glParams['args']['chargePoint'] == '1':
             glParams['files']['currentSocFile'] = ramDiskDir + "/soc"
@@ -150,12 +161,47 @@ def renderFileNames(ramDiskDir):
     return
 
 #---------------Access to stamps-----------------------------------------  
-def getStamp():
-    if glParams['brand'] == 'kia':
-        stamp = stamps_kia.stamps[random.randint(0,len(stamps_kia.stamps)-1)]
-    if glParams['brand'] == 'hyundai':
-        stamp = stamps_hyundai.stamps[random.randint(0,len(stamps_hyundai.stamps)-1)]
+#def updateStamps(moduleDir):
+#    try:
+#        f = open(glParams['files']['lastStampUpdateFile'], 'r')
+#        lastDownload = int(f.read())
+#        f.close()
+#    except:
+#        lastDownload = 0
+#        pass
+#        
+#    now = int(time.time())
+#        
+#    if lastDownload < (now - (3 * 24 * 60 * 60)):
+#        logDebug(1, "Stamps expired - updating")
+#        
+#        url = 'https://gitcdn.link/repo/neoPix/bluelinky-stamps/master/hyundai.json'
+#        r = requests.get(url, allow_redirects=True)
+#        open( moduleDir + '/stamps_hyundai.py', 'w').write('stamps = ' + r.text)
+#    
+#        url = 'https://gitcdn.link/repo/neoPix/bluelinky-stamps/master/kia.json'
+#        r = requests.get(url, allow_redirects=True)
+#        open( moduleDir + '/stamps_kia.py', 'w').write('stamps = ' + r.text)
+#        
+#    try:
+#        f = open(glParams['files']['lastStampUpdateFile'], 'w')
+#        f.write(str(now))
+#        f.close()
+#    except:
+#        raise
         
+    return 
+
+def getStamp():
+    now = int(time.time())
+    
+    if glParams['brand'] == 'kia':
+        index = max(min(int((now - stamps_kia.start) / stamps_kia.step) - 1,len(stamps_kia.stamps) - 1), 0)
+        stamp = stamps_kia.stamps[index]
+    if glParams['brand'] == 'hyundai':
+        index = max(min(int((now - stamps_hyundai.start) / stamps_hyundai.step) - 1,len(stamps_hyundai.stamps) - 1), 0)
+        stamp = stamps_hyundai.stamps[index]
+    
     return stamp
     
 #---------------Helper---------------------------------------------------  
@@ -499,7 +545,10 @@ def getStatusCached(vehicleId):
     statusDict = {
         'time': 0,
         'socev': 0,
-        'soc12v':0
+        'soc12v': 0,
+        'vehicleLocation': '',
+        'vehicleStatus': '',
+        'odometer': ''
     }
     
     url = glParams['baseUrl'] + '/api/v2/spa/vehicles/' + vehicleId + '/status/latest'
@@ -519,6 +568,9 @@ def getStatusCached(vehicleId):
         statusDict['time'] = timeToStamp(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['evStatus']['batteryStatus'])
         statusDict['soc12v'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['battery']['batSoc'])
+        statusDict['vehicleLocation'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleLocation']
+        statusDict['vehicleStatus'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']
+        statusDict['odometer'] = responseDict['resMsg']['vehicleStatusInfo']['odometer']
     except:
         logDebug(1, "Receiving cached status failed, invalid response")
         logDebug(2, response)
@@ -557,7 +609,8 @@ def getStatusFull(vehicleId):
     statusDict = {
         'time': 0,
         'socev': 0,
-        'soc12v':0
+        'soc12v': 0,
+        'vehicleStatus': ''
     }
     
     url = glParams['baseUrl'] + '/api/v2/spa/vehicles/' + vehicleId + '/status'
@@ -578,6 +631,7 @@ def getStatusFull(vehicleId):
         statusDict['time'] = timeToStamp(responseDict['resMsg']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['evStatus']['batteryStatus'])
         statusDict['soc12v'] = int(responseDict['resMsg']['battery']['batSoc'])
+        statusDict['vehicleStatus'] = responseDict['resMsg']
     except:
         logDebug(1, "Receiving current status failed, invalid response")
         logDebug(2, response)
@@ -660,6 +714,12 @@ def requestNewControlToken(pin):
 def DownloadSoC(email, password, pin, vin):
     logDebug(0, "SoC download starting")
       
+    auxData = {
+        'vehicleLocation': '',
+        'vehicleStatus': '',
+        'odometer': ''
+    }
+    
     try:
         now = int(time.time())       
         setGlobalData(vin)
@@ -679,7 +739,14 @@ def DownloadSoC(email, password, pin, vin):
         status = getStatusCached(vehicleId)
     except:
         logDebug(0, "Collecting data from server failed")
-        raise 
+        raise
+
+    try:
+        auxData['vehicleLocation'] = status['vehicleLocation']
+        auxData['vehicleStatus'] = status['vehicleStatus']
+        auxData['odometer'] = status['odometer']
+    except:
+        pass
 
     if (now - status['time']) < (glParams['cacheValid']) and status['socev'] > 0:
         logDebug(2, "Cached data is current")
@@ -694,6 +761,11 @@ def DownloadSoC(email, password, pin, vin):
         except:
             logDebug(0, "Collecting data from vehicle failed")
             raise
+        
+        try:
+            auxData['vehicleStatus'] = status['vehicleStatus']
+        except:
+            pass
     
     if status['soc12v'] >= 80:
         logDebug(2, "Received SoC (12 V-battery): " + str(status['soc12v']) + "%")
@@ -705,6 +777,13 @@ def DownloadSoC(email, password, pin, vin):
     soc = status['socev']
     logDebug(0, "Received SoC (HV-battery): " + str(soc) + "%")
     
+    try:
+        f = open(glParams['files']['auxDataFile'], 'w')
+        f.write(json.dumps(auxData))
+        f.close()
+    except:
+        pass
+        
     logDebug(1, "SoC download ending")
     
     return soc
@@ -1083,6 +1162,11 @@ def main():
     logDebug(1, "-------------------------------")    
     logDebug(1, "Kia/Hyundai SoC Module starting")
 
+    #try:
+    #    updateStamps(args['moduleDir'])
+    #except:
+    #    pass
+                
     try:
         saveUnplugState()
         saveChargedState()

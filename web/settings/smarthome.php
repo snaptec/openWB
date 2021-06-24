@@ -247,7 +247,7 @@
 										<label for="hook<?php echo $deviceNum; ?>einschaltverz" class="col-md-4 col-form-label">Einschaltverzögerung</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="hook<?php echo $deviceNum; ?>einschaltverz" id="hook<?php echo $deviceNum; ?>einschaltverz" value="<?php echo ${"hook" . $deviceNum . "einschaltverzold"} ?>">
-											<span class="form-text small">Bestimmt die Dauer, für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.</span>
+											<span class="form-text small">Bestimmt die Dauer in Sekunden, für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -282,7 +282,7 @@
 										<label for="hook<?php echo $deviceNum; ?>_ausverz" class="col-md-4 col-form-label">Ausschaltverzögerung</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="hook<?php echo $deviceNum; ?>_ausverz" id="hook<?php echo $deviceNum; ?>_ausverz" value="<?php echo ${"hook" . $deviceNum . "_ausverzold"} ?>">
-											<span class="form-text small">Bestimmt die Dauer, für die die Ausschaltschwelle unterschritten werden muss, bevor ausgeschaltet wird.</span>
+											<span class="form-text small">Bestimmt die Dauer in Sekunden, für die die Ausschaltschwelle unterschritten werden muss, bevor ausgeschaltet wird.</span>
 										</div>
 									</div>
 								</div>
