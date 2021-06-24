@@ -9,7 +9,8 @@ client = ModbusTcpClient('192.168.193.15', port=8899)
 #from pymodbus.transaction import ModbusRtuFramer
 #client = ModbusTcpClient('192.168.0.7', port=8899, framer=ModbusRtuFramer)
 
-
+def u16_to_s16(x):
+    return x if x < 0x8000 else x - 0x10000
 
 
 #Voltage
@@ -108,19 +109,19 @@ f.close()
 
 #Power Factor
 resp = client.read_input_registers(0x0025,2, unit=0x02)
-evupf1 = float(resp.registers[1]) / 10000
+evupf1 = float(u16_to_s16(resp.registers[1])) / 10000
 f = open('/var/www/html/openWB/ramdisk/evupf1', 'w')
 f.write(str(evupf1))
 f.close()
 
 resp = client.read_input_registers(0x0027,2, unit=0x02)
-evupf2 = float(resp.registers[1]) / 10000
+evupf2 = float(u16_to_s16(resp.registers[1])) / 10000
 f = open('/var/www/html/openWB/ramdisk/evupf2', 'w')
 f.write(str(evupf2))
 f.close()
 
 resp = client.read_input_registers(0x0029,2, unit=0x02)
-evupf3 = float(resp.registers[1]) / 10000
+evupf3 = float(u16_to_s16(resp.registers[1])) / 10000
 f = open('/var/www/html/openWB/ramdisk/evupf3', 'w')
 f.write(str(evupf3))
 f.close()
