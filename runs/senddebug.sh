@@ -5,9 +5,13 @@ sleep 60
 debugFile=/var/www/html/openWB/ramdisk/debug.log
 cat /var/www/html/openWB/ramdisk/debuguser > $debugFile
 debugemail=$(</var/www/html/openWB/ramdisk/debugemail)
+echo "############################ system ###############" >> $debugFile
+uptime >> $debugFile
+free >> $debugFile
+echo "############################ storage ###############" >> $debugFile
+df -h >> $debugFile
 echo "############################ network ##############" >> $debugFile
 ifconfig >> $debugFile
-uptime >> $debugFile
 echo "############################ version ##############" >> $debugFile
 echo "Version" >> $debugFile
 cat /var/www/html/openWB/web/version >> $debugFile
@@ -23,7 +27,6 @@ echo "############################ soc.log ##############" >> $debugFile
 echo "$(tail -100 /var/www/html/openWB/ramdisk/soc.log)" >> $debugFile
 echo "############################ nurpv.log ##############" >> $debugFile
 echo "$(tail -200 /var/www/html/openWB/ramdisk/nurpv.log)" >> $debugFile
-
 echo "############################ rfid.log ##############" >> $debugFile
 echo "$(cat /var/www/html/openWB/ramdisk/rfid.log)" >> $debugFile
 

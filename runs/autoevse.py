@@ -2,12 +2,9 @@
 #import argparse
 import paho.mqtt.client as mqtt
 import sys
-import os 
-import time 
-import getopt 
-import socket 
-import struct 
-import binascii 
+import os
+import time
+import struct
 import RPi.GPIO as GPIO
 from pymodbus.client.sync import ModbusSerialClient
 

@@ -47,6 +47,7 @@ ARGS+='"manualCalc": "'"$soccalc"'", '
 ARGS+='"batterySize": "'"$akkug"'", '
 ARGS+='"efficiency": "'"$efficiency"'", '
 ARGS+='"ramDiskDir": "'"$RAMDISKDIR"'", '
+ARGS+='"moduleDir": "'"$MODULEDIR"'", '
 ARGS+='"debugLevel": "'"$socDebug"'"'
 ARGS+='}'
 echo $ARGS > $ARGSFILE

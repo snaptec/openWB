@@ -950,6 +950,7 @@
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
 										<option <?php if($pv2wattmodulold == "wr2_solax") echo "selected" ?> value="wr2_solax">Solax</option>
+										<option <?php if($pv2wattmodulold == "wr2_sungrow") echo "selected" ?> value="wr2_sungrow">Sungrow</option>
 										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -1073,6 +1074,10 @@
 								if($('#pv2wattmodul').val() == 'wr2_solax') {
 									showSection('#pv2ipdiv');
 								}
+								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
+									showSection('#pv2ipdiv');
+								}
+
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
 									showSection('#pv2ipdiv');
 								}
