@@ -99,7 +99,13 @@ f.write(str(responsetext))
 f.write(str(responestatus))
 f.close()
 batt = json.loads(responsetext)
-soc = batt['energy'][0]['level']
+
+# filter to only include type=Electric but remove all others. Seen type=Fuel and type=Electric being returned.
+batt = filter(lambda x: x['type'] == 'Electric', batt['energy'])
+soc = batt[0]['level']
+
+#soc = batt['energy'][0]['level']
+
 #print(time_string,'soc lp'+chargepoint,soc)
 if (int(chargepoint) == 1):
     f = open('/var/www/html/openWB/ramdisk/soc', 'w')
