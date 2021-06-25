@@ -949,8 +949,8 @@ def conditions(nummer):
             logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, finishtime erreicht")
             setstat(nummer,10)
             return
-    # here startup device_startupdetection
-    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
+    # here startup device_startupdetection 
+    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20) and ( DeviceValues[str(nummer)+"relais"] == 0 ):
         setstat(nummer,20)
         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
         turndevicerelais(nummer, 1,0,0)
