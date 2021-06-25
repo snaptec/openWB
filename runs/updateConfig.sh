@@ -1742,7 +1742,7 @@ updateConfig(){
 		sed -i "/pv2pass='/b; s/^pv2pass=\(.*\)/pv2pass=\'\1\'/g" $ConfigFile
 	fi
 	if grep -Fq "pv2id=none" $ConfigFile; then
-		sed -i "/^pv2id=none/pv2id=1/g" $ConfigFile
+		sed -i "s/^pv2id=none/pv2id=1/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_bluelink_email=" $ConfigFile; then
 		echo "soc_bluelink_email=mail@mail.de" >> $ConfigFile
@@ -2052,6 +2052,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "alphav123=" $ConfigFile; then
+		echo "alphav123=0" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }

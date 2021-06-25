@@ -437,6 +437,7 @@ def update_pricedata(landeskennung, basispreis, debug_level):
                 if prices_count_after_cleanup < 11:
                     # mit 10 Preisen des Tages übrig: gegen 14 Uhr gibt es neue Preise
                     _write_log_entry('Versuche, weitere Preise von aWATTar zu empfangen', 1)
+                    pricelist_received = []
                     try:
                         pricelist_received = _get_updated_pricelist()
                     except Exception as e:

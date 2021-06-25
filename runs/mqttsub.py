@@ -1077,12 +1077,12 @@ def on_message(client, userdata, msg):
                     f.write("0")
                     f.close()
             if (msg.topic == "openWB/set/isss/Current"):
-                if (int(msg.payload) >= 0 and int(msg.payload) <=32):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=32):
                     f = open('/var/www/html/openWB/ramdisk/llsoll', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/isss/Lp2Current"):
-                if (int(msg.payload) >= 0 and int(msg.payload) <=32):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=32):
                     f = open('/var/www/html/openWB/ramdisk/llsolls1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
@@ -1091,6 +1091,11 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/u1p3pstat', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+            if (msg.topic == "openWB/set/isss/U1p3pLp2"):
+                 if (int(msg.payload) >= 0 and int(msg.payload) <=5):
+                     f = open('/var/www/html/openWB/ramdisk/u1p3plp2stat', 'w')
+                     f.write(msg.payload.decode("utf-8"))
+                     f.close()
             if (msg.topic == "openWB/set/isss/Cpulp1"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=5):
                     f = open('/var/www/html/openWB/ramdisk/extcpulp1', 'w')
