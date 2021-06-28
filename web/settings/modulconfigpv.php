@@ -987,12 +987,33 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2ip2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip2" class="col-md-4 col-form-label">Zweite IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip2" id="pv2ip2" value="<?php echo $pv2ip2old ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
+							</div>
+						</div>
+
 						<div id="pv2iddiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="pv2id" class="col-md-4 col-form-label">Modbus ID</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="1" name="pv2id" id="pv2id" value="<?php echo $pv2idold ?>">
 									<span class="form-text small">Gültige Werte ID. ID Adresse</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2id2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2id2" class="col-md-4 col-form-label">Modbus ID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="0" step="1" name="pv2id2" id="pv2id2" value="<?php echo $pv2id2old ?>">
+									<span class="form-text small">Gültige Werte ID. ID Adresse. Wenn sie nicht genutzt wird auf 0 belassen</span>
 								</div>
 							</div>
 						</div>
@@ -1052,6 +1073,8 @@
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
 								hideSection('#pv2iddiv');
+								hideSection('#pv2ip2div');
+								hideSection('#pv2id2div');
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
 								hideSection('#pv2piko2');
@@ -1095,6 +1118,8 @@
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {
 									showSection('#pv2ipdiv');
 									showSection('#pv2iddiv');
+									showSection('#pv2ip2div');
+									showSection('#pv2id2div');
 								}
 							}
 							$(function() {

@@ -1715,6 +1715,10 @@ updateConfig(){
 	if ! grep -Fq "pv2wattmodul=" $ConfigFile; then
 		echo "pv2wattmodul=none" >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2ip2=" $ConfigFile; then
+		echo "pv2ip2=192.168.192.192" >> $ConfigFile
+		echo "pv2id2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		echo "pv2ip=none" >> $ConfigFile
 		echo "pv2id=1" >> $ConfigFile
