@@ -610,10 +610,10 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 0) echo " active" ?>">
-											<input type="radio" name="froniusisgen24" id="froniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
+											<input type="radio" name="wrfroniusisgen24" id="wrfroniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
 										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 1) echo " active" ?>">
-											<input type="radio" name="froniusisgen24" id="froniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
+											<input type="radio" name="wrfroniusisgen24" id="wrfroniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 									<span class="form-text small">
