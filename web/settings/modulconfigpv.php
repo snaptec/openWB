@@ -987,17 +987,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="pv2ip2div" class="hide">
-							<div class="form-row mb-1">
-								<label for="pv2ip2" class="col-md-4 col-form-label">Zweite IP Adresse</label>
-								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip2" id="pv2ip2" value="<?php echo $pv2ip2old ?>">
-									<span class="form-text small">
-										Gültige Werte IP Adresse im Format: 192.168.0.12
-									</span>
-								</div>
-							</div>
-						</div>
+
 
 						<div id="pv2iddiv" class="hide">
 							<div class="form-row mb-1">
@@ -1008,15 +998,27 @@
 								</div>
 							</div>
 						</div>
-						<div id="pv2id2div" class="hide">
+						<div id="pv2ip2div" class="hide">
 							<div class="form-row mb-1">
-								<label for="pv2id2" class="col-md-4 col-form-label">Modbus ID</label>
+								<label for="pv2ip2" class="col-md-4 col-form-label">Zweite IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="number" min="0" step="1" name="pv2id2" id="pv2id2" value="<?php echo $pv2id2old ?>">
-									<span class="form-text small">Gültige Werte ID. ID Adresse. Wenn sie nicht genutzt wird auf 0 belassen</span>
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip2" id="pv2ip2" value="<?php echo $pv2ip2old ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12 Ist nur relevant wenn ein zweiter Modbus/Netzwerk Adapter genutzt wird. Wird einer für 2 Zähler genutzt bitte die IP vom ersten nochmals eintragen.
+									</span>
 								</div>
 							</div>
 						</div>
+						<div id="pv2id2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2id2" class="col-md-4 col-form-label">Zweite Modbus ID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="0" step="1" name="pv2id2" id="pv2id2" value="<?php echo $pv2id2old ?>">
+									<span class="form-text small">Gültige Werte ID. ID Adresse. Wenn kein zweiter Zähler genutzt wird auf 0 belassen.</span>
+								</div>
+							</div>
+						</div>
+
 						<div id="pv2wrjsondiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="wr2jsonurl" class="col-md-4 col-form-label">WR URL</label>
