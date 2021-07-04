@@ -27,6 +27,6 @@ watti = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 watt = int(watti[0])
 
 answer = '{"power":' + str(watt) + ',"powerc":' + str(vwh3) + '} '
-f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_rets' + str(devicenumber), 'w')
+f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
 json.dump(answer,f1)
 f1.close()

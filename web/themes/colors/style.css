@@ -1,0 +1,545 @@
+/*!
+Stylesheet zum openWB Standard-Theme
+
+2019-2020 Michael Ortenstein
+*/
+
+html{
+	min-height: 100%;
+	min-width: 100%;
+}
+
+body {
+	color: var(--color-fg);
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+	/* Old browsers */
+	background: var(--color-bg);
+}
+body > .container {
+	padding: 55px 15px 0;
+}
+h3 {
+	color: var(--color-title);
+}
+
+h4 {
+	color: var(--color-axis);
+}
+
+body > .container-fluid {
+	padding: 55px 15px 0;
+}
+@keyframes alertPulsation {
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-o-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-moz-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-webkit-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+.animate-alertPulsation {
+	-webkit-animation: alertPulsation 1s infinite;
+	-moz-animation: alertPulsation 1s infinite;
+	-o-animation: alertPulsation 1s infinite;
+	animation: alertPulsation 1s infinite;
+}
+
+.limitation-progress {
+	height: 0.6em !important;
+}
+
+.pull-right {
+	float:right
+}
+
+.row.no-gutter [class*='col-']:first-child:not(:only-child) {
+	padding-right: 0;
+}
+.row.no-gutter [class*='col-']:last-child:not(:only-child) {
+	padding-left: 0;
+}
+.row.no-gutter [class*='col-']:not(:first-child):not(:last-child):not(:only-child) {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.gradient {
+	background: -webkit-linear-gradient(black, #f2f2f2, black);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+}
+
+.cursor-pointer{
+	cursor: pointer;
+}
+
+.vaRow {
+	/* vertical alignment of content in rows */
+	display: flex;
+	align-items: center;
+}
+
+.hide {
+	display: none;
+}
+
+.lpEnabledStyle {
+	color: #006515;
+	text-decoration: none;
+}
+.lpWaitingStyle {
+	color: #ffdb00;
+	text-decoration: none;
+}
+.lpDisabledStyle {
+	color: #A30000;
+	text-decoration: line-through;
+}
+
+/* input[type=range]::-webkit-slider-runnable-track {
+	background: grey;
+	} */
+
+.text-green {
+	color: #4db662;
+}
+
+.text-red {
+	color: #d12020;
+}
+
+.text-white {
+	color: white;
+}
+
+.text-orange {
+	color: #ff8c1a;
+}
+
+.text-black {
+	color: black;
+}
+
+.text-blue {
+	color: blue;
+}
+
+.text-grey {
+	color: #515151;
+}
+
+.text-lightgrey {
+	color: lightgrey;
+}
+
+.bg-darkgrey {
+	background-color: #b6bcc9;
+}
+
+.bg-lightgrey {
+	background-color: #d0d7e6;
+}
+.bg-lightblue {
+	background-color: #23ebe1;
+}
+
+.bg-lightgreen {
+	background-color: #befebe;
+}
+
+.bg-rose {
+	background-color: #febebe;
+}
+
+.bg-apricot {
+	background-color:#fefedf;
+}
+
+.bg-orange {
+	background-color:#fcbe1e;
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query since this is the default in Bootstrap */
+h1 {
+	font-size: 1.6rem;
+}
+
+h2 {
+	font-size: 1.4rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+.verySmallTextSize {
+	font-size: 0.8rem;
+}
+
+.smallTextSize {
+	font-size: 0.7rem;
+}
+
+.regularTextSize {
+	font-size: 0.9rem;
+}
+
+.largeTextSize {
+	font-size: 1.1rem;
+}
+
+.buttonTextSize {
+	font-size: 0.9rem;
+}
+.tablecell {
+	font-size: 0.9rem;
+	line-height: 1.1rem;
+	vertical-align: middle;
+	padding: 0;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media screen and (min-width: 576px) {
+	h1 {
+		font-size: 2.1rem;
+	}
+
+	h2 {
+		font-size: 1.9rem;
+	}
+
+	h3 {
+		font-size: 1.7rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.0rem;
+	}
+
+	.smallTextSize {
+		font-size: 1.2rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.4rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.6rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.4rem;
+	}
+	.tablecell {
+		font-size: 1.2rem;
+		line-height: 1.1rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+
+	.table-condensed>tbody>tr>td {
+		padding: 1px;
+	}
+
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media screen and (min-width: 768px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+
+	h2 {
+		font-size: 1.3rem;
+	}
+
+	h3 {
+		font-size: 1.1rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.0rem;
+	}
+
+	.smallTextSize {
+		font-size: 0.6rem;
+	}
+
+	.regularTextSize {
+		font-size: 0.8rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.0rem;
+	}
+
+	.buttonTextSize {
+		font-size: 0.8rem;
+	}
+	.tablecell {
+		font-size: 0.9rem;
+		line-height: 0.8rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media screen and (min-width: 992px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+
+	h2 {
+		font-size: 1.3rem;
+	}
+
+	h3 {
+		font-size: 1.1rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.0rem;
+	}
+
+	.smallTextSize {
+		font-size: 0.7rem;
+	}
+
+	.regularTextSize {
+		font-size: 0.9rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.1rem;
+	}
+
+	.buttonTextSize {
+		font-size: 0.9rem;
+	}
+	.tablecell {
+		font-size: 1.0rem;
+		line-height: 0.8rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	h1 {
+		font-size: 3rem;
+	}
+
+	h2 {
+		font-size: 2.4rem;
+	}
+
+	h3 {
+		font-size: 1.5rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.4rem;
+	}
+
+	.smallTextSize {
+		font-size: 1.65rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.2rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.8rem;
+	}
+
+	.buttonTextSize {
+		font-size: 2.0rem;
+	}
+	.tablecell {
+		font-size: 1.3rem;
+		line-height: 1.0rem;
+		vertical-align: middle;
+		padding: 0;
+	}
+}
+
+/* Overarching colors */
+:root {
+	--fontCol: rgba(160, 160, 160, 0.82);
+	--gridCol: rgba(160,160,160, 0.82);
+	--xgridCol: rgba(160,160,160, 0.82);
+	--tickCol: rgba(160,160,160, 0.82);
+	--evuCol: rgba(178, 34, 34, 1);
+	}
+
+
+/* Theme color sets */
+
+.theme-light {
+	--color-bg: white;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-devices: #f16913;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
+	--color-axis: gray;
+	--color-grid: #bbbbbb;
+	--color-frame: white;
+	--color-subframe: lightgrey;
+	--color-fg: black;
+	--color-scale: lightgrey;
+	--color-title: black;
+	--color-battery: goldenrod;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
+	--padding-widget: 5px;
+	--fontCol: rgba(255, 255, 255, 0.82);
+	--gridCol: rgba(255, 255, 255, 0.82);
+	--xgridCol: rgba(255, 255, 255, 0.1);
+	--tickCol: rgba(255, 255, 255, 0.82);
+	--evuCol: rgba(255, 0, 0, 0.7);
+}
+
+.theme-dark {
+	--color-bg: midnightblue;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-devices: #f16913;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
+	--color-axis: steelblue;
+	--color-grid: steelblue;
+	--color-frame: lightskyblue;
+	--color-subframe: midnightblue;
+	--color-fg: white;
+	--color-scale: steelblue;
+	--color-title: lightgrey;
+	--color-battery: goldenrod;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
+	--padding-widget: 0px;
+}
+
+.theme-gray {
+	--color-bg: #333333;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-devices: #f16913;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
+	--color-axis: #666666;
+	--color-grid: black;
+	--color-frame: #999999;
+	--color-subframe: #333333;
+	--color-fg: white;
+	--color-scale: #999999;
+	--color-title: lightgrey;
+	--color-battery: goldenrod;
+	--color-lp1: #6baed6;
+	--color-lp2: #4292c6;
+	--color-lp3: #2171b5;
+	--color-lp4: #9ecae1;
+	--color-lp5: #c6dbef;
+	--color-lp6: #deebf7;
+	--color-lp7: #08519c;
+	--color-lp8: #6baed6;
+	--color-sh1: #fd8d3c;
+	--color-sh2: #f16913;
+	--color-sh3: #d94801;
+	--color-sh4: #fdae6b;
+	--color-sh5: #fdd0a2;
+	--color-sh6: #fee6ce;
+	--color-sh7: #a63603;
+	--color-sh8: #fe4b83;
+	--color-sh9: #e4419d;
+	--color-co1: #bf3caf;
+	--color-co2: #963db3;
+	--padding-widget: 0px;
+}
+
+.openwb-devices {
+	color: #ccffff;
+	background-color: #009696;
+}
+
+.colormenu {
+	background-color: var(--color-frame);
+}
+.wb-widget {
+	background-color: var(--color-bg);
+	border:1px solid var(--color-frame) ;
+}
+
+.wb-subwidget {
+	border:1px solid var(--color-subframe) ;
+	padding:var(--padding-widget);
+}
+th {
+	color: var(--color-axis);
+}
+.table-borderless td {
+	border: 0;
+}
+.popup-header {
+	color: midnightblue;
+}
+.axis text {
+	color: var(--color-axis);
+	stroke-width: 0;
+	} 

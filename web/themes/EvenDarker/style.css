@@ -1,0 +1,546 @@
+/*!
+Stylesheet for openWB Theme "EvenDarker"
+Based on Theme "dark" by Michael Ortenstein
+
+2020 Lutz Bender
+*/
+
+html{
+	min-height: 100%;
+	min-width: 100%;
+}
+
+body {
+	color: white;
+}
+body > .container {
+	padding: 55px 15px 0;
+}
+
+@keyframes alertPulsation {
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-o-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-moz-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+@-webkit-keyframes alertPulsation{
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
+}
+.animate-alertPulsation {
+	-webkit-animation: alertPulsation 3s infinite;
+	-moz-animation: alertPulsation 3s infinite;
+	-o-animation: alertPulsation 3s infinite;
+	animation: alertPulsation 3s infinite;
+}
+
+.limitation-progress {
+	height: 0.6em !important;
+}
+
+.pull-right {
+	float:right
+}
+
+.row.no-gutter [class*='col-']:first-child:not(:only-child) {
+	padding-right: 0;
+}
+.row.no-gutter [class*='col-']:last-child:not(:only-child) {
+	padding-left: 0;
+}
+.row.no-gutter [class*='col-']:not(:first-child):not(:last-child):not(:only-child) {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.gradient {
+	background: -webkit-linear-gradient(black, #f2f2f2, black);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+}
+
+.cursor-pointer{
+	cursor: pointer;
+}
+
+.vaRow {
+	/* vertical alignment of content in rows */
+	display: flex;
+	align-items: center;
+}
+
+.hide {
+	display: none;
+}
+
+.lpEnabledStyle {
+	color: #00b125;
+	text-decoration: none;
+}
+.lpWaitingStyle {
+	color: #ffdb00;
+	text-decoration: none;
+}
+.lpDisabledStyle {
+	color: #e21f1f;
+	text-decoration: line-through;
+}
+
+.text-green {
+	color: #00b125;
+}
+
+.text-red {
+	color: #e21f1f;
+}
+
+.text-white {
+	color: white;
+}
+
+.text-orange {
+	color: #ff8c1a;
+}
+
+.text-black {
+	color: white;
+}
+
+.text-blue {
+	color: blue;
+}
+
+.text-grey {
+	color: #e4e4e4;
+}
+
+.text-lightgrey {
+	color: rgba(255, 255, 255, 0.82);
+}
+
+.bg-darkgrey {
+	background-color: #6c757d;
+}
+
+.bg-lightgrey {
+	background-color: #565656;
+}
+.bg-lightblue {
+	background-color: #23ebe1;
+}
+
+.bg-lightgreen {
+	background-color: #befebe;
+}
+
+.bg-rose {
+	background-color: #febebe;
+}
+
+.bg-apricot {
+	background-color:#fefedf;
+}
+
+.bg-orange {
+	background-color:#fcbe1e;
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query since this is the default in Bootstrap */
+h1 {
+	font-size: 1.4rem;
+}
+
+h2 {
+	font-size: 0.9rem;
+}
+
+h3 {
+	font-size: 0.7rem;
+}
+
+.verySmallTextSize {
+	font-size: 0.5rem;
+}
+
+.smallTextSize {
+	font-size: 0.5rem;
+}
+
+.regularTextSize {
+	font-size: 0.7rem;
+}
+
+.largeTextSize {
+	font-size: 0.8rem;
+}
+
+.buttonTextSize {
+	font-size: 0.9rem;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media screen and (min-width: 576px) {
+	h1 {
+		font-size: 1.7rem;
+	}
+
+	h2 {
+		font-size: 1.1rem;
+	}
+
+	h3 {
+		font-size: 0.9rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 0.6rem;
+	}
+
+	.smallTextSize {
+		font-size: 0.68rem;
+	}
+
+	.regularTextSize {
+		font-size: 0.75rem;
+	}
+
+	.largeTextSize {
+		font-size: 0.95rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.0rem;
+	}
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media screen and (min-width: 768px) {
+	h1 {
+		font-size: 2.0rem;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	h3 {
+		font-size: 1.1rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 0.8rem;
+	}
+
+	.smallTextSize {
+		font-size: 0.9rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.0rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.3rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.2rem;
+	}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media screen and (min-width: 992px) {
+	h1 {
+		font-size: 2.6rem;
+	}
+
+	h2 {
+		font-size: 2.0rem;
+	}
+
+	h3 {
+		font-size: 1.6rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.1rem;
+	}
+
+	.smallTextSize {
+		font-size: 1.25rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.4rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.6rem;
+	}
+
+	.buttonTextSize {
+		font-size: 1.6rem;
+	}
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	h1 {
+		font-size: 3rem;
+	}
+
+	h2 {
+		font-size: 2.4rem;
+	}
+
+	h3 {
+		font-size: 1.95rem;
+	}
+
+	.verySmallTextSize {
+		font-size: 1.4rem;
+	}
+
+	.smallTextSize {
+		font-size: 1.65rem;
+	}
+
+	.regularTextSize {
+		font-size: 1.8rem;
+	}
+
+	.largeTextSize {
+		font-size: 1.8rem;
+	}
+
+	.buttonTextSize {
+		font-size: 2.0rem;
+	}
+}
+
+/* Livechart colors */
+:root {
+	--fontCol: rgba(255, 255, 255, 0.82);
+	--gridCol: rgba(255, 255, 255, 0.82);
+	--xgridCol: rgba(255, 255, 255, 0.1);
+	--gridSocCol: rgba(0, 0, 0, 0);
+	--tickCol: rgba(255, 255, 255, 0.82);
+	--lp1Col: rgba(0, 0, 255, 0.7);
+	--lp1bgCol: rgba(0, 0, 255, 0.7);
+	--lp2Col: rgba(50, 30, 105, 0.7);
+	--lp2bgCol: rgba(50, 30, 105, 0.7);
+	--evuCol: rgba(255, 0, 0, 0.7);
+	--evubgCol: rgba(255, 10, 13, 0.3);
+	--pvCol: rgba(0, 255, 0, 1);
+	--pvbgCol: rgba(10, 255, 13, 0.3);
+	--speicherCol: rgba(255, 153, 0, 0.8);
+	--speicherbgCol: rgba(200, 255, 13, 0.3);
+	--speicherSocCol: rgba(255, 153, 0, 0.8);
+	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
+	--lp1SocCol: rgba(0, 0, 255, 0.5);
+	--lp2SocCol: rgba(50, 50, 55, 0.5);
+	--hausverbrauchCol: rgba(255,255,255,0.7);
+	--hausverbrauchbgCol: rgba(200, 255, 13, 0.3);
+	--verbraucher1Col: rgba(0, 150, 150, 0.7);
+	--verbraucher1bgCol: rgba(200, 255, 13, 0.3);
+	--verbraucher2Col: rgba(150, 150, 0, 0.7);
+	--verbraucher2bgCol: rgba(200, 255, 13, 0.3);
+	--lpgesamtCol: rgba(50, 50, 55, 0.1);
+	--lpgesamtbgCol: rgba(0, 0, 255, 0.1);
+	--lp3Col: rgba(50, 50, 55, 0.7);
+	--lp3bgCol: blue;
+	--lp4Col: rgba(50, 50, 55, 0.7);
+	--lp4bgCol: blue;
+	--lp5Col: rgba(50, 50, 55, 0.7);
+	--lp5bgCol: blue;
+	--lp6Col: rgba(50, 50, 55, 0.7);
+	--lp6bgCol: blue;
+	--lp7Col: rgba(50, 50, 55, 0.7);
+	--lp7bgCol: blue;
+	--lp8Col: rgba(50, 50, 55, 0.7);
+	--lp8bgCol: blue;
+	--d1Col: rgba(230, 50, 220, 0.7);
+	--d1bgCol: blue;
+	--d2Col: rgba(230, 50, 220, 0.7);
+	--d2bgCol: blue;
+	--d3Col: rgba(230, 50, 220, 0.7);
+	--d3bgCol: blue;
+	--d4Col: rgba(230, 50, 220, 0.7);
+	--d4bgCol: blue;
+	--d5Col: rgba(230, 50, 220, 0.7);
+	--d5bgCol: blue;
+	--d6Col: rgba(230, 50, 220, 0.7);
+	--d6bgCol: blue;
+	--d7Col: rgba(230, 50, 220, 0.7);
+	--d7bgCol: blue;
+	--d8Col: rgba(230, 50, 220, 0.7);
+	--d8bgCol: blue;
+	--d9Col: rgba(230, 50, 220, 0.7);
+	--d9bgCol: blue;
+}
+
+/* modifications start here */
+.openwb-pv {
+	background-color: #006400;
+	color: #80ff80;
+}
+
+.openwb-evu {
+	background-color: darkred;
+	color: #ff8a8a;
+}
+
+.openwb-house {
+	background-color: dimgrey;
+	color: #e6e6e6;
+}
+
+.openwb-lp {
+	background-color: midnightblue;
+	color: #b0b0e8;
+}
+
+.openwb-housebat {
+	background-color: #b36200;
+	color: hsla(33, 70%, 80%, 1);
+}
+
+.openwb-device-1 {
+	color: rgb(204 255 255);
+	background-color: rgb(0 150 150);
+}
+
+.openwb-device-2 {
+	color: rgb(255 255 204);
+	background-color: rgb(150 150 0);
+}
+
+@media screen and (max-width: 575px) {
+	#date {
+		padding-right: 0;
+		padding-left: 5px;
+	}
+	#time {
+		padding-right: 5px;
+		padding-left: 0;
+	}
+}
+
+.progress {
+	background-color: #424242;
+}
+
+.progress-bar {
+	background-color: #424242;
+}
+
+.row.middle {
+	align-items: center;
+}
+
+#ladelogtablediv {
+	background: #343a40;
+}
+
+#ladelogtablediv .table {
+	color: #ffffff;
+}
+
+.bg-warning, .bg-info, .bg-success {
+	color: #212529;
+}
+.btn-secondary {
+	color: #ffffff;
+	background-color: #343a40;
+	border-color: #ffffff;
+}
+.btn-secondary:hover {
+	border-color: inherit;
+}
+.btn-success {
+	color: #fff;
+	background-color: #28a745;
+	/*border-color: #28a745;*/
+}
+
+.btn-outline-secondary {
+	color: #ffffff;
+}
+
+.card {
+	background-color: #212529;
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.datepicker {
+	background: #212529;
+	color: #ffffff;
+}
+
+.datepicker table tr td span.focused, .datepicker table tr td span:hover, .datepicker .datepicker-switch:hover, .datepicker .next:hover, .datepicker .prev:hover, .datepicker tfoot tr th:hover, .datepicker table tr td.day:hover, .datepicker table tr td.focused {
+	color: #000000;
+}
+
+.dropdown-menu .dropdown-item.disabled {
+	background-color: #343a40;
+	color: #ffffff;
+}
+
+.form-control, .form-control[readonly], .form-control:focus {
+	background-color: #343a40;
+	border: 1px solid #ced4da;
+	color: #ffffff;
+}
+
+.form-group {
+	color: #ffffff;
+}
+
+.input-group-text {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+.modal-content {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+.modal-content .text-grey {
+	color: #d0d0d0;
+}
+
+body {
+	background: linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+	linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+	linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+	linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+	linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+	linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+	background-color: #131313;
+	background-size: 20px 20px;
+}
+
+canvas.chartjs-render-monitor {
+	background: #343a40;
+}
+
+hr {
+	border-top-color: #ffffff;
+}
+
+input[type="text"], input[type="password"], input[type="email"], select {
+	border: 1px solid #ced4da;
+}

@@ -30,7 +30,7 @@
 		<link rel="stylesheet" type="text/css" href="hilfe/hilfe_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	</head>
 		<?php 
@@ -49,7 +49,7 @@
 			$output = shell_exec($command); 
 			echo $output;
 		?>
-		<form action="tools/wlan/wlan1.php" method="post">
+		<form action="tools/wlan/wlan1.php" method="post" autocomplete="off">
 		<br><br>
 		<h5> Neuverbinden mit</h5>
 		<p> Wlan SSID: <input id="wssid" type="text" name="wssid" /></p>

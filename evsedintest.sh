@@ -19,10 +19,10 @@ evsedintest() {
 				sleep 1
 				evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1000 1)
 				if [[ $evsedinstat == "9" ]]; then
-					echo "EVSE LP1 Prüfung erfolgreich"
+					openwbDebugLog "MAIN" 0 "EVSE LP1 Prüfung erfolgreich"
 					echo "erfolgreich" > ramdisk/evsedintestlp1
 				else
-					echo "EVSE LP1 Prüfung NICHt erfolgreich"
+					openwbDebugLog "MAIN" 0 "EVSE LP1 Prüfung NICHT erfolgreich"
 					echo "Fehler" > ramdisk/evsedintestlp1
 				fi
 				sleep 1
@@ -34,10 +34,10 @@ evsedintest() {
 				sleep 1
 				evsedinstat=$(sudo python runs/readmodbusethframer.py 192.168.193.18 1 1000 1)
 				if [[ $evsedinstat == "[9]" ]]; then
-					echo "EVSE LP1 Prüfung erfolgreich"
+					openwbDebugLog "MAIN" 0 "EVSE LP1 Prüfung erfolgreich"
 					echo "erfolgreich" > ramdisk/evsedintestlp1
 				else
-					echo "EVSE LP1 Prüfung NICHt erfolgreich"
+					openwbDebugLog "MAIN" 0 "EVSE LP1 Prüfung NICHT erfolgreich"
 					echo "Fehler" > ramdisk/evsedintestlp1
 				fi
 				sleep 1
@@ -66,10 +66,10 @@ evsedintest() {
 			sleep 1
 			evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
 			if [[ $evsedinstat == "9" ]]; then
-				echo "EVSE LP2 Prüfung erfolgreich"
+				openwbDebugLog "MAIN" 0 "EVSE LP2 Prüfung erfolgreich"
 				echo "erfolgreich" > ramdisk/evsedintestlp2
 			else
-				echo "EVSE LP2 Prüfung NICHt erfolgreich"
+				openwbDebugLog "MAIN" 0 "EVSE LP2 Prüfung NICHT erfolgreich"
 				echo "Fehler" > ramdisk/evsedintestlp2
 			fi
 			sleep 1
@@ -97,10 +97,10 @@ evsedintest() {
 			sleep 1
 			evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
 			if [[ $evsedinstat == "9" ]]; then
-				echo "EVSE LP3 Prüfung erfolgreich"
+				openwbDebugLog "MAIN" 0 "EVSE LP3 Prüfung erfolgreich"
 				echo "erfolgreich" > ramdisk/evsedintestlp3
 			else
-				echo "EVSE LP3 Prüfung NICHt erfolgreich"
+				openwbDebugLog "MAIN" 0 "EVSE LP3 Prüfung NICHT erfolgreich"
 				echo "Fehler" > ramdisk/evsedintestlp3
 			fi
 			sleep 1
@@ -127,19 +127,19 @@ evsedintest() {
 				fi
 				sleep 1
 				evselp12000=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 2000 1)
-				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000		
+				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000
 				sleep 1
 				evselp12007=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 2007 1)
-				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007		
+				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007
 				sleep 1
 			fi
 			if [[ $evsecon == "masterethframer" ]]; then
 				sleep 1
 				evselp12000=$(sudo python runs/readmodbusethframer.py 192.168.193.18 1 2000 1)
-				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000		
+				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000
 				sleep 1
 				evselp12007=$(sudo python runs/readmodbusethframer.py 192.168.193.18 1 2007 1)
-				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007		
+				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007
 				sleep 1
 			fi
 		fi
@@ -233,13 +233,9 @@ evsemodbuscheck() {
 		evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1000 1)
 		sleep 1
 		if [[ $evsedinstat == "$llalt" ]]; then
-			if [[ $debug == "1" ]]; then
-				echo "LP1 Modbus $llalt korrekt"
-			fi
+			openwbDebugLog "MAIN" 1 "LP1 Modbus $llalt korrekt"
 		else
-			if [[ $debug == "1" ]]; then
-				echo "LP1 Modbus $llalt nicht korrekt"
-			fi
+			openwbDebugLog "MAIN" 1 "LP1 Modbus $llalt nicht korrekt"
 			sudo python runs/evsewritembusdev.py $modbusevsesource $modbusevseid 1000 $llalt
 		fi
 	fi
@@ -257,13 +253,9 @@ evsemodbuscheck() {
 			evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
 			sleep 1
 			if [[ $evsedinstat == "$llalts1" ]]; then
-				if [[ $debug == "1" ]]; then
-					echo "LP2 Modbus $llalts1 korrekt"
-				fi
+				openwbDebugLog "MAIN" 1 "LP2 Modbus $llalts1 korrekt"
 			else
-				if [[ $debug == "1" ]]; then
-					echo "LP2 Modbus $llalts1 nichtkorrekt"
-				fi
+				openwbDebugLog "MAIN" 1 "LP2 Modbus $llalts1 nichtkorrekt"
 				sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 1000 $llalts1
 			fi
 		fi
@@ -280,13 +272,9 @@ evsemodbuscheck() {
 				fi
 				evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
 				if [[ $evsedinstat == "$llalts2" ]]; then
-					if [[ $debug == "1" ]]; then
-						echo "LP3 Modbus $llalts2 korrekt"
-					fi
+					openwbDebugLog "MAIN" 1 "LP3 Modbus $llalts2 korrekt"
 				else
-					if [[ $debug == "1" ]]; then
-						echo "LP3 Modbus $llalts2 nicht korrekt"
-					fi
+					openwbDebugLog "MAIN" 1 "LP3 Modbus $llalts2 nicht korrekt"
 					sudo python runs/evsewritembusdev.py $evsesources2 $evseids2 1000 $llalts2
 				fi
 			fi

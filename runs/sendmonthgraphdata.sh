@@ -1,13 +1,15 @@
 #!/bin/bash
 input=$1
-if [[ "$input" == "201912" ]]; then
+if [[ "$input" == "202012" ]]; then
+	oldmonth="202101"
+elif [[ "$input" == "201912" ]]; then
 	oldmonth="202001"
 elif [[ "$input" == "201812" ]]; then
 	oldmonth="201901"
 
 else
 	month=${input: -2}
-	month=$(( month + 1 ))
+	month=$(( ${month#0} +1))
 	if (( month < 10 )); then
 		month=$(printf "0$month")
 	fi

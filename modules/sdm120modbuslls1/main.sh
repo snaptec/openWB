@@ -14,7 +14,7 @@ else
 	echo "echo" > /dev/null
 fi
 
-if [[ $sdm120modbusllid1s1 != "none" ]] && [[ $sdm120modbusllid2s1 != "none" ]] && [[ $sdm120modbusllid3s1 != "none" ]] ; then
+if [[ $sdm120modbusllid1s1 != "254" ]] && [[ $sdm120modbusllid2s1 != "254" ]] && [[ $sdm120modbusllid3s1 != "254" ]] ; then
 	n=0
 	output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm3.py $sdm120lp2source $sdm120modbusllid1s1 $sdm120modbusllid2s1 $sdm120modbusllid3s1)
 	while read -r line; do
@@ -96,7 +96,7 @@ if [[ $sdm120modbusllid1s1 != "none" ]] && [[ $sdm120modbusllid2s1 != "none" ]] 
 	fi
 
 else
-	if [[ $sdm120modbusllid2s1 != "none" ]] ; then
+	if [[ $sdm120modbusllid2s1 != "254" ]] ; then
 		n=0
 		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm2.py $sdm120lp2source $sdm120modbusllid1s1 $sdm120modbusllid2s1)
 		while read -r line; do

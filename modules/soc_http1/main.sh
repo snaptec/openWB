@@ -1,14 +1,8 @@
 #!/bin/bash
 
-#Soc from http
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 
-hsoc=$(curl --connect-timeout 15 -s $hsocip1 | cut -f1 -d".")
-
-#wenn SOC nicht verfügbar (keine Antwort) ersetze leeren Wert durch eine 0
-re='^[0-9]+$'
-if ! [[ $hsoc =~ $re ]] ; then
-   hsoc="0"
-fi
-#echo $hsoc
-#zur weiteren verwendung im webinterface
-echo $hsoc > /var/www/html/openWB/ramdisk/soc1
+# for backward compatibility only
+# functionality is in soc_http
+$OPENWBBASEDIR/modules/soc_http/main.sh 2
+exit 0
