@@ -2038,5 +2038,11 @@ updateConfig(){
 	if ! grep -Fq "alphav123=" $ConfigFile; then
 		echo "alphav123=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "virtual_ip_eth0_evu=" $ConfigFile; then
+		echo "virtual_ip_eth0_evu=192.168.193.5" >> $ConfigFile
+	fi
+	if ! grep -Fq "virtual_ip_wlan0_evu=" $ConfigFile; then
+		echo "virtual_ip_wlan0_evu=192.168.193.6" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
