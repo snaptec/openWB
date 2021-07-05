@@ -270,9 +270,9 @@ else
 	openwbDebugLog "MAIN" 1 "external openWB or daemon mode not configured; checking network setup"
 	ethstate=$(</sys/class/net/eth0/carrier)
 	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+		sudo ifconfig eth0:0 $virtual_ip_eth0_evu netmask 255.255.255.0 up
 		if [ -d /sys/class/net/wlan0 ]; then
-			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+			sudo ifconfig wlan0:0 $virtual_ip_wlan0_evu netmask 255.255.255.0 down
 			wlanstate=$(</sys/class/net/wlan0/carrier)
 			if (( wlanstate == 1 )); then
 				sudo systemctl stop hostapd
@@ -281,9 +281,9 @@ else
 		fi
 	else
 		if [ -d /sys/class/net/wlan0 ]; then
-			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+			sudo ifconfig wlan0:0 $virtual_ip_wlan0_evu netmask 255.255.255.0 up
 		fi
-		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+		sudo ifconfig eth0:0 $virtual_ip_eth0_evu netmask 255.255.255.0 down
 	fi
 	# check for obsolete isss handler
 	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
