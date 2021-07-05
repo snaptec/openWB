@@ -38,6 +38,14 @@
 
 	<body>
 
+                <?php
+                        $lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+                        foreach($lines as $line) {
+                                list($key, $value) = explode("=", $line, 2);
+                                ${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+                        }
+                ?>
+		
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
@@ -48,7 +56,7 @@
 				switch( $_POST['action'] ){
 					case 'rename':
 						// change hostname
-						$cmd = "sudo /var/www/html/openWB/runs/sethostname.sh " . escapeshellarg( $_POST['hostname'] );
+						$cmd = "sudo /var/www/html/openWB/runs/sethostname.sh " . escapeshellarg( $_POST['hostname'] ) . " " . escapeshellarg( $_POST['virtual_ip_eth0_evu'] ) . " " . escapeshellarg( $_POST['virtual_ip_wlan0_evu'] );
 						exec( $cmd, $output, $returnval );
 						?>
 						<div class="col alert alert-success" role="alert">
@@ -81,6 +89,26 @@
 									</span>
 								</div>
 							</div>
+							<div class="row form-group">
+                                                                <label for="virtual_ip_eth0_evu" class="col-md-4 col-form-label">Virtuelle IP-Adresse eth0</label>
+                                                                <div class="col">
+                                                                        <input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="virtual_ip_eth0_evu" id="virtual_ip_eth0_evu" value="<?php echo $virtual_ip_eth0_evuold; ?>" />
+                                                                        <span class="form-text small">
+                                                                                Standard für eth0: 192.168.193.5<br />
+                                                                                Nach Änderung der IP muss ein Neustart der Wallbox erfolgen!
+                                                                        </span>
+                                                                </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                                <label for="virtual_ip_wlan0_evu" class="col-md-4 col-form-label">Virtuelle IP-Adresse wlan0</label>
+                                                                <div class="col">
+                                                                        <input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="virtual_ip_wlan0_evu" id="virtual_ip_wlan0_evu" value="<?php echo $virtual_ip_wlan0_evuold; ?>" />
+                                                                        <span class="form-text small">
+                                                                                Standard für wlan0: 192.168.193.6<br />
+                                                                                Nach Änderung der IP muss ein Neustart der Wallbox erfolgen!
+                                                                        </span>
+                                                                </div>
+                                                        </div>
 						</div>
 						<div class="card-footer text-center">
 							<button type="submit" name="action" value="rename" class="btn btn-success">Hostnamen ändern</button>
