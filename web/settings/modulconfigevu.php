@@ -236,26 +236,6 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-row mb-1">
-                                                                <label for="virtual_ip_eth0_evu" class="col-md-4 col-form-label">Virtuelle IP-Adresse eth0</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="virtual_ip_eth0_evu" id="virtual_ip_eth0_evu" value="<?php echo $virtual_ip_eth0_evuold; ?>" />
-                                                                        <span class="form-text small">
-                                                                                Standard für eth0: 192.168.193.5<br />
-                                                                                Nach Änderung der IP muss ein Neustart der Wallbox erfolgen!
-                                                                        </span>
-                                                                </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                                <label for="virtual_ip_wlan0_evu" class="col-md-4 col-form-label">Virtuelle IP-Adresse wlan0</label>
-                                                                <div class="col">
-                                                                        <input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="virtual_ip_wlan0_evu" id="virtual_ip_wlan0_evu" value="<?php echo $virtual_ip_wlan0_evuold; ?>" />
-                                                                        <span class="form-text small">
-                                                                                Standard für wlan0: 192.168.193.6<br />
-                                                                                Nach Änderung der IP muss ein Neustart der Wallbox erfolgen!
-                                                                        </span>
-                                                                </div>
-                                                        </div>
 						</div>
 						<div id="wattbezugsolarview" class="hide">
 							<div class="card-text alert alert-info">
