@@ -76,6 +76,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
@@ -666,6 +667,10 @@
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
 								}
+								if($('#speichermodul').val() == 'speicher_saxpower') {
+									showSection('#divspeicherip');
+								}
+
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');
