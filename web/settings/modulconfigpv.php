@@ -96,6 +96,7 @@
 										<option <?php if($pvwattmodulold == "wr_powerwall") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
 										<option <?php if($pvwattmodulold == "wr_victron") echo "selected" ?> value="wr_victron">Victron</option>
 										<option <?php if($pvwattmodulold == "wr_youless120") echo "selected" ?> value="wr_youless120">Youless 120</option>
+										<option <?php if($pvwattmodulold == "wr_alphaess") echo "selected" ?> value="wr_alphaess">AlphaESS-Speicher</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($pvwattmodulold == "wr_http") echo "selected" ?> value="wr_http">Http</option>
@@ -115,6 +116,11 @@
 								Per MQTT zu schreiben:<br>
 								<span class="text-info">openWB/set/pv/1/W</span> PV-Leistung in Watt, int, negativ<br>
 								<span class="text-info">openWB/set/pv/1/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
+						<div id="pvalphaess" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="pvsungrow" class="hide">
@@ -806,6 +812,7 @@
 								hideSection('#pvpowerdog');
 								hideSection('#pvsolarwatt');
 								hideSection('#pvsungrow');
+								hideSection('#pvalphaess');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -911,6 +918,9 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_solarwatt')   {
 									showSection('#pvsolarwatt');
+								}
+								if($('#pvwattmodul').val() == 'wr_alphaess')   {
+									showSection('#pvalphaess');
 								}
 								if($('#pvsungrow').val() == 'wr_sungrow')   {
 									showSection('#pvsungrow');
