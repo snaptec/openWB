@@ -52,15 +52,15 @@ if [[ $? == "0" ]] ; then
 #car status 2 Auto lädt
 #car status 3 Warte auf Fahrzeug
 #car status 4 Ladung beendet, Fahrzeug verbunden
-    car=$(echo $output | jq -r '.car')
-    if [[ $car == "1" ]] ; then
-      echo 0 > /var/www/html/openWB/ramdisk/plugstat
-    else          
-      echo 1 > /var/www/html/openWB/ramdisk/plugstat
-    fi
-    if [[ $car == "2" ]] ; then
-      echo 1 > /var/www/html/openWB/ramdisk/chargestat
-    else          
-      echo 0 > /var/www/html/openWB/ramdisk/chargestat
-     fi
+	car=$(echo $output | jq -r '.car')
+	if [[ $car == "1" ]] ; then
+		echo 0 > /var/www/html/openWB/ramdisk/plugstat
+	else
+		echo 1 > /var/www/html/openWB/ramdisk/plugstat
+	fi
+	if [[ $car == "2" ]] ; then
+		echo 1 > /var/www/html/openWB/ramdisk/chargestat
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/chargestat
+	fi
 fi
