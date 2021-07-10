@@ -30,6 +30,8 @@ def getState(key):
             value = 1
         if key == 'unplug':
             value = 1
+        if key == 'lastSuccess':
+            value = 1
             
         pass
         

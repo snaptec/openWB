@@ -7,8 +7,13 @@ import soc_external
 
 def doExternalUpdate():
     attempt = 0
-   
-    while attempt < 3:
+    
+    if state.getState('lastSuccess') == 1:
+        maxAttempt = 3
+    else:
+        maxAttempt = 1
+        
+    while attempt < maxAttempt:
         try:
             soc = soc_external.DownloadSoC()
         except:
@@ -17,10 +22,12 @@ def doExternalUpdate():
             
         if soc > 0:
             saveSoc(soc, 0)
+            state.setState('lastSuccess', 1)
             break
         else:
             attempt += 1
-            if attempt < 3:
+            state.setState('lastSuccess', 0)
+            if attempt < maxAttempt:
                 soclogging.logDebug(2, "Retrying in 60 Seconds...")
                 time.sleep(60)
     
