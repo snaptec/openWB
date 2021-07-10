@@ -4,6 +4,7 @@ import parameters
 import soclogging
 import state
 import soc_external
+import abrp
 
 def doExternalUpdate():
     attempt = 0
@@ -72,6 +73,12 @@ def saveSoc(soc, manual):
     except:
         raise
         
+    try:
+        if parameters.getParameter('abrpEnable') == 1:
+            abrp.pushABRP(soc)
+    except:
+        pass
+    
     if manual == 0:    
         try:
             f = open(parameters.getParameter('meterFile'), 'r')

@@ -21,6 +21,8 @@ case $CHARGEPOINT in
 		soccalc=$kia_soccalclp2
 		akkug=$akkuglp2
 		efficiency=$wirkungsgradlp2
+		abrp_enable=$kia_abrp_enable_2
+		abrp_token=$kia_abrp_token_2
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -34,6 +36,8 @@ case $CHARGEPOINT in
 		soccalc=$kia_soccalclp1
 		akkug=$akkuglp1
 		efficiency=$wirkungsgradlp1
+		abrp_enable=$kia_abrp_enable
+		abrp_token=$kia_abrp_token
 		;;
 esac
 
@@ -50,6 +54,8 @@ ARGS+='"timerInterval": "'"$kia_intervall"'", '
 ARGS+='"manualCalc": "'"$soccalc"'", '
 ARGS+='"batterySize": "'"$akkug"'", '
 ARGS+='"efficiency": "'"$efficiency"'", '
+ARGS+='"abrpEnable": "'"$abrp_enable"'", '
+ARGS+='"abrpToken": "'"$abrp_token"'", '
 ARGS+='"ramDiskDir": "'"$RAMDISKDIR"'", '
 ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 ARGS+='}'

@@ -40,6 +40,8 @@ def loadParameters(argsFile):
         setParameter('manualCalc', int(argsDict['manualCalc']))
         setParameter('batterySize', float(argsDict['batterySize']))
         setParameter('efficiency', float(argsDict['efficiency']))
+        setParameter('abrpEnable', int(argsDict['abrpEnable']))
+        setParameter('abrpToken', str(argsDict['abrpToken']))
         setParameter('accountName', str(argsDict['accountName']))
         setParameter('accountPassword', str(argsDict['accountPassword']))
         setParameter('accountPin', str(argsDict['accountPin']))
