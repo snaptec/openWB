@@ -174,7 +174,12 @@ if req_soc.status_code == 200:
 				range = entry[values]['value']
 			else:
 				socDebugLog("unknown entry: " + entry)
-
+	if not soc:
+		socDebugLog("SoC Value not filled " + req_soc.text)
+		soc = "0"
+	if not range:
+		socDebugLog("RangeElectric Value not filled " + req_soc.text)
+		range = "0"
 	socDebugLog("SOC: " + soc + " RANGE: " + range)
 	fd = open(soc_file,'w')
 	fd.write(str(soc))
