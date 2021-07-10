@@ -1,5 +1,6 @@
 import json
 import uuid
+import hashlib
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
 
@@ -7,6 +8,15 @@ import parameters
 import soclogging
 import kiahttp
 import stamps
+
+def getUserHash():
+    try:
+        account = parameters.getParameter('accountName') + ':' + parameters.getParameter('accountPassword')
+        hash = hashlib.md5(account.encode()).hexdigest()
+    except:
+        raise
+        
+    return hash
 
 def loadAccessToken():
     try:
@@ -18,6 +28,16 @@ def loadAccessToken():
         parameters.setParameter('tokenType', tokenDict['tokenType'])
         parameters.setParameter('refreshToken', tokenDict['refreshToken'])
         parameters.setParameter('deviceId', tokenDict['deviceId'])
+        try:
+            if tokenDict['userHash'] == getUserHash():
+                parameters.setParameter('userHash', tokenDict['userHash'])
+            else:
+                raise
+                
+        except:
+            parameters.setParameter('userHash', getUserHash())
+            raise
+            
     except:
         raise
         
@@ -28,12 +48,14 @@ def saveAccessToken(accessToken, deviceId):
     parameters.setParameter('tokenType', accessToken['token_type'])
     parameters.setParameter('refreshToken', accessToken['refresh_token'])
     parameters.setParameter('deviceId', deviceId)
+    parameters.setParameter('userHash', getUserHash())
     
     token = {}
     token['accessToken'] = accessToken['access_token']
     token['tokenType'] = accessToken['token_type']
     token['refreshToken'] = accessToken['refresh_token']
     token['deviceId'] = deviceId
+    token['userHash'] = getUserHash()
     
     f = open(parameters.getParameter('tokenFile'), 'w')
     f.write(json.dumps(token))
