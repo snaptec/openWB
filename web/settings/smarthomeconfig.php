@@ -472,10 +472,11 @@ $numDevices = 9;
 											<option value="sdm630" data-option="sdm630">SDM630</option>
 											<option value="shelly" data-option="shelly">Shelly</option>
 											<option value="we514" data-option="we514">WE514 (in Entwicklung)</option>
+											<option value="avm" data-option="avm">AVM (in Entwicklung)</option>
 										</select>
 									</div>
 								</div>
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-mystrom deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-fronius hide">
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-mystrom deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-fronius deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-avm hide">
 									<label for="device_measureipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -528,6 +529,25 @@ $numDevices = 9;
 										<span class="form-text small">
 											Hier bitte den Ausdruck für JQery angeben, mit dem der aktuelle Zählerstand aus der Antwort ermittelt werden kann. Diese Einstellung ist optional. Wird das Feld leer gelassen, dann wird intern ein Zähler simuliert.
 										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-avm hide">
+									<label for="device_measureavmusernameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<input id="device_measureavmusernameDevices<?php echo $devicenum; ?>" name="device_measureavmusername" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									</div>
+								</div>
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-avm hide">
+									<label for="device_measureavmpasswordDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Passwort</label>
+									<div class="col">
+										<input id="device_measureavmpasswordDevices<?php echo $devicenum; ?>" name="device_measureavmpassword" class="form-control" type="password" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									</div>
+								</div>
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-avm hide">
+									<label for="device_measureavmactorDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Aktor</label>
+									<div class="col">
+										<input id="device_measureavmactorDevices<?php echo $devicenum; ?>" name="device_measureavmactor" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Hier ist der Name des Gerätes einzutragen, wie er in der Fritz!Box angezeigt wird.</span>
 									</div>
 								</div>
 							</div>
