@@ -885,7 +885,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_pin" class="col-md-4 col-form-label">PIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
+											<input class="form-control" type="password" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
 											<span class="form-text small">
 												PIN des Accounts.
 											</span>
@@ -916,30 +916,57 @@
 												Bei Nein wird immer der SoC über die API abgefragt.
 											</span>
 										</div>
-										<div id="kiamanualcalcdiv" class="hide">
-											<div class="form-row mb-1">
-												<label for="kia_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="kia_akkuglp1" value="<?php echo $akkuglp1old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-													</span>
-												</div>
+									</div>
+									<div id="kiamanualcalcdiv" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="kia_akkuglp1" value="<?php echo $akkuglp1old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
 											</div>
-											<div class="form-row mb-1">
-												<label for="kia_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="kia_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="kia_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Push-Funktion für ABRP</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_abrp_enableold == 0) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable" id="kia_abrp_enableOff" value="0"<?php if($kia_abrp_enableold == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_abrp_enableold == 1) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable" id="kia_abrp_enableOn" value="1"<?php if($kia_abrp_enableold == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gew&auml;hlt wird, wird der SoC regelm&auml;&szlig;ig an ABRP &uuml;bermittelt.<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_abrp_enablediv" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_abrp_token" class="col-md-4 col-form-label">ABRP Token</label>
+											<div class="col">
+												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
+												<span class="form-text small">
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+												</span>
 											</div>
 										</div>
 									</div>
@@ -953,12 +980,23 @@
 												showSection('#kiamanualcalcdiv');
 											}
 										}
+										function visibility_kia_abrp_enable() {
+											if($('#kia_abrp_enableOff').prop("checked")) {
+												hideSection('#kia_abrp_enablediv');
+											} else {
+												showSection('#kia_abrp_enablediv');
+											}
+										}
 
 										$('input[type=radio][name=kia_soccalclp1]').change(function(){
 											visibility_kia_soccalclp1();
 										});
+										$('input[type=radio][name=kia_abrp_enable]').change(function(){
+											visibility_kia_abrp_enable();
+										});
 
 										visibility_kia_soccalclp1();
+										visibility_kia_abrp_enable();
 									});
 								</script>
 							</div>
@@ -3177,7 +3215,7 @@
 									<div class="form-row mb-1">
 										<label for="soc2pin" class="col-md-4 col-form-label">Pin</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
+											<input class="form-control" type="password" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
 											<span class="form-text small">
 												PIN des Accounts.
 											</span>
@@ -3567,30 +3605,57 @@
 												Bei Nein wird immer der SoC über die API abgefragt.
 											</span>
 										</div>
-										<div id="kiamanualcalclp2div" class="hide">
-											<div class="form-row mb-1">
-												<label for="kia_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="kia_akkuglp2" value="<?php echo $akkuglp2old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-													</span>
-												</div>
+									</div>
+									<div id="kiamanualcalclp2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="kia_akkuglp2" value="<?php echo $akkuglp2old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
 											</div>
-											<div class="form-row mb-1">
-												<label for="kia_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="kia_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="kia_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Push-Funktion für ABRP</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_abrp_enable_2old == 0) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable_2" id="kia_abrp_enable_2Off" value="0"<?php if($kia_abrp_enable_2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_abrp_enable_2old == 1) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable_2" id="kia_abrp_enable_2On" value="1"<?php if($kia_abrp_enable_2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gew&auml;hlt wird, wird der SoC regelm&auml;&szlig;ig an ABRP &uuml;bermittelt.<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_abrp_enable_2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_abrp_token_2" class="col-md-4 col-form-label">ABRP Token</label>
+											<div class="col">
+												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
+												<span class="form-text small">
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+												</span>
 											</div>
 										</div>
 									</div>
@@ -3604,12 +3669,23 @@
 											showSection('#kiamanualcalclp2div');
 										}
 									}
+									function visibility_kia_abrp_enable_2() {
+										if($('#kia_abrp_enable_2Off').prop("checked")) {
+											hideSection('#kia_abrp_enable_2div');
+										} else {
+											showSection('#kia_abrp_enable_2div');
+										}
+									}
 
 									$('input[type=radio][name=kia_soccalclp2]').change(function(){
 										visibility_kia_soccalclp2();
 									});
+									$('input[type=radio][name=kia_abrp_enable_2]').change(function(){
+										visibility_kia_abrp_enable_2();
+									});
 
 									visibility_kia_soccalclp2();
+									visibility_kia_abrp_enable_2();
 								});
 								</script>
 							</div>

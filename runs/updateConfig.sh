@@ -1750,6 +1750,18 @@ updateConfig(){
 	if ! grep -Fq "kia_soccalclp2=" $ConfigFile; then
 		echo "kia_soccalclp2=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "kia_abrp_enable=" $ConfigFile; then
+		echo "kia_abrp_enable=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_token=" $ConfigFile; then
+		echo "kia_abrp_token=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_enable_2=" $ConfigFile; then
+		echo "kia_abrp_enable_2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_token_2=" $ConfigFile; then
+		echo "kia_abrp_token_2=''" >> $ConfigFile
+	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile
 	fi
