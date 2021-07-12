@@ -1,15 +1,15 @@
 #!/bin/bash
 re='^[-+]?[0-9]+\.?[0-9]*$'
 
-if [ $twcmanagerlp2httpcontrol -eq 1 ]; then
+if [[ $twcmanagerlp2httpcontrol -eq 1 ]]; then
 	status=$(curl --connect-timeout 3 -s "http://$twcmanagerlp2ip:$twcmanagerlp2port/api/getStatus")
 	amps=$(echo $status | jq .maxAmpsToDivideAmongSlaves | sed -e 's/^"//' -e 's/"$//')
 	watts=$(echo $status | jq .chargerLoadWatts | sed -e 's/^"//' -e 's/"$//')
 	watt=$(echo "scale=0;$watts" | bc | sed 's/\..*$//')
 
-	if [ $watt -lt 4000 ]; then
+	if [[ $watt -lt 4000 ]]; then
 		twcmanagerlp2phasen=1
-	elif [ $watt -lt 8000 ]; then
+	elif [[ $watt -lt 8000 ]]; then
 		twcmanagerlp2phasen=2
 	else
 		twcmanagerlp2phasen=3
