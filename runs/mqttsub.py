@@ -159,7 +159,7 @@ def on_message(client, userdata, msg):
                         client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514','fronius','json'] # 'pyt' is deprecated and will be removed!
+                validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514','fronius','json','avm'] # 'pyt' is deprecated and will be removed!
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                     try:
                         deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))
@@ -296,6 +296,21 @@ def on_message(client, userdata, msg):
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
                     writetoconfig(shconfigfile,'smarthomedevices','device_actor_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_actor", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureavmusername" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_measureavmusername_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureavmusername", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureavmpassword" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_measureavmpassword_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureavmpassword", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureavmactor" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_measureavmactor_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureavmactor", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_acthortype" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
                 validDeviceTypes = ['M1','M3','9s']

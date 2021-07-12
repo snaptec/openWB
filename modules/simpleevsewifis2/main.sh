@@ -1,6 +1,7 @@
 #!/bin/bash
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+
 output=$(curl --connect-timeout $evsewifitimeoutlp3 -s http://$evsewifiiplp3/getParameters)
 if ! [ -z "$output" ]; then
 	watt=$(echo $output | jq '.list[] | .actualPower')
@@ -26,7 +27,7 @@ if ! [ -z "$output" ]; then
 	if [[ $llkwh =~ $rekwh ]] ; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs2
 	fi
-	if [[ $evsewifiplugstatelp3 > "1" ]]; then
+	if [[ $evsewifiplugstatelp3 > "1" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3

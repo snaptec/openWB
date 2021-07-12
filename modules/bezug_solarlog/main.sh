@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-
-
 answer=$(curl -d {\"801\":{\"170\":null}} --connect-timeout 5 -s $bezug_solarlog_ip/getjp)
 
 pvwatt=$(echo $answer | jq '."801"."170"."101"' )
@@ -23,4 +20,3 @@ echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
 pvkwhk=$(echo "$pvkwh*1000" |bc)
 echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
-

@@ -32,30 +32,27 @@ if ! [[ "$versionshort" == "EM2 00.01" ]] ; then
 else
 	newversion=$false
 	var_wattbezug="u5790-41"
-        var_wattbezug1="u6017-41"
-        var_wattbezug2="u6014-41"
-        var_wattbezug3="u6011-41"
-        var_ikwh="u5827-41"
-        var_ekwh="u5824-41"
-        var_evupf1="u6074-41"
-        var_evupf2="u6083-41"
-        var_evupf3="u6086-41"
-        var_evuv1="u5978-41"
-        var_evuv2="u5981-41"
-        var_evuv3="u5984-41"
-        var_bezuga1="u5999-41"
-        var_bezuga2="u5996-41"
-        var_bezuga3="u5993-41"
+	var_wattbezug1="u6017-41"
+	var_wattbezug2="u6014-41"
+	var_wattbezug3="u6011-41"
+	var_ikwh="u5827-41"
+	var_ekwh="u5824-41"
+	var_evupf1="u6074-41"
+	var_evupf2="u6083-41"
+	var_evupf3="u6086-41"
+	var_evuv1="u5978-41"
+	var_evuv2="u5981-41"
+	var_evuv3="u5984-41"
+	var_bezuga1="u5999-41"
+	var_bezuga2="u5996-41"
+	var_bezuga3="u5993-41"
 fi
 
 #Aktuelle Leistung (kW --> W)
 wattbezug=$(awk -F'[<>]' '/<value id="'"$var_wattbezug"'">/{print $3}' <<< $xml)
 wattbezug="${wattbezug::-2}"
-
 wattbezug1=$(awk -F'[<>]' '/<value id="'"$var_wattbezug1"'">/{print $3}' <<< $xml)
-
 wattbezug2=$(awk -F'[<>]' '/<value id="'"$var_wattbezug2"'">/{print $3}' <<< $xml)
-
 wattbezug3=$(awk -F'[<>]' '/<value id="'"$var_wattbezug3"'">/{print $3}' <<< $xml)
 
 #Zählerstand Import(kWh)
@@ -88,13 +85,13 @@ bezuga3=$(awk -F'[<>]' '/<value id="'"$var_bezuga3"'">/{print $3}' <<< $xml)
 #Prüfen ob Werte gültig
 re='^[-+]?[0-9]+\.?[0-9]*$'
 if ! [[ $wattbezug =~ $re ]] ; then
-	   wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+	wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 fi
 if ! [[ $ikwh =~ $re ]] ; then
-	   ikwh=$(</var/www/html/openWB/ramdisk/bezugkwh)
+	ikwh=$(</var/www/html/openWB/ramdisk/bezugkwh)
 fi
 if ! [[ $ekwh =~ $re ]] ; then
-	   ekwh=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
+	ekwh=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
 fi
 
 #Ausgabe

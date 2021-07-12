@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
-#Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv)
+# Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
+# Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv)
 # Einspeiseleistung: PV-Leistung > Verbrauch, es wird Strom eingespeist
 # Bezugsleistug: PV-Leistung < Verbrauch, es wird Strom aus dem Netz bezogen
 
@@ -20,13 +20,13 @@ wattb=$(( pvwatt + wattbezug ))
 re='^[0-9]+$'
 ra='^-[0-9]+$'
 if ! [[ $wattbezug =~ $re ]] ; then
-	  if ! [[ $wattbezug =~ $ra ]] ; then
-		  wattbezug="0"
-	  fi
+	if ! [[ $wattbezug =~ $ra ]] ; then
+		wattbezug="0"
+	fi
 fi
 
 echo $wattbezug
-#zur weiteren verwendung im webinterface
+# zur weiteren verwendung im webinterface
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 # Summe der vom Netz bezogene Energie total in Wh
 # nur für Smartmeter  im Einspeisepunkt!

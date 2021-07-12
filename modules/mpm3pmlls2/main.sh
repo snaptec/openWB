@@ -12,6 +12,3 @@ else
 	echo "echo" > /dev/null
 fi
 sudo python /var/www/html/openWB/modules/mpm3pmlls2/readmpm3pm.py $mpm3pmlls2source $mpm3pmlls2id
-
-
-

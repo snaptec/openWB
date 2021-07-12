@@ -7,7 +7,6 @@ MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="MAIN"
 Debug=$debug
 
-
 #For development only
 #Debug=1
 
@@ -22,19 +21,17 @@ openwbDebugLog  ${DMOD} 1 "Watt: ${evuwatt}"
 echo $evuwatt > /var/www/html/openWB/ramdisk/wattbezug
 
 if [ ! -z "${bezugjsonkwh}" ]; then
-    evuikwh=$(echo $answer | jq -r "$bezugjsonkwh")
+	evuikwh=$(echo $answer | jq -r "$bezugjsonkwh")
 else
-    evuikwh=0
+	evuikwh=0
 fi
-
 openwbDebugLog ${DMOD} 1 "BezugkWh: ${evuikwh}"
 echo $evuikwh > /var/www/html/openWB/ramdisk/bezugkwh
 
 if [ ! -z "${einspeisungjsonkwh}" ]; then
-    evuekwh=$(echo $answer | jq -r "$einspeisungjsonkwh")
+	evuekwh=$(echo $answer | jq -r "$einspeisungjsonkwh")
 else
-    evuekwh=0
+	evuekwh=0
 fi
 openwbDebugLog ${DMOD} 1 "EinspeiskWh: ${evuekwh}"
 echo $evuekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
-

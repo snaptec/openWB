@@ -4,5 +4,3 @@ if [[ $evseconlp8 == "extopenwb" ]]; then
 else
 	sudo python /var/www/html/openWB/modules/mpm3pmlllp8/readmpm3pm.py $mpmlp8ip $mpmlp8id
 fi
-
-

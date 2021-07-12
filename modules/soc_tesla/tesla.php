@@ -80,7 +80,9 @@
 
 					if($cpost == 1) { curl_setopt($ch, CURLOPT_POSTFIELDS, $post); }
 
-					if(!empty($cookies)) { curl_setopt($ch, CURLOPT_COOKIE, $cookie); }
+					if(!empty($cookies)) { curl_setopt($ch, CURLOPT_COOKIE, $cookies); }
+
+					if (defined('CURL_SSLVERSION_MAX_TLSv1_2')) curl_setopt ($ch, CURLOPT_SSLVERSION,CURL_SSLVERSION_MAX_TLSv1_2); // FM - force tls1.2
 
 					$response = curl_exec($ch);
 					$header = curl_getinfo($ch);
@@ -90,6 +92,7 @@
 				}
 
 				function tesla_captcha(){
+					global $user_agent;
 					$http_header = array('Content-Type: application/x-www-form-urlencoded', 'User-Agent: '.$user_agent, 'Origin: https://auth.tesla.com');
 					$captcha = tesla_connect("https://auth.tesla.com/captcha", 1, "https://auth.tesla.com/", $http_header, "", 0);
 					// $captcha = file_get_contents("https://auth.tesla.com/captcha");
@@ -382,59 +385,67 @@
 					<?php
 				}
 
-				switch($_REQUEST["go"]){
-					case "login":
-						$result = tesla_oauth2_login($_REQUEST["email"], $_REQUEST["pwd"], $_REQUEST["captcha"], $_REQUEST["mfa"]);
-						// echo $result;
-						$resultJson = json_decode( $result, false );
-						// var_dump( $resultJson );
-						// echo "Success: " . $resultJson->{'success'} . "<br>";
-						if($resultJson->{'success'} == 1){
-							$message = json_decode( $resultJson->{'message'}, true );
-							// var_dump( $message );
-							// foreach( array_keys($message) as $key ){
-							// 	echo "$key: " . $message[$key] . "<br>";
-							// }
-							// now construct a json object with the data we need
-							$token = [
-								"refresh_token" => $message['bearer_refresh_token'],
-								"access_token"  => $message['access_token'],
-								"expires_in"    => $message['expires_in'],
-								"created_at"    => $message['created_at']
-							];
-							// echo json_encode( $token );
-							$tokenFileP = fopen( $token_file, 'w' );
-							fwrite( $tokenFileP, json_encode( $token ) );
-							fclose( $tokenFileP );
+				if(isset($_REQUEST["go"])){
+					switch($_REQUEST["go"]){
+						case "login":
+							$result = tesla_oauth2_login($_REQUEST["email"], $_REQUEST["pwd"], $_REQUEST["captcha"], $_REQUEST["mfa"]);
+							// echo $result;
+							$resultJson = json_decode( $result, false );
+							// var_dump( $resultJson );
+							// echo "Success: " . $resultJson->{'success'} . "<br>";
+							if($resultJson->{'success'} == 1){
+								$message = json_decode( $resultJson->{'message'}, true );
+								// var_dump( $message );
+								// foreach( array_keys($message) as $key ){
+								// 	echo "$key: " . $message[$key] . "<br>";
+								// }
+								// now construct a json object with the data we need
+								$token = [
+									"refresh_token" => $message['bearer_refresh_token'],
+									"access_token"  => $message['access_token'],
+									"expires_in"    => $message['expires_in'],
+									"created_at"    => $message['created_at']
+								];
+								// echo json_encode( $token );
+								$tokenFileP = fopen( $token_file, 'w' );
+								fwrite( $tokenFileP, json_encode( $token ) );
+								fclose( $tokenFileP );
+								?>
+									<div class="alert alert-success">
+										Anmeldung erfolgreich!<br>
+										Die erhaltenen Token wurden gespeichert. Sie können diese Seite jetzt schließen.
+									</div>
+								<?php
+							} else {
+								// var_dump( $resultJson->{'message'} );
+								?>
+									<div class="alert alert-danger">
+										Anmeldung fehlgeschlagen!<br>
+										Meldung des servers: "<?php echo $resultJson->{'message'} ?>"
+									</div>
+								<?php
+							}
+							unlink( $cookie_file );
+						break;
+						case "cleanup":
+							if(file_exists($cookie_file)){
+								unlink( $cookie_file );
+							}
+							if(file_exists($token_file)){
+								unlink( $token_file );
+							}
 							?>
 								<div class="alert alert-success">
-									Anmeldung erfolgreich!<br>
-									Die erhaltenen Token wurden gespeichert. Sie können diese Seite jetzt schließen.
+									Gespeicherte Anmeldedaten wurden entfernt. Sie können diese Seite jetzt schließen.
 								</div>
 							<?php
-						} else {
-							// var_dump( $resultJson->{'message'} );
-							?>
-								<div class="alert alert-danger">
-									Anmeldung fehlgeschlagen!<br>
-									Meldung des servers: "<?php echo $resultJson->{'message'} ?>"
-								</div>
-							<?php
-						}
-						unlink( $cookie_file );
-					break;
-					case "cleanup":
-						unlink( $cookie_file );
-						unlink( $token_file );
-						?>
-							<div class="alert alert-success">
-								Gespeicherte Anmeldedaten wurden entfernt. Sie können diese Seite jetzt schließen.
-							</div>
-						<?php
-					break;
-					default:
-						html();
-					break;
+						break;
+						default:
+							html();
+						break;
+					}
+				} else {
+					html();
 				}
 			?>
 		</div>  <!-- container -->

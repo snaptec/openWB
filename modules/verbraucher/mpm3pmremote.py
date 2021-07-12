@@ -1,17 +1,18 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 verbrauchernr = str(sys.argv[1])
 seradd = str(sys.argv[2])
-from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(seradd, port=8899)
 
+client = ModbusTcpClient(seradd, port=8899)
 
 sdmid = int(sys.argv[3])
 if ( sdmid < 100 ):
@@ -47,7 +48,6 @@ if ( sdmid < 100 ):
     f.write(str(final))
     f.close()
 
-
     resp = client.read_input_registers(0x0E,2, unit=sdmid)
     lla1 = resp.registers[1]
     lla1 = float(lla1) / 100
@@ -72,7 +72,7 @@ if ( sdmid < 100 ):
 else:
     resp = client.read_input_registers(0x0156,2, unit=sdmid)
     ikwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-    ikwh = float("%.3f" % llkwh)
+    ikwh = float("%.3f" % ikwh)
     ikwh = float(ikwh) * 1000
     whstring = "/var/www/html/openWB/ramdisk/verbraucher%s_wh" % (verbrauchernr)
     f = open(whstring, 'w')
@@ -92,5 +92,3 @@ else:
     f = open(wstring, 'w')
     f.write(str(llg))
     f.close()
-
-

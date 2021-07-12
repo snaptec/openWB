@@ -1,16 +1,17 @@
 #!/usr/bin/python
-import sys
-import os
+# import sys
+# import os
 import time
-import getopt
-import socket
-import ConfigParser
-import struct
-import binascii
-import logging
+# import getopt
+# import socket
+# import ConfigParser
+# import struct
+# import binascii
+# import logging
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient('192.168.193.125', port=8899)
 
 sdmid = int(85)
@@ -61,4 +62,3 @@ final = gridw / 230
 f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
 f.write(str(final))
 f.close()
-
