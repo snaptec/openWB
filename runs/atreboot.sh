@@ -194,9 +194,9 @@ else
 	sudo pip install evdev
 fi
 if ! [ -x "$(command -v sshpass)" ];then
-	apt-get -qq update
+	sudo apt-get -qq update
 	sleep 1
-	apt-get -qq install sshpass
+	sudo apt-get -qq install sshpass
 fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
@@ -228,14 +228,14 @@ echo "mosquitto..."
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
 	sudo apt-get -qq install -y mosquitto mosquitto-clients
-	sudo service mosquitto restart
+	sudo service mosquitto start
 fi
 
 # check for mosquitto configuration
-if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || [ ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf ]; then
+if [ ! -f /etc/mosquitto/conf.d/openwb.conf ] || ! sudo grep -Fq "persistent_client_expiration" /etc/mosquitto/mosquitto.conf; then
 	echo "updating mosquitto config file"
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
-	sudo service mosquitto restart
+	sudo service mosquitto reload
 fi
 
 # check for other dependencies
@@ -284,12 +284,6 @@ echo "clear warning..."
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo "" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
-
-#if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
-#then
-#  sudo apt-get update
-#  sudo apt-get -qq install -y php-curl
-#fi
 
 # check for slave config and start handler
 if (( isss == 1 )); then

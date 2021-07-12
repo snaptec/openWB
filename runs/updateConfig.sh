@@ -1715,6 +1715,10 @@ updateConfig(){
 	if ! grep -Fq "pv2wattmodul=" $ConfigFile; then
 		echo "pv2wattmodul=none" >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2ip2=" $ConfigFile; then
+		echo "pv2ip2=192.168.192.192" >> $ConfigFile
+		echo "pv2id2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		echo "pv2ip=none" >> $ConfigFile
 		echo "pv2id=1" >> $ConfigFile
@@ -1724,7 +1728,7 @@ updateConfig(){
 		sed -i "/pv2pass='/b; s/^pv2pass=\(.*\)/pv2pass=\'\1\'/g" $ConfigFile
 	fi
 	if grep -Fq "pv2id=none" $ConfigFile; then
-		sed -i "/^pv2id=none/pv2id=1/g" $ConfigFile
+		sed -i "s/^pv2id=none/pv2id=1/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_bluelink_email=" $ConfigFile; then
 		echo "soc_bluelink_email=mail@mail.de" >> $ConfigFile
@@ -1742,6 +1746,18 @@ updateConfig(){
 	fi
 	if ! grep -Fq "kia_soccalclp2=" $ConfigFile; then
 		echo "kia_soccalclp2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_enable=" $ConfigFile; then
+		echo "kia_abrp_enable=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_token=" $ConfigFile; then
+		echo "kia_abrp_token=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_enable_2=" $ConfigFile; then
+		echo "kia_abrp_enable_2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_token_2=" $ConfigFile; then
+		echo "kia_abrp_token_2=''" >> $ConfigFile
 	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile

@@ -248,6 +248,27 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(str(config.get('smarthomedevices', 'device_measurejsoncounter_'+str(nummer))))
         except:
             argumentList.append("none")
+    elif meastyp == "avm":
+        argumentList[1] = prefixpy + 'avmhomeautomation/watt.py'
+        argumentList.append("undef") # 3
+        # 4
+        try:
+            measureactor = str(config.get('smarthomedevices', 'device_measureavmactor_'+str(nummer)))
+            argumentList.append(measureactor)
+        except:
+            argumentList.append("undef")
+        # 5
+        try:
+            measureusername = str(config.get('smarthomedevices', 'device_measureavmusername_'+str(nummer)))
+            argumentList.append(measureusername)
+        except:
+            argumentList.append("undef")
+        # 6
+        try:
+            measurepassword = str(config.get('smarthomedevices', 'device_measureavmpassword_'+str(nummer)))
+            argumentList.append(measurepassword)
+        except:
+            argumentList.append("undef")
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
@@ -949,8 +970,8 @@ def conditions(nummer):
             logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, finishtime erreicht")
             setstat(nummer,10)
             return
-    # here startup device_startupdetection
-    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
+    # here startup device_startupdetection 
+    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20) and ( DeviceValues[str(nummer)+"relais"] == 0 ):
         setstat(nummer,20)
         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
         turndevicerelais(nummer, 1,0,0)
@@ -960,10 +981,10 @@ def conditions(nummer):
             if  str(nummer)+"anlaufz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"anlaufz"])
                 if ( standbyduration < timesince ):
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte ein " + str(standbypower))
-                    #wird beim naechsten check nun als aktiv und einegschalterkannt
+                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte aus " + str(standbypower))
                     setstat(nummer,10)
                     del DeviceCounters[str(nummer)+"anlaufz"]
+                    turndevicerelais(nummer, 0,0,1)
                     return
                 else:
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " standbycheck noch nicht erreicht " +  str(standbyduration)+ " > " + str(timesince))
