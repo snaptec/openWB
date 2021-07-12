@@ -15,6 +15,18 @@ def pushABRP(soc):
     
     url = "https://api.iternio.com/1/tlm/send?api_key=" + requests.utils.quote(apiKey) + "&token=" + requests.utils.quote(userToken)
     data = {'tlm': {'utc': now, 'soc': soc, 'is_charging': state.isCharging()}}
+    
+    try:
+        f = open(parameters.getParameter('auxDataFile'), 'r')
+        auxData = json.loads(f.read())
+        f.close()        
+        data['tlm']['odometer'] = auxData['odometer']['value']
+        data['tlm']['lat'] = auxData['vehicleLocation']['coord']['lat']
+        data['tlm']['lon'] = auxData['vehicleLocation']['coord']['lon']
+        data['tlm']['speed'] = auxData['vehicleLocation']['speed']['value']
+        data['tlm']['is_parked'] = auxData['vehicleStatus']['doorLock']
+    except:
+        pass
         
     try:
         response = requests.post(url, json = data)
