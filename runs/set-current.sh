@@ -166,7 +166,7 @@ function setChargingCurrenttwcmanager () {
 			if [ $current -eq 0 ]; then
 				curl -s --connect-timeout 3 -X POST -d '' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/cancelChargeNow" > /dev/null
 			else
-				curl -s --connect-timeout 3 -X POST -d '{ "chargeNowRate": '"$current"', "chargeNowDuration": 86400 }' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/chargeNow" > /dev/null
+				curl -s --connect-timeout 3 -X POST -d '{ "chargeNowRate": '$current', "chargeNowDuration": 86400 }' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/chargeNow" > /dev/null
 			fi
 		else
 			curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
