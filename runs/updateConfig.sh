@@ -2054,5 +2054,11 @@ updateConfig(){
 	if ! grep -Fq "alphav123=" $ConfigFile; then
 		echo "alphav123=0" >> $ConfigFile
 	fi
+	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
+		sed -i "s/socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
+	fi
+	if grep -Fq "socmodul1=soc_bluelink" $ConfigFile; then
+		sed -i "s/socmodul1=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
+	fi
 	echo "Config file Update done."
 }
