@@ -1,13 +1,11 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import struct
-import binascii
-
-
+# import os
+# import time
+# import getopt
+# import socket
+# import struct
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.factory import ClientDecoder
 
@@ -29,7 +27,7 @@ def signed16(result, addr):
 def signed32(result, addr):
     val = unsigned32(result, addr)
     if val > 2147483647:
-       val -=  4294967295
+        val -=  4294967295
     return val
 
 ipaddress = str(sys.argv[1])

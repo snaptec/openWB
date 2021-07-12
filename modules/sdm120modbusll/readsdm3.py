@@ -1,22 +1,23 @@
 #!/usr/bin/python
 import sys
-import os
+# import os
 import time
-import getopt
-import socket
-import ConfigParser
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-seradd = str(sys.argv[1])
+# import binascii
 from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
-                stopbits=1, bytesize=8, timeout=1)
 
-#rq = client.read_holding_registers(0,8,unit=5)
-#print(rq.registers)
-sdmid = int(sys.argv[2])
+seradd = str(sys.argv[1])
+sdmid  = int(sys.argv[2])
 sdm2id = int(sys.argv[3])
 sdm3id = int(sys.argv[4])
+
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
+
+# rq = client.read_holding_registers(0,8,unit=5)
+# print(rq.registers)
 resp = client.read_input_registers(0x00,2, unit=sdmid)
 llv1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 llv1 = float("%.1f" % llv1[0])
@@ -75,7 +76,6 @@ resp = client.read_input_registers(0x0156,2, unit=sdm3id)
 llwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 llwh3 = float("%.3f" % llwh[0])
 
-
 llwh = llwh1 + llwh2 + llwh3
 f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
 f.write(str(llwh))
@@ -85,6 +85,3 @@ ll = wl1 + wl2 + wl3
 f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
 f.write(str(ll))
 f.close()
-
-
-

@@ -9,7 +9,6 @@ evua1=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/chan
 evua2=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/CurrentL2" | jq .value)
 evua3=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/CurrentL3" | jq .value)
 
-
 echo $watt > /var/www/html/openWB/ramdisk/wattbezug
 echo $evuv1 > /var/www/html/openWB/ramdisk/evuv1
 echo $evuv2 > /var/www/html/openWB/ramdisk/evuv2
@@ -19,9 +18,4 @@ echo $ewh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo $evua1 > /var/www/html/openWB/ramdisk/bezuga1
 echo $evua2 > /var/www/html/openWB/ramdisk/bezuga2
 echo $evua3 > /var/www/html/openWB/ramdisk/bezuga3
-
-
-
-
 echo $watt
-

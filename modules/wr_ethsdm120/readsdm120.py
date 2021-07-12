@@ -1,18 +1,18 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-seradd = str(sys.argv[1])
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(seradd, port=8899)
 
-
+seradd = str(sys.argv[1])
 sdmid = int(sys.argv[2])
+
+client = ModbusTcpClient(seradd, port=8899)
 
 resp = client.read_input_registers(0x0006,2, unit=sdmid)
 al1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))
@@ -28,7 +28,6 @@ f = open("/var/www/html/openWB/ramdisk/pvwatt", 'w')
 f.write(str(watt))
 f.close()
 
-
 resp = client.read_input_registers(0x004a,2, unit=sdmid)
 vwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 vwh1 = float("%.3f" % vwh[0])
@@ -42,6 +41,3 @@ vwh3 = str(vwh2)
 f = open("/var/www/html/openWB/ramdisk/pvkwh", 'w')
 f.write(str(vwh3))
 f.close()
-
-
-

@@ -1,18 +1,16 @@
 #!/usr/bin/python
-import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import sys
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-
-
+# import binascii
 from pymodbus.transaction import ModbusRtuFramer
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient('192.168.193.18', port=8899, framer=ModbusRtuFramer)
 
+client = ModbusTcpClient('192.168.193.18', port=8899, framer=ModbusRtuFramer)
 
 resp = client.read_input_registers(0x0002,4, unit=5)
 value1 = resp.registers[0] 
