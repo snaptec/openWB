@@ -965,6 +965,60 @@
 											</div>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Erweiterte Einstellungen</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_advancedold == 0) echo " active" ?>">
+													<input type="radio" name="kia_advanced" id="kia_advancedOff" value="0"<?php if($kia_advancedold == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_advancedold == 1) echo " active" ?>">
+													<input type="radio" name="kia_advanced" id="kia_advancedOn" value="1"<?php if($kia_advancedold == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_advanceddiv" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_adv_cachevalid" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid" id="kia_adv_cachevalid" value="<?php echo $kia_adv_cachevalidold ?>">
+												<span class="form-text small">
+													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_12v" class="col-md-4 col-form-label">12V SoC Limit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" max="100" step="1" name="kia_adv_12v" id="kia_adv_12v" value="<?php echo $kia_adv_12vold ?>">
+												<span class="form-text small">
+													Minimaler SoC der 12V-Batterie für Abrufe in Prozent (Default: 20)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_interval_unplug" class="col-md-4 col-form-label">Abrufintervall abgesteckt</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_interval_unplug" id="kia_adv_interval_unplug" value="<?php echo $kia_adv_interval_unplugold ?>">
+												<span class="form-text small">
+													Abrufintervall bei abgestecktem Auto in Minuten (sofern freigegeben)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_ratelimit" class="col-md-4 col-form-label">Abrufsperre</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_ratelimit" id="kia_adv_ratelimit" value="<?php echo $kia_adv_ratelimitold ?>">
+												<span class="form-text small">
+													Minimaler Abstand zwischen Abrufen in Minuten (default: 15)<br>
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
 								<script>
 									$(function() {
@@ -982,6 +1036,13 @@
 												showSection('#kia_abrp_enablediv');
 											}
 										}
+										function visibility_kia_advanced() {
+											if($('#kia_advancedOff').prop("checked")) {
+												hideSection('#kia_advanceddiv');
+											} else {
+												showSection('#kia_advanceddiv');
+											}
+										}
 
 										$('input[type=radio][name=kia_soccalclp1]').change(function(){
 											visibility_kia_soccalclp1();
@@ -989,9 +1050,13 @@
 										$('input[type=radio][name=kia_abrp_enable]').change(function(){
 											visibility_kia_abrp_enable();
 										});
+										$('input[type=radio][name=kia_advanced]').change(function(){
+											visibility_kia_advanced();
+										});
 
 										visibility_kia_soccalclp1();
 										visibility_kia_abrp_enable();
+										visibility_kia_advanced();
 									});
 								</script>
 							</div>
@@ -3645,6 +3710,60 @@
 											</div>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Erweiterte Einstellungen</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_advanced2old == 0) echo " active" ?>">
+													<input type="radio" name="kia_advanced2" id="kia_advanced2Off" value="0"<?php if($kia_advanced2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_advanced2old == 1) echo " active" ?>">
+													<input type="radio" name="kia_advanced2" id="kia_advanced2On" value="1"<?php if($kia_advanced2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_advanced2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_adv_cachevalid2" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid2" id="kia_adv_cachevalid2" value="<?php echo $kia_adv_cachevalid2old ?>">
+												<span class="form-text small">
+													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_12v2" class="col-md-4 col-form-label">12V SoC Limit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" max="100" step="1" name="kia_adv_12v2" id="kia_adv_12v2" value="<?php echo $kia_adv_12v2old ?>">
+												<span class="form-text small">
+													Minimaler SoC der 12V-Batterie für Abrufe in Prozent (Default: 20)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_interval_unplug2" class="col-md-4 col-form-label">Abrufintervall abgesteckt</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_interval_unplug2" id="kia_adv_interval_unplug2" value="<?php echo $kia_adv_interval_unplug2old ?>">
+												<span class="form-text small">
+													Abrufintervall bei abgestecktem Auto in Minuten (sofern freigegeben)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_ratelimit2" class="col-md-4 col-form-label">Abrufsperre</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_ratelimit2" id="kia_adv_ratelimit2" value="<?php echo $kia_adv_ratelimit2old ?>">
+												<span class="form-text small">
+													Minimaler Abstand zwischen Abrufen in Minuten (default: 15)<br>
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
 								<script>
 								$(function() {
@@ -3662,6 +3781,13 @@
 											showSection('#kia_abrp_enable_2div');
 										}
 									}
+									function visibility_kia_advanced2() {
+										if($('#kia_advanced2Off').prop("checked")) {
+											hideSection('#kia_advanced2div');
+										} else {
+											showSection('#kia_advanced2div');
+										}
+									}
 
 									$('input[type=radio][name=kia_soccalclp2]').change(function(){
 										visibility_kia_soccalclp2();
@@ -3669,9 +3795,13 @@
 									$('input[type=radio][name=kia_abrp_enable_2]').change(function(){
 										visibility_kia_abrp_enable_2();
 									});
+									$('input[type=radio][name=kia_advanced2]').change(function(){
+										visibility_kia_advanced2();
+									});
 
 									visibility_kia_soccalclp2();
 									visibility_kia_abrp_enable_2();
+									visibility_kia_advanced2();
 								});
 								</script>
 							</div>
