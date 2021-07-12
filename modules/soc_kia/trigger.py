@@ -53,8 +53,12 @@ def isMinimumTimerExpired():
 
 def isTimerExpired():
     now = int(time.time())
-    secLeft = (state.getState('lastRun') + (parameters.getParameter('timerInterval') * 60)) - now
-
+    
+    if state.isPlugged() == 1:
+        secLeft = (state.getState('lastRun') + (parameters.getParameter('timerInterval') * 60)) - now
+    else:
+        secLeft = (state.getState('lastRun') + (parameters.getParameter('timerIntervalUnplug') * 60)) - now
+        
     if secLeft < 0:
         trigger = 1
         soclogging.logDebug(1, "SoC download triggered by timer")
