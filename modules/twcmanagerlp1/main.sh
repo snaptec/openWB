@@ -35,7 +35,6 @@ elif (( twcmanagerlp1phasen == 3 )); then
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
 	echo $amps > /var/www/html/openWB/ramdisk/lla2
 	echo $amps > /var/www/html/openWB/ramdisk/lla3
-
 fi
 
 echo $watt > /var/www/html/openWB/ramdisk/llaktuell
