@@ -1,18 +1,19 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 #Args in var schreiben
 verbrauchernr = str(sys.argv[1])
 seradd = str(sys.argv[2])
 sdmid = int(sys.argv[3])
 
-from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(seradd, port=8899)
 
 #Phase 1 A
@@ -68,6 +69,7 @@ vl3string = "/var/www/html/openWB/ramdisk/verbraucher%s_v3" % (verbrauchernr)
 f = open(vl3string, 'w')
 f.write(str(vl3))
 f.close()
+
 #KWH Total Import
 resp = client.read_input_registers(0x0156,2, unit=sdmid)
 vwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))

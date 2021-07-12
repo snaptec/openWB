@@ -1,16 +1,15 @@
 #!/usr/bin/python
-import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import sys
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient('192.168.193.16', port=8899)
-
-
 
 #resp = client.read_input_registers(0x0002,2, unit=5)
 #ikwh = resp.registers[1]

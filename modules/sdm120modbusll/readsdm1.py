@@ -1,20 +1,18 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-seradd = str(sys.argv[1])
+# import binascii
 from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
-                stopbits=1, bytesize=8, timeout=1)
 
+seradd = str(sys.argv[1])
 sdmid = int(sys.argv[2])
 
-
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
 resp = client.read_input_registers(0x00,2, unit=sdmid)
 llv1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))
@@ -50,9 +48,3 @@ llwh = float("%.3f" % llwh[0])
 f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
 f.write(str(llwh))
 f.close()
-
-
-
-
-
-

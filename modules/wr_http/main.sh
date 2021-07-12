@@ -1,12 +1,10 @@
 #!/bin/bash
-
-
 wattwr=$(curl --connect-timeout 10 -s $wr_http_w_url)
 
 re='^-?[0-9]+$'
 
 if ! [[ $wattwr =~ $re ]] ; then
-	   wattwr="0"
+	wattwr="0"
 fi
 if (( wattwr > 3 )); then
 	wattwr=$(( wattwr * -1 ))
@@ -20,5 +18,3 @@ if [[ $wr_http_kwh_url != "none" ]]; then
 	pvkwhk=$(echo "scale=3;$ekwh / 1000" |bc)
 	echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 fi
-
-

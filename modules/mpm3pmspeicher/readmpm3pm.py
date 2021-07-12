@@ -1,22 +1,21 @@
 #!/usr/bin/python
 import sys
 import struct
-seradd = str(sys.argv[1])
-pvflag = str(sys.argv[3])
 from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
-                                stopbits=1, bytesize=8, timeout=1)
 
-
+seradd = str(sys.argv[1])
 sdmid = int(sys.argv[2])
+pvflag = str(sys.argv[3])
+
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
 resp = client.read_input_registers(0x0004,4, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
 ekwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
-#resp = client.read_input_registers(0x0004,2, unit=sdmid)
-#ekwh = resp.registers[1]
+# resp = client.read_input_registers(0x0004,2, unit=sdmid)
+# ekwh = resp.registers[1]
 ekwh = float(ekwh) /100
 f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
 f.write(str(ekwh))
@@ -27,14 +26,12 @@ value1 = resp.registers[0]
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
 ikwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
-#resp = client.read_input_registers(0x0002,2, unit=sdmid)
-#ikwh = resp.registers[1]
+# resp = client.read_input_registers(0x0002,2, unit=sdmid)
+# ikwh = resp.registers[1]
 ikwh = float(ikwh) * 10
 f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
 f.write(str(ikwh))
 f.close()
-
-
 
 resp = client.read_input_registers(0x0E,2, unit=sdmid)
 lla1 = resp.registers[1]
@@ -57,7 +54,7 @@ f = open('/var/www/html/openWB/ramdisk/speichera3', 'w')
 f.write(str(lla3))
 f.close()
 
-#total watt
+# total watt
 resp = client.read_input_registers(0x26,2, unit=sdmid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -73,6 +70,3 @@ if ( pvflag == 1 ):
     f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
     f.write(str(final))
 f.close()
-
-
-

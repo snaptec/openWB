@@ -25,13 +25,13 @@ fi
 #  z.b. wenn das System neu gestartet wurde, dann wird ein Dummykey an-
 #  gelegt
 if test -f "/var/www/html/openWB/ramdisk/ess_session_key"; then
-        session_key=$(sed -n '1p' /var/www/html/openWB/ramdisk/ess_session_key)
+	session_key=$(sed -n '1p' /var/www/html/openWB/ramdisk/ess_session_key)
 else
 	session_key=" "
 fi
 #
 ## JSON-Objekt vom PCS abholen. Es können folgende JSON-Objekte zurück gegeben werden:
-#   
+#
 #  1. Wenn der Sessionkey nicht korrekt bzw. wenn die Session abgelaufen ist, dann wird ein
 #     JSON-Objekt mit einem Attribut "auth_key" zurück gegeben
 #  2. Der Sessionkey ist gültig, dann erhält man ein JSON-Objekt mit den wichtigsten Attribute.

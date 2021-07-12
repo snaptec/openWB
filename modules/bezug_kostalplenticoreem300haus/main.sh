@@ -18,21 +18,21 @@
 
 # Unterscheidung EM300 Sensorposition zur Bestimmung Bezug EVU
 if [ $kostalplenticorehaus -eq 1 ]; then
-  # EM300 Sensorposition 2 (am EVU-Übergabepunkt = grid connection)
-  # Bezug EVU wurde bereits im wr_plenticore Modul aus den Modbus-Registern gelesen
-  "cp" /var/www/html/openWB/ramdisk/temp_wattbezug /var/www/html/openWB/ramdisk/wattbezug
+	# EM300 Sensorposition 2 (am EVU-Übergabepunkt = grid connection)
+	# Bezug EVU wurde bereits im wr_plenticore Modul aus den Modbus-Registern gelesen
+	"cp" /var/www/html/openWB/ramdisk/temp_wattbezug /var/www/html/openWB/ramdisk/wattbezug
 else
-  # EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
-  # Werte aus (temporärer) ramdisk lesen
-  # aktueller Hausverbrauch
-  Home_consumption=$(</var/www/html/openWB/ramdisk/temp_wattbezug)
-  # aktuelle PV-Leistung
-  PV_power_ac=$(</var/www/html/openWB/ramdisk/pvwatt)
-  # aktuelle Speicherleistung
-  Actual_batt_ch_disch_power=$(</var/www/html/openWB/ramdisk/temp_speicherleistung)
-  # Bezug berechnen
-  Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power + $Home_consumption)" |bc)
-  # und in die ramdisk
+	# EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
+	# Werte aus (temporärer) ramdisk lesen
+	# aktueller Hausverbrauch
+	Home_consumption=$(</var/www/html/openWB/ramdisk/temp_wattbezug)
+	# aktuelle PV-Leistung
+	PV_power_ac=$(</var/www/html/openWB/ramdisk/pvwatt)
+	# aktuelle Speicherleistung
+	Actual_batt_ch_disch_power=$(</var/www/html/openWB/ramdisk/temp_speicherleistung)
+	# Bezug berechnen
+	Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power + $Home_consumption)" |bc)
+	# und in die ramdisk
 	echo $Bezug > /var/www/html/openWB/ramdisk/wattbezug
 fi
 

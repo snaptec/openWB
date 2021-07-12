@@ -9,6 +9,4 @@ watt=$(echo $output | jq .values.power)
 watt=$(( watt / 1000 ))
 echo $watt > /var/www/html/openWB/ramdisk/pvwatt
 
-
 echo $watt
-
