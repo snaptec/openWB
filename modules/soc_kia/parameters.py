@@ -23,9 +23,6 @@ def setParameter(key, value):
 def loadParameters(argsFile):
     setParameter('reqTimeout', 60)
     setParameter('statusTimeout', 150)
-    setParameter('cacheValid', 10 * 60)
-    setParameter('soc12vLimit', 20)
-    setParameter('timerMinInterval', 15 * 60)
 
     try:
         f = open(argsFile, 'r')
@@ -47,6 +44,18 @@ def loadParameters(argsFile):
         setParameter('accountPin', str(argsDict['accountPin']))
         setParameter('vehicleVin', str(argsDict['vehicleVin']))
         setParameter('ramDiskDir', str(argsDict['ramDiskDir']))
+        setParameter('advEnable', int(argsDict['advEnable']))
+        
+        if getParameter('advEnable') == 0:
+            setParameter('cacheValid', 10 * 60)
+            setParameter('soc12vLimit', 20)
+            setParameter('timerMinInterval', 15 * 60)
+            setParameter('timerIntervalUnplug', getParameter('timerInterval'))
+        else:
+            setParameter('cacheValid', (int(argsDict['advCacheValid']) * 60))
+            setParameter('soc12vLimit', int(argsDict['adv12vLimit']))
+            setParameter('timerMinInterval', (int(argsDict['advRateLimit']) * 60))
+            setParameter('timerIntervalUnplug', int(argsDict['advIntUnplug']))
     except:
         raise
 
