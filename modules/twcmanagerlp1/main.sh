@@ -15,7 +15,7 @@ if [[ $twcmanagerlp1httpcontrol -eq 1 ]]; then
 	kwh_total=$(echo "$slave" | jq '.total.lifetimekWh')
 
 	if [[ $soc -gt 0 ]]; then
-		echo $soc > /var/www/html/openWB/ramdisk/soc1
+		echo $soc > /var/www/html/openWB/ramdisk/soc
 	fi
 
 	echo $volt1 > /var/www/html/openWB/ramdisk/llv1
@@ -41,8 +41,8 @@ fi
 
 if (( twcmanagerlp1phasen == 1 )); then
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
-    echo 0 > /var/www/html/openWB/ramdisk/lla2
-    echo 0 > /var/www/html/openWB/ramdisk/lla3
+	echo 0 > /var/www/html/openWB/ramdisk/lla2
+	echo 0 > /var/www/html/openWB/ramdisk/lla3
 elif (( twcmanagerlp1phasen == 2 )); then
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
 	echo $amps > /var/www/html/openWB/ramdisk/lla2

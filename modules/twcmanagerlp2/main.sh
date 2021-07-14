@@ -41,8 +41,8 @@ fi
 
 if (( twcmanagerlp2phasen == 1 )); then
 	echo $amps > /var/www/html/openWB/ramdisk/llas11
-    echo 0 > /var/www/html/openWB/ramdisk/llas12
-    echo 0 > /var/www/html/openWB/ramdisk/llas13
+	echo 0 > /var/www/html/openWB/ramdisk/llas12
+	echo 0 > /var/www/html/openWB/ramdisk/llas13
 elif (( twcmanagerlp2phasen == 2 )); then
 	echo $amps > /var/www/html/openWB/ramdisk/llas11
 	echo $amps > /var/www/html/openWB/ramdisk/llas12
