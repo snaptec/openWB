@@ -67,6 +67,14 @@ def doManualUpdate():
     
 def saveSoc(soc, manual):
     try:
+        f = open(parameters.getParameter('currentSocFile'), 'r')
+        socOld = int(f.read())
+        f.close()
+    except:
+        socOld = 0
+        pass
+        
+    try:
         f = open(parameters.getParameter('currentSocFile'), 'w')
         f.write(str(int(soc)))
         f.close()
@@ -74,7 +82,7 @@ def saveSoc(soc, manual):
         raise
         
     try:
-        if parameters.getParameter('abrpEnable') == 1:
+        if (parameters.getParameter('abrpEnable') == 1) and ((manual == 0) or (soc != socOld)):
             abrp.pushABRP(soc)
     except:
         pass

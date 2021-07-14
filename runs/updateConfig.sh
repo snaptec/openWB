@@ -1777,6 +1777,36 @@ updateConfig(){
 	if ! grep -Fq "kia_abrp_token_2=" $ConfigFile; then
 		echo "kia_abrp_token_2=''" >> $ConfigFile
 	fi
+	if ! grep -Fq "kia_advanced=" $ConfigFile; then
+		echo "kia_advanced=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_advanced2=" $ConfigFile; then
+		echo "kia_advanced2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_cachevalid=" $ConfigFile; then
+		echo "kia_adv_cachevalid=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_cachevalid2=" $ConfigFile; then
+		echo "kia_adv_cachevalid2=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_12v=" $ConfigFile; then
+		echo "kia_adv_12v=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_12v2=" $ConfigFile; then
+		echo "kia_adv_12v2=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_interval_unplug=" $ConfigFile; then
+		echo "kia_adv_interval_unplug=360" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_interval_unplug2=" $ConfigFile; then
+		echo "kia_adv_interval_unplug2=360" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_ratelimit=" $ConfigFile; then
+		echo "kia_adv_ratelimit=15" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_ratelimit2=" $ConfigFile; then
+		echo "kia_adv_ratelimit2=15" >> $ConfigFile
+	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile
 	fi
@@ -2071,6 +2101,12 @@ updateConfig(){
 	fi
 	if ! grep -Fq "alphav123=" $ConfigFile; then
 		echo "alphav123=0" >> $ConfigFile
+	fi
+	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
+		sed -i "s/socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
+	fi
+	if grep -Fq "socmodul1=soc_bluelinklp2" $ConfigFile; then
+		sed -i "s/socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
 	fi
 	echo "Config file Update done."
 }
