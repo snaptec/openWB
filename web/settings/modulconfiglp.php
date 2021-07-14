@@ -319,6 +319,19 @@
 							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
+									<div class="col-md-4">
+										HTTPControl / Ngardiner Fork
+									</div>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($twcmanagerlp1httpcontrolold == 0) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp1httpcontrol" id="twcmanagerlp1httpcontrolOff" value="0"<?php if($twcmanagerlp1httpcontrolold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($twcmanagerlp1httpcontrolold == 1) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp1httpcontrol" id="twcmanagerlp1httpcontrolOn" value="1"<?php if($twcmanagerlp1httpcontrolold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label for="twcmanagerlp1ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>">
@@ -327,7 +340,14 @@
 										</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
+								<div class="form-row mb-1 input-port">
+									<label for="twcmanagerlp1port" class="col-md-4 col-form-label">Port</label>
+									<div class="col">
+										<input class="form-control" type="number" min="80" max="10000" step="1" name="twcmanagerlp1port" id="twcmanagerlp1port" value="<?php echo $twcmanagerlp1portold ?>">
+										<span class="form-text small">Port des HTTP Control Interface. Standard: 8080</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 input-phases">
 									<label for="twcmanagerlp1phasen" class="col-md-4 col-form-label">Anzahl Phasen</label>
 									<div class="col">
 										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>">
@@ -336,6 +356,26 @@
 								</div>
 							</div>
 						</div>
+						<script>
+							$(function() {
+								function visibility_twcmanagerlp1_connection() {
+									if($('#twcmanagerlp1httpcontrolOff').prop("checked")) {
+										hideSection('#evsecontwcmanager .input-port');
+										showSection('#evsecontwcmanager .input-phases');
+									} else {
+										showSection('#evsecontwcmanager .input-port');
+										hideSection('#evsecontwcmanager .input-phases');
+									}
+								}
+
+								$('input[type=radio][name=twcmanagerlp1httpcontrol]').change(function(){
+									visibility_twcmanagerlp1_connection();
+								});
+
+	       							visibility_twcmanagerlp1_connection();
+							});
+						</script>
+
 						<div id="evsecongoe" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="goelp1">
 							<div class="form-group">
@@ -2404,6 +2444,7 @@
 										<option <?php if($evsecons1old == "keba") echo "selected" ?> value="keba">Keba</option>
 										<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 										<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+										<option <?php if($evsecons1old == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
@@ -2597,6 +2638,66 @@
 								<span class="text-info">openWB/set/lp/2/chargeStat</span> Status, ob gerade geladen wird, nur 0 (nein) oder 1 (ja)
 							</div>
 						</div>
+						<div id="evsecontwcmanagers1" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp2">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										HTTPControl / Ngardiner Fork
+									</div>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($twcmanagerlp2httpcontrolold == 0) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp2httpcontrol" id="twcmanagerlp2httpcontrolOff" value="0"<?php if($twcmanagerlp2httpcontrolold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($twcmanagerlp2httpcontrolold == 1) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp2httpcontrol" id="twcmanagerlp2httpcontrolOn" value="1"<?php if($twcmanagerlp2httpcontrolold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="twcmanagerlp2ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp2ip" id="twcmanagerlp2ip" value="<?php echo $twcmanagerlp2ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 input-port">
+									<label for="twcmanagerlp2port" class="col-md-4 col-form-label">Port</label>
+									<div class="col">
+										<input class="form-control" type="number" min="80" max="10000" step="1" name="twcmanagerlp2port" id="twcmanagerlp2port" value="<?php echo $twcmanagerlp2portold ?>">
+										<span class="form-text small">Port des HTTP Control Interface. Standard: 8080</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 input-phases">
+									<label for="twcmanagerlp2phasen" class="col-md-4 col-form-label">Anzahl Phasen</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp2phasen" id="twcmanagerlp2phasen" value="<?php echo $twcmanagerlp2phasenold ?>">
+										<span class="form-text small">Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA).</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<script>
+							$(function() {
+								function visibility_twcmanagerlp2_connection() {
+									if($('#twcmanagerlp2httpcontrolOff').prop("checked")) {
+										hideSection('#evsecontwcmanagers1 .input-port');
+										showSection('#evsecontwcmanagers1 .input-phases');
+									} else {
+										showSection('#evsecontwcmanagers1 .input-port');
+										hideSection('#evsecontwcmanagers1 .input-phases');
+									}
+								}
+
+								$('input[type=radio][name=twcmanagerlp2httpcontrol]').change(function(){
+									visibility_twcmanagerlp2_connection();
+								});
+
+								visibility_twcmanagerlp2_connection();
+							});
+						</script>
 						<div id="evsecoslaveeth" class="hide">
 							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmethll">
 							<div class="card-text alert alert-info">
@@ -4017,6 +4118,7 @@
 							hideSection('#evsecondaemonlp2');
 							hideSection('#evseconipevselp2');
 							hideSection('#evseconmqtts1');
+							hideSection('#evsecontwcmanagers1');
 
 							if($('#evsecons1').val() == 'modbusevse') {
 								switch( $("#evsecons1 option:selected").attr('data-id') ){
@@ -4026,7 +4128,7 @@
 									case "openwb series1/2 duo v2":
 										showSection('#openwb12s1v2');
 									break;
-									default:
+						       			default:
 										showSection('#evseconmbs1');
 										showSection('#llmodullp2');
 										display_llmp2();
@@ -4067,6 +4169,9 @@
 							}
 							if($('#evsecons1').val() == 'nrgkick') {
 								showSection('#evseconnrgkicks1');
+							}
+							if($('#evsecons1').val() == 'twcmanager') {
+								showSection('#evsecontwcmanagers1');
 							}
 						}
 
