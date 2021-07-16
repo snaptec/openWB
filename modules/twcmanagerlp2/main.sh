@@ -8,15 +8,10 @@ if [[ $twcmanagerlp2httpcontrol -eq 1 ]]; then
 	watts=$(echo "$status" | jq .chargerLoadWatts | sed -e 's/^"//' -e 's/"$//')
 	watt=$(echo "scale=0;$watts" | bc | sed 's/\..*$//')
 
-	soc=$(echo "$slave" | jq 'first(.[].lastBatterySOC)')
 	volt1=$(echo "$slave" | jq 'first(.[].voltsPhaseA)')
 	volt2=$(echo "$slave" | jq 'first(.[].voltsPhaseB)')
 	volt3=$(echo "$slave" | jq 'first(.[].voltsPhaseC)')
 	kwh_total=$(echo "$slave" | jq '.total.lifetimekWh')
-
-	if [[ $soc -gt 0 ]]; then
-		echo $soc > /var/www/html/openWB/ramdisk/soc1
-	fi
 
 	echo $volt1 > /var/www/html/openWB/ramdisk/llvs11
 	echo $volt2 > /var/www/html/openWB/ramdisk/llvs12

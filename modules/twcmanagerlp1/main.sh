@@ -14,10 +14,6 @@ if [[ $twcmanagerlp1httpcontrol -eq 1 ]]; then
 	volt3=$(echo "$slave" | jq 'first(.[].voltsPhaseC)')
 	kwh_total=$(echo "$slave" | jq '.total.lifetimekWh')
 
-	if [[ $soc -gt 0 ]]; then
-		echo $soc > /var/www/html/openWB/ramdisk/soc
-	fi
-
 	echo $volt1 > /var/www/html/openWB/ramdisk/llv1
 	echo $volt2 > /var/www/html/openWB/ramdisk/llv2
 	echo $volt3 > /var/www/html/openWB/ramdisk/llv3
