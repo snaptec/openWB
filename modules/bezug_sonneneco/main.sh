@@ -12,7 +12,6 @@ if (( sonnenecoalternativ == 2 )); then
 	echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 	echo $wattbezug
 else
-
 	if (( sonnenecoalternativ == 1 )); then
 		speicherantwort=$(curl --connect-timeout 5 -s "$sonnenecoip/api/v1/status")
 		wattbezug=$(echo $speicherantwort | jq .GridFeedIn_W)

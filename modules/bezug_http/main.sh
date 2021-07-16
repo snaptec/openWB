@@ -1,12 +1,10 @@
 #!/bin/bash
 
-
-wattbezug=$(curl --connect-timeout 10 -s $bezug_http_w_url)
-
 re='^-?[0-9]+$'
 
+wattbezug=$(curl --connect-timeout 10 -s $bezug_http_w_url)
 if ! [[ $wattbezug =~ $re ]] ; then
-	   wattbezug="0"
+	wattbezug="0"
 fi
 echo $wattbezug
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
@@ -31,7 +29,3 @@ if [[ $bezug_http_l3_url != "none" ]]; then
 	l3a=$(curl --connect-timeout 5 -s $bezug_http_l3_url)
 	echo $l3a > /var/www/html/openWB/ramdisk/bezuga3
 fi
-
-
-
-

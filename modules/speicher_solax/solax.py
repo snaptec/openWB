@@ -1,12 +1,11 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import struct
-import binascii
-
+# import os
+# import time
+# import getopt
+# import socket
+# import struct
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
 
 def unsigned16(result, addr):
@@ -19,19 +18,19 @@ def signed16(result, addr):
     return val
 
 ipaddress = str(sys.argv[1])
+
 client = ModbusTcpClient(ipaddress, port=502)
 
 resp=client.read_input_registers(0, 114)
 
-value1 = signed16(resp, 22)  #Batterie Power
-
-value2 = unsigned16(resp, 28 )
-
+# Batterie Power
+value1 = signed16(resp, 22)
 f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
 f.write(str(value1))
 f.close()
 
-
-f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')  #Batterieladezustand
+# Batterieladezustand
+value2 = unsigned16(resp, 28 )
+f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
 f.write(str(value2))
 f.close()

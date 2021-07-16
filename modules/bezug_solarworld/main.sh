@@ -14,7 +14,7 @@ bezug_watt=$(LC_ALL=C printf "%.0f\n" $(echo "$em_in_watt - $em_out_watt" | bc))
 ra='^-?[0-9]+$'
 
 if ! [[ $bezug_watt =~ $ra ]] ; then
-      bezug_watt="0"
+	bezug_watt="0"
 fi
 echo $bezug_watt
 echo $bezug_watt > /var/www/html/openWB/ramdisk/wattbezug

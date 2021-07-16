@@ -1,20 +1,23 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 ipaddress = str(sys.argv[1])
 slave1id = int(sys.argv[2])
 batwrsame = int(sys.argv[3])
 ip2address = str(sys.argv[4])
 extprodakt = str(sys.argv[5])
-from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient(ipaddress, port=502)
-#batterie auslesen und pv leistung korrigieren
+
+# batterie auslesen und pv leistung korrigieren
 storagepower = 0
 if batwrsame == 1:
     rr = client.read_holding_registers(62836, 2, unit=1)
@@ -50,17 +53,15 @@ if fmultiplint == fmult2iplint:
         rawprodw = rawprodw / 100000
     rawprodwwr1 = rawprodw - storagepower    
 
-
 resp= client.read_holding_registers(40093,2,unit=slave1id)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 finalwr1 = int(struct.unpack('>i', all.decode('hex'))[0])
 
-
-from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ip2address, port=502)
-#batterie auslesen und pv leistung korrigieren
+
+# batterie auslesen und pv leistung korrigieren
 resp= client.read_holding_registers(40084,2,unit=slave1id)
 multipli = resp.registers[0]
 multiplint = format(multipli, '04x')
@@ -90,19 +91,18 @@ if fmultiplint == fmult2iplint:
         rawprodw = rawprodw / 100000
     rawprodwwr2 = rawprodw  
 
-if extprodakt == 1:    
-	resp= client.read_holding_registers(40380,1,unit=slave1id)
-	value1 = resp.registers[0]
-	all = format(value1, '04x')
-	extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+if extprodakt == 1:
+    resp= client.read_holding_registers(40380,1,unit=slave1id)
+    value1 = resp.registers[0]
+    all = format(value1, '04x')
+    extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
 else:
-	extprod = 0
+    extprod = 0
 
 rawprodw = extprod + rawprodwwr1 + rawprodwwr2    
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(rawprodw))
 f.close()
-
 
 resp= client.read_holding_registers(40093,2,unit=slave1id)
 value1 = resp.registers[0]
@@ -117,7 +117,3 @@ pvkwhk= final / 1000
 f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
 f.write(str(pvkwhk))
 f.close()
-
-
-
-

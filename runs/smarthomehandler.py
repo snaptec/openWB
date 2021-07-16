@@ -248,6 +248,27 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(str(config.get('smarthomedevices', 'device_measurejsoncounter_'+str(nummer))))
         except:
             argumentList.append("none")
+    elif meastyp == "avm":
+        argumentList[1] = prefixpy + 'avmhomeautomation/watt.py'
+        argumentList.append("undef") # 3
+        # 4
+        try:
+            measureactor = str(config.get('smarthomedevices', 'device_measureavmactor_'+str(nummer)))
+            argumentList.append(measureactor)
+        except:
+            argumentList.append("undef")
+        # 5
+        try:
+            measureusername = str(config.get('smarthomedevices', 'device_measureavmusername_'+str(nummer)))
+            argumentList.append(measureusername)
+        except:
+            argumentList.append("undef")
+        # 6
+        try:
+            measurepassword = str(config.get('smarthomedevices', 'device_measureavmpassword_'+str(nummer)))
+            argumentList.append(measurepassword)
+        except:
+            argumentList.append("undef")
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))

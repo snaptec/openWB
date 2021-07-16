@@ -1,50 +1,50 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 ipaddress = str(sys.argv[1])
 ip2address = str(sys.argv[2])
 ip3address = str(sys.argv[3])
-from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient(ipaddress, port=502)
 client2 = ModbusTcpClient(ip2address, port=502)
 client3 = ModbusTcpClient(ip3address, port=502)
 
-
-
-#pv watt
+# pv watt
 resp= client.read_holding_registers(30775,2,unit=3)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 wr1w = int(struct.unpack('>i', all.decode('hex'))[0])
-#pv Wh
+
+# pv Wh
 resp= client.read_holding_registers(30529,2,unit=3)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 wr1wh = int(struct.unpack('>i', all.decode('hex'))[0])
 
-#pv watt
+# pv watt
 resp= client3.read_holding_registers(30775,2,unit=3)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 wr3w = int(struct.unpack('>i', all.decode('hex'))[0])
-#pv Wh
+# pv Wh
 resp= client3.read_holding_registers(30529,2,unit=3)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 wr3wh = int(struct.unpack('>i', all.decode('hex'))[0])
 
-
-#pv watt
+# pv watt
 resp= client2.read_holding_registers(30775,2,unit=3)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
@@ -58,7 +58,7 @@ f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(final))
 f.close()
 
-#pv Wh
+# pv Wh
 resp= client2.read_holding_registers(30529,2,unit=3)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
@@ -68,9 +68,3 @@ final = wr1wh + wr2wh + wr3wh
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(final))
 f.close()
-
-
-
-
-
-
