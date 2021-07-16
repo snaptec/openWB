@@ -17,5 +17,5 @@ if [[ "$usevartamodbus" != "1" ]]; then
 		echo $speichersoc > /var/www/html/openWB/ramdisk/speichersoc
 	fi
 else 
-	python /var/www/html/openWB/modules/speicher_varta/varta.py $vartaspeicherip
+	python /var/www/html/openWB/modules/speicher_varta/varta.py $vartaspeicherip $vartaspeicher2ip
 fi
