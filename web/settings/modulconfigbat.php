@@ -284,6 +284,13 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label for="vartaspeicher2ip" class="col-md-4 col-form-label">IP Adresse des zweiten Speichers</label>
+									<div class="col">
+										<input class="form-control" type="text" name="vartaspeicher2ip" id="vartaspeicher2ip" value="<?php echo $vartaspeicher2ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12, wenn nicht vorhanden none eintragen</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label for="usevartamodbus" class="col-md-4 col-form-label">Ausleseart Modbus</label>
 									<div class="col">
 										<select name="usevartamodbus" id="usevartamodbus" class="form-control">

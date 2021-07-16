@@ -1031,6 +1031,9 @@ updateConfig(){
 	if ! grep -Fq "vartaspeicherip=" $ConfigFile; then
 		echo "vartaspeicherip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "vartaspeicher2ip=" $ConfigFile; then
+		echo "vartaspeicher2ip=none" >> $ConfigFile
+	fi
 	if ! grep -Fq "usevartamodbus=" $ConfigFile; then
 		echo "usevartamodbus=0" >> $ConfigFile
 	fi
