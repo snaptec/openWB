@@ -1,6 +1,10 @@
 <?php
-$url = $_SERVER['REQUEST_URI'];
-$command = escapeshellcmd("sudo /bin/bash /var/www/html/openWB/modules/smarthome/http/dummyurl1.sh $url");
-$output = shell_exec($command);
-echo $output;
+ $dec = $_REQUEST['d'];
+ 	$file = "/var/www/html/openWB/ramdisk/device" . $dec . "_req_relais";
+ if (is_file($file)) {
+     	$a = file_get_contents($file);
+     if ($a == "1") {
+         echo 100;
+      } else { echo 0; }
+  } else { echo 0; }
 ?>
