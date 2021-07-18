@@ -213,7 +213,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
         except:
-            measureportsdm = 8899
+            measureportsdm = "8899"
         argumentList[1] = prefixpy +'sdm630/sdm630.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
         argumentList.append(measureportsdm)
