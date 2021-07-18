@@ -8,5 +8,3 @@ fi
 
 pv2watt=$(</var/www/html/openWB/ramdisk/pv2watt)
 echo $pv2watt
-
-

@@ -76,6 +76,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
@@ -280,6 +281,13 @@
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="vartaspeicher2ip" class="col-md-4 col-form-label">IP Adresse des zweiten Speichers</label>
+									<div class="col">
+										<input class="form-control" type="text" name="vartaspeicher2ip" id="vartaspeicher2ip" value="<?php echo $vartaspeicher2ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12, wenn nicht vorhanden none eintragen</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
@@ -666,6 +674,10 @@
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
 								}
+								if($('#speichermodul').val() == 'speicher_saxpower') {
+									showSection('#divspeicherip');
+								}
+
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');

@@ -1,16 +1,12 @@
 #!/usr/bin/python
-import sys
-import os
-import time
-import getopt
+# import sys
+# import os
+# import time
+# import getopt
 import struct
 from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient('192.168.193.15', port=8899)
-#from pymodbus.transaction import ModbusRtuFramer
-#client = ModbusTcpClient('192.168.0.7', port=8899, framer=ModbusRtuFramer)
-
-
-
 
 #Voltage
 resp = client.read_input_registers(0x0001,2, unit=0x02)
@@ -29,9 +25,6 @@ f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
 f.write(str(voltage3))
 f.close()
 
-
-
-
 #phasen watt
 resp = client.read_input_registers(0x0013,2, unit=0x02)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
@@ -39,7 +32,6 @@ finalw1 = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
 f.write(str(finalw1))
 f.close()
-
 resp = client.read_input_registers(0x0015,2, unit=0x02)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 finalw2 = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
@@ -54,14 +46,13 @@ f.write(str(finalw3))
 f.close()
 
 finalw= finalw1 + finalw2 + finalw3
-#total watt
-#resp = client.read_input_registers(0x0039,2, unit=0x02)
-#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-#finalw = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
+# total watt
+# resp = client.read_input_registers(0x0039,2, unit=0x02)
+# all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+# finalw = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(finalw))
 f.close()
-
 
 #ampere l1
 resp = client.read_input_registers(0x0007, 2, unit=0x02)

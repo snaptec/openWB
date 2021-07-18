@@ -16,5 +16,3 @@ if [[ $mpm3pmllid = "0" ]]; then
 else
 	python /var/www/html/openWB/modules/mpm3pmll/readmpm3pm.py $mpm3pmllsource $mpm3pmllid
 fi
-
-

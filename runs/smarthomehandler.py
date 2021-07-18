@@ -210,8 +210,13 @@ def sepwatt(oldwatt,oldwattk,nummer):
     (devuberschuss,ueberschussberechnung )= getueb(nummer)
     argumentList.append(str(devuberschuss))
     if meastyp == "sdm630":
+        try:
+            measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
+        except:
+            measureportsdm = 8899
         argumentList[1] = prefixpy +'sdm630/sdm630.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+        argumentList.append(measureportsdm)
     elif meastyp == "we514":
         argumentList[1] = prefixpy +'we514/watt.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
@@ -248,6 +253,27 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(str(config.get('smarthomedevices', 'device_measurejsoncounter_'+str(nummer))))
         except:
             argumentList.append("none")
+    elif meastyp == "avm":
+        argumentList[1] = prefixpy + 'avmhomeautomation/watt.py'
+        argumentList.append("undef") # 3
+        # 4
+        try:
+            measureactor = str(config.get('smarthomedevices', 'device_measureavmactor_'+str(nummer)))
+            argumentList.append(measureactor)
+        except:
+            argumentList.append("undef")
+        # 5
+        try:
+            measureusername = str(config.get('smarthomedevices', 'device_measureavmusername_'+str(nummer)))
+            argumentList.append(measureusername)
+        except:
+            argumentList.append("undef")
+        # 6
+        try:
+            measurepassword = str(config.get('smarthomedevices', 'device_measureavmpassword_'+str(nummer)))
+            argumentList.append(measurepassword)
+        except:
+            argumentList.append("undef")
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
@@ -949,7 +975,7 @@ def conditions(nummer):
             logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, finishtime erreicht")
             setstat(nummer,10)
             return
-    # here startup device_startupdetection 
+    # here startup device_startupdetection
     if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20) and ( DeviceValues[str(nummer)+"relais"] == 0 ):
         setstat(nummer,20)
         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")

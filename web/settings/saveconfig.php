@@ -161,18 +161,16 @@
 		}
 
 		// start ev-soc updates if in POST data
-		// if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] != 'none') ){
-		if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] == 'soc_tesla') ){ ?>
+		if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] != 'none') ){ ?>
 			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 1 gestartet.");</script>
 			<?php
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20000");
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20005");
 			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['socmodul'] . "/main.sh > /dev/null &" );
 		}
-		// if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] != 'none') ){
-		if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] == 'soc_teslalp2') ){ ?>
+		if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] != 'none') ){ ?>
 			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 2 gestartet.");</script>
 			<?php
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20000");
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20005");
 			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['socmodul1'] . "/main.sh > /dev/null &" );
 		}
 

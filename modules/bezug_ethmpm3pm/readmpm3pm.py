@@ -1,18 +1,14 @@
 #!/usr/bin/python
-import sys
-import os
-import time
-import getopt
+# import sys
+# import os
+# import time
+# import getopt
 import struct
 from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient('192.168.193.15', port=8899)
-#from pymodbus.transaction import ModbusRtuFramer
-#client = ModbusTcpClient('192.168.0.7', port=8899, framer=ModbusRtuFramer)
 
-
-
-
-#Voltage
+# Voltage
 resp = client.read_input_registers(0x08,4, unit=5)
 voltage1 = resp.registers[1]
 voltage1 = float(voltage1) / 10
@@ -43,7 +39,8 @@ ikwh = float(ikwh) * 10
 f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(ikwh))
 f.close()
-#phasen watt
+
+# phasen watt
 resp = client.read_input_registers(0x14,2, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -69,31 +66,31 @@ f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
 f.write(str(finalw3))
 f.close()
 
-#resp = client.read_input_registers(0x0E,2, unit=5)
-#lla1 = resp.registers[1]
-#lla1 = float(lla1) / 100
+# resp = client.read_input_registers(0x0E,2, unit=5)
+# lla1 = resp.registers[1]
+# lla1 = float(lla1) / 100
 lla1=round(float(float(finalw1) / float(voltage1)), 2)
 f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
 f.write(str(lla1))
 f.close()
 
-#resp = client.read_input_registers(0x10,2, unit=5)
-#lla2 = resp.registers[1]
-#lla2 = float(lla2) / 100
+# resp = client.read_input_registers(0x10,2, unit=5)
+# lla2 = resp.registers[1]
+# lla2 = float(lla2) / 100
 lla2=round(float(float(finalw2) / float(voltage2)), 2)
 f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
 f.write(str(lla2))
 f.close()
 
-#resp = client.read_input_registers(0x12,2, unit=5)
-#lla3 = resp.registers[1]
-#lla3 = float(lla3) / 100
+# resp = client.read_input_registers(0x12,2, unit=5)
+# lla3 = resp.registers[1]
+# lla3 = float(lla3) / 100
 lla3=round(float(float(finalw3) / float(voltage3)), 2) 
 f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
 f.write(str(lla3))
 f.close()
 
-#total watt
+# total watt
 resp = client.read_input_registers(0x26,2, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -103,7 +100,7 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
 
-#export kwh
+# export kwh
 resp = client.read_input_registers(0x0004,4, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -113,7 +110,8 @@ ekwh = float(ekwh) * 10
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(ekwh))
 f.close()
-#evuhz
+
+# evuhz
 resp = client.read_input_registers(0x2c,4, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -124,7 +122,7 @@ f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
 f.write(str(hz))
 f.close()
 
-#Power Factor
+# Power Factor
 resp = client.read_input_registers(0x20,4, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1]

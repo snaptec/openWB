@@ -21,12 +21,12 @@
 #########################################################
 
 import sys
-import os
-import getopt
-import socket
-import ConfigParser
-import struct
-import binascii
+# import os
+# import getopt
+# import socket
+# import ConfigParser
+# import struct
+# import binascii
 from datetime import datetime
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
@@ -85,7 +85,7 @@ def write_to_ramdisk():
     # Gesamtleistung AC PV-Module
     with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
         f.write(str(PV_power_total))
-    #schreibe den Wert nur wenn kein Speicher vorhanden ist. Wenn er da ist nutze die openWB PV Watt beschränkung
+    # schreibe den Wert nur wenn kein Speicher vorhanden ist. Wenn er da ist nutze die openWB PV Watt beschränkung
     if boolspeicher != 1:
         # Gesamtertrag in Wattstunden
         with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
