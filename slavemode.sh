@@ -287,19 +287,35 @@ function computeLoadImbalanceCompensation() {
 		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: lastImbalancePersistedValue=$lastImbalancePersistedValue, lastImbalance=$lastImbalance, lastImbalancePhase=$lastImbalancePhase"
 	fi
 
+	# add expected current change to the imbalance only if we're NOT charging on the phase with lowest current
+	local diffComp=0;
+	if (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 0 )); then
+		if (( slaveModeSlowRamping == 1 )); then
+			if (( `echo "$lldiff > 1.0" | bc` == 1 )); then
+				diffComp=1
+			elif (( `echo "$lldiff < -3.0" | bc` == 1 )); then
+				diffComp=-3
+			elif (( `echo "$lldiff < -0.5" | bc` == 1 )); then
+				diffComp=-1
+			fi
+		else
+			diffComp=$lldiff
+		fi
+	fi
+
 	# stick to last compensated phase
 	if (( lastImbalancePhase > 0 )); then
 
 		imbalPhase=$lastImbalancePhase
-		systemLoadImbalanceToUse=$(echo "scale=3; (${TotalCurrentConsumptionOnPhase[$imbalPhase]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
+		systemLoadImbalanceToUse=$(echo "scale=3; (${TotalCurrentConsumptionOnPhase[$imbalPhase]} + $diffComp - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
 
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Sticking to previously reduced for imbalance on phase #${lastImbalancePhase} (@ ${TotalCurrentConsumptionOnPhase[$imbalPhase]} A) --> systemLoadImbalanceToUse=$systemLoadImbalanceToUse"
+		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Sticking to previously reduced for imbalance on phase #${lastImbalancePhase} (@ ${TotalCurrentConsumptionOnPhase[$imbalPhase]} A + diffComp $diffComp A) --> systemLoadImbalanceToUse=$systemLoadImbalanceToUse"
 	else
 
 		imbalPhase=$ChargingPhaseWithMaximumTotalCurrent
-		systemLoadImbalanceToUse=$(echo "scale=3; (${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
+		systemLoadImbalanceToUse=$(echo "scale=3; (${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} + $diffComp - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
 
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Using ChargingPhaseWithMaximumTotalCurrent=${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A and PhaseWithMinimumTotalCurrent=${PhaseWithMinimumTotalCurrent} @ ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} A for imbalance calculation --> systemLoadImbalanceToUse=$systemLoadImbalanceToUse"
+		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Using ChargingPhaseWithMaximumTotalCurrent=${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A  + diffComp $diffComp A and PhaseWithMinimumTotalCurrent=${PhaseWithMinimumTotalCurrent} @ ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} A for imbalance calculation --> systemLoadImbalanceToUse=$systemLoadImbalanceToUse"
 	fi
 
 	imbalDiff=$(echo "scale=3; ($SlaveModeAllowedLoadImbalance - $systemLoadImbalanceToUse)" | bc)
