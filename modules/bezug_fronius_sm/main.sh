@@ -27,7 +27,7 @@ if [[ $froniusvar2 == "0" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
 	json_id=".Body.Data"
 	# Hole die JSON Daten
-	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung")
+	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=$froniuserzeugung")
 
 elif [[ $froniusvar2 == "1" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
