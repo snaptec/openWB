@@ -388,7 +388,7 @@ updateConfig(){
 	if ! grep -Fq "twcmanagerlp1port=" $ConfigFile; then
 		echo "twcmanagerlp1port=8080" >> $ConfigFile
 	fi
-	if ! grep -Fq "twcmangerlp2ip=" $ConfigFile; then
+	if ! grep -Fq "twcmanagerlp2ip=" $ConfigFile; then
 		echo "twcmanagerlp2ip='127.0.0.1'" >> $ConfigFile
 	fi
 	if ! grep -Fq "twcmanagerlp2port=" $ConfigFile; then
