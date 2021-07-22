@@ -1029,7 +1029,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			actualPower += ' Min';
 		} else {
 			rest = (actualPower % 3600 / 60).toFixed(0);
-			ganz = (actualPower / 3600).toFixed(0);
+			ganz = Math.floor(actualPower / 3600);
 			actualPower = ganz + ' H ' + rest +' Min';
 		}
 		element.text(actualPower);

@@ -1,14 +1,16 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-ipaddress = str(sys.argv[1])
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
+
+ipaddress = str(sys.argv[1])
+
 client = ModbusTcpClient(ipaddress, port=502)
 
 #new
@@ -38,4 +40,3 @@ final=hausverbrauch-pvwatt
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
-

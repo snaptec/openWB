@@ -13,10 +13,20 @@ from urllib.parse import parse_qs
 import requests
 from datetime import datetime, timezone
 
-MAX_ATTEMPTS = 10
+MAX_ATTEMPTS = 7
 CLIENT_ID = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384"
-UA = "Mozilla/5.0 (Linux; Android 10; Pixel 3 Build/QQ2A.200305.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/85.0.4183.81 Mobile Safari/537.36"
-X_TESLA_USER_AGENT = "TeslaApp/3.10.9-433/adff2e065/android/10"
+# UA = "Mozilla/5.0 (Linux; Android 10; Pixel 3 Build/QQ2A.200305.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/85.0.4183.81 Mobile Safari/537.36"
+# X_TESLA_USER_AGENT = "TeslaApp/3.10.9-433/adff2e065/android/10"
+
+# The documentation here:
+#   https://tesla-api.timdorr.com/api-basics/authentication Says:
+# "Avoid setting a User-Agent header that looks like a browser (such
+#  as Chrome or Safari). The SSO service has protections in place
+#  that will require executing JavaScript if a browser-like user
+#  agent is detected."
+# So to get a token I set the strings to:
+UA = ""
+X_TESLA_USER_AGENT = ""
 
 tokensFilename = ""
 tokens = {
@@ -252,8 +262,7 @@ def login(email, password, mfaPasscode):
 def refreshToken(email):
     global tokens
 
-    # headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
-    headers = {}
+    headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
     payload = {
         "grant_type": "refresh_token",
         "client_id": "ownerapi",
@@ -262,7 +271,7 @@ def refreshToken(email):
     }
     session = requests.Session()
 
-    resp = session.post("https://auth.tesla.com/oauth2/v3/token", headers=headers, json=payload)
+    resp = session.post("https://auth.tesla.com/oauth2/v3/token", headers=headers, json=payload, timeout=120)
     resp_json = resp.json()
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
@@ -298,16 +307,16 @@ def requestData(dataPart):
         eprint("Requesting data: \"%s\""%(dataPart))
     session = requests.Session()
     headers = {
-        # "user-agent": UA,
-        # "x-tesla-user-agent": X_TESLA_USER_AGENT,
+        "user-agent": UA,
+        "x-tesla-user-agent": X_TESLA_USER_AGENT,
         "authorization": "bearer " + tokens["access_token"]
         }
 
     owner_headers = headers
-    owner_headers["authorization"] = "bearer " + tokens["access_token"]
-    # owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
+    # owner_headers["authorization"] = "bearer " + tokens["access_token"]
+    owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
 
-    resp = session.get("https://owner-api.teslamotors.com/api/1/" + dataPart, headers=owner_headers)
+    resp = session.get("https://owner-api.teslamotors.com/api/1/" + dataPart, headers=owner_headers, timeout=120)
     if( verbose ):
         eprint(resp.text, "\n")
     return resp.text
@@ -317,51 +326,39 @@ def postCommand(command):
         eprint("Sending command: \"%s\""%(command))
     session = requests.Session()
     headers = {
-        # "user-agent": UA,
-        # "x-tesla-user-agent": X_TESLA_USER_AGENT,
+        "user-agent": UA,
+        "x-tesla-user-agent": X_TESLA_USER_AGENT,
         "authorization": "bearer " + tokens["access_token"]
         }
  
     owner_headers = headers
-    owner_headers["authorization"] = "bearer " + tokens["access_token"]
-    # owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
+    # owner_headers["authorization"] = "bearer " + tokens["access_token"]
+    owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
 
-    resp = session.post("https://owner-api.teslamotors.com/api/1/" + command, headers=owner_headers)
+    resp = session.post("https://owner-api.teslamotors.com/api/1/" + command, headers=owner_headers, timeout=120)
     if( verbose ):
         eprint(resp.text, "\n")
     return resp.text
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--email', type=str, required=True, help='E-mail used for myTesla account')
-    parser.add_argument('-p', '--password', type=str, required=False, default=None, help='myTesla account password')
-    parser.add_argument('-m', '--mfapasscode', type=str, required=False, default=None, help='passcode for multi factor authentication')
-    parser.add_argument('-f', '--tokensfile', type=str, required=False, default="tesla.token", help='filename to use for token')
-    parser.add_argument('-d', '--data', type=str, required=False, default=None, help='data part to request, use "#" as placeholder for "vehicle_id" if required')
-    parser.add_argument('-c', '--command', type=str, required=False, default=None, help='command to send, use "#" as placeholder for "vehicle_id" if required')
-    parser.add_argument('-v', '--vehicle', type=int, required=False, default=0, help='vehicle number to use, dafeults to "0"')
-    parser.add_argument('-l', '--logprefix', type=str, required=False, default=None, help='identifier used for logging to stderr')
-    parser.add_argument('--verbose', required=False, default=False, action='store_true', help='be verbose')
+    parser.add_argument("-e", "--email", type=str, required=True, help="Tesla account email")
+    # parser.add_argument("-p", "--password", type=str, required=False, default=None, help="Tesla account password")
+    # parser.add_argument("-m", "--mfapasscode", type=str, required=False, default=None, help="Passcode generated by your autheticator app")
+    parser.add_argument("-f", "--tokensfile", type=str, required=False, default="tesla.token", help="Filename to save tokens")
+    parser.add_argument("-d", "--data", type=str, required=False, default=None, help="data part to request, use \"#\" as placeholder for \"vehicle_id\" if required")
+    parser.add_argument("-c", "--command", type=str, required=False, default=None, help="command to send, use \"#\" as placeholder for \"vehicle_id\" if required")
+    parser.add_argument("-v", "--vehicle", type=int, required=False, default=0, help="vehicle number to use, dafeults to \"0\"")
+    parser.add_argument("-l", "--logprefix", type=str, required=False, default=None, help="identifier used for logging to stderr")
+    parser.add_argument("--verbose", required=False, default=False, action="store_true", help="be verbose")
     args = parser.parse_args()
 
     verbose = args.verbose
     tokensFilename = args.tokensfile
     if( not loadTokens() ):
-        if( verbose ):
-            eprint("Tokens file not found: " + args.tokensfile)
-            eprint("Trying login with provided credentials")
-        if( args.password == None ):
-            eprint("No password provided.")
-            sys.exit(1)
-        else:
-            try:
-                if( login(args.email, args.password, args.mfapasscode) ):
-                    if( verbose ):
-                        eprint("Login succeeded")
-            except ValueError as err:
-                eprint(err)
-                eprint("Login failed")
-                sys.exit(2)
+        eprint("Tokens file not found: " + args.tokensfile)
+        eprint("Login with E-Mail and Password not supported (Captcha)!")
+        sys.exit(1)
     else:
         if( verbose ):
             eprint("No need to authenticate. Valid tokens already present in " + tokensFilename)

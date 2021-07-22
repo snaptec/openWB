@@ -1,21 +1,21 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
-import struct
-import binascii
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
+# import struct
+# import binascii
 import ctypes
+from pymodbus.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus.transaction import ModbusRtuFramer
 
 #Args in var schreiben
 verbrauchernr = str(sys.argv[1])
 seradd = str(sys.argv[2])
 ABBid = int(sys.argv[3])
 
-from pymodbus.client.sync import ModbusTcpClient as ModbusClient
-from pymodbus.transaction import ModbusRtuFramer
 client = ModbusClient(seradd, port=502, framer=ModbusRtuFramer)
 
 response = client.read_holding_registers(address=0x5B00, count=28, unit=ABBid)

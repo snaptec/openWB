@@ -1,20 +1,20 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusSerialClient
+
 #Args in var schreiben
 verbrauchernr = str(sys.argv[1])
 seradd = str(sys.argv[2])
 sdmid = int(sys.argv[3])
 
-from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
-                                stopbits=1, bytesize=8, timeout=1)
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
 #Phase 1 A
 resp = client.read_input_registers(0x06,2, unit=sdmid)

@@ -397,7 +397,7 @@ function formatWattH(watt) {
 	}
 }
 function formatTime(seconds) {
-	const hours = (seconds / 3600).toFixed(0);
+	const hours = Math.floor(seconds / 3600);
 	const minutes = ((seconds % 3600) / 60).toFixed(0);
 	if (hours > 0) {
 		return (hours + "h " + minutes + " min");

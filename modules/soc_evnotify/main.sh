@@ -34,6 +34,29 @@ case $CHARGEPOINT in
 		;;
 esac
 
+incrementTimer(){
+	case $dspeed in
+		1)
+			# Regelgeschwindigkeit 10 Sekunden
+			ticksize=1
+			;;
+		2)
+			# Regelgeschwindigkeit 20 Sekunden
+			ticksize=2
+			;;
+		3)
+			# Regelgeschwindigkeit 60 Sekunden
+			ticksize=1
+			;;
+		*)
+			# Regelgeschwindigkeit unbekannt
+			ticksize=1
+			;;
+	esac
+	soctimer=$((soctimer+$ticksize))
+	echo $soctimer > $soctimerfile
+}
+
 soctimer=$(<$soctimerfile)
 openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 if (( soctimer < 4 )); then

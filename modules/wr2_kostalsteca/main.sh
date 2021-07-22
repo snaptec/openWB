@@ -9,7 +9,6 @@
 DMOD="PV" 
 Debug=$debug
 
-
 if (( $Debug > 1 )); then
 	measure=$(curl --connect-timeout 5 -s $pv2ip/measurements.xml)
 	openwbDebugLog ${DMOD} 2 "MEASURE: $measure"

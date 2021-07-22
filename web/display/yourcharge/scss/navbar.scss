@@ -1,0 +1,18 @@
+@import "vars.scss";
+
+.navbar {
+    justify-content: flex-start;
+    background-color: $dark-blue;
+    height: 70px;
+    font-size: 18px;
+    margin-bottom: 0;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    .flex-row {
+        align-items: center;
+    }
+    a {
+        color: #fff;
+    }
+}

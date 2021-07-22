@@ -21,7 +21,7 @@ wattbezug3=$(echo "scale=3 ; $wattbezug3 * 1000" | bc)
 wattbezug3=$(echo "$wattbezug3 / 1" | bc)
 
 if [ $wattbezug1 = '0' ] ; then
-		wattbezug1=$wattbezug
+	wattbezug1=$wattbezug
 fi
 
 #Zählerstand Import(kWh)

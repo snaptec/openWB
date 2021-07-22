@@ -1,19 +1,19 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 verbrauchernr = str(sys.argv[1])
 seradd = str(sys.argv[2])
-from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(seradd, port=8899)
-
-
 sdmid = int(sys.argv[3])
+
+client = ModbusTcpClient(seradd, port=8899)
 
 resp = client.read_input_registers(0x0006,2, unit=sdmid)
 al1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))
@@ -32,7 +32,6 @@ f = open(wattstring, 'w')
 f.write(str(watt))
 f.close()
 
-
 resp = client.read_input_registers(0x0048,2, unit=sdmid)
 vwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 vwh2 = float("%.3f" % vwh[0]) * int(1000)
@@ -41,7 +40,6 @@ vwhstring = "/var/www/html/openWB/ramdisk/verbraucher%s_wh" % (verbrauchernr)
 f = open(vwhstring, 'w')
 f.write(str(vwh3))
 f.close()
-
 
 resp = client.read_input_registers(0x004a,2, unit=sdmid)
 vwhe = struct.unpack('>f',struct.pack('>HH',*resp.registers))
@@ -52,7 +50,3 @@ vwhestring = "/var/www/html/openWB/ramdisk/verbraucher%s_whe" % (verbrauchernr)
 f = open(vwhestring, 'w')
 f.write(str(vwhe3))
 f.close()
-
-
-
-

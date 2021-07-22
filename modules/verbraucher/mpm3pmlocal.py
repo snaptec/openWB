@@ -1,18 +1,17 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusSerialClient
+
 verbrauchernr = str(sys.argv[1])
 seradd = str(sys.argv[2])
-from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
-                                stopbits=1, bytesize=8, timeout=1)
-
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
 sdmid = int(sys.argv[3])
 
@@ -37,7 +36,6 @@ f = open(whestring, 'w')
 f.write(str(ekwh))
 f.close()
 
-
 resp = client.read_input_registers(0x26,2, unit=sdmid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -47,4 +45,3 @@ wstring = "/var/www/html/openWB/ramdisk/verbraucher%s_watt" % (verbrauchernr)
 f = open(wstring, 'w')
 f.write(str(final))
 f.close()
-

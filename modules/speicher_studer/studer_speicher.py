@@ -1,16 +1,18 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
-import struct
-import binascii
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
+# import struct
+# import binascii
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
-ipaddress = str(sys.argv[1])
 from pymodbus.client.sync import ModbusTcpClient
+
+ipaddress = str(sys.argv[1])
+
 client = ModbusTcpClient(ipaddress, port=502)
 connection = client.connect()
 
@@ -67,4 +69,3 @@ f.write(str(bd*48))
 f.close()
 
 client.close()
-

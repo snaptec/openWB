@@ -76,6 +76,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
@@ -141,6 +142,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="1">SDM630 an EVU Kit angeschlossen</option>
 										</select>
 									</div>
 								</div>
@@ -282,6 +284,13 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label for="vartaspeicher2ip" class="col-md-4 col-form-label">IP Adresse des zweiten Speichers</label>
+									<div class="col">
+										<input class="form-control" type="text" name="vartaspeicher2ip" id="vartaspeicher2ip" value="<?php echo $vartaspeicher2ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12, wenn nicht vorhanden none eintragen</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label for="usevartamodbus" class="col-md-4 col-form-label">Ausleseart Modbus</label>
 									<div class="col">
 										<select name="usevartamodbus" id="usevartamodbus" class="form-control">
@@ -295,8 +304,16 @@
 						</div>
 
 						<div id="divspeicheralphaess" class="hide">
-							<div class="alert alert-info">
-								Keine Konfiguration erforderlich.
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
+									<div class="col">
+										<select name="alphav123" id="alphav123" class="form-control">
+											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
+											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
+										</select>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -657,6 +674,10 @@
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
 								}
+								if($('#speichermodul').val() == 'speicher_saxpower') {
+									showSection('#divspeicherip');
+								}
+
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');

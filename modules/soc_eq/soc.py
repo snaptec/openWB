@@ -22,6 +22,10 @@ myPid         = str(os.getpid())
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
 
+
+soc = None
+range = None
+
 def socDebugLog(message):
 	local_time = datetime.now(timezone.utc).astimezone()
 	print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": PID:"+ myPid + ": " + message)
@@ -174,7 +178,12 @@ if req_soc.status_code == 200:
 				range = entry[values]['value']
 			else:
 				socDebugLog("unknown entry: " + entry)
-
+	if not soc:
+		socDebugLog("SoC Value not filled " + req_soc.text)
+		soc = "0"
+	if not range:
+		socDebugLog("RangeElectric Value not filled " + req_soc.text)
+		range = "0"
 	socDebugLog("SOC: " + soc + " RANGE: " + range)
 	fd = open(soc_file,'w')
 	fd.write(str(soc))
