@@ -949,6 +949,7 @@
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
+										<option <?php if($pv2wattmodulold == "wr2_solarlog") echo "selected" ?> value="wr2_solarlog">SolarLog</option>
 										<option <?php if($pv2wattmodulold == "wr2_solax") echo "selected" ?> value="wr2_solax">Solax</option>
 										<option <?php if($pv2wattmodulold == "wr2_sungrow") echo "selected" ?> value="wr2_sungrow">Sungrow</option>
 										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
@@ -1070,6 +1071,18 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2solarlogdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="bezug2_solarlog_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug2_solarlog_ip" id="bezug2_solarlog_ip" value="<?php echo $bezug2_solarlog_ipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul.
+									</span>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
@@ -1080,6 +1093,7 @@
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
 								hideSection('#pv2piko2');
+								hideSection('#pv2solarlogdiv');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1122,6 +1136,9 @@
 									showSection('#pv2iddiv');
 									showSection('#pv2ip2div');
 									showSection('#pv2id2div');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_solarlog')   {
+									showSection('#pv2solarlogdiv');
 								}
 							}
 							$(function() {
