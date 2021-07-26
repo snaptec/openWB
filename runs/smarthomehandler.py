@@ -213,7 +213,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
         except:
-            measureportsdm = 8899
+            measureportsdm = "8899"
         argumentList[1] = prefixpy +'sdm630/sdm630.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
         argumentList.append(measureportsdm)
@@ -602,6 +602,7 @@ def on_message(client, userdata, msg):
 def getdevicevalues():
     global totalwatt
     global totalwattot
+    global totalminhaus
     for i in range(1, (numberOfSupportedDevices+1)):
         DeviceConfigured[i-1] = config.get('smarthomedevices', 'device_configured_'+str(i)) # list starts at 0
         if (DeviceConfigured[i-1] != DeviceConfiguredOld[i-1]) and (DeviceConfigured[i-1] == "0"):
@@ -620,6 +621,7 @@ def getdevicevalues():
     numberOfDevices = 0
     totalwatt = 0
     totalwattot = 0
+    totalminhaus = 0
     for n in DeviceConfigured:
         numberOfDevices += 1
         # prepare
@@ -675,6 +677,10 @@ def getdevicevalues():
                 device_acthorpower = int(config.get('smarthomedevices', 'device_acthorpower_'+str(numberOfDevices)))
             except:
                 device_acthorpower = 0
+            try:
+                device_homeconsumtion = int(config.get('smarthomedevices', 'device_homeconsumtion_'+str(numberOfDevices)))
+            except:
+                device_homeconsumtion = 0
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
@@ -753,6 +759,8 @@ def getdevicevalues():
                     totalwatt = totalwatt + watt
                 else:
                     totalwattot = totalwattot + watt
+                if (device_homeconsumtion == 0):
+                    totalminhaus = totalminhaus + watt
                 DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                 DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                 f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -819,8 +827,12 @@ def getdevicevalues():
     f = open(basePath+'/ramdisk/devicetotal_watt_other', 'w')
     f.write(str(totalwattot))
     f.close()
+    f = open(basePath+'/ramdisk/devicetotal_watt_hausmin', 'w')
+    f.write(str(totalminhaus))
+    f.close()
     logDebug(LOGLEVELDEBUG, "Total Watt abschaltbarer smarthomedevices: " + str(totalwatt)  )
     logDebug(LOGLEVELDEBUG, "Total Watt nichtabschaltbarer smarthomedevices: " + str(totalwattot) )
+    logDebug(LOGLEVELDEBUG, "Total Watt nicht im Hausverbrauch: " + str(totalminhaus) )
     publishmqtt()
 
 def turndevicerelais(nummer, zustand,ueberschussberechnung,updatecnt):
