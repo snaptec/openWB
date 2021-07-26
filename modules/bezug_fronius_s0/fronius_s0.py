@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf8
 import json
+import re
 import requests
 import sys
 
@@ -26,9 +27,9 @@ f.close()
 wattb=pvwatt + wattbezug
 
 #wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
-re='^[0-9]+$'
+regex='^[0-9]+$'
 ra='^-[0-9]+$'
-if re.search(re, wattbezug) == None:
+if re.search(regex, wattbezug) == None:
     if re.search(ra, wattbezug) == None:
         wattbezug=0
 
