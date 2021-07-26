@@ -27,13 +27,13 @@ if ! [ -z "$output" ]; then
 	if [[ $lla3 =~ $re ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/lla3
 	fi
-	if [[ $llv1 =~ $re ]] ; then
+	if [[ $llv1 =~ $rekwh ]] ; then
 		echo $llv1 > /var/www/html/openWB/ramdisk/llv1
 	fi
-	if [[ $llv2 =~ $re ]] ; then
+	if [[ $llv2 =~ $rekwh ]] ; then
 		echo $llv2 > /var/www/html/openWB/ramdisk/llv2
 	fi
-	if [[ $llv3 =~ $re ]] ; then
+	if [[ $llv3 =~ $rekwh ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llv3
 	fi
 
