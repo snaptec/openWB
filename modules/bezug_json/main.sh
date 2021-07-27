@@ -7,6 +7,8 @@ MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="MAIN"
 Debug=$debug
 
+python3 /var/www/html/openWB/modules/bezug_json/json.py $bezugjsonurl $bezugjsonkwh $einspeisungjsonkwh
+
 #For development only
 #Debug=1
 
@@ -14,24 +16,11 @@ openwbDebugLog ${DMOD} 2 "${bezugjsonwatt}"
 openwbDebugLog ${DMOD} 2 "${bezugjsonkwh}"
 openwbDebugLog ${DMOD} 2 "${einspeisungjsonkwh}"
 
-answer=$(curl --connect-timeout 5 -s $bezugjsonurl)
-evuwatt=$(echo $answer | jq -r "$bezugjsonwatt" | sed 's/\..*$//')
+evuwatt=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo ${evuwatt}
 openwbDebugLog  ${DMOD} 1 "Watt: ${evuwatt}"
-echo $evuwatt > /var/www/html/openWB/ramdisk/wattbezug
-
-if [ ! -z "${bezugjsonkwh}" ]; then
-	evuikwh=$(echo $answer | jq -r "$bezugjsonkwh")
-else
-	evuikwh=0
-fi
+evuikwh=$(</var/www/html/openWB/ramdisk/bezugkwh)
 openwbDebugLog ${DMOD} 1 "BezugkWh: ${evuikwh}"
-echo $evuikwh > /var/www/html/openWB/ramdisk/bezugkwh
-
-if [ ! -z "${einspeisungjsonkwh}" ]; then
-	evuekwh=$(echo $answer | jq -r "$einspeisungjsonkwh")
-else
-	evuekwh=0
-fi
+evuekwh=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
 openwbDebugLog ${DMOD} 1 "EinspeiskWh: ${evuekwh}"
-echo $evuekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+
