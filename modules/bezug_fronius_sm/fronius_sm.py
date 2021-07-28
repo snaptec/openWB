@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+
+import json
+import re
+import requests
+import sys
+
+froniusvar2 = str(sys.argv[1])
+froniuserzeugung = str(sys.argv[2])
+wrfroniusip = str(sys.argv[3])
+froniusmeterlocation = str(sys.argv[4])
+# for developement only
+# debug=1
+
+# Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
+# Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv).
+# Einspeiseleistung: PV-Leistung > Verbrauch, es wird Strom eingespeist
+# Bezugsleistug: PV-Leistung < Verbrauch, es wird Strom aus dem Netz bezogen
+
+# Fordere die Werte vom SmartMeter an.
+if froniusvar2 == "0":
+    # Hole die JSON Daten
+    params = (
+        ('Scope', 'Device'),
+        ('DeviceID', froniuserzeugung),
+    )
+    response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
+    response = json.loads(response_sm)
+    # Setze die für JSON Abruf benötigte DeviceID
+    response_json_id = response["Body"]["Data"]
+
+elif froniusvar2 == "1":
+    # Hole die JSON-Daten
+    params = (
+        ('Scope', 'System'),
+    )
+    response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
+    response = json.loads(response_sm)
+    # Setze die für JSON Abruf benötigte DeviceID
+    response_json_id = response["Body"]["Data"][froniuserzeugung]
+    # TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
+    # response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung&DataCollection=MeterRealtimeData")
+    # dann auch json_id wieder gleich:
+    # json_id=".Body.Data"
+
+elif froniusvar2 == "2":
+    # Hole die JSON-Daten
+    params = (
+        ('Scope', 'System'),
+    )
+    response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
+    response = json.loads(response_sm)
+    # Setze die für JSON Abruf benötigte DeviceID
+    response_json_id = response["Body"]["Data"][froniuserzeugung]
+    # TODO: meter_location für diese Variante korrekt ermitteln
+    # Überprüfe den Einbauort des SmartMeters.
+    meter_location = froniusmeterlocation
+
+    # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
+    wattbezug = int(response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"])
+    evuv1 = round(response_json_id["SMARTMETER_VOLTAGE_01_F64"], 2)
+    evuv2 = round(response_json_id["SMARTMETER_VOLTAGE_02_F64"], 2)
+    evuv3 = round(response_json_id["SMARTMETER_VOLTAGE_03_F64"], 2)
+    bezugw1 = round(response_json_id["SMARTMETER_POWERACTIVE_MEAN_01_F64"], 2)
+    bezugw2 = round(response_json_id["SMARTMETER_POWERACTIVE_MEAN_02_F64"], 2)
+    bezugw3 = round(response_json_id["SMARTMETER_POWERACTIVE_MEAN_03_F64"], 2)
+    # Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
+    # "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
+    bezuga1 = round(bezugw1 / evuv1, 2)
+    bezuga2 = round(bezugw2 / evuv2, 2)
+    bezuga3 = round(bezugw3 / evuv3, 2)
+    # TODO: ist dieser Parameter für diese Variante korrekt? sieht aus wie Copy-Paste
+    evuhz = round(response_json_id["Frequency_Phase_Average"], 2)
+    evupf1 = round(response_json_id["SMARTMETER_FACTOR_POWER_01_F64"], 2)
+    evupf2 = round(response_json_id["SMARTMETER_FACTOR_POWER_02_F64"], 2)
+    evupf3 = round(response_json_id["SMARTMETER_FACTOR_POWER_03_F64"], 2)
+    ikwh = response_json_id["SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64"]
+    ekwh = response_json_id["SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64"]
+
+# Auswertung für Variante0 und Variante1 gebündelt
+if froniusvar2 != "2":
+    # Überprüfe den Einbauort des SmartMeters.
+    meter_location = response_json_id["Meter_Location_Current"]
+
+    # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
+    wattbezug = int(response_json_id["PowerReal_P_Sum"])
+    evuv1 = round(response_json_id["Voltage_AC_Phase_1"], 2)
+    evuv2 = round(response_json_id["Voltage_AC_Phase_2"], 2)
+    evuv3 = round(response_json_id["Voltage_AC_Phase_3"], 2)
+    bezugw1 = round(response_json_id["PowerReal_P_Phase_1"], 2)
+    bezugw2 = round(response_json_id["PowerReal_P_Phase_2"], 2)
+    bezugw3 = round(response_json_id["PowerReal_P_Phase_3"], 2)
+    # Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
+    # "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
+    bezuga1 = round(bezugw1 / evuv1, 2)
+    bezuga2 = round(bezugw2 / evuv2, 2)
+    bezuga3 = round(bezugw3 / evuv3, 2)
+    evuhz = round(response_json_id["Frequency_Phase_Average"], 2)
+    evupf1 = round(response_json_id["PowerFactor_Phase_1"], 2)
+    evupf2 = round(response_json_id["PowerFactor_Phase_2"], 2)
+    evupf3 = round(response_json_id["PowerFactor_Phase_3"], 2)
+    ikwh = response_json_id["EnergyReal_WAC_Sum_Consumed"]
+    ekwh = response_json_id["EnergyReal_WAC_Sum_Produced"]
+
+if meter_location == "1":
+    # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
+    # PV Leistung wird gleichmäßig auf alle Phasen verteilt
+    # Spannungen und Leistungsfaktoren sind am Verbrauchszweig == Einspeisepunkt
+
+    # Lese die aktuelle PV-Leistung des Wechselrichters ein.
+    params = (
+        ('Scope', 'System)'),
+    )
+
+    response_fi = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
+    response = json.loads(response_fi)
+    # Basis ist die Leistungsangabe aus dem WR!
+    wattbezug = int(response["Body"]["Data"]["Site"]["P_Grid"])
+    pvwatt = int(response["Body"]["Data"]["Site"]["P_PV"])
+    # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
+    regex = '^-?[0-9]+$'
+    if re.search(pvwatt, regex) == None:
+        pvwatt = "0"
+    # Hier gehen wir mal davon aus, dass der Wechselrichter seine PV-Leistung gleichmäßig auf alle Phasen aufteilt.
+    bezugw1 = round(((-1 * bezugw1) - pvwatt/3), 2)
+    bezugw2 = round(((-1 * bezugw2) - pvwatt/3), 2)
+    bezugw3 = round(((-1 * bezugw3) - pvwatt/3), 2)
+    # Wegen der geänderten Leistungen sind die Ströme erneut zu berechnen
+    bezuga1 = round((bezugw1 / evuv1), 2)
+    bezuga2 = round((bezugw2 / evuv2), 2)
+    bezuga3 = round((bezugw3 / evuv3), 2)
+    # Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus dem Wechselrichter kam.
+    # ikwh=$(echo $response_sm | jq '.Body.Data.EnergyReal_WAC_Sum_Consumed')
+    ikwh = 0
+    # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
+    # ekwh=$(echo $response_fi | jq '.Body.Data.Site.E_Total')
+    ekwh = 0
+    with open("/var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation", "w") as f:
+        f.write(str(1))
+
+# Schreibe alle Werte in die Ramdisk.
+with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
+    f.write(str(wattbezug))
+with open("/var/www/html/openWB/ramdisk/evuv1", "w") as f:
+    f.write(str(evuv1))
+with open("/var/www/html/openWB/ramdisk/evuv2", "w") as f:
+    f.write(str(evuv2))
+with open("/var/www/html/openWB/ramdisk/evuv3", "w") as f:
+    f.write(str(evuv3))
+with open("/var/www/html/openWB/ramdisk/bezugw1", "w") as f:
+    f.write(str(bezugw1))
+with open("/var/www/html/openWB/ramdisk/bezugw2", "w") as f:
+    f.write(str(bezugw2))
+with open("/var/www/html/openWB/ramdisk/bezugw3", "w") as f:
+    f.write(str(bezugw3))
+with open("/var/www/html/openWB/ramdisk/bezuga1", "w") as f:
+    f.write(str(bezuga1))
+with open("/var/www/html/openWB/ramdisk/bezuga2", "w") as f:
+    f.write(str(bezuga2))
+with open("/var/www/html/openWB/ramdisk/bezuga3", "w") as f:
+    f.write(str(bezuga3))
+with open("/var/www/html/openWB/ramdisk/evuhz", "w") as f:
+    f.write(str(evuhz))
+with open("/var/www/html/openWB/ramdisk/evupf1", "w") as f:
+    f.write(str(evupf1))
+with open("/var/www/html/openWB/ramdisk/evupf2", "w") as f:
+    f.write(str(evupf2))
+with open("/var/www/html/openWB/ramdisk/evupf3", "w") as f:
+    f.write(str(evupf3))
+with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
+    f.write(str(ikwh))
+with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
+    f.write(str(ekwh))
+
+sys.exit([response_sm, meter_location, response_fi])
