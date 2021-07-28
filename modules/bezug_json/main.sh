@@ -7,7 +7,7 @@ MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="MAIN"
 Debug=$debug
 
-python3 /var/www/html/openWB/modules/bezug_json/json.py $bezugjsonurl $bezugjsonkwh $einspeisungjsonkwh
+python3 /var/www/html/openWB/modules/bezug_json/json.py $bezugjsonurl $bezugjsonwatt $bezugjsonkwh $einspeisungjsonkwh
 
 #For development only
 #Debug=1
