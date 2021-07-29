@@ -46,7 +46,7 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
         bezugwatt = int(bezugw - einspeisungw)
 if solarwattmethod == 1:  # Abruf über Gateway
     sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3)
-
+    sresponse = json.loads(sresponse)
     if len(str(sresponse)) < 10:
         with open(bezug_file, "r") as f:
             bezugwatt = f.read()
