@@ -14,7 +14,7 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py) 2>&1 > /dev/null)
+ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py $froniusvar2 $froniuserzeugung $wrfroniusip $froniusmeterlocation) 2>&1 > /dev/null)
 
 response_sm=$(echo $ret | awk '{print $1}' | tr -d '[' | tr -d ',')
 meter_location=$(echo $ret | awk '{print $2}' | tr -d ',')
@@ -32,7 +32,10 @@ bezuga3=$(</var/www/html/openWB/ramdisk/bezuga3)
 echo $wattbezug
 
 openwbDebugLog ${DMOD} 2 "EVU: response_sm: $response_sm"
-openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $"
+openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
+if [[ $meter_location == "1" ]]; then
+	openwbDebugLog ${DMOD} 1 "EVU: response_fi: $response_fi"
+fi
 openwbDebugLog ${DMOD} 1 "EVU: V: ${evuv1}/${evuv2}/${evuv3} A: ${bezuga1}/${bezuga2}/${bezuga3} W: ${bezugw1}/${bezugw2}/${bezugw3}/T${wattbezug}"
 
 

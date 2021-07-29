@@ -109,9 +109,8 @@ if meter_location == "1":
 
     # Lese die aktuelle PV-Leistung des Wechselrichters ein.
     params = (
-        ('Scope', 'System)'),
+        ('Scope', 'System'),
     )
-
     response_fi = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
     response = json.loads(response_fi)
     # Basis ist die Leistungsangabe aus dem WR!
@@ -122,9 +121,9 @@ if meter_location == "1":
     if re.search(pvwatt, regex) == None:
         pvwatt = "0"
     # Hier gehen wir mal davon aus, dass der Wechselrichter seine PV-Leistung gleichmäßig auf alle Phasen aufteilt.
-    bezugw1 = round(((-1 * bezugw1) - pvwatt/3), 2)
-    bezugw2 = round(((-1 * bezugw2) - pvwatt/3), 2)
-    bezugw3 = round(((-1 * bezugw3) - pvwatt/3), 2)
+    bezugw1 = round((-1 * bezugw1 - pvwatt/3), 2)
+    bezugw2 = round((-1 * bezugw2 - pvwatt/3), 2)
+    bezugw3 = round((-1 * bezugw3 - pvwatt/3), 2)
     # Wegen der geänderten Leistungen sind die Ströme erneut zu berechnen
     bezuga1 = round((bezugw1 / evuv1), 2)
     bezuga2 = round((bezugw2 / evuv2), 2)

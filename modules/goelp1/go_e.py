@@ -46,15 +46,15 @@ try:
         with open("/var/www/html/openWB/ramdisk/llkwh"+file_ext, "w") as f:
             f.write(str(llkwh))
 
-        if lp_num == 1:
-            rfid = output["uby"]
-            with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "r") as f:
-                oldrfid = f.read()
-            if rfid != oldrfid:
-                with open("/var/www/html/openWB/ramdisk/readtag", "w") as f:
-                    f.write(str(rfid))
-                with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "w") as f:
-                    f.write(str(rfid))
+    if lp_num == 1:
+        rfid = output["uby"]
+        with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "r") as f:
+            oldrfid = f.read()
+        if rfid != oldrfid:
+            with open("/var/www/html/openWB/ramdisk/readtag", "w") as f:
+                f.write(str(rfid))
+            with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "w") as f:
+                f.write(str(rfid))
     # car status 1 Ladestation bereit, kein Auto
     # car status 2 Auto lädt
     # car status 3 Warte auf Fahrzeug
