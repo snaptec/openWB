@@ -8,8 +8,7 @@ password = str(sys.argv[1])
 ip_address = str(sys.argv[2])
 
 def get_value(url, file):
-    output = requests.get(url, timeout = 2)
-    response=json.loads(output)
+    response = requests.get(url, timeout = 2).json()
     val = response["value"]
     f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
     f.write(str(val))

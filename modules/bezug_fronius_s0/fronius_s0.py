@@ -12,8 +12,7 @@ import sys
 primo = str(sys.argv[1])
 ip_address = str(sys.argv[2])
 
-output = requests.get('http://'+ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', timeout = 5)
-response=json.loads(output)
+response = requests.get('http://'+ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', timeout = 5).json()
 if primo == 1:
 	wattbezug=int(response["Body"]["Data"]["Site"]["P_Grid"])
 else:
@@ -42,8 +41,7 @@ f.close()
 # bei Smartmeter im Verbrauchszweig  entspricht das dem Gesamtverbrauch
 params = (('Scope', 'System'),)
 
-output = requests.get('http://'+ip_address+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout = 5)
-kwhtmp=json.loads(output)
+kwhtmp = requests.get('http://'+ip_address+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout = 5).json()
 # jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
 ikwh = kwhtmp["EnergyReal_WAC_Minus_Absolute"]
 ikwh = ikwh.replace(" ", "")

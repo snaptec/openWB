@@ -12,8 +12,7 @@ params = (
     ('meterId', id),
 )
 
-output = requests.get('https://api.discovergy.com/public/v1/last_reading', params=params, auth=(username, password), timeout = 3)
-response=json.loads(output)
+response = requests.get('https://api.discovergy.com/public/v1/last_reading', params=params, auth=(username, password), timeout = 3).json()
 
 einspeisungwh = response["values"]["energyOut"] / 10000000
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
