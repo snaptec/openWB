@@ -901,7 +901,7 @@
 										<div class="form-row vaRow mb-1">
 											<label for="u1p3ppause" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $u1p3ppauseold; ?> Sek</label>
 											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="u1p3ppause" id="u1p3ppause" min="2" max="15" step="1" value="<?php echo $u1p3ppauseold; ?>">
+												<input type="range" class="form-control-range rangeInput" name="u1p3ppause" id="u1p3ppause" min="2" max="150" step="1" value="<?php echo $u1p3ppauseold; ?>">
 											</div>
 										</div>
 										<span class="form-text small">

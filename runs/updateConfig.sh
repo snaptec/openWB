@@ -388,7 +388,7 @@ updateConfig(){
 	if ! grep -Fq "twcmanagerlp1port=" $ConfigFile; then
 		echo "twcmanagerlp1port=8080" >> $ConfigFile
 	fi
-	if ! grep -Fq "twcmangerlp2ip=" $ConfigFile; then
+	if ! grep -Fq "twcmanagerlp2ip=" $ConfigFile; then
 		echo "twcmanagerlp2ip='127.0.0.1'" >> $ConfigFile
 	fi
 	if ! grep -Fq "twcmanagerlp2port=" $ConfigFile; then
@@ -445,11 +445,17 @@ updateConfig(){
 	if ! grep -Fq "bezug_solarlog_ip=" $ConfigFile; then
 		echo "bezug_solarlog_ip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "bezug2_solarlog_ip=" $ConfigFile; then
+		echo "bezug2_solarlog_ip=192.168.0.12" >> $ConfigFile
+	fi
 	if ! grep -Fq "bezug_id=" $ConfigFile; then
 		echo "bezug_id=30" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezug_solarlog_speicherv=" $ConfigFile; then
 		echo "bezug_solarlog_speicherv=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug2_solarlog_speicherv=" $ConfigFile; then
+		echo "bezug2_solarlog_speicherv=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrfronius2ip=" $ConfigFile; then
 		echo "wrfronius2ip=none" >> $ConfigFile
@@ -1048,9 +1054,6 @@ updateConfig(){
 	fi
 	if ! grep -Fq "vartaspeicherip=" $ConfigFile; then
 		echo "vartaspeicherip=192.168.0.10" >> $ConfigFile
-	fi
-	if ! grep -Fq "vartaspeicher2ip=" $ConfigFile; then
-		echo "vartaspeicher2ip=none" >> $ConfigFile
 	fi
 	if ! grep -Fq "usevartamodbus=" $ConfigFile; then
 		echo "usevartamodbus=0" >> $ConfigFile
