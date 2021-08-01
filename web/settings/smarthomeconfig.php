@@ -103,6 +103,21 @@ $numDevices = 9;
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
 											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
 										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mqtt hide">
+											Generisches MQTT modul<br>
+											Wenn Einschaltbedigung erreicht (Beispiel hier mit Device 4)<br>
+											openWB/SmartHome/set/Devices/4/ReqRelay = 1<br>
+											openWB/SmartHome/set/Devices/4/Ueberschuss = in Watt<br>
+											Wenn Ausschaltbedigung erreicht<br>
+											openWB/SmartHome/set/Devices/4/ReqRelay = 0<br>
+											openWB/SmartHome/set/Devices/4/Ueberschuss = in Watt<br>
+											Bei der periodischen Abfrage wird die aktuelle Leistung<br>
+											openWB/SmartHome/set/Devices/4/Aktpower = in Watt erwartet<br>
+											und der aktuelle Zähler in Wattstunden wird hier erwartet<br>
+											openWB/SmartHome/set/Devices/4/Powerc<br>
+											wenn kein Zähler übergeben oder 0 übergeben wird, wird der Zähler selber gerechnet<br>
+											openWB/SmartHome/set/Devices/4/Ueberschuss = in Watt<br>
+										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-elwa hide">
 											Heizstab ELWA-E  der Firma my-PV<br>
 											Im Web Frontend vom Heizstab muss unter Steuerungs-Einstellungen der Parameter "Ansteuerungs-Typ = Modbus TCP" und "Power Timeout = 120 Sek" gesetzt werden.
@@ -289,7 +304,7 @@ $numDevices = 9;
 											<label for="device_finishTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Spätestens fertig um</label>
 											<div class="col">
 												<input id="device_finishTimeDevices<?php echo $devicenum; ?>" name="device_finishTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab.</span>
+												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Wenn das Gerät heute noch nicht eingeschaltet wurde, wird es unabhängig vom Überschuss eingeschaltet unter Berücksichtigung der Mindestlaufzeit, so dass es zur angegebenen Uhrzeit fertig ist.</span>
 											</div>
 										</div>
 
