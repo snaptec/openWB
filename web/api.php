@@ -135,4 +135,40 @@ if(isset($_GET["get"])) {
 		echo json_encode($json);
 	}
 }
+
+# HTTP-API as bridge to MQTT
+if(isset($_GET["topic"])) {
+	$topic = $_GET["topic"];
+	# writing topic
+	if(isset($_GET["message"])) {
+		$message = $_GET["message"];
+		$command = "mosquitto_pub -h localhost -t '$topic' -m '$message' 2>&1";
+		$output = exec($command);
+		# Skip an annoying warning because it doesn't cause any problems
+		$output = str_replace("Warning: Unable to locate configuration directory, default config not loaded.", "", $output);
+		# no output if mosquitto_pub was successful
+		if($output != ""){
+			echo "Error: $output";
+		}
+		else{
+			echo "Message '$message' successfully published to topic '$topic'!";
+		}
+	}
+	# reading topic
+	else{
+		$command = "mosquitto_sub -h localhost -t '$topic' -C 1 -W 1 2>&1";
+		$output = exec($command);
+		# Skip an annoying warning because it doesn't cause any problems
+		$output = str_replace("Warning: Unable to locate configuration directory, default config not loaded.", "", $output);
+		# no output if mosquitto_sub failed
+		if($output != ""){
+			echo $output;
+		}
+		else{
+			echo "Error: The topic '$topic' doesn't contain a retained value!";
+		}
+	}
+
+}
+
 ?>
