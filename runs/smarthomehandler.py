@@ -928,6 +928,14 @@ def conditions(nummer):
     except:
         finishtime = '00:00'
     try:
+        starttimedev = str(config.get('smarthomedevices', 'device_starttime_'+str(nummer)))
+    except:
+        starttimedev = '00:00'
+    try:
+        endtime = str(config.get('smarthomedevices', 'device_endtime_'+str(nummer)))
+    except:
+        endtime = '00:00'
+    try:
         startupdetection = int(config.get('smarthomedevices', 'device_startupdetection_'+str(nummer)))
     except:
         startupdetection = 0
@@ -957,11 +965,11 @@ def conditions(nummer):
     maxeinschaltdauer = int(config.get('smarthomedevices', 'device_maxeinschaltdauer_'+str(nummer))) * 60
     name = str(config.get('smarthomedevices', 'device_name_'+str(nummer)))
     #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " finishtime definiert " + str(finishtime) + ">" + str(DeviceOn[nummer-1]))
+    local_time = datetime.now(timezone.utc).astimezone()
+    localhour = int(local_time.strftime(format = "%H"))
+    localminute = int(local_time.strftime(format = "%M"))
+    localinsec = int(( localhour * 60 * 60 )  + (localminute * 60))
     if (finishtime != '00:00') and (DeviceOn[nummer-1] ==str("0")):
-        local_time = datetime.now(timezone.utc).astimezone()
-        localhour = int(local_time.strftime(format = "%H"))
-        localminute = int(local_time.strftime(format = "%M"))
-        localinsec = int(( localhour * 60 * 60 )  + (localminute * 60))
         finishhour = int(str("0") +str(finishtime).partition(':')[0])
         finishminute = int(str(finishtime)[-2:] )
         startspatsec = int(( finishhour * 60 * 60 )  + (finishminute * 60) - mineinschaltdauer)
@@ -1078,7 +1086,7 @@ def conditions(nummer):
             del DeviceCounters[str(nummer)+"ausverz"]
         except:
             pass
-        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle" + str(einschwelle) )
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle " + str(einschwelle) )
         if ( DeviceValues[str(nummer)+"relais"] == 0 ):
             #speichersocbeforestart
             #if ( speichersoc < speichersocbeforestart ):
@@ -1088,6 +1096,25 @@ def conditions(nummer):
             #    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " grösser gleich als Einschalt SoC " + str(speichersocbeforestart) + " , pruefe weiter")
             logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) + " Ueberschuss " + str(devuberschuss))
             logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung))
+            #check for valid time frame
+            #starttimedev
+            #endtime
+            if (starttimedev != '00:00'):
+                starthour = int(str("0") +str(starttimedev).partition(':')[0])
+                startminute = int(str(starttimedev)[-2:] )
+                logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Fruehster Start um definiert " + str(starthour) + ":" +  str ('%.2d' % startminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute))
+                if ((starthour > localhour )  or  ((starthour == localhour ) and (startminute >=localminute) )):
+                    logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Fruehster Start noch nicht erreicht ")
+                    return
+            if (endtime != '00:00'):
+                endhour = int(str("0") +str(endtime).partition(':')[0])
+                endminute = int(str(endtime)[-2:] )
+                logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Spaetester Start um definiert " + str(endhour) + ":" +  str ('%.2d' % endminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute))
+                if ((endhour > localhour )  or  ((endhour == localhour ) and (endminute >=localminute) )):
+                    pass
+                else:
+                    logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Spaetester Start vorbei ")
+                    return
             #speichersocbeforestart
             if  str(nummer)+"einverz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
