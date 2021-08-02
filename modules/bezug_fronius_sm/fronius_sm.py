@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import re
 import requests
 import sys
@@ -25,7 +24,7 @@ if froniusvar2 == "0":
         ('DeviceID', froniuserzeugung),
     )
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
-    response = json.loads(response_sm)
+    response = response_sm.json()
     # Setze die für JSON Abruf benötigte DeviceID
     response_json_id = response["Body"]["Data"]
 
@@ -35,7 +34,7 @@ elif froniusvar2 == "1":
         ('Scope', 'System'),
     )
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
-    response = json.loads(response_sm)
+    response = response_sm.json()
     # Setze die für JSON Abruf benötigte DeviceID
     response_json_id = response["Body"]["Data"][froniuserzeugung]
     # TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
@@ -49,7 +48,7 @@ elif froniusvar2 == "2":
         ('Scope', 'System'),
     )
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
-    response = json.loads(response_sm)
+    response = response_sm.json()
     # Setze die für JSON Abruf benötigte DeviceID
     response_json_id = response["Body"]["Data"][froniuserzeugung]
     # TODO: meter_location für diese Variante korrekt ermitteln
@@ -112,7 +111,7 @@ if meter_location == "1":
         ('Scope', 'System'),
     )
     response_fi = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
-    response = json.loads(response_fi)
+    response = response_fi.json()
     # Basis ist die Leistungsangabe aus dem WR!
     wattbezug = int(response["Body"]["Data"]["Site"]["P_Grid"])
     pvwatt = int(response["Body"]["Data"]["Site"]["P_PV"])
@@ -136,6 +135,8 @@ if meter_location == "1":
     ekwh = 0
     with open("/var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation", "w") as f:
         f.write(str(1))
+else:
+    response_fi = ""
 
 # Schreibe alle Werte in die Ramdisk.
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:

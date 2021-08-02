@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import requests
 import sys
 
@@ -11,8 +10,7 @@ speichermodul = str(sys.argv[2])
 params = (
     ('dxsEntries', ['33556736', '251658753', '83887106', '83887362', '83887618)']),
 )
-response = requests.get('http://'+wrkostalpikoip+'/api/dxs.json', params=params, timeout=3)
-pvwatttmp = json.loads(response)
+pvwatttmp = requests.get('http://'+wrkostalpikoip+'/api/dxs.json', params=params, timeout=3).json()
 # aktuelle Ausgangsleistung am WR [W]
 pvwatt = int(pvwatttmp["dxsEntries"][0]["value"])
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import re
 import requests
 import sys
@@ -31,8 +30,7 @@ elif lp_num == 3:
     stat_ext = "lp3"
 
 try:
-    response = requests.get('http://'+goeip+'/status', timeout=goetimeout)
-    output = json.loads(response)
+    output = requests.get('http://'+goeip+'/status', timeout=goetimeout).json()
     get_value("llaktuell"+file_ext, 11, True)
     get_value("lla"+file_ext+"1", 4, True)
     get_value("lla"+file_ext+"2", 5, True)
