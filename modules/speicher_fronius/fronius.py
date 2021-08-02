@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import re
 import requests
 import sys
@@ -11,8 +10,7 @@ wrfroniusip = str(sys.argv[1])
 params = (
     ('Scope', 'System'),
 )
-response = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=5)
-response = json.loads(response)
+response = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=5).json()
 speicherwatt = int(response["Body"]["Data"]["Site"]["P_Akku"])
 speicherwatt = speicherwatt * -1
 

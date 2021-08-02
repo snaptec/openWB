@@ -8,8 +8,7 @@ battjsonurl = str(sys.argv[1])
 battjsonwatt = str(sys.argv[2]).replace(".", "")
 battjsonsoc = str(sys.argv[3]).replace(".", "")
 
-response = requests.get('http://'+battjsonurl, timeout=5)
-response = json.loads(response)
+response = requests.get(battjsonurl, timeout=5).json()
 speicherleistung = int(response[battjsonwatt])
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(speicherleistung))

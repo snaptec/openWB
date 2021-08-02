@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import datetime
-import json
 import requests
 import sys
 
@@ -36,8 +35,7 @@ def get_value(key):
 
 
 if solarwattmethod == 0:  # Abruf über Energy Manager
-    sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=5)
-    sresponse = json.loads(sresponse)
+    sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=5).json()
     if len(str(sresponse)) < 10:
         sys.exit(1)
     
@@ -49,8 +47,7 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
 
 
 if solarwattmethod == 1: 	#Abruf über Gateway
-    sresponse=requests.get('http://'+speicher1_ip2+':8080/', timeout=3)
-    sresponse = json.loads(sresponse)
+    sresponse=requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
     if len(str(sresponse)) < 10:
         sys.exit(1)
     

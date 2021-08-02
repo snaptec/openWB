@@ -9,6 +9,8 @@ bydhvuser = str(sys.argv[2])
 bydhvpass = str(sys.argv[3])
 
 response = requests.get('http://'+bydhvip+'/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
+response.encoding = 'utf-8'
+response = response.text
 response = response.split("\n")
 for line in response:
     if "SOC:" in response[line]:
@@ -21,6 +23,8 @@ with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(soc))
 
 response = requests.get('http://'+bydhvip+'/asp/Home.asp', auth=(bydhvuser, bydhvpass))
+response.encoding = 'utf-8'
+response = response.text
 response = response.split("\n")
 for line in response:
     if "Power:" in response[line]:

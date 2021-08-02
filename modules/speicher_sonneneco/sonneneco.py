@@ -20,25 +20,32 @@ def check_write_value(value, file):
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems
 if sonnenecoalternativ == 2:
-    speichersoc = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M05', timeout=5)
+    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M05', timeout=5)
+    response.encoding = 'utf-8'
+    speichersoc = response.text.replace("\n", "")
     speichersoc = int(speichersoc)
-    speicherentladung = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M01', timeout=5)
-    speicherladung = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M02', timeout=5)
+    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M01', timeout=5)
+    response.encoding = 'utf-8'
+    speicherentladung = response.text.replace("\n", "")
+    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M02', timeout=5)
+    response.encoding = 'utf-8'
+    speicherladung = response.text.replace("\n", "")
     speicherladung = int(speicherladung)
     speicherentladung = int(speicherentladung)
     speicherwatt = speicherladung - speicherentladung
     # wenn Batterie aus bzw. keine Antwort ersetze leeren Wert durch eine 0
     check_write_value(speicherwatt, "speicherleistung")
     check_write_value(speichersoc, "speichersoc")
-    pvwatt = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M03', timeout=5)
+    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M03', timeout=5)
+    response.encoding = 'utf-8'
+    pvwatt = response.text.replace("\n", "")
     pvwatt = int(pvwatt)
     pvwatt = pvwatt * -1
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
 else:
     if sonnenecoalternativ == 0:
-        speicherantwort = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery', timeout=5)
-        speicherantwort = json.loads(speicherantwort)
+        speicherantwort = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery', timeout=5).json()
         speichersoc = int(speicherantwort["M05"])
         speicherentladung = int(speicherantwort["M34"])
         speicherladung = int(speicherantwort["M35"])
@@ -47,8 +54,7 @@ else:
         check_write_value(speicherwatt, "speicherleistung")
         check_write_value(speichersoc, "speichersoc")
     else:
-        speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5)
-        speicherantwort = json.loads(speicherantwort)
+        speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5).json()
         speicherwatt = speicherantwort["Pac_total_W"]
         speichersoc = speicherantwort["USOC"]
         speicherpvwatt = speicherantwort["Production_W"]

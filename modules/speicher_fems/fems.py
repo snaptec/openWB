@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import re
 import requests
 import sys
@@ -11,8 +10,7 @@ femsip = str(sys.argv[3])
 
 
 def get_value(url_ending, file=None):
-    response = requests.get("http://x:"+femskacopw+"@"+femsip+":8084/rest/channel/"+url_ending)
-    response = json.loads(response)
+    response = requests.get("http://x:"+femskacopw+"@"+femsip+":8084/rest/channel/"+url_ending).json()
     value = response["value"]
     if file != None:
         if file == "speichersoc":
