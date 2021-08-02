@@ -22,7 +22,7 @@ with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(speicherwatt))
 
 speichersoc = int(response["Body"]["Data"]["Inverters"]["1"]["SOC"])
-if re.search(speichersoc, ra) == None:
+if re.search(ra, speichersoc) == None:
     speichersoc = "0"
 with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(speichersoc))

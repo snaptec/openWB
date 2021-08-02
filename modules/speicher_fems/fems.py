@@ -23,13 +23,13 @@ def get_value(url_ending, file=None):
 
 
 if multifems == "0":
-    get_value("speichersoc", "ess0/Soc")
-    get_value("speicherikwh", "ess0/ActiveChargeEnergy")
-    get_value("speicherekwh", "ess0/ActiveDischargeEnergy")
+    get_value("ess0/Soc", "speichersoc")
+    get_value("ess0/ActiveChargeEnergy", "speicherikwh")
+    get_value("ess0/ActiveDischargeEnergy", "speicherekwh")
 else:
-    get_value("speichersoc", "ess2/Soc")
-    get_value("speicherikwh", "ess2/ActiveChargeEnergy")
-    get_value("speicherekwh", "ess2/ActiveDischargeEnergy")
+    get_value("ess2/Soc", "speichersoc")
+    get_value("ess2/ActiveChargeEnergy", "speicherikwh")
+    get_value("ess2/ActiveDischargeEnergy", "speicherekwh")
 
 grid = get_value("_sum/GridActivePower")
 pv = get_value("_sum/ProductionActivePower")

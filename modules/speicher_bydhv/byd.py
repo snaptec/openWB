@@ -15,6 +15,7 @@ response = response.split("\n")
 for line in response:
     if "SOC:" in response[line]:
         response = response[line:line+2]
+        response = ''.join(response)
         break
 response = response.replace("%", "")
 group = re.search("^.*value=$", response).group()
@@ -29,6 +30,7 @@ response = response.split("\n")
 for line in response:
     if "Power:" in response[line]:
         response = response[line:line+2]
+        response = ''.join(response)
         break
 response = response.replace(">", "")
 group = re.search("^.*value=$", response).group()
