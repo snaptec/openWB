@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import re
 import requests
 import sys
@@ -10,8 +9,7 @@ bezug_smartme_user = str(sys.argv[2])
 bezug_smartme_pass = str(sys.argv[3])
 
 # Daten einlesen
-response = requests.get('http://'+bezug_smartme_url, auth=(bezug_smartme_user, bezug_smartme_pass), timeout=10)
-response = json.loads(response)
+response = requests.get(bezug_smartme_url, auth=(bezug_smartme_user, bezug_smartme_pass), timeout=10).json()
 
 # Aktuelle Leistung (kW --> W)
 wattbezug = response["ActivePower"]

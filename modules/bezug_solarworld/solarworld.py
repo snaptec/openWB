@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import re
 import requests
 import sys
@@ -8,8 +7,7 @@ import sys
 solarworld_emanagerip = str(sys.argv[1])
 
 # Auslesen eines Solarworl eManagers über die integrierte JSON-API
-response = requests.get('http://'+solarworld_emanagerip+'/rest/solarworld/lpvm/powerAndBatteryData', timeout=5)
-emanagerantwort = json.loads(response)
+emanagerantwort = requests.get('http://'+solarworld_emanagerip+'/rest/solarworld/lpvm/powerAndBatteryData', timeout=5).json()
 
 em_in_watt = emanagerantwort["PowerIn"]
 em_out_watt = emanagerantwort["PowerOut"]

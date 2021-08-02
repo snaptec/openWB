@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import requests
 import sys
 
@@ -19,8 +18,7 @@ if sonnenecoalternativ == 2:
         f.write(str(wattbezug))
 else:
     if sonnenecoalternativ == 1:
-        speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5)
-        speicherantwort = json.loads(speicherantwort)
+        speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5).json()
         wattbezug = speicherantwort["GridFeedIn_W"]
         # Negativ ist Verbrauch, positiv Einspeisung
         wattbezug = wattbezug * -1

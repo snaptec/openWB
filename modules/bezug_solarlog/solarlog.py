@@ -9,8 +9,7 @@ bezug_solarlog_speicherv = str(sys.argv[1])
 
 data = {"801": {"170": None}}
 data = json.dumps(data)
-response = requests.post('http://'+bezug_solarlog_ip+'/getjp', data=data, timeout=5)
-response = json.loads(response)
+response = requests.post('http://'+bezug_solarlog_ip+'/getjp', data=data, timeout=5).json()
 
 
 pvwatt = response["801"]["170"]["101"]

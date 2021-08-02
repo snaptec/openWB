@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import datetime
-import json
 import requests
 import sys
 
@@ -26,8 +25,7 @@ def debugLog(msg):
 
 
 if solarwattmethod == 0:  # Abruf über Energy Manager
-    sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3)
-    sresponse = json.loads(sresponse)
+    sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
     if len(str(sresponse)) < 10:
         with open(bezug_file, "r") as f:
             bezugwatt = f.read()
@@ -45,8 +43,7 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
                         bezugw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
         bezugwatt = int(bezugw - einspeisungw)
 if solarwattmethod == 1:  # Abruf über Gateway
-    sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3)
-    sresponse = json.loads(sresponse)
+    sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
     if len(str(sresponse)) < 10:
         with open(bezug_file, "r") as f:
             bezugwatt = f.read()
