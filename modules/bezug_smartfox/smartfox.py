@@ -26,7 +26,8 @@ headers = {
 }
 
 response = requests.get('http://'+bezug_smartfox_ip+'/values.xml', headers=headers, timeout=10)
-
+response.encoding = 'utf-8'
+response = response.text.replace("\n", "")
 # Version ermitteln
 version = None
 tree = ET.parse(response)

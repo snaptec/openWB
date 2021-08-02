@@ -6,7 +6,9 @@ import sys
 
 def get_value(url, file):
     if url != "none":
-        value = requests.get('http://'+url, timeout=5)
+        response = requests.get('http://'+url, timeout=5)
+        response.encoding = 'utf-8'
+        value = response.text.replace("\n", "")
         with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
             f.write(str(value))
 
@@ -18,7 +20,9 @@ bezug_http_l1_url = str(sys.argv[4])
 bezug_http_l2_url = str(sys.argv[5])
 bezug_http_l3_url = str(sys.argv[6])
 
-wattbezug = requests.get('http://'+bezug_http_w_url, timeout=10)
+response = requests.get('http://'+bezug_http_w_url, timeout=10)
+response.encoding = 'utf-8'
+wattbezug = response.text.replace("\n", "")
 regex = '^-?[0-9]+$'
 if re.search(regex, wattbezug) == None:
     wattbezug = "0"

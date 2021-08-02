@@ -49,8 +49,7 @@ else:
 #
 headers = {'Content-Type': 'application/json', }
 data = json.dumps({"auth_key": session_key})
-response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5)
-response = json.loads(response)
+response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
 authchk = response['auth']
 #
 # Pruefen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
@@ -58,8 +57,7 @@ authchk = response['auth']
 if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
     headers = {'Content-Type': 'application/json', }
     data = json.dumps({"password": ess_pass})
-    response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5)
-    response = json.loads(response)
+    response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
     session_key = response["auth_key"]
     outjson = {"auth_key": session_key}
     #
@@ -67,7 +65,7 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
     #
     headers = {'Content-Type': 'application/json', }
     data = json.dumps(outjson)
-    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5)
+    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
     #
     # Sessionkey in der Ramdisk abspeichern
     #
@@ -92,8 +90,7 @@ arr_pos = monat
 
 headers = {'Content-Type': 'application/json', }
 data = json.dumps({"auth_key": session_key, "year": str(jahr)})
-response = requests.post(ess_url+'/v1/user/graph/load/year', headers=headers, data=data, verify=False, timeout=5)
-response = json.loads(response)
+response = requests.post(ess_url+'/v1/user/graph/load/year', headers=headers, data=data, verify=False, timeout=5).json()
 ikwh = response["loginfo"][arr_pos]["total_purchase"]
 ikwh = ikwh.replace("kwh", "")
 ikwh = int(ikwh)

@@ -10,8 +10,7 @@ bezugjsonwatt = str(sys.argv[2]).replace(".", "")
 bezugjsonkwh = str(sys.argv[3]).replace(".", "")
 einspeisungjsonkwh = str(sys.argv[4]).replace(".", "")
 
-response = requests.get("http://"+bezugjsonurl, timeout=5)
-answer = json.loads(response)
+answer = requests.get("http://"+bezugjsonurl, timeout=5).json()
 evuwatt = int(answer[bezugjsonwatt])
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
     f.write(str(evuwatt))
