@@ -1,36 +1,41 @@
 #!/usr/bin/env python3
-
-import datetime
+from datetime import datetime, timezone
+import os
 import requests
 import sys
+import traceback
 
-base_dir = str(sys.argv[1])
-debug = str(sys.argv[2])
-speicher1_ip = str(sys.argv[3])
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
 
-ramdisk_dir = base_dir+"/ramdisk"
-module = "PV"
-logfile = ramdisk_dir+"/openWB.log"
+speicher1_ip = str(sys.argv[1])
 
 
-def debugLog(msg):
-    if debug > 0:
-        timestamp = datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-        with open(logfile, "a") as f:
-            f.write(str(timestamp)+": "+str(module)+": "+msg)
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
 
 
-sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3)
-sresponse = sresponse.json()
+if Debug >= 2:
+    DebugLog('PV Solarwatt IP:' + speicher1_ip)
 
-for item in sresponse["result"]["items"]:
-    if "tagValues" in sresponse["result"]["items"][item]:
-        if "PowerProduced" in sresponse["result"]["items"][item]["tagValues"]:
-            if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]:
-                pvwatt = int(sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]["value"])
-                break
-debugLog("PV-Leistung: "+str(pvwatt)+" W")
+
+sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
+
+try:
+    for item in sresponse["result"]["items"]:
+        if "tagValues" in sresponse["result"]["items"][item]:
+            if "PowerProduced" in sresponse["result"]["items"][item]["tagValues"]:
+                if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]:
+                    pvwatt = int(sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]["value"])
+                    break
+except:
+    traceback.print_exc()
+    exit(1)
 pvwatt = pvwatt * -1
-
+if Debug >= 1:
+    DebugLog("PV-Leistung: "+str(pvwatt)+" W")
 with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
     f.write(str(pvwatt))
+
+exit(0)
