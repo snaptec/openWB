@@ -16,7 +16,7 @@ def get_value(file, field, scale=False):
 
 lp_num = str(sys.argv[1])
 goeip = str(sys.argv[2])
-goetimeout = str(sys.argv[3])
+goetimeout = int(sys.argv[3])
 
 rekwh = '^[-+]?[0-9]+\.?[0-9]*$'
 
