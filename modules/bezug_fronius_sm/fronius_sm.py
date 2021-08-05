@@ -3,13 +3,27 @@
 import re
 import requests
 import sys
+import traceback
 
 froniusvar2 = str(sys.argv[1])
 froniuserzeugung = str(sys.argv[2])
 wrfroniusip = str(sys.argv[3])
 froniusmeterlocation = str(sys.argv[4])
-# for developement only
-# debug=1
+
+def get_rounded_value(response, key):
+    try:
+        value = round(response[key], 2)
+        return value
+    except:
+        traceback.print_exc()
+
+def get_int_value(response, key):
+    try:
+        value = int(response[key])
+        return value
+    except:
+        traceback.print_exc()
+
 
 # Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
 # Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv).
@@ -26,7 +40,10 @@ if froniusvar2 == "0":
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
     response = response_sm.json()
     # Setze die für JSON Abruf benötigte DeviceID
-    response_json_id = response["Body"]["Data"]
+    try:
+        response_json_id = response["Body"]["Data"]
+    except:
+        traceback.print_exc()
 
 elif froniusvar2 == "1":
     # Hole die JSON-Daten
@@ -36,7 +53,10 @@ elif froniusvar2 == "1":
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
     response = response_sm.json()
     # Setze die für JSON Abruf benötigte DeviceID
-    response_json_id = response["Body"]["Data"][froniuserzeugung]
+    try:
+        response_json_id = response["Body"]["Data"][froniuserzeugung]
+    except:
+        traceback.print_exc()
     # TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
     # response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung&DataCollection=MeterRealtimeData")
     # dann auch json_id wieder gleich:
@@ -50,56 +70,74 @@ elif froniusvar2 == "2":
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
     response = response_sm.json()
     # Setze die für JSON Abruf benötigte DeviceID
-    response_json_id = response["Body"]["Data"][froniuserzeugung]
+    try:
+        response_json_id = response["Body"]["Data"][froniuserzeugung]
+    except:
+        traceback.print_exc()
     # TODO: meter_location für diese Variante korrekt ermitteln
     # Überprüfe den Einbauort des SmartMeters.
     meter_location = froniusmeterlocation
 
     # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
-    wattbezug = int(response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"])
-    evuv1 = round(response_json_id["SMARTMETER_VOLTAGE_01_F64"], 2)
-    evuv2 = round(response_json_id["SMARTMETER_VOLTAGE_02_F64"], 2)
-    evuv3 = round(response_json_id["SMARTMETER_VOLTAGE_03_F64"], 2)
-    bezugw1 = round(response_json_id["SMARTMETER_POWERACTIVE_MEAN_01_F64"], 2)
-    bezugw2 = round(response_json_id["SMARTMETER_POWERACTIVE_MEAN_02_F64"], 2)
-    bezugw3 = round(response_json_id["SMARTMETER_POWERACTIVE_MEAN_03_F64"], 2)
+    wattbezug = get_int_value(response_json_id, "SMARTMETER_POWERACTIVE_MEAN_SUM_F64")
+    evuv1 = get_rounded_value(response_json_id, "SMARTMETER_VOLTAGE_01_F64")
+    evuv2 = get_rounded_value(response_json_id, "SMARTMETER_VOLTAGE_02_F64")
+    evuv3 = get_rounded_value(response_json_id, "SMARTMETER_VOLTAGE_03_F64")
+    bezugw1 = get_rounded_value(response_json_id, "SMARTMETER_POWERACTIVE_MEAN_01_F64")
+    bezugw2 = get_rounded_value(response_json_id, "SMARTMETER_POWERACTIVE_MEAN_02_F64")
+    bezugw3 = get_rounded_value(response_json_id, "SMARTMETER_POWERACTIVE_MEAN_03_F64")
     # Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
     # "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
     bezuga1 = round(bezugw1 / evuv1, 2)
     bezuga2 = round(bezugw2 / evuv2, 2)
     bezuga3 = round(bezugw3 / evuv3, 2)
     # TODO: ist dieser Parameter für diese Variante korrekt? sieht aus wie Copy-Paste
-    evuhz = round(response_json_id["Frequency_Phase_Average"], 2)
-    evupf1 = round(response_json_id["SMARTMETER_FACTOR_POWER_01_F64"], 2)
-    evupf2 = round(response_json_id["SMARTMETER_FACTOR_POWER_02_F64"], 2)
-    evupf3 = round(response_json_id["SMARTMETER_FACTOR_POWER_03_F64"], 2)
-    ikwh = response_json_id["SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64"]
-    ekwh = response_json_id["SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64"]
+    evuhz = get_rounded_value(response_json_id, "Frequency_Phase_Average")
+    evupf1 = get_rounded_value(response_json_id, "SMARTMETER_FACTOR_POWER_01_F64")
+    evupf2 = get_rounded_value(response_json_id, "SMARTMETER_FACTOR_POWER_02_F64")
+    evupf3 = get_rounded_value(response_json_id, "SMARTMETER_FACTOR_POWER_03_F64")
+    try:
+        ikwh = response_json_id["SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64"]
+    except:
+        traceback.print_exc()
+    try:
+        ekwh = response_json_id["SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64"]
+    except:
+        traceback.print_exc()
 
 # Auswertung für Variante0 und Variante1 gebündelt
 if froniusvar2 != "2":
     # Überprüfe den Einbauort des SmartMeters.
-    meter_location = response_json_id["Meter_Location_Current"]
+    try:
+        meter_location = response_json_id["Meter_Location_Current"]
+    except:
+        traceback.print_exc()
 
     # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
-    wattbezug = int(response_json_id["PowerReal_P_Sum"])
-    evuv1 = round(response_json_id["Voltage_AC_Phase_1"], 2)
-    evuv2 = round(response_json_id["Voltage_AC_Phase_2"], 2)
-    evuv3 = round(response_json_id["Voltage_AC_Phase_3"], 2)
-    bezugw1 = round(response_json_id["PowerReal_P_Phase_1"], 2)
-    bezugw2 = round(response_json_id["PowerReal_P_Phase_2"], 2)
-    bezugw3 = round(response_json_id["PowerReal_P_Phase_3"], 2)
+    wattbezug = get_int_value(response_json_id, "PowerReal_P_Sum")
+    evuv1 = get_rounded_value(response_json_id, "Voltage_AC_Phase_1")
+    evuv2 = get_rounded_value(response_json_id, "Voltage_AC_Phase_2")
+    evuv3 = get_rounded_value(response_json_id, "Voltage_AC_Phase_3")
+    bezugw1 = get_rounded_value(response_json_id, "PowerReal_P_Phase_1")
+    bezugw2 = get_rounded_value(response_json_id, "PowerReal_P_Phase_2")
+    bezugw3 = get_rounded_value(response_json_id, "PowerReal_P_Phase_3")
     # Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
     # "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
     bezuga1 = round(bezugw1 / evuv1, 2)
     bezuga2 = round(bezugw2 / evuv2, 2)
     bezuga3 = round(bezugw3 / evuv3, 2)
-    evuhz = round(response_json_id["Frequency_Phase_Average"], 2)
-    evupf1 = round(response_json_id["PowerFactor_Phase_1"], 2)
-    evupf2 = round(response_json_id["PowerFactor_Phase_2"], 2)
-    evupf3 = round(response_json_id["PowerFactor_Phase_3"], 2)
-    ikwh = response_json_id["EnergyReal_WAC_Sum_Consumed"]
-    ekwh = response_json_id["EnergyReal_WAC_Sum_Produced"]
+    evuhz = get_rounded_value(response_json_id, "Frequency_Phase_Average")
+    evupf1 = get_rounded_value(response_json_id, "PowerFactor_Phase_1")
+    evupf2 = get_rounded_value(response_json_id, "PowerFactor_Phase_2")
+    evupf3 = get_rounded_value(response_json_id, "PowerFactor_Phase_3")
+    try:
+        ikwh = response_json_id["EnergyReal_WAC_Sum_Consumed"]
+    except:
+        traceback.print_exc()
+    try:
+        ekwh = response_json_id["EnergyReal_WAC_Sum_Produced"]
+    except:
+        traceback.print_exc()
 
 if meter_location == "1":
     # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
@@ -113,8 +151,14 @@ if meter_location == "1":
     response_fi = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
     response = response_fi.json()
     # Basis ist die Leistungsangabe aus dem WR!
-    wattbezug = int(response["Body"]["Data"]["Site"]["P_Grid"])
-    pvwatt = int(response["Body"]["Data"]["Site"]["P_PV"])
+    try:
+        wattbezug = int(response["Body"]["Data"]["Site"]["P_Grid"])
+    except:
+        traceback.print_exc()
+    try:
+        pvwatt = int(response["Body"]["Data"]["Site"]["P_PV"])
+    except:
+        traceback.print_exc()
     # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
     regex = '^-?[0-9]+$'
     if re.search(pvwatt, regex) == None:

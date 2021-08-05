@@ -2,6 +2,7 @@
 
 import requests
 import sys
+import traceback
 
 wrkostalpikoip = str(sys.argv[1])
 speichermodul = str(sys.argv[2])
@@ -12,7 +13,10 @@ params = (
 )
 pvwatttmp = requests.get('http://'+wrkostalpikoip+'/api/dxs.json', params=params, timeout=3).json()
 # aktuelle Ausgangsleistung am WR [W]
-pvwatt = int(pvwatttmp["dxsEntries"][0]["value"])
+try:
+    pvwatt = int(pvwatttmp["dxsEntries"][0]["value"])
+except:
+    traceback.print_exc()
 
 if pvwatt > 5:
     pvwatt = pvwatt*-1
@@ -21,15 +25,27 @@ if pvwatt > 5:
 with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
     f.write(pvwatt)
 # Gesamtzählerstand am WR [kWh]
-pvkwh = int(pvwatttmp["dxsEntries"][1]["value"])
+try:
+    pvkwh = int(pvwatttmp["dxsEntries"][1]["value"])
+except:
+    traceback.print_exc()
 pvkwh = pvkwh*1000
 # zur weiteren verwendung im webinterface
 with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
     f.write(str(pvkwh))
 
-bezugw1 = int(pvwatttmp["dxsEntries"][2]["value"])
-bezugw2 = int(pvwatttmp["dxsEntries"][3]["value"])
-bezugw3 = int(pvwatttmp["dxsEntries"][4]["value"])
+try:
+    bezugw1 = int(pvwatttmp["dxsEntries"][2]["value"])
+except:
+    traceback.print_exc()
+try:
+    bezugw2 = int(pvwatttmp["dxsEntries"][3]["value"])
+except:
+    traceback.print_exc()
+try:
+    bezugw3 = int(pvwatttmp["dxsEntries"][4]["value"])
+except:
+    traceback.print_exc()
 if speichermodul == "speicher_bydhv":
     with open("/var/www/html/openWB/ramdisk/speicherleistung", "r") as f:
         speicherleistung = f.read()
