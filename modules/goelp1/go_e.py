@@ -3,15 +3,18 @@
 import re
 import requests
 import sys
-
+import traceback
 
 def get_value(file, field, scale=False):
-    value = output["nrg"][field]
-    if scale == True:
-        value = int(value * 10)
-    if re.search('^-?[0-9]+$', value) != None:
-        with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
-            f.write(str(value))
+    try:
+        value = output["nrg"][field]
+        if scale == True:
+            value = int(value * 10)
+        if re.search('^-?[0-9]+$', value) != None:
+            with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
+                f.write(str(value))
+    except:
+        traceback.print_exc()
 
 
 lp_num = str(sys.argv[1])
@@ -38,26 +41,35 @@ try:
     get_value("llv"+file_ext+"1", 0)
     get_value("llv"+file_ext+"2", 1)
     get_value("llv"+file_ext+"3", 2)
-    llkwh = output["eto"]
-    value = round((llkwh * 10), 3)
-    if re.search(rekwh, llkwh) != None:
-        with open("/var/www/html/openWB/ramdisk/llkwh"+file_ext, "w") as f:
-            f.write(str(llkwh))
+    try:
+        llkwh = output["eto"]
+        value = round((llkwh * 10), 3)
+        if re.search(rekwh, llkwh) != None:
+            with open("/var/www/html/openWB/ramdisk/llkwh"+file_ext, "w") as f:
+                f.write(str(llkwh))
+    except:
+        traceback.print_exc()
 
     if lp_num == 1:
-        rfid = output["uby"]
-        with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "r") as f:
-            oldrfid = f.read()
-        if rfid != oldrfid:
-            with open("/var/www/html/openWB/ramdisk/readtag", "w") as f:
-                f.write(str(rfid))
-            with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "w") as f:
-                f.write(str(rfid))
+        try:
+            rfid = output["uby"]
+            with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "r") as f:
+                oldrfid = f.read()
+            if rfid != oldrfid:
+                with open("/var/www/html/openWB/ramdisk/readtag", "w") as f:
+                    f.write(str(rfid))
+                with open("/var/www/html/openWB/ramdisk/tmpgoelp1rfid", "w") as f:
+                    f.write(str(rfid))
+        except:
+            traceback.print_exc()
     # car status 1 Ladestation bereit, kein Auto
     # car status 2 Auto lädt
     # car status 3 Warte auf Fahrzeug
     # car status 4 Ladung beendet, Fahrzeug verbunden
-    car = output["car"]
+    try:
+        car = output["car"]
+    except:
+        traceback.print_exc()
     if car == "1":
         with open("/var/www/html/openWB/ramdisk/plugstat"+stat_ext, "w") as f:
             f.write(str(0))
@@ -71,4 +83,4 @@ try:
         with open("/var/www/html/openWB/ramdisk/chargestat"+stat_ext, "w") as f:
             f.write(str(0))
 except requests.exceptions.RequestException as e:
-    pass
+    traceback.print_exc()
