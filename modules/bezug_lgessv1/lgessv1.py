@@ -5,6 +5,7 @@ import json
 import os.path
 import requests
 import sys
+import traceback
 
 # ess_url: IP/URL des LG ESS V1.0
 #
@@ -47,19 +48,25 @@ else:
 #  2. Der Sessionkey ist gültig, dann erhält man ein JSON-Objekt mit den wichtigsten Attribute.
 #     Beispiel JSON-Objekte liegen im Ordner lgessv1/JSON-Beispiele.txt
 #
-headers = {'Content-Type': 'application/json', }
-data = json.dumps({"auth_key": session_key})
-response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
-authchk = response['auth']
+try:
+    headers = {'Content-Type': 'application/json', }
+    data = json.dumps({"auth_key": session_key})
+    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
+    authchk = response['auth']
+except:
+    traceback.print_exc()
 #
 # Pruefen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
 #
 if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
-    headers = {'Content-Type': 'application/json', }
-    data = json.dumps({"password": ess_pass})
-    response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
-    session_key = response["auth_key"]
-    outjson = {"auth_key": session_key}
+    try:
+        headers = {'Content-Type': 'application/json', }
+        data = json.dumps({"password": ess_pass})
+        response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
+        session_key = response["auth_key"]
+        outjson = {"auth_key": session_key}
+    except:
+        traceback.print_exc()
     #
     # aktuelle Daten aus dem PCS auslesen
     #
@@ -74,9 +81,18 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
 #
 # JSON-Objekt auswerten
 #
-grid_power = response["statistics"]["grid_power"]
-is_grid_selling_ = response["direction"]["is_grid_selling_"]
-load_power = response["statistics"]["load_power"]
+try:
+    grid_power = response["statistics"]["grid_power"]
+except:
+    traceback.print_exc()       
+try:
+    is_grid_selling_ = response["direction"]["is_grid_selling_"]
+except:
+    traceback.print_exc()
+try:
+    load_power = response["statistics"]["load_power"]
+except:
+    traceback.print_exc()
 if is_grid_selling_ == "1":
     grid_power = grid_power*-1
 
@@ -91,12 +107,18 @@ arr_pos = monat
 headers = {'Content-Type': 'application/json', }
 data = json.dumps({"auth_key": session_key, "year": str(jahr)})
 response = requests.post(ess_url+'/v1/user/graph/load/year', headers=headers, data=data, verify=False, timeout=5).json()
-ikwh = response["loginfo"][arr_pos]["total_purchase"]
-ikwh = ikwh.replace("kwh", "")
-ikwh = int(ikwh)
-loadkwh = response["loginfo"][arr_pos]["total_consumption"]
-loadkwh = loadkwh.replace("kwh", "")
-loadkwh = int(loadkwh)
+try:
+    ikwh = response["loginfo"][arr_pos]["total_purchase"]
+    ikwh = ikwh.replace("kwh", "")
+    ikwh = int(ikwh)
+except:
+    traceback.print_exc()
+try:
+    loadkwh = response["loginfo"][arr_pos]["total_consumption"]
+    loadkwh = loadkwh.replace("kwh", "")
+    loadkwh = int(loadkwh)
+except:
+    traceback.print_exc()
 #
 # Daten in Ramdisk schreiben
 #

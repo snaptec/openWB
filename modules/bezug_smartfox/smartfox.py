@@ -3,17 +3,22 @@
 import re
 import requests
 import sys
+import traceback
 import xml.etree.ElementTree as ET
 
 bezug_smartfox_ip = str(sys.argv[1])
 
 
 def get_xml_text(root, tag, attribute_key, attribute_value):
-    value = None
-    for element in root.iter(tag):
-        if element.get(attribute_key) == attribute_value:
-            value = element.text
-    return value
+    try:
+        value = None
+        for element in root.iter(tag):
+            if element.get(attribute_key) == attribute_value:
+                value = element.text
+        return value
+    except:
+        traceback.print_exc()
+
 
 
 # Anpassung der Variablennamen nach Firmwareupgrade auf EM2 00.01.03.06 (04-2021)
