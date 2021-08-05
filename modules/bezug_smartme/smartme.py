@@ -3,95 +3,93 @@
 import re
 import requests
 import sys
+import traceback
 
 bezug_smartme_url = str(sys.argv[1])
 bezug_smartme_user = str(sys.argv[2])
 bezug_smartme_pass = str(sys.argv[3])
 
+
+def get_power_value(key, file=None):
+    try:
+        value = int(response[key] * 1000)
+        if file == None:
+            return value
+        else:
+            f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
+            f.write(str(value))
+            f.close()
+    except:
+        traceback.print_exc()
+
+
+def get_im_ex_value(key, file=None):
+    try:
+        value = round(response[key] * 1000, 3)
+        if re.search(regex, value) == None:
+            with open("/var/www/html/openWB/ramdisk/bezugkwh", "r") as f:
+                value = f.read()
+        f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
+        f.write(str(value))
+        f.close()
+    except:
+        traceback.print_exc()
+
+
+def get_value(key, file=None):
+    try:
+        value = response[key]
+        if file == None:
+            return value
+        else:
+            f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
+            f.write(str(value))
+            f.close()
+    except:
+        traceback.print_exc()
+
+
 # Daten einlesen
 response = requests.get(bezug_smartme_url, auth=(bezug_smartme_user, bezug_smartme_pass), timeout=10).json()
 
 # Aktuelle Leistung (kW --> W)
-wattbezug = response["ActivePower"]
-wattbezug = int(wattbezug * 1000)
-
-wattbezug1 = response["ActivePowerL1"]
-wattbezug1 = int(wattbezug1 * 1000)
-
-wattbezug2 = response["ActivePowerL2"]
-wattbezug2 = int(wattbezug2 * 1000)
-
-wattbezug3 = response["ActivePowerL3"]
-wattbezug3 = int(wattbezug3 * 1000)
-
+wattbezug = get_power_value("ActivePower")
+wattbezug1 = get_power_value("ActivePowerL1")
 if wattbezug1 == 0:
     wattbezug1 = wattbezug
-
+get_power_value("ActivePowerL2", "bezugw2")
+get_power_value("ActivePowerL3", "bezugw3")
 # Zählerstand Import(kWh)
-ikwh = response["CounterReadingImport"]
-ikwh = round(ikwh * 1000, 3)
-# Zur Reduzierung der Datenmenge kann die folgende Zeile eingefügt werden.
-# ikwh=$(echo "$ikwh / 1" | bc)
-
+get_im_ex_value("CounterReadingImport", "bezugkwh")
 # Zählerstand Export(kWh)
-ekwh = response["CounterReadingExport"]
-ekwh = round(ekwh * 1000, 3)
-# Zur Reduzierung der Datenmenge kann die folgende Zeile eingefügt werden.
-# ekwh=$(echo "$ekwh / 1" | bc)
+get_im_ex_value("CounterReadingExport", "einspeisungkwh")
 
 # Weitere Zählerdaten für die Statusseite (PowerFaktor, Spannung und Strom)
-evupf1 = response["PowerFactorL1"]
-evupf2 = response["PowerFactorL2"]
-evupf3 = response["PowerFactorL3"]
-evuv1 = response["VoltageL1"]
-evuv2 = response["VoltageL2"]
-evuv3 = response["VoltageL3"]
-bezuga1 = response["CurrentL1"]
-bezuga2 = response["CurrentL2"]
-bezuga3 = response["CurrentL3"]
+get_value("PowerFactorL1", "evupf1")
+get_value("PowerFactorL2", "evupf2")
+get_value("PowerFactorL3", "evupf3")
+get_value("VoltageL1", "evuv1")
+get_value("VoltageL2", "evuv2")
+get_value("VoltageL3", "evuv3")
+bezuga1 = get_value("CurrentL1")
 if bezuga1 == 'null':
-    bezuga1 = response["Current"]
+    try:
+        bezuga1 = response["Current"]
+    except:
+        traceback.print_exc()
+with open("/var/www/html/openWB/ramdisk/bezuga1", "w") as f:
+    f.write(str(bezuga1))
+get_value("CurrentL2", "bezuga2")
+get_value("CurrentL3", "bezuga3")
+
 
 # Prüfen ob Werte gültig
 regex = '^[-+]?[0-9]+\.?[0-9]*$'
 if re.sreach(regex, wattbezug) == None:
     with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
         wattbezug = f.read()
-if re.search(regex, ikwh) == None:
-    with open("/var/www/html/openWB/ramdisk/bezugkwh", "r") as f:
-        ikwh = f.read()
-if re.search(regex, ekwh) == None:
-    with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "r") as f:
-        ekwh = f.read()
-
 # Ausgabe
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
     f.write(str(wattbezug))
-with open("/var/www/html/openWB/ramdisk/bezugw1", "w") as f:
+with open("/var/www/html/openWB/ramdisk/wattbezugw1", "w") as f:
     f.write(str(wattbezug1))
-with open("/var/www/html/openWB/ramdisk/bezugw2", "w") as f:
-    f.write(str(wattbezug2))
-with open("/var/www/html/openWB/ramdisk/bezugw3", "w") as f:
-    f.write(str(wattbezug3))
-with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
-    f.write(str(ikwh))
-with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
-    f.write(str(ekwh))
-with open("/var/www/html/openWB/ramdisk/evupf1", "w") as f:
-    f.write(str(evupf1))
-with open("/var/www/html/openWB/ramdisk/evupf2", "w") as f:
-    f.write(str(evupf2))
-with open("/var/www/html/openWB/ramdisk/evupf3", "w") as f:
-    f.write(str(evupf3))
-with open("/var/www/html/openWB/ramdisk/evuv1", "w") as f:
-    f.write(str(evuv1))
-with open("/var/www/html/openWB/ramdisk/evuv2", "w") as f:
-    f.write(str(evuv2))
-with open("/var/www/html/openWB/ramdisk/evuv3", "w") as f:
-    f.write(str(evuv3))
-with open("/var/www/html/openWB/ramdisk/bezuga1", "w") as f:
-    f.write(str(bezuga1))
-with open("/var/www/html/openWB/ramdisk/bezuga2", "w") as f:
-    f.write(str(bezuga2))
-with open("/var/www/html/openWB/ramdisk/bezuga3", "w") as f:
-    f.write(str(bezuga3))

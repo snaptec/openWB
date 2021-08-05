@@ -3,14 +3,20 @@
 import re
 import requests
 import sys
+import traceback
 
 solarworld_emanagerip = str(sys.argv[1])
 
 # Auslesen eines Solarworl eManagers über die integrierte JSON-API
 emanagerantwort = requests.get('http://'+solarworld_emanagerip+'/rest/solarworld/lpvm/powerAndBatteryData', timeout=5).json()
-
-em_in_watt = emanagerantwort["PowerIn"]
-em_out_watt = emanagerantwort["PowerOut"]
+try:
+    em_in_watt = emanagerantwort["PowerIn"]
+except:
+    traceback.print_exc()
+try:
+    em_out_watt = emanagerantwort["PowerOut"]
+except:
+    traceback.print_exc()
 
 # Bezug ist entweder -Out oder In; bei Einspeisung ist 'em_in_watt' immer 0
 # use printf zum runden, LC_ALL=C wegen Dezimalpunkt

@@ -2,14 +2,19 @@
 
 import requests
 import sys
+import traceback
 
 sonnenecoalternativ = str(sys.argv[1])
 sonnenecoip = str(sys.argv[2])
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems
 if sonnenecoalternativ == 2:
-    evubezug = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M39', timeout=5)
-    evueinspeisung = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M38', timeout=5)
+    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M39', timeout=5)
+    response.encoding = 'utf-8'
+    evubezug = response.text.replace("\n", "")
+    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M38', timeout=5)
+    response.encoding = 'utf-8'
+    evueinspeisung = response.text.replace("\n", "")
     evubezug = int(evubezug)
     evueinspeisung = int(evueinspeisung)
     wattbezug = evubezug - evueinspeisung
@@ -19,14 +24,23 @@ if sonnenecoalternativ == 2:
 else:
     if sonnenecoalternativ == 1:
         speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5).json()
-        wattbezug = speicherantwort["GridFeedIn_W"]
+        try:
+            wattbezug = speicherantwort["GridFeedIn_W"]
+        except:
+            traceback.print_exc()
         # Negativ ist Verbrauch, positiv Einspeisung
         wattbezug = wattbezug * -1
         # Es wird nur eine Spannung ausgegeben
-        evuv1 = speicherantwort["Uac"]
+        try:
+            evuv1 = speicherantwort["Uac"]
+        except:
+            traceback.print_exc()
         evuv2 = evuv1
         evuv3 = evuv1
-        evuhz = speicherantwort["Fac"]
+        try:
+            evuhz = speicherantwort["Fac"]
+        except:
+            traceback.print_exc()
         # Weitere Daten müssen errechnet werden
         # Es wird angenommen, dass alle Phasen gleich ausgelastet sind
         bezugw1 = round((wattbezug / 3), 2)

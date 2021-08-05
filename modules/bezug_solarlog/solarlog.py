@@ -3,6 +3,7 @@
 import json
 import requests
 import sys
+import traceback
 
 bezug_solarlog_ip = str(sys.argv[1])
 bezug_solarlog_speicherv = str(sys.argv[1])
@@ -11,11 +12,19 @@ data = {"801": {"170": None}}
 data = json.dumps(data)
 response = requests.post('http://'+bezug_solarlog_ip+'/getjp', data=data, timeout=5).json()
 
-
-pvwatt = response["801"]["170"]["101"]
-hausverbrauch = response["801"]["170"]["110"]
+try:
+    pvwatt = response["801"]["170"]["101"]
+except:
+    traceback.print_exc()
+try:
+    hausverbrauch = response["801"]["170"]["110"]
+except:
+    traceback.print_exc()
 bezugwatt = hausverbrauch - pvwatt
-pvkwh = response["801"]["170"]["109"]
+try:
+    pvkwh = response["801"]["170"]["109"]
+except:
+    traceback.print_exc()
 
 if bezug_solarlog_speicherv == 1:
     with open("ramdisk/speicherleistung", "r") as f:
