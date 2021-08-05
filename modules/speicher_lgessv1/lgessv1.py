@@ -5,6 +5,7 @@ import json
 import os.path
 import requests
 import sys
+import traceback
 
 # ess_url: IP/URL des LG ESS V1.0
 #
@@ -50,16 +51,22 @@ else:
 headers = {'Content-Type': 'application/json', }
 data = json.dumps({"auth_key": session_key})
 response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
-authchk = response['auth']
+try:
+    authchk = response['auth']
+except:
+    traceback.print_exc()
 #
 # Pruefen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
 #
 if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
-    headers = {'Content-Type': 'application/json', }
-    data = json.dumps({"password": ess_pass})
-    response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
-    session_key = response["auth_key"]
-    outjson = {"auth_key": session_key}
+    try:
+        headers = {'Content-Type': 'application/json', }
+        data = json.dumps({"password": ess_pass})
+        response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
+        session_key = response["auth_key"]
+        outjson = {"auth_key": session_key}
+    except:
+        traceback.print_exc()
     #
     # aktuelle Daten aus dem PCS auslesen
     #
@@ -74,9 +81,18 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
 #
 # JSON-Objekt auswerten
 #
-batconv_power = response["statistics"]["batconv_power"]
-bat_user_soc = response["statistics"]["bat_user_soc"]
-is_battery_discharging_ = response["direction"]["is_battery_discharging_"]
+try:
+    batconv_power = response["statistics"]["batconv_power"]
+except:
+    traceback.print_exc()
+try:
+    bat_user_soc = response["statistics"]["bat_user_soc"]
+except:
+    traceback.print_exc()
+try:
+    is_battery_discharging_ = response["direction"]["is_battery_discharging_"]
+except:
+    traceback.print_exc()
 #
 # Laden bzw. entladen
 #
@@ -94,12 +110,18 @@ arr_pos = monat
 headers = {'Content-Type': 'application/json', }
 data = json.dumps({"auth_key": session_key, "year": str(jahr)})
 response = requests.post(ess_url+'/v1/user/graph/batt/year', headers=headers, data=data, verify=False, timeout=5).json()
-speicherikwh = response["loginfo"][arr_pos]["total_charge"]
-speicherikwh = speicherikwh.replace("kwh", "")
-speicherikwh = int(speicherikwh)
-speicherekwh = response["loginfo"][arr_pos]["total_discharge"]
-speicherekwh = speicherekwh.replace("kwh", "")
-speicherekwh = int(speicherekwh)
+try:
+    speicherikwh = response["loginfo"][arr_pos]["total_charge"]
+    speicherikwh = speicherikwh.replace("kwh", "")
+    speicherikwh = int(speicherikwh)
+except:
+    traceback.print_exc()
+try:
+    speicherekwh = response["loginfo"][arr_pos]["total_discharge"]
+    speicherekwh = speicherekwh.replace("kwh", "")
+    speicherekwh = int(speicherekwh)
+except:
+    traceback.print_exc()
 #
 # Daten in Ramdisk schreiben
 #

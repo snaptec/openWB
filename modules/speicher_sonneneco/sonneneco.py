@@ -3,6 +3,7 @@
 import re
 import requests
 import sys
+import traceback
 
 sonnenecoalternativ = str(sys.argv[1])
 sonnenecoip = str(sys.argv[2])
@@ -45,18 +46,36 @@ if sonnenecoalternativ == 2:
 else:
     if sonnenecoalternativ == 0:
         speicherantwort = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery', timeout=5).json()
-        speichersoc = int(speicherantwort["M05"])
-        speicherentladung = int(speicherantwort["M34"])
-        speicherladung = int(speicherantwort["M35"])
+        try:
+            speichersoc = int(speicherantwort["M05"])
+        except:
+            traceback.print_exc()
+        try:
+            speicherentladung = int(speicherantwort["M34"])
+        except:
+            traceback.print_exc()
+        try:
+            speicherladung = int(speicherantwort["M35"])
+        except:
+            traceback.print_exc()
         speicherwatt = speicherladung - speicherentladung
         # wenn Batterie aus bzw. keine Antwort ersetze leeren Wert durch eine 0
         check_write_value(speicherwatt, "speicherleistung")
         check_write_value(speichersoc, "speichersoc")
     else:
         speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5).json()
-        speicherwatt = speicherantwort["Pac_total_W"]
-        speichersoc = speicherantwort["USOC"]
-        speicherpvwatt = speicherantwort["Production_W"]
+        try:
+            speicherwatt = speicherantwort["Pac_total_W"]
+        except:
+            traceback.print_exc()
+        try:
+            speichersoc = speicherantwort["USOC"]
+        except:
+            traceback.print_exc()
+        try:
+            speicherpvwatt = speicherantwort["Production_W"]
+        except:
+            traceback.print_exc()
         speicherpvwatt = speicherpvwatt * -1
         with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
             f.write(str(speicherpvwatt))

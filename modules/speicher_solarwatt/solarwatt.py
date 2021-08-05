@@ -3,6 +3,7 @@
 import datetime
 import requests
 import sys
+import traceback
 
 from requests.api import get
 
@@ -26,12 +27,15 @@ def debugLog(msg):
 
 def get_value(key, sresponse):
     value = None
-    for item in sresponse["result"]["items"]:
-        if "tagValues" in sresponse["result"]["items"][item]:
-            if key in sresponse["result"]["items"][item]["tagValues"]:
-                if "value" in sresponse["result"]["items"][item]["tagValues"][key]:
-                    value = int(sresponse["result"]["items"][item]["tagValues"][key]["value"])
-                    break
+    try:
+        for item in sresponse["result"]["items"]:
+            if "tagValues" in sresponse["result"]["items"][item]:
+                if key in sresponse["result"]["items"][item]["tagValues"]:
+                    if "value" in sresponse["result"]["items"][item]["tagValues"][key]:
+                        value = int(sresponse["result"]["items"][item]["tagValues"][key]["value"])
+                        break
+    except:
+        traceback.print_exc()
     return value
 
 
@@ -52,11 +56,20 @@ if solarwattmethod == 1: 	#Abruf über Gateway
     if len(str(sresponse)) < 10:
         sys.exit(1)
     
-    ibat=sresponse["FData"]["IBat"]
-    vbat=sresponse["FData"]["VBat"]
+    try:
+        ibat=sresponse["FData"]["IBat"]
+    except:
+        traceback.print_exc()
+    try:
+        vbat=sresponse["FData"]["VBat"]
+    except:
+        traceback.print_exc()
     speicherleistung=ibat * vbat
     speicherleistung=int(speicherleistung / (-1))
-    speichersoc=int(sresponse["SData"]["SoC"])
+    try:
+        speichersoc=int(sresponse["SData"]["SoC"])
+    except:
+        traceback.print_exc()
 
 
 debugLog("Speicherleistung: "+speicherleistung+" W")
