@@ -24,15 +24,15 @@ f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(bezugwh))
 f.close()
 
-vl1=response["values"]["voltage1"] / 1000
+vl1=response["values"]["phase1Voltage"] / 1000
 f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
 f.write(str(vl1))
 f.close()
-vl2=response["values"]["voltage2"] / 1000
+vl2=response["values"]["phase2Voltage"] / 1000
 f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
 f.write(str(vl2))
 f.close()
-vl3=response["values"]["voltage3"] / 1000
+vl3=response["values"]["phase3Voltage"] / 1000
 f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
 f.write(str(vl3))
 f.close()
@@ -41,15 +41,15 @@ watt = response["values"]["power"] / 1000
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(watt))
 f.close()
-wattl1 = response["values"]["power1"] / 1000
+wattl1 = response["values"]["phase1Power"] / 1000
 f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
 f.write(str(wattl1))
 f.close()
-wattl2 = response["values"]["power2"] / 1000
+wattl2 = response["values"]["phase2Power"] / 1000
 f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
 f.write(str(wattl2))
 f.close()
-wattl3 = response["values"]["power3"] / 1000
+wattl3 = response["values"]["phase3Power"] / 1000
 f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
 f.write(str(wattl3))
 f.close()
