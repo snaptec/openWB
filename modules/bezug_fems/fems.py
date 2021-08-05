@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 
-import json
 import requests
 import sys
+import traceback
 
 password = str(sys.argv[1])
 ip_address = str(sys.argv[2])
 
 def get_value(url, file):
-    response = requests.get(url, timeout = 2).json()
-    val = response["value"]
-    f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
-    f.write(str(val))
-    f.close()
+    try:
+        response = requests.get(url, timeout = 2).json()
+        val = response["value"]
+        f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
+        f.write(str(val))
+        f.close()
+    except:
+        traceback.print_exc()
 
 get_value('http://x:'+password+'@'+ip_address+':8084/rest/channel/meter0/ActivePower)', 'wattbezug')
 get_value('http://x:'+password+'@'+ip_address+':8084/rest/channel/_sum/GridBuyActiveEnergy)', 'bezugkwh')
