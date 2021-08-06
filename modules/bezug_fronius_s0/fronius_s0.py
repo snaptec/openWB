@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # coding: utf8
-import json
+
 import re
 import requests
 import sys
+import traceback
 
 # Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
 # Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv)
@@ -13,10 +14,13 @@ primo = str(sys.argv[1])
 ip_address = str(sys.argv[2])
 
 response = requests.get('http://'+ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', timeout = 5).json()
-if primo == 1:
-	wattbezug=int(response["Body"]["Data"]["Site"]["P_Grid"])
-else:
-	wattbezug=int(response["Body"]["Data"]["PowerReal_P_Sum"])
+try:
+    if primo == 1:
+        wattbezug=int(response["Body"]["Data"]["Site"]["P_Grid"])
+    else:
+        wattbezug=int(response["Body"]["Data"]["PowerReal_P_Sum"])
+except:
+    traceback.print_exc()
 
 #pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 #pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
@@ -43,7 +47,10 @@ params = (('Scope', 'System'),)
 
 kwhtmp = requests.get('http://'+ip_address+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout = 5).json()
 # jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
-ikwh = kwhtmp["EnergyReal_WAC_Minus_Absolute"]
+try:
+    ikwh = kwhtmp["EnergyReal_WAC_Minus_Absolute"]
+except:
+    traceback.print_exc()
 ikwh = ikwh.replace(" ", "")
 ikwh = ikwh.replace('\"', "")
 ikwh = ikwh.replace(':', "")
@@ -58,7 +65,10 @@ f.close()
 # Eingespeiste Energie total in Wh (für Smartmeter im Einspeisepunkt)
 # bei Smartmeter im Verbrauchsweig immer 0
 #ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
-ekwh = kwhtmp["EnergyReal_WAC_Plus_Absolute"]
+try:
+    ekwh = kwhtmp["EnergyReal_WAC_Plus_Absolute"]
+except:
+    traceback.print_exc()
 ekwh = ekwh.split(",")[0]
 ekwh = ekwh.replace(" ", "")
 ekwh = ekwh.replace('\"', "")
