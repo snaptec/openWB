@@ -8,10 +8,12 @@ username = str(sys.argv[1])
 password = str(sys.argv[2])
 id = str(sys.argv[3])
 
-def get_value(key, file, div):
+def get_value(key, file, div, toint = False):
     try:
         value = response["values"][key] / div
         f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
+        if(toint):
+            value = int(value)
         f.write(str(value))
         f.close()
         return value
@@ -31,7 +33,7 @@ vl1=get_value("phase1Voltage", "evuv1", 1000)
 vl2=get_value("phase2Voltage", "evuv2", 1000)
 vl3=get_value("phase3Voltage", "evuv3", 1000)
 
-get_value("power", "wattbezug", 1000)
+get_value("power", "wattbezug", 1000, True)
 wattl1=get_value("phase1Power", "bezugw1", 1000)
 wattl2=get_value("phase2Power", "bezugw2", 1000)
 wattl3=get_value("phase3Power", "bezugw3", 1000)
