@@ -47,7 +47,7 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
     speichere=get_value("PowerConsumedFromStorage", sresponse)
     speicherein=get_value("PowerOutFromStorage", sresponse)
     speicheri=get_value("PowerBuffered", sresponse)
-    speicherleistung=int((speichere + speicherin - speicheri) *-1)
+    speicherleistung=int((speichere + speicherein - speicheri) *-1)
     speichersoc=get_value("StateOfCharge", sresponse)
 
 
