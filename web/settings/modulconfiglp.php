@@ -45,6 +45,10 @@
 				list($key, $value) = explode("=", $line, 2);
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
+			// read available vehicles for EVCC SoC module from web API
+			$soc_evcc_vehicles = json_decode(file_get_contents('https://cloud.evcc.io/api/vehicles'), true);
+			$firstentry=array("id" => "none", "name" => "Bitte auswählen");
+			array_unshift($soc_evcc_vehicles , $firstentry);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -1278,23 +1282,13 @@
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<select name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" class="form-control">
-												<option <?php if($soc_evcc_type_lp1old == "none") echo "selected" ?> value="none">Bitte auswählen</option>
-												<option <?php if($soc_evcc_type_lp1old == 'audi') echo "selected" ?> value="audi">Audi</option>
-												<option <?php if($soc_evcc_type_lp1old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
-												<option <?php if($soc_evcc_type_lp1old == 'enyaq') echo "selected" ?> value="enyaq">Enyaq</option>
-												<option <?php if($soc_evcc_type_lp1old == 'fiat') echo "selected" ?> value="fiat">Fiat</option>
-												<option <?php if($soc_evcc_type_lp1old == 'ford') echo "selected" ?> value="ford">Ford</option>
-												<option <?php if($soc_evcc_type_lp1old == 'hyundai') echo "selected" ?> value="hyundai">Hyundai</option>
-												<option <?php if($soc_evcc_type_lp1old == 'id') echo "selected" ?> value="id">ID</option>
-												<option <?php if($soc_evcc_type_lp1old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp1old == 'nissan') echo "selected" ?> value="nissan">Nissan</option>
-												<option <?php if($soc_evcc_type_lp1old == 'carwings') echo "selected" ?> value="carwings">Nissan (Leaf &lt;2019)</option>
-												<option <?php if($soc_evcc_type_lp1old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp1old == 'renault') echo "selected" ?> value="renault">Renault</option>
-												<option <?php if($soc_evcc_type_lp1old == 'seat') echo "selected" ?> value="seat">Seat</option>
-												<option <?php if($soc_evcc_type_lp1old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
-												<option <?php if($soc_evcc_type_lp1old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
-												<option <?php if($soc_evcc_type_lp1old == 'vw') echo "selected" ?> value="vw">VW</option>											</select>
+												<?php
+													foreach($soc_evcc_vehicles as $item => $value)
+													{
+														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp1old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
+													}
+												?>
+											</select>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
 									</div>
@@ -4019,23 +4013,12 @@
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<select name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" class="form-control">
-												<option <?php if($soc_evcc_type_lp2old == "none") echo "selected" ?> value="none">Bitte auswählen</option>
-												<option <?php if($soc_evcc_type_lp2old == 'audi') echo "selected" ?> value="audi">Audi</option>
-												<option <?php if($soc_evcc_type_lp2old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
-												<option <?php if($soc_evcc_type_lp2old == 'enyaq') echo "selected" ?> value="enyaq">Enyaq</option>
-												<option <?php if($soc_evcc_type_lp2old == 'fiat') echo "selected" ?> value="fiat">Fiat</option>
-												<option <?php if($soc_evcc_type_lp2old == 'ford') echo "selected" ?> value="ford">Ford</option>
-												<option <?php if($soc_evcc_type_lp2old == 'hyundai') echo "selected" ?> value="hyundai">Hyundai</option>
-												<option <?php if($soc_evcc_type_lp2old == 'id') echo "selected" ?> value="id">ID</option>
-												<option <?php if($soc_evcc_type_lp2old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp2old == 'nissan') echo "selected" ?> value="nissan">Nissan</option>
-												<option <?php if($soc_evcc_type_lp2old == 'carwings') echo "selected" ?> value="carwings">Nissan (Leaf &lt;2019)</option>
-												<option <?php if($soc_evcc_type_lp2old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp2old == 'renault') echo "selected" ?> value="renault">Renault</option>
-												<option <?php if($soc_evcc_type_lp2old == 'seat') echo "selected" ?> value="seat">Seat</option>
-												<option <?php if($soc_evcc_type_lp2old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
-												<option <?php if($soc_evcc_type_lp2old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
-												<option <?php if($soc_evcc_type_lp2old == 'vw') echo "selected" ?> value="vw">VW</option>
+												<?php
+													foreach($soc_evcc_vehicles as $item => $value)
+													{
+														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp2old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
+													}
+												?>
 											</select>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
