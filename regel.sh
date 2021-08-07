@@ -256,30 +256,38 @@ fi
 if (( cpunterbrechunglp2 == 1 )); then
 	if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
 		if (( llalts1 > 5 )); then
-			if (( ladeleistunglp2 < 200 )); then
+			if (( ladeleistunglp2 < 100 )); then
 				cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
-				if (( cpulp2waraktiv == 0 )); then
-					openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
-					if [[ $evsecons1 == "simpleevsewifi" ]]; then
-						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
-					elif [[ $evsecons1 == "ipevse" ]]; then
-						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
-						python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
-					elif [[ $evsecons1 == "extopenwb" ]]; then
-						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
-					else
-						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
-						sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
+				cpulp2counter=$(<ramdisk/cpulp2counter)
+				if (( cpulp2counter > 5 )); then
+					if (( cpulp2waraktiv == 0 )); then
+						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
+						if [[ $evsecons1 == "simpleevsewifi" ]]; then
+							curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
+						elif [[ $evsecons1 == "ipevse" ]]; then
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+							python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
+						elif [[ $evsecons1 == "extopenwb" ]]; then
+							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
+						else
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+							sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
+						fi
+						echo 1 > ramdisk/cpulp2waraktiv
+						date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
 					fi
-					echo 1 > ramdisk/cpulp2waraktiv
-					date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
+				else
+					cpulp2counter=$((cpulp2counter+1))
+					echo $cpulp2counter > ramdisk/cpulp2counter
 				fi
 			else
 				echo 0 > ramdisk/cpulp2waraktiv
+				echo 0 > ramdisk/cpulp2counter
 			fi
 		fi
 	else
 		echo 0 > ramdisk/cpulp2waraktiv
+		echo 0 > ramdisk/cpulp2counter
 	fi
 fi
 
