@@ -208,8 +208,16 @@ def sepwatt(oldwatt,oldwattk,nummer):
     except:
         argumentList.append("undef")
     (devuberschuss,ueberschussberechnung )= getueb(nummer)
-    argumentList.append(str(devuberschuss))
-    if meastyp == "sdm630":
+    argumentList.append(str(devuberschuss))  
+    if meastyp == "sdm120":
+        try:
+            measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
+        except:
+            measureportsdm = "8899"
+        argumentList[1] = prefixpy +'sdm120/sdm120.py'
+        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+        argumentList.append(measureportsdm) 
+    elif meastyp == "sdm630":
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
         except:
