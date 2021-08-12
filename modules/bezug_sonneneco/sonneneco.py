@@ -4,7 +4,7 @@ import requests
 import sys
 import traceback
 
-sonnenecoalternativ = str(sys.argv[1])
+sonnenecoalternativ = int(sys.argv[1])
 sonnenecoip = str(sys.argv[2])
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems

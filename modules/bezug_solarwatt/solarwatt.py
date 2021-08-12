@@ -7,7 +7,7 @@ import traceback
 
 base_dir = str(sys.argv[1])
 debug = str(sys.argv[2])
-solarwattmethod = str(sys.argv[3])
+solarwattmethod = int(sys.argv[3])
 speicher1_ip = str(sys.argv[4])
 speicher1_ip2 = str(sys.argv[5])
 
@@ -37,15 +37,16 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
                     if "PowerConsumedFromGrid" in sresponse["result"]["items"][item]["tagValues"]:
                         if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerConsumedFromGrid"]:
                             bezugw = int(sresponse["result"]["items"][item]["tagValues"]["PowerConsumedFromGrid"]["value"])
+                            break
             except:
                 traceback.print_exc()
-        einspeisungw =$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerOut.value != null) | .tagValues.PowerOut.value' | head - n 1 | sed 's/\..*$//')
         for item in sresponse["result"]["items"]:
             try:
                 if "tagValues" in sresponse["result"]["items"][item]:
                     if "PowerOut" in sresponse["result"]["items"][item]["tagValues"]:
                         if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerOut"]:
-                            bezugw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
+                            einspeisungw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
+                            break
             except:
                 traceback.print_exc()
         bezugwatt = int(bezugw - einspeisungw)

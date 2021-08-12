@@ -10,13 +10,13 @@ import sys
 import traceback
 
 solarview_hostname = str(sys.argv[1])
-solarview_port = str(sys.argv[2])
+solarview_port = int(sys.argv[2])
 solarview_timeout = int(sys.argv[3])
-debug = str(sys.argv[4])
+debug = int(sys.argv[4])
 
 
 def log(msg):
-    with open("var/www/html/openWB/ramdisk/openWB.log", "a") as f:
+    with open("/var/www/html/openWB/ramdisk/openWB.log", "a") as f:
         f.write(str("[bezug_solarview] "+msg))
 
 
@@ -45,7 +45,7 @@ def request(command):
             s.sendall(command)
             response = s.recv(1024)
     except Exception as e:
-        log("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+solarview_hostname+", port: "+port+", timeout: "+timeout)
+        log("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+str(solarview_hostname)+", port: "+str(port)+", timeout: "+str(timeout))
         traceback.print_exc()
         sys.exit(0)
 

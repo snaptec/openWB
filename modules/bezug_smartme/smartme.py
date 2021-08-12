@@ -85,7 +85,7 @@ get_value("CurrentL3", "bezuga3")
 
 # Prüfen ob Werte gültig
 regex = '^[-+]?[0-9]+\.?[0-9]*$'
-if re.sreach(regex, wattbezug) == None:
+if re.search(regex, wattbezug) == None:
     with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
         wattbezug = f.read()
 # Ausgabe
