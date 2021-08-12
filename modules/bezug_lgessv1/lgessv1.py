@@ -84,7 +84,7 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
 try:
     grid_power = response["statistics"]["grid_power"]
 except:
-    traceback.print_exc()       
+    traceback.print_exc()
 try:
     is_grid_selling_ = response["direction"]["is_grid_selling_"]
 except:

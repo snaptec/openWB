@@ -5,7 +5,7 @@
 #########################################################
 #
 # ermittelt Werte Kostal Plenticore mit EM300
-# für alle 3 Phasen Leistung, Strom, Spannung
+# fuer alle 3 Phasen Leistung, Strom, Spannung
 # dann Netzfrequenz und Bezug/Einspeisung
 #
 # Werte werden im Wechselrichter-Modul ausgelesen, hier nur
@@ -23,30 +23,30 @@ kostalplenticorehaus = str(sys.argv[1])
 
 # Unterscheidung EM300 Sensorposition zur Bestimmung Bezug EVU
 if kostalplenticorehaus == 1:
-	# EM300 Sensorposition 2 (am EVU-Übergabepunkt = grid connection)
-	# Bezug EVU wurde bereits im wr_plenticore Modul aus den Modbus-Registern gelesen
-	shutil.copy("/var/www/html/openWB/ramdisk/temp_wattbezug", "/var/www/html/openWB/ramdisk/wattbezug")
+    # EM300 Sensorposition 2 (am EVU-Uebergabepunkt = grid connection)
+    # Bezug EVU wurde bereits im wr_plenticore Modul aus den Modbus-Registern gelesen
+    shutil.copy("/var/www/html/openWB/ramdisk/temp_wattbezug", "/var/www/html/openWB/ramdisk/wattbezug")
 else:
-	# EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
-	# Werte aus (temporärer) ramdisk lesen
-	# aktueller Hausverbrauch
-	with open("/var/www/html/openWB/ramdisk/temp_wattbezug", "r") as f:
-		home_consumption=f.read()
-	# aktuelle PV-Leistung
-	with open("/var/www/html/openWB/ramdisk/pvwatt", "r") as f:
-		pv_power_ac=f.read()
-	# aktuelle Speicherleistung
-	with open("/var/www/html/openWB/ramdisk/temp_speicherleistung", "r") as f:
-		actual_batt_ch_disch_power=f.read()
-	# Bezug berechnen
-	bezug=pv_power_ac + actual_batt_ch_disch_power + home_consumption
-	# und in die ramdisk
-	with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-		f.write(bezug)
+    # EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
+    # Werte aus (temporaerer) ramdisk lesen
+    # aktueller Hausverbrauch
+    with open("/var/www/html/openWB/ramdisk/temp_wattbezug", "r") as f:
+        home_consumption = int(f.read())
+    # aktuelle PV-Leistung
+    with open("/var/www/html/openWB/ramdisk/pvwatt", "r") as f:
+        pv_power_ac = int(f.read())
+    # aktuelle Speicherleistung
+    with open("/var/www/html/openWB/ramdisk/temp_speicherleistung", "r") as f:
+        actual_batt_ch_disch_power = int(f.read())
+    # Bezug berechnen
+    bezug = pv_power_ac + actual_batt_ch_disch_power + home_consumption
+    # und in die ramdisk
+    with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
+        f.write(str(bezug))
 
 
-# Daten aus temporärer ramdisk zur globalen Weiterverarbeitung in die
-# entsprechenden ramdisks kopieren. Die temporären Werte stammen aus dem
+# Daten aus temporaerer ramdisk zur globalen Weiterverarbeitung in die
+# entsprechenden ramdisks kopieren. Die temporaeren Werte stammen aus dem
 # wr_plenticore Modul, werden dort zentral aus den Modbus-Registern gelesen
 
 # Bezug Strom Phase 1

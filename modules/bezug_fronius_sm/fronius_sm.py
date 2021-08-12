@@ -10,12 +10,14 @@ froniuserzeugung = str(sys.argv[2])
 wrfroniusip = str(sys.argv[3])
 froniusmeterlocation = str(sys.argv[4])
 
+
 def get_rounded_value(response, key):
     try:
         value = round(response[key], 2)
         return value
     except:
         traceback.print_exc()
+
 
 def get_int_value(response, key):
     try:

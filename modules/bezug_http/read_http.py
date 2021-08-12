@@ -4,6 +4,7 @@ import requests
 import sys
 import traceback
 
+
 def get_value(url, file):
     try:
         if url != "none":

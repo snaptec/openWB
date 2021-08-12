@@ -20,7 +20,6 @@ def get_xml_text(root, tag, attribute_key, attribute_value):
         traceback.print_exc()
 
 
-
 # Anpassung der Variablennamen nach Firmwareupgrade auf EM2 00.01.03.06 (04-2021)
 # Daten einlesen
 headers = {
