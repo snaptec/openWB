@@ -16,21 +16,27 @@ debug = str(sys.argv[4])
 
 
 def log(msg):
-    with open("target/openWB.log", "a") as f:
+    with open("var/www/html/openWB/ramdisk/openWB.log", "a") as f:
         f.write(str("[bezug_solarview] "+msg))
 
 
 def write_value(value, file):
     try:
         with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
-            f.write(value)
+            f.write(str(value))
     except:
         traceback.print_exc()
 
 
 def request(command):
-    port = solarview_port[:-15000]
-    timeout = int(solarview_timeout[:-1])
+    try:
+        port = solarview_port
+    except:
+        port = 15000
+    try:
+        timeout = solarview_timeout
+    except:
+        timeout = 1
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -38,7 +44,8 @@ def request(command):
             s.connect((solarview_hostname, port))
             s.sendall(command)
             response = s.recv(1024)
-    except:
+    except Exception as e:
+        log("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+solarview_hostname+", port: "+port+", timeout: "+timeout)
         traceback.print_exc()
         sys.exit(0)
 
@@ -107,26 +114,26 @@ def request(command):
     if debug != 0:
         # Werte ausgeben
         log("ID: "+id)
-        log("Zeitpunkt: "+timestamp)
-        log("Temperatur: "+temperature+" °C")
-        log("Leistung: "+power+" W")
+        log("Zeitpunkt: "+str(timestamp))
+        log("Temperatur: "+str(temperature)+" °C")
+        log("Leistung: "+str(power)+" W")
         log("Energie:")
-        log("  Tag:    "+energy_day+" Wh")
-        log("  Monat:  "+energy_month+" Wh")
-        log("  Jahr:   "+energy_year+" Wh")
-        log("  Gesamt: "+energy_total+" Wh")
+        log("  Tag:    "+str(energy_day)+" Wh")
+        log("  Monat:  "+str(energy_month)+" Wh")
+        log("  Jahr:   "+str(energy_year)+" Wh")
+        log("  Gesamt: "+str(energy_total)+" Wh")
         log("Generator-MPP-Tracker-1")
-        log("  Spannung: "+mpptracker1_voltage+" V")
-        log("  Strom:    "+mpptracker1_current+" A")
+        log("  Spannung: "+str(mpptracker1_voltage)+" V")
+        log("  Strom:    "+str(mpptracker1_current)+" A")
         log("Generator-MPP-Tracker-2")
-        log("  Spannung: "+mpptracker2_voltage+" V")
-        log("  Strom:    "+mpptracker2_current+" A")
+        log("  Spannung: "+str(mpptracker2_voltage)+" V")
+        log("  Strom:    "+str(mpptracker2_current)+" A")
         log("Generator-MPP-Tracker-3")
-        log("  Spannung: "+mpptracker3_voltage+" V")
-        log("  Strom:    "+mpptracker3_current+" A")
+        log("  Spannung: "+str(mpptracker3_voltage)+" V")
+        log("  Strom:    "+str(mpptracker3_current)+" A")
         log("Generator-MPP-Tracker-4")
-        log("  Spannung: "+mpptracker4_voltage+" V")
-        log("  Strom:    "+mpptracker4_current+" A")
+        log("  Spannung: "+str(mpptracker4_voltage)+" V")
+        log("  Strom:    "+str(mpptracker4_current)+" A")
 
     # Werte speichern
     if command == "command_einspeisung":
@@ -152,7 +159,7 @@ if solarview_hostname == None or solarview_hostname == "":
     sys.exit(1)
 if solarview_port:
     if solarview_port < 1 or solarview_port > 65535:
-        log("Invalid value '$solarview_port' for variable 'solarview_port'")
+        log("Invalid value "+str(solarview_port)+" for variable 'solarview_port'")
         sys.exit(1)
 
 command_bezug = '22*'
