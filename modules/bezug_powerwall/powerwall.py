@@ -8,7 +8,7 @@ import sys
 import time
 
 base_dir = str(sys.argv[1])
-debug = str(sys.argv[2])
+debug = int(sys.argv[2])
 myPid = str(sys.argv[3])
 speicherpwloginneeded = int(sys.argv[4])
 speicherpwuser = str(sys.argv[5])
@@ -19,7 +19,7 @@ ramdiskdir = base_dir+"/ramdisk"
 module = "EVU"
 logfile = ramdiskdir+"/openWB.log"
 cookie_file = ramdiskdir+"/powerwall_cookie.txt"
-cookieOptions = ""
+cookie = ""
 
 
 def debugLog(msg):
@@ -40,13 +40,13 @@ def get_value(answer, key, file):
 
 if speicherpwloginneeded == 1:
     # delete our login cookie after some time as it may be invalid
-
-    edited = os.stat(cookie_file).st_mtime
-    now = time.time()
-    edit_diff = now - edited
-    if edit_diff < 3600:
-        debugLog("Deleting saved login cookie after 1 hour as it may not be valid anymore.")
-        os.remove(cookie_file)
+    if os.path.isfile(cookie_file) == True:
+        edited = os.stat(cookie_file).st_mtime
+        now = time.time()
+        edit_diff = now - edited
+        if edit_diff < 3600:
+            debugLog("Deleting saved login cookie after 1 hour as it may not be valid anymore.")
+            os.remove(cookie_file)
     if os.path.isfile(cookie_file) == False:
         # log in and save cookie for later use
         debugLog("Trying to authenticate...")
