@@ -142,7 +142,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
-											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="1">SDM630 an EVU Kit angeschlossen</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">SDM630 an EVU Kit angeschlossen</option>
 										</select>
 									</div>
 								</div>
