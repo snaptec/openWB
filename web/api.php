@@ -148,9 +148,11 @@ if(isset($_GET["topic"])) {
 		$output = str_replace("Warning: Unable to locate configuration directory, default config not loaded.", "", $output);
 		# no output if mosquitto_pub was successful
 		if($output != ""){
+			http_response_code(500);
 			echo "Error: $output";
 		}
 		else{
+			http_response_code(200);
 			echo "Message '$message' successfully published to topic '$topic'!";
 		}
 	}
@@ -162,9 +164,11 @@ if(isset($_GET["topic"])) {
 		$output = str_replace("Warning: Unable to locate configuration directory, default config not loaded.", "", $output);
 		# no output if mosquitto_sub failed
 		if($output != ""){
+			http_response_code(200);
 			echo $output;
 		}
 		else{
+			http_response_code(404);
 			echo "Error: The topic '$topic' doesn't contain a retained value!";
 		}
 	}
