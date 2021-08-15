@@ -1,18 +1,13 @@
 <?php
 # HTTP-API as bridge to MQTT
 
-function StringStartsWith ($string, $start){
-	$len = strlen($start);
-	return (substr($string, 0, $len) === $start);
-}
-
 if(isset($_GET["topic"])) {
 	$topic = $_GET["topic"];
 	# writing topic
 	if(isset($_GET["message"])) {
 		$message = $_GET["message"];
 		# check if topic is allowed to write
-		if(StringStartsWith($topic, "openWB/set/")){
+		if(strpos($topic, "/set/") !== false){
 			$command = "mosquitto_pub -h localhost -t '$topic' -m '$message' 2>&1";
 			$output = exec($command);
 			# Skip an annoying warning because it doesn't cause any problems
@@ -29,7 +24,7 @@ if(isset($_GET["topic"])) {
 		}
 		else{
 			http_response_code(400);
-			echo "Error: Only 'openWB/set/...' topics are allowed to write.";
+			echo "Error: Only '.../set/...' topics are allowed to write.";
 		}
 	}
 	# reading topic
