@@ -19,9 +19,9 @@ echo ${speicherleistung}
 echo $speicherleistung > /var/www/html/openWB/ramdisk/speicherleistung
 
 if [ ! -z "$battjsonsoc" ]; then
-    battsoc=$(echo $answer | jq -r "$battjsonsoc")
+	battsoc=$(echo $answer | jq -r "$battjsonsoc")
 else
-    battsoc=0
+	battsoc=0
 fi
 
 openwbDebugLog ${DMOD} 1 "BattSoC: ${battsoc}"

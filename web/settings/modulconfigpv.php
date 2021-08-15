@@ -90,6 +90,7 @@
 										<option <?php if($pvwattmodulold == "wr_solarwatt") echo "selected" ?> value="wr_solarwatt">Solarwatt / My Reserver Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_solarworld") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 										<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
+										<option <?php if($pvwattmodulold == "wr_studer") echo "selected" ?> value="wr_studer">Studer-Innotec System</option>
 										<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
 										<option <?php if($pvwattmodulold == "wr_sunways") echo "selected" ?> value="wr_sunways">Sunways</option>
 										<option <?php if($pvwattmodulold == "wr_powerwall") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
@@ -174,6 +175,20 @@
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
 								</div>
+							</div>
+							<label class="col-md-4 col-form-label">Alternative Auslesung</label>
+							<div class="col">
+								<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($wryoulessaltold == 0) echo " active" ?>">
+										<input type="radio" name="wryoulessalt" id="wryoulessaltNo" value="0"<?php if($wryoulessaltold == 0) echo " checked=\"checked\"" ?>>Nein (S0)
+									</label>
+									<label class="btn btn-outline-info<?php if($wryoulessaltold == 1) echo " active" ?>">
+										<input type="radio" name="wryoulessalt" id="wryoulessaltYes" value="1"<?php if($wryoulessaltold == 1) echo " checked=\"checked\"" ?>>Ja
+									</label>
+								</div>
+								<span class="form-text small">
+									Diese Option aktivieren wenn statt des S0 der andere Eingang des Youless genutzt wird.
+								</span>
 							</div>
 						</div>
 						<div id="pvsunways" class="hide">
@@ -469,6 +484,22 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Batterieleistung von PV abziehen</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($solaredgesubbatold == 0) echo " active" ?>">
+											<input type="radio" name="solaredgesubbat" id="solaredgesubbatNo" value="0"<?php if($solaredgesubbatold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($solaredgesubbatold == 1) echo " active" ?>">
+											<input type="radio" name="solaredgesubbat" id="solaredgesubbatYes" value="1"<?php if($solaredgesubbatold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option ist im Normalfall immer Nein. Bitte nur aktivieren wenn die PV Leistung nicht korrekt dargestellt werden um den Wert den die Batterieleistung betrifft
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
 								<label for="solaredgepvslave1" class="col-md-4 col-form-label">WR 1 Solaredge ID</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="1" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgepvslave1old ?>">
@@ -514,6 +545,45 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvwrstuder" class="hide">
+							<div class="form-row mb-1">
+								<label for="studer_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="studer_ip" id="studer_ip" value="<?php echo $studer_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="studer_xt" class="col-md-4 col-form-label">Anzahl XT-Devices</label>
+								<div class="col">
+										<input class="form-control" type="text" pattern="^([1-9])$" name="studer_xt" id="studer_xt" value="<?php echo $studer_xtold ?>">
+										<span class="form-text small">Anzahl (1-9) der Studer XT-Devices im System (XTS/XTM/XTH)</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Typ des MPPT Solarladeregler</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VT) echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeNo" value="VT"<?php if($studer_vc_typeold == VT) echo " checked=\"checked\"" ?>>VT
+										</label>
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VS) echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeYes" value="VS"<?php if($studer_vc_typeold == VS) echo " checked=\"checked\"" ?>>VS
+										</label>
+									</div>
+									<span class="form-text small">
+										Ist ein VarioString (VS-70/VS-120) oder ein Variotrack (VT-40/VT-65/VT-80) verbaut
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="studer_vc" class="col-md-4 col-form-label">Anzahl MPPT Solarladeregler</label>
+								<div class="col">
+										<input class="form-control" type="text" pattern="^([1-9])$" name="studer_vc" id="studer_vc" value="<?php echo $studer_vcold ?>">
+										<span class="form-text small">Anzahl (1-9) der Studer MPPT Solarladeregler im System (VS/VT)</span>
+								</div>
+							</div>
+						</div> 
 						<div id="pvwrsolax" class="hide">
 							<div class="form-row mb-1">
 								<label for="solaxip" class="col-md-4 col-form-label">WR Solax IP</label>
@@ -540,10 +610,10 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 0) echo " active" ?>">
-											<input type="radio" name="froniusisgen24" id="froniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
+											<input type="radio" name="wrfroniusisgen24" id="wrfroniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
 										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 1) echo " active" ?>">
-											<input type="radio" name="froniusisgen24" id="froniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
+											<input type="radio" name="wrfroniusisgen24" id="wrfroniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 									<span class="form-text small">
@@ -696,7 +766,7 @@
 								<div class="col">
 									<input class="form-control" type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>">
 									<span class="form-text small">
-									Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben.
+									Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben. <br>ACHTUNG! Dies ist nur das richtige Modul wenn ein extra EnergyMeter nur für die PV vorhanden ist. Im Normalfall ist immer "SMA ModbusTCP WR" zu wählen.<br>Ist nur ein HomeManager vorhanden ist dieses Modul nicht richtig.
 									</span>
 								</div>
 							</div>
@@ -812,6 +882,9 @@
 								if($('#pvwattmodul').val() == 'wr_solaredge')   {
 									showSection('#pvwrsolaredge');
 								}
+                                if($('#pvwattmodul').val() == 'wr_studer')   {
+									showSection('#pvwrstuder');
+								}
 								if($('#pvwattmodul').val() == 'wr_solax')   {
 									showSection('#pvwrsolax');
 								}
@@ -872,10 +945,13 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($pv2wattmodulold == "wr2_kostalpiko") echo "selected" ?> value="wr2_kostalpiko">Kostal Piko</option>
+										<option <?php if($pv2wattmodulold == "wr2_kostalpikovar2") echo "selected" ?> value="wr2_kostalpikovar2">Kostal Piko alt</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
+										<option <?php if($pv2wattmodulold == "wr2_solarlog") echo "selected" ?> value="wr2_solarlog">SolarLog</option>
 										<option <?php if($pv2wattmodulold == "wr2_solax") echo "selected" ?> value="wr2_solax">Solax</option>
+										<option <?php if($pv2wattmodulold == "wr2_sungrow") echo "selected" ?> value="wr2_sungrow">Sungrow</option>
 										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 									</optgroup>
 									<optgroup label="generische Module">
@@ -912,6 +988,8 @@
 								</div>
 							</div>
 						</div>
+
+
 						<div id="pv2iddiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="pv2id" class="col-md-4 col-form-label">Modbus ID</label>
@@ -921,6 +999,27 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2ip2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip2" class="col-md-4 col-form-label">Zweite IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip2" id="pv2ip2" value="<?php echo $pv2ip2old ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12 Ist nur relevant wenn ein zweiter Modbus/Netzwerk Adapter genutzt wird. Wird einer für 2 Zähler genutzt bitte die IP vom ersten nochmals eintragen.
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2id2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2id2" class="col-md-4 col-form-label">Zweite Modbus ID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="0" step="1" name="pv2id2" id="pv2id2" value="<?php echo $pv2id2old ?>">
+									<span class="form-text small">Gültige Werte ID. ID Adresse. Wenn kein zweiter Zähler genutzt wird auf 0 belassen.</span>
+								</div>
+							</div>
+						</div>
+
 						<div id="pv2wrjsondiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="wr2jsonurl" class="col-md-4 col-form-label">WR URL</label>
@@ -952,14 +1051,53 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2piko2" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2_piko2_user" class="col-md-4 col-form-label">Benutzername</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2_piko2_user" id="wr2_piko2_user" value="<?php echo $wr2_piko2_userold ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2_piko2_pass" class="col-md-4 col-form-label">Passwort</label>
+								<div class="col">
+									<input class="form-control" type="password" name="wr2_piko2_pass" id="wr2_piko2_pass" value="<?php echo htmlspecialchars($wr2_piko2_passold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2_piko2_url" class="col-md-4 col-form-label">URL</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2_piko2_url" id="wr2_piko2_url" value="<?php echo $wr2_piko2_urlold ?>">
+								</div>
+							</div>
+						</div>
+						<div id="pv2solarlogdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="bezug2_solarlog_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug2_solarlog_ip" id="bezug2_solarlog_ip" value="<?php echo $bezug2_solarlog_ipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul.
+									</span>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
 								hideSection('#pv2iddiv');
+								hideSection('#pv2ip2div');
+								hideSection('#pv2id2div');
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
-								
+								hideSection('#pv2piko2');
+								hideSection('#pv2solarlogdiv');
+
+								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
+									showSection('#pv2piko2');
+								}
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('#pv2wrjsondiv');
 								}
@@ -975,6 +1113,10 @@
 								if($('#pv2wattmodul').val() == 'wr2_solax') {
 									showSection('#pv2ipdiv');
 								}
+								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
+									showSection('#pv2ipdiv');
+								}
+
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
 									showSection('#pv2ipdiv');
 								}
@@ -992,6 +1134,11 @@
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {
 									showSection('#pv2ipdiv');
 									showSection('#pv2iddiv');
+									showSection('#pv2ip2div');
+									showSection('#pv2id2div');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_solarlog')   {
+									showSection('#pv2solarlogdiv');
 								}
 							}
 							$(function() {

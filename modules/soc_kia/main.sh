@@ -1,22 +1,18 @@
 #!/bin/bash
 
+SOCMODULE="kia"
+
+MODULEDIR=$(cd `dirname $0` && pwd)
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
 LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+DEBUGLEVEL=$debug
 
-socDebug=$debug
-# for developement only
-# socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		socsuccessfile="$RAMDISKDIR/socsuccess1"
-		soctimerfile="$RAMDISKDIR/soctimer1"
-		manualSocFile="$RAMDISKDIR/kiasoc1"
-		socFile="$RAMDISKDIR/soc1"
 		kia_email=$soc2user
 		kia_password=$soc2pass
 		kia_pin=$soc2pin
@@ -25,17 +21,18 @@ case $CHARGEPOINT in
 		soccalc=$kia_soccalclp2
 		akkug=$akkuglp2
 		efficiency=$wirkungsgradlp2
-		manualMeterFile="$RAMDISKDIR/kia_meter_lp2"
-		meterFile="$RAMDISKDIR/llkwhs1"
+		abrp_enable=$kia_abrp_enable_2
+		abrp_token=$kia_abrp_token_2
+		advanced=$kia_advanced2
+		adv_cachevalid=$kia_adv_cachevalid2
+		adv_12v=$kia_adv_12v2
+		adv_interval_unplug=$kia_adv_interval_unplug2
+		adv_ratelimit=$kia_adv_ratelimit2
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
-		# set CHARGEPOINT in case it is empty (needed for logging)
+		# set CHARGEPOINT in case it is empty (needed for soclogging)
 		CHARGEPOINT=1
-		socsuccessfile="$RAMDISKDIR/socsuccess"
-		soctimerfile="$RAMDISKDIR/soctimer"
-		manualSocFile="$RAMDISKDIR/kiasoc"
-		socFile="$RAMDISKDIR/soc"
 		kia_email=$soc_bluelink_email
 		kia_password=$soc_bluelink_password
 		kia_pin=$soc_bluelink_pin
@@ -44,138 +41,40 @@ case $CHARGEPOINT in
 		soccalc=$kia_soccalclp1
 		akkug=$akkuglp1
 		efficiency=$wirkungsgradlp1
-		manualMeterFile="$RAMDISKDIR/kia_meter_lp1"
-		meterFile="$RAMDISKDIR/llkwh"
+		abrp_enable=$kia_abrp_enable
+		abrp_token=$kia_abrp_token
+		advanced=$kia_advanced
+		adv_cachevalid=$kia_adv_cachevalid
+		adv_12v=$kia_adv_12v
+		adv_interval_unplug=$kia_adv_interval_unplug
+		adv_ratelimit=$kia_adv_ratelimit
 		;;
 esac
 
-case $dspeed in
-	1)
-		# Regelgeschwindigkeit 10 Sekunden
-		ticksize=1
-		;;
-	2)
-		# Regelgeschwindigkeit 20 Sekunden
-		ticksize=2
-		;;
-	3)
-		# Regelgeschwindigkeit 60 Sekunden
-		ticksize=1
-		;;
-	*)
-		# Regelgeschwindigkeit unbekannt
-		ticksize=1
-		;;
-esac
+ARGSFILE="$RAMDISKDIR/soc_${SOCMODULE}_lp${CHARGEPOINT}_args"
 
-socDebugLog(){
-	if (( socDebug >= $1 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: LP$CHARGEPOINT: $2" >> $LOGFILE
-	fi
-}
+ARGS='{'
+ARGS+='"moduleName": "'"$SOCMODULE"'", '
+ARGS+='"chargePoint": "'"$CHARGEPOINT"'", '
+ARGS+='"accountName": "'"$kia_email"'", '
+ARGS+='"accountPassword": "'"$kia_password"'", '
+ARGS+='"accountPin": "'"$kia_pin"'", '
+ARGS+='"vehicleVin": "'"$kia_vin"'", '
+ARGS+='"timerInterval": "'"$kia_intervall"'", '
+ARGS+='"manualCalc": "'"$soccalc"'", '
+ARGS+='"batterySize": "'"$akkug"'", '
+ARGS+='"efficiency": "'"$efficiency"'", '
+ARGS+='"abrpEnable": "'"$abrp_enable"'", '
+ARGS+='"abrpToken": "'"$abrp_token"'", '
+ARGS+='"advEnable": "'"$advanced"'", '
+ARGS+='"advCacheValid": "'"$adv_cachevalid"'", '
+ARGS+='"adv12vLimit": "'"$adv_12v"'", '
+ARGS+='"advIntUnplug": "'"$adv_interval_unplug"'", '
+ARGS+='"advRateLimit": "'"$adv_ratelimit"'", '
+ARGS+='"ramDiskDir": "'"$RAMDISKDIR"'", '
+ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
+ARGS+='}'
 
-socDebugLog 1 "-----------------------------------------------------------"
-socDebugLog 1 "Kia SoC Module starting"
+echo $ARGS > $ARGSFILE
 
-soctimervalue=$(<$soctimerfile)
-tmpintervall=$(( kia_intervall * 6 ))
-ticksLeft=$((tmpintervall - soctimervalue))
-timeLeft=$(echo "scale=1;$ticksLeft / 6" | bc | sed 's/^\./0./')
-socDebugLog 1 "    Next update: $timeLeft minutes ($ticksLeft ticks)"
-
-if (( soctimervalue < tmpintervall )); then
-	
-	soctimervalue=$((soctimervalue+ticksize))
-	echo $soctimervalue > $soctimerfile
-
-	if ((soccalc == 0)); then
-		socDebugLog 1 "    Nothing to do yet"	
-	fi
-
-	if ((soccalc == 1)); then
-		socDebugLog 1 "    Manual Calculation starting"
-
-		if [[ -f "$meterFile" ]]; then
-			currentMeter=$(<$meterFile)
-
-			# read manual Soc
-			if [[ -f "$manualSocFile" ]]; then
-				manualSoc=$(<$manualSocFile)
-			else
-				# set manualSoc to 0 as a starting point
-				manualSoc=0
-				echo $manualSoc > $manualSocFile
-			fi
-
-			# read manualMeterFile if file exists and manualMeterFile is newer than manualSocFile
-			if [[ -f "$manualMeterFile" ]] && [ "$manualMeterFile" -nt "$manualSocFile" ]; then
-				manualMeter=$(<$manualMeterFile)
-			else
-				# manualMeterFile does not exist or is outdated
-				# update manualMeter with currentMeter
-				manualMeter=$currentMeter
-				echo $manualMeter > $manualMeterFile
-			fi
-
-			# read current soc
-			if [[ -f "$socFile" ]]; then
-				currentSoc=$(<$socFile)
-			else
-				currentSoc=$manualSoc
-				echo $currentSoc > $socFile
-			fi
-
-			# calculate newSoc
-			currentMeterDiff=$(echo "scale=3;$currentMeter - $manualMeter" | bc | sed 's/^\./0./')
-			currentEffectiveMeterDiff=$(echo "scale=3;$currentMeterDiff * $efficiency / 100" | bc | sed 's/^\./0./')
-			socDebugLog 1 "        Charged since last update: $currentMeterDiff kWh = $currentEffectiveMeterDiff kWh @ $efficiency% efficency"
-			currentSocDiff=$(echo "scale=2;100 / $akkug * $currentEffectiveMeterDiff" | bc | sed 's/^\./0./')
-			socDebugLog 1 "        Charged since last update: $currentEffectiveMeterDiff kWh of $akkug kWh = $currentSocDiff% SoC"
-			newSoc=$(echo "scale=0;($manualSoc + $currentSocDiff) / 1" | bc)
-			if (( newSoc > 100 )); then
-				newSoc=100
-			fi
-			if (( newSoc < 0 )); then
-				newSoc=0
-			fi
-			socDebugLog 1 "        Estimated SoC: $manualSoc% (last update) + $currentSocDiff% (extrapolation) = $newSoc% SoC"
-			if (( newSoc != currentSoc )); then
-				socDebugLog 0 "        New Manual SoC: $newSoc% SoC"
-				echo $newSoc > $socFile
-			fi
-		else
-			# no current meter value for calculation -> Exit
-			socDebugLog 1 "        ERROR: no meter value for calculation! ($meterFile)"
-		fi
-		socDebugLog 1 "    Manual Calculation ending"
-	fi
-else
-	socDebugLog 1 "    SoC Update starting (Timer expired)"
-	echo 0 > $soctimerfile
-	echo 0 > $socsuccessfile
-	
-	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $manualSocFile $CHARGEPOINT $socDebug $socsuccessfile >> $LOGFILE
-	success=$(<$socsuccessfile)
-	
-	if ((success == 1)); then
-		soc=$(<$manualSocFile)
-		echo $soc > $socFile
-		socDebugLog 0 "        SoC received: $soc% SoC"
-		
-		if ((soccalc == 0)); then
-			socDebugLog 1 "        Applying new SoC to openWB (no manual calculation)"
-
-		fi
-		if ((soccalc == 1)); then
-			socDebugLog 1 "        Applying SoC and saving for manual calculation"
-		fi
-	else
-		socDebugLog 1 "        SoC download not successful"
-	fi
-	
-	touch $socFile
-	socDebugLog 1 "    SoC Update ending"
-fi
-
-socDebugLog 1 "Kia SoC Module ending"
+sudo python3 $MODULEDIR/main.py $ARGSFILE &>> $LOGFILE &

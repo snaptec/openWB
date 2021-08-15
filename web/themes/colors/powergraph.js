@@ -113,7 +113,7 @@ class PowerGraph {
     var heading = "Leistung / Ladestand ";
     switch (wbdata.graphMode) {
       case 'live':
-        heading = heading + this.liveGraphMinutes + " min";
+        heading = heading + this.liveGraphMinutes + "&nbsp;min";
         break;
       case 'day':
         const today = new Date();
@@ -364,7 +364,7 @@ extractMonthValues(payload, oldPayload) {
       values["lp" + i] = this.calcMonthlyValue(4 + i, elements, oldElements);
     }
     for (i = 3; i < 8; i++) {
-      values["lp" + i] = this.calcMonthlyValue(12 + i, elements, oldElements);
+      values["lp" + i] = this.calcMonthlyValue(12 + i - 3, elements, oldElements);
     }
     values.soc1 = +elements[21];
     values.soc2 = +elements[22];
@@ -376,8 +376,8 @@ extractMonthValues(payload, oldPayload) {
     values.co0 = this.calcMonthlyValue(10, elements, oldElements);
     values.co1 = this.calcMonthlyValue(12, elements, oldElements);
     //battery
-    values.batIn = this.calcMonthlyValue(8, elements, oldElements);
-    values.batOut = this.calcMonthlyValue(9, elements, oldElements);
+    values.batIn = this.calcMonthlyValue(17, elements, oldElements);
+    values.batOut = this.calcMonthlyValue(18, elements, oldElements);
     values.batterySoc = +elements[20];
     // calculated values
     values.housePower = values.gridPull + values.solarPower + values.batOut

@@ -30,7 +30,6 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 	kWhCounter=$(grep kWhCounter /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}')
 	LastScannedRfidTag=$(grep LastScannedRfidTag /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}')
 
-
 	if (( chargep == "1" ));then
 		echo $VPhase1 > /var/www/html/openWB/ramdisk/llv1
 		echo $VPhase2 > /var/www/html/openWB/ramdisk/llv2
@@ -44,8 +43,6 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 		echo $boolChargeStat > /var/www/html/openWB/ramdisk/chargestat
 		soc=$(</var/www/html/openWB/ramdisk/soc)
 		mosquitto_pub -h $ip -r -t openWB/set/lp/$chargepcp/%Soc -m "$soc"
-
-
 	fi
 	if (( chargep == "2" ));then
 		echo $VPhase1 > /var/www/html/openWB/ramdisk/llvs11
@@ -60,7 +57,6 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 		echo $boolChargeStat > /var/www/html/openWB/ramdisk/chargestats1
 		soc=$(</var/www/html/openWB/ramdisk/soc1)
 		mosquitto_pub -h $ip -r -t openWB/set/lp/$chargepcp/%Soc -m "$soc"
-
 	fi
 	if (( chargep == "3" ));then
 		echo $VPhase1 > /var/www/html/openWB/ramdisk/llvs21
@@ -73,7 +69,6 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 		echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwhs2
 		echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstatlp3
 		echo $boolChargeStat > /var/www/html/openWB/ramdisk/chargestatlp3
-
 	fi
 	if (( chargep > "3" ));then
 		echo $VPhase1 > /var/www/html/openWB/ramdisk/llv1lp$chargep
@@ -86,7 +81,6 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 		echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwhlp$chargep
 		echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstatlp$chargep
 		echo $boolChargeStat > /var/www/html/openWB/ramdisk/chargestatlp$chargep
-
 	fi
 	if ! [ -z $LastScannedRfidTag ] && [ $LastScannedRfidTag -ge "3" ]; then
 		echo $LastScannedRfidTag > /var/www/html/openWB/ramdisk/readtag
@@ -94,10 +88,21 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 	fi
 
 	mosquitto_pub -h $ip -r -t openWB/set/isss/parentWB -m "$myipaddress"
-        mosquitto_pub -h $ip -r -t openWB/set/isss/parentWB -m "$myipaddress"
-        openwbModulePublishState "LP" 0 "Kein Fehler" $chargep
+	if (( chargepcp == "1" )); then
+		mosquitto_pub -h $ip -r -t openWB/set/isss/parentCPlp1 -m "$chargep"
+	else
+		mosquitto_pub -h $ip -r -t openWB/set/isss/parentCPlp2 -m "$chargep"
+	fi
+	mosquitto_pub -h $ip -r -t openWB/set/isss/heartbeat -m "0"
+	openwbModulePublishState "LP" 0 "Kein Fehler" $chargep
+	echo 0 > /var/www/html/openWB/ramdisk/errcounterextopenwb
 else
-        openwbModulePublishState "LP" 1 "Keine Daten vom LP erhalten, IP Korrekt?" $chargep
-        openwbDebugLog "MAIN" 0 "Keine Daten von externe openWB LP $chargep empfangen"
+	openwbModulePublishState "LP" 1 "Keine Daten vom LP erhalten, IP Korrekt?" $chargep
+	openwbDebugLog "MAIN" 0 "Keine Daten von externe openWB LP $chargep empfangen"
+	errcounter=$(</var/www/html/openWB/ramdisk/errcounterextopenwb)
+	errcounter=$((errcounter+1))
+	echo $errcounter > /var/www/html/openWB/ramdisk/errcounterextopenwb
+	if (( errcounter > 5 )); then
+		echo "Fehler bei Auslesung externe openWB LP $chargep, Netzwerk oder Konfiguration prüfen" > /var/www/html/openWB/ramdisk/lastregelungaktiv
+	fi
 fi
-

@@ -10,10 +10,11 @@ import json
 devicenumber = str(sys.argv[1])
 seradd = str(sys.argv[2])
 sdmid = int(sys.argv[3])
+port = int(sys.argv[4])
 
 from pymodbus.client.sync import ModbusTcpClient
 
-client = ModbusTcpClient(seradd, port=8899)
+client = ModbusTcpClient(seradd, port=port)
 
 #KWH Total Import
 resp = client.read_input_registers(0x0156,2, unit=sdmid)

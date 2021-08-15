@@ -7,10 +7,9 @@ pvwatttmp=$(curl --connect-timeout 3 -s $wrkostalpikoip/api/dxs.json?dxsEntries=
 #aktuelle Ausgangsleistung am WR [W]
 pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
 
-if [ $pvwatt > 5 ]
-	 then
-	  pvwatt=$(echo "$pvwatt*-1" |bc)
-fi   
+if [ $pvwatt > 5 ] ; then
+	pvwatt=$(echo "$pvwatt*-1" |bc)
+fi
 
 #zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
@@ -30,7 +29,6 @@ else
 	wattbezug=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt" |bc)
 fi
 
-
 echo $wattbezug
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 bezuga1=$(echo "scale=2 ; $bezugw1 / 225" | bc)
@@ -39,8 +37,3 @@ bezuga3=$(echo "scale=2 ; $bezugw3 / 225" | bc)
 echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
 echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
 echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
-
-
-
-
-

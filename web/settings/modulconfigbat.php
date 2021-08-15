@@ -76,6 +76,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
@@ -141,6 +142,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">SDM630 an EVU Kit angeschlossen</option>
 										</select>
 									</div>
 								</div>
@@ -156,6 +158,43 @@
 								<span class="text-info">openWB/set/houseBattery/WhExported</span> Entladene Energie in Wh, float, nur positiv<br>
 								<span class="text-info">openWB/set/houseBattery/%Soc</span> Ladestand des Speichers, int, 0-100
 							</div>
+						</div>
+						
+						<div id="divspeichersolarwatt" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="solarwattmethod1" class="col-md-4 col-form-label">Abrufmethode EVU/Batterie</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($solarwattmethodold == 0) echo " active" ?>">
+												<input type="radio" name="solarwattmethod" id="solarwattmethod1" value="0"<?php if($solarwattmethodold == 0) echo " checked=\"checked\"" ?>>Energy Manager
+											</label>
+											<label class="btn btn-outline-info<?php if($solarwattmethodold == 1) echo " active" ?>">
+												<input type="radio" name="solarwattmethod" id="solarwattmethod2" value="1"<?php if($solarwattmethodold == 1) echo " checked=\"checked\"" ?>>Gateway
+											</label>
+										</div>
+										<span class="form-text small">
+											IP-Adresse 1: Energy Manager (immer angeben)<br>
+											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+										</span>
+									</div>									
+								</div>
+							</div>
+							<script>
+								function visibility_solarwatt_ip2() {
+									if($('#solarwattmethod1').prop("checked")) {
+										hideSection('#divspeicherip2');
+									} else {
+										showSection('#divspeicherip2');
+									}
+								}
+								
+								$(function() {	
+									$('input[type=radio][name=solarwattmethod]').change(function(){
+										visibility_solarwatt_ip2();
+									});
+								});
+							</script>
 						</div>
 
 						<div id="divspeichervictron" class="hide">
@@ -204,6 +243,18 @@
 								</div>
 							</div>
 						</div>
+						
+						<div id="divspeicherip2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="speicher1_ip2" class="col-md-4 col-form-label">IP Adresse 2</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip2" id="speicher1_ip2" value="<?php echo $speicher1_ip2old ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+							</div>
+						</div>
 
 						<div id="divspeichersiemens" class="hide">
 							<div class="alert alert-info">
@@ -233,6 +284,13 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
+									<label for="vartaspeicher2ip" class="col-md-4 col-form-label">IP Adresse des zweiten Speichers</label>
+									<div class="col">
+										<input class="form-control" type="text" name="vartaspeicher2ip" id="vartaspeicher2ip" value="<?php echo $vartaspeicher2ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12, wenn nicht vorhanden none eintragen</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label for="usevartamodbus" class="col-md-4 col-form-label">Ausleseart Modbus</label>
 									<div class="col">
 										<select name="usevartamodbus" id="usevartamodbus" class="form-control">
@@ -246,8 +304,16 @@
 						</div>
 
 						<div id="divspeicheralphaess" class="hide">
-							<div class="alert alert-info">
-								Keine Konfiguration erforderlich.
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
+									<div class="col">
+										<select name="alphav123" id="alphav123" class="form-control">
+											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
+											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
+										</select>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -281,7 +347,7 @@
 									<label for="speicherpwpass" class="col-md-4 col-form-label">Passwort</label>
 									<div class="col">
 										<input class="form-control" type="password" name="speicherpwpass" id="speicherpwpass" value="<?php echo $speicherpwpassold ?>">
-										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall.</span>
+										<span class="form-text small">Passwort für den lokalen Login auf der Powerwall. Das Passwort sind üblicherweise die letzten 5 Stellen der Seriennummer.</span>
 									</div>
 								</div>
 							</div>
@@ -587,6 +653,8 @@
 								hideSection('#divspeicherrct');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
+								hideSection('#divspeichersolarwatt');
+								hideSection('#divspeicherip2');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
@@ -599,11 +667,17 @@
 									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
+									showSection('#divspeichersolarwatt');
 									showSection('#divspeicherip');
+									visibility_solarwatt_ip2();
 								}
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
 								}
+								if($('#speichermodul').val() == 'speicher_saxpower') {
+									showSection('#divspeicherip');
+								}
+
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');

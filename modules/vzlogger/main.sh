@@ -5,7 +5,6 @@
 #Mithilfe von sed wird die die gewünschte Zeile ausgewählt
 #tr entfernt unnötige leerzeilen
 
-
 watttmp=$(curl --connect-timeout 15 -s $vzloggerip)
 watt=$(echo $watttmp | jq . | sed ''$vzloggerline'!d' | tr -d ' ' )
 watt=$(echo "${watt}" | cut -f1 -d".")

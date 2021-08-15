@@ -80,7 +80,7 @@
 									</div>
 									<span class="form-text small">
 										Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen. Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (20 Sekunden) herabsetzen. Die Einstellungen „Sehr Langsam“ führt zu einer Regelzeit von 60 Sekunden.<br>
-										<span class="text-danger">Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“ etc., werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger.</span>
+										<span class="text-danger">Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“ etc., werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger. Ebenso können eingestellte Verzögerungen um den Faktor der Änderung langsamer ausgeführt werden. Solange es keinen triftiten Grund gibt sollte immer Normal gewählt werden.</span>
 									</span>
 								</div>
 							</div>
@@ -183,7 +183,7 @@
 									<div class="form-row vaRow mb-1">
 										<label for="cpunterbrechungdauerlp1" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungdauerlp1old; ?> Sek</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp1" id="cpunterbrechungdauerlp1" min="4" max="15" step="1" value="<?php echo $cpunterbrechungdauerlp1old; ?>">
+											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp1" id="cpunterbrechungdauerlp1" min="4" max="150" step="1" value="<?php echo $cpunterbrechungdauerlp1old; ?>">
 										</div>
 									</div>
 									<span class="form-text small">
@@ -212,7 +212,7 @@
 										<div class="form-row vaRow mb-1">
 											<label for="cpunterbrechungdauerlp2" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungdauerlp2old; ?> Sek</label>
 											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp2" id="cpunterbrechungdauerlp2" min="4" max="15" step="1" value="<?php echo $cpunterbrechungdauerlp2old; ?>">
+												<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp2" id="cpunterbrechungdauerlp2" min="4" max="150" step="1" value="<?php echo $cpunterbrechungdauerlp2old; ?>">
 											</div>
 										</div>
 										<span class="form-text small">
@@ -244,7 +244,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 cpminlaufzeit hide">
-								<label for="cpminlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
+								<label for="cpunterbrechungmindestlaufzeit" class="col-md-4 col-form-label">Mindestlaufzeit nach Unterbrechung</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
 										<label for="cpunterbrechungmindestlaufzeit" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungmindestlaufzeitold; ?> Sek</label>

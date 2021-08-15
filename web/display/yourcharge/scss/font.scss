@@ -1,0 +1,55 @@
+@import "vars.scss";
+.color-primary {
+    color: $primary;
+}
+.bg-warning {
+    color: #212529;
+}
+.bg-info {
+    color: #212529;
+}
+.bg-success {
+    color: #212529;
+}
+.btn-outline-secondary {
+    color: #ffffff;
+}
+.btn-block {
+    font-size: 24px;
+}
+.lpEnabledStyle {
+    color: #006515;
+    text-decoration: none;
+}
+.lpWaitingStyle {
+    color: #ffdb00;
+    text-decoration: none;
+}
+.lpDisabledStyle {
+    color: #a30000;
+    text-decoration: line-through;
+}
+.text-green {
+    color: #006515;
+}
+.text-red {
+    color: #a30000;
+}
+.text-white {
+    color: white;
+}
+.text-orange {
+    color: #ff8c1a;
+}
+.text-black {
+    color: black;
+}
+.text-blue {
+    color: blue;
+}
+.text-grey {
+    color: #515151;
+}
+.text-lightgrey {
+    color: rgba(255, 255, 255, 0.82);
+}

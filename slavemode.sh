@@ -46,9 +46,12 @@ openwbisslave() {
 
 		# handle de-activation request by socket or EV RFID scan
 		if (( SocketActivationRequested >= 2 )); then
-			openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket DEactivation requested by socket or EV RFID tag scan. Socket will now be turned off."
-			sudo python runs/standardSocket.py off
-			echo 0 > $SocketRequestedFile
+			if (( SocketActivated == 0)) || (( SocketApproved == 0 )); then
+			  echo 0 > $SocketRequestedFile
+			else
+				openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket DEactivation requested by socket or EV RFID tag scan. Socket will now be turned off."
+				sudo python runs/standardSocket.py off
+			fi
 
 		# handle disapprove of active socket
 		elif (( SocketActivated > 0 )) && (( SocketApproved == 0 )); then
@@ -77,7 +80,7 @@ openwbisslave() {
 
 		# no change required
 		else
-			openwbDebugLog "MAIN" 0 "Slave Mode: Socket installed: No change required"
+			openwbDebugLog "MAIN" 2 "Slave Mode: Socket installed: No change required"
 		fi
 
 	else
@@ -306,10 +309,17 @@ function computeLoadImbalanceCompensation() {
 	#  have been compensating in last loop?                are we contributing ?                   we're not contributing to minimal current phase             is imbalance limit newly exceeded?
 	if        (( lastImbalance < 0 ))         || ( (( ChargingOnPhase[$imbalPhase] == 1 )) && (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 0 )) && (( `echo "$imbalDiff < 0.0" | bc` == 1 )) ); then
 
-		# we're contributing to imbalance and imbalance actually needs adjustment, first calculate our part of the contribution
-		imbalDiff=$(echo "scale=3; ($imbalDiff / ${ChargingVehiclesOnPhase[$imbalPhase]})" | bc)
+		chargingVehiclesOnImbalPhase=${ChargingVehiclesOnPhase[$imbalPhase]}
+		if (( chargingVehiclesOnImbalPhase == 0 )); then
+			# there are no vehicles charging: shouldn't happen (likely a bug in controller)
+			# but we at leasts count ourself as we know that "we're contributing" and thereby prevent a div/0
+			chargingVehiclesOnImbalPhase=1;
+		fi
 
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: We're contributing! imbalPhase=$imbalPhase, ChargingVehiclesOnPhase[imbalPhase]=${ChargingVehiclesOnPhase[$imbalPhase]} ==> imbalDiff=${imbalDiff} A"
+		# we're contributing to imbalance and imbalance actually needs adjustment, first calculate our part of the contribution
+		imbalDiff=$(echo "scale=3; ($imbalDiff / ${chargingVehiclesOnImbalPhase})" | bc)
+
+		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: We're contributing! imbalPhase=$imbalPhase, ChargingVehiclesOnPhase[imbalPhase]=${ChargingVehiclesOnPhase[$imbalPhase]}, chargingVehiclesOnImbalPhase=${chargingVehiclesOnImbalPhase=} ==> imbalDiff=${imbalDiff} A"
 
 		# calculate new imbalance adjustement value in integer Ampere steps
 		# Note: We need to do the rounding to next lower Ampere of imbalance in order to really enforce an adjustement.

@@ -131,6 +131,10 @@
 				readLogFile("/openWB/ramdisk/soc.log", "#socdiv");
 			}
 			soclog();
+			function llanbindunglog() {
+				readLogFile("/openWB/ramdisk/isss.log", "#llanbindungdiv");
+			}
+			llanbindunglog();
 		</script>
 
 	</head>
@@ -587,6 +591,13 @@
 						<button class="btn btn-info reloadSocLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
 						<pre id="socdiv"></pre>
 					</div>
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseEight">
+						<a class="card-title">Nur Ladepunkt Log </a>
+					</div>
+					<div id="collapseEight" class="card-body collapse" data-parent="#accordion">
+						<button class="btn btn-info reloadLLAnbindungLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
+						<pre id="llanbindungdiv"></pre>
+					</div>
 				</div>
 			</div>
 
@@ -701,6 +712,9 @@
 			});
 			$('.reloadSocLog').click(function(event){
 				soclog();
+			});
+			$('.reloadLLAnbindungLog').click(function(event){
+				llanbindunglog();
 			});
 		</script>
 

@@ -3,12 +3,17 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-LOGFILE="$RAMDISKDIR/soc.log"
+DMOD="EVSOC"
 CHARGEPOINT=$1
 
-socDebug=$debug
-# for developement only
-socDebug=1
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_leaf: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
 
 case $CHARGEPOINT in
 	2)
@@ -25,13 +30,6 @@ case $CHARGEPOINT in
 		;;
 esac
 
-socDebugLog(){
-	if (( $socDebug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
-	fi
-}
-
-socDebugLog "Starting Python module"
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Starting Python module"
 sudo python /var/www/html/openWB/modules/soc_leaf/soc.py $username $password $CHARGEPOINT
-socDebugLog "Done"
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Done"

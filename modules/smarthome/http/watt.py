@@ -42,8 +42,9 @@ if len(urlc) < 6:
 else:
     if not urlparse(urlc).scheme:
         urlc = 'http://' + urlc
-    powerc = int(urllib.request.urlopen(urlc, timeout=5).read().decode("utf-8"))
+    powercfl = float(urllib.request.urlopen(urlc, timeout=5).read().decode("utf-8"))
+    powerc = int(powercfl)
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
 f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
 json.dump(answer,f1)
-f1.close() 
+f1.close()

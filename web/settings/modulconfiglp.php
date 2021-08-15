@@ -45,6 +45,10 @@
 				list($key, $value) = explode("=", $line, 2);
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
+			// read available vehicles for EVCC SoC module from web API
+			$soc_evcc_vehicles = json_decode(file_get_contents('https://cloud.evcc.io/api/vehicles'), true);
+			$firstentry=array("id" => "none", "name" => "Bitte auswählen");
+			array_unshift($soc_evcc_vehicles , $firstentry);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -73,6 +77,7 @@
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
 									<optgroup label="openWB">
+										<option <?php if($evseconold == "daemon") echo "selected" ?> value="daemon">openWB Daemon</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "0") echo "selected" ?> value="modbusevse" data-id="openwb auto">Series1/2 Autoerkennung</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">Series1/2</option>
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">Series1/2 mit geeichtem Zähler Variante 1</option>
@@ -126,7 +131,6 @@
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option für fertige openWB series1 oder series2.<br>
-								<span class="text-danger">Diese Option befindet sich noch in der Testphase!</span>
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
@@ -136,6 +140,14 @@
 								Dies ist die richtige Option für die openWB mit Buchse.
 							</div>
 						</div>
+						<div id="openwbdaemon" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="lldaemonlp1">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für eine fertige openWB und bietet eine optimale und schnelle Auslesung.
+							</div>
+						</div>
+
 						<div id="openwb12mid" class="hide">
 							<!-- default values for openwb12mid -->
 							<input type="hidden" name="modbusevseid" value="1">
@@ -311,6 +323,19 @@
 							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
+									<div class="col-md-4">
+										HTTPControl / Ngardiner Fork
+									</div>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($twcmanagerlp1httpcontrolold == 0) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp1httpcontrol" id="twcmanagerlp1httpcontrolOff" value="0"<?php if($twcmanagerlp1httpcontrolold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($twcmanagerlp1httpcontrolold == 1) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp1httpcontrol" id="twcmanagerlp1httpcontrolOn" value="1"<?php if($twcmanagerlp1httpcontrolold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label for="twcmanagerlp1ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>">
@@ -319,7 +344,14 @@
 										</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
+								<div class="form-row mb-1 input-port">
+									<label for="twcmanagerlp1port" class="col-md-4 col-form-label">Port</label>
+									<div class="col">
+										<input class="form-control" type="number" min="80" max="10000" step="1" name="twcmanagerlp1port" id="twcmanagerlp1port" value="<?php echo $twcmanagerlp1portold ?>">
+										<span class="form-text small">Port des HTTP Control Interface. Standard: 8080</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 input-phases">
 									<label for="twcmanagerlp1phasen" class="col-md-4 col-form-label">Anzahl Phasen</label>
 									<div class="col">
 										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>">
@@ -328,6 +360,26 @@
 								</div>
 							</div>
 						</div>
+						<script>
+							$(function() {
+								function visibility_twcmanagerlp1_connection() {
+									if($('#twcmanagerlp1httpcontrolOff').prop("checked")) {
+										hideSection('#evsecontwcmanager .input-port');
+										showSection('#evsecontwcmanager .input-phases');
+									} else {
+										showSection('#evsecontwcmanager .input-port');
+										hideSection('#evsecontwcmanager .input-phases');
+									}
+								}
+
+								$('input[type=radio][name=twcmanagerlp1httpcontrol]').change(function(){
+									visibility_twcmanagerlp1_connection();
+								});
+
+	       							visibility_twcmanagerlp1_connection();
+							});
+						</script>
+
 						<div id="evsecongoe" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="goelp1">
 							<div class="form-group">
@@ -681,8 +733,7 @@
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
-										<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai</option>
-										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
+										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
 										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
 										<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
 										<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
@@ -783,23 +834,10 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_tesla_password" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_tesla_password" id="soc_tesla_password" value="<?php echo $soc_tesla_passwordold ?>">
-											<span class="form-text small">
-												Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
-												Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
-												Wenn das Eingabefeld geleert wird, dann werden auch die Anmeldetoken komplett entfernt.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_tesla_mfapasscode" class="col-md-4 col-form-label">MFA-PassCode</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_tesla_mfapasscode" id="soc_tesla_mfapasscode" value="<?php echo $soc_tesla_mfapasscodeold ?>">
-											<span class="form-text small">
-												Optionaler PassCode für eine aktivierte 2-Faktor-Anmeldung. Der PassCode wird nur benötigt, wenn noch keine Token vorhanden sind. Nach erfolgreicher Anmeldung wid der PassCode entfernt.
-											</span>
+											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_tesla_username" value="1">Bei Tesla anmelden</button>
+											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="1">Anmeldedaten entfernen</button>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -833,8 +871,28 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$(function() {
+										var teslaUrl = "/openWB/modules/soc_tesla/tesla.php";
+
+										$('.soc-tesla-login-btn').click(function(){
+											var chargepoint = $(this).val();
+											var email = $($(this).attr('data-email')).val();
+											var teslaLoginUrl = teslaUrl+"?chargepoint="+chargepoint+"&email="+email;
+											// console.log("chargepoint: "+chargepoint+" email: "+email+" url: "+teslaLoginUrl);
+											window.open(teslaLoginUrl, '_tesla_login').focus();
+										});
+
+										$('.soc-tesla-clear-btn').click(function(){
+											var chargepoint = $(this).val();
+											var teslaCleanupUrl = teslaUrl+"?chargepoint="+chargepoint+"&go=cleanup";
+											// console.log("chargepoint: "+chargepoint+" email: "+email+" url: "+teslaLoginUrl);
+											window.open(teslaCleanupUrl, '_tesla_login').focus();
+										});
+									});
+								</script>
 							</div>
-							<div id="socmbluelink" class="hide">
+							<div id="socmkia" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_email" class="col-md-4 col-form-label">E-Mail</label>
@@ -863,14 +921,10 @@
 											</span>
 										</div>
 									</div>
-								</div>
-							</div>
-							<div id="socmkia" class="hide">
-								<div class="form-group">
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_pin" class="col-md-4 col-form-label">PIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
+											<input class="form-control" type="password" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
 											<span class="form-text small">
 												PIN des Accounts.
 											</span>
@@ -901,30 +955,111 @@
 												Bei Nein wird immer der SoC über die API abgefragt.
 											</span>
 										</div>
-										<div id="kiamanualcalcdiv" class="hide">
-											<div class="form-row mb-1">
-												<label for="kia_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="kia_akkuglp1" value="<?php echo $akkuglp1old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-													</span>
-												</div>
+									</div>
+									<div id="kiamanualcalcdiv" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="kia_akkuglp1" value="<?php echo $akkuglp1old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
 											</div>
-											<div class="form-row mb-1">
-												<label for="kia_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="kia_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="kia_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Push-Funktion für ABRP</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_abrp_enableold == 0) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable" id="kia_abrp_enableOff" value="0"<?php if($kia_abrp_enableold == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_abrp_enableold == 1) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable" id="kia_abrp_enableOn" value="1"<?php if($kia_abrp_enableold == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gew&auml;hlt wird, wird der SoC regelm&auml;&szlig;ig an ABRP &uuml;bermittelt.<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_abrp_enablediv" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_abrp_token" class="col-md-4 col-form-label">ABRP Token</label>
+											<div class="col">
+												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
+												<span class="form-text small">
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Erweiterte Einstellungen</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_advancedold == 0) echo " active" ?>">
+													<input type="radio" name="kia_advanced" id="kia_advancedOff" value="0"<?php if($kia_advancedold == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_advancedold == 1) echo " active" ?>">
+													<input type="radio" name="kia_advanced" id="kia_advancedOn" value="1"<?php if($kia_advancedold == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_advanceddiv" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_adv_cachevalid" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid" id="kia_adv_cachevalid" value="<?php echo $kia_adv_cachevalidold ?>">
+												<span class="form-text small">
+													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_12v" class="col-md-4 col-form-label">12V SoC Limit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" max="100" step="1" name="kia_adv_12v" id="kia_adv_12v" value="<?php echo $kia_adv_12vold ?>">
+												<span class="form-text small">
+													Minimaler SoC der 12V-Batterie für Abrufe in Prozent (Default: 20)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_interval_unplug" class="col-md-4 col-form-label">Abrufintervall abgesteckt</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_interval_unplug" id="kia_adv_interval_unplug" value="<?php echo $kia_adv_interval_unplugold ?>">
+												<span class="form-text small">
+													Abrufintervall bei abgestecktem Auto in Minuten (sofern freigegeben)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_ratelimit" class="col-md-4 col-form-label">Abrufsperre</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_ratelimit" id="kia_adv_ratelimit" value="<?php echo $kia_adv_ratelimitold ?>">
+												<span class="form-text small">
+													Minimaler Abstand zwischen Abrufen in Minuten (default: 15)<br>
+												</span>
 											</div>
 										</div>
 									</div>
@@ -938,12 +1073,34 @@
 												showSection('#kiamanualcalcdiv');
 											}
 										}
+										function visibility_kia_abrp_enable() {
+											if($('#kia_abrp_enableOff').prop("checked")) {
+												hideSection('#kia_abrp_enablediv');
+											} else {
+												showSection('#kia_abrp_enablediv');
+											}
+										}
+										function visibility_kia_advanced() {
+											if($('#kia_advancedOff').prop("checked")) {
+												hideSection('#kia_advanceddiv');
+											} else {
+												showSection('#kia_advanceddiv');
+											}
+										}
 
 										$('input[type=radio][name=kia_soccalclp1]').change(function(){
 											visibility_kia_soccalclp1();
 										});
+										$('input[type=radio][name=kia_abrp_enable]').change(function(){
+											visibility_kia_abrp_enable();
+										});
+										$('input[type=radio][name=kia_advanced]').change(function(){
+											visibility_kia_advanced();
+										});
 
 										visibility_kia_soccalclp1();
+										visibility_kia_abrp_enable();
+										visibility_kia_advanced();
 									});
 								</script>
 							</div>
@@ -1125,20 +1282,13 @@
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<select name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" class="form-control">
-												<option <?php if($soc_evcc_type_lp1old == "none") echo "selected" ?> value="none">Bitte auswählen</option>
-												<option <?php if($soc_evcc_type_lp1old == 'audi') echo "selected" ?> value="audi">Audi</option>
-												<option <?php if($soc_evcc_type_lp1old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
-												<option <?php if($soc_evcc_type_lp1old == 'ford') echo "selected" ?> value="ford">Ford</option>
-												<option <?php if($soc_evcc_type_lp1old == 'hyundai') echo "selected" ?> value="Hyundai">Hyundai</option>
-												<option <?php if($soc_evcc_type_lp1old == 'id') echo "selected" ?> value="id">ID</option>
-												<option <?php if($soc_evcc_type_lp1old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp1old == 'nissan') echo "selected" ?> value="Nissan">Nissan</option>
-												<option <?php if($soc_evcc_type_lp1old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp1old == 'renault') echo "selected" ?> value="Renault">Renault</option>
-												<option <?php if($soc_evcc_type_lp1old == 'seat') echo "selected" ?> value="seat">Seat</option>
-												<option <?php if($soc_evcc_type_lp1old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
-												<option <?php if($soc_evcc_type_lp1old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
-												<option <?php if($soc_evcc_type_lp1old == 'vw') echo "selected" ?> value="vw">VW</option>											</select>
+												<?php
+													foreach($soc_evcc_vehicles as $item => $value)
+													{
+														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp1old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
+													}
+												?>
+											</select>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
 									</div>
@@ -1179,7 +1329,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_intervall_lp1" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_evcc_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_evcc_intervall" id="soc_evcc_intervall" value="<?php echo $soc_evcc_intervallold ?>">
 											<span class="form-text small">
@@ -1849,7 +1999,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -1927,7 +2077,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
 															});
-															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp1').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -1966,6 +2116,7 @@
 							hideSection('#evsecontwcmanager');
 							hideSection('#evseconipevse');
 							hideSection('#openwbbuchse');
+							hideSection('#openwbdaemon');
 							hideSection('#evseconextopenwb');
 							hideSection('#evseconmqtt');
 
@@ -1996,6 +2147,9 @@
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('#evseconextopenwb');
+							}
+							if($('#evsecon').val() == 'daemon') {
+								showSection('#openwbdaemon');
 							}
 							if($('#evsecon').val() == 'buchse') {
 								showSection('#openwbbuchse');
@@ -2111,7 +2265,6 @@
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
-							hideSection('#socmbluelink');
 							hideSection('#socmkia');
 							hideSection('#socmuser');
 							hideSection('#socmpass');
@@ -2140,12 +2293,6 @@
 								showSection('#socsupportinfo');
 								showSection('#socmqtt');
 							}
-							if($('#socmodul').val() == 'soc_bluelink') {
-								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3138')
-								showSection('#socsupportinfo');
-								showSection('#socmkia');
-								showSection('#socmbluelink');
-							}
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('#socoldevccwarning');
 								showSection('#socmid');
@@ -2163,7 +2310,6 @@
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3137')
 								showSection('#socsupportinfo');
 								showSection('#socmkia');
-								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
@@ -2285,6 +2431,7 @@
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">Series1/2 Duo 1. Version</option>
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">Series1/2 Duo (ab Herbst 2020)</option>
 										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evsecons1old == "daemon") echo "selected" ?> value="daemon">openWB Duo Daemon </option>
 										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
 										<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
 									</optgroup>
@@ -2293,6 +2440,7 @@
 										<option <?php if($evsecons1old == "keba") echo "selected" ?> value="keba">Keba</option>
 										<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 										<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+										<option <?php if($evsecons1old == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
@@ -2322,6 +2470,13 @@
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="evsecondaemonlp2" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="lldaemonlp2">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option für eine fertige openWB Duo und bietet eine optimale und schnelle Auslesung.
 							</div>
 						</div>
 						<div id="evseconipevselp2" class="hide">
@@ -2479,6 +2634,66 @@
 								<span class="text-info">openWB/set/lp/2/chargeStat</span> Status, ob gerade geladen wird, nur 0 (nein) oder 1 (ja)
 							</div>
 						</div>
+						<div id="evsecontwcmanagers1" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp2">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										HTTPControl / Ngardiner Fork
+									</div>
+									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($twcmanagerlp2httpcontrolold == 0) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp2httpcontrol" id="twcmanagerlp2httpcontrolOff" value="0"<?php if($twcmanagerlp2httpcontrolold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($twcmanagerlp2httpcontrolold == 1) echo " active" ?>">
+											<input type="radio" name="twcmanagerlp2httpcontrol" id="twcmanagerlp2httpcontrolOn" value="1"<?php if($twcmanagerlp2httpcontrolold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="twcmanagerlp2ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp2ip" id="twcmanagerlp2ip" value="<?php echo $twcmanagerlp2ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 input-port">
+									<label for="twcmanagerlp2port" class="col-md-4 col-form-label">Port</label>
+									<div class="col">
+										<input class="form-control" type="number" min="80" max="10000" step="1" name="twcmanagerlp2port" id="twcmanagerlp2port" value="<?php echo $twcmanagerlp2portold ?>">
+										<span class="form-text small">Port des HTTP Control Interface. Standard: 8080</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 input-phases">
+									<label for="twcmanagerlp2phasen" class="col-md-4 col-form-label">Anzahl Phasen</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp2phasen" id="twcmanagerlp2phasen" value="<?php echo $twcmanagerlp2phasenold ?>">
+										<span class="form-text small">Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA).</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<script>
+							$(function() {
+								function visibility_twcmanagerlp2_connection() {
+									if($('#twcmanagerlp2httpcontrolOff').prop("checked")) {
+										hideSection('#evsecontwcmanagers1 .input-port');
+										showSection('#evsecontwcmanagers1 .input-phases');
+									} else {
+										showSection('#evsecontwcmanagers1 .input-port');
+										hideSection('#evsecontwcmanagers1 .input-phases');
+									}
+								}
+
+								$('input[type=radio][name=twcmanagerlp2httpcontrol]').change(function(){
+									visibility_twcmanagerlp2_connection();
+								});
+
+								visibility_twcmanagerlp2_connection();
+							});
+						</script>
 						<div id="evsecoslaveeth" class="hide">
 							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmethll">
 							<div class="card-text alert alert-info">
@@ -2711,8 +2926,7 @@
 									<optgroup label="Fahrzeughersteller">
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
-										<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai</option>
-										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
+										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
 										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
 										<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
 										<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
@@ -2875,23 +3089,10 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_teslalp2_password" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_teslalp2_password" id="soc_teslalp2_password" value="<?php echo $soc_teslalp2_passwordold ?>">
-											<span class="form-text small">
-												Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
-												Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
-												Wenn das Eingabefeld geleert wird, dann werden auch die Anmeldetoken komplett entfernt.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_teslalp2_mfapasscode" class="col-md-4 col-form-label">MFA-PassCode</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_teslalp2_mfapasscode" id="soc_teslalp2_mfapasscode" value="<?php echo $soc_teslalp2_mfapasscodeold ?>">
-											<span class="form-text small">
-												Optionaler PassCode für eine aktivierte 2-Faktor-Anmeldung. Der PassCode wird nur benötigt, wenn noch keine Token vorhanden sind. Nach erfolgreicher Anmeldung wid der PassCode entfernt.
-											</span>
+											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_teslalp2_username" value="2">Bei Tesla anmelden</button>
+											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="2">Anmeldedaten entfernen</button>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -3162,7 +3363,7 @@
 									<div class="form-row mb-1">
 										<label for="soc2pin" class="col-md-4 col-form-label">Pin</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
+											<input class="form-control" type="password" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
 											<span class="form-text small">
 												PIN des Accounts.
 											</span>
@@ -3552,30 +3753,111 @@
 												Bei Nein wird immer der SoC über die API abgefragt.
 											</span>
 										</div>
-										<div id="kiamanualcalclp2div" class="hide">
-											<div class="form-row mb-1">
-												<label for="kia_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="kia_akkuglp2" value="<?php echo $akkuglp2old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-													</span>
-												</div>
+									</div>
+									<div id="kiamanualcalclp2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="kia_akkuglp2" value="<?php echo $akkuglp2old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
 											</div>
-											<div class="form-row mb-1">
-												<label for="kia_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="kia_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="kia_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Für Kia e-niro (11 kWh Lader): 85-90 Prozent<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Push-Funktion für ABRP</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_abrp_enable_2old == 0) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable_2" id="kia_abrp_enable_2Off" value="0"<?php if($kia_abrp_enable_2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_abrp_enable_2old == 1) echo " active" ?>">
+													<input type="radio" name="kia_abrp_enable_2" id="kia_abrp_enable_2On" value="1"<?php if($kia_abrp_enable_2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gew&auml;hlt wird, wird der SoC regelm&auml;&szlig;ig an ABRP &uuml;bermittelt.<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_abrp_enable_2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_abrp_token_2" class="col-md-4 col-form-label">ABRP Token</label>
+											<div class="col">
+												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
+												<span class="form-text small">
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Erweiterte Einstellungen</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($kia_advanced2old == 0) echo " active" ?>">
+													<input type="radio" name="kia_advanced2" id="kia_advanced2Off" value="0"<?php if($kia_advanced2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($kia_advanced2old == 1) echo " active" ?>">
+													<input type="radio" name="kia_advanced2" id="kia_advanced2On" value="1"<?php if($kia_advanced2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												<br>
+											</span>
+										</div>
+									</div>
+									<div id="kia_advanced2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="kia_adv_cachevalid2" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid2" id="kia_adv_cachevalid2" value="<?php echo $kia_adv_cachevalid2old ?>">
+												<span class="form-text small">
+													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_12v2" class="col-md-4 col-form-label">12V SoC Limit</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" max="100" step="1" name="kia_adv_12v2" id="kia_adv_12v2" value="<?php echo $kia_adv_12v2old ?>">
+												<span class="form-text small">
+													Minimaler SoC der 12V-Batterie für Abrufe in Prozent (Default: 20)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_interval_unplug2" class="col-md-4 col-form-label">Abrufintervall abgesteckt</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_interval_unplug2" id="kia_adv_interval_unplug2" value="<?php echo $kia_adv_interval_unplug2old ?>">
+												<span class="form-text small">
+													Abrufintervall bei abgestecktem Auto in Minuten (sofern freigegeben)<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="kia_adv_ratelimit2" class="col-md-4 col-form-label">Abrufsperre</label>
+											<div class="col">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_ratelimit2" id="kia_adv_ratelimit2" value="<?php echo $kia_adv_ratelimit2old ?>">
+												<span class="form-text small">
+													Minimaler Abstand zwischen Abrufen in Minuten (default: 15)<br>
+												</span>
 											</div>
 										</div>
 									</div>
@@ -3589,12 +3871,34 @@
 											showSection('#kiamanualcalclp2div');
 										}
 									}
+									function visibility_kia_abrp_enable_2() {
+										if($('#kia_abrp_enable_2Off').prop("checked")) {
+											hideSection('#kia_abrp_enable_2div');
+										} else {
+											showSection('#kia_abrp_enable_2div');
+										}
+									}
+									function visibility_kia_advanced2() {
+										if($('#kia_advanced2Off').prop("checked")) {
+											hideSection('#kia_advanced2div');
+										} else {
+											showSection('#kia_advanced2div');
+										}
+									}
 
 									$('input[type=radio][name=kia_soccalclp2]').change(function(){
 										visibility_kia_soccalclp2();
 									});
+									$('input[type=radio][name=kia_abrp_enable_2]').change(function(){
+										visibility_kia_abrp_enable_2();
+									});
+									$('input[type=radio][name=kia_advanced2]').change(function(){
+										visibility_kia_advanced2();
+									});
 
 									visibility_kia_soccalclp2();
+									visibility_kia_abrp_enable_2();
+									visibility_kia_advanced2();
 								});
 								</script>
 							</div>
@@ -3626,7 +3930,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" disabled>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -3685,7 +3989,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
 															});
-															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
+															$('#soc_tronity_select_vehicle_lp2').attr('disabled', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -3709,20 +4013,12 @@
 										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
 										<div class="col">
 											<select name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" class="form-control">
-												<option <?php if($soc_evcc_type_lp2old == "none") echo "selected" ?> value="none">Bitte auswählen</option>
-												<option <?php if($soc_evcc_type_lp2old == 'audi') echo "selected" ?> value="audi">Audi</option>
-												<option <?php if($soc_evcc_type_lp2old == 'bmw') echo "selected" ?> value="bmw">BMW</option>
-												<option <?php if($soc_evcc_type_lp2old == 'ford') echo "selected" ?> value="ford">Ford</option>
-												<option <?php if($soc_evcc_type_lp2old == 'hyundai') echo "selected" ?> value="Hyundai">Hyundai</option>
-												<option <?php if($soc_evcc_type_lp2old == 'id') echo "selected" ?> value="id">ID</option>
-												<option <?php if($soc_evcc_type_lp2old == 'kia') echo "selected" ?> value="kia">Kia</option>
-												<option <?php if($soc_evcc_type_lp2old == 'nissan') echo "selected" ?> value="Nissan">Nissan</option>
-												<option <?php if($soc_evcc_type_lp2old == 'porsche') echo "selected" ?> value="porsche">Porsche</option>
-												<option <?php if($soc_evcc_type_lp2old == 'renault') echo "selected" ?> value="Renault">Renault</option>
-												<option <?php if($soc_evcc_type_lp2old == 'seat') echo "selected" ?> value="seat">Seat</option>
-												<option <?php if($soc_evcc_type_lp2old == 'skoda') echo "selected" ?> value="skoda">Škoda</option>
-												<option <?php if($soc_evcc_type_lp2old == 'volvo') echo "selected" ?> value="volvo">Volvo</option>
-												<option <?php if($soc_evcc_type_lp2old == 'vw') echo "selected" ?> value="vw">VW</option>
+												<?php
+													foreach($soc_evcc_vehicles as $item => $value)
+													{
+														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp2old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
+													}
+												?>
 											</select>
 											<span class="form-text small">Auswahl Fahrzeugtyp</span>
 										</div>
@@ -3806,8 +4102,10 @@
 							hideSection('#openwb12s1v1');
 							hideSection('#openwb12s1v2');
 							hideSection('#evseconextopenwblp2');
+							hideSection('#evsecondaemonlp2');
 							hideSection('#evseconipevselp2');
 							hideSection('#evseconmqtts1');
+							hideSection('#evsecontwcmanagers1');
 
 							if($('#evsecons1').val() == 'modbusevse') {
 								switch( $("#evsecons1 option:selected").attr('data-id') ){
@@ -3817,7 +4115,7 @@
 									case "openwb series1/2 duo v2":
 										showSection('#openwb12s1v2');
 									break;
-									default:
+						       			default:
 										showSection('#evseconmbs1');
 										showSection('#llmodullp2');
 										display_llmp2();
@@ -3844,6 +4142,9 @@
 							if($('#evsecons1').val() == 'extopenwb') {
 								showSection('#evseconextopenwblp2');
 							}
+							if($('#evsecons1').val() == 'daemon') {
+								showSection('#evsecondaemonlp2');
+							}
 							if($('#evsecons1').val() == 'goe') {
 								showSection('#evsecongoes1');
 							}
@@ -3855,6 +4156,9 @@
 							}
 							if($('#evsecons1').val() == 'nrgkick') {
 								showSection('#evseconnrgkicks1');
+							}
+							if($('#evsecons1').val() == 'twcmanager') {
+								showSection('#evsecontwcmanagers1');
 							}
 						}
 
@@ -3949,16 +4253,6 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
-							}
-							if($('#socmodul1').val() == 'soc_bluelinklp2') {
-								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3138')
-								showSection('#socsupportinfolp2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmpin2');
-								showSection('#socmvin2');
-								showSection('#socmintervall2');
-								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3137')

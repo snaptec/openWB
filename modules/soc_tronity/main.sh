@@ -123,6 +123,7 @@ incrementTimer(){
 
 authToken=''
 soctimer=$(<$soctimerfile)
+openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 ladeleistung=$(<$ladeleistungfile)
 
 if (( ladeleistung > 1000 )); then
