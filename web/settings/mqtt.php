@@ -52,6 +52,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<?php
 				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf');
+				$files = array_merge($files, glob('/etc/mosquitto/conf.d/99-bridge-*.conf.no'));
 				$filesCount = count($files);
 				// give the user the option to configure more than one bridge
 				array_push($files, "");
@@ -81,7 +82,7 @@
 					$bridgeEnabled = preg_match('/.*\.conf$/', $currentFile) === 1;
 					$subscribeConfigs = false;
 					foreach($bridgeLines as $bridgeLine) {
-						//echo "line '$bridgeLine'<br/>";
+						// echo "line '$bridgeLine'<br/>";
 						if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
 							// echo "Matches: " . var_dump($matches);
 							$remotePrefix = trim($matches[5]);
