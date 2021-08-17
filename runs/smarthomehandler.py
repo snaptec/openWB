@@ -57,6 +57,11 @@ for i in range(1, (numberOfSupportedDevices+1)):
     DeviceOnOld.append("9999")
     DeviceOnOldStandby.append("9999")
     StatusOld.append("9999")
+    filename = basePath+'/ramdisk/smarthome_device_minhaus_' + str(i)
+    f = open(filename, 'w')
+    f.write(str("0"))
+    f.close()
+    os.chmod(filename, 0o777)
 global numberOfDevices
 
 def cleardef(nummer):
@@ -90,6 +95,8 @@ def cleardef(nummer):
     f = open(basePath+'/ramdisk/device' + str(nummer) + '_relais', 'w')
     f.write(str("0"))
     f.close()
+    #status normal setzen
+    setstat(nummer,10)
     try:
         del DeviceCounters[str(nummer)+"oldstampeinschaltdauer"]
     except:
@@ -611,8 +618,9 @@ def on_message(client, userdata, msg):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceOnStandby[int(devicenumb)-1] = str(int(msg.payload))
-            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") OnCntStandby read from mqtt " +  str(DeviceOnStandby[int(devicenumb)-1]))
-
+            #status normal setzen
+            setstat(devicenumb,10)
+            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") OnCntStandby read from mqtt " +  str(DeviceOnStandby[int(devicenumb)-1]) + ", set status = 10 ")
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
     global totalwatt
@@ -776,6 +784,9 @@ def getdevicevalues():
                     totalwattot = totalwattot + watt
                 if (device_homeconsumtion == 0):
                     totalminhaus = totalminhaus + watt
+                f = open(basePath+'/ramdisk/smarthome_device_minhaus_' + str(numberOfDevices), 'w')
+                f.write(str(device_homeconsumtion))
+                f.close()
                 DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                 DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                 f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -897,7 +908,7 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung,updatecnt):
                     DeviceOn[nummer-1]= str(int(DeviceOn[nummer-1])+1)
                 else:
                     DeviceOnStandby[nummer-1]= str(int(DeviceOnStandby[nummer-1])+1)
-                logDebug(LOGLEVELINFO, "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung) + " oncount: " + str(DeviceOn[nummer-1]))
+                logDebug(LOGLEVELINFO, "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung) + " oncount: " + str(DeviceOn[nummer-1]) + " onstandby: " + str(DeviceOnStandby[nummer-1]) )
                 f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
                 f.write(str(zustand))
                 f.close()
