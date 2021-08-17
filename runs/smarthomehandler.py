@@ -24,6 +24,7 @@ maxspeicher = 100
 oldmaxspeicher = 0
 oldtotalwatt = 0
 oldtotalwattot = 0
+oldtotalminhaus = -1
 olduberschuss = 0
 olduberschussoffset = 0
 numberOfSupportedDevices=9 # limit number of smarthome devices
@@ -208,7 +209,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
     except:
         argumentList.append("undef")
     (devuberschuss,ueberschussberechnung )= getueb(nummer)
-    argumentList.append(str(devuberschuss))  
+    argumentList.append(str(devuberschuss))
     if meastyp == "sdm120":
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
@@ -216,7 +217,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
             measureportsdm = "8899"
         argumentList[1] = prefixpy +'sdm120/sdm120.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
-        argumentList.append(measureportsdm) 
+        argumentList.append(measureportsdm)
     elif meastyp == "sdm630":
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
@@ -416,10 +417,12 @@ def publishmqtt():
     global oldmaxspeicher
     global oldtotalwatt
     global oldtotalwattot
+    global oldtotalminhaus
     global olduberschuss
     global olduberschussoffset
     global totalwatt
     global totalwattot
+    global totalminhaus
     global numberOfSupportedDevices
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
@@ -473,6 +476,10 @@ def publishmqtt():
         client.publish("openWB/SmartHome/Status/wattnichtschalt", payload=str(totalwattot), qos=0, retain=True)
         client.loop(timeout=2.0)
         oldtotalwattot = totalwattot
+    if (oldtotalminhaus != totalminhaus):
+        client.publish("openWB/SmartHome/Status/wattnichtHaus", payload=str(totalminhaus), qos=0, retain=True)
+        client.loop(timeout=2.0)
+        oldtotalminhaus = totalminhaus
     if (olduberschuss != uberschuss):
         client.publish("openWB/SmartHome/Status/uberschuss", payload=str(uberschuss), qos=0, retain=True)
         client.loop(timeout=2.0)
@@ -825,7 +832,7 @@ def getdevicevalues():
                     runtime=DeviceValues[str(numberOfDevices)+"runningtime"]
                 except:
                     runtime=0
-                logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " rel: " + str(relais)  +  " oncnt/time: " + str(DeviceOn[numberOfDevices-1]) + "/" + str(runtime) + " Status: " + str(devstatus) + " akt: " + str(watt) + " Z Hw: " + str(wattk))
+                logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " rel: " + str(relais)  +  " oncnt/onstandby/time: " + str(DeviceOn[numberOfDevices-1]) + "/" +  str(DeviceOnStandby[numberOfDevices-1]) + "/" + str(runtime) + " Status: " + str(devstatus) + " akt: " + str(watt) + " Z Hw: " + str(wattk))
             except Exception as e:
                 DeviceValues.update( {str(numberOfDevices) : "error"})
                 logDebug(LOGLEVELERROR, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " Fehlermeldung: " + str(e))
