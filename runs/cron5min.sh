@@ -72,6 +72,16 @@ d7=$(<$RAMDISKDIR/device7_wh)
 d8=$(<$RAMDISKDIR/device8_wh)
 d9=$(<$RAMDISKDIR/device9_wh)
 d10="0"
+d1haus=$(<$RAMDISKDIR/smarthome_device_minhaus_1)
+d2haus=$(<$RAMDISKDIR/smarthome_device_minhaus_2)
+d3haus=$(<$RAMDISKDIR/smarthome_device_minhaus_3)
+d4haus=$(<$RAMDISKDIR/smarthome_device_minhaus_4)
+d5haus=$(<$RAMDISKDIR/smarthome_device_minhaus_5)
+d6haus=$(<$RAMDISKDIR/smarthome_device_minhaus_6)
+d7haus=$(<$RAMDISKDIR/smarthome_device_minhaus_7)
+d8haus=$(<$RAMDISKDIR/smarthome_device_minhaus_8)
+d9haus=$(<$RAMDISKDIR/smarthome_device_minhaus_9)
+
 # now add a line to our daily csv
 echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile.csv
 openwbDebugLog "MAIN" 1 "daily csv updated: $dailyfile.csv"
@@ -230,6 +240,37 @@ do
 		echo $d9dailyyield > $RAMDISKDIR/daily_d9kwh
 	fi
 done
+
+#echo $(date +%H%M),$d1haus,$d2haus,$d3haus,$d4haus,$d5haus,$d6haus,$d7haus,$d8haus,$d9haus, $d1dailyyield ,$d2dailyyield , $d3dailyyield , $d4dailyyield , $d5dailyyield , $d6dailyyield , $d7dailyyield , $d8dailyyield , $d9dailyyield  >> $RAMDISKDIR/alog.log
+# zero out devices were kwh should be included in house consumtion
+if (( d1haus == 1 )); then
+ d1dailyyield=0
+fi
+if (( d2haus == 1 )); then
+ d2dailyyield=0
+fi
+if (( d3haus == 1 )); then
+ d3dailyyield=0
+fi
+if (( d4haus == 1 )); then
+ d4dailyyield=0
+fi
+if (( d5haus == 1 )); then
+ d5dailyyield=0
+fi
+if (( d6haus == 1 )); then
+ d6dailyyield=0
+fi
+if (( d7haus == 1 )); then
+ d7dailyyield=0
+fi
+if (( d8haus == 1 )); then
+ d8dailyyield=0
+fi
+if (( d9haus == 1 )); then
+ d9dailyyield=0
+fi
+#echo $(date +%H%M),$d1haus,$d2haus,$d3haus,$d4haus,$d5haus,$d6haus,$d7haus,$d8haus,$d9haus, $d1dailyyield ,$d2dailyyield , $d3dailyyield , $d4dailyyield , $d5dailyyield , $d6dailyyield , $d7dailyyield , $d8dailyyield , $d9dailyyield  >> $RAMDISKDIR/alog.log
 # now calculate the house consumption daily yield as difference of measured input and output
 hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $d6dailyyield - $d7dailyyield - $d8dailyyield - $d9dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
 echo $hausdailyyield > $RAMDISKDIR/daily_hausverbrauchkwh
