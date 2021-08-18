@@ -37,7 +37,7 @@ if froniusvar2 == "0":
     # Hole die JSON Daten
     params = (
         ('Scope', 'Device'),
-        ('DeviceID', froniuserzeugung),
+        ('DeviceId', froniuserzeugung),
     )
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
     response = response_sm.json()
