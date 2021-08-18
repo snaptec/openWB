@@ -18,13 +18,13 @@ if ! [ -z "$output" ]; then
 	if [[ $watt =~ $re ]] ; then
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuell
 	fi
-	if [[ $lla1 =~ $re ]] ; then
+	if [[ $lla1 =~ $rekwh ]] ; then
 		echo $lla1 > /var/www/html/openWB/ramdisk/lla1
 	fi
-	if [[ $lla2 =~ $re ]] ; then
+	if [[ $lla2 =~ $rekwh ]] ; then
 		echo $lla2 > /var/www/html/openWB/ramdisk/lla2
 	fi
-	if [[ $lla3 =~ $re ]] ; then
+	if [[ $lla3 =~ $rekwh ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/lla3
 	fi
 	if [[ $llv1 =~ $rekwh ]] ; then

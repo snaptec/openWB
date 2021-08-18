@@ -24,6 +24,7 @@ maxspeicher = 100
 oldmaxspeicher = 0
 oldtotalwatt = 0
 oldtotalwattot = 0
+oldtotalminhaus = -1
 olduberschuss = 0
 olduberschussoffset = 0
 numberOfSupportedDevices=9 # limit number of smarthome devices
@@ -56,6 +57,11 @@ for i in range(1, (numberOfSupportedDevices+1)):
     DeviceOnOld.append("9999")
     DeviceOnOldStandby.append("9999")
     StatusOld.append("9999")
+    filename = basePath+'/ramdisk/smarthome_device_minhaus_' + str(i)
+    f = open(filename, 'w')
+    f.write(str("0"))
+    f.close()
+    os.chmod(filename, 0o777)
 global numberOfDevices
 
 def cleardef(nummer):
@@ -89,6 +95,8 @@ def cleardef(nummer):
     f = open(basePath+'/ramdisk/device' + str(nummer) + '_relais', 'w')
     f.write(str("0"))
     f.close()
+    #status normal setzen
+    setstat(nummer,10)
     try:
         del DeviceCounters[str(nummer)+"oldstampeinschaltdauer"]
     except:
@@ -208,7 +216,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
     except:
         argumentList.append("undef")
     (devuberschuss,ueberschussberechnung )= getueb(nummer)
-    argumentList.append(str(devuberschuss))  
+    argumentList.append(str(devuberschuss))
     if meastyp == "sdm120":
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
@@ -216,7 +224,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
             measureportsdm = "8899"
         argumentList[1] = prefixpy +'sdm120/sdm120.py'
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
-        argumentList.append(measureportsdm) 
+        argumentList.append(measureportsdm)
     elif meastyp == "sdm630":
         try:
             measureportsdm = str(config.get('smarthomedevices', 'device_measureportsdm_'+str(nummer)))
@@ -416,10 +424,12 @@ def publishmqtt():
     global oldmaxspeicher
     global oldtotalwatt
     global oldtotalwattot
+    global oldtotalminhaus
     global olduberschuss
     global olduberschussoffset
     global totalwatt
     global totalwattot
+    global totalminhaus
     global numberOfSupportedDevices
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
@@ -473,6 +483,10 @@ def publishmqtt():
         client.publish("openWB/SmartHome/Status/wattnichtschalt", payload=str(totalwattot), qos=0, retain=True)
         client.loop(timeout=2.0)
         oldtotalwattot = totalwattot
+    if (oldtotalminhaus != totalminhaus):
+        client.publish("openWB/SmartHome/Status/wattnichtHaus", payload=str(totalminhaus), qos=0, retain=True)
+        client.loop(timeout=2.0)
+        oldtotalminhaus = totalminhaus
     if (olduberschuss != uberschuss):
         client.publish("openWB/SmartHome/Status/uberschuss", payload=str(uberschuss), qos=0, retain=True)
         client.loop(timeout=2.0)
@@ -604,8 +618,9 @@ def on_message(client, userdata, msg):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceOnStandby[int(devicenumb)-1] = str(int(msg.payload))
-            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") OnCntStandby read from mqtt " +  str(DeviceOnStandby[int(devicenumb)-1]))
-
+            #status normal setzen
+            setstat(devicenumb,10)
+            logDebug(LOGLEVELERROR, "(" + str(devicenumb) + ") OnCntStandby read from mqtt " +  str(DeviceOnStandby[int(devicenumb)-1]) + ", set status = 10 ")
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
     global totalwatt
@@ -769,6 +784,9 @@ def getdevicevalues():
                     totalwattot = totalwattot + watt
                 if (device_homeconsumtion == 0):
                     totalminhaus = totalminhaus + watt
+                f = open(basePath+'/ramdisk/smarthome_device_minhaus_' + str(numberOfDevices), 'w')
+                f.write(str(device_homeconsumtion))
+                f.close()
                 DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                 DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                 f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -825,7 +843,7 @@ def getdevicevalues():
                     runtime=DeviceValues[str(numberOfDevices)+"runningtime"]
                 except:
                     runtime=0
-                logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " rel: " + str(relais)  +  " oncnt/time: " + str(DeviceOn[numberOfDevices-1]) + "/" + str(runtime) + " Status: " + str(devstatus) + " akt: " + str(watt) + " Z Hw: " + str(wattk))
+                logDebug(LOGLEVELDEBUG, "(" + str(numberOfDevices) + ") " + str(devicename) + " rel: " + str(relais)  +  " oncnt/onstandby/time: " + str(DeviceOn[numberOfDevices-1]) + "/" +  str(DeviceOnStandby[numberOfDevices-1]) + "/" + str(runtime) + " Status: " + str(devstatus) + " akt: " + str(watt) + " Z Hw: " + str(wattk))
             except Exception as e:
                 DeviceValues.update( {str(numberOfDevices) : "error"})
                 logDebug(LOGLEVELERROR, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " Fehlermeldung: " + str(e))
@@ -890,7 +908,7 @@ def turndevicerelais(nummer, zustand,ueberschussberechnung,updatecnt):
                     DeviceOn[nummer-1]= str(int(DeviceOn[nummer-1])+1)
                 else:
                     DeviceOnStandby[nummer-1]= str(int(DeviceOnStandby[nummer-1])+1)
-                logDebug(LOGLEVELINFO, "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung) + " oncount: " + str(DeviceOn[nummer-1]))
+                logDebug(LOGLEVELINFO, "(" + str(nummer) + ") " + str(devicename) + " angeschaltet. Ueberschussberechnung (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung) + " oncount: " + str(DeviceOn[nummer-1]) + " onstandby: " + str(DeviceOnStandby[nummer-1]) )
                 f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
                 f.write(str(zustand))
                 f.close()
