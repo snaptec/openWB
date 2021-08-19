@@ -14,7 +14,7 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py $froniusvar2 $froniuserzeugung $wrfroniusip $froniusmeterlocation 2>&1)
+ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" 2>&1)
 
 response_sm=$(echo $ret | awk '{print $1}' | tr -d '[' | tr -d ',')
 meter_location=$(echo $ret | awk '{print $2}' | tr -d ',')
