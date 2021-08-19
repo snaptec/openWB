@@ -15,7 +15,7 @@ ip_address = str(sys.argv[2])
 
 response = requests.get('http://'+ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', timeout = 5).json()
 try:
-    if primo == 1:
+    if primo == str(1):
         wattbezug=int(response["Body"]["Data"]["Site"]["P_Grid"])
     else:
         wattbezug=int(response["Body"]["Data"]["PowerReal_P_Sum"])
@@ -25,15 +25,15 @@ except:
 #pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 #pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
 f = open( "ramdisk/pvwatt" , 'r')
-pvwatt =f.read()
+pvwatt =int(f.read())
 f.close()
 wattb=pvwatt + wattbezug
 
 #wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
 regex='^[0-9]+$'
 ra='^-[0-9]+$'
-if re.search(regex, wattbezug) == None:
-    if re.search(ra, wattbezug) == None:
+if re.search(regex, str(wattbezug)) == None:
+    if re.search(ra, str(wattbezug)) == None:
         wattbezug=0
 
 # zur weiteren verwendung im webinterface
@@ -48,7 +48,8 @@ params = (('Scope', 'System'),)
 kwhtmp = requests.get('http://'+ip_address+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout = 5).json()
 # jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
 try:
-    ikwh = kwhtmp["EnergyReal_WAC_Minus_Absolute"]
+    for location in kwhtmp["Body"]["Data"]:
+        ikwh = str(kwhtmp["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"])
 except:
     traceback.print_exc()
 ikwh = ikwh.replace(" ", "")
@@ -66,7 +67,8 @@ f.close()
 # bei Smartmeter im Verbrauchsweig immer 0
 #ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
 try:
-    ekwh = kwhtmp["EnergyReal_WAC_Plus_Absolute"]
+    for location in kwhtmp["Body"]["Data"]:
+        ekwh = str(kwhtmp["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"])
 except:
     traceback.print_exc()
 ekwh = ekwh.split(",")[0]
