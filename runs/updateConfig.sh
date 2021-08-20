@@ -2114,5 +2114,11 @@ updateConfig(){
 	if grep -Fq "socmodul1=soc_bluelinklp2" $ConfigFile; then
 		sed -i "s/socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
 	fi
+	if ! grep -Fq "virtual_ip_eth0=" $ConfigFile; then
+		echo "virtual_ip_eth0='192.168.193.5'" >> $ConfigFile
+	fi
+	if ! grep -Fq "virtual_ip_wlan0=" $ConfigFile; then
+		echo "virtual_ip_wlan0='192.168.193.6'" >> $ConfigFile
+	fi
 	echo "Config file Update done."
 }
