@@ -3,37 +3,66 @@
 import requests
 import sys
 import traceback
+import jq
+from datetime import datetime, timezone
+import os
+
+Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
 
 bezugjsonurl = str(sys.argv[1])
-# Anpassen an alte Einstellungen
-bezugjsonwatt = str(sys.argv[2]).replace(".", "")
-bezugjsonkwh = str(sys.argv[3]).replace(".", "")
-einspeisungjsonkwh = str(sys.argv[4]).replace(".", "")
+
+bezugjsonwatt = str(sys.argv[2])
+bezugjsonkwh = str(sys.argv[3])
+einspeisungjsonkwh = str(sys.argv[4])
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+
+
+
+if Debug >= 2:
+    DebugLog('JQ Watt: ' + bezugjsonwatt)
+    DebugLog('JQ Bezug: ' + bezugjsonkwh)
+    DebugLog('JQ Einsp: ' + einspeisungjsonkwh)
+
 
 answer = requests.get(bezugjsonurl, timeout=5).json()
 try:
-    evuwatt = int(answer[bezugjsonwatt])
+    evuwatt = jq.compile(bezugjsonwatt).input(answer).first()
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
         f.write(str(evuwatt))
 except:
     traceback.print_exc()
+    exit(1)
+if Debug >= 1:
+    DebugLog('Watt: ' + str(evuwatt))
 
 try:
     if bezugjsonkwh != "":
-        evuikwh = answer[bezugjsonkwh]
+        evuikwh = jq.compile(bezugjsonkwh).input(answer).first()
     else:
         evuikwh = 0
     with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
         f.write(str(evuikwh))
 except:
     traceback.print_exc()
+    exit(1)
+if Debug >= 1:
+    DebugLog('Bezug: ' + str(evuikwh))
 
 try:
     if einspeisungjsonkwh != "":
-        evuekwh = answer[einspeisungjsonkwh]
+        evuekwh = jq.compile(einspeisungjsonkwh).input(answer).first()
     else:
         evuekwh = 0
     with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
         f.write(str(evuekwh))
 except:
     traceback.print_exc()
+    exit(1)
+if Debug >= 1:
+    DebugLog('Einsp: ' + str(evuekwh))
+
+exit(0)
