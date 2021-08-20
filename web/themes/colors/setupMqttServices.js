@@ -341,6 +341,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/7/mode", 1],
 	["openWB/config/get/SmartHome/Devices/8/mode", 1],
 	["openWB/config/get/SmartHome/Devices/9/mode", 1],
+	["openWB/SmartHome/Status/wattnichtHaus", 1],
 	// Config Vars Sofort current
 	["openWB/config/get/sofort/lp/1/current", 1],
 	["openWB/config/get/sofort/lp/2/current", 1],
