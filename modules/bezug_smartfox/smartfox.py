@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
@@ -8,6 +9,12 @@ import xml.etree.ElementTree as ET
 
 bezug_smartfox_ip = str(sys.argv[1])
 
+Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
 
 def get_xml_text(root, tag, attribute_key, attribute_value):
     try:
@@ -18,7 +25,10 @@ def get_xml_text(root, tag, attribute_key, attribute_value):
         return value
     except:
         traceback.print_exc()
+        exit(1)
 
+if Debug >= 2:
+    DebugLog('Smartfox IP: ' + bezug_smartfox_ip)
 
 # Anpassung der Variablennamen nach Firmwareupgrade auf EM2 00.01.03.06 (04-2021)
 # Daten einlesen
@@ -153,3 +163,22 @@ with open("/var/www/html/openWB/ramdisk/bezuga2", "w") as f:
     f.write(str(bezuga2))
 with open("/var/www/html/openWB/ramdisk/bezuga3", "w") as f:
     f.write(str(bezuga3))
+
+if Debug >= 1:
+    DebugLog('Watt: ' + str(wattbezug))
+    DebugLog('Einspeisung: ' + str(ekwh))
+    DebugLog('Bezug: ' + str(ikwh))
+    DebugLog('Leistung L1: ' + str(wattbezug1))
+    DebugLog('Leistung L2: ' + str(wattbezug2))
+    DebugLog('Leistung L3: ' + str(wattbezug3))
+    DebugLog('Power Faktor L1: ' + str(evupf1))
+    DebugLog('Power Faktor L2: ' + str(evupf2))
+    DebugLog('Power Faktor L3: ' + str(evupf3))
+    DebugLog('Spannung L1: ' + str(evuv1))
+    DebugLog('Spannung L2: ' + str(evuv2))
+    DebugLog('Spannung L3: ' + str(evuv3))
+    DebugLog('Strom L1: ' + str(bezuga1))
+    DebugLog('Strom L2: ' + str(bezuga2))
+    DebugLog('Strom L3: ' + str(bezuga3))
+
+exit(0)

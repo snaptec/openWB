@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-
-import datetime
+from datetime import datetime, timezone
+import os
 import json
 import os.path
 import requests
@@ -21,6 +21,19 @@ lgessv1ip = str(sys.argv[1])
 ess_pass = str(sys.argv[2])
 ess_api_ver = str(sys.argv[3])
 ess_url = "https://"+lgessv1ip
+
+Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+
+if Debug >= 2:
+    DebugLog('LG IP: ' + lgessv1ip)
+    DebugLog('LG Passwort: ' + ess_pass)
+    DebugLog('LG Version: ' + ess_api_ver)
+
 #
 # Flag für unterschiedliche API-Versionen der Firmware
 #
@@ -55,6 +68,7 @@ try:
     authchk = response['auth']
 except:
     traceback.print_exc()
+    exit(1)
 #
 # Pruefen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
 #
@@ -67,6 +81,7 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
         outjson = {"auth_key": session_key}
     except:
         traceback.print_exc()
+        exit(1)
     #
     # aktuelle Daten aus dem PCS auslesen
     #
@@ -85,14 +100,19 @@ try:
     grid_power = response["statistics"]["grid_power"]
 except:
     traceback.print_exc()
+    exit(1)
 try:
     is_grid_selling_ = response["direction"]["is_grid_selling_"]
 except:
     traceback.print_exc()
+    exit(1)
+if Debug >= 1:
+    DebugLog('Imp/Exp: ' + str(is_grid_selling_))
 try:
     load_power = response["statistics"]["load_power"]
 except:
     traceback.print_exc()
+    exit(1)
 if is_grid_selling_ == "1":
     grid_power = grid_power*-1
 
@@ -113,15 +133,21 @@ try:
     ikwh = int(ikwh)
 except:
     traceback.print_exc()
+    exit(1)
 try:
     loadkwh = response["loginfo"][arr_pos]["total_consumption"]
     loadkwh = loadkwh.replace("kwh", "")
     loadkwh = int(loadkwh)
 except:
     traceback.print_exc()
+    exit(1)
 #
 # Daten in Ramdisk schreiben
 #
 # echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
     f.write(str(grid_power))
+if Debug >= 1:
+    DebugLog('Watt: ' + str(grid_power))
+
+exit(0)

@@ -15,11 +15,21 @@
 # This file is part of openWB
 #
 #########################################################
-
+from datetime import datetime, timezone
+import os
 import shutil
 import sys
 
-kostalplenticorehaus = str(sys.argv[1])
+kostalplenticorehaus = int(sys.argv[1])
+Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+
+if Debug >= 2:
+    DebugLog('Kostal Plenticore Haus: ' + str(kostalplenticorehaus))
 
 # Unterscheidung EM300 Sensorposition zur Bestimmung Bezug EVU
 if kostalplenticorehaus == 1:
@@ -43,6 +53,8 @@ else:
     # und in die ramdisk
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
         f.write(str(bezug))
+    if Debug >= 1:
+        DebugLog('Watt: ' + str(bezug))
 
 
 # Daten aus temporaerer ramdisk zur globalen Weiterverarbeitung in die
@@ -75,3 +87,5 @@ shutil.copy("/var/www/html/openWB/ramdisk/temp_evupf1", "/var/www/html/openWB/ra
 shutil.copy("/var/www/html/openWB/ramdisk/temp_evupf2", "/var/www/html/openWB/ramdisk/evupf2")
 # Power Faktor Phase 3
 shutil.copy("/var/www/html/openWB/ramdisk/temp_evupf3", "/var/www/html/openWB/ramdisk/evupf3")
+
+exit(0)

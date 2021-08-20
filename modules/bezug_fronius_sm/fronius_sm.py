@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
@@ -10,6 +11,14 @@ froniuserzeugung = str(sys.argv[2])
 wrfroniusip = str(sys.argv[3])
 froniusmeterlocation = str(sys.argv[4])
 
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
 
 def get_rounded_value(response, key):
     try:
@@ -17,6 +26,7 @@ def get_rounded_value(response, key):
         return value
     except:
         traceback.print_exc()
+        exit(1)
 
 
 def get_int_value(response, key):
@@ -25,7 +35,14 @@ def get_int_value(response, key):
         return value
     except:
         traceback.print_exc()
+        exit(1)
 
+
+if Debug >= 2:
+    DebugLog('Fronius SM Variante: ' + froniusvar2)
+    DebugLog('Fronius SM Erzeugung: ' + froniuserzeugung)
+    DebugLog('Fronius SM IP: ' + wrfroniusip)
+    DebugLog('Fronius SM Zaehlerort: ' + froniusmeterlocation)
 
 # Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
 # Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv).
@@ -46,6 +63,7 @@ if froniusvar2 == "0":
         response_json_id = response["Body"]["Data"]
     except:
         traceback.print_exc()
+        exit(1)
 
 elif froniusvar2 == "1":
     # Hole die JSON-Daten
@@ -54,11 +72,14 @@ elif froniusvar2 == "1":
     )
     response_sm = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetMeterRealtimeData.cgi', params=params, timeout=5)
     response = response_sm.json()
+    if Debug >= 1:
+        DebugLog('response_sm: ' + str(response_sm))
     # Setze die für JSON Abruf benötigte DeviceID
     try:
         response_json_id = response["Body"]["Data"][froniuserzeugung]
     except:
         traceback.print_exc()
+        exit(1)
     # TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
     # response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung&DataCollection=MeterRealtimeData")
     # dann auch json_id wieder gleich:
@@ -76,6 +97,7 @@ elif froniusvar2 == "2":
         response_json_id = response["Body"]["Data"][froniuserzeugung]
     except:
         traceback.print_exc()
+        exit(1)
     # TODO: meter_location für diese Variante korrekt ermitteln
     # Überprüfe den Einbauort des SmartMeters.
     meter_location = froniusmeterlocation
@@ -93,8 +115,7 @@ elif froniusvar2 == "2":
     bezuga1 = round(bezugw1 / evuv1, 2)
     bezuga2 = round(bezugw2 / evuv2, 2)
     bezuga3 = round(bezugw3 / evuv3, 2)
-    # TODO: ist dieser Parameter für diese Variante korrekt? sieht aus wie Copy-Paste
-    evuhz = get_rounded_value(response_json_id, "Frequency_Phase_Average")
+    evuhz = get_rounded_value(response_json_id, "GRID_FREQUENCY_MEAN_F32")
     evupf1 = get_rounded_value(response_json_id, "SMARTMETER_FACTOR_POWER_01_F64")
     evupf2 = get_rounded_value(response_json_id, "SMARTMETER_FACTOR_POWER_02_F64")
     evupf3 = get_rounded_value(response_json_id, "SMARTMETER_FACTOR_POWER_03_F64")
@@ -102,10 +123,12 @@ elif froniusvar2 == "2":
         ikwh = response_json_id["SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64"]
     except:
         traceback.print_exc()
+        exit(1)
     try:
         ekwh = response_json_id["SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64"]
     except:
         traceback.print_exc()
+        exit(1)
 
 # Auswertung für Variante0 und Variante1 gebündelt
 if froniusvar2 != "2":
@@ -114,6 +137,9 @@ if froniusvar2 != "2":
         meter_location = response_json_id["Meter_Location_Current"]
     except:
         traceback.print_exc()
+        exit(1)
+    if Debug >= 1:
+        DebugLog('Zaehlerort: ' + str(meter_location))
 
     # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
     wattbezug = get_int_value(response_json_id, "PowerReal_P_Sum")
@@ -136,10 +162,12 @@ if froniusvar2 != "2":
         ikwh = response_json_id["EnergyReal_WAC_Sum_Consumed"]
     except:
         traceback.print_exc()
+        exit(1)
     try:
         ekwh = response_json_id["EnergyReal_WAC_Sum_Produced"]
     except:
         traceback.print_exc()
+        exit(1)
 
 if meter_location == "1":
     # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
@@ -157,10 +185,12 @@ if meter_location == "1":
         wattbezug = int(response["Body"]["Data"]["Site"]["P_Grid"])
     except:
         traceback.print_exc()
+        exit(1)
     try:
         pvwatt = int(response["Body"]["Data"]["Site"]["P_PV"])
     except:
         traceback.print_exc()
+        exit(1)
     # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
     regex = '^-?[0-9]+$'
     if re.search(pvwatt, regex) == None:
@@ -183,6 +213,8 @@ if meter_location == "1":
         f.write(str(1))
 else:
     response_fi = ""
+if Debug >= 1:
+    DebugLog('response_fi: ' + str(response_fi))
 
 # Schreibe alle Werte in die Ramdisk.
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
@@ -218,4 +250,22 @@ with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
 with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
     f.write(str(ekwh))
 
-sys.exit([response_sm, meter_location, response_fi])
+if Debug >= 1:
+    DebugLog('Watt: ' + str(wattbezug))
+    DebugLog('Einspeisung: ' + str(ekwh))
+    DebugLog('Bezug: ' + str(ikwh))
+    DebugLog('Leistung L1: ' + str(bezugw1))
+    DebugLog('Leistung L2: ' + str(bezugw2))
+    DebugLog('Leistung L3: ' + str(bezugw3))
+    DebugLog('Power Faktor L1: ' + str(evupf1))
+    DebugLog('Power Faktor L2: ' + str(evupf2))
+    DebugLog('Power Faktor L3: ' + str(evupf3))
+    DebugLog('Spannung L1: ' + str(evuv1))
+    DebugLog('Spannung L2: ' + str(evuv2))
+    DebugLog('Spannung L3: ' + str(evuv3))
+    DebugLog('Strom L1: ' + str(bezuga1))
+    DebugLog('Strom L2: ' + str(bezuga2))
+    DebugLog('Strom L3: ' + str(bezuga3))
+    DebugLog('Frequenz: ' + str(evuhz))
+
+exit(0)

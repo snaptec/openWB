@@ -3,7 +3,18 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
 DMOD="MAIN"
+Debug=$debug
+
+#For development only
+#Debug=1
+
+if [ $DMOD == "MAIN" ]; then
+    MYLOGFILE="$RAMDISKDIR/openWB.log"
+else
+    MYLOGFILE="$RAMDISKDIR/evu_json.log"
+fi
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
@@ -14,28 +25,12 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" 2>&1)
+ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" 2>&1) >>$MYLOGFILE 2>&1
+ret=$?
 
-response_sm=$(echo $ret | awk '{print $1}' | tr -d '[' | tr -d ',')
-meter_location=$(echo $ret | awk '{print $2}' | tr -d ',')
-response_fi=$(echo $ret | awk '{print $3}' | tr -d ']')
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
-evuv1=$(</var/www/html/openWB/ramdisk/evuv1)
-evuv2=$(</var/www/html/openWB/ramdisk/evuv2)
-evuv3=$(</var/www/html/openWB/ramdisk/evuv3)
-bezugw1=$(</var/www/html/openWB/ramdisk/bezugw1)
-bezugw2=$(</var/www/html/openWB/ramdisk/bezugw2)
-bezugw3=$(</var/www/html/openWB/ramdisk/bezugw3)
-bezuga1=$(</var/www/html/openWB/ramdisk/bezuga1)
-bezuga2=$(</var/www/html/openWB/ramdisk/bezuga2)
-bezuga3=$(</var/www/html/openWB/ramdisk/bezuga3)
 echo $wattbezug
-
-openwbDebugLog ${DMOD} 2 "EVU: response_sm: $response_sm"
-openwbDebugLog ${DMOD} 1 "EVU: SmartMeter location: $meter_location"
-if [[ $meter_location == "1" ]]; then
-	openwbDebugLog ${DMOD} 1 "EVU: response_fi: $response_fi"
-fi
-openwbDebugLog ${DMOD} 1 "EVU: V: ${evuv1}/${evuv2}/${evuv3} A: ${bezuga1}/${bezuga2}/${bezuga3} W: ${bezugw1}/${bezugw2}/${bezugw3}/T${wattbezug}"
 
 
