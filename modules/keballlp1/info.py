@@ -185,7 +185,23 @@ resp= client.read_holding_registers(1500,2,unit=255)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 final2 = float( decoder.decode_32bit_uint())
 rfidinfo= "%08X" % int(final2)
-
+rfidinfo = '00' + rfidinfo
+#rfid simulieren
+#if (lpnumber ==1):
+#    file_stringtr= '/var/www/html/openWB/ramdisk/kebalp1r'
+#else:
+#    file_stringtr= '/var/www/html/openWB/ramdisk/kebalp2r'
+#if os.path.isfile(file_stringtr):
+#    f = open( file_stringtr , 'r')
+#    rfidtr=int(f.read())
+#    f.close()
+#    if rfidtr == 1:
+#        rfidinfo = '0004A376A2'
+#    if rfidtr == 2:
+#        rfidinfo = '0004A2DAA2'
+#    if rfidtr == 3:
+#        rfidinfo = '000992DAA2'
+#rfid simulations end
 # firmware version
 resp= client.read_holding_registers(1018,2,unit=255)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
@@ -208,7 +224,7 @@ if os.path.isfile(file_string):
     f = open( file_string , 'r')
     rfidold=str(f.read())
     f.close()
-    if (rfidold != rfidinfo) and (rfidinfo != '00000000'):
+    if (rfidold != rfidinfo) and (rfidinfo != '0000000000'):
         f = open( '/var/www/html/openWB/ramdisk/readtag','w')
         f.write(str(rfidinfo))
         f.close()

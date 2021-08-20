@@ -51,7 +51,8 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 		<div role="main" class="container" style="margin-top:20px">
 			<?php
-				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
+				$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf');
+				$files = array_merge($files, glob('/etc/mosquitto/conf.d/99-bridge-*.conf.no'));
 				$filesCount = count($files);
 				// give the user the option to configure more than one bridge
 				array_push($files, "");
@@ -73,6 +74,7 @@
 					$exportEvu = false;
 					$exportPv = false;
 					$exportAllLps = false;
+					$tryPrivate = false;
 					$subscribeChargeMode = false;
 					$exportGraph = false;
 					$exportStatus = false;
@@ -80,7 +82,7 @@
 					$bridgeEnabled = preg_match('/.*\.conf$/', $currentFile) === 1;
 					$subscribeConfigs = false;
 					foreach($bridgeLines as $bridgeLine) {
-						//echo "line '$bridgeLine'<br/>";
+						// echo "line '$bridgeLine'<br/>";
 						if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
 							// echo "Matches: " . var_dump($matches);
 							$remotePrefix = trim($matches[5]);
@@ -102,6 +104,10 @@
 						}
 						else if(preg_match('/^\s*bridge_tls_version\s+(.+)/', $bridgeLine, $matches) === 1) {
 							$tlsVersion = trim($matches[1]);
+						}
+
+						if(preg_match('/^\s*try_private\s+true/', $bridgeLine) === 1) {
+							$tryPrivate = true;
 						}
 
 						if(preg_match('/^\s*topic\s+openWB\/global\/#/', $bridgeLine) === 1) {
@@ -231,6 +237,22 @@
 									Version des TLS Protokolls, welches zur Verschlüsselung der Kommunikation mit dem entfernten Server verwendet wird.
 									TLSv 1.3 ist empfohlen, wird jedoch erst ab Debian Version "Buster" unterstützt.
 								</span>
+							</div>
+						</div>
+						<div class="form-row mb-1">
+							<label class="col-md-4 col-form-label">Br&uuml;cke signalisieren</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($exportStatus == 0) echo " active" ?>">
+										<input type="radio" name="tryPrivate" id="tryPrivateOff" value="0"<?php if(! $tryPrivate) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($exportStatus == 1) echo " active" ?>">
+										<input type="radio" name="tryPrivate" id="tryPrivateOn" value="1"<?php if($tryPrivate) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
+								<span class="form-text small">Aktiviert eine propriet&auml;re MQTT Protokoll-Erweiterung des Mosquitto Brokers, welche dem entfernten Broker signalisiert dass es sich um
+								eine MQTT Br&uumlcke handelt. Ergibt bessere Leistung mit Mosquitto-Brokern, ist jedoch inkompatibel mit vielen anderen MQTT-Brokern. Daher bitte nur aktivieren, wenn der Ziel-Broker
+								sicher ein Mosquitto-Broker ist.</span>
 							</div>
 						</div>
 					</div>
