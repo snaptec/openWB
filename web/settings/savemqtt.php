@@ -180,6 +180,7 @@ if(!preg_match('/^(tlsv1.2|tlsv1.3)$/', $tlsProtocol)) {
 	cleanAndExit("Interner Fehler: Ung&uuml;tiges TLS Protokoll '" . htmlentities($tlsProtocol) . "'");
 }
 
+$tryPrivate = isset($_POST['tryPrivate']) && ($_POST['tryPrivate'] == 1) ? "true" : "false";
 $exportStatus = isset($_POST['exportStatus']) && ($_POST['exportStatus'] == 1);
 $exportGraph = isset($_POST['exportGraph']) && ($_POST['exportGraph'] == 1);
 $subscribeConfigs = isset($_POST['subscribeConfigs']) && ($_POST['subscribeConfigs'] == 1);
@@ -306,9 +307,9 @@ bridge_tls_version $tlsProtocol
 # Only change if you know what you're doing!
 bridge_insecure false
 
-# Indicate to remote that we're a bridge.
+# Indicate to remote that we're a bridge. Only compatible with remote Mosquitto brokers.
 # Only change if you know what you're doing!
-try_private true
+try_private $tryPrivate
 
 # How often a "ping" is sent to the remote server to indicate that we're still alive and keep firewalls open.
 keepalive_interval 63
