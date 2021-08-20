@@ -18,6 +18,7 @@ class WbData {
 		this.chargePower = 0;
 		this.chargeSum = 0;
 		this.housePower = 0;
+		this.smartHomePower = 0;
 		this.houseEnergy = 0;
 		this.batteryEnergyExport = 0;
 		this.batteryEnergyImport = 0;
@@ -157,8 +158,11 @@ class WbData {
 				this.updateUsageSummary("charging", "energy", value)
 				break;
 			case 'houseEnergy':
-				console.log("Update House Energy: " + value);
 				this.updateUsageSummary("house", "energy", value);
+				break;
+			case 'smarthomePower':
+				this.updateConsumerSummary();
+				powerMeter.update();
 				break;
 			case 'currentPowerPrice':
 				chargePointList.update();
@@ -175,7 +179,6 @@ class WbData {
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
-				console.log("Update PV Energy: " + value);
 				break;
 			default:
 				break;
@@ -295,8 +298,13 @@ class WbData {
 	}
 
 	updateConsumerSummary(cat) {
-		this.updateUsageSummary("devices", cat, this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0)
-			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer[cat], 0));
+		if (cat == 'energy') {
+		this.updateUsageSummary("devices", 'energy', this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0)
+			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
+		} else {
+			this.updateUsageSummary("devices", 'power', this.smarthomePower
+			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
+		}
 	}
 
 	//update cookie
