@@ -37,6 +37,14 @@
 	</head>
 
 	<body>
+		<?php
+			// load openwb.conf
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
@@ -61,7 +69,50 @@
 							}, 3000);
 						</script>
 						<?php
-					break;
+						break;
+					case 'wlanreset':
+						// reset wlan credentials
+						$result1 = file_put_contents('/home/pi/wssid','');
+						$result2 = file_put_contents('/home/pi/wpassword','');
+						if( $result1 === false || $result2 === false ){
+							?>
+							<div class="col alert alert-danger" role="alert">
+								Die Zugangsdaten konnten nicht entfernt werden!<br>
+								Diese Funktion setzt eine fertig gekaufte openWB voraus. Bei Eigeninstallationen ändern Sie bitte die Zugangsdaten mit den normalen Funktionen des Raspberry Pi OS.
+							</div>
+							<?php
+							break;
+						}
+						?>
+						<div class="col alert alert-success" role="alert">
+							Die Zugangsdaten wurden entfernt.<br>
+							Die openWB wird jetzt neu gestartet.
+						</div>
+						<script>
+							window.setTimeout(() => {
+								$("#rebootConfirmationModal").modal("show");
+							}, 3000);
+						</script>
+						<?php
+						break;
+					case 'virtip':
+						// change virtual IPs
+						$cmd = "sudo /var/www/html/openWB/runs/setvirtips.sh " . escapeshellarg( $_POST['virtual_ip_eth0'] ) . " " . escapeshellarg( $_POST['virtual_ip_wlan0'] );
+						exec( $cmd, $output, $returnval );
+						?>
+						<div class="col alert alert-success" role="alert">
+							Das virtuelles Netzwerk wurde angepasst.<br>
+							eth0: <?php echo $_POST['virtual_ip_eth0']; ?><br>
+							wlan0: <?php echo $_POST['virtual_ip_wlan0']; ?><br>
+							Die openWB wird jetzt neu gestartet.
+						</div>
+						<script>
+							window.setTimeout(() => {
+								$("#rebootConfirmationModal").modal("show");
+							}, 3000);
+						</script>
+						<?php
+						break;
 				}
 			} else { // nothing to do yet, show input field ?>
 
@@ -87,6 +138,73 @@
 						</div>
 					</form>
 				</div> <!-- card end -->
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						WLAN
+					</div>
+					<form action="./settings/network.php" method="POST">
+						<div class="card-body">
+							<div class="row form-group">
+								<label for="wlanreset" class="col-md-4 col-form-label">Anmeldedaten löschen</label>
+								<div class="col">
+									<button type="submit" name="action" value="wlanreset" class="btn btn-block btn-danger">Anmeldedaten löschen</button>
+									<span id="wlanresetHelpBlock" class="form-text small">
+										Hiermit können die aktuellen WLAN Zugangsdaten (SSID und Kennwort) entfernt werden. Nach dem Neustart öffnet die openWB einen Hotspot, falls kein Netzwerkkabel eingesteckt ist.<br>
+										<span class="text-danger">
+											Die openWB wird direkt nach der Änderung neu gestartet! Alle Fahrzeuge sind vorher abzustecken!<br>
+											Diese Funktion setzt eine fertig gekaufte openWB voraus. Bei Eigeninstallationen ändern Sie bitte die Zugangsdaten mit den normalen Funktionen des Raspberry Pi OS.
+										</span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div> <!-- card end -->
+
+				<div class="card border-danger">
+					<div class="card-header bg-danger">
+						openWB Plug'n'Play Netzwerk
+					</div>
+					<form action="./settings/network.php" method="POST">
+						<div class="card-body">
+							<div class="row form-group">
+								<label for="" class="col-md-4 col-form-label">eth0</label>
+								<div class="col">
+									<input type="text" name="virtual_ip_eth0" id="virtual_ip_eth0" value="<?php echo $virtual_ip_eth0old; ?>" aria-describedby="virtualIpEth0HelpBlock" class="form-control" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$">
+									<span id="virtualIpEth0HelpBlock" class="form-text small">
+										Hier kann die IP des virtuellen Netzwerkadapters angepasst werden.<br>
+										<span class="text-danger">
+											Achtung!<br>
+											Wenn hier ungültige Daten eingetragen werden, funktioniert die Verbindung zu einem openWB EVU-/PV-/Speicher-/AlphaESS-Kit nicht mehr! Ein externes Display kann ebenfalls keine Verbindung mehr aufbauen!<br>
+											Die Standardeinstellung ist <span class="text-primary">192.168.193.5</span> und sollte nur in Ausnahmefällen geändert werden!<br>
+											Die openWB wird direkt nach der Änderung neu gestartet! Alle Fahrzeuge sind vorher abzustecken!
+										</span>
+									</span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<label for="" class="col-md-4 col-form-label">wlan0</label>
+								<div class="col">
+									<input type="text" name="virtual_ip_wlan0" id="virtual_ip_wlan0" value="<?php echo $virtual_ip_wlan0old; ?>" aria-describedby="virtualIpWlan0HelpBlock" class="form-control" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$">
+									<span id="virtualIpWlan0HelpBlock" class="form-text small">
+										Hier kann die IP des virtuellen Netzwerkadapters angepasst werden.<br>
+										<span class="text-danger">
+											Achtung!<br>
+											Wenn hier ungültige Daten eingetragen werden, funktioniert die Verbindung zu einem openWB EVU-/PV-/Speicher-/AlphaESS-Kit nicht mehr! Ein externes Display kann ebenfalls keine Verbindung mehr aufbauen!<br>
+											Die Standardeinstellung ist <span class="text-primary">192.168.193.6</span> und sollte nur in Ausnahmefällen geändert werden!<br>
+											Die openWB wird direkt nach der Änderung neu gestartet! Alle Fahrzeuge sind vorher abzustecken!
+										</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer text-center">
+							<button type="submit" name="action" value="virtip" class="btn btn-danger">Plug'n'Play Netzwerk ändern</button>
+						</div>
+					</form>
+				</div> <!-- card end -->
+
 			<?php } ?>
 			<div class="row justify-content-center">
 				<div class="col text-center">
