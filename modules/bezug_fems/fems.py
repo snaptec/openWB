@@ -17,7 +17,7 @@ def write_ramdisk(val, file):
 
 # Grid meter values
 try:
-    response = requests.get('http://x:'+password+'@'+ip_address+':8084/rest/channel/meter0/(ActivePowerL.|VoltageL.|Frequency)', timeout = 1).json()
+    response = requests.get('http://x:'+password+'@'+ip_address+':8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)', timeout = 1).json()
 except:
     traceback.print_exc()
 
