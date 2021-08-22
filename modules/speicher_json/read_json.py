@@ -24,12 +24,12 @@ if Debug>=2:
 	DebugLog(str(response))
 try:
 	speicherleistung = jq.compile(battjsonwatt).input(response).first()
-	speicherleistung = int(speicherleistung)
 	if Debug>=1:
 		DebugLog('Speicherleistung: ' + str(speicherleistung))
 	if not str(speicherleistung).isnumeric():
 		DebugLog('Speicherleistung nicht numerisch. Bitte Filterausdruck ueberpruefen -->0')
 		speicherleistung=0
+	speicherleistung = int(speicherleistung)
 	with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
 		f.write(str(speicherleistung))
 except:
@@ -38,12 +38,12 @@ except:
 try:
 	if battjsonsoc != "":
 		battsoc = jq.compile(battjsonsoc).input(response).first()
-		battsoc = int(battsoc)
 		if Debug>=1:
 			DebugLog('SpeicherSoC: ' + str(battsoc))
 		if not str(battsoc).isnumeric():
 			DebugLog('SpeicherSoc nicht numerisch. Bitte Filterausdruck ueberpruefen -->0')
 			battsoc=0
+		battsoc = int(battsoc)
 	else:
 		battsoc = 0
 		if Debug>=1:

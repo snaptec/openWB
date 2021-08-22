@@ -38,7 +38,7 @@ try:
 	watt=int(watt)
 	if watt >= 0:
 		watt = watt*(-1)
-	if numpv==1:
+	if numpv == 1:
 		with open(RAMDISKDIR + "pvwatt", "w") as f:
 			f.write(str(watt))
 	else:
@@ -55,7 +55,7 @@ try:
 		kwh = jq.compile(jsonkwh).input(response).first()
 	else:
 		kwh = 0
-	if numpv==1:
+	if numpv == 1:
 		with open(RAMDISKDIR + "pvkwh", "w") as f:
 			f.write(str(kwh))
 	else:

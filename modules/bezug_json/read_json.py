@@ -29,6 +29,9 @@ if Debug >= 2:
 
 
 response = requests.get(bezugjsonurl, timeout=5).json()
+if Debug>=2:
+	DebugLog(str(response))
+
 try:
 	evuwatt = jq.compile(bezugjsonwatt).input(response).first()
 	evuwatt = int(evuwatt)
@@ -37,8 +40,9 @@ try:
 except:
 	traceback.print_exc()
 	exit(1)
+
 if Debug >= 1:
-	DebugLog('Watt: ' + str(evuwatt))
+	DebugLog('EVU Watt: ' + str(evuwatt))
 
 try:
 	if bezugjsonkwh != "":
@@ -51,7 +55,7 @@ except:
 	traceback.print_exc()
 	exit(1)
 if Debug >= 1:
-	DebugLog('Bezug: ' + str(evuikwh))
+	DebugLog('EVU Bezug: ' + str(evuikwh))
 
 try:
 	if einspeisungjsonkwh != "":
@@ -64,6 +68,6 @@ except:
 	traceback.print_exc()
 	exit(1)
 if Debug >= 1:
-	DebugLog('Einsp: ' + str(evuekwh))
+	DebugLog('EVU Einsp: ' + str(evuekwh))
 
 exit(0)
