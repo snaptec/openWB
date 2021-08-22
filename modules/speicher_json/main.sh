@@ -2,7 +2,7 @@
 
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
+#MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="BATT"
 DMOD="MAIN"
 Debug=$debug
@@ -21,7 +21,6 @@ openwbDebugLog ${DMOD} 2 "Speicher URL: ${battjsonurl}"
 openwbDebugLog ${DMOD} 2 "Speicher Watt: ${battjsonwatt}"
 openwbDebugLog ${DMOD} 2 "Speicher SoC: ${battjsonsoc}"
 
-#python3 /var/www/html/openWB/modules/speicher_json/read_json.py "${battjsonurl}" "${battjsonwatt}" "${battjsonsoc}" >>$MYLOGFILE 2>&1
 python3 $OPENWBBASEDIR/modules/speicher_json/read_json.py "${battjsonurl}" "${battjsonwatt}" "${battjsonsoc}" >>$MYLOGFILE 2>&1
 ret=$?
 
