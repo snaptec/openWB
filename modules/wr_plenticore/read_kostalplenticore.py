@@ -22,13 +22,16 @@
 import os
 import sys
 import time
-#import getopt
-#import socket
-#import struct
-#import binascii
-import debugpy
+remotedebug=0
+#zukünftige Nutzung ?
+#try:
+#    import debugpy
+#    remotedebug=1
+#except ImportError, e:
+#remotedebug=0  # module doesn't exist, deal with it.
 
-from datetime import datetime, timezone
+from datetime import datetime
+#from timezone import timezone
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
@@ -36,11 +39,13 @@ from pymodbus.client.sync import ModbusTcpClient
 class myLogging:
     @staticmethod
     def DebugLog(Pid, message):
-        local_time = datetime.now(timezone.utc).astimezone()
+        #local_time = datetime.now(timezone.utc).astimezone()
+        local_time= datetime.now()
         print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + message)   
     @staticmethod
     def openWBLog(Pid, message):
-        local_time = datetime.now(timezone.utc).astimezone()
+        #local_time = datetime.now(timezone.utc).astimezone()
+        local_time = datetime.now()
         log = (local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + 'read_kostalplenticore.py:' +message + '\n')
         try:
             # Versuche in ramdisk log zu schreiben
@@ -246,14 +251,14 @@ def main(argv=None):
     WR1 = plenticore(WR1IP,Battery)
     # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
     if WR2IP != 'none':
-        WR2= plenticore(WR2IP, 0)
-    if Debug >= 2:
+        WR2= plenticore(WR2IP, 0)    
+    if remotedebug==1 and Debug >= 2:
         try:
             debugpy.listen(5678)
         except:
-            pass
+          pass
         
-    myLogging.openWBLog(myPid, 'Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + "WR2:" + str(WR2IP) + "Battery:" + str(Battery))
+    myLogging.openWBLog(myPid, 'Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + " -WR2:" + str(WR2IP) + " -Battery:" + str(Battery))
     
     WR1.ReadWechselrichter()
     WR1.ReadKSEM300()
