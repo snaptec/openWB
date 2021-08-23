@@ -21,14 +21,11 @@
 #########################################################
 import os
 import sys
-import sys
-import os
 import time
-import getopt
-import socket
-import ConfigParser
-import struct
-import binascii
+#import getopt
+#import socket
+#import struct
+#import binascii
 import debugpy
 
 from datetime import datetime, timezone
@@ -36,64 +33,42 @@ from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
 
-# Variablen initialisieren
-# Summenwerte
-PV_power_total = 0
-Total_yield = 0
-Yearly_yield = 0
-Monthly_yield = 0
-# Werte WR1
-PV_power_ac1 = 0
-Total_yield1 = 0
-Yearly_yield1 = 0
-Monthly_yield1 = 0
-Actual_batt_ch_disch_power = 0
-Battery_actual_SOC = 0
-# Werte WR2
-PV_power_ac2 = 0
-Total_yield2 = 0
-Yearly_yield2 = 0
-Monthly_yield2 = 0
-# Werte EVU
-Bezug = 0
-Current_phase_1_powermeter = 0
-Current_phase_2_powermeter = 0
-Current_phase_3_powermeter = 0
-Frequency_powermeter = 0
-Active_power_phase_1_powermeter = 0
-Active_power_phase_2_powermeter = 0
-Active_power_phase_3_powermeter = 0
-Voltage_phase_1_powermeter = 0
-Voltage_phase_2_powermeter = 0
-Voltage_phase_3_powermeter = 0
-Actual_cos_phi = 0
-
-class plenticore:          
-    _wr  = ModbusTcpClient
-    _WRIP = str
-    _Battery = bool
+class myLogging:
+    @staticmethod
+    def DebugLog(Pid, message):
+        local_time = datetime.now(timezone.utc).astimezone()
+        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + message)   
+    @staticmethod
+    def openWBLog(Pid, message):
+        local_time = datetime.now(timezone.utc).astimezone()
+        log = (local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + 'read_kostalplenticore.py:' +message + '\n')
+        try:
+            # Versuche in ramdisk log zu schreiben
+            with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
+                f.write(log)
+        except:
+            #2. Versuch mit print 
+            DebugLog(Pid, message)            
+            
+class plenticore:
     
     def __init__(self, WRIP, Battery):        
         # Class Variablen
-        _WRIP = WRIP
-        _Battery = Battery
-
+        self._WRIP = WRIP
+        self._Battery = Battery
+        self._wr = ''   
         # Plenticore als Modbus Client einrichten
-        try:            
-            self.wr = ModbusTcpClient(WRIP, port=1502)
-            self.wr.client.connect()
+        try:
+            self._wr = ModbusTcpClient(self._WRIP, port=1502)        
+            #self._wr.client.connect()
         except:
             # kein Zugriff auf WR1, also Abbruch und mit Null initialisierte Variablen in die Ramdisk
-            self.DebugLog('Fehler beim Initialisieren des Modbus-Client WR1: ' + sys.exc_info()[0])
-            sys.exit(1)
+            myLogging.DebugLog('', 'Wechserrichter IP :' + self._WRIP)
+            myLogging.openWBLog('Fehler beim Initialisieren des Modbus-Client WR1: ' + sys.exc_info()[0])
+            sys.exit(1)            
     
-    # Tdo: global Log Class
-    def DebugLog(self, Pid, message):
-        local_time = datetime.now(timezone.utc).astimezone()
-        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + message)   
-
-    def ReadRegister(self, address, count=1, **kwargs)->result:
-        self._wr.read_holding_registers(address,count,kwargs)
+    def ReadRegister(self, address, count=1, **kwargs):
+        return self._wr.read_holding_registers(address,count,**kwargs)
 
     def ReadBattery(self):
         # dann zunächst alle relevanten Register aus WR 1 auslesen:
@@ -112,16 +87,17 @@ class plenticore:
                 reg_582 = self._wr.read_holding_registers(582,1,unit=71)
                 # Plenticore Register 514: Battery_actual_SOC [%]
                 # ist Ladestand des Speichers
-                reg_514 = self._wr.read_holding_registers(514,1,unit=71)
-                self.FRegister_260 = BinaryPayloadDecoder.fromRegisters(reg_260.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-                self.FRegister_270 = BinaryPayloadDecoder.fromRegisters(reg_270.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-                self.FRegister_514 = BinaryPayloadDecoder.fromRegisters(reg_514.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-                self.FRegister_582 = BinaryPayloadDecoder.fromRegisters(reg_582.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+                reg_514 = self._wr.read_holding_registers(514,1,unit=71)              
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-            self.DebugLog('Fehler beim Lesen der Modbus-Register Battery:' + self._WRIP + '(falsche IP?)' + sys.exc_info()[0])        
+            myLogging.openWBLog('Fehler beim Lesen der Modbus-Register Battery:' + self._WRIP + '(falsche IP?)' + sys.exc_info()[0])        
             sys.exit(1)
 
+        self.FRegister_260 = BinaryPayloadDecoder.fromRegisters(reg_260.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_270 = BinaryPayloadDecoder.fromRegisters(reg_270.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_514 = BinaryPayloadDecoder.fromRegisters(reg_514.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_582 = BinaryPayloadDecoder.fromRegisters(reg_582.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+                
     def ReadWechselrichter(self):
         try:
             # Plenticore Register 575: Inverter_generation_power_actual [W]
@@ -135,16 +111,16 @@ class plenticore:
             reg_324 = self._wr.read_holding_registers(324,2,unit=71)
             # Plenticore Register 326: Monthly_yield [Wh]
             # ist PV Monatsertrag
-            reg_326 = self._wr.read_holding_registers(326,2,unit=71)            
-            self.FRegister_320 = BinaryPayloadDecoder.fromRegisters(reg_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_324 = BinaryPayloadDecoder.fromRegisters(reg_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_326 = BinaryPayloadDecoder.fromRegisters(reg_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_575 = BinaryPayloadDecoder.fromRegisters(reg_575.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+            reg_326 = self._wr.read_holding_registers(326,2,unit=71)                        
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-            self.DebugLog('Fehler beim Lesen der Modbus-Register WR:' + self._WRIP + '(falsche WR-IP?)' + sys.exc_info()[0])        
+            myLogging.openWBLog('Fehler beim Lesen der Modbus-Register WR:' + self._WRIP + '(falsche WR-IP?)' + sys.exc_info()[0])        
             sys.exit(1)
 
+        self.FRegister_320 = BinaryPayloadDecoder.fromRegisters(reg_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_324 = BinaryPayloadDecoder.fromRegisters(reg_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_326 = BinaryPayloadDecoder.fromRegisters(reg_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_575 = BinaryPayloadDecoder.fromRegisters(reg_575.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     def ReadKSEM300(self):
         try:
             # Strom auf Phasen 1-3 EVU aus Kostal Plenticore lesen
@@ -190,41 +166,83 @@ class plenticore:
             reg_250 = self._wr.read_holding_registers(250,2,unit=71)
             # Plenticore Register 150: Actual_cos_phi []
             # ist Wirkfaktor
-            reg_150 = self._wr.read_holding_registers(150,2,unit=71)
-            #ausgelesene Register WR 1 dekodieren
-            #FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_150 = BinaryPayloadDecoder.fromRegisters(reg_150.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_220 = BinaryPayloadDecoder.fromRegisters(reg_220.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_222 = BinaryPayloadDecoder.fromRegisters(reg_222.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_224 = BinaryPayloadDecoder.fromRegisters(reg_224.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_230 = BinaryPayloadDecoder.fromRegisters(reg_230.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_232 = BinaryPayloadDecoder.fromRegisters(reg_232.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_234 = BinaryPayloadDecoder.fromRegisters(reg_234.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_240 = BinaryPayloadDecoder.fromRegisters(reg_240.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_242 = BinaryPayloadDecoder.fromRegisters(reg_242.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_244 = BinaryPayloadDecoder.fromRegisters(reg_244.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_250 = BinaryPayloadDecoder.fromRegisters(reg_250.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-            self.FRegister_252 = BinaryPayloadDecoder.fromRegisters(reg_252.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+            reg_150 = self._wr.read_holding_registers(150,2,unit=71)           
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-            self.DebugLog('Fehler beim Lesen der Modbus-Register KSEM300:' + self._WRIP + '(falsche WR-IP?)' + sys.exc_info()[0])        
+            myLogging.openWBLog('Fehler beim Lesen der Modbus-Register KSEM300:' + self._WRIP + '(falsche WR-IP?)' + sys.exc_info()[0])        
             sys.exit(1)           
-                
+        
+        #ausgelesene Register WR 1 dekodieren
+        #FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_150 = BinaryPayloadDecoder.fromRegisters(reg_150.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_220 = BinaryPayloadDecoder.fromRegisters(reg_220.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_222 = BinaryPayloadDecoder.fromRegisters(reg_222.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_224 = BinaryPayloadDecoder.fromRegisters(reg_224.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_230 = BinaryPayloadDecoder.fromRegisters(reg_230.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_232 = BinaryPayloadDecoder.fromRegisters(reg_232.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_234 = BinaryPayloadDecoder.fromRegisters(reg_234.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_240 = BinaryPayloadDecoder.fromRegisters(reg_240.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_242 = BinaryPayloadDecoder.fromRegisters(reg_242.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_244 = BinaryPayloadDecoder.fromRegisters(reg_244.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_250 = BinaryPayloadDecoder.fromRegisters(reg_250.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        self.FRegister_252 = BinaryPayloadDecoder.fromRegisters(reg_252.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+        
 def main(argv=None):
-    # IP für Wechselrichter 1
-    WR1IP = str(sys.argv[1])
-    # IP für Wechselrichter 2
-    WR2IP = str(sys.argv[2])
-    # Battery vorhanden 
-    Battery = int(sys.argv[3])       
-    Debug = int(os.environ.get('debug'))
-    myPid = str(os.getpid())       
-
-    # Tdo: global Log Class
-    def DebugLog(Pid, message):
-        local_time = datetime.now(timezone.utc).astimezone()
-        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + message)           
+    myPid = str(os.getpid()) 
+    if len(sys.argv) ==5:
+        # IP für Wechselrichter 1
+        WR1IP = str(sys.argv[1])
+        # IP für Wechselrichter 2
+        WR2IP = str(sys.argv[2])
+        # Battery vorhanden
+        Battery = int(sys.argv[3])
+        ## not used
+        ARGV4 = str(sys.argv[4])
+    else:
+        myLogging.openWBLog(myPid, 'Argumente fehlen oder sind fehlerhaft')
+        sys.exit(1)
     
+    #tdo: how to get openWB debug level
+    _strdebug = os.environ.get('debug')
+    
+    if _strdebug != 'none':
+        try:      
+            Debug = int(_strdebug)
+        except:
+            Debug = 0    
+          
+    # Variablen initialisieren
+    # Summenwerte
+    PV_power_total = 0
+    Total_yield = 0
+    Yearly_yield = 0
+    Monthly_yield = 0
+    # Werte WR1
+    PV_power_ac1 = 0
+    Total_yield1 = 0
+    Yearly_yield1 = 0
+    Monthly_yield1 = 0
+    Actual_batt_ch_disch_power = 0
+    Battery_actual_SOC = 0
+    # Werte WR2
+    PV_power_ac2 = 0
+    Total_yield2 = 0
+    Yearly_yield2 = 0
+    Monthly_yield2 = 0
+    # Werte EVU
+    Bezug = 0
+    Current_phase_1_powermeter = 0
+    Current_phase_2_powermeter = 0
+    Current_phase_3_powermeter = 0
+    Frequency_powermeter = 0
+    Active_power_phase_1_powermeter = 0
+    Active_power_phase_2_powermeter = 0
+    Active_power_phase_3_powermeter = 0
+    Voltage_phase_1_powermeter = 0
+    Voltage_phase_2_powermeter = 0
+    Voltage_phase_3_powermeter = 0
+    Actual_cos_phi = 0    
+        
     WR1 = plenticore(WR1IP,Battery)
     # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
     if WR2IP != 'none':
@@ -234,10 +252,11 @@ def main(argv=None):
             debugpy.listen(5678)
         except:
             pass
-        DebugLog('Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + "WR2:" + str(WR2IP) + "Battery:" + Battery)
+        
+    myLogging.openWBLog(myPid, 'Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + "WR2:" + str(WR2IP) + "Battery:" + str(Battery))
     
-    WR1.ReadWechselrichter
-    WR1.ReadKSEM300
+    WR1.ReadWechselrichter()
+    WR1.ReadKSEM300()
         
     # dekodierte Register WR 1 in entsprechende Typen umwandeln
     #Total_DC_power1 = int(FRegister_100.decode_32bit_float())
@@ -259,7 +278,7 @@ def main(argv=None):
     Voltage_phase_3_powermeter = round(WR1.FRegister_250.decode_32bit_float(),2)
     Actual_cos_phi = round(WR1.FRegister_150.decode_32bit_float(),3)
     if Battery == 1:
-        WR1.ReadBattery    
+        WR1.ReadBattery()    
         DC1_power1 = int(WR1.FRegister_260.decode_32bit_float())
         DC2_power1 = int(WR1.FRegister_270.decode_32bit_float())
         Actual_batt_ch_disch_power = int(WR1.FRegister_582.decode_16bit_int())
@@ -270,7 +289,7 @@ def main(argv=None):
 
     # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
     if WR2IP != 'none':
-        WR2.ReadWechselrichter
+        WR2.ReadWechselrichter()
         Total_yield2 = int(WR2.FRegister2_320.decode_32bit_float())
         Yearly_yield2 = round((WR2.FRegister2_324.decode_32bit_float()/1000),2)
         Monthly_yield2 = round((WR2.FRegister2_326.decode_32bit_float()/1000),2)
