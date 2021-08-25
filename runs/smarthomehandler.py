@@ -1044,10 +1044,26 @@ def conditions(nummer):
             if  str(nummer)+"anlaufz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"anlaufz"])
                 if ( standbyduration < timesince ):
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte aus " + str(standbypower))
+                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec pruefe Einschaltschwelle " + str(standbypower))
                     setstat(nummer,10)
                     del DeviceCounters[str(nummer)+"anlaufz"]
-                    turndevicerelais(nummer, 0,0,1)
+                    oldueberschussberechnung = 0
+                    devuberschuss = 0
+                    ( devuberschuss, oldueberschussberechnung)= getueb(nummer)
+                    if ( devuberschuss > einschwelle):
+                        try:
+                            del DeviceCounters[str(nummer)+"ausverz"]
+                        except:
+                            pass
+                        try:
+                            del DeviceCounters[str(nummer)+"einverz"]
+                        except:
+                            pass
+                        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle, schalte ein (ohne Einschaltverzoegerung) " + str(einschwelle) )
+                        turndevicerelais(nummer, 1,oldueberschussberechnung,1)
+                    else:
+                        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " kleiner Einschaltschwelle, schalte aus " + str(einschwelle) )
+                        turndevicerelais(nummer, 0,0,1)
                     return
                 else:
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " standbycheck noch nicht erreicht " +  str(standbyduration)+ " > " + str(timesince))
@@ -1119,6 +1135,9 @@ def conditions(nummer):
         setueb(nummer,ueberschussberechnung)
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) +  " Ueberschuss " + str(devuberschuss))
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung anders (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung))
+    if (devstatus == 20):
+        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung immer noch aktiv, keine Ueberprüfung auf Einschalt oder Ausschaltschwelle ")
+        return
     if ( devuberschuss > einschwelle):
         try:
             del DeviceCounters[str(nummer)+"ausverz"]
