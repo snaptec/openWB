@@ -351,12 +351,11 @@ function impExpShow(mqttpayload, variable) {
 	// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
 	var value = parseInt(mqttpayload);
 	var valueStr = Math.abs(value).toLocaleString(undefined);
-	if(value < 0) {
-		valueStr += " (Exp.)";
-	} else if (value > 0) {
-		valueStr += " (Imp.)";
-	}
-	$(variable).text(valueStr);
+    if(value > 0)
+       h = '<span style="background-color:#FFCFD0"> <small>Imp</small> ' + valueStr + '</span>'; 
+    else
+       h = '<span style="background-color:#ACFFAB"> <small>Exp</small> ' + valueStr + '</span>'; 
+	$(variable).html(h);
 }
 
 // show value as kilo
