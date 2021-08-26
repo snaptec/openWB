@@ -295,7 +295,7 @@ class WbData {
 	updateUsageDetails() {
 		this.usageDetails = [this.usageSummary.evuOut,
 		this.usageSummary.charging]
-			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
+			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)).sort((a,b)=>{return (b.power-a.power)}))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary.batIn, this.usageSummary.house]);
 	}
