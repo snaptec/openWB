@@ -123,6 +123,7 @@ class WbData {
 		doc.classed("theme-dark", (this.displayMode == "dark"));
 		doc.classed("theme-light", (this.displayMode == "light"));
 		doc.classed("theme-gray", (this.displayMode == "gray"));
+		doc.classed("shcolors-normal", true);
 	}
 
 	updateEvu(field, value) {
