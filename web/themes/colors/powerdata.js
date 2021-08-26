@@ -214,6 +214,8 @@ class WbData {
 				this.updateUsageDetails();
 				yieldMeter.update();
 				break;
+			case 'countAsHouse':
+				break;
 			default:
 				break;
 		}
@@ -386,6 +388,7 @@ class SHDevice {
 		this.configured = configured;
 		this.showInGraph = true;
 		this.color = color;
+		this.countAsHouse = false;
 	}
 };
 
