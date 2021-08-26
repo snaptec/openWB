@@ -94,6 +94,13 @@
 								} else {
 									hideSection('.manualsetpoint');
 								}
+								if(this.value == '1') {
+									showSection('.helptextimport');
+									hideSection('.helptextexport');
+								} else {
+									showSection('.helptextexport');
+									hideSection('.helptextimport');
+								}
 							})
 						});
 					</script>
@@ -111,14 +118,16 @@
 								<label for="minFeedinPowerBeforeStart" class="col-md-4 col-form-label">Einschaltschwelle</label>
 								<div class="col">
 									<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="100000" value="1320" data-default="1320" data-topicprefix="openWB/config/get/pv/">
-									<span class="form-text small">Parameter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden. Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle multipliziert mit der Anzahl genutzter Phasen, startet die Laderegelung.</span>
+									<span class="form-text helptextexport small">Parameter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden. Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle multipliziert mit der Anzahl genutzter Phasen, startet die Laderegelung.</span>
+									<span class="form-text helptextimport small hide">Parameter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden. Fällt der <b>Bezug</b> unter die Einschaltschwelle multipliziert mit der Anzahl genutzter Phasen, startet die Laderegelung.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="startDelay" class="col-md-4 col-form-label">Einschaltverzögerung</label>
 								<div class="col">
 									<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="20" data-default="20" data-topicprefix="openWB/config/get/pv/">
-									<span class="form-text small">Parameter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden. Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt. Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.</span>
+									<span class="form-text helptextexport small">Parameter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden. Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt. Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.</span>
+									<span class="form-text helptextimport small hide">Parameter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden. Die Ladung startet erst, wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> unter der Einschaltschwelle liegt. Steigt der Bezug innerhalb der Zeitspanne über die Einschaltschwelle, zählt die Zeit von vorne.</span>
 								</div>
 							</div>
 						</div>
@@ -703,6 +712,13 @@
 						showSection('.manualsetpoint');
 					} else {
 						hideSection('.manualsetpoint');
+					}
+					if( mqttpayload == '1') {
+						showSection('.helptextimport');
+						hideSection('.helptextexport');
+					} else {
+						showSection('.helptextexport');
+						hideSection('.helptextimport');
 					}
 				}
 				if ( elementId == "nurpv70dynact") {
