@@ -76,6 +76,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_rct2") echo "selected" ?> value="speicher_rct2">RCT (neu)</option>
 										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
@@ -651,6 +652,7 @@
 								hideSection('#divspeicherip');
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
+								hideSection('#divspeicherrct2');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
 								hideSection('#divspeichersolarwatt');
@@ -661,6 +663,10 @@
 								}
 								if($('#speichermodul').val() == 'speicher_rct') {
 									showSection('#divspeicherrct');
+								}
+								if($('#speichermodul').val() == 'speicher_rct2') {
+									showSection('#divspeicherrct');
+									showSection('#divspeicherrct2');
 								}
 								if($('#speichermodul').val() == 'speicher_siemens') {
 									showSection('#divspeicherip');
