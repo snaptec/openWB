@@ -274,6 +274,23 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
+						<div id="divspeicherrct2" class="hide">
+				<div class="card-header bg-secondary">
+					Speicher Hardware
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+						<pre><?php 
+						   $lines=[];
+							exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
+							echo implode('<br>',$lines); 
+						  ?></pre>
+						</div>
+					</div>
+				</div>
+
+						</div>
 
 						<div id="divspeichervarta" class="hide">
 							<div class="form-group">
