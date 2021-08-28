@@ -146,15 +146,27 @@ goecheck
 nrgkickcheck
 
 #load charging vars
-if (( debug == 1)); then
-	startloadvars=$(date +%s)
-fi
+startloadvars=$(date +%s)
 loadvars
-if (( debug == 1)); then
-	endloadvars=$(date +%s)
-	timeloadvars=$((endloadvars-startloadvars))
+endloadvars=$(date +%s)
+timeloadvars=$((endloadvars-startloadvars))
+
+if [ "$timeloadvars" -gt "8" ]; then
+	openwbDebugLog "MAIN" 0 "**** WARNUNG Zeit zum abfragen aller Werte $timeloadvars Sekunden *****"
+else
+  if (( debug == 1)); then
 	openwbDebugLog "MAIN" 0 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
+  fi     
 fi
+if [ "$timeloadvars" -gt "10" ]; then
+	openwbDebugLog "MAIN" 0 "********************************************************************"
+	openwbDebugLog "MAIN" 0 "**** Zeit zum abfragen aller Werte >10 Sekunde Break regln.sh  *****"
+	openwbDebugLog "MAIN" 0 "********************************************************************"
+    exit 1
+fi
+
+
+
 if (( u1p3paktiv == 1 )); then
 	blockall=$(<ramdisk/blockall)
 	if (( blockall == 1 )); then
