@@ -1,13 +1,33 @@
 #!/usr/bin/python
-# import sys
+import sys
 # import os
 # import time
 # import getopt
 import struct
 from pymodbus.client.sync import ModbusTcpClient
 
-client = ModbusTcpClient('192.168.193.15', port=8899)
+##EVU Kit Defaults
+mbip='192.168.193.15'
+mbport=8899
 sdmid = 115
+
+#Check Argumentlist and replace Defaults if present
+if len(sys.argv) >= 2:
+	mbip=str(sys.argv[1])
+
+if len(sys.argv) >= 3:
+	mbport=int(sys.argv[2])
+
+if len(sys.argv) >= 4:
+	sdmid=int(sys.argv[3])
+
+
+#client = ModbusTcpClient('192.168.193.15', port=8899)
+client = ModbusTcpClient()
+client.host(mbip)
+client.port(mbport)
+#client.unit_id(sdmid)
+
 
 # Voltage
 resp = client.read_input_registers(0x00,2, unit=sdmid)
