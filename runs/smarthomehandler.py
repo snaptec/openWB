@@ -504,7 +504,11 @@ def publishmqtt():
             client.publish("openWB/SmartHome/Devices/"+str(i)+"/OnCntStandby", payload=str(DeviceOnStandby[i-1]) , qos=0, retain=True)
             client.loop(timeout=2.0)
             DeviceOnOldStandby [i-1] =  DeviceOnStandby[i-1]
-        devstatus=getstat(i-1)
+        devstatus=getstat(i)
+        #nur bei Status 10 on status mitnehmen
+        if (devstatus == 10):
+            if str(i)+"relais" in DeviceValues:
+                devstatus = devstatus + int( DeviceValues[str(i)+"relais"])
         if (devstatus != StatusOld [i-1]):
             client.publish("openWB/SmartHome/Devices/"+str(i)+"/Status", payload=str(devstatus) , qos=0, retain=True)
             client.loop(timeout=2.0)
@@ -1034,7 +1038,8 @@ def conditions(nummer):
             setstat(nummer,10)
             return
     # here startup device_startupdetection
-    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20) and ( DeviceValues[str(nummer)+"relais"] == 0 ):
+    #remove condition that device has to be off
+    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
         setstat(nummer,20)
         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
         turndevicerelais(nummer, 1,0,0)
