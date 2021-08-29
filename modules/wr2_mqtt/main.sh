@@ -5,11 +5,11 @@ MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="PV"
 Debug=$debug
 
-pvwatt=$(<${RAMDISKDIR}/pvwatt)
+
+pvwatt=$(<$RAMDISKDIR/pvwatt2)
 echo $pvwatt
-openwbDebugLog ${DMOD} 1 "PVWatt: ${pvwatt}"
+openwbDebugLog ${DMOD} 1 "PV2Watt: ${pvwatt}"
 
-pvkwh=$(<${RAMDISKDIR}/pvkwh)
-openwbDebugLog ${DMOD} 1 "PVkWh: ${pvkwh}"
-
+pvkwh=$(<${RAMDISKDIR}/pv2kwh)
+openwbDebugLog ${DMOD} 1 "PV2kWh: ${pvkwh}"
 openwbModulePublishState "PV" 0 "Kein Fehler" 1
