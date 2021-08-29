@@ -63,7 +63,7 @@ def main():
         Stor=  (int(rct.read(clientsocket, 0x5570401B)) / 1000.0)
         print "Stored Energy        : "  + str(Stor) + ' Kwh'
         Used=  (int(rct.read(clientsocket, 0xA9033880)) / 1000.0)
-        print "Stored Energy        : "  + str(Used) + ' Kwh'
+        print "Used Energy          : "  + str(Used) + ' Kwh'
 
 #0x902AFAFB battery.temperature                              22.8020839691
 #0x65EED11B battery.voltage                                  319.721984863
