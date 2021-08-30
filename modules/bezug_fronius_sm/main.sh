@@ -27,7 +27,7 @@ if [[ $froniusvar2 == "0" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
 	json_id=".Body.Data"
 	# Hole die JSON Daten
-	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung")
+	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=$froniuserzeugung")
 
 elif [[ $froniusvar2 == "1" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
@@ -62,8 +62,7 @@ elif [[ $froniusvar2 == "2" ]]; then
 	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
 	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
 	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
-	# TODO: ist dieser Parameter für diese Variante korrekt? sieht aus wie Copy-Paste
-	evuhz=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Frequency_Phase_Average')/1" | bc)
+	evuhz=$(echo "scale=2; $(echo $response_sm | jq $json_id'.GRID_FREQUENCY_MEAN_F32')/1" | bc)
 	evupf1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_01_F64')/1" | bc)
 	evupf2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_02_F64')/1" | bc)
 	evupf3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_03_F64')/1" | bc)

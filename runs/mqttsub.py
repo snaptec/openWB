@@ -147,7 +147,7 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_name", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceTypes = ['none','shelly','tasmota','acthor','elwa','idm','stiebel','http','avm','mystrom','pyt'] # 'pyt' is deprecated and will be removed!
+                validDeviceTypes = ['none','shelly','tasmota','acthor','elwa','idm','stiebel','http','avm','mystrom','viessmann','mqtt','pyt'] # 'pyt' is deprecated and will be removed!
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                     try:
                         # just check vor payload in list, deviceTypeIndex is not used
@@ -159,7 +159,7 @@ def on_message(client, userdata, msg):
                         client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514','fronius','json','avm'] # 'pyt' is deprecated and will be removed!
+                validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514','fronius','json','avm','mqtt','sdm120'] # 'pyt' is deprecated and will be removed!
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                     try:
                         deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))

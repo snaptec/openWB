@@ -1,12 +1,32 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BATT"
 DMOD="MAIN"
+Debug=$debug
 
-python3 /var/www/html/openWB/modules/speicher_json/read_json.py "${battjsonurl}" "${battjsonwatt}" "${battjsonsoc}"
+#For Development only
+#Debug=1
 
-speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
+fi
+
+
+openwbDebugLog ${DMOD} 2 "Speicher URL: ${battjsonurl}"
+openwbDebugLog ${DMOD} 2 "Speicher Watt: ${battjsonwatt}"
+openwbDebugLog ${DMOD} 2 "Speicher SoC: ${battjsonsoc}"
+
+python3 $OPENWBBASEDIR/modules/speicher_json/read_json.py "${battjsonurl}" "${battjsonwatt}" "${battjsonsoc}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+
 openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"
-echo ${speicherleistung}
-
-battsoc=$(</var/www/html/openWB/ramdisk/speichersoc)
-openwbDebugLog ${DMOD} 1 "BattSoC: ${battsoc}"
+#echo ${speicherleistung}

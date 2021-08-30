@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-# import os
+import os
 import time
 import json
 # import getopt
@@ -184,12 +184,50 @@ errinfo= "%8X" % int(final2)
 resp= client.read_holding_registers(1500,2,unit=255)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 final2 = float( decoder.decode_32bit_uint())
-rfidinfo= "%8X" % int(final2)
+rfidinfo= "%08X" % int(final2)
+rfidinfo = '00' + rfidinfo
+#rfid simulieren
+#if (lpnumber ==1):
+#    file_stringtr= '/var/www/html/openWB/ramdisk/kebalp1r'
+#else:
+#    file_stringtr= '/var/www/html/openWB/ramdisk/kebalp2r'
+#if os.path.isfile(file_stringtr):
+#    f = open( file_stringtr , 'r')
+#    rfidtr=int(f.read())
+#    f.close()
+#    if rfidtr == 1:
+#        rfidinfo = '0004A376A2'
+#    if rfidtr == 2:
+#        rfidinfo = '0004A2DAA2'
+#    if rfidtr == 3:
+#        rfidinfo = '000992DAA2'
+#rfid simulations end
+# firmware version
+resp= client.read_holding_registers(1018,2,unit=255)
+decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
+final2 = float( decoder.decode_32bit_uint())
+firminfo= "%08X" % int(final2)
 
-answer = '{"maxcur":' + str(maxcur) + ',"supcur":' + str(supcur) + ',"hwinfo":' + str(hwinfo) + ',"Error":' + str(errinfo) + ',"plugstat":' + str(plugstat) + ',"chargestat":' + str(chargestat) +  ',"rfid":' + str(rfidinfo)  +  ',"powerc":' + powerc + ',"power":' + power + ',"V1":' + v1 + ',"V2":' + v2 + ',"V3":' + v3 + ',"A1":' + a1 + ',"A2":' + a2 + ',"A3":' + a3 +'} '
+answer = '{"maxcur":' + str(maxcur) + ',"supcur":' + str(supcur) + ',"hwinfo":' + str(hwinfo) + ',"Error":' + str(errinfo) + ',"plugstat":' + str(plugstat) + ',"chargestat":' + str(chargestat) +  ',"rfid":' + str(rfidinfo)  +  ',"firmware":' + str(firminfo)  +  ',"powerc":' + powerc + ',"power":' + power + ',"V1":' + v1 + ',"V2":' + v2 + ',"V3":' + v3 + ',"A1":' + a1 + ',"A2":' + a2 + ',"A3":' + a3 +'} '
 if (lpnumber ==1):
     f = open('/var/www/html/openWB/ramdisk/kebainfolp1', 'w')
 else:
     f = open('/var/www/html/openWB/ramdisk/kebainfolp2','w')
 json.dump(answer,f)
+f.close()
+if (lpnumber ==1):
+    file_string= '/var/www/html/openWB/ramdisk/kebalp1rfid'
+else:
+    file_string= '/var/www/html/openWB/ramdisk/kebalp2rfid'
+rfidold=rfidinfo
+if os.path.isfile(file_string):
+    f = open( file_string , 'r')
+    rfidold=str(f.read())
+    f.close()
+    if (rfidold != rfidinfo) and (rfidinfo != '0000000000'):
+        f = open( '/var/www/html/openWB/ramdisk/readtag','w')
+        f.write(str(rfidinfo))
+        f.close()
+f = open( file_string , 'w')
+f.write(str(rfidinfo))
 f.close()

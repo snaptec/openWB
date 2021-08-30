@@ -445,11 +445,17 @@ updateConfig(){
 	if ! grep -Fq "bezug_solarlog_ip=" $ConfigFile; then
 		echo "bezug_solarlog_ip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "bezug2_solarlog_ip=" $ConfigFile; then
+		echo "bezug2_solarlog_ip=192.168.0.12" >> $ConfigFile
+	fi
 	if ! grep -Fq "bezug_id=" $ConfigFile; then
 		echo "bezug_id=30" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezug_solarlog_speicherv=" $ConfigFile; then
 		echo "bezug_solarlog_speicherv=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug2_solarlog_speicherv=" $ConfigFile; then
+		echo "bezug2_solarlog_speicherv=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrfronius2ip=" $ConfigFile; then
 		echo "wrfronius2ip=none" >> $ConfigFile
@@ -1048,9 +1054,6 @@ updateConfig(){
 	fi
 	if ! grep -Fq "vartaspeicherip=" $ConfigFile; then
 		echo "vartaspeicherip=192.168.0.10" >> $ConfigFile
-	fi
-	if ! grep -Fq "vartaspeicher2ip=" $ConfigFile; then
-		echo "vartaspeicher2ip=none" >> $ConfigFile
 	fi
 	if ! grep -Fq "usevartamodbus=" $ConfigFile; then
 		echo "usevartamodbus=0" >> $ConfigFile
@@ -2110,6 +2113,12 @@ updateConfig(){
 	fi
 	if grep -Fq "socmodul1=soc_bluelinklp2" $ConfigFile; then
 		sed -i "s/socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
+	fi
+	if ! grep -Fq "virtual_ip_eth0=" $ConfigFile; then
+		echo "virtual_ip_eth0='192.168.193.5'" >> $ConfigFile
+	fi
+	if ! grep -Fq "virtual_ip_wlan0=" $ConfigFile; then
+		echo "virtual_ip_wlan0='192.168.193.6'" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }

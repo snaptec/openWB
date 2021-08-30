@@ -620,7 +620,7 @@
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Fronius WR.
 										</span>
-										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php if(isset($wrfroniusip)) echo $wrfroniusip ?>">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
 										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>
@@ -1128,7 +1128,8 @@
 						// fill listbox, format <manufacturer> <meter model> (<serial>)
 						for(var i in data.Body.Data) {
 							var meter = data.Body.Data[i];
-							options += '<option value="'+i+'" data-meterlocation="'+meter.Meter_Location_Current+'"'
+							var meter_location = meter.hasOwnProperty('1SMARTMETER_VALUE_LOCATION_U16') ? parseInt(meter.SMARTMETER_VALUE_LOCATION_U16) : meter.Meter_Location_Current;
+							options += '<option value="'+i+'" data-meterlocation="'+meter_location+'"'
 							if($('#froniuserzeugung').attr("data-old") == i) {
 								options += ' selected=true';
 							}
