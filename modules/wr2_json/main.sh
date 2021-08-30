@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="PV"
 #DMOD="MAIN"
@@ -10,10 +10,10 @@ Debug=$debug
 #For Development only
 #Debug=1
 
-if [ $DMOD == "MAIN" ]; then
-	MYLOGFILE="$RAMDISKDIR/openWB.log"
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	MYLOGFILE="$RAMDISKDIR/nurpv.log"
+	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
 
@@ -28,5 +28,5 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-watt=$(<$RAMDISKDIR/pvwatt2)
+watt=$(<${RAMDISKDIR}/pvwatt2)
 echo ${watt}
