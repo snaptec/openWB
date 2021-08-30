@@ -26,7 +26,7 @@ if len(sys.argv) >= 4:
 client = ModbusTcpClient()
 client.host(mbip)
 client.port(mbport)
-client.unit_id(mbid)
+#client.unit_id(mbid)
 
 #Voltage
 resp = client.read_input_registers(0x0001,2, unit=mbid)
