@@ -17,52 +17,57 @@ bezugjsonkwh = str(sys.argv[3])
 einspeisungjsonkwh = str(sys.argv[4])
 
 def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+	local_time = datetime.now(timezone.utc).astimezone()
+	print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
 
 
 
 if Debug >= 2:
-    DebugLog('JQ Watt: ' + bezugjsonwatt)
-    DebugLog('JQ Bezug: ' + bezugjsonkwh)
-    DebugLog('JQ Einsp: ' + einspeisungjsonkwh)
+	DebugLog('JQ Watt: ' + bezugjsonwatt)
+	DebugLog('JQ Bezug: ' + bezugjsonkwh)
+	DebugLog('JQ Einsp: ' + einspeisungjsonkwh)
 
 
-answer = requests.get(bezugjsonurl, timeout=5).json()
-try:
-    evuwatt = jq.compile(bezugjsonwatt).input(answer).first()
-    with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-        f.write(str(evuwatt))
-except:
-    traceback.print_exc()
-    exit(1)
-if Debug >= 1:
-    DebugLog('Watt: ' + str(evuwatt))
+response = requests.get(bezugjsonurl, timeout=5).json()
+if Debug>=2:
+	DebugLog(str(response))
 
 try:
-    if bezugjsonkwh != "":
-        evuikwh = jq.compile(bezugjsonkwh).input(answer).first()
-    else:
-        evuikwh = 0
-    with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
-        f.write(str(evuikwh))
+	evuwatt = jq.compile(bezugjsonwatt).input(response).first()
+	evuwatt = int(evuwatt)
+	with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
+		f.write(str(evuwatt))
 except:
-    traceback.print_exc()
-    exit(1)
+	traceback.print_exc()
+	exit(1)
+
 if Debug >= 1:
-    DebugLog('Bezug: ' + str(evuikwh))
+	DebugLog('EVU Watt: ' + str(evuwatt))
 
 try:
-    if einspeisungjsonkwh != "":
-        evuekwh = jq.compile(einspeisungjsonkwh).input(answer).first()
-    else:
-        evuekwh = 0
-    with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
-        f.write(str(evuekwh))
+	if bezugjsonkwh != "":
+		evuikwh = jq.compile(bezugjsonkwh).input(response).first()
+	else:
+		evuikwh = 0
+	with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
+		f.write(str(evuikwh))
 except:
-    traceback.print_exc()
-    exit(1)
+	traceback.print_exc()
+	exit(1)
 if Debug >= 1:
-    DebugLog('Einsp: ' + str(evuekwh))
+	DebugLog('EVU Bezug: ' + str(evuikwh))
+
+try:
+	if einspeisungjsonkwh != "":
+		evuekwh = jq.compile(einspeisungjsonkwh).input(response).first()
+	else:
+		evuekwh = 0
+	with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
+		f.write(str(evuekwh))
+except:
+	traceback.print_exc()
+	exit(1)
+if Debug >= 1:
+	DebugLog('EVU Einsp: ' + str(evuekwh))
 
 exit(0)

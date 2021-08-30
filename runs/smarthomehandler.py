@@ -719,20 +719,32 @@ def getdevicevalues():
                         argumentList.append(device_actor)
                     argumentList.append(device_username)
                     argumentList.append(device_password)
-                    proc=subprocess.Popen(argumentList)
-                    proc.communicate()
-                    f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
-                    answerj=json.load(f1)
-                    f1.close()
-                    answer = json.loads(answerj)
-                    wattstart = int(answer['power'])
-                    wattkstart = int(answer['powerc'])
-                    # bei laufender Anlauferkennung deivce nicht aktiv setzten
-                    devstatus=getstat(numberOfDevices)
-                    if (int(answer['on']) == 1) and (devstatus != 20):
-                        relais=1
-                    else:
-                        relais=0
+                    try:
+                        proc=subprocess.Popen(argumentList)
+                        proc.communicate()
+                    except Exception as e:
+                        DeviceValues.update( {str(numberOfDevices) : "error"})
+                        logDebug(LOGLEVELERROR, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " Fehlermeldung (zugriff watt.py): " + str(e))
+                    try:
+                        f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
+                        answerj=json.load(f1)
+                        f1.close()
+                    except Exception as e:
+                        DeviceValues.update( {str(numberOfDevices) : "error"})
+                        logDebug(LOGLEVELERROR, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " Fehlermeldung (zugriff return file (1)): " + str(e))
+                    try:
+                        answer = json.loads(answerj)
+                        wattstart = int(answer['power'])
+                        wattkstart = int(answer['powerc'])
+                        # bei laufender Anlauferkennung deivce nicht aktiv setzten
+                        devstatus=getstat(numberOfDevices)
+                        if (int(answer['on']) == 1) and (devstatus != 20):
+                            relais=1
+                        else:
+                            relais=0
+                    except Exception as e:
+                        DeviceValues.update( {str(numberOfDevices) : "error"})
+                        logDebug(LOGLEVELERROR, "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " Fehlermeldung (zugriff return file (2)): " + str(e) + str(answerj))
                     #Shelly temp sensor
                     if (switchtyp == "shelly")  and (canswitch == 1):
                         try:
