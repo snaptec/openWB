@@ -21,3 +21,5 @@ import shutil
 shutil.copy("/var/www/html/openWB/ramdisk/temp_speicherleistung", "/var/www/html/openWB/ramdisk/speicherleistung")
 # Speicher Ladestand von Speicher am WR 1
 shutil.copy("/var/www/html/openWB/ramdisk/temp_speichersoc", "/var/www/html/openWB/ramdisk/speichersoc")
+
+exit(0)

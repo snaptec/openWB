@@ -1,11 +1,24 @@
 #!/usr/bin/env python3
 
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
 import traceback
 
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 wrfroniusip = str(sys.argv[1])
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+
+if Debug >= 2:
+    DebugLog('Speicher IP: ' + wrfroniusip)
 
 # Auslesen eines Fronius Symo WR Hybrid mit Fronius Smartmeter und Batterie über die integrierte JSON-API des WR.
 params = (
@@ -16,6 +29,7 @@ try:
     speicherwatt = int(response["Body"]["Data"]["Site"]["P_Akku"])
 except:
     traceback.print_exc()
+    exit(1)
 speicherwatt = speicherwatt * -1
 
 # wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
@@ -29,7 +43,10 @@ try:
     speichersoc = int(response["Body"]["Data"]["Inverters"]["1"]["SOC"])
 except:
     traceback.print_exc()
+    exit(1)
 if re.search(ra, speichersoc) == None:
     speichersoc = "0"
 with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(speichersoc))
+
+exit(0)

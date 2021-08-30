@@ -1,12 +1,26 @@
 #!/usr/bin/env python3
 
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
 import traceback
 
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 sonnenecoalternativ = str(sys.argv[1])
 sonnenecoip = str(sys.argv[2])
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+
+if Debug >= 2:
+    DebugLog('Speicher Alternativ: ' + sonnenecoalternativ)
+    DebugLog('Speicher IP: ' + sonnenecoip)
 
 ra = '^-?[0-9]+$'
 
@@ -50,14 +64,17 @@ else:
             speichersoc = int(speicherantwort["M05"])
         except:
             traceback.print_exc()
+            exit(1)
         try:
             speicherentladung = int(speicherantwort["M34"])
         except:
             traceback.print_exc()
+            exit(1)
         try:
             speicherladung = int(speicherantwort["M35"])
         except:
             traceback.print_exc()
+            exit(1)
         speicherwatt = speicherladung - speicherentladung
         # wenn Batterie aus bzw. keine Antwort ersetze leeren Wert durch eine 0
         check_write_value(speicherwatt, "speicherleistung")
@@ -68,14 +85,22 @@ else:
             speicherwatt = speicherantwort["Pac_total_W"]
         except:
             traceback.print_exc()
+            exit(1)
         try:
             speichersoc = speicherantwort["USOC"]
+            if Debug >= 1:
+                DebugLog('SpeicherSoC: ' + str(speichersoc))
+            if not str(speichersoc).isnumeric():
+                DebugLog('SpeicherSoc nicht numerisch. -->0')
+                speichersoc = 0
         except:
             traceback.print_exc()
+            exit(1)
         try:
             speicherpvwatt = speicherantwort["Production_W"]
         except:
             traceback.print_exc()
+            exit(1)
         speicherpvwatt = speicherpvwatt * -1
         with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
             f.write(str(speicherpvwatt))
@@ -86,3 +111,5 @@ else:
         with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
             f.write(str(speicherwatt))
         check_write_value(speichersoc, "speichersoc")
+
+exit(0)

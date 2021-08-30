@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
 
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
 import traceback
 
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 multifems = str(sys.argv[1])
 femskacopw = str(sys.argv[2])
 femsip = str(sys.argv[3])
 
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+
+if Debug >= 2:
+    DebugLog('Speicher IP: ' + femsip)
+    DebugLog('Speicher Passwort: ' + femskacopw)
+    DebugLog('Speicher Multi: ' + multifems)
 
 def get_value(url_ending, file=None):
     try:
@@ -24,6 +38,7 @@ def get_value(url_ending, file=None):
             return value
     except:
         traceback.print_exc()
+        exit(1)
 
 
 if multifems == "0":
@@ -46,3 +61,5 @@ if re.search(ra, leistung) == None:
     leistung = "0"
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(leistung))
+
+exit(0)

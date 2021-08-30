@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import datetime
+from datetime import datetime, timezone
 import json
+import os
 import os.path
 import requests
 import sys
@@ -21,6 +23,20 @@ lgessv1ip = str(sys.argv[1])
 ess_pass = str(sys.argv[2])
 ess_api_ver = str(sys.argv[3])
 ess_url = "https://"+lgessv1ip
+
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+
+if Debug >= 2:
+    DebugLog('Speicher IP: ' + lgessv1ip)
+    DebugLog('Speicher Passwort: ' + ess_pass)
+    DebugLog('Speicher Version: ' + ess_api_ver)
+
 #
 # Flag für unterschiedliche API-Versionen der Firmware
 #
@@ -55,6 +71,7 @@ try:
     authchk = response['auth']
 except:
     traceback.print_exc()
+    exit(1)
 #
 # Pruefen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
 #
@@ -67,6 +84,7 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
         outjson = {"auth_key": session_key}
     except:
         traceback.print_exc()
+        exit(1)
     #
     # aktuelle Daten aus dem PCS auslesen
     #
@@ -85,14 +103,25 @@ try:
     batconv_power = response["statistics"]["batconv_power"]
 except:
     traceback.print_exc()
+    exit(1)
+
 try:
     bat_user_soc = response["statistics"]["bat_user_soc"]
+    if Debug >= 1:
+        DebugLog('SpeicherSoC: ' + str(bat_user_soc))
+    if not str(bat_user_soc).isnumeric():
+        DebugLog('SpeicherSoc nicht numerisch. -->0')
+        bat_user_soc = 0
 except:
     traceback.print_exc()
+    exit(1)
+
 try:
     is_battery_discharging_ = response["direction"]["is_battery_discharging_"]
 except:
     traceback.print_exc()
+    exit(1)
+
 #
 # Laden bzw. entladen
 #
@@ -114,14 +143,27 @@ try:
     speicherikwh = response["loginfo"][arr_pos]["total_charge"]
     speicherikwh = speicherikwh.replace("kwh", "")
     speicherikwh = int(speicherikwh)
+    if Debug >= 1:
+        DebugLog('Speicher Import: ' + str(speicherikwh))
+    if not str(speicherikwh).isnumeric():
+        DebugLog('Speicher Import nicht numerisch. -->0')
+        speicherikwh = 0
 except:
     traceback.print_exc()
+    exit(1)
+
 try:
     speicherekwh = response["loginfo"][arr_pos]["total_discharge"]
     speicherekwh = speicherekwh.replace("kwh", "")
     speicherekwh = int(speicherekwh)
+    if Debug >= 1:
+        DebugLog('Speicher Export: ' + str(speicherekwh))
+    if not str(speicherekwh).isnumeric():
+        DebugLog('Speicher Export nicht numerisch. -->0')
+        speicherekwh = 0
 except:
     traceback.print_exc()
+    exit(1)
 #
 # Daten in Ramdisk schreiben
 #
@@ -132,3 +174,5 @@ with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(bat_user_soc))
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(batconv_power))
+
+exit(0)

@@ -1,13 +1,28 @@
 #!/usr/bin/env python3
 
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
 import traceback
 
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 bydhvip = str(sys.argv[1])
 bydhvuser = str(sys.argv[2])
 bydhvpass = str(sys.argv[3])
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+
+if Debug >= 2:
+    DebugLog('Speicher IP: ' + bydhvip)
+    DebugLog('Speicher User: ' + bydhvuser)
+    DebugLog('Speicher Passwort: ' + bydhvpass)
 
 try:
     response = requests.get('http://'+bydhvip+'/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
@@ -26,6 +41,7 @@ try:
         f.write(str(soc))
 except:
     traceback.print_exc()
+    exit(1)
 
 try:
     response = requests.get('http://'+bydhvip+'/asp/Home.asp', auth=(bydhvuser, bydhvpass))
@@ -45,3 +61,6 @@ try:
         f.write(str(speicherleistung))
 except:
     traceback.print_exc()
+    exit(1)
+
+exit(0)

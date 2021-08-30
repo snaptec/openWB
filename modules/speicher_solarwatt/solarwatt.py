@@ -1,28 +1,30 @@
 #!/usr/bin/env python3
 
-import datetime
+from datetime import datetime, timezone
+import os
 import requests
 import sys
 import traceback
 
 from requests.api import get
 
-base_dir = str(sys.argv[1])
-debug = str(sys.argv[2])
-solarwattmethod = str(sys.argv[3])
-speicher1_ip = str(sys.argv[4])
-speicher1_ip2 = str(sys.argv[5])
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
 
-ramdisk_dir = base_dir+"/ramdisk"
-module = "Speicher"
-logfile = ramdisk_dir+"/openWB.log"
+solarwattmethod = str(sys.argv[1])
+speicher1_ip = str(sys.argv[2])
+speicher1_ip2 = str(sys.argv[3])
 
 
-def debugLog(msg):
-    if debug > 0:
-        timestamp = datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-        with open(logfile, "a") as f:
-            f.write(str(timestamp)+": "+str(module)+": "+msg)
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+
+if Debug >= 2:
+    DebugLog('Speicher Methode: ' + solarwattmethod)
+    DebugLog('Speicher IP1: ' + speicher1_ip)
+    DebugLog('Speicher IP2: ' + speicher1_ip2)
 
 
 def get_value(key, sresponse):
@@ -36,6 +38,7 @@ def get_value(key, sresponse):
                         break
     except:
         traceback.print_exc()
+        exit(1)
     return value
 
 
@@ -60,21 +63,31 @@ if solarwattmethod == 1: 	#Abruf über Gateway
         ibat=sresponse["FData"]["IBat"]
     except:
         traceback.print_exc()
+        exit(1)
     try:
         vbat=sresponse["FData"]["VBat"]
     except:
         traceback.print_exc()
+        exit(1)
     speicherleistung=ibat * vbat
     speicherleistung=int(speicherleistung / (-1))
     try:
         speichersoc=int(sresponse["SData"]["SoC"])
+        if Debug >= 1:
+            DebugLog('SpeicherSoC: ' + str(speichersoc))
+        if not str(speichersoc).isnumeric():
+            DebugLog('SpeicherSoc nicht numerisch. -->0')
+            speichersoc = 0
     except:
         traceback.print_exc()
+        exit(1)
 
 
-debugLog("Speicherleistung: "+speicherleistung+" W")
+DebugLog("Speicherleistung: "+speicherleistung+" W")
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(speicherleistung))
-debugLog("SpeicherSoC: "+speichersoc+" %")
+DebugLog("SpeicherSoC: "+speichersoc+" %")
 with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(speichersoc))
+
+exit(0)
