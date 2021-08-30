@@ -45,6 +45,8 @@ try:
     response = requests.get(speicherleistung_http, timeout=10)
     response.encoding = 'utf-8'
     leistung = response.text.replace("\n", "")
+    if Debug >= 1:
+        DebugLog('Speicherleistung: ' + str(leistung))
     with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
         f.write(str(leistung))
 except:
@@ -56,6 +58,8 @@ if speicherikwh_http != "none":
         response = requests.get(speicherikwh_http, timeout=10)
         response.encoding = 'utf-8'
         ikwh = response.text.replace("\n", "")
+        if Debug >= 1:
+            DebugLog('Speicher Import: ' + str(ikwh))
         with open("/var/www/html/openWB/ramdisk/speicherikwh", "w") as f:
             f.write(str(ikwh))
     except:
@@ -67,6 +71,8 @@ if speicherekwh_http != "none":
         response = requests.get(speicherekwh_http, timeout=10)
         response.encoding = 'utf-8'
         ekwh = response.text.replace("\n", "")
+        if Debug >= 1:
+            DebugLog('Speicher Export: ' + str(ekwh))
         with open("/var/www/html/openWB/ramdisk/speicherekwh", "w") as f:
             f.write(str(ekwh))
     except:

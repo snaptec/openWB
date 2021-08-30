@@ -36,6 +36,8 @@ speicherwatt = speicherwatt * -1
 ra = '^-?[0-9]+$'
 if re.search(ra, speicherwatt) == None:
     speicherwatt = "0"
+if Debug >= 1:
+    DebugLog('Speicherleistung: ' + str(speicherwatt))
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(speicherwatt))
 
@@ -46,6 +48,8 @@ except:
     exit(1)
 if re.search(ra, speichersoc) == None:
     speichersoc = "0"
+if Debug >= 1:
+    DebugLog('Soc: ' + str(speichersoc))
 with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(speichersoc))
 

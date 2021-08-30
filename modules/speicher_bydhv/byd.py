@@ -37,6 +37,8 @@ try:
     response = response.replace("%", "")
     group = re.search("^.*value=$", response).group()
     soc = response.replace(group, "")
+    if Debug >= 1:
+        DebugLog('Soc: ' + str(soc))
     with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
         f.write(str(soc))
 except:
@@ -57,6 +59,8 @@ try:
     group = re.search("^.*value=$", response).group()
     speicherleistung = response.replace(group, "")
     speicherleistung = int(speicherleistung*1000)
+    if Debug >= 1:
+        DebugLog('Speicherleistung: ' + str(speicherleistung))
     with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
         f.write(str(speicherleistung))
 except:

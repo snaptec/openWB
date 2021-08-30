@@ -29,6 +29,8 @@ def write_ramdisk(value, file):
         if file == "speichersoc":
             if re.search("^[-+]?[0-9]+\.?[0-9]*$", value) == None:
                 value = "0"
+        if Debug >= 1:
+            DebugLog(file+': ' + str(value))
         with open("/var/www/html/openWB/ramdisk/"+file, "") as f:
             f.write(str(value))
     except:
@@ -84,6 +86,8 @@ leistung = grid + pv - haus
 ra = "^[-+]?[0-9]+\.?[0-9]*$"
 if re.search(ra, leistung) == None:
     leistung = "0"
+if Debug >= 1:
+    DebugLog('Speicherleistung: ' + str(leistung))
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(leistung))
 

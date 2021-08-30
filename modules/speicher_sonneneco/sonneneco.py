@@ -28,6 +28,8 @@ def check_write_value(value, file):
     global ra 
     if re.search(ra, value) == None:
         value = "0"
+    if Debug >= 1:
+        DebugLog(file+': ' + str(value))
     with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
         f.write(str(value))
 
@@ -55,6 +57,8 @@ if sonnenecoalternativ == 2:
     pvwatt = response.text.replace("\n", "")
     pvwatt = int(pvwatt)
     pvwatt = pvwatt * -1
+    if Debug >= 1:
+        DebugLog('PV Leistung: ' + str(pvwatt))
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
 else:
@@ -102,12 +106,16 @@ else:
             traceback.print_exc()
             exit(1)
         speicherpvwatt = speicherpvwatt * -1
+        if Debug >= 1:
+            DebugLog('Speicher PV Watt: ' + str(speicherpvwatt))
         with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
             f.write(str(speicherpvwatt))
         if re.search(ra, speicherwatt) == None:
             speicherwatt = "0"
         else:
             speicherwatt = speicherwatt * -1
+        if Debug >= 1:
+            DebugLog('Speicherleistung: ' + str(speicherwatt))
         with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
             f.write(str(speicherwatt))
         check_write_value(speichersoc, "speichersoc")
