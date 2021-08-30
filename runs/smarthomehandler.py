@@ -1256,7 +1256,10 @@ def resetmaxeinschaltdauerfunc():
                     DeviceTempValues.update({'oldtime'+str(i) : '2'})
                     logDebug(LOGLEVELINFO, "(" + str(i) + ") RunningTime auf 0 gesetzt")
                     DeviceOn[i-1]= str("0")
-                    DeviceOnStandby[i-1]= str("0")
+                    devstatus=getstat(i)
+                    #Sofern Anlauferkennung laueft counter nicht zuruecksetzen
+                    if (devstatus != 20):
+                        DeviceOnStandby[i-1]= str("0")
                     try:
                         del DeviceCounters[str(i)+"oldstampeinschaltdauer"]
                     except:
