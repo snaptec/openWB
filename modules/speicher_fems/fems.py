@@ -7,7 +7,7 @@ import requests
 import sys
 import traceback
 
-Debug = int(os.environ.get('debug'))
+Debug = int(os.environ.get("debug"))
 myPid = str(os.getpid())
 
 multifems = str(sys.argv[1])
@@ -20,43 +20,68 @@ def DebugLog(message):
 
 
 if Debug >= 2:
-    DebugLog('Speicher IP: ' + femsip)
-    DebugLog('Speicher Passwort: ' + femskacopw)
-    DebugLog('Speicher Multi: ' + multifems)
+    DebugLog("Speicher IP: " + femsip)
+    DebugLog("Speicher Passwort: " + femskacopw)
+    DebugLog("Speicher Multi: " + multifems)
 
-def get_value(url_ending, file=None):
+def write_ramdisk(value, file):
     try:
-        response = requests.get("http://x:"+femskacopw+"@"+femsip+":8084/rest/channel/"+url_ending).json()
-        value = response["value"]
-        if file != None:
-            if file == "speichersoc":
-                if re.search('^[-+]?[0-9]+\.?[0-9]*$', value) == None:
-                    value = "0"
-            with open("/var/www/html/openWB/ramdisk/"+file, "") as f:
-                f.write(str(value))
-        else:
-            return value
+        if file == "speichersoc":
+            if re.search("^[-+]?[0-9]+\.?[0-9]*$", value) == None:
+                value = "0"
+        with open("/var/www/html/openWB/ramdisk/"+file, "") as f:
+            f.write(str(value))
     except:
         traceback.print_exc()
         exit(1)
 
 
 if multifems == "0":
-    get_value("ess0/Soc", "speichersoc")
-    get_value("ess0/ActiveChargeEnergy", "speicherikwh")
-    get_value("ess0/ActiveDischargeEnergy", "speicherekwh")
+    try:
+        response = requests.get("http://x:"+femskacopw+"@"+femsip+":8084/rest/channel/ess0/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)").json()
+    except:
+        traceback.print_exc()
+        exit(1)
+    for singleValue in response:
+        address = singleValue["address"]
+        if (address == "ess0/Soc"):
+            write_ramdisk(singleValue["value"], "speichersoc")
+        elif address == "ess0/ActiveChargeEnergy":
+            write_ramdisk(singleValue["value"], "speicherikwh")
+        elif address == "ess0/ActiveDischargeEnergy":
+            write_ramdisk(singleValue["value"], "speicherekwh")
 else:
-    get_value("ess2/Soc", "speichersoc")
-    get_value("ess2/ActiveChargeEnergy", "speicherikwh")
-    get_value("ess2/ActiveDischargeEnergy", "speicherekwh")
+    try:
+        response = requests.get("http://x:"+femskacopw+"@"+femsip+":8084/rest/channel/ess2/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)").json()
+    except:
+        traceback.print_exc()
+        exit(1)
+    for singleValue in response:
+        address = singleValue["address"]
+        if (address == "ess2/Soc"):
+            write_ramdisk(singleValue["value"], "speichersoc")
+        elif address == "ess2/ActiveChargeEnergy":
+            write_ramdisk(singleValue["value"], "speicherikwh")
+        elif address == "ess2/ActiveDischargeEnergy":
+            write_ramdisk(singleValue["value"], "speicherekwh")
 
-grid = get_value("_sum/GridActivePower")
-pv = get_value("_sum/ProductionActivePower")
-haus = get_value("_sum/ConsumptionActivePower")
+try:
+    response = requests.get("http://x:"+femskacopw+"@"+femsip+":8084/rest/channel/_sum/(GridActivePower|ProductionActivePower|ConsumptionActivePower)").json()
+except:
+    traceback.print_exc()
+    exit(1)
+for singleValue in response:
+    address = singleValue["address"]
+    if (address == "_sum/GridActivePower"):
+        grid = singleValue["value"]
+    elif address == "_sum/ProductionActivePower":
+        pv = singleValue["value"]
+    elif address == "_sum/ConsumptionActivePower":
+        haus = singleValue["value"]
 
 leistung = grid + pv - haus
 
-ra = '^[-+]?[0-9]+\.?[0-9]*$'
+ra = "^[-+]?[0-9]+\.?[0-9]*$"
 if re.search(ra, leistung) == None:
     leistung = "0"
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
