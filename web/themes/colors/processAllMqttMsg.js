@@ -50,6 +50,7 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/hook\//i)) { processHookMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\//i)) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/SmartHome\/Devices\//i)) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Status\//i)) { processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/sofort\/lp\//i)) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/pv\//i)) { processPvConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
@@ -1224,6 +1225,18 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		window['d' + index + 'name'] = mqttpayload;
 	}
 }
+function processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload) {
+	processPreloader(mqttmsg);
+	// color theme
+	
+	if (mqttmsg.match(/^openwb\/SmartHome\/Status\/wattnichtHaus$/i)) {
+		var SHPower = parseInt(mqttpayload, 10);
+		if (isNaN(SHPower)) {
+			SHPower = 0;
+		}
+			wbdata.updateGlobal ("smarthomePower", SHPower) ;
+	}
+}
 function subscribeMqttGraphSegments() {
 	for (var segments = 1; segments < 17; segments++) {
 		topic = "openWB/graph/" + segments + "alllivevalues";
@@ -1296,3 +1309,4 @@ function makeFloat(message) {
 	}
 	return number;
 }
+
