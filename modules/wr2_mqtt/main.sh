@@ -1,12 +1,12 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="PV"
 Debug=$debug
 
 
-pvwatt=$(<$RAMDISKDIR/pvwatt2)
+pvwatt=$(<${RAMDISKDIR}/pvwatt2)
 echo $pvwatt
 openwbDebugLog ${DMOD} 1 "PV2Watt: ${pvwatt}"
 
