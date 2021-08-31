@@ -295,10 +295,10 @@ def main(argv=None):
     # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
     if WR2IP != 'none':
         WR2.ReadWechselrichter()
-        Total_yield2 = int(WR2.FRegister2_320.decode_32bit_float())
-        Yearly_yield2 = round((WR2.FRegister2_324.decode_32bit_float()/1000),2)
-        Monthly_yield2 = round((WR2.FRegister2_326.decode_32bit_float()/1000),2)
-        Inverter_generation_power_actual2 = int(WR2.FRegister2_575.decode_16bit_int())
+        Total_yield2 = int(WR2.FRegister_320.decode_32bit_float())
+        Yearly_yield2 = round((WR2.FRegister_324.decode_32bit_float()/1000),2)
+        Monthly_yield2 = round((WR2.FRegister_326.decode_32bit_float()/1000),2)
+        Inverter_generation_power_actual2 = int(WR2.FRegister_575.decode_16bit_int())
 
     # AC-Leistung der PV-Module/des Speichers für WR 1 bestimmen
     if Battery == 0:
