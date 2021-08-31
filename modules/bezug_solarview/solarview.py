@@ -136,9 +136,9 @@ def request(command):
         log("  Strom:    "+str(mpptracker4_current)+" A")
 
     # Werte speichern
-    if command == "command_einspeisung":
+    if command == command_einspeisung:
         write_value(energy_total, "einspeisungkwh")
-    elif command == "$command_bezug":
+    elif command == command_bezug:
         write_value(power, "wattbezug")
         write_value(energy_total, "bezugkwh")
         # Kompatibilität für neue und alte Doku
@@ -165,5 +165,5 @@ if solarview_port:
 command_bezug = '22*'
 command_einspeisung = '21*'
 
-request("command_einspeisung")
-request("command_bezug")
+request(command_einspeisung)
+request(command_bezug)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+from datetime import datetime, timezone
+import os
 import re
 import requests
 import sys
@@ -9,6 +10,17 @@ bezug_smartme_url = str(sys.argv[1])
 bezug_smartme_user = str(sys.argv[2])
 bezug_smartme_pass = str(sys.argv[3])
 
+Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+
+if Debug >= 2:
+    DebugLog('Smartme URL: ' + bezug_smartme_url)
+    DebugLog('Smartme User: ' + bezug_smartme_user)
+    DebugLog('Smartme Passwort: ' + bezug_smartme_pass)
 
 def get_power_value(key, file=None):
     try:
@@ -16,11 +28,14 @@ def get_power_value(key, file=None):
         if file == None:
             return value
         else:
+            if Debug >= 1:
+                DebugLog(file+': ' + str(value))
             f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
             f.write(str(value))
             f.close()
     except:
         traceback.print_exc()
+        exit(1)
 
 
 def get_im_ex_value(key, file=None):
@@ -29,11 +44,14 @@ def get_im_ex_value(key, file=None):
         if re.search(regex, value) == None:
             with open("/var/www/html/openWB/ramdisk/bezugkwh", "r") as f:
                 value = f.read()
+        if Debug >= 1:
+            DebugLog(file+': ' + str(value))
         f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
         f.write(str(value))
         f.close()
     except:
         traceback.print_exc()
+        exit(1)
 
 
 def get_value(key, file=None):
@@ -42,11 +60,14 @@ def get_value(key, file=None):
         if file == None:
             return value
         else:
+            if Debug >= 1:
+                DebugLog(file+': ' + str(value))
             f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
             f.write(str(value))
             f.close()
     except:
         traceback.print_exc()
+        exit(1)
 
 
 # Daten einlesen
@@ -77,6 +98,9 @@ if bezuga1 == 'null':
         bezuga1 = response["Current"]
     except:
         traceback.print_exc()
+        exit(1)
+if Debug >= 1:
+    DebugLog('Strom L1: ' + str(bezuga1))
 with open("/var/www/html/openWB/ramdisk/bezuga1", "w") as f:
     f.write(str(bezuga1))
 get_value("CurrentL2", "bezuga2")
@@ -89,7 +113,13 @@ if re.search(regex, wattbezug) == None:
     with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
         wattbezug = f.read()
 # Ausgabe
+if Debug >= 1:
+    DebugLog('Leistung: ' + str(wattbezug))
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
     f.write(str(wattbezug))
+if Debug >= 1:
+    DebugLog('Leistung L1: ' + str(wattbezug1))
 with open("/var/www/html/openWB/ramdisk/wattbezugw1", "w") as f:
     f.write(str(wattbezug1))
+
+exit(0)

@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
-
+from datetime import datetime, timezone
+import os
 import requests
 import sys
 import traceback
 
 sonnenecoalternativ = int(sys.argv[1])
 sonnenecoip = str(sys.argv[2])
+
+Debug         = int(os.environ.get('debug'))
+myPid         = str(os.getpid())
+
+def DebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+
+if Debug >= 2:
+    DebugLog('Sonneneco Alternativ: ' + sonnenecoalternativ)
+    DebugLog('Sonneneco IP: ' + sonnenecoip)
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems
 if sonnenecoalternativ == 2:
@@ -28,6 +40,7 @@ else:
             wattbezug = speicherantwort["GridFeedIn_W"]
         except:
             traceback.print_exc()
+            exit(1)
         # Negativ ist Verbrauch, positiv Einspeisung
         wattbezug = wattbezug * -1
         # Es wird nur eine Spannung ausgegeben
@@ -35,12 +48,14 @@ else:
             evuv1 = speicherantwort["Uac"]
         except:
             traceback.print_exc()
+            exit(1)
         evuv2 = evuv1
         evuv3 = evuv1
         try:
             evuhz = speicherantwort["Fac"]
         except:
             traceback.print_exc()
+            exit(1)
         # Weitere Daten müssen errechnet werden
         # Es wird angenommen, dass alle Phasen gleich ausgelastet sind
         bezugw1 = round((wattbezug / 3), 2)
@@ -57,9 +72,11 @@ else:
         ekwh = 0
     else:
         # Bietet die Rest API die Daten?
-        sys.exit(0)
+        exit(1)
 
     # Schreibe alle Werte in die Ramdisk.
+    if Debug >= 1:
+        DebugLog('Leistung: ' + str(wattbezug))
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
         f.write(str(wattbezug))
     with open("/var/www/html/openWB/ramdisk/evuv1", "w") as f:
@@ -88,7 +105,13 @@ else:
         f.write(str(evupf2))
     with open("/var/www/html/openWB/ramdisk/evupf3", "w") as f:
         f.write(str(evupf3))
+    if Debug >= 1:
+        DebugLog('Import: ' + str(ikwh))
     with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
         f.write(str(ikwh))
+    if Debug >= 1:
+        DebugLog('Export: ' + str(ekwh))
     with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
         f.write(str(ekwh))
+
+exit(0)
