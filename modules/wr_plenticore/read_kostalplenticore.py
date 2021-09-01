@@ -35,6 +35,7 @@ from datetime import datetime
 #only in pyhton >3 available
 #from packaging import version
 #from timezone import timezone
+from ipparser import ipparser
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
@@ -373,6 +374,14 @@ def main(argv=None):
         Battery = int(sys.argv[3])
         # IP für Wechselrichter 3
         WR3IP = str(sys.argv[4])
+        WR4IP = "none"
+        WR5IP = "none"
+        ips= ipparser(WR3IP)
+        #in IP3 kann ein aufeinanderfolgende Liste entalten sein "192.168.0.1-3"        
+        if len(ips)>1:
+            WR3IP = ips[0]
+            WR4IP = ips[1]
+            WR5IP = ips[2]
     else:
         myLogging.openWBLog(myPid, "Argumente fehlen oder sind fehlerhaft")
         sys.exit(1)
@@ -395,6 +404,8 @@ def main(argv=None):
     WR1=None
     WR2=None
     WR3=None
+    WR4=None
+    WR5=None
     
     WR1 = plenticore(myPid, WR1IP,Battery)            
     myLogging.openWBLog(myPid, "Wechselrichter Kostal Plenticore Config - WR1:" + str(WR1IP) + " -WR2:" + str(WR2IP) +
@@ -418,6 +429,13 @@ def main(argv=None):
         
     if WR3IP != "none":
         WR3= plenticore(myPid,WR3IP, 0)
+        
+    # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
+    if WR4IP != "none":
+        WR4= plenticore(myPid,WR4IP, 0)
+        
+    if WR5IP != "none":
+        WR5= plenticore(myPid,WR5IP, 0)
     
     # Summen der Erträge bestimmen
     PV_power_total=WR1.attr_WR.P_PV_AC_total
@@ -434,7 +452,7 @@ def main(argv=None):
         Monthly_yield += WR2.attr_WR.Monthly_yield
         Yearly_yield += WR2.attr_WR.Yearly_yield
         
-    # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
+    # ggf. dekodierte Register WR 3 in entsprechende Typen umwandeln
     if WR3 is not None:
         WR3.ReadWechselrichter()
         PV_power_total +=  WR3.attr_WR.P_PV_AC_total
@@ -442,6 +460,24 @@ def main(argv=None):
         Total_yield +=  WR3.attr_WR.Total_yield
         Monthly_yield += WR3.attr_WR.Monthly_yield
         Yearly_yield += WR3.attr_WR.Yearly_yield
+    
+    # ggf. dekodierte Register WR 4 in entsprechende Typen umwandeln
+    if WR4 is not None:
+        WR4.ReadWechselrichter()
+        PV_power_total +=  WR4.attr_WR.P_PV_AC_total
+        # Summen der Erträge bestimmen
+        Total_yield +=  WR4.attr_WR.Total_yield
+        Monthly_yield += WR4.attr_WR.Monthly_yield
+        Yearly_yield += WR4.attr_WR.Yearly_yield
+    
+    # ggf. dekodierte Register WR 5 in entsprechende Typen umwandeln
+    if WR5 is not None:
+        WR5.ReadWechselrichter()
+        PV_power_total +=  WR5.attr_WR.P_PV_AC_total
+        # Summen der Erträge bestimmen
+        Total_yield +=  WR5.attr_WR.Total_yield
+        Monthly_yield += WR5.attr_WR.Monthly_yield
+        Yearly_yield += WR5.attr_WR.Yearly_yield
 
     # Batteriewerte Berechnen und übertragen
     if Battery == 1:        
