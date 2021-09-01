@@ -149,7 +149,6 @@ class plenticore_inverter:
         self.Total_yield = 0
         self.Yearly_yield= 0
         self.Monthly_yield= 0
-        s
         
 class plenticore_battery:
     def __init__(self):
