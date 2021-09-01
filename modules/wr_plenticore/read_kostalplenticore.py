@@ -201,14 +201,7 @@ class plenticore(modbus):
                 # Plenticore Register 582: Actual_batt_ch_disch_power [W]
                 # ist Lade-/Entladeleistung des angeschlossenen Speichers
                 # {charge=negativ, discharge=positiv}
-                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))            
-                # Batterleistung DC Seitig mit einrechnen                
-                #if self.attr_Bat.P_charge_discharge<0:
-                    # Bedingung Batterie wird geladen
-                #    self.attr_WR.P_PV_AC_total += self.attr_Bat.P_charge_discharge*-1
-                #else:
-                    # Bedingung Batterie wird entladen
-                #    self.attr_WR.P_PV_AC_total -= self.attr_Bat.P_charge_discharge
+                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))                           
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register Battery:' + str(self._IP) + '(falsche IP?)' + str(sys.exc_info()[0]))        
@@ -257,9 +250,8 @@ class plenticore(modbus):
             # keine Battery, wird die Leistung von String 3 addiert
             if self._Battery!=1:
                 self.attr_WR.P_DC_in_total+= self.attr_WR.P_DC_S3
-            # zur weiter Berechnung im Fall mit Batterie       
-            #self.attr_WR.P_PV_AC_total += self.attr_WR.P_Generation_actual
-            if self.attr_WR.P_Home_Cons_PV > 0:
+            # zur weiter Berechnung im Fall mit Batterie                   
+            if self.attr_WR.P_DC_in_total > 5:
                 self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
                 if self.attr_WR.P_Home_Cons_Bat < 0:
                     self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat
