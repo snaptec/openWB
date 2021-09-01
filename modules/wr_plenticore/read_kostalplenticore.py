@@ -336,6 +336,11 @@ class plenticore(modbus):
             sys.exit(1)
 
 def main(argv=None):
+    #if remotedebug==1 and Debug >= 2:
+    #    try:
+    #        debugpy.listen(5678)
+    #    except:
+    #      pass
     myPid = str(os.getpid()) 
     if len(sys.argv) ==5:
         # IP für Wechselrichter 1
@@ -344,7 +349,7 @@ def main(argv=None):
         WR2IP = str(sys.argv[2])
         # Battery vorhanden
         Battery = int(sys.argv[3])
-        ## not used today
+        # IP für Wechselrichter 3
         WR3IP = str(sys.argv[4])
     else:
         myLogging.openWBLog(myPid, 'Argumente fehlen oder sind fehlerhaft')
@@ -366,31 +371,31 @@ def main(argv=None):
     Yearly_yield = 0
     Monthly_yield = 0
         
-    WR1 = plenticore(myPid, WR1IP,Battery)
-    # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
-    if WR2IP != 'none':
-        WR2= plenticore(myPid,WR2IP, 0)
-    else:
-        WR2= None    
-    #if remotedebug==1 and Debug >= 2:
-    #    try:
-    #        debugpy.listen(5678)
-    #    except:
-    #      pass
-        
-    myLogging.openWBLog(myPid, 'Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + " -WR2:" + str(WR2IP) + " -Battery:" + str(Battery))
+    WR1 = plenticore(myPid, WR1IP,Battery)            
+    myLogging.openWBLog(myPid, 'Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + " -WR2:" + str(WR2IP) + " -Battery:" + str(Battery) + "\n -WR3:" + str(WR3IP))
     
     WR1.ReadWechselrichter()
     WR1.ReadKSEM300()
-        
+    
     #Battery nur an WR1 erlaubt
     if Battery == 1:
-        WR1.ReadBattery()   
+        WR1.ReadBattery()
     
     #zukünftige Implementierung von Battery Steuerung
     #Battery nur an WR1 erlaubt
     if WR1.BatMgt==1:
         WR1.BatteryMgt()
+    
+    # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
+    if WR2IP != 'none':
+        WR2= plenticore(myPid,WR2IP, 0)
+    else:
+        WR2= None
+    
+    if WR3IP != 'none':
+        WR3= plenticore(myPid,WR3IP, 0)
+    else:
+        WR3= None                
         
     # Summen der Erträge bestimmen
     PV_power_total= WR1.attr_WR.P_DC_in_total
@@ -406,7 +411,16 @@ def main(argv=None):
         Total_yield +=  WR2.attr_WR.Total_yield
         Monthly_yield += WR2.attr_WR.Monthly_yield
         Yearly_yield += WR2.attr_WR.Yearly_yield  
-           
+
+    # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
+    if WR3IP != 'none':
+        WR3.ReadWechselrichter()
+        PV_power_total +=  WR3.attr_WR.P_DC_in_total
+        # Summen der Erträge bestimmen
+        Total_yield +=  WR3.attr_WR.Total_yield
+        Monthly_yield += WR3.attr_WR.Monthly_yield
+        Yearly_yield += WR3.attr_WR.Yearly_yield
+        
     # zunächst alle Summenwerte beider WR
     # Gesamtleistung AC PV-Module
     with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
@@ -458,6 +472,25 @@ def main(argv=None):
         # Monatsertrag in Kilowattstunden
         with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk2', 'w') as f:
             f.write(str(WR2.attr_WR.Monthly_yield))
+    
+    # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
+    if WR3 is not None:
+        # Werte WR 2
+        # Leistung DC PV-Module
+        with open('/var/www/html/openWB/ramdisk/pvwatt3', 'w') as f:
+            f.write(str(WR3.attr_WR.P_DC_in_total*-1))
+        # Gesamtertrag in Wattstunden
+        with open('/var/www/html/openWB/ramdisk/pvkwh3', 'w') as f:
+            f.write(str(WR3.attr_WR.Total_yield))
+        # Gesamtertrag in Kilowattstunden
+        with open('/var/www/html/openWB/ramdisk/pvkwhk3', 'w') as f:
+            f.write(str(WR3.attr_WR.Total_yield / 1000))
+        # Jahresertrag in Kilowattstunden
+        with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk3', 'w') as f:
+            f.write(str(WR3.attr_WR.Yearly_yield))
+        # Monatsertrag in Kilowattstunden
+        with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk3', 'w') as f:
+            f.write(str(WR3.attr_WR.Monthly_yield))
    
     # Nachfolgende Werte nur in temporäre ramdisk, da die Module
     # Speicher und Bezug für die globalen Variablen zuständig sind
