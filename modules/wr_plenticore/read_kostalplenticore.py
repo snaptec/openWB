@@ -18,10 +18,11 @@
 # 2019 Kevin Wieland, Michael Ortenstein
 # This file is part of openWB
 #
+# 01.09.2021   skl     Überarbeitung Klassen basiert   
 #########################################################
 import os
 import sys
-import time
+#import time
 remotedebug=0
 #zukünftige Nutzung ?
 #try:
@@ -43,14 +44,14 @@ class myLogging:
     def DebugLog(Pid, message):
         #local_time = datetime.now(timezone.utc).astimezone()
         local_time= datetime.now()
-        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + message)   
+        #print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + message)   
     @staticmethod
     def openWBLog(Pid, message):
         #local_time = datetime.now(timezone.utc).astimezone()
         local_time = datetime.now()
         log = (local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ Pid +": " + 'read_kostalplenticore.py:' +message + '\n')
         try:
-            print(log)
+            #print(log)
             # Versuche in ramdisk log zu schreiben
             with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
                 f.write(log)
@@ -122,41 +123,45 @@ class plenticore_KSEM:
         # Phase 3
         self.I_P3_A = 0
         #EVU Gesamt
-        self.P_active_total= 0
+        self.P_active_total = 0
         #Frequenz
-        self.Freq=0
+        self.Freq = 0
         #Leistung P1-3
-        self.P_P1_W=0
-        self.P_P2_W=0
-        self.P_P3_W=0
+        self.P_P1_W = 0
+        self.P_P2_W = 0
+        self.P_P3_W = 0
         #Spannung P1-3
-        self.U_P1_V=0
-        self.U_P2_V=0
-        self.U_P3_V=0
+        self.U_P1_V = 0
+        self.U_P2_V = 0
+        self.U_P3_V = 0
         #cosphi
-        self.cosphi_actual=0
+        self.cosphi_actual = 0
         
 class plenticore_inverter:   
     def __init__(self):
         self.MC_Version = ""
         self.String_Count = 0
-        self.P_DC_total=0
-        self.P_DC_S1= 0
-        self.P_DC_S2= 0
-        self.P_DC_S3= 0
-        self.P_DC_in_total=0
+        self.P_DC_total = 0
+        self.P_DC_S1 = 0
+        self.P_DC_S2 = 0
+        self.P_DC_S3 = 0
+        self.P_DC_in_total =0
         self.P_Generation_actual = 0
+        self.P_PV_AC_total = 0
+        self.P_Home_Cons_PV = 0
+        self.P_Home_Cons_Grid = 0
+        self.P_Home_Cons_Bat = 0
         self.Total_yield = 0
-        self.Yearly_yield= 0
-        self.Monthly_yield= 0
-        
+        self.Yearly_yield = 0
+        self.Monthly_yield = 0
+       
 class plenticore_battery:
     def __init__(self):
         self.Model = 0
         self.SerialNo= 0
         self.SoC_actual = 0
         self.P_charge_discharge = 0        
-        self.Capacity=0
+        self.Capacity = 0
         
 class plenticore(modbus):    
     #Klassen Variablen
@@ -178,9 +183,8 @@ class plenticore(modbus):
         except:
             # kein Zugriff auf WR1, also Abbruch und mit Null initialisierte Variablen in die Ramdisk
             myLogging.DebugLog('', 'Wechserrichter IP :' + self._IP)
-            myLogging.openWBLog(self._pid, 'Fehler beim Initialisieren des Modbus-Client WR1: ' + str(sys.exc_info()[0]))
-            sys.exit(1)            
-        
+            myLogging.openWBLog(self._pid, 'Fehler beim Initialisieren des Modbus-Client WR1: ' + str(sys.exc_info()[0]))            
+            #sys.exit(1)  
     def ReadBattery(self):
         # dann zunächst alle relevanten Register aus WR 1 auslesen:
         try:
@@ -197,11 +201,18 @@ class plenticore(modbus):
                 # Plenticore Register 582: Actual_batt_ch_disch_power [W]
                 # ist Lade-/Entladeleistung des angeschlossenen Speichers
                 # {charge=negativ, discharge=positiv}
-                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))                        
+                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))            
+                # Batterleistung DC Seitig mit einrechnen                
+                #if self.attr_Bat.P_charge_discharge<0:
+                    # Bedingung Batterie wird geladen
+                #    self.attr_WR.P_PV_AC_total += self.attr_Bat.P_charge_discharge*-1
+                #else:
+                    # Bedingung Batterie wird entladen
+                #    self.attr_WR.P_PV_AC_total -= self.attr_Bat.P_charge_discharge
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register Battery:' + str(self._IP) + '(falsche IP?)' + str(sys.exc_info()[0]))        
-            sys.exit(1)                
+            #sys.exit(1)                
         
     def ReadWechselrichter(self):
         try:
@@ -211,7 +222,15 @@ class plenticore(modbus):
             self.attr_WR.MC_Version = str(self.ReadString(38))            
             # Plenticore Register 260: Power DC1 [W]
             # ist Leistung String 1
-            self.attr_WR.P_DC_total = int(self.ReadFloat32(100))             
+            self.attr_WR.P_DC_total = int(self.ReadFloat32(100))
+            # Plenticore Register 106: Power Home Consumption Battery [W]            
+            self.attr_WR.P_Home_Cons_Bat = int(self.ReadFloat32(106))
+            # Plenticore Register 106: Power Home Consumption Grid [W]            
+            self.attr_WR.P_Home_Cons_Grid = int(self.ReadFloat32(108))
+            # Plenticore Register 116: Power Home Consumption PV [W]            
+            self.attr_WR.P_Home_Cons_PV = int(self.ReadFloat32(116))
+            # Plenticore Register 172: Total Active Power AC [W]            
+            self.attr_WR.P_AC_Total = int(self.ReadFloat32(172))
             # Plenticore Register 260: Power DC1 [W]
             # ist Leistung String 1
             self.attr_WR.P_DC_S1 = int(self.ReadFloat32(260)) 
@@ -235,17 +254,28 @@ class plenticore(modbus):
             self.attr_WR.P_Generation_actual = int(self.ReadInt16(575))           
             # nur generierte PV Leistung berechnen, keine BatterieLeistung
             self.attr_WR.P_DC_in_total= self.attr_WR.P_DC_S1 + self.attr_WR.P_DC_S2
-            # keinen Battery, wird der 
+            # keine Battery, wird die Leistung von String 3 addiert
             if self._Battery!=1:
                 self.attr_WR.P_DC_in_total+= self.attr_WR.P_DC_S3
+            # zur weiter Berechnung im Fall mit Batterie       
+            #self.attr_WR.P_PV_AC_total += self.attr_WR.P_Generation_actual
+            if self.attr_WR.P_Home_Cons_PV > 0:
+                self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
+                if self.attr_WR.P_Home_Cons_Bat < 0:
+                    self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat
+                if self.attr_WR.P_Home_Cons_Grid >0:
+                    self.attr_WR.P_PV_AC_total += self.attr_WR.P_Home_Cons_Grid
+            else:
+                self.attr_WR.P_PV_AC_total = 0
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-            myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register WR:' + str(self._IP) + '(falsche WR-IP?)' + str(sys.exc_info()[0]))        
-            sys.exit(1)
+            myLogging.openWBLog(self._pid, "Fehler beim Lesen der Modbus-Register WR:" + str(self._IP) +
+                                "(falsche WR-IP?)" + str(sys.exc_info()[0]))        
+            #sys.exit(1)  
       
         #Version Check to enable ModBus BatterMgt - not available before this version                
-        print('FW Version BatMgtSupport min=' + str(("1.47")))
-        print('FW Version Ist=' + str(self.attr_WR.MC_Version))        
+        #print("FW Version BatMgtSupport min=" + str(("1.47")))
+        #print("FW Version Ist=" + str(self.attr_WR.MC_Version))        
         #if version.parse(str(self.attr_WR.MC_Version)) >= version.parse("1.47"):
         #    self.BatMgt =1
         #else:
@@ -299,8 +329,9 @@ class plenticore(modbus):
             self.attr_KSEM.cosphi_actual = round(self.ReadFloat32(150),3)                        
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk            
-            myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register KSEM300:' + str(self.IP) + '(falsche WR-IP?)' + str(sys.exc_info()[0]))        
-            sys.exit(1)                   
+            myLogging.openWBLog(self._pid, "Fehler beim Lesen der Modbus-Register KSEM300:" + str(self.IP)
+                                + "(falsche WR-IP?)" + str(sys.exc_info()[0]))        
+            #sys.exit(1)          
 
     def BatteryMgt(self):
         # Battery Mgt. relevant Register aus WR 1 auslesen:
@@ -314,9 +345,8 @@ class plenticore(modbus):
                 # Seriennumer der Batterie
                 self.Bat_Serial = str(self.ReadString(1070))
                 #Battery mgt. mode
-                self.Bat_ControlMode = int(self.ReadInt32(1080))
-                                                                      
-                print('mode = ' + self.Bat_ControlMode)
+                self.Bat_ControlMode = int(self.ReadInt32(1080))                                                                      
+                #print("mode = " + self.Bat_ControlMode)
                 # ist Kostal WR auf Battery Mgt. per Modbus Cfg
                 #  0 = intern, 1 = digital IO's, 2= ModBus Extern            
                 if self.Bat_ControlMode == 2:
@@ -332,8 +362,8 @@ class plenticore(modbus):
                     self.Bat_AbsSet_DC_ChargeCurrent = round(self.ReadFloat32(1032),2)                                
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-            myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register BatteryMgt.:' + str(self._IP) + '(falsche IP?)' + str(sys.exc_info()[0]))        
-            sys.exit(1)
+            myLogging.openWBLog(self._pid, "Fehler beim Lesen der Modbus-Register BatteryMgt.:" + str(self._IP) + "(falsche IP?)" + str(sys.exc_info()[0]))        
+            #sys.exit(1)
 
 def main(argv=None):
     #if remotedebug==1 and Debug >= 2:
@@ -352,15 +382,15 @@ def main(argv=None):
         # IP für Wechselrichter 3
         WR3IP = str(sys.argv[4])
     else:
-        myLogging.openWBLog(myPid, 'Argumente fehlen oder sind fehlerhaft')
+        myLogging.openWBLog(myPid, "Argumente fehlen oder sind fehlerhaft")
         sys.exit(1)
     
     #tdo: how to get openWB debug level
-    _strdebug = os.environ.get('debug')
+    _strdebug = os.environ.get("debug")
     
     if _strdebug != "none":
         try:      
-            Debug = int(_strdebug)            
+            Debug = int(str(_strdebug))            
         except:
             Debug = 0    
     
@@ -370,9 +400,13 @@ def main(argv=None):
     Total_yield = 0
     Yearly_yield = 0
     Monthly_yield = 0
-        
+    WR1=None
+    WR2=None
+    WR3=None
+    
     WR1 = plenticore(myPid, WR1IP,Battery)            
-    myLogging.openWBLog(myPid, 'Wechselrichter Kostal Plenticore Config - WR1:' + str(WR1IP) + " -WR2:" + str(WR2IP) + " -Battery:" + str(Battery) + "\n -WR3:" + str(WR3IP))
+    myLogging.openWBLog(myPid, "Wechselrichter Kostal Plenticore Config - WR1:" + str(WR1IP) + " -WR2:" + str(WR2IP) +
+                        "\n -Battery:" + str(Battery) + " -WR3:" + str(WR3IP))
     
     WR1.ReadWechselrichter()
     WR1.ReadKSEM300()
@@ -387,47 +421,71 @@ def main(argv=None):
         WR1.BatteryMgt()
     
     # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
-    if WR2IP != 'none':
+    if WR2IP != "none":
         WR2= plenticore(myPid,WR2IP, 0)
-    else:
-        WR2= None
-    
-    if WR3IP != 'none':
-        WR3= plenticore(myPid,WR3IP, 0)
-    else:
-        WR3= None                
         
+    if WR3IP != "none":
+        WR3= plenticore(myPid,WR3IP, 0)
+    
     # Summen der Erträge bestimmen
-    PV_power_total= WR1.attr_WR.P_DC_in_total
+    PV_power_total=WR1.attr_WR.P_PV_AC_total
     Total_yield = WR1.attr_WR.Total_yield 
     Monthly_yield = WR1.attr_WR.Monthly_yield 
     Yearly_yield = WR1.attr_WR.Yearly_yield
     
-     # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
-    if WR2IP != 'none':
+    # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
+    if WR2 is not None:
         WR2.ReadWechselrichter()
-        PV_power_total +=  WR2.attr_WR.P_DC_in_total
+        PV_power_total +=  WR2.attr_WR.P_PV_AC_total
         # Summen der Erträge bestimmen
         Total_yield +=  WR2.attr_WR.Total_yield
         Monthly_yield += WR2.attr_WR.Monthly_yield
-        Yearly_yield += WR2.attr_WR.Yearly_yield  
-
+        Yearly_yield += WR2.attr_WR.Yearly_yield
+        
     # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
-    if WR3IP != 'none':
+    if WR3 is not None:
         WR3.ReadWechselrichter()
-        PV_power_total +=  WR3.attr_WR.P_DC_in_total
+        PV_power_total +=  WR3.attr_WR.P_PV_AC_total
         # Summen der Erträge bestimmen
         Total_yield +=  WR3.attr_WR.Total_yield
         Monthly_yield += WR3.attr_WR.Monthly_yield
         Yearly_yield += WR3.attr_WR.Yearly_yield
-        
+
+    # Batteriewerte Berechnen und übertragen
+    if Battery == 1:        
+        # Speicherladung muss durch Wandlungsverluste und internen Verbrauch korregiert werden
+        # sonst wird ein falscher Hausverbrauch berechnet
+        # die Verluste fallen hier unter den Tische, besser wäre auch HomeConsumption direkt zu openWB
+        if WR1.attr_Bat.P_charge_discharge >=0:
+            P_Charge_corrected = WR1.attr_Bat.P_charge_discharge - (WR1.attr_Bat.P_charge_discharge - WR1.attr_WR.P_Home_Cons_Bat)
+            #print("Leistung Speicher Modbus= " + str(WR1.attr_Bat.P_charge_discharge) +
+                  #" ,Speicherladung korrigiert= " + str(P_Charge_corrected) +
+                  #", Leistung Hausverbrauch Bat actual = " + str(WR1.attr_WR.P_Home_Cons_Bat))          
+        else:
+            P_Charge_corrected = WR1.attr_Bat.P_charge_discharge            
+                
+        # Nachfolgende Werte nur in temporäre ramdisk, da die Module
+        # Speicher und Bezug für die globalen Variablen zuständig sind
+        # und dort die Übernahme in die entsprechende ramdisk erfolgt
+        # Speicherleistung WR 1
+        with open('/var/www/html/openWB/ramdisk/temp_speicherleistung', 'w') as f:
+            f.write(str(P_Charge_corrected*-1))        
+        # Speicher Ladestand von Speicher am WR 1
+        with open('/var/www/html/openWB/ramdisk/temp_speichersoc', 'w') as f:
+            f.write(str(WR1.attr_Bat.SoC_actual))
+                
     # zunächst alle Summenwerte beider WR
     # Gesamtleistung AC PV-Module
     with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
-        f.write(str(PV_power_total))    
+        f.write(str(PV_power_total*-1))
+        #print("PV Leistung alle WR =" + str(PV_power_total*-1))    
+    
     # Gesamtertrag in Wattstunden
-    with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
-        f.write(str(Total_yield))
+    # schreibe den Wert nur wenn kein Speicher vorhanden ist. Wenn er da ist nutze die openWB PV Watt beschränkung
+    if Battery!=1:
+        with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
+            f.write(str(Total_yield))
+    
     # Gesamtertrag in Kilowattstunden
     with open('/var/www/html/openWB/ramdisk/pvkwhk', 'w') as f:
         f.write(str(Total_yield / 1000))
@@ -437,10 +495,11 @@ def main(argv=None):
     # Monatsertrag in Kilowattstunden
     with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk', 'w') as f:
         f.write(str(Monthly_yield))
+    
     # Werte WR 1
     # Leistung DC PV-Module
     with open('/var/www/html/openWB/ramdisk/pvwatt1', 'w') as f:
-        f.write(str(WR1.attr_WR.P_DC_in_total*-1))
+        f.write(str(WR1.attr_WR.P_PV_AC_total*-1))
     # Gesamtertrag in Wattstunden
     with open('/var/www/html/openWB/ramdisk/pvkwh1', 'w') as f:
         f.write(str(WR1.attr_WR.Total_yield))
@@ -452,14 +511,13 @@ def main(argv=None):
         f.write(str(WR1.attr_WR.Yearly_yield))
     # Monatsertrag in Kilowattstunden
     with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk1', 'w') as f:
-        f.write(str(WR1.attr_WR.Monthly_yield))
-    
-    # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
+        f.write(str(WR1.attr_WR.Monthly_yield))    
+
     if WR2 is not None:
         # Werte WR 2
         # Leistung DC PV-Module
         with open('/var/www/html/openWB/ramdisk/pvwatt2', 'w') as f:
-            f.write(str(WR2.attr_WR.P_DC_in_total*-1))
+            f.write(str(WR2.attr_WR.P_PV_AC_total*-1))
         # Gesamtertrag in Wattstunden
         with open('/var/www/html/openWB/ramdisk/pvkwh2', 'w') as f:
             f.write(str(WR2.attr_WR.Total_yield))
@@ -472,13 +530,12 @@ def main(argv=None):
         # Monatsertrag in Kilowattstunden
         with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk2', 'w') as f:
             f.write(str(WR2.attr_WR.Monthly_yield))
-    
-    # ggf. dekodierte Register WR 2 in entsprechende Typen umwandeln
+
     if WR3 is not None:
-        # Werte WR 2
+        # Werte WR 3
         # Leistung DC PV-Module
         with open('/var/www/html/openWB/ramdisk/pvwatt3', 'w') as f:
-            f.write(str(WR3.attr_WR.P_DC_in_total*-1))
+            f.write(str(WR3.attr_WR.P_PV_AC_total*-1))
         # Gesamtertrag in Wattstunden
         with open('/var/www/html/openWB/ramdisk/pvkwh3', 'w') as f:
             f.write(str(WR3.attr_WR.Total_yield))
@@ -491,20 +548,11 @@ def main(argv=None):
         # Monatsertrag in Kilowattstunden
         with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk3', 'w') as f:
             f.write(str(WR3.attr_WR.Monthly_yield))
-   
-    # Nachfolgende Werte nur in temporäre ramdisk, da die Module
-    # Speicher und Bezug für die globalen Variablen zuständig sind
-    # und dort die Übernahme in die entsprechende ramdisk erfolgt
-    # Speicherleistung WR 1
-    with open('/var/www/html/openWB/ramdisk/temp_speicherleistung', 'w') as f:
-        f.write(str(WR1.attr_WR.P_Generation_actual*-1))
-    # Speicher Ladestand von Speicher am WR 1
-    with open('/var/www/html/openWB/ramdisk/temp_speichersoc', 'w') as f:
-        f.write(str(WR1.attr_Bat.SoC_actual))
     
     # Bezug EVU
     with open('/var/www/html/openWB/ramdisk/temp_wattbezug', 'w') as f:
         f.write(str(WR1.attr_KSEM.P_active_total))
+        #print("KSEM Watt Bezug = " + str(WR1.attr_KSEM.P_active_total))
     # Bezug Strom Phase 1
     with open('/var/www/html/openWB/ramdisk/temp_bezuga1', 'w') as f:
         f.write(str(WR1.attr_KSEM.I_P1_A))
@@ -542,7 +590,7 @@ def main(argv=None):
     with open('/var/www/html/openWB/ramdisk/temp_evupf2', 'w') as f:
         f.write(str(WR1.attr_KSEM.cosphi_actual))
     with open('/var/www/html/openWB/ramdisk/temp_evupf3', 'w') as f:
-        f.write(str(WR1.attr_KSEM.cosphi_actual))                        
+        f.write(str(WR1.attr_KSEM.cosphi_actual))                           
 
 if __name__ == "__main__":
     main(sys.argv)
