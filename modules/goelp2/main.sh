@@ -69,8 +69,12 @@ if [[ $? == "0" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/plugstats1
         #wenn das Auto angesteckt ist, wird der ausgelesene Zählerstand ignoriert und stattdessen die Leistung aufintegriert
 		#Grund: der ausgelesene Zählerstand hat eine Auflösung von 1kWh -> zu ungenau in der Darstellung
-		simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goe2poskwh)/1000" | bc)
-		echo $simenergy > /var/www/html/openWB/ramdisk/llkwhs1
+		if [ -f "/var/www/html/openWB/ramdisk/goe2poskwh" ]; then
+            simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goe2poskwh)/1000" | bc)
+		    echo $simenergy > /var/www/html/openWB/ramdisk/llkwhs1
+        else
+            echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
+        fi
 	fi
 	if [[ $car == "2" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestats1
