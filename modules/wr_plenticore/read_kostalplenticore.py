@@ -531,55 +531,55 @@ def main(argv=None):
     
     # Werte WR 1
     # Leistung DC PV-Module
-    with open('/var/www/html/openWB/ramdisk/pvwatt1', 'w') as f:
+    with open('/var/www/html/openWB/ramdisk/pv1watt', 'w') as f:
         f.write(str(WR1.attr_WR.P_PV_AC_total*-1))
     # Gesamtertrag in Wattstunden
-    with open('/var/www/html/openWB/ramdisk/pvkwh1', 'w') as f:
+    with open('/var/www/html/openWB/ramdisk/pv1kwh', 'w') as f:
         f.write(str(WR1.attr_WR.Total_yield))
     # Gesamtertrag in Kilowattstunden
-    with open('/var/www/html/openWB/ramdisk/pvkwhk1', 'w') as f:
+    with open('/var/www/html/openWB/ramdisk/pv1kwhk', 'w') as f:
         f.write(str(WR1.attr_WR.Total_yield / 1000))
     # Jahresertrag in Kilowattstunden
-    with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk1', 'w') as f:
+    with open('/var/www/html/openWB/ramdisk/yearly_pv1kwhk', 'w') as f:
         f.write(str(WR1.attr_WR.Yearly_yield))
     # Monatsertrag in Kilowattstunden
-    with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk1', 'w') as f:
+    with open('/var/www/html/openWB/ramdisk/monthly_pv1kwhk', 'w') as f:
         f.write(str(WR1.attr_WR.Monthly_yield))    
 
     if WR2 is not None:
         # Werte WR 2
         # Leistung DC PV-Module
-        with open('/var/www/html/openWB/ramdisk/pvwatt2', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/pv2watt', 'w') as f:
             f.write(str(WR2.attr_WR.P_PV_AC_total*-1))
         # Gesamtertrag in Wattstunden
-        with open('/var/www/html/openWB/ramdisk/pvkwh2', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/pv2kwh', 'w') as f:
             f.write(str(WR2.attr_WR.Total_yield))
         # Gesamtertrag in Kilowattstunden
-        with open('/var/www/html/openWB/ramdisk/pvkwhk2', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/pv2kwhk', 'w') as f:
             f.write(str(WR2.attr_WR.Total_yield / 1000))
         # Jahresertrag in Kilowattstunden
-        with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk2', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/yearly_pv2kwhk', 'w') as f:
             f.write(str(WR2.attr_WR.Yearly_yield))
         # Monatsertrag in Kilowattstunden
-        with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk2', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/monthly_pv2kwhk', 'w') as f:
             f.write(str(WR2.attr_WR.Monthly_yield))
 
     if WR3 is not None:
         # Werte WR 3
         # Leistung DC PV-Module
-        with open('/var/www/html/openWB/ramdisk/pvwatt3', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/pv3watt', 'w') as f:
             f.write(str(WR3.attr_WR.P_PV_AC_total*-1))
         # Gesamtertrag in Wattstunden
-        with open('/var/www/html/openWB/ramdisk/pvkwh3', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/pv3kwh', 'w') as f:
             f.write(str(WR3.attr_WR.Total_yield))
         # Gesamtertrag in Kilowattstunden
-        with open('/var/www/html/openWB/ramdisk/pvkwhk3', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/pv3kwhk', 'w') as f:
             f.write(str(WR3.attr_WR.Total_yield / 1000))
         # Jahresertrag in Kilowattstunden
-        with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk3', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/yearly_pv3kwhk', 'w') as f:
             f.write(str(WR3.attr_WR.Yearly_yield))
         # Monatsertrag in Kilowattstunden
-        with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk3', 'w') as f:
+        with open('/var/www/html/openWB/ramdisk/monthly_pv3kwhk', 'w') as f:
             f.write(str(WR3.attr_WR.Monthly_yield))
     
     # Bezug EVU
