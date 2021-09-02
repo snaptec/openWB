@@ -290,6 +290,8 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(measurepassword)
         except:
             argumentList.append("undef")
+    elif meastyp == "smaem":
+        argumentList[1] = prefixpy + 'smaem/watt.py'
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
