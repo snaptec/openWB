@@ -42,7 +42,7 @@ try:
 		with open(RAMDISKDIR + "pvwatt", "w") as f:
 			f.write(str(watt))
 	else:
-		with open(RAMDISKDIR + "pvwatt" + str(numpv) , "w") as f:
+		with open(RAMDISKDIR + "pv" + str(numpv) + "watt" , "w") as f:
 			f.write(str(watt))
 except:
 	traceback.print_exc()
