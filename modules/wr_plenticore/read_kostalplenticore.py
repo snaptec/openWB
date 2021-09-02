@@ -35,7 +35,7 @@ from datetime import datetime
 #only in pyhton >3 available
 #from packaging import version
 #from timezone import timezone
-#from ipparser import ipparser
+from ipparser import ipparser
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
@@ -381,12 +381,12 @@ def main(argv=None):
         WR3IP = str(sys.argv[4])
         WR4IP = "none"
         WR5IP = "none"
-        #ips= ipparser(WR3IP)
+        ips= ipparser(WR3IP)
         #in IP3 kann ein aufeinanderfolgende Liste entalten sein "192.168.0.1-3"        
-        #if len(ips)>1:
-        #    WR3IP = ips[0]
-        #    WR4IP = ips[1]
-        #    WR5IP = ips[2]
+        if len(ips)>1:
+            WR3IP = ips[0]
+            WR4IP = ips[1]
+            WR5IP = ips[2]
     else:
         myLogging.openWBLog(myPid, "Argumente fehlen oder sind fehlerhaft")
         sys.exit(1)
