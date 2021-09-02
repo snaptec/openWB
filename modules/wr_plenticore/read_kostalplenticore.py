@@ -259,8 +259,10 @@ class plenticore(modbus):
                 self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
                 if self.attr_WR.P_Home_Cons_Bat < 0:
                     self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat
-                if self.attr_WR.P_Home_Cons_Grid >0:
+                if self.attr_WR.P_Home_Cons_Grid > 0:
                     self.attr_WR.P_PV_AC_total += self.attr_WR.P_Home_Cons_Grid
+                if self.attr_KSEM. P_active_total < 0:
+                    self.attr_WR.P_PV_AC_total += self.attr_KSEM.P_active_total * -1
             else:
                 self.attr_WR.P_PV_AC_total = 0
         except:
@@ -414,9 +416,9 @@ def main(argv=None):
     myLogging.openWBLog(myPid, "Wechselrichter Kostal Plenticore Config - WR1:" + str(WR1IP) + " -WR2:" + str(WR2IP) +
                         "\n -Battery:" + str(Battery) + " -WR3:" + str(WR3IP))
     
-    WR1.ReadWechselrichter()
     WR1.ReadKSEM300()
-    
+    WR1.ReadWechselrichter()
+      
     #Battery nur an WR1 erlaubt
     if Battery == 1:
         WR1.ReadBattery()
