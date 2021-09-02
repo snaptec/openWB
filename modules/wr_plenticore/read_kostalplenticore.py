@@ -250,21 +250,23 @@ class plenticore(modbus):
             # ist AC-Leistungsabgabe des Wechselrichters
             self.attr_WR.P_Generation_actual = int(self.ReadInt16(575))           
             # nur generierte PV Leistung berechnen, keine BatterieLeistung
-            self.attr_WR.P_DC_in_total= self.attr_WR.P_DC_S1 + self.attr_WR.P_DC_S2
-            # keine Battery, wird die Leistung von String 3 addiert
-            if self._Battery!=1:
-                self.attr_WR.P_DC_in_total+= self.attr_WR.P_DC_S3
+            self.attr_WR.P_DC_in_total= self.attr_WR.P_DC_S1 + self.attr_WR.P_DC_S2            
             # zur weiter Berechnung im Fall mit Batterie                   
-            if self.attr_WR.P_DC_in_total > 5:
-                self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
-                if self.attr_WR.P_Home_Cons_Bat < 0:
-                    self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat
-                if self.attr_WR.P_Home_Cons_Grid > 0:
-                    self.attr_WR.P_PV_AC_total += self.attr_WR.P_Home_Cons_Grid
-                if self.attr_KSEM. P_active_total < 0:
-                    self.attr_WR.P_PV_AC_total += self.attr_KSEM.P_active_total * -1
+            if (self._Battery==1):
+                if (self.attr_WR.P_DC_in_total > 5):
+                    self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
+                    if self.attr_WR.P_Home_Cons_Bat < 0:
+                        self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat
+                    if self.attr_WR.P_Home_Cons_Grid > 0:
+                        self.attr_WR.P_PV_AC_total += self.attr_WR.P_Home_Cons_Grid
+                    if self.attr_KSEM. P_active_total < 0:
+                        self.attr_WR.P_PV_AC_total += self.attr_KSEM.P_active_total * -1
+                else:
+                    self.attr_WR.P_PV_AC_total = 0
+            # Fall ohne Batterie einfach nur P_AC Leistung nehmen
             else:
-                self.attr_WR.P_PV_AC_total = 0
+                self.attr_WR.P_PV_AC_total = self.attr_WR.P_AC_total
+        
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, "Fehler beim Lesen der Modbus-Register WR:" + str(self._IP) +
