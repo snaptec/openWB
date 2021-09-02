@@ -35,7 +35,7 @@ from datetime import datetime
 #only in pyhton >3 available
 #from packaging import version
 #from timezone import timezone
-from ipparser import ipparser
+#from ipparser import ipparser
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient
@@ -202,7 +202,10 @@ class plenticore(modbus):
                 # Plenticore Register 582: Actual_batt_ch_disch_power [W]
                 # ist Lade-/Entladeleistung des angeschlossenen Speichers
                 # {charge=negativ, discharge=positiv}
-                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))                           
+                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))
+                # wenn PV Leistung und Batterie geladen wird
+                if (self.attr_WR.P_DC_in_total > 5) and (self.attr_Bat.P_charge_discharge <0):
+                    self.attr_WR.P_PV_AC_total += self.attr_Bat.P_charge_discharge*-1
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register Battery:' + str(self._IP) + '(falsche IP?)' + str(sys.exc_info()[0]))        
@@ -376,12 +379,12 @@ def main(argv=None):
         WR3IP = str(sys.argv[4])
         WR4IP = "none"
         WR5IP = "none"
-        ips= ipparser(WR3IP)
+        #ips= ipparser(WR3IP)
         #in IP3 kann ein aufeinanderfolgende Liste entalten sein "192.168.0.1-3"        
-        if len(ips)>1:
-            WR3IP = ips[0]
-            WR4IP = ips[1]
-            WR5IP = ips[2]
+        #if len(ips)>1:
+        #    WR3IP = ips[0]
+        #    WR4IP = ips[1]
+        #    WR5IP = ips[2]
     else:
         myLogging.openWBLog(myPid, "Argumente fehlen oder sind fehlerhaft")
         sys.exit(1)
