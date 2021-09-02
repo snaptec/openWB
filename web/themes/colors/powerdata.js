@@ -123,6 +123,7 @@ class WbData {
 		doc.classed("theme-dark", (this.displayMode == "dark"));
 		doc.classed("theme-light", (this.displayMode == "light"));
 		doc.classed("theme-gray", (this.displayMode == "gray"));
+		doc.classed("shcolors-normal", true);
 	}
 
 	updateEvu(field, value) {
@@ -214,6 +215,8 @@ class WbData {
 				this.updateUsageDetails();
 				yieldMeter.update();
 				break;
+			case 'countAsHouse':
+				break;
 			default:
 				break;
 		}
@@ -292,7 +295,7 @@ class WbData {
 	updateUsageDetails() {
 		this.usageDetails = [this.usageSummary.evuOut,
 		this.usageSummary.charging]
-			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
+			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)).sort((a,b)=>{return (b.power-a.power)}))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary.batIn, this.usageSummary.house]);
 	}
@@ -386,6 +389,7 @@ class SHDevice {
 		this.configured = configured;
 		this.showInGraph = true;
 		this.color = color;
+		this.countAsHouse = false;
 	}
 };
 
