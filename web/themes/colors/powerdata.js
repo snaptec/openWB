@@ -65,6 +65,7 @@ class WbData {
 		this.showGrid = false;
 		this.displayMode = "gray";
 		this.usageStackOrder = 0;
+		this.decimalPlaces = 1;
 		this.prefs = {};
 	};
 
@@ -123,6 +124,7 @@ class WbData {
 		doc.classed("theme-dark", (this.displayMode == "dark"));
 		doc.classed("theme-light", (this.displayMode == "light"));
 		doc.classed("theme-gray", (this.displayMode == "gray"));
+		doc.classed("shcolors-normal", true);
 	}
 
 	updateEvu(field, value) {
@@ -214,6 +216,8 @@ class WbData {
 				this.updateUsageDetails();
 				yieldMeter.update();
 				break;
+			case 'countAsHouse':
+				break;
 			default:
 				break;
 		}
@@ -292,7 +296,7 @@ class WbData {
 	updateUsageDetails() {
 		this.usageDetails = [this.usageSummary.evuOut,
 		this.usageSummary.charging]
-			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
+			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)).sort((a,b)=>{return (b.power-a.power)}))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary.batIn, this.usageSummary.house]);
 	}
@@ -314,6 +318,7 @@ class WbData {
 		this.prefs.displayM = this.displayMode;
 		this.prefs.stackO = this.usageStackOrder;
 		this.prefs.showGr = this.showGrid;
+		this.prefs.decimalP = this.decimalPlaces;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 	// read cookies and update settings
@@ -342,6 +347,9 @@ class WbData {
 			}
 			if ('showGr' in this.prefs) {
 				this.showGrid = this.prefs.showGr;
+			}
+			if ('decimalP' in this.prefs) {
+				this.decimalPlaces = this.prefs.decimalP;
 			}
 		}
 	}
@@ -386,12 +394,31 @@ class SHDevice {
 		this.configured = configured;
 		this.showInGraph = true;
 		this.color = color;
+		this.countAsHouse = false;
 	}
 };
 
 function formatWatt(watt) {
+	let wattResult;
 	if (watt >= 1000) {
-		return ((Math.round(watt / 100) / 10) + " kW");
+		switch (wbdata.decimalPlaces) {
+			case 0:
+				wattResult = Math.round(watt / 1000);
+				break;
+			case 1:
+				wattResult = (Math.round(watt / 100) / 10).toFixed(1);
+				break;
+			case 2:
+				wattResult = (Math.round(watt / 10) / 100).toFixed(2);
+				break;
+			case 3:
+				wattResult = (Math.round(watt) / 1000).toFixed(3);
+				break;
+			default: 
+				wattResult = Math.round(watt / 100) / 10;
+				break;
+		}
+		return (wattResult + " kW");
 	} else {
 		return (watt + " W");
 	}
@@ -399,7 +426,24 @@ function formatWatt(watt) {
 
 function formatWattH(watt) {
 	if (watt >= 1000) {
-		return ((Math.round(watt / 100) / 10) + " kWh");
+		switch (wbdata.decimalPlaces) {
+			case 0:
+				wattResult = Math.round(watt / 1000);
+				break;
+			case 1:
+				wattResult = (Math.round(watt / 100) / 10).toFixed(1);
+				break;
+			case 2:
+				wattResult = (Math.round(watt / 10) / 100).toFixed(2);
+				break;
+			case 3:
+				wattResult = (Math.round(watt) / 1000).toFixed(3);
+				break;
+			default: 
+				wattResult = Math.round(watt / 100) / 10;
+				break;
+		}
+		return (wattResult + " kWh");
 	} else {
 		return (Math.round(watt) + " Wh");
 	}
@@ -490,6 +534,18 @@ function toggleGrid() {
 	powerGraph.updateGraph();
 	yieldMeter.update();
 	wbdata.persistGraphPreferences();
+}
+
+function switchDecimalPlaces() {
+	if (wbdata.decimalPlaces  < 3) {
+		wbdata.decimalPlaces = wbdata.decimalPlaces+1;
+	} else {
+		wbdata.decimalPlaces = 0;
+	}
+	wbdata.persistGraphPreferences();
+	powerMeter.update();
+	yieldMeter.update();
+	smartHomeList.update();
 }
 
 function toggleMonthView() {

@@ -190,9 +190,9 @@ class PowerMeter {
       .cornerRadius(this.cornerRadius);
 
     // Add the chart to the svg
-    const arcCount = Object.values(wbdata.usageSummary).length;
+    const arcCount = Object.values(wbdata.usageDetails).length;
     svg.selectAll("consumers")
-      .data(pieGenerator(Object.values(wbdata.usageSummary).concat([{ "power": this.emptyPower, "color": this.bgColor }]))).enter()
+      .data(pieGenerator(Object.values(wbdata.usageDetails).concat([{ "power": this.emptyPower, "color": this.bgColor }]))).enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color)
