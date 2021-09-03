@@ -254,9 +254,13 @@ class plenticore(modbus):
             # zur weiter Berechnung im Fall mit Batterie                   
             if (self._Battery==1):
                 if (self.attr_WR.P_DC_in_total > 5):
-                    self.attr_WR.P_PV_AC_total = self.attr_WR.P_Generation_actual                    
-                    if self.attr_WR.P_Home_Cons_PV >= 0:
-                        self.attr_WR.P_PV_AC_total += self.attr_WR.P_Home_Cons_PV                                        
+                    _homecons = self.attr_WR.P_Home_Cons_Bat + self.attr_WR.P_Home_Cons_Grid + self.attr_WR.P_Home_Cons_Grid
+                    self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
+                    # wenn Umrichter mehr produziert als Hausverbrauch -> einspeisen
+                    if self.attr_WR.P_Home_Cons_Bat < 0:
+                        self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat                   
+                    if  self.attr_WR.P_Generation_actual < _homeconsume:                                                
+                        self.attr_WR.P_PV_AC_total += attr_WR.P_Generation_actual - _homeconsume
                 else:
                     self.attr_WR.P_PV_AC_total = 0
             # Fall ohne Batterie einfach nur P_AC Leistung nehmen
