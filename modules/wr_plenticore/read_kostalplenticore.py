@@ -202,10 +202,7 @@ class plenticore(modbus):
                 # Plenticore Register 582: Actual_batt_ch_disch_power [W]
                 # ist Lade-/Entladeleistung des angeschlossenen Speichers
                 # {charge=negativ, discharge=positiv}
-                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))
-                # wenn PV Leistung und Batterie geladen wird
-                if (self.attr_WR.P_DC_in_total > 5) and (self.attr_Bat.P_charge_discharge <0):
-                    self.attr_WR.P_PV_AC_total += self.attr_Bat.P_charge_discharge*-1
+                self.attr_Bat.P_charge_discharge = int(self.ReadInt16(582))           
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, 'Fehler beim Lesen der Modbus-Register Battery:' + str(self._IP) + '(falsche IP?)' + str(sys.exc_info()[0]))        
@@ -253,21 +250,34 @@ class plenticore(modbus):
             self.attr_WR.P_DC_in_total= self.attr_WR.P_DC_S1 + self.attr_WR.P_DC_S2            
             # zur weiter Berechnung im Fall mit Batterie                   
             if (self._Battery==1):
-                if (self.attr_WR.P_DC_in_total > 5):
-                    _homecons = self.attr_WR.P_Home_Cons_Bat + self.attr_WR.P_Home_Cons_Grid + self.attr_WR.P_Home_Cons_Grid
-                    self.attr_WR.P_PV_AC_total = self.attr_WR.P_Home_Cons_PV
-                    # wenn Umrichter mehr produziert als Hausverbrauch -> einspeisen
-                    if self.attr_WR.P_Home_Cons_Bat < 0:
-                        self.attr_WR.P_PV_AC_total -= self.attr_WR.P_Home_Cons_Bat                   
-                    if  self.attr_WR.P_Generation_actual < _homeconsume:                                                
-                        self.attr_WR.P_PV_AC_total += attr_WR.P_Generation_actual - _homeconsume
+                # da Batterie DC-seitig angebunden ist,
+                # muss deren Lade-/Entladeleistung mitbetrachtet werden
+                # wenn man die AC-Leistung der PV-Module und des Speichers bestimmen möchte.
+                # Kostal liefert nur DC-Werte, also DC-Leistung berechnen    
+                # schauen, ob überhaupt PV-Leistung erzeugt wird
+                if  self.attr_WR.P_DC_in_total < 0:
+                    # PV-Anlage kann nichts verbrauchen, also ggf. Register-/Rundungsfehler korrigieren
+                    self.attr_WR.P_PV_AC_total  = 0
                 else:
-                    self.attr_WR.P_PV_AC_total = 0
-            # Fall ohne Batterie einfach nur P_AC Leistung nehmen
-            else:
-                self.attr_WR.P_DC_in_total += self.attr_WR.P_DC_S3 
-                self.attr_WR.P_PV_AC_total = self.attr_WR.P_Generation_actual        
-        except:
+                    # wird PV-DC-Leistung erzeugt, müssen die Wandlungsverluste betrachtet werden
+                    # Kostal liefert nur DC-seitige Werte
+                    # zunächst Annahme, die Batterie wird geladen:
+                    # die PV-Leistung die Summe aus verlustbehafteter AC-Leistungsabgabe des WR
+                    # und der DC-Ladeleistung, die Wandlungsverluste werden also nur in der PV-Leistung
+                    # ersichtlich
+                    if self.attr_Bat.P_charge_discharge > 0:
+                        # wird die Batterie entladen, werden die Wandlungsverluste anteilig an der
+                        # DC-Leistung auf PV und Batterie verteilt
+                        # dazu muss der Divisor Total_DC_power != 0 sein
+                        Total_DC_power1 =  self.attr_WR.P_DC_in_total + self.attr_Bat.P_charge_discharge
+                        self.attr_WR.P_PV_AC_total = int((self.attr_WR.P_DC_in_total  / float(Total_DC_power1)) * self.attr_WR.P_Generation_actual)
+                        self.attr_Bat.P_charge_discharge = self.attr_WR.P_Generation_actual - self.attr_WR.P_PV_AC_total
+                    else:
+                        # Batterie wird geladen
+                        # dann ist PV-Leistung die Wechselrichter-AC-Leistung + die Ladeleistung der Batterie (negative because charging)
+                        self.attr_WR.P_PV_AC_total = self.attr_WR.P_Generation_actual- self.attr_Bat.P_charge_discharge
+                        self.attr_WR.P_DC_in_total += self.attr_WR.P_DC_S3 
+        except:            
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, "Fehler beim Lesen der Modbus-Register WR:" + str(self._IP) +
                                 "(falsche WR-IP?)" + str(sys.exc_info()[0]))        
@@ -419,11 +429,11 @@ def main(argv=None):
                         "\n -Battery:" + str(Battery) + " -WR3:" + str(WR3IP) + "-WR4:" + str(WR4IP) + "-WR5:" + str(WR5IP))
     
     WR1.ReadKSEM300()
-    WR1.ReadWechselrichter()
-      
     #Battery nur an WR1 erlaubt
     if Battery == 1:
         WR1.ReadBattery()
+    
+    WR1.ReadWechselrichter()    
     
     #zukünftige Implementierung von Battery Steuerung
     #Battery nur an WR1 erlaubt
