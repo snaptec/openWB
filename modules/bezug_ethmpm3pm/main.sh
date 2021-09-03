@@ -15,6 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
+openwbDebugLog ${DMOD} 2 "EVU Kit Version: ${evukitversion}"
 
 if (( evukitversion == 1 )); then
 	sudo python ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readlovato.py >>${MYLOGFILE} 2>&1
