@@ -265,8 +265,8 @@ class plenticore(modbus):
                     self.attr_WR.P_PV_AC_total = 0
             # Fall ohne Batterie einfach nur P_AC Leistung nehmen
             else:
-                self.attr_WR.P_PV_AC_total = self.attr_WR.P_AC_total
-        
+                self.attr_WR.P_DC_in_total += self.attr_WR.P_DC_S3 
+                self.attr_WR.P_PV_AC_total = self.attr_WR.P_Generation_actual        
         except:
             # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
             myLogging.openWBLog(self._pid, "Fehler beim Lesen der Modbus-Register WR:" + str(self._IP) +
@@ -416,7 +416,7 @@ def main(argv=None):
     
     WR1 = plenticore(myPid, WR1IP,Battery)            
     myLogging.openWBLog(myPid, "Wechselrichter Kostal Plenticore Config - WR1:" + str(WR1IP) + " -WR2:" + str(WR2IP) +
-                        "\n -Battery:" + str(Battery) + " -WR3:" + str(WR3IP))
+                        "\n -Battery:" + str(Battery) + " -WR3:" + str(WR3IP) + "-WR4:" + str(WR4IP) + "-WR5:" + str(WR5IP))
     
     WR1.ReadKSEM300()
     WR1.ReadWechselrichter()
@@ -454,6 +454,7 @@ def main(argv=None):
     if WR2 is not None:
         WR2.ReadWechselrichter()
         PV_power_total +=  WR2.attr_WR.P_PV_AC_total
+        myLogging.openWBLog(myPid, "WR2 Leistung = " + str(WR2.attr_WR.P_PV_AC_total) + "PV_total = " + str(PV_power_total))
         # Summen der Erträge bestimmen
         Total_yield +=  WR2.attr_WR.Total_yield
         Monthly_yield += WR2.attr_WR.Monthly_yield
@@ -463,6 +464,7 @@ def main(argv=None):
     if WR3 is not None:
         WR3.ReadWechselrichter()
         PV_power_total +=  WR3.attr_WR.P_PV_AC_total
+        myLogging.openWBLog(myPid, "WR3 Leistung = " + str(WR3.attr_WR.P_PV_AC_total) + "PV_total = " + str(PV_power_total))
         # Summen der Erträge bestimmen
         Total_yield +=  WR3.attr_WR.Total_yield
         Monthly_yield += WR3.attr_WR.Monthly_yield
@@ -472,6 +474,7 @@ def main(argv=None):
     if WR4 is not None:
         WR4.ReadWechselrichter()
         PV_power_total +=  WR4.attr_WR.P_PV_AC_total
+        myLogging.openWBLog(myPid, "WR4 Leistung = " + str(WR4.attr_WR.P_PV_AC_total) + "PV_total = " + str(PV_power_total))
         # Summen der Erträge bestimmen
         Total_yield +=  WR4.attr_WR.Total_yield
         Monthly_yield += WR4.attr_WR.Monthly_yield
@@ -481,6 +484,7 @@ def main(argv=None):
     if WR5 is not None:
         WR5.ReadWechselrichter()
         PV_power_total +=  WR5.attr_WR.P_PV_AC_total
+        myLogging.openWBLog(myPid, "WR5 Leistung = " + str(WR5.attr_WR.P_PV_AC_total) + "PV_total = " + str(PV_power_total))
         # Summen der Erträge bestimmen
         Total_yield +=  WR5.attr_WR.Total_yield
         Monthly_yield += WR5.attr_WR.Monthly_yield
