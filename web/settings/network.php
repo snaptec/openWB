@@ -125,9 +125,9 @@
 							<div class="row form-group">
 								<label for="hostname" class="col-md-4 col-form-label">Neuer Hostname</label>
 								<div class="col">
-									<input type="text" name="hostname" id="hostname" value="<?php echo $currentHostname; ?>" placeholder="Name" aria-describedby="hostnameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9_-]*">
+									<input type="text" name="hostname" id="hostname" value="<?php echo $currentHostname; ?>" placeholder="Name" aria-describedby="hostnameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]">
 									<span id="hostnameHelpBlock" class="form-text small">
-										Der Hostname darf nur Buchstaben, Zahlen und die Zeichen "-_" enthalten. Keine Umlaute, Sonderzeichen oder Leerzeichen.<br>
+										Der Hostname darf nur Buchstaben, Zahlen und einen Bindestrich enthalten. Keine Umlaute, Sonderzeichen oder Leerzeichen. Das erste und letzte Zeichen darf kein Bindestrich sein.<br>
 										<span class="text-danger">Die openWB wird direkt nach der Änderung neu gestartet! Alle Fahrzeuge sind vorher abzustecken!</span>
 									</span>
 								</div>
