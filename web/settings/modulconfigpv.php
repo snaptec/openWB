@@ -304,6 +304,15 @@
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
 								</div>
+								</div>
+								<div class="form-row mb-1">
+								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
+								<div class="col">
+									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
+									<span class="form-text small">
+										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
+									</span>
+								</div>							
 							</div>
 							<div class="form-row mb-1">
 								<label for="kostalplenticoreip3" class="col-md-4 col-form-label">WR 3 IP Adresse</label>
@@ -314,16 +323,16 @@
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
 								</div>
+							</div>	
 							</div>
-							<div class="form-row mb-1">
-								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
+								<div class="form-row mb-1">
+								<label for="name_wechselrichter3" class="col-md-4 col-form-label">WR 3 Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
+									<input class="form-control" type="text" name="name_wechselrichter3" id="name_wechselrichter3" value="<?php echo $name_wechselrichter3old ?>">
 									<span class="form-text small">
-										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
+										Freie Bezeichnung des dritten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 									</span>
-								</div>
-							</div>
+								</div>				
 						</div>
 						<div id="pvsmartme" class="hide">
 							<div class="form-row mb-1">
