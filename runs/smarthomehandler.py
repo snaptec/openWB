@@ -290,6 +290,8 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(measurepassword)
         except:
             argumentList.append("undef")
+    elif meastyp == "smaem":
+        argumentList[1] = prefixpy + 'smaem/watt.py'
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
@@ -504,7 +506,11 @@ def publishmqtt():
             client.publish("openWB/SmartHome/Devices/"+str(i)+"/OnCntStandby", payload=str(DeviceOnStandby[i-1]) , qos=0, retain=True)
             client.loop(timeout=2.0)
             DeviceOnOldStandby [i-1] =  DeviceOnStandby[i-1]
-        devstatus=getstat(i-1)
+        devstatus=getstat(i)
+        #nur bei Status 10 on status mitnehmen
+        if (devstatus == 10):
+            if str(i)+"relais" in DeviceValues:
+                devstatus = devstatus + int( DeviceValues[str(i)+"relais"])
         if (devstatus != StatusOld [i-1]):
             client.publish("openWB/SmartHome/Devices/"+str(i)+"/Status", payload=str(devstatus) , qos=0, retain=True)
             client.loop(timeout=2.0)
@@ -1034,7 +1040,8 @@ def conditions(nummer):
             setstat(nummer,10)
             return
     # here startup device_startupdetection
-    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20) and ( DeviceValues[str(nummer)+"relais"] == 0 ):
+    #remove condition that device has to be off
+    if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
         setstat(nummer,20)
         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
         turndevicerelais(nummer, 1,0,0)
@@ -1044,10 +1051,26 @@ def conditions(nummer):
             if  str(nummer)+"anlaufz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"anlaufz"])
                 if ( standbyduration < timesince ):
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec schalte aus " + str(standbypower))
+                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " standbycheck abgelaufen " + str(standbyduration) + " ,sec pruefe Einschaltschwelle " + str(standbypower))
                     setstat(nummer,10)
                     del DeviceCounters[str(nummer)+"anlaufz"]
-                    turndevicerelais(nummer, 0,0,1)
+                    oldueberschussberechnung = 0
+                    devuberschuss = 0
+                    ( devuberschuss, oldueberschussberechnung)= getueb(nummer)
+                    if ( devuberschuss > einschwelle):
+                        try:
+                            del DeviceCounters[str(nummer)+"ausverz"]
+                        except:
+                            pass
+                        try:
+                            del DeviceCounters[str(nummer)+"einverz"]
+                        except:
+                            pass
+                        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle, schalte ein (ohne Einschaltverzoegerung) " + str(einschwelle) )
+                        turndevicerelais(nummer, 1,oldueberschussberechnung,1)
+                    else:
+                        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " kleiner Einschaltschwelle, schalte aus " + str(einschwelle) )
+                        turndevicerelais(nummer, 0,0,1)
                     return
                 else:
                     logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name) + " standbycheck noch nicht erreicht " +  str(standbyduration)+ " > " + str(timesince))
@@ -1119,6 +1142,9 @@ def conditions(nummer):
         setueb(nummer,ueberschussberechnung)
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " SoC " + str(speichersoc) + " Einschalt SoC " + str(speichersocbeforestart) +  " Ueberschuss " + str(devuberschuss))
         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " Ueberschussberechnung anders (1 = mit Speicher, 2 = mit Offset) " + str(ueberschussberechnung))
+    if (devstatus == 20):
+        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung immer noch aktiv, keine Ueberprüfung auf Einschalt oder Ausschaltschwelle ")
+        return
     if ( devuberschuss > einschwelle):
         try:
             del DeviceCounters[str(nummer)+"ausverz"]
@@ -1232,7 +1258,10 @@ def resetmaxeinschaltdauerfunc():
                     DeviceTempValues.update({'oldtime'+str(i) : '2'})
                     logDebug(LOGLEVELINFO, "(" + str(i) + ") RunningTime auf 0 gesetzt")
                     DeviceOn[i-1]= str("0")
-                    DeviceOnStandby[i-1]= str("0")
+                    devstatus=getstat(i)
+                    #Sofern Anlauferkennung laueft counter nicht zuruecksetzen
+                    if (devstatus != 20):
+                        DeviceOnStandby[i-1]= str("0")
                     try:
                         del DeviceCounters[str(i)+"oldstampeinschaltdauer"]
                     except:

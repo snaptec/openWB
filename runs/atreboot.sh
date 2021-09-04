@@ -273,6 +273,12 @@ if python3 -c "import jq" &> /dev/null; then
 else
 	sudo pip3 install jq
 fi
+#Prepare for ipparser in Python
+if python3 -c "import ipparser" &> /dev/null; then
+	echo 'ipparser installed...'
+else
+	sudo pip3 install ipparser
+fi
 
 # update version
 echo "version..."
