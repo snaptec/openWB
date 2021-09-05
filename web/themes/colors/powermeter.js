@@ -189,10 +189,17 @@ class PowerMeter {
       .outerRadius(this.radius)
       .cornerRadius(this.cornerRadius);
 
+    // Filter out shared home devices that are included in house consumption
+    const plotData = [wbdata.usageSummary.evuOut,  wbdata.usageSummary.charging]
+    .concat(wbdata.shDevice.filter(row => (row.configured && !row.countAsHouse)).sort((a,b)=>{return (b.power-a.power)}))
+    .concat(wbdata.consumer.filter(row => (row.configured)))
+    .concat([wbdata.usageSummary.batIn, wbdata.usageSummary.house])
+    .concat([{ "power": this.emptyPower, "color": this.bgColor }]);
+
     // Add the chart to the svg
-    const arcCount = Object.values(wbdata.usageDetails).length;
+    const arcCount = Object.values(plotData).length -1;
     svg.selectAll("consumers")
-      .data(pieGenerator(Object.values(wbdata.usageDetails).concat([{ "power": this.emptyPower, "color": this.bgColor }]))).enter()
+      .data(pieGenerator(Object.values(plotData))).enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => d.data.color)
