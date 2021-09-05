@@ -1273,6 +1273,20 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
                     f.write(str(pvwatt))
                     f.close()
+            if (msg.topic == "openWB/set/pv/2/WhCounter"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+                    f = open('/var/www/html/openWB/ramdisk/pv2kwh', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/pv/2/W"):
+                if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
+                    if (float(msg.payload) > 1):
+                        pvwatt=int(float(msg.payload.decode("utf-8"))) * -1
+                    else:
+                        pvwatt=int(float(msg.payload.decode("utf-8")))
+                    f = open('/var/www/html/openWB/ramdisk/pv2watt', 'w')
+                    f.write(str(pvwatt))
+                    f.close()
             if (msg.topic == "openWB/set/lp/1/AutolockStatus"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=3):
                     f = open('/var/www/html/openWB/ramdisk/autolockstatuslp1', 'w')

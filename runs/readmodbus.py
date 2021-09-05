@@ -20,4 +20,4 @@ if request.isError():
     print('Modbus Error:', request)
 else:
     result = request.registers
-    print(result.registers[0])
+    print(result[0])
