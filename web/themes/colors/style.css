@@ -389,6 +389,9 @@ h3 {
 	--xgridCol: rgba(160,160,160, 0.82);
 	--tickCol: rgba(160,160,160, 0.82);
 	--evuCol: rgba(178, 34, 34, 1);
+	--color-switchRed: #d12020;
+	--color-switchGreen: #4db662;
+	--color-switchBlue: steelblue;
 	}
 
 
