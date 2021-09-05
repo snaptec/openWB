@@ -970,6 +970,7 @@
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($pv2wattmodulold == "wr2_json") echo "selected" ?> value="wr2_json">Json Abfrage</option>
+										<option <?php if($pv2wattmodulold == "wr2_mqtt") echo "selected" ?> value="wr2_mqtt">MQTT</option>
 										<option <?php if($pv2wattmodulold == "wr2_ethsdm120") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
 									</optgroup>
 								</select>
@@ -1065,6 +1066,14 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2mqttdiv" class="hide">
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Per MQTT zu schreiben:<br>
+								<span class="text-info">openWB/set/pv/2/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/2/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
 						<div id="pv2piko2" class="hide">
 							<div class="form-row mb-1">
 								<label for="wr2_piko2_user" class="col-md-4 col-form-label">Benutzername</label>
@@ -1106,6 +1115,7 @@
 								hideSection('#pv2id2div');
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
+								hideSection('#pv2mqttdiv');
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
 
@@ -1114,6 +1124,9 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('#pv2wrjsondiv');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_mqtt') {
+									showSection('#pv2mqttdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
 									showSection('#pv2kitdiv');
