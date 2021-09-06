@@ -336,6 +336,15 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_finishTime", msg.payload.decode("utf-8"), qos=0, retain=True)
                 else:
                     print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))
+ 
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_onTime" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and re.search(r'^([01]{0,1}\d|2[0-3]):[0-5]\d$', msg.payload.decode("utf-8") ) ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_ontime_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_onTime", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))    
+                                   
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_startTime" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and re.search(r'^([01]{0,1}\d|2[0-3]):[0-5]\d$', msg.payload.decode("utf-8") ) ):

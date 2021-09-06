@@ -311,6 +311,14 @@ $numDevices = 9;
 											</div>
 										</div>
 
+										<div class="form-row mb-1">
+											<label for="device_onTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Immer an nach</label>
+											<div class="col">
+												<input id="device_onTimeDevices<?php echo $devicenum; ?>" name="device_onTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Das Gerät wird ab dieser Uhrzeit eingeschaltet, unabhängig vom Überschuss unter Berücksichtigung der maximalen Einschaltdauer.</span>
+											</div>
+										</div>
+
 									</div>
 									<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom hide">
 										<hr class="border-secondary">
