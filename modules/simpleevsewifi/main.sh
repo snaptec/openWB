@@ -6,11 +6,17 @@ output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/get
 if ! [ -z "$output" ]; then
 	watt=$(echo $output | jq '.list[] | .actualPower')
 	lla1=$(echo $output | jq '.list[] | .currentP1')
+	lla1=$(echo "scale=0;$lla1 / 1" |bc)
 	lla2=$(echo $output | jq '.list[] | .currentP2')
+	lla2=$(echo "scale=0;$lla2 / 1" |bc)
 	lla3=$(echo $output | jq '.list[] | .currentP3')
+	lla3=$(echo "scale=0;$lla3 / 1" |bc)
 	llv1=$(echo $output | jq '.list[] | .voltageP1')
+	llv1=$(echo "scale=0;$llv1 / 1" |bc)
 	llv2=$(echo $output | jq '.list[] | .voltageP2')
+	llv2=$(echo "scale=0;$llv2 / 1" |bc)
 	llv3=$(echo $output | jq '.list[] | .voltageP3')
+	llv3=$(echo "scale=0;$llv3 / 1" |bc)
 	llkwh=$(echo $output | jq '.list[] | .meterReading')
 	evsewifiplugstatelp1=$(echo $output | jq '.list[] | .vehicleState')
 
