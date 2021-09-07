@@ -50,6 +50,7 @@ var topicsToSubscribe = [
 	["openWB/lp/1/faultStr", 1],
 	["openWB/lp/1/socFaultState", 1],
 	["openWB/lp/1/socFaultStr", 1],
+	["openWB/lp/1/lastSeen", 1],
 
 	["openWB/lp/2/boolChargePointConfigured", 0],
 	["openWB/lp/2/AConfigured", 1], 

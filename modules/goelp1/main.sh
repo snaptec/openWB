@@ -5,16 +5,17 @@ rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
 if [[ $? == "0" ]] ; then
 	goecorrectionfactor=$(echo "scale=0;$goecorrectionfactorlp1 * 100000 /1" |bc)
+    echo $goecorrectionfactor > /var/www/html/openWB/ramdisk/goecorrectionlp1
 	watt=$(echo $output | jq -r '.nrg[11]')
 	watt=$(echo "scale=0;$watt * 10 /1" |bc)
 	if [[ $watt =~ $re ]] ; then
-		if [[ $goesimulationlp1 == "0" ]] ; then
-			echo $watt > /var/www/html/openWB/ramdisk/llaktuell
-		else
-			wattc=$((watt*$goecorrectionfactor/100000))
-			wattc=$(echo "scale=0;$wattc" |bc)
-			echo $wattc > /var/www/html/openWB/ramdisk/llaktuell
-		fi
+        if [[ $goesimulationlp1 == "0" ]] ; then
+            echo $watt > /var/www/html/openWB/ramdisk/llaktuell
+        else
+		    wattc=$((watt*$goecorrectionfactor/100000))
+		    wattc=$(echo "scale=0;$wattc" |bc)
+		    echo $wattc > /var/www/html/openWB/ramdisk/llaktuell
+        fi
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
 	lla1=$(echo "scale=1;$lla1 / 10" |bc)
@@ -23,8 +24,8 @@ if [[ $? == "0" ]] ; then
 	fi
 	lla2=$(echo $output | jq -r '.nrg[5]')
 	lla2=$(echo "scale=1;$lla2 / 10" |bc)
-	if [[ $lla2 =~ $rekwh ]] ; then
-		echo $lla2 > /var/www/html/openWB/ramdisk/lla2
+	if [[ $lla2 =~ $rekwh ]] ; then		
+        echo $lla2 > /var/www/html/openWB/ramdisk/lla2
 	fi
 	lla3=$(echo $output | jq -r '.nrg[6]')
 	lla3=$(echo "scale=1;$lla3 / 10" |bc)
@@ -95,4 +96,8 @@ if [[ $? == "0" ]] ; then
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
+
+    lastseen=$(date +"%d.%m.%Y %H:%M:%S")
+	echo $lastseen >/var/www/html/openWB/ramdisk/goelp1lastcontact
+    mosquitto_pub -t openWB/lp/1/lastSeen -r -m "$lastseen"
 fi

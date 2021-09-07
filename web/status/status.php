@@ -209,6 +209,10 @@
 											<th scope="row">SoC [%]</th>
 											<td class="soc">--</td>
 										</tr>
+										<tr class="lpLastSeenRow hide">
+											<th scope="row">Letzter Kontakt</th>
+											<td class="lpLastSeen"></td>
+										</tr>
 										<tr class="faultStrSocLpRow hide">
 											<th scope="row">Störungsbeschreibung</th>
 											<td class="faultStrSocLp"></td>
