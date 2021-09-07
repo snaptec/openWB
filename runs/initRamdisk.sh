@@ -586,7 +586,7 @@ initRamdisk(){
 		"mqttverbraucher2_name:notset" \
 		"mqttversion:-1" \
 		"mqttwattbezug:-1" \
-		"mqttwizzarddone:-1" 
+		"mqttwizzarddone:-1"
 	do
 		IFS=':' read -r -a tuple <<< "$f"
 		currentRamdiskFileVar="\"$RamdiskPath/${tuple[0]}\""
