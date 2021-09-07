@@ -56,7 +56,7 @@ if [[ $? == "0" ]] ; then
 			echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
 		fi
 	else	
-		pluggedladunglp1startkwh=$(</var/www/html/openWB/ramdisk/pluggedladunglp1startkwh)
+		temp_kWhCounter_lp1=$(</var/www/html/openWB/ramdisk/temp_kWhCounter_lp1)
 		#simulation der Energiemenge während des ladens
 		#wenn die Dateien noch nicht da sind, werden sie angelegt. Simulation startet im nächsten Regelschritt.
 		if [ -f "/var/www/html/openWB/ramdisk/goewatt0neg" ]; then
@@ -64,7 +64,7 @@ if [[ $? == "0" ]] ; then
 				python /var/www/html/openWB/runs/simcount.py $wattc goe goeposkwh goenegkwh
 			else
 				#Benutze den Zählerstand aus pluggedladunglp1startkwh als Startwert für die Simulation
-				simenergy=$(echo "scale=0; $pluggedladunglp1startkwh*3600000/1" | bc)
+				simenergy=$(echo "scale=0; $temp_kWhCounter_lp1*3600000/1" | bc)
 				echo $simenergy > /var/www/html/openWB/ramdisk/goewatt0pos
 			fi
 		else
@@ -77,7 +77,7 @@ if [[ $? == "0" ]] ; then
 			echo $simenergy > /var/www/html/openWB/ramdisk/llkwh
 		else
 			#Wenn die Simulation noch nicht gelaufen ist, nehme den Wert pluggedladunglp1startkwh
-			echo $pluggedladunglp1startkwh > /var/www/html/openWB/ramdisk/llkwh
+			echo $temp_kWhCounter_lp1 > /var/www/html/openWB/ramdisk/llkwh
 		fi
 	fi
 	#car status 1 Ladestation bereit, kein Auto
