@@ -59,7 +59,7 @@ class SmartHomeList {
         .attr("class", (row) => row.isOn ? "fa fa-toggle-on text-green pr-2" : "fa fa-toggle-off text-red pr-2");
       // name
       cell.append("span")
-        .text(row => row.name);
+        .text(row => (row.countAsHouse)? "*"+row.name : row.name);
       // Power/energy
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
