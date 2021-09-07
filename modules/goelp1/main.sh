@@ -8,13 +8,13 @@ if [[ $? == "0" ]] ; then
 	watt=$(echo $output | jq -r '.nrg[11]')
 	watt=$(echo "scale=0;$watt * 10 /1" |bc)
 	if [[ $watt =~ $re ]] ; then
-        if [[ $goesimulationlp1 == "0" ]] ; then
-            echo $watt > /var/www/html/openWB/ramdisk/llaktuell
-        else
-		    wattc=$((watt*$goecorrectionfactor/100000))
-		    wattc=$(echo "scale=0;$wattc" |bc)
-		    echo $wattc > /var/www/html/openWB/ramdisk/llaktuell
-        fi
+		if [[ $goesimulationlp1 == "0" ]] ; then
+			echo $watt > /var/www/html/openWB/ramdisk/llaktuell
+		else
+			wattc=$((watt*$goecorrectionfactor/100000))
+			wattc=$(echo "scale=0;$wattc" |bc)
+			echo $wattc > /var/www/html/openWB/ramdisk/llaktuell
+		fi
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
 	lla1=$(echo "scale=1;$lla1 / 10" |bc)
@@ -64,7 +64,7 @@ if [[ $? == "0" ]] ; then
 				python /var/www/html/openWB/runs/simcount.py $wattc goe goeposkwh goenegkwh
 			else
 				#Benutze den Zählerstand aus pluggedladunglp1startkwh als Startwert für die Simulation
-				simenergy=$(echo "scale=0; $pluggedladunglp1startkwh)*3600000/1" | bc)
+				simenergy=$(echo "scale=0; $pluggedladunglp1startkwh*3600000/1" | bc)
 				echo $simenergy > /var/www/html/openWB/ramdisk/goewatt0pos
 			fi
 		else
