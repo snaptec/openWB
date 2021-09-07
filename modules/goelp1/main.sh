@@ -51,39 +51,39 @@ if [[ $? == "0" ]] ; then
 		echo $rfid > /var/www/html/openWB/ramdisk/readtag
 		echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp1rfid
 	fi
-	#simulation der Energiemenge während des ladens
-	#wenn die Dateien noch nicht da sind, werden sie angelegt. Simulation startet im nächsten Regelschritt.
-	if [ -f "/var/www/html/openWB/ramdisk/goewatt0neg" ]; then
-		if [ -f "/var/www/html/openWB/ramdisk/goewatt0pos" ]; then
-			python /var/www/html/openWB/runs/simcount.py $wattc goe goeposkwh goenegkwh
-		else
-            #Benutze den Zählerstand vom go-e charger als Startwert für die Simulation
-            simenergy=$(echo "scale=0; $llkwh)*3600000/1" | bc)
-            echo $simenergy > /var/www/html/openWB/ramdisk/goewatt0pos
-        fi
-    else
-        echo 0 > /var/www/html/openWB/ramdisk/goewatt0neg
-	fi
-    
-	#car status 1 Ladestation bereit, kein Auto
-	#car status 2 Auto lädt
-	#car status 3 Warte auf Fahrzeug
-	#car status 4 Ladung beendet, Fahrzeug verbunden
-	car=$(echo $output | jq -r '.car')
 	if [[ $goesimulationlp1 == "0" ]] ; then
 		if [[ $llkwh =~ $rekwh ]] ; then
 			echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
 		fi
 	else		
+		#simulation der Energiemenge während des ladens
+		#wenn die Dateien noch nicht da sind, werden sie angelegt. Simulation startet im nächsten Regelschritt.
+		if [ -f "/var/www/html/openWB/ramdisk/goewatt0neg" ]; then
+			if [ -f "/var/www/html/openWB/ramdisk/goewatt0pos" ]; then
+				python /var/www/html/openWB/runs/simcount.py $wattc goe goeposkwh goenegkwh
+			else
+				#Benutze den Zählerstand vom go-e charger als Startwert für die Simulation
+				simenergy=$(echo "scale=0; $llkwh)*3600000/1" | bc)
+				echo $simenergy > /var/www/html/openWB/ramdisk/goewatt0pos
+			fi
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/goewatt0neg
+		fi
 		#der ausgelesene Zählerstand wird ignoriert und stattdessen die Leistung aufintegriert
 		#Grund: der ausgelesene Zählerstand hat eine Auflösung von 1kWh -> zu ungenau in der Darstellung
 		if [ -f "/var/www/html/openWB/ramdisk/goeposkwh" ]; then
 			simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goeposkwh)/1000" | bc)
 			echo $simenergy > /var/www/html/openWB/ramdisk/llkwh
 		else
-			echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
+			pluggedladunglp1startkwh=$(</var/www/html/openWB/ramdisk/pluggedladunglp1startkwh)
+			echo $pluggedladunglp1startkwh > /var/www/html/openWB/ramdisk/llkwh
 		fi
 	fi
+	#car status 1 Ladestation bereit, kein Auto
+	#car status 2 Auto lädt
+	#car status 3 Warte auf Fahrzeug
+	#car status 4 Ladung beendet, Fahrzeug verbunden
+	car=$(echo $output | jq -r '.car')
 	if [[ $car == "1" ]] ; then
 		echo 0 > /var/www/html/openWB/ramdisk/plugstat
 	else
