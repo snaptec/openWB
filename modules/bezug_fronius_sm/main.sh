@@ -5,10 +5,6 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="EVU"
 DMOD="MAIN"
-Debug=$debug
-
-#For development only
-#Debug=1
 
 if [ $DMOD == "MAIN" ]; then
     MYLOGFILE="$RAMDISKDIR/openWB.log"
@@ -25,12 +21,10 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" 2>&1) >>$MYLOGFILE 2>&1
+ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" &>>$MYLOGFILE)
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug
-
-
