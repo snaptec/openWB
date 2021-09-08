@@ -1116,7 +1116,6 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			actualDailyYield = 0;
 		}
 		wbdata.updateSH(index, "energy", actualDailyYield);
-
 	}
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i)) {
 		var rTime = parseInt(mqttpayload, 10);
@@ -1127,6 +1126,24 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	}
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i)) {
 		wbdata.updateSH(index, "isOn", (mqttpayload == 1));
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Status$/i)) {
+		switch (mqttpayload) {
+			case '10':
+				wbdata.updateSH(index, "status", 'off');
+				break;
+			case '11':
+				wbdata.updateSH(index, "status", 'on');
+				break;
+			case '20':
+				wbdata.updateSH(index, "status", 'on-by-detection');
+				break;
+			case '30':
+				wbdata.updateSH(index, "status", 'on-by-timeout');
+				break;
+			default:
+				wbdata.updateSH(index, "status", 'off');
+		}
 	}
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i)) {
 		var actualTemp = parseFloat(mqttpayload);
