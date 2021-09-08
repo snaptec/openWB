@@ -169,6 +169,7 @@ loadvars(){
 						if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 							export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 						fi
+						echo 20000 > /var/www/html/openWB/ramdisk/soctimer1
 					fi
 					echo 1 > /var/www/html/openWB/ramdisk/plugstats1
 					plugstat2=1
