@@ -63,7 +63,7 @@ if [[ $? == "0" ]] ; then
 			if [ -f "/var/www/html/openWB/ramdisk/goewatt0pos" ]; then
 				python /var/www/html/openWB/runs/simcount.py $wattc goe goeposkwh goenegkwh
 			else
-				#Benutze den Zählerstand aus pluggedladunglp1startkwh als Startwert für die Simulation
+				#Benutze den Zählerstand aus temp_kWhCounter_lp1 als Startwert für die Simulation
 				simenergy=$(echo "scale=0; $temp_kWhCounter_lp1*3600000/1" | bc)
 				echo $simenergy > /var/www/html/openWB/ramdisk/goewatt0pos
 			fi
@@ -76,7 +76,7 @@ if [[ $? == "0" ]] ; then
 			simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goeposkwh)/1000" | bc)
 			echo $simenergy > /var/www/html/openWB/ramdisk/llkwh
 		else
-			#Wenn die Simulation noch nicht gelaufen ist, nehme den Wert pluggedladunglp1startkwh
+			#Wenn die Simulation noch nicht gelaufen ist, nehme den Wert temp_kWhCounter_lp1
 			echo $temp_kWhCounter_lp1 > /var/www/html/openWB/ramdisk/llkwh
 		fi
 	fi
