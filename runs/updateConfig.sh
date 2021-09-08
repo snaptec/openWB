@@ -323,6 +323,9 @@ updateConfig(){
 	if ! grep -Fq "socuser=" $ConfigFile; then
 		echo "socuser=username" >> $ConfigFile
 	fi
+	if ! grep -Fq "socopts=" $ConfigFile; then
+		echo "socopts=''" >> $ConfigFile
+	fi
 	if ! grep -Fq "zoelp2username=" $ConfigFile; then
 		echo "zoelp2username=username" >> $ConfigFile
 	fi
@@ -1567,6 +1570,9 @@ updateConfig(){
 		echo "soc2pass=''" >> $ConfigFile
 	else
 		sed -i "/soc2pass='/b; s/^soc2pass=\(.*\)/soc2pass=\'\1\'/g" $ConfigFile
+	fi
+	if ! grep -Fq "soc2opts=" $ConfigFile; then
+		echo "soc2opts=''" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc2pin=" $ConfigFile; then
 		echo "soc2pin=pin" >> $ConfigFile

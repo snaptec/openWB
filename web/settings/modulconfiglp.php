@@ -1399,6 +1399,23 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmopts" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="socopts" class="col-md-4 col-form-label">Option</label>
+										<div class="col">
+											<input class="form-control" type="text" name="socopts" id="socopts" value="<?php echo $socoptsold ?>">
+										</div>
+									</div>
+                                    <div class="card-text alert alert-info">
+											Mögliche Werte:<br><ul>
+											<li>-q | --MQTT Debughilfe, es wird ein weitere Zweig im MQTT geschrieben.
+                                              Alle auslesbaren Daten werden unter /Skoda/... abgelegt.</li> 
+											<li>-c | --car Debughilfe, es wird eine Protokoldatei "./carinfo_{lp}.json" mit den Rohdaten erstellt</li>
+                                            </ul>
+									</div>
+								</div>
+							</div>
 							<div id="soczoe" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2268,6 +2285,7 @@
 							hideSection('#socmkia');
 							hideSection('#socmuser');
 							hideSection('#socmpass');
+							hideSection('#socmopts');
 							hideSection('#socmyrenault');
 							hideSection('#socmypeugeot');
 							hideSection('#socmyopel');
@@ -2283,6 +2301,11 @@
 							} else {
 								showSection('#socmodullp1', false); // do not enable all input child-elements!
 								showSection('#stopsocnotpluggedlp1');
+							}
+							if($('#socmodul').val() == 'soc_citigo') {
+								showSection('#socmuser');
+								showSection('#socmpass');
+								showSection('#socmopts');
 							}
 							if($('#socmodul').val() == 'soc_volvo') {
 								showSection('#socmuser');
@@ -2996,6 +3019,23 @@
 										<div class="col">
 											<input class="form-control" type="password" name="soc2pass" id="soc2pass" value="<?php echo $soc2passold ?>">
 										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmopts2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2opts" class="col-md-4 col-form-label">Option</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2opts" id="soc2opts" value="<?php echo $soc2optsold ?>">
+										</div>
+									</div>
+                                    <div class="card-text alert alert-info">
+											Mögliche Werte:<br><ul>
+											<li>-q | --MQTT Debughilfe, es wird ein weitere Zweig im MQTT geschrieben.
+                                              Alle auslesbaren Daten werden unter /Skoda/... abgelegt.</li> 
+											<li>-c | --car Debughilfe, es wird eine Protokoldatei "./carinfo_{lp}.json" mit den Rohdaten erstellt</li>
+                                            </ul>
 									</div>
 								</div>
 							</div>
@@ -4205,6 +4245,7 @@
 							hideSection('#socmtype2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
+							hideSection('#socmopts2');
 							hideSection('#socmpin2');
 							hideSection('#socmnone1');
 							hideSection('#socmhttp1');
@@ -4332,6 +4373,11 @@
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3144')
 								showSection('#socsupportinfolp2');
 								showSection('#socmanuallp2');
+							}
+							if($('#socmodul1').val() == 'soc_citigolp2') {
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmopts2');
 							}
 							if($('#socmodul1').val() == 'soc_volvolp2') {
 								showSection('#socmuser2');
