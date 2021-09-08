@@ -418,23 +418,14 @@ h3 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
-	--color-sh1: #fd8d3c;
-	--color-sh2: #f16913;
-	--color-sh3: #d94801;
-	--color-sh4: #fdae6b;
-	--color-sh5: #fdd0a2;
-	--color-sh6: #fee6ce;
-	--color-sh7: #a63603;
-	--color-sh8: #fe4b83;
-	--color-sh9: #e4419d;
-	--color-co1: #bf3caf;
+		--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 5px;
 	--fontCol: rgba(255, 255, 255, 0.82);
 	--gridCol: rgba(255, 255, 255, 0.82);
 	--xgridCol: rgba(255, 255, 255, 0.1);
 	--tickCol: rgba(255, 255, 255, 0.82);
-	--evuCol: rgba(255, 0, 0, 0.7);
+	--evuCol: rgba(255, 0, 0, 0.7);	
 }
 
 .theme-dark {
@@ -461,15 +452,6 @@ h3 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
-	--color-sh1: #fd8d3c;
-	--color-sh2: #f16913;
-	--color-sh3: #d94801;
-	--color-sh4: #fdae6b;
-	--color-sh5: #fdd0a2;
-	--color-sh6: #fee6ce;
-	--color-sh7: #a63603;
-	--color-sh8: #fe4b83;
-	--color-sh9: #e4419d;
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 0px;
@@ -499,6 +481,12 @@ h3 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
+		--color-co1: #bf3caf;
+	--color-co2: #963db3;
+	--padding-widget: 0px;
+}
+
+.shcolors-normal {
 	--color-sh1: #fd8d3c;
 	--color-sh2: #f16913;
 	--color-sh3: #d94801;
@@ -508,11 +496,19 @@ h3 {
 	--color-sh7: #a63603;
 	--color-sh8: #fe4b83;
 	--color-sh9: #e4419d;
-	--color-co1: #bf3caf;
-	--color-co2: #963db3;
-	--padding-widget: 0px;
 }
 
+.shcolors-advanced {
+	--color-sh1: #ffffff;
+	--color-sh2: #ff4d4d;
+	--color-sh3: #668cff;
+	--color-sh4: #ff6600;
+	--color-sh5: #00ff00;
+	--color-sh6: #ffff00;
+	--color-sh7: #ff00ff;
+	--color-sh8: #993300;
+	--color-sh9: #a366ff;
+}
 .openwb-devices {
 	color: #ccffff;
 	background-color: #009696;

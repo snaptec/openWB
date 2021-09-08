@@ -4,24 +4,31 @@ rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
 output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/status)
 if [[ $? == "0" ]] ; then
+	goecorrectionfactor=$(echo "scale=0;$goecorrectionfactorlp2 * 100000 /1" |bc)
 	watt=$(echo $output | jq -r '.nrg[11]')
 	watt=$(echo "scale=0;$watt * 10 /1" |bc)
 	if [[ $watt =~ $re ]] ; then
-		echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
+		if [[ $goesimulationlp1 == "0" ]] ; then
+			echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
+		else
+			wattc=$((watt*$goecorrectionfactor/100000))
+			wattc=$(echo "scale=0;$wattc" |bc)
+			echo $wattc > /var/www/html/openWB/ramdisk/llaktuells1
+		fi
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
-	lla1=$(echo "scale=0;$lla1 / 10" |bc)
-	if [[ $lla1 =~ $re ]] ; then
+	lla1=$(echo "scale=1;$lla1 / 10" |bc)
+	if [[ $lla1 =~ $rekwh ]] ; then
 		echo $lla1 > /var/www/html/openWB/ramdisk/llas11
 	fi
 	lla2=$(echo $output | jq -r '.nrg[5]')
-	lla2=$(echo "scale=0;$lla2 / 10" |bc)
-	if [[ $lla2 =~ $re ]] ; then
+	lla2=$(echo "scale=1;$lla2 / 10" |bc)
+	if [[ $lla2 =~ $rekwh ]] ; then
 		echo $lla2 > /var/www/html/openWB/ramdisk/llas12
 	fi
 	lla3=$(echo $output | jq -r '.nrg[6]')
-	lla3=$(echo "scale=0;$lla3 / 10" |bc)
-	if [[ $lla3 =~ $re ]] ; then
+	lla3=$(echo "scale=1;$lla3 / 10" |bc)
+	if [[ $lla3 =~ $rekwh ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/llas13
 	fi
 	llv1=$(echo $output | jq -r '.nrg[0]')
@@ -37,19 +44,39 @@ if [[ $? == "0" ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llvs13
 	fi
 	llkwh=$(echo $output | jq -r '.eto')
-	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
-	#if [[ $llkwh =~ $rekwh ]] ; then
-	#	echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
-	#fi
-    
-    #simulation der Energiemenge während des ladens
-	#wenn die Dateien noch nicht da sind, werden sie angelegt sobald das Auto nicht angesteckt ist.
-	if [ -f "/var/www/html/openWB/ramdisk/goe2watt0neg" ]; then
-		if [ -f "/var/www/html/openWB/ramdisk/goe2watt0pos" ]; then
-			python /var/www/html/openWB/runs/simcount.py $watt goe2 goe2poskwh goe2negkwh
+	llkwh=$(echo "scale=3;$llkwh / 10" |bc)	
+	if [[ $goesimulationlp2 == "0" ]] ; then
+		if [[ $llkwh =~ $rekwh ]] ; then
+			echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
+		fi
+	else	
+		temp_kWhCounter_lp2=$(</var/www/html/openWB/ramdisk/temp_kWhCounter_lp2)
+		#simulation der Energiemenge während des ladens
+		#wenn die Dateien noch nicht da sind, werden sie angelegt. Simulation startet im nächsten Regelschritt.
+		if [ -f "/var/www/html/openWB/ramdisk/goe2watt0neg" ]; then
+			if [ -f "/var/www/html/openWB/ramdisk/goe2watt0pos" ]; then
+				python /var/www/html/openWB/runs/simcount.py $wattc goe2 goe2poskwh goe2negkwh
+			else
+				#Benutze den Zählerstand aus temp_kWhCounter_lp2 als Startwert für die Simulation
+				simenergy=$(echo "scale=0; $temp_kWhCounter_lp2*3600000/1" | bc)
+				echo $simenergy > /var/www/html/openWB/ramdisk/goe2watt0pos
+			fi
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/goe2watt0neg
+		fi
+		#der ausgelesene Zählerstand wird ignoriert und stattdessen die Leistung aufintegriert
+		#Grund: der ausgelesene Zählerstand hat eine Auflösung von 1kWh -> zu ungenau in der Darstellung
+		if [ -f "/var/www/html/openWB/ramdisk/goe2poskwh" ]; then
+			simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goe2poskwh)/1000" | bc)
+			echo $simenergy > /var/www/html/openWB/ramdisk/llkwhs1
+		else
+			#Wenn die Simulation noch nicht gelaufen ist, nehme den Wert temp_kWhCounter_lp2
+			echo $temp_kWhCounter_lp2 > /var/www/html/openWB/ramdisk/llkwhs1
 		fi
 	fi
-    
+	
+	
+	
 	#car status 1 Ladestation bereit, kein Auto
 	#car status 2 Auto lädt
 	#car status 3 Warte auf Fahrzeug
@@ -57,24 +84,8 @@ if [[ $? == "0" ]] ; then
 	car=$(echo $output | jq -r '.car')
 	if [[ $car == "1" ]] ; then
 		echo 0 > /var/www/html/openWB/ramdisk/plugstats1
-        #wenn das Auto nicht angesteckt ist, wird der simulierte Zählerstand mit dem ausgelesenen Zählerstand überschrieben
-		#Damit wird die Simulation wieder mit dem Zähler des Go-E abgeglichen, die Nachkommestellen gehen allerdings verloren.
-		echo 0 > /var/www/html/openWB/ramdisk/goe2watt0neg
-		if [[ $llkwh =~ $rekwh ]] ; then
-			echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
-			simenergy=$(echo "scale=0; $(</var/www/html/openWB/ramdisk/llkwhs1)*3600000/1" | bc)
-			echo $simenergy > /var/www/html/openWB/ramdisk/goe2watt0pos
-		fi
 	else
 		echo 1 > /var/www/html/openWB/ramdisk/plugstats1
-        #wenn das Auto angesteckt ist, wird der ausgelesene Zählerstand ignoriert und stattdessen die Leistung aufintegriert
-		#Grund: der ausgelesene Zählerstand hat eine Auflösung von 1kWh -> zu ungenau in der Darstellung
-		if [ -f "/var/www/html/openWB/ramdisk/goe2poskwh" ]; then
-            simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goe2poskwh)/1000" | bc)
-		    echo $simenergy > /var/www/html/openWB/ramdisk/llkwhs1
-        else
-            echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
-        fi
 	fi
 	if [[ $car == "2" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestats1
