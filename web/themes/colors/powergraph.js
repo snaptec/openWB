@@ -563,7 +563,7 @@ class PowerGraph {
         .attr("y", d => yScale(d[1]))
         .attr("height", d => yScale(d[0]) - yScale(d[1]))
         .attr("width", this.xScale.bandwidth())
-      rects.append("svg:title").text((d) => formatWatt(d[1] - d[0]));
+      rects.append("svg:title").text((d) => formatWattH(d[1] - d[0]));
     } else {
       svg.selectAll(".sourceareas")
         .data(stackedSeries)
@@ -624,7 +624,7 @@ class PowerGraph {
     const stackGen = d3.stack().keys(keys[wbdata.usageStackOrder]);
     const stackedSeries = stackGen(this.graphData);
     if (wbdata.graphMode == 'month') {
-      svg.selectAll(".sourcebar")
+      var rects = svg.selectAll(".sourcebar")
         .data(stackedSeries).enter()
         .append("g")
         .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]])
@@ -635,6 +635,7 @@ class PowerGraph {
         .attr("y", d => yScale(d[0]))
         .attr("height", d => yScale(d[1]) - yScale(d[0]))
         .attr("width", this.xScale.bandwidth())
+      rects.append("svg:title").text((d) => formatWattH(d[1] - d[0]));
     } else {
       svg.selectAll(".targetareas")
         .data(stackedSeries)
