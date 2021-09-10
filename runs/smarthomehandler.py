@@ -991,6 +991,14 @@ def conditions(nummer):
         standbyduration = int(config.get('smarthomedevices', 'device_standbyduration_'+str(nummer)))
     except:
         standbyduration = 0
+    try:
+        ontime = str(config.get('smarthomedevices', 'device_ontime_'+str(nummer)))
+    except:
+        ontime = '00:00'
+    try:
+        startupmuldetection = int(config.get('smarthomedevices', 'device_startupmuldetection_'+str(nummer)))
+    except:
+        startupmuldetection = 0
     file_charge= '/var/www/html/openWB/ramdisk/llkombiniert'
     testcharge = 0
     if os.path.isfile(file_charge):
@@ -1013,6 +1021,18 @@ def conditions(nummer):
     localhour = int(local_time.strftime(format = "%H"))
     localminute = int(local_time.strftime(format = "%M"))
     localinsec = int(( localhour * 60 * 60 )  + (localminute * 60))
+    # onnow = 0 -> normale Regelung
+    # onnow = 1 -> Zeitpunkt erreciht, immer ein ohne Ueberschuss regelung
+    onnow = 0
+    if (ontime != '00:00'):
+        onhour = int(str("0") +str(ontime).partition(':')[0])
+        onminute = int(str(ontime)[-2:] )
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Immer an nach definiert " + str(onhour) + ":" +  str ('%.2d' % onminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute))
+        if ((onhour > localhour )  or  ((onhour == localhour ) and (onminute >=localminute) )):
+            pass
+        else:
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen Immer an nach")
+            onnow = 1
     if (finishtime != '00:00') and (DeviceOn[nummer-1] ==str("0")):
         finishhour = int(str("0") +str(finishtime).partition(':')[0])
         finishminute = int(str(finishtime)[-2:] )
@@ -1057,7 +1077,7 @@ def conditions(nummer):
                     oldueberschussberechnung = 0
                     devuberschuss = 0
                     ( devuberschuss, oldueberschussberechnung)= getueb(nummer)
-                    if ( devuberschuss > einschwelle):
+                    if (( devuberschuss > einschwelle) or (onnow == 1)):
                         try:
                             del DeviceCounters[str(nummer)+"ausverz"]
                         except:
@@ -1066,7 +1086,7 @@ def conditions(nummer):
                             del DeviceCounters[str(nummer)+"einverz"]
                         except:
                             pass
-                        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle, schalte ein (ohne Einschaltverzoegerung) " + str(einschwelle) )
+                        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle oder Immer an zeit erreicht, schalte ein (ohne Einschaltverzoegerung) " + str(einschwelle) )
                         turndevicerelais(nummer, 1,oldueberschussberechnung,1)
                     else:
                         logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " kleiner Einschaltschwelle, schalte aus " + str(einschwelle) )
@@ -1145,12 +1165,33 @@ def conditions(nummer):
     if (devstatus == 20):
         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung immer noch aktiv, keine Ueberprüfung auf Einschalt oder Ausschaltschwelle ")
         return
-    if ( devuberschuss > einschwelle):
+    # Device mit Anlauferkennung (mehrfach pro tag) welches im PV Modus ist ?
+    if (devstatus == 10) and (startupmuldetection == 1) and (startupdetection == 1) and (int(DeviceOn[nummer-1]) > 0):
+        if  str(nummer)+"eintime" in DeviceCounters:
+            timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
+            if ( mineinschaltdauer < timestart):
+                logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, restarte Anlauferkennung ")
+                del DeviceCounters[str(nummer) + "eintime"]
+                setstat(nummer,20)
+                DeviceOnStandby[nummer-1] = str("0")
+                DeviceOn[nummer-1] = str("0")
+                logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
+                turndevicerelais(nummer, 1,0,0)
+                return
+        else:
+            logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, restarte Anlauferkennung ")
+            setstat(nummer,20)
+            DeviceOnStandby[nummer-1] = str("0")
+            DeviceOn[nummer-1] = str("0")
+            logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun aktiv, eingeschaltet ")
+            turndevicerelais(nummer, 1,0,0)
+            return
+    if (( devuberschuss > einschwelle) or (onnow == 1)):
         try:
             del DeviceCounters[str(nummer)+"ausverz"]
         except:
             pass
-        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle " + str(einschwelle) )
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss "  + str(devuberschuss) + " größer Einschaltschwelle oder Immer an zeit erreicht " + str(einschwelle) )
         if ( DeviceValues[str(nummer)+"relais"] == 0 ):
             #speichersocbeforestart
             #if ( speichersoc < speichersocbeforestart ):
@@ -1202,7 +1243,7 @@ def conditions(nummer):
             del DeviceCounters[str(nummer)+"einverz"]
         except:
             pass
-        if ( devuberschuss < ausschwelle):
+        if (devuberschuss < ausschwelle) :
             if ( speichersoc > speichersocbeforestop ):
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name)+ " SoC höher als Abschalt SoC, lasse Gerät weiterlaufen")
                 return
