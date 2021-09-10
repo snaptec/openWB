@@ -365,7 +365,7 @@ $numDevices = 9;
 																<input type="radio" name="device_startupMulDetectionDevices<?php echo $devicenum; ?>" id="device_startupMulDetection<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 															</label>
 														</div>
-														<span class="form-text small">Diese Option sorgt dafür, dass das Gerät nach absolvieren der Mindesteinschaltdauer sofort wieder in den Standby schaltet. Wenn du Option nicht gesetzt ist, bleibt das Gerät an und wird erst beim Erreichen der Ausschaltbedigung abgestellt.</span>
+														<span class="form-text small">Diese Option sorgt dafür, dass das Gerät nach absolvieren der Mindesteinschaltdauer sofort wieder in den Standby schaltet. Wenn die Option nicht gesetzt ist, bleibt das Gerät an und wird erst beim Erreichen der Ausschaltbedigung abgestellt.</span>
 														</span>
 														<span class="form-text small text-danger">Das Feature befindet sich noch in der Entwicklung!</span>
 													</div>
@@ -551,7 +551,7 @@ $numDevices = 9;
 											<option value="we514" data-option="we514">WE514</option>
 											<option value="avm" data-option="avm">AVM</option>
 											<option value="mqtt" data-option="mqtt">Mqtt</option>
-											<option value="sma" data-option="sma">SMA Energie Meter</option>
+											<option value="smaem" data-option="smaem">SMA Energy Meter</option>
 											<option value="sdm120" data-option="sdm630">SDM120</option>
 										</select>
 									</div>
@@ -640,19 +640,19 @@ deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
 									</div>
 								</div>
 
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sma hide">
-									<label for="device_measuresmaserDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">SMA Serienummer</label>
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-smaem hide">
+									<label for="device_measuresmaserDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">SMA Seriennummer</label>
 									<div class="col">
 										<input id="device_measuresmaserDevices<?php echo $devicenum; ?>" name="device_measuresmaser" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Serienummer des Sma Energie Meter.</span>
+										<span class="form-text small">Seriennummer des Sma Energy Meter.</span>
 									</div>
 								</div>
 
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sma hide">
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-smaem hide">
 									<label for="device_measuresmaageDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Alter Return File</label>
 									<div class="col">
-										<input id="device_measuresmaageDevices<?php echo $devicenum; ?>" name="device_measuresmaage" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Parameter in Sekunden, der bestimmt, wie alt das Return file sein darf .</span>
+										<input id="device_measuresmaageDevices<?php echo $devicenum; ?>" name="device_measuresmaage" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="15" value="15" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Parameter in Sekunden, der bestimmt, wie alt die Datendatei sein darf .</span>
 									</div>
 								</div>
 
