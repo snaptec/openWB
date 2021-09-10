@@ -87,6 +87,7 @@ class YieldMeter {
 
 	drawChart(svg) {
 		const ymax = d3.max(this.plotdata, (d) => d.energy);
+		const xCount = this.plotdata.length;		
 		this.xScale.domain(this.plotdata.map((d) => d.name));
 		this.yScale.domain([0, ymax]);
 		const bargroups = svg
@@ -152,7 +153,6 @@ class YieldMeter {
 			.attr("fill", (d) => d.color)
 			.text((d) => (formatWattH(d.energy * 1000)));
 
-
 		const categories = svg.selectAll(".category")
 			.data(this.plotdata)
 			.enter()
@@ -164,7 +164,7 @@ class YieldMeter {
 			.attr("font-size", this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
-			.text((d) => (d.name));
+			.text((d) => (truncateCategorie(d.name, xCount)));	
 	}
 
 	updateHeading() {
@@ -189,5 +189,24 @@ class YieldMeter {
 		d3.select("h3#energyheading").text(heading);
 	}
 }
+
+function truncateCategorie(categorie, xCount) {
+	if (xCount <= 5) {
+		textLength = 12;
+	} else if (xCount == 6) {
+		textLength = 7;
+	} else if (xCount > 6 && xCount <= 8) {
+		textLength = 6;
+	} else {
+		textLength = 5;
+	}
+	
+	if (categorie.length > textLength) {
+		return categorie.substr(0, textLength) + '.';
+	} else {
+		return categorie;
+	}
+}
+
 var yieldMeter = new YieldMeter();
 
