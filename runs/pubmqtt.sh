@@ -288,7 +288,7 @@ for mq in "${!mqttvar[@]}"; do
 	fi
 done
 
-sysinfo=$(php web/tools/programmloggerinfo.php 2>/dev/null)
+sysinfo=$(cd web/tools; sudo php programmloggerinfo.php 2>/dev/null)
 tempPubList="${tempPubList}\nopenWB/global/cpuUse=$(echo ${sysinfo} | jq -r '.cpuuse')"
 tempPubList="${tempPubList}\nopenWB/global/cpuTemp=$(echo "scale=2; $(echo ${sysinfo} | jq -r '.cputemp') / 1000" | bc)"
 tempPubList="${tempPubList}\nopenWB/global/cpuFreq=$(($(echo ${sysinfo} | jq -r '.cpufreq') / 1000))"
