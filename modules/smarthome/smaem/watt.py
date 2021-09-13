@@ -57,12 +57,12 @@ signal.signal(signal.SIGINT, abortprogram)
 devicenumber = str(sys.argv[1]) # SmartHomeDevice-Nummer
 smaserial = sys.argv[2] # SMA EnergyMeter Serial number
 secondssincelastmetering = sys.argv[3] # Seconds since last metering, useful for handling with more than one EnergyMeter
-debugmodus = sys.argv[4] # Switch for activating debug log "ramdisk/smaem.log": 0 = off / 1 = on
 
 # TEST until we have the GUI configuration
-debugmodus = 0
 secondssincelastmetering = 15
 # TEST
+
+debugmodus = 1
 
 ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
