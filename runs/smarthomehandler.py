@@ -1060,6 +1060,11 @@ def conditions(nummer):
             setstat(nummer,10)
             return
     # here startup device_startupdetection
+    if (startupdetection == 0) and (devstatus == 20):
+        setstat(nummer,10)
+        turndevicerelais(nummer, 0,0,1)
+        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun abgeschaltet ")
+        return
     #remove condition that device has to be off
     if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
         setstat(nummer,20)
