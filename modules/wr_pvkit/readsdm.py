@@ -27,7 +27,7 @@ if len(sys.argv) >= 5:
         mbid=int(sys.argv[4])
 
 
-client = ModbusTcpClient('192.168.193.13', port=8899)
+#client = ModbusTcpClient('192.168.193.13', port=8899)
 client = ModbusTcpClient(mbip,port=mbport)
 #client.host(mbip)
 #client.port(mbport)
