@@ -242,7 +242,7 @@
 							<div class="form-row mb-1">
 								<label for="evuflexversion" class="col-md-4 col-form-label">Version des openWB evu Kits</label>
 								<div class="col">
-									<select name="evukitflexversion" id="evukitflexversion" class="form-control">
+									<select name="evuflexversion" id="evuflexversion" class="form-control">
 										<option <?php if($evuflexversionold == 0) echo "selected" ?> value="0">EVU Kit MPM3PM</option>
 										<option <?php if($evuflexversionold == 1) echo "selected" ?> value="1">EVU Kit var 2 Lovato</option>
 										<option <?php if($evuflexversionold == 2) echo "selected" ?> value="2">EVU Kit SDM</option>
