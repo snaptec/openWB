@@ -24,5 +24,5 @@ elif (( pvkitversion == 2 )); then
 else
 	#python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readmpm3pm.py "2" "192.168.193.13" "8899" "8" >>${MYLOGFILE} 2>&1
 fi
-pvwatt=$(<${RAMDISKDIR}/pvwatt)
+pvwatt=$(<${RAMDISKDIR}/pv2watt)
 echo $pvwatt
