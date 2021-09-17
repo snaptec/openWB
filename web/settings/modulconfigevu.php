@@ -249,6 +249,32 @@
 									</select>
 								</div>
 							</div>
+							<div class="form-row mb-1">
+								<label for="evuflexip" class="col-md-4 col-form-label">EVU Adapter IP</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evuflexip" id="evuflexip" value="<?php echo $evuflexipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										IP Adresse des Protoss/Elfin Adapters.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="evuflexport" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="evuflexport" id="evuflexport" value="<?php echo (empty($evuflexportold)?'502':$evuflexportold) ?>">
+									<span class="form-text small">
+										TCP Port der im Protoss/Elfin konfiguriert ist.<br>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+									<label for="evuflexid" class="col-md-4 col-form-label">Unit ID</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evuflexid" id="evuflexid" value="<?php echo $evuflexidold ?>">
+										<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
+									</div>
+								</div>
 						</div>
 						<div id="wattbezugsolarview" class="hide">
 							<div class="card-text alert alert-info">
