@@ -17,7 +17,7 @@ def setup_connection():
     try:
         global client
         client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
-        client.connect("localhost", 1883)
+        client.connect("localhost", 1886)
         client.loop_start()
     except Exception as e:
         log.exception_logging(e)
@@ -50,7 +50,7 @@ def delete_connection():
     except Exception as e:
         log.exception_logging(e)
 
-def pub_single(topic, payload, hostname):
+def pub_single(topic, payload, hostname, no_json = False):
     """ published eine einzelne Nachricht an einen Host, der nicht der localhost ist.
 
         Parameter
@@ -61,8 +61,13 @@ def pub_single(topic, payload, hostname):
         Payload, der gepusht werden soll. Nicht als json, da ISSS kein json-Payload verwendet.
     hostname: str
         IP des Hosts
+    no_json: bool
+        Kompabilität mit isss, die ramdisk verwenden.
     """
     try:
-        publish.single(topic, json.dumps(payload), hostname=hostname)
+        if no_json == False:
+            publish.single(topic, json.dumps(payload), hostname=hostname)
+        else:
+            publish.single(topic, payload, hostname=hostname)
     except Exception as e:
         log.exception_logging(e)

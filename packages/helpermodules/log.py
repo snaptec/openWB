@@ -1,5 +1,5 @@
-# """Log-Modul, dass die KOnfiguration für die Log-Dateien und Funktionen zum Aufruf der einzelnen Handler enthält
-# """
+"""Log-Modul, dass die KOnfiguration für die Log-Dateien und Funktionen zum Aufruf der einzelnen Handler enthält
+"""
 
 from datetime import datetime, timezone
 import filelock
@@ -140,8 +140,17 @@ def cleanup_logfiles():
         subprocess.run(["./packages/helpermodules/cleanup_log.sh", "/var/www/html/openWB/data/debug/mqtt.log"])
 
 def log_1_9(message):
-    """
+    """ Logging für 1.9
     """
     local_time = datetime.now(timezone.utc).astimezone()
     myPid = str(os.getpid())
     print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+
+def log_exception_comp(exception, ramdisk):
+    """ Logging für 1.9 (ramdisk = True) und 2.x (ramdisk = False).
+    """
+    if ramdisk == False:
+        exception_logging(exception)
+    else:
+        traceback.print_exc()
+        exit(1)
