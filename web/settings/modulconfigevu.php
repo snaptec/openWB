@@ -106,6 +106,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_mpm3pm") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
 										<option <?php if($wattbezugmodulold == "bezug_mqtt") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 										<option <?php if($wattbezugmodulold == "sdm630modbusbezug") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
+										<option <?php if($wattbezugmodulold == "bezug_ethmpm3pmflex") echo "selected" ?> value="bezug_ethmpm3pmflex">openWB EVU Kit flexible IP</option>
 										<option <?php if($wattbezugmodulold == "vzlogger") echo "selected" ?> value="vzlogger">VZLogger</option>
 									</optgroup>
 								</select>
@@ -233,6 +234,18 @@
 										<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit MPM3PM</option>
 										<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit var 2 Lovato</option>
 										<option <?php if($evukitversionold == 2) echo "selected" ?> value="2">EVU Kit SDM</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div id="wattbezugethmpm3pmflex" class="hide">
+							<div class="form-row mb-1">
+								<label for="evukitflexversion" class="col-md-4 col-form-label">Version des openWB evu Kits</label>
+								<div class="col">
+									<select name="evukitflexversion" id="evukitflexversion" class="form-control">
+										<option <?php if($evukitflexversionold == 0) echo "selected" ?> value="0">EVU Kit MPM3PM</option>
+										<option <?php if($evukitflexversionold == 1) echo "selected" ?> value="1">EVU Kit var 2 Lovato</option>
+										<option <?php if($evukitflexversionold == 2) echo "selected" ?> value="2">EVU Kit SDM</option>
 									</select>
 								</div>
 							</div>
@@ -863,6 +876,7 @@
 								hideSection('#wattbezugsbs25');
 								hideSection('#wattbezuge3dc');
 								hideSection('#wattbezugethmpm3pm');
+								hideSection('#wattbezugethmpm3pmflex');
 								hideSection('#wattbezugplentihaus');
 								hideSection('#wattbezugkostalpiko');
 								hideSection('#wattbezugkostalsmartenergymeter');
@@ -991,6 +1005,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
 									showSection('#wattbezugethmpm3pm');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_ethmpm3pmflex')   {
+									showSection('#wattbezugethmpm3pmflex');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
 									showSection('#wattbezugsbs25');

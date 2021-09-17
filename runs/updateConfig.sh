@@ -810,9 +810,6 @@ updateConfig(){
 	if ! grep -Fq "name_wechselrichter2=" $ConfigFile; then
 		echo "name_wechselrichter2=WR2" >> $ConfigFile
 	fi
-	if ! grep -Fq "name_wechselrichter3=" $ConfigFile; then
-		echo "name_wechselrichter3=WR3" >> $ConfigFile
-	fi
 	if ! grep -Fq "hook1ein_url=" $ConfigFile; then
 		echo "hook1ein_url='https://webhook.com/ein.php'" >> $ConfigFile
 	fi
@@ -2122,6 +2119,11 @@ updateConfig(){
 	fi
 	if ! grep -Fq "virtual_ip_wlan0=" $ConfigFile; then
 		echo "virtual_ip_wlan0='192.168.193.6'" >> $ConfigFile
+	fi
+	if ! grep -Fq "evuflexip=" $ConfigFile; then
+		echo "evuflexip='192.168.193.5'" >> $ConfigFile
+		echo "evuflexport=8899" >> $ConfigFile
+		echo "evuflexid=1" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }
