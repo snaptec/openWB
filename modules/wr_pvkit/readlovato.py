@@ -14,10 +14,10 @@ numpv = 1
 
 #Check Argumentlist and replace Defaults if present
 if len(sys.argv) >= 2:
-	numpv=str(sys.argv[1])
+	numpv=int(sys.argv[1])
 
 if len(sys.argv) >= 3:
-	mbip=int(sys.argv[2])
+	mbip=str(sys.argv[2])
 
 if len(sys.argv) >= 4:
 	mbport=int(sys.argv[3])
