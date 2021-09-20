@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo python /var/www/html/openWB/modules/bezug_ksem/readksem.py $ksemip
+sudo python3 /var/www/html/openWB/packages/modules/counter/kostal_smart_energy_meter.py "${ksemip}"
 
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug

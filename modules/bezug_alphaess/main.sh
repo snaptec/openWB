@@ -1,9 +1,6 @@
 #!/bin/bash
-if [[ $alphav123 == "1" ]]; then
-	python /var/www/html/openWB/modules/bezug_alphaess/readv123.py
-else
-	python /var/www/html/openWB/modules/bezug_alphaess/readalpha.py
-fi
+
+sudo python3 /var/www/html/openWB/packages/modules/counter/alpha_ess.py "${alphav123}"
 
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug
