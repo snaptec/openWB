@@ -307,13 +307,12 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
-									<label for="pvflexid" class="col-md-4 col-form-label">Unit ID</label>
-									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="pvflexid" id="pvflexid" value="<?php echo $pvflexidold ?>">
-										<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
-									</div>
+								<label for="pvflexid" class="col-md-4 col-form-label">Unit ID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" max="254" step="1" name="pvflexid" id="pvflexid" value="<?php echo $pvflexidold ?>">
+									<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
 								</div>
-
+							</div>
 						</div>
 						<div id="pvplenti" class="hide">
 							<div class="form-row mb-1">
@@ -364,8 +363,7 @@
 									</span>
 								</div>
 							</div>
-							</div>
-								<div class="form-row mb-1">
+							<div class="form-row mb-1">
 								<label for="name_wechselrichter3" class="col-md-4 col-form-label">WR 3 Name</label>
 								<div class="col">
 									<input class="form-control" type="text" name="name_wechselrichter3" id="name_wechselrichter3" value="<?php echo $name_wechselrichter3old ?>">
@@ -373,6 +371,7 @@
 										Freie Bezeichnung des dritten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 									</span>
 								</div>
+							</div>
 						</div>
 						<div id="pvsmartme" class="hide">
 							<div class="form-row mb-1">
