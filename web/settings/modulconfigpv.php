@@ -79,6 +79,7 @@
 										<option <?php if($pvwattmodulold == "wr_lgessv1") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($pvwattmodulold == "wr_fems") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($pvwattmodulold == "wr_powerdog") echo "selected" ?> value="wr_powerdog">Powerdog</option>
+										<option <?php if($pvwattmodulold == "wr_powerfox") echo "selected" ?> value="wr_powerfox">Powerfox</option>
 										<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
 										<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
 										<option <?php if($pvwattmodulold == "smaemd_pv") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
@@ -786,7 +787,17 @@
 								</div>
 							</div>
 						</div>
-
+						<div id="pvpowerfox" class="hide">
+							<div class="form-row mb-1">
+								<label for="powerfoxpvid" class="col-md-4 col-form-label">Device ID</label>
+								<div class="col">
+									<input class="form-control" type="text" name="powerfoxpvid" id="powerfoxpvid" value="<?php echo $powerfoxpvidold ?>">
+									<span class="form-text small">
+										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.<br>Zugehöriger Benutzername und Passwort werden im Powerfox EVU Modul konfiguriert.
+									</span>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pvwattmodul() {
 								hideSection('#pvvzl');
@@ -822,6 +833,8 @@
 								hideSection('#pvsolarwatt');
 								hideSection('#pvsungrow');
 								hideSection('#pvalphaess');
+								hideSection('#pvpowerfox');
+
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -934,6 +947,10 @@
 								if($('#pvsungrow').val() == 'wr_sungrow')   {
 									showSection('#pvsungrow');
 								}
+								if($('#pvpowerfox').val() == 'wr_powerfox')   {
+									showSection('#pvpowerfox');
+								}
+
 							}
 
 							$(function() {

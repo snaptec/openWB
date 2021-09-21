@@ -1480,6 +1480,9 @@ updateConfig(){
 	if ! grep -Fq "powerfoxid=" $ConfigFile; then
 		echo "powerfoxid=idesmeters" >> $ConfigFile
 	fi
+	if ! grep -Fq "powerfoxpvid=" $ConfigFile; then
+		echo "powerfoxpvid=idesmeters" >> $ConfigFile
+	fi
 	if ! grep -Fq "ksemip=" $ConfigFile; then
 		echo "ksemip=ipdesmeters" >> $ConfigFile
 	fi
