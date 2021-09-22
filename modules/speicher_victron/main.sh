@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo python /var/www/html/openWB/modules/speicher_victron/victron_speicher.py $bezug_victronip
+sudo python3 /var/www/html/openWB/packages/modules/bat/victron.py "${bezug_victronip}"

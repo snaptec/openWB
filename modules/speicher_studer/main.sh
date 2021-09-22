@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /var/www/html/openWB/modules/speicher_studer/studer_speicher.py $studer_ip
+sudo python3 /var/www/html/openWB/packages/modules/bat/studer.py "${studer_ip}"

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo python /var/www/html/openWB/modules/speicher_sbs25/sbs25.py $sbs25ip
+sudo python3 /var/www/html/openWB/packages/modules/bat/sbs25.py "${sbs25ip}"

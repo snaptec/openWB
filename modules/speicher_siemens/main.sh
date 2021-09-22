@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /var/www/html/openWB/modules/speicher_siemens/siemens.py $speicher1_ip
+sudo python3 /var/www/html/openWB/packages/modules/bat/siemens.py "${speicher1_ip}"

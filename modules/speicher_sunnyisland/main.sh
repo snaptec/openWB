@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo python /var/www/html/openWB/modules/speicher_sunnyisland/sunnyisland.py $sunnyislandip
+sudo python3 /var/www/html/openWB/packages/modules/bat/sunnyisland.py "${sunnyislandip}"

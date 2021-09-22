@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /var/www/html/openWB/modules/speicher_solax/solax.py $solaxip
+sudo python3 /var/www/html/openWB/packages/modules/bat/solax.py "${solaxip}"

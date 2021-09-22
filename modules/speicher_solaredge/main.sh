@@ -2,5 +2,5 @@
 if [[ $solaredgespeicherip == $solaredgepvip ]]  ; then
 	echo "value read at pv modul" > /dev/null
 else
-	python /var/www/html/openWB/modules/speicher_solaredge/solaredge.py $solaredgespeicherip $solaredgezweiterspeicher
+	sudo python3 /var/www/html/openWB/packages/modules/bat/solaredge.py "${solaredgespeicherip}" "${solaredgezweiterspeicher}"
 fi

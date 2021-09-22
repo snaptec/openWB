@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /var/www/html/openWB/modules/speicher_sungrow/sungrow.py $speicher1_ip
+sudo python3 /var/www/html/openWB/packages/modules/bat/sungrow.py "${speicher1_ip}"
