@@ -1,5 +1,6 @@
 #!/bin/bash
 
-python /var/www/html/openWB/modules/bezug_siemens/siemens.py $bezug1_ip
+sudo python3 /var/www/html/openWB/packages/modules/counter/siemens.py "${bezug1_ip}"
+
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python /var/www/html/openWB/modules/bezug_solax/solax.py $solaxip
+sudo python3 /var/www/html/openWB/packages/modules/counter/solax.py "${solaxip}"
 
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug
