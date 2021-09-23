@@ -56,9 +56,9 @@ class set_values():
 
     def pub_to_broker(self, num, values):
         try:
-            pub.pub("openWB/set/bat/"+str(num)+"/get/power", round(values[0], 2))
-            pub.pub("openWB/set/bat/"+str(num)+"/get/counter", round(values[1], 3))
+            pub.pub("openWB/set/pv/"+str(num)+"/get/power", round(values[0], 2))
+            pub.pub("openWB/set/pv/"+str(num)+"/get/counter", round(values[1], 3))
             values[2] = [round(val, 1) for val in values[2]]
-            pub.pub("openWB/set/bat/"+str(num)+"/get/current", values[2])
+            pub.pub("openWB/set/pv/"+str(num)+"/get/current", values[2])
         except Exception as e:
             log.log_exception_comp(e, False)
