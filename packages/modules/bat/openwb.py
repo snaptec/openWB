@@ -16,12 +16,12 @@ else:
 
 
 class module(set_values.set_values):
-    def __init__(self, counter_num, ramdisk=False) -> None:
+    def __init__(self, bat_num, ramdisk=False) -> None:
         super().__init__()
         self.ramdisk = ramdisk
         self.data = {}
         self.data["simulation"] = {}
-        self.counter_num = counter_num
+        self.bat_num = bat_num
 
     def read(self):
         """ unterscheidet die Version des EVU-Kits und liest die Werte des Moduls aus.
@@ -77,7 +77,7 @@ class module(set_values.set_values):
             values = [power,
                       0,
                       [imported, exported]]
-            self.set(self.counter_num, values, self.ramdisk)
+            self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
             log.log_exception_comp(e, self.ramdisk)
 
@@ -114,7 +114,7 @@ class module(set_values.set_values):
             values = [power,
                       0,
                       [imported, exported]]
-            self.set(self.counter_num, values, self.ramdisk)
+            self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
             log.log_exception_comp(e, self.ramdisk)
 
@@ -158,7 +158,7 @@ class module(set_values.set_values):
             values = [power,
                       0,
                       [imported, exported]]
-            self.set(self.counter_num, values, self.ramdisk)
+            self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
             log.log_exception_comp(e, self.ramdisk)
 
