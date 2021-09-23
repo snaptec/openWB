@@ -79,6 +79,7 @@
 										<option <?php if($pvwattmodulold == "wr_lgessv1") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($pvwattmodulold == "wr_fems") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($pvwattmodulold == "wr_powerdog") echo "selected" ?> value="wr_powerdog">Powerdog</option>
+										<option <?php if($pvwattmodulold == "wr_powerfox") echo "selected" ?> value="wr_powerfox">Powerfox</option>
 										<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
 										<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
 										<option <?php if($pvwattmodulold == "smaemd_pv") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
@@ -304,6 +305,15 @@
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
 								</div>
+								</div>
+								<div class="form-row mb-1">
+								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
+								<div class="col">
+									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
+									<span class="form-text small">
+										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
+									</span>
+								</div>							
 							</div>
 							<div class="form-row mb-1">
 								<label for="kostalplenticoreip3" class="col-md-4 col-form-label">WR 3 IP Adresse</label>
@@ -314,16 +324,16 @@
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
 								</div>
+							</div>	
 							</div>
-							<div class="form-row mb-1">
-								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
+								<div class="form-row mb-1">
+								<label for="name_wechselrichter3" class="col-md-4 col-form-label">WR 3 Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
+									<input class="form-control" type="text" name="name_wechselrichter3" id="name_wechselrichter3" value="<?php echo $name_wechselrichter3old ?>">
 									<span class="form-text small">
-										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
+										Freie Bezeichnung des dritten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 									</span>
-								</div>
-							</div>
+								</div>				
 						</div>
 						<div id="pvsmartme" class="hide">
 							<div class="form-row mb-1">
@@ -777,7 +787,17 @@
 								</div>
 							</div>
 						</div>
-
+						<div id="pvpowerfox" class="hide">
+							<div class="form-row mb-1">
+								<label for="powerfoxpvid" class="col-md-4 col-form-label">Device ID</label>
+								<div class="col">
+									<input class="form-control" type="text" name="powerfoxpvid" id="powerfoxpvid" value="<?php echo $powerfoxpvidold ?>">
+									<span class="form-text small">
+										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.<br>Zugehöriger Benutzername und Passwort werden im Powerfox EVU Modul konfiguriert.
+									</span>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pvwattmodul() {
 								hideSection('#pvvzl');
@@ -813,6 +833,8 @@
 								hideSection('#pvsolarwatt');
 								hideSection('#pvsungrow');
 								hideSection('#pvalphaess');
+								hideSection('#pvpowerfox');
+
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -925,6 +947,10 @@
 								if($('#pvsungrow').val() == 'wr_sungrow')   {
 									showSection('#pvsungrow');
 								}
+								if($('#pvpowerfox').val() == 'wr_powerfox')   {
+									showSection('#pvpowerfox');
+								}
+
 							}
 
 							$(function() {
@@ -966,6 +992,7 @@
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($pv2wattmodulold == "wr2_json") echo "selected" ?> value="wr2_json">Json Abfrage</option>
+										<option <?php if($pv2wattmodulold == "wr2_mqtt") echo "selected" ?> value="wr2_mqtt">MQTT</option>
 										<option <?php if($pv2wattmodulold == "wr2_ethsdm120") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
 									</optgroup>
 								</select>
@@ -1061,6 +1088,14 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2mqttdiv" class="hide">
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Per MQTT zu schreiben:<br>
+								<span class="text-info">openWB/set/pv/2/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/2/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
 						<div id="pv2piko2" class="hide">
 							<div class="form-row mb-1">
 								<label for="wr2_piko2_user" class="col-md-4 col-form-label">Benutzername</label>
@@ -1102,6 +1137,7 @@
 								hideSection('#pv2id2div');
 								hideSection('#pv2kitdiv');
 								hideSection('#pv2wrjsondiv');
+								hideSection('#pv2mqttdiv');
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
 
@@ -1110,6 +1146,9 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('#pv2wrjsondiv');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_mqtt') {
+									showSection('#pv2mqttdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
 									showSection('#pv2kitdiv');

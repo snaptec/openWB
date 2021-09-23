@@ -389,6 +389,9 @@ h3 {
 	--xgridCol: rgba(160,160,160, 0.82);
 	--tickCol: rgba(160,160,160, 0.82);
 	--evuCol: rgba(178, 34, 34, 1);
+	--color-switchRed: #d12020;
+	--color-switchGreen: #4db662;
+	--color-switchBlue: steelblue;
 	}
 
 
@@ -399,7 +402,6 @@ h3 {
 	--color-evu: firebrick;
 	--color-pv: #33a02c;
 	--color-house: #7f7f7f;
-	--color-devices: #f16913;
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: gray;
@@ -418,15 +420,6 @@ h3 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
-	--color-sh1: #fd8d3c;
-	--color-sh2: #f16913;
-	--color-sh3: #d94801;
-	--color-sh4: #fdae6b;
-	--color-sh5: #fdd0a2;
-	--color-sh6: #fee6ce;
-	--color-sh7: #a63603;
-	--color-sh8: #fe4b83;
-	--color-sh9: #e4419d;
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 5px;
@@ -434,7 +427,7 @@ h3 {
 	--gridCol: rgba(255, 255, 255, 0.82);
 	--xgridCol: rgba(255, 255, 255, 0.1);
 	--tickCol: rgba(255, 255, 255, 0.82);
-	--evuCol: rgba(255, 0, 0, 0.7);
+	--evuCol: rgba(255, 0, 0, 0.7);	
 }
 
 .theme-dark {
@@ -442,7 +435,6 @@ h3 {
 	--color-evu: firebrick;
 	--color-pv: #33a02c;
 	--color-house: #7f7f7f;
-	--color-devices: #f16913;
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: steelblue;
@@ -461,15 +453,6 @@ h3 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
-	--color-sh1: #fd8d3c;
-	--color-sh2: #f16913;
-	--color-sh3: #d94801;
-	--color-sh4: #fdae6b;
-	--color-sh5: #fdd0a2;
-	--color-sh6: #fee6ce;
-	--color-sh7: #a63603;
-	--color-sh8: #fe4b83;
-	--color-sh9: #e4419d;
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 0px;
@@ -480,7 +463,6 @@ h3 {
 	--color-evu: firebrick;
 	--color-pv: #33a02c;
 	--color-house: #7f7f7f;
-	--color-devices: #f16913;
 	--color-charging: #1f78b4;
 	--color-export: #b2df8a;
 	--color-axis: #666666;
@@ -499,6 +481,13 @@ h3 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
+		--color-co1: #bf3caf;
+	--color-co2: #963db3;
+	--padding-widget: 0px;
+}
+
+.shcolors-normal {
+	--color-devices: #f16913;
 	--color-sh1: #fd8d3c;
 	--color-sh2: #f16913;
 	--color-sh3: #d94801;
@@ -508,11 +497,34 @@ h3 {
 	--color-sh7: #a63603;
 	--color-sh8: #fe4b83;
 	--color-sh9: #e4419d;
-	--color-co1: #bf3caf;
-	--color-co2: #963db3;
-	--padding-widget: 0px;
 }
 
+.shcolors-advanced {
+	--color-devices: #ff4d4d;
+	--color-sh1: #ffffff;
+	--color-sh2: #ff4d4d;
+	--color-sh3: #668cff;
+	--color-sh4: #ff6600;
+	--color-sh5: #00ff00;
+	--color-sh6: #ffff00;
+	--color-sh7: #ff00ff;
+	--color-sh8: #993300;
+	--color-sh9: #a366ff;
+}
+
+.shcolors-standard {
+	--color-devices: rgba(200, 50, 200, 0.7);
+	--color-sh1: rgba(200, 150, 200, 0.7);
+	--color-sh2: rgba(200, 100, 200, 0.7);
+	--color-sh3: rgba(200, 50, 200, 0.7);
+	--color-sh4: rgba(200, 0, 200, 0.7);
+	--color-sh5: rgba(150, 200, 200, 0.7);
+	--color-sh6: rgba(100, 200, 200, 0.7);
+	--color-sh7: rgba(50, 200, 200, 0.7);
+	--color-sh8: rgba(0, 200, 200, 0.7);
+	--color-sh9: rgba(200, 200, 200, 0.7);
+}	
+	
 .openwb-devices {
 	color: #ccffff;
 	background-color: #009696;
@@ -542,4 +554,4 @@ th {
 .axis text {
 	color: var(--color-axis);
 	stroke-width: 0;
-	} 
+} 

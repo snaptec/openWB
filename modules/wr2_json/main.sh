@@ -28,5 +28,5 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-watt=$(<${RAMDISKDIR}/pvwatt2)
+watt=$(<${RAMDISKDIR}/pv2watt)
 echo ${watt}
