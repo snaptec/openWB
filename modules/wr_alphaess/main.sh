@@ -1,6 +1,6 @@
 #!/bin/bash
-if [[ $alphav123 == "1" ]]; then
-	python /var/www/html/openWB/modules/wr_alphaess/readv123.py
-else
-	python /var/www/html/openWB/modules/wr_alphaess/readalpha.py
-fi
+
+sudo python3 /var/www/html/openWB/packages/modules/pv/alpha_ess.py "${alphav123}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+echo $pvwatt
