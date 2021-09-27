@@ -641,7 +641,7 @@ deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
 								</div>
 
 								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-smaem hide">
-									<label for="device_measuresmaserDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">SMA Serienummer</label>
+									<label for="device_measuresmaserDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">SMA Seriennummer</label>
 									<div class="col">
 										<input id="device_measuresmaserDevices<?php echo $devicenum; ?>" name="device_measuresmaser" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">Seriennummer des Sma Energy Meter.</span>
