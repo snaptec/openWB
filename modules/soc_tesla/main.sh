@@ -53,28 +53,6 @@ case $CHARGEPOINT in
 		;;
 esac
 
-password="${!passwordConfigText}"
-mfapasscode="${!mfaPasscodeConfigText}"
-
-getAndWriteSoc(){
-	re='^-?[0-9]+$'
-	# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
-	response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --data="vehicles/#/vehicle_data" --logprefix="Lp$CHARGEPOINT" 2>>$MYLOGFILE)
-	# current state of car
-	# state=$(echo $response | jq .response.state)
-	state=$(echo $response | jq .state)
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: State: $state"
-	# soclevel=$(echo $response | jq .response.charge_state.battery_level)
-	soclevel=$(echo $response | jq .charge_state.battery_level)
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $soclevel"
-
-	if  [[ $soclevel =~ $re ]] ; then
-		if (( $soclevel != 0 )) ; then
-			echo $soclevel > $socfile
-		fi
-	fi
-}
-
 incrementTimer(){
 	case $dspeed in
 		1)
@@ -98,53 +76,6 @@ incrementTimer(){
 	echo $soctimer > $soctimerfile
 }
 
-clearPassword(){
-	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Removing password from config."
-	sed -i "s/$passwordConfigText=.*/$passwordConfigText=''/" $CONFIGFILE
-}
-
-setTokenPassword(){
-	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Writing token password to config."
-	sed -i "s/$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
-	sed -i "s/$mfaPasscodeConfigText=.*/$mfaPasscodeConfigText=XXX/" $CONFIGFILE
-}
-
-checkToken(){
-	returnValue=0
-
-	# check if token is present
-	if [ ! -f $tokensfile ]; then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: No token found."
-		openwbModulePublishState "EVSOC" 0 "Keine Zugangsdaten eingetragen" $CHARGEPOINT
-		returnValue=2
-	fi
-
-	return "$returnValue"
-}
-
-wakeUpCar(){
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Waking up car."
-	counter=0
-	until [ $counter -ge 12 ]; do
-		# response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
-		response=$(python3 $MODULEDIR/tesla.py --email="$username" --tokensfile="$tokensfile" --vehicle="$carnumber" --command="vehicles/#/wake_up" --logprefix="Lp$CHARGEPOINT" 2>>$MYLOGFILE)
-		# state=$(echo $response | jq .response.state)
-		state=$(echo $response | jq .state)
-		if [ "$state" = "\"online\"" ]; then
-			break
-		fi
-		counter=$((counter+1))
-		sleep 5
-		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Loop: $counter State: $state"
-	done
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car state after wakeup: $state"
-	if [ "$state" = "\"online\"" ]; then
-		return 0
-	else
-		return 1
-	fi
-}
-
 soctimer=$(<$soctimerfile)
 openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 if (( ladeleistung > 1000 )); then
@@ -155,16 +86,7 @@ if (( ladeleistung > 1000 )); then
 	else
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
-		checkToken
-		checkResult=$?
-		if [ "$checkResult" == 0 ]; then
-			# car cannot be asleep while charging
-			getAndWriteSoc
-			checkResult=$?
-			if [ "$checkResult" == 0 ]; then
-				openwbModulePublishState "EVSOC" 0 "Erfolgreich" $CHARGEPOINT
-			fi
-		fi
+		sudo python3 /var/www/html/openWB/packages/modules/soc/tesla.py "${username}" "${tokensfile}" "${carnumber}" 0
 	fi
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
@@ -174,23 +96,6 @@ else
 	else
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
-		checkToken
-		checkResult=$?
-		if [ "$checkResult" == 0 ]; then
-			# todo: do not always wake car
-			wakeUpCar
-			wakeUpResult=$?
-			if [ $wakeUpResult -eq 0 ]; then
-				openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Update SoC"
-			else
-				openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Car not online after timeout. SoC will be outdated!"
-				openwbModulePublishState "EVSOC" 1 "WakeUp fehlgeschlagen" $CHARGEPOINT
-			fi
-			getAndWriteSoc
-			checkResult=$?
-			if [ "$checkResult" == 0 ]; then
-				openwbModulePublishState "EVSOC" 0 "Erfolgreich" $CHARGEPOINT
-			fi
-		fi
+		sudo python3 /var/www/html/openWB/packages/modules/soc/tesla.py "${username}" "${tokensfile}" "${carnumber}" 1
 	fi
 fi
