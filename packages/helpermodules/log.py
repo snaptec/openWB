@@ -38,11 +38,11 @@ def setup_logger():
     global mqtt_logger
     global mqtt_fhandler
     global mqtt_lock
-    mqtt_logger, mqtt_fhandler = _config_logger("mqtt", stream = False)
+    mqtt_logger, mqtt_fhandler = _config_logger("mqtt", stream=False)
     mqtt_lock = filelock.FileLock('/var/www/html/openWB/data/debug/mqtt.log.lock')
 
 
-def _config_logger(name, stream = True):
+def _config_logger(name, stream=True):
     """ konfiguriert den Logger für das Logging in eine Datei und falls stream = True für das Logging auf der Konsole.
 
     Parameter
@@ -67,6 +67,7 @@ def _config_logger(name, stream = True):
         logger.addHandler(ch)
     return logger, fh
 
+
 def message_debug_log(level, message):
     """ kümmert sich um das Locking der Log-Datei und übergibt die Nachricht an den entsprechenden Log-Handler.
 
@@ -81,11 +82,13 @@ def message_debug_log(level, message):
         _set_message(debug_logger, level, message)
         debug_fhandler.close()
 
+
 def message_data_log(level, message):
     with data_lock.acquire(timeout=1):
         _set_message(data_logger, level, message)
         data_fhandler.close()
-    
+
+
 def message_mqtt_log(topic, payload):
     with mqtt_lock.acquire(timeout=1):
         _set_message(mqtt_logger, "info", "Topic: "+topic+", Payload: "+payload)
@@ -115,19 +118,26 @@ def _set_message(logger, level, message):
     elif level == "critical":
         logger.critical(message)
 
-def exception_logging(exception):
+
+def exception_logging(exception, module= None):
     """ Formatiert Exceptions für die Log-Ausgabe. Vom Traceback wird nur der letzte Eintrag verwendet, damit die Logmeldung nicht zu lang wird.
 
     Parameters
     ----------
     exception: ecxeption
         raised exception
+    module: str
+        Modul, bei dem der Fehler aufgetreten ist.
     """
     tb = exception.__traceback__
-    value= str(exception)
-    exctype=str(type(exception))
-    msg="Exception type: "+exctype+" Traceback: "+str(traceback.format_tb(tb, -1))+" Details: "+value
+    value = str(exception)
+    exctype = str(type(exception))
+    if module == None:
+        msg = "Exception type: "+exctype+" Traceback: "+str(traceback.format_tb(tb, -1))+" Details: "+value
+    else:
+        msg = str(module)+" Exception type: "+exctype+" Traceback: "+str(traceback.format_tb(tb, -1))+" Details: "+value
     message_debug_log("error", msg)
+
 
 def cleanup_logfiles():
     """ kürzt die Logfiles auf die letzten 1000 Zeilen.
@@ -139,18 +149,43 @@ def cleanup_logfiles():
     with mqtt_lock.acquire(timeout=1):
         subprocess.run(["./packages/helpermodules/cleanup_log.sh", "/var/www/html/openWB/data/debug/mqtt.log"])
 
+
 def log_1_9(message):
     """ Logging für 1.9
     """
-    local_time = datetime.now(timezone.utc).astimezone()
-    myPid = str(os.getpid())
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    try:
+        local_time = datetime.now(timezone.utc).astimezone()
+        myPid = str(os.getpid())
+        print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+    except:
+        traceback.print_exc()
 
-def log_exception_comp(exception, ramdisk):
-    """ Logging für 1.9 (ramdisk = True) und 2.x (ramdisk = False).
+
+def log_exception_comp(exception, ramdisk, module=None):
+    """ Logging für 1.9 und 2.x.
+    Parameters
+    ----------
+    exception: ecxeption
+        raised exception
+    ramdisk: bool
+        1.9 (ramdisk = True), 2.x (ramdisk = False)
+    module: str
+        Modul, bei dem der Fehler aufgetreten ist.
     """
     if ramdisk == False:
-        exception_logging(exception)
+        exception_logging(exception, module)
     else:
         traceback.print_exc()
         exit(1)
+
+def log_comp(level, message, ramdisk):
+    if ramdisk == False:
+        if level == "debug":
+            if os.environ.get("debug") < 2:
+                return
+        elif level == "info":
+            if os.environ.get("debug") < 1:
+                return
+        log_1_9(level, message)
+    else:
+        message_debug_log(level, message)

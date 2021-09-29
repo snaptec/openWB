@@ -27,7 +27,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
 
             # print "evu watt bezug"
             try:
@@ -46,7 +46,7 @@ class module(set_values.set_values):
                 else:
                     power_all = einsp * -1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_all = 0
 
             if self.ramdisk == True:
@@ -62,16 +62,15 @@ class module(set_values.set_values):
                       50]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

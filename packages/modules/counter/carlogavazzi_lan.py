@@ -26,7 +26,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
             sdmid = 1
 
             # Voltage
@@ -44,7 +44,7 @@ class module(set_values.set_values):
                 voltage3 = float(struct.unpack('>i', all.decode('hex'))[0])
                 voltage3 = float(voltage3) / 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 voltage1 = 0
                 voltage2 = 0
                 voltage3 = 0
@@ -63,7 +63,7 @@ class module(set_values.set_values):
 
                 power_all = power1 + power2 + power3
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power1 = 0
                 power2 = 0
                 power3 = 0
@@ -84,7 +84,7 @@ class module(set_values.set_values):
                 current3 = float(struct.unpack('>i', all.decode('hex'))[0])
                 current3 = abs(current3 / 1000)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -96,7 +96,7 @@ class module(set_values.set_values):
                 if frequency > 100:
                     frequency = float(frequency / 10)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 frequency = 0
 
             if self.ramdisk == True:
@@ -112,17 +112,16 @@ class module(set_values.set_values):
                       frequency]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         counter_num = 1
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = sys.argv[1]
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

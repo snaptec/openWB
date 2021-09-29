@@ -29,12 +29,12 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            if self.data["module"]["config"]["version"] == 0:
+            if self.data["config"]["version"] == 0:
                 self._read_alpha_prior_v123()
-            elif self.data["module"]["config"]["version"] == 1:
+            elif self.data["config"]["version"] == 1:
                 self._read_alpha_since_v123()
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
     def _read_alpha_prior_v123(self):
         try:
@@ -59,7 +59,7 @@ class module(set_values.set_values):
                 pvw4 = int(decoder.decode_32bit_int())
                 power = (pvw + pvw2 + pvw3 + pvw4) * -1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             if self.ramdisk == True:
@@ -71,7 +71,7 @@ class module(set_values.set_values):
                       [0, 0, 0]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
     def _read_alpha_since_v123(self):
         try:
@@ -96,7 +96,7 @@ class module(set_values.set_values):
                 pvw4 = int(decoder.decode_32bit_int())
                 power = (pvw + pvw2 + pvw3 + pvw4) * -1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             if self.ramdisk == True:
@@ -108,16 +108,15 @@ class module(set_values.set_values):
                       [0, 0, 0]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         version = int(sys.argv[1])
-        mod.data["module"]["config"]["version"] = version
+        mod.data["config"]["version"] = version
 
         mod.read()
     except Exception as e:

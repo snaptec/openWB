@@ -27,7 +27,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
 
             resp = client.read_input_registers(40002, 2, unit=1)
             all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
@@ -50,16 +50,15 @@ class module(set_values.set_values):
                       50]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

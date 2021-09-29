@@ -46,7 +46,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            self.client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port="502")
+            self.client = ModbusTcpClient(self.data["config"]["ip_address"], port="502")
             self.client.connect()
 
             try:
@@ -54,7 +54,7 @@ class module(set_values.set_values):
                 voltage2 = self._ReadUInt32(102) * 0.001
                 voltage3 = self._ReadUInt32(142) * 0.001
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 voltage1 = 0
                 voltage2 = 0
                 voltage3 = 0
@@ -62,7 +62,7 @@ class module(set_values.set_values):
             try:
                 imported = self._ReadUInt64(512) * 0.1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 imported = 0
 
             try:
@@ -76,7 +76,7 @@ class module(set_values.set_values):
                 bezugw3m = self._ReadUInt32(122) * 0.1
                 power3 = bezugw3p if bezugw3p >= bezugw3m else -bezugw3m
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power1 = 0
                 power2 = 0
                 power3 = 0
@@ -86,7 +86,7 @@ class module(set_values.set_values):
                 current2 = self._ReadUInt32(100) * 0.001
                 current3 = self._ReadUInt32(140) * 0.001
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -97,19 +97,19 @@ class module(set_values.set_values):
                 wattbezug = wattbezugp if wattbezugp >= wattbezugm else -wattbezugm
                 power_all = int(wattbezug)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_all = 0
 
             try:
                 exported = self._ReadUInt64(516) * 0.1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 exported = 0
 
             try:
                 frequency = self._ReadUInt32(26) * 0.001
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 frequency = 0
 
             try:
@@ -117,7 +117,7 @@ class module(set_values.set_values):
                 power_factor2 = self._ReadInt32(104) * 0.001
                 power_factor3 = self._ReadInt32(144) * 0.001
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_factor1 = 0
                 power_factor2 = 0
                 power_factor3 = 0
@@ -131,16 +131,15 @@ class module(set_values.set_values):
                       frequency]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

@@ -28,7 +28,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
             connection = client.connect()
 
             try:
@@ -52,7 +52,7 @@ class module(set_values.set_values):
 
                 power = (mpp1_watt2 + mpp2_watt2 + mpp3_watt2 + mpp_watt2) * -1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             client.close()
@@ -65,16 +65,15 @@ class module(set_values.set_values):
                       [0, 0, 0]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

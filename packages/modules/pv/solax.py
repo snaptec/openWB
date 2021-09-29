@@ -41,7 +41,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
 
             try:
                 resp = client.read_input_registers(10, 2)
@@ -49,14 +49,14 @@ class module(set_values.set_values):
                 pv2 = self._unsigned16(resp, 1)
                 power = (pv1 + pv2) * -1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             try:
                 resp = client.read_input_registers(80, 4)
                 daily_yield = self._unsigned32(resp, 0) / 10   # yield today
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 daily_yield = 0
             if self.ramdisk == True:
                 with open("/var/www/html/openWB/ramdisk/daily_pvkwh", "w") as f:
@@ -67,7 +67,7 @@ class module(set_values.set_values):
             try:
                 counter = self._unsigned32(resp, 2)       # yield overall
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 counter = 0
 
             client.close()
@@ -77,16 +77,15 @@ class module(set_values.set_values):
                       [0, 0, 0]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

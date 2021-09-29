@@ -25,9 +25,9 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            slave_id = self.data["module"]["config"]["slave_id"]
+            slave_id = self.data["config"]["slave_id"]
 
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=self.data["module"]["config"]["modbus_port"])
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=self.data["config"]["modbus_port"])
 
             try:
                 resp = client.read_holding_registers(40206, 5, unit=slave_id)
@@ -55,7 +55,7 @@ class module(set_values.set_values):
                 if fsf == -4:
                     power_all = final / 10000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_all = 0
 
             try:
@@ -123,7 +123,7 @@ class module(set_values.set_values):
                         current2 = current2 / 100000
                         current3 = current3 / 100000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -143,7 +143,7 @@ class module(set_values.set_values):
                 all = format(value1, '04x')
                 voltage3 = int(struct.unpack('>h', all.decode('hex'))[0]) / 100
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 voltage1 = 0
                 voltage2 = 0
                 voltage3 = 0
@@ -163,7 +163,7 @@ class module(set_values.set_values):
                 all = format(value1, '04x')
                 power3 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power1 = 0
                 power2 = 0
                 power3 = 0
@@ -201,7 +201,7 @@ class module(set_values.set_values):
                 if fmultiplint == -5:
                     frequency = frequency / 1000000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 frequency = 0
 
             try:
@@ -211,7 +211,7 @@ class module(set_values.set_values):
                 all = format(value1, '04x') + format(value2, '04x')
                 imported = int(struct.unpack('>i', all.decode('hex'))[0])
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 imported = 0
 
             try:
@@ -221,7 +221,7 @@ class module(set_values.set_values):
                 all = format(value1, '04x') + format(value2, '04x')
                 final = int(struct.unpack('>i', all.decode('hex'))[0])
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 exported = 0
 
             values = [[voltage1, voltage2, voltage3],
@@ -233,20 +233,19 @@ class module(set_values.set_values):
                       frequency]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
         modbus_port = int(sys.argv[2])
-        mod.data["module"]["config"]["modbus_port"] = modbus_port
+        mod.data["config"]["modbus_port"] = modbus_port
         slave_id = int(sys.argv[3])
-        mod.data["module"]["config"]["slave_id"] = slave_id
+        mod.data["config"]["slave_id"] = slave_id
 
         mod.read()
     except Exception as e:

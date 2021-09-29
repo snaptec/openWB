@@ -27,14 +27,14 @@ class module(set_values.set_values):
         """ unterscheidet die Version des EVU-Kits und liest die Werte des Moduls aus.
         """
         try:
-            if self.data["module"]["config"]["version"] == 0:
+            if self.data["config"]["version"] == 0:
                 self._read_mpm3pm()
-            elif self.data["module"]["config"]["version"] == 1:
+            elif self.data["config"]["version"] == 1:
                 self._read_sdm120()
-            elif self.data["module"]["config"]["version"] == 2:
+            elif self.data["config"]["version"] == 2:
                 self._read_sdm630()
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
 
     def _read_mpm3pm(self):
         try:
@@ -48,7 +48,7 @@ class module(set_values.set_values):
                 imported = int(struct.unpack('>i', all.decode('hex'))[0])
                 imported = float(imported) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 imported = 0
 
             # total watt
@@ -59,7 +59,7 @@ class module(set_values.set_values):
                 all = format(value1, '04x') + format(value2, '04x')
                 power = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 power = 0
 
             # export kwh
@@ -71,7 +71,7 @@ class module(set_values.set_values):
                 exported = int(struct.unpack('>i', all.decode('hex'))[0])
                 exported = float(exported) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 exported = 0
 
             values = [power,
@@ -79,7 +79,7 @@ class module(set_values.set_values):
                       [imported, exported]]
             self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
 
     def _read_sdm120(self):
         try:
@@ -90,7 +90,7 @@ class module(set_values.set_values):
                 vwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
                 imported = float(vwh[0]) * int(1000)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 imported = 0
 
             # total watt
@@ -99,7 +99,7 @@ class module(set_values.set_values):
                 watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
                 power = int(watt[0])
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 power = 0
 
             # export kwh
@@ -108,7 +108,7 @@ class module(set_values.set_values):
                 vwhe = struct.unpack('>f', struct.pack('>HH', *resp.registers))
                 exported = float(vwhe[0]) * int(1000)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 exported = 0
 
             values = [power,
@@ -116,7 +116,7 @@ class module(set_values.set_values):
                       [imported, exported]]
             self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
 
     def _read_sdm630(self):
         try:
@@ -127,7 +127,7 @@ class module(set_values.set_values):
                 vwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
                 imported = float(vwh[0]) * int(1000)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 imported = 0
 
             # total watt
@@ -143,7 +143,7 @@ class module(set_values.set_values):
                 watt3 = int(watt[0])
                 power = (watt1+watt2+watt3)*-1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 power = 0
 
             # export kwh
@@ -152,7 +152,7 @@ class module(set_values.set_values):
                 vwhe = struct.unpack('>f', struct.pack('>HH', *resp.registers))
                 exported = float(vwhe[0]) * int(1000)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 exported = 0
 
             values = [power,
@@ -160,16 +160,15 @@ class module(set_values.set_values):
                       [imported, exported]]
             self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         version = int(sys.argv[1])
-        mod.data["module"]["config"]["version"] = version
+        mod.data["config"]["version"] = version
 
         mod.read()
     except Exception as e:

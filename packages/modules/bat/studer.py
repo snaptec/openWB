@@ -27,7 +27,7 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
             connection = client.connect()
 
             # Studer Battery Power
@@ -41,7 +41,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(result, byteorder=Endian.Big)
                 power = decoder.decode_32bit_float()  # type: float
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 power = 0
 
             # Studer SOC
@@ -55,7 +55,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(result, byteorder=Endian.Big)
                 soc = decoder.decode_32bit_float()  # type: float
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 soc = 0
 
             # Studer charged Energy
@@ -69,7 +69,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(result, byteorder=Endian.Big)
                 imported = decoder.decode_32bit_float()*48  # type: float
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 imported = 0
 
             # Studer discharged Energy
@@ -83,7 +83,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(result, byteorder=Endian.Big)
                 exported = decoder.decode_32bit_float()*48  # type: float
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
                 exported = 0
 
             client.close()
@@ -93,16 +93,15 @@ class module(set_values.set_values):
                       [imported, exported]]
             self.set(self.bat_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Bat"+str(self.bat_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

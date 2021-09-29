@@ -29,10 +29,10 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            power_all = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["module"]["config"]["ip_address"], '--name=g_sync.p_ac_sc_sum']))
-            current1 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["module"]["config"]["ip_address"], '--id=0x27BE51D9']) / 230)
-            current2 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["module"]["config"]["ip_address"], '--id=0xF5584F90']) / 230)
-            current3 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["module"]["config"]["ip_address"], '--id=0xB221BCFA']) / 230)
+            power_all = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--name=g_sync.p_ac_sc_sum']))
+            current1 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0x27BE51D9']) / 230)
+            current2 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0xF5584F90']) / 230)
+            current3 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0xB221BCFA']) / 230)
 
             if self.ramdisk == True:
                 imported, exported = simcount.sim_count(power_all, ramdisk=True, pref="bezug")
@@ -47,7 +47,7 @@ class module(set_values.set_values):
                       50]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
     def read_value(self, argv):
         try:
@@ -72,17 +72,16 @@ class module(set_values.set_values):
                 raise ValueError('RCT konnte nicht abgefragt werden aufgrund falscher Konfiguration oder Gerät nicht erreichbar.')
             return ret_val
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
             return 0
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
 
         mod.read()
     except Exception as e:

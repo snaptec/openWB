@@ -29,10 +29,10 @@ class module(set_values.set_values):
     def read(self):
         try:
             params = (
-                ('meterId', self.data["module"]["config"]["id"]),
+                ('meterId', self.data["config"]["id"]),
             )
-            username = self.data["module"]["config"]["username"]
-            password = self.data["module"]["config"]["password"]
+            username = self.data["config"]["username"]
+            password = self.data["config"]["password"]
             response = requests.get('https://api.discovergy.com/public/v1/last_reading', params=params, auth=(username, password), timeout=3).json()
 
             try:
@@ -40,7 +40,7 @@ class module(set_values.set_values):
                 voltage2 = response["values"]["phase2Voltage"] / 1000
                 voltage3 = response["values"]["phase3Voltage"] / 1000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 voltage1 = 0
                 voltage2 = 0
                 voltage3 = 0
@@ -48,19 +48,19 @@ class module(set_values.set_values):
             try:
                 imported = response["values"]["energy"] / 10000000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 imported = 0
 
             try:
                 exported = response["values"]["energyOut"] / 10000000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 exported = 0
 
             try:
                 power_all = response["values"]["power"] / 1000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_all = 0
             try:
                 power1 = response["values"]["phase1Power"] / 1000
@@ -89,7 +89,7 @@ class module(set_values.set_values):
                 else:
                     current3 = power3 / 230
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -103,20 +103,19 @@ class module(set_values.set_values):
                       50]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         username = str(sys.argv[1])
         password = str(sys.argv[2])
         id = str(sys.argv[3])
-        mod.data["module"]["config"]["username"] = username
-        mod.data["module"]["config"]["password"] = password
-        mod.data["module"]["config"]["id"] = id
+        mod.data["config"]["username"] = username
+        mod.data["config"]["password"] = password
+        mod.data["config"]["id"] = id
 
         mod.read()
     except Exception as e:

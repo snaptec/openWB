@@ -26,9 +26,9 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            vc_count = mod.data["module"]["config"]["vc_count"]
-            vc_type = mod.data["module"]["config"]["vc_type"]
-            client = ModbusTcpClient(self.data["module"]["config"]["ip_address"], port=502)
+            vc_count = mod.data["config"]["vc_count"]
+            vc_type = mod.data["config"]["vc_type"]
+            client = ModbusTcpClient(self.data["config"]["ip_address"], port=502)
             connection = client.connect()
 
             # loop for power
@@ -54,7 +54,7 @@ class module(set_values.set_values):
 
                 power = power*1000*-1  # openWB need the values as negative Values in W
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             # loop for counter
@@ -78,7 +78,7 @@ class module(set_values.set_values):
                     counter = counter + decoder.decode_32bit_float()  # type: float
                     i += 1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 counter = 0
 
             client.close()
@@ -87,22 +87,21 @@ class module(set_values.set_values):
                       [0, 0, 0]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         ip_address = str(sys.argv[1])
-        mod.data["module"]["config"]["ip_address"] = ip_address
+        mod.data["config"]["ip_address"] = ip_address
         xt_count = int(sys.argv[2])  # studer_xt (count XT* Devices)
-        mod.data["module"]["config"]["xt_count"] = xt_count
+        mod.data["config"]["xt_count"] = xt_count
         vc_count = int(sys.argv[3])  # studer_vc (count MPPT Devices)
-        mod.data["module"]["config"]["vc_count"] = vc_count
+        mod.data["config"]["vc_count"] = vc_count
         vc_type = str(sys.argv[4])  # studer_vc_type (MPPT type VS or VT)
-        mod.data["module"]["config"]["vc_type"] = vc_type
+        mod.data["config"]["vc_type"] = vc_type
 
         mod.read()
     except Exception as e:

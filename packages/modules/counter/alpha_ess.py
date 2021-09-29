@@ -27,12 +27,12 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            if self.data["module"]["config"]["version"] == 0:
+            if self.data["config"]["version"] == 0:
                 self._read_alpha_prior_v123()
-            elif self.data["module"]["config"]["version"] == 1:
+            elif self.data["config"]["version"] == 1:
                 self._read_alpha_since_v123()
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
     def _read_alpha_prior_v123(self):
         try:
@@ -45,7 +45,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 power_all = int(decoder.decode_32bit_int())
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_all = 0
 
             try:
@@ -53,7 +53,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 exported = int(decoder.decode_32bit_int()) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 exported = 0
 
             try:
@@ -61,7 +61,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 imported = int(decoder.decode_32bit_int()) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 imported = 0
 
             try:
@@ -78,7 +78,7 @@ class module(set_values.set_values):
                 gridw = int(decoder.decode_32bit_int())
                 current3 = gridw / 230
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -92,7 +92,7 @@ class module(set_values.set_values):
                       50]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
     def _read_alpha_since_v123(self):
         try:
@@ -105,7 +105,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 power_all = int(decoder.decode_32bit_int())
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 power_all = 0
 
             try:
@@ -113,7 +113,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 exported = int(decoder.decode_32bit_int()) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 exported = 0
 
             try:
@@ -121,7 +121,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 imported = int(decoder.decode_32bit_int()) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 imported = 0
 
             try:
@@ -135,7 +135,7 @@ class module(set_values.set_values):
                 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
                 current3 = int(decoder.decode_16bit_int()/1000)
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -149,16 +149,18 @@ class module(set_values.set_values):
                       50]
             self.set(self.counter_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "Counter"+str(self.counter_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         version = int(sys.argv[1])
-        mod.data["module"]["config"]["version"] = version
+        mod.data["config"]["version"] = version
+
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('alpha_ess Version: ' + str(version))
 
         mod.read()
     except Exception as e:

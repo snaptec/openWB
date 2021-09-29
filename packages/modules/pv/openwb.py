@@ -27,14 +27,14 @@ class module(set_values.set_values):
         """ unterscheidet die Version des EVU-Kits und liest die Werte des Moduls aus.
         """
         try:
-            if self.data["module"]["config"]["version"] == 1:
+            if self.data["config"]["version"] == 1:
                 self._read_lovato()
-            elif self.data["module"]["config"]["version"] == 2:
+            elif self.data["config"]["version"] == 2:
                 self._read_sdm()
             else:
                 self._read_mpm3pm()
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
     def _read_lovato(self):
         try:
@@ -53,7 +53,7 @@ class module(set_values.set_values):
                 else:
                     counter = finalbezug2
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 counter = 0
 
             # phasen watt
@@ -73,7 +73,7 @@ class module(set_values.set_values):
                 if (power > 10):
                     power = power*-1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             try:
@@ -87,7 +87,7 @@ class module(set_values.set_values):
                 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
                 current3 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -97,7 +97,7 @@ class module(set_values.set_values):
                       [current1, current2, current3]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
     def _read_sdm(self):
         try:
@@ -118,7 +118,7 @@ class module(set_values.set_values):
                 if (power > 10):
                     power = power*-1
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             try:
@@ -129,7 +129,7 @@ class module(set_values.set_values):
                 resp = client.read_input_registers(0x0A, 2, unit=sdmid)
                 current3 = float(struct.unpack('>f', struct.pack('>HH', *resp.registers))[0])
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -139,7 +139,7 @@ class module(set_values.set_values):
                 pvkwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))[0]
                 counter = float(pvkwh) * 1000
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 counter = 0
 
             values = [power,
@@ -147,7 +147,7 @@ class module(set_values.set_values):
                       [current1, current2, current3]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
     def _read_mpm3pm(self):
         try:
@@ -161,7 +161,7 @@ class module(set_values.set_values):
                 ikwh = int(struct.unpack('>i', all.decode('hex'))[0])
                 counter = float(ikwh) * 10
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 counter = 0
 
             try:
@@ -175,7 +175,7 @@ class module(set_values.set_values):
                 lla3 = resp.registers[1]
                 current3 = float(lla3) / 100
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 current1 = 0
                 current2 = 0
                 current3 = 0
@@ -188,7 +188,7 @@ class module(set_values.set_values):
                 all = format(value1, '04x') + format(value2, '04x')
                 power = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
             except Exception as e:
-                log.log_exception_comp(e, self.ramdisk)
+                log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
                 power = 0
 
             values = [power,
@@ -196,16 +196,15 @@ class module(set_values.set_values):
                       [current1, current2, current3]]
             self.set(self.pv_num, values, self.ramdisk)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk)
+            log.log_exception_comp(e, self.ramdisk, "PV"+str(self.pv_num))
 
 
 if __name__ == "__main__":
     try:
         mod = module(0, True)
-        mod.data["module"] = {}
-        mod.data["module"]["config"] = {}
+        mod.data["config"] = {}
         version = int(sys.argv[1])
-        mod.data["module"]["config"]["version"] = version
+        mod.data["config"]["version"] = version
 
         mod.read()
     except Exception as e:
