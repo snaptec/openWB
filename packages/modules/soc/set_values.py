@@ -27,9 +27,9 @@ class set_values():
         """
         try:
             if ramdisk == True:
-                self.write_to_ramdisk(values)
+                self.write_to_ramdisk(values, num)
             else:
-                self.pub_to_broker(num, values)
+                self.pub_to_broker(values, num)
         except Exception as e:
             log.log_exception_comp(e, ramdisk)
 
@@ -59,7 +59,7 @@ class set_values():
         except Exception as e:
             log.log_exception_comp(e, True)
 
-    def pub_to_broker(self, num, values):
+    def pub_to_broker(self, values, num):
         """
         Parameter
         ---------
@@ -110,7 +110,7 @@ class set_values():
         except Exception as e:
             log.log_exception_comp(e, self.ramdisk)
 
-    def set_state(self, ramdisk, state, str):
+    def set_state(self, ramdisk, num, state, fault_str):
         """ setzt den Fehlerstatus und -text des Moduls.
 
         Parameter
@@ -124,10 +124,10 @@ class set_values():
         """
         try:
             if ramdisk == True:
-                pub.pub_single("openWB/set/lp/"+str(self.num)+"/socFaultState", state ,hostname="localhost", no_json=True)
-                pub.pub_single("openWB/set/lp/"+str(self.num)+"/socFaultStr", str, hostname="localhost", no_json=True)
+                pub.pub_single("openWB/set/lp/"+str(num)+"/socFaultState", state ,hostname="localhost", no_json=True)
+                pub.pub_single("openWB/set/lp/"+str(num)+"/socFaultStr", fault_str, hostname="localhost", no_json=True)
             else:
-                pub.pub("openWB/set/ev/"+str(self.num)+"/module/get/fault_state", state)
-                pub.pub("openWB/set/ev/"+str(self.num)+"/module/get/fault_str", str)
+                pub.pub("openWB/set/ev/"+str(num)+"/module/get/fault_state", state)
+                pub.pub("openWB/set/ev/"+str(num)+"/module/get/fault_str", fault_str)
         except Exception as e:
-            log.log_exception_comp(e, False)
+            log.log_exception_comp(e, ramdisk)

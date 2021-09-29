@@ -160,9 +160,21 @@ def log_1_9(message):
     except:
         traceback.print_exc()
 
+def log_1_9_soc(message):
+    """ Soc-Logging für 1.9
+    """
+    try:
+        local_time = datetime.now(timezone.utc).astimezone()
+        myPid = str(os.getpid())
+        with open("/var/www/html/openWB/ramdisk/soc.log", "a") as f:
+            f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": " + message)
+            f.write("\n")
+    except:
+        traceback.print_exc()
+
 
 def log_exception_comp(exception, ramdisk, module=None):
-    """ Logging für 1.9 und 2.x.
+    """ Exception-Logging für 1.9 und 2.x.
     Parameters
     ----------
     exception: ecxeption
@@ -178,14 +190,29 @@ def log_exception_comp(exception, ramdisk, module=None):
         traceback.print_exc()
         exit(1)
 
-def log_comp(level, message, ramdisk):
-    if ramdisk == False:
+def log_comp(level, message, ramdisk, file=None):
+    """ Exception-Logging für 1.9 und 2.x.
+    Parameters
+    ----------
+    level: str
+        Logging-Level
+    message: str
+        Logging-Nachricht
+    ramdisk: bool
+        1.9 (ramdisk = True), 2.x (ramdisk = False)
+    file:
+        Dateipfad, wenn nicht in openwb.log geloggt werden soll.
+    """
+    if ramdisk == True:
         if level == "debug":
-            if os.environ.get("debug") < 2:
+            if int(os.environ.get("debug")) < 2:
                 return
         elif level == "info":
-            if os.environ.get("debug") < 1:
+            if int(os.environ.get("debug")) < 1:
                 return
-        log_1_9(level, message)
+        if file == "soc":
+            log_1_9_soc(message)
+        else:
+            log_1_9(message)
     else:
         message_debug_log(level, message)

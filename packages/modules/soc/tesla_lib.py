@@ -48,10 +48,12 @@ tokens = {
 expiration = 0
 verbose = False
 num = 0
+ramdisk = None
 
 def eprint(msg):
     global num
-    log.log_comp("error", "EV "+str(num)+": "+str(msg))
+    global ramdisk
+    log.log_comp("error", "EV "+str(num)+": "+str(msg), ramdisk, file="soc")
 
 def gen_params():
     verifier_bytes = os.urandom(86)
@@ -60,28 +62,28 @@ def gen_params():
     state = base64.urlsafe_b64encode(os.urandom(16)).rstrip(b"=").decode("utf-8")
     return code_verifier, code_challenge, state
 
-def loadTokens():
+def loadTokens(tokensfile):
     global tokens, expiration
     try:
-        with open(tokensFilename, "r") as R:
+        with open(tokensfile, "r") as R:
             tokens = json.load(R)
             expiration = tokens["created_at"] + tokens["expires_in"] - 86400
             return True
     except IOError as e:
         if( verbose ):
-            eprint("Could not read from file %s: %s (pressing on in hopes of alternate authenticaiton)"%(tokensFilename, str(e)))
+            eprint("Could not read from file %s: %s (pressing on in hopes of alternate authenticaiton)"%(tokensfile, str(e)))
         return False
 
-def saveTokens():
+def saveTokens(tokensfile):
     try:
-        with open(tokensFilename, "w") as W:
+        with open(tokensfile, "w") as W:
             W.write(json.dumps(tokens))
             return True
     except IOError as e:
-        eprint("Could not write to file %s: %s"%(tokensFilename, str(e)))
+        eprint("Could not write to file %s: %s"%(tokensfile, str(e)))
         return False
 
-def login(email, password, mfaPasscode):
+def login(email, password, mfaPasscode, tokensfile):
     headers = {
         # "User-Agent": UA,
         # "x-tesla-user-agent": X_TESLA_USER_AGENT,
@@ -265,9 +267,9 @@ def login(email, password, mfaPasscode):
     tokens["access_token"] = resp_json["access_token"]
     tokens["created_at"] = resp_json["created_at"]
     tokens["expires_in"] = resp_json["expires_in"]
-    return saveTokens()
+    return saveTokens(tokensfile)
 
-def refreshToken(email):
+def refreshToken(email, tokensfile):
     global tokens
 
     headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
@@ -301,17 +303,17 @@ def refreshToken(email):
     tokens["access_token"] = resp_json["access_token"]
     tokens["created_at"] = resp_json["created_at"]
     tokens["expires_in"] = resp_json["expires_in"]
-    return saveTokens()
+    return saveTokens(tokensfile)
 
 def listCars():
      myList = []
-     myVehicles = requestData('vehicles')
+     myVehicles = requestData('vehicles').text
      for index, car in enumerate(json.loads(myVehicles)["response"]):
          myList.append(json.loads("{\"id\":\"%s\", \"vin\":\"%s\", \"name\":\"%s\"}"%(index, car["vin"], car["display_name"])))
      print(json.dumps(myList))
 
 def getVehicleIdByVin(vin):
-    myVehicles = requestData('vehicles')
+    myVehicles = requestData('vehicles').text
     for car in json.loads(myVehicles)["response"]:
         if( verbose ):
             eprint("VIN: %s"%(car["vin"]))
@@ -325,8 +327,8 @@ def getVehicleIdByVin(vin):
         eprint("Index: %d VIN: %s"%(index, car["vin"]))
 
 def getVehicleIdByIndex(index):
-    myVehicles = requestData('vehicles')
-    myVehicleId = json.loads(myVehicles)["response"][index]["id"]
+    myVehicles = requestData('vehicles').text
+    myVehicleId = json.loads(myVehicles)["response"][int(index)]["id"]
     if( verbose ):
         eprint("vehicle_id for entry %d: %s"%(index, str(myVehicleId)))
     return myVehicleId
@@ -369,10 +371,15 @@ def postCommand(command):
         eprint(resp.text, "\n")
     return resp
 
-def lib(email, ev_num, tokensfile="tesla.token", data=None, command=None, vehicle=0, vin=None, listcars=False, verbose=False):
-    verbose = verbose
-    tokensFilename = tokensfile
-    if( not loadTokens() ):
+def lib(email, ev_num, p_ramdisk, tokensfile="tesla.token", data=None, command=None, vehicle=0, vin=None, listcars=False, p_verbose=False):
+    global num
+    num = ev_num
+    global ramdisk
+    ramdisk = p_ramdisk
+    global verbose
+    verbose = p_verbose
+
+    if( not loadTokens(tokensfile) ):
         eprint("Tokens file not found: " + tokensfile)
         eprint("Login with E-Mail and Password not supported (Captcha)!")
         return 0
@@ -383,16 +390,13 @@ def lib(email, ev_num, tokensfile="tesla.token", data=None, command=None, vehicl
             if( verbose ):
                 eprint("Access token expired. Refreshing token.")
             try:
-                if( refreshToken(email) ):
+                if( refreshToken(email, tokensfile) ):
                     if( verbose ):
                         eprint("Token Refresh succeeded")
             except ValueError as err:
                 eprint(err)
                 eprint("Token Refresh failed")
                 return 0
-
-    global num
-    num = ev_num
 
     if listcars == True:
         listCars()

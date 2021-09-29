@@ -86,7 +86,7 @@ if (( ladeleistung > 1000 )); then
 	else
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
-		sudo python3 /var/www/html/openWB/packages/modules/soc/tesla.py "${username}" "${tokensfile}" "${carnumber}" 0
+		python3 /var/www/html/openWB/packages/modules/soc/tesla.py "${CHARGEPOINT}" "${username}" "${tokensfile}" "${carnumber}" 0
 	fi
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
@@ -96,6 +96,6 @@ else
 	else
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
-		sudo python3 /var/www/html/openWB/packages/modules/soc/tesla.py "${username}" "${tokensfile}" "${carnumber}" 1
+		python3 /var/www/html/openWB/packages/modules/soc/tesla.py "${CHARGEPOINT}" "${username}" "${tokensfile}" "${carnumber}" 1
 	fi
 fi
