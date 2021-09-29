@@ -303,11 +303,32 @@ def refreshToken(email):
     tokens["expires_in"] = resp_json["expires_in"]
     return saveTokens()
 
-def getVehicleId(vehicle):
+def listCars():
+     myList = []
+     myVehicles = requestData('vehicles')
+     for index, car in enumerate(json.loads(myVehicles)["response"]):
+         myList.append(json.loads("{\"id\":\"%s\", \"vin\":\"%s\", \"name\":\"%s\"}"%(index, car["vin"], car["display_name"])))
+     print(json.dumps(myList))
+
+def getVehicleIdByVin(vin):
     myVehicles = requestData('vehicles')
-    myVehicleId = json.loads(myVehicles)["response"][vehicle]["id"]
+    for car in json.loads(myVehicles)["response"]:
+        if( verbose ):
+            eprint("VIN: %s"%(car["vin"]))
+        if( car["vin"] == vin):
+            myVehicleId = car["id"]
+            if( verbose ):
+                eprint("vehicle_id for vin %s: %s"%(vin, str(myVehicleId)))
+            return myVehicleId
+    eprint("vin not found: %s"%(vin))
+    for index, car in enumerate(json.loads(myVehicles)["response"]):
+        eprint("Index: %d VIN: %s"%(index, car["vin"]))
+
+def getVehicleIdByIndex(index):
+    myVehicles = requestData('vehicles')
+    myVehicleId = json.loads(myVehicles)["response"][index]["id"]
     if( verbose ):
-        eprint("vehicle_id for entry %d: %s"%(vehicle, str(myVehicleId)))
+        eprint("vehicle_id for entry %d: %s"%(index, str(myVehicleId)))
     return myVehicleId
 
 def requestData(dataPart):
@@ -348,7 +369,7 @@ def postCommand(command):
         eprint(resp.text, "\n")
     return resp
 
-def lib(email, ev_num, tokensfile="tesla.token", data=None, command=None, vehicle=0, logprefix=None, verbose=False):
+def lib(email, ev_num, tokensfile="tesla.token", data=None, command=None, vehicle=0, vin=None, listcars=False, verbose=False):
     verbose = verbose
     tokensFilename = tokensfile
     if( not loadTokens() ):
@@ -373,11 +394,18 @@ def lib(email, ev_num, tokensfile="tesla.token", data=None, command=None, vehicl
     global num
     num = ev_num
 
-    vehicleID = getVehicleId(vehicle)
-    if( data != None ):
-        response = requestData(data.replace("#", str(vehicleID)))
-        #print(json.dumps(json.loads(response)["response"]))
-    if( command != None ):
-        response = postCommand(command.replace("#", str(vehicleID)))
-        #print(json.dumps(json.loads(response)["response"]))
+    if listcars == True:
+        listCars()
+        return 0
+    if vin != None:
+        vehicleID = getVehicleIdByVin(vin)
+    else:
+        vehicleID = getVehicleIdByIndex(vehicle)
+    if vehicleID != None:
+        if data != None :
+            response = requestData(data.replace("#", str(vehicleID)))
+            #print(json.dumps(json.loads(response)["response"]))
+        if command != None:
+            response = postCommand(command.replace("#", str(vehicleID)))
+            #print(json.dumps(json.loads(response)["response"]))
     return response
