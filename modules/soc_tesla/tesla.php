@@ -78,7 +78,8 @@
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
 					curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
 					curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-					curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_MAX_TLSv1_2);
+					// curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_MAX_TLSv1_2);
+					if (defined('CURL_SSLVERSION_MAX_TLSv1_2')) curl_setopt ($ch, CURLOPT_SSLVERSION,CURL_SSLVERSION_MAX_TLSv1_2); // FM - force tls1.2
 					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
 					if(!empty($referer)) { curl_setopt($ch, CURLOPT_REFERER, $referer); }
