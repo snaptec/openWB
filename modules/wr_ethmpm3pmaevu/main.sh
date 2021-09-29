@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo python3 /var/www/html/openWB/packages/modules/pv/openwb.py "${pvkitversion}"
+python3 /var/www/html/openWB/packages/modules/pv/openwb.py "${pvkitversion}"
 
 pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 echo $pvwatt
