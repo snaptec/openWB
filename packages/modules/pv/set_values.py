@@ -42,8 +42,8 @@ class set_values():
             self.write_to_file("/pva1", round(values[2][0], 1))
             self.write_to_file("/pva2", round(values[2][1], 1))
             self.write_to_file("/pva3", round(values[2][2], 1))
-            # if int(os.environ.get('debug')) >= 1:
-            #     log.log_1_9('PV Watt: ' + str(int(values[0])))
+            if int(os.environ.get('debug')) >= 1:
+                log.log_1_9('PV Watt: ' + str(int(values[0])))
         except Exception as e:
             log.log_exception_comp(e, True)
 

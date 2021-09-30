@@ -2,6 +2,9 @@
 Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul / Speicher diese nicht liefert.
 """
 import os
+import paho.mqtt.subscribe as subscribe
+import re
+import signal
 import sys
 import time
 
@@ -46,12 +49,21 @@ def sim_count(present_power_all, topic="", data={}, ramdisk = False, pref = ""):
                 f = open('/var/www/html/openWB/ramdisk/'+pref+'wh0', 'r')
                 watt1=int(float(f.read()))
                 f.close()
-                f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0pos', 'r')
-                wattposh=int(float(f.read()))
-                f.close()
-                f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0neg', 'r')
-                wattnegh=int(f.read())
-                f.close()
+                try:
+                    f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0pos', 'r')
+                    wattposh=int(float(f.read()))
+                    importtemp = wattposh
+                    f.close()
+                except:
+                    importtemp = restore("watt0pos")
+
+                try:
+                    f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0neg', 'r')
+                    wattnegh=int(f.read())
+                    exporttemp = wattnegh
+                    f.close()
+                except:
+                    exporttemp = restore("watt0neg")
                 f = open('/var/www/html/openWB/ramdisk/'+pref+'sec0', 'w')
                 value1 = "%22.6f" % sim_timestamp
                 f.write(str(value1))
@@ -107,9 +119,13 @@ def sim_count(present_power_all, topic="", data={}, ramdisk = False, pref = ""):
                 f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0pos', 'w')
                 f.write(str(wattposh))
                 f.close()
+                if wattposh != importtemp:
+                    pub.pub_single("openWB/pv/WHImported_temp", wattposh, no_json=True)
                 f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0neg', 'w')
                 f.write(str(wattnegh))
                 f.close()
+                if wattnegh != exporttemp:
+                    pub.pub_single("openWB/pv/WHExport_temp", wattnegh, no_json=True)
             else:
                 pub.pub(topic+"module/simulation/present_imported", wattposh)
                 pub.pub(topic+"module/simulation/present_exported", wattnegh)
@@ -129,6 +145,31 @@ def sim_count(present_power_all, topic="", data={}, ramdisk = False, pref = ""):
             return 0, 0
     except Exception as e:
         log.log_exception_comp(e, ramdisk)
+
+def restore(value):
+    signal.signal(signal.SIGALRM, abort)
+    signal.alarm(3)
+    try:
+        if value == "watt0pos":
+            temp = subscribe.simple("openWB/pv/WHImported_temp", hostname="localhost")
+        else:
+            temp = subscribe.simple("openWB/pv/WHExport_temp", hostname="localhost")
+    except:
+        pass
+    ra='^-?[0-9]+$'
+    if re.search(ra, temp) == None:
+        temp = "0"
+    f = open('/var/www/html/openWB/ramdisk/'+pref+value, 'w')
+    f.write(str(temp))
+    f.close()
+    if value == "watt0pos":
+        log.log_1_9("loadvars read openWB/pv/WHImported_temp from mosquito "+str(temp))
+    else:
+        log.log_1_9("loadvars read openWB/pv/WHExport_temp from mosquito "+str(temp))
+    return temp
+
+def abort(signal, frame):
+    raise Exception
 
 if __name__ == "__main__":
     try:

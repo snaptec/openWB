@@ -60,10 +60,10 @@ class set_values():
             self.write_to_file("/einspeisungkwh", values[4][1])
             self.write_to_file("/wattbezug", int(values[5]))
             self.write_to_file("/evuhz", round(values[6], 2))
-            # if int(os.environ.get('debug')) >= 1:
-            #     log.log_1_9('EVU Watt: ' + str(int(values[5])))
-            #     log.log_1_9('EVU Bezug: ' + str(int(values[4][0])))
-            #     log.log_1_9('EVU Einspeisung: ' + str(int(values[4][1])))
+            if int(os.environ.get('debug')) >= 1:
+                log.log_1_9('EVU Watt: ' + str(int(values[5])))
+                log.log_1_9('EVU Bezug: ' + str(int(values[4][0])))
+                log.log_1_9('EVU Einspeisung: ' + str(int(values[4][1])))
         except Exception as e:
             log.log_exception_comp(e, True)
 

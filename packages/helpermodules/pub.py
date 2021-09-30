@@ -50,7 +50,7 @@ def delete_connection():
     except Exception as e:
         log.exception_logging(e)
 
-def pub_single(topic, payload, hostname, no_json = False):
+def pub_single(topic, payload, hostname="localhost", no_json = False):
     """ published eine einzelne Nachricht an einen Host, der nicht der localhost ist.
 
         Parameter
@@ -66,8 +66,8 @@ def pub_single(topic, payload, hostname, no_json = False):
     """
     try:
         if no_json == False:
-            publish.single(topic, json.dumps(payload), hostname=hostname)
+            publish.single(topic, json.dumps(payload), hostname=hostname, retain=True)
         else:
-            publish.single(topic, payload, hostname=hostname)
+            publish.single(topic, payload, hostname=hostname, retain=True)
     except Exception as e:
         log.exception_logging(e)

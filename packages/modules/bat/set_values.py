@@ -39,8 +39,8 @@ class set_values():
             self.write_to_file("/speichersoc", int(values[1]))
             self.write_to_file("/speicherikwh", round(values[2][0], 2))
             self.write_to_file("/speicherekwh", round(values[2][1], 2))
-            # if int(os.environ.get('debug')) >= 1:
-            #     log.log_1_9('BAT Watt: ' + str(int(values[0])))
+            if int(os.environ.get('debug')) >= 1:
+                log.log_1_9('BAT Watt: ' + str(int(values[0])))
         except Exception as e:
             log.log_exception_comp(e, True)
 
