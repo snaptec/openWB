@@ -111,8 +111,8 @@ else:
  # This will cause error messages in /var/www/html/openWB/ramdisk/smarthome.log: 
  # Module SMAEM: No data received and no historical data since boottime
  # Leistungsmessung smaem [...] Fehlermeldung: [Errno 2] No such file or directory: '/var/www/html/openWB/ramdisk/smarthome_device_ret1'W
- # debugfile.write('4 - Our SMA EM ' + smaserial + ' is not sending right now\n')
  sys.exit(str(datetime.datetime.now()) + ": Module SMAEM: No data received and no historical data since boottime")
+
 # general output section
 
 answer = '{"power":' + watt + ',"powerc":' + wattc + '}'
