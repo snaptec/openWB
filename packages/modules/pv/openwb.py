@@ -206,6 +206,9 @@ if __name__ == "__main__":
         version = int(sys.argv[1])
         mod.data["config"]["version"] = version
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('PV-Module PV-Kit version: ' + str(version))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

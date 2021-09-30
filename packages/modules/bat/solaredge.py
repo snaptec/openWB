@@ -79,6 +79,10 @@ if __name__ == "__main__":
         second_bat = int(sys.argv[2])
         mod.data["config"]["second_bat"] = second_bat
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Bat-Module solaredge ip_address: ' + str(ip_address))
+            log.log_1_9('Bat-Module solaredge second_bat: ' + str(second_bat))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

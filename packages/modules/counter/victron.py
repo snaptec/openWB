@@ -149,6 +149,10 @@ if __name__ == "__main__":
         modbus_id = int(sys.argv[2])
         mod.data["config"]["modbus_id"] = modbus_id
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Counter-Module victron ip_address: ' + str(ip_address))
+            log.log_1_9('Counter-Module victron modbus_id: ' + str(modbus_id))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

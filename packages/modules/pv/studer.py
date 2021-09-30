@@ -103,6 +103,12 @@ if __name__ == "__main__":
         vc_type = str(sys.argv[4])  # studer_vc_type (MPPT type VS or VT)
         mod.data["config"]["vc_type"] = vc_type
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('PV-Module studer ip_address: ' + str(ip_address))
+            log.log_1_9('PV-Module studer xt_count: ' + str(xt_count))
+            log.log_1_9('PV-Module studer vc_count: ' + str(vc_count))
+            log.log_1_9('PV-Module studer vc_type: ' + str(vc_type))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

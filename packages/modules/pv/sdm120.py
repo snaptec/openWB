@@ -69,6 +69,10 @@ if __name__ == "__main__":
         id = int(sys.argv[2])
         mod.data["config"]["id"] = id
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('PV-Module sdm120 ip_address: ' + str(ip_address))
+            log.log_1_9('PV-Module sdm120 id: ' + str(id))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

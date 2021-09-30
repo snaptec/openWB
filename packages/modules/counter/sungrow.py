@@ -71,6 +71,10 @@ if __name__ == "__main__":
         mode = int(sys.argv[2])
         mod.data["config"]["mode"] = mode
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Counter-Module sungrow ip_address: ' + str(ip_address))
+            log.log_1_9('Counter-Module sungrow mode: ' + str(mode))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

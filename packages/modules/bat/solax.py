@@ -72,6 +72,9 @@ if __name__ == "__main__":
         ip_address = str(sys.argv[1])
         mod.data["config"]["ip_address"] = ip_address
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Bat-Module solax ip_address: ' + str(ip_address))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

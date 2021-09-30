@@ -136,6 +136,12 @@ if __name__ == "__main__":
         mod.data["config"]["tesla_ev_num"] = tesla_ev_num
         wake_up = int(sys.argv[5])
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('SoC-Module tesla num: ' + str(num))
+            log.log_1_9('SoC-Module tesla username: ' + str(username))
+            log.log_1_9('SoC-Module tesla tokenfile: ' + str(tokenfile))
+            log.log_1_9('SoC-Module tesla tesla_ev_num: ' + str(tesla_ev_num))
+
         ret = mod._check_token()
         if ret == 0:
             if wake_up == True:

@@ -247,6 +247,11 @@ if __name__ == "__main__":
         slave_id = int(sys.argv[3])
         mod.data["config"]["slave_id"] = slave_id
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Counter-Module solaredge ip_address: ' + str(ip_address))
+            log.log_1_9('Counter-Module solaredge modbus_port: ' + str(modbus_port))
+            log.log_1_9('Counter-Module solaredge slave_id: ' + str(slave_id))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

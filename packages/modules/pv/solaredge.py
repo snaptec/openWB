@@ -273,6 +273,18 @@ if __name__ == "__main__":
         ip_address2 = str(sys.argv[10])
         mod.data["config"]["ip_address2"] = ip_address2
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('PV-Module solaredge ip_address1: ' + str(ip_address1))
+            log.log_1_9('PV-Module solaredge slave_id1: ' + str(slave_id1))
+            log.log_1_9('PV-Module solaredge slave_id2: ' + str(slave_id2))
+            log.log_1_9('PV-Module solaredge slave_id3: ' + str(slave_id3))
+            log.log_1_9('PV-Module solaredge slave_id4: ' + str(slave_id4))
+            log.log_1_9('PV-Module solaredge ext_prod: ' + str(ext_prod))
+            log.log_1_9('PV-Module solaredge bat_ip: ' + str(bat_ip))
+            log.log_1_9('PV-Module solaredge second_bat: ' + str(second_bat))
+            log.log_1_9('PV-Module solaredge subtract_bat: ' + str(subtract_bat))
+            log.log_1_9('PV-Module solaredge ip_address2: ' + str(ip_address2))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

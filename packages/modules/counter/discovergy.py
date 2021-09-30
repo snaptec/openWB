@@ -117,6 +117,11 @@ if __name__ == "__main__":
         mod.data["config"]["password"] = password
         mod.data["config"]["id"] = id
 
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Counter-Module disvocergy username: ' + str(username))
+            log.log_1_9('Counter-Module disvocergy password: ' + str(password))
+            log.log_1_9('Counter-Module disvocergy id: ' + str(id))
+
         mod.read()
     except Exception as e:
         log.log_exception_comp(e, True)

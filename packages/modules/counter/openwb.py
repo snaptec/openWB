@@ -399,16 +399,11 @@ if __name__ == "__main__":
             mod.data["config"]["ip_address"] = "192.168.193.15"
             mod.data["config"]["id"] = 0x02
         elif version == 2:
-            # mod.data["config"]["ip_address"] = "192.168.193.15"
-            # mod.data["config"]["id"] = 115
-            mod.data["config"]["ip_address"] = "192.168.1.101"
-            mod.data["config"]["id"] = 105
+            mod.data["config"]["ip_address"] = "192.168.193.15"
+            mod.data["config"]["id"] = 115
 
-        log.log_1_9('EVU-Kit Version: ' + str(version))
-        log.log_1_9(str(os.environ))
-        log.log_1_9(os.environ['HOME'])
-        # if int(os.environ.get('debug')) >= 2:
-        #     log.log_1_9('EVU-Kit Version: ' + str(version))
+        if int(os.environ.get('debug')) >= 2:
+            log.log_1_9('Counter-Module EVU-Kit Version: ' + str(version))
 
         mod.read()
     except Exception as e:
