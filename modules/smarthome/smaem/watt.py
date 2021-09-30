@@ -1,36 +1,34 @@
 #!/usr/bin/python3
-# coding=ISO-8859-1
-"""
- *
- * by Markus Gießen 2021-05-12
- * adopted from Florian Wenger
- * 
- * Here we only use a SMA EnergyMeter as SmartHome Device
- * Only two values are returned: 
- * pconsume = current power consumation in Watt
- * pconsumecounter = cumulated value of power consumation in kWh
- * endless loop (until ctrl+c) displays measurement from SMA Energymeter
- *
- *  this software is released under GNU General Public License, version 2.
- *  This program is free software;
- *  you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; version 2 of the License.
- *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with this program;
- *  if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * 2018-12-22 Tommi2Day small enhancements
- * 2019-08-13 datenschuft run without config
- * 2020-01-04 datenschuft changes to tun with speedwiredecoder
- * 2020-01-13 Kevin Wieland changes to run with openWB
- * 2020-02-03 theHolgi added phase-wise load and power factor
- * 2021-09-01 Markus Gießen adoption for usage as Smart Home Device for power consumption
- *
- */
-"""
+# coding=utf-8
+
+# by Markus Gießen 2021-09-30
+# adopted from Florian Wenger
+# 
+# Here we only use a SMA EnergyMeter as SmartHome Device
+# Only two values are returned: 
+# pconsume = current power consumation in Watt
+# pconsumecounter = cumulated value of power consumation in kWh
+# endless loop (until ctrl+c) displays measurement from SMA Energymeter
+#
+#  this software is released under GNU General Public License, version 2.
+#  This program is free software;
+#  you can redistribute it and/or modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; version 2 of the License.
+#  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+#  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along with this program;
+#  if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# 2018-12-22 Tommi2Day small enhancements
+# 2019-08-13 datenschuft run without config
+# 2020-01-04 datenschuft changes to tun with speedwiredecoder
+# 2020-01-13 Kevin Wieland changes to run with openWB
+# 2020-02-03 theHolgi added phase-wise load and power factor
+# 2021-09-01 Markus Gießen adoption for usage as Smart Home Device for power consumption
+
+
 import sys
 import os
 import datetime
@@ -101,7 +99,7 @@ elif (os.path.isfile(returnfile)) and ((time.time()-lastmodificationtime) >= int
  lastvalues = ret.read()
  ret.close()
  wattc = lastvalues[int(lastvalues.rfind('powerc')) + 9:lastvalues.find('}')]
- debugfile.write(str(datetime.datetime.now()) + ': 2 - We create a fake ret-file. lastvalues: #' + lastvalues + '# - int-lastvalues.rfind-powerc-: #' + str((lastvalues.rfind('powerc'))) + '#\n')
+ debugfile.write(str(datetime.datetime.now()) + ': 2 - We create a fake ret-file. lastvalues: #' + lastvalues + '# - int-lastvalues.rfind-powerc: #' + str((lastvalues.rfind('powerc'))) + '#\n')
 
 elif (os.path.isfile(returnfile)) and ((time.time()-lastmodificationtime) < int(secondssincelastmetering)): # Scenario 3: Our EnergyMeter is not sending but we have a returnfile which is younger than n seconds (parameter secondssincelastmetering)
  # We have a ret-file which is younger than n seconds. We do nothing as the existing ret-file is good enough.
