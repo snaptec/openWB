@@ -1060,6 +1060,11 @@ def conditions(nummer):
             setstat(nummer,10)
             return
     # here startup device_startupdetection
+    if ((startupdetection == 0) or (onnow == 1)) and (devstatus == 20):
+        setstat(nummer,10)
+        turndevicerelais(nummer, 0,0,1)
+        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun abgeschaltet ")
+        return
     #remove condition that device has to be off
     if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
         setstat(nummer,20)
@@ -1113,30 +1118,36 @@ def conditions(nummer):
     # Auto ladung
     if deactivatewhileevcharging == 1:
         if ( DeviceValues[str(nummer)+"relais"] == 1 ):
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll ausgeschaltet werden bei Ladung, pruefe " + str( testcharge))
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll reduziert werden bei Ladung, pruefe " + str( testcharge))
             if chargestatus == 1:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, pruefe Mindestlaufzeit")
                 if str(nummer)+"eintime" in DeviceCounters:
                     timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                     if ( mineinschaltdauer < timestart):
-                        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, schalte aus ")
-                        turndevicerelais(nummer, 0,0,1)
-                        return
+                        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, setze Ausschaltschwelle auf 0")
+                        #turndevicerelais(nummer, 0,0,1)
+                        #return
+                        ausverz = 0
+                        if (ausschwelle < 0):
+                            ausschwelle = 0
                     else:
                         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer nicht erreicht, " + str(mineinschaltdauer) + " > " + str(timestart))
                 else:
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
-                    turndevicerelais(nummer, 0,0,1)
-                    return
+                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt,setze Ausschaltschwelle auf 0")
+                    #turndevicerelais(nummer, 0,0,1)
+                    #return
+                    ausverz = 0
+                    if (ausschwelle < 0):
+                        ausschwelle = 0
             else:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
-        else:
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
-            if chargestatus == 1:
-                logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
-                return
-            else:
-                logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
+        #else:
+            #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
+            #if chargestatus == 1:
+                #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
+                #return
+            #else:
+                #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
     # Auto ladung ende
     # Art vom ueberschussberechnung pruefen
     ueberschussberechnung = 0

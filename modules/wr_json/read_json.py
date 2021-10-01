@@ -4,11 +4,16 @@ import requests
 import sys
 import traceback
 import jq
+import re
 from datetime import datetime, timezone
 import os
 
 Debug         = int(os.environ.get('debug'))
 myPid         = str(os.getpid())
+
+
+#renumeric ='^-?[0-9]+$'
+renumeric ='^[-+]?[0-9]+\.?[0-9]*$'
 
 jsonurl = str(sys.argv[1])
 
@@ -22,7 +27,7 @@ def DebugLog(message):
 	local_time = datetime.now(timezone.utc).astimezone()
 	print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
 
-
+numcheck = re.compile(renumeric)
 
 if Debug >= 2:
 	DebugLog('PV' + str(numpv) + ' JQ Watt: ' + jsonwatt)
@@ -32,9 +37,15 @@ if Debug >= 2:
 
 response = requests.get(jsonurl, timeout=5).json()
 if Debug>=2:
-        DebugLog('JSON Response: ' + str(response))
+	DebugLog('JSON Response: ' + str(response))
 try:
 	watt = jq.compile(jsonwatt).input(response).first()
+	if Debug>=1:
+		DebugLog('Leistung: ' + str(watt))
+	if not numcheck.match(str(watt)):
+		DebugLog('Leistung (Watt) nicht numerisch. Bitte Filterausdruck ueberpruefen -->0')
+		watt=0
+
 	watt=int(watt)
 	if watt >= 0:
 		watt = watt*(-1)
@@ -42,6 +53,7 @@ try:
 		with open(RAMDISKDIR + "pvwatt", "w") as f:
 			f.write(str(watt))
 	else:
+		DebugLog(RAMDISKDIR + "pv" + str(numpv) + "watt"+ "W:"+str(watt))
 		with open(RAMDISKDIR + "pv" + str(numpv) + "watt" , "w") as f:
 			f.write(str(watt))
 except:
