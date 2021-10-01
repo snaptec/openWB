@@ -9,13 +9,11 @@ if __name__ == "__main__":
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
-    from helpermodules import pub
     from helpermodules import timecheck
     import set_values
     import tesla_lib
 else:
     from ...helpermodules import log
-    from ...helpermodules import pub
     from ...helpermodules import timecheck
     from . import set_values
     from . import tesla_lib

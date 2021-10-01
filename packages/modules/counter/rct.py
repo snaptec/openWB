@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
 import fnmatch
+import os
+from pathlib import Path
 
 if __name__ == "__main__":
-    from pathlib import Path
-    import os
     import sys
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
@@ -29,10 +29,11 @@ class module(set_values.set_values):
 
     def read(self):
         try:
-            power_all = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--name=g_sync.p_ac_sc_sum']))
-            current1 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0x27BE51D9']) / 230)
-            current2 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0xF5584F90']) / 230)
-            current3 = int(self.read_value(['/var/www/html/openWB/packages/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0xB221BCFA']) / 230)
+            parentdir = str(Path(os.path.abspath(__file__)).parents[2])
+            power_all = int(self.read_value([parentdir+'/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--name=g_sync.p_ac_sc_sum']))
+            current1 = int(self.read_value([parentdir+'/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0x27BE51D9']) / 230)
+            current2 = int(self.read_value([parentdir+'/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0xF5584F90']) / 230)
+            current3 = int(self.read_value([parentdir+'/modules/counter/rct.py', '--ip='+self.data["config"]["ip_address"], '--id=0xB221BCFA']) / 230)
 
             if self.ramdisk == True:
                 imported, exported = simcount.sim_count(power_all, ramdisk=True, pref="bezug")
