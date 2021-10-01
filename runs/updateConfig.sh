@@ -2121,6 +2121,7 @@ updateConfig(){
 		echo "virtual_ip_wlan0='192.168.193.6'" >> $ConfigFile
 	fi
 	if ! grep -Fq "evuflexip=" $ConfigFile; then
+		echo "evuflexversion=2" >>$ConfigFile
 		echo "evuflexip='192.168.193.5'" >> $ConfigFile
 		echo "evuflexport=8899" >> $ConfigFile
 		echo "evuflexid=1" >> $ConfigFile
