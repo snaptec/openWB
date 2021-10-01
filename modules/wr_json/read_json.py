@@ -12,7 +12,8 @@ Debug         = int(os.environ.get('debug'))
 myPid         = str(os.getpid())
 
 
-renumeric ='^-?[0-9]+$'
+#renumeric ='^-?[0-9]+$'
+renumeric ='^[-+]?[0-9]+\.?[0-9]*$'
 
 jsonurl = str(sys.argv[1])
 
