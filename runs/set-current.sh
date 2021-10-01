@@ -106,7 +106,7 @@ function setChargingCurrentIpModbus () {
 	evseip=$2
 	ipevseid=$3
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $ipevseid
+	python3 /var/www/html/openWB/packages/modules/cp/satellite.py 2 "${evseip}" "${ipevseid}" "${current}"
 }
 
 # function for openwb slave kit
