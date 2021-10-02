@@ -15,7 +15,7 @@ else
     MYLOGFILE="$RAMDISKDIR/evu_json.log"
 fi
 
-python /var/www/html/openWB/modules/bezug_kostalplenticoreem300haus/kostal_plenticore.py "${kostalplenticorehaus}" >>$MYLOGFILE 2>&1
+python3 /var/www/html/openWB/modules/bezug_kostalplenticoreem300haus/kostal_plenticore.py "${kostalplenticorehaus}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
