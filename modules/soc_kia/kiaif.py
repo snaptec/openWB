@@ -68,10 +68,15 @@ def getStatusCached(vehicleId):
         raise 
 
     try:
+        statusDict['soc12v'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['battery']['batSoc'])
+    except:
+        statusDict['soc12v'] = 100
+        pass
+        
+    try:
         responseDict = json.loads(response)
         statusDict['time'] = timeToStamp(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['evStatus']['batteryStatus'])
-        statusDict['soc12v'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['battery']['batSoc'])
         statusDict['vehicleLocation'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleLocation']
         statusDict['vehicleStatus'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']
         statusDict['odometer'] = responseDict['resMsg']['vehicleStatusInfo']['odometer']
