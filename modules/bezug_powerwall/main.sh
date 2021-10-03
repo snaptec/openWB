@@ -16,7 +16,7 @@ else
     MYLOGFILE="$RAMDISKDIR/evu_json.log"
 fi
 
-sudo python3 /var/www/html/openWB/modules/bezug_powerwall/powerwall.py "${OPENWBBASEDIR}" "${speicherpwloginneeded}" "${speicherpwuser}" "${speicherpwpass}" "${speicherpwip}" >>$MYLOGFILE 2>&1
+python3 /var/www/html/openWB/modules/bezug_powerwall/powerwall.py "${OPENWBBASEDIR}" "${speicherpwloginneeded}" "${speicherpwuser}" "${speicherpwpass}" "${speicherpwip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
