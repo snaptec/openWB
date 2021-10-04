@@ -46,7 +46,7 @@ def refresh_soc(akey: str, token: str, chargepoint: str):
         return
 
     log(1, "Lp%s: SoC from Server: %d" % (chargepoint, soc))
-    if soc >= 100:
+    if soc <= 100:
         write_float_to_ramdisk_file("soc" + chargepoint_number_to_string(chargepoint), soc)
     else:
         log(0, "Lp%s: SoC=%f is invalid!" % (chargepoint, soc))
