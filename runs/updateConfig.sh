@@ -810,6 +810,9 @@ updateConfig(){
 	if ! grep -Fq "name_wechselrichter2=" $ConfigFile; then
 		echo "name_wechselrichter2=WR2" >> $ConfigFile
 	fi
+	if ! grep -Fq "name_wechselrichter3=" $ConfigFile; then
+		echo "name_wechselrichter3=WR3" >> $ConfigFile
+	fi
 	if ! grep -Fq "hook1ein_url=" $ConfigFile; then
 		echo "hook1ein_url='https://webhook.com/ein.php'" >> $ConfigFile
 	fi
