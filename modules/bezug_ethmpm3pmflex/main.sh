@@ -15,17 +15,17 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu_json.log"
 fi
 
-openwbDebugLog ${DMOD} 2 "EVU KIT Version: ${evukitversion}"
+openwbDebugLog ${DMOD} 2 "EVU KIT Version: ${evuflexversion}"
 openwbDebugLog ${DMOD} 2 "EVU IP: ${evuflexip}"
 openwbDebugLog ${DMOD} 2 "EVU Port : ${evuflexport}"
 openwbDebugLog ${DMOD} 2 "EVU ID : ${evuflexid}"
 
 #sudo python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/test.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
 #ret=$?
-if (( evukitversion == 1 )); then
+if (( evuflexversion == 1 )); then
 	python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readlovato.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
 	ret=$?
-elif (( evukitversion == 2 )); then
+elif (( evuflexversion == 2 )); then
 	python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readsdm.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
 	ret=$?
 else
