@@ -1,44 +1,64 @@
 #!/usr/bin/python
-# import sys
+import sys
 # import os
 # import time
 # import getopt
 import struct
 from pymodbus.client.sync import ModbusTcpClient
 
-client = ModbusTcpClient('192.168.193.15', port=8899)
+##EVU Kit Defaults
+mbip='192.168.193.15'
+mbport=8899
+mbid=0x02
+
+#Check Argumentlist and replace Defaults if present
+if len(sys.argv) >= 2:
+        mbip=str(sys.argv[1])
+
+if len(sys.argv) >= 3:
+        mbport=int(sys.argv[2])
+
+if len(sys.argv) >= 4:
+        mbid=int(sys.argv[3])
+
+
+#client = ModbusTcpClient('192.168.193.15', port=8899)
+client = ModbusTcpClient(mbip,port=mbport)
+#client.host(mbip)
+#client.port(mbport)
+#client.unit_id(mbid)
 
 #Voltage
-resp = client.read_input_registers(0x0001,2, unit=0x02)
+resp = client.read_input_registers(0x0001,2, unit=mbid)
 voltage1 = float(resp.registers[1] / 100)
 f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
 f.write(str(voltage1))
 f.close()
-resp = client.read_input_registers(0x0003,2, unit=0x02)
+resp = client.read_input_registers(0x0003,2, unit=mbid)
 voltage2 = float(resp.registers[1] / 100)
 f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
 f.write(str(voltage2))
 f.close()
-resp = client.read_input_registers(0x0005,2, unit=0x02)
+resp = client.read_input_registers(0x0005,2, unit=mbid)
 voltage3 = float(resp.registers[1] / 100)
 f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
 f.write(str(voltage3))
 f.close()
 
 #phasen watt
-resp = client.read_input_registers(0x0013,2, unit=0x02)
+resp = client.read_input_registers(0x0013,2, unit=mbid)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 finalw1 = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
 f.write(str(finalw1))
 f.close()
-resp = client.read_input_registers(0x0015,2, unit=0x02)
+resp = client.read_input_registers(0x0015,2, unit=mbid)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 finalw2 = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
 f.write(str(finalw2))
 f.close()
-resp = client.read_input_registers(0x0017,2, unit=0x02)
+resp = client.read_input_registers(0x0017,2, unit=mbid)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 finalw3 = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
@@ -47,7 +67,7 @@ f.close()
 
 finalw= finalw1 + finalw2 + finalw3
 # total watt
-# resp = client.read_input_registers(0x0039,2, unit=0x02)
+# resp = client.read_input_registers(0x0039,2, unit=mbid)
 # all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 # finalw = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
@@ -55,7 +75,7 @@ f.write(str(finalw))
 f.close()
 
 #ampere l1
-resp = client.read_input_registers(0x0007, 2, unit=0x02)
+resp = client.read_input_registers(0x0007, 2, unit=mbid)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 lla1 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
@@ -66,7 +86,7 @@ else:
 f.close()
 
 #ampere l2
-resp = client.read_input_registers(0x0009, 2, unit=0x02)
+resp = client.read_input_registers(0x0009, 2, unit=mbid)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 lla2 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
@@ -77,7 +97,7 @@ else:
 f.close()
 
 #ampere l3
-resp = client.read_input_registers(0x000b, 2, unit=0x02)
+resp = client.read_input_registers(0x000b, 2, unit=mbid)
 all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 lla3 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
@@ -88,7 +108,7 @@ else:
 f.close()
 
 #evuhz
-resp = client.read_input_registers(0x0031,2, unit=0x02)
+resp = client.read_input_registers(0x0031,2, unit=mbid)
 evuhz= float(resp.registers[1])
 evuhz= float(evuhz / 100)
 if evuhz > 100:
@@ -98,19 +118,19 @@ f.write(str(evuhz))
 f.close()
 
 #Power Factor
-resp = client.read_input_registers(0x0025,2, unit=0x02)
+resp = client.read_input_registers(0x0025,2, unit=mbid)
 evupf1 = float(resp.registers[1]) / 10000
 f = open('/var/www/html/openWB/ramdisk/evupf1', 'w')
 f.write(str(evupf1))
 f.close()
 
-resp = client.read_input_registers(0x0027,2, unit=0x02)
+resp = client.read_input_registers(0x0027,2, unit=mbid)
 evupf2 = float(resp.registers[1]) / 10000
 f = open('/var/www/html/openWB/ramdisk/evupf2', 'w')
 f.write(str(evupf2))
 f.close()
 
-resp = client.read_input_registers(0x0029,2, unit=0x02)
+resp = client.read_input_registers(0x0029,2, unit=mbid)
 evupf3 = float(resp.registers[1]) / 10000
 f = open('/var/www/html/openWB/ramdisk/evupf3', 'w')
 f.write(str(evupf3))

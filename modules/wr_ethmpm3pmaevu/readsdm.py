@@ -54,7 +54,7 @@ f.close()
 
 resp = client.read_input_registers(0x0156,2, unit=sdmid)
 pvkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-pvkwh = float("%.3f" % pvkwh) / 1000
+pvkwh = float("%.3f" % pvkwh) * 1000
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(pvkwh))
 f.close()
