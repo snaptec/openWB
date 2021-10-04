@@ -68,13 +68,19 @@ def getStatusCached(vehicleId):
         raise 
 
     try:
+        responseDict = json.loads(response)
+    except:
+        soclogging.logDebug(1, "Receiving cached status failed, invalid response")
+        soclogging.logDebug(2, response)
+        raise
+        
+    try:
         statusDict['soc12v'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['battery']['batSoc'])
     except:
         statusDict['soc12v'] = 100
         pass
         
     try:
-        responseDict = json.loads(response)
         statusDict['time'] = timeToStamp(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['vehicleStatusInfo']['vehicleStatus']['evStatus']['batteryStatus'])
         statusDict['vehicleLocation'] = responseDict['resMsg']['vehicleStatusInfo']['vehicleLocation']
@@ -130,12 +136,22 @@ def getStatusFull(vehicleId):
     except:
         raise
         
-
     try:
         responseDict = json.loads(response)
+    except:
+        soclogging.logDebug(1, "Receiving current status failed, invalid response")
+        soclogging.logDebug(2, response)
+        raise
+        
+    try:
+        statusDict['soc12v'] = int(responseDict['resMsg']['battery']['batSoc'])
+    except:
+        statusDict['soc12v'] = 100
+        pass
+
+    try:
         statusDict['time'] = timeToStamp(responseDict['resMsg']['time'])
         statusDict['socev'] = int(responseDict['resMsg']['evStatus']['batteryStatus'])
-        statusDict['soc12v'] = int(responseDict['resMsg']['battery']['batSoc'])
         statusDict['vehicleStatus'] = responseDict['resMsg']
     except:
         soclogging.logDebug(1, "Receiving current status failed, invalid response")
