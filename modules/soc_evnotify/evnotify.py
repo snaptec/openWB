@@ -1,19 +1,18 @@
 import sys
-from datetime import datetime
+from os.path import dirname, realpath, join
+
 import requests
 
-RAMDISK_PATH = "/var/www/html/openWB/ramdisk/"
-debuglevel = 2
+sys.path.append(join(dirname(dirname(dirname(realpath(__file__)))), "lib"))
+from openwb.config import RAMDISK_PATH, Config
+from openwb.logger import Logger, LogFile
 
-
-def log(level: int, msg: str):
-    if debuglevel >= level:
-        with open(RAMDISK_PATH + "soc.log", "a") as fd:
-            fd.write("%s: EVNotify: %s\n" % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), msg))
+logger = Logger(LogFile.EVSOC, "EVNotify")
+config = Config()
 
 
 def write_to_ramdisk_file(filename: str, content: str):
-    with open(RAMDISK_PATH + filename, 'w') as f:
+    with open(join(RAMDISK_PATH, filename), 'w') as f:
         f.write(content)
         f.write("\n")
 
@@ -35,19 +34,16 @@ def refresh_soc(akey: str, token: str, chargepoint: str):
     try:
         soc = load_evnotify_soc(akey, token)
     except Exception as e:
-        log(0, "Lp%s: Failed to retrieve SoC: %s" % (chargepoint, e))
+        logger.info(f"Lp{chargepoint}: Failed to retrieve SoC: {e}")
         return
 
-    log(1, "Lp%s: SoC from Server: %g" % (chargepoint, soc))
+    logger.debug(f"Lp{chargepoint}: SoC from Server: {soc}")
     if soc <= 100:
         write_float_to_ramdisk_file("soc" if chargepoint == "1" else "soc1", soc)
     else:
-        log(0, "Lp%s: SoC=%g is invalid!" % (chargepoint, soc))
+        logger.info(f"Lp{chargepoint}: SoC={soc} is invalid!")
 
 
 if __name__ == '__main__':
-    debuglevelArg = sys.argv[4]
-    if debuglevelArg.isdigit():
-        debuglevel = int(debuglevelArg)
-
-    refresh_soc(sys.argv[1], sys.argv[2], sys.argv[3])
+    chargePointName = "lp2" if sys.argv[1] == "2" else ""
+    refresh_soc(config["evnotifyakey" + chargePointName], config["evnotifytoken" + chargePointName], sys.argv[1])
