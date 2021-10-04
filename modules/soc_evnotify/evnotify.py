@@ -31,13 +31,6 @@ def load_evnotify_soc(akey: str, token: str):
     raise Exception("Expected response with number property soc_display. Got: " + response.text)
 
 
-def chargepoint_number_to_string(chargepoint: str):
-    if chargepoint == "1":
-        return ""
-    else:
-        return chargepoint
-
-
 def refresh_soc(akey: str, token: str, chargepoint: str):
     try:
         soc = load_evnotify_soc(akey, token)
@@ -45,11 +38,11 @@ def refresh_soc(akey: str, token: str, chargepoint: str):
         log(0, "Lp%s: Failed to retrieve SoC: %s" % (chargepoint, e))
         return
 
-    log(1, "Lp%s: SoC from Server: %d" % (chargepoint, soc))
+    log(1, "Lp%s: SoC from Server: %g" % (chargepoint, soc))
     if soc <= 100:
-        write_float_to_ramdisk_file("soc" + chargepoint_number_to_string(chargepoint), soc)
+        write_float_to_ramdisk_file("soc" if chargepoint == "1" else "soc1", soc)
     else:
-        log(0, "Lp%s: SoC=%f is invalid!" % (chargepoint, soc))
+        log(0, "Lp%s: SoC=%g is invalid!" % (chargepoint, soc))
 
 
 if __name__ == '__main__':
