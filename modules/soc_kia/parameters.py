@@ -116,7 +116,7 @@ def loadBrandData():
         setParameter('baseUrl', 'https://' + getParameter('host'))
         setParameter('clientId', '6d477c38-3ca4-4cf3-9557-2a1929a94654')
         setParameter('authClientId', '97516a3c-2060-48b4-98cd-8e7dcd3c47b2')
-        setParameter('appId', '99cfff84-f4e2-4be8-a5ed-e5b755eb6581')
+        setParameter('appId', '014d2225-8495-4735-812d-2616334fd15d')
         setParameter('basicToken', 'Basic NmQ0NzdjMzgtM2NhNC00Y2YzLTk1NTctMmExOTI5YTk0NjU0OktVeTQ5WHhQekxwTHVvSzB4aEJDNzdXNlZYaG10UVI5aVFobUlGampvWTRJcHhzVg==')
     
     return
