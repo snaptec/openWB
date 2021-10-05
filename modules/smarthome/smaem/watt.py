@@ -26,7 +26,7 @@
 # 2020-01-04 datenschuft changes to tun with speedwiredecoder
 # 2020-01-13 Kevin Wieland changes to run with openWB
 # 2020-02-03 theHolgi added phase-wise load and power factor
-# 2021-09-01 Markus Giessen adoption for usage as Smart Home Device for power consumption
+# 2021-09-01 Markus Giessen adoption for usage as Smart Home Device for energy metering
 
 import sys
 import os
@@ -49,7 +49,6 @@ def abortprogram(signal,frame):
 signal.signal(signal.SIGINT, abortprogram)
 
 # read configuration
-# default values
 devicenumber = str(sys.argv[1]) # SmartHomeDevice-Nummer
 smaserial = sys.argv[2] # SMA EnergyMeter Serial number
 secondssincelastmetering = int(sys.argv[3]) # Seconds since last metering, useful for handling with more than one EnergyMeter
@@ -58,8 +57,9 @@ ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
 MCAST_PORT = 9522
 
-returnfile = '/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber)
-debugfile = open('/var/www/html/openWB/ramdisk/smaem.log','a',newline='\r\n')
+returnfile = '/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber) # Return file (.ret) for energy metering
+timefile = '/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber) + '_time' # Dummy file needed for timestamp of last metering
+debugfile = open('/var/www/html/openWB/ramdisk/smaem.log','a',newline='\r\n') # Logfile for additional output beside of the smarthome.log
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -74,8 +74,8 @@ except BaseException:
 # debugfile.write('smaserial: #' + str(smaserial) + '# - sys.argv[1]: #' + str(sys.argv[1]) + '# - sys.argv[2]: #' + str(sys.argv[2]) + '# - sys.argv[3]: #' + str(sys.argv[3]) + '#\n')
 # debugfile.write('secondssincelastmetering: #' + str(secondssincelastmetering) + '#\n')
 
-if os.path.isfile(returnfile):
-	lastmodificationtime=round(os.path.getmtime(returnfile),0)
+if os.path.isfile(timefile):
+	lastmodificationtime=round(os.path.getmtime(timefile),0)
 	# debugfile.write('We took the time of the returnfile:' + datetime.fromtimestamp(lastmodificationtime) + '\n')
 else:
 	lastmodificationtime=round(time.time(),0)
@@ -111,7 +111,7 @@ elif (os.path.isfile(returnfile)) and (int((round(time.time(),0)-lastmodificatio
 elif (os.path.isfile(returnfile)) and (int((round(time.time(),0)-lastmodificationtime)) < int(secondssincelastmetering)): # Scenario 3: Our EnergyMeter is not sending but we have a returnfile which is younger than n seconds (parameter secondssincelastmetering)
  # We have a ret-file which is younger than n seconds. We do nothing as the existing ret-file is good enough.
  debugfile.write(str(datetime.datetime.now()) + ': 3 - The existing ret-file is fine enough. round(time.time(),0): #' + str(round(time.time(),0)) + '# - lastmodificationtime: #' + str(lastmodificationtime) + '# - secondssincelastmetering: #' + str(secondssincelastmetering) + '#\n')
- sys.exit("Module SMAEM: No data received and no historical data which is older than " + str(secondssincelastmetering) + " seconds.")
+ sys.exit("Module SMAEM: No data received but we have historical data which is younger than " + str(secondssincelastmetering) + " seconds.")
 else:
  # Our EnergyMeter is not sending right now and it didn't send any data since boottime
  # In this case we do nothing and we don't create a "fake" returnfile (as we don't know the value for wattc)
@@ -127,5 +127,10 @@ answer = '{"power":' + watt + ',"powerc":' + wattc + '}'
 f = open(returnfile, 'w')
 json.dump(answer,f)
 f.close()
+
+t = open(timefile, 'w')
+t.write(str(datetime.datetime.now()) + ': File is created by Smarthome module SMAEM for validating the timestamp of the last return-file creation.')
+t.close()
+
 debugfile.write(str(datetime.datetime.now()) + ': 99 - Output answer: #' + answer + '#\n')
 debugfile.close()
