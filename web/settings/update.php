@@ -223,9 +223,9 @@
 				}
 
 				$(function getAllVersions() {
-					displayVersion("Stable", 'https://raw.githubusercontent.com/snaptec/openWB/stable17/web/version');
-					displayVersion("Beta", 'https://raw.githubusercontent.com/snaptec/openWB/beta/web/version');
-					displayVersion("Nightly", 'https://raw.githubusercontent.com/snaptec/openWB/master/web/version');
+					displayVersion("Stable", 'https://raw.githubusercontent.com/philipp123ow/openWB/stable17/web/version');
+					displayVersion("Beta", 'https://raw.githubusercontent.com/philipp123ow/openWB/beta/web/version');
+					displayVersion("Nightly", 'https://raw.githubusercontent.com/philipp123ow/openWB/master/web/version');
 				});
 
 				$.get({
