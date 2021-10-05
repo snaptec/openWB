@@ -58,7 +58,7 @@ if ! [ -z "$output" ]; then
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
-	if [[ $rfidtag != "0" ]] ; then
+	if [ ! -z "$rfidtag" ]; then
 		echo $rfidtag > /var/www/html/openWB/ramdisk/readtag
 		curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/clearRfid
 	fi
