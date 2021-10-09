@@ -9,7 +9,7 @@ from pymodbus.client.sync import ModbusTcpClient
 ##EVU Kit Defaults
 mbip='192.168.193.15'
 mbport=8899
-mdid = 5
+mbid = 5
 
 #Check Argumentlist and replace Defaults if present
 if len(sys.argv) >= 2:
