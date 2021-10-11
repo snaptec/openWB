@@ -35,7 +35,7 @@ class ChargePointList {
 
       ;
     const rows = chargePoint.append("div")
-      .attr("class", "row wb-widget p-0 mb-2")
+      .attr("class", "row  p-0 mb-2")
       .style ( "background-color","black")
       .append("div").attr("class", "container-fluid");
       
@@ -68,7 +68,7 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
     const nameRow = d3.create("div").classed("row", true)
     const nameCell = nameRow
       .append("div")
-        .attr("class", "col-8  px-1 py-0 chargePointName")
+        .attr("class", "col-8  px-2 py-0 chargePointName")
         .style("color", row.color)
         .style("vertical-align", "middle")
         .style ("text-align", "left")
@@ -123,7 +123,7 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
   cpButtonRow (row, index) {
     const chargeModes = ["Sofort", "Min & PV", "PV", "Stop", "Standby"]
   
-    const buttonRow = d3.create("div").classed("row", true).classed("pt-3", true)
+    const buttonRow = d3.create("div").attr ("class", "row pt-3 pb-1")
         
     const modeButton = buttonRow.append ("div").attr ("class", "col-6 m-0 px-1")
       .append ("button")
@@ -139,9 +139,9 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
           .append ("span").attr("class", "fas fa-car priorityEvBatteryIcon")
      .text(" ")
 
-     const configButton = buttonRow.append("div").classed("col-6 m-0 px-1", true)
+     const configButton = buttonRow.append("div").attr ("class", "col-6 m-0 px-1")
      .append ("button")
-     .attr ("class", "btn btn-block btn-outline-secondary display-button ladepunktConfigBtn px-1")
+     .attr ("class", "btn btn-block btn-outline-secondary display-button ladepunktConfigBtn px-1 ")
      .attr ("type", "button")
      .on("click", () => {
         if (displaylocked == false) {
@@ -159,7 +159,6 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
      const buttonText = configButton.append("span")
      
      configButton.append ("i").attr("class", "fas fa-wrench")
-     configButton.append("text").text(" ")
      configButton.append("text").text("  Konfig")
      
      return buttonRow.node()
