@@ -127,7 +127,7 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
         
     const modeButton = buttonRow.append ("div").attr ("class", "col-6 m-0 px-1")
       .append ("button")
-      .attr("class", "btn btn-block btn-secondary chargeModeSelectBtn px-1")
+      .attr("class", "btn btn-block btn-success chargeModeSelectBtn px-1")
       .attr("type", "button")
       .on("click", () => {
           $("#chargeModeModal").modal("show");      
