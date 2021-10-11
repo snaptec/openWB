@@ -580,7 +580,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 			var dd = String(dateObject.getDate()).padStart(2, '0');  // format with leading zeros
 			var mm = String(dateObject.getMonth() + 1).padStart(2, '0'); //January is 0 so add +1!
 			var dayOfWeek = dateObject.toLocaleDateString('de-DE', { weekday: 'short'});
-			date = dayOfWeek + ', ' + dd + '.' + mm + '.' + dateObject.getFullYear();
+			date = dd + '.' + mm + '.' + dateObject.getFullYear();
 		}
 		$('#time').text(time);
 		$('#date').text(date);
