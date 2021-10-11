@@ -1283,6 +1283,7 @@
 										<option <?php if($displaythemeold == 3) echo "selected" ?> value="3">Gauges</option>
 										<option <?php if($displaythemeold == 1) echo "selected" ?> value="1">Symbolfluss</option>
 										<option <?php if($displaythemeold == 2) echo "selected" ?> value="2">Nur Ladeleistung, keine verstellmöglichkeit</option>
+										<option <?php if($displaythemeold == 5) echo "selected" ?> value="5">Colors</option>
 									</select>
 								</div>
 							</div>
