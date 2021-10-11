@@ -36,7 +36,7 @@ class ChargePointList {
       ;
     const rows = chargePoint.append("div")
       .attr("class", "row wb-widget p-0 mb-2")
-      //.style ( "background-color","var(--color-axis")
+      .style ( "background-color","black")
       .append("div").attr("class", "container-fluid");
       
     rows.append((row, i) => this.cpNameButtonCell(row, i));
@@ -125,9 +125,9 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
   
     const buttonRow = d3.create("div").classed("row", true).classed("pt-3", true)
         
-    const modeButton = buttonRow.append ("div").classed ("col-6 m-0 p-0", true)
+    const modeButton = buttonRow.append ("div").attr ("class", "col-6 m-0 px-1")
       .append ("button")
-      .attr("class", "btn btn-block btn-info chargeModeSelectBtn px-0")
+      .attr("class", "btn btn-block btn-secondary chargeModeSelectBtn px-1")
       .attr("type", "button")
       .on("click", () => {
           $("#chargeModeModal").modal("show");      
@@ -139,9 +139,9 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
           .append ("span").attr("class", "fas fa-car priorityEvBatteryIcon")
      .text(" ")
 
-     const configButton = buttonRow.append("div").classed("col-6 m-0 p-0", true)
+     const configButton = buttonRow.append("div").classed("col-6 m-0 px-1", true)
      .append ("button")
-     .attr ("class", "btn btn-block btn-outline-info ladepunktConfigBtn")
+     .attr ("class", "btn btn-block btn-outline-secondary display-button ladepunktConfigBtn px-1")
      .attr ("type", "button")
      .on("click", () => {
         if (displaylocked == false) {
@@ -156,7 +156,12 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
     });
      
 
+     const buttonText = configButton.append("span")
+     
      configButton.append ("i").attr("class", "fas fa-wrench")
+     configButton.append("text").text(" ")
+     configButton.append("text").text("  Konfig")
+     
      return buttonRow.node()
   }
   /* cpSocButtonCell(row, index) {
