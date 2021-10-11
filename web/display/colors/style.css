@@ -79,7 +79,7 @@ h3 {
     border: 0px!important;
 }
 .card-body {
-    background-color: #212529;
+    background-color: var(--color-bg);
     /*border-color: rgba(255, 255, 255, 0.5);*/
     color: #ffffff;
 }
@@ -110,7 +110,7 @@ h3 {
 }
 
 .modal-content {
-    background-color: #212529;
+    background-color: var(--color-bg);
     color: #ffffff;
 }
 

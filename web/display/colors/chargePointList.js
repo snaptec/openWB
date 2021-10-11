@@ -36,7 +36,7 @@ class ChargePointList {
       ;
     const rows = chargePoint.append("div")
       .attr("class", "row  p-0 mb-2")
-      .style ( "background-color","black")
+      .style ( "background-color","var(--color-bg")
       .append("div").attr("class", "container-fluid");
       
     rows.append((row, i) => this.cpNameButtonCell(row, i));
