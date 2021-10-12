@@ -8,7 +8,7 @@ class PowerMeter {
   constructor() {
     this.width = 500;
     this.height = this.width;
-    this.margin = 20;
+    this.margin = 10;
     this.radius = this.width / 2 - this.margin;
     this.cornerRadius = 1;
     this.circleGapSize = (Math.PI / 40);
@@ -32,14 +32,6 @@ class PowerMeter {
     this.axisColor = 'var(--color-axis)';
     this.fgColor = "var(--color-fg)";
     this.scaleColor = "var(--color-scale)";
-
-
-    d3.select("button#powerMeterButton")
-      .on("click", switchDisplay);
-    d3.select("button#themeSwitchButton")
-      .on("click", switchTheme);
-    d3.select("button#meterResetButton")
-      .on("click", resetButtonClicked);
   }
 
   getColor(category) {
@@ -89,23 +81,6 @@ class PowerMeter {
     this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.usageSummary.batIn); // Speicher in
     this.addLabel(svg, 0, this.height / 2 * 2 / 5, "middle", wbdata.usageSummary.house);  // Haus
 
-   /*  if (wbdata.chargePoint[0].isSocConfigured) {
-      this.addLabelWithColor(svg,
-        (-this.width / 2 - this.margin / 4 + 10),
-        (-this.height / 2 + this.margin + 5),
-        "start",
-        (wbdata.chargePoint[0].name + ": " + (wbdata.chargePoint[0].soc) + "%"),
-        wbdata.chargePoint[0].color);
-    }
-
-    if (wbdata.chargePoint[1].isSocConfigured) {
-      this.addLabelWithColor(svg,
-        (this.width / 2 + this.margin / 4 - 10),
-        (-this.height / 2 + this.margin + 5),
-        "end",
-        (wbdata.chargePoint[1].name + ": " + (wbdata.chargePoint[1].soc) + "%"),
-        wbdata.chargePoint[1].color);
-    } */
     if (wbdata.batterySoc > 0) {
       this.addLabelWithColor(svg,
         (-this.width / 2 - this.margin / 4 + 10),
