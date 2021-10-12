@@ -35,7 +35,7 @@ class ChargePointList {
 
       ;
     const rows = chargePoint.append("div")
-      .attr("class", "row  p-0 mb-2")
+      .attr("class", "row p-0 mb-2")
       .style ( "background-color","var(--color-bg")
       .append("div").attr("class", "container-fluid");
       
@@ -159,7 +159,8 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
      const buttonText = configButton.append("span")
      
      configButton.append ("i").attr("class", "fas fa-wrench")
-     configButton.append("text").text("  Konfig")
+     configButton.append("text").html('&nbsp;&nbsp;')
+     configButton.append("text").text(" Konfig")
      
      return buttonRow.node()
   }
