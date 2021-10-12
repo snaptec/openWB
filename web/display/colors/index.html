@@ -28,22 +28,15 @@
 <body>
 
     <div class="container-fluid">
-        <div class="row pt-2 pb-0">
-            <div class=" col-4">
-                <h3 class="mt-0">Ladepunkte</h3>
-        </div>
-        <div class="col-8 pl-5 pr-0">
-            <h3 id="widgetheading">Aktuelle Leistung</h3>
-        </div>
-        </div>
-        <div class="row pb-2">
+        
+        <div class="row pt-2">
             <div class=" col-4 pl-2 pr-0">
                 <div id="chargePointTable"></div>
             </div>
             <!-- Aktuelle Leistung (powermeter) -->
             <div class="col-8 pl-5 pr-0">
                 <div class="container-fluid">
-                    
+
                     <div class="row">
                         <div class="col wb-widget px-0">
                             <figure id="powermeter" class=" mb-0"></figure>
@@ -54,15 +47,23 @@
                 </div>
             </div>
         </div>
-        <div class="row p-0 m-0">
+        <div class="row pt-0 pb-0">
+            <div class=" col-4">
+                <h3 class="mt-0"></h3>
+            </div>
+            <div class="col-8 pl-5 pr-0">
+                <h3 id="widgetheading">&nbsp;</h3>
+            </div>
+        </div>
+        <div class="row pt-0 pb-0">
             <div class="col-4">
                 <div class="container-fluid px-2">
                     <div class="row px-0">
                         <div class="col-2 py-2 px-0" id="displaylock">
                             <button class="btn btn-block btn-outline-secondary display-button " id="lockButton"
                                 type="button">
-                            <i class="fas fa-lock text-danger h4"></i>
-                            <i class="fas fa-unlock text-success h4 hide"></i>
+                                <i class="fas fa-lock text-danger h4"></i>
+                                <i class="fas fa-unlock text-success h4 hide"></i>
                             </button>
                         </div>
 
@@ -70,7 +71,7 @@
                             <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
                             <h4 id="time" class="col text-center text-light">12:36</h4>
                         </div>
-                        
+
                         <div class="col-5 py-2 px-0">
                             <button class="btn btn-block btn-outline-secondary display-button " id="statusButton"
                                 type="button">
@@ -80,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8 pl-5 pr-0">
+            <div class="col-8 pl-5 pr-4">
                 <div class="container-fluid px-2">
                     <div class="row px-0">
                         <div class="col-4 py-2 px-0">
@@ -328,10 +329,10 @@
                     <div class="row">
 
                         <div class="col pt-4 px-3">
-                           <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
-                                   class="fas fa-check">&nbsp;&nbsp; OK</i></button>
-                       </div>
-                       </div>
+                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                                    class="fas fa-check">&nbsp;&nbsp; OK</i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1157,10 +1158,10 @@
                     <div class="row">
 
                         <div class="col pt-4 px-3">
-                           <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
-                                   class="fas fa-check">&nbsp;&nbsp; OK</i></button>
-                       </div>
-                       </div>
+                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                                    class="fas fa-check">&nbsp;&nbsp; OK</i></button>
+                        </div>
+                    </div>
                 </div> <!-- /modal body -->
             </div>
         </div>
@@ -1454,18 +1455,18 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
 
-                     <div class="col pt-4 px-3">
-                        <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
-                                class="fas fa-check">&nbsp;&nbsp; OK</i></button>
+                        <div class="col pt-4 px-3">
+                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                                    class="fas fa-check">&nbsp;&nbsp; OK</i></button>
+                        </div>
                     </div>
-                    </div>
-                
-            </div> <!-- /modal body -->
+
+                </div> <!-- /modal body -->
+            </div>
         </div>
-    </div>
     </div>
     <script>
         $('.chargeModeBtn').on("click", function (event) {

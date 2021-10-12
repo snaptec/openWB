@@ -89,7 +89,7 @@ class PowerGraph {
   
 
   updateHeading() {
-    var heading = "Leistung / Ladestand ";
+    var heading = "";
     heading = heading + this.liveGraphMinutes + " min";
     d3.select("h3#widgetheading").text(heading);
   }

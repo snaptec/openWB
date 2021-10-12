@@ -61,7 +61,7 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
   }
 
   updateValues() {
-    this.chargepoints = wbdata.chargePoint.filter(cp => cp.configured);
+    this.chargepoints = wbdata.chargePoint.filter((cp,i) => cp.configured && i <3); // limit number of charge points displayed to 3
   }
 
   cpNameButtonCell(row, index) {
@@ -164,30 +164,7 @@ rows.append ((row,i) => this.cpButtonRow (row,i));
      
      return buttonRow.node()
   }
-  /* cpSocButtonCell(row, index) {
-    const outer = d3.create("div")
-      .attr("class", "row px-1 py-1")
-      const cell = outer
-      .append("div").attr("class", "col")
-      .attr("onClick", (row) => ("socButtonClicked(" + index + ")"))
-      .style("text-align", "center")
-      .style("vertical-align", "middle");
-    if (row.isSocConfigured) {
-      cell.append("span").text(row.soc + " %")
-        .attr("class", "px-2");
-      if (row.isSocManual) {
-        cell.append("i")
-          .attr("class", "small fas fa-edit")
-          .style("color", "var(--color-fg");
-      } else {
-        cell.append("i")
-          .attr("class", "small fas fa-redo-alt")
-          .attr("id", "soclabel-" + index)
-          .style("color", "var(--color-fg)");
-      }
-    }
-    return outer.node();
-  } */
+  
 
   editManualSoc(i) {
     this.manualSoc = wbdata.chargePoint[i].soc;
