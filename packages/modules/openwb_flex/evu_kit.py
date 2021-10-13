@@ -2,7 +2,6 @@
 import sys
 
 
-
 try:
     from ...helpermodules import log
     from ...helpermodules import simcount
@@ -24,8 +23,9 @@ except:
     from modules.common import mpm3pm
     from modules.common import sdm630
 
+
 class EvuKitFlex():
-    def __init__(self, device) -> None:
+    def __init__(self, device: dict) -> None:
         self.data = {}
         self.data = device
         version = device["config"]["components"]["component0"]["configuration"]["version"]
@@ -35,7 +35,7 @@ class EvuKitFlex():
         if "name" not in self.data["config"]["components"]["component0"]:
             self.data["config"]["components"]["component0"]["name"] = "EVU-Kit"+str(device["config"]["id"])
         self.data["simulation"] = {}
-        client = connect_tcp.connect_tcp(device["config"]["name"], ip_address, port)
+        client = connect_tcp.ConnectTcp(device["config"]["name"], ip_address, port)
         factory = self.__counter_factory(version)
         self.counter = factory(device["config"], client)
         self.value_store = (store.ValueStoreFactory().get_storage("counter"))()
@@ -44,11 +44,11 @@ class EvuKitFlex():
 
     def __counter_factory(self, version: int):
         if version == 0:
-            return mpm3pm.mpm3pm
+            return mpm3pm.Mpm3pm
         elif version == 1:
-            return lovato.lovato
+            return lovato.Lovato
         elif version == 2:
-            return sdm630.sdm630
+            return sdm630.Sdm630
 
     def read(self):
         """ liest die Werte des Moduls aus.
@@ -70,7 +70,8 @@ class EvuKitFlex():
             else:
                 current = self.counter.get_current()
                 current = [abs(current[i]) for i in range(3)]
-                imported, exported = self.sim_count.sim_count(power_all, topic="openWB/set/system/devices/"+str(self.data["config"]["id"])+"/components/"+str(self.data["config"]["components"]["component0"]["id"])+"/", data=self.data["simulation"], prefix="bezug")
+                imported, exported = self.sim_count.sim_count(power_all, topic="openWB/set/system/devices/" +
+                                                              str(self.data["config"]["id"])+"/components/"+str(self.data["config"]["components"]["component0"]["id"])+"/", data=self.data["simulation"], prefix="bezug")
 
             self.value_store.set(self.data["config"]["components"]["component0"]["id"], voltage, current, power_per_phase, power_factor, imported, exported, power_all, frequency)
         except Exception as e:

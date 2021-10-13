@@ -22,6 +22,7 @@ def setup_connection():
     except Exception as e:
         log.exception_logging(e)
 
+
 def pub(topic, payload):
     """ published das übergebene Payload als json-Objekt an das übergebene Topic.
 
@@ -41,6 +42,7 @@ def pub(topic, payload):
     except Exception as e:
         log.exception_logging(e)
 
+
 def delete_connection():
     """ schließt die Verbindung zum Broker.
     """
@@ -50,7 +52,8 @@ def delete_connection():
     except Exception as e:
         log.exception_logging(e)
 
-def pub_single(topic, payload, hostname="localhost", no_json = False):
+
+def pub_single(topic, payload, hostname="localhost", no_json=False):
     """ published eine einzelne Nachricht an einen Host, der nicht der localhost ist.
 
         Parameter

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-
+from typing import List, Tuple
 try:
+    from ..common import connect_tcp
     from ...helpermodules import log
 except:
     # for 1.9 compability
@@ -10,15 +11,16 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
+    from modules.common import connect_tcp
 
 
-class mpm3pm:
-    def __init__(self, device_config, client) -> None:
+class Mpm3pm:
+    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
         self.name = device_config["components"]["component0"]["name"]
         self.id = device_config["components"]["component0"]["configuration"]["id"]
 
-    def get_voltage(self):
+    def get_voltage(self) -> List[int]:
         """
         """
         try:
@@ -32,7 +34,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_imported(self):
+    def get_imported(self) -> float:
         """
         """
         try:
@@ -42,7 +44,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_power(self):
+    def get_power(self) -> Tuple[List[int], float]:
         try:
             power_per_phase = []
             regs = [0x14, 0x16, 0x18]
@@ -55,7 +57,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return [None, None, None], None
 
-    def get_exported(self):
+    def get_exported(self) -> float:
         """
         """
         try:
@@ -65,7 +67,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_power_factor(self):
+    def get_power_factor(self) -> List[int]:
         """
         """
         try:
@@ -79,7 +81,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_frequency(self):
+    def get_frequency(self) -> float:
         """
         """
         try:
@@ -89,7 +91,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_current(self):
+    def get_current(self) -> List[int]:
         """
         """
         try:
@@ -103,7 +105,7 @@ class mpm3pm:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_counter(self):
+    def get_counter(self) -> float:
         try:
             counter = self.client.read_integer_registers(0x0004, 4, self.id) * 10
             return counter

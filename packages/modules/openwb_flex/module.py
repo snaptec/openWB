@@ -12,8 +12,9 @@ except:
     from helpermodules import log
     import evu_kit
 
+
 class Module():
-    def __init__(self, device) -> None:
+    def __init__(self, device: dict) -> None:
         try:
             self.data = {}
             self.data["config"] = device
@@ -30,6 +31,7 @@ class Module():
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+self.data["config"]["name"], e)
 
+
 def read_legacy(argv: List):
     """ Ausführung des Moduls als Python-Skript
     """
@@ -40,7 +42,8 @@ def read_legacy(argv: List):
         port = int(argv[4])
         id = int(argv[5])
 
-        device0 = {"name": "OpenWB-Kit","type": "openwb_flex", "id": 0, "configuration":{"ip_address": ip_address, "port": port}, "components": {"component0": {"type": component_type, "id": 0, "configuration": {"version": version, "id": id}}}}
+        device0 = {"name": "OpenWB-Kit", "type": "openwb_flex", "id": 0, "configuration": {"ip_address": ip_address, "port": port},
+                   "components": {"component0": {"type": component_type, "id": 0, "configuration": {"version": version, "id": id}}}}
         mod = Module(device0)
 
         log.MainLogger().debug('openWB Version: ' + str(version))
@@ -51,6 +54,7 @@ def read_legacy(argv: List):
         mod.read()
     except Exception as e:
         log.MainLogger().error("Fehler im Modul openwb_flex", e)
+
 
 if __name__ == "__main__":
     read_legacy(sys.argv)

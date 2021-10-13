@@ -1,12 +1,9 @@
-"""Log-Modul, dass die KOnfiguration für die Log-Dateien und Funktionen zum Aufruf der einzelnen Handler enthält
+"""Singelton für das Logger-Modul
 """
 
 from datetime import datetime, timezone
-import filelock
 import logging
 import os
-import pathlib
-import subprocess
 import traceback
 from pathlib import Path
 
@@ -26,25 +23,25 @@ class MainLogger:
         def __init__(self):
             pass
 
-        def info(self, message:str, exception=None):
+        def info(self, message: str, exception=None):
             self.__process_exception(exception)
             if int(os.environ.get("debug")) >= 1:
                 self.__write_log(message)
 
-        def debug(self, message:str, exception=None):
+        def debug(self, message: str, exception=None):
             self.__process_exception(exception)
             if int(os.environ.get("debug")) >= 2:
                 self.__write_log(message)
 
-        def error(self, message:str, exception=None):
+        def error(self, message: str, exception=None):
             self.__process_exception(exception)
             self.__write_log(message)
 
-        def warning(self, message:str, exception=None):
+        def warning(self, message: str, exception=None):
             self.__process_exception(exception)
             self.__write_log(message)
-        
-        def critical(self, message:str, exception=None):
+
+        def critical(self, message: str, exception=None):
             self.__process_exception(exception)
             self.__write_log(message)
 
@@ -53,7 +50,7 @@ class MainLogger:
                 traceback.print_exc()
                 exit(1)
 
-        def __write_log(self, message:str):
+        def __write_log(self, message: str):
             """ Logging für 1.9
             """
             try:
@@ -64,6 +61,7 @@ class MainLogger:
                 traceback.print_exc()
 
     instance = None
+
     def __init__(self):
         if not MainLogger.instance:
             ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[2])+"/ramdisk/bootinprogress").is_file()
@@ -78,11 +76,14 @@ class MainLogger:
                 fh.setLevel(logging.DEBUG)
                 fh.setFormatter(formatter)
                 MainLogger.instance.addHandler(fh)
+
     def __getattr__(self, name):
         return getattr(self.instance, name)
 
+
 class MqttLogger:
     instance = None
+
     def __init__(self):
         if not MqttLogger.instance:
             MqttLogger.instance = logging.getLogger("mqtt")
@@ -93,11 +94,14 @@ class MqttLogger:
             fh.setLevel(logging.DEBUG)
             fh.setFormatter(formatter)
             MqttLogger.instance.addHandler(fh)
+
     def __getattr__(self, name):
         return getattr(self.instance, name)
 
+
 class DataLogger:
     instance = None
+
     def __init__(self):
         if not DataLogger.instance:
             DataLogger.instance = logging.getLogger("data")
@@ -108,5 +112,6 @@ class DataLogger:
             fh.setLevel(logging.DEBUG)
             fh.setFormatter(formatter)
             DataLogger.instance.addHandler(fh)
+
     def __getattr__(self, name):
         return getattr(self.instance, name)

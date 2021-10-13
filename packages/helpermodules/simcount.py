@@ -28,17 +28,15 @@ class SimCountFactory:
 
 
 class SimCountLegacy:
-    def sim_count(self, power_present: float, topic: str = "", data: dict = {}, prefix: str = ""):
+    def sim_count(self, power_present: float, topic: str = "", data: dict = {}, prefix: str = "") -> typing.Tuple[float, float]:
         """ emulate import export
 
         Parameters
         ----------
-        power_present: float
-            aktuelle Leistung
-        topic: str "openWB/set/counter/0/"
-            Topic, an das gepublished werden soll
-        data:  data.data.counter_data[item].data["set"]
-            Daten aus dem data-Modul auf die lesen zugegriffen wird.
+        power_present: aktuelle Leistung
+        topic: Topic, ungenutzt
+        data:  ungenutzt
+        prefix: prefix für die ramdisk-Datei
         Return
         ------
         imported: importierte Energie
@@ -101,7 +99,9 @@ class SimCountLegacy:
         except Exception as e:
             log.MainLogger().error("Fehler im Modul simcount", e)
 
-    def restore(self, value, prefix:str):
+    def restore(self, value, prefix: str):
+        """ stellt die Werte vom Broker wieder her.
+        """
         try:
             signal.signal(signal.SIGALRM, self.abort)
             signal.alarm(3)
@@ -129,17 +129,14 @@ class SimCountLegacy:
 
 
 class SimCount:
-    def sim_count(power_present:float, topic:str="", data:dict={}, prefix:str=""):
+    def sim_count(power_present: float, topic: str = "", data: dict = {}, prefix: str = "") -> typing.Tuple[float, float]:
         """ emulate import export
 
         Parameters
         ----------
-        power_present: float
-            aktuelle Leistung
-        topic: str "openWB/set/counter/0/"
-            Topic, an das gepublished werden soll
-        data:  data.data.counter_data[item].data["set"]
-            Daten aus dem data-Modul auf die lesen zugegriffen wird.
+        power_present: aktuelle Leistung
+        topic: str Topic, an das gepublished werden soll
+        data: Komponenten-Daten
         Return
         ------
         imported: importierte Energie

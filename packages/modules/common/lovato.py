@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
+from typing import List, Tuple
+
 try:
+    from ..common import connect_tcp
     from ...helpermodules import log
 except:
     # for 1.9 compability
@@ -10,15 +13,16 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
+    from modules.common import connect_tcp
 
 
-class lovato:
-    def __init__(self, device_config, client) -> None:
+class Lovato:
+    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
         self.name = device_config["components"]["component0"]["name"]
         self.id = device_config["components"]["component0"]["configuration"]["id"]
 
-    def get_voltage(self):
+    def get_voltage(self) -> List[int]:
         """
         """
         try:
@@ -32,7 +36,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_imported(self):
+    def get_imported(self) -> float:
         """
         """
         try:
@@ -42,7 +46,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_power(self):
+    def get_power(self) -> Tuple[List[int], float]:
         try:
             power_per_phase = []
             regs = [0x0013, 0x0015, 0x0017]
@@ -60,7 +64,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return [None, None, None], None
 
-    def get_exported(self):
+    def get_exported(self) -> float:
         """
         """
         try:
@@ -70,7 +74,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_power_factor(self):
+    def get_power_factor(self) -> List[int]:
         """
         """
         try:
@@ -84,7 +88,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_frequency(self):
+    def get_frequency(self) -> float:
         """
         """
         try:
@@ -96,7 +100,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_current(self):
+    def get_current(self) -> List[int]:
         """
         """
         try:
@@ -110,7 +114,7 @@ class lovato:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_counter(self):
+    def get_counter(self) -> float:
         try:
             finalbezug1 = self.client.read_integer_registers(0x1a1f, 2, self.id)
             finalbezug2 = self.client.read_input_registers(0x1a21, 2, self.id)

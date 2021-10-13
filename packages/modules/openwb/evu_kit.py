@@ -2,7 +2,6 @@
 import sys
 
 
-
 try:
     from ...helpermodules import log
     from ..openwb_flex.evu_kit import EvuKitFlex
@@ -14,8 +13,9 @@ except:
     from helpermodules import log
     from modules.openwb_flex.evu_kit import EvuKitFlex
 
+
 class EvuKit(EvuKitFlex):
-    def __init__(self, device_config) -> None:
+    def __init__(self, device_config: dict) -> None:
         try:
             self.data = {}
             self.data["config"] = device_config

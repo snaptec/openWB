@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import sys
-
+from typing import List, Tuple
 try:
+    from ..common import connect_tcp
     from ...helpermodules import log
 except:
     # for 1.9 compability
@@ -11,15 +12,16 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
+    from modules.common import connect_tcp
 
 
-class sdm630:
-    def __init__(self, device_config, client) -> None:
+class Sdm630:
+    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
         self.name = device_config["components"]["component0"]["name"]
         self.id = device_config["components"]["component0"]["configuration"]["id"]
 
-    def get_voltage(self):
+    def get_voltage(self) -> List[int]:
         """
         """
         try:
@@ -33,7 +35,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_imported(self):
+    def get_imported(self) -> float:
         """
         """
         try:
@@ -43,7 +45,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_power(self):
+    def get_power(self) -> Tuple[List[int], float]:
         try:
             power_per_phase = []
             regs = [0x0C, 0x0E, 0x10]
@@ -56,7 +58,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return [None, None, None], None
 
-    def get_exported(self):
+    def get_exported(self) -> float:
         """
         """
         try:
@@ -66,7 +68,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_power_factor(self):
+    def get_power_factor(self) -> List[int]:
         """
         """
         try:
@@ -80,7 +82,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_frequency(self):
+    def get_frequency(self) -> float:
         """
         """
         try:
@@ -92,7 +94,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return None
 
-    def get_current(self):
+    def get_current(self) -> List[int]:
         """
         """
         try:
@@ -106,7 +108,7 @@ class sdm630:
             log.MainLogger().error(self.name, e)
             return [None, None, None]
 
-    def get_counter(self):
+    def get_counter(self) -> float:
         try:
             counter = self.client.read_float_registers(0x0156, 2, self.id) * 1000
             return counter
