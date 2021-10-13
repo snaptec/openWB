@@ -41,7 +41,7 @@ if pvwatt > 5:
 
 # zur weiteren verwendung im webinterface
 with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-    f.write(pvwatt)
+    f.write(str(pvwatt))
 # Gesamtzählerstand am WR [kWh]
 try:
     pvkwh = int(pvwatttmp["dxsEntries"][1]["value"])
