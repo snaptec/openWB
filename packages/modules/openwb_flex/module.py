@@ -2,12 +2,12 @@ from typing import List
 
 try:
     from ...helpermodules import log
-    import evu_kit
+    from . import evu_kit
 except:
     from pathlib import Path
     import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[1])
+    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     import evu_kit
@@ -21,7 +21,6 @@ class Module():
             self.data["simulation"] = {}
             if device["components"]["component0"]["type"] == "counter":
                 self.mod = evu_kit.EvuKitFlex(device)
-
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+device["name"], e)
 
@@ -43,7 +42,7 @@ def read_legacy(argv: List):
         id = int(argv[5])
 
         device0 = {"name": "OpenWB-Kit", "type": "openwb_flex", "id": 0, "configuration": {"ip_address": ip_address, "port": port},
-                   "components": {"component0": {"type": component_type, "id": 0, "configuration": {"version": version, "id": id}}}}
+                   "components": {"component0": {"name": "EVU-Kit flex", "type": component_type, "id": 0, "configuration": {"version": version, "id": id}}}}
         mod = Module(device0)
 
         log.MainLogger().debug('openWB Version: ' + str(version))

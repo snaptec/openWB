@@ -23,8 +23,11 @@ except:
 
 class SimCountFactory:
     def get_sim_counter(self):
-        ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[2])+"/ramdisk/bootinprogress").is_file()
-        return SimCountLegacy if ramdisk else SimCount
+        try:
+            ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[2])+"/ramdisk/bootinprogress").is_file()
+            return SimCountLegacy if ramdisk else SimCount
+        except Exception as e:
+            log.MainLogger().error("Fehler im Modul simcount", e)
 
 
 class SimCountLegacy:

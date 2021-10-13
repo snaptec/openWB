@@ -26,7 +26,7 @@ class Module():
                     pass
                 elif component["type"] == "counter":
                     self.data["components"].append(evu_kit.EvuKit(self.data["config"]))
-                if component["type"] == "inverter":
+                elif component["type"] == "inverter":
                     pass
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+self.data["config"]["name"], e)
@@ -46,7 +46,7 @@ def read_legacy(argv: List):
         component_type = str(sys.argv[1])
         version = int(sys.argv[2])
 
-        device0 = {"name": "OpenWB-Kit", "type": "openwb", "id": 0, "components": {"component0": {"type": component_type, "id": 0, "configuration": {"version": version}}}}
+        device0 = {"name": "OpenWB-Kit", "type": "openwb", "id": 0, "components": {"component0": {"name": "EVU-Kit", "type": component_type, "id": 0, "configuration": {"version": version}}}}
         mod = Module(device0)
 
         log.MainLogger().debug('openWB Version: ' + str(version))
