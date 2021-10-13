@@ -87,6 +87,12 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/pv\//i) ) { processPvConfigMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/display\//i) ) { processDisplayConfigMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Status\//i)) { processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\//i)) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/config\/get\/SmartHome\/Devices\//i)) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
+	
+	
+	
 }  // end handlevar
 
 function processDisplayConfigMessages(mqttmsg, mqttpayload) {
@@ -1003,7 +1009,115 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 	}
 }
+function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSMartHomeDevices
+	// called by handlevar
+	// color theme
+	var index = getIndex(mqttmsg);  // extract number between two / /
+	if (mqttmsg.match(/^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_configured$/i)) {
+		// respective SH Device configured
+		wbdata.updateSH(index, "configured", (mqttpayload == 1));
+	}
+	else if (mqttmsg.match(/^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/mode$/i)) {
+		wbdata.updateSH(index, "isAutomatic", (mqttpayload == 0));
+	}
+	else if (mqttmsg.match(/^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i)) {
+		wbdata.updateSH(index, "name", mqttpayload);
+	}
+	else if (mqttmsg.match(/^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_homeConsumtion$/i)) {
+		wbdata.updateSH(index, "countAsHouse", (mqttpayload == "1"));
+	}
 
+	// end color theme
+}
+function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/SmartHomeDevices - actual values only!
+	// called by handlevar
+	var index = getIndex(mqttmsg);  // extract number between two / /
+	// color theme
+	if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Watt$/i)) {
+		var actualPower = parseInt(mqttpayload, 10);
+		if (isNaN(actualPower)) {
+			actualPower = 0;
+		}
+		wbdata.updateSH(index, "power", actualPower);
+		// smartHomeList.update();
+	} else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i)) {
+		var actualDailyYield = parseFloat(mqttpayload);
+		if (isNaN(actualDailyYield)) {
+			actualDailyYield = 0;
+		}
+		wbdata.updateSH(index, "energy", actualDailyYield);
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i)) {
+		var rTime = parseInt(mqttpayload, 10);
+		if (isNaN(rTime)) {
+			rTime = 0;
+		}
+		wbdata.updateSH(index, "runningTime", rTime);
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i)) {
+		wbdata.updateSH(index, "isOn", (mqttpayload == 1));
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Status$/i)) {
+		switch (mqttpayload) {
+			case '10':
+				wbdata.updateSH(index, "status", 'off');
+				break;
+			case '11':
+				wbdata.updateSH(index, "status", 'on');
+				break;
+			case '20':
+				wbdata.updateSH(index, "status", 'on-by-detection');
+				break;
+			case '30':
+				wbdata.updateSH(index, "status", 'on-by-timeout');
+				break;
+			default:
+				wbdata.updateSH(index, "status", 'off');
+		}
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i)) {
+		var actualTemp = parseFloat(mqttpayload);
+		if (isNaN(actualTemp)) {
+			actualTemp = 0;
+		}
+		wbdata.updateSH(index, "temp1", actualTemp);
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i)) {
+		var actualTemp = parseFloat(mqttpayload);
+		if (isNaN(actualTemp)) {
+			actualTemp = 0;
+		}
+		wbdata.updateSH(index, "temp2", actualTemp);
+	}
+	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i)) {
+		var actualTemp = parseFloat(mqttpayload);
+		if (isNaN(actualTemp)) {
+			actualTemp = 0;
+		}
+		wbdata.updateSH(index, "temp3", actualTemp);
+	}
+
+
+
+	// end of color theme
+
+
+
+
+}
+function processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload) {
+	
+	// color theme
+	if (mqttmsg.match(/^openwb\/SmartHome\/Status\/wattnichtHaus$/i)) {
+		var SHPower = parseInt(mqttpayload, 10);
+		if (isNaN(SHPower)) {
+			SHPower = 0;
+		}
+		wbdata.updateGlobal("smarthomePower", SHPower);
+	}
+}
 function subscribeMqttGraphSegments() {
 	for (var segments = 1; segments < 17; segments++) {
 		topic = "openWB/graph/" + segments + "alllivevalues";

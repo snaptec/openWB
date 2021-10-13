@@ -210,7 +210,6 @@ class WbData {
 				this.updateConsumerSummary("energy");
 				break;
 			case 'showInGraph':
-				this.persistGraphPreferences();
 				this.updateUsageDetails();
 				yieldMeter.update();
 				break;
@@ -219,8 +218,7 @@ class WbData {
 			default:
 				break;
 		}
-		smartHomeList.update();
-	}
+		}
 
 	updateCP(index, field, value) {
 		this.chargePoint[index - 1][field] = value;
@@ -296,7 +294,7 @@ class WbData {
 			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)).sort((a, b) => { return (b.power - a.power) }))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary.batIn, this.usageSummary.house]);
-	}
+		}
 
 	updateConsumerSummary(cat) {
 		if (cat == 'energy') {
