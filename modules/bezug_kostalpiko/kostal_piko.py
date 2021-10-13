@@ -24,7 +24,7 @@ if Debug >= 2:
 # Auslesen eines Kostal Piko WR über die integrierte API des WR mit angeschlossenem Eigenverbrauchssensor.
 
 params = (
-    ('dxsEntries', ['33556736', '251658753', '83887106', '83887362', '83887618)']),
+    ('dxsEntries', ['33556736', '251658753', '83887106', '83887362', '83887618']),
 )
 pvwatttmp = requests.get('http://'+wrkostalpikoip+'/api/dxs.json', params=params, timeout=3).json()
 # aktuelle Ausgangsleistung am WR [W]
