@@ -27,10 +27,8 @@ class EvuKit(EvuKitFlex):
                 ip_address = "192.168.193.15"
                 id = 0x02
             elif version == 2:
-                # ip_address = "192.168.1.101"
-                # id = 105
-                ip_address = "192.168.1.101"
-                id = 105
+                ip_address = "192.168.193.15"
+                id = 115
             self.data["config"]["configuration"] = {}
             self.data["config"]["configuration"]["ip_address"] = ip_address
             self.data["config"]["configuration"]["port"] = 8899
