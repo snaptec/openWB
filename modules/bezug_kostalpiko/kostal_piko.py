@@ -83,7 +83,7 @@ if Debug >= 1:
 if speichermodul == "speicher_bydhv":
     with open("/var/www/html/openWB/ramdisk/speicherleistung", "r") as f:
         speicherleistung = f.read()
-    wattbezug = bezugw1+bezugw2+bezugw3+pvwatt+speicherleistung
+    wattbezug = bezugw1+bezugw2+bezugw3+pvwatt+int(speicherleistung)
 else:
     wattbezug = bezugw1+bezugw2+bezugw3+pvwatt
 
