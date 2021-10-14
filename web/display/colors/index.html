@@ -28,7 +28,7 @@
 <body>
 
     <div class="container-fluid">
-        
+
         <div class="row pt-2">
             <div class=" col-4 pl-2 pr-0">
                 <div id="chargePointTable"></div>
@@ -87,7 +87,7 @@
             </div>
             <div class="col-2">
                 <p id="screensize"></p>
-                </div>
+            </div>
             <div class="col-6 pl-6 pr-4">
                 <div class="container-fluid px-2">
                     <div class="row px-0">
@@ -121,7 +121,7 @@
 
 
 
-    <script>
+    <!--   <script>
         var currentLp = 1;
 
         $('.ladepunktInfoBtn').on("click", function (event) {
@@ -180,8 +180,8 @@
                 }
             }
         });
-    </script>
-    </div>
+    </script> -->
+
 
     <!-- Code -->
     <div id="code" class="code resume">
@@ -343,34 +343,34 @@
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        // TODO: replace by MQTT topics
-        function updateit() {
-            $.getJSON('tools/programmloggerinfo.php', function (data) {
-                json = eval(data);
-                // console.log(json);
-                $('#cpu').val(json.cpuuse);
-                $('#cpuuse').html(json.cpuuse);
-                $('#memtot').html(json.memtot);
-                $('#mem').prop('max', json.memtot);
-                $('#mem').val(json.memuse);
-                $('#mem').prop('high', json.memtot * 0.85);
-                $('#memfree').html(json.memfree);
-                $('#diskuse').html(json.diskuse);
-                $('#diskfree').html(json.diskfree);
-            })
-        };
 
-        $(document).ready(function () {
-            updateit();
-            setInterval(updateit, 10000);
-        });
+        <script>
+            // TODO: replace by MQTT topics
+            function updateit() {
+                $.getJSON('tools/programmloggerinfo.php', function (data) {
+                    json = eval(data);
+                    // console.log(json);
+                    $('#cpu').val(json.cpuuse);
+                    $('#cpuuse').html(json.cpuuse);
+                    $('#memtot').html(json.memtot);
+                    $('#mem').prop('max', json.memtot);
+                    $('#mem').val(json.memuse);
+                    $('#mem').prop('high', json.memtot * 0.85);
+                    $('#memfree').html(json.memfree);
+                    $('#diskuse').html(json.diskuse);
+                    $('#diskfree').html(json.diskfree);
+                })
+            };
 
-        $('#backend .reloadBtn').click(function () {
-            location.reload();
-        });
-    </script>
+            $(document).ready(function () {
+                updateit();
+                setInterval(updateit, 10000);
+            });
+
+            $('#backend .reloadBtn').click(function () {
+                location.reload();
+            });
+        </script>
     </div>
 
 
@@ -1474,36 +1474,36 @@
                 </div> <!-- /modal body -->
             </div>
         </div>
-    </div>
-    <script>
-        $('.chargeModeBtn').on("click", function (event) {
-            if (displaylocked == false) {
-                var chargeMode = $(this).attr("data-chargeMode");
-                publish(chargeMode, "openWB/set/ChargeMode");
-            }
-        });
 
-        $('.priorityModeBtn').on("click", function (event) {
-            // prio: 0 = battery, 1 = ev
-            if (displaylocked == false) {
-                var priority = $(this).attr('data-priority');
-                if (priority == '0' || priority == '1') {
-                    publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
+        <script>
+            $('.chargeModeBtn').on("click", function (event) {
+                if (displaylocked == false) {
+                    var chargeMode = $(this).attr("data-chargeMode");
+                    publish(chargeMode, "openWB/set/ChargeMode");
                 }
-            }
-        });
+            });
 
-        $('.70PvBtn').on("click", function (event) {
-            // 0 deaktiviert, 1 aktiviert
-            if (displaylocked == false) {
-                if ($(this).hasClass("btn-success")) {
-                    publish("0", "openWB/set/pv/NurPV70Status");
-                } else {
-                    publish("1", "openWB/set/pv/NurPV70Status");
+            $('.priorityModeBtn').on("click", function (event) {
+                // prio: 0 = battery, 1 = ev
+                if (displaylocked == false) {
+                    var priority = $(this).attr('data-priority');
+                    if (priority == '0' || priority == '1') {
+                        publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
+                    }
                 }
-            }
-        });
-    </script>
+            });
+
+            $('.70PvBtn').on("click", function (event) {
+                // 0 deaktiviert, 1 aktiviert
+                if (displaylocked == false) {
+                    if ($(this).hasClass("btn-success")) {
+                        publish("0", "openWB/set/pv/NurPV70Status");
+                    } else {
+                        publish("1", "openWB/set/pv/NurPV70Status");
+                    }
+                }
+            });
+        </script>
     </div>
 
     <!-- modal lock-info-window -->
@@ -1631,11 +1631,11 @@
                 // load mqtt library
                 'js/mqttws31.js',
                 // some helper functions
-                'display/colors/helperFunctions.js?ver=20210113',
+                'display/colors/helperFunctions.js',
                 // functions for processing messages
-                'display/colors/processAllMqttMsg.js?ver=20210301',
+                'display/colors/processAllMqttMsg.js',
                 // functions performing mqtt and start mqtt-service
-                'display/colors/setupMqttServices.js?ver=20210301',
+                'display/colors/setupMqttServices.js',
             ];
 
             scriptsToLoad.forEach(function (src) {
@@ -1677,7 +1677,7 @@
 
             // display lock
             $.get(
-                { url: "display/cards/checklock.php?lock=1", cache: false },
+                { url: "display/colors/checklock.php?lock=1", cache: false },
                 function (data) {
                     if (data == "1") {
                         displaypinaktiv = 1;
