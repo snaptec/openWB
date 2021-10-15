@@ -1,6 +1,5 @@
 class PowerGraph {
-  svg;
-  xScale;
+  
 
   constructor() {
     this.graphData = [];
@@ -25,6 +24,8 @@ class PowerGraph {
     this.margin = { top: 10, right: 20, bottom: 10, left: 25 };
     this.liveGraphMinutes = 0;
     wbdata.usageStackOrder = 2;
+    this.svg=null;
+    this.xScale=null;
   }
 
   init() {
