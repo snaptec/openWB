@@ -29,13 +29,10 @@
     <div class="container-fluid">
         <div class="row pt-3">
 
-
+            <!-- Linke Spalte (Buttons)-->
             <div class="col-2 px-1">
-
                 <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
                 <h4 id="time" class="col text-center text-light pb-5">12:36</h4>
-
-                
                 <button class="btn btn-block btn-secondary display-button" id="powerSelectButton" type="button">
                     <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
                 </button>
@@ -45,7 +42,6 @@
                 <button class="btn btn-block btn-outline-secondary display-button mb-4" id="energySelectButton"
                     type="button">
                     <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
-
                 </button>
                 <p id="screensize"></p>
                 <p id="useragent"></p>
@@ -54,15 +50,13 @@
                 </button>
                 <div id="displaylock">
                     <button class="btn btn-block btn-outline-secondary display-button " id="lockButton" type="button">
-                        <i class="fas fa-lock text-danger h4"></i>
-                        <i class="fas fa-unlock text-success h4 hide"></i>
+                        <i class="fas fa-lock text-danger "></i>
+                        <i class="fas fa-unlock text-success hide"></i>
                     </button>
                 </div>
-
             </div>
 
-
-            <!-- Aktuelle Leistung (powermeter) -->
+            <!-- Mittlere Spalte (Widgets) -->
             <div class="col-7 p-0">
                 <div class="container-fluid">
 
@@ -76,8 +70,7 @@
                 </div>
             </div>
 
-
-
+            <!-- Rechte Spalte (Ladepunkte)-->
             <div class=" col-3 px-1">
                 <div id="chargePointTable"></div>
             </div>
