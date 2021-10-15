@@ -124,8 +124,11 @@ class WbData {
 			.on("click", showStatus);
 		const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 		const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-		const foo = d3.select("p#screensize")
+		const useragent = navigator.userAgent;
+		d3.select("p#screensize")
 			.text("Screen size: " + vw + "x" + vh)
+		d3.select("p#useragent")
+		.text(useragent)
 		
 	}
 

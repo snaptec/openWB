@@ -70,7 +70,7 @@ h3 {
     color: #ffffff;
 }
 .btn-block {
-    font-size: 24px;
+    font-size: 22px;
 }
 .card {
     background-color: rgba(0, 0, 0, 0)!important;
@@ -230,11 +230,11 @@ hr {
     animation: alertPulsation 1s infinite;
 }
 .text-green {
-    color: #006515;
+    color: #4db662;
 }
 
 .text-red {
-    color: #A30000;
+    color: #d12020;
 }
 
 .text-white {
@@ -469,15 +469,15 @@ h3 {
 	padding:var(--padding-widget);
 }
 .chargePointName {
-    font-size: 24px;
+    font-size: 18px;
     text-align:center;
 }
 
 .chargePointData {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .display-button {
-    font-size: 18px;
+    font-size: 16px;
     padding: 9px;
 }
