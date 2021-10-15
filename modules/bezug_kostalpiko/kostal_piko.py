@@ -24,7 +24,7 @@ if Debug >= 2:
 # Auslesen eines Kostal Piko WR über die integrierte API des WR mit angeschlossenem Eigenverbrauchssensor.
 
 params = (
-    ('dxsEntries', ['33556736', '251658753', '83887106', '83887362', '83887618)']),
+    ('dxsEntries', ['33556736', '251658753', '83887106', '83887362', '83887618']),
 )
 pvwatttmp = requests.get('http://'+wrkostalpikoip+'/api/dxs.json', params=params, timeout=3).json()
 # aktuelle Ausgangsleistung am WR [W]
@@ -41,7 +41,7 @@ if pvwatt > 5:
 
 # zur weiteren verwendung im webinterface
 with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-    f.write(pvwatt)
+    f.write(str(pvwatt))
 # Gesamtzählerstand am WR [kWh]
 try:
     pvkwh = int(pvwatttmp["dxsEntries"][1]["value"])
@@ -83,7 +83,7 @@ if Debug >= 1:
 if speichermodul == "speicher_bydhv":
     with open("/var/www/html/openWB/ramdisk/speicherleistung", "r") as f:
         speicherleistung = f.read()
-    wattbezug = bezugw1+bezugw2+bezugw3+pvwatt+speicherleistung
+    wattbezug = bezugw1+bezugw2+bezugw3+pvwatt+int(speicherleistung)
 else:
     wattbezug = bezugw1+bezugw2+bezugw3+pvwatt
 
