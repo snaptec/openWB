@@ -31,9 +31,10 @@ value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 final = int(struct.unpack('>i', all.decode('hex'))[0])*-1
-f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(final))
-f.close()
+if final > -65536:
+    f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
+    f.write(str(final))
+    f.close()
 
 # wattbezug
 try:
@@ -42,7 +43,7 @@ try:
     value2 = resp.registers[1]
     all = format(value1, '04x') + format(value2, '04x')
     final = int(struct.unpack('>i', all.decode('hex'))[0])*-1
-    f = open('/var/www/html/openWB/ramdisk/huawaibezugwatt', 'w')
+    f = open('/var/www/html/openWB/ramdisk/huaweibezugwatt', 'w')
     f.write(str(final))
     f.close()
 except:
@@ -53,24 +54,24 @@ try:
     value1 = resp.registers[0]
     value2 = resp.registers[1]
     all = format(value1, '04x') + format(value2, '04x')
-    final = int(struct.unpack('>i', all.decode('hex'))[0])*-1
-    f = open('/var/www/html/openWB/ramdisk/huawaievua1', 'w')
+    final = int(struct.unpack('>i', all.decode('hex'))[0])/100*-1
+    f = open('/var/www/html/openWB/ramdisk/huaweievua1', 'w')
     f.write(str(final))
     f.close()
     resp= client.read_holding_registers(37109,2,unit=idaddress)
     value1 = resp.registers[0]
     value2 = resp.registers[1]
     all = format(value1, '04x') + format(value2, '04x')
-    final = int(struct.unpack('>i', all.decode('hex'))[0])*-1
-    f = open('/var/www/html/openWB/ramdisk/huawaievua2', 'w')
+    final = int(struct.unpack('>i', all.decode('hex'))[0])/100*-1
+    f = open('/var/www/html/openWB/ramdisk/huaweievua2', 'w')
     f.write(str(final))
     f.close()
     resp= client.read_holding_registers(37111,2,unit=idaddress)
     value1 = resp.registers[0]
     value2 = resp.registers[1]
     all = format(value1, '04x') + format(value2, '04x')
-    final = int(struct.unpack('>i', all.decode('hex'))[0])*-1
-    f = open('/var/www/html/openWB/ramdisk/huawaievua3', 'w')
+    final = int(struct.unpack('>i', all.decode('hex'))[0])/100*-1
+    f = open('/var/www/html/openWB/ramdisk/huaweievua3', 'w')
     f.write(str(final))
     f.close()
 except:
