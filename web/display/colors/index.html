@@ -27,46 +27,43 @@
 <body>
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row pt-3">
 
-        
-            <div class="col-2">
+
+            <div class="col-2 px-1">
+
                 <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
-                <h4 id="time" class="col text-center text-light">12:36</h4>
-                <div  id="displaylock">
-                    <button class="btn btn-block btn-outline-secondary display-button " id="lockButton"
-                        type="button">
+                <h4 id="time" class="col text-center text-light pb-5">12:36</h4>
+
+                
+                <button class="btn btn-block btn-secondary display-button" id="powerSelectButton" type="button">
+                    <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
+                </button>
+                <button class="btn btn-block btn-outline-secondary display-button" id="timeSelectButton" type="button">
+                    <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
+                </button>
+                <button class="btn btn-block btn-outline-secondary display-button mb-4" id="energySelectButton"
+                    type="button">
+                    <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
+
+                </button>
+                <p id="screensize"></p>
+                <p id="useragent"></p>
+                <button class="btn btn-block btn-outline-secondary display-button " id="statusButton" type="button">
+                    <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
+                </button>
+                <div id="displaylock">
+                    <button class="btn btn-block btn-outline-secondary display-button " id="lockButton" type="button">
                         <i class="fas fa-lock text-danger h4"></i>
                         <i class="fas fa-unlock text-success h4 hide"></i>
                     </button>
                 </div>
-                    <button class="btn btn-block btn-outline-secondary display-button " id="statusButton"
-                                type="button">
-                                <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
-                            </button>
-                            <button class="btn btn-block btn-secondary display-button" id="powerSelectButton"
-                                type="button">
-                                <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
-                            </button>
-                            <button class="btn btn-block btn-outline-secondary display-button" id="timeSelectButton"
-                                type="button">
-                                <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
-                            </button>
-                            <button class="btn btn-block btn-outline-secondary display-button" id="energySelectButton"
-                                type="button">
-                                <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
 
-                            </button>
-                            <p id="screensize"></p>
-                            <p id="useragent"></p>
-                
-        
-                
             </div>
-            
-            
+
+
             <!-- Aktuelle Leistung (powermeter) -->
-            <div class="col-7 pl-6 pr-0">
+            <div class="col-7 p-0">
                 <div class="container-fluid">
 
                     <div class="row">
@@ -78,14 +75,14 @@
                     </div>
                 </div>
             </div>
-        
-            
-        
-        <div class=" col-3 pl-2 pr-0">
-            <div id="chargePointTable"></div>
+
+
+
+            <div class=" col-3 px-1">
+                <div id="chargePointTable"></div>
+            </div>
         </div>
     </div>
-</div>
     <!-- Side navigation -->
 
 
@@ -153,7 +150,7 @@
 
 
     <!-- Code -->
- <!--    <div id="code" class="code resume">
+    <!--    <div id="code" class="code resume">
         <div id="PINcode" class="text-center">
             <input id="PINbox" type="text" value="" name="PINbox" disabled="disabled">
             <br>
@@ -1528,10 +1525,10 @@
                 displaylocked = true;
                 $('#displaylock').find('.fa-lock').removeClass('hide');
                 $('#displaylock').find('.fa-unlock').addClass('hide');
-               /*  if ($('.sidenav').find('.btn.active').hasClass('displayLock')) {
-                    // console.log('changing panel');
-                    initPanels();
-                } */
+                /*  if ($('.sidenav').find('.btn.active').hasClass('displayLock')) {
+                     // console.log('changing panel');
+                     initPanels();
+                 } */
                 window.clearTimeout(lockTimeoutHandler);
                 lockTimeoutHandler = null;
             }
@@ -1621,25 +1618,25 @@
             // handling of display panels
             initPanels();
 
-         /*    $('.sidenav').find('a[href^="#"]').on("click", function (event) {
-                if ($(this).hasClass('displayLock') && displaylocked == true) {
-                    $("#lockInfoModal").modal("show");
-                } else {
-                    // hide all panels
-                    $('.resume').addClass('hide');
-                    // get target panel
-                    var target = $(this).attr('href');
-                    // display target panel
-                    $('.resume' + target).removeClass('hide');
-                    // remove active menu element
-                    $('.sidenav').find('.active').removeClass('active');
-                    // activate clicked menu element
-                    $(this).addClass('active');
-                    // update sparklines
-                   // $.sparkline_display_visible();
-                }
-            });
- */
+            /*    $('.sidenav').find('a[href^="#"]').on("click", function (event) {
+                   if ($(this).hasClass('displayLock') && displaylocked == true) {
+                       $("#lockInfoModal").modal("show");
+                   } else {
+                       // hide all panels
+                       $('.resume').addClass('hide');
+                       // get target panel
+                       var target = $(this).attr('href');
+                       // display target panel
+                       $('.resume' + target).removeClass('hide');
+                       // remove active menu element
+                       $('.sidenav').find('.active').removeClass('active');
+                       // activate clicked menu element
+                       $(this).addClass('active');
+                       // update sparklines
+                      // $.sparkline_display_visible();
+                   }
+               });
+    */
             $('#lastmanagementShowBtn').on("click", function (event) {
                 $("#lastregelungModal").modal("show");
             });
