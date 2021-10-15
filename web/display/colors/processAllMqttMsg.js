@@ -562,7 +562,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			// priority buttons in modal
 			$('#priorityModeBtns').removeClass('hide');
 			// update sparklines
-			$.sparkline_display_visible();
+		//	$.sparkline_display_visible();
 		} else {
 			$('.hausbatterie').addClass('hide');
 			$('.priorityEvBattery').addClass('hide');
@@ -679,7 +679,7 @@ function processPvMessages(mqttmsg, mqttpayload) {
 			// if pv is configured, show info-cards
 			$('.pv').removeClass('hide');
 			// update sparklines
-			$.sparkline_display_visible();
+		//	$.sparkline_display_visible();
 		} else {
 			$('.pv').addClass('hide');
 		}
@@ -928,7 +928,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			case '1':
 				element.removeClass('hide');
 				// update sparklines
-				$.sparkline_display_visible();
+			//	$.sparkline_display_visible();
 				break;
 		}
 	}
