@@ -27,17 +27,46 @@
 <body>
 
     <div class="container-fluid">
+        <div class="row">
 
-        <div class="row pt-2">
-            <div class=" col-4 pl-2 pr-0">
-                <div id="chargePointTable"></div>
-            </div>
+        
             <div class="col-2">
-                <p style="text-align:center;">Work in progress!</p>
-                <p id="useragent"></p>
+                <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
+                <h4 id="time" class="col text-center text-light">12:36</h4>
+                <div  id="displaylock">
+                    <button class="btn btn-block btn-outline-secondary display-button " id="lockButton"
+                        type="button">
+                        <i class="fas fa-lock text-danger h4"></i>
+                        <i class="fas fa-unlock text-success h4 hide"></i>
+                    </button>
+                </div>
+                    <button class="btn btn-block btn-outline-secondary display-button " id="statusButton"
+                                type="button">
+                                <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
+                            </button>
+                            <button class="btn btn-block btn-secondary display-button" id="powerSelectButton"
+                                type="button">
+                                <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
+                            </button>
+                            <button class="btn btn-block btn-outline-secondary display-button" id="timeSelectButton"
+                                type="button">
+                                <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
+                            </button>
+                            <button class="btn btn-block btn-outline-secondary display-button" id="energySelectButton"
+                                type="button">
+                                <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
+
+                            </button>
+                            <p id="screensize"></p>
+                            <p id="useragent"></p>
+                
+        
+                
             </div>
+            
+            
             <!-- Aktuelle Leistung (powermeter) -->
-            <div class="col-6 pl-6 pr-0">
+            <div class="col-7 pl-6 pr-0">
                 <div class="container-fluid">
 
                     <div class="row">
@@ -49,76 +78,14 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row pt-0 pb-0">
-            <div class=" col-4">
-                <h3 class="mt-0"></h3>
-            </div>
-            <div class="col-2">
-                
-            </div>
-            <div class="col-6 pl-6 pr-0">
-                <h3 id="widgetheading">&nbsp;</h3>
-            </div>
-        </div>
-        <div class="row pt-0 pb-0">
-            <div class="col-4">
-                <div class="container-fluid px-2">
-                    <div class="row px-0">
-                        <div class="col-2 py-2 px-0" id="displaylock">
-                            <button class="btn btn-block btn-outline-secondary display-button " id="lockButton"
-                                type="button">
-                                <i class="fas fa-lock text-danger h4"></i>
-                                <i class="fas fa-unlock text-success h4 hide"></i>
-                            </button>
-                        </div>
-
-                        <div class="col-5 px-0">
-                            <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
-                            <h4 id="time" class="col text-center text-light">12:36</h4>
-                        </div>
-
-                        <div class="col-5 py-2 px-0">
-                            <button class="btn btn-block btn-outline-secondary display-button " id="statusButton"
-                                type="button">
-                                <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2">
-                <p id="screensize"></p>
-            </div>
-            <div class="col-6 pl-6 pr-4">
-                <div class="container-fluid px-2">
-                    <div class="row px-0">
-                        <div class="col-4 py-2 px-0">
-                            <button class="btn btn-block btn-secondary display-button" id="powerSelectButton"
-                                type="button">
-                                <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
-                            </button>
-                        </div>
-                        <div class="col-4 py-2 px-1">
-                            <button class="btn btn-block btn-outline-secondary display-button" id="timeSelectButton"
-                                type="button">
-                                <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
-                            </button>
-                        </div>
-                        <div class="col-4 py-2 px-0">
-                            <button class="btn btn-block btn-outline-secondary display-button" id="energySelectButton"
-                                type="button">
-                                <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
-
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
+        
+            
+        
+        <div class=" col-3 pl-2 pr-0">
+            <div id="chargePointTable"></div>
         </div>
     </div>
+</div>
     <!-- Side navigation -->
 
 
