@@ -1157,6 +1157,10 @@ updateConfig(){
 		echo "pv1_idd=1" >> $ConfigFile
 		echo "speicher1_ip=192.168.0.17" >> $ConfigFile
 	fi
+	if ! grep -Fq "pv1_ida=" $ConfigFile; then
+		echo "pv1_ida=1" >> $ConfigFile
+	fi
+
 	if ! grep -Fq "speicher1_ip2=" $ConfigFile; then
 		echo "speicher1_ip2=192.168.0.17" >> $ConfigFile
 	fi
