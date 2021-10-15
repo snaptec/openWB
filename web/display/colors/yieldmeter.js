@@ -5,7 +5,11 @@
  */
 
 class YieldMeter {
-	
+	bardata;
+	xScale;
+	yScale;
+	svg;
+
 	constructor() {
 		this.width = 500;
 		this.height = 500;
@@ -14,10 +18,6 @@ class YieldMeter {
 		};
 		this.labelfontsize = 16;
 		this.axisFontSize = 12;
-		this.bardata=null;
-		this.xScale=null;
-		this.yScale=null;
-		this.svg=null;
 	}
 
 	// to be called when the document is loaded

@@ -122,13 +122,13 @@ class WbData {
 			.on("click", switchToEnergyView);
 		d3.select("button#statusButton")
 			.on("click", showStatus);
-	/* 	const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+		const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 		const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
 		const useragent = navigator.userAgent;
 		d3.select("p#screensize")
 			.text("Screen size: " + vw + "x" + vh)
 		d3.select("p#useragent")
-		.text(useragent) */
+		.text(useragent)
 		
 	}
 

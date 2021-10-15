@@ -4,14 +4,14 @@
  */
 
 class ChargePointList {
+  tbody;
+  footer;
 
   constructor() {
     this.chargepoints = [];
     this.phaseSymbols = ['/', '\u2460', '\u2461', '\u2462']
     this.headers = ["Ladepunkt", "Ladeparameter", "geladen", "Ladestand"];
     this.manualSoc = 0;
-    this.tbody=null;
-    this.footer=null;
   };
 
     // initialize after document is created
