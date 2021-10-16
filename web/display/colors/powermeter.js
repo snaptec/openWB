@@ -8,7 +8,7 @@ class PowerMeter {
   constructor() {
     this.width = 500;
     this.height = this.width;
-    this.margin = 5;
+    this.margin = 15;
     this.radius = this.width / 2 - this.margin;
     this.cornerRadius = 1;
     this.circleGapSize = (Math.PI / 40);
