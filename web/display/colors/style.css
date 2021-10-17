@@ -51,6 +51,7 @@ body {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
     /* Old browsers */
     background: var(--color-bg);;
+    font-family:Arial, Helvetica, sans-serif
     
 }
 body {
@@ -474,7 +475,7 @@ h3 {
 }
 
 .chargePointData {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .display-button {

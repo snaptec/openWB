@@ -27,12 +27,12 @@
 <body>
 
     <div class="container-fluid">
-        <div class="row pt-3">
+        <div class="row pt-0">
 
             <!-- Linke Spalte (Buttons)-->
-            <div class="col-2 px-1">
-                <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
-                <h4 id="time" class="col text-center text-light pb-5 mb-3">12:36</h4>
+            <div class="col-2 pl-1 pr-0">
+                <h4 id="date" class="text-center text-light pt-5">19.11.2020</h4>
+                <h4 id="time" class="text-center text-light pb-5 mb-3">12:36</h4>
                 <button class="btn btn-block btn-secondary display-button p-4" id="powerSelectButton" type="button">
                     <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
                 </button>
@@ -47,7 +47,7 @@
                 <button class="btn btn-block btn-outline-secondary display-button mt-5 p-4" id="statusButton" type="button">
                     <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
                 </button>
-                <div id="displaylock" class="mt-1">
+                <div id="displaylock" class="mt-5">
                     <button class="btn btn-block btn-outline-secondary display-button p-4" id="lockButton" type="button">
                         <i class="fas fa-lock text-danger "></i>
                         <i class="fas fa-unlock text-success hide"></i>
@@ -57,10 +57,10 @@
 
             <!-- Mittlere Spalte (Widgets) -->
             <div class="col-7 p-0">
-                <div class="container-fluid">
+                <div class="container-fluid m-0 pb-1">
 
                     <div class="row">
-                        <div class="col wb-widget p-3">
+                        <div class="col wb-widget p-0">
                             <figure id="powermeter" class=" mb-0"></figure>
                             <figure id="energymeter" class="wb-subwidget mb-0 hide"></figure>
                             <figure id="powergraph" class="wb-subwidget mb-0 hide"></figure>
@@ -75,110 +75,7 @@
             </div>
         </div>
     </div>
-    <!-- Side navigation -->
-
-
-
-    <!--   <script>
-        var currentLp = 1;
-
-        $('.ladepunktInfoBtn').on("click", function (event) {
-            currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-            $('#ladepunktInfoModal').find('.infoLp').text(currentLp);
-            $('#ladepunktInfoModal').find('[data-lp]').addClass('hide');
-            $('#ladepunktInfoModal').find('[data-lp="' + currentLp + '"]').removeClass('hide');
-            $('#ladepunktInfoModal').modal("show");
-        });
-
-        $('.ladepunktConfigBtn').on("click", function (event) {
-            if (displaylocked == false) {
-                currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-                $('#ladepunktConfigModal').find('.configLp').text(currentLp);
-                $('#ladepunktConfigModal').find('[data-config-lp]').addClass('hide');
-                $('#ladepunktConfigModal').find('[data-config-lp="' + currentLp + '"]').removeClass('hide');
-                $('#ladepunktConfigModal').modal("show");
-            } else {
-                $("#lockInfoModal").modal("show");
-            }
-        });
-
-        $('.chargeModeSelectBtn').on("click", function (event) {
-            if (displaylocked == false) {
-                $("#chargeModeModal").modal("show");
-            } else {
-                $("#lockInfoModal").modal("show");
-            }
-        });
-
-        $('.enableLp').on("click", function (event) {
-            if (displaylocked == false) {
-                // send mqtt set to enable/disable charge point after click
-                var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-                if (!isNaN(parseInt(lp)) && lp > 0 && lp < 9) {
-                    var isDisabled = $(this).hasClass("lpDisabledStyle")
-                    if (isDisabled) {
-                        publish("1", "openWB/set/lp/" + lp + "/ChargePointEnabled");
-                    } else {
-                        publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
-                    }
-                }
-            } else {
-                $("#lockInfoModal").modal("show");
-            }
-        });
-
-        $('.socConfiguredLp').on("click", function (event) {
-            if ($(this).hasClass('manualSoC')) {
-                if (displaylocked == false) {
-                    currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-                    $('#socModal').find('.socLp').text(currentLp);
-                    $('#socModal').modal("show");
-                } else {
-                    $("#lockInfoModal").modal("show");
-                }
-            }
-        });
-    </script> -->
-
-
-    <!-- Code -->
-    <!--    <div id="code" class="code resume">
-        <div id="PINcode" class="text-center">
-            <input id="PINbox" type="text" value="" name="PINbox" disabled="disabled">
-            <br>
-            <input type="button" class="PINbutton" name="1" value="1" id="1" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="2" value="2" id="2" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="3" value="3" id="3" onclick="addNumber(this);">
-            <br>
-            <input type="button" class="PINbutton" name="4" value="4" id="4" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="5" value="5" id="5" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="6" value="6" id="6" onclick="addNumber(this);">
-            <br>
-            <input type="button" class="PINbutton" name="7" value="7" id="7" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="8" value="8" id="8" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="9" value="9" id="9" onclick="addNumber(this);">
-            <br>
-            <input type="button" class="PINbutton clear" name="-" value="clear" id="-" onclick="clearForm(this);">
-            <input type="button" class="PINbutton" name="0" value="0" id="0" onclick="addNumber(this);">
-            <input type="button" class="PINbutton enter" name="+" value="enter" id="+" onclick="submitForm(PINbox);">
-        </div>
-        <script>
-            function addNumber(e) {
-                var v = $("#PINbox").val();
-                $("#PINbox").val(v + e.value);
-            }
-
-            function clearForm(e) {
-                $("#PINbox").val("");
-            }
-
-            function submitForm(e) {
-                publish(e.value, "openWB/set/system/SimulateRFID");
-                $("#PINbox").val("");
-            };
-        </script>
-    </div>
- -->
+    
     <!-- Status -->
     <div class="modal" id="statusModal">
         <div class="modal-dialog">
@@ -1517,10 +1414,7 @@
                 displaylocked = true;
                 $('#displaylock').find('.fa-lock').removeClass('hide');
                 $('#displaylock').find('.fa-unlock').addClass('hide');
-                /*  if ($('.sidenav').find('.btn.active').hasClass('displayLock')) {
-                     // console.log('changing panel');
-                     initPanels();
-                 } */
+                
                 window.clearTimeout(lockTimeoutHandler);
                 lockTimeoutHandler = null;
             }
@@ -1575,12 +1469,7 @@
 
         function initPanels() {
             $('.resume').addClass('hide');
-          /*   $('.sidenav').find('.btn').removeClass('active');
-            var firstButton = $('.sidenav').find('.btn').not('.hide').not('.displayLock').first();
-            var firstNavTarget = $(firstButton).attr('href');
-            $(firstButton).addClass('active');
-            $(firstNavTarget).removeClass('hide');
-         */}
+         }
 
         $(document).ready(function () {
 
@@ -1610,25 +1499,7 @@
             // handling of display panels
             initPanels();
 
-            /*    $('.sidenav').find('a[href^="#"]').on("click", function (event) {
-                   if ($(this).hasClass('displayLock') && displaylocked == true) {
-                       $("#lockInfoModal").modal("show");
-                   } else {
-                       // hide all panels
-                       $('.resume').addClass('hide');
-                       // get target panel
-                       var target = $(this).attr('href');
-                       // display target panel
-                       $('.resume' + target).removeClass('hide');
-                       // remove active menu element
-                       $('.sidenav').find('.active').removeClass('active');
-                       // activate clicked menu element
-                       $(this).addClass('active');
-                       // update sparklines
-                      // $.sparkline_display_visible();
-                   }
-               });
-    */
+           
             $('#lastmanagementShowBtn').on("click", function (event) {
                 $("#lastregelungModal").modal("show");
             });
