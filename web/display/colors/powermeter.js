@@ -8,8 +8,8 @@ class PowerMeter {
   constructor() {
     this.width = 500;
     this.height = 500;
-    this.margin = 5;
-    this.radius = this.width / 2 - this.margin;
+    this.margin = { top: 5, bottom: 32, left: 0, right: 0 }
+    this.radius = (this.height - this.margin.top - this.margin.bottom) / 2;
     this.cornerRadius = 1;
     this.circleGapSize = (Math.PI / 40);
     this.maxPower = 4000;
@@ -65,7 +65,7 @@ class PowerMeter {
         "translate(" + this.width / 2 + "," + this.height / 2 + ")"
       )
       .append("g")
-      .attr("transform","scale(0.9294,1)");
+      .attr("transform", "scale(0.9294,1)");
 
     return g;
   }
@@ -76,17 +76,17 @@ class PowerMeter {
     this.drawUsageArc(svg);
     this.addLabel(svg, 0, -this.height / 2 * 3 / 5, "middle", wbdata.sourceSummary.pv); // PV
     this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.sourceSummary.evuIn); // Netz
-    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.sourceSummary.batOut); // Speicher Out
+    this.addLabel(svg, this.width / 2 - this.margin.left / 4, (this.height - this.margin.top - this.margin.bottom) / 2 + 15, "end", wbdata.sourceSummary.batOut); // Speicher Out
     this.addLabel(svg, 0, -this.height / 2 * 2 / 5, "middle", wbdata.usageSummary.evuOut);  // Export
     this.addLabel(svg, 0, this.height / 2 * 1 / 5, "middle", wbdata.usageSummary.charging); // Laden
     this.addLabel(svg, 0, this.height / 2 * 3 / 5, "middle", wbdata.usageSummary.devices); // Geräte
-    this.addLabel(svg, this.width / 2 - this.margin / 4, this.height / 2 - this.margin + 15, "end", wbdata.usageSummary.batIn); // Speicher in
+    this.addLabel(svg, this.width / 2 - this.margin.left / 4, (this.height - this.margin.top - this.margin.bottom) / 2 + 15, "end", wbdata.usageSummary.batIn); // Speicher in
     this.addLabel(svg, 0, this.height / 2 * 2 / 5, "middle", wbdata.usageSummary.house);  // Haus
 
     if (wbdata.batterySoc > 0) {
       this.addLabelWithColor(svg,
-        (-this.width / 2 - this.margin / 4 + 10),
-        (this.height / 2 - this.margin + 15),
+        (-this.width / 2 - this.margin.left / 4 + 10),
+        ((this.height - this.margin.top - this.margin.bottom) / 2 + 15),
         "start",
         ("Speicher: " + wbdata.batterySoc + "%"),
         wbdata.usageSummary.batIn.color);
