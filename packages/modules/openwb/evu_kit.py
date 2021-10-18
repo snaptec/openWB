@@ -35,6 +35,6 @@ class EvuKit(EvuKitFlex):
             self.data["config"]["components"]["component0"]["configuration"]["id"] = id
             self.data["config"]["components"]["component0"]["name"] = "EVU-Kit0"
 
-            super().__init__(self.data)
+            super().__init__(self.data["config"])
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+self.data["config"]["components"]["component0"]["name"], e)
