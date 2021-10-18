@@ -6,34 +6,7 @@
  * @author Lutz Bender
  */
 
- // global object to store values from mqtt
-// - var lastSparklineValues = [];
-// stores data as array of js objects: { chartElement: null, value: 0 }
-
-/* function storeSparklineValue( element, value ) {
-	//console.log("storing Sparkline value: element: "+element.attr('data-chartName')+" value: "+value);
-	var done = false;
-	for ( index = 0; (index < lastSparklineValues.length) && !done; index++ ) {
-		if( lastSparklineValues[index].chartElement.attr('data-chartName') == element.attr('data-chartName') ){
-			lastSparklineValues[index].value = value;
-			done = true;
-		}
-	}
-	if ( !done ) {
-		lastSparklineValues.push( { "chartElement": element, "value": value } );
-	}
-} */
-
-
-/* function updateDashboardElement(elementText, elementChart, text, value){
-	// update text
-	if(elementText != null){
-		elementText.text(text);
-	}
-	// store value for sparklines
-	storeSparklineValue( elementChart, value );
-}
- */
+ 
 function reloadDisplay() {
     /** @function reloadDisplay
      * triggers a reload of the current page
@@ -96,6 +69,7 @@ function handlevar(mqttmsg, mqttpayload) {
 }  // end handlevar
 
 function processDisplayConfigMessages(mqttmsg, mqttpayload) {
+	
 	if ( mqttmsg == 'openWB/config/get/display/showHouseConsumption' ) {
 	/* 	switch (mqttpayload) {
 			case '0':
@@ -134,7 +108,13 @@ function processDisplayConfigMessages(mqttmsg, mqttpayload) {
 }
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
+	// color theme
 	if ( mqttmsg == 'openWB/config/get/pv/priorityModeEVBattery' ) {
+		wbdata.updatePv ("hasEVPriority", (mqttpayload == "1"))
+	}
+	//end color theme
+	
+				if ( mqttmsg == 'openWB/config/get/pv/priorityModeEVBattery' ) {
 		// sets button color in charge mode modal and sets icon in mode select button
 		switch (mqttpayload) {
 			case '0':
@@ -179,8 +159,8 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 	} else if ( element.hasClass('btn-group-toggle') ) {
 		setToggleBtnGroup(elementId, mqttpayload);
 	}
-
 }
+
 function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
@@ -361,8 +341,8 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 			evuiDailyYield = 0;
 		}
 		if (evuiDailyYield >= 0) {
-			wbdata.updateEvu("evuiDailyYield", evuiDailyYield);
-			} else {
+			 wbdata.updateEvu("evuiDailyYield", evuiDailyYield);
+			 } else {
 			wbdata.updateEvu("evuiDailyYield", 0);
 		}
 
@@ -542,11 +522,11 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		wbdata.updateBat("isBatteryConfigured", (mqttpayload == 1));
 	}
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
-		wbdata.updateBat("batteryEnergyExport", makeFloat(mqttpayload));
-	}
+		 wbdata.updateBat("batteryEnergyExport", makeFloat(mqttpayload));
+		 }
 	else if (mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
 	wbdata.updateBat("batteryEnergyImport", makeFloat(mqttpayload))
-		}
+	}
 	// end color theme
 
 	if ( mqttmsg == 'openWB/housebattery/W' ) {
@@ -635,7 +615,7 @@ function processPvMessages(mqttmsg, mqttpayload) {
 			}
 			if (pvDailyYield >= 0) {
 				wbdata.updatePv("pvDailyYield", pvDailyYield);
-			}
+				}
 
 			break;
 		case 'openWB/pv/bool70PVDynStatus':
