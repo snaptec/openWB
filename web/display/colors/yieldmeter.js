@@ -39,30 +39,13 @@ class YieldMeter {
 
 	// to be called when values have changed
 	update() {
-		switch (wbdata.graphMode) {
-			case 'live':
 				this.plotdata = Object.values(wbdata.sourceSummary)
 				.filter((row) => (row.energy > 0))
 				.concat(wbdata.usageDetails
 					.filter((row) => (row.energy > 0)));
-				break;
-			case 'day':
-				if (wbdata.showTodayGraph) {
-					this.plotdata = Object.values(wbdata.sourceSummary)
-						.filter((row) => (row.energy > 0))
-						.concat(wbdata.usageDetails
-							.filter((row) => (row.energy > 0)));			
-				} else {
-					this.plotdata = Object.values(wbdata.historicSummary)
-						.filter((row) => (row.energy > 0));		
-				}
-				break;
-			case 'month':
-				this.plotdata = Object.values(wbdata.historicSummary)
-					.filter((row) => (row.energy > 0));
-				break;
-			default: break;
-		}		
+		
+				
+		this.adjustLabelSize()
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
 		this.updateHeading();
@@ -117,23 +100,10 @@ class YieldMeter {
 			.text("energy");
 
 		yAxis.selectAll(".tick").attr("font-size", this.axisFontSize);
-//		if (wbdata.showGrid) {
-//			yAxis.selectAll(".tick line")
-//			.attr("stroke", this.gridColor)
-//			.attr ("stroke-width", "0.5");			
-//		} else {
-			yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
-//		}
+		yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
 		yAxis.select(".domain")
 			.attr("stroke", this.bgcolor);
 
-/* 		svg.append("text")
-			.attr("x", -this.margin.left)
-			.attr("y", -15)
-			.style("fill", this.axisColor)
-			.attr("font-size", this.axisFontSize)
-			.text("kWh")
-			; */
 		const labels = svg.selectAll(".label")
 			.data(this.plotdata)
 			.enter()
@@ -146,8 +116,6 @@ class YieldMeter {
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (formatWattH(d.energy * 1000)));
-
-
 		const categories = svg.selectAll(".category")
 			.data(this.plotdata)
 			.enter()
@@ -159,30 +127,47 @@ class YieldMeter {
 			.attr("font-size", this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
-			.text((d) => (d.name));
+			.text((d) => (this.truncateCategory(d.name)));
 	}
 
 	updateHeading() {
-		var heading = "Energie ";
-
-		switch (wbdata.graphMode) {
-			case 'live':
-				heading = heading + " heute";
-				break;
-			case 'day':
-				if (wbdata.showTodayGraph) {
-					heading = heading + " heute";
-				} else {
-					heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
-				}
-				break;
-			case 'month':
-				heading = "Monatswerte " + formatMonth (wbdata.graphMonth.month, wbdata.graphMonth.year);
-				break;
-			default: break;
-		}
+		var heading = "Energie heute";
 		d3.select("h3#energyheading").text(heading);
 	}
+
+	adjustLabelSize() {
+		let xCount = this.plotdata.length
+		if (xCount <= 5) {
+			this.maxTextLength = 12;
+			this.labelfontsize = 16
+		} else if (xCount == 6) {
+			this.maxTextLength = 11;
+			this.labelfontsize = 14
+		} else if (xCount > 6 && xCount <= 8) {
+			this.maxTextLength = 8;
+			this.labelfontsize = 13
+		} else if (xCount == 9) {
+			this.maxTextLength = 8;
+			this.labelfontsize = 11;
+		} else if (xCount == 10) {
+			this.maxTextLength = 7;
+			this.labelfontsize = 10;
+		}
+		else {
+			this.maxTextLength = 6;
+			this.labelfontsize = 9
+		}
+	}
+
+	truncateCategory(name) {
+		if (name.length > this.maxTextLength) {
+			return name.substr(0, this.maxTextLength) + "."
+		} else {
+			return name
+		}
+	}
+
+
 }
 var yieldMeter = new YieldMeter();
 
