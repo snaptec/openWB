@@ -15,23 +15,9 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu_json.log"
 fi
 
-openwbDebugLog ${DMOD} 2 "EVU KIT Version: ${evuflexversion}"
-openwbDebugLog ${DMOD} 2 "EVU IP: ${evuflexip}"
-openwbDebugLog ${DMOD} 2 "EVU Port : ${evuflexport}"
-openwbDebugLog ${DMOD} 2 "EVU ID : ${evuflexid}"
+python3 ${OPENWBBASEDIR}/packages/modules/openwb_flex/module.py "counter" "${evuflexversion}" "${evuflexip}" "${evuflexport}" "${evuflexid}" >>${MYLOGFILE} 2>&1
+ret=$?
 
-#sudo python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/test.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
-#ret=$?
-if (( evuflexversion == 1 )); then
-	python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readlovato.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
-	ret=$?
-elif (( evuflexversion == 2 )); then
-	python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readsdm.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
-	ret=$?
-else
-	python3 ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readmpm3pm.py ${evuflexip} ${evuflexport} ${evuflexid} >>${MYLOGFILE} 2>&1
-	ret=$?
-fi
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 
 wattbezug=$(<${RAMDISKDIR}/wattbezug)
