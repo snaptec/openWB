@@ -15,18 +15,8 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-openwbDebugLog ${DMOD} 2 "EVU Kit Version: ${evukitversion}"
-
-if (( evukitversion == 1 )); then
-	sudo python ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readlovato.py >>${MYLOGFILE} 2>&1
-	ret=$?
-elif (( evukitversion == 2 )); then
-	sudo python ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readsdm.py >>${MYLOGFILE} 2>&1
-	ret=$?
-else
-	sudo python ${OPENWBBASEDIR}/modules/bezug_ethmpm3pm/readmpm3pm.py >>${MYLOGFILE} 2>&1
-	ret=$?
-fi
+python3 ${OPENWBBASEDIR}/packages/modules/openwb/module.py "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
+ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 wattbezug=$(<${RAMDISKDIR}/wattbezug)
