@@ -34,157 +34,98 @@ class ChargePointList {
       .data(this.chargepoints).enter()
       .append("div").attr("class", "container-fluid mt-3 p-0")
       ;
-    chargePoint.append((row, i) => this.cpNameButtonCell(row, i));
-    chargePoint.append((row, i) => this.cpChargeInfoRow(row, i));
-    chargePoint.append((row, i) => this.cpChargeModeRow(row, i));
-    // chargePoint.append((row, i) => this.cpConfigRow(row, i));
+    chargePoint.html((row, index) => `
+      <div class="row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
+        ${this.cpNameRow(row)}
+      </div>
+      <div class = "row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
+        ${this.cpChargeInfoRow(row)}
+      </div>
+      <div class = "row m-0 p-0">
+        ${this.cpChargeModeRow(row, index)}
+      </div>`
+    )
+    
   }
 
   updateValues() {
     this.chargepoints = wbdata.chargePoint.filter((cp, i) => cp.configured && i < 3); // limit number of charge points displayed to 3
   }
 
-  cpNameButtonCell(row, index) {
-    const nameRow = d3.create("div").attr("class", "row  m-0 p-0")
-    nameRow.on("click", () => {
-      if (displaylocked == false) {
-        $("#chargeModeModal").modal("show");
-      } else {
-        $("#lockInfoModal").modal("show");
-      }
-    })
-
-    const nameCell = nameRow
-      .append("div")
-      .attr("class", "col  px-0 py-0 chargePointName")
-      .style("color", row.color)
-      .style("vertical-align", "middle")
-      .style("text-align", "left");
-
-    nameCell
-      .append("span").text(row.name)
-      .attr("class", "px-0");
-
-    if (row.isPluggedIn) {
-      const span =
-        nameCell.append("span")
-          .attr("class", "fa fa-xs fa-plug")
-        ;
-      span.classed("text-orange", (!row.isCharging))
-      span.classed("text-green", row.isCharging)
-    }
-    if (row.willFinishAtTime) {
-      nameCell.append("span")
-        .attr("class", "fa fa-xs fa-flag-checkered pl-1")
-        .style("color", this.fgColor);
-    }
-    if (row.chargeAtNight) {
-      nameCell.append("span")
-        .attr("class", "fa fa-xs fa-moon pl-1")
-        .style("color", this.fgColor)
-    }
-
-    return nameRow.node();
+  cpNameRow(row) {
+    let plugColor = row.isCharging ? "text-green" : "text-orange";
+    let plugIcon = !row.isPluggedIn ? "" : `
+      <span class="fa fa-xs fa-plug ${plugColor}"/></span>
+      `
+    let finishIcon = !row.willFinishAtTime ? "" : `
+      <span class="fa fa-xs fa-flag-checkered pl-0" style="color:${this.fgColor};"/></span>
+    `
+    let nightIcon = !row.chargeAtNight ? "" : `
+      <span class="fa fa-xs fa-moon pl-0" style="color:${this.fgColor};"></span>
+    `
+    return `
+        <div class = "col px-0 py-0 chargePointName"
+          style="color:${row.color};vertical-align:middle;text-align:left;">
+          <span class="px-0">${row.name}</span>
+          ${plugIcon}
+          ${finishIcon}
+          ${nightIcon}
+        </div>
+      `
   }
 
-  cpChargeInfoRow(row, index) {
-    const ciRow = d3.create("div").attr("class", "row m-0 p-0")
-    ciRow.on("click", () => {
-      if (displaylocked == false) {
-        $("#chargeModeModal").modal("show");
-      } else {
-        $("#lockInfoModal").modal("show");
-      }
-    })
-    const socCell = ciRow
-      .append("div")
-      .attr("class", "col-4  px-0 py-0 chargePointName")
-      .style("color", row.color)
-      .style("text-align", "left");
-
-    if (row.isSocConfigured) {
-      socCell.append("span").text(row.soc + " %")
-        .attr("class", "px-0")
-        .style("vertical-align", "middle");
-    } else {
-      socCell.append("span").html("&nbsp;")
-    }
-
-    const infoCell = ciRow.append("div")
-      .attr("class", "col-8  pl-0 pr-2 py-0 chargePointData")
-      .style("color", row.color)
-      .style("vertical-align", "middle")
-      .style("text-align", "right");
-
-    infoCell.append("p")
-      .attr("class", "px-0 pb-0 mb-0 ")
-      .text(formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A")
-      .style("color", "white")
-
-    infoCell.append("p")
-      .attr("class", "px-0 mb-0 ")
-      .text(formatWattH(row.energy * 1000) + " / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km")
-      .style("color", "white")
-
-    return ciRow.node()
+  cpChargeInfoRow(row) {
+    let soctext = row.isSocConfigured ? row.soc + " %" : " ";
+    let powerString = formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + row.targetCurrent + " A";
+    let energyString = formatWatt(row.energy * 1000) + " / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
+    return `
+      <div class="col-4 px-0 py-0 chargePointName" style="color:${row.color};text-align:left">
+        <span class="px-0 " style="vertical-align:middle;">
+          ${soctext}
+        </span>
+      </div>
+      <div class="col-8  pl-0 pr-2 py-0 chargePointData" 
+        style="color:white;vertical-align:middle;text-align:right;">
+        <p class="px-0 pb-0 mb-0">
+          ${powerString} 
+        </p>
+        <p class="px-0 mb-0">
+          ${energyString}
+        </p>
+      </div>
+      `
   }
-
 
   cpChargeModeRow(row, index) {
     const chargeModes = ["Sofort", "Min & PV", "PV", "Stop", "Standby"]
-    const cmRow = d3.create("div").attr("class", "row m-0 p-0")
-    const modeButton = cmRow.append("div").attr("class", "col-7 m-0 px-1 py-0")
-      .append("button")
-      .attr("class", "btn btn-block btn-success display-button chargeModeSelectBtn px-0 py-3")
-      .attr("type", "button")
-      .on("click", () => {
-        if (displaylocked == false) {
-          createDisableButton(row, index);
-          $("#chargeModeModal").modal("show");
-        } else {
-          $("#lockInfoModal").modal("show");
-        }
-      })
-    if (row.isEnabled) {
-      modeButton
-        .append("span").attr("class", "text-white")
-        .text(chargeModes[wbdata.chargeMode])
-        if (wbdata.isBatteryConfigured && (wbdata.chargeMode == 1 || wbdata.chargeMode == 2)) {
-          if (wbdata.hasEVPriority) {
-            modeButton.append("span").attr("class", "priorityEvBattery")
-              .append("span").attr("class", "fas fa-car px-2")
-              .text(" ")
-          } else {
-            modeButton.append("span").attr("class", "priorityEvBattery")
-              .append("span").attr("class", "fas fa-car-battery px-2")
-              .text(" ")
-          }
-        }
-    } else {
-      modeButton
-        .append("span").attr("class", "text-red")
-        .text("Inaktiv")
+    var priorityIcon = "";
+    if (wbdata.isBatteryConfigured && (wbdata.chargeMode == 1 || wbdata.chargeMode == 2)) {
+      priorityIcon = wbdata.hasEVPriority ? "fa-car" : "fa-car-battery"
     }
-       const configButton = cmRow.append("div").attr("class", "col-5 m-0 px-1 py-0")
-      .append("button")
-      .attr("class", "btn btn-block btn-outline-secondary display-button ladepunktConfigBtn px-0 mx-0  py-3 ")
-      .attr("type", "button")
-      .on("click", () => {
-        if (displaylocked == false) {
-          $('#ladepunktConfigModal').find('.configLp').text(index + 1);
-          $('#ladepunktConfigModal').find('[data-config-lp]').addClass('hide');
-          $('#ladepunktConfigModal').find('[data-config-lp="' + (index + 1) + '"]').removeClass('hide');
-          $('#ladepunktConfigModal').modal("show");
-        } else {
-          $("#lockInfoModal").modal("show");
-        }
-      });
-
-
-    configButton.append("i").attr("class", "fas fa-wrench")
-    return cmRow.node()
+    var modeButtonText = ""
+    if (row.isEnabled) {
+      modeButtonText = `
+        <span class="text-white;">${chargeModes[wbdata.chargeMode]}</span>
+        <span class="priorityEvBattery">
+          <span class="fas ${priorityIcon} px-2"> </span>
+        </span>`
+    } else {
+      modeButtonText = `<span class="text-red">Inaktiv</span>`
+    }
+    return `
+      <div class="col-7 m-0 px-0 py-0">
+        <button class="btn btn-block btn-success display-button px-0 py-3" 
+        type="button" onclick="modeButtonClicked(${row.isEnabled},${index})">
+          ${modeButtonText}
+        </button>
+      </div>
+      <div class="col-5 m-0 px-1 py-0">
+        <button class="btn btn-block btn-outline-secondary display-button px-0 mx-0  py-3"
+          type="button" onclick = "configButtonClicked(${index})">
+          <i class="fas fa-wrench"></i>
+        </button>
+      </div>`
   }
-
 
 
   editManualSoc(i) {
@@ -281,24 +222,6 @@ function socButtonClicked(i) {
   }
 }
 
-function createDisableButton(row, index) {
-  let div = d3.select("div#disableButton");
-  div.selectAll("*").remove();
-  let buttonText = (row.isEnabled ? "LP Deaktivieren" : "LP Aktivieren")
-  let b = div.append("button")
-    .attr("type", "button")
-    .text(buttonText)
-    .attr("class", "chargeModeBtn chargeModeBtnDisable btn btn-lg btn-block")
-    .on("click", () => {
-      lpButtonClicked(index)
-    })
-
-
-  b.classed("btn-danger", row.isEnabled)
-  b.classed("btn-info", !row.isEnabled)
-
-}
-
 function lpButtonClicked(i) {
   if (wbdata.chargePoint[i].isEnabled) {
     publish("0", "openWB/set/lp/" + (+i + 1) + "/ChargePointEnabled");
@@ -309,4 +232,36 @@ function lpButtonClicked(i) {
     .classed("disabled", true);
 }
 
+function configButtonClicked(index) {
+  if (displaylocked == false) {
+    $('#ladepunktConfigModal').find('.configLp').text(index + 1);
+    $('#ladepunktConfigModal').find('[data-config-lp]').addClass('hide');
+    $('#ladepunktConfigModal').find('[data-config-lp="' + (index + 1) + '"]').removeClass('hide');
+    $('#ladepunktConfigModal').modal("show");
+  } else {
+    $("#lockInfoModal").modal("show");
+  }
+}
+
+function modeButtonClicked(isEnabled, index) {
+  if (displaylocked == false) {
+    let div = d3.select("div#disableButton");
+    div.selectAll("*").remove();
+    let buttonText = (isEnabled ? "LP Deaktivieren" : "LP Aktivieren")
+    let b = div.append("button")
+      .attr("type", "button")
+      .text(buttonText)
+      .attr("class", "chargeModeBtn chargeModeBtnDisable btn btn-lg btn-block")
+      .attr("data-dismiss","modal")
+      .on("click", () => {
+        lpButtonClicked(index)
+      })
+    b.classed("btn-danger", isEnabled)
+    b.classed("btn-info", !isEnabled)
+
+    $("#chargeModeModal").modal("show");
+  } else {
+    $("#lockInfoModal").modal("show");
+  }
+}
 var chargePointList = new ChargePointList();

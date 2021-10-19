@@ -120,6 +120,11 @@ class WbData {
 			.on("click", switchToEnergyView);
 		d3.select("button#statusButton")
 			.on("click", showStatus);
+
+		powerMeter.init()
+		powerGraph.init()
+		yieldMeter.init()
+		chargePointList.init()
 	}
 
 	updateEvu(field, value) {
@@ -420,4 +425,5 @@ function showStatus() {
 	$("#statusModal").modal("show");
 }
 var wbdata = new WbData(new Date(Date.now()));
+
 
