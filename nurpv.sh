@@ -244,14 +244,10 @@ nurpvlademodus(){
 					llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
 				fi
 			else
-				if (( llalt == minimalapv )); then
+				if (( nurpvslowup == 1 )) && (( uberschuss - schaltschwelle > 230 )); then
 					llneu=$(( llalt + 1 ))
 				else
-					if (( nurpvslowup == 1 )); then
-						llneu=$(( llalt + 1 ))
-					else
-						llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
-					fi
+					llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
 				fi
 			fi
 			if (( llneu > maximalstromstaerke )); then
