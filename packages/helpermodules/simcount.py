@@ -55,15 +55,14 @@ class SimCountLegacy:
                 power_previous = int(float(self.read_ramdisk_file(prefix+'wh0')))
                 try:
                     counter_import_present = int(float(self.read_ramdisk_file(prefix+'watt0pos')))
-                    counter_import_previous = counter_import_present
                 except:
-                    counter_import_previous = self.restore("watt0pos", prefix)
-
+                    counter_import_present = self.restore("watt0pos", prefix)
+                counter_import_previous = counter_import_present
                 try:
-                    counter_export_present = int(self.read_ramdisk_file(prefix+'watt0neg'))
-                    counter_export_previous = counter_export_present
+                    counter_export_present = int(float(self.read_ramdisk_file(prefix+'watt0neg')))
                 except:
-                    counter_export_previous = self.restore("watt0neg", prefix)
+                    counter_export_present = self.restore("watt0neg", prefix)
+                counter_export_previous = counter_export_present
                 start_new = False
             self.write_ramdisk_file(prefix+'sec0', "%22.6f" % timestamp_present)
             self.write_ramdisk_file(prefix+'wh0', power_present)
@@ -76,15 +75,32 @@ class SimCountLegacy:
                 counter_import_present = counter_import_present + imp_exp[0]
                 wattposkh = counter_import_present/3600
                 wattnegkh = (counter_export_present*-1)/3600
+
+                topic = self.__get_topic(prefix)
                 self.write_ramdisk_file(prefix+'watt0pos', counter_import_present)
                 if counter_import_present != counter_import_previous:
-                    pub.pub_single("openWB/pv/WHImported_temp", counter_import_present, no_json=True)
+                    pub.pub_single("openWB/"+topic+"/WHImported_temp", counter_import_present, no_json=True)
                 self.write_ramdisk_file(prefix+'watt0neg', counter_export_present)
                 if counter_export_present != counter_export_previous:
-                    pub.pub_single("openWB/pv/WHExport_temp", counter_export_present, no_json=True)
+                    pub.pub_single("openWB/"+topic+"/WHExport_temp", counter_export_present, no_json=True)
                 return wattposkh, wattnegkh
             else:
                 return 0, 0
+        except Exception as e:
+            log.MainLogger().error("Fehler im Modul simcount", e)
+
+    def __get_topic(self, prefix:str) -> str:
+        """ ermittelt das zum Präfix gehörende Topic."""
+        try:
+            if prefix == "bezug":
+                topic = "evu"
+            elif prefix == "pv":
+                topic = prefix
+            elif prefix == "speicher":
+                topic = "housebattery"
+            else:
+                log.MainLogger().error("Fehler im Modul simcount: Unbekannter Präfix")
+            return topic
         except Exception as e:
             log.MainLogger().error("Fehler im Modul simcount", e)
 
@@ -109,26 +125,28 @@ class SimCountLegacy:
             signal.signal(signal.SIGALRM, self.abort)
             signal.alarm(3)
             try:
+                topic = self.__get_topic(prefix)
                 if value == "watt0pos":
-                    temp = subscribe.simple("openWB/pv/WHImported_temp", hostname="localhost")
+                    temp = subscribe.simple("openWB/"+topic+"/WHImported_temp", hostname="localhost")
                 else:
-                    temp = subscribe.simple("openWB/pv/WHExport_temp", hostname="localhost")
-            except:
-                pass
+                    temp = subscribe.simple("openWB/"+topic+"/WHExport_temp", hostname="localhost")
+            except Exception as e:
+                log.MainLogger().error("Fehler im Modul simcount", e)
+            temp = int(float(temp.payload.decode("utf-8")))
             ra = '^-?[0-9]+$'
-            if re.search(ra, temp) == None:
+            if re.search(ra, str(temp)) == None:
                 temp = "0"
             self.write_ramdisk_file(prefix+value, temp)
             if value == "watt0pos":
-                log.log_1_9("loadvars read openWB/pv/WHImported_temp from mosquito "+str(temp))
+                log.MainLogger().info("loadvars read openWB/"+topic+"/WHImported_temp from mosquito "+str(temp))
             else:
-                log.log_1_9("loadvars read openWB/pv/WHExport_temp from mosquito "+str(temp))
+                log.MainLogger().info("loadvars read openWB/"+topic+"/WHExport_temp from mosquito "+str(temp))
             return temp
         except Exception as e:
             log.MainLogger().error("Fehler im Modul simcount", e)
 
     def abort(self, signal, frame):
-        raise Exception
+        raise TimeoutError
 
 
 class SimCount:
