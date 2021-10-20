@@ -138,7 +138,7 @@ hr {
 .modal-header,
 .modal-footer {
     border-color: dimgrey;
-    font-size: 16px;
+    font-size: 1.5em;
 }
 
 .modal-content label {
@@ -481,4 +481,10 @@ h3 {
 .display-button {
     font-size: 16px;
     padding: 9px;
+}
+
+
+.status-header,.status-title {
+    text-align: center;
+    font-size: 1em;
 }
