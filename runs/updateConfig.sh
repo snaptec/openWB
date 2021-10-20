@@ -382,6 +382,24 @@ updateConfig(){
 	if ! grep -Fq "twcmanagerlp1phasen=" $ConfigFile; then
 		echo "twcmanagerlp1phasen=3" >> $ConfigFile
 	fi
+	if ! grep -Fq "twcmanagerlp1httpcontrol=" $ConfigFile; then
+		echo "twcmanagerlp1httpcontrol=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "twcmanagerlp1port=" $ConfigFile; then
+		echo "twcmanagerlp1port=8080" >> $ConfigFile
+	fi
+	if ! grep -Fq "twcmanagerlp2ip=" $ConfigFile; then
+		echo "twcmanagerlp2ip='127.0.0.1'" >> $ConfigFile
+	fi
+	if ! grep -Fq "twcmanagerlp2port=" $ConfigFile; then
+		echo "twcmanagerlp2port=8080" >> $ConfigFile
+	fi
+	if ! grep -Fq "twcmanagerlp2phasen=" $ConfigFile; then
+		echo "twcmanagerlp2phasen=3" >> $ConfigFile
+	fi
+	if ! grep -Fq "twcmanagerlp2httpcontrol=" $ConfigFile; then
+		echo "twcmanagerlp2httpcontrol=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "mpm3pmpvsource=" $ConfigFile; then
 		echo "mpm3pmpvsource=/dev/ttyUSB0" >> $ConfigFile
 	fi
@@ -427,11 +445,17 @@ updateConfig(){
 	if ! grep -Fq "bezug_solarlog_ip=" $ConfigFile; then
 		echo "bezug_solarlog_ip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "bezug2_solarlog_ip=" $ConfigFile; then
+		echo "bezug2_solarlog_ip=192.168.0.12" >> $ConfigFile
+	fi
 	if ! grep -Fq "bezug_id=" $ConfigFile; then
 		echo "bezug_id=30" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezug_solarlog_speicherv=" $ConfigFile; then
 		echo "bezug_solarlog_speicherv=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezug2_solarlog_speicherv=" $ConfigFile; then
+		echo "bezug2_solarlog_speicherv=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrfronius2ip=" $ConfigFile; then
 		echo "wrfronius2ip=none" >> $ConfigFile
@@ -786,6 +810,9 @@ updateConfig(){
 	if ! grep -Fq "name_wechselrichter2=" $ConfigFile; then
 		echo "name_wechselrichter2=WR2" >> $ConfigFile
 	fi
+	if ! grep -Fq "name_wechselrichter3=" $ConfigFile; then
+		echo "name_wechselrichter3=WR3" >> $ConfigFile
+	fi
 	if ! grep -Fq "hook1ein_url=" $ConfigFile; then
 		echo "hook1ein_url='https://webhook.com/ein.php'" >> $ConfigFile
 	fi
@@ -1031,6 +1058,9 @@ updateConfig(){
 	if ! grep -Fq "vartaspeicherip=" $ConfigFile; then
 		echo "vartaspeicherip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "vartaspeicher2ip=" $ConfigFile; then
+		echo "vartaspeicher2ip=none" >> $ConfigFile
+	fi
 	if ! grep -Fq "usevartamodbus=" $ConfigFile; then
 		echo "usevartamodbus=0" >> $ConfigFile
 	fi
@@ -1127,6 +1157,10 @@ updateConfig(){
 		echo "pv1_idd=1" >> $ConfigFile
 		echo "speicher1_ip=192.168.0.17" >> $ConfigFile
 	fi
+	if ! grep -Fq "pv1_ida=" $ConfigFile; then
+		echo "pv1_ida=1" >> $ConfigFile
+	fi
+
 	if ! grep -Fq "speicher1_ip2=" $ConfigFile; then
 		echo "speicher1_ip2=192.168.0.17" >> $ConfigFile
 	fi
@@ -1453,6 +1487,9 @@ updateConfig(){
 	if ! grep -Fq "powerfoxid=" $ConfigFile; then
 		echo "powerfoxid=idesmeters" >> $ConfigFile
 	fi
+	if ! grep -Fq "powerfoxpvid=" $ConfigFile; then
+		echo "powerfoxpvid=idesmeters" >> $ConfigFile
+	fi
 	if ! grep -Fq "ksemip=" $ConfigFile; then
 		echo "ksemip=ipdesmeters" >> $ConfigFile
 	fi
@@ -1715,6 +1752,10 @@ updateConfig(){
 	if ! grep -Fq "pv2wattmodul=" $ConfigFile; then
 		echo "pv2wattmodul=none" >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2ip2=" $ConfigFile; then
+		echo "pv2ip2=192.168.192.192" >> $ConfigFile
+		echo "pv2id2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		echo "pv2ip=none" >> $ConfigFile
 		echo "pv2id=1" >> $ConfigFile
@@ -1742,6 +1783,48 @@ updateConfig(){
 	fi
 	if ! grep -Fq "kia_soccalclp2=" $ConfigFile; then
 		echo "kia_soccalclp2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_enable=" $ConfigFile; then
+		echo "kia_abrp_enable=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_token=" $ConfigFile; then
+		echo "kia_abrp_token=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_enable_2=" $ConfigFile; then
+		echo "kia_abrp_enable_2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_abrp_token_2=" $ConfigFile; then
+		echo "kia_abrp_token_2=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_advanced=" $ConfigFile; then
+		echo "kia_advanced=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_advanced2=" $ConfigFile; then
+		echo "kia_advanced2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_cachevalid=" $ConfigFile; then
+		echo "kia_adv_cachevalid=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_cachevalid2=" $ConfigFile; then
+		echo "kia_adv_cachevalid2=10" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_12v=" $ConfigFile; then
+		echo "kia_adv_12v=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_12v2=" $ConfigFile; then
+		echo "kia_adv_12v2=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_interval_unplug=" $ConfigFile; then
+		echo "kia_adv_interval_unplug=360" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_interval_unplug2=" $ConfigFile; then
+		echo "kia_adv_interval_unplug2=360" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_ratelimit=" $ConfigFile; then
+		echo "kia_adv_ratelimit=15" >> $ConfigFile
+	fi
+	if ! grep -Fq "kia_adv_ratelimit2=" $ConfigFile; then
+		echo "kia_adv_ratelimit2=15" >> $ConfigFile
 	fi
 	if ! grep -Fq "isss=" $ConfigFile; then
 		echo "isss=0" >> $ConfigFile
@@ -2037,6 +2120,36 @@ updateConfig(){
 	fi
 	if ! grep -Fq "alphav123=" $ConfigFile; then
 		echo "alphav123=0" >> $ConfigFile
+	fi
+	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
+		sed -i "s/socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
+	fi
+	if grep -Fq "socmodul1=soc_bluelinklp2" $ConfigFile; then
+		sed -i "s/socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
+	fi
+	if ! grep -Fq "virtual_ip_eth0=" $ConfigFile; then
+		echo "virtual_ip_eth0='192.168.193.5'" >> $ConfigFile
+	fi
+	if ! grep -Fq "virtual_ip_wlan0=" $ConfigFile; then
+		echo "virtual_ip_wlan0='192.168.193.6'" >> $ConfigFile
+	fi
+	if ! grep -Fq "evuflexip=" $ConfigFile; then
+		echo "evuflexversion=2" >>$ConfigFile
+		echo "evuflexip='192.168.193.5'" >> $ConfigFile
+		echo "evuflexport=8899" >> $ConfigFile
+		echo "evuflexid=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "pvflexip=" $ConfigFile; then
+		echo "pvflexip='192.168.193.5'" >> $ConfigFile
+		echo "pvflexport=8899" >> $ConfigFile
+		echo "pvflexid=1" >> $ConfigFile
+		echo "pvflexversion=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "pv2flexip=" $ConfigFile; then
+		echo "pv2flexip='192.168.193.5'" >> $ConfigFile
+		echo "pv2flexport=8899" >> $ConfigFile
+		echo "pv2flexid=1" >> $ConfigFile
+		echo "pv2flexversion=1" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }

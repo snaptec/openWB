@@ -183,7 +183,7 @@
 									<div class="form-row vaRow mb-1">
 										<label for="cpunterbrechungdauerlp1" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungdauerlp1old; ?> Sek</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp1" id="cpunterbrechungdauerlp1" min="4" max="15" step="1" value="<?php echo $cpunterbrechungdauerlp1old; ?>">
+											<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp1" id="cpunterbrechungdauerlp1" min="4" max="150" step="1" value="<?php echo $cpunterbrechungdauerlp1old; ?>">
 										</div>
 									</div>
 									<span class="form-text small">
@@ -212,7 +212,7 @@
 										<div class="form-row vaRow mb-1">
 											<label for="cpunterbrechungdauerlp2" class="col-2 col-form-label valueLabel" suffix="Sek"><?php echo $cpunterbrechungdauerlp2old; ?> Sek</label>
 											<div class="col-10">
-												<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp2" id="cpunterbrechungdauerlp2" min="4" max="15" step="1" value="<?php echo $cpunterbrechungdauerlp2old; ?>">
+												<input type="range" class="form-control-range rangeInput" name="cpunterbrechungdauerlp2" id="cpunterbrechungdauerlp2" min="4" max="150" step="1" value="<?php echo $cpunterbrechungdauerlp2old; ?>">
 											</div>
 										</div>
 										<span class="form-text small">
@@ -1283,6 +1283,7 @@
 										<option <?php if($displaythemeold == 3) echo "selected" ?> value="3">Gauges</option>
 										<option <?php if($displaythemeold == 1) echo "selected" ?> value="1">Symbolfluss</option>
 										<option <?php if($displaythemeold == 2) echo "selected" ?> value="2">Nur Ladeleistung, keine verstellmöglichkeit</option>
+										<option <?php if($displaythemeold == 5) echo "selected" ?> value="5">Colors</option>
 									</select>
 								</div>
 							</div>

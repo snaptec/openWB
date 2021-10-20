@@ -124,7 +124,7 @@ class PowerGraph {
         }
         break;
       case 'month':
-        heading = "Tageswerte " +  formatMonth (wbdata.graphMonth.month, wbdata.graphMonth.year);
+        heading = "Tageswerte " + formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
         break;
       default: break;
     }
@@ -138,7 +138,7 @@ class PowerGraph {
       // ignore error 
     }
   }
-  
+
   activateMonth() {
     this.resetMonthGraph();
     try {
@@ -157,7 +157,7 @@ class PowerGraph {
       // ignore error 
     }
   }
-  
+
   updateLive(topic, payload) {
     if (wbdata.graphMode == 'live') { // only udpdate if live graph is active
       if (this.initialized) { // steady state
@@ -294,127 +294,14 @@ class PowerGraph {
         deviceEnergy = deviceEnergy + (endValues[26 + i] - startValues[26 + i]) / 1000;
       } else {
         deviceEnergy = deviceEnergy + (endValues[19 + i] - startValues[19 + i]) / 1000;
-      }}
+      }
+    }
     deviceEnergy = deviceEnergy + (endValues[10] - startValues[10]) / 1000;
     deviceEnergy = deviceEnergy + (endValues[12] - startValues[12]) / 1000;
     wbdata.historicSummary.devices.energy = deviceEnergy;
     wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
     wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
       - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
-  }
-
-  extractDayValues(payload, oldPayload) {
-    const elements = payload.split(",");
-    const oldElements = oldPayload.split(",");
-    var values = {};
-    values.date = new Date(d3.timeParse("%H%M")(elements[0]));
-    // evu
-    values.gridPull = this.calcValue(1, elements, oldElements);
-    values.gridPush = this.calcValue(2, elements, oldElements);
-    // pv
-    values.solarPower = this.calcValue(3, elements, oldElements);
-    values.inverter = 0;
-    // charge points
-    values.charging = this.calcValue(7, elements, oldElements);
-    var i;
-    for (i = 0; i < 3; i++) {
-      values["lp" + i] = this.calcValue(4 + i, elements, oldElements);
-    }
-    for (i = 3; i < 8; i++) {
-      values["lp" + i] = this.calcValue(12 + i, elements, oldElements);
-    }
-    values.soc1 = +elements[21];
-    values.soc2 = +elements[22];
-    // smart home
-    for (i = 0; i < 10; i++) {
-      values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
-    }
-    //consumers
-    values.co0 = this.calcValue(10, elements, oldElements);
-    values.co1 = this.calcValue(12, elements, oldElements);
-    //battery
-    values.batIn = this.calcValue(8, elements, oldElements);
-    values.batOut = this.calcValue(9, elements, oldElements);
-    values.batterySoc = +elements[20];
-    // calculated values
-    values.housePower = values.gridPull + values.solarPower + values.batOut
-      - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
-      - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9;
-    if (values.housePower < 0) { values.housePower = 0; };
-    values.selfUsage = values.solarPower - values.gridPush;
-    if (values.selfUsage < 0) { values.selfUsage = 0; };
-    return values;
-  }
-
-extractMonthValues(payload, oldPayload) {
-    const elements = payload.split(",");
-    const oldElements = oldPayload.split(",");
-    var values = {};
-    values.date = new Date(d3.timeParse("%Y%m%d%H%M")(oldElements[0] + '1200'));
-    // evu
-    values.gridPull = this.calcMonthlyValue(1, elements, oldElements);
-    values.gridPush = this.calcMonthlyValue(2, elements, oldElements);
-    // pv
-    values.solarPower = this.calcMonthlyValue(3, elements, oldElements);
-    values.inverter = 0;
-    // charge points
-    values.charging = this.calcMonthlyValue(7, elements, oldElements);
-    var i;
-    for (i = 0; i < 3; i++) {
-      values["lp" + i] = this.calcMonthlyValue(4 + i, elements, oldElements);
-    }
-    for (i = 3; i < 8; i++) {
-      values["lp" + i] = this.calcMonthlyValue(12 + i, elements, oldElements);
-    }
-    values.soc1 = +elements[21];
-    values.soc2 = +elements[22];
-    // smart home
-   for (i = 0; i < 10; i++) {
-      values["sh" + i] = this.calcMonthlyValue(19 + i, elements, oldElements);
-    } 
-    //consumers
-    values.co0 = this.calcMonthlyValue(10, elements, oldElements);
-    values.co1 = this.calcMonthlyValue(12, elements, oldElements);
-    //battery
-    values.batIn = this.calcMonthlyValue(8, elements, oldElements);
-    values.batOut = this.calcMonthlyValue(9, elements, oldElements);
-    values.batterySoc = +elements[20];
-    // calculated values
-    values.housePower = values.gridPull + values.solarPower + values.batOut
-    - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
-    - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9;if (values.housePower < 0) { values.housePower = 0; };
-    values.selfUsage = values.solarPower - values.gridPush;
-    if (values.selfUsage < 0) { values.selfUsage = 0; };
-    return values;
-  }
-  reset() {
-    this.resetLiveGraph();
-    this.resetDayGraph();
-  }
-
-  resetLiveGraph() {
-    // fresh reload of the graph
-    this.initialized = false;
-    this.initCounter = 0;
-    this.initialGraphData = [];
-    this.graphData = [];
-    this.graphRefreshCounter = 0;
-  }
-
-  resetDayGraph() {
-    this.initialized = false;
-    this.initCounter = 0;
-    this.staging = [];
-    this.rawData = [];
-    this.graphData = [];
-  }
-
-  resetMonthGraph() {
-    this.initialized = false;
-    this.initCounter = false;
-    this.staging = [];
-    this.rawData = [];
-    this.graphData = [];
   }
 
   extractLiveValues(payload) {
@@ -455,7 +342,11 @@ extractMonthValues(payload, oldPayload) {
 
     // smart home
     for (i = 0; i < 8; i++) {
-      values["sh" + i] = +elements[20 + i];
+      if (!(wbdata.shDevice[i].countAsHouse)) {
+        values["sh" + i] = +elements[20 + i];
+      } else {
+        values["sh" + i] = +0;
+      }
     }
     //consumers
     values.co0 = +elements[12];
@@ -476,6 +367,126 @@ extractMonthValues(payload, oldPayload) {
     return values;
   }
 
+  extractDayValues(payload, oldPayload) {
+    const elements = payload.split(",");
+    const oldElements = oldPayload.split(",");
+    var values = {};
+    values.date = new Date(d3.timeParse("%H%M")(elements[0]));
+    // evu
+    values.gridPull = this.calcValue(1, elements, oldElements);
+    values.gridPush = this.calcValue(2, elements, oldElements);
+    // pv
+    values.solarPower = this.calcValue(3, elements, oldElements);
+    values.inverter = 0;
+    // charge points
+    values.charging = this.calcValue(7, elements, oldElements);
+    var i;
+    for (i = 0; i < 3; i++) {
+      values["lp" + i] = this.calcValue(4 + i, elements, oldElements);
+    }
+    for (i = 3; i < 8; i++) {
+      values["lp" + i] = this.calcValue(12 + i, elements, oldElements);
+    }
+    values.soc1 = +elements[21];
+    values.soc2 = +elements[22];
+    // smart home
+    for (i = 0; i < 9; i++) {
+      if (!(wbdata.shDevice[i].countAsHouse)) {
+        values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
+      } else {
+        values["sh" + i] = +0;
+      }
+    }
+    //consumers
+    values.co0 = this.calcValue(10, elements, oldElements);
+    values.co1 = this.calcValue(12, elements, oldElements);
+    //battery
+    values.batIn = this.calcValue(8, elements, oldElements);
+    values.batOut = this.calcValue(9, elements, oldElements);
+    values.batterySoc = +elements[20];
+    // calculated values
+    values.housePower = values.gridPull + values.solarPower + values.batOut
+      - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
+      - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8;
+    if (values.housePower < 0) { values.housePower = 0; };
+    values.selfUsage = values.solarPower - values.gridPush;
+    if (values.selfUsage < 0) { values.selfUsage = 0; };
+    return values;
+  }
+
+  extractMonthValues(payload, oldPayload) {
+    const elements = payload.split(",");
+    const oldElements = oldPayload.split(",");
+    var values = {};
+    values.date = new Date(d3.timeParse("%Y%m%d%H%M")(oldElements[0] + '1200'));
+    // evu
+    values.gridPull = this.calcMonthlyValue(1, elements, oldElements);
+    values.gridPush = this.calcMonthlyValue(2, elements, oldElements);
+    // pv
+    values.solarPower = this.calcMonthlyValue(3, elements, oldElements);
+    values.inverter = 0;
+    // charge points
+    values.charging = this.calcMonthlyValue(7, elements, oldElements);
+    var i;
+    for (i = 0; i < 3; i++) {
+      values["lp" + i] = this.calcMonthlyValue(4 + i, elements, oldElements);
+    }
+    for (i = 3; i < 8; i++) {
+      values["lp" + i] = this.calcMonthlyValue(12 + i - 3, elements, oldElements);
+    }
+    values.soc1 = +elements[21];
+    values.soc2 = +elements[22];
+    // smart home
+    for (i = 0; i < 10; i++) {
+      values["sh" + i] = this.calcMonthlyValue(19 + i, elements, oldElements);
+    }
+    //consumers
+    values.co0 = this.calcMonthlyValue(10, elements, oldElements);
+    values.co1 = this.calcMonthlyValue(12, elements, oldElements);
+    //battery
+    values.batIn = this.calcMonthlyValue(17, elements, oldElements);
+    values.batOut = this.calcMonthlyValue(18, elements, oldElements);
+    values.batterySoc = +elements[20];
+    // calculated values
+    values.housePower = values.gridPull + values.solarPower + values.batOut
+      - values.gridPush - values.batIn - values.charging - values.co0 - values.co1
+      - values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9; if (values.housePower < 0) { values.housePower = 0; };
+    values.selfUsage = values.solarPower - values.gridPush;
+    if (values.selfUsage < 0) { values.selfUsage = 0; };
+    return values;
+  }
+  reset() {
+    this.resetLiveGraph();
+    this.resetDayGraph();
+  }
+
+  resetLiveGraph() {
+    // fresh reload of the graph
+    this.initialized = false;
+    this.initCounter = 0;
+    this.initialGraphData = [];
+    this.graphData = [];
+    this.graphRefreshCounter = 0;
+  }
+
+  resetDayGraph() {
+    this.initialized = false;
+    this.initCounter = 0;
+    this.staging = [];
+    this.rawData = [];
+    this.graphData = [];
+  }
+
+  resetMonthGraph() {
+    this.initialized = false;
+    this.initCounter = false;
+    this.staging = [];
+    this.rawData = [];
+    this.graphData = [];
+  }
+
+
+
   calcValue(i, array, oldArray) {
     var val = (array[i] - oldArray[i]) * 12;
     if (val < 0 || val > 150000) {
@@ -485,7 +496,7 @@ extractMonthValues(payload, oldPayload) {
   }
   calcMonthlyValue(i, array, oldArray) {
     var val = (array[i] - oldArray[i]);
-    
+
     if (val < 0 || val > 150000) {
       val = 0;
     }
@@ -521,14 +532,14 @@ extractMonthValues(payload, oldPayload) {
 
   drawSourceGraph(svg, width, height) {
     var keys = (wbdata.graphMode == 'month') ? ["gridPull", "batOut", "selfUsage", "gridPush"] : ["selfUsage", "gridPush", "batOut", "gridPull"];
-    
+
     if (wbdata.graphMode == 'month') {
-      const dayRange = d3.extent (this.graphData, d => d.date.getDate())
+      const dayRange = d3.extent(this.graphData, d => d.date.getDate())
       this.xScale = d3.scaleBand()
-        .domain (Array.from ({length: (dayRange[1] - dayRange[0] + 1)}, (v,k) => k + dayRange[0]))
-        .paddingInner (0.4);
+        .domain(Array.from({ length: (dayRange[1] - dayRange[0] + 1) }, (v, k) => k + dayRange[0]))
+        .paddingInner(0.4);
     } else {
-      this.xScale = d3.scaleTime().domain (d3.extent (this.graphData, d => d.date));
+      this.xScale = d3.scaleTime().domain(d3.extent(this.graphData, d => d.date));
     }
     this.xScale.range([0, width - this.margin.right]);
     const yScale = d3.scaleLinear().range([height - 10, 0]);
@@ -548,21 +559,21 @@ extractMonthValues(payload, oldPayload) {
         .selectAll("rect")
         .data((d) => d).enter()
         .append("rect")
-          .attr("x", (d) => this.xScale(d.data.date.getDate()))
-          .attr("y", d => yScale(d[1]))
-          .attr("height", d => yScale(d[0]) - yScale(d[1]))
-          .attr("width", this.xScale.bandwidth())
-      rects.append("svg:title").text ((d) => formatWatt(d[1]-d[0]));
+        .attr("x", (d) => this.xScale(d.data.date.getDate()))
+        .attr("y", d => yScale(d[1]))
+        .attr("height", d => yScale(d[0]) - yScale(d[1]))
+        .attr("width", this.xScale.bandwidth())
+      rects.append("svg:title").text((d) => formatWattH(d[1] - d[0]));
     } else {
       svg.selectAll(".sourceareas")
-      .data(stackedSeries)
-      .join("path")
-      .attr("d", d3.area()
-        .x((d, i) => this.xScale(this.graphData[i].date))
-        .y0((d) => yScale(d[0]))
-        .y1((d) => yScale(d[1]))
-      )
-      .attr("fill", (d, i) => this.colors[keys[i]]);
+        .data(stackedSeries)
+        .join("path")
+        .attr("d", d3.area()
+          .x((d, i) => this.xScale(this.graphData[i].date))
+          .y0((d) => yScale(d[0]))
+          .y1((d) => yScale(d[1]))
+        )
+        .attr("fill", (d, i) => this.colors[keys[i]]);
     }
 
     const yAxis = svg.append("g")
@@ -613,27 +624,28 @@ extractMonthValues(payload, oldPayload) {
     const stackGen = d3.stack().keys(keys[wbdata.usageStackOrder]);
     const stackedSeries = stackGen(this.graphData);
     if (wbdata.graphMode == 'month') {
-      svg.selectAll(".sourcebar")
+      var rects2 = svg.selectAll(".sourcebar")
         .data(stackedSeries).enter()
         .append("g")
         .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]])
         .selectAll("rect")
         .data(d => d).enter()
         .append("rect")
-          .attr("x", (d) => this.xScale(d.data.date.getDate()))
-          .attr("y", d => yScale(d[0]))
-          .attr("height", d => yScale(d[1]) - yScale(d[0]))
-          .attr("width", this.xScale.bandwidth())
+        .attr("x", (d) => this.xScale(d.data.date.getDate()))
+        .attr("y", d => yScale(d[0]))
+        .attr("height", d => yScale(d[1]) - yScale(d[0]))
+        .attr("width", this.xScale.bandwidth())
+      rects2.append("svg:title").text((d) => formatWattH(d[1] - d[0]));
     } else {
       svg.selectAll(".targetareas")
-      .data(stackedSeries)
-      .join("path")
-      .attr("d", d3.area()
-        .x((d, i) => this.xScale(this.graphData[i].date))
-        .y0((d) => yScale(d[0]))
-        .y1((d) => yScale(d[1]))
-      )
-      .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]]);
+        .data(stackedSeries)
+        .join("path")
+        .attr("d", d3.area()
+          .x((d, i) => this.xScale(this.graphData[i].date))
+          .y0((d) => yScale(d[0]))
+          .y1((d) => yScale(d[1]))
+        )
+        .attr("fill", (d, i) => this.colors[keys[wbdata.usageStackOrder][i]]);
     }
     const yAxis = svg.append("g")
       .attr("class", "axis")
@@ -670,10 +682,10 @@ extractMonthValues(payload, oldPayload) {
       .ticks(4)
       .tickSizeInner(ticksize)
 
-      if (wbdata.graphMode != 'month') {
-        xAxisGenerator.tickFormat(d3.timeFormat("%H:%M"))
-          .ticks(4);
-      } 
+    if (wbdata.graphMode != 'month') {
+      xAxisGenerator.tickFormat(d3.timeFormat("%H:%M"))
+        .ticks(4);
+    }
 
     const xAxis = svg.append("g").attr("class", "axis")
       .call(xAxisGenerator);

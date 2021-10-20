@@ -1,19 +1,21 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 ipaddress = str(sys.argv[1])
 ip2address = str(sys.argv[2])
-from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient(ipaddress, port=502)
 client2 = ModbusTcpClient(ip2address, port=502) #Zweites E3DC
 
-#battsoc
+# battsoc
 resp= client.read_holding_registers(40082,1,unit=1)
 resp2= client2.read_holding_registers(40082,1,unit=1) #Zweites E3DC
 value1 = resp.registers[0]
@@ -26,14 +28,14 @@ final = (final1 + final2)/2
 f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
 f.write(str(final))
 f.close()
-#print "hausverbrauch"
-#resp= client.read_holding_registers(40071,2,unit=1)
-#value1 = resp.registers[0]
-#value2 = resp.registers[1]
-#all = format(value2, '04x') + format(value1, '04x')
-#final = int(struct.unpack('>i', all.decode('hex'))[0])
-#print final
-#pv punkt
+# print "hausverbrauch"
+# resp= client.read_holding_registers(40071,2,unit=1)
+# value1 = resp.registers[0]
+# value2 = resp.registers[1]
+# all = format(value2, '04x') + format(value1, '04x')
+# final = int(struct.unpack('>i', all.decode('hex'))[0])
+# print final
+# pv punkt
 resp= client.read_holding_registers(40067,2,unit=1)
 resp2= client2.read_holding_registers(40067,2,unit=1) #Zweites E3DC
 value1 = resp.registers[0]
@@ -53,7 +55,7 @@ final = final1 + final2 + final3
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(final))
 f.close()
-#battleistung
+# battleistung
 resp= client.read_holding_registers(40069,2,unit=1)
 resp2= client2.read_holding_registers(40069,2,unit=1) #Zweites E3DC
 value1 = resp.registers[0]
@@ -68,5 +70,3 @@ final = final1 + final2
 f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
 f.write(str(final))
 f.close()
-
-

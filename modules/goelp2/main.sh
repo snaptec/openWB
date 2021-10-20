@@ -36,25 +36,24 @@ if [[ $? == "0" ]] ; then
 	if [[ $llv3 =~ $re ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llvs13
 	fi
-
 	llkwh=$(echo $output | jq -r '.eto')
 	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
 	if [[ $llkwh =~ $rekwh ]] ; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
 	fi
-#car status 1 Ladestation bereit, kein Auto
-#car status 2 Auto lädt
-#car status 3 Warte auf Fahrzeug
-#car status 4 Ladung beendet, Fahrzeug verbunden
-    car=$(echo $output | jq -r '.car')
-    if [[ $car == "1" ]] ; then
-      echo 0 > /var/www/html/openWB/ramdisk/plugstats1
-    else          
-      echo 1 > /var/www/html/openWB/ramdisk/plugstats1
-    fi
-    if [[ $car == "2" ]] ; then
-      echo 1 > /var/www/html/openWB/ramdisk/chargestats1
-    else          
-      echo 0 > /var/www/html/openWB/ramdisk/chargestats1
-     fi    
+	#car status 1 Ladestation bereit, kein Auto
+	#car status 2 Auto lädt
+	#car status 3 Warte auf Fahrzeug
+	#car status 4 Ladung beendet, Fahrzeug verbunden
+	car=$(echo $output | jq -r '.car')
+	if [[ $car == "1" ]] ; then
+		echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+	else
+		echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+	fi
+	if [[ $car == "2" ]] ; then
+		echo 1 > /var/www/html/openWB/ramdisk/chargestats1
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+	fi
 fi

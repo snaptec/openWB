@@ -1,22 +1,23 @@
 #!/usr/bin/python
-import sys
+# import sys
 import os
 import os.path
-import time
-import getopt
-import socket
-import ConfigParser
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusSerialClient
+
 try:
     f = open('/dev/ttyUSB0')
     seradd = "/dev/ttyUSB0"
     f.close()
 except:
     seradd = "/dev/serial0"
-from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
-                                stopbits=1, bytesize=8, timeout=1)
+
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
 try:
     with open('/var/www/html/openWB/ramdisk/llmodulconfig', 'r') as value:
@@ -311,4 +312,3 @@ except:
     f.write(str('failure'))
     f.close()
     #openwbModulePublishState "LP" 0 "Kein Fehler" 1
-

@@ -14,7 +14,6 @@ DebugLog(){
 	fi
 }
 
-
 if (( $solarwattmethod == 0 )); then 	#Abruf über Energy Manager
 	sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip}/rest/kiwigrid/wizard/devices")
 

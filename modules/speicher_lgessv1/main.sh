@@ -25,7 +25,7 @@ fi
 #  z.b. wenn das System neu gestartet wurde, dann wird ein Dummykey an-
 #  gelegt
 if test -f "/var/www/html/openWB/ramdisk/ess_session_key"; then
-        session_key=$(sed -n '1p' /var/www/html/openWB/ramdisk/ess_session_key)
+	session_key=$(sed -n '1p' /var/www/html/openWB/ramdisk/ess_session_key)
 else
 	session_key=" "
 fi

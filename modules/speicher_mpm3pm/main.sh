@@ -7,7 +7,3 @@ elif (( speicherkitversion == 2 )); then
 else
 	sudo python /var/www/html/openWB/modules/speicher_mpm3pm/readmpm3pm.py 
 fi
-
- 
-
-

@@ -3,7 +3,7 @@ import sys
 from pymodbus.client.sync import ModbusSerialClient
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
-import math
+# import math
 
 # Set debug to "1" to enable debugging messages
 debug = 0
@@ -59,8 +59,7 @@ values = (('llv1',      4096, 0.001, 2, 'U32', 'Voltage AC Phase 1 [0.001 * V]')
 #   value = [decoded_value, decoded_value_string]
 value_dict = {}
 
-client = ModbusSerialClient(method = "rtu", port=mb_port, baudrate=9600,
-        stopbits=1, bytesize=8, timeout=1)
+client = ModbusSerialClient(method = "rtu", port=mb_port, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
 #client.connect()
 
@@ -78,9 +77,7 @@ for value in values:
             decoded_value = 0
             decoded_value_str = '0'
         else:
-            decoder = BinaryPayloadDecoder.fromRegisters(result.registers,
-                                                         byteorder=Endian.Big,
-                                                         wordorder=Endian.Big)
+            decoder = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             # Check the datatype (default is unsigned int 32 bit)
             if value[4] == 'U16':
                 decoded_value_raw = decoder.decode_16bit_uint()
@@ -108,5 +105,5 @@ for value in values:
         f = open(ramdiskpath + '/' + value[0], 'w')
         f.write(value_dict[value[0]][1])
         f.close()
- 
+
 #client.close()

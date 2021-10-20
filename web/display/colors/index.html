@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="de" class="theme-gray shcolors-normal">
+
+<head>
+    <base href="/openWB/web/">
+    <meta charset="UTF-8">
+    <title>openWB Display</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+    <!-- Normalize -->
+    <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+    <!-- Font Awesome, all styles -->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
+    <!-- important scripts to be loaded -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+    <!-- display style -->
+    <link rel="stylesheet" type="text/css" href="display/colors/style.css">
+    <script src="themes/colors/js/d3.v6.min.js"></script>
+    <script src="display/colors/powerdata.js"></script>
+    <script src="display/colors/powermeter.js"></script>
+    <script src="display/colors/yieldmeter.js"></script>
+    <script src="display/colors/powergraph.js"></script>
+    <script src="display/colors/chargePointList.js"></script>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row pt-0">
+
+            <!-- Linke Spalte (Buttons)-->
+            <div class="col-2 pl-1 pr-0">
+                <h4 id="date" class="text-center text-light pt-5">19.11.2020</h4>
+                <h4 id="time" class="text-center text-light pb-5 mb-3">12:36</h4>
+                <button class="btn btn-block btn-secondary display-button p-4" id="powerSelectButton" type="button">
+                    <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
+                </button>
+                <button class="btn btn-block btn-outline-secondary display-button p-4" id="timeSelectButton" type="button">
+                    <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
+                </button>
+                <button class="btn btn-block btn-outline-secondary display-button mb-4 p-4" id="energySelectButton"
+                    type="button">
+                    <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
+                </button>
+                
+                <button class="btn btn-block btn-outline-secondary display-button mt-5 p-4" id="statusButton" type="button">
+                    <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
+                </button>
+                <div id="displaylock" class="mt-5">
+                    <button class="btn btn-block btn-outline-secondary display-button p-4" id="lockButton" type="button">
+                        <i class="fas fa-lock text-danger "></i>
+                        <i class="fas fa-unlock text-success hide"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mittlere Spalte (Widgets) -->
+            <div class="col-7 p-0">
+                <div class="container-fluid m-0 pb-1">
+
+                    <div class="row">
+                        <div class="col wb-widget p-0">
+                            <figure id="powermeter" class=" mb-0"></figure>
+                            <figure id="energymeter" class="wb-subwidget mb-0 hide"></figure>
+                            <figure id="powergraph" class="wb-subwidget mb-0 hide"></figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rechte Spalte (Ladepunkte)-->
+            <div class=" col-3 px-1">
+                <div id="chargePointTable"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Status -->
+    <div class="modal" id="statusModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header ">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col">
+                        <div class="status-title">Status</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <div id="status" class="status">
+                        <div class="row px-0">
+                            <div class="col-12">
+                                <div class="status-header bg-secondary">
+                                    Systeminformationen
+                                </div>
+                                <div class="">
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Version:
+                                        </div>
+                                        <div class="col">
+                                            <span class='systemVersion'>-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            IP Adresse:
+                                        </div>
+                                        <div class="col">
+                                            <span class="systemIpAddress"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Betriebszeit:
+                                        </div>
+                                        <div class="col">
+                                            <span class='systemUptime'>--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Prozessor:
+                                        </div>
+                                        <div class="col">
+                                            <meter id="cpu" high="85" min="0" max="100" value="0"></meter> <span
+                                                id='cpuuse'>--</span>%
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Arbeitsspeicher:
+                                        </div>
+                                        <div class="col">
+                                            <span id='memtot'>--</span> MB <meter id="mem" min="0" value="0"></meter>
+                                            (<span id='memfree'>--</span> MB frei)
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            SD-Karte:
+                                        </div>
+                                        <div class="col">
+                                            <span id='diskuse'>--</span>, <span id='diskfree'>--</span> verfügbar.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row px-2">
+                            <div class="col-12">
+                                <div class="status-header bg-secondary">
+                                    Verbindung zum Backend
+                                </div>
+                                <div id="backend">
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Status:
+                                        </div>
+                                        <div class="col">
+                                            <span class="connectionState">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Verbindungsversuche:
+                                        </div>
+                                        <div class="col">
+                                            <span class="counter">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-end">
+                                        <div class="col-8">
+                                            <button class="btn btn-block btn-danger displayButton reloadBtn" type="button">
+                                                Display neu Laden
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col pt-2 px-3">
+                            <button type="button" class="btn btn-info btn-block displayButton" data-dismiss="modal"><i
+                                    class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // TODO: replace by MQTT topics
+            function updateit() {
+                $.getJSON('tools/programmloggerinfo.php', function (data) {
+                    json = eval(data);
+                    // console.log(json);
+                    $('#cpu').val(json.cpuuse);
+                    $('#cpuuse').html(json.cpuuse);
+                    $('#memtot').html(json.memtot);
+                    $('#mem').prop('max', json.memtot);
+                    $('#mem').val(json.memuse);
+                    $('#mem').prop('high', json.memtot * 0.85);
+                    $('#memfree').html(json.memfree);
+                    $('#diskuse').html(json.diskuse);
+                    $('#diskfree').html(json.diskfree);
+                })
+            };
+
+            $(document).ready(function () {
+                updateit();
+                setInterval(updateit, 10000);
+            });
+
+            $('#backend .reloadBtn').click(function () {
+                location.reload();
+            });
+        </script>
+    </div>
+
+
+
+    <!-- modal chargepoint-config-window -->
+    <div class="modal" id="ladepunktConfigModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-light text-center">Einstellungen Ladepunkt <span
+                                class="configLp"></span></div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <!-- global options for all charge points -->
+                    <!-- options specific for charge mode Min+PV -->
+                    <div class="chargeMode chargeModeMinPv">
+                        <div class="form-row vaRow">
+                            <div class="col-4">
+                                <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
+                                <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right"
+                                    data-suffix="A"></label>
+                            </div>
+                            <div class="col">
+                                <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6"
+                                    max="16" step="1" value="6" data-initialized="0"
+                                    data-topicprefix="openWB/config/get/pv/">
+                            </div>
+                        </div>
+                        <div class="form-row vaRow">
+                            <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 1-->
+                    <div data-config-lp="1" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/1/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/1/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="1">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <label
+                                            class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/1/chargeLimitation" data-option="2"> EV-SoC
+                                        </label>
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/1/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/1/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/1/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/1/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/1/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <div class="form-row vaRow form-group" data-option="2">
+                                    <div class="col-4">
+                                        <label for="lp/1/socToChargeTo" class="col-form-label">SoC:</label>
+                                        <label for="lp/1/socToChargeTo" class="col-form-label valueLabel pull-right"
+                                            data-suffix="%"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/1/socToChargeTo" min="5" max="100" step="5" value="5"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 2 -->
+                    <div data-config-lp="2" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/2/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/2/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="2">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/2/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <label
+                                            class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/2/chargeLimitation" data-option="2"> EV-SoC
+                                        </label>
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/2/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/2/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/2/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/2/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/2/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <div class="form-row vaRow form-group" data-option="2">
+                                    <div class="col-4">
+                                        <label for="lp/2/socToChargeTo" class="col-form-label">SoC:</label>
+                                        <label for="lp/2/socToChargeTo" class="col-form-label valueLabel pull-right"
+                                            data-suffix="%"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/2/socToChargeTo" min="5" max="100" step="5" value="5"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 3 -->
+                    <div data-config-lp="3" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/3/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/3/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="3">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/3/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <!-- EV SoC not implemented for this chargepoint
+                                                <label class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                                    <input type="radio" name="lp/3/chargeLimitation" data-option="2"> EV-SoC
+                                                </label>
+                                            -->
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/3/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/3/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/3/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/3/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/3/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <!-- EV SoC not implemented for this chargepoint
+                                        <div class="form-row vaRow form-group" data-option="2">
+                                            <div class="col-4">
+                                                <label for="lp/3/socToChargeTo" class="col-form-label">SoC:</label>
+                                                <label for="lp/3/socToChargeTo" class="col-form-label valueLabel pull-right" data-suffix="%"></label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="range" class="form-control-range rangeInput" id="lp/3/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+                                            </div>
+                                        </div>
+                                    -->
+                                <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 4 -->
+                    <div data-config-lp="4" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/4/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/4/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="4">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/4/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <!-- EV SoC not implemented for this chargepoint
+                                                <label class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                                    <input type="radio" name="lp/4/chargeLimitation" data-option="2"> EV-SoC
+                                                </label>
+                                            -->
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/4/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/4/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/4/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/4/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/4/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <!-- EV SoC not implemented for this chargepoint
+                                        <div class="form-row vaRow form-group" data-option="2">
+                                            <div class="col-4">
+                                                <label for="lp/4/socToChargeTo" class="col-form-label">SoC:</label>
+                                                <label for="lp/4/socToChargeTo" class="col-form-label valueLabel pull-right" data-suffix="%"></label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="range" class="form-control-range rangeInput" id="lp/4/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+                                            </div>
+                                        </div>
+                                    -->
+                                <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 5 -->
+                    <div data-config-lp="5" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/5/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/5/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="5">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/5/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <!-- EV SoC not implemented for this chargepoint
+                                                <label class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                                    <input type="radio" name="lp/5/chargeLimitation" data-option="2"> EV-SoC
+                                                </label>
+                                            -->
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/5/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/5/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/5/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/5/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/5/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <!-- EV SoC not implemented for this chargepoint
+                                        <div class="form-row vaRow form-group" data-option="2">
+                                            <div class="col-4">
+                                                <label for="lp/5/socToChargeTo" class="col-form-label">SoC:</label>
+                                                <label for="lp/5/socToChargeTo" class="col-form-label valueLabel pull-right" data-suffix="%"></label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="range" class="form-control-range rangeInput" id="lp/5/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+                                            </div>
+                                        </div>
+                                    -->
+                                <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 6 -->
+                    <div data-config-lp="6" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/6/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/6/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="6">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/6/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <!-- EV SoC not implemented for this chargepoint
+                                                <label class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                                    <input type="radio" name="lp/6/chargeLimitation" data-option="2"> EV-SoC
+                                                </label>
+                                            -->
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/6/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/6/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/6/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/6/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/6/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <!-- EV SoC not implemented for this chargepoint
+                                        <div class="form-row vaRow form-group" data-option="2">
+                                            <div class="col-4">
+                                                <label for="lp/6/socToChargeTo" class="col-form-label">SoC:</label>
+                                                <label for="lp/6/socToChargeTo" class="col-form-label valueLabel pull-right" data-suffix="%"></label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="range" class="form-control-range rangeInput" id="lp/6/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+                                            </div>
+                                        </div>
+                                    -->
+                                <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 7 -->
+                    <div data-config-lp="7" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/7/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/7/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="7">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/7/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <!-- EV SoC not implemented for this chargepoint
+                                                <label class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                                    <input type="radio" name="lp/7/chargeLimitation" data-option="2"> EV-SoC
+                                                </label>
+                                            -->
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/7/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/7/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/7/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/7/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/7/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <!-- EV SoC not implemented for this chargepoint
+                                        <div class="form-row vaRow form-group" data-option="2">
+                                            <div class="col-4">
+                                                <label for="lp/7/socToChargeTo" class="col-form-label">SoC:</label>
+                                                <label for="lp/7/socToChargeTo" class="col-form-label valueLabel pull-right" data-suffix="%"></label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="range" class="form-control-range rangeInput" id="lp/7/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+                                            </div>
+                                        </div>
+                                    -->
+                                <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chargepoint 8 -->
+                    <div data-config-lp="8" class="hide">
+                        <!-- options specific for charge mode Sofort -->
+                        <div class="chargeMode chargeModeSofort">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="lp/8/current" class="col-form-label">Stromstärke: </label>
+                                    <label for="lp/8/current" class="col-form-label valueLabel pull-right"
+                                        data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6"
+                                        max="32" step="1" value="6" data-initialized="0"
+                                        data-topicprefix="openWB/config/get/sofort/">
+                                </div>
+                            </div>
+                            <!-- limit options -->
+                            <div class="chargeLimitation" data-lp="8">
+                                <div class="form-row vaRow">
+                                    <div class="col-4">
+                                        <label class="col-form-label">Begrenzung:</label>
+                                    </div>
+                                    <div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation"
+                                        data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/8/chargeLimitation" data-option="0"> keine
+                                        </label>
+                                        <!-- EV SoC not implemented for this chargepoint
+                                                <label class="socConfiguredLp btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                                    <input type="radio" name="lp/8/chargeLimitation" data-option="2"> EV-SoC
+                                                </label>
+                                            -->
+                                        <label class="btn btn-lg btn-outline-info btn-toggle regularTextSize">
+                                            <input type="radio" name="lp/8/chargeLimitation" data-option="1">
+                                            Energiemenge
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- options if limit is set to energy (1) -->
+                                <div class="form-row vaRow form-group" data-option="1">
+                                    <div class="col-4">
+                                        <label for="lp/8/energyToCharge" class="col-form-label">Energie:</label>
+                                        <label for="lp/8/energyToCharge" class="col-form-label valueLabel pull-right"
+                                            data-suffix="kWh"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="range" class="form-control-range rangeInput"
+                                            id="lp/8/energyToCharge" min="2" max="100" step="2" value="2"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input class="btn btn-warning btn-lg regularTextSize resetEnergyToCharge"
+                                            type="button" id="lp/8/resetEnergyToCharge"
+                                            value="Energiemenge zurücksetzen"
+                                            data-topicprefix="openWB/config/get/sofort/">
+                                    </div>
+                                </div> <!-- end limit energy -->
+                                <!-- options if limit is set to EV SoC (2) -->
+                                <!-- EV SoC not implemented for this chargepoint
+                                        <div class="form-row vaRow form-group" data-option="2">
+                                            <div class="col-4">
+                                                <label for="lp/8/socToChargeTo" class="col-form-label">SoC:</label>
+                                                <label for="lp/8/socToChargeTo" class="col-form-label valueLabel pull-right" data-suffix="%"></label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="range" class="form-control-range rangeInput" id="lp/8/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+                                            </div>
+                                        </div>
+                                    -->
+                                <!-- end limit EV SoC -->
+                            </div> <!-- end limit options -->
+                        </div>
+                        <!-- options specific for charge mode PV -->
+                        <div class="chargeMode chargeModePv">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Standby -->
+                        <div class="chargeMode chargeModeStandby">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Standby" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                        <!-- options specific for charge mode Stop -->
+                        <div class="chargeMode chargeModeStop">
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">In dem Lademodus "Stop" gibt es keine
+                                    Einstellungen.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col pt-4 px-3">
+                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                                    class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
+                        </div>
+                    </div>
+                </div> <!-- /modal body -->
+            </div>
+        </div>
+        <script>
+            $('.resetEnergyToCharge').on("click", function () {
+                var topic = getTopicToSendTo($(this).attr('id'));
+                publish("1", topic);
+            });
+        </script>
+    </div>
+
+    <!-- modal lock-window -->
+    <div class="modal" id="lockModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header bg-warning">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-dark text-center">Eingaben entsperren</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <div id="Lockcode" class="text-center">
+                        <input id="Lockbox" type="password" value="" name="Lockbox" disabled="disabled"
+                            class="text-center display-4" size="4">
+                        <br>
+                        <input type="button" class="PINbutton" name="1" value="1" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton" name="2" value="2" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton" name="3" value="3" onclick="addLockNumber(this);">
+                        <br>
+                        <input type="button" class="PINbutton" name="4" value="4" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton" name="5" value="5" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton" name="6" value="6" onclick="addLockNumber(this);">
+                        <br>
+                        <input type="button" class="PINbutton" name="7" value="7" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton" name="8" value="8" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton" name="9" value="9" onclick="addLockNumber(this);">
+                        <br>
+                        <input type="button" class="PINbutton clear" name="-" value="clear"
+                            onclick="clearLockForm(this);">
+                        <input type="button" class="PINbutton" name="0" value="0" onclick="addLockNumber(this);">
+                        <input type="button" class="PINbutton enter" name="+" value="enter"
+                            onclick="submitLockForm(Lockbox);">
+                    </div>
+                </div> <!-- /modal body -->
+            </div>
+        </div>
+        <script>
+            function addLockNumber(e) {
+                var v = $("#Lockbox").val();
+                $("#Lockbox").val(v + e.value);
+            }
+
+            function clearLockForm(e) {
+                $("#Lockbox").val("");
+            }
+
+            function submitLockForm(e) {
+                $.get(
+                    { url: "display/colors/checklock.php?pin=" + $('#Lockbox').val(), cache: false },
+                    function (data) {
+                        if (data == 1) {
+                            lockDisplay(false);
+                            $('#lockModal').find('.modal-body').addClass('bg-success');
+                            $('#Lockcode').find('.enter').prop('disabled', true);
+                            window.setTimeout(function () {
+                                $('#lockModal').find('.modal-body').removeClass('bg-success');
+                                $('#Lockcode').find('.enter').prop('disabled', false);
+                                $("#Lockbox").val("");
+                                $("#lockModal").modal("hide");
+                            }, 1000);
+                        } else {
+                            $('#lockModal').find('.modal-body').addClass('bg-danger');
+                            $('#Lockcode').find('.enter').prop('disabled', true);
+                            window.setTimeout(function () {
+                                $('#lockModal').find('.modal-body').removeClass('bg-danger');
+                                $('#Lockcode').find('.enter').prop('disabled', false);
+                                $("#Lockbox").val("");
+                            }, 3000);
+                        }
+                    }
+                );
+            };
+        </script>
+    </div>
+
+    <!-- modal SoC-window -->
+    <div class="modal" id="socModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header bg-warning">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-dark text-center">Manuelle SoC-Eingabe - Ladepunkt <span
+                                class="socLp"></span></div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <div id="manualSocInput" class="text-center display-4">
+                        <input id="manualSocBox" type="number" min="0" max="100" step="1" value="0" name="socBox"
+                            class="text-right">&nbsp;%<br>
+                        <input type="button" class="PINbutton" name="1" value="1" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton" name="2" value="2" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton" name="3" value="3" onclick="addSocNumber(this);">
+                        <br>
+                        <input type="button" class="PINbutton" name="4" value="4" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton" name="5" value="5" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton" name="6" value="6" onclick="addSocNumber(this);">
+                        <br>
+                        <input type="button" class="PINbutton" name="7" value="7" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton" name="8" value="8" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton" name="9" value="9" onclick="addSocNumber(this);">
+                        <br>
+                        <input type="button" class="PINbutton clear" name="-" value="clear" onclick="clearSocForm();">
+                        <input type="button" class="PINbutton" name="0" value="0" onclick="addSocNumber(this);">
+                        <input type="button" class="PINbutton enter" name="+" value="enter" onclick="submitSocForm();"
+                            data-dismiss="modal">
+                    </div>
+                </div> <!-- /modal body -->
+            </div>
+        </div>
+        <script>
+            function addSocNumber(e) {
+                var newValue = parseInt($("#manualSocBox").val()) * 10 + parseInt(e.value);
+                if (newValue >= 0 && newValue <= 100) {
+                    $("#manualSocBox").val(newValue);
+                } else {
+                    $('#manualSocBox').addClass('bg-danger');
+                    setTimeout(function () {
+                        $('#manualSocBox').removeClass('bg-danger');
+                    }, 1500);
+                }
+            }
+
+            function clearSocForm() {
+                $("#manualSocBox").val("0");
+            }
+
+            function submitSocForm() {
+                var currentLp = $('#socModal').find('.socLp').text();
+                var manualSoc = $("#manualSocBox").val();
+                // console.log("SoC for LP"+currentLp+": "+manualSoc);
+                publish(manualSoc, "openWB/set/lp/" + currentLp + "/manualSoc");
+                // reset input after publishing
+                clearSocForm();
+            };
+        </script>
+    </div>
+
+    <!-- modal alert-window -->
+    <div class="modal" id="lastregelungModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header bg-danger">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-light text-center">Warnmeldungen</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <h4 class="text-danger" id="lastregelungaktiv">Derzeit gibt es keine Warnmeldungen.</h4>
+                </div> <!-- /modal body -->
+            </div>
+        </div>
+    </div>
+
+    <!-- modal wizzard-window -->
+    <div class="modal" id="wizzardModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header bg-warning">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-center">Einrichtungs-Assistent</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <h4 class="text-light text-center">
+                        Bitte rufen Sie in einem Browser die Weboberfläche dieser openWB auf.
+                        Sie werden mit einem Assistenten durch die Einrichtung der Module geführt.
+                    </h4>
+                    <h4 class="text-warning text-center">
+                        Die IP lautet: <span class="systemIpAddress">&nbsp;</span>
+                    </h4>
+                </div> <!-- /modal body -->
+            </div>
+        </div>
+    </div>
+
+    <!-- modal chargemode-select-window -->
+    <div class="modal" id="chargeModeModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-light text-center">Lademodus-Auswahl</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <!-- chargemode buttons -->
+                    <div class="row justify-content-center">
+                        <div class="col-sm-4 px-3 pb-3 pt-1">
+                            <button type="button"
+                                class="chargeModeBtn chargeModeBtnSofort btn btn-lg btn-block btn-secondary"
+                                data-chargeMode="0">Sofort</button>
+                        </div>
+                        <div class="col-sm-4 px-3 pb-3 pt-1">
+                            <button type="button"
+                                class="chargeModeBtn chargeModeBtnPV btn btn-lg btn-block btn-secondary"
+                                data-chargeMode="2">PV</button>
+                        </div>
+                        <div class="col-sm-4 px-3 pb-3 pt-1">
+                            <button type="button"
+                                class="chargeModeBtn chargeModeBtnMinPV btn btn-lg btn-block btn-secondary"
+                                data-chargeMode="1">Min + PV</button>
+                        </div>
+                        <div class="col-sm-4 px-3 pb-3 pt-1" id="disableButton">
+
+                        </div>
+                        <div class="col-sm-4 px-3 pb-3 pt-1">
+                            <button type="button"
+                                class="chargeModeBtn chargeModeBtnStandby btn btn-lg btn-block btn-secondary"
+                                data-chargeMode="4">Standby</button>
+                        </div>
+                        <div class="col-sm-4 px-3 pb-3 pt-1">
+                            <button type="button"
+                                class="chargeModeBtn chargeModeBtnStop btn btn-lg btn-block btn-secondary"
+                                data-chargeMode="3">Stop</button>
+                        </div>
+                    </div>
+                    <!-- priority buttons -->
+                    <div id='priorityModeBtns' class="hide">
+                        <hr>
+                        <div class="row">
+                            <h3 class="col text-center text-light">Vorrang im Lademodus PV-Laden:</h3>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-sm-5 py-1">
+                                <button id="evPriorityBtn" type="button"
+                                    class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-priority="1">
+                                    EV <span class="fas fa-car">&nbsp;</span>
+                                </button>
+                            </div>
+                            <div class="col-sm-5 py-1">
+                                <button id="batteryPriorityBtn" type="button"
+                                    class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-priority="0">
+                                    Speicher <span class="fas fa-car-battery">&nbsp;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 70% button -->
+                    <div id='70ModeBtn' class="hide">
+                        <hr>
+                        <div class="row">
+                            <h3 class="col text-center text-light">70% beachten im Lademodus PV-Laden:</h3>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-sm-8 py-1">
+                                <button id="70PvBtn" type="button" class="70PvBtn btn btn-lg btn-block btn-secondary">
+                                    70 % beachten
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col pt-4 px-3">
+                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                                    class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
+                        </div>
+                    </div>
+
+                </div> <!-- /modal body -->
+            </div>
+        </div>
+
+        <script>
+            $('.chargeModeBtn').on("click", function (event) {
+                if (displaylocked == false) {
+                    var chargeMode = $(this).attr("data-chargeMode");
+                    publish(chargeMode, "openWB/set/ChargeMode");
+                }
+            });
+
+            $('.priorityModeBtn').on("click", function (event) {
+                // prio: 0 = battery, 1 = ev
+                if (displaylocked == false) {
+                    var priority = $(this).attr('data-priority');
+                    if (priority == '0' || priority == '1') {
+                        publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
+                    }
+                }
+            });
+
+            $('.70PvBtn').on("click", function (event) {
+                // 0 deaktiviert, 1 aktiviert
+                if (displaylocked == false) {
+                    if ($(this).hasClass("btn-success")) {
+                        publish("0", "openWB/set/pv/NurPV70Status");
+                    } else {
+                        publish("1", "openWB/set/pv/NurPV70Status");
+                    }
+                }
+            });
+        </script>
+    </div>
+
+    <!-- modal lock-info-window -->
+    <div class="modal" id="lockInfoModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header bg-warning">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col justify-content-center">
+                        <div class="modal-title text-center">Display gesperrt</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <h4 class="text-light text-center">
+                        Das Display ist mit einem PIN-Code gesperrt.<br>
+                        Bitte tippen Sie links unten auf das <i class="fas fa-lock text-danger"></i> und geben den
+                        richtigen PIN ein.
+                    </h4>
+                </div>
+                <!-- modal footer -->
+                <div class="modal-footer justify-content-center">
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal">
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var displaypinaktiv = 1;
+        var lockTimeoutHandler = null;
+        var lockTimeout = 60000;
+        var displaylocked = true;
+
+        function lockDisplay(lock = true) {
+            if (lock == false) {
+                displaylocked = false;
+                $('#displaylock').find('.fa-lock').addClass('hide');
+                $('#displaylock').find('.fa-unlock').removeClass('hide');
+                lockTimeoutHandler = window.setTimeout(lockDisplay, lockTimeout);
+            } else {
+                displaylocked = true;
+                $('#displaylock').find('.fa-lock').removeClass('hide');
+                $('#displaylock').find('.fa-unlock').addClass('hide');
+                
+                window.clearTimeout(lockTimeoutHandler);
+                lockTimeoutHandler = null;
+            }
+        }
+
+        window.setInterval(function () {
+            $.get(
+                { url: "display/colors/checklock.php?lock=1", cache: false },
+                function (data) {
+                    if (data == "1") {
+                        displaypinaktiv = 1;
+                        if (lockTimeoutHandler == null) {
+                            displaylocked = true;
+                        }
+                        $('#displaylock').removeClass('hide');
+                    } else {
+                        displaypinaktiv = 0;
+                        displaylocked = false;
+                        window.clearTimeout(lockTimeoutHandler);
+                        lockTimeoutHandler = null;
+                        $('#displaylock').addClass('hide');
+                    }
+                }
+            );
+        }, 15000);
+
+        var delayUserInput = (function () {
+            // sets a timeout on call and resets timout if called again for same id before timeout fires
+            var timeoutHandles = {};
+            return function (id, callback, ms) {
+                if (timeoutHandles[id]) {
+                    clearTimeout(timeoutHandles[id]);
+                };
+                timeoutHandles[id] = setTimeout(function () {
+                    delete timeoutHandles[id];
+                    callback(id);
+                }, ms);
+            };
+        })();
+
+        function chargeLimitationOptionsShowHide(btnGrp, option) {
+            // show/hide all option-parameters in form-rows for selected option
+            var parent = btnGrp.closest('.chargeLimitation[data-lp]');  // get parent div element for charge limitation options
+            var index = $(parent).data('lp');  // get current chargepoint number
+            $(parent).find('.form-row[data-option=' + option + ']').removeClass('hide');  // now show option elements for selected option
+            $(parent).find('.form-row[data-option]').not('[data-option=' + option + ']').addClass('hide');  // hide all other option elements
+            // now show/hide elements in modal info dialog
+            var dataLpElements = $('[data-lp=' + index + ']');  // get main divs for our current chargepoint
+            dataLpElements.find('[data-option-limit=' + option + ']').removeClass('hide');  // show info element for selected option
+            dataLpElements.find('[data-option-limit]').not('[data-option-limit=' + option + ']').addClass('hide'); // hide all other options
+        }
+
+        function initPanels() {
+            $('.resume').addClass('hide');
+         }
+
+        $(document).ready(function () {
+
+            // load scripts synchronously in order specified
+            var scriptsToLoad = [
+                // load mqtt library
+                'js/mqttws31.js',
+                // some helper functions
+                'display/colors/helperFunctions.js',
+                // functions for processing messages
+                'display/colors/processAllMqttMsg.js',
+                // functions performing mqtt and start mqtt-service
+                'display/colors/setupMqttServices.js',
+            ];
+
+            scriptsToLoad.forEach(function (src) {
+                var script = document.createElement('script');
+                script.src = src;
+                script.async = false;
+                document.body.appendChild(script);
+            });
+            wbdata.init();
+           
+            // handling of display panels
+            initPanels();
+
+           
+            $('#lastmanagementShowBtn').on("click", function (event) {
+                $("#lastregelungModal").modal("show");
+            });
+
+            // display lock
+            $.get(
+                { url: "display/colors/checklock.php?lock=1", cache: false },
+                function (data) {
+                    if (data == "1") {
+                        displaypinaktiv = 1;
+                        $('#displaylock').removeClass('hide');
+                    } else {
+                        displaypinaktiv = 0;
+                        displaylocked = false;
+                        $('#displaylock').addClass('hide');
+                    }
+                }
+            );
+
+            $('#displaylock').on("click", function () {
+                if (displaylocked == true) {
+                    $("#lockModal").modal("show");
+                } else {
+                    lockDisplay(true);
+                }
+            });
+
+            $('.btn-group-toggle').change(function (event) {
+                // only charge limitation has class btn-group-toggle so far
+                // option: 0 = keine, 1 = Energiemenge, 2 = EV-SoC
+                var elementId = $(this).attr('id');
+                var option = $('input[name="' + elementId + '"]:checked').data('option').toString();
+                var topic = getTopicToSendTo(elementId);
+                publish(option, topic);
+                // show/hide respective option-values and progress
+                if (elementId.includes("chargeLimitation")) {
+                    chargeLimitationOptionsShowHide(this, option);
+                }
+            });
+
+            $('.rangeInput').on('input', function () {
+                // show slider value in label of class valueLabel
+                var elementId = $(this).attr('id');
+                updateLabel(elementId);
+                var element = $('#' + $.escapeSelector(elementId));
+                var label = $('label[for="' + elementId + '"].valueLabel');
+                label.addClass('text-danger');
+                delayUserInput(elementId, function (id) {
+                    // gets executed on callback, 2000ms after last input-change
+                    // changes label color back to normal and sends input-value by mqtt
+                    var elem = $('#' + $.escapeSelector(id));
+                    var value = elem.val();
+                    var topic = getTopicToSendTo(id);
+                    publish(value, topic);
+                    var label = $('label[for="' + id + '"].valueLabel');
+                    label.removeClass('text-danger');
+                    // if rangeInput is for chargeLimitation, recalc progress
+                    if (id.includes('/energyToCharge')) {
+                        var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
+                        var element = parent.find('.progress-bar');  // now get parents progressbar
+                        var actualCharged = element.data('actualCharged');  // get stored value
+                        if (isNaN(parseFloat(actualCharged))) {
+                            actualCharged = 0;  // minimum value
+                        }
+                        var progress = (actualCharged / value * 100).toFixed(0);
+                        element.width(progress + "%");
+                    }
+                }, 2000);
+            });
+
+        });
+    </script>
+</body>
+
+</html>

@@ -1,12 +1,23 @@
 #!/bin/bash
-if (( evukitversion == 1 )); then
-	sudo python /var/www/html/openWB/modules/bezug_ethmpm3pm/readlovato.py
-elif (( evukitversion == 2 )); then
-	sudo python /var/www/html/openWB/modules/bezug_ethmpm3pm/readsdm.py 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
+
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	sudo python /var/www/html/openWB/modules/bezug_ethmpm3pm/readmpm3pm.py 
+        MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
-wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+
+python3 ${OPENWBBASEDIR}/packages/modules/openwb/module.py "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+wattbezug=$(<${RAMDISKDIR}/wattbezug)
 echo $wattbezug
-
-
