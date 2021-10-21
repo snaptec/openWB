@@ -103,9 +103,7 @@ class WbData {
 		gridCol = style.getPropertyValue('--gridCol');
 		evuCol = style.getPropertyValue('--evuCol');
 
-		// this.readGraphPreferences();
 		this.graphMode = 'live';
-		// powerGraph.activateLive();
 
 		// set display mode
 		const doc = d3.select("html");
@@ -122,11 +120,11 @@ class WbData {
 			.on("click", switchToEnergyView);
 		d3.select("button#statusButton")
 			.on("click", showStatus);
-		const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-		const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-		const foo = d3.select("p#screensize")
-			.text("Screen size: " + vw + "x" + vh)
-		
+
+		powerMeter.init()
+		powerGraph.init()
+		yieldMeter.init()
+		chargePointList.init()
 	}
 
 	updateEvu(field, value) {
@@ -170,6 +168,9 @@ class WbData {
 				break;
 			case 'currentPowerPrice':
 				chargePointList.update();
+				break;
+			case 'chargeMode':
+				chargePointList.update();
 			default:
 				break;
 		}
@@ -183,6 +184,10 @@ class WbData {
 				break;
 			case 'pvDailyYield':
 				this.updateSourceSummary("pv", "energy", this.pvDailyYield);
+				break;
+			case 'isBatteryConfigured':
+			case 'hasEVPriority':
+				chargePointList.update()
 				break;
 			default:
 				break;
@@ -222,7 +227,7 @@ class WbData {
 			default:
 				break;
 		}
-		}
+	}
 
 	updateCP(index, field, value) {
 		this.chargePoint[index - 1][field] = value;
@@ -236,6 +241,8 @@ class WbData {
 			case 'soc':
 				powerMeter.update();
 				break;
+			case 'isEnabled':
+				chargePointList.update()
 			default:
 				break;
 		}
@@ -298,7 +305,7 @@ class WbData {
 			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)).sort((a, b) => { return (b.power - a.power) }))
 			.concat(this.consumer.filter(row => (row.configured)))
 			.concat([this.usageSummary.batIn, this.usageSummary.house]);
-		}
+	}
 
 	updateConsumerSummary(cat) {
 		if (cat == 'energy') {
@@ -309,53 +316,6 @@ class WbData {
 				+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
 		}
 	}
-
-	//update cookie
-	persistGraphPreferences() {
-		this.prefs.hideSH = this.shDevice.filter(device => !device.showInGraph).map(device => device.id);
-		this.prefs.showLG = (this.graphPreference == 'live');
-		this.prefs.displayM = this.displayMode;
-		this.prefs.stackO = this.usageStackOrder;
-		this.prefs.showGr = this.showGrid;
-		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
-	}
-	// read cookies and update settings
-	readGraphPreferences() {
-		const wbCookies = document.cookie.split(';');
-		const myCookie = wbCookies.filter(entry => entry.split('=')[0] === "openWBColorTheme");
-		if (myCookie.length > 0) {
-			this.prefs = JSON.parse(myCookie[0].split('=')[1]);
-			if ('hideSH' in this.prefs) {
-				this.prefs.hideSH.map(i => this.shDevice[i].showInGraph = false)
-			}
-			if ('showLG' in this.prefs) {
-				this.graphPreference = (this.prefs.showLG) ? "live" : "day";
-			}
-			if ('maxPow' in this.prefs) {
-				powerMeter.maxPower = +this.prefs.maxPow;
-			}
-			if ('relPM' in this.prefs) {
-				powerMeter.showRelativeArcs = this.prefs.relPM;
-			}
-			if ('displayM' in this.prefs) {
-				//	this.displayMode = this.prefs.displayM;
-			}
-			if ('stackO' in this.prefs) {
-				this.usageStackOrder = this.prefs.stackO;
-			}
-			if ('showGr' in this.prefs) {
-				this.showGrid = this.prefs.showGr;
-			}
-		}
-	}
-	dayGraphUpdated() {
-		yieldMeter.update();
-	}
-	monthGraphUpdated() {
-		yieldMeter.update();
-	}
-
-
 }
 
 
@@ -423,12 +383,6 @@ function formatMonth(month, year) {
 	return (months[month] + " " + year);
 }
 
-
-
-
-
-
-
 // required for pricechart to work
 var evuCol;
 var xgridCol;
@@ -471,4 +425,5 @@ function showStatus() {
 	$("#statusModal").modal("show");
 }
 var wbdata = new WbData(new Date(Date.now()));
+
 

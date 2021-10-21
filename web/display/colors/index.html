@@ -13,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
     <!-- important scripts to be loaded -->
     <script src="js/jquery-3.6.0.min.js"></script>
-    <script src="display/cards/jquery.sparkline.js"></script>
     <script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
     <!-- display style -->
     <link rel="stylesheet" type="text/css" href="display/colors/style.css">
@@ -28,20 +27,40 @@
 <body>
 
     <div class="container-fluid">
+        <div class="row pt-0">
 
-        <div class="row pt-2">
-            <div class=" col-4 pl-2 pr-0">
-                <div id="chargePointTable"></div>
+            <!-- Linke Spalte (Buttons)-->
+            <div class="col-2 pl-1 pr-0">
+                <h4 id="date" class="text-center text-light pt-5">19.11.2020</h4>
+                <h4 id="time" class="text-center text-light pb-5 mb-3">12:36</h4>
+                <button class="btn btn-block btn-secondary display-button p-4" id="powerSelectButton" type="button">
+                    <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
+                </button>
+                <button class="btn btn-block btn-outline-secondary display-button p-4" id="timeSelectButton" type="button">
+                    <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
+                </button>
+                <button class="btn btn-block btn-outline-secondary display-button mb-4 p-4" id="energySelectButton"
+                    type="button">
+                    <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
+                </button>
+                
+                <button class="btn btn-block btn-outline-secondary display-button mt-5 p-4" id="statusButton" type="button">
+                    <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
+                </button>
+                <div id="displaylock" class="mt-5">
+                    <button class="btn btn-block btn-outline-secondary display-button p-4" id="lockButton" type="button">
+                        <i class="fas fa-lock text-danger "></i>
+                        <i class="fas fa-unlock text-success hide"></i>
+                    </button>
+                </div>
             </div>
-            <div class="col-2">
-                <p style="text-align:center;">Work in progress!</p>
-            </div>
-            <!-- Aktuelle Leistung (powermeter) -->
-            <div class="col-6 pl-6 pr-0">
-                <div class="container-fluid">
+
+            <!-- Mittlere Spalte (Widgets) -->
+            <div class="col-7 p-0">
+                <div class="container-fluid m-0 pb-1">
 
                     <div class="row">
-                        <div class="col wb-widget px-0">
+                        <div class="col wb-widget p-0">
                             <figure id="powermeter" class=" mb-0"></figure>
                             <figure id="energymeter" class="wb-subwidget mb-0 hide"></figure>
                             <figure id="powergraph" class="wb-subwidget mb-0 hide"></figure>
@@ -49,178 +68,14 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row pt-0 pb-0">
-            <div class=" col-4">
-                <h3 class="mt-0"></h3>
-            </div>
-            <div class="col-2"></div>
-            <div class="col-6 pl-6 pr-0">
-                <h3 id="widgetheading">&nbsp;</h3>
-            </div>
-        </div>
-        <div class="row pt-0 pb-0">
-            <div class="col-4">
-                <div class="container-fluid px-2">
-                    <div class="row px-0">
-                        <div class="col-2 py-2 px-0" id="displaylock">
-                            <button class="btn btn-block btn-outline-secondary display-button " id="lockButton"
-                                type="button">
-                                <i class="fas fa-lock text-danger h4"></i>
-                                <i class="fas fa-unlock text-success h4 hide"></i>
-                            </button>
-                        </div>
 
-                        <div class="col-5 px-0">
-                            <h4 id="date" class="col text-center text-light pt-3">19.11.2020</h4>
-                            <h4 id="time" class="col text-center text-light">12:36</h4>
-                        </div>
-
-                        <div class="col-5 py-2 px-0">
-                            <button class="btn btn-block btn-outline-secondary display-button " id="statusButton"
-                                type="button">
-                                <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2">
-                <p id="screensize"></p>
-            </div>
-            <div class="col-6 pl-6 pr-4">
-                <div class="container-fluid px-2">
-                    <div class="row px-0">
-                        <div class="col-4 py-2 px-0">
-                            <button class="btn btn-block btn-secondary display-button" id="powerSelectButton"
-                                type="button">
-                                <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
-                            </button>
-                        </div>
-                        <div class="col-4 py-2 px-1">
-                            <button class="btn btn-block btn-outline-secondary display-button" id="timeSelectButton"
-                                type="button">
-                                <span><i class="fas fa-chart-area"></i>&nbsp;&nbsp; Graph</span>
-                            </button>
-                        </div>
-                        <div class="col-4 py-2 px-0">
-                            <button class="btn btn-block btn-outline-secondary display-button" id="energySelectButton"
-                                type="button">
-                                <span><i class="fas fa-chart-bar"></i>&nbsp;&nbsp; Heute</span>
-
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
+            <!-- Rechte Spalte (Ladepunkte)-->
+            <div class=" col-3 px-1">
+                <div id="chargePointTable"></div>
             </div>
         </div>
     </div>
-    <!-- Side navigation -->
-
-
-
-    <!--   <script>
-        var currentLp = 1;
-
-        $('.ladepunktInfoBtn').on("click", function (event) {
-            currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-            $('#ladepunktInfoModal').find('.infoLp').text(currentLp);
-            $('#ladepunktInfoModal').find('[data-lp]').addClass('hide');
-            $('#ladepunktInfoModal').find('[data-lp="' + currentLp + '"]').removeClass('hide');
-            $('#ladepunktInfoModal').modal("show");
-        });
-
-        $('.ladepunktConfigBtn').on("click", function (event) {
-            if (displaylocked == false) {
-                currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-                $('#ladepunktConfigModal').find('.configLp').text(currentLp);
-                $('#ladepunktConfigModal').find('[data-config-lp]').addClass('hide');
-                $('#ladepunktConfigModal').find('[data-config-lp="' + currentLp + '"]').removeClass('hide');
-                $('#ladepunktConfigModal').modal("show");
-            } else {
-                $("#lockInfoModal").modal("show");
-            }
-        });
-
-        $('.chargeModeSelectBtn').on("click", function (event) {
-            if (displaylocked == false) {
-                $("#chargeModeModal").modal("show");
-            } else {
-                $("#lockInfoModal").modal("show");
-            }
-        });
-
-        $('.enableLp').on("click", function (event) {
-            if (displaylocked == false) {
-                // send mqtt set to enable/disable charge point after click
-                var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-                if (!isNaN(parseInt(lp)) && lp > 0 && lp < 9) {
-                    var isDisabled = $(this).hasClass("lpDisabledStyle")
-                    if (isDisabled) {
-                        publish("1", "openWB/set/lp/" + lp + "/ChargePointEnabled");
-                    } else {
-                        publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
-                    }
-                }
-            } else {
-                $("#lockInfoModal").modal("show");
-            }
-        });
-
-        $('.socConfiguredLp').on("click", function (event) {
-            if ($(this).hasClass('manualSoC')) {
-                if (displaylocked == false) {
-                    currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-                    $('#socModal').find('.socLp').text(currentLp);
-                    $('#socModal').modal("show");
-                } else {
-                    $("#lockInfoModal").modal("show");
-                }
-            }
-        });
-    </script> -->
-
-
-    <!-- Code -->
-    <div id="code" class="code resume">
-        <div id="PINcode" class="text-center">
-            <input id="PINbox" type="text" value="" name="PINbox" disabled="disabled">
-            <br>
-            <input type="button" class="PINbutton" name="1" value="1" id="1" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="2" value="2" id="2" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="3" value="3" id="3" onclick="addNumber(this);">
-            <br>
-            <input type="button" class="PINbutton" name="4" value="4" id="4" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="5" value="5" id="5" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="6" value="6" id="6" onclick="addNumber(this);">
-            <br>
-            <input type="button" class="PINbutton" name="7" value="7" id="7" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="8" value="8" id="8" onclick="addNumber(this);">
-            <input type="button" class="PINbutton" name="9" value="9" id="9" onclick="addNumber(this);">
-            <br>
-            <input type="button" class="PINbutton clear" name="-" value="clear" id="-" onclick="clearForm(this);">
-            <input type="button" class="PINbutton" name="0" value="0" id="0" onclick="addNumber(this);">
-            <input type="button" class="PINbutton enter" name="+" value="enter" id="+" onclick="submitForm(PINbox);">
-        </div>
-        <script>
-            function addNumber(e) {
-                var v = $("#PINbox").val();
-                $("#PINbox").val(v + e.value);
-            }
-
-            function clearForm(e) {
-                $("#PINbox").val("");
-            }
-
-            function submitForm(e) {
-                publish(e.value, "openWB/set/system/SimulateRFID");
-                $("#PINbox").val("");
-            };
-        </script>
-    </div>
-
+    
     <!-- Status -->
     <div class="modal" id="statusModal">
         <div class="modal-dialog">
@@ -228,8 +83,8 @@
                 <!-- modal header -->
                 <div class="modal-header ">
                     <div class="col-1">&nbsp;</div>
-                    <div class="col justify-content-center">
-                        <div class="modal-title text-light text-center">Status</div>
+                    <div class="col">
+                        <div class="status-title">Status</div>
                     </div>
                     <div class="col-1 pr-0">
                         <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
@@ -239,12 +94,12 @@
                 <!-- modal body -->
                 <div class="modal-body">
                     <div id="status" class="status">
-                        <div class="row px-2">
-                            <div class="col-xs-12 card">
-                                <div class="card-header bg-secondary">
+                        <div class="row px-0">
+                            <div class="col-12">
+                                <div class="status-header bg-secondary">
                                     Systeminformationen
                                 </div>
-                                <div class="card-body">
+                                <div class="">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Version:
@@ -299,11 +154,11 @@
                             </div>
                         </div>
                         <div class="row px-2">
-                            <div class="col-xs-12 card">
-                                <div class="card-header bg-secondary">
+                            <div class="col-12">
+                                <div class="status-header bg-secondary">
                                     Verbindung zum Backend
                                 </div>
-                                <div id="backend" class="card-body">
+                                <div id="backend">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Status:
@@ -322,7 +177,7 @@
                                     </div>
                                     <div class="form-row justify-content-end">
                                         <div class="col-8">
-                                            <button class="btn btn-block btn-danger reloadBtn" type="button">
+                                            <button class="btn btn-block btn-danger displayButton reloadBtn" type="button">
                                                 Display neu Laden
                                             </button>
                                         </div>
@@ -335,8 +190,8 @@
                     </div>
                     <div class="row">
 
-                        <div class="col pt-4 px-3">
-                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                        <div class="col pt-2 px-3">
+                            <button type="button" class="btn btn-info btn-block displayButton" data-dismiss="modal"><i
                                     class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
                         </div>
                     </div>
@@ -1217,7 +1072,7 @@
                             onclick="clearLockForm(this);">
                         <input type="button" class="PINbutton" name="0" value="0" onclick="addLockNumber(this);">
                         <input type="button" class="PINbutton enter" name="+" value="enter"
-                            onclick="submitLockForm(PINbox);">
+                            onclick="submitLockForm(Lockbox);">
                     </div>
                 </div> <!-- /modal body -->
             </div>
@@ -1234,7 +1089,7 @@
 
             function submitLockForm(e) {
                 $.get(
-                    { url: "display/cards/checklock.php?pin=" + $('#Lockbox').val(), cache: false },
+                    { url: "display/colors/checklock.php?pin=" + $('#Lockbox').val(), cache: false },
                     function (data) {
                         if (data == 1) {
                             lockDisplay(false);
@@ -1416,6 +1271,9 @@
                                 class="chargeModeBtn chargeModeBtnMinPV btn btn-lg btn-block btn-secondary"
                                 data-chargeMode="1">Min + PV</button>
                         </div>
+                        <div class="col-sm-4 px-3 pb-3 pt-1" id="disableButton">
+
+                        </div>
                         <div class="col-sm-4 px-3 pb-3 pt-1">
                             <button type="button"
                                 class="chargeModeBtn chargeModeBtnStandby btn btn-lg btn-block btn-secondary"
@@ -1559,10 +1417,7 @@
                 displaylocked = true;
                 $('#displaylock').find('.fa-lock').removeClass('hide');
                 $('#displaylock').find('.fa-unlock').addClass('hide');
-                if ($('.sidenav').find('.btn.active').hasClass('displayLock')) {
-                    // console.log('changing panel');
-                    initPanels();
-                }
+                
                 window.clearTimeout(lockTimeoutHandler);
                 lockTimeoutHandler = null;
             }
@@ -1570,7 +1425,7 @@
 
         window.setInterval(function () {
             $.get(
-                { url: "display/cards/checklock.php?lock=1", cache: false },
+                { url: "display/colors/checklock.php?lock=1", cache: false },
                 function (data) {
                     if (data == "1") {
                         displaypinaktiv = 1;
@@ -1617,12 +1472,7 @@
 
         function initPanels() {
             $('.resume').addClass('hide');
-            $('.sidenav').find('.btn').removeClass('active');
-            var firstButton = $('.sidenav').find('.btn').not('.hide').not('.displayLock').first();
-            var firstNavTarget = $(firstButton).attr('href');
-            $(firstButton).addClass('active');
-            $(firstNavTarget).removeClass('hide');
-        }
+         }
 
         $(document).ready(function () {
 
@@ -1645,32 +1495,11 @@
                 document.body.appendChild(script);
             });
             wbdata.init();
-            powerMeter.init();
-            yieldMeter.init();
-            powerGraph.init();
-            chargePointList.init();
+           
             // handling of display panels
             initPanels();
 
-            $('.sidenav').find('a[href^="#"]').on("click", function (event) {
-                if ($(this).hasClass('displayLock') && displaylocked == true) {
-                    $("#lockInfoModal").modal("show");
-                } else {
-                    // hide all panels
-                    $('.resume').addClass('hide');
-                    // get target panel
-                    var target = $(this).attr('href');
-                    // display target panel
-                    $('.resume' + target).removeClass('hide');
-                    // remove active menu element
-                    $('.sidenav').find('.active').removeClass('active');
-                    // activate clicked menu element
-                    $(this).addClass('active');
-                    // update sparklines
-                    $.sparkline_display_visible();
-                }
-            });
-
+           
             $('#lastmanagementShowBtn').on("click", function (event) {
                 $("#lastregelungModal").modal("show");
             });
