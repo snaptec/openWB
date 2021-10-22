@@ -66,7 +66,9 @@ class ConnectTcp:
 
     def read_registers(self, reg: int, len: int, id: int):
         try:
-            return self.tcp_client.read_input_registers(reg, len, unit=id)
+            resp = self.tcp_client.read_input_registers(reg, len, unit=id)
+            value = float(resp.registers[1])
+            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except Exception as e:
