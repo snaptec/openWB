@@ -292,6 +292,16 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append("undef")
     elif meastyp == "smaem":
         argumentList[1] = prefixpy + 'smaem/watt.py'
+        try:
+            measuresmaser = str(config.get('smarthomedevices', 'device_measuresmaser_'+str(nummer)))
+        except:
+            measuresmaser = "123"
+        try:
+            measuresmaage = str(config.get('smarthomedevices', 'device_measuresmaage_'+str(nummer)))
+        except:
+            measuresmaage = "15"
+        argumentList[3] = measuresmaser
+        argumentList[4] = measuresmaage
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
