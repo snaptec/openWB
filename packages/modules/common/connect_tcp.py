@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu formatieren.
 """
+import codecs
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
@@ -23,6 +24,7 @@ class ConnectTcp:
         try:
             self.tcp_client = ModbusTcpClient(ip_address, port)
             self.name = name
+            self.decode_hex = codecs.getdecoder("hex_codec")
         except Exception as e:
             log.MainLogger().error(self.name, e)
 
@@ -33,7 +35,7 @@ class ConnectTcp:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
             all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-            value = int(struct.unpack('>i', all.decode('hex'))[0])
+            value = int(struct.unpack('>i', self.decode_hex(all)[0])[0])
             return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
@@ -45,7 +47,7 @@ class ConnectTcp:
         try:
             resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
             all = format(resp.registers[0], '04x')
-            value = int(struct.unpack('>h', all.decode('hex'))[0])
+            value = int(struct.unpack('>h', self.decode_hex(all)[0])[0])
             return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
