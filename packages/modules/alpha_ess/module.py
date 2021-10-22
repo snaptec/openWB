@@ -28,7 +28,7 @@ class module():
             super().__init__()
             self.data = {}
             self.data["config"] = device_config
-            self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], "192.168.193.125", 8899,)
+            self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], "192.168.193.125", 8899)
             self.data["components"] = []
             for c in self.data["config"]["components"]:
                 component = self.data["config"]["components"][c]
@@ -50,6 +50,7 @@ class module():
 
     def read(self):
         try:
+            log.MainLogger().debug("Komponenten von "+self.data["config"]["name"]+" auslesen.")
             for component in self.data["components"]:
                 component.read()
         except Exception as e:
@@ -61,7 +62,7 @@ def read_legacy(argv: List):
         component_type = str(argv[1])
         version = int(argv[2])
 
-        device0 = {"name": "Alpha Ess", "type": "alpha_ess", "components": {"component0": {"name": "Alpha Ess "+component_type, "type": component_type, "configuration": {"version": version}}}}
+        device0 = {"name": "Alpha Ess", "type": "alpha_ess", "components": {"component0": {"name": "Alpha Ess "+component_type, "id": 0, "type": component_type, "configuration": {"version": version}}}}
         mod = module(device0)
 
         log.MainLogger().debug('alpha_ess Version: ' + str(version))

@@ -23,7 +23,7 @@ openwbDebugLog ${DMOD} 2 "PV URL : ${wrjsonurl}"
 openwbDebugLog ${DMOD} 2 "PV Watt: ${wrjsonwatt}"
 openwbDebugLog ${DMOD} 2 "PV kWh : ${wrjsonkwh}"
 
-python3 $OPENWBBASEDIR/modules/alpha_ess/module.py "inverter" "${alphav123}" >>$MYLOGFILE 2>&1
+python3 $OPENWBBASEDIR/packages/modules/alpha_ess/module.py "inverter" "${alphav123}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

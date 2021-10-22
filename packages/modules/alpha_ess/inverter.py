@@ -33,40 +33,27 @@ class AlphaEssInverter():
 
     def read(self):
         try:
-            factory_method = self.__version_factory(self.component["configuration"]["version"])
-            power = factory_method(sdmid=85)
+            log.MainLogger().debug("Komponente "+self.component["name"]+" auslesen.")
+            reg_p = self.__version_factory(self.component["configuration"]["version"])
+            power = self.__get_power(85, reg_p)
 
             _, counter = self.sim_count.sim_count(power, topic="openWB/set/pv/"+str(self.component["id"])+"/", data=self.data["simulation"], prefix="pv")
             self.value_store.set(self.component["id"], power=power, counter=counter, currents=[0, 0, 0])
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
 
-    def __version_factory(self, version: int):
+    def __version_factory(self, version: int) -> int:
         try:
             if version == 0:
-                return self.__read_before_v123
+                return 0x0012
             else:
-                return self.__read_since_v123
+                return 0x00A1
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
 
-    def __read_before_v123(self, sdmid: int) -> float:
+    def __get_power(self, sdmid: int, reg_p: int) -> float:
         try:
-            pvw = self.client.read_binary_registers_to_int(0x0012, 4, sdmid, 32)
-            if (pvw < 0):
-                pvw = pvw * -1
-            time.sleep(0.1)
-            pvw2 = self.client.read_binary_registers_to_int(0x041F, 4, sdmid, 32)
-            pvw3 = self.client.read_binary_registers_to_int(0x0423, 4, sdmid, 32)
-            pvw4 = self.client.read_binary_registers_to_int(0x0427, 4, sdmid, 32)
-            power = (pvw + pvw2 + pvw3 + pvw4) * -1
-            return power
-        except Exception as e:
-            log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
-
-    def __read_since_v123(self, sdmid: int) -> float:
-        try:
-            pvw = self.client.read_binary_registers_to_int(0x00A1, 4, sdmid, 32)
+            pvw = self.client.read_binary_registers_to_int(reg_p, 4, sdmid, 32)
             if (pvw < 0):
                 pvw = pvw * -1
             time.sleep(0.1)

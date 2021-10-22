@@ -26,14 +26,40 @@ class ValueStoreFactory:
             return InverterValueStoreRamdisk if ramdisk else InverterValueStoreBroker
 
 
-def write_to_file(file: str, value):
+def write_to_file(file: str, value, digits: int = None):
     try:
         if value != None:
+            if digits != None:
+                if digits == 0:
+                    value = int(value)
+                else:
+                    value = round(value, digits)
             with open("/var/www/html/openWB/ramdisk/" + file, "w") as f:
                 f.write(str(value))
+        return value
     except Exception as e:
-        log.MainLogger().error("Fehler im Modul store", e)
+        log.MainLogger().exception("Fehler im Modul store")
 
+def pub_to_broker(topic: str, value, digits: int = None) -> None:
+    try:
+        if isinstance(value, list):
+            if None not in value:
+                if digits != None:
+                    if digits == 0:
+                        value = [int(val,) for val in value]
+                    else:
+                        value = [round(val, digits) for val in value]
+                pub.pub(topic, value)
+        else:
+            if value != None:
+                if digits != None:
+                    if digits == 0:
+                        value = int(value)
+                    else:
+                        value = round(value, digits)
+                pub.pub(topic, value)
+    except Exception as e:
+        log.MainLogger().exception("Fehler im Modul store")
 
 class ValueStore:
     @abstractmethod
@@ -44,91 +70,86 @@ class ValueStore:
 class BatteryValueStoreRamdisk(ValueStore):
     def set(self, num, power: float, soc: int, imported: float, exported: float):
         try:
-            write_to_file("/speicherleistung", int(power))
-            write_to_file("/speichersoc", int(soc))
-            write_to_file("/speicherikwh", round(imported, 2))
-            write_to_file("/speicherekwh", round(exported, 2))
-            log.MainLogger().info('BAT Watt: ' + str(int(power)))
+            power = write_to_file("/speicherleistung", power, 0)
+            write_to_file("/speichersoc", soc, 0)
+            write_to_file("/speicherikwh", imported, 2)
+            write_to_file("/speicherekwh", exported, 2)
+            log.MainLogger().info('BAT Watt: ' + str(power))
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul store", e)
+            log.MainLogger().exception("Fehler im Modul store")
 
 
 class BatteryValueStoreBroker(ValueStore):
     def set(self, num, power: float, soc: int, imported: float, exported: float):
         try:
-            pub.pub("openWB/set/bat/"+str(num)+"/get/power", round(power, 2))
-            pub.pub("openWB/set/bat/"+str(num)+"/get/soc", int(soc))
-            pub.pub("openWB/set/bat/"+str(num)+"/get/imported", round(imported, 2))
-            pub.pub("openWB/set/bat/"+str(num)+"/get/exported", round(exported, 2))
+            pub_to_broker("openWB/set/bat/"+str(num)+"/get/power", power, 2)
+            pub_to_broker("openWB/set/bat/"+str(num)+"/get/soc", soc, 0)
+            pub_to_broker("openWB/set/bat/"+str(num)+"/get/imported", imported, 2)
+            pub_to_broker("openWB/set/bat/"+str(num)+"/get/exported", exported, 2)
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul store", e)
+            log.MainLogger().exception("Fehler im Modul store")
 
 
 class CounterValueStoreRamdisk(ValueStore):
     def set(self, num, voltages: List[float], currents: List[float], powers: List[float], power_factors: List[float], imported: float, exported: float, power_all: float, frequency: float):
         try:
-            voltages = [round(val, 1) for val in voltages]
-            write_to_file("/evuv1", voltages[0])
-            write_to_file("/evuv2", voltages[1])
-            write_to_file("/evuv3", voltages[2])
-            currents = [round(val, 1) for val in currents]
-            write_to_file("/bezuga1", currents[0])
-            write_to_file("/bezuga2", currents[1])
-            write_to_file("/bezuga3", currents[2])
-            powers = [int(val) for val in powers]
-            write_to_file("/bezugw1", powers[0])
-            write_to_file("/bezugw2", powers[1])
-            write_to_file("/bezugw3", powers[2])
-            power_factors = [round(val, 2) for val in power_factors]
-            write_to_file("/evupf1", power_factors[0])
-            write_to_file("/evupf2", power_factors[1])
-            write_to_file("/evupf3", power_factors[2])
-            write_to_file("/bezugkwh", imported)
-            write_to_file("/einspeisungkwh", exported)
-            write_to_file("/wattbezug", int(power_all))
-            write_to_file("/evuhz", round(frequency, 2))
-            log.MainLogger().info('EVU Watt: ' + str(int(power_all)))
-            log.MainLogger().info('EVU Bezug: ' + str(int(imported)))
-            log.MainLogger().info('EVU Einspeisung: ' + str(int(exported)))
+            write_to_file("/evuv1", voltages[0], 1)
+            write_to_file("/evuv2", voltages[1], 1)
+            write_to_file("/evuv3", voltages[2], 1)
+            write_to_file("/bezuga1", currents[0], 1)
+            write_to_file("/bezuga2", currents[1], 1)
+            write_to_file("/bezuga3", currents[2], 1)
+            write_to_file("/bezugw1", powers[0], 0)
+            write_to_file("/bezugw2", powers[1], 0)
+            write_to_file("/bezugw3", powers[2], 0)
+            write_to_file("/evupf1", power_factors[0], 2)
+            write_to_file("/evupf2", power_factors[1], 2)
+            write_to_file("/evupf3", power_factors[2], 2)
+            imported = write_to_file("/bezugkwh", imported)
+            exported = write_to_file("/einspeisungkwh", exported)
+            power_all = write_to_file("/wattbezug", power_all, 0)
+            write_to_file("/evuhz", frequency, 2)
+            log.MainLogger().info('EVU Watt: ' + str(power_all))
+            log.MainLogger().info('EVU Bezug: ' + str(imported))
+            log.MainLogger().info('EVU Einspeisung: ' + str(exported))
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul store", e)
+            log.MainLogger().exception("Fehler im Modul store")
 
 
 class CounterValueStoreBroker(ValueStore):
     def set(self, num, voltages: List[float], currents: List[float], powers: List[float], power_factors: List[float], imported: float, exported: float, power_all: float, frequency: float):
         try:
-            pub.pub("openWB/set/counter/"+str(num)+"/get/voltages", [round(value, 2) for value in voltages])
-            pub.pub("openWB/set/counter/"+str(num)+"/get/currents", [round(value, 2) for value in currents])
-            pub.pub("openWB/set/counter/"+str(num)+"/get/power_phase", [round(value, 2) for value in powers])
-            pub.pub("openWB/set/counter/"+str(num)+"/get/power_factors", [round(value, 2) for value in power_factors])
-            pub.pub("openWB/set/counter/"+str(num)+"/get/imported", imported)
-            pub.pub("openWB/set/counter/"+str(num)+"/get/exported", exported)
-            pub.pub("openWB/set/counter/"+str(num)+"/get/power_all", power_all)
-            pub.pub("openWB/set/counter/"+str(num)+"/get/frequency", frequency)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/voltage", voltages, 2)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/current", currents, 2)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/power_phase", powers, 2)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/power_factors", power_factors, 2)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/imported", imported)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/exported", exported)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/power_all", power_all)
+            pub_to_broker("openWB/set/counter/"+str(num)+"/get/frequency", frequency)
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul store", e)
+            log.MainLogger().exception("Fehler im Modul store")
 
 
 class InverterValueStoreRamdisk(ValueStore):
     def set(self, num, power: float, counter: float, currents: List[float]):
         try:
-            write_to_file("/pvwatt", int(power))
-            write_to_file("/pvkwh", round(counter, 3))
-            write_to_file("/pvkwhk", round(counter/1000, 3))
-            write_to_file("/pva1", round(currents[0], 1))
-            write_to_file("/pva2", round(currents[1], 1))
-            write_to_file("/pva3", round(currents[2], 1))
-            log.MainLogger().info('PV Watt: ' + str(int(power)))
+            power = write_to_file("/pvwatt", power, 0)
+            write_to_file("/pvkwh", counter, 3)
+            write_to_file("/pvkwhk", counter/1000, 3)
+            write_to_file("/pva1", currents[0], 1)
+            write_to_file("/pva2", currents[1], 1)
+            write_to_file("/pva3", currents[2], 1)
+            log.MainLogger().info('PV Watt: ' + str(power))
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul store", e)
+            log.MainLogger().exception("Fehler im Modul store")
 
 
 class InverterValueStoreBroker(ValueStore):
     def set(self, num, power: float, counter: float, currents: List[float]):
         try:
-            pub.pub("openWB/set/pv/"+str(num)+"/get/power", round(power, 2))
-            pub.pub("openWB/set/pv/"+str(num)+"/get/counter", round(counter, 3))
-            currents = [round(val, 1) for val in currents]
-            pub.pub("openWB/set/pv/"+str(num)+"/get/currents", currents)
+            pub_to_broker("openWB/set/pv/"+str(num)+"/get/power", power, 2)
+            pub_to_broker("openWB/set/pv/"+str(num)+"/get/counter", counter, 3)
+            pub_to_broker("openWB/set/pv/"+str(num)+"/get/currents", currents, 1)
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul store", e)
+            log.MainLogger().exception("Fehler im Modul store")
