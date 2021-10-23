@@ -4,5 +4,5 @@
 speichersoc=$(</var/www/html/openWB/ramdisk/huaweispeichersoc)
 speicherl=$(</var/www/html/openWB/ramdisk/huaweispeicherleistung)
 echo $speichersoc > /var/www/html/openWB/ramdisk/speichersoc
-echo $speicherleistung > /var/www/html/openWB/ramdisk/speicherleistung
+echo $speicherl > /var/www/html/openWB/ramdisk/speicherleistung
 

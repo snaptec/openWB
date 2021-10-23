@@ -70,11 +70,12 @@ class SimCountLegacy:
             if start_new == False:
                 timestamp_previous = timestamp_previous+1
                 seconds_since_previous = timestamp_present - timestamp_previous
+                log.MainLogger().debug("Berechnungsgrundlage simcount: vergangene Zeit [s]"+str(seconds_since_previous)+", vorherige Leistung[W]: "+str(power_previous)+", aktuelle Leistung[W]: "+str(power_present))
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
                 wattposkh = counter_import_present/3600
-                wattnegkh = (counter_export_present*-1)/3600
+                wattnegkh = counter_export_present/3600
 
                 topic = self.__get_topic(prefix)
                 self.write_ramdisk_file(prefix+'watt0pos', counter_import_present)
@@ -187,11 +188,12 @@ class SimCount:
             if start_new == False:
                 timestamp_previous = timestamp_previous+1
                 seconds_since_previous = timestamp_present - timestamp_previous
+                log.MainLogger().debug("Berechnungsgrundlage simcount: vergangene Zeit [s]"+str(seconds_since_previous)+", vorherige Leistung[W]: "+str(power_previous)+", aktuelle Leistung[W]: "+str(power_present))
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
                 wattposkh = counter_import_present/3600
-                wattnegkh = (counter_export_present*-1)/3600
+                wattnegkh = counter_export_present/3600
                 pub.pub(topic+"module/simulation/present_imported", counter_import_present)
                 pub.pub(topic+"module/simulation/present_exported", counter_export_present)
                 return wattposkh, wattnegkh

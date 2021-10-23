@@ -6,7 +6,7 @@ DMOD="PV"
 Debug=$debug
 
 
-pvwatt=$(<${RAMDISKDIR}/pvwatt2)
+pvwatt=$(<${RAMDISKDIR}/pv2watt)
 echo $pvwatt
 openwbDebugLog ${DMOD} 1 "PV2Watt: ${pvwatt}"
 

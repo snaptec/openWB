@@ -98,7 +98,7 @@ except:
     pass
 finalb=finalb1+finalb2
 f = open('/var/www/html/openWB/ramdisk/huaweispeicherleistung', 'w')
-f.write(str(final))
+f.write(str(finalb))
 f.close()
 
 try:
