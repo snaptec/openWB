@@ -739,6 +739,7 @@
 										<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 										<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">MyRenault</option>
 										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
+										<option <?php if($socmodulold == "soc_leafze1") echo "selected" ?> value="soc_leafze1">Nissan Leaf ZE1</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
@@ -1546,6 +1547,28 @@
 									</div>
 								</div>
 							</div>
+							<div id="socleafze1" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="leafusername" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="leafusername" id="leafusername" value="<?php echo $leafusernameold ?>">
+											<span class="form-text small">
+												Nissan Connect Benutzername
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="leafpasswort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>">
+											<span class="form-text small">
+												Nissan Connect Passwort
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div id="soci3" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2253,6 +2276,7 @@
 							hideSection('#socmnone');
 							hideSection('#socmhttp');
 							hideSection('#socleaf');
+							hideSection('#socleafze1');
 							hideSection('#soci3');
 							hideSection('#soczoe');
 							hideSection('#socevnotify');
@@ -2335,6 +2359,9 @@
 							}
 							if($('#socmodul').val() == 'soc_leaf') {
 								showSection('#socleaf');
+							}
+							if($('#socmodul').val() == 'soc_leafze1') {
+								showSection('#socleafze1');
 							}
 							if($('#socmodul').val() == 'soc_i3') {
 								showSection('#soci3');
@@ -2932,6 +2959,7 @@
 										<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 										<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
 										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
+										<option <?php if($socmodul1old == "soc_leafze1s1") echo "selected" ?> value="soc_leafze1s1">Nissan Leaf ZE1</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
@@ -3297,6 +3325,28 @@
 								</div>
 							</div>
 							<div id="socleaf1" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="leafusernames1" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>">
+											<span class="form-text small">
+												Nissan Connect Benutzername
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="leafpassworts1" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>">
+											<span class="form-text small">
+												Nissan Connect Passwort
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socleafze11" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label for="leafusernames1" class="col-md-4 col-form-label">Benutzername</label>
@@ -4209,6 +4259,7 @@
 							hideSection('#socmnone1');
 							hideSection('#socmhttp1');
 							hideSection('#socleaf1');
+							hideSection('#socleafze11');
 							hideSection('#soci31');
 							hideSection('#socevnotifylp2');
 							hideSection('#soczoelp2');
@@ -4288,6 +4339,9 @@
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('#socleaf1');
+							}
+							if($('#socmodul1').val() == 'soc_leafze1s1') {
+								showSection('#socleafze11');
 							}
 							if($('#socmodul1').val() == 'soc_myrenaultlp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3139')
