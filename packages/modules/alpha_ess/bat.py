@@ -26,7 +26,7 @@ class AlphaEssBat():
             self.component = component
             self.data = {}
             self.data["simulation"] = {}
-            self.value_store = (store.ValueStoreFactory().get_storage("counter"))()
+            self.value_store = (store.ValueStoreFactory().get_storage("bat"))()
             simcount_factory = simcount.SimCountFactory().get_sim_counter()
             self.sim_count = simcount_factory()
         except Exception as e:
