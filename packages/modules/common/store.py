@@ -75,6 +75,8 @@ class BatteryValueStoreRamdisk(ValueStore):
             write_to_file("/speicherikwh", imported, 2)
             write_to_file("/speicherekwh", exported, 2)
             log.MainLogger().info('BAT Watt: ' + str(power))
+            log.MainLogger().info('BAT Einspeisung: ' + str(exported))
+            log.MainLogger().info('BAT Bezug: ' + str(imported))
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul store")
 

@@ -61,11 +61,11 @@ class AlphaEssInverter():
             p2_reg = self.client.read_binary_registers_to_int(0x041F, 4, sdmid, 32)
             p3_reg = self.client.read_binary_registers_to_int(0x0423, 4, sdmid, 32)
             p4_reg = self.client.read_binary_registers_to_int(0x0427, 4, sdmid, 32)
-            log.MainLogger().debug("Alpha Ess WR-Register: R1"+str(p_reg)+" R2 "+str(p2_reg)+" R3 "+str(p3_reg)+" R4 "+str(p4_reg))
             if p2_reg != None and p3_reg != None and p4_reg != None:
                 power = (p_reg + p2_reg + p3_reg + p4_reg) * -1
             else:
                 power = None
+            log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: R1"+str(p_reg)+" R2 "+str(p2_reg)+" R3 "+str(p3_reg)+" R4 "+str(p4_reg))
             return power
         except Exception as e:
             log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
