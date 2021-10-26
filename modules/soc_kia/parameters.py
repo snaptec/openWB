@@ -108,7 +108,7 @@ def loadBrandData():
         setParameter('host', 'prd.eu-ccapi.kia.com:8080')
         setParameter('baseUrl', 'https://' + getParameter('host'))
         setParameter('clientId', 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a')
-        setParameter('authClientId', 'f4d531c7-1043-444d-b09a-ad24bd913dd4')
+        setParameter('authClientId', '572e0304-5f8d-4b4c-9dd5-41aa84eed160')
         setParameter('appId', 'e7bcd186-a5fd-410d-92cb-6876a42288bd')
         setParameter('GCMSenderId', '345127537656')
         setParameter('basicToken', 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA==')
