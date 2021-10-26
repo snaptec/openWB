@@ -63,6 +63,7 @@ class SimCountLegacy:
                 except:
                     counter_export_present = self.restore("watt0neg", prefix)
                 counter_export_previous = counter_export_present
+                log.MainLogger().debug("simcount Zwischenergebnisse letzte Berechnung: Import: "+str(counter_import_previous)+" Export: "+str(counter_export_previous)+" Power: "+str(power_previous))
                 start_new = False
             self.write_ramdisk_file(prefix+'sec0', "%22.6f" % timestamp_present)
             self.write_ramdisk_file(prefix+'wh0', power_present)
@@ -73,10 +74,13 @@ class SimCountLegacy:
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
+                log.MainLogger().debug("simcount aufsummierte Energie: Bezug[Ws]: "+str(counter_import_present)+", Einspeisung[Ws]: "+str(counter_export_present))
                 wattposkh = counter_import_present/3600
-                wattnegkh = (counter_export_present*-1)/3600
+                wattnegkh = counter_export_present/3600
+                log.MainLogger().info("simcount Ergebnis: Bezug[Wh]: "+str(wattposkh)+", Einspeisung[Wh]: "+str(wattnegkh))
 
                 topic = self.__get_topic(prefix)
+                log.MainLogger().debug("simcount Zwischenergebnisse atkuelle Berechnung: Import: "+str(counter_import_present)+" Export: "+str(counter_export_present)+" Power: "+str(power_present))
                 self.write_ramdisk_file(prefix+'watt0pos', counter_import_present)
                 if counter_import_present != counter_import_previous:
                     pub.pub_single("openWB/"+topic+"/WHImported_temp", counter_import_present, no_json=True)
@@ -132,6 +136,8 @@ class SimCountLegacy:
                     temp = subscribe.simple("openWB/"+topic+"/WHExport_temp", hostname="localhost")
             except Exception as e:
                 log.MainLogger().error("Fehler im Modul simcount", e)
+            # Signal-Handler stoppen
+            signal.alarm(0)
             temp = int(float(temp.payload.decode("utf-8")))
             ra = '^-?[0-9]+$'
             if re.search(ra, str(temp)) == None:
@@ -179,6 +185,7 @@ class SimCount:
                     counter_export_present = int(data["present_exported"])
                 else:
                     counter_export_present = 0
+                log.MainLogger().debug("simcount Zwischenergebnisse letzte Berechnung: Import: "+str(counter_export_present)+" Export: "+str(counter_import_present)+" Power: "+str(power_previous))
                 value1 = "%22.6f" % timestamp_present
                 start_new = False
             pub.pub(topic+"module/simulation/timestamp_present", value1)
@@ -190,8 +197,11 @@ class SimCount:
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
+                log.MainLogger().debug("simcount aufsummierte Energie: Bezug[Ws]: "+str(counter_import_present)+", Einspeisung[Ws]: "+str(counter_export_present))
                 wattposkh = counter_import_present/3600
-                wattnegkh = (counter_export_present*-1)/3600
+                wattnegkh = counter_export_present/3600
+                log.MainLogger().info("simcount Ergebnis: Bezug[Wh]: "+str(wattposkh)+", Einspeisung[Wh]: "+str(wattnegkh))
+                log.MainLogger().debug("simcount Zwischenergebnisse atkuelle Berechnung: Import: "+str(counter_import_present)+" Export: "+str(counter_export_present)+" Power: "+str(power_present))
                 pub.pub(topic+"module/simulation/present_imported", counter_import_present)
                 pub.pub(topic+"module/simulation/present_exported", counter_export_present)
                 return wattposkh, wattnegkh
@@ -206,15 +216,21 @@ Number = typing.Union[int, float]
 
 def calculate_import_export(seconds_since_previous: Number, power1: Number, power2: Number) -> typing.Tuple[Number, Number]:
     try:
+        log.MainLogger().debug("simcount Berechnungsgrundlage: vergangene Zeit [s]"+str(seconds_since_previous)+", vorherige Leistung[W]: "+str(power1)+", aktuelle Leistung[W]: "+str(power2))
         power_low = min(power1, power2)
         power_high = max(power1, power2)
         gradient = (power_high - power_low) / seconds_since_previous
+        # Berechnung der Gesamtfläche (ohne Beträge, Fläche unterhalb der x-Achse reduziert die Fläche oberhalb der x-Achse)
         def energy_function(seconds): return .5 * gradient * seconds ** 2 + power_low * seconds
 
         energy_total = energy_function(seconds_since_previous)
+        log.MainLogger().debug("simcount Gesamtenergie im Zeitintervall: "+str(energy_total))
         if power_low < 0 < power_high:
+            # Berechnung der Fläche im vierten Quadranten -> Export
             power_zero_seconds = -power_low / gradient
             energy_exported = energy_function(power_zero_seconds)
+            log.MainLogger().debug("simcount exportierte Energie im Zeitintervall: "+str(energy_exported))
+            # Betragsmäßige Gesamtfläche: oberhalb der x-Achse = Import, unterhalb der x-Achse: Export
             return energy_total - energy_exported, energy_exported * -1
         return (energy_total, 0) if energy_total >= 0 else (0, -energy_total)
     except Exception as e:
