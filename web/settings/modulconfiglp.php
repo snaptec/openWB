@@ -1004,7 +1004,7 @@
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
 												<span class="form-text small">
-													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen (mehrere Tokens per Semikolon trennen)<br>
 												</span>
 											</div>
 										</div>
@@ -3802,7 +3802,7 @@
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
 												<span class="form-text small">
-													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen (mehrere Tokens per Semikolon trennen)<br>
 												</span>
 											</div>
 										</div>
