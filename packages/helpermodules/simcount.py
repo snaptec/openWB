@@ -62,6 +62,9 @@ class SimCountLegacy:
                     counter_export_present = int(float(self.read_ramdisk_file(prefix+'watt0neg')))
                 except:
                     counter_export_present = self.restore("watt0neg", prefix)
+                if counter_export_present < 0:
+                    # runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab.
+                    counter_export_present = counter_export_present * -1
                 counter_export_previous = counter_export_present
                 log.MainLogger().debug("simcount Zwischenergebnisse letzte Berechnung: Import: "+str(counter_import_previous)+" Export: "+str(counter_export_previous)+" Power: "+str(power_previous))
                 start_new = False
