@@ -1,10 +1,12 @@
 """Singelton für das Logger-Modul
 """
 
-from datetime import datetime, timezone
 import logging
 import os
 import traceback
+import subprocess
+import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 debug_logger = None
@@ -45,6 +47,11 @@ class MainLogger:
             self.__process_exception(exception)
             self.__write_log(message)
 
+        def exception(self, message: str, exception=None):
+            exception = str(sys.exc_info())
+            self.__process_exception(exception)
+            self.__write_log(message)
+
         def __process_exception(self, exception):
             if exception != None:
                 traceback.print_exc()
@@ -70,9 +77,8 @@ class MainLogger:
             else:
                 MainLogger.instance = logging.getLogger("main")
                 MainLogger.instance.setLevel(logging.DEBUG)
-                formatter = logging.Formatter(
-                    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-                fh = logging.FileHandler('/var/www/html/openWB/data/debug/main.log')
+                formatter = logging.Formatter('%(asctime)s - {%(pathname)s:%(lineno)s} - %(levelname)s - %(message)s')
+                fh = logging.FileHandler('/var/www/html/openWB/ramdisk/main.log')
                 fh.setLevel(logging.DEBUG)
                 fh.setFormatter(formatter)
                 MainLogger.instance.addHandler(fh)
@@ -90,7 +96,7 @@ class MqttLogger:
             MqttLogger.instance.setLevel(logging.DEBUG)
             formatter = logging.Formatter(
                 '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            fh = logging.FileHandler('/var/www/html/openWB/data/debug/mqtt.log')
+            fh = logging.FileHandler('/var/www/html/openWB/ramdisk/mqtt.log')
             fh.setLevel(logging.DEBUG)
             fh.setFormatter(formatter)
             MqttLogger.instance.addHandler(fh)
@@ -99,19 +105,8 @@ class MqttLogger:
         return getattr(self.instance, name)
 
 
-class DataLogger:
-    instance = None
-
-    def __init__(self):
-        if not DataLogger.instance:
-            DataLogger.instance = logging.getLogger("data")
-            DataLogger.instance.setLevel(logging.DEBUG)
-            formatter = logging.Formatter(
-                '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            fh = logging.FileHandler('/var/www/html/openWB/data/debug/data.log')
-            fh.setLevel(logging.DEBUG)
-            fh.setFormatter(formatter)
-            DataLogger.instance.addHandler(fh)
-
-    def __getattr__(self, name):
-        return getattr(self.instance, name)
+def cleanup_logfiles():
+    """ ruft das Skript zum Kürzen der Logfiles auf.
+    """
+    subprocess.run(["./packages/helpermodules/cleanup_log.sh", "/var/www/html/openWB/ramdisk/main.log"])
+    subprocess.run(["./packages/helpermodules/cleanup_log.sh", "/var/www/html/openWB/ramdisk/mqtt.log"])
