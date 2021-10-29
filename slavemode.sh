@@ -31,6 +31,11 @@ fi
 # the main entry point of the script that is called from outside
 openwbisslave() {
 
+	openwbDebugLog "MAIN" 2 ""
+	openwbDebugLog "MAIN" 2 "************************************"
+	openwbDebugLog "MAIN" 2 "** Slave mode: Control loop start **"
+	openwbDebugLog "MAIN" 2 "************************************"
+
 	setVariablesFromRamdisk
 
 	checkControllerHeartbeat
@@ -202,7 +207,7 @@ function computeAndSetCurrentForChargePoint() {
 	# new charge current in int but always rounded to the next _lower_ integer
 	llneu=$(echo "scale=0; ($PreviousExpectedChargeCurrent + $lldiff)/1" | bc)
 
-	openwbDebugLog "MAIN" 2 "Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A"
+	openwbDebugLog "MAIN" 2 "Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A -> llneu=${llneu} A"
 
 	# limit the change to +1, -1 or -3 if slow ramping is enabled,
 	# a value of 0 will be kept unchanged
@@ -236,7 +241,7 @@ function computeAndSetCurrentForChargePoint() {
 		# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
 		# For this case we limit to the total allowed current divided by the number of charging vehicals.
 		# The resulting value might get further limited to maximalstromstaerke below.
-		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+		if (( `echo "$llneu - 1 > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
 
 			if (( $llneu > $PreviousExpectedChargeCurrent )); then
 				openwbDebugLog "MAIN" 2 "Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu > PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Not changing allowed current."
@@ -269,7 +274,7 @@ function computeLoadImbalanceCompensation() {
 	local llWanted=$2
 	local llWantedIncrease=$((llWanted - PreviousExpectedChargeCurrent))
 
-	#  have been compensating in last loop?                are we contributing ?                   we're not contributing to minimal current phase             is imbalance limit newly exceeded?
+	#           are we not contributing to maximum load phase ?                       or also to minimal current phase                 or not charging
 	if ( (( ChargingOnPhase[$PhaseWithMaximumTotalCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
 		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
 		return 0
@@ -277,7 +282,7 @@ function computeLoadImbalanceCompensation() {
 
 	local currentLoadImbalance=$(echo "scale=3; (${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
 
-	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumTotalCurrent} - L${PhaseWithMinimumTotalCurrent}: ${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} = ${currentLoadImbalance} A"
+	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumTotalCurrent} - L${PhaseWithMinimumTotalCurrent}: ${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} = ${currentLoadImbalance} A (limit is ${SlaveModeAllowedLoadImbalance} A)"
 
 	local chargingVehiclesToUse=$ChargingVehiclesAdjustedForThisCp
 	if (( chargingVehiclesToUse == 0 )); then
