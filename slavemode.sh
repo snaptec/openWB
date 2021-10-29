@@ -276,7 +276,7 @@ function computeLoadImbalanceCompensation() {
 
 	#           are we not contributing to maximum load phase ?                       or also to minimal current phase                 or not charging
 	if ( (( ChargingOnPhase[$PhaseWithMaximumTotalCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
+#		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
 		return 0
 	fi
 
