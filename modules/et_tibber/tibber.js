@@ -190,10 +190,15 @@ function fillCardTagesbezug(response){
 
     if (typeof consumptionHourly !== 'undefined') {
         $('#dateYesterday').text('für gestern ' + yesterday.toLocaleDateString(undefined, options));
-        // first filter all dates other than yesterday
     	var midnight = new Date(new Date().setHours(0,0,0,0));
+        // filter todays hours
         consumptionHourly = consumptionHourly.filter(function (e) {
             return new Date(e.from).valueOf() < midnight.valueOf();
+        });
+        midnight.setDate(midnight.getDate()-1);
+        // filter hours before yesterday
+        consumptionHourly = consumptionHourly.filter(function (e) {
+            return new Date(e.from).valueOf() >= midnight.valueOf();
         });
         // now if 24 hours are left, sum up totals and fill arrays for chart
         if (consumptionHourly.length == 24) {
