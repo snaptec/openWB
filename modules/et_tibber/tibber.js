@@ -201,20 +201,19 @@ function fillCardTagesbezug(response){
             return new Date(e.from).valueOf() >= midnight.valueOf();
         });
         // now if 24 hours are left, sum up totals and fill arrays for chart
-        if (consumptionHourly.length == 24) {
-            for (i=0; i<consumptionHourly.length; i++) {
-                if (typeof consumptionHourly[i].cost === 'number' && typeof consumptionHourly[i].consumption === 'number') {
-                    totalConsumptionDay += consumptionHourly[i].consumption;
-                    totalCostsDay += consumptionHourly[i].cost;
-                    labels.push(createXLabel(consumptionHourly[i].from, consumptionHourly[i].to));
-                    dataConsumption.push(consumptionHourly[i].consumption.toFixed(2));
-                    dataPrice.push((consumptionHourly[i].unitPrice * 100).toFixed(2));
-                }
+        console.log(consumptionHourly);
+        for (i=0; i<consumptionHourly.length; i++) {
+            if (typeof consumptionHourly[i].cost === 'number' && typeof consumptionHourly[i].consumption === 'number') {
+                totalConsumptionDay += consumptionHourly[i].consumption;
+                totalCostsDay += consumptionHourly[i].cost;
+                labels.push(createXLabel(consumptionHourly[i].from, consumptionHourly[i].to));
+                dataConsumption.push(consumptionHourly[i].consumption.toFixed(2));
+                dataPrice.push((consumptionHourly[i].unitPrice * 100).toFixed(2));
             }
-            $('#totalConsumptionDay').text(convertToLocale(totalConsumptionDay, ' kWh'));
-            $('#totalCostsDay').text(convertToLocale(totalCostsDay, ' €'));
-            $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' ct/kWh'));
         }
+        $('#totalConsumptionDay').text(convertToLocale(totalConsumptionDay, ' kWh'));
+        $('#totalCostsDay').text(convertToLocale(totalCostsDay, ' €'));
+        $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' ct/kWh'));
         // create chart or hide it
         if (totalConsumptionDay > 0) {
             loadHourlyConsumptionchart(labels, dataConsumption, dataPrice);
