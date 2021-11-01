@@ -123,14 +123,14 @@ class WbData {
 		d3.select("button#statusButton")
 			.on("click", showStatus);
 		d3.select(".minpvRangeInput")
-			.on("input", function () {updateMinpvRangeInput(this.value)});
+			.on("input", function () { updateMinpvRangeInput(this.value) });
 		d3.select(".sofortRangeInput")
-			.on("input", function () {updateSofortRangeInput(this.value)});
+			.on("input", function () { updateSofortRangeInput(this.value) });
 		d3.select(".socRangeInput")
-			.on("input", function () {updateSocRangeInput(this.value)});
+			.on("input", function () { updateSocRangeInput(this.value) });
 		d3.select(".energyRangeInput")
-			.on("input", function () {updateEnergyRangeInput(this.value)});
-		
+			.on("input", function () { updateEnergyRangeInput(this.value) });
+
 		powerMeter.init()
 		powerGraph.init()
 		yieldMeter.init()
@@ -253,7 +253,6 @@ class WbData {
 				powerMeter.update();
 				break;
 			case 'configured':
-			case 'targetCurrent':
 				chargePointList.updateConfig()
 			default:
 				break;
@@ -327,6 +326,13 @@ class WbData {
 			this.updateUsageSummary("devices", 'power', this.smarthomePower
 				+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
 		}
+	}
+
+	setChargeLimitMode(limitMode) {
+		d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
+		d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
+		publish(limitMode, "openWB/config/set/sofort/lp/" + (this.chargePointToConfig + 1) + "/chargeLimitation")
+
 	}
 }
 
@@ -437,49 +443,41 @@ function showStatus() {
 	$("#statusModal").modal("show");
 }
 
-function updateMinpvRangeInput (value) {
-	console.log ("update range input: ")
-	console.log (value)
-	const label = d3.select (".labelMinPv").text(value + " A"); 
-  label.classed ("text-danger", true)
-	setTimeout (() => {
-		label.classed ("text-danger", false)
-		publish (value, "openWB/config/set/pv/minCurrentMinPv")
+function updateMinpvRangeInput(value) {
+	const label = d3.select(".labelMinPv").text(value + " A");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/pv/minCurrentMinPv")
 	}, 2000)
 }
 
-function updateSofortRangeInput (value) {
-	console.log ("update range input: ")
-	console.log (value)
-	const label = d3.select (".labelSofortCurrent").text(value + " A"); 
-  label.classed ("text-danger", true)
-	setTimeout (() => {
-		label.classed ("text-danger", false)
-		publish (value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig+1) + "/current")
+function updateSofortRangeInput(value) {
+	const label = d3.select(".labelSofortCurrent").text(value + " A");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/current")
 	}, 2000)
 }
 
-function updateSocRangeInput (value) {
-	console.log ("update range input: ")
-	console.log (value)
-	const label = d3.select (".labelSocLimit").text(value + " %"); 
-  label.classed ("text-danger", true)
-	setTimeout (() => {
-		label.classed ("text-danger", false)
-		publish (value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig+1) + "/socToChargeTo")
+function updateSocRangeInput(value) {
+	const label = d3.select(".labelSocLimit").text(value + " %");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/socToChargeTo")
 	}, 2000)
 }
 
-function updateEnergyRangeInput (value) {
-	console.log ("update range input: ")
-	console.log (value)
-	const label = d3.select (".labelEnergyLimit").text(value + " %"); 
-  label.classed ("text-danger", true)
-	setTimeout (() => {
-		label.classed ("text-danger", false)
-		publish (value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig+1) + "/energyToCharge")
+function updateEnergyRangeInput(value) {
+	const label = d3.select(".labelEnergyLimit").text(value + " kWh");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/energyToCharge")
 	}, 2000)
-	
+
 
 }
 var wbdata = new WbData(new Date(Date.now()));
