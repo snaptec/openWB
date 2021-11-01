@@ -201,7 +201,6 @@ function fillCardTagesbezug(response){
             return new Date(e.from).valueOf() >= midnight.valueOf();
         });
         // now if 24 hours are left, sum up totals and fill arrays for chart
-        console.log(consumptionHourly);
         for (i=0; i<consumptionHourly.length; i++) {
             if (typeof consumptionHourly[i].cost === 'number' && typeof consumptionHourly[i].consumption === 'number') {
                 totalConsumptionDay += consumptionHourly[i].consumption;
