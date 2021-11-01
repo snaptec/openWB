@@ -96,8 +96,11 @@ class CarState:
     def __init__(
         self,
         soc: float,
+        timestamp: str = ""
     ):
         """Args:
             soc: actual state of charge in percent
+            timestamp: timestamp of last soc request
         """
         self.soc = soc
+        self.timestamp = timestamp
