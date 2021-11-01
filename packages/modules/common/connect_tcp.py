@@ -52,6 +52,18 @@ class ConnectTcp:
         except:
             log.MainLogger().exception(self.name)
 
+    def __reset_error_factory(self):
+        try:
+            ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
+            if ramdisk == True:
+                publish.single("openWB/set/evu/faultState", 0)
+                publish.single("openWB/set/evu/faultStr", "Kein Fehler.")
+            else:
+                pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_str", "Kein Fehler.")
+                pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_state", 0)
+        except:
+            log.MainLogger().exception(self.name)
+
     def _log_connection_error(self):
         try:
             error_text = self.name+" konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen."
@@ -71,10 +83,10 @@ class ConnectTcp:
 
     def read_integer_registers(self, reg: int, len: int, id: int) -> int:
         try:
+            value = None
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
             all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
             value = int(struct.unpack('>i', self.decode_hex(all)[0])[0])
-            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except AttributeError:
@@ -84,14 +96,17 @@ class ConnectTcp:
                 log.MainLogger().exception(self.name)
         except:
             log.MainLogger().exception(self.name)
-            return None
+        else:
+            self.__reset_error_factory()
+        finally:
+            return value
 
     def read_short_int_registers(self, reg: int, len: int, id: int) -> int:
         try:
+            value = None
             resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
             all = format(resp.registers[0], '04x')
             value = int(struct.unpack('>h', self.decode_hex(all)[0])[0])
-            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except AttributeError:
@@ -101,13 +116,16 @@ class ConnectTcp:
                 log.MainLogger().exception(self.name)
         except:
             log.MainLogger().exception(self.name)
-            return None
+        else:
+            self.__reset_error_factory()
+        finally:
+            return value
 
     def read_float_registers(self, reg: int, len: int, id: int) -> float:
         try:
+            value = None
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
             value = float(struct.unpack('>f', struct.pack('>HH', *resp.registers))[0])
-            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except AttributeError:
@@ -117,13 +135,16 @@ class ConnectTcp:
                 log.MainLogger().exception(self.name)
         except:
             log.MainLogger().exception(self.name)
-            return None
+        else:
+            self.__reset_error_factory()
+        finally:
+            return value
 
     def read_registers(self, reg: int, len: int, id: int):
         try:
+            value = None
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
             value = float(resp.registers[1])
-            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except AttributeError:
@@ -133,10 +154,14 @@ class ConnectTcp:
                 log.MainLogger().exception(self.name)
         except:
             log.MainLogger().exception(self.name)
-            return None
+        else:
+            self.__reset_error_factory()
+        finally:
+            return value
 
     def read_binary_registers_to_int(self, reg: int, len: int, id: int, bit: int, signed=True) -> int:
         try:
+            value = None
             resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
@@ -149,7 +174,6 @@ class ConnectTcp:
                     value = int(decoder.decode_16bit_int())
                 else:
                     value = int(decoder.decode_16bit_uint())
-            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except AttributeError:
@@ -159,17 +183,20 @@ class ConnectTcp:
                 log.MainLogger().exception(self.name)
         except:
             log.MainLogger().exception(self.name)
-            return None
+        else:
+            self.__reset_error_factory()
+        finally:
+            return value
 
     def read_binary_registers_to_float(self, reg: int, len: int, id: int, bit: int) -> float:
         try:
+            value = None
             resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 value = float(decoder.decode_32bit_float())
             elif bit == 16:
                 value = float(decoder.decode_16bit_float())
-            return value
         except pymodbus.exceptions.ConnectionException:
             self._log_connection_error()
         except AttributeError:
@@ -179,4 +206,7 @@ class ConnectTcp:
                 log.MainLogger().exception(self.name)
         except:
             log.MainLogger().exception(self.name)
-            return None
+        else:
+            self.__reset_error_factory()
+        finally:
+            return value
