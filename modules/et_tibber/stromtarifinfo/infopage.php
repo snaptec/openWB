@@ -33,7 +33,7 @@
 		<script src="js/Chart.bundle.min.js"></script>
 
 		<!-- special stromtarif scripts to be loaded -->
-		<script src="../modules/et_tibber/tibber.js?ver=20211031"></script>
+		<script src="../modules/et_tibber/tibber.js?ver=20211101"></script>
 		<script src="../modules/et_tibber/stromtarifinfo/tibberElectricityPricechart.js?ver=20210104"></script>
 		<script src="../modules/et_tibber/stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20210104-b"></script>
 
