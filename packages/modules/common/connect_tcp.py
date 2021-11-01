@@ -2,6 +2,7 @@
 """ Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu formatieren.
 """
 import codecs
+import paho.mqtt.publish as publish
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
@@ -39,12 +40,23 @@ class ConnectTcp:
         except:
             log.MainLogger().exception(self.name)
 
+    def __set_error_factory(self, fault_str, fault_state):
+        try:
+            ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
+            if ramdisk == True:
+                publish.single("openWB/set/evu/faultState", fault_state)
+                publish.single("openWB/set/evu/faultStr", fault_str)
+            else:
+                pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_str", fault_str)
+                pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_state", fault_state)
+        except:
+            log.MainLogger().exception(self.name)
+
     def _log_connection_error(self):
         try:
             error_text = self.name+" konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen."
             log.MainLogger().error(error_text)
-            pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_str", error_text)
-            pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_state", 2)
+            self.__set_error_factory(error_text, 2)
         except:
             log.MainLogger().exception(self.name)
 
@@ -52,8 +64,7 @@ class ConnectTcp:
         try:
             error_text = self.name+" konnte keine Werte fuer Register "+str(reg)+" abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten."
             log.MainLogger().error(error_text)
-            pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_str", error_text)
-            pub.pub("openWB/set/devices/"+str(self.id)+"/get/fault_state", 1)
+            self.__set_error_factory(error_text, 1)
             self.tcp_client.close()
         except:
             log.MainLogger().exception(self.name)
