@@ -18,29 +18,44 @@ except:
     from modules.common import store
 
 
+def get_default() -> dict:
+    return {
+        "name": "Alpha ESS Wechselrichter",
+        "id": None,
+        "type": "inverter",
+        "configuration":
+        {
+            "version": 1
+        }
+    }
+
+
 class AlphaEssInverter():
-    def __init__(self, client: connect_tcp.ConnectTcp, component: dict) -> None:
+    def __init__(self, client: connect_tcp.ConnectTcp, component_config: dict) -> None:
         try:
             self.client = client
-            self.component = component
             self.data = {}
+            self.data["config"] = component_config
             self.data["simulation"] = {}
-            self.value_store = (store.ValueStoreFactory().get_storage("inverter"))()
+            self.value_store = (store.ValueStoreFactory().get_storage("inverter"))(self.data["config"]["id"])
             simcount_factory = simcount.SimCountFactory().get_sim_counter()
             self.sim_count = simcount_factory()
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
+            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
     def read(self):
         try:
-            log.MainLogger().debug("Komponente "+self.component["name"]+" auslesen.")
-            reg_p = self.__version_factory(self.component["configuration"]["version"])
+            log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
+            reg_p = self.__version_factory(self.data["config"]["configuration"]["version"])
             power = self.__get_power(85, reg_p)
 
-            _, counter = self.sim_count.sim_count(power, topic="openWB/set/pv/"+str(self.component["id"])+"/", data=self.data["simulation"], prefix="pv")
-            self.value_store.set(self.component["id"], power=power, counter=counter, currents=[0, 0, 0])
+            if isinstance(power, (int, float)):
+                _, counter = self.sim_count.sim_count(power, topic="openWB/set/pv/"+str(self.data["config"]["id"])+"/", data=self.data["simulation"], prefix="pv")
+            else:
+                counter = None
+            self.value_store.set(power=power, counter=counter, currents=[0, 0, 0])
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
+            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
     def __version_factory(self, version: int) -> int:
         try:
@@ -49,23 +64,23 @@ class AlphaEssInverter():
             else:
                 return 0x00A1
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
+            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
     def __get_power(self, sdmid: int, reg_p: int) -> float:
         try:
             p_reg = self.client.read_binary_registers_to_int(reg_p, 4, sdmid, 32)
-            if p_reg != None:
+            if isinstance(p_reg, (int, float)):
                 if (p_reg < 0):
                     p_reg = p_reg * -1
             time.sleep(0.1)
             p2_reg = self.client.read_binary_registers_to_int(0x041F, 4, sdmid, 32)
             p3_reg = self.client.read_binary_registers_to_int(0x0423, 4, sdmid, 32)
             p4_reg = self.client.read_binary_registers_to_int(0x0427, 4, sdmid, 32)
-            if p2_reg != None and p3_reg != None and p4_reg != None:
+            if isinstance(p2_reg, (int, float)) and isinstance(p3_reg, (int, float)) and isinstance(p4_reg, (int, float)):
                 power = (p_reg + p2_reg + p3_reg + p4_reg) * -1
             else:
-                power = None
+                power = p_reg  # enthält Fehlermeldung
             log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: R1"+str(p_reg)+" R2 "+str(p2_reg)+" R3 "+str(p3_reg)+" R4 "+str(p4_reg))
             return power
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul "+self.component["name"], e)
+            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])

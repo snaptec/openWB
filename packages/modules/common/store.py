@@ -99,18 +99,18 @@ class ValueStore:
                 if ramdisk == True:
                     if self.num != None:
                         try:
-                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/get/faultStr", value["fault_str"])
-                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/get/faultState", value["fault_state"])
+                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultStr", value["fault_str"])
+                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultState", value["fault_state"])
                         except:
-                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/get/faultStr", "Es ist ein interner Fehler aufgetreten.")
-                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/get/faultState", 2)
+                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultStr", "Es ist ein interner Fehler aufgetreten.")
+                            publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultState", 2)
                     else:
                         try:
-                            publish.single("openWB/set/"+self.type+"/get/faultStr", value["fault_str"])
-                            publish.single("openWB/set/"+self.type+"/get/faultState", value["fault_state"])
+                            publish.single("openWB/set/"+self.type+"/faultStr", value["fault_str"])
+                            publish.single("openWB/set/"+self.type+"/faultState", value["fault_state"])
                         except:
-                            publish.single("openWB/set/"+self.type+"/get/faultStr", "Es ist ein interner Fehler aufgetreten.")
-                            publish.single("openWB/set/"+self.type+"/get/faultState", 2)
+                            publish.single("openWB/set/"+self.type+"/faultStr", "Es ist ein interner Fehler aufgetreten.")
+                            publish.single("openWB/set/"+self.type+"/faultState", 2)
                 else:
                     try:
                         pub.pub("openWB/set/"+self.type+"/"+str(self.num)+"/get/fault_str", value["fault_str"])
@@ -120,7 +120,7 @@ class ValueStore:
                         pub.pub("openWB/set/"+self.type+"/"+str(self.num)+"/get/fault_state", 2)
                 self.is_error_set = True
         except:
-            log.MainLogger().exception(self.name)
+            log.MainLogger().exception("Fehler im Modul store")
 
 
 class BatteryValueStoreRamdisk(ValueStore):
@@ -131,7 +131,7 @@ class BatteryValueStoreRamdisk(ValueStore):
 
     def set(self, power: float, soc: int, imported: float, exported: float):
         try:
-            self.error_set = False
+            self.is_error_set = False
             power = self.write_to_file("/speicherleistung", power, 0)
             self.write_to_file("/speichersoc", soc, 0)
             self.write_to_file("/speicherikwh", imported, 2)
