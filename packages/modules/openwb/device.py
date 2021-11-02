@@ -31,17 +31,20 @@ class Device():
             self.data = {}
             self.data["config"] = device_config
             self.data["components"] = {}
-            ip_address = "192.168.193.15"
-            port = "8899"
-            self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
     def add_component(self, component_config: dict) -> None:
         try:
             if component_config["type"] == "counter":
+                ip_address = "192.168.193.15"
+                port = "8899"
+                self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
                 self.data["components"]["component"+str(component_config["id"])] = counter.EvuKit(self.data["config"]["id"], component_config, self.client)
             elif component_config["type"] == "inverter":
+                ip_address = "192.168.193.13"
+                port = "8899"
+                self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
                 self.data["components"]["component"+str(component_config["id"])] = inverter.PvKit(self.data["config"]["id"], component_config, self.client)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
