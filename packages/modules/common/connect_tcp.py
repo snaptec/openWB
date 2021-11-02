@@ -26,6 +26,7 @@ class ConnectTcp:
     def __init__(self, name: str, id: int, ip_address: str, port: int) -> None:
         try:
             self.tcp_client = ModbusTcpClient(ip_address, port)
+            log.MainLogger().debug("Baue Verbindung auf zu "+str(self.tcp_client))
             # Den Verbinungsaufbau übernimmt der tcp_client automatisch.
             self.name = name
             self.id = id
@@ -33,14 +34,14 @@ class ConnectTcp:
         except:
             log.MainLogger().exception(self.name)
 
-    def close_connection(self):
+    def close_connection(self) -> None:
         try:
             log.MainLogger().debug("Close Modbus TCP connection")
             self.tcp_client.close()
         except:
             log.MainLogger().exception(self.name)
 
-    def __set_error_factory(self, fault_str, fault_state):
+    def __set_error_factory(self, fault_str: str, fault_state: int) -> None:
         try:
             ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
             if ramdisk == True:
@@ -52,7 +53,7 @@ class ConnectTcp:
         except:
             log.MainLogger().exception(self.name)
 
-    def __reset_error_factory(self):
+    def __reset_error_factory(self) -> None:
         try:
             ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
             if ramdisk == True:
@@ -64,7 +65,7 @@ class ConnectTcp:
         except:
             log.MainLogger().exception(self.name)
 
-    def _log_connection_error(self):
+    def _log_connection_error(self) -> None:
         try:
             error_text = self.name+" konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen."
             log.MainLogger().error(error_text)
@@ -72,7 +73,7 @@ class ConnectTcp:
         except:
             log.MainLogger().exception(self.name)
 
-    def _log_modbus_error(self, reg):
+    def _log_modbus_error(self, reg: int) -> None:
         try:
             error_text = self.name+" konnte keine Werte fuer Register "+str(reg)+" abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten."
             log.MainLogger().error(error_text)
