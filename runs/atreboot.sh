@@ -115,6 +115,8 @@ if (( displayaktiv == 1 )); then
 		echo "@xset s 600" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 		echo "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" >> /home/pi/.config/lxsession/LXDE-pi/autostart
 	fi
+	echo "deleting browser cache"
+	rm -rf /home/pi/.cache/chromium
 fi
 
 # restart smarthomehandler
@@ -274,6 +276,11 @@ if python3 -c "import pymodbus" &> /dev/null; then
 	echo 'pymodbus installed...'
 else
 	sudo pip3 install pymodbus
+fi
+if python3 -c "import requests" &> /dev/null; then
+	echo 'python requests installed...'
+else
+	sudo pip3 install requests
 fi
 #Prepare for jq in Python
 if python3 -c "import jq" &> /dev/null; then

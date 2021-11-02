@@ -71,6 +71,7 @@
 										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
 										<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
 										<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+										<option <?php if($speichermodulold == "speicher_huawei") echo "selected" ?> value="speicher_huawei">Huawei</option>
 										<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
 										<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
@@ -200,6 +201,11 @@
 						<div id="divspeichervictron" class="hide">
 							<div class="alert alert-info">
 								Konfiguration im Bezug Victron Modul.
+							</div>
+						</div>
+						<div id="divspeicherhuawei" class="hide">
+							<div class="alert alert-info">
+								Konfiguration im PV Huawei Modul.
 							</div>
 						</div>
 
@@ -655,7 +661,7 @@
 								hideSection('#divspeicherjson');
 								hideSection('#divspeichersolarwatt');
 								hideSection('#divspeicherip2');
-
+								hideSection('#divspeicherhuawei');
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
 								}
@@ -691,6 +697,10 @@
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
 								}
+								if($('#speichermodul').val() == 'speicher_huawei') {
+									showSection('#divspeicherhuawei');
+								}
+
 								if($('#speichermodul').val() == 'speicher_studer') {
 									showSection('#divspeicherstuder');
 								}

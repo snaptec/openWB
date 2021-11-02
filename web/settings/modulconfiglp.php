@@ -1004,7 +1004,7 @@
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
 												<span class="form-text small">
-													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen (mehrere Tokens per Semikolon trennen)<br>
 												</span>
 											</div>
 										</div>
@@ -1029,9 +1029,9 @@
 										<div class="form-row mb-1">
 											<label for="kia_adv_cachevalid" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
 											<div class="col">
-												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid" id="kia_adv_cachevalid" value="<?php echo $kia_adv_cachevalidold ?>">
+												<input class="form-control" type="number" min="-15" step="1" name="kia_adv_cachevalid" id="kia_adv_cachevalid" value="<?php echo $kia_adv_cachevalidold ?>">
 												<span class="form-text small">
-													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
+													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0: Abruf immer vom Auto; Default: 10)<br>
 												</span>
 											</div>
 										</div>
@@ -3802,7 +3802,7 @@
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
 												<span class="form-text small">
-													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen (mehrere Tokens per Semikolon trennen)<br>
 												</span>
 											</div>
 										</div>
@@ -3827,7 +3827,7 @@
 										<div class="form-row mb-1">
 											<label for="kia_adv_cachevalid2" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
 											<div class="col">
-												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid2" id="kia_adv_cachevalid2" value="<?php echo $kia_adv_cachevalid2old ?>">
+												<input class="form-control" type="number" min="-15" step="1" name="kia_adv_cachevalid2" id="kia_adv_cachevalid2" value="<?php echo $kia_adv_cachevalid2old ?>">
 												<span class="form-text small">
 													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
 												</span>

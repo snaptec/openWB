@@ -150,6 +150,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvid" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv1_ida" class="col-md-4 col-form-label">ID </label>
+								<div class="col">
+									<input class="form-control" type="text" name="pv1_ida" id="pv1_ida" value="<?php echo $pv1_idaold ?>">
+									<span class="form-text small">
+										Gültige Werte Id als Zahl.
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="pvsiemens" class="hide">
 							<!-- nothing here, just generic IP -->
 						</div>
@@ -856,6 +867,7 @@
 								hideSection('#pvfems');
 								hideSection('#pvsolarworld');
 								hideSection('#pvip');
+								hideSection('#pvid');
 								hideSection('#pvsiemens');
 								hideSection('#pvrct');
 								hideSection('#pvpowerdog');
@@ -871,6 +883,7 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_huawei') {
 									showSection('#pvip');
+									showSection('#pvid');
 								}
 								if($('#pvwattmodul').val() == 'wr_shelly') {
 									showSection('#pvip');
