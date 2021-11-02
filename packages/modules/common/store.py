@@ -225,14 +225,20 @@ class InverterValueStoreRamdisk(ValueStore):
 
     def set(self, power: float, counter: float, currents: List[float]):
         try:
+            if self.num == 1:
+                filename_extension = ""
+            elif self.num == 2:
+                filename_extension = "2"
+            else:
+                log.MainLogger().error("Unbekannte PV-Nummer "+str(self.num))
             self.is_error_set = False
-            power = self.write_to_file("/pvwatt", power, 0)
-            self.write_to_file("/pvkwh", counter, 3)
+            power = self.write_to_file("/pv"+filename_extension+"watt", power, 0)
+            self.write_to_file("/pv"+filename_extension+"kwh", counter, 3)
             if isinstance(counter, (int, float)):
-                self.write_to_file("/pvkwhk", counter/1000, 3)
-            self.write_to_file("/pva1", currents[0], 1)
-            self.write_to_file("/pva2", currents[1], 1)
-            self.write_to_file("/pva3", currents[2], 1)
+                self.write_to_file("/pv"+filename_extension+"kwhk", counter/1000, 3)
+            self.write_to_file("/pv"+filename_extension+"a1", currents[0], 1)
+            self.write_to_file("/pv"+filename_extension+"a2", currents[1], 1)
+            self.write_to_file("/pv"+filename_extension+"a3", currents[2], 1)
             log.MainLogger().info('PV Watt: ' + str(power))
             log.MainLogger().info('PV Export: ' + str(counter))
             self.reset_error()
