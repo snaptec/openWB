@@ -39,7 +39,9 @@ class Sdm630:
         """
         """
         try:
-            imported = self.client.read_float_registers(0x0048, 2, self.id) * 1000
+            imported = self.client.read_float_registers(0x0048, 2, self.id)
+            if isinstance(imported, (int, float)):
+                imported = imported * 1000
             return imported
         except:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -52,10 +54,10 @@ class Sdm630:
             for register in regs:
                 value = self.client.read_float_registers(register, 2, self.id)
                 power_per_phase.append(value)
-            if None not in power_per_phase:
+            if all(isinstance(x, (int, float)) for x in power_per_phase):
                 power_all = sum(power_per_phase)
             else:
-                power_all = None
+                power_all = value  # enthält Fehlermeldung
             return power_per_phase, power_all
         except:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -65,7 +67,9 @@ class Sdm630:
         """
         """
         try:
-            exported = self.client.read_float_registers(0x004a, 2, self.id) * 1000
+            exported = self.client.read_float_registers(0x004a, 2, self.id)
+            if isinstance(exported, (int, float)):
+                exported = exported * 1000
             return exported
         except:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -90,11 +94,9 @@ class Sdm630:
         """
         try:
             frequency = self.client.read_float_registers(0x46, 2, self.id)
-            if frequency != None:
+            if isinstance(frequency, (int, float)):
                 if frequency > 100:
                     frequency = frequency / 10
-            else:
-                frequency = None
             return frequency
         except:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -116,7 +118,9 @@ class Sdm630:
 
     def get_counter(self) -> float:
         try:
-            counter = self.client.read_float_registers(0x0156, 2, self.id) * 1000
+            counter = self.client.read_float_registers(0x0156, 2, self.id)
+            if isinstance(counter, (int, float)):
+                counter = counter * 1000
             return counter
         except:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))

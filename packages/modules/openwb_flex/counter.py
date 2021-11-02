@@ -23,19 +23,17 @@ except:
     from modules.common import sdm630
 
 
-def get_default(type: str) -> dict:
-    if type == "counter":
-        component_default = {
-            "name": "EVU-Kit flex",
-            "type": "counter",
-            "id": None,
-            "configuration":
+def get_default() -> dict:
+    return {
+        "name": "EVU-Kit flex",
+        "type": "counter",
+        "id": None,
+        "configuration":
             {
                 "version": 2,
                 "id": 115
             }
-        }
-    return component_default
+    }
 
 
 class EvuKitFlex():
@@ -49,7 +47,7 @@ class EvuKitFlex():
             factory = self.__counter_factory(version)
             self.tcp_client = tcp_client
             self.counter = factory(self.data["config"], self.tcp_client)
-            self.value_store = (store.ValueStoreFactory().get_storage("counter"))()
+            self.value_store = (store.ValueStoreFactory().get_storage("counter"))(self.data["config"]["id"])
             simcount_factory = simcount.SimCountFactory().get_sim_counter()
             self.sim_count = simcount_factory()
         except:
@@ -100,7 +98,7 @@ class EvuKitFlex():
                     imported, exported = None, None
             log.MainLogger().debug("EVU-Kit Leistung[W]: "+str(power_all))
             self.tcp_client.close_connection()
-            self.value_store.set(self.data["config"]["id"], voltages=voltages, currents=currents, powers=power_per_phase,
+            self.value_store.set(voltages=voltages, currents=currents, powers=power_per_phase,
                                  power_factors=power_factors, imported=imported, exported=exported, power_all=power_all, frequency=frequency)
             log.MainLogger().debug("Stop kit reading "+str(power_all))
         except:

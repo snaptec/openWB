@@ -4,6 +4,7 @@ try:
     from ...helpermodules import log
     from ..common import connect_tcp
     from . import counter
+    from . import inverter
 except:
     from pathlib import Path
     import os
@@ -13,6 +14,7 @@ except:
     from helpermodules import log
     from modules.common import connect_tcp
     import counter
+    import inverter
 
 
 def get_default() -> dict:
@@ -44,6 +46,8 @@ class Device():
         try:
             if component_config["type"] == "counter":
                 self.data["components"]["component"+str(component_config["id"])] = counter.EvuKitFlex(self.data["config"]["id"], component_config, self.client)
+            elif component_config["type"] == "inverter":
+                self.data["components"]["component"+str(component_config["id"])] = inverter.PvKitFlex(self.data["config"]["id"], component_config, self.client)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
@@ -62,19 +66,24 @@ def read_legacy(argv: List):
     """ Ausführung des Moduls als Python-Skript
     """
     try:
+        log.MainLogger().debug('Start reading flex')
         component_type = str(argv[1])
         version = int(argv[2])
         ip_address = str(argv[3])
         port = int(argv[4])
         id = int(argv[5])
+        try:
+            num = int(argv[6])
+        except:
+            num = 0
 
         default = get_default()
         default["id"] = 0
         default["configuration"]["ip_address"] = ip_address
         default["configuration"]["port"] = port
         dev = Device(default)
-        component_default = counter.get_default(component_type)
-        component_default["id"] = 0
+        component_default = globals()[component_type].get_default()
+        component_default["id"] = num
         component_default["configuration"]["version"] = version
         component_default["configuration"]["id"] = id
         dev.add_component(component_default)

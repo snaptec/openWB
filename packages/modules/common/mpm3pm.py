@@ -27,7 +27,9 @@ class Mpm3pm:
             voltage = []
             regs = [0x08, 0x0A, 0x0C]
             for register in regs:
-                value = float(self.client.read_registers(register, 4, self.id) / 10)
+                value = self.client.read_registers(register, 4, self.id)
+                if isinstance(value, (int, float)):
+                    value = value / 10
                 voltage.append(value)
             return voltage
         except Exception as e:
@@ -38,7 +40,9 @@ class Mpm3pm:
         """
         """
         try:
-            imported = self.client.read_integer_registers(0x0002, 4, self.id) * 10
+            imported = self.client.read_integer_registers(0x0002, 4, self.id)
+            if isinstance(imported, (int, float)):
+                imported = imported * 10
             return imported
         except Exception as e:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -49,9 +53,13 @@ class Mpm3pm:
             power_per_phase = []
             regs = [0x14, 0x16, 0x18]
             for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id) / 100
+                value = self.client.read_integer_registers(register, 2, self.id)
+                if isinstance(value, (int, float)):
+                    value = value / 100
                 power_per_phase.append(value)
-            power_all = self.client.read_integer_registers(0x26, 2, self.id) / 100
+            power_all = self.client.read_integer_registers(0x26, 2, self.id)
+            if isinstance(power_all, (int, float)):
+                power_all = power_all / 100
             return power_per_phase, power_all
         except Exception as e:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -61,7 +69,9 @@ class Mpm3pm:
         """
         """
         try:
-            exported = self.client.read_integer_registers(0x0004, 4, self.id) * 10
+            exported = self.client.read_integer_registers(0x0004, 4, self.id)
+            if isinstance(exported, (int, float)):
+                exported = exported * 10
             return exported
         except Exception as e:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -74,7 +84,9 @@ class Mpm3pm:
             power_factor = []
             regs = [0x20, 0x22, 0x24]
             for register in regs:
-                value = self.client.read_integer_registers(register, 4, self.id) / 10
+                value = self.client.read_integer_registers(register, 4, self.id)
+                if isinstance(value, (int, float)):
+                    value = value / 100
                 power_factor.append(value)
             return power_factor
         except Exception as e:
@@ -85,7 +97,9 @@ class Mpm3pm:
         """
         """
         try:
-            frequency = self.client.read_integer_registers(0x2c, 4, self.id) / 100
+            frequency = self.client.read_integer_registers(0x2c, 4, self.id)
+            if isinstance(frequency, (int, float)):
+                frequency = frequency / 100
             return frequency
         except Exception as e:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
@@ -98,7 +112,9 @@ class Mpm3pm:
             current = []
             regs = [0x0E, 0x10, 0x12]
             for register in regs:
-                value = float(self.client.read_registers(register, 2, self.id)) / 100
+                value = self.client.read_registers(register, 2, self.id)
+                if isinstance(value, (int, float)):
+                    value = value / 100
                 current.append(value)
             return current
         except Exception as e:
@@ -107,7 +123,9 @@ class Mpm3pm:
 
     def get_counter(self) -> float:
         try:
-            counter = self.client.read_integer_registers(0x0004, 4, self.id) * 10
+            counter = self.client.read_integer_registers(0x0004, 4, self.id)
+            if isinstance(counter, (int, float)):
+                counter = counter * 10
             return counter
         except Exception as e:
             log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
