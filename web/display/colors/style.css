@@ -71,7 +71,7 @@ h3 {
     color: #ffffff;
 }
 .btn-block {
-    font-size: 16px;
+    font-size: 1.2em;
 }
 .card {
     background-color: rgba(0, 0, 0, 0)!important;
@@ -487,4 +487,8 @@ h3 {
 .status-header,.status-title {
     text-align: center;
     font-size: 1em;
+}
+
+.modalComment, .modalLabel {
+    font-size: 1.4em;
 }

@@ -66,6 +66,8 @@ class WbData {
 		this.displayMode = "gray";
 		this.usageStackOrder = 0;
 		this.prefs = {};
+		this.chargePointToConfig = 0;
+		this.minCurrent = 6;
 	};
 
 	init() {
@@ -120,6 +122,14 @@ class WbData {
 			.on("click", switchToEnergyView);
 		d3.select("button#statusButton")
 			.on("click", showStatus);
+		d3.select(".minpvRangeInput")
+			.on("input", function () { updateMinpvRangeInput(this.value) });
+		d3.select(".sofortRangeInput")
+			.on("input", function () { updateSofortRangeInput(this.value) });
+		d3.select(".socRangeInput")
+			.on("input", function () { updateSocRangeInput(this.value) });
+		d3.select(".energyRangeInput")
+			.on("input", function () { updateEnergyRangeInput(this.value) });
 
 		powerMeter.init()
 		powerGraph.init()
@@ -167,10 +177,10 @@ class WbData {
 				powerMeter.update();
 				break;
 			case 'currentPowerPrice':
-				chargePointList.update();
+				chargePointList.updateValues();
 				break;
 			case 'chargeMode':
-				chargePointList.update();
+				chargePointList.updateValues();
 			default:
 				break;
 		}
@@ -187,7 +197,8 @@ class WbData {
 				break;
 			case 'isBatteryConfigured':
 			case 'hasEVPriority':
-				chargePointList.update()
+			case 'minCurrent':
+				chargePointList.updateValues()
 				break;
 			default:
 				break;
@@ -241,12 +252,12 @@ class WbData {
 			case 'soc':
 				powerMeter.update();
 				break;
-			case 'isEnabled':
-				chargePointList.update()
+			case 'configured':
+				chargePointList.updateConfig()
 			default:
 				break;
 		}
-		chargePointList.update();
+		chargePointList.updateValues();
 	}
 
 	updateBat(field, value) {
@@ -315,6 +326,13 @@ class WbData {
 			this.updateUsageSummary("devices", 'power', this.smarthomePower
 				+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
 		}
+	}
+
+	setChargeLimitMode(limitMode) {
+		d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
+		d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
+		publish(limitMode, "openWB/config/set/sofort/lp/" + (this.chargePointToConfig + 1) + "/chargeLimitation")
+
 	}
 }
 
@@ -423,6 +441,44 @@ function switchToEnergyView() {
 }
 function showStatus() {
 	$("#statusModal").modal("show");
+}
+
+function updateMinpvRangeInput(value) {
+	const label = d3.select(".labelMinPv").text(value + " A");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/pv/minCurrentMinPv")
+	}, 2000)
+}
+
+function updateSofortRangeInput(value) {
+	const label = d3.select(".labelSofortCurrent").text(value + " A");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/current")
+	}, 2000)
+}
+
+function updateSocRangeInput(value) {
+	const label = d3.select(".labelSocLimit").text(value + " %");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/socToChargeTo")
+	}, 2000)
+}
+
+function updateEnergyRangeInput(value) {
+	const label = d3.select(".labelEnergyLimit").text(value + " kWh");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/energyToCharge")
+	}, 2000)
+
+
 }
 var wbdata = new WbData(new Date(Date.now()));
 

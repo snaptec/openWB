@@ -95,13 +95,23 @@ while True:
     if smaserials is None or smaserials == 'none' or str(emparts['serial']) == smaserials:
         # Special treatment for positive / negative power
         
-        watt=int(emparts['pconsume'])
-        if watt < 5:
-            watt=-int(emparts['psupply'])
-            positive[0] = -1
-        writeToFile(basepath + 'wattbezug', watt)
-        writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
-        writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
+        try:
+            watt=int(emparts['pconsume'])
+            if watt < 5:
+                watt=-int(emparts['psupply'])
+                positive[0] = -1
+            writeToFile(basepath + 'wattbezug', watt)
+        except:
+            pass
+        try:
+            if ( emparts['psupplycounter'] < 900000 ):
+                writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
+        except:
+            pass
+        try:
+            writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
+        except:
+            pass
         for phase in [1,2,3]:
             power = int(emparts['p%iconsume' % phase])
             if power < 5:

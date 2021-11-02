@@ -277,6 +277,11 @@ if python3 -c "import pymodbus" &> /dev/null; then
 else
 	sudo pip3 install pymodbus
 fi
+if python3 -c "import requests" &> /dev/null; then
+	echo 'python requests installed...'
+else
+	sudo pip3 install requests
+fi
 #Prepare for jq in Python
 if python3 -c "import jq" &> /dev/null; then
 	echo 'jq installed...'
