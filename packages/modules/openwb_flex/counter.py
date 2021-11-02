@@ -74,7 +74,8 @@ class EvuKitFlex():
             frequency = self.counter.get_frequency()
             power_factors = self.counter.get_power_factor()
 
-            if self.data["config"]["configuration"]["version"] == 0:
+            version = self.data["config"]["configuration"]["version"]
+            if version == 0:
                 try:
                     if None not in power_per_phase and None not in voltages:
                         currents = [(power_per_phase[i]/voltages[i]) for i in range(3)]
@@ -86,6 +87,11 @@ class EvuKitFlex():
                 imported = self.counter.get_imported()
                 exported = self.counter.get_exported()
             else:
+                if version == 1:
+                    if all(isinstance(x, (int, float)) for x in power_per_phase):
+                        power_all = sum(power_per_phase)
+                    else:
+                        power_all = power_per_phase[0]  # enthält Fehlermeldung
                 currents = self.counter.get_current()
                 if None not in currents:
                     currents = [abs(currents[i]) for i in range(3)]

@@ -17,10 +17,13 @@ except:
 
 
 class Lovato:
-    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
-        self.client = client
-        self.name = device_config["components"]["component0"]["name"]
-        self.id = device_config["components"]["component0"]["configuration"]["id"]
+    def __init__(self, component_config: dict, client: connect_tcp.ConnectTcp) -> None:
+        try:
+            self.client = client
+            self.name = component_config["name"]
+            self.id = component_config["configuration"]["id"]
+        except Exception as e:
+            log.MainLogger().exception("Fehler beim Initialisieren von "+str(self.name))
 
     def get_voltage(self) -> List[int]:
         """
@@ -35,7 +38,7 @@ class Lovato:
                 voltage.append(value)
             return voltage
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None]
 
     def get_imported(self) -> float:
@@ -47,7 +50,7 @@ class Lovato:
                 imported = imported * 1000
             return imported
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None
 
     def get_power(self) -> Tuple[List[int], float]:
@@ -60,17 +63,10 @@ class Lovato:
                     value = value / 100
                 power_per_phase.append(value)
 
-            if self.type == "Bat-Kit":
-                power_all = self.client.read_float_registers(0x000C, 2, self.id)
-            else:
-                if all(isinstance(x, (int, float)) for x in power_per_phase):
-                    power_all = sum(power_per_phase)
-                else:
-                    power_all = power_per_phase  # enthält Fehlermeldung
-
+            power_all = self.client.read_float_registers(0x000C, 2, self.id)
             return power_per_phase, power_all
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None], None
 
     def get_exported(self) -> float:
@@ -82,7 +78,7 @@ class Lovato:
                 exported = exported * 1000
             return exported
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None
 
     def get_power_factor(self) -> List[int]:
@@ -92,27 +88,27 @@ class Lovato:
             power_factor = []
             regs = [0x0025, 0x0027, 0x0029]
             for register in regs:
-                value = float(self.client.read_registers(register, 2, self.id))
+                value = self.client.read_registers(register, 2, self.id)
                 if isinstance(value, (int, float)):
                     value = value / 10000
                 power_factor.append(value)
             return power_factor
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None]
 
     def get_frequency(self) -> float:
         """
         """
         try:
-            frequency = float(self.client.read_registers(0x0031, 2, self.id))
+            frequency = self.client.read_registers(0x0031, 2, self.id)
             if isinstance(frequency, (int, float)):
                 frequency = frequency / 100
                 if frequency > 100:
                     frequency = frequency / 10
             return frequency
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None
 
     def get_current(self) -> List[int]:
@@ -128,13 +124,13 @@ class Lovato:
                 current.append(value)
             return current
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None]
 
     def get_counter(self) -> float:
         try:
             finalbezug1 = self.client.read_integer_registers(0x1a1f, 2, self.id)
-            finalbezug2 = self.client.read_input_registers(0x1a21, 2, self.id)
+            finalbezug2 = self.client.read_integer_registers(0x1a21, 2, self.id)
             if isinstance(finalbezug1, (int, float)) and isinstance(finalbezug2, (int, float)):
                 if (finalbezug1 > finalbezug2):
                     counter = finalbezug1
@@ -144,5 +140,5 @@ class Lovato:
                 counter = finalbezug1  # enthält Fehlermeldung
             return counter
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk, self.type+str(self.pv_num))
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None

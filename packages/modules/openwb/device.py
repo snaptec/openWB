@@ -4,6 +4,7 @@ try:
     from ..common import connect_tcp
     from ...helpermodules import log
     from . import counter
+    from. import inverter
 except:
     from pathlib import Path
     import os
@@ -13,13 +14,16 @@ except:
     from helpermodules import log
     from modules.common import connect_tcp
     import counter
+    import inverter
+
 
 def get_default() -> dict:
     return {
-        "name": "OpenWB-Kit", 
-        "type": "openwb", 
+        "name": "OpenWB-Kit",
+        "type": "openwb",
         "id": None
-        }
+    }
+
 
 class Device():
     def __init__(self, device_config: dict) -> None:
@@ -27,8 +31,7 @@ class Device():
             self.data = {}
             self.data["config"] = device_config
             self.data["components"] = {}
-            #ip_address = "192.168.193.15"
-            ip_address = "192.168.1.101"
+            ip_address = "192.168.193.15"
             port = "8899"
             self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
         except Exception as e:
@@ -38,6 +41,8 @@ class Device():
         try:
             if component_config["type"] == "counter":
                 self.data["components"]["component"+str(component_config["id"])] = counter.EvuKit(self.data["config"]["id"], component_config, self.client)
+            elif component_config["type"] == "inverter":
+                self.data["components"]["component"+str(component_config["id"])] = inverter.PvKit(self.data["config"]["id"], component_config, self.client)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
@@ -58,13 +63,17 @@ def read_legacy(argv: List):
     try:
         component_type = str(sys.argv[1])
         version = int(sys.argv[2])
+        try:
+            num = int(argv[3])
+        except:
+            num = 0
 
         default = get_default()
         default["id"] = 0
         dev = Device(default)
 
-        component_default = counter.get_default()
-        component_default["id"] = 0
+        component_default = globals()[component_type].get_default()
+        component_default["id"] = num
         component_default["configuration"]["version"] = version
         dev.add_component(component_default)
 
