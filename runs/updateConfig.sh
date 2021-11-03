@@ -571,17 +571,35 @@ updateConfig(){
 	if ! grep -Fq "goetimeoutlp1=" $ConfigFile; then
 		echo "goetimeoutlp1=5" >> $ConfigFile
 	fi
+	if ! grep -Fq "goesimulationlp1=" $ConfigFile; then
+		echo "goesimulationlp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "goecorrectionfactorlp1=" $ConfigFile; then
+		echo "goecorrectionfactorlp1=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "goeiplp2=" $ConfigFile; then
 		echo "goeiplp2=192.168.0.15" >> $ConfigFile
 	fi
 	if ! grep -Fq "goetimeoutlp2=" $ConfigFile; then
 		echo "goetimeoutlp2=5" >> $ConfigFile
 	fi
+	if ! grep -Fq "goesimulationlp2=" $ConfigFile; then
+		echo "goesimulationlp2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "goecorrectionfactorlp2=" $ConfigFile; then
+		echo "goecorrectionfactorlp2=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "goeiplp3=" $ConfigFile; then
 		echo "goeiplp3=192.168.0.15" >> $ConfigFile
 	fi
 	if ! grep -Fq "goetimeoutlp3=" $ConfigFile; then
 		echo "goetimeoutlp3=5" >> $ConfigFile
+	fi
+	if ! grep -Fq "goesimulationlp3=" $ConfigFile; then
+		echo "goesimulationlp3=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "goecorrectionfactorlp3=" $ConfigFile; then
+		echo "goecorrectionfactorlp3=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "pushbenachrichtigung=" $ConfigFile; then
 		echo "pushbenachrichtigung=0" >> $ConfigFile
