@@ -20,7 +20,7 @@ def setup_connection():
         client.connect("localhost", 1886)
         client.loop_start()
     except Exception as e:
-        log.MainLogger().error("Fehler im pub-Modul", e)
+        log.MainLogger().exception("Fehler im pub-Modul")
 
 
 def pub(topic, payload):
@@ -40,7 +40,7 @@ def pub(topic, payload):
         else:
             client.publish(topic, payload=json.dumps(payload), qos=0, retain=True)
     except Exception as e:
-        log.MainLogger().error("Fehler im pub-Modul", e)
+        log.MainLogger().exception("Fehler im pub-Modul")
 
 
 def delete_connection():
@@ -50,7 +50,7 @@ def delete_connection():
         client.loop_stop()
         client.disconnect
     except Exception as e:
-        log.MainLogger().error("Fehler im pub-Modul", e)
+        log.MainLogger().exception("Fehler im pub-Modul")
 
 
 def pub_single(topic, payload, hostname="localhost", no_json=False):
@@ -73,4 +73,4 @@ def pub_single(topic, payload, hostname="localhost", no_json=False):
         else:
             publish.single(topic, json.dumps(payload), hostname=hostname, retain=True)
     except Exception as e:
-        log.MainLogger().error("Fehler im pub-Modul", e)
+        log.MainLogger().exception("Fehler im pub-Modul")

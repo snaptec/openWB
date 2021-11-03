@@ -262,13 +262,13 @@
                                     data-suffix="A"></label>
                             </div>
                             <div class="col">
-                                <input type="range" class="form-control-range minpvRangeInput" id="minCurrentMinPv" min="6"
-                                    max="16" step="1" value="6" data-initialized="0"
-                                >
+                                <input type="range" class="form-control-range minpvRangeInput" id="minCurrentMinPv"
+                                    min="6" max="16" step="1" value="6" data-initialized="0">
                             </div>
                         </div>
                         <div class="form-row vaRow">
-                            <div class="col modalComment text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
+                            <div class="col modalComment text-center text-info">Diese Einstellung gilt für alle
+                                Ladepunkte!</div>
                         </div>
                     </div>
                     <!-- chargepoint config-->
@@ -278,12 +278,13 @@
                             <div class="form-row vaRow">
                                 <div class="col-4">
                                     <label for="currentSofort" class="modalLabel col-form-label">Stromstärke: </label>
-                                    <label for="currentSofort" class="modalLabel labelSofortCurrent col-form-label valueLabel pull-right"
+                                    <label for="currentSofort"
+                                        class="modalLabel labelSofortCurrent col-form-label valueLabel pull-right"
                                         data-suffix="A"></label>
                                 </div>
                                 <div class="col">
-                                    <input type="range" class="form-control-range sofortRangeInput" id="currentSofort" min="6"
-                                        max="32" step="1" value="6" data-initialized="0"
+                                    <input type="range" class="form-control-range sofortRangeInput" id="currentSofort"
+                                        min="6" max="32" step="1" value="6" data-initialized="0"
                                         data-topicprefix="openWB/config/get/sofort/">
                                 </div>
                             </div>
@@ -296,28 +297,33 @@
                                     <div class="col limitSelector btn-group btn-group-toggle" id="lp/1/chargeLimitation"
                                         data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
                                         <label class="buttonNoLimit btn btn-lg btn-outline-info btn-toggle modalLabel">
-                                            <input type="radio" name="lp/1/chargeLimitation" data-option="0" class="limitButton"> keine
+                                            <input type="radio" name="lp/1/chargeLimitation" data-option="0"
+                                                class="limitButton"> keine
                                         </label>
                                         <label
                                             class="buttonSocLimit socConfiguredLp btn btn-lg btn-outline-info btn-toggle modalLabel">
-                                            <input type="radio" name="lp/1/chargeLimitation" data-option="2" class="limitButton"> EV-SoC
+                                            <input type="radio" name="lp/1/chargeLimitation" data-option="2"
+                                                class="limitButton"> EV-SoC
                                         </label>
-                                        <label class="buttonEnergyLimit btn btn-lg btn-outline-info btn-toggle modalLabel">
-                                            <input type="radio" name="lp/1/chargeLimitation" data-option="1" class="limitButton">
+                                        <label
+                                            class="buttonEnergyLimit btn btn-lg btn-outline-info btn-toggle modalLabel">
+                                            <input type="radio" name="lp/1/chargeLimitation" data-option="1"
+                                                class="limitButton">
                                             Energiemenge
                                         </label>
                                     </div>
                                 </div>
                                 <!-- options if limit is set to energy (1) -->
-                                <div class="form-row vaRow form-group" data-option="1">
+                                <div class="energyLimitSettings form-row vaRow form-group hide" data-option="1">
                                     <div class="col-4">
                                         <label for="energyLimit" class="modalLabel col-form-label">Energie:</label>
-                                        <label for="energyLimit" class="labelEnergyLimit modalLabel col-form-label valueLabel pull-right"
+                                        <label for="energyLimit"
+                                            class="labelEnergyLimit modalLabel col-form-label valueLabel pull-right"
                                             data-suffix="kWh"></label>
                                     </div>
                                     <div class="col">
-                                        <input type="range" class="form-control-range energyRangeInput"
-                                            id="energyLimit" min="2" max="100" step="2" value="2"
+                                        <input type="range" class="form-control-range energyRangeInput" id="energyLimit"
+                                            min="2" max="100" step="2" value="2"
                                             data-topicprefix="openWB/config/get/sofort/">
                                     </div>
                                     <div class="col-12 d-flex justify-content-end">
@@ -328,15 +334,16 @@
                                     </div>
                                 </div> <!-- end limit energy -->
                                 <!-- options if limit is set to EV SoC (2) -->
-                                <div class="form-row vaRow form-group hide" data-option="2">
+                                <div class="socLimitSettings form-row vaRow form-group hide" data-option="2">
                                     <div class="col-4">
                                         <label for="socLimit" class="modalLabel col-form-label">SoC:</label>
-                                        <label for="socLimit" class="labelSocLimit modalLabel col-form-label valueLabel pull-right"
+                                        <label for="socLimit"
+                                            class="labelSocLimit modalLabel col-form-label valueLabel pull-right"
                                             data-suffix="%"></label>
                                     </div>
                                     <div class="col">
-                                        <input type="range" class="form-control-range socRangeInput"
-                                            id="socLimit" min="5" max="100" step="5" value="5">
+                                        <input type="range" class="form-control-range socRangeInput" id="socLimit"
+                                            min="5" max="100" step="5" value="5">
                                     </div>
                                 </div> <!-- end limit EV SoC -->
                             </div> <!-- end limit options -->
@@ -517,7 +524,6 @@
             function submitSocForm() {
                 var currentLp = $('#socModal').find('.socLp').text();
                 var manualSoc = $("#manualSocBox").val();
-                // console.log("SoC for LP"+currentLp+": "+manualSoc);
                 publish(manualSoc, "openWB/set/lp/" + currentLp + "/manualSoc");
                 // reset input after publishing
                 clearSocForm();
@@ -873,44 +879,8 @@
                 // option: 0 = keine, 1 = Energiemenge, 2 = EV-SoC
                 var elementId = $(this).attr('id');
                 var option = $('input[name="' + elementId + '"]:checked').data('option').toString();
-                var topic = getTopicToSendTo(elementId);
-                publish(option, topic);
-                // show/hide respective option-values and progress
-                if (elementId.includes("chargeLimitation")) {
-                    chargeLimitationOptionsShowHide(this, option);
-                }
+                wbdata.setChargeLimitMode(option)
             });
-
-           /*  $('.rangeInput').on('input', function () {
-                // show slider value in label of class valueLabel
-                var elementId = $(this).attr('id');
-               updateLabel(elementId);
-                var element = $('#' + $.escapeSelector(elementId));
-                var label = $('label[for="' + elementId + '"].valueLabel');
-                label.addClass('text-danger');
-                delayUserInput(elementId, function (id) {
-                    // gets executed on callback, 2000ms after last input-change
-                    // changes label color back to normal and sends input-value by mqtt
-                    var elem = $('#' + $.escapeSelector(id));
-                    var value = elem.val();
-                    var topic = getTopicToSendTo(id);
-                    publish(value, topic);
-                    var label = $('label[for="' + id + '"].valueLabel');
-                    label.removeClass('text-danger');
-                    // if rangeInput is for chargeLimitation, recalc progress
-                    if (id.includes('/energyToCharge')) {
-                        var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
-                        var element = parent.find('.progress-bar');  // now get parents progressbar
-                        var actualCharged = element.data('actualCharged');  // get stored value
-                        if (isNaN(parseFloat(actualCharged))) {
-                            actualCharged = 0;  // minimum value
-                        }
-                        var progress = (actualCharged / value * 100).toFixed(0);
-                        element.width(progress + "%");
-                    }
-                }, 2000);
-            }); */
-
         });
     </script>
 </body>

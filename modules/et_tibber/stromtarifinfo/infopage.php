@@ -33,7 +33,7 @@
 		<script src="js/Chart.bundle.min.js"></script>
 
 		<!-- special stromtarif scripts to be loaded -->
-		<script src="../modules/et_tibber/tibber.js?ver=20210211"></script>
+		<script src="../modules/et_tibber/tibber.js?ver=20211101"></script>
 		<script src="../modules/et_tibber/stromtarifinfo/tibberElectricityPricechart.js?ver=20210104"></script>
 		<script src="../modules/et_tibber/stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20210104-b"></script>
 
@@ -206,7 +206,7 @@
 				// calculate amount of datasets to be received since Tibber only sends valid data for
 				// past hours/days/months
 				var now = new Date();
-				const hoursToReceive = now.getHours() + 24; // Tibber sends hourly data for past hours
+				const hoursToReceive = 50; // last 50 hours should be sufficient data
 				const daysToReceive = now.getDate() + 1;  // Tibber sends daily data for past days
 				var monthsToReceive = now.getMonth();  // no index correction since Tibber sends monthly data for past months
 				var tibberToken = "<?php echo $tibbertokenold; ?>";

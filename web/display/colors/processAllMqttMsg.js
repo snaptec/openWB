@@ -117,7 +117,7 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 			limit = 6;
 		}
 		wbdata.updateCP (index, "energyToCharge", limit)
-	}else if (mqttmsg.match(/^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/socToChargeTo$/i)) {
+	} else if (mqttmsg.match(/^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/socToChargeTo$/i)) {
 		var limit = parseInt(mqttpayload, 10);
 		if (isNaN(limit)) {
 			limit = 6;
@@ -129,13 +129,6 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 		wbdata.updatePv("hasEVPriority", (mqttpayload == "1"))
 	} 
 	// end colors theme
-	/* var elementId = mqttmsg.replace('openWB/config/get/sofort/', '');
-	var element = $('#' + $.escapeSelector(elementId));
-	if (element.attr('type') == 'range') {
-		setInputValue(elementId, mqttpayload);
-	} else if (element.hasClass('btn-group-toggle')) {
-		setToggleBtnGroup(elementId, mqttpayload);
-	} */
 }
 
 function processGraphMessages(mqttmsg, mqttpayload) {

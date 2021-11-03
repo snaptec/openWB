@@ -44,9 +44,7 @@ class ChargePointList {
   }
 
   updateValues() { // A value has changed. Only update the values, do not redraw all
-    //console.log(this.chargepoints)
-    //console.log(wbdata)
-    this.chargepoints.map((cp, i) => {
+      this.chargepoints.map((cp, i) => {
       let powerString = formatWatt(cp.power) + " " + this.phaseSymbols[cp.phasesInUse] + " " + cp.targetCurrent + " A";
       let energyString = formatWatt(cp.energy * 1000) + " / " + Math.round(cp.energy / cp.energyPer100km * 1000) / 10 + " km"
       if (cp.configured) {
@@ -73,9 +71,23 @@ class ChargePointList {
         d3.select(".priority-" + i).classed("hide", !cp.isEnabled || !wbdata.isBatteryConfigured || (wbdata.chargeMode != "1" && wbdata.chargeMode != "2"))
         d3.select(".priority-" + i).classed("fa-car", wbdata.hasEVPriority); // car icon
         d3.select(".priority-" + i).classed("fa-car-battery", !wbdata.hasEVPriority); //battery icon
-        d3.select("input#energyLimit").property("value", cp.energyToCharge); // Set the minimal Current for PV loading
-        d3.select(".labelEnergyLimit").text(cp.energyToCharge + " kWh"); // Display the minimal Current for PV loading
-        
+        //  d3.select("input#energyLimit").property("value", cp.energyToCharge); // Set the minimal Current for PV loading
+        //  d3.select(".labelEnergyLimit").text(cp.energyToCharge + " kWh"); 
+
+        // modal charge limitation selectors
+        /* if (i == wbdata.chargePointToConfig) {
+          const noLimitButton = d3.select(".buttonNoLimit");
+          const socLimitButton = d3.select(".buttonSocLimit");
+          const energyLimitButton = d3.select(".buttonEnergyLimit");
+          const limitMode = cp.chargeLimitation;
+          console.log("charge limitation for cp " + i +  ": " + limitMode)
+          noLimitButton.classed("active", (limitMode == '0'));
+          socLimitButton.classed("active", (limitMode == '2'));
+          energyLimitButton.classed("active", (limitMode == '1'));
+          d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
+          d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
+        } */
+
       }
       // modal update
       // d3.select ("input#minCurrentMinPv").attr ("value", wbdata.minCurrent); // Set the minimal Current for PV loading in the range control
@@ -138,30 +150,31 @@ class ChargePointList {
 
   displayChargeConfigModal(index) {
     wbdata.chargePointToConfig = index; // remember the CP we are configuring
+    const cp = wbdata.chargePoint[index];
     d3.select(".configLp").text(index + 1); // Set the CP number in the title
     d3.select("input#minCurrentMinPv").property("value", wbdata.minCurrent); // Set the minimal Current for PV loading
     d3.select(".labelMinPv").text(wbdata.minCurrent + " A"); // Display the minimal Current for PV loading
-    d3.select("input#currentSofort").property("value", wbdata.chargePoint[index].current); // Set the minimal Current for PV loading
-    d3.select(".labelSofortCurrent").text(wbdata.chargePoint[index].current + " A"); // Display the minimal Current for PV loading
-    d3.select("input#energyLimit").property("value", wbdata.chargePoint[index].energyToCharge); // Set the minimal Current for PV loading
-    d3.select(".labelEnergyLimit").text(wbdata.chargePoint[index].energyToCharge + " kWh"); // Display the minimal Current for PV loading
+    d3.select("input#currentSofort").property("value", cp.current); // Set the minimal Current for PV loading
+    d3.select(".labelSofortCurrent").text(cp.current + " A"); // Display the minimal Current for PV loading
+    d3.select("input#energyLimit").property("value", cp.energyToCharge); // Set the minimal Current for PV loading
+    d3.select(".labelEnergyLimit").text(cp.energyToCharge + " kWh"); // Display the minimal Current for PV loading
     if (index < 2) {
-      d3.select("input#socLimit").property("value", wbdata.chargePoint[index].socLimit); // Set the minimal Current for PV loading
-      d3.select(".labelSocLimit").text(wbdata.chargePoint[index].socLimit + " %"); // Display the minimal Current for PV loading
+      d3.select("input#socLimit").property("value", cp.socLimit); // Set the minimal Current for PV loading
+      d3.select(".labelSocLimit").text(cp.socLimit + " %"); // Display the minimal Current for PV loading
       d3.select(".socConfiguredLp").classed("hide", false)
     } else {
       d3.select(".socConfiguredLp").classed("hide", true)
     }
-    const noLimitButton = d3.select (".buttonNoLimit");
-    const socLimitButton = d3.select (".buttonSocLimit");
-    const energyLimitButton = d3.select (".buttonEnergyLimit");
-    
-    const limitMode =  wbdata.chargePoint[index].chargeLimitation;
+    // charge limit selectors
+    const noLimitButton = d3.select(".buttonNoLimit");
+    const socLimitButton = d3.select(".buttonSocLimit");
+    const energyLimitButton = d3.select(".buttonEnergyLimit");
+    const limitMode = cp.chargeLimitation;
     noLimitButton.classed("active", (limitMode == '0'));
     socLimitButton.classed("active", (limitMode == '2'));
     energyLimitButton.classed("active", (limitMode == '1'));
-      
-    
+    d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
+    d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
   }
 }
 
