@@ -31,7 +31,7 @@ class Mpm3pm:
                 voltage.append(value)
             return voltage
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None]
 
     def get_imported(self) -> float:
@@ -41,7 +41,7 @@ class Mpm3pm:
             imported = self.client.read_integer_registers(0x0002, 4, self.id) * 10
             return imported
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None
 
     def get_power(self) -> Tuple[List[int], float]:
@@ -54,7 +54,7 @@ class Mpm3pm:
             power_all = self.client.read_integer_registers(0x26, 2, self.id) / 100
             return power_per_phase, power_all
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None], None
 
     def get_exported(self) -> float:
@@ -64,7 +64,7 @@ class Mpm3pm:
             exported = self.client.read_integer_registers(0x0004, 4, self.id) * 10
             return exported
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None
 
     def get_power_factor(self) -> List[int]:
@@ -78,7 +78,7 @@ class Mpm3pm:
                 power_factor.append(value)
             return power_factor
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None]
 
     def get_frequency(self) -> float:
@@ -88,7 +88,7 @@ class Mpm3pm:
             frequency = self.client.read_integer_registers(0x2c, 4, self.id) / 100
             return frequency
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None
 
     def get_current(self) -> List[int]:
@@ -102,7 +102,7 @@ class Mpm3pm:
                 current.append(value)
             return current
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return [None, None, None]
 
     def get_counter(self) -> float:
@@ -110,5 +110,5 @@ class Mpm3pm:
             counter = self.client.read_integer_registers(0x0004, 4, self.id) * 10
             return counter
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
             return None

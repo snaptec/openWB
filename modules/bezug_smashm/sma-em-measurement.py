@@ -103,9 +103,15 @@ while True:
             writeToFile(basepath + 'wattbezug', watt)
         except:
             pass
-        if ( emparts['psupplycounter'] < 900000 ):
-            writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
-        writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
+        try:
+            if ( emparts['psupplycounter'] < 900000 ):
+                writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
+        except:
+            pass
+        try:
+            writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
+        except:
+            pass
         for phase in [1,2,3]:
             power = int(emparts['p%iconsume' % phase])
             if power < 5:
