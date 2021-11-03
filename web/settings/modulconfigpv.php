@@ -154,7 +154,7 @@
 							<div class="form-row mb-1">
 								<label for="pv1_ida" class="col-md-4 col-form-label">ID </label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv1_ida" id="pv1_ida" value="<?php echo $pv1_idaold ?>">
+									<input class="form-control" type="text" name="pv1_ida" id="pv1_ida" value="<?php echo $pv1_idaold ?>">
 									<span class="form-text small">
 										Gültige Werte Id als Zahl.
 									</span>
