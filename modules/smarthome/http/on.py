@@ -22,6 +22,6 @@ if os.path.isfile(file_string):
    f = open( file_string , 'a')
 else:
    f = open( file_string , 'w')
-print ('%s devicenr %s url %s)' % (time_string,devicenumber,url),file=f)
+print ('%s devicenr %s url %s' % (time_string,devicenumber,url),file=f)
 f.close()
 urllib.request.urlopen(url, timeout=5)
