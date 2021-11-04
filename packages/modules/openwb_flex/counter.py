@@ -6,7 +6,7 @@ try:
     from ...helpermodules import log
     from ..common import simcount
     from ..common import lovato
-    from ..common.module_error import ModuleError
+    from ..common.module_error import ModuleError, ModuleErrorLevels
     from ..common import mpm3pm
     from ..common import sdm630
     from ..common import store
@@ -20,7 +20,7 @@ except:
     from modules.common import store
 
     from modules.common import lovato
-    from modules.common.module_error import ModuleError
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
     from modules.common import mpm3pm
     from modules.common import sdm630
 
@@ -67,14 +67,13 @@ class EvuKitFlex():
             self.__process_error(e)
 
     def __process_error(self, e):
-        ModuleError(__name__+" "+str(type(e))+" "+str(e), 2).store_error(self.data["config"]["id"], "counter", self.data["config"]["name"])
+        ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR).store_error(self.data["config"]["id"], "counter", self.data["config"]["name"])
 
     def read(self):
         """ liest die Werte des Moduls aus.
         """
         try:
             log.MainLogger().debug("Start kit reading")
-            a = b+ 5
             voltages = self.counter.get_voltage()
             power_per_phase, power_all = self.counter.get_power()
             frequency = self.counter.get_frequency()

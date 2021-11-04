@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 
 try:
-    from ..common.module_error import ModuleError
+    from ..common.module_error import ModuleError, ModuleErrorLevels
     from ...helpermodules import compability
     from ...helpermodules import log
     from ...helpermodules import pub
@@ -16,7 +16,7 @@ except:
     from helpermodules import compability
     from helpermodules import log
     from helpermodules import pub
-    from modules.common.module_error import ModuleError
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class ValueStoreFactory:
@@ -33,7 +33,7 @@ class ValueStoreFactory:
             process_error(e)
 
 def process_error( e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), 2) from e
+    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
 def write_to_file(file: str, value, digits: int = None) -> None:
     try:

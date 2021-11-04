@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 try:
     from ..common import connect_tcp
-    from ..common.module_error import ModuleError
+    from ..common.module_error import ModuleError, ModuleErrorLevels
     from ...helpermodules import log
 except:
     # for 1.9 compability
@@ -15,7 +15,7 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     from modules.common import connect_tcp
-    from modules.common.module_error import ModuleError
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class Sdm630:
@@ -28,7 +28,7 @@ class Sdm630:
         if isinstance(e, ModuleError):
             raise
         else:
-            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), 2) from e
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
     def get_voltage(self) -> List[int]:
         try:

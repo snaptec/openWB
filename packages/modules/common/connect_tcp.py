@@ -10,7 +10,7 @@ import struct
 
 try:
     from ...helpermodules import log
-    from ..common import module_error
+    from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
     import os
@@ -18,7 +18,7 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
-    from modules.common import module_error
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class ConnectTcp:
@@ -42,12 +42,12 @@ class ConnectTcp:
 
     def __process_modbus_error(self, e):
         if isinstance(e, pymodbus.exceptions.ConnectionException):
-            raise module_error.ModuleError("TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen.", 2) from e
+            raise ModuleError("TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen.", ModuleErrorLevels.ERROR) from e
         elif isinstance(e, pymodbus.exceptions.ModbusIOException):
             self.close_connection()
-            raise module_error.ModuleError("TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", 1) from e
+            raise ModuleError("TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", ModuleErrorLevels.WARNING) from e
         else:
-            raise module_error.ModuleError(__name__+" "+str(type(e))+" "+str(e), 1) from e
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
     def read_integer_registers(self, reg: int, len: int, id: int) -> int:
         try:
