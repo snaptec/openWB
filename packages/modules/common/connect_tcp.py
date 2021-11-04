@@ -125,10 +125,10 @@ class ConnectTcp:
         finally:
             return value
 
-    def read_binary_registers_to_int(self, reg: int, len: int, id: int, bit: int, signed=True) -> int:
+    def read_binary_registers_to_int(self, reg: int, id: int, bit: int, signed=True) -> int:
         try:
             value = None
-            resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
+            resp = self.tcp_client.read_holding_registers(reg, bit/8, unit=id)
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 if signed == True:
@@ -140,6 +140,8 @@ class ConnectTcp:
                     value = int(decoder.decode_16bit_int())
                 else:
                     value = int(decoder.decode_16bit_uint())
+            else:
+                raise Exception("Invalid value for bit: "+str(bit)+". Allowed values are 16, 32")
         except pymodbus.exceptions.ConnectionException:
             value = self._log_connection_error()
         except AttributeError:
@@ -152,15 +154,17 @@ class ConnectTcp:
         finally:
             return value
 
-    def read_binary_registers_to_float(self, reg: int, len: int, id: int, bit: int) -> float:
+    def read_binary_registers_to_float(self, reg: int, id: int, bit: int) -> float:
         try:
             value = None
-            resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
+            resp = self.tcp_client.read_holding_registers(reg, bit/8, unit=id)
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 value = float(decoder.decode_32bit_float())
             elif bit == 16:
                 value = float(decoder.decode_16bit_float())
+            else:
+                raise Exception("Invalid value for bit: "+str(bit)+". Allowed values are 16, 32")
         except pymodbus.exceptions.ConnectionException:
             value = self._log_connection_error()
         except AttributeError:

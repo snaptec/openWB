@@ -11,6 +11,7 @@ import typing
 from pathlib import Path
 
 try:
+    from . import compability
     from . import log
     from . import pub
 except:
@@ -18,13 +19,14 @@ except:
     import sys
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
+    from helpermodules import compability
     from helpermodules import log
 
 
 class SimCountFactory:
     def get_sim_counter(self):
         try:
-            ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[2])+"/ramdisk/bootinprogress").is_file()
+            ramdisk = compability.check_ramdisk_usage()
             return SimCountLegacy if ramdisk else SimCount
         except:
            log.MainLogger().exception("Fehler im Modul simcount")
@@ -71,7 +73,9 @@ class SimCountLegacy:
             self.write_ramdisk_file(prefix+'sec0', "%22.6f" % timestamp_present)
             self.write_ramdisk_file(prefix+'wh0', power_present)
 
-            if start_new == False:
+            if start_new:
+                return 0, 0
+            else:
                 timestamp_previous = timestamp_previous+1
                 seconds_since_previous = timestamp_present - timestamp_previous
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
@@ -91,8 +95,6 @@ class SimCountLegacy:
                 if counter_export_present != counter_export_previous:
                     pub.pub_single("openWB/"+topic+"/WHExport_temp", counter_export_present, no_json=True)
                 return wattposkh, wattnegkh
-            else:
-                return 0, 0
         except:
            log.MainLogger().exception("Fehler im Modul simcount")
 
@@ -193,7 +195,12 @@ class SimCount:
             pub.pub(topic+"simulation/timestamp_present", "%22.6f" % timestamp_present)
             pub.pub(topic+"simulation/power_present", power_present)
 
-            if start_new == False:
+            if start_new:
+                log.MainLogger().debug("Neue Simulation")
+                pub.pub(topic+"simulation/present_imported", 0)
+                pub.pub(topic+"simulation/present_exported", 0)
+                return 0, 0
+            else:
                 timestamp_previous = timestamp_previous+1
                 seconds_since_previous = timestamp_present - timestamp_previous
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
@@ -207,11 +214,6 @@ class SimCount:
                 pub.pub(topic+"simulation/present_imported", counter_import_present)
                 pub.pub(topic+"simulation/present_exported", counter_export_present)
                 return wattposkh, wattnegkh
-            else:
-                log.MainLogger().debug("Neue Simulation")
-                pub.pub(topic+"simulation/present_imported", 0)
-                pub.pub(topic+"simulation/present_exported", 0)
-                return 0, 0
         except:
            log.MainLogger().exception("Fehler im Modul simcount")
 

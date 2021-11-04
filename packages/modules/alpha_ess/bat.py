@@ -51,9 +51,9 @@ class AlphaEssBat():
             sdmid = 85
 
             time.sleep(0.1)
-            voltage = self.client.read_binary_registers_to_int(0x0100, 2, sdmid, 16)
+            voltage = self.client.read_binary_registers_to_int(0x0100, sdmid, 16)
             time.sleep(0.1)
-            current = self.client.read_binary_registers_to_int(0x0101, 2, sdmid, 16)
+            current = self.client.read_binary_registers_to_int(0x0101, sdmid, 16)
 
             if isinstance(voltage, (int, float)) and isinstance(current, (int, float)):
                 power = voltage * current * -1 / 100
@@ -61,7 +61,7 @@ class AlphaEssBat():
                 power = voltage  # enthält Fehlermeldung
             log.MainLogger().debug("Alpha Ess Leistung[W]: "+str(power)+", Speicher-Register: Spannung[V] "+str(voltage)+" Strom[A] "+str(current))
             time.sleep(0.1)
-            soc_reg = self.client.read_binary_registers_to_int(0x0102, 2, sdmid, 16)
+            soc_reg = self.client.read_binary_registers_to_int(0x0102, sdmid, 16)
             if isinstance(soc_reg, (int, float)):
                 soc = int(soc_reg * 0.1)
             else:

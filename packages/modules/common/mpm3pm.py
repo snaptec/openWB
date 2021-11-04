@@ -24,8 +24,6 @@ class Mpm3pm:
             log.MainLogger().exception("Fehler beim Initialisieren von "+str(self.name))
 
     def get_voltage(self) -> List[int]:
-        """
-        """
         try:
             voltage = []
             regs = [0x08, 0x0A, 0x0C]
@@ -40,8 +38,6 @@ class Mpm3pm:
             return [None, None, None]
 
     def get_imported(self) -> float:
-        """
-        """
         try:
             imported = self.client.read_integer_registers(0x0002, 4, self.id)
             if isinstance(imported, (int, float)):
@@ -69,8 +65,6 @@ class Mpm3pm:
             return [None, None, None], None
 
     def get_exported(self) -> float:
-        """
-        """
         try:
             exported = self.client.read_integer_registers(0x0004, 4, self.id)
             if isinstance(exported, (int, float)):
@@ -81,8 +75,6 @@ class Mpm3pm:
             return None
 
     def get_power_factor(self) -> List[int]:
-        """
-        """
         try:
             power_factor = []
             regs = [0x20, 0x22, 0x24]
@@ -97,8 +89,6 @@ class Mpm3pm:
             return [None, None, None]
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
             frequency = self.client.read_integer_registers(0x2c, 4, self.id)
             if isinstance(frequency, (int, float)):
@@ -109,8 +99,6 @@ class Mpm3pm:
             return None
 
     def get_current(self) -> List[int]:
-        """
-        """
         try:
             current = []
             regs = [0x0E, 0x10, 0x12]

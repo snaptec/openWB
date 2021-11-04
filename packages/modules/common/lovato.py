@@ -26,8 +26,6 @@ class Lovato:
             log.MainLogger().exception("Fehler beim Initialisieren von "+str(self.name))
 
     def get_voltage(self) -> List[int]:
-        """
-        """
         try:
             voltage = []
             regs = [0x0001, 0x0003, 0x0005]
@@ -42,8 +40,6 @@ class Lovato:
             return [None, None, None]
 
     def get_imported(self) -> float:
-        """
-        """
         try:
             imported = self.client.read_float_registers(0x0048, 2, self.id)
             if isinstance(imported, (int, float)):
@@ -70,8 +66,6 @@ class Lovato:
             return [None, None, None], None
 
     def get_exported(self) -> float:
-        """
-        """
         try:
             exported = self.client.read_float_registers(0x004a, 2, self.id)
             if isinstance(exported, (int, float)):
@@ -82,8 +76,6 @@ class Lovato:
             return None
 
     def get_power_factor(self) -> List[int]:
-        """
-        """
         try:
             power_factor = []
             regs = [0x0025, 0x0027, 0x0029]
@@ -98,8 +90,6 @@ class Lovato:
             return [None, None, None]
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
             frequency = self.client.read_registers(0x0031, 2, self.id)
             if isinstance(frequency, (int, float)):
@@ -112,8 +102,6 @@ class Lovato:
             return None
 
     def get_current(self) -> List[int]:
-        """
-        """
         try:
             current = []
             regs = [0x0007, 0x0009, 0x000b]
@@ -132,10 +120,7 @@ class Lovato:
             finalbezug1 = self.client.read_integer_registers(0x1a1f, 2, self.id)
             finalbezug2 = self.client.read_integer_registers(0x1a21, 2, self.id)
             if isinstance(finalbezug1, (int, float)) and isinstance(finalbezug2, (int, float)):
-                if (finalbezug1 > finalbezug2):
-                    counter = finalbezug1
-                else:
-                    counter = finalbezug2
+                return max(finalbezug1, finalbezug2)
             else:
                 counter = finalbezug1  # enthält Fehlermeldung
             return counter

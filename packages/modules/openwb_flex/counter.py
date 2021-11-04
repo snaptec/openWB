@@ -98,7 +98,7 @@ class EvuKitFlex():
                 else:
                     currents = [0, 0, 0]
                 topic_str = "openWB/set/system/device/" + str(self.device_id)+"/component/"+str(self.data["config"]["id"])+"/"
-                if power_all != None:
+                if power_all is not None:
                     imported, exported = self.sim_count.sim_count(power_all, topic=topic_str, data=self.data["simulation"], prefix="bezug")
                 else:
                     imported, exported = None, None

@@ -22,8 +22,6 @@ class Sdm630:
         self.id = component_config["configuration"]["id"]
 
     def get_voltage(self) -> List[int]:
-        """
-        """
         try:
             voltage = []
             regs = [0x00, 0x02, 0x04]
@@ -36,8 +34,6 @@ class Sdm630:
             return [None, None, None]
 
     def get_imported(self) -> float:
-        """
-        """
         try:
             imported = self.client.read_float_registers(0x0048, 2, self.id)
             if isinstance(imported, (int, float)):
@@ -64,8 +60,6 @@ class Sdm630:
             return [None, None, None], None
 
     def get_exported(self) -> float:
-        """
-        """
         try:
             exported = self.client.read_float_registers(0x004a, 2, self.id)
             if isinstance(exported, (int, float)):
@@ -76,8 +70,6 @@ class Sdm630:
             return None
 
     def get_power_factor(self) -> List[int]:
-        """
-        """
         try:
             power_factor = []
             regs = [0x1E, 0x20, 0x22]
@@ -90,8 +82,6 @@ class Sdm630:
             return [None, None, None]
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
             frequency = self.client.read_float_registers(0x46, 2, self.id)
             if isinstance(frequency, (int, float)):
@@ -103,8 +93,6 @@ class Sdm630:
             return None
 
     def get_current(self) -> List[int]:
-        """
-        """
         try:
             current = []
             regs = [0x06, 0x08, 0x0A]

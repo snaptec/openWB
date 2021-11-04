@@ -61,17 +61,17 @@ class AlphaEssCounter():
 
     def __read_before_v123(self, sdmid: int) -> Tuple[float, float, float, List[float]]:
         try:
-            power_all = self.client.read_binary_registers_to_int(0x0006, 4, sdmid, 32)
-            exported = self.client.read_binary_registers_to_int(0x0008, 4, sdmid, 32)
+            power_all = self.client.read_binary_registers_to_int(0x0006, sdmid, 32)
+            exported = self.client.read_binary_registers_to_int(0x0008, sdmid, 32)
             if isinstance(exported, (int, float)):
                 exported = exported * 10
-            imported = self.client.read_binary_registers_to_int(0x000A, 4, sdmid, 32)
+            imported = self.client.read_binary_registers_to_int(0x000A, sdmid, 32)
             if isinstance(imported, (int, float)):
                 imported = imported * 10
             currents = []
             regs = [0x0000, 0x0002, 0x0004]
             for register in regs:
-                value = self.client.read_binary_registers_to_int(register, 4, sdmid, 32)
+                value = self.client.read_binary_registers_to_int(register, sdmid, 32)
                 if isinstance(value, (int, float)):
                     value = value / 230
                 currents.append(value)
@@ -81,17 +81,17 @@ class AlphaEssCounter():
 
     def __read_since_v123(self, sdmid: int) -> Tuple[float, float, float, List[float]]:
         try:
-            power_all = self.client.read_binary_registers_to_int(0x0021, 4, sdmid, 32)
-            exported = self.client.read_binary_registers_to_int(0x0010, 4, sdmid, 32)
+            power_all = self.client.read_binary_registers_to_int(0x0021, sdmid, 32)
+            exported = self.client.read_binary_registers_to_int(0x0010, sdmid, 32)
             if isinstance(exported, (int, float)):
                 exported = exported * 10
-            imported = self.client.read_binary_registers_to_int(0x0012, 4, sdmid, 32)
+            imported = self.client.read_binary_registers_to_int(0x0012, sdmid, 32)
             if isinstance(imported, (int, float)):
                 imported = imported * 10
             currents = []
             regs = [0x0017, 0x0018, 0x0019]
             for register in regs:
-                value = self.client.read_binary_registers_to_int(register, 2, sdmid, 16)
+                value = self.client.read_binary_registers_to_int(register, sdmid, 16)
                 if isinstance(value, (int, float)):
                     value = value / 1000
                 currents.append(value)

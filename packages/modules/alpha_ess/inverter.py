@@ -68,14 +68,14 @@ class AlphaEssInverter():
 
     def __get_power(self, sdmid: int, reg_p: int) -> float:
         try:
-            p_reg = self.client.read_binary_registers_to_int(reg_p, 4, sdmid, 32)
+            p_reg = self.client.read_binary_registers_to_int(reg_p, sdmid, 32)
             if isinstance(p_reg, (int, float)):
                 if (p_reg < 0):
                     p_reg = p_reg * -1
             time.sleep(0.1)
-            p2_reg = self.client.read_binary_registers_to_int(0x041F, 4, sdmid, 32)
-            p3_reg = self.client.read_binary_registers_to_int(0x0423, 4, sdmid, 32)
-            p4_reg = self.client.read_binary_registers_to_int(0x0427, 4, sdmid, 32)
+            p2_reg = self.client.read_binary_registers_to_int(0x041F, sdmid, 32)
+            p3_reg = self.client.read_binary_registers_to_int(0x0423, sdmid, 32)
+            p4_reg = self.client.read_binary_registers_to_int(0x0427, sdmid, 32)
             if isinstance(p2_reg, (int, float)) and isinstance(p3_reg, (int, float)) and isinstance(p4_reg, (int, float)):
                 power = (p_reg + p2_reg + p3_reg + p4_reg) * -1
             else:

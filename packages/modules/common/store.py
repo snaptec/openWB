@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import List
 
 try:
+    from ...helpermodules import compability
     from ...helpermodules import log
     from ...helpermodules import pub
 except:
@@ -12,13 +13,14 @@ except:
     import sys
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
+    from helpermodules import compability
     from helpermodules import log
     from helpermodules import pub
 
 
 class ValueStoreFactory:
     def get_storage(self, component_type: str):
-        ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
+        ramdisk = compability.check_ramdisk_usage()
         if component_type == "bat":
             return BatteryValueStoreRamdisk if ramdisk else BatteryValueStoreBroker
         elif component_type == "counter":
@@ -35,7 +37,7 @@ class ValueStore:
     def write_to_file(self, file: str, value, digits: int = None) -> float:
         try:
             if isinstance(value, (int, float)):
-                if digits != None:
+                if digits is not None:
                     if digits == 0:
                         value = int(value)
                     else:
@@ -52,7 +54,7 @@ class ValueStore:
         try:
             if isinstance(value, list):
                 if all(isinstance(x, (int, float)) for x in value):
-                    if digits != None:
+                    if digits is not None:
                         if digits == 0:
                             value = [int(val,) for val in value]
                         else:
@@ -62,7 +64,7 @@ class ValueStore:
 
             else:
                 if isinstance(value, (int, float)):
-                    if digits != None:
+                    if digits is not None:
                         if digits == 0:
                             value = int(value)
                         else:
@@ -76,9 +78,9 @@ class ValueStore:
     def reset_error(self) -> None:
         try:
             if self.is_error_set == False:
-                ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
-                if ramdisk == True:
-                    if self.num != None:
+                ramdisk = compability.check_ramdisk_usage()
+                if ramdisk:
+                    if self.num is not None:
                         publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultState", 0)
                         publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultStr", "Kein Fehler.")
                     else:
@@ -95,9 +97,9 @@ class ValueStore:
             # Nur beim ersten Fehler je Zyklus publishen
             if self.is_error_set == False:
                 log.MainLogger().debug("Fehlerstring publishen: "+str(value))
-                ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[3])+"/ramdisk/bootinprogress").is_file()
-                if ramdisk == True:
-                    if self.num != None:
+                ramdisk = compability.check_ramdisk_usage()
+                if ramdisk:
+                    if self.num is not None:
                         try:
                             publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultStr", value["fault_str"])
                             publish.single("openWB/set/"+self.type+"/"+str(self.num)+"/faultState", value["fault_state"])
