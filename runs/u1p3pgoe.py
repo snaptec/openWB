@@ -23,26 +23,24 @@ if(args.verbose):
 		traceback.print_exc()
 		exit(1)
 
+# check whether fsp param exists => go-e charger has HW V3 and therefore 1to3 phase switch capability
 if ( "fsp" in status_goe):
 	try:
 		if(args.verbose):
-			print  ("fsp before: %d"%(int(status_goe['fsp'])))
+			print  ("Phaseneinstellung fsp vorher: %d"%(int(status_goe['fsp'])))
+		if ( args.phases == 1 and int(status_goe['fsp']) != 1):
+			set_fsp_goe = requests.get('http://'+args.address+'/mqtt?payload=fsp=1', timeout = 5).json()
+			#Using API V2 the respective call would be /api/set?psm=1
+			if (int(set_fsp_goe['fsp']) == 1 and args.verbose):
+				print ("Umschaltung auf 1 Phase erfolgreich: fsp=%d"%(int(set_fsp_goe['fsp'])))
+		if ( args.phases == 3 and int(status_goe['fsp']) != 0 ):
+			set_fsp_goe = requests.get('http://'+args.address+'/mqtt?payload=fsp=0', timeout = 5).json()
+			#Using API V2 the respective call would be /api/set?psm=2
+			if (int(set_fsp_goe['fsp']) == 0 and args.verbose):
+				print ("Umschaltung auf 3 Phasen erfolgreich: fsp=%d"%(int(set_fsp_goe['fsp'])))
 	except:
 		traceback.print_exc()
 		exit(1)
-	if ( args.phases == 1 ):
-		set_fsp_goe = requests.get('http://'+args.address+'/mqtt?payload=fsp=0', timeout = 5).json()
-		try: 
-			if (int(set_fsp_goe['fsp']) == 0 and args.verbose):
-				print ("Switch to 1Phase succeeded: fsp=%d"%(int(set_fsp_goe['fsp'])))
-		except:
-			traceback.print_exc()
-			exit(1)
-	if ( args.phases == 3 ):
-		set_fsp_goe = requests.get('http://'+args.address+'/mqtt?payload=fsp=1', timeout = 5).json()
-		try:
-			if (int(set_fsp_goe['fsp']) == 1 and args.verbose):
-				print ("Switch to 3Phases succeeded: fsp=%d"%(int(set_fsp_goe['fsp'])))
-		except:
-			traceback.print_exc()
-			exit(1)
+else :
+	if(args.verbose):
+		print ("Phasenumschaltung von go-e Charger nicht unterstuetzt (V2 HW ?!)")
