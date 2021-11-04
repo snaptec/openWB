@@ -14,7 +14,7 @@ except:
     from modules.openwb_flex.inverter import PvKitFlex
 
 
-def get_default() -> dict:
+def get_default_config() -> dict:
     return {
         "name": "PV-Kit",
         "type": "inverter",

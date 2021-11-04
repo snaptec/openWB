@@ -11,9 +11,10 @@ import typing
 from pathlib import Path
 
 try:
-    from . import compability
-    from . import log
-    from . import pub
+    from ..common.module_error import ModuleError
+    from ...helpermodules import compability
+    from ...helpermodules import log
+    from ...helpermodules import pub
 except:
     # for 1.9 compability
     import sys
@@ -21,15 +22,18 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import compability
     from helpermodules import log
+    from module_error import ModuleError
 
+def process_error( e):
+    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), 2) from e
 
 class SimCountFactory:
     def get_sim_counter(self):
         try:
             ramdisk = compability.check_ramdisk_usage()
             return SimCountLegacy if ramdisk else SimCount
-        except:
-           log.MainLogger().exception("Fehler im Modul simcount")
+        except Exception as e:
+            process_error(e)
 
 
 class SimCountLegacy:
@@ -95,8 +99,8 @@ class SimCountLegacy:
                 if counter_export_present != counter_export_previous:
                     pub.pub_single("openWB/"+topic+"/WHExport_temp", counter_export_present, no_json=True)
                 return wattposkh, wattnegkh
-        except:
-           log.MainLogger().exception("Fehler im Modul simcount")
+        except Exception as e:
+            process_error(e)
 
     def __get_topic(self, prefix:str) -> str:
         """ ermittelt das zum Präfix gehörende Topic."""
@@ -111,21 +115,21 @@ class SimCountLegacy:
                 log.MainLogger().error("Fehler im Modul simcount: Unbekannter Präfix")
             return topic
         except Exception as e:
-            log.MainLogger().error("Fehler im Modul simcount", e)
+            process_error(e)
 
     def read_ramdisk_file(self, name: str):
         try:
             with open('/var/www/html/openWB/ramdisk/' + name, 'r') as f:
                 return f.read()
-        except:
-           log.MainLogger().exception("Fehler im Modul simcount")
+        except Exception as e:
+            process_error(e)
 
     def write_ramdisk_file(self, name: str, value):
         try:
             with open('/var/www/html/openWB/ramdisk/' + name, 'w') as f:
                 f.write(str(value))
-        except:
-           log.MainLogger().exception("Fehler im Modul simcount")
+        except Exception as e:
+            process_error(e)
 
     def restore(self, value, prefix: str):
         """ stellt die Werte vom Broker wieder her.
@@ -153,8 +157,8 @@ class SimCountLegacy:
             else:
                 log.MainLogger().info("loadvars read openWB/"+topic+"/WHExport_temp from mosquito "+str(temp))
             return temp
-        except:
-           log.MainLogger().exception("Fehler im Modul simcount")
+        except Exception as e:
+            process_error(e)
 
     def abort(self, signal, frame):
         raise TimeoutError
@@ -214,8 +218,8 @@ class SimCount:
                 pub.pub(topic+"simulation/present_imported", counter_import_present)
                 pub.pub(topic+"simulation/present_exported", counter_export_present)
                 return wattposkh, wattnegkh
-        except:
-           log.MainLogger().exception("Fehler im Modul simcount")
+        except Exception as e:
+            process_error(e)
 
 
 Number = typing.Union[int, float]
@@ -240,12 +244,12 @@ def calculate_import_export(seconds_since_previous: Number, power1: Number, powe
             # Betragsmäßige Gesamtfläche: oberhalb der x-Achse = Import, unterhalb der x-Achse: Export
             return energy_total - energy_exported, energy_exported * -1
         return (energy_total, 0) if energy_total >= 0 else (0, -energy_total)
-    except:
-       log.MainLogger().exception("Fehler im Modul simcount")
+    except Exception as e:
+        process_error(e)
 
 
 if __name__ == "__main__":
     try:
         SimCountLegacy.sim_count(int(sys.argv[1]), prefix=str(sys.argv[2]))
-    except:
-       log.MainLogger().exception("Fehler im Modul simcount")
+    except Exception as e:
+        process_error(e)

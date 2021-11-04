@@ -4,8 +4,8 @@ from typing import Tuple
 
 try:
     from ...helpermodules import log
-    from ...helpermodules import simcount
     from ..common import connect_tcp
+    from ..common import simcount
     from ..common import store
 except:
     from pathlib import Path
@@ -14,12 +14,12 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
-    from helpermodules import simcount
     from modules.common import connect_tcp
+    from modules.common import simcount
     from modules.common import store
 
 
-def get_default() -> dict:
+def get_default_config() -> dict:
     return {
         "name": "Alpha ESS Speicher",
         "id": None,

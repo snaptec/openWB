@@ -20,7 +20,7 @@ except:
     from modules.common import store
 
 
-def get_default() -> dict:
+def get_default_config() -> dict:
     return {
         "name": "PV-Kit flex",
         "type": "inverter",

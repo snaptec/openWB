@@ -17,7 +17,7 @@ except:
     import inverter
 
 
-def get_default() -> dict:
+def get_default_config() -> dict:
     return {
         "name": "OpenWB-Kit",
         "type": "openwb_flex",
@@ -75,14 +75,14 @@ def read_legacy(argv: List):
         try:
             num = int(argv[6])
         except:
-            num = 0
+            num = None
 
-        default = get_default()
+        default = get_default_config()
         default["id"] = 0
         default["configuration"]["ip_address"] = ip_address
         default["configuration"]["port"] = port
         dev = Device(default)
-        component_default = globals()[component_type].get_default()
+        component_default = globals()[component_type].get_default_config()
         component_default["id"] = num
         component_default["configuration"]["version"] = version
         component_default["configuration"]["id"] = id

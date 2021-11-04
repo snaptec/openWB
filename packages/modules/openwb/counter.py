@@ -13,7 +13,7 @@ except:
     from helpermodules import log
     from modules.openwb_flex.counter import EvuKitFlex
 
-def get_default() -> dict:
+def get_default_config() -> dict:
     return {
             "name": "EVU-Kit",
             "type": "counter",

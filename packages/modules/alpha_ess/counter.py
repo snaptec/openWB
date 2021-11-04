@@ -17,7 +17,7 @@ except:
     from modules.common import connect_tcp
 
 
-def get_default() -> dict:
+def get_default_config() -> dict:
     return {
         "name": "Alpha ESS Zähler",
         "id": None,
@@ -35,7 +35,7 @@ class AlphaEssCounter():
             self.client = client
             self.data = {}
             self.data["config"] = component_config
-            self.value_store = (store.ValueStoreFactory().get_storage("counter"))(self.data["config"]["id"])
+            self.value_store = (store.ValueStoreFactory().get_storage(component_config["type"]))(self.data["config"]["id"])
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
