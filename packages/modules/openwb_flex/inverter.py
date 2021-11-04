@@ -3,10 +3,9 @@
 
 try:
     from ...helpermodules import log
-    from ..common import lovato
-    from ..common import mpm3pm
-    from ..common import sdm630
-    from ..common import store
+    from ..common import connect_tcp
+    from ..common import misc_component
+    from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
     import os
@@ -14,10 +13,9 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
-    from modules.common import lovato
-    from modules.common import mpm3pm
-    from modules.common import sdm630
-    from modules.common import store
+    from modules.common import connect_tcp
+    from modules.common import misc_component
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 def get_default_config() -> dict:
@@ -33,52 +31,35 @@ def get_default_config() -> dict:
     }
 
 
-class PvKitFlex():
-    def __init__(self, device_id: int, component_config: dict, tcp_client) -> None:
+class PvKitFlex(misc_component.MiscComponent):
+    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
-            self.data = {}
-            self.data["config"] = component_config
-            self.device_id = device_id
-            version = self.data["config"]["configuration"]["version"]
-            self.data["simulation"] = {}
-            factory = self.__inverter_factory(version)
+            client = self.kit_version_factory(component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client)
+            super().__init__(device_id, component_config, client)
             self.tcp_client = tcp_client
-            self.counter = factory(self.data["config"], self.tcp_client)
-            self.value_store = (store.ValueStoreFactory().get_storage("inverter"))(self.data["config"]["id"])
-        except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+        except Exception as e:
+            self.process_error(e)
 
-    def __inverter_factory(self, version: int):
-        try:
-            if version == 0:
-                return mpm3pm.Mpm3pm
-            elif version == 1:
-                return lovato.Lovato
-            elif version == 2:
-                return sdm630.Sdm630
-        except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
-
-    def read(self):
+    def update_values(self) -> None:
         """ liest die Werte des Moduls aus.
         """
         try:
-            counter = self.counter.get_counter()
-            power_per_phase, power_all = self.counter.get_power()
+            counter = self.client.get_counter()
+            power_per_phase, power_all = self.client.get_power()
 
             version = self.data["config"]["configuration"]["version"]
             if version == 1:
-                if all(isinstance(x, (int, float)) for x in power_per_phase):
-                    power_all = sum(power_per_phase)
-                else:
-                    power_all = power_per_phase[0] # enthält Fehlermeldung
-            if isinstance(power_all, (int, float)) and (version == 1 or version == 2):
-                if (power_all > 10):
-                    power_all = power_all*-1
-            currents = self.counter.get_current()
+                power_all = sum(power_per_phase)
+            if (power_all > 10):
+                power_all = power_all*-1
+            currents = self.client.get_current()
 
             log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power_all))
             self.tcp_client.close_connection()
             self.value_store.set(power=power_all, counter=counter, currents=currents)
+        except ModuleError as e:
+            e.store_error(self.data["config"]["id"], "inverter", self.data["config"]["name"])
         except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+            self.process_error(e)
+        else:
+            ModuleError("Kein Fehler.", ModuleErrorLevels.NO_ERROR).store_error(self.data["config"]["id"], "inverter", self.data["config"]["name"])

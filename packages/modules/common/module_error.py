@@ -17,8 +17,9 @@ except:
     from helpermodules import log
     from helpermodules import pub
 
+
 class ModuleError(Exception):
-    def __init__(self, fault_str: str, fault_state:int) -> None:
+    def __init__(self, fault_str: str, fault_state: int) -> None:
         self.fault_str = fault_str
         self.fault_state = fault_state
 
@@ -31,6 +32,8 @@ class ModuleError(Exception):
                     component_type = "evu"
                 elif component_type == "bat":
                     component_type = "houseBattery"
+                elif component_type == "inverter":
+                    component_type = "pv"
                 if component_num is not None:
                     pub.pub_single("openWB/set/"+component_type+"/"+str(component_num)+"/faultStr", self.fault_str)
                     pub.pub_single("openWB/set/"+component_type+"/"+str(component_num)+"/faultState", self.fault_state.value)
@@ -42,6 +45,7 @@ class ModuleError(Exception):
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_state", self.fault_state.value)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul module_error")
+
 
 class ModuleErrorLevels(Enum):
     NO_ERROR = 0

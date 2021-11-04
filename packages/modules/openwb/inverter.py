@@ -4,13 +4,15 @@ import sys
 
 try:
     from ...helpermodules import log
-    from ..openwb_flex.counter import EvuKitFlex
+    from ..common import connect_tcp
+    from ..openwb_flex.counter import PvKitFlex
 except:
     from pathlib import Path
     import os
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
+    from modules.common import connect_tcp
     from modules.openwb_flex.inverter import PvKitFlex
 
 
@@ -27,7 +29,7 @@ def get_default_config() -> dict:
 
 
 class PvKit(PvKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             self.data = {}
             self.data["config"] = component_config

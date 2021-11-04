@@ -45,3 +45,14 @@ class MiscComponent():
 
     def process_error(self, e):
         ModuleError(str(type(e))+" "+str(e), ModuleErrorLevels.ERROR).store_error(self.data["config"]["id"], "counter", self.data["config"]["name"])
+
+    def kit_version_factory(self, version: int, id: int, tcp_client: connect_tcp.ConnectTcp) -> Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]:
+        try:
+            if version == 0:
+                return mpm3pm.Mpm3pm(id, tcp_client)
+            elif version == 1:
+                return lovato.Lovato(id, tcp_client)
+            elif version == 2:
+                return sdm630.Sdm630(id, tcp_client)
+        except Exception as e:
+            self.process_error(e)

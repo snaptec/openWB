@@ -4,6 +4,7 @@ import sys
 
 try:
     from ...helpermodules import log
+    from ..common import connect_tcp
     from ..openwb_flex.counter import EvuKitFlex
 except:
     from pathlib import Path
@@ -11,21 +12,24 @@ except:
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
     from helpermodules import log
+    from modules.common import connect_tcp
     from modules.openwb_flex.counter import EvuKitFlex
+
 
 def get_default_config() -> dict:
     return {
-            "name": "EVU-Kit",
-            "type": "counter",
-            "id": None,
-            "configuration":
+        "name": "EVU-Kit",
+        "type": "counter",
+        "id": None,
+        "configuration":
             {
                 "version": 2
             }
-        }
+    }
+
 
 class EvuKit(EvuKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             self.data = {}
             self.data["config"] = component_config

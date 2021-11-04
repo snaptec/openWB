@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 import time
-from typing import Tuple
 
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
-    from ..common import simcount
-    from ..common import store
+    from ..common import misc_component
+    from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
     import os
@@ -15,8 +14,8 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     from modules.common import connect_tcp
-    from modules.common import simcount
-    from modules.common import store
+    from modules.common import misc_component
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 def get_default_config() -> dict:
@@ -31,20 +30,15 @@ def get_default_config() -> dict:
     }
 
 
-class AlphaEssBat():
-    def __init__(self, client: connect_tcp.ConnectTcp, component_config: dict) -> None:
+class AlphaEssBat(misc_component.MiscComponent):
+    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
-            self.client = client
-            self.data = {}
-            self.data["config"] = component_config
-            self.data["simulation"] = {}
-            self.value_store = (store.ValueStoreFactory().get_storage("bat"))(self.data["config"]["id"])
-            simcount_factory = simcount.SimCountFactory().get_sim_counter()
-            self.sim_count = simcount_factory()
+            super().__init__(device_id, component_config, tcp_client)
+            self.tcp_client = tcp_client
         except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+            self.process_error(e)
 
-    def read(self):
+    def read(self) -> None:
         try:
             log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
             # keine Unterschiede zwischen den Versionen
@@ -55,22 +49,18 @@ class AlphaEssBat():
             time.sleep(0.1)
             current = self.client.read_binary_registers_to_int(0x0101, sdmid, 16)
 
-            if isinstance(voltage, (int, float)) and isinstance(current, (int, float)):
-                power = voltage * current * -1 / 100
-            else:
-                power = voltage  # enthält Fehlermeldung
+            power = voltage * current * -1 / 100
             log.MainLogger().debug("Alpha Ess Leistung[W]: "+str(power)+", Speicher-Register: Spannung[V] "+str(voltage)+" Strom[A] "+str(current))
             time.sleep(0.1)
             soc_reg = self.client.read_binary_registers_to_int(0x0102, sdmid, 16)
-            if isinstance(soc_reg, (int, float)):
-                soc = int(soc_reg * 0.1)
-            else:
-                soc = soc_reg  # enthält Fehlermeldung
+            soc = int(soc_reg * 0.1)
 
-            if isinstance(power, (int, float)):
-                imported, exported = self.sim_count.sim_count(power, topic="openWB/set/bat/"+str(self.data["config"]["id"])+"/", data=self.data["simulation"], prefix="speicher")
-            else:
-                imported, exported = None, None
+            topic_str = "openWB/set/system/device/" + str(self.device_id)+"/mmisc_component/"+str(self.data["config"]["id"])+"/"
+            imported, exported = self.sim_count.sim_count(power, topic=topic_str, data=self.data["simulation"], prefix="speicher")
             self.value_store.set(power=power, soc=soc, imported=imported, exported=exported)
+        except ModuleError as e:
+            e.store_error(self.data["config"]["id"], "bat", self.data["config"]["name"])
         except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+            self.process_error(e)
+        else:
+            ModuleError("Kein Fehler.", ModuleErrorLevels.NO_ERROR).store_error(self.data["config"]["id"], "bat", self.data["config"]["name"])

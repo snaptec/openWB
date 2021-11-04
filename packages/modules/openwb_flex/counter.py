@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 import sys
-from typing import Union
 
 
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
-    from ..common import lovato
     from ..common import misc_component
-    from ..common import mpm3pm
-    from ..common import sdm630
     from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
@@ -18,10 +14,7 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     from modules.common import connect_tcp
-    from modules.common import lovato
     from modules.common import misc_component
-    from modules.common import mpm3pm
-    from modules.common import sdm630
     from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
@@ -41,25 +34,13 @@ def get_default_config() -> dict:
 class EvuKitFlex(misc_component.MiscComponent):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
-            factory = self.__counter_factory(version=component_config["configuration"]["version"])
-            self.tcp_client = tcp_client
-            client = factory(component_config["configuration"]["id"], self.tcp_client)
+            client = self.kit_version_factory(component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client)
             super().__init__(device_id, component_config, client)
+            self.tcp_client = tcp_client
         except Exception as e:
             self.process_error(e)
 
-    def __counter_factory(self, version: int) -> Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]:
-        try:
-            if version == 0:
-                return mpm3pm.Mpm3pm
-            elif version == 1:
-                return lovato.Lovato
-            elif version == 2:
-                return sdm630.Sdm630
-        except Exception as e:
-            self.process_error(e)
-
-    def update_values(self):
+    def update_values(self) -> None:
         """ liest die Werte des Moduls aus.
         """
         try:

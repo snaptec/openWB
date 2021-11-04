@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Union
 
 try:
     from ..common import connect_tcp
+    from ..common import misc_device
     from ...helpermodules import log
     from . import counter
     from. import inverter
@@ -13,6 +14,7 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     from modules.common import connect_tcp
+    from modules.common import misc_device
     import counter
     import inverter
 
@@ -25,38 +27,28 @@ def get_default_config() -> dict:
     }
 
 
-class Device():
-    def __init__(self, device_config: dict) -> None:
+class Device(misc_device.MiscDevice):
+    def __init__(self, device: dict) -> None:
         try:
-            self.data = {}
-            self.data["config"] = device_config
-            self.data["components"] = {}
+            super().__init__(device, client=None)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
-    def add_component(self, component_config: dict) -> None:
+    def component_factory(self, component_type: str) -> Union[counter.EvuKit, inverter.PvKit]:
         try:
-            if component_config["type"] == "counter":
+            if component_type == "bat":
+                pass
+            elif component_type == "counter":
                 ip_address = "192.168.193.15"
                 port = "8899"
-                self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
-                self.data["components"]["component"+str(component_config["id"])] = counter.EvuKit(self.data["config"]["id"], component_config, self.client)
-            elif component_config["type"] == "inverter":
+                self.client = connect_tcp.ConnectTcp(self.data["config"]["id"], ip_address, port)
+                return counter.EvuKit
+            elif component_type == "inverter":
                 ip_address = "192.168.193.13"
                 port = "8899"
-                self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
-                self.data["components"]["component"+str(component_config["id"])] = inverter.PvKit(self.data["config"]["id"], component_config, self.client)
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
-
-    def read(self):
-        try:
-            if len(self.data["components"]) > 0:
-                for component in self.data["components"]:
-                    self.data["components"][component].read()
-            else:
-                log.MainLogger().warning(self.data["config"]["name"]+": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden.")
-        except Exception as e:
+                self.client = connect_tcp.ConnectTcp(self.data["config"]["id"], ip_address, port)
+                return inverter.PvKit
+        except:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
 
@@ -83,7 +75,7 @@ def read_legacy(argv: List):
         log.MainLogger().debug('openWB Version: ' + str(version))
 
         dev.read()
-    except Exception as e:
+    except:
         log.MainLogger().exception("Fehler im Modul openwb")
 
 
