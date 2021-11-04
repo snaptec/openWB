@@ -13,6 +13,9 @@ if [[ "$1" == "1" ]]; then
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "1"
 	fi
+	if [[ $evsecon == "goe" ]]; then
+		sudo python runs/u1p3pgoe.py -a $goeiplp1 -p 1
+	fi
 	# chargepoint 2
 	if [[ $lastmanagement == 1 && $evsecons1 == "modbusevse" && $u1p3plp2aktiv == "1" ]]; then
 		openwbDebugLog "MAIN" 0 "Pause nach Umschaltung: ${u1p3ppause}s"
@@ -24,12 +27,18 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep2ip -m "1"
 	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "goe" ]]; then
+		sudo python runs/u1p3pgoe.py -a $goeiplp2 -p 1
+	fi
 	# chargepoint 3
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep3ip -m "1"
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp3 -i $u1p3plp3id -p 1 -d $u1p3ppause
+	fi
+	if [[ $lastmanagements2 == 1 && $evsecons2 == "goe" ]]; then
+		sudo python runs/u1p3pgoe.py -a $goeiplp3 -p 1
 	fi
 	# chargepoint 4
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "extopenwb" ]]; then
@@ -127,6 +136,15 @@ if [[ "$1" == "3" ]]; then
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "ipevse" && $u1p3plp8aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp8 -i $u1p3plp8id -p 3 -d $u1p3ppause
 	fi
+	if [[ $evsecon == "goe" ]]; then
+		sudo python runs/u1p3pgoe.py -a $goeiplp1 -p 3
+	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "goe" ]]; then
+		sudo python runs/u1p3pgoe.py -a $goeiplp2 -p 3
+	fi
+	if [[ $lastmanagements2 == 1 && $evsecons2 == "goe" ]]; then
+		sudo python runs/u1p3pgoe.py -a $goeiplp3 -p 3
+	fi
 	echo 3 > ramdisk/u1p3pstat
 fi
 
@@ -146,6 +164,11 @@ if [[ "$1" == "stop" ]]; then
 		oldll=$(<ramdisk/llsoll)
 		echo $oldll > ramdisk/tmpllsoll
 	fi
+	#if [[ $evsecon == "goe" ]]; then
+	#	oldll=$(<ramdisk/llsoll)
+	#	echo $oldll > ramdisk/tmpllsoll
+	#	runs/set-current.sh 0 m
+	#fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "daemon" ]]; then
 		oldlls1=$(<ramdisk/llsolls1)
 		echo $oldlls1 > ramdisk/tmpllsolls1
@@ -156,11 +179,21 @@ if [[ "$1" == "stop" ]]; then
 		echo $oldlls1 > ramdisk/tmpllsolls1
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep2ip -m "0"
 	fi
+	#if [[ $lastmanagement == 1 && $evsecons1 == "goe" ]]; then
+	#	oldlls1=$(<ramdisk/llsolls1)
+	#	echo $oldlls1 > ramdisk/tmpllsolls1
+	#	runs/set-current.sh 0 s1
+	#fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
 		oldlls2=$(<ramdisk/llsolls2)
 		echo $oldlls2 > ramdisk/tmpllsolls2
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep3ip -m "0"
 	fi
+	#if [[ $lastmanagements2 == 1 && $evsecons2 == "goe" ]]; then
+	#	oldlls2=$(<ramdisk/llsolls2)
+	#	echo $oldlls2 > ramdisk/tmpllsolls2
+	#	runs/set-current.sh 0 s2
+	#fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "extopenwb" ]]; then
 		oldlllp4=$(<ramdisk/llsolllp4)
 		echo $oldlllp4 > ramdisk/tmpllsolllp4
@@ -252,6 +285,9 @@ if [[ "$1" == "start" ]]; then
 		oldll=$(<ramdisk/tmpllsoll)
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$oldll"
 	fi
+	#if [[ $evsecon == "goe" ]]; then
+	#	runs/set-current.sh $oldll m
+	#fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		oldlls1=$(<ramdisk/tmpllsolls1)
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep2ip -m "$oldlls1"
@@ -318,6 +354,14 @@ if [[ "$1" == "start" ]]; then
 		oldlllp8=$(<ramdisk/tmpllsolllp8)
 		runs/set-current.sh $oldlllp8 lp8
 	fi
+	#if [[ $lastmanagement == 1 && $evsecons1 == "goe" ]]; then
+	#	oldlls1=$(<ramdisk/tmpllsolls1)
+	#	runs/set-current.sh $oldlls1 s1
+	#fi
+	#if [[ $lastmanagements2 == 1 && $evsecons2 == "goe" ]]; then
+	#	oldlls2=$(<ramdisk/tmpllsolls2)
+	#	runs/set-current.sh $oldlls2 s2
+	#fi
 fi
 
 if [[ "$1" == "startslow" ]]; then
@@ -330,6 +374,9 @@ if [[ "$1" == "startslow" ]]; then
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$minimalapv"
 	fi
+	#if [[ $evsecon == "goe" ]]; then
+	#	runs/set-current.sh $minimalapv m
+	#fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep2ip -m "$minimalapv"
 	fi
@@ -363,9 +410,15 @@ if [[ "$1" == "startslow" ]]; then
 	if [[ $lastmanagement == 1 && $evsecons1 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
 		runs/set-current.sh $minimalapv s1
 	fi
+	#if [[ $lastmanagement == 1 && $evsecons1 == "goe" ]]; then
+	#	runs/set-current.sh $minimalapv s1
+	#fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		runs/set-current.sh $minimalapv s2
 	fi
+	#if [[ $lastmanagements2 == 1 && $evsecons2 == "goe" ]]; then
+	#	runs/set-current.sh $minimalapv s2
+	#fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
 		runs/set-current.sh $minimalapv lp4
 	fi
