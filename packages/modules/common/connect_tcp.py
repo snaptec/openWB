@@ -22,23 +22,22 @@ except:
 
 
 class ConnectTcp:
-    def __init__(self, name: str, id: int, ip_address: str, port: int) -> None:
+    def __init__(self, id: int, ip_address: str, port: int) -> None:
         try:
             self.tcp_client = ModbusTcpClient(ip_address, port)
             log.MainLogger().debug("Baue Verbindung auf zu "+str(self.tcp_client))
             # Den Verbinungsaufbau übernimmt der tcp_client automatisch.
-            self.name = name
             self.id = id
             self.decode_hex = codecs.getdecoder("hex_codec")
-        except:
-            log.MainLogger().exception(self.name)
+        except Exception as e:
+            self.__process_modbus_error(e)
 
     def close_connection(self) -> None:
         try:
             log.MainLogger().debug("Close Modbus TCP connection")
             self.tcp_client.close()
-        except:
-            log.MainLogger().exception(self.name)
+        except Exception as e:
+            self.__process_modbus_error(e)
 
     def __process_modbus_error(self, e):
         if isinstance(e, pymodbus.exceptions.ConnectionException):
@@ -58,7 +57,6 @@ class ConnectTcp:
             return int(struct.unpack('>i', self.decode_hex(all)[0])[0])
         except Exception as e:
             self.__process_modbus_error(e)
-            
 
     def read_short_int_registers(self, reg: int, len: int, id: int) -> int:
         try:

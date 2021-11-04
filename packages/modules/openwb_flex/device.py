@@ -3,6 +3,7 @@ from typing import List
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
+    from ..common import misc_device
     from . import counter
     from . import inverter
 except:
@@ -13,6 +14,7 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     from modules.common import connect_tcp
+    from modules.common import misc_device
     import counter
     import inverter
 
@@ -30,34 +32,25 @@ def get_default_config() -> dict:
     }
 
 
-class Device():
+class Device(misc_device.MiscDevice):
     def __init__(self, device: dict) -> None:
         try:
-            self.data = {}
-            self.data["config"] = device
-            self.data["components"] = {}
-            ip_address = self.data["config"]["configuration"]["ip_address"]
-            port = self.data["config"]["configuration"]["port"]
-            self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
+            ip_address = device["configuration"]["ip_address"]
+            port = device["configuration"]["port"]
+            client = connect_tcp.ConnectTcp(device["id"], ip_address, port)
+            super().__init__(device, client)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
-    def add_component(self, component_config: dict) -> None:
-        try:
-            if component_config["type"] == "counter":
-                self.data["components"]["component"+str(component_config["id"])] = counter.EvuKitFlex(self.data["config"]["id"], component_config, self.client)
-            elif component_config["type"] == "inverter":
-                self.data["components"]["component"+str(component_config["id"])] = inverter.PvKitFlex(self.data["config"]["id"], component_config, self.client)
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
-    def read(self):
+    def component_factory(self, component_type: str):
         try:
-            if len(self.data["components"]) > 0:
-                for component in self.data["components"]:
-                    self.data["components"][component].read()
-            else:
-                log.MainLogger().warning(self.data["config"]["name"]+": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden.")
+            if component_type == "bat":
+                pass
+            elif component_type == "counter":
+                return counter.EvuKitFlex
+            elif component_type == "inverter":
+                return inverter.PvKitFlex
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 

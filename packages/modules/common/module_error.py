@@ -32,15 +32,14 @@ class ModuleError(Exception):
                 elif component_type == "bat":
                     component_type = "houseBattery"
                 if component_num is not None:
-                    publish.single("openWB/set/"+component_type+"/"+str(component_num)+"/faultStr", self.fault_str)
-                    publish.single("openWB/set/"+component_type+"/"+str(component_num)+"/faultState", self.fault_state)
+                    pub.pub_single("openWB/set/"+component_type+"/"+str(component_num)+"/faultStr", self.fault_str)
+                    pub.pub_single("openWB/set/"+component_type+"/"+str(component_num)+"/faultState", self.fault_state.value)
                 else:
-                    log.MainLogger().debug("openWB/set/"+component_type+"/faultState")
-                    publish.single("openWB/set/"+component_type+"/faultStr", self.fault_str)
-                    publish.single("openWB/set/"+component_type+"/faultState", self.fault_state)
+                    pub.pub_single("openWB/set/"+component_type+"/faultStr", self.fault_str)
+                    pub.pub_single("openWB/set/"+component_type+"/faultState", self.fault_state.value)
             else:
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_str", self.fault_str)
-                pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_state", self.fault_state)
+                pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_state", self.fault_state.value)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul module_error")
 

@@ -19,11 +19,9 @@ except:
 
 
 class Sdm630:
-    def __init__(self, component_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id:int, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
-        self.name = component_config["name"]
-        self.id = component_config["configuration"]["id"]
-
+        self.id = modbus_id
     def __process_error(self, e):
         if isinstance(e, ModuleError):
             raise

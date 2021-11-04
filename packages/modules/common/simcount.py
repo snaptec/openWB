@@ -22,8 +22,9 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import compability
     from helpermodules import log
-    from module_error import ModuleError, ModuleErrorLevels
-
+    from helpermodules import pub
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    
 def process_error( e):
     raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
