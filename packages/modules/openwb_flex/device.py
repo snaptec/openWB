@@ -8,10 +8,8 @@ try:
     from . import inverter
 except:
     from pathlib import Path
-    import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
     from modules.common import misc_device
@@ -33,6 +31,12 @@ def get_default_config() -> dict:
 
 
 class Device(misc_device.MiscDevice):
+    _COMPONENT_TYPE_TO_CLASS = {
+        # "bat": ,
+        "counter": counter.EvuKitFlex,
+        "inverter": inverter.PvKitFlex
+    }
+
     def __init__(self, device: dict) -> None:
         try:
             ip_address = device["configuration"]["ip_address"]
@@ -42,27 +46,23 @@ class Device(misc_device.MiscDevice):
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
-
-    def component_factory(self, component_type: str):
-        try:
-            if component_type == "bat":
-                pass
-            elif component_type == "counter":
-                return counter.EvuKitFlex
-            elif component_type == "inverter":
-                return inverter.PvKitFlex
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+    def add_component(self, component_config: dict) -> None:
+        self.instantiate_component(component_config, super().component_factory(component_config["type"]))
 
 
-def read_legacy(argv: List):
+def read_legacy(argv: List[str]):
     """ Ausführung des Moduls als Python-Skript
     """
     try:
+        _COMPONENT_TYPE_TO_MODULE = {
+            # "bat": ,
+            "counter": counter,
+            "inverter": inverter
+        }
         log.MainLogger().debug('Start reading flex')
-        component_type = str(argv[1])
+        component_type = argv[1]
         version = int(argv[2])
-        ip_address = str(argv[3])
+        ip_address = argv[3]
         port = int(argv[4])
         id = int(argv[5])
         try:
@@ -74,7 +74,11 @@ def read_legacy(argv: List):
         default["configuration"]["ip_address"] = ip_address
         default["configuration"]["port"] = port
         dev = Device(default)
-        component_default = globals()[component_type].get_default_config()
+        if component_type in _COMPONENT_TYPE_TO_MODULE:
+            component_default = _COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        else:
+            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(_COMPONENT_TYPE_TO_MODULE.keys()))
+
         component_default["id"] = num
         component_default["configuration"]["version"] = version
         component_default["configuration"]["id"] = id

@@ -7,11 +7,9 @@ try:
     from ...helpermodules import pub
 except:
     # for 1.9 compability
-    import os
     import sys
     from pathlib import Path
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import compability
     from helpermodules import log
     from helpermodules import pub

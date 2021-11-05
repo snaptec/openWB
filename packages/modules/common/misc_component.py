@@ -11,10 +11,8 @@ try:
     from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
-    import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
     from modules.common import lovato
@@ -25,7 +23,7 @@ except:
     from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
-class MiscComponent():
+class MiscComponent:
     def __init__(self, device_id: int, component_config: dict, client: Union[connect_tcp.ConnectTcp, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         try:
             self.device_id = device_id

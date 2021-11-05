@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
 
-
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
@@ -9,9 +8,7 @@ try:
     from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
-    import os
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
     from modules.common import misc_component

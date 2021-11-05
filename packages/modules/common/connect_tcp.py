@@ -13,10 +13,8 @@ try:
     from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
-    import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common.module_error import ModuleError, ModuleErrorLevels
 
@@ -54,7 +52,7 @@ class ConnectTcp:
             if type(resp) == pymodbus.exceptions.ModbusIOException:
                 self.__process_modbus_error(resp)
             all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-            return int(struct.unpack('>i', self.decode_hex(all)[0])[0])
+            return struct.unpack('>i', self.decode_hex(all)[0])[0]
         except Exception as e:
             self.__process_modbus_error(e)
 
@@ -64,7 +62,7 @@ class ConnectTcp:
             if type(resp) == pymodbus.exceptions.ModbusIOException:
                 self.__process_modbus_error(resp)
             all = format(resp.registers[0], '04x')
-            return int(struct.unpack('>h', self.decode_hex(all)[0])[0])
+            return struct.unpack('>h', self.decode_hex(all)[0])[0]
         except Exception as e:
             self.__process_modbus_error(e)
 
@@ -73,7 +71,7 @@ class ConnectTcp:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
             if type(resp) == pymodbus.exceptions.ModbusIOException:
                 self.__process_modbus_error(resp)
-            return float(struct.unpack('>f', struct.pack('>HH', *resp.registers))[0])
+            return struct.unpack('>f', struct.pack('>HH', *resp.registers))[0]
         except Exception as e:
             self.__process_modbus_error(e)
 
@@ -94,14 +92,14 @@ class ConnectTcp:
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 if signed == True:
-                    value = int(decoder.decode_32bit_int())
+                    value = decoder.decode_32bit_int()
                 else:
-                    value = int(decoder.decode_32bit_uint())
+                    value = decoder.decode_32bit_uint()
             elif bit == 16:
                 if signed == True:
-                    value = int(decoder.decode_16bit_int())
+                    value = decoder.decode_16bit_int()
                 else:
-                    value = int(decoder.decode_16bit_uint())
+                    value = decoder.decode_16bit_uint()
             else:
                 raise Exception("Invalid value for bit: "+str(bit)+". Allowed values are 16, 32")
             return value
@@ -115,9 +113,9 @@ class ConnectTcp:
                 self.__process_modbus_error(resp)
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
-                value = float(decoder.decode_32bit_float())
+                value = decoder.decode_32bit_float()
             elif bit == 16:
-                value = float(decoder.decode_16bit_float())
+                value = decoder.decode_16bit_float()
             else:
                 raise Exception("Invalid value for bit: "+str(bit)+". Allowed values are 16, 32")
             return value

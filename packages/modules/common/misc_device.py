@@ -5,15 +5,13 @@ try:
     from ..common import connect_tcp
 except:
     from pathlib import Path
-    import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
 
 
-class MiscDevice():
+class MiscDevice:
     def __init__(self, device: dict, client: connect_tcp.ConnectTcp) -> None:
         try:
             self.data = {"config": device,
@@ -22,15 +20,22 @@ class MiscDevice():
         except:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
-    def add_component(self, component_config: dict) -> None:
+    def instantiate_component(self, component_config: dict, factory) -> None:
         try:
-            factory = self.component_factory(component_config["type"])
             self.data["components"]["component"+str(component_config["id"])] = factory(self.data["config"]["id"], component_config, self.client)
         except:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
+    def component_factory(self, component_type: str):
+        try:
+            if component_type in self._COMPONENT_TYPE_TO_CLASS:
+                return self._COMPONENT_TYPE_TO_CLASS[component_type]
+            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(self._COMPONENT_TYPE_TO_CLASS.keys()))
+        except Exception as e:
+            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+
     @abstractmethod
-    def component_factory(self):
+    def add_component(self, component_config: dict) -> None:
         pass
 
     def update_values(self):

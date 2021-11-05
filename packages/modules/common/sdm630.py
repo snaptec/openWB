@@ -7,11 +7,9 @@ try:
     from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     # for 1.9 compability
-    import os
     from pathlib import Path
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from modules.common import connect_tcp
     from modules.common.module_error import ModuleError, ModuleErrorLevels
 

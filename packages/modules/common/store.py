@@ -1,5 +1,5 @@
-import os
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from collections.abc import Iterable
 from pathlib import Path
 from typing import List
 
@@ -11,8 +11,7 @@ try:
 except:
     # for 1.9 compability
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import compability
     from helpermodules import log
     from helpermodules import pub
@@ -32,8 +31,15 @@ class ValueStoreFactory:
         except Exception as e:
             process_error(e)
 
-def process_error( e):
+
+def process_error(e):
     raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+
+
+def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
+    for index, value in enumerate(values):
+        write_to_file(prefix+str(index + 1), value, digits)
+
 
 def write_to_file(file: str, value, digits: int = None) -> None:
     try:
@@ -47,6 +53,7 @@ def write_to_file(file: str, value, digits: int = None) -> None:
         return value
     except Exception as e:
         process_error(e)
+
 
 def pub_to_broker(topic: str, value, digits: int = None) -> None:
     try:
@@ -66,6 +73,7 @@ def pub_to_broker(topic: str, value, digits: int = None) -> None:
             pub.pub(topic, value)
     except Exception as e:
         process_error(e)
+
 
 class ValueStore:
     @abstractmethod
@@ -110,18 +118,10 @@ class CounterValueStoreRamdisk(ValueStore):
 
     def set(self, voltages: List[float], currents: List[float], powers: List[float], power_factors: List[float], imported: float, exported: float, power_all: float, frequency: float):
         try:
-            write_to_file("/evuv1", voltages[0], 1)
-            write_to_file("/evuv2", voltages[1], 1)
-            write_to_file("/evuv3", voltages[2], 1)
-            write_to_file("/bezuga1", currents[0], 1)
-            write_to_file("/bezuga2", currents[1], 1)
-            write_to_file("/bezuga3", currents[2], 1)
-            write_to_file("/bezugw1", powers[0], 0)
-            write_to_file("/bezugw2", powers[1], 0)
-            write_to_file("/bezugw3", powers[2], 0)
-            write_to_file("/evupf1", power_factors[0], 2)
-            write_to_file("/evupf2", power_factors[1], 2)
-            write_to_file("/evupf3", power_factors[2], 2)
+            write_array_to_files("/evuv", voltages, 1)
+            write_array_to_files("/bezuga", currents, 1)
+            write_array_to_files("/bezugw", powers, 0)
+            write_array_to_files("/evupf", power_factors, 2)
             imported = write_to_file("/bezugkwh", imported)
             exported = write_to_file("/einspeisungkwh", exported)
             power_all = write_to_file("/wattbezug", power_all, 0)
@@ -166,9 +166,7 @@ class InverterValueStoreRamdisk(ValueStore):
             power = write_to_file("/pv"+filename_extension+"watt", power, 0)
             write_to_file("/pv"+filename_extension+"kwh", counter, 3)
             write_to_file("/pv"+filename_extension+"kwhk", counter/1000, 3)
-            write_to_file("/pv"+filename_extension+"a1", currents[0], 1)
-            write_to_file("/pv"+filename_extension+"a2", currents[1], 1)
-            write_to_file("/pv"+filename_extension+"a3", currents[2], 1)
+            write_array_to_files("/pv"+filename_extension+"a", currents, 1)
             log.MainLogger().info('PV Watt: ' + str(power))
         except Exception as e:
             process_error(e)

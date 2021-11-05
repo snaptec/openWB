@@ -12,10 +12,8 @@ try:
     from . import inverter
 except:
     from pathlib import Path
-    import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
     from modules.common import misc_device
@@ -33,6 +31,12 @@ def get_default_config() -> dict:
 
 
 class Device(misc_device.MiscDevice):
+    _COMPONENT_TYPE_TO_CLASS = {
+        "bat": bat.AlphaEssBat,
+        "counter": counter.AlphaEssCounter,
+        "inverter": inverter.AlphaEssInverter
+    }
+
     def __init__(self, device: dict) -> None:
         try:
             client = connect_tcp.ConnectTcp(device["id"], "192.168.193.125", 8899)
@@ -40,21 +44,18 @@ class Device(misc_device.MiscDevice):
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
-    def component_factory(self, component_type: str) -> Union[bat.AlphaEssBat, counter.AlphaEssCounter, inverter.AlphaEssInverter]:
-        try:
-            if component_type == "bat":
-                return bat.AlphaEssBat
-            elif component_type == "counter":
-                return counter.AlphaEssCounter
-            elif component_type == "inverter":
-                return inverter.AlphaEssInverter
-        except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+    def add_component(self, component_config: dict) -> None:
+        self.instantiate_component(component_config, self.component_factory(component_config["type"]))
 
 
-def read_legacy(argv: List):
+def read_legacy(argv: List[str]) -> None:
     try:
-        component_type = str(argv[1])
+        _COMPONENT_TYPE_TO_MODULE = {
+            "bat": bat,
+            "counter": counter,
+            "inverter": inverter
+        }
+        component_type = argv[1]
         version = int(argv[2])
         try:
             num = int(argv[3])
@@ -64,7 +65,10 @@ def read_legacy(argv: List):
         default = get_default_config()
         default["id"] = 0
         dev = Device(default)
-        component_default = globals()[component_type].get_default_config()
+        if component_type in _COMPONENT_TYPE_TO_MODULE:
+            component_default = _COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        else:
+            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(_COMPONENT_TYPE_TO_MODULE.keys()))
         component_default["id"] = num
         component_default["configuration"]["version"] = version
         dev.add_component(component_default)
