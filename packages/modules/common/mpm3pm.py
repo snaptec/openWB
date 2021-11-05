@@ -15,10 +15,10 @@ except:
 
 
 class Mpm3pm:
-    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, component_config: dict, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
-        self.name = device_config["components"]["component0"]["name"]
-        self.id = device_config["components"]["component0"]["configuration"]["id"]
+        self.name = component_config["name"]
+        self.id = component_config["configuration"]["id"]
 
     def get_voltage(self) -> List[int]:
         """

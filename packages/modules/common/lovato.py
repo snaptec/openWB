@@ -17,11 +17,10 @@ except:
 
 
 class Lovato:
-    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, component_config: dict, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
-        self.name = device_config["components"]["component0"]["name"]
-        self.id = device_config["components"]["component0"]["configuration"]["id"]
-
+        self.name = component_config["name"]
+        self.id = component_config["configuration"]["id"]
     def get_voltage(self) -> List[int]:
         """
         """
@@ -54,10 +53,7 @@ class Lovato:
                 value = self.client.read_integer_registers(register, 2, self.id) / 100
                 power_per_phase.append(value)
 
-            if self.type == "Bat-Kit":
-                power_all = self.client.read_float_registers(0x000C, 2, self.id)
-            else:
-                power_all = sum(power_per_phase)
+            power_all = self.client.read_float_registers(0x000C, 2, self.id)
 
             return power_per_phase, power_all
         except Exception as e:
