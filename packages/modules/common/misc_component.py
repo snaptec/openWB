@@ -30,9 +30,8 @@ class MiscComponent():
         try:
             self.device_id = device_id
             self.client = client
-            self.data = {}
-            self.data["config"] = component_config
-            self.data["simulation"] = {}
+            self.data = {"config": component_config,
+                         "simulation": {}}
             self.value_store = (store.ValueStoreFactory().get_storage(component_config["type"]))(self.data["config"]["id"])
             simcount_factory = simcount.SimCountFactory().get_sim_counter()
             self.sim_count = simcount_factory()

@@ -5,7 +5,6 @@ from typing import List, Tuple
 try:
     from ..common import connect_tcp
     from ..common.module_error import ModuleError, ModuleErrorLevels
-    from ...helpermodules import log
 except:
     # for 1.9 compability
     import os
@@ -13,15 +12,15 @@ except:
     import sys
     parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
     sys.path.insert(0, parentdir2)
-    from helpermodules import log
     from modules.common import connect_tcp
     from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class Sdm630:
-    def __init__(self, modbus_id:int, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id: int, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
         self.id = modbus_id
+
     def __process_error(self, e):
         if isinstance(e, ModuleError):
             raise
@@ -30,12 +29,7 @@ class Sdm630:
 
     def get_voltage(self) -> List[int]:
         try:
-            voltage = []
-            regs = [0x00, 0x02, 0x04]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                voltage.append(value)
-            return voltage
+            return [self.client.read_float_registers(register, 2, self.id) for register in [0x00, 0x02, 0x04]]
         except Exception as e:
             self.__process_error(e)
 
@@ -47,11 +41,7 @@ class Sdm630:
 
     def get_power(self) -> Tuple[List[int], float]:
         try:
-            power_per_phase = []
-            regs = [0x0C, 0x0E, 0x10]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                power_per_phase.append(value)
+            power_per_phase = [self.client.read_float_registers(register, 2, self.id) for register in [0x0C, 0x0E, 0x10]]
             power_all = sum(power_per_phase)
             return power_per_phase, power_all
         except Exception as e:
@@ -65,12 +55,7 @@ class Sdm630:
 
     def get_power_factor(self) -> List[int]:
         try:
-            power_factor = []
-            regs = [0x1E, 0x20, 0x22]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                power_factor.append(value)
-            return power_factor
+            return [self.client.read_float_registers(register, 2, self.id) for register in [0x1E, 0x20, 0x22]]
         except Exception as e:
             self.__process_error(e)
 
@@ -85,12 +70,7 @@ class Sdm630:
 
     def get_current(self) -> List[int]:
         try:
-            current = []
-            regs = [0x06, 0x08, 0x0A]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                current.append(value)
-            return current
+            return [self.client.read_float_registers(register, 2, self.id) for register in [0x06, 0x08, 0x0A]]
         except Exception as e:
             self.__process_error(e)
 

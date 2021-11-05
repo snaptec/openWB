@@ -20,7 +20,7 @@ def get_default_config() -> dict:
     return {
         "name": "PV-Kit",
         "type": "inverter",
-        "id": None,
+        "id": 0,
         "configuration":
             {
                 "version": 2
@@ -31,8 +31,7 @@ def get_default_config() -> dict:
 class PvKit(PvKitFlex):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
-            self.data = {}
-            self.data["config"] = component_config
+            self.data = {"config": component_config}
             version = self.data["config"]["configuration"]["version"]
             if version == 0:
                 id = 8

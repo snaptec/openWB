@@ -69,7 +69,7 @@ def pub_to_broker(topic: str, value, digits: int = None) -> None:
 
 class ValueStore:
     @abstractmethod
-    def set(self, num, values):
+    def set(self, *kwargs) -> None:
         pass
 
 

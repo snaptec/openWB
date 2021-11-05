@@ -22,7 +22,7 @@ except:
 def get_default_config() -> dict:
     return {
         "name": "Alpha ESS Zähler",
-        "id": None,
+        "id": 0,
         "type": "counter",
         "configuration":
         {
@@ -35,11 +35,10 @@ class AlphaEssCounter(misc_component.MiscComponent):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             super().__init__(device_id, component_config, tcp_client)
-            self.tcp_client = tcp_client
         except Exception as e:
             self.process_error(e)
 
-    def update_values(self):
+    def update_values(self) -> None:
         try:
             log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
             time.sleep(0.1)
@@ -65,7 +64,7 @@ class AlphaEssCounter(misc_component.MiscComponent):
         except Exception as e:
             self.process_error(e)
 
-    def __update_values_before_v123(self, sdmid: int) -> Tuple[float, float, float, List[float]]:
+    def __update_values_before_v123(self, sdmid: int) -> Tuple[int, int, int, List[int]]:
         try:
             power_all = self.client.read_binary_registers_to_int(0x0006, sdmid, 32)
             exported = self.client.read_binary_registers_to_int(0x0008, sdmid, 32) * 10
@@ -81,7 +80,7 @@ class AlphaEssCounter(misc_component.MiscComponent):
         except Exception as e:
             self.process_error(e)
 
-    def __update_values_since_v123(self, sdmid: int) -> Tuple[float, float, float, List[float]]:
+    def __update_values_since_v123(self, sdmid: int) -> Tuple[int, int, int, List[int]]:
         try:
             power_all = self.client.read_binary_registers_to_int(0x0021, sdmid, 32)
             exported = self.client.read_binary_registers_to_int(0x0010, sdmid, 32) * 10

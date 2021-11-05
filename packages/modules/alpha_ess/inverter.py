@@ -21,7 +21,7 @@ except:
 def get_default_config() -> dict:
     return {
         "name": "Alpha ESS Wechselrichter",
-        "id": None,
+        "id": 0,
         "type": "inverter",
         "configuration":
         {
@@ -34,7 +34,6 @@ class AlphaEssInverter(misc_component.MiscComponent):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             super().__init__(device_id, component_config, tcp_client)
-            self.tcp_client = tcp_client
         except Exception as e:
             self.process_error(e)
 
@@ -65,7 +64,7 @@ class AlphaEssInverter(misc_component.MiscComponent):
         except Exception as e:
             self.process_error(e)
 
-    def __get_power(self, sdmid: int, reg_p: int) -> float:
+    def __get_power(self, sdmid: int, reg_p: int) -> int:
         try:
             p_reg = self.client.read_binary_registers_to_int(reg_p, sdmid, 32)
             if (p_reg < 0):

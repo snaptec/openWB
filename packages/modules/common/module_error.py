@@ -1,5 +1,4 @@
 from enum import Enum
-import paho.mqtt.publish as publish
 import traceback
 
 try:
@@ -43,7 +42,7 @@ class ModuleError(Exception):
             else:
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_str", self.fault_str)
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_state", self.fault_state.value)
-        except Exception as e:
+        except:
             log.MainLogger().exception("Fehler im Modul module_error")
 
 

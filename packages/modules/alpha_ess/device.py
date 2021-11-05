@@ -71,7 +71,7 @@ def read_legacy(argv: List):
 
         log.MainLogger().debug('alpha_ess Version: ' + str(version))
 
-        dev.read()
+        dev.update_values()
     except:
         log.MainLogger().exception("Fehler im Modul Alpha ESS")
 

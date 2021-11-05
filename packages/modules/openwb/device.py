@@ -23,7 +23,7 @@ def get_default_config() -> dict:
     return {
         "name": "OpenWB-Kit",
         "type": "openwb",
-        "id": None
+        "id": 0
     }
 
 
@@ -64,7 +64,6 @@ def read_legacy(argv: List):
             num = None
 
         default = get_default_config()
-        default["id"] = 0
         dev = Device(default)
 
         component_default = globals()[component_type].get_default_config()
@@ -74,7 +73,7 @@ def read_legacy(argv: List):
 
         log.MainLogger().debug('openWB Version: ' + str(version))
 
-        dev.read()
+        dev.update_values()
     except:
         log.MainLogger().exception("Fehler im Modul openwb")
 

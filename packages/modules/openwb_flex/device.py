@@ -23,7 +23,7 @@ def get_default_config() -> dict:
     return {
         "name": "OpenWB-Kit",
         "type": "openwb_flex",
-        "id": None,
+        "id": 0,
         "configuration":
         {
             "ip_address": "192.168.193.15",
@@ -71,7 +71,6 @@ def read_legacy(argv: List):
             num = None
 
         default = get_default_config()
-        default["id"] = 0
         default["configuration"]["ip_address"] = ip_address
         default["configuration"]["port"] = port
         dev = Device(default)
@@ -86,7 +85,7 @@ def read_legacy(argv: List):
         log.MainLogger().debug('openWB-Kit Port: ' + str(port))
         log.MainLogger().debug('openWB-Kit ID: ' + str(id))
 
-        dev.read()
+        dev.update_values()
     except Exception as e:
         log.MainLogger().exception("Fehler im Modul openwb_flex")
 

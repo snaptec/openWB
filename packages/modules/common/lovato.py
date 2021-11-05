@@ -5,6 +5,7 @@ from typing import List, Tuple
 try:
     from ..common import connect_tcp
     from ...helpermodules import log
+    from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     # for 1.9 compability
     import os
@@ -14,116 +15,71 @@ except:
     sys.path.insert(0, parentdir2)
     from helpermodules import log
     from modules.common import connect_tcp
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class Lovato:
-    def __init__(self, component_config: dict, client: connect_tcp.ConnectTcp) -> None:
-        try:
-            self.client = client
-            self.name = component_config["name"]
-            self.id = component_config["configuration"]["id"]
-        except Exception as e:
-            log.MainLogger().exception("Fehler beim Initialisieren von "+str(self.name))
+    def __init__(self, modbus_id: int, client: connect_tcp.ConnectTcp) -> None:
+        self.client = client
+        self.id = modbus_id
+
+    def __process_error(self, e):
+        if isinstance(e, ModuleError):
+            raise
+        else:
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
     def get_voltage(self) -> List[int]:
         try:
-            voltage = []
-            regs = [0x0001, 0x0003, 0x0005]
-            for register in regs:
-                value = self.client.read_registers(register, 2, self.id)
-                if isinstance(value, (int, float)):
-                    value = value / 100
-                voltage.append(value)
-            return voltage
+            return [self.client.read_registers(register, 2, self.id) / 100 for register in [0x0001, 0x0003, 0x0005]]
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_imported(self) -> float:
         try:
-            imported = self.client.read_float_registers(0x0048, 2, self.id)
-            if isinstance(imported, (int, float)):
-                imported = imported * 1000
-            return imported
+            return self.client.read_float_registers(0x0048, 2, self.id) * 1000
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)
 
     def get_power(self) -> Tuple[List[int], float]:
         try:
-            power_per_phase = []
-            regs = [0x0013, 0x0015, 0x0017]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id)
-                if isinstance(value, (int, float)):
-                    value = value / 100
-                power_per_phase.append(value)
-
+            power_per_phase = [self.client.read_integer_registers(register, 2, self.id) / 100 for register in [0x0013, 0x0015, 0x0017]]
             power_all = self.client.read_float_registers(0x000C, 2, self.id)
             return power_per_phase, power_all
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None], None
+            self.__process_error(e)
 
     def get_exported(self) -> float:
         try:
-            exported = self.client.read_float_registers(0x004a, 2, self.id)
-            if isinstance(exported, (int, float)):
-                exported = exported * 1000
-            return exported
+            return self.client.read_float_registers(0x004a, 2, self.id) * 1000
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)
 
     def get_power_factor(self) -> List[int]:
         try:
-            power_factor = []
-            regs = [0x0025, 0x0027, 0x0029]
-            for register in regs:
-                value = self.client.read_registers(register, 2, self.id)
-                if isinstance(value, (int, float)):
-                    value = value / 10000
-                power_factor.append(value)
-            return power_factor
+            return [self.client.read_registers(register, 2, self.id) / 10000 for register in [0x0025, 0x0027, 0x0029]]
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_frequency(self) -> float:
         try:
-            frequency = self.client.read_registers(0x0031, 2, self.id)
-            if isinstance(frequency, (int, float)):
-                frequency = frequency / 100
-                if frequency > 100:
-                    frequency = frequency / 10
+            frequency = self.client.read_registers(0x0031, 2, self.id) / 100
+            if frequency > 100:
+                frequency = frequency / 10
             return frequency
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)
 
     def get_current(self) -> List[int]:
         try:
-            current = []
-            regs = [0x0007, 0x0009, 0x000b]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id)
-                if isinstance(value, (int, float)):
-                    value = value / 10000
-                current.append(value)
-            return current
+            return [self.client.read_integer_registers(register, 2, self.id) / 10000 for register in [0x0007, 0x0009, 0x000b]]
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_counter(self) -> float:
         try:
             finalbezug1 = self.client.read_integer_registers(0x1a1f, 2, self.id)
             finalbezug2 = self.client.read_integer_registers(0x1a21, 2, self.id)
-            if isinstance(finalbezug1, (int, float)) and isinstance(finalbezug2, (int, float)):
-                return max(finalbezug1, finalbezug2)
-            else:
-                counter = finalbezug1  # enthält Fehlermeldung
-            return counter
+            return max(finalbezug1, finalbezug2)
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)

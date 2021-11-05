@@ -21,7 +21,7 @@ except:
 def get_default_config() -> dict:
     return {
         "name": "Alpha ESS Speicher",
-        "id": None,
+        "id": 0,
         "type": "bat",
         "configuration":
         {
@@ -34,11 +34,10 @@ class AlphaEssBat(misc_component.MiscComponent):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             super().__init__(device_id, component_config, tcp_client)
-            self.tcp_client = tcp_client
         except Exception as e:
             self.process_error(e)
 
-    def read(self) -> None:
+    def update_values(self) -> None:
         try:
             log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
             # keine Unterschiede zwischen den Versionen

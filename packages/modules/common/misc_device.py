@@ -12,28 +12,28 @@ except:
     from helpermodules import log
     from modules.common import connect_tcp
 
+
 class MiscDevice():
-    def __init__(self, device: dict, client: connect_tcp.ConnectTcp ) -> None:
+    def __init__(self, device: dict, client: connect_tcp.ConnectTcp) -> None:
         try:
-            self.data = {}
-            self.data["config"] = device
-            self.data["components"] = {}
+            self.data = {"config": device,
+                         "components": {}}
             self.client = client
-        except Exception as e:
+        except:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
         try:
             factory = self.component_factory(component_config["type"])
             self.data["components"]["component"+str(component_config["id"])] = factory(self.data["config"]["id"], component_config, self.client)
-        except Exception as e:
+        except:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
     @abstractmethod
     def component_factory(self):
         pass
 
-    def read(self):
+    def update_values(self):
         try:
             log.MainLogger().debug("Start device reading"+str(self.data["components"]))
             if self.data["components"]:
@@ -41,5 +41,5 @@ class MiscDevice():
                     self.data["components"][component].update_values()
             else:
                 log.MainLogger().warning(self.data["config"]["name"]+": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden.")
-        except Exception as e:
+        except:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
