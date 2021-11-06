@@ -27,8 +27,7 @@ class Device():
             self.data = {}
             self.data["config"] = device_config
             self.data["components"] = {}
-            #ip_address = "192.168.193.15"
-            ip_address = "192.168.1.101"
+            ip_address = "192.168.193.15"
             port = "8899"
             self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
         except Exception as e:

@@ -35,8 +35,7 @@ class EvuKit(EvuKitFlex):
             elif version == 1:
                 id = 0x02
             elif version == 2:
-                #id = 115
-                id=105
+                id = 115
             self.data["config"]["configuration"]["id"] = id
 
             super().__init__(device_id, self.data["config"], tcp_client)
