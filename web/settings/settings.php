@@ -1117,7 +1117,7 @@
 												<input type="range" class="form-control-range rangeInput" name="nachtsoc" id="nachtsoc" min="5" max="100" step="5" value="<?php echo $nachtsocold; ?>">
 											</div>
 										</div>
-										<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster. Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.</span>
+										<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts bis zur Überschreitung von xx% SoC geladen in dem angegebenen Zeitfenster. Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
@@ -1129,7 +1129,7 @@
 												<input type="range" class="form-control-range rangeInput" name="nachtsoc1" id="nachtsoc1" min="5" max="100" step="5" value="<?php echo $nachtsoc1old; ?>">
 											</div>
 										</div>
-										<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster. Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv.</span>
+										<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts bis zur Überschreitung von xx% SoC geladen in dem angegebenen Zeitfenster. Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv.</span>
 									</div>
 								</div>
 								<hr class="border-info">
@@ -1303,7 +1303,7 @@
 													<input type="range" class="form-control-range rangeInput" name="nachtsocs1" id="nachtsocs1" min="5" max="100" step="5" value="<?php echo $nachtsocs1old; ?>">
 												</div>
 											</div>
-											<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster. Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.</span>
+											<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts in dem angegebenen Zeitfenster bis zur Überschreitung von xx% SoC geladen. Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -1315,7 +1315,7 @@
 													<input type="range" class="form-control-range rangeInput" name="nachtsoc1s1" id="nachtsoc1s1" min="5" max="100" step="5" value="<?php echo $nachtsoc1s1old; ?>">
 												</div>
 											</div>
-											<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster. Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv.</span>
+											<span class="form-text small">Wenn SoC Modul vorhanden wird Nachts in dem angegebenen Zeitfenster bis zur Überschreitung von xx% SoC geladen. Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv.</span>
 										</div>
 									</div>
 									<hr class="border-info">
