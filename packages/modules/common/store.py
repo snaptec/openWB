@@ -26,7 +26,7 @@ class ValueStoreFactory:
             return InverterValueStoreRamdisk if ramdisk else InverterValueStoreBroker
 
 
-def write_to_file(file: str, value, digits: int = None):
+def write_to_file(file: str, value, digits: int = None) -> None:
     try:
         if value != None:
             if digits != None:
@@ -49,7 +49,7 @@ def pub_to_broker(topic: str, value, digits: int = None) -> None:
                         value = [int(val,) for val in value]
                     else:
                         value = [round(val, digits) for val in value]
-                pub.pub(topic, value)
+            pub.pub(topic, value)
         else:
             if value != None:
                 if digits != None:
@@ -57,7 +57,7 @@ def pub_to_broker(topic: str, value, digits: int = None) -> None:
                         value = int(value)
                     else:
                         value = round(value, digits)
-                pub.pub(topic, value)
+            pub.pub(topic, value)
     except Exception as e:
         log.MainLogger().exception("Fehler im Modul store")
 
