@@ -73,6 +73,8 @@ class EvuKitFlex():
             log.MainLogger().debug("Start kit reading")
             voltages = self.counter.get_voltage()
             power_per_phase, power_all = self.counter.get_power()
+            if self.data["config"]["configuration"]["version"] == 1:
+                power_all = sum(power_per_phase)
             frequency = self.counter.get_frequency()
             power_factors = self.counter.get_power_factor()
 
