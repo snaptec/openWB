@@ -1,5 +1,6 @@
 from enum import Enum
 import traceback
+from typing_extensions import Literal
 
 try:
     from ...helpermodules import compability
@@ -14,9 +15,14 @@ except:
     from helpermodules import log
     from helpermodules import pub
 
+class ModuleErrorLevels(Enum):
+    NO_ERROR = 0
+    WARNING = 1
+    ERROR = 2
+
 
 class ModuleError(Exception):
-    def __init__(self, fault_str: str, fault_state: int) -> None:
+    def __init__(self, fault_str: str, fault_state: Literal[ModuleErrorLevels.ERROR, ModuleErrorLevels.WARNING, ModuleErrorLevels.NO_ERROR]) -> None:
         self.fault_str = fault_str
         self.fault_state = fault_state
 
@@ -42,9 +48,3 @@ class ModuleError(Exception):
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_state", self.fault_state.value)
         except:
             log.MainLogger().exception("Fehler im Modul module_error")
-
-
-class ModuleErrorLevels(Enum):
-    NO_ERROR = 0
-    WARNING = 1
-    ERROR = 2

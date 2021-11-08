@@ -23,7 +23,7 @@ class Mpm3pm:
         else:
             raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
-    def get_voltage(self) -> List[int]:
+    def get_voltage(self) -> List[float]:
         try:
             return [self.client.read_registers(register, 2, self.id) / 10 for register in [0x08, 0x0A, 0x0C]]
         except Exception as e:
@@ -35,7 +35,7 @@ class Mpm3pm:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
             power_per_phase = [self.client.read_integer_registers(register, 2, self.id) / 100 for register in [0x14, 0x16, 0x18]]
             power_all = self.client.read_integer_registers(0x26, 2, self.id) / 100
@@ -49,7 +49,7 @@ class Mpm3pm:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
+    def get_power_factor(self) -> List[float]:
         try:
             return [self.client.read_integer_registers(register, 2, self.id) / 100 for register in [0x20, 0x22, 0x24]]
         except Exception as e:
@@ -61,7 +61,7 @@ class Mpm3pm:
         except Exception as e:
             self.__process_error(e)
 
-    def get_current(self) -> List[int]:
+    def get_current(self) -> List[float]:
         try:
             return [self.client.read_registers(register, 2, self.id) / 100 for register in [0x0E, 0x10, 0x12]]
         except Exception as e:

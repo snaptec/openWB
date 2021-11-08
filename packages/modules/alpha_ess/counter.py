@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import time
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 
 try:
     from ...helpermodules import log
@@ -56,7 +56,7 @@ class AlphaEssCounter(AbstractCounter):
         )
         return counter_state
 
-    def __get_values_factory(self, version: int):
+    def __get_values_factory(self, version: int) -> Callable[[int], Tuple[int, int, int, List[int]]]:
         try:
             if version == 0:
                 return self.__get_values_before_v123

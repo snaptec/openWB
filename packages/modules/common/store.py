@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from collections.abc import Iterable
+from collections.abc import Iterable 
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 try:
     from ..common.module_error import ModuleError, ModuleErrorLevels
@@ -18,20 +18,6 @@ except:
     from helpermodules import pub
     from modules.common.module_error import ModuleError, ModuleErrorLevels
     from .component_state import BatState, CounterState, InverterState
-
-
-class ValueStoreFactory:
-    def get_storage(self, component_type: str):
-        try:
-            ramdisk = compability.check_ramdisk_usage()
-            if component_type == "bat":
-                return BatteryValueStoreRamdisk if ramdisk else BatteryValueStoreBroker
-            elif component_type == "counter":
-                return CounterValueStoreRamdisk if ramdisk else CounterValueStoreBroker
-            elif component_type == "inverter":
-                return InverterValueStoreRamdisk if ramdisk else InverterValueStoreBroker
-        except Exception as e:
-            process_error(e)
 
 
 def process_error(e):
@@ -164,7 +150,7 @@ class InverterValueStoreRamdisk(ValueStore):
             elif self.num == 2:
                 filename_extension = "2"
             else:
-                log.MainLogger().error("Unbekannte PV-Nummer "+str(self.num))
+                raise ModuleError("Unbekannte PV-Nummer "+str(self.num), ModuleErrorLevels.ERROR)
             power = write_to_file("/pv"+filename_extension+"watt", inverter_state.power, 0)
             write_to_file("/pv"+filename_extension+"kwh", inverter_state.counter, 3)
             write_to_file("/pv"+filename_extension+"kwhk", inverter_state.counter/1000, 3)
@@ -183,5 +169,20 @@ class InverterValueStoreBroker(ValueStore):
             pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/power", inverter_state.power, 2)
             pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/counter", inverter_state.counter, 3)
             pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/currents", inverter_state.currents, 1)
+        except Exception as e:
+            process_error(e)
+
+value_store_classes = Union[BatteryValueStoreRamdisk, BatteryValueStoreBroker, CounterValueStoreRamdisk, CounterValueStoreBroker, InverterValueStoreRamdisk, InverterValueStoreBroker]
+
+class ValueStoreFactory:
+    def get_storage(self, component_type: str) -> value_store_classes:
+        try:
+            ramdisk = compability.check_ramdisk_usage()
+            if component_type == "bat":
+                return BatteryValueStoreRamdisk if ramdisk else BatteryValueStoreBroker
+            elif component_type == "counter":
+                return CounterValueStoreRamdisk if ramdisk else CounterValueStoreBroker
+            elif component_type == "inverter":
+                return InverterValueStoreRamdisk if ramdisk else InverterValueStoreBroker
         except Exception as e:
             process_error(e)

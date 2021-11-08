@@ -45,18 +45,19 @@ class Device(abstract_device.AbstractDevice):
         try:
             if component_type not in self._COMPONENT_TYPE_TO_CLASS:
                 raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(self._COMPONENT_TYPE_TO_CLASS.keys()))
-            if component_type == "bat":
-                pass
-            elif component_type == "counter":
+            
+            if component_type == "counter":
                 ip_address = "192.168.193.15"
-                port = "8899"
+                port = 8899
                 self.client = connect_tcp.ConnectTcp(self.data["config"]["id"], ip_address, port)
                 return self._COMPONENT_TYPE_TO_CLASS[component_type]
             elif component_type == "inverter":
                 ip_address = "192.168.193.13"
-                port = "8899"
+                port = 8899
                 self.client = connect_tcp.ConnectTcp(self.data["config"]["id"], ip_address, port)
                 return self._COMPONENT_TYPE_TO_CLASS[component_type]
+            # elif component_type == "bat":
+            #     pass
         except:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 

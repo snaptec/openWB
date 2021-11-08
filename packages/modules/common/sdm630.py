@@ -25,7 +25,7 @@ class Sdm630:
         else:
             raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
-    def get_voltage(self) -> List[int]:
+    def get_voltage(self) -> List[float]:
         try:
             return [self.client.read_float_registers(register, 2, self.id) for register in [0x00, 0x02, 0x04]]
         except Exception as e:
@@ -37,7 +37,7 @@ class Sdm630:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
             power_per_phase = [self.client.read_float_registers(register, 2, self.id) for register in [0x0C, 0x0E, 0x10]]
             power_all = sum(power_per_phase)
@@ -51,7 +51,7 @@ class Sdm630:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
+    def get_power_factor(self) -> List[float]:
         try:
             return [self.client.read_float_registers(register, 2, self.id) for register in [0x1E, 0x20, 0x22]]
         except Exception as e:
@@ -66,7 +66,7 @@ class Sdm630:
         except Exception as e:
             self.__process_error(e)
 
-    def get_current(self) -> List[int]:
+    def get_current(self) -> List[float]:
         try:
             return [self.client.read_float_registers(register, 2, self.id) for register in [0x06, 0x08, 0x0A]]
         except Exception as e:

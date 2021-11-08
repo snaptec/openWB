@@ -27,7 +27,7 @@ class Lovato:
         else:
             raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
-    def get_voltage(self) -> List[int]:
+    def get_voltage(self) -> List[float]:
         try:
             return [self.client.read_registers(register, 2, self.id) / 100 for register in [0x0001, 0x0003, 0x0005]]
         except Exception as e:
@@ -39,7 +39,7 @@ class Lovato:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
             power_per_phase = [self.client.read_integer_registers(register, 2, self.id) / 100 for register in [0x0013, 0x0015, 0x0017]]
             power_all = self.client.read_float_registers(0x000C, 2, self.id)
@@ -53,7 +53,7 @@ class Lovato:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
+    def get_power_factor(self) -> List[float]:
         try:
             return [self.client.read_registers(register, 2, self.id) / 10000 for register in [0x0025, 0x0027, 0x0029]]
         except Exception as e:
@@ -68,7 +68,7 @@ class Lovato:
         except Exception as e:
             self.__process_error(e)
 
-    def get_current(self) -> List[int]:
+    def get_current(self) -> List[float]:
         try:
             return [self.client.read_integer_registers(register, 2, self.id) / 10000 for register in [0x0007, 0x0009, 0x000b]]
         except Exception as e:

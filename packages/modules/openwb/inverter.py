@@ -4,12 +4,14 @@ import sys
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
+    from ..common.module_error import ModuleError, ModuleErrorLevels
     from ..openwb_flex.inverter import PvKitFlex
 except:
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
     from modules.openwb_flex.inverter import PvKitFlex
 
 
@@ -36,6 +38,8 @@ class PvKit(PvKitFlex):
                 id = 0x08
             elif version == 2:
                 id = 116
+            else:
+                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevels.ERROR)
             self.data["config"]["configuration"]["id"] = id
 
             super().__init__(device_id, self.data["config"], tcp_client)

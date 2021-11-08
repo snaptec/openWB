@@ -9,6 +9,7 @@ try:
     from ..common import sdm630
     from ..common import store
     from ..common.module_error import ModuleError, ModuleErrorLevels
+    from component_state import BatState, CounterState, InverterState
 except:
     from pathlib import Path
     import sys
@@ -21,7 +22,7 @@ except:
     from modules.common import sdm630
     from modules.common import store
     from modules.common.module_error import ModuleError, ModuleErrorLevels
-    from . component_state import BatState, CounterState, InverterState
+    from .component_state import BatState, CounterState, InverterState
 
 
 class AbstractComponent:
@@ -37,16 +38,20 @@ class AbstractComponent:
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
+    @abstractmethod
+    def get_values(self) -> Union[BatState, CounterState, InverterState]:
+        pass
+
     def update_values(self) -> Union[BatState, CounterState, InverterState]:
         try:
             state = self.get_values()
             self.value_store.set(state)
         except ModuleError as e:
             e.store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
-            raise ModuleError("", 2)
+            raise ModuleError("", ModuleErrorLevels.ERROR)
         except Exception as e:
             self.process_error(e)
-            raise ModuleError("", 2)
+            raise ModuleError("", ModuleErrorLevels.ERROR)
         else:
             ModuleError("Kein Fehler.", ModuleErrorLevels.NO_ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
             return state
@@ -62,6 +67,8 @@ class AbstractComponent:
                 return lovato.Lovato(id, tcp_client)
             elif version == 2:
                 return sdm630.Sdm630(id, tcp_client)
+            else:
+                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevels.ERROR)
         except Exception as e:
             self.process_error(e)
 

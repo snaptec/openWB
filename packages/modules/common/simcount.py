@@ -52,7 +52,8 @@ class SimCountLegacy:
         """
         try:
             timestamp_present = time.time()
-            power_previous = 0
+            power_previous, counter_export_present, counter_export_previous = 0, 0, 0
+            counter_import_present, counter_import_previous = 0, 0
             timestamp_previous = 0.0
             start_new = True
             if os.path.isfile('/var/www/html/openWB/ramdisk/'+prefix+'sec0'):
@@ -61,12 +62,12 @@ class SimCountLegacy:
                 try:
                     counter_import_present = int(float(self.read_ramdisk_file(prefix+'watt0pos')))
                 except:
-                    counter_import_present = self.restore("watt0pos", prefix)
+                    counter_import_present = int(self.restore("watt0pos", prefix))
                 counter_import_previous = counter_import_present
                 try:
                     counter_export_present = int(float(self.read_ramdisk_file(prefix+'watt0neg')))
                 except:
-                    counter_export_present = self.restore("watt0neg", prefix)
+                    counter_export_present = int(self.restore("watt0neg", prefix))
                 if counter_export_present < 0:
                     # runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab.
                     counter_export_present = counter_export_present * -1
@@ -111,7 +112,7 @@ class SimCountLegacy:
             elif prefix == "speicher":
                 topic = "housebattery"
             else:
-                log.MainLogger().error("Fehler im Modul simcount: Unbekannter Präfix")
+                raise ModuleError("Fehler im Modul simcount: Unbekannter Präfix", ModuleErrorLevels.ERROR)
             return topic
         except Exception as e:
             process_error(e)
@@ -143,7 +144,7 @@ class SimCountLegacy:
                 else:
                     temp = subscribe.simple("openWB/"+topic+"/WHExport_temp", hostname="localhost")
             except Exception as e:
-                log.MainLogger().error("Fehler im Modul simcount", e)
+                raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
             # Signal-Handler stoppen
             signal.alarm(0)
             temp = int(float(temp.payload.decode("utf-8")))
@@ -179,7 +180,7 @@ class SimCount:
         """
         try:
             timestamp_present = time.time()
-            power_previous = 0
+            power_previous, counter_export_present, counter_import_present = 0, 0, 0
             timestamp_previous = 0.0
             start_new = True
             if "timestamp_present" in data:
@@ -249,6 +250,6 @@ def calculate_import_export(seconds_since_previous: Number, power1: Number, powe
 
 if __name__ == "__main__":
     try:
-        SimCountLegacy.sim_count(int(sys.argv[1]), prefix=str(sys.argv[2]))
+        SimCountLegacy().sim_count(power_present=int(sys.argv[1]), prefix=str(sys.argv[2]))
     except Exception as e:
         process_error(e)

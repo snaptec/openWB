@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
+import sys
 from typing import List, Union
 
 try:
@@ -12,7 +13,6 @@ try:
     from . import inverter
 except:
     from pathlib import Path
-    import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
