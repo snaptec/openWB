@@ -49,8 +49,8 @@ class ConnectTcp:
     def read_integer_registers(self, reg: int, len: int, id: int) -> int:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
-            if type(resp) == pymodbus.exceptions.ModbusIOException:
-                self.__process_modbus_error(resp)
+            if resp.isError():
+                raise resp
             all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
             return struct.unpack('>i', self.decode_hex(all)[0])[0]
         except Exception as e:
@@ -59,8 +59,8 @@ class ConnectTcp:
     def read_short_int_registers(self, reg: int, len: int, id: int) -> int:
         try:
             resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
-            if type(resp) == pymodbus.exceptions.ModbusIOException:
-                self.__process_modbus_error(resp)
+            if resp.isError():
+                raise resp
             all = format(resp.registers[0], '04x')
             return struct.unpack('>h', self.decode_hex(all)[0])[0]
         except Exception as e:
@@ -69,8 +69,8 @@ class ConnectTcp:
     def read_float_registers(self, reg: int, len: int, id: int) -> float:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
-            if type(resp) == pymodbus.exceptions.ModbusIOException:
-                self.__process_modbus_error(resp)
+            if resp.isError():
+                raise resp
             return struct.unpack('>f', struct.pack('>HH', *resp.registers))[0]
         except Exception as e:
             self.__process_modbus_error(e)
@@ -78,8 +78,8 @@ class ConnectTcp:
     def read_registers(self, reg: int, len: int, id: int) -> float:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
-            if type(resp) == pymodbus.exceptions.ModbusIOException:
-                self.__process_modbus_error(resp)
+            if resp.isError():
+                raise resp
             return float(resp.registers[1])
         except Exception as e:
             self.__process_modbus_error(e)
@@ -87,8 +87,8 @@ class ConnectTcp:
     def read_binary_registers_to_int(self, reg: int, id: int, bit: int, signed=True) -> int:
         try:
             resp = self.tcp_client.read_holding_registers(reg, bit/8, unit=id)
-            if type(resp) == pymodbus.exceptions.ModbusIOException:
-                self.__process_modbus_error(resp)
+            if resp.isError():
+                raise resp
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 if signed == True:
@@ -109,8 +109,8 @@ class ConnectTcp:
     def read_binary_registers_to_float(self, reg: int, id: int, bit: int) -> float:
         try:
             resp = self.tcp_client.read_holding_registers(reg, bit/8, unit=id)
-            if type(resp) == pymodbus.exceptions.ModbusIOException:
-                self.__process_modbus_error(resp)
+            if resp.isError():
+                raise resp
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 value = decoder.decode_32bit_float()
