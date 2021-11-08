@@ -2,7 +2,7 @@ from typing import List, Union
 
 try:
     from ..common import connect_tcp
-    from ..common import misc_device
+    from ..common import abstract_device
     from ...helpermodules import log
     from . import counter
     from. import inverter
@@ -12,7 +12,7 @@ except:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
-    from modules.common import misc_device
+    from modules.common import abstract_device
     import counter
     import inverter
 
@@ -25,7 +25,7 @@ def get_default_config() -> dict:
     }
 
 
-class Device(misc_device.MiscDevice):
+class Device(abstract_device.AbstractDevice):
     _COMPONENT_TYPE_TO_CLASS = {
         # "bat": ,
         "counter": counter.EvuKit,

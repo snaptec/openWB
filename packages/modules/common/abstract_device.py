@@ -3,15 +3,20 @@ from abc import abstractmethod
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
+    from ..common.module_error import ModuleError
 except:
     from pathlib import Path
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
+    from modules.common.module_error import ModuleError
 
 
-class MiscDevice:
+class AbstractDevice:
+    _COMPONENT_TYPE_TO_CLASS = {
+    }
+
     def __init__(self, device: dict, client: connect_tcp.ConnectTcp) -> None:
         try:
             self.data = {"config": device,
@@ -46,5 +51,7 @@ class MiscDevice:
                     self.data["components"][component].update_values()
             else:
                 log.MainLogger().warning(self.data["config"]["name"]+": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden.")
+        except ModuleError:
+            log.MainLogger().error("Beim Auslesen eines Moduls ist ein Fehler aufgetreten. Auslesen des Devices "+self.data["config"]["name"]+" beendet.")
         except:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])

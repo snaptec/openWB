@@ -8,6 +8,7 @@ try:
     from ...helpermodules import compability
     from ...helpermodules import log
     from ...helpermodules import pub
+    from component_state import BatState, CounterState, InverterState
 except:
     # for 1.9 compability
     import sys
@@ -16,6 +17,7 @@ except:
     from helpermodules import log
     from helpermodules import pub
     from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from .component_state import BatState, CounterState, InverterState
 
 
 class ValueStoreFactory:
@@ -85,15 +87,15 @@ class BatteryValueStoreRamdisk(ValueStore):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
-    def set(self, power: float, soc: int, imported: float, exported: float):
+    def set(self, bat_state: BatState):
         try:
-            power = write_to_file("/speicherleistung", power, 0)
-            write_to_file("/speichersoc", soc, 0)
-            write_to_file("/speicherikwh", imported, 2)
-            write_to_file("/speicherekwh", exported, 2)
+            power = write_to_file("/speicherleistung", bat_state.power, 0)
+            write_to_file("/speichersoc", bat_state.soc, 0)
+            write_to_file("/speicherikwh", bat_state.imported, 2)
+            write_to_file("/speicherekwh", bat_state.exported, 2)
             log.MainLogger().info('BAT Watt: ' + str(power))
-            log.MainLogger().info('BAT Einspeisung: ' + str(exported))
-            log.MainLogger().info('BAT Bezug: ' + str(imported))
+            log.MainLogger().info('BAT Einspeisung: ' + str(bat_state.exported))
+            log.MainLogger().info('BAT Bezug: ' + str(bat_state.imported))
         except Exception as e:
             process_error(e)
 
@@ -102,12 +104,12 @@ class BatteryValueStoreBroker(ValueStore):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
-    def set(self, power: float, soc: int, imported: float, exported: float):
+    def set(self, bat_state: BatState):
         try:
-            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/power", power, 2)
-            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/soc", soc, 0)
-            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/imported", imported, 2)
-            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/exported", exported, 2)
+            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/power", bat_state.power, 2)
+            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/soc", bat_state.soc, 0)
+            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/imported", bat_state.imported, 2)
+            pub_to_broker("openWB/set/bat/"+str(self.num)+"/get/exported", bat_state.exported, 2)
         except Exception as e:
             process_error(e)
 
@@ -116,16 +118,16 @@ class CounterValueStoreRamdisk(ValueStore):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
-    def set(self, voltages: List[float], currents: List[float], powers: List[float], power_factors: List[float], imported: float, exported: float, power_all: float, frequency: float):
+    def set(self, counter_state: CounterState):
         try:
-            write_array_to_files("/evuv", voltages, 1)
-            write_array_to_files("/bezuga", currents, 1)
-            write_array_to_files("/bezugw", powers, 0)
-            write_array_to_files("/evupf", power_factors, 2)
-            imported = write_to_file("/bezugkwh", imported)
-            exported = write_to_file("/einspeisungkwh", exported)
-            power_all = write_to_file("/wattbezug", power_all, 0)
-            write_to_file("/evuhz", frequency, 2)
+            write_array_to_files("/evuv", counter_state.voltages, 1)
+            write_array_to_files("/bezuga", counter_state.currents, 1)
+            write_array_to_files("/bezugw", counter_state.powers, 0)
+            write_array_to_files("/evupf", counter_state.power_factors, 2)
+            imported = write_to_file("/bezugkwh", counter_state.imported)
+            exported = write_to_file("/einspeisungkwh", counter_state.exported)
+            power_all = write_to_file("/wattbezug", counter_state.power_all, 0)
+            write_to_file("/evuhz", counter_state.frequency, 2)
             log.MainLogger().info('EVU Watt: ' + str(power_all))
             log.MainLogger().info('EVU Bezug: ' + str(imported))
             log.MainLogger().info('EVU Einspeisung: ' + str(exported))
@@ -137,16 +139,16 @@ class CounterValueStoreBroker(ValueStore):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
-    def set(self, voltages: List[float], currents: List[float], powers: List[float], power_factors: List[float], imported: float, exported: float, power_all: float, frequency: float):
+    def set(self, counter_state: CounterState):
         try:
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/voltage", voltages, 2)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/current", currents, 2)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/power_phase", powers, 2)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/power_factors", power_factors, 2)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/imported", imported)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/exported", exported)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/power_all", power_all)
-            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/frequency", frequency)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/voltage", counter_state.voltages, 2)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/current", counter_state.currents, 2)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/power_phase", counter_state.powers, 2)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/power_factors", counter_state.power_factors, 2)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/imported", counter_state.imported)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/exported", counter_state.exported)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/power_all", counter_state.power_all)
+            pub_to_broker("openWB/set/counter/"+str(self.num)+"/get/frequency", counter_state.frequency)
         except Exception as e:
             process_error(e)
 
@@ -155,7 +157,7 @@ class InverterValueStoreRamdisk(ValueStore):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
-    def set(self, power: float, counter: float, currents: List[float]):
+    def set(self, inverter_state: InverterState):
         try:
             if self.num == 1:
                 filename_extension = ""
@@ -163,10 +165,10 @@ class InverterValueStoreRamdisk(ValueStore):
                 filename_extension = "2"
             else:
                 log.MainLogger().error("Unbekannte PV-Nummer "+str(self.num))
-            power = write_to_file("/pv"+filename_extension+"watt", power, 0)
-            write_to_file("/pv"+filename_extension+"kwh", counter, 3)
-            write_to_file("/pv"+filename_extension+"kwhk", counter/1000, 3)
-            write_array_to_files("/pv"+filename_extension+"a", currents, 1)
+            power = write_to_file("/pv"+filename_extension+"watt", inverter_state.power, 0)
+            write_to_file("/pv"+filename_extension+"kwh", inverter_state.counter, 3)
+            write_to_file("/pv"+filename_extension+"kwhk", inverter_state.counter/1000, 3)
+            write_array_to_files("/pv"+filename_extension+"a", inverter_state.currents, 1)
             log.MainLogger().info('PV Watt: ' + str(power))
         except Exception as e:
             process_error(e)
@@ -176,10 +178,10 @@ class InverterValueStoreBroker(ValueStore):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
-    def set(self, power: float, counter: float, currents: List[float]):
+    def set(self, inverter_state: InverterState):
         try:
-            pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/power", power, 2)
-            pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/counter", counter, 3)
-            pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/currents", currents, 1)
+            pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/power", inverter_state.power, 2)
+            pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/counter", inverter_state.counter, 3)
+            pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/currents", inverter_state.currents, 1)
         except Exception as e:
             process_error(e)

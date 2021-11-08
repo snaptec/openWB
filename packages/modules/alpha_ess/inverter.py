@@ -4,16 +4,18 @@ import time
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
-    from ..common import misc_component
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common.abstract_component import AbstractInverter
+    from ..common.component_state import InverterState
+    from ..common.module_error import ModuleError
 except:
     from pathlib import Path
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
-    from modules.common import misc_component
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.abstract_component import AbstractInverter
+    from modules.common.component_state import InverterState
+    from modules.common.module_error import ModuleError
 
 
 def get_default_config() -> dict:
@@ -28,28 +30,26 @@ def get_default_config() -> dict:
     }
 
 
-class AlphaEssInverter(misc_component.MiscComponent):
+class AlphaEssInverter(AbstractInverter):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             super().__init__(device_id, component_config, tcp_client)
         except Exception as e:
             self.process_error(e)
 
-    def update_values(self) -> None:
-        try:
-            log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
-            reg_p = self.__version_factory(self.data["config"]["configuration"]["version"])
-            power = self.__get_power(85, reg_p)
+    def get_values(self) -> InverterState:
+        log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
+        reg_p = self.__version_factory(self.data["config"]["configuration"]["version"])
+        power = self.__get_power(85, reg_p)
 
-            topic_str = "openWB/set/system/device/" + str(self.device_id)+"/mmisc_component/"+str(self.data["config"]["id"])+"/"
-            _, counter = self.sim_count.sim_count(power, topic=topic_str, data=self.data["simulation"], prefix="pv")
-            self.value_store.set(power=power, counter=counter, currents=[0, 0, 0])
-        except ModuleError as e:
-            e.store_error(self.data["config"]["id"], "inverter", self.data["config"]["name"])
-        except Exception as e:
-            self.process_error(e)
-        else:
-            ModuleError("Kein Fehler.", ModuleErrorLevels.NO_ERROR).store_error(self.data["config"]["id"], "inverter", self.data["config"]["name"])
+        topic_str = "openWB/set/system/device/" + str(self.device_id)+"/component/"+str(self.data["config"]["id"])+"/"
+        _, counter = self.sim_count.sim_count(power, topic=topic_str, data=self.data["simulation"], prefix="pv")
+        inverter_state = InverterState(
+            power=power, 
+            counter=counter, 
+            currents=[0, 0, 0]
+        )
+        return inverter_state
 
     def __version_factory(self, version: int) -> int:
         try:

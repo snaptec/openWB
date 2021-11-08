@@ -5,16 +5,18 @@ from typing import List, Tuple
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
-    from ..common import misc_component
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common.abstract_component import AbstractCounter
+    from ..common.component_state import CounterState
+    from ..common.module_error import ModuleError
 except:
     from pathlib import Path
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import connect_tcp
-    from modules.common import misc_component
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.abstract_component import AbstractCounter
+    from modules.common.component_state import CounterState
+    from modules.common.module_error import ModuleError
 
 
 def get_default_config() -> dict:
@@ -29,40 +31,43 @@ def get_default_config() -> dict:
     }
 
 
-class AlphaEssCounter(misc_component.MiscComponent):
+class AlphaEssCounter(AbstractCounter):
     def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
         try:
             super().__init__(device_id, component_config, tcp_client)
         except Exception as e:
             self.process_error(e)
 
-    def update_values(self) -> None:
-        try:
-            log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
-            time.sleep(0.1)
-            factory_method = self.__update_values_factory(self.data["config"]["configuration"]["version"])
-            power_all, exported, imported, currents = factory_method(sdmid=85)
+    def get_values(self) -> CounterState:
+        log.MainLogger().debug("Komponente "+self.data["config"]["name"]+" auslesen.")
+        time.sleep(0.1)
+        factory_method = self.__get_values_factory(self.data["config"]["configuration"]["version"])
+        power_all, exported, imported, currents = factory_method(sdmid=85)
 
-            self.value_store.set(voltages=[0, 0, 0], currents=currents, powers=[0, 0, 0], power_factors=[0, 0, 0], imported=imported, exported=exported, power_all=power_all, frequency=50)
-        except ModuleError as e:
-            e.store_error(self.data["config"]["id"], "counter", self.data["config"]["name"])
-        except Exception as e:
-            self.process_error(e)
-        else:
-            ModuleError("Kein Fehler.", ModuleErrorLevels.NO_ERROR).store_error(self.data["config"]["id"], "counter", self.data["config"]["name"])
+        counter_state = CounterState(
+            voltages=[0, 0, 0],
+            currents=currents,
+            powers=[0, 0, 0],
+            power_factors=[0, 0, 0],
+            imported=imported,
+            exported=exported,
+            power_all=power_all,
+            frequency=50
+        )
+        return counter_state
 
-    def __update_values_factory(self, version: int):
+    def __get_values_factory(self, version: int):
         try:
             if version == 0:
-                return self.__update_values_before_v123
+                return self.__get_values_before_v123
             else:
-                return self.__update_values_since_v123
+                return self.__get_values_since_v123
         except ModuleError as e:
             raise
         except Exception as e:
             self.process_error(e)
 
-    def __update_values_before_v123(self, sdmid: int) -> Tuple[int, int, int, List[int]]:
+    def __get_values_before_v123(self, sdmid: int) -> Tuple[int, int, int, List[int]]:
         try:
             power_all = self.client.read_binary_registers_to_int(0x0006, sdmid, 32)
             exported = self.client.read_binary_registers_to_int(0x0008, sdmid, 32) * 10
@@ -78,7 +83,7 @@ class AlphaEssCounter(misc_component.MiscComponent):
         except Exception as e:
             self.process_error(e)
 
-    def __update_values_since_v123(self, sdmid: int) -> Tuple[int, int, int, List[int]]:
+    def __get_values_since_v123(self, sdmid: int) -> Tuple[int, int, int, List[int]]:
         try:
             power_all = self.client.read_binary_registers_to_int(0x0021, sdmid, 32)
             exported = self.client.read_binary_registers_to_int(0x0010, sdmid, 32) * 10
