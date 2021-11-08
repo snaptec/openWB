@@ -145,7 +145,7 @@
 											</div>
 										</div>
 										<span class="form-text small">
-											Parameter in Prozent [%] für die Lademengenbegrenzung im Modus Sofortladen. Definiert den EV-SoC, auf den der Ladevorgang begrenzt werden soll.
+											Parameter in Prozent [%] für die Lademengenbegrenzung im Modus Sofortladen. Definiert den EV-SoC, bei dessen Überschreitung die Ladung gestoppt wird.
 											<span class="text-danger">
 												Dieser Parameter kann auf der Hauptseite der openWB per Sofortzugriff im Modus Sofortladen jederzeit geändert werden.
 											</span>
