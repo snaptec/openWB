@@ -91,7 +91,6 @@
 				Fehler bei der Abfrage der Tibber-API (<span id="dataErrorText"></span>).
 			</div>
 
-
 			<div id="validData" style="display: none;">
 
 				<div class="card border-secondary">
@@ -241,7 +240,7 @@
 				var tibberQueryTail = '}}}" }';
 				var tibberQuery = tibberQueryHead + tibberQueryGetAdress + tibberQueryGetPriceInfo + tibberQueryGetHourlyConsumption + tibberQueryTail;
 
-				var tibberData = null;
+				$("#dataError").hide();
 				readTibberAPI(tibberToken, tibberQuery)
 					.then((data) => {
 						processTibberResponse(data, theDate)
@@ -250,6 +249,7 @@
 						$("#waitForData").hide();
 						$("#dataErrorText").text(error);
 						$("#dataError").show();
+						$('#validData').hide();
 					})
 			}
 
