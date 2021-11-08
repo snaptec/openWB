@@ -238,10 +238,6 @@ function processTibberResponse(tibberResponse, consumptionDayDate){
         fillCardStrompreis(tibberResponse);
         // data for card "Tagesverbrauch"
         fillCardTagesbezug(tibberResponse, consumptionDayDate);
-        // data for card "Monatsverbrauch"
-
-        // data for card "Jahresverbrauch"
-
         // now show cards
         $('#waitForData').hide();
         $('#validData').show();
