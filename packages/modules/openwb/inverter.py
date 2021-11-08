@@ -4,7 +4,7 @@ import sys
 try:
     from ...helpermodules import log
     from ..common import connect_tcp
-    from ..openwb_flex.counter import PvKitFlex
+    from ..openwb_flex.inverter import PvKitFlex
 except:
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
