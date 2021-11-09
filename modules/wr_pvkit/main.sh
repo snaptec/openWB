@@ -16,12 +16,7 @@ else
 fi
 
 
-if (( pvkitversion == 1 )); then
-	python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readlovato.py >>${MYLOGFILE} 2>&1
-elif (( pvkitversion == 2 )); then
-	python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readsdm.py >>${MYLOGFILE} 2>&1
-else
-	python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readmpm3pm.py >>${MYLOGFILE} 2>&1
-fi
+python3 ${OPENWBBASEDIR}/packages/modules/openwb/device.py "inverter" "${pvkitversion}" "1">>${MYLOGFILE} 2>&1
+
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt
