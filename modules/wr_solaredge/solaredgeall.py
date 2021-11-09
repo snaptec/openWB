@@ -3,7 +3,9 @@ import math
 import sys
 from statistics import mean
 
+from modules.common.component_state import InverterState, BatState
 from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.store import get_inverter_value_store, get_bat_value_store
 
 # Sunspec (API) documentation: https://www.solaredge.com/sites/default/files/sunspec-implementation-technical-note.pdf
 
@@ -16,22 +18,16 @@ subbat = int(sys.argv[9])
 
 client = ModbusClient(ipaddress)
 
-# batterie auslesen und pv leistung korrigieren
 storage_slave_ids = slave_ids[0: 1 + zweiterspeicher]
 storage_powers = []
 if batwrsame == 1:
     soc = mean(
         client.read_holding_registers(62852, ModbusDataType.FLOAT_32, unit=slave_id) for slave_id in storage_slave_ids
     )
-    f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
-    f.write(str(soc))
-    f.close()
     storage_powers = [
         client.read_holding_registers(62836, ModbusDataType.FLOAT_32, unit=slave_id) for slave_id in storage_slave_ids
     ]
-    f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
-    f.write(str(sum(storage_powers)))
-    f.close()
+    get_bat_value_store(1).set(BatState(power=sum(storage_powers), soc=soc))
 
 total_energy = 0
 total_power = 0
@@ -51,13 +47,4 @@ if subbat == 1:
 else:
     total_power -= sum(storage_powers)
 
-f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(min(total_power, 0)))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-f.write(str(total_energy))
-f.close()
-pvkwhk= total_energy / 1000
-f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
-f.write(str(pvkwhk))
-f.close()
+get_inverter_value_store(1).set(InverterState(counter=total_energy, power=total_power))
