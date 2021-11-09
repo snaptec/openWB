@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import math
 import sys
+from statistics import mean
 
 from modules.common.modbus import ModbusClient, ModbusDataType
 
@@ -13,35 +14,23 @@ extprodakt = int(sys.argv[7])
 zweiterspeicher = int(sys.argv[8])
 subbat = int(sys.argv[9])
 
-storage2power = 0
-
 client = ModbusClient(ipaddress)
 
 # batterie auslesen und pv leistung korrigieren
-storagepower = 0
-storage2power = 0
+storage_slave_ids = slave_ids[0: 1 + zweiterspeicher]
+storage_powers = []
 if batwrsame == 1:
-    soc = client.read_holding_registers(62852, ModbusDataType.FLOAT_32, unit=slave_ids[0])
-    try:
-        if zweiterspeicher == 1:
-            soc2 = client.read_holding_registers(62852, ModbusDataType.FLOAT_32, unit=slave_ids[1])
-            fsoc=(soc+soc2)/2
-        else:
-            fsoc=soc
-    except:
-        fsoc=soc
+    soc = mean(
+        client.read_holding_registers(62852, ModbusDataType.FLOAT_32, unit=slave_id) for slave_id in storage_slave_ids
+    )
     f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
-    f.write(str(fsoc))
+    f.write(str(soc))
     f.close()
-    storagepower = client.read_holding_registers(62836, ModbusDataType.FLOAT_32, unit=slave_ids[0])
-    try:
-        if zweiterspeicher == 1:
-            storage2power = client.read_holding_registers(62836, ModbusDataType.FLOAT_32, unit=slave_ids[1])
-    except:
-        storage2power = 0
-    final=storagepower+storage2power
+    storage_powers = [
+        client.read_holding_registers(62836, ModbusDataType.FLOAT_32, unit=slave_id) for slave_id in storage_slave_ids
+    ]
     f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
-    f.write(str(final))
+    f.write(str(sum(storage_powers)))
     f.close()
 
 total_energy = 0
@@ -55,25 +44,15 @@ for slave_id in slave_ids:
     total_energy += client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave_id)
 
 if extprodakt == 1:
-    try:
-        # 40380 = "Meter 2/Total Real Power (sum of active phases)" (Watt)
-        extprod = -client.read_holding_registers(40380, ModbusDataType.INT_16, unit=slave_ids[0])
-    except:
-        extprod = 0
-else:
-    extprod = 0
+    # 40380 = "Meter 2/Total Real Power (sum of active phases)" (Watt)
+    total_power -= client.read_holding_registers(40380, ModbusDataType.INT_16, unit=slave_ids[0])
 if subbat == 1:
-    if storagepower > 0:
-        storagepower=0
-    if storage2power > 0:
-        storage2power=0
-    allwatt = total_power - storagepower - storage2power + extprod
+    total_power -= sum(min(p, 0) for p in storage_powers)
 else:
-    allwatt = total_power - storagepower - storage2power + extprod
-if allwatt > 0:
-    allwatt=0
+    total_power -= sum(storage_powers)
+
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(allwatt))
+f.write(str(min(total_power, 0)))
 f.close()
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(total_energy))
