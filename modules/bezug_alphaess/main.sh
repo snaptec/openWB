@@ -15,7 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/alpha_ess/module.py "counter" "${alphav123}" >>${MYLOGFILE} 2>&1
+python3 ${OPENWBBASEDIR}/packages/modules/alpha_ess/device.py "counter" "${alphav123}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

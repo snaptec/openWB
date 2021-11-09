@@ -2,113 +2,73 @@
 from typing import List, Tuple
 try:
     from ..common import connect_tcp
-    from ...helpermodules import log
+    from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     # for 1.9 compability
-    import os
     from pathlib import Path
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import log
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from modules.common import connect_tcp
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class Mpm3pm:
-    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id: int, client: connect_tcp.ConnectTcp) -> None:
         self.client = client
-        self.name = device_config["components"]["component0"]["name"]
-        self.id = device_config["components"]["component0"]["configuration"]["id"]
+        self.id = modbus_id
 
-    def get_voltage(self) -> List[int]:
-        """
-        """
+    def __process_error(self, e):
+        if isinstance(e, ModuleError):
+            raise
+        else:
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+
+    def get_voltage(self) -> List[float]:
         try:
-            voltage = []
-            regs = [0x08, 0x0A, 0x0C]
-            for register in regs:
-                value = float(self.client.read_registers(register, 4, self.id) / 10)
-                voltage.append(value)
-            return voltage
+            return [self.client.read_registers(register, 2, self.id) / 10 for register in [0x08, 0x0A, 0x0C]]
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_imported(self) -> float:
-        """
-        """
         try:
-            imported = self.client.read_integer_registers(0x0002, 4, self.id) * 10
-            return imported
+            return self.client.read_integer_registers(0x0002, 4, self.id) * 10
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = []
-            regs = [0x14, 0x16, 0x18]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id) / 100
-                power_per_phase.append(value)
+            power_per_phase = [self.client.read_integer_registers(register, 2, self.id) / 100 for register in [0x14, 0x16, 0x18]]
             power_all = self.client.read_integer_registers(0x26, 2, self.id) / 100
             return power_per_phase, power_all
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None], None
+            self.__process_error(e)
 
     def get_exported(self) -> float:
-        """
-        """
         try:
-            exported = self.client.read_integer_registers(0x0004, 4, self.id) * 10
-            return exported
+            return self.client.read_integer_registers(0x0004, 4, self.id) * 10
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
-        """
-        """
+    def get_power_factor(self) -> List[float]:
         try:
-            power_factor = []
-            regs = [0x20, 0x22, 0x24]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 4, self.id) / 10
-                power_factor.append(value)
-            return power_factor
+            return [self.client.read_integer_registers(register, 2, self.id) / 100 for register in [0x20, 0x22, 0x24]]
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
-            frequency = self.client.read_integer_registers(0x2c, 4, self.id) / 100
-            return frequency
+            return self.client.read_integer_registers(0x2c, 4, self.id) / 100
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)
 
-    def get_current(self) -> List[int]:
-        """
-        """
+    def get_current(self) -> List[float]:
         try:
-            current = []
-            regs = [0x0E, 0x10, 0x12]
-            for register in regs:
-                value = float(self.client.read_registers(register, 2, self.id)) / 100
-                current.append(value)
-            return current
+            return [self.client.read_registers(register, 2, self.id) / 100 for register in [0x0E, 0x10, 0x12]]
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_counter(self) -> float:
         try:
-            counter = self.client.read_integer_registers(0x0004, 4, self.id) * 10
-            return counter
+            return self.client.read_integer_registers(0x0004, 4, self.id) * 10
         except Exception as e:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            self.__process_error(e)

@@ -9,6 +9,15 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+try:
+    from . import compability
+except:
+    # for 1.9 compability
+    import sys
+    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
+    sys.path.insert(0, parentdir2)
+    from helpermodules import compability
+
 debug_logger = None
 debug_fhandler = None
 debug_lock = None
@@ -53,9 +62,8 @@ class MainLogger:
             self.__write_log(message)
 
         def __process_exception(self, exception):
-            if exception != None:
+            if exception is not None:
                 traceback.print_exc()
-                exit(1)
 
         def __write_log(self, message: str):
             """ Logging für 1.9
@@ -71,8 +79,8 @@ class MainLogger:
 
     def __init__(self):
         if not MainLogger.instance:
-            ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[2])+"/ramdisk/bootinprogress").is_file()
-            if ramdisk == True:
+            ramdisk = compability.check_ramdisk_usage()
+            if ramdisk:
                 MainLogger.instance = MainLogger.__Logger()
             else:
                 MainLogger.instance = logging.getLogger("main")
