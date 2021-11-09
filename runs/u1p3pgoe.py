@@ -16,11 +16,16 @@ args = parser.parse_args()
 if(args.verbose):
     print("Go-e mit IP %s Umschaltung auf %d Phasen" % (args.address, args.phases))
 
-status_goe = requests.get('http://'+args.address+'/status', timeout=5).json()
+try:
+    status_goe = requests.get('http://'+args.address+'/status', timeout=5).json()
+except requests.exceptions.ConnectionError:
+        print("Connection to go-e failed")
+        exit(1)
+
 if(args.verbose):
     try:
         print("go-e serial number: %s" % (status_goe['sse']))
-    except:
+    except KeyError:
         traceback.print_exc()
         exit(1)
 
