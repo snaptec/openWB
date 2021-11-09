@@ -8,12 +8,9 @@ try:
     from ..common import simcount
     from ..common import sdm630
     from ..common import store
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common.module_error import ModuleError, ModuleErrorLevel
     from component_state import BatState, CounterState, InverterState
 except:
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import modbus
     from modules.common import lovato
@@ -21,7 +18,7 @@ except:
     from modules.common import simcount
     from modules.common import sdm630
     from modules.common import store
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
     from .component_state import BatState, CounterState, InverterState
 
 
@@ -48,16 +45,16 @@ class AbstractComponent:
             self.value_store.set(state)
         except ModuleError as e:
             e.store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
-            raise ModuleError("", ModuleErrorLevels.ERROR)
+            raise ModuleError("", ModuleErrorLevel.ERROR)
         except Exception as e:
             self.process_error(e)
-            raise ModuleError("", ModuleErrorLevels.ERROR)
+            raise ModuleError("", ModuleErrorLevel.ERROR)
         else:
-            ModuleError("Kein Fehler.", ModuleErrorLevels.NO_ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
+            ModuleError("Kein Fehler.", ModuleErrorLevel.NO_ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
             return state
 
     def process_error(self, e):
-        ModuleError(str(type(e))+" "+str(e), ModuleErrorLevels.ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
+        ModuleError(str(type(e))+" "+str(e), ModuleErrorLevel.ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
 
     def kit_version_factory(self, version: int, id: int, tcp_client: modbus.ModbusClient) -> Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]:
         try:
@@ -68,7 +65,7 @@ class AbstractComponent:
             elif version == 2:
                 return sdm630.Sdm630(id, tcp_client)
             else:
-                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevels.ERROR)
+                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevel.ERROR)
         except Exception as e:
             self.process_error(e)
 

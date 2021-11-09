@@ -12,13 +12,10 @@ import struct
 
 try:
     from ...helpermodules import log
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common.module_error import ModuleError, ModuleErrorLevel
 except:
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
 
 
 class ModbusDataType(Enum):
@@ -58,7 +55,7 @@ class ModbusClient:
             self.delegate.close()
         except Exception as e:
             raise ModuleError(__name__+" "+str(type(e))+" " +
-                              str(e), ModuleErrorLevels.ERROR) from e
+                              str(e), ModuleErrorLevel.ERROR) from e
 
     def __read_registers(self, read_register_method: Callable,
                          address: int,
@@ -85,13 +82,13 @@ class ModbusClient:
             return result if multi_request else result[0]
         except pymodbus.exceptions.ConnectionException as e:
             raise ModuleError(
-                "TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen.", ModuleErrorLevels.ERROR) from e
+                "TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen.", ModuleErrorLevel.ERROR) from e
         except pymodbus.exceptions.ModbusIOException as e:
             raise ModuleError(
-                "TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", ModuleErrorLevels.WARNING) from e
+                "TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", ModuleErrorLevel.WARNING) from e
         except Exception as e:
             raise ModuleError(__name__+" "+str(type(e))+" " +
-                              str(e), ModuleErrorLevels.ERROR) from e
+                              str(e), ModuleErrorLevel.ERROR) from e
 
     def read_holding_registers(self, address: int,
                                types: Union[Iterable[ModbusDataType], ModbusDataType],
