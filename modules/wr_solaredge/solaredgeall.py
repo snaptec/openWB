@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
+import math
 import sys
-# import os
-# import time
-# import getopt
-# import socket
-# import ConfigParser
-import struct
-# import binascii
-from pymodbus.client.sync import ModbusTcpClient
+
+from modules.common.modbus import ModbusClient, ModbusDataType
+
+# Sunspec (API) documentation: https://www.solaredge.com/sites/default/files/sunspec-implementation-technical-note.pdf
+
 
 ipaddress = str(sys.argv[1])
 try:
@@ -33,20 +31,16 @@ subbat = int(sys.argv[9])
 
 storage2power = 0
 
-client = ModbusTcpClient(ipaddress, port=502)
+client = ModbusClient(ipaddress)
 
 # batterie auslesen und pv leistung korrigieren
 storagepower = 0
 storage2power = 0
 if batwrsame == 1:
-    rr = client.read_holding_registers(62852, 2, unit=slave1id)
-    raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-    soc = int(struct.unpack('>f', raw)[0])
+    soc = client.read_holding_registers(62852, ModbusDataType.FLOAT_32, unit=slave1id)
     try:
         if zweiterspeicher == 1:
-            rr = client.read_holding_registers(62852, 2, unit=slave2id)
-            raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-            soc2 = int(struct.unpack('>f', raw)[0])
+            soc2 = client.read_holding_registers(62852, ModbusDataType.FLOAT_32, unit=slave2id)
             fsoc=(soc+soc2)/2
         else:
             fsoc=soc
@@ -55,14 +49,10 @@ if batwrsame == 1:
     f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
     f.write(str(fsoc))
     f.close()
-    rr = client.read_holding_registers(62836, 2, unit=slave1id)
-    raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-    storagepower = int(struct.unpack('>f', raw)[0])
+    storagepower = client.read_holding_registers(62836, ModbusDataType.FLOAT_32, unit=slave1id)
     try:
         if zweiterspeicher == 1:
-            rr = client.read_holding_registers(62836, 2, unit=slave2id)
-            raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-            storage2power = int(struct.unpack('>f', raw)[0])
+            storage2power = client.read_holding_registers(62836, ModbusDataType.FLOAT_32, unit=slave2id)
     except:
         storage2power = 0
     final=storagepower+storage2power
@@ -71,134 +61,36 @@ if batwrsame == 1:
     f.close()
 
 try:
-    resp= client.read_holding_registers(40083,2,unit=slave1id)
-    # read watt
-    watt=format(resp.registers[0], '04x')
-    wr1watt=int(struct.unpack('>h', watt.decode('hex'))[0]) * -1
-    # read multiplier
-    multiplier=format(resp.registers[1], '04x')
-    fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
-    if fmultiplier == 2:
-        fwr1watt = wr1watt * 100
-    if fmultiplier == 1:
-        fwr1watt = wr1watt * 10
-    if fmultiplier == 0:
-        fwr1watt = wr1watt
-    if fmultiplier == -1:
-        fwr1watt = wr1watt / 10
-    if fmultiplier == -2:
-        fwr1watt = wr1watt / 100
-    if fmultiplier == -3:
-        fwr1watt = wr1watt / 1000
-    if fmultiplier == -4:
-        fwr1watt = wr1watt / 10000
-    if fmultiplier == -5:
-        fwr1watt = wr1watt / 10000
-    resp= client.read_holding_registers(40093,2,unit=slave1id)
-    value1 = resp.registers[0]
-    value2 = resp.registers[1]
-    all = format(value1, '04x') + format(value2, '04x')
-    final = int(struct.unpack('>i', all.decode('hex'))[0])
+    # 40083 = AC Power value (Watt), 40084 = AC Power scale factor
+    power_base, power_scale = client.read_holding_registers(40083, [ModbusDataType.INT_16] * 2, unit=slave1id)
+    fwr1watt = -power_base * math.pow(10, power_scale)
+    # 40093 = AC Lifetime Energy production (Watt hours)
+    final = client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave1id)
 except:
     fwr1watt=0
 if slave2id != 0:
     try:
-        resp= client.read_holding_registers(40083,2,unit=slave2id)
-        # read watt
-        watt=format(resp.registers[0], '04x')
-        wr2watt=int(struct.unpack('>h', watt.decode('hex'))[0]) * -1
-        # read multiplier
-        multiplier=format(resp.registers[1], '04x')
-        fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
-        if fmultiplier == 2:
-            fwr2watt = wr2watt * 100
-        if fmultiplier == 1:
-            fwr2watt = wr2watt * 10
-        if fmultiplier == 0:
-            fwr2watt = wr2watt
-        if fmultiplier == -1:
-            fwr2watt = wr2watt / 10
-        if fmultiplier == -2:
-            fwr2watt = wr2watt / 100
-        if fmultiplier == -3:
-            fwr2watt = wr2watt / 1000
-        if fmultiplier == -4:
-            fwr2watt = wr2watt / 10000
-        if fmultiplier == -5:
-            fwr2watt = wr2watt / 10000
-        resp= client.read_holding_registers(40093,2,unit=slave2id)
-        value1 = resp.registers[0]
-        value2 = resp.registers[1]
-        all = format(value1, '04x') + format(value2, '04x')
-        final = final + int(struct.unpack('>i', all.decode('hex'))[0])
+        power_base, power_scale = client.read_holding_registers(40083, [ModbusDataType.INT_16] * 2, unit=slave2id)
+        fwr2watt = -power_base * math.pow(10, power_scale)
+        final += client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave2id)
     except:
         fwr2watt=0
 else:
     fwr2watt=0
 if slave3id != 0:
     try:
-        resp= client.read_holding_registers(40083,2,unit=slave3id)
-        # read watt
-        watt=format(resp.registers[0], '04x')
-        wr3watt=int(struct.unpack('>h', watt.decode('hex'))[0]) * -1
-        # read multiplier
-        multiplier=format(resp.registers[1], '04x')
-        fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
-        if fmultiplier == 2:
-            fwr3watt = wr3watt * 100
-        if fmultiplier == 1:
-            fwr3watt = wr3watt * 10
-        if fmultiplier == 0:
-            fwr3watt = wr3watt
-        if fmultiplier == -1:
-            fwr3watt = wr3watt / 10
-        if fmultiplier == -2:
-            fwr3watt = wr3watt / 100
-        if fmultiplier == -3:
-            fwr3watt = wr3watt / 1000
-        if fmultiplier == -4:
-            fwr3watt = wr3watt / 10000
-        if fmultiplier == -5:
-            fwr3watt = wr3watt / 10000
-        resp= client.read_holding_registers(40093,2,unit=slave3id)
-        value1 = resp.registers[0]
-        value2 = resp.registers[1]
-        all = format(value1, '04x') + format(value2, '04x')
-        final = final + int(struct.unpack('>i', all.decode('hex'))[0])
+        power_base, power_scale = client.read_holding_registers(40083, [ModbusDataType.INT_16] * 2, unit=slave3id)
+        fwr2watt = -power_base * math.pow(10, power_scale)
+        final += client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave3id)
     except:
         fwr3watt=0
 else:
     fwr3watt=0
 if slave4id != 0:
     try:
-        resp= client.read_holding_registers(40083,2,unit=slave4id)
-        # read watt
-        watt=format(resp.registers[0], '04x')
-        wr4watt=int(struct.unpack('>h', watt.decode('hex'))[0]) * -1
-        # read multiplier
-        multiplier=format(resp.registers[1], '04x')
-        fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
-        if fmultiplier == 2:
-            fwr4watt = wr4watt * 100
-        if fmultiplier == 1:
-            fwr4watt = wr4watt * 10
-        if fmultiplier == 0:
-            fwr4watt = wr4watt
-        if fmultiplier == -1:
-            fwr4watt = wr4watt / 10
-        if fmultiplier == -2:
-            fwr4watt = wr4watt / 100
-        if fmultiplier == -3:
-            fwr4watt = wr4watt / 1000
-        if fmultiplier == -4:
-            fwr4watt = wr4watt / 10000
-        if fmultiplier == -5:
-            fwr4watt = wr4watt / 10000
-        resp= client.read_holding_registers(40093,2,unit=slave4id)
-        value1 = resp.registers[0]
-        value2 = resp.registers[1]
-        all = format(value1, '04x') + format(value2, '04x')
-        final = final + int(struct.unpack('>i', all.decode('hex'))[0])
+        power_base, power_scale = client.read_holding_registers(40083, [ModbusDataType.INT_16] * 2, unit=slave4id)
+        fwr2watt = -power_base * math.pow(10, power_scale)
+        final += client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave4id)
     except:
         fwr4watt=0
 else:
@@ -206,10 +98,8 @@ else:
 
 if extprodakt == 1:
     try:
-        resp= client.read_holding_registers(40380,1,unit=slave1id)
-        value1 = resp.registers[0]
-        all = format(value1, '04x')
-        extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+        # 40380 = "Meter 2/Total Real Power (sum of active phases)" (Watt)
+        extprod = -client.read_holding_registers(40380, ModbusDataType.INT_16, unit=slave1id)
     except:
         extprod = 0
 else:
