@@ -7,8 +7,6 @@ try:
     from ..common.abstract_component import AbstractCounter
     from ..common.component_state import CounterState
 except:
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractCounter
@@ -54,8 +52,7 @@ class EvuKitFlex(AbstractCounter):
         else:
             if version == 1:
                 power_all = sum(power_per_phase)
-            currents = self.client.get_current()
-            currents = [abs(currents[i]) for i in range(3)]
+            currents = map(abs, self.client.get_current())
             topic_str = "openWB/set/system/device/" + str(self.device_id)+"/component/"+str(self.data["config"]["id"])+"/"
             imported, exported = self.sim_count.sim_count(power_all, topic=topic_str, data=self.data["simulation"], prefix="bezug")
         log.MainLogger().debug("EVU-Kit Leistung[W]: "+str(power_all))

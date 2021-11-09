@@ -4,14 +4,12 @@ import sys
 try:
     from ...helpermodules import log
     from ..common import modbus
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common.module_error import ModuleError, ModuleErrorLevel
     from ..openwb_flex.counter import EvuKitFlex
 except:
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import modbus
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
     from modules.openwb_flex.counter import EvuKitFlex
 
 
@@ -39,7 +37,7 @@ class EvuKit(EvuKitFlex):
             elif version == 2:
                 id = 115
             else:
-                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevels.ERROR)
+                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevel.ERROR)
             self.data["config"]["configuration"]["id"] = id
 
             super().__init__(device_id, self.data["config"], tcp_client)
