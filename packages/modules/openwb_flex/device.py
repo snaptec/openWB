@@ -3,7 +3,7 @@ import sys
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common import abstract_device
     from . import counter
     from . import inverter
@@ -11,7 +11,7 @@ except:
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common import abstract_device
     import counter
     import inverter
@@ -41,7 +41,7 @@ class Device(abstract_device.AbstractDevice):
         try:
             ip_address = device["configuration"]["ip_address"]
             port = device["configuration"]["port"]
-            client = connect_tcp.ConnectTcp(device["id"], ip_address, port)
+            client = modbus.ModbusClient(ip_address, port)
             super().__init__(device, client)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+device["name"])

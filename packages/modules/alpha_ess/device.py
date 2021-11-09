@@ -6,7 +6,7 @@ from typing import List, Union
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from modules.common import abstract_device
     from . import bat
     from . import counter
@@ -15,7 +15,7 @@ except:
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common import abstract_device
     from modules.alpha_ess import bat
     from modules.alpha_ess import counter
@@ -39,7 +39,7 @@ class Device(abstract_device.AbstractDevice):
 
     def __init__(self, device: dict) -> None:
         try:
-            client = connect_tcp.ConnectTcp(device["id"], "192.168.193.125", 8899)
+            client = modbus.ModbusClient("192.168.193.125", 8899)
             super().__init__(device, client)
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+device["name"])

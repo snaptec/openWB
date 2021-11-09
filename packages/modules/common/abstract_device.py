@@ -2,14 +2,14 @@ from abc import abstractmethod
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common.module_error import ModuleError
 except:
     from pathlib import Path
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common.module_error import ModuleError
 
 
@@ -17,7 +17,7 @@ class AbstractDevice:
     _COMPONENT_TYPE_TO_CLASS = {
     }
 
-    def __init__(self, device: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, device: dict, client: modbus.ModbusClient) -> None:
         try:
             self.data = {"config": device,
                          "components": {}}
