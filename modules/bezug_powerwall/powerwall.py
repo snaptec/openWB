@@ -58,7 +58,7 @@ if speicherpwloginneeded == 1:
         edited = os.stat(cookie_file).st_mtime
         now = time.time()
         edit_diff = now - edited
-        if edit_diff < 3600:
+        if edit_diff > 3600:
             DebugLog("Deleting saved login cookie after 1 hour as it may not be valid anymore.")
             os.remove(cookie_file)
     if os.path.isfile(cookie_file) == False:

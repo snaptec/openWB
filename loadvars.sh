@@ -482,7 +482,10 @@ loadvars(){
 
 	#Speicher werte
 	if [[ $speichermodul != "none" ]] ; then
-		timeout 5 modules/$speichermodul/main.sh || true
+		timeout 5 modules/$speichermodul/main.sh
+		if [[ $? -eq 124 ]] ; then
+			openwbModulePublishState "BAT" 2 "Die Werte konnten nicht innerhalb des Timeouts abgefragt werden. Bitte Konfiguration und Gerätestatus prüfen."
+		fi
 		speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		speicherleistung=$(echo $speicherleistung | sed 's/\..*$//')
 		speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)

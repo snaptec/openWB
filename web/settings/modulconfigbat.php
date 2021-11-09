@@ -77,6 +77,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_rct2") echo "selected" ?> value="speicher_rct2">RCT V.2</option>
 										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
@@ -279,7 +280,23 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
+						<div id="divspeicherrct2" class="hide">
+				<div class="card-header bg-secondary">
+					Speicher Hardware
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+						<pre><?php 
+						   $lines=[];
+							exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
+							echo implode('<br>',$lines); 
+						  ?></pre>
+						</div>
+					</div>
+				</div>
 
+						</div>
 						<div id="divspeichervarta" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -657,6 +674,7 @@
 								hideSection('#divspeicherip');
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
+								hideSection('#divspeicherrct2');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
 								hideSection('#divspeichersolarwatt');
@@ -667,6 +685,10 @@
 								}
 								if($('#speichermodul').val() == 'speicher_rct') {
 									showSection('#divspeicherrct');
+								}
+								if($('#speichermodul').val() == 'speicher_rct2') {
+									showSection('#divspeicherrct');
+									showSection('#divspeicherrct2');
 								}
 								if($('#speichermodul').val() == 'speicher_siemens') {
 									showSection('#divspeicherip');

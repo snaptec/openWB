@@ -66,6 +66,7 @@
 					<div class="row">
 						<div class="col">
 							Kernel: <?php echo exec('uname -ors'); ?><br>
+							<?php echo exec('python3 -V'); ?><br>
 							openWB Version: <span id="installedVersionSpan" data-version=""></span>
 						</div>
 					</div>

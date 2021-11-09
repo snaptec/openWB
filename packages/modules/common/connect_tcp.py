@@ -10,105 +10,114 @@ import struct
 
 try:
     from ...helpermodules import log
+    from ..common.module_error import ModuleError, ModuleErrorLevels
 except:
     from pathlib import Path
-    import os
     import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
+    from modules.common.module_error import ModuleError, ModuleErrorLevels
 
 
 class ConnectTcp:
-    def __init__(self, name: str, ip_address: str, port: int) -> None:
+    def __init__(self, id: int, ip_address: str, port: int) -> None:
         try:
             self.tcp_client = ModbusTcpClient(ip_address, port)
-            self.name = name
+            log.MainLogger().debug("Baue Verbindung auf zu "+str(self.tcp_client))
+            # Den Verbinungsaufbau übernimmt der tcp_client automatisch.
+            self.id = id
             self.decode_hex = codecs.getdecoder("hex_codec")
         except Exception as e:
-            log.MainLogger().error(self.name, e)
+            self.__process_modbus_error(e)
 
-    def _log_connection_error(self):
-        log.MainLogger().error(self.name+" konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss prüfen.")
+    def close_connection(self) -> None:
+        try:
+            log.MainLogger().debug("Close Modbus TCP connection")
+            self.tcp_client.close()
+        except Exception as e:
+            self.__process_modbus_error(e)
+
+    def __process_modbus_error(self, e):
+        if isinstance(e, pymodbus.exceptions.ConnectionException):
+            raise ModuleError("TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen.", ModuleErrorLevels.ERROR) from e
+        elif isinstance(e, pymodbus.exceptions.ModbusIOException):
+            self.close_connection()
+            raise ModuleError("TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", ModuleErrorLevels.WARNING) from e
+        else:
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
 
     def read_integer_registers(self, reg: int, len: int, id: int) -> int:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
+            if resp.isError():
+                raise resp
             all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-            value = int(struct.unpack('>i', self.decode_hex(all)[0])[0])
-            return value
-        except pymodbus.exceptions.ConnectionException:
-            self._log_connection_error()
+            return struct.unpack('>i', self.decode_hex(all)[0])[0]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_modbus_error(e)
 
     def read_short_int_registers(self, reg: int, len: int, id: int) -> int:
         try:
             resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
+            if resp.isError():
+                raise resp
             all = format(resp.registers[0], '04x')
-            value = int(struct.unpack('>h', self.decode_hex(all)[0])[0])
-            return value
-        except pymodbus.exceptions.ConnectionException:
-            self._log_connection_error()
+            return struct.unpack('>h', self.decode_hex(all)[0])[0]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_modbus_error(e)
 
     def read_float_registers(self, reg: int, len: int, id: int) -> float:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
-            value = float(struct.unpack('>f', struct.pack('>HH', *resp.registers))[0])
-            return value
-        except pymodbus.exceptions.ConnectionException:
-            self._log_connection_error()
+            if resp.isError():
+                raise resp
+            return struct.unpack('>f', struct.pack('>HH', *resp.registers))[0]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_modbus_error(e)
 
-    def read_registers(self, reg: int, len: int, id: int):
+    def read_registers(self, reg: int, len: int, id: int) -> float:
         try:
             resp = self.tcp_client.read_input_registers(reg, len, unit=id)
-            value = float(resp.registers[1])
-            return value
-        except pymodbus.exceptions.ConnectionException:
-            self._log_connection_error()
+            if resp.isError():
+                raise resp
+            return float(resp.registers[1])
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_modbus_error(e)
 
-    def read_binary_registers_to_int(self, reg: int, len: int, id: int, bit: int, signed=True) -> int:
+    def read_binary_registers_to_int(self, reg: int, id: int, bit: int, signed=True) -> int:
         try:
-            resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
+            resp = self.tcp_client.read_holding_registers(reg, bit/8, unit=id)
+            if resp.isError():
+                raise resp
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
                 if signed == True:
-                    value = int(decoder.decode_32bit_int())
+                    value = decoder.decode_32bit_int()
                 else:
-                    value = int(decoder.decode_32bit_uint())
+                    value = decoder.decode_32bit_uint()
             elif bit == 16:
                 if signed == True:
-                    value = int(decoder.decode_16bit_int())
+                    value = decoder.decode_16bit_int()
                 else:
-                    value = int(decoder.decode_16bit_uint())
+                    value = decoder.decode_16bit_uint()
+            else:
+                raise Exception("Invalid value for bit: "+str(bit)+". Allowed values are 16, 32")
             return value
-        except pymodbus.exceptions.ConnectionException:
-            self._log_connection_error()
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_modbus_error(e)
 
-    def read_binary_registers_to_float(self, reg: int, len: int, id: int, bit: int) -> float:
+    def read_binary_registers_to_float(self, reg: int, id: int, bit: int) -> float:
         try:
-            resp = self.tcp_client.read_holding_registers(reg, len, unit=id)
+            resp = self.tcp_client.read_holding_registers(reg, bit/8, unit=id)
+            if resp.isError():
+                raise resp
             decoder = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             if bit == 32:
-                value = float(decoder.decode_32bit_float())
+                value = decoder.decode_32bit_float()
             elif bit == 16:
-                value = float(decoder.decode_16bit_float())
+                value = decoder.decode_16bit_float()
+            else:
+                raise Exception("Invalid value for bit: "+str(bit)+". Allowed values are 16, 32")
             return value
-        except pymodbus.exceptions.ConnectionException:
-            self._log_connection_error()
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_modbus_error(e)
