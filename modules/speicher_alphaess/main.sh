@@ -17,11 +17,9 @@ else
 fi
 
 
-openwbDebugLog ${DMOD} 2 "Speicher URL: ${battjsonurl}"
-openwbDebugLog ${DMOD} 2 "Speicher Watt: ${battjsonwatt}"
-openwbDebugLog ${DMOD} 2 "Speicher SoC: ${battjsonsoc}"
+openwbDebugLog ${DMOD} 2 "Speicher Version: ${alphav123}"
 
-python3 $OPENWBBASEDIR/packages/modules/alpha_ess/module.py "bat" "${alphav123}" >>$MYLOGFILE 2>&1
+python3 $OPENWBBASEDIR/packages/modules/alpha_ess/device.py "bat" "${alphav123}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
