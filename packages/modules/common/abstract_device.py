@@ -5,16 +5,13 @@ try:
     from ..common import modbus
     from ..common.module_error import ModuleError
 except:
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import modbus
     from modules.common.module_error import ModuleError
 
 
 class AbstractDevice:
-    _COMPONENT_TYPE_TO_CLASS = {
+    COMPONENT_TYPE_TO_CLASS = {
     }
 
     def __init__(self, device: dict, client: modbus.ModbusClient) -> None:
@@ -33,9 +30,9 @@ class AbstractDevice:
 
     def component_factory(self, component_type: str):
         try:
-            if component_type in self._COMPONENT_TYPE_TO_CLASS:
-                return self._COMPONENT_TYPE_TO_CLASS[component_type]
-            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(self._COMPONENT_TYPE_TO_CLASS.keys()))
+            if component_type in self.COMPONENT_TYPE_TO_CLASS:
+                return self.COMPONENT_TYPE_TO_CLASS[component_type]
+            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(self.COMPONENT_TYPE_TO_CLASS.keys()))
         except Exception as e:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 

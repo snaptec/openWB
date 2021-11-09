@@ -10,13 +10,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 try:
-    from . import compability
+    from . import compatibility
 except:
-    # for 1.9 compability
-    import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import compability
+    from helpermodules import compatibility
 
 debug_logger = None
 debug_fhandler = None
@@ -79,7 +75,7 @@ class MainLogger:
 
     def __init__(self):
         if not MainLogger.instance:
-            ramdisk = compability.check_ramdisk_usage()
+            ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
                 MainLogger.instance = MainLogger.__Logger()
             else:

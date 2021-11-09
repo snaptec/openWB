@@ -4,14 +4,11 @@ from typing import List, Tuple
 
 try:
     from ..common import modbus
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common.module_error import ModuleError, ModuleErrorLevel
 except:
-    # for 1.9 compability
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    # for 1.9 compatibility
     from modules.common import modbus
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
 
 
 class Sdm630:
@@ -23,7 +20,7 @@ class Sdm630:
         if isinstance(e, ModuleError):
             raise
         else:
-            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
 
     def get_voltage(self) -> List[float]:
         try:
