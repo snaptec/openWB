@@ -2,7 +2,7 @@
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
-output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/status)
+output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/status)
 if [[ $? == "0" ]] ; then
 	watt=$(echo $output | jq -r '.nrg[11]')
 	watt=$(echo "scale=0;$watt * 10 /1" |bc)
@@ -37,11 +37,11 @@ if [[ $? == "0" ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llvs13
 	fi
 	llkwh=$(echo $output | jq -r '.eto')
-	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
+	llkwh=$(echo "scale=3;$llkwh / 1000" |bc)
 	if [[ $llkwh =~ $rekwh ]] ; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
 	fi
-	rfid=$(echo $output | jq -r '.uby')
+	rfid=$(echo $output | jq -r '.trx')
 	oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp2rfid)
 	if [[ $rfid != $oldrfid ]] ; then
 		echo $rfid > /var/www/html/openWB/ramdisk/readtag
@@ -52,10 +52,10 @@ if [[ $? == "0" ]] ; then
 	#car status 3 Warte auf Fahrzeug
 	#car status 4 Ladung beendet, Fahrzeug verbunden
 	car=$(echo $output | jq -r '.car')
-	if [[ $car == "1" ]] ; then
-		echo 0 > /var/www/html/openWB/ramdisk/plugstats1
-	else
+	if [[ $car == "2" ]] || [[ $car == "3" ]] || [[ $car == "4" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 	fi
 	if [[ $car == "2" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestats1
