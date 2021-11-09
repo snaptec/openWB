@@ -112,20 +112,23 @@ while True:
             writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
         except:
             pass
-        for phase in [1,2,3]:
-            power = int(emparts['p%iconsume' % phase])
-            if power < 5:
-                power = -int(emparts['p%isupply' % phase])
-                positive[phase] = -1
-            writeToFile(basepath + 'bezugw%i' % phase, power)
-        for filename, mapping in phasemappingdict.items():
+        try:
             for phase in [1,2,3]:
-                if mapping['from'] % phase in emparts:
-                    value = emparts[mapping['from'] % phase]
-                    if 'sign' in mapping and mapping['sign']:
-                       value *= positive[phase]
-                    writeToFile(basepath + filename % phase, value)
-        for filename, key in mappingdict.items():
-            if key in emparts:
-                writeToFile(basepath + filename, emparts[key])
+                power = int(emparts['p%iconsume' % phase])
+                if power < 5:
+                    power = -int(emparts['p%isupply' % phase])
+                    positive[phase] = -1
+                writeToFile(basepath + 'bezugw%i' % phase, power)
+            for filename, mapping in phasemappingdict.items():
+                for phase in [1,2,3]:
+                    if mapping['from'] % phase in emparts:
+                        value = emparts[mapping['from'] % phase]
+                        if 'sign' in mapping and mapping['sign']:
+                           value *= positive[phase]
+                        writeToFile(basepath + filename % phase, value)
+            for filename, key in mappingdict.items():
+                if key in emparts:
+                    writeToFile(basepath + filename, emparts[key])
+        except:
+            pass
         sys.exit(0)
