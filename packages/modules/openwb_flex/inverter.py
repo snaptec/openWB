@@ -7,9 +7,6 @@ try:
     from ..common.abstract_component import AbstractInverter
     from ..common.component_state import InverterState
 except:
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractInverter
