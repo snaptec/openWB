@@ -31,7 +31,7 @@ def get_default_config() -> dict:
 
 
 class Device(abstract_device.AbstractDevice):
-    _COMPONENT_TYPE_TO_CLASS = {
+    COMPONENT_TYPE_TO_CLASS = {
         "bat": bat.AlphaEssBat,
         "counter": counter.AlphaEssCounter,
         "inverter": inverter.AlphaEssInverter
@@ -45,7 +45,8 @@ class Device(abstract_device.AbstractDevice):
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(component_config, self.component_factory(component_config["type"]))
+        self.instantiate_component(
+            component_config, self.component_factory(component_config["type"]))
 
 
 def read_legacy(argv: List[str]) -> None:
@@ -66,9 +67,11 @@ def read_legacy(argv: List[str]) -> None:
         default["id"] = 0
         dev = Device(default)
         if component_type in _COMPONENT_TYPE_TO_MODULE:
-            component_default = _COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+            component_default = _COMPONENT_TYPE_TO_MODULE[component_type].get_default_config(
+            )
         else:
-            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(_COMPONENT_TYPE_TO_MODULE.keys()))
+            raise Exception("illegal component type "+component_type +
+                            ". Allowed values: "+','.join(_COMPONENT_TYPE_TO_MODULE.keys()))
         component_default["id"] = num
         component_default["configuration"]["version"] = version
         dev.add_component(component_default)

@@ -11,25 +11,24 @@ import typing
 from pathlib import Path
 
 try:
-    from ..common.module_error import ModuleError, ModuleErrorLevels
-    from ...helpermodules import compability
+    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ...helpermodules import compatibility
     from ...helpermodules import log
     from ...helpermodules import pub
 except:
-    # for 1.9 compability
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    from helpermodules import compability
+    # for 1.9 compatibility
+    from helpermodules import compatibility
     from helpermodules import log
     from helpermodules import pub
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
     
 def process_error( e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
 
 class SimCountFactory:
     def get_sim_counter(self):
         try:
-            ramdisk = compability.check_ramdisk_usage()
+            ramdisk = compatibility.is_ramdisk_in_use()
             return SimCountLegacy if ramdisk else SimCount
         except Exception as e:
             process_error(e)
@@ -112,7 +111,7 @@ class SimCountLegacy:
             elif prefix == "speicher":
                 topic = "housebattery"
             else:
-                raise ModuleError("Fehler im Modul simcount: Unbekannter Präfix", ModuleErrorLevels.ERROR)
+                raise ModuleError("Fehler im Modul simcount: Unbekannter Präfix", ModuleErrorLevel.ERROR)
             return topic
         except Exception as e:
             process_error(e)
@@ -144,7 +143,7 @@ class SimCountLegacy:
                 else:
                     temp = subscribe.simple("openWB/"+topic+"/WHExport_temp", hostname="localhost")
             except Exception as e:
-                raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+                raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
             # Signal-Handler stoppen
             signal.alarm(0)
             temp = int(float(temp.payload.decode("utf-8")))

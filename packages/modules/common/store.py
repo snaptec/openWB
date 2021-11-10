@@ -1,27 +1,27 @@
 from abc import abstractmethod
 from collections.abc import Iterable 
 from pathlib import Path
-from typing import List, Union
+from typing import Callable, List, Union
 
 try:
-    from ..common.module_error import ModuleError, ModuleErrorLevels
-    from ...helpermodules import compability
+    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ...helpermodules import compatibility
     from ...helpermodules import log
     from ...helpermodules import pub
     from component_state import BatState, CounterState, InverterState
 except:
-    # for 1.9 compability
+    # for 1.9 compatibility
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    from helpermodules import compability
+    from helpermodules import compatibility
     from helpermodules import log
     from helpermodules import pub
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
     from .component_state import BatState, CounterState, InverterState
 
 
 def process_error(e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
 
 
 def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
@@ -29,39 +29,33 @@ def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
         write_to_file(prefix+str(index + 1), value, digits)
 
 
-def write_to_file(file: str, value, digits: int = None) -> None:
+def write_to_file(file: str, value, digits: Union[int, None] = None) -> None:
     try:
-        if digits != None:
-            if digits == 0:
-                value = int(value)
-            else:
-                value = round(value, digits)
+        rounding = get_rounding_function_by_digits(digits)
         with open("/var/www/html/openWB/ramdisk/" + file, "w") as f:
-            f.write(str(value))
+            f.write(str(rounding(value)))
         return value
     except Exception as e:
         process_error(e)
 
+def get_rounding_function_by_digits(digits: Union[int, None]) -> Callable:
+    if digits is None:
+        return lambda value: value
+    elif digits == 0:
+        return int
+    else:
+        return lambda value: round(value, digits)
 
-def pub_to_broker(topic: str, value, digits: int = None) -> None:
+
+def pub_to_broker(topic: str, value, digits: Union[int, None] = None) -> None:
+    rounding = get_rounding_function_by_digits(digits)    
     try:
         if isinstance(value, list):
-            if digits != None:
-                if digits == 0:
-                    value = [int(val,) for val in value]
-                else:
-                    value = [round(val, digits) for val in value]
-            pub.pub(topic, value)
+            pub.pub(topic, [rounding(v) for v in value])
         else:
-            if digits != None:
-                if digits == 0:
-                    value = int(value)
-                else:
-                    value = round(value, digits)
-            pub.pub(topic, value)
+            pub.pub(topic, rounding(value))
     except Exception as e:
         process_error(e)
-
 
 class ValueStore:
     @abstractmethod
@@ -150,7 +144,7 @@ class InverterValueStoreRamdisk(ValueStore):
             elif self.num == 2:
                 filename_extension = "2"
             else:
-                raise ModuleError("Unbekannte PV-Nummer "+str(self.num), ModuleErrorLevels.ERROR)
+                raise ModuleError("Unbekannte PV-Nummer "+str(self.num), ModuleErrorLevel.ERROR)
             power = write_to_file("/pv"+filename_extension+"watt", inverter_state.power, 0)
             write_to_file("/pv"+filename_extension+"kwh", inverter_state.counter, 3)
             write_to_file("/pv"+filename_extension+"kwhk", inverter_state.counter/1000, 3)
@@ -177,7 +171,7 @@ value_store_classes = Union[BatteryValueStoreRamdisk, BatteryValueStoreBroker, C
 class ValueStoreFactory:
     def get_storage(self, component_type: str) -> value_store_classes:
         try:
-            ramdisk = compability.check_ramdisk_usage()
+            ramdisk = compatibility.is_ramdisk_in_use()
             if component_type == "bat":
                 return BatteryValueStoreRamdisk if ramdisk else BatteryValueStoreBroker
             elif component_type == "counter":
