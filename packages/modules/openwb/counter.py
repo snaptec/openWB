@@ -3,14 +3,14 @@ import sys
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common.module_error import ModuleError, ModuleErrorLevels
     from ..openwb_flex.counter import EvuKitFlex
 except:
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common.module_error import ModuleError, ModuleErrorLevels
     from modules.openwb_flex.counter import EvuKitFlex
 
@@ -28,7 +28,7 @@ def get_default_config() -> dict:
 
 
 class EvuKit(EvuKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         try:
             self.data = {"config": component_config}
             version = self.data["config"]["configuration"]["version"]

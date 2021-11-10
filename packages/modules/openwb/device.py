@@ -1,7 +1,7 @@
 from typing import List, Union
 
 try:
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common import abstract_device
     from ...helpermodules import log
     from . import counter
@@ -11,7 +11,7 @@ except:
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common import abstract_device
     import counter
     import inverter
@@ -49,12 +49,12 @@ class Device(abstract_device.AbstractDevice):
             if component_type == "counter":
                 ip_address = "192.168.193.15"
                 port = 8899
-                self.client = connect_tcp.ConnectTcp(self.data["config"]["id"], ip_address, port)
+                self.client = modbus.ModbusClient(ip_address, port)
                 return self._COMPONENT_TYPE_TO_CLASS[component_type]
             elif component_type == "inverter":
                 ip_address = "192.168.193.13"
                 port = 8899
-                self.client = connect_tcp.ConnectTcp(self.data["config"]["id"], ip_address, port)
+                self.client = modbus.ModbusClient(ip_address, port)
                 return self._COMPONENT_TYPE_TO_CLASS[component_type]
             # elif component_type == "bat":
             #     pass

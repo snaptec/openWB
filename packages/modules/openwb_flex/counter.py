@@ -3,14 +3,14 @@ import sys
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common.abstract_component import AbstractCounter
     from ..common.component_state import CounterState
 except:
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common.abstract_component import AbstractCounter
     from modules.common.component_state import CounterState
 
@@ -29,7 +29,7 @@ def get_default_config() -> dict:
 
 
 class EvuKitFlex(AbstractCounter):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         try:
             client = self.kit_version_factory(component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client)
             super().__init__(device_id, component_config, client)

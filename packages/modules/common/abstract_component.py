@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import List, Union
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common import lovato
     from ..common import mpm3pm
     from ..common import simcount
@@ -15,7 +15,7 @@ except:
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common import lovato
     from modules.common import mpm3pm
     from modules.common import simcount
@@ -26,7 +26,7 @@ except:
 
 
 class AbstractComponent:
-    def __init__(self, device_id: int, component_config: dict, client: Union[connect_tcp.ConnectTcp, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         try:
             self.device_id = device_id
             self.client = client
@@ -59,7 +59,7 @@ class AbstractComponent:
     def process_error(self, e):
         ModuleError(str(type(e))+" "+str(e), ModuleErrorLevels.ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
 
-    def kit_version_factory(self, version: int, id: int, tcp_client: connect_tcp.ConnectTcp) -> Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]:
+    def kit_version_factory(self, version: int, id: int, tcp_client: modbus.ModbusClient) -> Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]:
         try:
             if version == 0:
                 return mpm3pm.Mpm3pm(id, tcp_client)
@@ -74,7 +74,7 @@ class AbstractComponent:
 
 
 class AbstractBat(AbstractComponent):
-    def __init__(self, device_id: int, component_config: dict, client: Union[connect_tcp.ConnectTcp, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         super().__init__(device_id, component_config, client)
 
     @abstractmethod
@@ -86,7 +86,7 @@ class AbstractBat(AbstractComponent):
 
 
 class AbstractCounter(AbstractComponent):
-    def __init__(self, device_id: int, component_config: dict, client: Union[connect_tcp.ConnectTcp, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         super().__init__(device_id, component_config, client)
 
     @abstractmethod
@@ -98,7 +98,7 @@ class AbstractCounter(AbstractComponent):
 
 
 class AbstractInverter(AbstractComponent):
-    def __init__(self, device_id: int, component_config: dict, client: Union[connect_tcp.ConnectTcp, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         super().__init__(device_id, component_config, client)
 
     @abstractmethod
