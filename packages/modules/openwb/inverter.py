@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 
 try:
     from ...helpermodules import log
@@ -35,9 +34,11 @@ class PvKit(PvKitFlex):
             elif version == 2:
                 id = 116
             else:
-                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevel.ERROR)
+                raise ModuleError("Version "+str(version) +
+                                  " unbekannt.", ModuleErrorLevel.ERROR)
             self.data["config"]["configuration"]["id"] = id
 
             super().__init__(device_id, self.data["config"], tcp_client)
         except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["components"]["component0"]["name"])
+            log.MainLogger().exception("Fehler im Modul " +
+                                       self.data["config"]["components"]["component0"]["name"])

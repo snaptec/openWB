@@ -1,5 +1,5 @@
 from typing import List, Union
-
+import sys
 try:
     from ..common import modbus
     from ..common import abstract_device
@@ -33,10 +33,12 @@ class Device(abstract_device.AbstractDevice):
         try:
             super().__init__(device, client=None)
         except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+            log.MainLogger().exception(
+                "Fehler im Modul "+self.data["config"]["name"])
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(component_config, self.component_factory(component_config["type"]))
+        self.instantiate_component(
+            component_config, self.component_factory(component_config["type"]))
 
     def component_factory(self, component_type: str) -> Union[counter.EvuKit, inverter.PvKit]:
         try:
@@ -53,9 +55,11 @@ class Device(abstract_device.AbstractDevice):
             # elif component_type == "bat":
             #     pass
             else:
-                raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(self.COMPONENT_TYPE_TO_CLASS.keys()))
+                raise Exception("illegal component type "+component_type +
+                                ". Allowed values: "+','.join(self.COMPONENT_TYPE_TO_CLASS.keys()))
         except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+            log.MainLogger().exception(
+                "Fehler im Modul "+self.data["config"]["name"])
 
 
 def read_legacy(argv: List[str]):
@@ -77,9 +81,11 @@ def read_legacy(argv: List[str]):
     dev = Device(device_config)
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config(
+        )
     else:
-        raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
+        raise Exception("illegal component type "+component_type +
+                        ". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
     component_config["id"] = num
     component_config["configuration"]["version"] = version
     dev.add_component(component_config)
