@@ -1,27 +1,21 @@
 #!/usr/bin/python
-import sys
-import os
-import time
-import getopt
+# import sys
+# import os
+# import time
+# import getopt
 import struct
 from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient('192.168.193.15', port=8899)
-#from pymodbus.transaction import ModbusRtuFramer
-#client = ModbusTcpClient('192.168.0.7', port=8899, framer=ModbusRtuFramer)
 
-
-
-
-
-######
 resp = client.read_input_registers(0x0004,4, unit=8)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
 ikwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
 
-#resp = client.read_input_registers(0x0004,2, unit=sdmid)
-#ikwh = resp.registers[1]
+# resp = client.read_input_registers(0x0004,2, unit=sdmid)
+# ikwh = resp.registers[1]
 ikwh = float(ikwh) * 10
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(ikwh))
@@ -57,7 +51,7 @@ f = open('/var/www/html/openWB/ramdisk/pva3', 'w')
 f.write(str(lla3))
 f.close()
 
-#total watt
+# total watt
 resp = client.read_input_registers(0x26,2, unit=8)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -66,5 +60,3 @@ final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(final))
 f.close()
-
-

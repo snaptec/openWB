@@ -8,7 +8,7 @@ devicenumber = str(sys.argv[1])
 ipadr = str(sys.argv[2])        #IP-ADresse des Fronius Wechselrichters, mit dem der Zähler kommuniziert
 smid = int(sys.argv[3])         #ID des Zählers im Wechselrichter (Hauptzähler 0, weitere fortlaufend)
 
-jsonurl = "http://"+str(ipadr)+"/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID="+str(smid)      #Abfrage-URL, die die .json Antwort liefert.
+jsonurl = "http://"+str(ipadr)+"/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId="+str(smid)      #Abfrage-URL, die die .json Antwort liefert.
 jsonpower = ".Body.Data.PowerReal_P_Sum"                #json Key in dem der aktuelle Leistungswert steht
 jsonpowerc = ".Body.Data.EnergyReal_WAC_Sum_Consumed"   #json Key in dem der summierte Verbrauch steht
 

@@ -1,25 +1,27 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
-import struct
-import binascii
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
+# import struct
+# import binascii
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
+from pymodbus.client.sync import ModbusTcpClient
+
 ipaddress		= str(sys.argv[1])	# IP-Address Modbus Gateway
 xtcount 		= int(sys.argv[2])	# studer_xt (count XT* Devices)
 vccount 		= int(sys.argv[3])	# studer_vc (count MPPT Devices)
 studervctype 	= str(sys.argv[4])	# studer_vc_type (MPPT type VS or VT)
 
-from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
+
 connection = client.connect()
 
 def func_pvwatt():
-#loop for pvwatt
+	# loop for pvwatt
 	if studervctype == 'VS':
 		mb_unit = int(40)
 		mb_register = int(20)  # MB:20; ID: 15010; PV power kW
@@ -48,7 +50,7 @@ def func_pvwatt():
 
 
 def func_pvkwh():
-# loop for pvkwh
+	# loop for pvkwh
 	if studervctype == 'VS':
 		mb_unit = int(40)
 		mb_register = int(46)  # MB:46; ID: 15023; Desc: Total PV produced energy MWh
@@ -73,9 +75,7 @@ def func_pvkwh():
 	f.write(str(pvkwh*1000000))
 	f.close()
 
-
 func_pvwatt()
 func_pvkwh()
 
 client.close()
-

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 illwh=$(cat /run/shm/em-$smaemdllid-pregardcounter)
 llwatt=$(cat /run/shm/em-$smaemdllid-pregard |sed 's/\..*$//')
 bezuga1=$(cat /run/shm/em-$smaemdllid-p1regard |sed 's/\..*$//')
@@ -13,5 +11,3 @@ echo $llwatt > /var/www/html/openWB/ramdisk/llaktuell
 echo $bezuga1 > /var/www/html/openWB/ramdisk/lla1
 echo $bezuga2 > /var/www/html/openWB/ramdisk/lla2
 echo $bezuga3 > /var/www/html/openWB/ramdisk/lla3
-
-
