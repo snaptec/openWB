@@ -45,7 +45,8 @@ class Device(abstract_device.AbstractDevice):
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(component_config, super().component_factory(component_config["type"]))
+        self.instantiate_component(component_config, super(
+        ).component_factory(component_config["type"]))
 
 
 def read_legacy(argv: List[str]):
@@ -72,9 +73,11 @@ def read_legacy(argv: List[str]):
     device_config["configuration"]["port"] = port
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config(
+        )
     else:
-        raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
+        raise Exception("illegal component type "+component_type +
+                        ". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
 
     component_config["id"] = num
     component_config["configuration"]["version"] = version

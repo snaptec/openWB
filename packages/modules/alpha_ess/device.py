@@ -43,7 +43,8 @@ class Device(abstract_device.AbstractDevice):
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(component_config, self.component_factory(component_config["type"]))
+        self.instantiate_component(
+            component_config, self.component_factory(component_config["type"]))
 
 
 def read_legacy(argv: List[str]) -> None:
