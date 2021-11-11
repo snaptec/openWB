@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
-""" Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu formatieren.
+"""Modul für einfache Modbusoperationen.
+
+Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu
+formatieren.
 """
-import codecs
 from enum import Enum
+from typing import Callable, Iterable, Union
+
+import pymodbus
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
-from typing import Callable, Iterable, List, Union
-import pymodbus
-import struct
 
 try:
     from ...helpermodules import log
     from ..common.module_error import ModuleError, ModuleErrorLevel
-except:
+except ImportError:
     from helpermodules import log
     from modules.common.module_error import ModuleError, ModuleErrorLevel
 
@@ -82,10 +84,16 @@ class ModbusClient:
             return result if multi_request else result[0]
         except pymodbus.exceptions.ConnectionException as e:
             raise ModuleError(
-                "TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und Hardware-Anschluss pruefen.", ModuleErrorLevel.ERROR) from e
+                "TCP-Client konnte keine Verbindung aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " +
+                "Hardware-Anschluss pruefen.",
+                ModuleErrorLevel.ERROR
+            ) from e
         except pymodbus.exceptions.ModbusIOException as e:
             raise ModuleError(
-                "TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red, beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", ModuleErrorLevel.WARNING) from e
+                "TCP-Client konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red," +
+                "beenden und bei anhaltender Fehlermeldung Zaehler neustarten.",
+                ModuleErrorLevel.WARNING
+            ) from e
         except Exception as e:
             raise ModuleError(__name__+" "+str(type(e))+" " +
                               str(e), ModuleErrorLevel.ERROR) from e

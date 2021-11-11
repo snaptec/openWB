@@ -2,7 +2,7 @@
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
 import sys
-from typing import List, Union
+from typing import List
 
 try:
     from ...helpermodules import log
@@ -11,7 +11,7 @@ try:
     from . import bat
     from . import counter
     from . import inverter
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common import abstract_device
@@ -39,7 +39,7 @@ class Device(abstract_device.AbstractDevice):
         try:
             client = modbus.ModbusClient("192.168.193.125", 8899)
             super().__init__(device, client)
-        except Exception as e:
+        except Exception:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
@@ -57,7 +57,7 @@ def read_legacy(argv: List[str]) -> None:
     version = int(argv[2])
     try:
         num = int(argv[3])
-    except:
+    except ValueError:
         num = None
 
     device_config = get_default_config()
@@ -66,7 +66,10 @@ def read_legacy(argv: List[str]) -> None:
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
     else:
-        raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
+        raise Exception(
+            "illegal component type " + component_type + ". Allowed values: " +
+            ','.join(COMPONENT_TYPE_TO_MODULE.keys())
+        )
     component_config["id"] = num
     component_config["configuration"]["version"] = version
     dev.add_component(component_config)
@@ -79,5 +82,5 @@ def read_legacy(argv: List[str]) -> None:
 if __name__ == "__main__":
     try:
         read_legacy(sys.argv)
-    except:
+    except Exception:
         log.MainLogger().exception("Fehler im Alpha Ess Skript")

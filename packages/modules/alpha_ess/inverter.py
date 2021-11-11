@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import time
 
 try:
     from ...helpermodules import log
@@ -7,7 +6,7 @@ try:
     from ..common.abstract_component import AbstractInverter
     from ..common.component_state import InverterState
     from ..common.module_error import ModuleError
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractInverter
@@ -58,7 +57,10 @@ class AlphaEssInverter(AbstractInverter):
 
     def __get_power(self, unit: int, reg_p: int) -> int:
         try:
-            powers = [self.client.read_holding_registers(address, modbus.ModbusDataType.INT_32, unit=unit) for address in [reg_p, 0x041F, 0x0423, 0x0427]]
+            powers = [
+                self.client.read_holding_registers(address, modbus.ModbusDataType.INT_32, unit=unit)
+                for address in [reg_p, 0x041F, 0x0423, 0x0427]
+            ]
             powers[0] = abs(powers[0])
             power = sum(powers) * -1
             log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: " + str(powers))

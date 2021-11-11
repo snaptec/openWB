@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-import sys
 from typing import List, Tuple
 
 try:
     from ..common import modbus
     from ..common.module_error import ModuleError, ModuleErrorLevel
-except:
+except ImportError:
     # for 1.9 compatibility
     from modules.common import modbus
     from modules.common.module_error import ModuleError, ModuleErrorLevel
@@ -56,7 +55,7 @@ class Sdm630:
 
     def get_frequency(self) -> float:
         try:
-            frequency= self.client.read_input_registers(0x46, modbus.ModbusDataType.FLOAT_32, unit=self.id)
+            frequency = self.client.read_input_registers(0x46, modbus.ModbusDataType.FLOAT_32, unit=self.id)
             if frequency > 100:
                 frequency = frequency / 10
             return frequency

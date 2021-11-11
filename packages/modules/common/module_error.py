@@ -5,12 +5,12 @@ try:
     from ...helpermodules import compatibility
     from ...helpermodules import log
     from ...helpermodules import pub
-except:
+except ImportError:
     # for 1.9 compatibility
-    import sys
     from helpermodules import compatibility
     from helpermodules import log
     from helpermodules import pub
+
 
 class ModuleErrorLevel(Enum):
     NO_ERROR = 0
@@ -25,7 +25,10 @@ class ModuleError(Exception):
 
     def store_error(self, component_num: int, component_type: str, component_name: str) -> None:
         try:
-            log.MainLogger().debug(component_name+": FaultState "+str(self.fault_state)+", FaultStr "+self.fault_str+", Traceback: \n"+traceback.format_exc())
+            log.MainLogger().debug(
+                component_name+": FaultState "+str(self.fault_state)+", FaultStr "+self.fault_str+", Traceback: \n" +
+                traceback.format_exc()
+            )
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
                 if component_type == "counter":
@@ -42,5 +45,5 @@ class ModuleError(Exception):
             else:
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_str", self.fault_str)
                 pub.pub("openWB/set/"+component_type+"/"+str(component_num)+"/get/fault_state", self.fault_state.value)
-        except:
+        except Exception:
             log.MainLogger().exception("Fehler im Modul module_error")

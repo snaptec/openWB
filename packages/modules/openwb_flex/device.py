@@ -7,7 +7,7 @@ try:
     from ..common import abstract_device
     from . import counter
     from . import inverter
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common import abstract_device
@@ -41,7 +41,7 @@ class Device(abstract_device.AbstractDevice):
             port = device["configuration"]["port"]
             client = modbus.ModbusClient(ip_address, port)
             super().__init__(device, client)
-        except Exception as e:
+        except Exception:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
@@ -65,7 +65,7 @@ def read_legacy(argv: List[str]):
     id = int(argv[5])
     try:
         num = int(argv[6])
-    except:
+    except ValueError:
         num = None
 
     device_config = get_default_config()
@@ -95,5 +95,5 @@ def read_legacy(argv: List[str]):
 if __name__ == "__main__":
     try:
         read_legacy(sys.argv)
-    except Exception as e:
+    except Exception:
         log.MainLogger().exception("Fehler im Modul openwb_flex")

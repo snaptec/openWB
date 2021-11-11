@@ -6,7 +6,7 @@ try:
     from ..common import modbus
     from ..common.abstract_component import AbstractBat
     from ..common.component_state import BatState
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractBat
@@ -43,13 +43,17 @@ class AlphaEssBat(AbstractBat):
         current = self.client.read_holding_registers(0x0101, modbus.ModbusDataType.INT_16, unit=sdmid)
 
         power = voltage * current * -1 / 100
-        log.MainLogger().debug("Alpha Ess Leistung[W]: "+str(power)+", Speicher-Register: Spannung[V] "+str(voltage)+" Strom[A] "+str(current))
+        log.MainLogger().debug(
+            "Alpha Ess Leistung[W]: %f, Speicher-Register: Spannung[V]: %f, Strom[A]: %f" % (power, voltage, current)
+        )
         time.sleep(0.1)
         soc_reg = self.client.read_holding_registers(0x0102, modbus.ModbusDataType.INT_16, unit=sdmid)
         soc = int(soc_reg * 0.1)
 
         topic_str = "openWB/set/system/device/" + str(self.device_id)+"/component/"+str(self.data["config"]["id"])+"/"
-        imported, exported = self.sim_count.sim_count(power, topic=topic_str, data=self.data["simulation"], prefix="speicher")
+        imported, exported = self.sim_count.sim_count(
+            power, topic=topic_str, data=self.data["simulation"], prefix="speicher"
+        )
         bat_state = BatState(
             power=power,
             soc=soc,

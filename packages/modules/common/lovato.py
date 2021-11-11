@@ -4,11 +4,9 @@ from typing import List, Tuple
 
 try:
     from ..common import modbus
-    from ...helpermodules import log
     from ..common.module_error import ModuleError, ModuleErrorLevel
-except:
+except ImportError:
     # for 1.9 compatibility
-    from helpermodules import log
     from modules.common import modbus
     from modules.common.module_error import ModuleError, ModuleErrorLevel
 
@@ -16,7 +14,7 @@ except:
 class Lovato:
     def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         self.client = client
-        unit=self.id = modbus_id
+        self.id = modbus_id
 
     def __process_error(self, e):
         if isinstance(e, ModuleError):
@@ -38,7 +36,9 @@ class Lovato:
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = self.client.read_input_registers(0x0013, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id) / 100
+            power_per_phase = self.client.read_input_registers(
+                0x0013, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id
+            ) / 100
             power_all = self.client.read_input_registers(0x000C, modbus.ModbusDataType.FLOAT_32, unit=self.id)
             return power_per_phase, power_all
         except Exception as e:
@@ -52,7 +52,7 @@ class Lovato:
 
     def get_power_factor(self) -> List[float]:
         try:
-            return self.client.read_input_registers(0x0025,[ modbus.ModbusDataType.FLOAT_32]*3, unit=self.id) / 10000
+            return self.client.read_input_registers(0x0025, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id) / 10000
         except Exception as e:
             self.__process_error(e)
 

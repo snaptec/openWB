@@ -7,7 +7,12 @@ from testutils.mock import ignore_logging
 
 
 class Params:
-    def __init__(self, name: str, seconds: int, power_previous: int, power_present: int, expected_energy: Tuple[Number, Number]):
+    def __init__(self,
+                 name: str,
+                 seconds: int,
+                 power_previous: int,
+                 power_present: int,
+                 expected_energy: Tuple[Number, Number]):
         self.name = name
         self.seconds = seconds
         self.power_previous = power_previous

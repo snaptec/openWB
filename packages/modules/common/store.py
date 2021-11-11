@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from collections.abc import Iterable 
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Callable, List, Union
+from typing import Callable, Union
 
 try:
     from ..common.module_error import ModuleError, ModuleErrorLevel
@@ -9,7 +9,7 @@ try:
     from ...helpermodules import log
     from ...helpermodules import pub
     from component_state import BatState, CounterState, InverterState
-except:
+except ImportError:
     # for 1.9 compatibility
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -38,6 +38,7 @@ def write_to_file(file: str, value, digits: Union[int, None] = None) -> None:
     except Exception as e:
         process_error(e)
 
+
 def get_rounding_function_by_digits(digits: Union[int, None]) -> Callable:
     if digits is None:
         return lambda value: value
@@ -48,7 +49,7 @@ def get_rounding_function_by_digits(digits: Union[int, None]) -> Callable:
 
 
 def pub_to_broker(topic: str, value, digits: Union[int, None] = None) -> None:
-    rounding = get_rounding_function_by_digits(digits)    
+    rounding = get_rounding_function_by_digits(digits)
     try:
         if isinstance(value, list):
             pub.pub(topic, [rounding(v) for v in value])
@@ -56,6 +57,7 @@ def pub_to_broker(topic: str, value, digits: Union[int, None] = None) -> None:
             pub.pub(topic, rounding(value))
     except Exception as e:
         process_error(e)
+
 
 class ValueStore:
     @abstractmethod
@@ -166,7 +168,16 @@ class InverterValueStoreBroker(ValueStore):
         except Exception as e:
             process_error(e)
 
-value_store_classes = Union[BatteryValueStoreRamdisk, BatteryValueStoreBroker, CounterValueStoreRamdisk, CounterValueStoreBroker, InverterValueStoreRamdisk, InverterValueStoreBroker]
+
+value_store_classes = Union[
+    BatteryValueStoreRamdisk,
+    BatteryValueStoreBroker,
+    CounterValueStoreRamdisk,
+    CounterValueStoreBroker,
+    InverterValueStoreRamdisk,
+    InverterValueStoreBroker
+]
+
 
 class ValueStoreFactory:
     def get_storage(self, component_type: str) -> value_store_classes:
