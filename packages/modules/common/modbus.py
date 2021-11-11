@@ -15,7 +15,7 @@ from pymodbus.payload import BinaryPayloadDecoder
 try:
     from ...helpermodules import log
     from ..common.module_error import ModuleError, ModuleErrorLevel
-except ImportError:
+except (ImportError, ValueError):
     from helpermodules import log
     from modules.common.module_error import ModuleError, ModuleErrorLevel
 

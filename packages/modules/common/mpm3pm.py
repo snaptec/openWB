@@ -3,7 +3,7 @@ from typing import List, Tuple
 try:
     from ..common import modbus
     from ..common.module_error import ModuleError, ModuleErrorLevel
-except ImportError:
+except (ImportError, ValueError):
     # for 1.9 compatibility
     from modules.common import modbus
     from modules.common.module_error import ModuleError, ModuleErrorLevel

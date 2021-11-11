@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 
 try:
     from . import compatibility
-except ImportError:
+except (ImportError, ValueError):
     from helpermodules import compatibility
 
 debug_logger = None
