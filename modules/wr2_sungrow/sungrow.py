@@ -15,7 +15,8 @@ value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value2, '04x') + format(value1, '04x')
 final = int(struct.unpack('>i', all.decode('hex'))[0]*-1)
-f = open('/var/www/html/openWB/ramdisk/pv2watt', 'w')
-f.write(str(final))
-f.close()
+if final > -100000:
+    f = open('/var/www/html/openWB/ramdisk/pv2watt', 'w')
+    f.write(str(final))
+    f.close()
 

@@ -591,7 +591,10 @@
 						<button class="btn btn-info reloadSocLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
 						<pre id="socdiv"></pre>
 					</div>
-					<div id="collapseSeven" class="card-body collapse" data-parent="#accordion">
+					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseEight">
+						<a class="card-title">Nur Ladepunkt Log </a>
+					</div>
+					<div id="collapseEight" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadLLAnbindungLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
 						<pre id="llanbindungdiv"></pre>
 					</div>

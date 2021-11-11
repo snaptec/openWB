@@ -71,11 +71,14 @@
 										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
 										<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
 										<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+										<option <?php if($speichermodulold == "speicher_huawei") echo "selected" ?> value="speicher_huawei">Huawei</option>
 										<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
 										<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_rct2") echo "selected" ?> value="speicher_rct2">RCT V.2</option>
+										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 										<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
@@ -141,7 +144,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
-											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="1">SDM630 an EVU Kit angeschlossen</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">SDM630 an EVU Kit angeschlossen</option>
 										</select>
 									</div>
 								</div>
@@ -199,6 +202,11 @@
 						<div id="divspeichervictron" class="hide">
 							<div class="alert alert-info">
 								Konfiguration im Bezug Victron Modul.
+							</div>
+						</div>
+						<div id="divspeicherhuawei" class="hide">
+							<div class="alert alert-info">
+								Konfiguration im PV Huawei Modul.
 							</div>
 						</div>
 
@@ -272,7 +280,23 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
+						<div id="divspeicherrct2" class="hide">
+				<div class="card-header bg-secondary">
+					Speicher Hardware
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+						<pre><?php 
+						   $lines=[];
+							exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
+							echo implode('<br>',$lines); 
+						  ?></pre>
+						</div>
+					</div>
+				</div>
 
+						</div>
 						<div id="divspeichervarta" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -280,6 +304,13 @@
 									<div class="col">
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="vartaspeicher2ip" class="col-md-4 col-form-label">IP Adresse des zweiten Speichers</label>
+									<div class="col">
+										<input class="form-control" type="text" name="vartaspeicher2ip" id="vartaspeicher2ip" value="<?php echo $vartaspeicher2ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12, wenn nicht vorhanden none eintragen</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
@@ -643,16 +674,21 @@
 								hideSection('#divspeicherip');
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
+								hideSection('#divspeicherrct2');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
 								hideSection('#divspeichersolarwatt');
 								hideSection('#divspeicherip2');
-
+								hideSection('#divspeicherhuawei');
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('#divspeicherfems');
 								}
 								if($('#speichermodul').val() == 'speicher_rct') {
 									showSection('#divspeicherrct');
+								}
+								if($('#speichermodul').val() == 'speicher_rct2') {
+									showSection('#divspeicherrct');
+									showSection('#divspeicherrct2');
 								}
 								if($('#speichermodul').val() == 'speicher_siemens') {
 									showSection('#divspeicherip');
@@ -666,6 +702,10 @@
 								if($('#speichermodul').val() == 'speicher_tesvoltsma') {
 									showSection('#divspeicherip');
 								}
+								if($('#speichermodul').val() == 'speicher_saxpower') {
+									showSection('#divspeicherip');
+								}
+
 								if($('#speichermodul').val() == 'speicher_sungrow') {
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');
@@ -679,6 +719,10 @@
 								if($('#speichermodul').val() == 'speicher_victron') {
 									showSection('#divspeichervictron');
 								}
+								if($('#speichermodul').val() == 'speicher_huawei') {
+									showSection('#divspeicherhuawei');
+								}
+
 								if($('#speichermodul').val() == 'speicher_studer') {
 									showSection('#divspeicherstuder');
 								}

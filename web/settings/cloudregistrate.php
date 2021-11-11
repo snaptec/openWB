@@ -68,6 +68,7 @@
 			'RemotePrefix' => $clouduser.'/',
 			'mqttProtocol' => 'mqttv311',
 			'tlsProtocol' => 'tlsv1.2',
+			'tryPrivate' => '1',
 			'exportStatus' => '1',
 			'exportGraph' => '1',
 			'subscribeConfigs' => '1',
