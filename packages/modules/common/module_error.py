@@ -1,6 +1,5 @@
 from enum import Enum
 import traceback
-from typing_extensions import Literal
 
 try:
     from ...helpermodules import compatibility
