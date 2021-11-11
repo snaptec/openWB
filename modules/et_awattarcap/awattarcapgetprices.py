@@ -29,13 +29,17 @@ priceUrl = "https://api.awattar.de/v1/marketdata?start="
 # --- Helper-Funktionen ---
 
 def logDebug(msgLevel, msgText):
-    if debug >= msgLevel:
-        now = datetime.now()
-        timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-        line = timestamp + ": " + str(msgText) + "\n"
-        f = open('/var/www/html/openWB/ramdisk/openWB.log', 'a')
-        f.write(line)
-        f.close()      
+    try:
+        if debug >= msgLevel:
+            now = datetime.now()
+            timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+            line = timestamp + ": " + str(msgText) + "\n"
+            with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
+                f.write(line)
+            f.close()      
+    except:
+        pass
+        
     return
     
 def getWeekday(time):
@@ -161,7 +165,7 @@ def main():
     try:
         debug = int(sys.argv[1])
         timeToday = int(datetime.combine(datetime.today(), time.min).timestamp())
-        timeTomorrow = int(timeToday + (24*60*60))      
+        timeTomorrow = int(timeToday + (24*60*60))
     except:
         raise
     
