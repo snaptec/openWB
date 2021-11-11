@@ -32,13 +32,10 @@ def logDebug(msgLevel, msgText):
     if debug >= msgLevel:
         now = datetime.now()
         timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-        line = timestamp + ": " + msgText + "\n"
-        
-        #f = open('/var/www/html/openWB/ramdisk/openWB.log', 'a')
-        #f.write(line)
-        #f.close()
-        print(line)
-        
+        line = timestamp + ": " + str(msgText) + "\n"
+        f = open('/var/www/html/openWB/ramdisk/openWB.log', 'a')
+        f.write(line)
+        f.close()      
     return
     
 def getWeekday(time):
@@ -164,7 +161,7 @@ def main():
     try:
         debug = int(sys.argv[1])
         timeToday = int(datetime.combine(datetime.today(), time.min).timestamp())
-        timeTomorrow = int(timeToday + (24*60*60))
+        timeTomorrow = int(timeToday + (24*60*60))      
     except:
         raise
     
@@ -177,7 +174,9 @@ def main():
         
         curveToday = calculateCurve(dataToday, timeToday)
     except:
-        curveToday = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+        curveToday = {}
+        for hour in range(24):
+            curveToday[hour] = 0
         pass
     
     try:
@@ -189,7 +188,9 @@ def main():
             
         curveTomorrow = calculateCurve(dataTomorrow, timeTomorrow)
     except:
-        curveTomorrow = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+        curveTomorrow = {}
+        for hour in range(24):
+            curveTomorrow[hour] = 0
         pass
         
     try:
