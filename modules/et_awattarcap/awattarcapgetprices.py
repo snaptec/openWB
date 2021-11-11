@@ -35,7 +35,7 @@ def logDebug(msgLevel, msgText):
             timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
             line = timestamp + ": " + str(msgText) + "\n"
             with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
-                f.write(line)   
+                f.write(line)
     except:
         pass
         
