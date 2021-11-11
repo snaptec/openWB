@@ -8,7 +8,7 @@ try:
     from ..common.abstract_component import AbstractCounter
     from ..common.component_state import CounterState
     from ..common.module_error import ModuleError
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractCounter
@@ -72,7 +72,7 @@ class AlphaEssCounter(AbstractCounter):
                 frequency=50
             )
             return counter_state
-        except ModuleError as e:
+        except ModuleError:
             raise
         except Exception as e:
             self.process_error(e)
@@ -103,7 +103,7 @@ class AlphaEssCounter(AbstractCounter):
                 frequency=50
             )
             return counter_state
-        except ModuleError as e:
+        except ModuleError:
             raise
         except Exception as e:
             self.process_error(e)

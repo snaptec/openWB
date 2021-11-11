@@ -7,11 +7,10 @@ import traceback
 import subprocess
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 try:
     from . import compatibility
-except:
+except ImportError:
     from helpermodules import compatibility
 
 debug_logger = None
@@ -66,9 +65,9 @@ class MainLogger:
             """
             try:
                 local_time = datetime.now(timezone.utc).astimezone()
-                myPid = str(os.getpid())
-                print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
-            except:
+                my_pid = str(os.getpid())
+                print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + my_pid + ": " + message)
+            except Exception:
                 traceback.print_exc()
 
     instance = None

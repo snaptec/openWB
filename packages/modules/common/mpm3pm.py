@@ -3,7 +3,7 @@ from typing import List, Tuple
 try:
     from ..common import modbus
     from ..common.module_error import ModuleError, ModuleErrorLevel
-except:
+except ImportError:
     # for 1.9 compatibility
     from modules.common import modbus
     from modules.common.module_error import ModuleError, ModuleErrorLevel
@@ -12,7 +12,7 @@ except:
 class Mpm3pm:
     def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         self.client = client
-        unit=self.id = modbus_id
+        self.id = modbus_id
 
     def __process_error(self, e):
         if isinstance(e, ModuleError):

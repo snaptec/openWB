@@ -6,7 +6,7 @@ try:
     from ...helpermodules import log
     from . import counter
     from. import inverter
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common import abstract_device
@@ -32,7 +32,7 @@ class Device(abstract_device.AbstractDevice):
     def __init__(self, device: dict) -> None:
         try:
             super().__init__(device, client=None)
-        except Exception as e:
+        except Exception:
             log.MainLogger().exception(
                 "Fehler im Modul "+self.data["config"]["name"])
 
@@ -57,7 +57,7 @@ class Device(abstract_device.AbstractDevice):
             else:
                 raise Exception("illegal component type "+component_type +
                                 ". Allowed values: "+','.join(self.COMPONENT_TYPE_TO_CLASS.keys()))
-        except:
+        except Exception:
             log.MainLogger().exception(
                 "Fehler im Modul "+self.data["config"]["name"])
 
@@ -74,7 +74,7 @@ def read_legacy(argv: List[str]):
     version = int(sys.argv[2])
     try:
         num = int(argv[3])
-    except:
+    except ValueError:
         num = None
 
     device_config = get_default_config()
@@ -98,5 +98,5 @@ def read_legacy(argv: List[str]):
 if __name__ == "__main__":
     try:
         read_legacy(sys.argv)
-    except:
+    except Exception:
         log.MainLogger().exception("Fehler im Modul openwb")

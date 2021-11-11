@@ -6,7 +6,7 @@ try:
     from ..common import modbus
     from ..common.abstract_component import AbstractInverter
     from ..common.component_state import InverterState
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractInverter
@@ -29,7 +29,9 @@ def get_default_config() -> dict:
 class PvKitFlex(AbstractInverter):
     def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         try:
-            client = self.kit_version_factory(component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client)
+            client = self.kit_version_factory(
+                component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client
+            )
             super().__init__(device_id, component_config, client)
             self.tcp_client = tcp_client
         except Exception as e:
@@ -44,15 +46,15 @@ class PvKitFlex(AbstractInverter):
         version = self.data["config"]["configuration"]["version"]
         if version == 1:
             power_all = sum(power_per_phase)
-        if (power_all > 10):
+        if power_all > 10:
             power_all = power_all*-1
         currents = self.client.get_current()
 
         log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power_all))
         self.tcp_client.close_connection()
         inverter_state = InverterState(
-            power=power_all, 
-            counter=counter, 
+            power=power_all,
+            counter=counter,
             currents=currents
         )
         return inverter_state

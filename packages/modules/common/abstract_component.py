@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, Union
+from typing import Union
 try:
     from ...helpermodules import log
     from ..common import modbus
@@ -10,7 +10,7 @@ try:
     from ..common import store
     from ..common.module_error import ModuleError, ModuleErrorLevel
     from component_state import BatState, CounterState, InverterState
-except:
+except ImportError:
     from helpermodules import log
     from modules.common import modbus
     from modules.common import lovato
@@ -23,16 +23,23 @@ except:
 
 
 class AbstractComponent:
-    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(
+        self,
+        device_id: int,
+        component_config: dict,
+        client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]
+    ) -> None:
         try:
             self.device_id = device_id
             self.client = client
             self.data = {"config": component_config,
                          "simulation": {}}
-            self.value_store = (store.ValueStoreFactory().get_storage(component_config["type"]))(self.data["config"]["id"])
+            self.value_store = (store.ValueStoreFactory().get_storage(component_config["type"]))(
+                self.data["config"]["id"]
+            )
             simcount_factory = simcount.SimCountFactory().get_sim_counter()
             self.sim_count = simcount_factory()
-        except Exception as e:
+        except Exception:
             log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
 
     @abstractmethod
@@ -50,13 +57,19 @@ class AbstractComponent:
             self.process_error(e)
             raise ModuleError("", ModuleErrorLevel.ERROR)
         else:
-            ModuleError("Kein Fehler.", ModuleErrorLevel.NO_ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
+            ModuleError("Kein Fehler.", ModuleErrorLevel.NO_ERROR).store_error(
+                self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"]
+            )
             return state
 
     def process_error(self, e):
-        ModuleError(str(type(e))+" "+str(e), ModuleErrorLevel.ERROR).store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
+        ModuleError(str(type(e))+" "+str(e), ModuleErrorLevel.ERROR).store_error(
+            self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"]
+        )
 
-    def kit_version_factory(self, version: int, id: int, tcp_client: modbus.ModbusClient) -> Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]:
+    def kit_version_factory(self, version: int, id: int, tcp_client: modbus.ModbusClient) -> Union[
+        mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630
+    ]:
         try:
             if version == 0:
                 return mpm3pm.Mpm3pm(id, tcp_client)
@@ -71,7 +84,10 @@ class AbstractComponent:
 
 
 class AbstractBat(AbstractComponent):
-    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: dict,
+                 client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         super().__init__(device_id, component_config, client)
 
     @abstractmethod
@@ -83,7 +99,10 @@ class AbstractBat(AbstractComponent):
 
 
 class AbstractCounter(AbstractComponent):
-    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: dict,
+                 client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         super().__init__(device_id, component_config, client)
 
     @abstractmethod
@@ -95,7 +114,10 @@ class AbstractCounter(AbstractComponent):
 
 
 class AbstractInverter(AbstractComponent):
-    def __init__(self, device_id: int, component_config: dict, client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: dict,
+                 client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
         super().__init__(device_id, component_config, client)
 
     @abstractmethod
