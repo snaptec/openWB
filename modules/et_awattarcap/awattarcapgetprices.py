@@ -29,15 +29,15 @@ priceUrl = "https://api.awattar.de/v1/marketdata?start="
 # --- Helper-Funktionen ---
 
 def logDebug(msgLevel, msgText):
-    if debug >= msgLevel:
-        now = datetime.now()
-        timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-        line = timestamp + ": " + msgText + "\n"
-        
-        #f = open('/var/www/html/openWB/ramdisk/openWB.log', 'a')
-        #f.write(line)
-        #f.close()
-        print(line)
+    try:
+        if debug >= msgLevel:
+            now = datetime.now()
+            timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+            line = timestamp + ": " + str(msgText) + "\n"
+            with open('/var/www/html/openWB/ramdisk/openWB.log', 'a') as f:
+                f.write(line)
+    except:
+        pass
         
     return
     
@@ -91,9 +91,8 @@ def downloadPrices(time):
 
 def loadPrices(fileName):
     try:
-        f = open(fileName, 'r')
-        data = json.loads(f.read())
-        f.close()
+        with open(fileName, 'r') as f:
+            data = json.loads(f.read())
     except:
         return 0
     
@@ -101,9 +100,8 @@ def loadPrices(fileName):
     
 def savePrices(fileName, data):
     try:
-        f = open(fileName, 'w')
-        f.write(json.dumps(data))
-        f.close()
+        with open(fileName, 'w') as f:
+            f.write(json.dumps(data))
     except:
         return
     
@@ -131,23 +129,21 @@ def calculateCurve(data, time):
 
 def savePriceCurve(curve1, curve2, time1, time2):
     try:    
-        f = open(curveFile, 'w')
-        f.write("awattarcap_de\n")
-        for hour in range(datetime.now().hour, 24):
-            f.write(str(time1 + (hour*60*60)) + "," + str(curve1[hour]) + "\n") 
-        for hour in range(24):
-            f.write(str(time2 + (hour*60*60)) + "," + str(curve2[hour]) + "\n")     
-        f.close()
+        with open(curveFile, 'w') as f: 
+            f.write("awattarcap_de\n")
+            for hour in range(datetime.now().hour, 24):
+                f.write(str(time1 + (hour*60*60)) + "," + str(curve1[hour]) + "\n") 
+            for hour in range(24):
+                f.write(str(time2 + (hour*60*60)) + "," + str(curve2[hour]) + "\n")     
     except:
         raise
         
     return
     
 def saveCurrentPrice(curve1, time1):
-    try:    
-        f = open(currentFile, 'w')
-        f.write(str(curve1[datetime.now().hour])) 
-        f.close()
+    try:
+        with open(currentFile, 'w') as f:    
+            f.write(str(curve1[datetime.now().hour])) 
     except:
         raise
         
@@ -177,7 +173,9 @@ def main():
         
         curveToday = calculateCurve(dataToday, timeToday)
     except:
-        curveToday = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+        curveToday = {}
+        for hour in range(24):
+            curveToday[hour] = 0
         pass
     
     try:
@@ -189,7 +187,9 @@ def main():
             
         curveTomorrow = calculateCurve(dataTomorrow, timeTomorrow)
     except:
-        curveTomorrow = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+        curveTomorrow = {}
+        for hour in range(24):
+            curveTomorrow[hour] = 0
         pass
         
     try:
