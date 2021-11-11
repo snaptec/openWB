@@ -11,7 +11,7 @@ try:
     from . import bat
     from . import counter
     from . import inverter
-except ImportError:
+except (ImportError, ValueError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common import abstract_device

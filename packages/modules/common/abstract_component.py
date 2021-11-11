@@ -10,7 +10,7 @@ try:
     from ..common import store
     from ..common.module_error import ModuleError, ModuleErrorLevel
     from component_state import BatState, CounterState, InverterState
-except ImportError:
+except (ImportError, ValueError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common import lovato
