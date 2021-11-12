@@ -111,7 +111,6 @@ if [[ $? == "0" ]] ; then
 			fi
 			oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp2rfid)
 			if [[ $rfid != $oldrfid ]] ; then
-				openwbDebugLog "RFID" 0 "RFID3: $rfid"
 				echo $rfid > /var/www/html/openWB/ramdisk/readtag
 				echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp2rfid
 			fi
