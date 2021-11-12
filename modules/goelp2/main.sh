@@ -7,7 +7,6 @@ if [[ $? == "0" ]] ; then
 	#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 	fsp=$(echo $output | jq -r '.fsp')
 	if [[ ! $fsp =~ $re ]] ; then 
-		openwbDebugLog "RFID" 0 "alte API: $fsp"
 		watt=$(echo $output | jq -r '.nrg[11]')
 		watt=$(echo "scale=0;$watt * 10 /1" |bc)
 		if [[ $watt =~ $re ]] ; then
@@ -67,7 +66,6 @@ if [[ $? == "0" ]] ; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 		fi
 	else 
-		openwbDebugLog "RFID" 0 "neue API: $fsp"
 		output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/status)
 		if [[ $? == "0" ]] ; then
 			watt=$(echo $output | jq -r '.nrg[11]')
