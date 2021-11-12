@@ -1193,7 +1193,9 @@ updateConfig(){
 		else
 			echo "etprovideraktiv=0" >> $ConfigFile
 		fi
-		# tibber demo settings
+	fi
+	# tibber demo settings
+	if ! grep -Fq "tibbertoken=" $ConfigFile; then
 		echo "tibbertoken=d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a" >> $ConfigFile
 		echo "tibberhomeid=c70dcbe5-4485-4821-933d-a8a86452737b" >> $ConfigFile
 	fi

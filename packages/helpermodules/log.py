@@ -7,7 +7,11 @@ import traceback
 import subprocess
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
+
+try:
+    from . import compatibility
+except (ImportError, ValueError):
+    from helpermodules import compatibility
 
 debug_logger = None
 debug_fhandler = None
@@ -53,26 +57,25 @@ class MainLogger:
             self.__write_log(message)
 
         def __process_exception(self, exception):
-            if exception != None:
+            if exception is not None:
                 traceback.print_exc()
-                exit(1)
 
         def __write_log(self, message: str):
             """ Logging für 1.9
             """
             try:
                 local_time = datetime.now(timezone.utc).astimezone()
-                myPid = str(os.getpid())
-                print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
-            except:
+                my_pid = str(os.getpid())
+                print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + my_pid + ": " + message)
+            except Exception:
                 traceback.print_exc()
 
     instance = None
 
     def __init__(self):
         if not MainLogger.instance:
-            ramdisk = Path(str(Path(os.path.abspath(__file__)).parents[2])+"/ramdisk/bootinprogress").is_file()
-            if ramdisk == True:
+            ramdisk = compatibility.is_ramdisk_in_use()
+            if ramdisk:
                 MainLogger.instance = MainLogger.__Logger()
             else:
                 MainLogger.instance = logging.getLogger("main")
