@@ -1,123 +1,75 @@
 #!/usr/bin/env python3
-import sys
 from typing import List, Tuple
+
 try:
-    from ..common import connect_tcp
-    from ...helpermodules import log
-except:
-    # for 1.9 compability
-    import os
-    from pathlib import Path
-    import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import log
-    from modules.common import connect_tcp
+    from ..common import modbus
+    from ..common.module_error import ModuleError, ModuleErrorLevel
+except (ImportError, ValueError):
+    # for 1.9 compatibility
+    from modules.common import modbus
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
 
 
 class Sdm630:
-    def __init__(self, component_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         self.client = client
-        self.name = component_config["name"]
-        self.id = component_config["configuration"]["id"]
+        self.id = modbus_id
 
-    def get_voltage(self) -> List[int]:
-        """
-        """
+    def __process_error(self, e):
+        if isinstance(e, ModuleError):
+            raise
+        else:
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
+
+    def get_voltage(self) -> List[float]:
         try:
-            voltage = []
-            regs = [0x00, 0x02, 0x04]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                voltage.append(value)
-            return voltage
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            return self.client.read_input_registers(0x00, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
+        except Exception as e:
+            self.__process_error(e)
 
     def get_imported(self) -> float:
-        """
-        """
         try:
-            imported = self.client.read_float_registers(0x0048, 2, self.id) * 1000
-            return imported
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            return self.client.read_input_registers(0x0048, modbus.ModbusDataType.FLOAT_32, unit=self.id) * 1000
+        except Exception as e:
+            self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = []
-            regs = [0x0C, 0x0E, 0x10]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                power_per_phase.append(value)
-            if None not in power_per_phase:
-                power_all = sum(power_per_phase)
-            else:
-                power_all = None
+            power_per_phase = self.client.read_input_registers(0x0C, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
+            power_all = sum(power_per_phase)
             return power_per_phase, power_all
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None], None
+        except Exception as e:
+            self.__process_error(e)
 
     def get_exported(self) -> float:
-        """
-        """
         try:
-            exported = self.client.read_float_registers(0x004a, 2, self.id) * 1000
-            return exported
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            return self.client.read_input_registers(0x004a, modbus.ModbusDataType.FLOAT_32, unit=self.id) * 1000
+        except Exception as e:
+            self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
-        """
-        """
+    def get_power_factor(self) -> List[float]:
         try:
-            power_factor = []
-            regs = [0x1E, 0x20, 0x22]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                power_factor.append(value)
-            return power_factor
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            return self.client.read_input_registers(0x1E, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
+        except Exception as e:
+            self.__process_error(e)
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
-            frequency = self.client.read_float_registers(0x46, 2, self.id)
-            if frequency != None:
-                if frequency > 100:
-                    frequency = frequency / 10
-            else:
-                frequency = None
+            frequency = self.client.read_input_registers(0x46, modbus.ModbusDataType.FLOAT_32, unit=self.id)
+            if frequency > 100:
+                frequency = frequency / 10
             return frequency
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+        except Exception as e:
+            self.__process_error(e)
 
-    def get_current(self) -> List[int]:
-        """
-        """
+    def get_current(self) -> List[float]:
         try:
-            current = []
-            regs = [0x06, 0x08, 0x0A]
-            for register in regs:
-                value = self.client.read_float_registers(register, 2, self.id)
-                current.append(value)
-            return current
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return [None, None, None]
+            return self.client.read_input_registers(0x06, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
+        except Exception as e:
+            self.__process_error(e)
 
     def get_counter(self) -> float:
         try:
-            counter = self.client.read_float_registers(0x0156, 2, self.id) * 1000
-            return counter
-        except:
-            log.MainLogger().exception("Fehler beim Auslesen von "+str(self.name))
-            return None
+            return self.client.read_input_registers(0x0156, modbus.ModbusDataType.FLOAT_32, unit=self.id) * 1000
+        except Exception as e:
+            self.__process_error(e)

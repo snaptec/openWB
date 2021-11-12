@@ -46,7 +46,7 @@ class ChargePointList {
   updateValues() { // A value has changed. Only update the values, do not redraw all
       this.chargepoints.map((cp, i) => {
       let powerString = formatWatt(cp.power) + " " + this.phaseSymbols[cp.phasesInUse] + " " + cp.targetCurrent + " A";
-      let energyString = formatWatt(cp.energy * 1000) + " / " + Math.round(cp.energy / cp.energyPer100km * 1000) / 10 + " km"
+      let energyString = formatWattH(cp.energy * 1000) + " / " + Math.round(cp.energy / cp.energyPer100km * 1000) / 10 + " km"
       if (cp.configured) {
         d3.select(".cpname-" + i).text(cp.name) // name
         if (cp.isSocConfigured) { // soc

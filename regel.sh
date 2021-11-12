@@ -89,6 +89,9 @@ if [[ $isss == "1" ]]; then
 	heartbeat=$(<ramdisk/heartbeat)
 	heartbeat=$((heartbeat+10))
 	echo $heartbeat > ramdisk/heartbeat
+	mosquitto_pub -r -t "openWB/system/Uptime" -m "$(uptime)"
+	mosquitto_pub -r -t "openWB/system/Timestamp" -m "$(date +%s)"
+	mosquitto_pub -r -t "openWB/system/Date" -m "$(date)"
 	exit 0
 fi
 
