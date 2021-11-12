@@ -106,8 +106,12 @@ if [[ $? == "0" ]] ; then
 				echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
 			fi
 			rfid=$(echo $output | jq -r '.trx')
+			if [[ $rfid == "null" ]] ; then
+				rfid="0"
+			fi
 			oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp2rfid)
 			if [[ $rfid != $oldrfid ]] ; then
+				openwbDebugLog "RFID" 0 "RFID3: $rfid"
 				echo $rfid > /var/www/html/openWB/ramdisk/readtag
 				echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp2rfid
 			fi
