@@ -71,23 +71,23 @@ if [[ $? == "0" ]] ; then
 		output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/status)
 		if [[ $? == "0" ]] ; then
 			watt=$(echo $output | jq -r '.nrg[11]')
-			watt=$(echo "scale=0;$watt * 10 /1" |bc)
+			watt=$(echo "scale=0;$watt /1" |bc)
 			if [[ $watt =~ $re ]] ; then
 				echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 			fi
 			lla1=$(echo $output | jq -r '.nrg[4]')
-			lla1=$(echo "scale=0;$lla1 / 10" |bc)
-			if [[ $lla1 =~ $re ]] ; then
+			lla1=$(echo "scale=0;$lla1" |bc)
+			if [[ $lla1 =~ $rekwh ]] ; then
 				echo $lla1 > /var/www/html/openWB/ramdisk/llas11
 			fi
 			lla2=$(echo $output | jq -r '.nrg[5]')
-			lla2=$(echo "scale=0;$lla2 / 10" |bc)
-			if [[ $lla2 =~ $re ]] ; then
+			lla2=$(echo "scale=0;$lla2" |bc)
+			if [[ $lla2 =~ $rekwh ]] ; then
 				echo $lla2 > /var/www/html/openWB/ramdisk/llas12
 			fi
 			lla3=$(echo $output | jq -r '.nrg[6]')
-			lla3=$(echo "scale=0;$lla3 / 10" |bc)
-			if [[ $lla3 =~ $re ]] ; then
+			lla3=$(echo "scale=0;$lla3" |bc)
+			if [[ $lla3 =~ $rekwh ]] ; then
 				echo $lla3 > /var/www/html/openWB/ramdisk/llas13
 			fi
 			llv1=$(echo $output | jq -r '.nrg[0]')
