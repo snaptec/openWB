@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
-import sys
 from typing import List, Tuple
 
 try:
-    from ..common import connect_tcp
-    from ..common.module_error import ModuleError, ModuleErrorLevels
-except:
-    # for 1.9 compability
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    from modules.common import connect_tcp
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from ..common import modbus
+    from ..common.module_error import ModuleError, ModuleErrorLevel
+except (ImportError, ValueError):
+    # for 1.9 compatibility
+    from modules.common import modbus
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
 
 
 class Sdm630:
-    def __init__(self, modbus_id: int, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         self.client = client
         self.id = modbus_id
 
@@ -23,23 +19,23 @@ class Sdm630:
         if isinstance(e, ModuleError):
             raise
         else:
-            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevels.ERROR) from e
+            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
 
     def get_voltage(self) -> List[float]:
         try:
-            return [self.client.read_float_registers(register, 2, self.id) for register in [0x00, 0x02, 0x04]]
+            return self.client.read_input_registers(0x00, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
         except Exception as e:
             self.__process_error(e)
 
     def get_imported(self) -> float:
         try:
-            return self.client.read_float_registers(0x0048, 2, self.id) * 1000
+            return self.client.read_input_registers(0x0048, modbus.ModbusDataType.FLOAT_32, unit=self.id) * 1000
         except Exception as e:
             self.__process_error(e)
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = [self.client.read_float_registers(register, 2, self.id) for register in [0x0C, 0x0E, 0x10]]
+            power_per_phase = self.client.read_input_registers(0x0C, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
             power_all = sum(power_per_phase)
             return power_per_phase, power_all
         except Exception as e:
@@ -47,19 +43,19 @@ class Sdm630:
 
     def get_exported(self) -> float:
         try:
-            return self.client.read_float_registers(0x004a, 2, self.id) * 1000
+            return self.client.read_input_registers(0x004a, modbus.ModbusDataType.FLOAT_32, unit=self.id) * 1000
         except Exception as e:
             self.__process_error(e)
 
     def get_power_factor(self) -> List[float]:
         try:
-            return [self.client.read_float_registers(register, 2, self.id) for register in [0x1E, 0x20, 0x22]]
+            return self.client.read_input_registers(0x1E, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
         except Exception as e:
             self.__process_error(e)
 
     def get_frequency(self) -> float:
         try:
-            frequency = self.client.read_float_registers(0x46, 2, self.id)
+            frequency = self.client.read_input_registers(0x46, modbus.ModbusDataType.FLOAT_32, unit=self.id)
             if frequency > 100:
                 frequency = frequency / 10
             return frequency
@@ -68,12 +64,12 @@ class Sdm630:
 
     def get_current(self) -> List[float]:
         try:
-            return [self.client.read_float_registers(register, 2, self.id) for register in [0x06, 0x08, 0x0A]]
+            return self.client.read_input_registers(0x06, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)
         except Exception as e:
             self.__process_error(e)
 
     def get_counter(self) -> float:
         try:
-            return self.client.read_float_registers(0x0156, 2, self.id) * 1000
+            return self.client.read_input_registers(0x0156, modbus.ModbusDataType.FLOAT_32, unit=self.id) * 1000
         except Exception as e:
             self.__process_error(e)

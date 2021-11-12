@@ -10,7 +10,15 @@ class BatState:
 
 
 class CounterState:
-    def __init__(self, voltages: List[float], currents: List[float], powers: List[float], power_factors: List[float], imported: float, exported: float, power_all: float, frequency: float):
+    def __init__(self,
+                 voltages: List[float],
+                 currents: List[float],
+                 powers: List[float],
+                 power_factors: List[float],
+                 imported: float,
+                 exported: float,
+                 power_all: float,
+                 frequency: float):
         self.voltages = voltages
         self.currents = currents
         self.powers = powers

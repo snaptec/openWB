@@ -3,23 +3,27 @@
 
 import json
 import os
+from typing import Optional
+
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
 from . import log
 
-client = None
+client = None  # type: Optional[mqtt.Client]
 
 
 def setup_connection():
-    """ öffnet die Verbindugn zum Broker. Bei Verbindungsabbruch wird automatisch versucht, eine erneute Verbindung herzustellen.
+    """Öffnet die Verbindung zum Broker.
+
+    Bei Verbindungsabbruch wird automatisch versucht, eine erneute Verbindung herzustellen.
     """
     try:
         global client
         client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
         client.connect("localhost", 1886)
         client.loop_start()
-    except Exception as e:
+    except Exception:
         log.MainLogger().exception("Fehler im pub-Modul")
 
 
@@ -39,7 +43,7 @@ def pub(topic, payload):
             client.publish(topic, payload, qos=0, retain=True)
         else:
             client.publish(topic, payload=json.dumps(payload), qos=0, retain=True)
-    except Exception as e:
+    except Exception:
         log.MainLogger().exception("Fehler im pub-Modul")
 
 
@@ -49,7 +53,7 @@ def delete_connection():
     try:
         client.loop_stop()
         client.disconnect
-    except Exception as e:
+    except Exception:
         log.MainLogger().exception("Fehler im pub-Modul")
 
 
@@ -68,9 +72,9 @@ def pub_single(topic, payload, hostname="localhost", no_json=False):
         Kompabilität mit isss, die ramdisk verwenden.
     """
     try:
-        if no_json == True:
+        if no_json:
             publish.single(topic, payload, hostname=hostname, retain=True)
         else:
             publish.single(topic, json.dumps(payload), hostname=hostname, retain=True)
-    except Exception as e:
+    except Exception:
         log.MainLogger().exception("Fehler im pub-Modul")
