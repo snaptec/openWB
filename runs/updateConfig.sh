@@ -571,17 +571,35 @@ updateConfig(){
 	if ! grep -Fq "goetimeoutlp1=" $ConfigFile; then
 		echo "goetimeoutlp1=5" >> $ConfigFile
 	fi
+	if ! grep -Fq "goesimulationlp1=" $ConfigFile; then
+		echo "goesimulationlp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "goecorrectionfactorlp1=" $ConfigFile; then
+		echo "goecorrectionfactorlp1=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "goeiplp2=" $ConfigFile; then
 		echo "goeiplp2=192.168.0.15" >> $ConfigFile
 	fi
 	if ! grep -Fq "goetimeoutlp2=" $ConfigFile; then
 		echo "goetimeoutlp2=5" >> $ConfigFile
 	fi
+	if ! grep -Fq "goesimulationlp2=" $ConfigFile; then
+		echo "goesimulationlp2=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "goecorrectionfactorlp2=" $ConfigFile; then
+		echo "goecorrectionfactorlp2=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "goeiplp3=" $ConfigFile; then
 		echo "goeiplp3=192.168.0.15" >> $ConfigFile
 	fi
 	if ! grep -Fq "goetimeoutlp3=" $ConfigFile; then
 		echo "goetimeoutlp3=5" >> $ConfigFile
+	fi
+	if ! grep -Fq "goesimulationlp3=" $ConfigFile; then
+		echo "goesimulationlp3=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "goecorrectionfactorlp3=" $ConfigFile; then
+		echo "goecorrectionfactorlp3=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "pushbenachrichtigung=" $ConfigFile; then
 		echo "pushbenachrichtigung=0" >> $ConfigFile
@@ -1193,9 +1211,7 @@ updateConfig(){
 		else
 			echo "etprovideraktiv=0" >> $ConfigFile
 		fi
-	fi
-	# tibber demo settings
-	if ! grep -Fq "tibbertoken=" $ConfigFile; then
+		# tibber demo settings
 		echo "tibbertoken=d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a" >> $ConfigFile
 		echo "tibberhomeid=c70dcbe5-4485-4821-933d-a8a86452737b" >> $ConfigFile
 	fi

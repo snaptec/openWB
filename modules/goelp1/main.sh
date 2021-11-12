@@ -4,24 +4,31 @@ rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
 output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
 if [[ $? == "0" ]] ; then
+	goecorrectionfactor=$(echo "scale=0;$goecorrectionfactorlp1 * 100000 /1" |bc)
 	watt=$(echo $output | jq -r '.nrg[11]')
 	watt=$(echo "scale=0;$watt * 10 /1" |bc)
 	if [[ $watt =~ $re ]] ; then
-		echo $watt > /var/www/html/openWB/ramdisk/llaktuell
+		if [[ $goesimulationlp1 == "0" ]] ; then
+			echo $watt > /var/www/html/openWB/ramdisk/llaktuell
+		else
+			wattc=$((watt*$goecorrectionfactor/100000))
+			wattc=$(echo "scale=0;$wattc" |bc)
+			echo $wattc > /var/www/html/openWB/ramdisk/llaktuell
+		fi
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
-	lla1=$(echo "scale=0;$lla1 / 10" |bc)
-	if [[ $lla1 =~ $re ]] ; then
+	lla1=$(echo "scale=1;$lla1 / 10" |bc)
+	if [[ $lla1 =~ $rekwh ]] ; then
 		echo $lla1 > /var/www/html/openWB/ramdisk/lla1
 	fi
 	lla2=$(echo $output | jq -r '.nrg[5]')
-	lla2=$(echo "scale=0;$lla2 / 10" |bc)
-	if [[ $lla2 =~ $re ]] ; then
+	lla2=$(echo "scale=1;$lla2 / 10" |bc)
+	if [[ $lla2 =~ $rekwh ]] ; then
 		echo $lla2 > /var/www/html/openWB/ramdisk/lla2
 	fi
 	lla3=$(echo $output | jq -r '.nrg[6]')
-	lla3=$(echo "scale=0;$lla3 / 10" |bc)
-	if [[ $lla3 =~ $re ]] ; then
+	lla3=$(echo "scale=1;$lla3 / 10" |bc)
+	if [[ $lla3 =~ $rekwh ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/lla3
 	fi
 	llv1=$(echo $output | jq -r '.nrg[0]')
@@ -38,14 +45,41 @@ if [[ $? == "0" ]] ; then
 	fi
 	llkwh=$(echo $output | jq -r '.eto')
 	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
-	if [[ $llkwh =~ $rekwh ]] ; then
-		echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
-	fi
 	rfid=$(echo $output | jq -r '.uby')
 	oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp1rfid)
+	openwbDebugLog "RFID" 0 "aktueller RFID: $rfid | alter RFID: $oldrfid"
 	if [[ $rfid != $oldrfid ]] ; then
 		echo $rfid > /var/www/html/openWB/ramdisk/readtag
 		echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp1rfid
+	fi
+	if [[ $goesimulationlp1 == "0" ]] ; then
+		if [[ $llkwh =~ $rekwh ]] ; then
+			echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
+		fi
+	else	
+		temp_kWhCounter_lp1=$(</var/www/html/openWB/ramdisk/temp_kWhCounter_lp1)
+		#simulation der Energiemenge während des ladens
+		#wenn die Dateien noch nicht da sind, werden sie angelegt. Simulation startet im nächsten Regelschritt.
+		if [ -f "/var/www/html/openWB/ramdisk/goewatt0neg" ]; then
+			if [ -f "/var/www/html/openWB/ramdisk/goewatt0pos" ]; then
+				python /var/www/html/openWB/runs/simcount.py $wattc goe goeposkwh goenegkwh
+			else
+				#Benutze den Zählerstand aus temp_kWhCounter_lp1 als Startwert für die Simulation
+				simenergy=$(echo "scale=0; $temp_kWhCounter_lp1*3600000/1" | bc)
+				echo $simenergy > /var/www/html/openWB/ramdisk/goewatt0pos
+			fi
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/goewatt0neg
+		fi
+		#der ausgelesene Zählerstand wird ignoriert und stattdessen die Leistung aufintegriert
+		#Grund: der ausgelesene Zählerstand hat eine Auflösung von 1kWh -> zu ungenau in der Darstellung
+		if [ -f "/var/www/html/openWB/ramdisk/goeposkwh" ]; then
+			simenergy=$(echo "scale=3; $(</var/www/html/openWB/ramdisk/goeposkwh)/1000" | bc)
+			echo $simenergy > /var/www/html/openWB/ramdisk/llkwh
+		else
+			#Wenn die Simulation noch nicht gelaufen ist, nehme den Wert temp_kWhCounter_lp1
+			echo $temp_kWhCounter_lp1 > /var/www/html/openWB/ramdisk/llkwh
+		fi
 	fi
 	#car status 1 Ladestation bereit, kein Auto
 	#car status 2 Auto lädt
