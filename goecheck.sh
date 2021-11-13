@@ -33,26 +33,49 @@ goecheck(){
 		if [[ $evsecons1 == "goe" ]]; then
 			output=$(curl --connect-timeout 1 -s http://$goeiplp2/status)
 			if [[ $? == "0" ]] ; then
-				state=$(echo $output | jq -r '.alw')
-				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-					lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
-					if ((state == "0"))  && (( lp2enabled == "1" )) ; then
-						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=1 > /dev/null
+				#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
+				fsp=$(echo $output | jq -r '.fsp')
+				if [[ ! $fsp =~ $re ]] ; then
+					state=$(echo $output | jq -r '.alw')
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+						lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
+						if ((state == "0"))  && (( lp2enabled == "1" )) ; then
+							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=1 > /dev/null
+						fi
 					fi
-				fi
-				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-					if ((state == "1")) ; then
-						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=0 > /dev/null
+					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+						if ((state == "1")) ; then
+							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=0 > /dev/null
+						fi
 					fi
-				fi
-				fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
-				oldcurrent=$(echo $output | jq -r '.amp')
-				current=$(</var/www/html/openWB/ramdisk/llsolls1)
-				if (( oldcurrent != $current )) ; then
-					if (($fwv >= 40)) ; then
-						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amx=$current > /dev/null
-					else
-						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amp=$current > /dev/null
+					fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
+					oldcurrent=$(echo $output | jq -r '.amp')
+					current=$(</var/www/html/openWB/ramdisk/llsolls1)
+					if (( oldcurrent != $current )) ; then
+						if (($fwv >= 40)) ; then
+							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amx=$current > /dev/null
+						else
+							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amp=$current > /dev/null
+						fi
+					fi
+				else
+					output=$(curl --connect-timeout 1 -s http://$goeiplp2/api/status)
+					state=$(echo $output | jq -r '.frc')
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+						lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
+						if ((state == "1"))  && (( lp2enabled == "1" )) ; then
+							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?frc=0 > /dev/null
+						fi
+					fi
+					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+						if ((state == "0")) ; then
+							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?frc=1 > /dev/null
+						fi
+					fi
+					oldcurrent=$(echo $output | jq -r '.amp')
+					current=$(</var/www/html/openWB/ramdisk/llsolls1)
+					if (( oldcurrent != $current )) ; then
+						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?amp=$current > /dev/null
 					fi
 				fi
 			fi
