@@ -7,16 +7,11 @@ import traceback
 import subprocess
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 try:
-    from . import compability
-except:
-    # for 1.9 compability
-    import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import compability
+    from . import compatibility
+except (ImportError, ValueError):
+    from helpermodules import compatibility
 
 debug_logger = None
 debug_fhandler = None
@@ -70,16 +65,16 @@ class MainLogger:
             """
             try:
                 local_time = datetime.now(timezone.utc).astimezone()
-                myPid = str(os.getpid())
-                print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
-            except:
+                my_pid = str(os.getpid())
+                print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + my_pid + ": " + message)
+            except Exception:
                 traceback.print_exc()
 
     instance = None
 
     def __init__(self):
         if not MainLogger.instance:
-            ramdisk = compability.check_ramdisk_usage()
+            ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
                 MainLogger.instance = MainLogger.__Logger()
             else:

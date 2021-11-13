@@ -3,15 +3,13 @@ import sys
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common import abstract_device
     from . import counter
     from . import inverter
-except:
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+except (ImportError, ValueError):
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common import abstract_device
     import counter
     import inverter
@@ -31,7 +29,7 @@ def get_default_config() -> dict:
 
 
 class Device(abstract_device.AbstractDevice):
-    _COMPONENT_TYPE_TO_CLASS = {
+    COMPONENT_TYPE_TO_CLASS = {
         # "bat": ,
         "counter": counter.EvuKitFlex,
         "inverter": inverter.PvKitFlex
@@ -41,58 +39,61 @@ class Device(abstract_device.AbstractDevice):
         try:
             ip_address = device["configuration"]["ip_address"]
             port = device["configuration"]["port"]
-            client = connect_tcp.ConnectTcp(device["id"], ip_address, port)
+            client = modbus.ModbusClient(ip_address, port)
             super().__init__(device, client)
-        except Exception as e:
+        except Exception:
             log.MainLogger().exception("Fehler im Modul "+device["name"])
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(component_config, super().component_factory(component_config["type"]))
+        self.instantiate_component(component_config, super(
+        ).component_factory(component_config["type"]))
 
 
 def read_legacy(argv: List[str]):
     """ Ausführung des Moduls als Python-Skript
     """
+    COMPONENT_TYPE_TO_MODULE = {
+        # "bat": ,
+        "counter": counter,
+        "inverter": inverter
+    }
+    log.MainLogger().debug('Start reading flex')
+    component_type = argv[1]
+    version = int(argv[2])
+    ip_address = argv[3]
+    port = int(argv[4])
+    id = int(argv[5])
     try:
-        _COMPONENT_TYPE_TO_MODULE = {
-            # "bat": ,
-            "counter": counter,
-            "inverter": inverter
-        }
-        log.MainLogger().debug('Start reading flex')
-        component_type = argv[1]
-        version = int(argv[2])
-        ip_address = argv[3]
-        port = int(argv[4])
-        id = int(argv[5])
-        try:
-            num = int(argv[6])
-        except:
-            num = None
+        num = int(argv[6])
+    except ValueError:
+        num = None
 
-        default = get_default_config()
-        default["configuration"]["ip_address"] = ip_address
-        default["configuration"]["port"] = port
-        dev = Device(default)
-        if component_type in _COMPONENT_TYPE_TO_MODULE:
-            component_default = _COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        else:
-            raise Exception("illegal component type "+component_type+". Allowed values: "+','.join(_COMPONENT_TYPE_TO_MODULE.keys()))
+    device_config = get_default_config()
+    device_config["configuration"]["ip_address"] = ip_address
+    device_config["configuration"]["port"] = port
+    dev = Device(device_config)
+    if component_type in COMPONENT_TYPE_TO_MODULE:
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config(
+        )
+    else:
+        raise Exception("illegal component type "+component_type +
+                        ". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
 
-        component_default["id"] = num
-        component_default["configuration"]["version"] = version
-        component_default["configuration"]["id"] = id
-        dev.add_component(component_default)
+    component_config["id"] = num
+    component_config["configuration"]["version"] = version
+    component_config["configuration"]["id"] = id
+    dev.add_component(component_config)
 
-        log.MainLogger().debug('openWB Version: ' + str(version))
-        log.MainLogger().debug('openWB-Kit IP-Adresse: ' + str(ip_address))
-        log.MainLogger().debug('openWB-Kit Port: ' + str(port))
-        log.MainLogger().debug('openWB-Kit ID: ' + str(id))
+    log.MainLogger().debug('openWB Version: ' + str(version))
+    log.MainLogger().debug('openWB-Kit IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('openWB-Kit Port: ' + str(port))
+    log.MainLogger().debug('openWB-Kit ID: ' + str(id))
 
-        dev.update_values()
-    except Exception as e:
-        log.MainLogger().exception("Fehler im Modul openwb_flex")
+    dev.update_values()
 
 
 if __name__ == "__main__":
-    read_legacy(sys.argv)
+    try:
+        read_legacy(sys.argv)
+    except Exception:
+        log.MainLogger().exception("Fehler im Modul openwb_flex")

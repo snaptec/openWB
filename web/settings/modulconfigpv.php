@@ -335,6 +335,9 @@
 										Gültige Werte: IP-Adresse des 1. Kostal Plenticore. An diesem muss (wenn vorhanden) der EM300/das KSEM und ggf. Speicher angeschlossen sein.
 										Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
+									<span class="form-text small">
+										Am 1. Plenticore darf ein Speicher angebunden sein. In diesem Fall ist im Batteriespeicher-Modul "Kostal Plenticore mit Speicher" auszuwählen. Der WR stellt alle Daten der angeschlossenen Batterie bereit.
+									</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -354,6 +357,9 @@
 										Gültige Werte: IP-Adresse des 2. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein.
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
+									<span class="form-text small">
+										Am 2. Plenticore darf kein Speicher angebunden sein.
+									</span>
 								</div>
 								</div>
 								<div class="form-row mb-1">
@@ -372,6 +378,9 @@
 									<span class="form-text small">
 										Gültige Werte: IP-Adresse des 3. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein.
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
+									</span>
+									<span class="form-text small">
+										Am 3. Plenticore darf kein Speicher angebunden sein.
 									</span>
 								</div>
 							</div>

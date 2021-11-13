@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
-import sys
 
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
-    from ..common.module_error import ModuleError, ModuleErrorLevels
+    from ..common import modbus
+    from ..common.module_error import ModuleError, ModuleErrorLevel
     from ..openwb_flex.inverter import PvKitFlex
-except:
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+except (ImportError, ValueError):
     from helpermodules import log
-    from modules.common import connect_tcp
-    from modules.common.module_error import ModuleError, ModuleErrorLevels
+    from modules.common import modbus
+    from modules.common.module_error import ModuleError, ModuleErrorLevel
     from modules.openwb_flex.inverter import PvKitFlex
 
 
@@ -28,20 +25,20 @@ def get_default_config() -> dict:
 
 
 class PvKit(PvKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         try:
             self.data = {"config": component_config}
             version = self.data["config"]["configuration"]["version"]
-            if version == 0:
-                id = 8
-            elif version == 1:
+            if version == 0 or version == 1:
                 id = 0x08
             elif version == 2:
                 id = 116
             else:
-                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevels.ERROR)
+                raise ModuleError("Version "+str(version) +
+                                  " unbekannt.", ModuleErrorLevel.ERROR)
             self.data["config"]["configuration"]["id"] = id
 
             super().__init__(device_id, self.data["config"], tcp_client)
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["components"]["component0"]["name"])
+        except Exception:
+            log.MainLogger().exception("Fehler im Modul " +
+                                       self.data["config"]["components"]["component0"]["name"])
