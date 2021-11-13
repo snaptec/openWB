@@ -75,7 +75,7 @@ nachtlademodus(){
 			fi
 			if [[ $socmodul != "none" ]]; then
 				openwbDebugLog "MAIN" 1 "nachtladen mit socmodul $socmodul"
-				if (( soc <= diesersoc )); then
+			  if (( soc < diesersoc ||  diesersoc == 100 )) ; then
 					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 						llnachtneu=$nachtll
 						#runs/set-current.sh "$nachtll" m
@@ -286,7 +286,7 @@ nachtlademodus(){
 			fi
 			if [[ $socmodul1 != "none" ]]; then
 				openwbDebugLog "MAIN" 1 "nachtladen mit socmodul $socmodul1"
-				if (( soc1 <= diesersocs1 )); then
+				if ((  soc1 < diesersocs1  ||  diesersocs1 == 100 )) ; then
 					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						llnachts1neu=$nachtlls1
 						#runs/set-current.sh "$nachtlls1" s1
