@@ -191,7 +191,6 @@ function setChargingCurrentgoe () {
 		#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 		fsp=$(echo $output | jq -r '.fsp')
 		if [[ ! $fsp =~ $re ]] ; then
-			openwbDebugLog "MAIN" 0 "set-current OldApi: $fsp"
 			if [[ $current -eq 0 ]]; then
 				state=$(echo $output | jq -r '.alw')
 				if ((state == "1")) ; then
@@ -214,21 +213,17 @@ function setChargingCurrentgoe () {
 			fi
 		else
 			output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/api/status)
-			openwbDebugLog "MAIN" 0 "set-current NewApi: $fsp"
 			state=$(echo $output | jq -r '.frc')
 			if [[ $current -eq 0 ]]; then
 				if ((state == "0")) ; then
-					openwbDebugLog "MAIN" 0 "set-current disabling Go-e"
 					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/api/set?frc=1 > /dev/null
 				fi
 			else
 				if ((state == "1")) ; then
-					openwbDebugLog "MAIN" 0 "set-current enabling Go-e"
 					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/api/set?frc=0 > /dev/null
 				fi
 				oldgoecurrent=$(echo $output | jq -r '.amp')
 				if (( oldgoecurrent != $current )) ; then
-					openwbDebugLog "MAIN" 0 "set-current amp=$current"
 					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/api/set?amp=$current > /dev/null
 				fi
 			fi

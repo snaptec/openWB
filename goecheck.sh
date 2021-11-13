@@ -36,7 +36,6 @@ goecheck(){
 				#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 				fsp=$(echo $output | jq -r '.fsp')
 				if [[ ! $fsp =~ $re ]] ; then
-					openwbDebugLog "MAIN" 0 "GoeCheck OldApi: $fsp"
 					state=$(echo $output | jq -r '.alw')
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
@@ -65,20 +64,17 @@ goecheck(){
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
 						if ((state == "1"))  && (( lp2enabled == "1" )) ; then
-							openwbDebugLog "MAIN" 0 "GoeCheck enabling Go-e"
 							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?frc=0 > /dev/null
 						fi
 					fi
 					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						if ((state == "0")) ; then
-							openwbDebugLog "MAIN" 0 "GoeCheck disabling Go-e"
 							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?frc=1 > /dev/null
 						fi
 					fi
 					oldcurrent=$(echo $output | jq -r '.amp')
 					current=$(</var/www/html/openWB/ramdisk/llsolls1)
 					if (( oldcurrent != $current )) ; then
-						openwbDebugLog "MAIN" 0 "GoeCheck setting Go-e to $current"
 						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?amp=$current > /dev/null
 					fi
 				fi
