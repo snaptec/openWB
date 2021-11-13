@@ -36,7 +36,7 @@ if ("fsp" in status_goe):
         if (args.phases == 3 and int(status_goe['fsp']) != 0):
             if (args.minampere and args.minampere >= 5 and args.minampere <= 32):
                 set_amx_goe = requests.get('http://'+args.address+'/api/set?amp='+str(args.minampere), timeout=5).json()
-                if (int(set_amx_goe['amx']) == args.minampere and args.verbose):
+                if (int(set_amx_goe['amp']) == args.minampere and args.verbose):
                     print("Setzen von MinAmpere erfolgreich: amx=%d" % (int(set_amx_goe['amx'])))
             set_fsp_goe = requests.get('http://'+args.address+'/api/set?psm=2', timeout=5).json()
             if (int(set_fsp_goe['fsp']) == 0 and args.verbose):
