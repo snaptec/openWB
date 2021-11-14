@@ -288,6 +288,14 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/7/mode", 1],
 	["openWB/config/get/SmartHome/Devices/8/mode", 1],
 	["openWB/config/get/SmartHome/Devices/9/mode", 1],
+
+	// etprovider topcis
+	["openWB/global/ETProvider/modulePath", 1],
+	["openWB/global/ETProvider/providerName", 1],
+	["openWB/global/awattar/boolAwattarEnabled", 0],
+	["openWB/global/awattar/MaxPriceForCharging", 1],
+	["openWB/global/awattar/ActualPriceForCharging", 1],
+	["openWB/global/awattar/pricelist", 1]
 ];
 
 // holds number of topics flagged 1 initially

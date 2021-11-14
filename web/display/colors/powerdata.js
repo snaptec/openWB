@@ -29,6 +29,10 @@ class WbData {
 			"month": this.graphDate.getMonth(),
 			"year": this.graphDate.getFullYear()
 		}
+		this.etPrice = 0;
+		this.etMaxPrice = 0;
+		this.etPriceList = "";
+		this.isEtEnabled = false;
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
@@ -130,11 +134,14 @@ class WbData {
 			.on("input", function () { updateSocRangeInput(this.value) });
 		d3.select(".energyRangeInput")
 			.on("input", function () { updateEnergyRangeInput(this.value) });
+		d3.select(".maxPriceInput")
+			.on("input", function () { updateMaxPriceInput(this.value) });
 
 		powerMeter.init()
 		powerGraph.init()
 		yieldMeter.init()
 		chargePointList.init()
+		priceChart.init()
 	}
 
 	updateEvu(field, value) {
@@ -250,7 +257,6 @@ class WbData {
 				yieldMeter.update();
 				break;
 			case 'soc':
-				powerMeter.update();
 				break;
 			case 'configured':
 				chargePointList.updateConfig()
@@ -282,6 +288,19 @@ class WbData {
 			default:
 				break;
 		}
+	}
+
+	updateET(field,value) {
+		this[field]=value;
+		
+		switch (field) {
+			case 'etPrice':
+			case 'isEtEnabled': chargePointList.updateValues();
+			break;
+			default:
+				break;
+		}
+		priceChart.update()
 	}
 
 	updateSourceSummary(cat, field, value) {
@@ -480,6 +499,25 @@ function updateEnergyRangeInput(value) {
 
 
 }
+function updateMaxPriceInput(value) {
+	const label = d3.select(".labelMaxPrice").text(value + " Cent");
+	label.classed("text-danger", true)
+
+	wbdata.updateET ("etMaxPrice", value);
+	if (wbdata.maxPriceDelayTimer) {
+		clearTimeout(wbdata.maxPriceDelayTimer)
+	}
+	wbdata.maxPriceDelayTimer = setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/global/awattar/MaxPriceForCharging" )
+		wbdata.maxPriceDelayTimer = null;
+	}, 2000)
+
+
+}
+
+
+
 var wbdata = new WbData(new Date(Date.now()));
 
 
