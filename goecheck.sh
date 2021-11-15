@@ -2,7 +2,7 @@
 goecheck(){
 	#######################################
 	#goe mobility check
-	digit = '^[0-9]$'
+	digit='^[0-9]$'
 	
 	if [[ $evsecon == "goe" ]]; then
 		output=$(curl --connect-timeout 1 -s http://$goeiplp1/status)
