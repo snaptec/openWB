@@ -103,7 +103,7 @@ if [[ $? == "0" ]] ; then
             llkwh=$(echo $output | jq -r '.eto')
             llkwh=$(echo "scale=3;$llkwh / 1000" |bc)
             if [[ $llkwh =~ $rekwh ]] ; then
-                echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
+                echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs2
             fi
             rfid=$(echo $output | jq -r '.trx')
             if [[ $rfid == "null" ]] ; then
