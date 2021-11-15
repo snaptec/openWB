@@ -22,6 +22,8 @@
     <script src="display/colors/yieldmeter.js"></script>
     <script src="display/colors/powergraph.js"></script>
     <script src="display/colors/chargePointList.js"></script>
+    <script src="display/colors/pricechart.js"></script>
+
 </head>
 
 <body>
@@ -61,7 +63,6 @@
             <!-- Mittlere Spalte (Widgets) -->
             <div class="col-7 p-0">
                 <div class="container-fluid m-0 pb-1">
-
                     <div class="row">
                         <div class="col wb-widget p-0">
                             <figure id="powermeter" class=" mb-0"></figure>
@@ -75,6 +76,13 @@
             <!-- Rechte Spalte (Ladepunkte)-->
             <div class=" col-3 px-1">
                 <div id="chargePointTable"></div>
+                <div class="container-fluid mt-5 p-2">
+                    <div class="row">
+                        <div class="col">
+                            <p class="currentPrice hide">Strompreis: 0 ct/kWh</p> 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -189,11 +197,8 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="row">
-
                         <div class="col pt-2 px-3">
                             <button type="button" class="btn btn-info btn-block displayButton" data-dismiss="modal"><i
                                     class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
@@ -370,6 +375,29 @@
                             </div>
                         </div>
                     </div>
+                    <!-- price based charging configuration-->
+                    <div class="priceConfiguration hide">
+                        <figure id="priceChart"></figure>
+                        <div class="form-row vaRow">
+                            <div class="col-4">
+                                <label for="maxPrice" class="modalLabel col-form-label">Maximal: </label>
+                                <label for="maxPrice"
+                                    class="modalLabel labelMaxPrice col-form-label valueLabel pull-right"
+                                    data-suffix="A"></label>
+                            </div>
+                            <div class="col">
+                                <input type="range" class="form-control-range maxPriceInput" id="maxPrice" min="-25"
+                                    max="95" step="0.1" value="0" data-initialized="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col pt-4 px-3">
+                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                                    class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
+                        </div>
+                    </div>
                 </div> <!-- /modal body -->
             </div>
         </div>
@@ -522,7 +550,8 @@
             }
 
             function submitSocForm() {
-                var currentLp = $('#socModal').find('.socLp').text();
+                // var currentLp = $('#socModal').find('.socLp').text();
+                var currentLp = (wbdata.chargePointToConfig + 1);
                 var manualSoc = $("#manualSocBox").val();
                 publish(manualSoc, "openWB/set/lp/" + currentLp + "/manualSoc");
                 // reset input after publishing
@@ -631,6 +660,11 @@
                                 data-chargeMode="3">Stop</button>
                         </div>
                     </div>
+                    <div class="row justify-content-center">
+                        <div id="socSetButton"></div>
+                        <div id="socLoadButton"></div>
+                    </div>
+                      
                     <!-- priority buttons -->
                     <div id='priorityModeBtns' class="hide">
                         <hr>
