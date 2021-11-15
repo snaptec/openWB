@@ -55,6 +55,7 @@ if re.search(regex, str(wattbezug)) == None:
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(wattbezug))
 f.close()
+
 # Summe der vom Netz bezogene Energie total in Wh
 # nur für Smartmeter  im Einspeisepunkt!
 # bei Smartmeter im Verbrauchszweig  entspricht das dem Gesamtverbrauch
@@ -67,14 +68,17 @@ DebugLog(2, 'response_s0_data: ' + str(response))
 # jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
 try:
     for location in response["Body"]["Data"]:
-        ikwh = str(response["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"])
+        if "EnergyReal_WAC_Minus_Absolute" in response["Body"]["Data"][location]:
+            ikwh = str(response["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"])
+        else:
+            f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'r')
+            ikwh = float(f.read())
+            f.close()
+            if wattbezug > 0:
+                # OpenWB Regelintervall 10s, Intervallfrequenz 360/h
+                ikwh += float(wattbezug) / 360
 except:
     traceback.print_exc()
-ikwh = ikwh.replace(" ", "")
-ikwh = ikwh.replace('\"', "")
-ikwh = ikwh.replace(':', "")
-ikwh = ikwh.replace('}', "")
-ikwh = ikwh.replace('\n', "")
 
 #ikwh=$(echo ${kwhtmp##*EnergyReal_WAC_Minus_Absolute} | tr -d ' ' |  tr -d '\"' | tr -d ':' | tr -d '}' | tr -d '\n')
 #echo $ikwh #Test-Ausgabe
@@ -86,14 +90,17 @@ f.close()
 #ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
 try:
     for location in response["Body"]["Data"]:
-        ekwh = str(response["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"])
+        if "EnergyReal_WAC_Plus_Absolute" in response["Body"]["Data"][location]:
+            ekwh = str(response["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"])
+        else:
+            f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'r')
+            ekwh = float(f.read())
+            f.close()
+            if wattbezug < 0:
+                # OpenWB Regelintervall 10s, Intervallfrequenz 360/h
+                ekwh += float(abs(wattbezug)) / 360
 except:
     traceback.print_exc()
-ekwh = ekwh.split(",")[0]
-ekwh = ekwh.replace(" ", "")
-ekwh = ekwh.replace('\"', "")
-ekwh = ekwh.replace(':', "")
-#echo $ekwh #Test-Ausgabe
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(ekwh))
 f.close()
