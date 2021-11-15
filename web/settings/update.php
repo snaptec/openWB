@@ -133,7 +133,7 @@
 							<h2>Nightly</h2>
 							<p>
 								Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.<br>
-								Alle Änderungen können auf <a href="https://github.com/snaptec/openWB/commits/master">GitHub</a> eingesehen werden.
+								Alle Änderungen können auf <a href="https://github.com/xerion3800/openWB/commits/master">GitHub</a> eingesehen werden.
 							</p>
 						</div>
 					</div>
