@@ -361,9 +361,9 @@ ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
 echo "load versions..."
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl -s https://raw.githubusercontent.com/xerion3800/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl -s https://raw.githubusercontent.com/xerion3800/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl -s https://raw.githubusercontent.com/xerion3800/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
 # update our local version
 sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /var/www/html/openWB/web/lastcommit
