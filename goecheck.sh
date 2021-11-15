@@ -6,7 +6,7 @@ goecheck(){
 		output=$(curl --connect-timeout 1 -s http://$goeiplp1/status)
 		if [[ $? == "0" ]] ; then
 			#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
-			digit = ^[0-9]$
+			digit = '^[0-9]$'
 			fsp=$(echo $output | jq -r '.fsp')
 			if [[ ! $fsp =~ $digit ]] ; then
 				state=$(echo $output | jq -r '.alw')
