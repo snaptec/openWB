@@ -207,6 +207,18 @@ $numDevices = 9;
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="device_stateurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Status-URL</label>
+										<div class="col">
+											<input id="device_stateurlDevices<?php echo $devicenum; ?>" name="device_stateurl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">
+												Die hier angegebene URL wird aufgerufen, um den aktuellen Status (1 = an, 0 = aus) des Geräts zu erhalten. Falls keine URL vorhanden ist, kann die folgende URL angebenen werden:<br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurlstate.php. Diese URL gibt immer den Wert 0 zurück.(Device immer aus) <br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurlstate1.php?d=nummerdevice. Diese URL gibt den Wert 0 oder 1 zurück. Je nachdem ob das Smarthomedevice gerade läuft bzw. laufen soll.<br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurlstate2.php. Diese URL gibt immer den Wert 1 zurück. (Device immer an) <br>
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">

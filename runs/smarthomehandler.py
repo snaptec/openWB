@@ -199,7 +199,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
     try:
         configuredName = config.get('smarthomedevices', 'device_name_'+str(nummer))
     except:
-        configuredName = "(unknown name)"
+        configuredName = "(unknown name
     if difmes == 0:
         newwatt = oldwatt
        # simcount verwenden wenn newwattk = 0
@@ -255,6 +255,11 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(measureurlc)
         except:
             argumentList.append("none")
+		try:
+			device_stateurl = str(config.get('smarthomedevices', 'device_stateurl_'+str(nummer)))
+			argumentList.append(device_stateurl)
+		except:
+			argumentList.append("undef")
     elif meastyp == "json":
         argumentList[1] = prefixpy + 'json/watt.py'
         try:

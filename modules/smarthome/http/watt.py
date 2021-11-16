@@ -19,8 +19,14 @@ try:
     urlc=str(sys.argv[5])
 except:
     urlc = "none"
+try:
+    urlstate=str(sys.argv[6])
+except:
+    urlstate = "none"
 if not urlparse(url).scheme:
    url = 'http://' + url
+if not urlparse(urlstate).scheme:
+   urlstate = 'http://' + urlstate
 if uberschuss < 0:
    uberschuss = 0
 urlrep= url.replace("<openwb-ueberschuss>", str(uberschuss))
@@ -29,11 +35,12 @@ if os.path.isfile(file_string):
    f = open( file_string , 'a')
 else:
    f = open( file_string , 'w')
-print ('%s devicenr %s orig url %s replaced url %s urlc %s' % (time_string,devicenumber,url,urlrep,urlc),file=f)
+print ('%s devicenr %s orig url %s replaced url %s urlc %s urlstate %s'% (time_string,devicenumber,url,urlrep,urlc,urlstate),file=f)
 f.close()
+state = int(urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8"))
 aktpowerfl = float(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
 aktpower = int(aktpowerfl)
-if aktpower > 50:
+if state == 1 or aktpower > 50:
     relais = 1
 else:
     relais = 0
