@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 from subprocess import run
-import os
+# import os
 import sys
 import subprocess
 import time
@@ -9,6 +9,9 @@ from datetime import datetime
 import configparser
 import re
 import threading
+from json import loads as json_loads
+from json.decoder import JSONDecodeError
+
 global inaction
 inaction=0
 openwbconffile = "/var/www/html/openWB/openwb.conf"
@@ -895,13 +898,26 @@ def on_message(client, userdata, msg):
                     setTopicCleared = True
                     subprocess.run("/var/www/html/openWB/runs/update.sh")
             if (msg.topic == "openWB/set/system/SendDebug"):
-                if ( 20 <= len(msg.payload.decode("utf-8")) <=1000 ):
-                    f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-                    client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
-                    setTopicCleared = True
-                    subprocess.run("/var/www/html/openWB/runs/senddebuginit.sh")
+                payload = msg.payload.decode("utf-8")
+                if ( 20 <= len(payload) <=1000 ):
+                    try:
+                        json_payload = json_loads(str(payload))
+                    except JSONDecodeError:
+                        file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+                        file.write("payload is not valid JSON, fallback to simple text\n")
+                        file.close()
+                        payload = payload.rpartition('email: ')
+                        json_payload = { "message": payload[0], "email": payload[2] }
+                    finally:
+                        f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
+                        f.write(json_payload["message"])
+                        f.close()
+                        f = open('/var/www/html/openWB/ramdisk/debugmail', 'w')
+                        f.write(json_payload["email"])
+                        f.close()
+                        client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
+                        setTopicCleared = True
+                        subprocess.run("/var/www/html/openWB/runs/senddebuginit.sh")
             if (msg.topic == "openWB/set/system/reloadDisplay"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
                     client.publish("openWB/system/reloadDisplay", msg.payload.decode("utf-8"), qos=0, retain=True)
