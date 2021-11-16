@@ -199,7 +199,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
     try:
         configuredName = config.get('smarthomedevices', 'device_name_'+str(nummer))
     except:
-        configuredName = "(unknown name
+        configuredName = "(unknown name)"
     if difmes == 0:
         newwatt = oldwatt
        # simcount verwenden wenn newwattk = 0
