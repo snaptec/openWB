@@ -4,7 +4,7 @@ try:
     from ..common import modbus
     from ..common.abstract_component import AbstractCounter
     from ..common.component_state import CounterState
-except (ImportError, ValueError):
+except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractCounter

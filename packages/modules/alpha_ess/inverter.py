@@ -6,7 +6,7 @@ try:
     from ..common.abstract_component import AbstractInverter
     from ..common.component_state import InverterState
     from ..common.module_error import ModuleError
-except (ImportError, ValueError):
+except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractInverter
