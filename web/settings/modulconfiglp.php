@@ -386,7 +386,7 @@
 								<div class="alert alert-info">
 									Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
 									<span class="text-danger">
-										Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+										Bitte halten Sie die Go-e Firmware auf einem aktuellen Stand.
 									</span>
 								</div>
 								<div class="form-row mb-1">
@@ -404,7 +404,37 @@
 										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
-											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
+											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der go-echarger z.B. gerade unterwegs genutzt wird.
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Simulation der geladenen leistung (kWh) für Zählerstand</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($goesimulationlp1old == 0) echo " active" ?>">
+												<input type="radio" name="goesimulationlp1" id="goesimulationlp1off" value="0"<?php if($goesimulationlp1old == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($goesimulationlp1old == 1) echo " active" ?>">
+												<input type="radio" name="goesimulationlp1" id="goesimulationlp1On" value="1"<?php if($goesimulationlp1old == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
+										<span class="form-text small">
+											Der Zählerstand des Go-e springt immer um ganze kWh. Dies führt im Ladelog und den Tagesgrafiken zu unschönen Darstellungen.<br /> 
+											Mit der Simulation werden diese Werte geglättet und somit ähnlich dem tatsächlichen Verlauf dargestellt.<br />
+											Bei Nutzung des Features wird der Zählerstand Go-e ignoriert und durch die simulierten Werte berechnet.<br />
+											<span class="text-danger">Feature ist aktuell noch in der Implementierung!</span>
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="goecorrectionfactorlp1" class="col-md-4 col-form-label">Korrektur-Faktor für Ladeleistung [W]</label>
+									<div class="col">
+										<input class="form-control" type="number" min="0.00001" max="1.99999" step="0.00001" name="goecorrectionfactorlp1" id="goecorrectionfactorlp1" value="<?php echo $goecorrectionfactorlp1old ?>">
+										<span class="form-text small">
+											Faktor, mit dem die Wertabweichungen des Go-echargers bei Ladeleistung [W] korrigiert werden können.<br />
+											Bei gewünschter Erhöhung um z.B. 8% Eingabe 1,08. Bei 1 keine Korrektur.<br />
+											Korrekturfaktor <> 1 nur sinnvoll bei Nutzung Simulation.
 										</span>
 									</div>
 								</div>
@@ -1004,7 +1034,7 @@
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
 												<span class="form-text small">
-													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen (mehrere Tokens per Semikolon trennen)<br>
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
 												</span>
 											</div>
 										</div>
@@ -1029,9 +1059,9 @@
 										<div class="form-row mb-1">
 											<label for="kia_adv_cachevalid" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
 											<div class="col">
-												<input class="form-control" type="number" min="-15" step="1" name="kia_adv_cachevalid" id="kia_adv_cachevalid" value="<?php echo $kia_adv_cachevalidold ?>">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid" id="kia_adv_cachevalid" value="<?php echo $kia_adv_cachevalidold ?>">
 												<span class="form-text small">
-													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0: Abruf immer vom Auto; Default: 10)<br>
+													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
 												</span>
 											</div>
 										</div>
@@ -2728,7 +2758,7 @@
 								<div class="alert alert-info">
 									Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
 									<span class="text-danger">
-										Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+										Bitte halten Sie die Go-e Firmware auf einem aktuellen Stand.
 									</span>
 								</div>
 								<div class="form-row mb-1">
@@ -2747,6 +2777,36 @@
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Simulation der geladenen leistung (kWh) für Zählerstand</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($goesimulationlp2old == 0) echo " active" ?>">
+												<input type="radio" name="goesimulationlp2" id="goesimulationlp2off" value="0"<?php if($goesimulationlp2old == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($goesimulationlp2old == 1) echo " active" ?>">
+												<input type="radio" name="goesimulationlp2" id="goesimulationlp2On" value="1"<?php if($goesimulationlp2old == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
+										<span class="form-text small">
+											Der Zählerstand des Go-e springt immer um ganze kWh. Dies führt im Ladelog und den Tagesgrafiken zu unschönen Darstellungen.<br /> 
+											Mit der Simulation werden diese Werte geglättet und somit ähnlich dem tatsächlichen Verlauf dargestellt.<br />
+											Bei Nutzung des Features wird der Zählerstand Go-e ignoriert und durch die simulierten Werte berechnet.<br />
+											<span class="text-danger">Feature ist aktuell noch in der Implementierung!</span>
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="goecorrectionfactorlp2" class="col-md-4 col-form-label">Korrektur-Faktor für Ladeleistung [W]</label>
+									<div class="col">
+										<input class="form-control" type="number" min="0.00001" max="1.99999" step="0.00001" name="goecorrectionfactorlp2" id="goecorrectionfactorlp2" value="<?php echo $goecorrectionfactorlp2old ?>">
+										<span class="form-text small">
+											Faktor, mit dem die Wertabweichungen des Go-echargers bei Ladeleistung [W] korrigiert werden können.<br />
+											Bei gewünschter Erhöhung um z.B. 8% Eingabe 1,08. Bei 1 keine Korrektur.<br />
+											Korrekturfaktor <> 1 nur sinnvoll bei Nutzung Simulation.
 										</span>
 									</div>
 								</div>
@@ -3802,7 +3862,7 @@
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
 												<span class="form-text small">
-													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen (mehrere Tokens per Semikolon trennen)<br>
+													Token vom Typ "Generic" aus den Fahrzeug-Einstellungen<br>
 												</span>
 											</div>
 										</div>
@@ -3827,7 +3887,7 @@
 										<div class="form-row mb-1">
 											<label for="kia_adv_cachevalid2" class="col-md-4 col-form-label">Cache G&uuml;ltigkeit</label>
 											<div class="col">
-												<input class="form-control" type="number" min="-15" step="1" name="kia_adv_cachevalid2" id="kia_adv_cachevalid2" value="<?php echo $kia_adv_cachevalid2old ?>">
+												<input class="form-control" type="number" min="0" step="1" name="kia_adv_cachevalid2" id="kia_adv_cachevalid2" value="<?php echo $kia_adv_cachevalid2old ?>">
 												<span class="form-text small">
 													Gültigkeitsdauer des letzten Status in Minuten, z.B. nach Abstellen des Autos oder Abruf in der App (0=Abruf immer vom Auto; Default: 10)<br>
 												</span>
@@ -4563,7 +4623,7 @@
 								<div class="alert alert-info">
 									Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
 									<span class="text-danger">
-										Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+										Bitte halten Sie die Go-e Firmware auf einem aktuellen Stand.
 									</span>
 								</div>
 								<div class="form-row mb-1">
@@ -4582,6 +4642,36 @@
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Simulation der geladenen leistung (kWh) für Zählerstand</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($goesimulationlp3old == 0) echo " active" ?>">
+												<input type="radio" name="goesimulationlp3" id="goesimulationlp3off" value="0"<?php if($goesimulationlp3old == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($goesimulationlp3old == 1) echo " active" ?>">
+												<input type="radio" name="goesimulationlp3" id="goesimulationlp3On" value="1"<?php if($goesimulationlp3old == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
+										<span class="form-text small">
+											Der Zählerstand des Go-e springt immer um ganze kWh. Dies führt im Ladelog und den Tagesgrafiken zu unschönen Darstellungen.<br /> 
+											Mit der Simulation werden diese Werte geglättet und somit ähnlich dem tatsächlichen Verlauf dargestellt.<br />
+											Bei Nutzung des Features wird der Zählerstand Go-e ignoriert und durch die simulierten Werte berechnet.<br />
+											<span class="text-danger">Feature ist aktuell noch in der Implementierung!</span>
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="goecorrectionfactorlp3" class="col-md-4 col-form-label">Korrektur-Faktor für Ladeleistung [W]</label>
+									<div class="col">
+										<input class="form-control" type="number" min="0.00001" max="1.99999" step="0.00001" name="goecorrectionfactorlp3" id="goecorrectionfactorlp3" value="<?php echo $goecorrectionfactorlp3old ?>">
+										<span class="form-text small">
+											Faktor, mit dem die Wertabweichungen des Go-echargers bei Ladeleistung [W] korrigiert werden können.<br />
+											Bei gewünschter Erhöhung um z.B. 8% Eingabe 1,08. Bei 1 keine Korrektur.<br />
+											Korrekturfaktor <> 1 nur sinnvoll bei Nutzung Simulation.
 										</span>
 									</div>
 								</div>
