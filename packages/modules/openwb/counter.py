@@ -6,7 +6,7 @@ try:
     from ..common import modbus
     from ..common.module_error import ModuleError, ModuleErrorLevel
     from ..openwb_flex.counter import EvuKitFlex
-except (ImportError, ValueError):
+except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.module_error import ModuleError, ModuleErrorLevel
