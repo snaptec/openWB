@@ -54,7 +54,7 @@ Raspbian installieren
 
 In der Shell folgendes eingeben:
 
-	curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
+	curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo bash
 
 
 
