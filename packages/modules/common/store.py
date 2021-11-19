@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from collections.abc import Iterable
-from pathlib import Path
-from typing import Callable, Union
+from typing import Callable, Generic, TypeVar, Union
 
 try:
     from ..common.module_error import ModuleError, ModuleErrorLevel
@@ -10,9 +9,6 @@ try:
     from ...helpermodules import pub
     from component_state import BatState, CounterState, InverterState
 except (ImportError, ValueError, SystemError):
-    # for 1.9 compatibility
-    import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from helpermodules import compatibility
     from helpermodules import log
     from helpermodules import pub
@@ -59,13 +55,16 @@ def pub_to_broker(topic: str, value, digits: Union[int, None] = None) -> None:
         process_error(e)
 
 
-class ValueStore:
+T = TypeVar("T")
+
+
+class ValueStore(Generic[T]):
     @abstractmethod
     def set(self, *kwargs) -> None:
         pass
 
 
-class BatteryValueStoreRamdisk(ValueStore):
+class BatteryValueStoreRamdisk(ValueStore[BatState]):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
@@ -82,7 +81,7 @@ class BatteryValueStoreRamdisk(ValueStore):
             process_error(e)
 
 
-class BatteryValueStoreBroker(ValueStore):
+class BatteryValueStoreBroker(ValueStore[BatState]):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
@@ -96,7 +95,7 @@ class BatteryValueStoreBroker(ValueStore):
             process_error(e)
 
 
-class CounterValueStoreRamdisk(ValueStore):
+class CounterValueStoreRamdisk(ValueStore[CounterState]):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
@@ -117,7 +116,7 @@ class CounterValueStoreRamdisk(ValueStore):
             process_error(e)
 
 
-class CounterValueStoreBroker(ValueStore):
+class CounterValueStoreBroker(ValueStore[CounterState]):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
@@ -135,7 +134,7 @@ class CounterValueStoreBroker(ValueStore):
             process_error(e)
 
 
-class InverterValueStoreRamdisk(ValueStore):
+class InverterValueStoreRamdisk(ValueStore[InverterState]):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
@@ -156,7 +155,7 @@ class InverterValueStoreRamdisk(ValueStore):
             process_error(e)
 
 
-class InverterValueStoreBroker(ValueStore):
+class InverterValueStoreBroker(ValueStore[InverterState]):
     def __init__(self, component_num: int) -> None:
         self.num = component_num
 
@@ -169,25 +168,22 @@ class InverterValueStoreBroker(ValueStore):
             process_error(e)
 
 
-value_store_classes = Union[
-    BatteryValueStoreRamdisk,
-    BatteryValueStoreBroker,
-    CounterValueStoreRamdisk,
-    CounterValueStoreBroker,
-    InverterValueStoreRamdisk,
-    InverterValueStoreBroker
-]
+def get_bat_value_store(component_num: int) -> ValueStore[BatState]:
+    if compatibility.is_ramdisk_in_use():
+        return BatteryValueStoreRamdisk(component_num)
+    else:
+        return BatteryValueStoreBroker(component_num)
 
 
-class ValueStoreFactory:
-    def get_storage(self, component_type: str) -> value_store_classes:
-        try:
-            ramdisk = compatibility.is_ramdisk_in_use()
-            if component_type == "bat":
-                return BatteryValueStoreRamdisk if ramdisk else BatteryValueStoreBroker
-            elif component_type == "counter":
-                return CounterValueStoreRamdisk if ramdisk else CounterValueStoreBroker
-            elif component_type == "inverter":
-                return InverterValueStoreRamdisk if ramdisk else InverterValueStoreBroker
-        except Exception as e:
-            process_error(e)
+def get_counter_value_store(component_num: int) -> ValueStore[CounterState]:
+    if compatibility.is_ramdisk_in_use():
+        return CounterValueStoreRamdisk(component_num)
+    else:
+        return CounterValueStoreBroker(component_num)
+
+
+def get_inverter_value_store(component_num: int) -> ValueStore[InverterState]:
+    if compatibility.is_ramdisk_in_use():
+        return InverterValueStoreRamdisk(component_num)
+    else:
+        return InverterValueStoreBroker(component_num)

@@ -1,128 +1,58 @@
 from abc import abstractmethod
-from typing import Union
+from typing import Generic, TypeVar
+
 try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common import lovato
-    from ..common import mpm3pm
-    from ..common import simcount
-    from ..common import sdm630
-    from ..common import store
-    from ..common.module_error import ModuleError, ModuleErrorLevel
-    from component_state import BatState, CounterState, InverterState
+    from ..common.module_error import ComponentInfo, ModuleError, ModuleErrorLevel
+    from ..common.store import ValueStore
 except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common import lovato
-    from modules.common import mpm3pm
-    from modules.common import simcount
-    from modules.common import sdm630
-    from modules.common import store
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
-    from .component_state import BatState, CounterState, InverterState
+    from modules.common.module_error import ComponentInfo, ModuleError, ModuleErrorLevel
+    from modules.common.store import ValueStore
+
+T = TypeVar("T")
 
 
-class AbstractComponent:
-    def __init__(
-        self,
-        device_id: int,
-        component_config: dict,
-        client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]
-    ) -> None:
-        try:
-            self.device_id = device_id
-            self.client = client
-            self.data = {"config": component_config,
-                         "simulation": {}}
-            self.value_store = (store.ValueStoreFactory().get_storage(component_config["type"]))(
-                self.data["config"]["id"]
-            )
-            simcount_factory = simcount.SimCountFactory().get_sim_counter()
-            self.sim_count = simcount_factory()
-        except Exception:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
-
+class AbstractComponent(Generic[T]):
     @abstractmethod
-    def get_values(self) -> Union[BatState, CounterState, InverterState]:
+    def __init__(self, device_id: int, component_config: dict, tcp_client) -> None:
         pass
 
-    def update_values(self) -> Union[BatState, CounterState, InverterState]:
+    @abstractmethod
+    def get_values(self) -> T:
+        pass
+
+    @abstractmethod
+    def get_component_info(self) -> ComponentInfo:
+        pass
+
+
+class ComponentUpdater(Generic[T]):
+    def __init__(self, component: AbstractComponent[T],
+                 value_store: ValueStore[T]) -> None:
+        self.component = component
+        self.value_store = value_store
+
+    def get_values(self) -> T:
         try:
-            state = self.get_values()
-            self.value_store.set(state)
-        except ModuleError as e:
-            e.store_error(self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"])
-            raise ModuleError("", ModuleErrorLevel.ERROR)
+            state = self.component.get_values()
         except Exception as e:
             self.process_error(e)
-            raise ModuleError("", ModuleErrorLevel.ERROR)
         else:
-            ModuleError("Kein Fehler.", ModuleErrorLevel.NO_ERROR).store_error(
-                self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"]
-            )
+            ModuleError("Kein Fehler.", ModuleErrorLevel.NO_ERROR).store_error(self.component.get_component_info())
             return state
 
-    def process_error(self, e):
-        ModuleError(str(type(e))+" "+str(e), ModuleErrorLevel.ERROR).store_error(
-            self.data["config"]["id"], self.data["config"]["type"], self.data["config"]["name"]
-        )
-
-    def kit_version_factory(self, version: int, id: int, tcp_client: modbus.ModbusClient) -> Union[
-        mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630
-    ]:
+    def set_values(self, state: T) -> None:
         try:
-            if version == 0:
-                return mpm3pm.Mpm3pm(id, tcp_client)
-            elif version == 1:
-                return lovato.Lovato(id, tcp_client)
-            elif version == 2:
-                return sdm630.Sdm630(id, tcp_client)
-            else:
-                raise ModuleError("Version "+str(version)+" unbekannt.", ModuleErrorLevel.ERROR)
+            self.value_store.set(state)
         except Exception as e:
             self.process_error(e)
 
-
-class AbstractBat(AbstractComponent):
-    def __init__(self,
-                 device_id: int,
-                 component_config: dict,
-                 client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
-        super().__init__(device_id, component_config, client)
-
-    @abstractmethod
-    def get_values(self) -> BatState:
-        pass
-
-    def update_values(self) -> BatState:
-        return super().update_values()
-
-
-class AbstractCounter(AbstractComponent):
-    def __init__(self,
-                 device_id: int,
-                 component_config: dict,
-                 client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
-        super().__init__(device_id, component_config, client)
-
-    @abstractmethod
-    def get_values(self) -> CounterState:
-        pass
-
-    def update_values(self) -> CounterState:
-        return super().update_values()
-
-
-class AbstractInverter(AbstractComponent):
-    def __init__(self,
-                 device_id: int,
-                 component_config: dict,
-                 client: Union[modbus.ModbusClient, mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]) -> None:
-        super().__init__(device_id, component_config, client)
-
-    @abstractmethod
-    def get_values(self) -> InverterState:
-        pass
-
-    def update_values(self) -> InverterState:
-        return super().update_values()
+    def process_error(self, e):
+        if type(e) == ModuleError:
+            e.store_error(self.component.get_component_info())
+            raise ModuleError("", ModuleErrorLevel.ERROR)
+        else:
+            ModuleError(
+                str(type(e)) + " " + str(e),
+                ModuleErrorLevel.ERROR).store_error(
+                self.component.get_component_info())
+            raise ModuleError("", ModuleErrorLevel.ERROR)

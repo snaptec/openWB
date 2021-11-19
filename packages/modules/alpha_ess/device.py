@@ -76,7 +76,7 @@ def read_legacy(argv: List[str]) -> None:
 
     log.MainLogger().debug('alpha_ess Version: ' + str(version))
 
-    dev.update_values()
+    dev.get_values()
 
 
 if __name__ == "__main__":
