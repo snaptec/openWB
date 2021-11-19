@@ -210,7 +210,7 @@
 											<td class="soc">--</td>
 										</tr>
 										<tr class="lpLastSeenRow hide">
-											<th scope="row">Letzter Kontakt</th>
+											<th scope="row">Letzte Verbindung</th>
 											<td class="lpLastSeen"></td>
 										</tr>
 										<tr class="faultStrSocLpRow hide">
