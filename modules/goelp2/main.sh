@@ -5,6 +5,7 @@ rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/status)
 if [[ $? == "0" ]] ; then
 	goecorrectionfactor=$(echo "scale=0;$goecorrectionfactorlp2 * 100000 /1" |bc)
+	echo $goecorrectionfactor > /var/www/html/openWB/ramdisk/goecorrectionlp2
 	watt=$(echo $output | jq -r '.nrg[11]')
 	watt=$(echo "scale=0;$watt * 10 /1" |bc)
 	if [[ $watt =~ $re ]] ; then
@@ -45,7 +46,13 @@ if [[ $? == "0" ]] ; then
 	fi
 	llkwh=$(echo $output | jq -r '.eto')
 	llkwh=$(echo "scale=3;$llkwh / 10" |bc)	
+	rfid=$(echo $output | jq -r '.uby')
+	oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp2rfid)
+	if [[ $rfid != $oldrfid ]] ; then
+		echo $rfid > /var/www/html/openWB/ramdisk/readtag
+		echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp2rfid
 	if [[ $goesimulationlp2 == "0" ]] ; then
+	fi
 		if [[ $llkwh =~ $rekwh ]] ; then
 			echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
 		fi
@@ -74,9 +81,6 @@ if [[ $? == "0" ]] ; then
 			echo $temp_kWhCounter_lp2 > /var/www/html/openWB/ramdisk/llkwhs1
 		fi
 	fi
-	
-	
-	
 	#car status 1 Ladestation bereit, kein Auto
 	#car status 2 Auto lädt
 	#car status 3 Warte auf Fahrzeug
@@ -92,4 +96,7 @@ if [[ $? == "0" ]] ; then
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 	fi
+	lastseen=$(date +"%d.%m.%Y %H:%M:%S")
+	echo $lastseen >/var/www/html/openWB/ramdisk/goelp2lastcontact
+    mosquitto_pub -t openWB/lp/2/lastSeen -r -m "$lastseen"
 fi
