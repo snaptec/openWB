@@ -492,14 +492,16 @@ loadvars(){
 		speichersoc=$(echo $speichersoc | sed 's/\..*$//')
 		speichervorhanden="1"
 		echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
-		if [[ $speichermodul == "speicher_e3dc" ]] ; then
+		if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
 			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
 			pv1vorhanden="1"
 
 		fi
 		if [[ $speichermodul == "speicher_sonneneco" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+			echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
 			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
 			pv1vorhanden="1"
 		fi
@@ -1058,9 +1060,12 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
+	if [[ $pv2wattmodul == "wr2_shelly" ]]; then
+		usesimpv=1
+	fi
 	if [[ $usesimpv == "1" ]]; then
 		ra='^-?[0-9]+$'
-		watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
+		watt3=$(</var/www/html/openWB/ramdisk/pvallwatt)
 		if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
 			importtemp=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
 		else
@@ -1082,6 +1087,12 @@ loadvars(){
 			echo $exporttemp > /var/www/html/openWB/ramdisk/pvwatt0neg
 		fi
 		sudo python /var/www/html/openWB/runs/simcount.py $watt3 pv pvposkwh pvkwh
+		if [[ $pv2vorhanden == "1" ]]; then
+			temppvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+			echo $temppvkwh > /var/www/html/openWB/ramdisk/pvallwh
+			echo $temppvkwh > /var/www/html/openWB/ramdisk/pv2kwh
+		fi
+
 		importtemp1=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
 		exporttemp1=$(</var/www/html/openWB/ramdisk/pvwatt0neg)
 		if [[ $importtemp !=  $importtemp1 ]]; then
