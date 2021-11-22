@@ -24,7 +24,8 @@ class Lovato:
 
     def get_voltage(self) -> List[float]:
         try:
-            return self.client.read_input_registers(0x0001, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id) / 100
+            return [val / 100 for val in self.client.read_input_registers(
+                0x0001, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
 
@@ -36,9 +37,9 @@ class Lovato:
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = self.client.read_input_registers(
+            power_per_phase = [val / 100 for val in self.client.read_input_registers(
                 0x0013, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id
-            ) / 100
+            )]
             power_all = self.client.read_input_registers(0x000C, modbus.ModbusDataType.FLOAT_32, unit=self.id)
             return power_per_phase, power_all
         except Exception as e:
@@ -52,7 +53,8 @@ class Lovato:
 
     def get_power_factor(self) -> List[float]:
         try:
-            return self.client.read_input_registers(0x0025, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id) / 10000
+            return [val / 10000 for val in self.client.read_input_registers(
+                0x0025, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
 
@@ -67,7 +69,8 @@ class Lovato:
 
     def get_current(self) -> List[float]:
         try:
-            return self.client.read_input_registers(0x0007, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id) / 10000
+            return [val / 10000 for val in self.client.read_input_registers(
+                0x0007, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
 
