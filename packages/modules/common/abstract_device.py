@@ -56,7 +56,7 @@ class AbstractDevice:
                     ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
                 )
         except ModuleError:
-            log.MainLogger().error(
+            log.MainLogger().exception(
                 "Beim Auslesen eines Moduls ist ein Fehler aufgetreten. Auslesen des Devices %s beendet." %
                 self.data["config"]["name"]
             )
