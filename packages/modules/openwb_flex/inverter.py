@@ -50,14 +50,13 @@ class PvKitFlex(AbstractInverter):
             if power_all > 10:
                 power_all = power_all*-1
             currents = self.client.get_current()
-
-            log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power_all))
-            self.tcp_client.close_connection()
-            inverter_state = InverterState(
-                power=power_all,
-                counter=counter,
-                currents=currents
-            )
-            return inverter_state
         finally:
             self.tcp_client.close_connection()
+
+        log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power_all))
+        inverter_state = InverterState(
+            power=power_all,
+            counter=counter,
+            currents=currents
+        )
+        return inverter_state
