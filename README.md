@@ -63,15 +63,40 @@ Crontab anpassen:
 hier einfügen:
 
 	* * * * * /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-	* * * * * sleep 10 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-	* * * * * sleep 20 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-	* * * * * sleep 30 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-	* * * * * sleep 40 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-	* * * * * sleep 50 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
+	* * * * * sleep 10 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
+	* * * * * sleep 20 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
+	* * * * * sleep 30 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
+	* * * * * sleep 40 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
+	* * * * * sleep 50 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 
 
 
- 
+ # SENEC Speicher HTTP Abfrage
+
+In der OpenWB Oberfläche gehe ich auf: Einstellungen > Einstellungen > Modulkonfiguration und wähle im Bereich "Strombezugsmessmodul (EVU-Übergabepunkt)" das Strombezugsmodul "HTTP" aus.
+Um die Konfigurationen nun einzulesen gebe ich nacheinander die Pfade zu meinen RamDisk Dateien ein:
+
+
+http://localhost/openWB/ramdisk/wattbezug_senec
+http://localhost/openWB/ramdisk/bezugkwh_senec
+http://localhost/openWB/ramdisk/einspeisungkwh_senec
+http://localhost/openWB/ramdisk/bezuga1_senec
+http://localhost/openWB/ramdisk/bezuga2_senec
+http://localhost/openWB/ramdisk/bezuga3_senec
+
+Im Bereich "Speicher-Modul" wähle ich "HTTP Abfrage" und trage nacheinander folgendes ein:
+
+http://localhost/openWB/ramdisk/speicherleistung_senec
+http://localhost/openWB/ramdisk/speichersoc_senec
+http://localhost/openWB/ramdisk/speicherikwh_senec
+http://localhost/openWB/ramdisk/speicherekwh_senec
+
+Im Bereich "PV" wähle ich "HTTP Abfrage" und trage nacheinander folgendes ein:
+
+http://localhost/openWB/ramdisk/pvwatt_senec
+http://localhost/openWB/ramdisk/pvewh_senec
+
+Quelle:https://openwb.de/forum/viewtopic.php?t=1082
 
 
 # Extras
