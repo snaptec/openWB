@@ -288,9 +288,9 @@
 					<div class="row">
 						<div class="col">
 						<pre><?php
-						   $lines=[];
-							exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
-							echo implode('<br>',$lines);
+						   // $lines=[];
+							// exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
+							// echo implode('<br>',$lines);
 						  ?></pre>
 						</div>
 					</div>
