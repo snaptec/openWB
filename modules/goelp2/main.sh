@@ -91,9 +91,11 @@ if [[ $? == "0" ]] ; then
 		echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 	else
 		echo 1 > /var/www/html/openWB/ramdisk/plugstats1
-		if [[ $pushbplug == "1" ]] && [[ $ladestatuslp2 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-		message="$lp2name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-		/var/www/html/openWB/runs/pushover.sh "$message"
+		if [[ $plugstat == "0" ]] ; then
+			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp2 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+			message="$lp2name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+			/var/www/html/openWB/runs/pushover.sh "$message"
+			fi
 		fi
 	fi
 	if [[ $car == "2" ]] ; then
@@ -101,7 +103,7 @@ if [[ $? == "0" ]] ; then
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 	fi
-	openwbDebugLog "Debug" 0 "pushbplug: $pushbplug  | ladestatuslp2: $ladestatuslp2 | pushbenachrichtigung: $pushbenachrichtigung"
+	# openwbDebugLog "Debug" 0 "pushbplug: $pushbplug  | ladestatuslp2: $ladestatuslp2 | pushbenachrichtigung: $pushbenachrichtigung"
 	lastseen=$(date +"%d.%m.%Y %H:%M:%S")
 	echo $lastseen >/var/www/html/openWB/ramdisk/goelp2lastcontact
     mosquitto_pub -t openWB/lp/2/lastSeen -r -m "$lastseen"
