@@ -16,7 +16,7 @@ initRamdisk(){
 	echo "**** REBOOT ****" >> $RamdiskPath/nurpv.log
 	echo "**** REBOOT ****" >> $RamdiskPath/cleanup.log
 	echo "**** REBOOT ****" >> $RamdiskPath/smarthome.log
-
+	echo "**** REBOOT ****" >> $RamdiskPath/isss.log
 
 	echo $bootmodus > $RamdiskPath/lademodus
 
