@@ -2,7 +2,6 @@
 try:
     from ...helpermodules import log
     from ..common import modbus
-    from ..common.abstract_component import AbstractComponent, ComponentUpdater
     from ..common.component_state import CounterState
     from ..common.module_error import ComponentInfo
     from ..common.store import get_counter_value_store
@@ -11,7 +10,6 @@ try:
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
-    from modules.common.abstract_component import AbstractComponent, ComponentUpdater
     from modules.common.component_state import CounterState
     from modules.common.module_error import ComponentInfo
     from modules.common.store import get_counter_value_store
@@ -32,17 +30,7 @@ def get_default_config() -> dict:
     }
 
 
-def create_component(device_config: dict, component_config: dict,
-                     modbus_client):
-    return ComponentUpdater(
-        EvuKitFlex(
-            device_config["id"],
-            component_config,
-            modbus_client,
-        ), get_counter_value_store(component_config["id"]))
-
-
-class EvuKitFlex(AbstractComponent[CounterState]):
+class EvuKitFlex:
     def __init__(self, device_id: int, component_config: dict,
                  tcp_client: modbus.ModbusClient) -> None:
         self.__device_id = device_id
@@ -54,15 +42,19 @@ class EvuKitFlex(AbstractComponent[CounterState]):
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.__simulation = {}
+        self.__store = get_counter_value_store(component_config["id"])
 
     def get_component_info(self) -> ComponentInfo:
         return ComponentInfo(self.component_config["id"],
                              self.component_config["type"],
                              self.component_config["name"])
 
-    def get_values(self) -> CounterState:
+    def get_values(self):
         """ liest die Werte des Moduls aus.
         """
+        currents = [0]*3
+        exported = 0
+        imported = 0
         log.MainLogger().debug("Start kit reading")
         try:
             voltages = self.__client.get_voltage()
@@ -105,4 +97,4 @@ class EvuKitFlex(AbstractComponent[CounterState]):
             frequency=frequency
         )
         log.MainLogger().debug("Stop kit reading "+str(power_all))
-        return counter_state
+        self.__store.set(counter_state)
