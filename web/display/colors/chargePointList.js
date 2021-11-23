@@ -147,6 +147,14 @@ class ChargePointList {
     } else {
       d3.select(".socConfiguredLp").classed("hide", true)
     }
+    // show/hide config sections depending on charge mode
+    d3.select(".chargeModeSofort").classed ("hide", wbdata.chargeMode != '0')
+    d3.select(".chargeModeMinPv").classed ("hide", wbdata.chargeMode != '1')
+    d3.select(".chargeModePv").classed ("hide", wbdata.chargeMode != '2')
+    d3.select(".chargeModeStop").classed ("hide", wbdata.chargeMode != '3')
+    d3.select(".chargeModeStandby").classed ("hide", wbdata.chargeMode != '4')
+    
+
     // charge limit selectors
     const noLimitButton = d3.select(".buttonNoLimit");
     const socLimitButton = d3.select(".buttonSocLimit");
