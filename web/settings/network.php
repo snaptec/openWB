@@ -72,11 +72,9 @@
 						break;
 					case 'wlanreset':
 						// reset wlan credentials
-						$result1 = file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/tmp/wssid', '');
-						$result2 = file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/tmp/wpassword', '');
-						$cmd = 'nohup sudo /bin/bash /var/www/html/wlanconnect.sh > /dev/null 2>&1 &';
-						exec($cmd, $output, $returnval);
-						if( $result1 === false || $result2 === false || $returnval !== 0 ){
+						$result1 = file_put_contents('/home/pi/wssid','');
+						$result2 = file_put_contents('/home/pi/wpassword','');
+						if( $result1 === false || $result2 === false ){
 							?>
 							<div class="col alert alert-danger" role="alert">
 								Die Zugangsdaten konnten nicht entfernt werden!<br>
@@ -91,7 +89,9 @@
 							Die openWB wird jetzt neu gestartet.
 						</div>
 						<script>
-							$.get({ url: "settings/restart.php", cache: false });
+							window.setTimeout(() => {
+								$("#rebootConfirmationModal").modal("show");
+							}, 3000);
 						</script>
 						<?php
 						break;

@@ -9,7 +9,7 @@ try:
     from ...helpermodules import log
     from ...helpermodules import pub
     from component_state import BatState, CounterState, InverterState
-except (ImportError, ValueError, SystemError):
+except (ImportError, ValueError):
     # for 1.9 compatibility
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))

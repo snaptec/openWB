@@ -5,7 +5,7 @@ try:
     from ...helpermodules import compatibility
     from ...helpermodules import log
     from ...helpermodules import pub
-except (ImportError, ValueError, SystemError):
+except (ImportError, ValueError):
     # for 1.9 compatibility
     from helpermodules import compatibility
     from helpermodules import log

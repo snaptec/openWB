@@ -6,7 +6,7 @@ try:
     from ...helpermodules import log
     from . import counter
     from. import inverter
-except (ImportError, ValueError, SystemError):
+except (ImportError, ValueError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common import abstract_device
@@ -74,7 +74,7 @@ def read_legacy(argv: List[str]):
     version = int(sys.argv[2])
     try:
         num = int(argv[3])
-    except IndexError:
+    except ValueError:
         num = None
 
     device_config = get_default_config()

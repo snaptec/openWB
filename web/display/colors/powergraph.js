@@ -118,8 +118,7 @@ class PowerGraph {
           var bulkdata = payload.toString().split("\n");
           if (bulkdata.length <= 1) {
             bulkdata = [];
-          } 
-          
+          }
           if (serialNo != "") {
             if (typeof (this.initialGraphData[+serialNo - 1]) === 'undefined') {
               this.initialGraphData[+serialNo - 1] = bulkdata;
@@ -161,7 +160,8 @@ class PowerGraph {
     values.date.setDate (now.getDate())
     values.date.setMonth (now.getMonth())
     values.date.setFullYear (now.getFullYear())
-    if (values.date.getHours() > now.getHours()) { // this is an entry from yesterday
+
+    if (values.date.getHours() > now.getHours) { // this is an entry from yesterday
       values.date = new Date (values.date.getTime() - mSecondsPerDay) // change date to yesterday
     } 
    

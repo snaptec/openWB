@@ -4,7 +4,7 @@ try:
     from ...helpermodules import log
     from ..common import modbus
     from ..common.module_error import ModuleError
-except (ImportError, ValueError, SystemError):
+except (ImportError, ValueError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.module_error import ModuleError
@@ -56,7 +56,7 @@ class AbstractDevice:
                     ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
                 )
         except ModuleError:
-            log.MainLogger().exception(
+            log.MainLogger().error(
                 "Beim Auslesen eines Moduls ist ein Fehler aufgetreten. Auslesen des Devices %s beendet." %
                 self.data["config"]["name"]
             )
