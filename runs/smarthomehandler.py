@@ -1006,6 +1006,10 @@ def conditions(nummer):
     except:
         ontime = '00:00'
     try:
+        onuntiltime = str(config.get('smarthomedevices', 'device_onuntiltime_'+str(nummer)))
+    except:
+        onuntiltime = '00:00'
+    try:
         startupmuldetection = int(config.get('smarthomedevices', 'device_startupmuldetection_'+str(nummer)))
     except:
         startupmuldetection = 0
@@ -1042,6 +1046,15 @@ def conditions(nummer):
             pass
         else:
             logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen Immer an nach")
+            onnow = 1
+    if (onuntiltime != '00:00'):
+        onuntilhour = int(str("0") +str(onuntiltime).partition(':')[0])
+        onuntilminute = int(str(onuntiltime)[-2:] )
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Immer an vor definiert " + str(onuntilhour) + ":" +  str ('%.2d' % onuntilminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute))
+        if ((onuntilhour < localhour )  or  ((onuntilhour == localhour ) and (onuntilminute <=localminute) )):
+            pass
+        else:
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen Immer an vor")
             onnow = 1
     if (finishtime != '00:00') and (DeviceOn[nummer-1] ==str("0")):
         finishhour = int(str("0") +str(finishtime).partition(':')[0])
