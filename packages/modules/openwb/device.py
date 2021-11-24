@@ -1,16 +1,16 @@
-from typing import Any, Callable, List
+from typing import List, Union
 import sys
 
 try:
-    from ..common.abstract_device import AbstractDevice, DeviceUpdater
-    from ..common.abstract_component import ComponentUpdater
+    from ..common.abstract_device import AbstractDevice, clear_all_error_states, process_component_error
     from ...helpermodules import log
     from . import counter
+    from . import inverter
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
-    from modules.common.abstract_device import AbstractDevice, DeviceUpdater
-    from modules.common.abstract_component import ComponentUpdater
+    from modules.common.abstract_device import AbstractDevice, clear_all_error_states, process_component_error
     import counter
+    import inverter
 
 
 def get_default_config() -> dict:
@@ -25,15 +25,36 @@ class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
         # "bat": ,
         "counter": counter.EvuKit,
-        # "inverter": inverter.PvKit
+        "inverter": inverter.PvKit
     }
-    components = []  # type: List[ComponentUpdater]
+    _components = []  # type: List[Union[counter.EvuKit, inverter.PvKit]]
 
     def __init__(self, device_config: dict) -> None:
         self.device_config = device_config
 
-    def add_component(self, factory: Callable[[dict, dict, Any], ComponentUpdater], component_config: dict):
-        self.components.append(factory(self.device_config, component_config, None))
+    def add_component(self, component_config: dict) -> None:
+        component_type = component_config["type"]
+        if component_type in self.COMPONENT_TYPE_TO_CLASS:
+            self._components.append(self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"], component_config))
+
+    def get_values(self) -> None:
+        log.MainLogger().debug("Start device reading" + str(self._components))
+        if self._components:
+            for component in self._components:
+                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
+                try:
+                    component.update()
+                    # Nur Löschen wenn auch kein Fehler vorliegt, sonst springt die Anzeige, wenn generell vor dem
+                    # Auslesen der Status auf dem Broker zurückgesetzt wird.
+                    clear_all_error_states([component])
+                except Exception as e:
+                    process_component_error(e, component)
+        else:
+            log.MainLogger().warning(
+                self.device_config["name"] +
+                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
+            )
 
 
 def read_legacy(argv: List[str]):
@@ -42,7 +63,7 @@ def read_legacy(argv: List[str]):
     COMPONENT_TYPE_TO_MODULE = {
         # "bat": ,
         "counter": counter,
-        # "inverter": inverter
+        "inverter": inverter
     }
     component_type = argv[1]
     version = int(argv[2])
@@ -52,18 +73,17 @@ def read_legacy(argv: List[str]):
         num = None
 
     device_config = get_default_config()
-    dev = DeviceUpdater(Device(device_config))
+    dev = Device(device_config)
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        module = COMPONENT_TYPE_TO_MODULE[component_type]
     else:
         raise Exception("illegal component type " + component_type +
                         ". Allowed values: " +
                         ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
     component_config["id"] = num
     component_config["configuration"]["version"] = version
-    dev.device.add_component(module.create_component, component_config)
+    dev.add_component(component_config)
 
     log.MainLogger().debug('openWB Version: ' + str(version))
 

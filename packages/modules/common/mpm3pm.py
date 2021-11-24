@@ -2,10 +2,12 @@
 from typing import List, Tuple
 try:
     from ..common import modbus
+    from ..common.modbus import ModbusDataType
     from ..common.fault_state import FaultState, FaultStateLevel
 except (ImportError, ValueError, SystemError):
     # for 1.9 compatibility
     from modules.common import modbus
+    from modules.common.modbus import ModbusDataType
     from modules.common.fault_state import FaultState, FaultStateLevel
 
 
@@ -24,54 +26,54 @@ class Mpm3pm:
     def get_voltage(self) -> List[float]:
         try:
             return [val / 10 for val in self.client.read_input_registers(
-                0x08, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
+                0x08, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
 
     def get_imported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0002, modbus.ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0002, ModbusDataType.FLOAT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
             power_per_phase = [val / 100 for val in self.client.read_input_registers(
-                0x14, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
+                0x14, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
             power_all = [val / 100 for val in self.client.read_input_registers(
-                0x26, modbus.ModbusDataType.FLOAT_32, unit=self.id)]
+                0x26, ModbusDataType.FLOAT_32, unit=self.id)]
             return power_per_phase, power_all
         except Exception as e:
             self.__process_error(e)
 
     def get_exported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0004, modbus.ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0004, ModbusDataType.FLOAT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 
     def get_power_factor(self) -> List[float]:
         try:
             return [val / 100 for val in self.client.read_input_registers(
-                0x20, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
+                0x20, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
 
     def get_frequency(self) -> float:
         try:
-            return self.client.read_input_registers(0x2c, modbus.ModbusDataType.FLOAT_64, unit=self.id) / 100
+            return self.client.read_input_registers(0x2c, ModbusDataType.FLOAT_64, unit=self.id) / 100
         except Exception as e:
             self.__process_error(e)
 
     def get_current(self) -> List[float]:
         try:
             return [val / 100 for val in self.client.read_input_registers(
-                0x0E, [modbus.ModbusDataType.FLOAT_32]*3, unit=self.id)]
+                0x0E, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
 
     def get_counter(self) -> float:
         try:
-            return self.client.read_input_registers(0x0004, modbus.ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0004, ModbusDataType.FLOAT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)

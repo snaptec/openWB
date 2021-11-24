@@ -3,16 +3,12 @@
 
 try:
     from ..common import modbus
-    from ..common.abstract_component import ComponentUpdater
     from ..common.fault_state import FaultState, FaultStateLevel
     from ..openwb_flex.counter import EvuKitFlex
-    from ..common.store import get_counter_value_store
 except (ImportError, ValueError, SystemError):
     from modules.common import modbus
-    from modules.common.abstract_component import ComponentUpdater
     from modules.common.fault_state import FaultState, FaultStateLevel
     from modules.openwb_flex.counter import EvuKitFlex
-    from modules.common.store import get_counter_value_store
 
 
 def get_default_config() -> dict:
@@ -27,16 +23,8 @@ def get_default_config() -> dict:
     }
 
 
-def create_component(device_config: dict, component_config: dict, modbus_client):
-    return ComponentUpdater(
-            EvuKit(device_config["id"], component_config,
-                   modbus.ModbusClient("192.168.193.15", 8899)),
-            get_counter_value_store(component_config["id"]))
-
-
 class EvuKit(EvuKitFlex):
-    def __init__(self, device_id: int, component_config: dict,
-                 tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict) -> None:
         self.data = {"config": component_config}
         version = self.data["config"]["configuration"]["version"]
         if version == 0:
@@ -49,4 +37,4 @@ class EvuKit(EvuKitFlex):
             raise FaultState("Version " + str(version) + " unbekannt.", FaultStateLevel.ERROR)
         self.data["config"]["configuration"]["id"] = id
 
-        super().__init__(device_id, self.data["config"], tcp_client)
+        super().__init__(device_id, self.data["config"], modbus.ModbusClient("192.168.193.15", 8899))

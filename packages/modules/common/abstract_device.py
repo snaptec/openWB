@@ -1,6 +1,7 @@
 from abc import abstractmethod
+from typing import Union
 
-from packages.modules.common.fault_state import FaultState, FaultStateLevel
+from modules.common.fault_state import FaultState, FaultStateLevel
 
 
 class AbstractDevice:
@@ -17,13 +18,13 @@ class AbstractDevice:
         pass
 
 
-def clear_all_error_states(device):
-    for component in device._components:
-        FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR).store_error(component.get_component_info())
+def clear_all_error_states(components) -> None:
+    for component in components:
+        FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR).store_error(component.component_info)
 
 
-def process_component_error(e, component):
+def process_component_error(e: Union[FaultState, Exception], component) -> None:
     if type(e) is FaultState:
-        e.store_error(component.get_component_info())
+        e.store_error(component.component_info)
     else:
-        FaultState(str(type(e)) + " " + str(e), FaultStateLevel.ERROR).store_error(component.get_component_info())
+        FaultState(str(type(e)) + " " + str(e), FaultStateLevel.ERROR).store_error(component.component_info)

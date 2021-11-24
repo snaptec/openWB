@@ -1,18 +1,16 @@
 from typing import List
 import sys
 
-from packages.modules.common.abstract_device import clear_all_error_states, process_component_error
-
 try:
     from ...helpermodules import log
     from ..common import modbus
-    from ..common.abstract_device import AbstractDevice
+    from ..common.abstract_device import AbstractDevice, clear_all_error_states, process_component_error
     from . import counter
     from . import inverter
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
-    from modules.common.abstract_device import AbstractDevice
+    from modules.common.abstract_device import AbstractDevice, clear_all_error_states, process_component_error
     import counter
     import inverter
 
@@ -60,6 +58,9 @@ class Device(AbstractDevice):
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 try:
                     component.update()
+                    # Nur Löschen wenn auch kein Fehler vorliegt, sonst springt die Anzeige, wenn generell vor dem
+                    # Auslesen der Status auf dem Broker zurückgesetzt wird.
+                    clear_all_error_states([component])
                 except Exception as e:
                     process_component_error(e, component)
         else:
@@ -110,7 +111,6 @@ def read_legacy(argv: List[str]):
     log.MainLogger().debug('openWB flex-Kit Port: ' + str(port))
     log.MainLogger().debug('openWB flex-Kit ID: ' + str(id))
 
-    clear_all_error_states(dev)
     dev.get_values()
 
 

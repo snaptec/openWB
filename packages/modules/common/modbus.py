@@ -79,14 +79,15 @@ class ModbusClient:
             response = read_register_method(
                 address, number_of_addresses, **kwargs)
             if response.isError():
-                raise response
+                raise FaultState(__name__+" "+str(type(response))+" " +
+                                 str(response), FaultStateLevel.ERROR)
             decoder = BinaryPayloadDecoder.fromRegisters(
                 response.registers, Endian.Big if big_endian else Endian.Little)
             result = [getattr(decoder, t.decoding_method)() for t in types]
             return result if multi_request else result[0]
         except pymodbus.exceptions.ConnectionException as e:
             raise FaultState("TCP-Client konnte keine Verbindung zu " + str(self.address) + ":" + str(self.port) +
-                             "aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " + "Hardware-Anschluss pruefen.",
+                             " aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " + "Hardware-Anschluss pruefen.",
                              FaultStateLevel.ERROR) from e
         except pymodbus.exceptions.ModbusIOException as e:
             raise FaultState(

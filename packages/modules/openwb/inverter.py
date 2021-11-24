@@ -25,7 +25,7 @@ def get_default_config() -> dict:
 
 
 class PvKit(PvKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict) -> None:
         try:
             self.data = {"config": component_config}
             version = self.data["config"]["configuration"]["version"]
@@ -38,7 +38,7 @@ class PvKit(PvKitFlex):
                                  " unbekannt.", FaultStateLevel.ERROR)
             self.data["config"]["configuration"]["id"] = id
 
-            super().__init__(device_id, self.data["config"], tcp_client)
+            super().__init__(device_id, self.data["config"], modbus.ModbusClient("192.168.193.13", 8899))
         except Exception:
             log.MainLogger().exception("Fehler im Modul " +
                                        self.data["config"]["components"]["component0"]["name"])

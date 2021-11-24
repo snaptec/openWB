@@ -37,11 +37,9 @@ class PvKitFlex:
                                 tcp_client)
         self.__tcp_client = tcp_client
         self.__store = get_inverter_value_store(component_config["id"])
-
-    def get_component_info(self) -> ComponentInfo:
-        return ComponentInfo(self.component_config["id"],
-                             self.component_config["type"],
-                             self.component_config["name"])
+        self.component_info = ComponentInfo(self.component_config["id"],
+                                            self.component_config["name"],
+                                            self.component_config["type"])
 
     def update(self) -> None:
         """ liest die Werte des Moduls aus.
