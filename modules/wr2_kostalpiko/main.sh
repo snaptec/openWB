@@ -6,7 +6,6 @@ if [[ "$speichermodul" != "none" ]]; then
 else
 	pvwatttmp=$(curl --connect-timeout 5 -s $pv2ip/api/dxs.json?dxsEntries=67109120'&'dxsEntries=251658753)
 fi
-
 # aktuelle Ausgangsleistung am WR [W]
 pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
 
@@ -14,7 +13,6 @@ if [ $pvwatt > 5 ]
 	then
 	pvwatt=$(echo "$pvwatt*-1" |bc)
 fi
-
 echo $pvwatt
 # zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pv2watt
