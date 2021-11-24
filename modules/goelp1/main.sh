@@ -85,25 +85,26 @@ if [[ $? == "0" ]] ; then
 	#car status 2 Auto lädt
 	#car status 3 Warte auf Fahrzeug
 	#car status 4 Ladung beendet, Fahrzeug verbunden
-	ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
+	# ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
+	plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
 	car=$(echo $output | jq -r '.car')
-	if [[ $car == "1" ]] ; then
-		echo 0 > /var/www/html/openWB/ramdisk/plugstats
-	else
-		echo 1 > /var/www/html/openWB/ramdisk/plugstats
-		if [[ $plugstat == "0" ]] ; then
-			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-			message="$lp1name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+	openwbDebugLog "Debug" 0 "$lp1name: pushbplug: $pushbplug  | car: $car | pushbenachrichtigung: $pushbenachrichtigung | plugstat: $plugstat"
+	if [[ $plugstat == "0" ]] ; then
+		if [[ $pushbplug == "1" ]] && [[ $car != "1" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+			message="$lp2name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 			/var/www/html/openWB/runs/pushover.sh "$message"
-			fi
 		fi
+	fi
+	if [[ $car == "1" ]] ; then
+		echo 0 > /var/www/html/openWB/ramdisk/plugstat
+	else
+		echo 1 > /var/www/html/openWB/ramdisk/plugstat
 	fi
 	if [[ $car == "2" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestat
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
-	openwbDebugLog "Debug" 0 "pushbplug: $pushbplug  | ladestatuslp1: $ladestatuslp1 | pushbenachrichtigung: $pushbenachrichtigung"
     lastseen=$(date +"%d.%m.%Y %H:%M:%S")
 	echo $lastseen >/var/www/html/openWB/ramdisk/goelp1lastcontact
     mosquitto_pub -t openWB/lp/1/lastSeen -r -m "$lastseen"
