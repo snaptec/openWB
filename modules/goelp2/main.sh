@@ -87,7 +87,7 @@ if [[ $? == "0" ]] ; then
 	#car status 4 Ladung beendet, Fahrzeug verbunden
 	plugstat=$(</var/www/html/openWB/ramdisk/plugstats1)
 	car=$(echo $output | jq -r '.car')
-	openwbDebugLog "Debug" 0 "$lp2name: pushbplug: $pushbplug  | car: $car | pushbenachrichtigung: $pushbenachrichtigung | plugstat: $plugstat"
+	# openwbDebugLog "Debug" 0 "$lp2name: pushbplug: $pushbplug  | car: $car | pushbenachrichtigung: $pushbenachrichtigung | plugstat: $plugstat"
 	if [[ $plugstat == "0" ]] ; then
 		if [[ $pushbplug == "1" ]] && [[ $car != "1" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
 			message="$lp2name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
