@@ -113,7 +113,7 @@ class PriceChart {
       .attr("stroke-width", "0.5");
 
     yAxis.select(".domain")
-      .attr("stroke", this.bgColor)
+      .attr("stroke", this.gridColor)
       ;
   }
 }

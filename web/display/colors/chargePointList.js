@@ -75,13 +75,6 @@ class ChargePointList {
     })
     d3.select(".currentPrice").classed("hide", !((wbdata.chargeMode == "0") && wbdata.isEtEnabled))
     d3.select(".currentPrice").text("Preis: " + wbdata.etPrice + " ct/kWh");
-
-    const limitMode = wbdata.chargePoint[wbdata.chargePointToConfig].chargeLimitation;
-    d3.select(".pricechartColumn").classed ("col-12", (limitMode == 0));
-    d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 || limitMode == 1));
-    // d3.select(".pricechartColumn").classed ("col-10", (limitMode == 1));
-    d3.select(".energyResetButton").classed ("hide", (limitMode != 1));
-    
   }
 
   calculateValues() {
@@ -174,12 +167,6 @@ class ChargePointList {
     d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
     d3.select(".priceConfiguration").classed("hide", !((wbdata.chargeMode == "0") && wbdata.isEtEnabled));
     d3.select(".labelMaxPrice").text(wbdata.etMaxPrice + " Cent");
-
-    d3.select(".pricechartColumn").classed ("col-12", (limitMode == 0));
-    d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 ||  limitMode == 1));
-    // d3.select(".pricechartColumn").classed ("col-10", (limitMode == 1));
-    
-
   }
 }
 
