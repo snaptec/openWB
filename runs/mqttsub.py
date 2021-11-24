@@ -895,13 +895,31 @@ def on_message(client, userdata, msg):
                     setTopicCleared = True
                     subprocess.run("/var/www/html/openWB/runs/update.sh")
             if (msg.topic == "openWB/set/system/SendDebug"):
-                if ( 20 <= len(msg.payload.decode("utf-8")) <=1000 ):
-                    f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-                    client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
-                    setTopicCleared = True
-                    subprocess.run("/var/www/html/openWB/runs/senddebuginit.sh")
+                payload = msg.payload.decode("utf-8")
+                if ( 20 <= len(payload) <=1000 ):
+                    try:
+                        json_payload = json_loads(str(payload))
+                    except JSONDecodeError:
+                        file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+                        file.write("payload is not valid JSON, fallback to simple text\n")
+                        file.close()
+                        payload = payload.rpartition('email: ')
+                        json_payload = { "message": payload[0], "email": payload[2] }
+                    finally:
+                        if (re.match(emailallowed, json_payload["email"])):
+                            f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
+                            f.write("%s\n%s\n" % (json_payload["message"], json_payload["email"]))
+                            f.close()
+                            f = open('/var/www/html/openWB/ramdisk/debugemail', 'w')
+                            f.close()
+                            f.write(json_payload["email"] + "\n")
+                        else:
+                            file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+                        subprocess.run("/var/www/html/openWB/runs/senddebuginit.sh")
+                        setTopicCleared = True
+                        client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
+                            file.close()
+                            file.write("payload does not contain a valid email: '%s'\n" % (str(json_payload["email"])))
             if (msg.topic == "openWB/set/system/reloadDisplay"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
                     client.publish("openWB/system/reloadDisplay", msg.payload.decode("utf-8"), qos=0, retain=True)
