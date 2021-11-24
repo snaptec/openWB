@@ -214,11 +214,11 @@ function computeAndSetCurrentForChargePoint() {
 	if (( slaveModeSlowRamping == 1 )); then
 
 		local adjustment=0;
-		if (( `echo "$lldiff > 1.0" | bc` == 1 )); then
+		if (( `echo "$lldiff >= 1.0" | bc` == 1 )); then
 			adjustment=1
-		elif (( `echo "$lldiff < -3.0" | bc` == 1 )); then
+		elif (( `echo "$lldiff <= -3.0" | bc` == 1 )); then
 			adjustment=-3
-		elif (( `echo "$lldiff < -0.5" | bc` == 1 )); then
+		elif (( `echo "$lldiff <= -0.5" | bc` == 1 )); then
 			adjustment=-1
 		fi
 
