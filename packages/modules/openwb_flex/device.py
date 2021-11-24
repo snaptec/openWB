@@ -1,18 +1,18 @@
 from typing import List
 import sys
 
+from packages.modules.common.abstract_device import clear_all_error_states, process_component_error
+
 try:
     from ...helpermodules import log
     from ..common import modbus
     from ..common.abstract_device import AbstractDevice
-    from ..common.module_error import ModuleError, ModuleErrorLevel
     from . import counter
     from . import inverter
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_device import AbstractDevice
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
     import counter
     import inverter
 
@@ -57,17 +57,11 @@ class Device(AbstractDevice):
         log.MainLogger().debug("Start device reading" + str(self._components))
         if self._components:
             for component in self._components:
+                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 try:
                     component.update()
-                except ModuleError as e:
-                    e.store_error(component.get_component_info())
                 except Exception as e:
-                    ModuleError(
-                        str(type(e)) + " " + str(e),
-                        ModuleErrorLevel.ERROR).store_error(
-                        component.get_component_info())
-                else:
-                    ModuleError("Kein Fehler.", ModuleErrorLevel.NO_ERROR).store_error(component.get_component_info())
+                    process_component_error(e, component)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
@@ -116,6 +110,7 @@ def read_legacy(argv: List[str]):
     log.MainLogger().debug('openWB flex-Kit Port: ' + str(port))
     log.MainLogger().debug('openWB flex-Kit ID: ' + str(id))
 
+    clear_all_error_states(dev)
     dev.get_values()
 
 

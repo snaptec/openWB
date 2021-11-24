@@ -9,7 +9,7 @@ import time
 import typing
 
 try:
-    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ..common.fault_state import FaultState, FaultStateLevel
     from ...helpermodules import compatibility
     from ...helpermodules import log
     from ...helpermodules import pub
@@ -18,11 +18,11 @@ except (ImportError, ValueError, SystemError):
     from helpermodules import compatibility
     from helpermodules import log
     from helpermodules import pub
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+    from modules.common.fault_state import FaultState, FaultStateLevel
 
 
 def process_error(e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
+    raise FaultState(__name__+" "+str(type(e))+" "+str(e), FaultStateLevel.ERROR) from e
 
 
 class SimCountFactory:
@@ -44,7 +44,7 @@ def get_topic(prefix: str) -> str:
         elif prefix == "speicher":
             topic = "housebattery"
         else:
-            raise ModuleError("Fehler im Modul simcount: Unbekannter Präfix", ModuleErrorLevel.ERROR)
+            raise FaultState("Fehler im Modul simcount: Unbekannter Präfix", FaultStateLevel.ERROR)
         return topic
     except Exception as e:
         process_error(e)

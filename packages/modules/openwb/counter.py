@@ -4,13 +4,13 @@
 try:
     from ..common import modbus
     from ..common.abstract_component import ComponentUpdater
-    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ..common.fault_state import FaultState, FaultStateLevel
     from ..openwb_flex.counter import EvuKitFlex
     from ..common.store import get_counter_value_store
 except (ImportError, ValueError, SystemError):
     from modules.common import modbus
     from modules.common.abstract_component import ComponentUpdater
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+    from modules.common.fault_state import FaultState, FaultStateLevel
     from modules.openwb_flex.counter import EvuKitFlex
     from modules.common.store import get_counter_value_store
 
@@ -46,7 +46,7 @@ class EvuKit(EvuKitFlex):
         elif version == 2:
             id = 115
         else:
-            raise ModuleError("Version " + str(version) + " unbekannt.", ModuleErrorLevel.ERROR)
+            raise FaultState("Version " + str(version) + " unbekannt.", FaultStateLevel.ERROR)
         self.data["config"]["configuration"]["id"] = id
 
         super().__init__(device_id, self.data["config"], tcp_client)

@@ -3,12 +3,12 @@
 try:
     from ...helpermodules import log
     from ..common import modbus
-    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ..common.fault_state import FaultState, FaultStateLevel
     from ..openwb_flex.inverter import PvKitFlex
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+    from modules.common.fault_state import FaultState, FaultStateLevel
     from modules.openwb_flex.inverter import PvKitFlex
 
 
@@ -34,8 +34,8 @@ class PvKit(PvKitFlex):
             elif version == 2:
                 id = 116
             else:
-                raise ModuleError("Version "+str(version) +
-                                  " unbekannt.", ModuleErrorLevel.ERROR)
+                raise FaultState("Version "+str(version) +
+                                 " unbekannt.", FaultStateLevel.ERROR)
             self.data["config"]["configuration"]["id"] = id
 
             super().__init__(device_id, self.data["config"], tcp_client)

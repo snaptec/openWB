@@ -7,13 +7,13 @@ try:
     from ..common import modbus
     from ..common.abstract_component import AbstractCounter
     from ..common.component_state import CounterState
-    from ..common.module_error import ModuleError
+    from ..common.fault_state import FaultState
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractCounter
     from modules.common.component_state import CounterState
-    from modules.common.module_error import ModuleError
+    from modules.common.fault_state import FaultState
 
 
 def get_default_config() -> dict:
@@ -72,7 +72,7 @@ class AlphaEssCounter(AbstractCounter):
                 frequency=50
             )
             return counter_state
-        except ModuleError:
+        except FaultState:
             raise
         except Exception as e:
             self.process_error(e)
@@ -103,7 +103,7 @@ class AlphaEssCounter(AbstractCounter):
                 frequency=50
             )
             return counter_state
-        except ModuleError:
+        except FaultState:
             raise
         except Exception as e:
             self.process_error(e)

@@ -3,14 +3,14 @@ try:
     from ...helpermodules import log
     from ..common import modbus
     from ..common.component_state import InverterState
-    from ..common.module_error import ComponentInfo
+    from ..common.fault_state import ComponentInfo
     from ..common.store import get_inverter_value_store
     from ..openwb_flex.versions import kit_version_factory
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.component_state import InverterState
-    from modules.common.module_error import ComponentInfo
+    from modules.common.fault_state import ComponentInfo
     from modules.common.store import get_inverter_value_store
     from modules.openwb_flex.versions import kit_version_factory
 

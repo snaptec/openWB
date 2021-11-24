@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from typing import Callable, Generic, TypeVar, Union
 
 try:
-    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ..common.fault_state import FaultState, FaultStateLevel
     from ...helpermodules import compatibility
     from ...helpermodules import log
     from ...helpermodules import pub
@@ -12,12 +12,12 @@ except (ImportError, ValueError, SystemError):
     from helpermodules import compatibility
     from helpermodules import log
     from helpermodules import pub
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+    from modules.common.fault_state import FaultState, FaultStateLevel
     from .component_state import BatState, CounterState, InverterState
 
 
 def process_error(e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
+    raise FaultState(__name__+" "+str(type(e))+" "+str(e), FaultStateLevel.ERROR) from e
 
 
 def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
@@ -145,7 +145,7 @@ class InverterValueStoreRamdisk(ValueStore[InverterState]):
             elif self.num == 2:
                 filename_extension = "2"
             else:
-                raise ModuleError("Unbekannte PV-Nummer "+str(self.num), ModuleErrorLevel.ERROR)
+                raise FaultState("Unbekannte PV-Nummer "+str(self.num), FaultStateLevel.ERROR)
             power = write_to_file("/pv"+filename_extension+"watt", inverter_state.power, 0)
             write_to_file("/pv"+filename_extension+"kwh", inverter_state.counter, 3)
             write_to_file("/pv"+filename_extension+"kwhk", inverter_state.counter/1000, 3)

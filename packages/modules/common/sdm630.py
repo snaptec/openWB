@@ -3,11 +3,11 @@ from typing import List, Tuple
 
 try:
     from ..common import modbus
-    from ..common.module_error import ModuleError, ModuleErrorLevel
+    from ..common.fault_state import FaultState, FaultStateLevel
 except (ImportError, ValueError, SystemError):
     # for 1.9 compatibility
     from modules.common import modbus
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+    from modules.common.fault_state import FaultState, FaultStateLevel
 
 
 class Sdm630:
@@ -16,10 +16,10 @@ class Sdm630:
         self.id = modbus_id
 
     def __process_error(self, e):
-        if isinstance(e, ModuleError):
+        if isinstance(e, FaultState):
             raise
         else:
-            raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
+            raise FaultState(__name__+" "+str(type(e))+" "+str(e), FaultStateLevel.ERROR) from e
 
     def get_voltage(self) -> List[float]:
         try:

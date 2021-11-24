@@ -12,7 +12,7 @@ except (ImportError, ValueError, SystemError):
     from helpermodules import pub
 
 
-class ModuleErrorLevel(Enum):
+class FaultStateLevel(Enum):
     NO_ERROR = 0
     WARNING = 1
     ERROR = 2
@@ -25,10 +25,10 @@ class ComponentInfo:
         self.type = type
 
 
-class ModuleError(Exception):
+class FaultState(Exception):
     type_name_mapping = {"bat": "houseBattery", "counter": "evu", "inverter": "pv"}
 
-    def __init__(self, fault_str: str, fault_state: ModuleErrorLevel) -> None:
+    def __init__(self, fault_str: str, fault_state: FaultStateLevel) -> None:
         self.fault_str = fault_str
         self.fault_state = fault_state
 
@@ -54,4 +54,4 @@ class ModuleError(Exception):
                     "openWB/set/" + component_info.type + "/" + str(component_info.id) +
                     "/get/fault_state", self.fault_state.value)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul module_error")
+            log.MainLogger().exception("Fehler im Modul fault_state")

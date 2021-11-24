@@ -5,13 +5,13 @@ try:
     from ..common import modbus
     from ..common.abstract_component import AbstractInverter
     from ..common.component_state import InverterState
-    from ..common.module_error import ModuleError
+    from ..common.fault_state import FaultState
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
     from modules.common.abstract_component import AbstractInverter
     from modules.common.component_state import InverterState
-    from modules.common.module_error import ModuleError
+    from modules.common.fault_state import FaultState
 
 
 def get_default_config() -> dict:
@@ -65,7 +65,7 @@ class AlphaEssInverter(AbstractInverter):
             power = sum(powers) * -1
             log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: " + str(powers))
             return power
-        except ModuleError:
+        except FaultState:
             raise
         except Exception as e:
             self.process_error(e)
