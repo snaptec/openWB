@@ -6,7 +6,7 @@ sleep 60
 debugFile=/var/www/html/openWB/ramdisk/debug.log
 cat /var/www/html/openWB/ramdisk/debuguser > $debugFile
 debugemail=$(</var/www/html/openWB/ramdisk/debugemail)
-echo "\n############################ system ###############" >> $debugFile
+echo "############################ system ###############" >> $debugFile
 uptime >> $debugFile
 free >> $debugFile
 echo "############################ storage ###############" >> $debugFile
