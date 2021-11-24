@@ -922,7 +922,7 @@ def on_message(client, userdata, msg):
                             f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
                             f.write(json_payload["message"])
                             f.close()
-                            f = open('/var/www/html/openWB/ramdisk/debugmail', 'w')
+                            f = open('/var/www/html/openWB/ramdisk/debugemail', 'w')
                             f.write(json_payload["email"])
                             f.close()
                         else:
