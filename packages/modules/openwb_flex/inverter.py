@@ -43,7 +43,7 @@ class PvKitFlex:
                              self.component_config["type"],
                              self.component_config["name"])
 
-    def get_values(self) -> None:
+    def update(self) -> None:
         """ liest die Werte des Moduls aus.
         """
         try:

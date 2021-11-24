@@ -26,6 +26,8 @@ class ComponentInfo:
 
 
 class ModuleError(Exception):
+    type_name_mapping = {"bat": "houseBattery", "counter": "evu", "inverter": "pv"}
+
     def __init__(self, fault_str: str, fault_state: ModuleErrorLevel) -> None:
         self.fault_str = fault_str
         self.fault_state = fault_state
@@ -38,13 +40,8 @@ class ModuleError(Exception):
                                    traceback.format_exc())
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
-                if component_info.type == "counter":
-                    component_info.type = "evu"
-                elif component_info.type == "bat":
-                    component_info.type = "houseBattery"
-                elif component_info.type == "inverter":
-                    component_info.type = "pv"
-                prefix = "openWB/set/" + component_info.type + "/"
+                type = self.type_name_mapping.get(component_info.type, component_info.type)
+                prefix = "openWB/set/" + type + "/"
                 if component_info.id is not None:
                     prefix += str(component_info.id) + "/"
                 pub.pub_single(prefix + "faultStr", self.fault_str)

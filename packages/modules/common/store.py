@@ -60,7 +60,7 @@ T = TypeVar("T")
 
 class ValueStore(Generic[T]):
     @abstractmethod
-    def set(self, *kwargs) -> None:
+    def set(self, state: T) -> None:
         pass
 
 

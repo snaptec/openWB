@@ -42,7 +42,7 @@ class EvuKit(EvuKitFlex):
         if version == 0:
             id = 5
         elif version == 1:
-            id = 0x02
+            id = 2
         elif version == 2:
             id = 115
         else:

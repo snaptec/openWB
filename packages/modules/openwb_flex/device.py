@@ -58,7 +58,7 @@ class Device(AbstractDevice):
         if self._components:
             for component in self._components:
                 try:
-                    component.get_values()
+                    component.update()
                 except ModuleError as e:
                     e.store_error(component.get_component_info())
                 except Exception as e:

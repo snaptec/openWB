@@ -11,9 +11,9 @@ class BatState:
 
 class CounterState:
     def __init__(self,
-                 imported: float,
-                 exported: float,
-                 power_all: float,
+                 imported: float = 0,
+                 exported: float = 0,
+                 power_all: float = 0,
                  voltages: List[float] = None,
                  currents: List[float] = None,
                  powers: List[float] = None,
@@ -42,8 +42,10 @@ class InverterState:
         self,
         counter: float,
         power: float,
-        currents: List[float] = [0] * 3,
+        currents: List[float] = None,
     ):
+        if currents is None:
+            currents = [0]*3
         self.currents = currents
         self.power = power
         self.counter = counter
