@@ -920,10 +920,10 @@ def on_message(client, userdata, msg):
                     finally:
                         if (re.match(emailallowed, json_payload["email"])):
                             f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
-                            f.write(json_payload["message"])
+                            f.write("%s\n%s\n" % (json_payload["message"], json_payload["email"]))
                             f.close()
-                            f = open('/var/www/html/openWB/ramdisk/debugmail', 'w')
-                            f.write(json_payload["email"])
+                            f = open('/var/www/html/openWB/ramdisk/debugemail', 'w')
+                            f.write(json_payload["email"] + "\n")
                             f.close()
                         else:
                             file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
