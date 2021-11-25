@@ -2,15 +2,9 @@
 
 from typing import List, Tuple
 
-try:
-    from ..common import modbus
-    from ..common.modbus import ModbusDataType
-    from ..common.fault_state import FaultState
-except (ImportError, ValueError, SystemError):
-    # for 1.9 compatibility
-    from modules.common import modbus
-    from modules.common.modbus import ModbusDataType
-    from modules.common.fault_state import FaultState
+from modules.common import modbus
+from modules.common.fault_state import FaultState
+from modules.common.modbus import ModbusDataType
 
 
 class Lovato:

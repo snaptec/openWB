@@ -1,9 +1,6 @@
 from typing import List
 
-try:
-    from ..common.fault_state import ComponentInfo, FaultState
-except (ImportError, ValueError, SystemError):
-    from modules.common.fault_state import ComponentInfo, FaultState
+from modules.common.fault_state import ComponentInfo, FaultState
 
 
 class BatState:

@@ -1,14 +1,9 @@
 from typing import Type, Union
-try:
-    from ..common import lovato
-    from ..common import mpm3pm
-    from ..common import sdm630
-    from ..common.fault_state import FaultState
-except (ImportError, ValueError, SystemError):
-    from modules.common import lovato
-    from modules.common import mpm3pm
-    from modules.common import sdm630
-    from modules.common.fault_state import FaultState
+
+from modules.common import lovato
+from modules.common import mpm3pm
+from modules.common import sdm630
+from modules.common.fault_state import FaultState
 
 
 def kit_version_factory(version: int) -> Type[Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]]:

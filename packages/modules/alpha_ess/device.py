@@ -4,22 +4,13 @@
 import sys
 from typing import List, Union
 
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.abstract_device import AbstractDevice
-    from ..common.component_state import SingleComponentUpdateContext
-    from . import bat
-    from . import counter
-    from . import inverter
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.abstract_device import AbstractDevice
-    from modules.common.component_state import SingleComponentUpdateContext
-    from modules.alpha_ess import bat
-    from modules.alpha_ess import counter
-    from modules.alpha_ess import inverter
+from helpermodules import log
+from modules.common import modbus
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_state import SingleComponentUpdateContext
+from modules.alpha_ess import bat
+from modules.alpha_ess import counter
+from modules.alpha_ess import inverter
 
 
 def get_default_config() -> dict:

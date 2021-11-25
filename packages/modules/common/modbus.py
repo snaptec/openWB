@@ -12,12 +12,8 @@ from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 
-try:
-    from ...helpermodules import log
-    from ..common.fault_state import FaultState
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common.fault_state import FaultState
+from helpermodules import log
+from modules.common.fault_state import FaultState
 
 
 class ModbusDataType(Enum):

@@ -2,15 +2,9 @@ from enum import Enum
 import traceback
 from typing import Optional
 
-try:
-    from ...helpermodules import compatibility
-    from ...helpermodules import log
-    from ...helpermodules import pub
-except (ImportError, ValueError, SystemError):
-    # for 1.9 compatibility
-    from helpermodules import compatibility
-    from helpermodules import log
-    from helpermodules import pub
+from helpermodules import compatibility
+from helpermodules import log
+from helpermodules import pub
 
 
 class FaultStateLevel(Enum):

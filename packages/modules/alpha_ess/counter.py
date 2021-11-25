@@ -2,20 +2,12 @@
 import time
 from typing import Callable
 
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.modbus import ModbusDataType
-    from ..common.component_state import CounterState
-    from ..common.fault_state import ComponentInfo
-    from ..common.store import get_counter_value_store
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.modbus import ModbusDataType
-    from modules.common.component_state import CounterState
-    from modules.common.fault_state import ComponentInfo
-    from modules.common.store import get_counter_value_store
+from helpermodules import log
+from modules.common import modbus
+from modules.common.component_state import CounterState
+from modules.common.fault_state import ComponentInfo
+from modules.common.modbus import ModbusDataType
+from modules.common.store import get_counter_value_store
 
 
 def get_default_config() -> dict:

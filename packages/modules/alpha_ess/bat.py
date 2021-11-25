@@ -1,22 +1,13 @@
 #!/usr/bin/env python3
 import time
 
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common import simcount
-    from ..common.modbus import ModbusDataType
-    from ..common.store import get_bat_value_store
-    from ..common.component_state import BatState
-    from ..common.fault_state import ComponentInfo
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.modbus import ModbusDataType
-    from modules.common.component_state import BatState
-    from modules.common.fault_state import ComponentInfo
-    from modules.common import simcount
-    from modules.common.store import get_bat_value_store
+from helpermodules import log
+from modules.common import modbus
+from modules.common import simcount
+from modules.common.component_state import BatState
+from modules.common.modbus import ModbusDataType
+from modules.common.fault_state import ComponentInfo
+from modules.common.store import get_bat_value_store
 
 
 def get_default_config() -> dict:

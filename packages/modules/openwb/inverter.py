@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
 
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.fault_state import FaultState
-    from ..openwb_flex.inverter import PvKitFlex
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.fault_state import FaultState
-    from modules.openwb_flex.inverter import PvKitFlex
+from helpermodules import log
+from modules.common import modbus
+from modules.common.fault_state import FaultState
+from modules.openwb_flex.inverter import PvKitFlex
 
 
 def get_default_config() -> dict:

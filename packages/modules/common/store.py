@@ -2,18 +2,11 @@ from abc import abstractmethod
 from collections.abc import Iterable
 from typing import Callable, Generic, TypeVar, Union
 
-try:
-    from ..common.fault_state import FaultState
-    from ...helpermodules import compatibility
-    from ...helpermodules import log
-    from ...helpermodules import pub
-    from component_state import BatState, CounterState, InverterState
-except (ImportError, ValueError, SystemError):
-    from helpermodules import compatibility
-    from helpermodules import log
-    from helpermodules import pub
-    from modules.common.fault_state import FaultState
-    from .component_state import BatState, CounterState, InverterState
+from helpermodules import compatibility
+from helpermodules import log
+from helpermodules import pub
+from modules.common.component_state import BatState, CounterState, InverterState
+from modules.common.fault_state import FaultState
 
 
 def process_error(e):

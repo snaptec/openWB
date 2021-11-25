@@ -1,20 +1,12 @@
 #!/usr/bin/env python3
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.modbus import ModbusDataType
-    from ..common.component_state import InverterState
-    from ..common import simcount
-    from ..common.fault_state import ComponentInfo
-    from ..common.store import get_inverter_value_store
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.modbus import ModbusDataType
-    from modules.common.component_state import InverterState
-    from modules.common.fault_state import ComponentInfo
-    from modules.common import simcount
-    from modules.common.store import get_inverter_value_store
+
+from helpermodules import log
+from modules.common import modbus
+from modules.common import simcount
+from modules.common.component_state import InverterState
+from modules.common.fault_state import ComponentInfo
+from modules.common.modbus import ModbusDataType
+from modules.common.store import get_inverter_value_store
 
 
 def get_default_config() -> dict:
