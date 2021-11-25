@@ -3,12 +3,12 @@ from typing import List, Tuple
 try:
     from ..common import modbus
     from ..common.modbus import ModbusDataType
-    from ..common.fault_state import FaultState, FaultStateLevel
+    from ..common.fault_state import FaultState
 except (ImportError, ValueError, SystemError):
     # for 1.9 compatibility
     from modules.common import modbus
     from modules.common.modbus import ModbusDataType
-    from modules.common.fault_state import FaultState, FaultStateLevel
+    from modules.common.fault_state import FaultState
 
 
 class Mpm3pm:
@@ -20,8 +20,7 @@ class Mpm3pm:
         if isinstance(e, FaultState):
             raise
         else:
-            raise FaultState(__name__+" "+str(type(e))+" " +
-                             str(e), FaultStateLevel.ERROR) from e
+            raise FaultState.error(__name__+" "+str(type(e))+" " + str(e)) from e
 
     def get_voltage(self) -> List[float]:
         try:

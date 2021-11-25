@@ -1,5 +1,6 @@
 from enum import Enum
 import traceback
+from typing import Optional
 
 try:
     from ...helpermodules import compatibility
@@ -56,3 +57,23 @@ class FaultState(Exception):
                     "/get/fault_state", self.fault_state.value)
         except Exception:
             log.MainLogger().exception("Fehler im Modul fault_state")
+
+    @staticmethod
+    def error(message: str) -> "FaultState":
+        return FaultState(message, FaultStateLevel.ERROR)
+
+    @staticmethod
+    def warning(message: str) -> "FaultState":
+        return FaultState(message, FaultStateLevel.WARNING)
+
+    @staticmethod
+    def no_error() -> "FaultState":
+        return FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR)
+
+    @staticmethod
+    def from_exception(exception: Optional[Exception], level: FaultStateLevel = FaultStateLevel.ERROR) -> "FaultState":
+        if exception is None:
+            return FaultState.no_error()
+        if isinstance(exception, FaultState):
+            return exception
+        return FaultState(str(type(exception)) + " " + str(exception), level)

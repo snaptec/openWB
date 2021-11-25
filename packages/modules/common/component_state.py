@@ -1,9 +1,9 @@
 from typing import List
 
 try:
-    from ..common.fault_state import ComponentInfo, FaultState, FaultStateLevel
+    from ..common.fault_state import ComponentInfo, FaultState
 except (ImportError, ValueError, SystemError):
-    from modules.common.fault_state import ComponentInfo, FaultState, FaultStateLevel
+    from modules.common.fault_state import ComponentInfo, FaultState
 
 
 class BatState:
@@ -72,13 +72,8 @@ class SingleComponentUpdateContext:
         return None
 
     def __exit__(self, exception_type, exception, exception_traceback) -> bool:
-        if exception is None:
-            FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR).store_error(self.__component_info)
-        else:
-            if exception_type is FaultState:
-                exception.store_error(self.__component_info)
-            else:
-                FaultState(exception_type + " " + exception, FaultStateLevel.ERROR).store_error(self.__component_info)
+        fault_state = FaultState.from_exception(exception)
+        fault_state.store_error(self.__component_info)
         return True
 
 
@@ -98,13 +93,7 @@ class MultiComponentUpdateContext:
         return None
 
     def __exit__(self, exception_type, exception, exception_traceback) -> bool:
+        fault_state = FaultState.from_exception(exception)
         for component in self.__device_components:
-            if exception is None:
-                FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR).store_error(component.component_info)
-            else:
-                if exception_type is FaultState:
-                    exception.store_error(component.component_info)
-                else:
-                    FaultState(exception_type + " " + exception,
-                               FaultStateLevel.ERROR).store_error(component.component_info)
+            fault_state.store_error(component.component_info)
         return True

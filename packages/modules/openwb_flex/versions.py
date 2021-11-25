@@ -3,12 +3,12 @@ try:
     from ..common import lovato
     from ..common import mpm3pm
     from ..common import sdm630
-    from ..common.fault_state import FaultState, FaultStateLevel
+    from ..common.fault_state import FaultState
 except (ImportError, ValueError, SystemError):
     from modules.common import lovato
     from modules.common import mpm3pm
     from modules.common import sdm630
-    from modules.common.fault_state import FaultState, FaultStateLevel
+    from modules.common.fault_state import FaultState
 
 
 def kit_version_factory(version: int) -> Type[Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm630.Sdm630]]:
@@ -19,5 +19,5 @@ def kit_version_factory(version: int) -> Type[Union[mpm3pm.Mpm3pm, lovato.Lovato
     elif version == 2:
         return sdm630.Sdm630
     else:
-        raise FaultState("Version "+str(version) +
-                         " unbekannt.", FaultStateLevel.ERROR)
+        raise FaultState.error("Version "+str(version) +
+                               " unbekannt.")
