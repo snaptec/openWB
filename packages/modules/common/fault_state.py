@@ -34,10 +34,11 @@ class FaultState(Exception):
 
     def store_error(self, component_info: ComponentInfo) -> None:
         try:
-            log.MainLogger().debug(component_info.name + ": FaultState " +
-                                   str(self.fault_state) + ", FaultStr " +
-                                   self.fault_str + ", Traceback: \n" +
-                                   traceback.format_exc())
+            if self.fault_state is not FaultStateLevel.NO_ERROR:
+                log.MainLogger().error(component_info.name + ": FaultState " +
+                                       str(self.fault_state) + ", FaultStr " +
+                                       self.fault_str + ", Traceback: \n" +
+                                       traceback.format_exc())
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
                 type = self.type_name_mapping.get(component_info.type, component_info.type)

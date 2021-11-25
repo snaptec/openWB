@@ -7,14 +7,16 @@ from typing import List, Union
 try:
     from ...helpermodules import log
     from ..common import modbus
-    from ..common.abstract_device import AbstractDevice, clear_all_error_states, process_component_error
+    from ..common.abstract_device import AbstractDevice
+    from ..common.component_state import SingleComponentUpdateContext
     from . import bat
     from . import counter
     from . import inverter
 except (ImportError, ValueError, SystemError):
     from helpermodules import log
     from modules.common import modbus
-    from modules.common.abstract_device import AbstractDevice, clear_all_error_states, process_component_error
+    from modules.common.abstract_device import AbstractDevice
+    from modules.common.component_state import SingleComponentUpdateContext
     from modules.alpha_ess import bat
     from modules.alpha_ess import counter
     from modules.alpha_ess import inverter
@@ -55,13 +57,8 @@ class Device(AbstractDevice):
         if self._components:
             for component in self._components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                try:
+                with SingleComponentUpdateContext(component.component_info):
                     component.update()
-                    # Nur Löschen wenn auch kein Fehler vorliegt, sonst springt die Anzeige, wenn generell vor dem
-                    # Auslesen der Status auf dem Broker zurückgesetzt wird.
-                    clear_all_error_states([component])
-                except Exception as e:
-                    process_component_error(e, component)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
