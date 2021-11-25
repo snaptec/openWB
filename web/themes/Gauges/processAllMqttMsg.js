@@ -1030,7 +1030,7 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		} else {
 			infoElement.addClass('hide');
 		}
-		var visibleRows = $('[data-dev]:visible');  // show/hide complete block depending on visible rows within
+		var visibleRows = $('.smartHome [data-dev]').not('.hide');  // show/hide complete block depending on visible rows within
 		if ( visibleRows.length > 0 ) {
 			$('.smartHome').removeClass('hide');
 		} else {
