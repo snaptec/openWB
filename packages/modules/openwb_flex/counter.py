@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-import sys
-
 try:
     from ...helpermodules import log
-    from ..common import connect_tcp
+    from ..common import modbus
     from ..common.abstract_component import AbstractCounter
     from ..common.component_state import CounterState
-except:
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+except (ImportError, ValueError, SystemError):
     from helpermodules import log
-    from modules.common import connect_tcp
+    from modules.common import modbus
     from modules.common.abstract_component import AbstractCounter
     from modules.common.component_state import CounterState
 
@@ -29,9 +25,10 @@ def get_default_config() -> dict:
 
 
 class EvuKitFlex(AbstractCounter):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         try:
-            client = self.kit_version_factory(component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client)
+            client = self.kit_version_factory(
+                component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client)
             super().__init__(device_id, component_config, client)
             self.tcp_client = tcp_client
         except Exception as e:
@@ -41,25 +38,33 @@ class EvuKitFlex(AbstractCounter):
         """ liest die Werte des Moduls aus.
         """
         log.MainLogger().debug("Start kit reading")
-        voltages = self.client.get_voltage()
-        power_per_phase, power_all = self.client.get_power()
-        frequency = self.client.get_frequency()
-        power_factors = self.client.get_power_factor()
+        try:
+            voltages = self.client.get_voltage()
+            power_per_phase, power_all = self.client.get_power()
+            frequency = self.client.get_frequency()
+            power_factors = self.client.get_power_factor()
 
-        version = self.data["config"]["configuration"]["version"]
+            version = self.data["config"]["configuration"]["version"]
+            if version == 0:
+                imported = self.client.get_imported()
+                exported = self.client.get_exported()
+            else:
+                currents = map(abs, self.client.get_current())
+        finally:
+            self.tcp_client.close_connection()
+
         if version == 0:
             currents = [(power_per_phase[i]/voltages[i]) for i in range(3)]
-            imported = self.client.get_imported()
-            exported = self.client.get_exported()
         else:
             if version == 1:
                 power_all = sum(power_per_phase)
-            currents = self.client.get_current()
-            currents = [abs(currents[i]) for i in range(3)]
-            topic_str = "openWB/set/system/device/" + str(self.device_id)+"/component/"+str(self.data["config"]["id"])+"/"
-            imported, exported = self.sim_count.sim_count(power_all, topic=topic_str, data=self.data["simulation"], prefix="bezug")
+            topic_str = "openWB/set/system/device/" + \
+                str(self.device_id)+"/component/" + \
+                str(self.data["config"]["id"])+"/"
+            imported, exported = self.sim_count.sim_count(
+                power_all, topic=topic_str, data=self.data["simulation"], prefix="bezug")
+
         log.MainLogger().debug("EVU-Kit Leistung[W]: "+str(power_all))
-        self.tcp_client.close_connection()
         counter_state = CounterState(
             voltages=voltages,
             currents=currents,

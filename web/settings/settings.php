@@ -144,7 +144,8 @@
 								<label for="etprovider" class="col-md-4 col-form-label">Anbieter</label>
 								<div class="col">
 									<select name="etprovider" id="etprovider" class="form-control">
-										<option <?php if($etproviderold == "et_awattar") echo "selected" ?> value="et_awattar">aWATTar</option>
+										<option <?php if($etproviderold == "et_awattar") echo "selected" ?> value="et_awattar">aWATTar Hourly</option>
+										<option <?php if($etproviderold == "et_awattarcap") echo "selected" ?> value="et_awattarcap">aWATTar Hourly-CAP</option>
 										<option <?php if($etproviderold == "et_tibber") echo "selected" ?> value="et_tibber">Tibber</option>
 									</select>
 								</div>
