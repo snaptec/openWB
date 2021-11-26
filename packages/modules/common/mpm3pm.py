@@ -26,7 +26,7 @@ class Mpm3pm:
 
     def get_imported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0002, ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0002, ModbusDataType.INT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 
@@ -35,14 +35,14 @@ class Mpm3pm:
             power_per_phase = [val / 100 for val in self.client.read_input_registers(
                 0x14, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
             power_all = [val / 100 for val in self.client.read_input_registers(
-                0x26, ModbusDataType.FLOAT_32, unit=self.id)]
+                0x26, ModbusDataType.INT_32, unit=self.id)]
             return power_per_phase, power_all
         except Exception as e:
             self.__process_error(e)
 
     def get_exported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0004, ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0004, ModbusDataType.INT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 

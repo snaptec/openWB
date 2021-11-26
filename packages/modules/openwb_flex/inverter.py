@@ -5,7 +5,7 @@ from modules.common import modbus
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
-from modules.openwb_flex.versions import kit_version_factory
+from modules.openwb_flex.versions import kit_counter_inverter_version_factory
 
 
 def get_default_config() -> dict:
@@ -24,7 +24,7 @@ def get_default_config() -> dict:
 class PvKitFlex:
     def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         self.component_config = component_config
-        factory = kit_version_factory(
+        factory = kit_counter_inverter_version_factory(
             component_config["configuration"]["version"])
         self.__client = factory(component_config["configuration"]["id"],
                                 tcp_client)
