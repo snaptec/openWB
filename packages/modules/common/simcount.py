@@ -8,23 +8,14 @@ import sys
 import time
 import typing
 
-import paho.mqtt.subscribe as subscribe
-
-try:
-    from ..common.module_error import ModuleError, ModuleErrorLevel
-    from ...helpermodules import compatibility
-    from ...helpermodules import log
-    from ...helpermodules import pub
-except (ImportError, ValueError):
-    # for 1.9 compatibility
-    from helpermodules import compatibility
-    from helpermodules import log
-    from helpermodules import pub
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+from helpermodules import compatibility
+from helpermodules import log
+from helpermodules import pub
+from modules.common.fault_state import FaultState
 
 
 def process_error(e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
+    raise FaultState.error(__name__+" "+str(type(e))+" "+str(e)) from e
 
 
 class SimCountFactory:
@@ -34,6 +25,38 @@ class SimCountFactory:
             return SimCountLegacy if ramdisk else SimCount
         except Exception as e:
             process_error(e)
+
+
+def get_topic(prefix: str) -> str:
+    """ ermittelt das zum Präfix gehörende Topic."""
+    try:
+        if prefix == "bezug":
+            topic = "evu"
+        elif prefix == "pv":
+            topic = prefix
+        elif prefix == "speicher":
+            topic = "housebattery"
+        else:
+            raise FaultState.error("Fehler im Modul simcount: Unbekannter Präfix")
+        return topic
+    except Exception as e:
+        process_error(e)
+
+
+def read_ramdisk_file(name: str):
+    try:
+        with open('/var/www/html/openWB/ramdisk/' + name, 'r') as f:
+            return f.read()
+    except Exception as e:
+        process_error(e)
+
+
+def write_ramdisk_file(name: str, value):
+    try:
+        with open('/var/www/html/openWB/ramdisk/' + name, 'w') as f:
+            f.write(str(value))
+    except Exception as e:
+        process_error(e)
 
 
 class SimCountLegacy:

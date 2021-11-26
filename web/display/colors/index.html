@@ -328,7 +328,7 @@
                                             min="2" max="100" step="2" value="2"
                                             data-topicprefix="openWB/config/get/sofort/">
                                     </div>
-                                    <div class="col-12 d-flex justify-content-end">
+                                    <!--  <div class="col-4 d-flex justify-content-end">
                                         <input class="btn btn-warning btn-lg modal-button resetEnergyToCharge"
                                             type="button" id="lp/1/resetEnergyToCharge"
                                             value="Energiemenge zurücksetzen"
@@ -374,12 +374,18 @@
                     </div>
                     <!-- price based charging configuration-->
                     <div class="priceConfiguration hide">
-                        <figure id="priceChart"></figure>
-                        <div class="form-row vaRow">
-                            <div class="col-4">
-                                <label for="maxPrice" class="modalLabel col-form-label">Maximal: </label>
+                        <div class="row p-0 m-0 ">
+                            <div class="col"></div>
+                            <div class="col-12 pricechartColumn p-0 m-0">
+                                <figure id="priceChart"></figure>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="form-row vaRow p-0 m-0">
+                            <div class="col-4 m-0 p-0">
+                                <label for="maxPrice" class="modalLabel col-form-label p-0 m-0 ">Maximal: </label>
                                 <label for="maxPrice"
-                                    class="modalLabel labelMaxPrice col-form-label valueLabel pull-right"
+                                    class="modalLabel labelMaxPrice col-form-label valueLabel pull-right p-0 m-0"
                                     data-suffix="A"></label>
                             </div>
                             <div class="col">
@@ -388,11 +394,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
 
+                    <div class="row">
+                        <div class="col pt-1 px-3 energyResetButton hide">
+                            <input class="btn btn-warning btn-lg modal-button resetEnergyToCharge" type="button"
+                                id="lp/1/resetEnergyToCharge" value="Energiemenge zurücksetzen"
+                                data-topicprefix="openWB/config/get/sofort/">
+                        </div>
                         <div class="col pt-1 px-3">
-                            <button type="button" class="btn btn-info btn-block btn-lg modal-button" data-dismiss="modal"><i
-                                    class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
+                            <button type="button" class="btn btn-info btn-block btn-lg modal-button"
+                                data-dismiss="modal"><i class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
                         </div>
                     </div>
                 </div> <!-- /modal body -->
@@ -661,7 +672,7 @@
                         <div id="socSetButton"></div>
                         <div id="socLoadButton"></div>
                     </div>
-                      
+
                     <!-- priority buttons -->
                     <div id='priorityModeBtns' class="hide">
                         <hr>
