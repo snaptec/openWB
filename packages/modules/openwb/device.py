@@ -1,18 +1,11 @@
 from typing import List, Union
 import sys
 
-try:
-    from ..common.abstract_device import AbstractDevice
-    from ..common.component_state import SingleComponentUpdateContext
-    from ...helpermodules import log
-    from . import counter
-    from . import inverter
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common.abstract_device import AbstractDevice
-    from modules.common.component_state import SingleComponentUpdateContext
-    import counter
-    import inverter
+from helpermodules import log
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_state import SingleComponentUpdateContext
+import counter
+import inverter
 
 
 def get_default_config() -> dict:

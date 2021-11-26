@@ -1,20 +1,12 @@
 #!/usr/bin/env python3
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.component_state import CounterState
-    from ..common.fault_state import ComponentInfo
-    from ..common.store import get_counter_value_store
-    from ..common import simcount
-    from ..openwb_flex.versions import kit_version_factory
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.component_state import CounterState
-    from modules.common.fault_state import ComponentInfo
-    from modules.common.store import get_counter_value_store
-    from modules.common import simcount
-    from modules.openwb_flex.versions import kit_version_factory
+
+from helpermodules import log
+from modules.common import modbus
+from modules.common import simcount
+from modules.common.component_state import CounterState
+from modules.common.fault_state import ComponentInfo
+from modules.common.store import get_counter_value_store
+from modules.openwb_flex.versions import kit_version_factory
 
 
 def get_default_config() -> dict:

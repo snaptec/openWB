@@ -8,17 +8,10 @@ import sys
 import time
 import typing
 
-try:
-    from ..common.fault_state import FaultState
-    from ...helpermodules import compatibility
-    from ...helpermodules import log
-    from ...helpermodules import pub
-except (ImportError, ValueError, SystemError):
-    # for 1.9 compatibility
-    from helpermodules import compatibility
-    from helpermodules import log
-    from helpermodules import pub
-    from modules.common.fault_state import FaultState
+from helpermodules import compatibility
+from helpermodules import log
+from helpermodules import pub
+from modules.common.fault_state import FaultState
 
 
 def process_error(e):
