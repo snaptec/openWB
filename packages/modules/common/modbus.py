@@ -79,8 +79,7 @@ class ModbusClient:
             response = read_register_method(
                 address, number_of_addresses, **kwargs)
             if response.isError():
-                raise FaultState.error(__name__+" "+str(type(response))+" " +
-                                       str(response))
+                raise FaultState.error(__name__+" "+str(response))
             decoder = BinaryPayloadDecoder.fromRegisters(
                 response.registers, Endian.Big if big_endian else Endian.Little)
             result = [getattr(decoder, t.decoding_method)() for t in types]
