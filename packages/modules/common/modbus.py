@@ -5,7 +5,7 @@ Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, 
 formatieren.
 """
 from enum import Enum
-from typing import Callable, Iterable, Union
+from typing import Callable, Iterable, Union, overload, List
 
 import pymodbus
 from pymodbus.client.sync import ModbusTcpClient
@@ -34,6 +34,7 @@ class ModbusDataType(Enum):
 
 
 _MODBUS_HOLDING_REGISTER_SIZE = 16
+Number = Union[int, float]
 
 
 class ModbusClient:
@@ -93,10 +94,26 @@ class ModbusClient:
             raise FaultState.error(__name__+" "+str(type(e))+" " +
                                    str(e)) from e
 
+    @overload
+    def read_holding_registers(self, address: int, types: Iterable[ModbusDataType], **kwargs) -> List[Number]:
+        pass
+
+    @overload
+    def read_holding_registers(self, address: int, types: ModbusDataType, **kwargs) -> Number:
+        pass
+
     def read_holding_registers(self, address: int,
                                types: Union[Iterable[ModbusDataType], ModbusDataType],
                                **kwargs):
         return self.__read_registers(self.delegate.read_holding_registers, address, types, **kwargs)
+
+    @overload
+    def read_input_registers(self, address: int, types: Iterable[ModbusDataType], **kwargs) -> List[Number]:
+        pass
+
+    @overload
+    def read_input_registers(self, address: int, types: ModbusDataType, **kwargs) -> Number:
+        pass
 
     def read_input_registers(self, address: int,
                              types: Union[Iterable[ModbusDataType], ModbusDataType],
