@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
 
-
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.abstract_component import AbstractInverter
-    from ..common.component_state import InverterState
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.abstract_component import AbstractInverter
-    from modules.common.component_state import InverterState
+from helpermodules import log
+from modules.common import modbus
+from modules.common.component_state import InverterState
+from modules.common.fault_state import ComponentInfo
+from modules.common.store import get_inverter_value_store
+from modules.openwb_flex.versions import kit_version_factory
 
 
 def get_default_config() -> dict:
@@ -26,32 +21,34 @@ def get_default_config() -> dict:
     }
 
 
-class PvKitFlex(AbstractInverter):
+class PvKitFlex:
     def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
-        try:
-            client = self.kit_version_factory(
-                component_config["configuration"]["version"], component_config["configuration"]["id"], tcp_client
-            )
-            super().__init__(device_id, component_config, client)
-            self.tcp_client = tcp_client
-        except Exception as e:
-            self.process_error(e)
+        self.component_config = component_config
+        factory = kit_version_factory(
+            component_config["configuration"]["version"])
+        self.__client = factory(component_config["configuration"]["id"],
+                                tcp_client)
+        self.__tcp_client = tcp_client
+        self.__store = get_inverter_value_store(component_config["id"])
+        self.component_info = ComponentInfo(self.component_config["id"],
+                                            self.component_config["name"],
+                                            self.component_config["type"])
 
-    def get_values(self) -> InverterState:
+    def update(self) -> None:
         """ liest die Werte des Moduls aus.
         """
         try:
-            counter = self.client.get_counter()
-            power_per_phase, power_all = self.client.get_power()
+            counter = self.__client.get_counter()
+            power_per_phase, power_all = self.__client.get_power()
 
-            version = self.data["config"]["configuration"]["version"]
+            version = self.component_config["configuration"]["version"]
             if version == 1:
                 power_all = sum(power_per_phase)
             if power_all > 10:
                 power_all = power_all*-1
-            currents = self.client.get_current()
+            currents = self.__client.get_current()
         finally:
-            self.tcp_client.close_connection()
+            self.__tcp_client.close_connection()
 
         log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power_all))
         inverter_state = InverterState(
@@ -59,4 +56,4 @@ class PvKitFlex(AbstractInverter):
             counter=counter,
             currents=currents
         )
-        return inverter_state
+        self.__store.set(inverter_state)
