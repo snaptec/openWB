@@ -10,7 +10,6 @@ wrfronius2ip = str(sys.argv[2])
 wrfroniusisgen24 = str(sys.argv[3])
 
 Debug = int(os.environ.get('debug'))
-# Debug = 2
 myPid = str(os.getpid())
 
 
@@ -44,9 +43,17 @@ except:
 if wrfroniusisgen24 == "0":
     try:
 	    pvkwh = int(pvwatttmp["Body"]["Data"]["Site"]["E_Total"])
+	    pvday = round(pvwatttmp["Body"]["Data"]["Site"]["E_Day"])
     except:
         traceback.print_exc()
         exit(1)
+    try:
+        with open("/var/www/html/openWB/ramdisk/pvkwh_start", "r") as f:
+            pvkwh_start = int(f.read())
+            if pvkwh_start + pvday > pvkwh:
+                pvkwh = pvkwh_start + pvday
+    except FileNotFoundError as e:
+        DebugLog(1, str(e))
 
 if wrfronius2ip != "none":
     try:
@@ -86,5 +93,8 @@ else:
                 f.write(str(pvkwh))
             with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
                 f.write('{:.3f}'.format(round(pvkwh / 1000, 3)))
+        if pvday == 0:
+            with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
+                f.write(str(pvkwh))
 
 exit(0)
