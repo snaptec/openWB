@@ -292,6 +292,16 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append("undef")
     elif meastyp == "smaem":
         argumentList[1] = prefixpy + 'smaem/watt.py'
+        try:
+            measuresmaser = str(config.get('smarthomedevices', 'device_measuresmaser_'+str(nummer)))
+        except:
+            measuresmaser = "123"
+        try:
+            measuresmaage = str(config.get('smarthomedevices', 'device_measuresmaage_'+str(nummer)))
+        except:
+            measuresmaage = "15"
+        argumentList[3] = measuresmaser
+        argumentList[4] = measuresmaage
     else:
        # no known meastyp, so return the old values directly
         logDebug(LOGLEVELERROR, "Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
@@ -996,6 +1006,10 @@ def conditions(nummer):
     except:
         ontime = '00:00'
     try:
+        onuntiltime = str(config.get('smarthomedevices', 'device_onuntiltime_'+str(nummer)))
+    except:
+        onuntiltime = '00:00'
+    try:
         startupmuldetection = int(config.get('smarthomedevices', 'device_startupmuldetection_'+str(nummer)))
     except:
         startupmuldetection = 0
@@ -1033,6 +1047,15 @@ def conditions(nummer):
         else:
             logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen Immer an nach")
             onnow = 1
+    if (onuntiltime != '00:00'):
+        onuntilhour = int(str("0") +str(onuntiltime).partition(':')[0])
+        onuntilminute = int(str(onuntiltime)[-2:] )
+        logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Immer an vor definiert " + str(onuntilhour) + ":" +  str ('%.2d' % onuntilminute) +   " aktuelle Zeit " + str (localhour) + ":" + str ('%.2d' % localminute))
+        if ((onuntilhour < localhour )  or  ((onuntilhour == localhour ) and (onuntilminute <=localminute) )):
+            pass
+        else:
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " schalte ein wegen Immer an vor")
+            onnow = 1
     if (finishtime != '00:00') and (DeviceOn[nummer-1] ==str("0")):
         finishhour = int(str("0") +str(finishtime).partition(':')[0])
         finishminute = int(str(finishtime)[-2:] )
@@ -1060,6 +1083,11 @@ def conditions(nummer):
             setstat(nummer,10)
             return
     # here startup device_startupdetection
+    if ((startupdetection == 0) or (onnow == 1)) and (devstatus == 20):
+        setstat(nummer,10)
+        turndevicerelais(nummer, 0,0,1)
+        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Anlauferkennung nun abgeschaltet ")
+        return
     #remove condition that device has to be off
     if (startupdetection == 1) and (DeviceOnStandby[nummer-1] ==str("0")) and (DeviceOn[nummer-1] ==str("0")) and (devstatus != 20):
         setstat(nummer,20)
@@ -1113,30 +1141,36 @@ def conditions(nummer):
     # Auto ladung
     if deactivatewhileevcharging == 1:
         if ( DeviceValues[str(nummer)+"relais"] == 1 ):
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll ausgeschaltet werden bei Ladung, pruefe " + str( testcharge))
+            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll reduziert werden bei Ladung, pruefe " + str( testcharge))
             if chargestatus == 1:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, pruefe Mindestlaufzeit")
                 if str(nummer)+"eintime" in DeviceCounters:
                     timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                     if ( mineinschaltdauer < timestart):
-                        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, schalte aus ")
-                        turndevicerelais(nummer, 0,0,1)
-                        return
+                        logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer erreicht, setze Ausschaltschwelle auf 0")
+                        #turndevicerelais(nummer, 0,0,1)
+                        #return
+                        ausverz = 0
+                        if (ausschwelle < 0):
+                            ausschwelle = 0
                     else:
                         logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)  + " Mindesteinschaltdauer nicht erreicht, " + str(mineinschaltdauer) + " > " + str(timestart))
                 else:
-                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
-                    turndevicerelais(nummer, 0,0,1)
-                    return
+                    logDebug(LOGLEVELINFO,"(" + str(nummer) + ") " + str(name)+ " Mindesteinschaltdauer nicht bekannt,setze Ausschaltschwelle auf 0")
+                    #turndevicerelais(nummer, 0,0,1)
+                    #return
+                    ausverz = 0
+                    if (ausschwelle < 0):
+                        ausschwelle = 0
             else:
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
-        else:
-            logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
-            if chargestatus == 1:
-                logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
-                return
-            else:
-                logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
+        #else:
+            #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
+            #if chargestatus == 1:
+                #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
+                #return
+            #else:
+                #logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft nicht, pruefe weiter")
     # Auto ladung ende
     # Art vom ueberschussberechnung pruefen
     ueberschussberechnung = 0

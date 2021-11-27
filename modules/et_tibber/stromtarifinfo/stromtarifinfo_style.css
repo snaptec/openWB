@@ -65,6 +65,16 @@ body > .container {
     z-index: 1030; /* same as menue */
 }
 
+.vaRow {
+    /* vertical alignment of content in rows */
+  display: flex;
+  align-items: center;
+}
+
+.datepicker.dropdown-menu table {
+    background-color: rgb(194, 188, 188);
+}
+
 h1 {
     margin: 0.67em 0 0.2em 0;
 }

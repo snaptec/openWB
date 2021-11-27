@@ -310,7 +310,13 @@ $numDevices = 9;
 												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Wenn das Gerät heute noch nicht eingeschaltet wurde, wird es unabhängig vom Überschuss eingeschaltet unter Berücksichtigung der Mindestlaufzeit, so dass es zur angegebenen Uhrzeit fertig ist.</span>
 											</div>
 										</div>
-
+										<div class="form-row mb-1">
+											<label for="device_onuntilTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Immer an vor</label>
+											<div class="col">
+												<input id="device_onuntilTimeDevices<?php echo $devicenum; ?>" name="device_onuntilTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Das Gerät wird bis zu dieser Uhrzeit eingeschaltet, unabhängig vom Überschuss unter Berücksichtigung der maximalen Einschaltdauer.</span>
+											</div>
+										</div>
 										<div class="form-row mb-1">
 											<label for="device_onTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Immer an nach</label>
 											<div class="col">
@@ -376,7 +382,7 @@ $numDevices = 9;
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
-											<label class="col-md-4 col-form-label">Bei Autoladen ausschalten</label>
+											<label class="col-md-4 col-form-label">Bei Autoladen reduzieren</label>
 											<div class="col">
 												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" name="device_deactivateWhileEvCharging" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													<label class="btn btn-outline-info">
@@ -386,7 +392,7 @@ $numDevices = 9;
 														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 													</label>
 												</div>
-												<span class="form-text small">Diese Option sorgt dafür, dass das Gerät gezielt abgeschaltet wird, wenn ein Auto geladen wird (> 1000 Watt Leistungsaufnahme). Dem Auto steht somit entweder mehr PV-Überschuss zur Verfügung oder der Bezug verringert sich.</span>
+												<span class="form-text small">Diese Option sorgt dafür, dass die aktuelle Leistungsaufnahme von diesem Gerät in den die Pv Überschussberechnung miteinbezogen wird. Wenn dann ein Auto geladen wird (> 1000 Watt Leistungsaufnahme), wird die Auschaltschwelle (sofern eine Bezugschwelle definiert ist) auf 0 gesetzt. Ebenso wird die Auschaltverzögerung auf 0 gesetzt. Dadurch werden diese Geräte als erstes abgeschaltet, wenn das Auto lädt und der Überschuss nicht ausreicht.</span>
 											</div>
 										</div>
 									</div>
@@ -649,7 +655,7 @@ deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
 								</div>
 
 								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-smaem hide">
-									<label for="device_measuresmaageDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Alter Return File</label>
+									<label for="device_measuresmaageDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Alter Datendatei </label>
 									<div class="col">
 										<input id="device_measuresmaageDevices<?php echo $devicenum; ?>" name="device_measuresmaage" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="15" value="15" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">Parameter in Sekunden, der bestimmt, wie alt die Datendatei sein darf .</span>

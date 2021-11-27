@@ -181,8 +181,8 @@ class Battery_API {
 		$updateTime = date( 'd.m.Y H:i', $updateTimestamp );
 		$electricRange = intval( $attributes->beRemainingRangeElectricKm );
 		$chargingLevel = intval( $attributes->chargingLevelHv );
-		$chargingActive = intval( $attributes->chargingSystemStatus === 'CHARGINGACTIVE' );
-		$chargingError = intval( $attributes->chargingSystemStatus === 'CHARGINGERROR' );
+		$chargingActive = intval( $attributes->charging_status === 'CHARGINGACTIVE' );
+		$chargingError = intval( $attributes->charging_status === 'CHARGINGERROR' );
 		//$chargingTimeRemaining = intval( $attributes->chargingTimeRemaining );
 		//$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 

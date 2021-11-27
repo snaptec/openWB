@@ -74,6 +74,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_huawei") echo "selected" ?> value="bezug_huawei">Huawei mit SmartMeter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
 										<option <?php if($wattbezugmodulold == "bezug_ksem") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
@@ -83,6 +84,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 										<option <?php if($wattbezugmodulold == "bezug_powerfox") echo "selected" ?> value="bezug_powerfox">Powerfox</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
+										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
@@ -106,6 +108,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_mpm3pm") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
 										<option <?php if($wattbezugmodulold == "bezug_mqtt") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 										<option <?php if($wattbezugmodulold == "sdm630modbusbezug") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
+										<option <?php if($wattbezugmodulold == "bezug_ethmpm3pmflex") echo "selected" ?> value="bezug_ethmpm3pmflex">openWB EVU Kit flexible IP</option>
 										<option <?php if($wattbezugmodulold == "vzlogger") echo "selected" ?> value="vzlogger">VZLogger</option>
 									</optgroup>
 								</select>
@@ -196,6 +199,12 @@
 								IP Adresse des RCT Speichers eingeben.
 							</div>
 						</div>
+						<div id="wattbezughuawei" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration erfolgt im zugehörigen PV Modul.
+							</div>
+						</div>
+
 						<div id="wattbezugpowerdog" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Powerdog eingeben. Im Powerdog muss die Schnittstelle ModbusTCP aktiviert werden.
@@ -236,6 +245,44 @@
 									</select>
 								</div>
 							</div>
+						</div>
+						<div id="wattbezugethmpm3pmflex" class="hide">
+							<div class="form-row mb-1">
+								<label for="evuflexversion" class="col-md-4 col-form-label">Version des openWB evu Kits</label>
+								<div class="col">
+									<select name="evuflexversion" id="evuflexversion" class="form-control">
+										<option <?php if($evuflexversionold == 0) echo "selected" ?> value="0">EVU Kit MPM3PM</option>
+										<option <?php if($evuflexversionold == 1) echo "selected" ?> value="1">EVU Kit var 2 Lovato</option>
+										<option <?php if($evuflexversionold == 2) echo "selected" ?> value="2">EVU Kit SDM</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="evuflexip" class="col-md-4 col-form-label">EVU Adapter IP</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evuflexip" id="evuflexip" value="<?php echo $evuflexipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										IP Adresse des Protoss/Elfin Adapters.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="evuflexport" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="evuflexport" id="evuflexport" value="<?php echo (empty($evuflexportold)?'502':$evuflexportold) ?>">
+									<span class="form-text small">
+										TCP Port der im Protoss/Elfin konfiguriert ist.<br>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+									<label for="evuflexid" class="col-md-4 col-form-label">Unit ID</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evuflexid" id="evuflexid" value="<?php echo $evuflexidold ?>">
+										<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
+									</div>
+								</div>
 						</div>
 						<div id="wattbezugsolarview" class="hide">
 							<div class="card-text alert alert-info">
@@ -863,6 +910,7 @@
 								hideSection('#wattbezugsbs25');
 								hideSection('#wattbezuge3dc');
 								hideSection('#wattbezugethmpm3pm');
+								hideSection('#wattbezugethmpm3pmflex');
 								hideSection('#wattbezugplentihaus');
 								hideSection('#wattbezugkostalpiko');
 								hideSection('#wattbezugkostalsmartenergymeter');
@@ -880,6 +928,7 @@
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
+								hideSection('#wattbezughuawei');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
 								hideSection('#wattbezugsungrow');
@@ -921,7 +970,15 @@
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
 								}
+								if($('#wattbezugmodul').val() == 'bezug_huawei') {
+									showSection('#wattbezughuawei');
+								}
+
 								if($('#wattbezugmodul').val() == 'bezug_rct') {
+									showSection('#wattbezugrct');
+									showSection('#wattbezugip');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_rct2') {
 									showSection('#wattbezugrct');
 									showSection('#wattbezugip');
 								}
@@ -991,6 +1048,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
 									showSection('#wattbezugethmpm3pm');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_ethmpm3pmflex')   {
+									showSection('#wattbezugethmpm3pmflex');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
 									showSection('#wattbezugsbs25');

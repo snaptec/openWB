@@ -98,7 +98,7 @@ def getDeviceId():
     soclogging.logDebug(2, "Requesting DeviceId")
 
     url = parameters.getParameter('baseUrl') + '/api/v1/spa/notifications/register'
-    data = {"pushRegId":"1","pushType":"GCM","uuid": str(uuid.uuid1())}
+    data = {"pushRegId": parameters.getParameter('GCMSenderId'), "pushType": "GCM", "uuid": str(uuid.uuid1())}
     headers = {
         'ccsp-service-id': parameters.getParameter('clientId'),
         'Content-type': 'application/json;charset=UTF-8',

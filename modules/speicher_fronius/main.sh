@@ -13,7 +13,14 @@ fi
 
 echo $speicherwatt > /var/www/html/openWB/ramdisk/speicherleistung
 
-speichersoc=$(echo $speicherwatttmp | jq '.Body.Data.Inverters."1".SOC' | sed 's/\..*$//')
+
+if [[ $wrfroniusisgen24 == 1 ]]; then
+	json_string=".Body.Data.\"$froniuserzeugung\""
+	speichersoctmp=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetStorageRealtimeData.cgi")
+	speichersoc=$(echo $speichersoctmp | jq $json_string'.Controller.StateOfCharge_Relative' | sed 's/\..*$//')
+else
+	speichersoc=$(echo $speicherwatttmp | jq '.Body.Data.Inverters."1".SOC' | sed 's/\..*$//')
+fi
 if ! [[ $speichersoc =~ $ra ]] ; then
 	speichersoc="0"
 fi

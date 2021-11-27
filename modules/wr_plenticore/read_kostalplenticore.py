@@ -248,8 +248,13 @@ class plenticore(modbus):
             self.attr_WR.P_Generation_actual = int(self.ReadInt16(575))           
             # nur generierte PV Leistung berechnen, keine BatterieLeistung
             self.attr_WR.P_DC_in_total= self.attr_WR.P_DC_S1 + self.attr_WR.P_DC_S2            
+            # im Fall ohne Batterie                   
+            if (self._Battery==0):
+                # ggf. 3 String zu addieren
+                self.attr_WR.P_DC_in_total+= self.attr_WR.P_DC_S3
+                self.attr_WR.P_PV_AC_total  = self.attr_WR.P_Generation_actual
             # zur weiter Berechnung im Fall mit Batterie                   
-            if (self._Battery==1):
+            else:
                 # da Batterie DC-seitig angebunden ist,
                 # muss deren Lade-/Entladeleistung mitbetrachtet werden
                 # wenn man die AC-Leistung der PV-Module und des Speichers bestimmen möchte.

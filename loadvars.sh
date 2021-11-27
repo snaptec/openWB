@@ -30,6 +30,14 @@ loadvars(){
 	olademodus=$(<ramdisk/mqttlastlademodus)
 	osoc=$(<ramdisk/mqttsoc)
 	osoc1=$(<ramdisk/mqttsoc1)
+	ostopchargeafterdisclp1=$(<ramdisk/mqttstopchargeafterdisclp1)
+	ostopchargeafterdisclp2=$(<ramdisk/mqttstopchargeafterdisclp2)
+	ostopchargeafterdisclp3=$(<ramdisk/mqttstopchargeafterdisclp3)
+	ostopchargeafterdisclp4=$(<ramdisk/mqttstopchargeafterdisclp4)
+	ostopchargeafterdisclp5=$(<ramdisk/mqttstopchargeafterdisclp5)
+	ostopchargeafterdisclp6=$(<ramdisk/mqttstopchargeafterdisclp6)
+	ostopchargeafterdisclp7=$(<ramdisk/mqttstopchargeafterdisclp7)
+	ostopchargeafterdisclp8=$(<ramdisk/mqttstopchargeafterdisclp8)
 	ospeichersoc=$(<ramdisk/mqttspeichersoc)
 	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 	odailychargelp1=$(<ramdisk/mqttdailychargelp1)
@@ -474,7 +482,10 @@ loadvars(){
 
 	#Speicher werte
 	if [[ $speichermodul != "none" ]] ; then
-		timeout 5 modules/$speichermodul/main.sh || true
+		timeout 5 modules/$speichermodul/main.sh
+		if [[ $? -eq 124 ]] ; then
+			openwbModulePublishState "BAT" 2 "Die Werte konnten nicht innerhalb des Timeouts abgefragt werden. Bitte Konfiguration und Gerätestatus prüfen."
+		fi
 		speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		speicherleistung=$(echo $speicherleistung | sed 's/\..*$//')
 		speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
@@ -990,13 +1001,7 @@ loadvars(){
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_carlogavazzilan" ]]|| [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
-		usesimbezug=1
-	fi
-	if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
-		usesimbezug=1
-	fi
-	if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "2" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_huawei" ]] || [[ $wattbezugmodul == "bezug_carlogavazzilan" ]]|| [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
 		usesimbezug=1
 	fi
 	if [[ $usesimbezug == "1" ]]; then
@@ -1050,7 +1055,7 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $wrfroniusisgen24 == "1" ]]; then
 		usesimpv=1
 	fi
-	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]] || [[ $pvwattmodul == "wr_alphaess" ]]; then
+	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
 	if [[ $usesimpv == "1" ]]; then
@@ -1088,7 +1093,7 @@ loadvars(){
 		# sim pv end
 	fi
 
-	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_sungrow" ]]|| [[ $speichermodul == "speicher_alphaess" ]] || [[ $speichermodul == "speicher_siemens" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
+	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_huawei" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_sungrow" ]] || [[ $speichermodul == "speicher_siemens" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_saxpower" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
@@ -1237,6 +1242,38 @@ loadvars(){
 		tempPubList="${tempPubList}\nopenWB/lp/2/%Soc=${soc1}"
 		echo $soc1 > ramdisk/mqttsoc1
 	fi
+	if [[ "$ostopchargeafterdisclp1" != "$stopchargeafterdisclp1" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/1/stopchargeafterdisc=${stopchargeafterdisclp1}"
+		echo $stopchargeafterdisclp1 > ramdisk/mqttstopchargeafterdisclp1
+	fi
+	if [[ "$ostopchargeafterdisclp2" != "$stopchargeafterdisclp2" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/2/stopchargeafterdisc=${stopchargeafterdisclp2}"
+		echo $stopchargeafterdisclp2 > ramdisk/mqttstopchargeafterdisclp2
+	fi
+	if [[ "$ostopchargeafterdisclp3" != "$stopchargeafterdisclp3" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/3/stopchargeafterdisc=${stopchargeafterdisclp3}"
+		echo $stopchargeafterdisclp3 > ramdisk/mqttstopchargeafterdisclp3
+	fi
+	if [[ "$ostopchargeafterdisclp4" != "$stopchargeafterdisclp4" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/4/stopchargeafterdisc=${stopchargeafterdisclp4}"
+		echo $stopchargeafterdisclp4 > ramdisk/mqttstopchargeafterdisclp4
+	fi
+	if [[ "$ostopchargeafterdisclp5" != "$stopchargeafterdisclp5" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/5/stopchargeafterdisc=${stopchargeafterdisclp5}"
+		echo $stopchargeafterdisclp5 > ramdisk/mqttstopchargeafterdisclp5
+	fi
+	if [[ "$ostopchargeafterdisclp6" != "$stopchargeafterdisclp6" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/6/stopchargeafterdisc=${stopchargeafterdisclp6}"
+		echo $stopchargeafterdisclp6 > ramdisk/mqttstopchargeafterdisclp6
+	fi
+	if [[ "$ostopchargeafterdisclp7" != "$stopchargeafterdisclp7" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/7/stopchargeafterdisc=${stopchargeafterdisclp7}"
+		echo $stopchargeafterdisclp7 > ramdisk/mqttstopchargeafterdisclp7
+	fi
+	if [[ "$ostopchargeafterdisclp8" != "$stopchargeafterdisclp8" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/lp/8/stopchargeafterdisc=${stopchargeafterdisclp8}"
+		echo $stopchargeafterdisclp8 > ramdisk/mqttstopchargeafterdisclp8
+	fi
 	if [[ $rfidakt == "1" ]]; then
 		rfid
 	fi
@@ -1298,17 +1335,17 @@ loadvars(){
 	ohook1_aktiv=$(<ramdisk/mqtthook1_aktiv)
 	if [[ "$ohook1_aktiv" != "$hook1_aktiv" ]]; then
 		tempPubList="${tempPubList}\nopenWB/hook/1/boolHookConfigured=${hook1_aktiv}"
-		echo $ > ramdisk/mqtthook1_aktiv
+		echo $hook1_aktiv > ramdisk/mqtthook1_aktiv
 	fi
 	ohook2_aktiv=$(<ramdisk/mqtthook2_aktiv)
 	if [[ "$ohook2_aktiv" != "$hook2_aktiv" ]]; then
 		tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2_aktiv}"
-		echo $ > ramdisk/mqtthook2_aktiv
+		echo $hook2_aktiv > ramdisk/mqtthook2_aktiv
 	fi
 	ohook3_aktiv=$(<ramdisk/mqtthook3_aktiv)
 	if [[ "$ohook3_aktiv" != "$hook3_aktiv" ]]; then
 		tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3_aktiv}"
-		echo $ > ramdisk/mqtthook3_aktiv
+		echo $hook3_aktiv > ramdisk/mqtthook3_aktiv
 	fi
 
 	if (( ohook1aktiv != hook1aktiv )); then

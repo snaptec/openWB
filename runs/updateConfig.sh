@@ -1058,6 +1058,9 @@ updateConfig(){
 	if ! grep -Fq "vartaspeicherip=" $ConfigFile; then
 		echo "vartaspeicherip=192.168.0.10" >> $ConfigFile
 	fi
+	if ! grep -Fq "vartaspeicher2ip=" $ConfigFile; then
+		echo "vartaspeicher2ip=none" >> $ConfigFile
+	fi
 	if ! grep -Fq "usevartamodbus=" $ConfigFile; then
 		echo "usevartamodbus=0" >> $ConfigFile
 	fi
@@ -1154,6 +1157,10 @@ updateConfig(){
 		echo "pv1_idd=1" >> $ConfigFile
 		echo "speicher1_ip=192.168.0.17" >> $ConfigFile
 	fi
+	if ! grep -Fq "pv1_ida=" $ConfigFile; then
+		echo "pv1_ida=1" >> $ConfigFile
+	fi
+
 	if ! grep -Fq "speicher1_ip2=" $ConfigFile; then
 		echo "speicher1_ip2=192.168.0.17" >> $ConfigFile
 	fi
@@ -1186,7 +1193,9 @@ updateConfig(){
 		else
 			echo "etprovideraktiv=0" >> $ConfigFile
 		fi
-		# tibber demo settings
+	fi
+	# tibber demo settings
+	if ! grep -Fq "tibbertoken=" $ConfigFile; then
 		echo "tibbertoken=d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a" >> $ConfigFile
 		echo "tibberhomeid=c70dcbe5-4485-4821-933d-a8a86452737b" >> $ConfigFile
 	fi
@@ -2125,6 +2134,24 @@ updateConfig(){
 	fi
 	if ! grep -Fq "virtual_ip_wlan0=" $ConfigFile; then
 		echo "virtual_ip_wlan0='192.168.193.6'" >> $ConfigFile
+	fi
+	if ! grep -Fq "evuflexip=" $ConfigFile; then
+		echo "evuflexversion=2" >>$ConfigFile
+		echo "evuflexip='192.168.193.5'" >> $ConfigFile
+		echo "evuflexport=8899" >> $ConfigFile
+		echo "evuflexid=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "pvflexip=" $ConfigFile; then
+		echo "pvflexip='192.168.193.5'" >> $ConfigFile
+		echo "pvflexport=8899" >> $ConfigFile
+		echo "pvflexid=1" >> $ConfigFile
+		echo "pvflexversion=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "pv2flexip=" $ConfigFile; then
+		echo "pv2flexip='192.168.193.5'" >> $ConfigFile
+		echo "pv2flexport=8899" >> $ConfigFile
+		echo "pv2flexid=1" >> $ConfigFile
+		echo "pv2flexversion=1" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }
