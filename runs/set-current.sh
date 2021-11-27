@@ -189,8 +189,9 @@ function setChargingCurrentgoe () {
 	if [[ $evsecon == "goe" ]]; then
 		output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
 		#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
+		digit='^[0-9]$'
 		fsp=$(echo $output | jq -r '.fsp')
-		if [[ ! $fsp =~ $re ]] ; then
+		if [[ ! $fsp =~ $digit ]] ; then
 			if [[ $current -eq 0 ]]; then
 				state=$(echo $output | jq -r '.alw')
 				if ((state == "1")) ; then

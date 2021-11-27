@@ -2,15 +2,17 @@
 goecheck(){
 	#######################################
 	#goe mobility check
+	digit='^[0-9]$'
+	
 	if [[ $evsecon == "goe" ]]; then
 		output=$(curl --connect-timeout 1 -s http://$goeiplp1/status)
 		if [[ $? == "0" ]] ; then
 			#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 			fsp=$(echo $output | jq -r '.fsp')
-			if [[ ! $fsp =~ $re ]] ; then
+			if [[ ! $fsp =~ $digit ]] ; then
 				state=$(echo $output | jq -r '.alw')
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					lp2enabled=$(</var/www/html/openWB/ramdisk/lp1enabled)
+					lp1enabled=$(</var/www/html/openWB/ramdisk/lp1enabled)
 					if ((state == "0"))  && (( lp1enabled == "1" )) ; then
 						curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
 					fi
@@ -34,8 +36,8 @@ goecheck(){
 				output=$(curl --connect-timeout 1 -s http://$goeiplp1/api/status)
 				state=$(echo $output | jq -r '.frc')
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					lp2enabled=$(</var/www/html/openWB/ramdisk/lp1enabled)
-					if ((state == "1"))  && (( lp2enabled == "1" )) ; then
+					lp1enabled=$(</var/www/html/openWB/ramdisk/lp1enabled)
+					if ((state == "1"))  && (( lp1enabled == "1" )) ; then
 						curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/api/set?frc=0 > /dev/null
 					fi
 				fi
@@ -58,7 +60,7 @@ goecheck(){
 			if [[ $? == "0" ]] ; then
 				#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 				fsp=$(echo $output | jq -r '.fsp')
-				if [[ ! $fsp =~ $re ]] ; then
+				if [[ ! $fsp =~ $digit ]] ; then
 					state=$(echo $output | jq -r '.alw')
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
@@ -109,11 +111,11 @@ goecheck(){
 			if [[ $? == "0" ]] ; then
 				#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 				fsp=$(echo $output | jq -r '.fsp')
-				if [[ ! $fsp =~ $re ]] ; then
+				if [[ ! $fsp =~ $digit ]] ; then
 					state=$(echo $output | jq -r '.alw')
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-						lp2enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
-						if ((state == "0"))  && (( lp2enabled == "1" )) ; then
+						lp3enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
+						if ((state == "0"))  && (( lp3enabled == "1" )) ; then
 							curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=1 > /dev/null
 						fi
 					fi
@@ -136,8 +138,8 @@ goecheck(){
 					output=$(curl --connect-timeout 1 -s http://$goeiplp3/api/status)
 					state=$(echo $output | jq -r '.frc')
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-						lp2enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
-						if ((state == "1"))  && (( lp2enabled == "1" )) ; then
+						lp3enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
+						if ((state == "1"))  && (( lp3enabled == "1" )) ; then
 							curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/api/set?frc=0 > /dev/null
 						fi
 					fi
