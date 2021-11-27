@@ -720,6 +720,11 @@ def getdevicevalues():
                 device_homeconsumtion = int(config.get('smarthomedevices', 'device_homeconsumtion_'+str(numberOfDevices)))
             except:
                 device_homeconsumtion = 0
+            try:
+                device_stateurl = str(config.get('smarthomedevices', 'device_stateurl_'+str(numberOfDevices)))
+            except:
+                device_stateurl = "none"
+
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
@@ -735,6 +740,7 @@ def getdevicevalues():
                         argumentList.append(device_actor)
                     argumentList.append(device_username)
                     argumentList.append(device_password)
+                    argumentList.append(device_stateurl)
                     try:
                         proc=subprocess.Popen(argumentList)
                         proc.communicate()
