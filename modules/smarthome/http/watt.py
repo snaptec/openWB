@@ -20,12 +20,12 @@ try:
 except:
     urlc = "none"
 try:
-    urlstate=str(sys.argv[6])
+    urlstate=str(sys.argv[8])
 except:
     urlstate = "none"
 if not urlparse(url).scheme:
    url = 'http://' + url
-if not urlparse(urlstate).scheme:
+if not urlparse(urlstate).scheme and urlstate is not "none":
    urlstate = 'http://' + urlstate
 if uberschuss < 0:
    uberschuss = 0
@@ -37,7 +37,10 @@ else:
    f = open( file_string , 'w')
 print ('%s devicenr %s orig url %s replaced url %s urlc %s urlstate %s'% (time_string,devicenumber,url,urlrep,urlc,urlstate),file=f)
 f.close()
-state = int(urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8"))
+if urlstate is not "none":
+    state = int(urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8"))
+else:
+    state = 0
 aktpowerfl = float(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
 aktpower = int(aktpowerfl)
 if state == 1 or aktpower > 50:

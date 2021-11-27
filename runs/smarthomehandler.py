@@ -255,11 +255,6 @@ def sepwatt(oldwatt,oldwattk,nummer):
             argumentList.append(measureurlc)
         except:
             argumentList.append("none")
-		try:
-			device_stateurl = str(config.get('smarthomedevices', 'device_stateurl_'+str(nummer)))
-			argumentList.append(device_stateurl)
-		except:
-			argumentList.append("undef")
     elif meastyp == "json":
         argumentList[1] = prefixpy + 'json/watt.py'
         try:
@@ -725,6 +720,11 @@ def getdevicevalues():
                 device_homeconsumtion = int(config.get('smarthomedevices', 'device_homeconsumtion_'+str(numberOfDevices)))
             except:
                 device_homeconsumtion = 0
+            try:
+                device_stateurl = str(config.get('smarthomedevices', 'device_stateurl_'+str(numberOfDevices)))
+            except:
+                device_stateurl = "none"
+
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
@@ -740,6 +740,7 @@ def getdevicevalues():
                         argumentList.append(device_actor)
                     argumentList.append(device_username)
                     argumentList.append(device_password)
+                    argumentList.append(device_stateurl)
                     try:
                         proc=subprocess.Popen(argumentList)
                         proc.communicate()
