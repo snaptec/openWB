@@ -132,7 +132,7 @@
 
 				$elemId = $elemType.$lp.'_'.$dayOfWeek;
 				$elemName = $elemType.'['.$lp.']['.$dayOfWeek.']';
-				$elemValue = $settingsArray[$elemId];
+				$elemValue = array_key_exists($elemId, $settingsArray) ? $settingsArray[$elemId] : '';
 			}
 
 			function echoCheckboxDiv($elemType, $label) {
@@ -243,7 +243,7 @@ ECHODAYROWTAIL;
 
 						$elemId = 'waitUntilFinishedBoxLp'.$lp;
 						$elemName = 'waitUntilFinishedBoxLp'.'['.$lp.']';
-						$elemValue = $settingsArray[$elemId];
+						$elemValue = array_key_exists($elemId, $settingsArray) ? $settingsArray[$elemId] : '';
 						// translate boolean to proper html
 						if ( $elemValue == 'on' ) {
 							$elemValue = " checked='checked'";
