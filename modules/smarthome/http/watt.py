@@ -11,7 +11,7 @@ import binascii
 import urllib.request
 from urllib.parse import urlparse
 named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S http watty.py", named_tuple)
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S http watt.py", named_tuple)
 devicenumber=str(sys.argv[1])
 uberschuss=int(sys.argv[3])
 url=str(sys.argv[4])
@@ -36,9 +36,19 @@ if os.path.isfile(file_string):
 else:
    f = open( file_string , 'w')
 print ('%s devicenr %s orig url %s replaced url %s urlc %s urlstate %s'% (time_string,devicenumber,url,urlrep,urlc,urlstate),file=f)
-f.close()
 if not urlstate.startswith("none"):
-    state = int(urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8"))
+    stateurl_response = 0
+    try:
+        stateurl_response = urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        print('%s StateURL HTTP Error: %d'%(time_string,e.code),file=f)
+    except urllib.error.URLError as e:
+        print('%s StateURL URL Error: %s'%(time_string,e.reason),file=f)
+    try:
+        state = int(stateurl_response)
+    except ValueError:
+        print ('%s StateURL delivered no integer but: %s'%(time_string,stateurl_response),file=f)
+        state = 0
 else:
     state = 0
 f.close()
