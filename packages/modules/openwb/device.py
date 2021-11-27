@@ -1,17 +1,11 @@
 from typing import List, Union
 import sys
-try:
-    from ..common import modbus
-    from ..common import abstract_device
-    from ...helpermodules import log
-    from . import counter
-    from. import inverter
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common import abstract_device
-    import counter
-    import inverter
+
+from helpermodules import log
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_state import SingleComponentUpdateContext
+import counter
+import inverter
 
 
 def get_default_config() -> dict:
@@ -22,44 +16,35 @@ def get_default_config() -> dict:
     }
 
 
-class Device(abstract_device.AbstractDevice):
+class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
         # "bat": ,
         "counter": counter.EvuKit,
         "inverter": inverter.PvKit
     }
+    _components = []  # type: List[Union[counter.EvuKit, inverter.PvKit]]
 
-    def __init__(self, device: dict) -> None:
-        try:
-            super().__init__(device, client=None)
-        except Exception:
-            log.MainLogger().exception(
-                "Fehler im Modul "+self.data["config"]["name"])
+    def __init__(self, device_config: dict) -> None:
+        self.device_config = device_config
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(
-            component_config, self.component_factory(component_config["type"]))
+        component_type = component_config["type"]
+        if component_type in self.COMPONENT_TYPE_TO_CLASS:
+            self._components.append(self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"], component_config))
 
-    def component_factory(self, component_type: str) -> Union[counter.EvuKit, inverter.PvKit]:
-        try:
-            if component_type == "counter":
-                ip_address = "192.168.193.15"
-                port = 8899
-                self.client = modbus.ModbusClient(ip_address, port)
-                return self.COMPONENT_TYPE_TO_CLASS[component_type]
-            elif component_type == "inverter":
-                ip_address = "192.168.193.13"
-                port = 8899
-                self.client = modbus.ModbusClient(ip_address, port)
-                return self.COMPONENT_TYPE_TO_CLASS[component_type]
-            # elif component_type == "bat":
-            #     pass
-            else:
-                raise Exception("illegal component type "+component_type +
-                                ". Allowed values: "+','.join(self.COMPONENT_TYPE_TO_CLASS.keys()))
-        except Exception:
-            log.MainLogger().exception(
-                "Fehler im Modul "+self.data["config"]["name"])
+    def get_values(self) -> None:
+        log.MainLogger().debug("Start device reading" + str(self._components))
+        if self._components:
+            for component in self._components:
+                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
+                with SingleComponentUpdateContext(component.component_info):
+                    component.update()
+        else:
+            log.MainLogger().warning(
+                self.device_config["name"] +
+                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
+            )
 
 
 def read_legacy(argv: List[str]):
@@ -70,8 +55,8 @@ def read_legacy(argv: List[str]):
         "counter": counter,
         "inverter": inverter
     }
-    component_type = sys.argv[1]
-    version = int(sys.argv[2])
+    component_type = argv[1]
+    version = int(argv[2])
     try:
         num = int(argv[3])
     except IndexError:
@@ -81,18 +66,18 @@ def read_legacy(argv: List[str]):
     dev = Device(device_config)
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config(
-        )
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
     else:
-        raise Exception("illegal component type "+component_type +
-                        ". Allowed values: "+','.join(COMPONENT_TYPE_TO_MODULE.keys()))
+        raise Exception("illegal component type " + component_type +
+                        ". Allowed values: " +
+                        ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
     component_config["id"] = num
     component_config["configuration"]["version"] = version
     dev.add_component(component_config)
 
     log.MainLogger().debug('openWB Version: ' + str(version))
 
-    dev.update_values()
+    dev.get_values()
 
 
 if __name__ == "__main__":

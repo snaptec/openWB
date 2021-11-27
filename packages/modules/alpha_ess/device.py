@@ -2,22 +2,15 @@
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
 import sys
-from typing import List
+from typing import List, Union
 
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from modules.common import abstract_device
-    from . import bat
-    from . import counter
-    from . import inverter
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common import abstract_device
-    from modules.alpha_ess import bat
-    from modules.alpha_ess import counter
-    from modules.alpha_ess import inverter
+from helpermodules import log
+from modules.common import modbus
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_state import SingleComponentUpdateContext
+from modules.alpha_ess import bat
+from modules.alpha_ess import counter
+from modules.alpha_ess import inverter
 
 
 def get_default_config() -> dict:
@@ -28,23 +21,40 @@ def get_default_config() -> dict:
     }
 
 
-class Device(abstract_device.AbstractDevice):
+class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
         "bat": bat.AlphaEssBat,
         "counter": counter.AlphaEssCounter,
         "inverter": inverter.AlphaEssInverter
     }
 
-    def __init__(self, device: dict) -> None:
+    _components = []  # type: List[Union[bat.AlphaEssBat, counter.AlphaEssCounter, inverter.AlphaEssInverter]]
+
+    def __init__(self, device_config: dict) -> None:
         try:
-            client = modbus.ModbusClient("192.168.193.125", 8899)
-            super().__init__(device, client)
+            self.client = modbus.ModbusClient("192.168.193.125", 8899)
+            self.device_config = device_config
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device["name"])
+            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
 
     def add_component(self, component_config: dict) -> None:
-        self.instantiate_component(
-            component_config, self.component_factory(component_config["type"]))
+        component_type = component_config["type"]
+        if component_type in self.COMPONENT_TYPE_TO_CLASS:
+            self._components.append(self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"], component_config, self.client))
+
+    def get_values(self) -> None:
+        log.MainLogger().debug("Start device reading" + str(self._components))
+        if self._components:
+            for component in self._components:
+                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
+                with SingleComponentUpdateContext(component.component_info):
+                    component.update()
+        else:
+            log.MainLogger().warning(
+                self.device_config["name"] +
+                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
+            )
 
 
 def read_legacy(argv: List[str]) -> None:
@@ -76,7 +86,7 @@ def read_legacy(argv: List[str]) -> None:
 
     log.MainLogger().debug('alpha_ess Version: ' + str(version))
 
-    dev.update_values()
+    dev.get_values()
 
 
 if __name__ == "__main__":
