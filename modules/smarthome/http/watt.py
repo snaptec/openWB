@@ -41,6 +41,7 @@ if not urlstate.startswith("none"):
     state = int(urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8"))
 else:
     state = 0
+f.close()
 aktpowerfl = float(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
 aktpower = int(aktpowerfl)
 if state == 1 or aktpower > 50:
