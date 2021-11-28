@@ -91,7 +91,7 @@ if [[ $? == "0" ]] ; then
 	# openwbDebugLog "Debug" 0 "$lp1name: pushbplug: $pushbplug  | car: $car | pushbenachrichtigung: $pushbenachrichtigung | plugstat: $plugstat"
 	if [[ $plugstat == "0" ]] ; then
 		if [[ $pushbplug == "1" ]] && [[ $car != "1" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-			message="$lp2name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+			message="$lp1name eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 			/var/www/html/openWB/runs/pushover.sh "$message"
 		fi
 	fi
