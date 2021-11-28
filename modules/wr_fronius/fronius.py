@@ -41,6 +41,7 @@ except:
     pvwatt = 0
 
 if wrfroniusisgen24 == "0":
+    pvkwh_start = 0
     try:
 	    pvkwh = int(pvwatttmp["Body"]["Data"]["Site"]["E_Total"])
 	    pvday = round(pvwatttmp["Body"]["Data"]["Site"]["E_Day"])
@@ -93,7 +94,7 @@ else:
                 f.write(str(pvkwh))
             with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
                 f.write('{:.3f}'.format(round(pvkwh / 1000, 3)))
-        if pvday == 0:
+        if pvday == 0 and pvkwh > pvkwh_start:
             with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                 f.write(str(pvkwh))
 
