@@ -42,6 +42,7 @@ except:
 
 if wrfroniusisgen24 == "0":
     pvkwh_start = 0
+    pvkwh_offset = 0
     try:
 	    pvkwh = int(pvwatttmp["Body"]["Data"]["Site"]["E_Total"])
 	    pvday = round(pvwatttmp["Body"]["Data"]["Site"]["E_Day"])
@@ -49,10 +50,25 @@ if wrfroniusisgen24 == "0":
         traceback.print_exc()
         exit(1)
     try:
+        with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "r") as f:
+            pvkwh_offset = int(f.read())
+    except FileNotFoundError as e:
+        DebugLog(1, str(e))
+    try:
         with open("/var/www/html/openWB/ramdisk/pvkwh_start", "r") as f:
             pvkwh_start = int(f.read())
-            if pvkwh_start + pvday > pvkwh:
-                pvkwh = pvkwh_start + pvday
+            pvkwh_new = pvkwh_start + pvday + pvkwh_offset
+            if pvkwh_new > pvkwh:
+                if pvkwh_new - pvkwh >= 100:
+                    # Korregiere Abweichung
+                    pvkwh_diff = pvkwh_new - pvkwh - 99
+                    pvkwh_offset -= pvkwh_diff
+                    pvkwh_new -= pvkwh_diff
+                pvkwh = pvkwh_new
+            else:
+                # Berechne Abweichung als Mittelwert von aktueller und bisheriger Abweichung
+                pvkwh_offset = round((pvkwh_offset + pvkwh - pvkwh_start - pvday) / 2)
+            print("pvkwh_offset = %s" % pvkwh_offset)
     except FileNotFoundError as e:
         DebugLog(1, str(e))
 
@@ -88,14 +104,20 @@ else:
     # Zur weiteren Verwendung im Webinterface
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
-    if wrfroniusisgen24 == "0":
-        if pvkwh > 0:
-            with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
-                f.write(str(pvkwh))
-            with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
-                f.write('{:.3f}'.format(round(pvkwh / 1000, 3)))
+    if wrfroniusisgen24 == "0" and pvkwh > 0:
+        with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
+            f.write(str(pvkwh))
+        with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
+            f.write('{:.3f}'.format(round(pvkwh / 1000, 3)))
         if pvday == 0 and pvkwh > pvkwh_start:
             with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                 f.write(str(pvkwh))
+            with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "w") as f:
+                with open("/var/www/html/openWB/ramdisk/daily_pvkwh", "r") as ff:
+                    pvkwh_offset = (pvkwh_offset + int(float(ff.read()) * 1000)) % 100
+                    f.write(str(pvkwh_offset))
+        else:
+            with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "w") as f:
+                f.write(str(pvkwh_offset))
 
 exit(0)
