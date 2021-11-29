@@ -34,17 +34,16 @@ class YieldMeter {
 		this.chargeColor = 'var(--color-charging)';
 		this.axisColor = 'var(--color-axis)';
 		this.gridColor = 'var(--color-grid)';
-   	
+
 	}
 
 	// to be called when values have changed
 	update() {
-				this.plotdata = Object.values(wbdata.sourceSummary)
-				.filter((row) => (row.energy > 0))
-				.concat(wbdata.usageDetails
-					.filter((row) => (row.energy > 0)));
-		
-				
+		this.plotdata = Object.values(wbdata.sourceSummary)
+			.filter((row) => (row.energy > 0))
+			.concat(wbdata.usageDetails
+				.filter((row) => (row.energy > 0)));
+
 		this.adjustLabelSize()
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);

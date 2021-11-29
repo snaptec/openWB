@@ -5,6 +5,7 @@ from helpermodules import log
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_state import SingleComponentUpdateContext
+import bat
 import counter
 import inverter
 
@@ -24,7 +25,7 @@ def get_default_config() -> dict:
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-        # "bat": ,
+        "bat": bat.BatKitFlex,
         "counter": counter.EvuKitFlex,
         "inverter": inverter.PvKitFlex
     }
@@ -63,7 +64,7 @@ def read_legacy(argv: List[str]):
     """ Ausführung des Moduls als Python-Skript
     """
     COMPONENT_TYPE_TO_MODULE = {
-        # "bat": ,
+        "bat": bat,
         "counter": counter,
         "inverter": inverter
     }

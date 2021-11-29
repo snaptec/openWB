@@ -89,7 +89,7 @@ class PowerGraph {
       unsubscribeMqttGraphSegments();
       unsubscribeGraphUpdates();
     } catch (err) {
-      // on intial run this method is not existing
+      // on initial run this method is not existing
     }
   }
 
@@ -159,7 +159,7 @@ class PowerGraph {
   }
 
   updateLive(topic, payload) {
-    if (wbdata.graphMode == 'live') { // only udpdate if live graph is active
+    if (wbdata.graphMode == 'live') { // only update if live graph is active
       if (this.initialized) { // steady state
         if (topic === "openWB/graph/lastlivevalues") {
           const values = this.extractLiveValues(payload.toString());
