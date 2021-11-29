@@ -509,7 +509,7 @@ function updateMaxPriceInput(value) {
 	}
 	wbdata.maxPriceDelayTimer = setTimeout(() => {
 		label.classed("text-danger", false)
-		publish(value, "openWB/global/awattar/MaxPriceForCharging" )
+		publish(value, "openWB/set/awattar/MaxPriceForCharging" )
 		wbdata.maxPriceDelayTimer = null;
 	}, 2000)
 

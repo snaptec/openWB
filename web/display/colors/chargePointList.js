@@ -174,12 +174,10 @@ class ChargePointList {
     d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
     d3.select(".priceConfiguration").classed("hide", !((wbdata.chargeMode == "0") && wbdata.isEtEnabled));
     d3.select(".labelMaxPrice").text(wbdata.etMaxPrice + " Cent");
+    d3.select(".maxPriceInput").property("value", wbdata.etMaxPrice);
 
     d3.select(".pricechartColumn").classed ("col-12", (limitMode == 0));
     d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 ||  limitMode == 1));
-    // d3.select(".pricechartColumn").classed ("col-10", (limitMode == 1));
-
-
   }
 }
 
