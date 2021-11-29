@@ -177,7 +177,7 @@
 										</div>
 										<span class="form-text small">
 											IP-Adresse 1: Energy Manager (immer angeben)<br>
-											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+											IP-Adresse 2: Gateway (Zusätzlich, falls Abrufmethode Gateway)
 										</span>
 									</div>
 								</div>

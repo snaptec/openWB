@@ -1,5 +1,5 @@
 <?php
-	// if paranmeter extendedFilename is passed with value 1 the filename changes
+	// if parameter extendedFilename is passed with value 1 the filename changes
 	// from backup.tar.gz to openWB_backup_YYYY-MM-DD_HH-MM-SS.tar.gz
 	$useExtendedFilename = false;
 	if( isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1") {

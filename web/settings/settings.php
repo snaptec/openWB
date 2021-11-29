@@ -171,7 +171,7 @@
 									</p>
 									<p>
 										Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die Home-ID können Sie (wenn bekannt)
-										in das Eingebafeld selbst eintragen oder <b>nach Eingabe Ihres Token</b> durch Klick auf den Button von der openWB ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
+										in das Eingabefeld selbst eintragen oder <b>nach Eingabe Ihres Token</b> durch Klick auf den Button von der openWB ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der Home-ID automatisch gelöscht.
 									</p>
 									<p>
 										Bei einer fehlerhaften Tibber-Abfrage wird der Strompreis von der openWB bis zur nächsten erfolgreichen Abfrage mit 99.99ct/kWh festgelegt.
