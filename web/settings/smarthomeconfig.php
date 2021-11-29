@@ -79,7 +79,7 @@ $numDevices = 9;
 									<div class="col">
 										<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="none" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value="none" data-option="none" selected="selected">Kein Gerät</option>
-											<option value="shelly" data-option="shelly">Shelly</option>
+											<option value="shelly" data-option="shelly">Shelly oder Shelly plus</option>
 											<option value="tasmota" data-option="tasmota">Tasmota</option>
 											<option value="acthor" data-option="acthor">Acthor</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
@@ -553,7 +553,7 @@ $numDevices = 9;
 											<option value="json" data-option="json">Json</option>
 											<option value="mystrom" data-option="mystrom">MyStrom</option>
 											<option value="sdm630" data-option="sdm630">SDM630</option>
-											<option value="shelly" data-option="shelly">Shelly</option>
+											<option value="shelly" data-option="shelly">Shelly oder Shelly plus</option>
 											<option value="we514" data-option="we514">WE514</option>
 											<option value="avm" data-option="avm">AVM</option>
 											<option value="mqtt" data-option="mqtt">Mqtt</option>
