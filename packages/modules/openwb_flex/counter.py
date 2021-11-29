@@ -6,7 +6,7 @@ from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
-from modules.openwb_flex.versions import kit_version_factory
+from modules.openwb_flex.versions import kit_counter_inverter_version_factory
 
 
 def get_default_config() -> dict:
@@ -27,7 +27,7 @@ class EvuKitFlex:
                  tcp_client: modbus.ModbusClient) -> None:
         self.__device_id = device_id
         self.component_config = component_config
-        factory = kit_version_factory(
+        factory = kit_counter_inverter_version_factory(
             component_config["configuration"]["version"])
         self.__client = factory(component_config["configuration"]["id"],
                                 tcp_client)
