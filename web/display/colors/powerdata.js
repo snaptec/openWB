@@ -420,7 +420,7 @@ function formatMonth(month, year) {
 	return (months[month] + " " + year);
 }
 
-// required for pricechart to work
+// required for price chart to work
 var evuCol;
 var xgridCol;
 var gridCol;
@@ -509,7 +509,7 @@ function updateMaxPriceInput(value) {
 	}
 	wbdata.maxPriceDelayTimer = setTimeout(() => {
 		label.classed("text-danger", false)
-		publish(value, "openWB/global/awattar/MaxPriceForCharging" )
+		publish(value, "openWB/set/awattar/MaxPriceForCharging" )
 		wbdata.maxPriceDelayTimer = null;
 	}, 2000)
 
