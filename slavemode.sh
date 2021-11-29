@@ -9,6 +9,7 @@ declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
 declare -r SocketActivatedFile="ramdisk/socketActivated"
 declare -r SocketApprovedFile="ramdisk/socketApproved"
 declare -r SocketRequestedFile="ramdisk/socketActivationRequested"
+declare -r EnergyLimitFile="ramdisk/energyLimitLp"
 declare -r SystemVoltage=240
 declare -r MaxCurrentOffset=1.0
 declare -r LmStatusFile="ramdisk/lmStatusLp"
@@ -19,7 +20,9 @@ declare -r LmStatusDownByLm=2
 declare -r LmStatusDownByEv=3
 declare -r LmStatusDownByError=4
 declare -r LmStatusDownByDisable=5
+# 6-7 reserved for LM use
 declare -r LmStatusDownForSocket=8
+declare -r LmStatusDownByEnergyLimit=9
 
 if (( lastmanagement > 0 )); then
 	declare -r -i NumberOfSupportedChargePoints=2
@@ -174,6 +177,8 @@ function computeAndSetCurrentForChargePoint() {
 		fi
 	fi
 
+	if endChargeAndAbortOnChargeLimits $chargePoint; then return 0; fi
+
 	# compute difference between allowed current on the total current of the phase that has the highest total current and is actually used for charging
 	# in floats for not to loose too much precision
 	local lldiff=$(echo "scale=3; ($AllowedTotalCurrentPerPhase - ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent}) / ${ChargingVehiclesAdjustedForThisCp}" | bc)
@@ -265,6 +270,53 @@ function computeAndSetCurrentForChargePoint() {
 	fi
 
 	return 0
+}
+
+function endChargeAndAbortOnChargeLimits() {
+
+	local chargePoint=$1
+
+	local cpEnergyLimitFile="${EnergyLimitFile}${chargePoint}"
+	if [ ! -f "${cpEnergyLimitFile}" ]; then
+		# no energy limit file available for the CP --> no energy limit
+		openwbDebugLog "MAIN" 2 "Slave Mode: No energy limit setting: Energy limit disabled"
+		return 1
+	fi
+
+	local energyLimit=$(<"${cpEnergyLimitFile}")
+	if (( `echo "$energyLimit <= 0" | bc` == 1 )); then
+		# 0 doesn't make sense - treat it equal to no energy limit
+		openwbDebugLog "MAIN" 2 "Slave Mode: 0 or negative energy limit setting: Energy limit disabled"
+		return 1
+	fi
+
+	local energyChargedSincePlugin=0
+
+	if (( chargePoint == 1 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladen")
+	elif (( chargePoint == 2 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp2")
+	elif (( chargePoint == 3 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp3")
+	elif (( chargePoint >= 4 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp4")
+	else
+		openwbDebugLog "MAIN" 0 "Slave Mode limit processing ERROR: Charge Point #${chargePoint} is not supported"
+		# returning != 0 here would abort control loop of this CP, but we don't want that just for sake of energy limits
+		return 1
+	fi
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Active energy limit: ${energyLimit} Wh, already charged ${energyChargedSincePlugin} kWh"
+
+	if (( `echo "($energyChargedSincePlugin * 1000) > $energyLimit" | bc` == 1 )); then
+
+		openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit reached: Disabling charge"
+		callSetCurrent 0 0  $LmStatusDownByEnergyLimit
+		return 0
+	fi
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit not reached: Continue to charge"
+	return 1
 }
 
 function computeLoadImbalanceCompensation() {
@@ -645,12 +697,6 @@ function callSetCurrent() {
 		currentToSet=$MaximumCurrentPossibleForCp
 	fi
 
-	if (( PreviousExpectedChargeCurrent != currentToSet )); then
-
-		openwbDebugLog "MAIN" 2 "Setting current to ${currentToSet} A for CP#${chargePoint}"
-		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
-	fi
-
 	if (( $statusReason == -1 )); then
 		if (( $CpIsCharging == 1 )) || (( $currentToSet == 0 )); then
 			statusReason=$computedReason
@@ -668,6 +714,14 @@ function callSetCurrent() {
 		do
 			echo "$statusReason" > "${LmStatusFile}${i}"
 		done
+	fi
+
+	if (( PreviousExpectedChargeCurrent != currentToSet )); then
+
+		openwbDebugLog "MAIN" 2 "Setting current from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}"
+		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
+	else
+		return 0
 	fi
 
 	runs/set-current.sh $currentToSet "${chargePointString}"
