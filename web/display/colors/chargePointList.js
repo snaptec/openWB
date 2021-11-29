@@ -81,7 +81,7 @@ class ChargePointList {
     d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 || limitMode == 1));
     // d3.select(".pricechartColumn").classed ("col-10", (limitMode == 1));
     d3.select(".energyResetButton").classed ("hide", (limitMode != 1));
-    
+
   }
 
   calculateValues() {
@@ -160,7 +160,7 @@ class ChargePointList {
     d3.select(".chargeModePv").classed ("hide", wbdata.chargeMode != '2')
     d3.select(".chargeModeStop").classed ("hide", wbdata.chargeMode != '3')
     d3.select(".chargeModeStandby").classed ("hide", wbdata.chargeMode != '4')
-    
+
 
     // charge limit selectors
     const noLimitButton = d3.select(".buttonNoLimit");
@@ -264,7 +264,7 @@ function modeButtonClicked(index) {
           })
       }
     }
-  
+
   $("#chargeModeModal").modal("show");
 } else {
   $("#lockInfoModal").modal("show");

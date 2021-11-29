@@ -82,7 +82,7 @@
 			// now values can be accessed by $settingsArray[$key] = $value;
 
 			$isConfiguredLp = array_fill(1, $maxQuantityLp, false); // holds boolean for configured lp
-			// due to inconsitent variable naming need individual lines
+			// due to inconsistent variable naming need individual lines
 			$isConfiguredLp[1] = 1;  // lp1 always configured
 			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
 			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
@@ -381,8 +381,8 @@ ECHOFORMGROUPTAIL;
 					});
 
 					$("input:text").click(function() {
-						// if clockpicker input is clickedstore the old clockpicker time of clicked clockpicker in global var
-						//  before changing it so it can be reset if lock/unlock time is accidently chosen to be identical
+						// if clockpicker input is clicked store the old clockpicker time of clicked clockpicker in global var
+						//  before changing it so it can be reset if lock/unlock time is accidentally chosen to be identical
 						window.oldClockpickerTime = $(this).val();
 					});
 

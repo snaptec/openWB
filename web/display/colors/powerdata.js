@@ -420,7 +420,7 @@ function formatMonth(month, year) {
 	return (months[month] + " " + year);
 }
 
-// required for pricechart to work
+// required for price chart to work
 var evuCol;
 var xgridCol;
 var gridCol;

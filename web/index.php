@@ -35,9 +35,9 @@
 			// expand expiring-date to now + 2 years
 			$expire = time()+(60*60*24*365*2);
 			setcookie('openWBTheme', $_COOKIE['openWBTheme'], $expire, '/openWB/');
-			// following line is needed because until now the cookie-path was accidently
-			// set to /openWB/web/. So from now on path is /openWB/ to access cookie from all subdirs
-			// therefore delete old cookies by having them expire immediatley
+			// following line is needed because until now the cookie-path was accidentally
+			// set to /openWB/web/. So from now on path is /openWB/ to access cookie from all subdirectories
+			// therefore delete old cookies by having them expire immediately
 			setcookie('openWBTheme', '', time() - 3600, '/openWB/web');
 			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 		}
