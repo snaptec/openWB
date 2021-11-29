@@ -518,7 +518,7 @@ loadvars(){
 		speichervorhanden="0"
 		echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 	fi
-#addition pv nach Speicherauslesung
+	#addition pv nach Speicherauslesung
 	if [[ $pv2vorhanden == "1" ]]; then
 		pv1watt=$(</var/www/html/openWB/ramdisk/pv1watt)
 		pv2watt=$(</var/www/html/openWB/ramdisk/pv2watt)
