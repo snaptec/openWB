@@ -150,7 +150,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 						<u>ACHTUNG</u>: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen!<br/>
-						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und
+						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit persönlichem Login und
 						strenger Zugriffskontrolle (zumindest für die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
 						</div>
 						<div class="form-group">
@@ -179,7 +179,7 @@
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="RemoteAddress<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Addresse und Portnummer des entfernten MQTT-Servers</label>
+							<label for="RemoteAddress<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Adresse und Portnummer des entfernten MQTT-Servers</label>
 							<div class="col">
 								<input class="form-control" type="text" size="50" name="RemoteAddress" id="RemoteAddress<?php echo $loopCount; ?>" pattern="^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$" value="<?php echo $remoteAddressAndPort; ?>">
 								<span class="form-text small">Entfernter MQTT-Server und Port-Nummer. Standard Port ist 8883 für eine TLS-geschützte Verbindung.</span>
@@ -249,8 +249,8 @@
 										<input type="radio" name="tryPrivate" value="1"<?php if($tryPrivate) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
-								<span class="form-text small">Aktiviert eine propriet&auml;re MQTT Protokoll-Erweiterung des Mosquitto Brokers, welche dem entfernten Broker signalisiert dass es sich um
-								eine MQTT Br&uumlcke handelt. Ergibt bessere Leistung mit Mosquitto-Brokern, ist jedoch inkompatibel mit vielen anderen MQTT-Brokern. Daher bitte nur aktivieren, wenn der Ziel-Broker
+								<span class="form-text small">Aktiviert eine proprietäre MQTT Protokoll-Erweiterung des Mosquitto Brokers, welche dem entfernten Broker signalisiert dass es sich um
+								eine MQTT Brücke handelt. Ergibt bessere Leistung mit Mosquitto-Brokern, ist jedoch inkompatibel mit vielen anderen MQTT-Brokern. Daher bitte nur aktivieren, wenn der Ziel-Broker
 								sicher ein Mosquitto-Broker ist.</span>
 							</div>
 						</div>

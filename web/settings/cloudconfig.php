@@ -81,11 +81,11 @@
 			<h1>Einstellungen zur openWB Cloud</h1>
 			<?php if ( $datenschutzackold != 1 ) { ?>
 				<div class="alert alert-danger">
-					Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloudanbindung nutzen zu können.
+					Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloud-Anbindung nutzen zu können.
 				</div>
 			<?php } else { ?>
 				<div class="alert alert-success">
-					Sie haben der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloudanbindung nutzen.
+					Sie haben der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloud-Anbindung nutzen.
 				</div>
 			<?php }
 			if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>

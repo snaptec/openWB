@@ -617,7 +617,7 @@ function toggleMonthView() {
 	}
 	yieldMeter.update();
 }
-// required for pricechart to work
+// required for price chart to work
 var evuCol;
 var xgridCol;
 var gridCol;

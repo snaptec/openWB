@@ -37,7 +37,7 @@
 	<body>
 
 		<?php
-			// support function for dynmic built of carousel content
+			// support function for dynamic built of carousel content
 			function dir_list($rootDir){
 				// returns all directories as theme names from themes folder
 				// except for themes hidden and standard
