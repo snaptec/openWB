@@ -14,11 +14,10 @@ def get_default_config() -> dict:
         "name": "EVU-Kit flex",
         "type": "counter",
         "id": None,
-        "configuration":
-            {
-                "version": 2,
-                "id": 115
-            }
+        "configuration": {
+            "version": 2,
+            "id": 115
+        }
     }
 
 
@@ -33,7 +32,7 @@ class EvuKitFlex:
                                 tcp_client)
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
+        self.simulation = {}
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo(self.component_config["id"],
                                             self.component_config["name"],
@@ -54,7 +53,7 @@ class EvuKitFlex:
                 imported = self.__client.get_imported()
                 exported = self.__client.get_exported()
             else:
-                currents = map(abs, self.__client.get_current())
+                currents = list(map(abs, self.__client.get_current()))
         finally:
             self.__tcp_client.close_connection()
         version = self.component_config["configuration"]["version"]
@@ -69,7 +68,7 @@ class EvuKitFlex:
             imported, exported = self.__sim_count.sim_count(
                 power_all,
                 topic=topic_str,
-                data=self.__simulation,
+                data=self.simulation,
                 prefix="bezug"
             )
         counter_state = CounterState(

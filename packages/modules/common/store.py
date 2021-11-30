@@ -4,7 +4,7 @@ from typing import Callable, Generic, TypeVar, Union
 
 from helpermodules import compatibility
 from helpermodules import log
-from helpermodules import pub
+from helpermodules.pub import Pub
 from modules.common.component_state import BatState, CounterState, InverterState
 from modules.common.fault_state import FaultState
 
@@ -15,7 +15,7 @@ def process_error(e):
 
 def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
     for index, value in enumerate(values):
-        write_to_file(prefix+str(index + 1), value, digits)
+        write_to_file(prefix + str(index + 1), value, digits)
 
 
 def write_to_file(file: str, value, digits: Union[int, None] = None) -> None:
@@ -41,9 +41,9 @@ def pub_to_broker(topic: str, value, digits: Union[int, None] = None) -> None:
     rounding = get_rounding_function_by_digits(digits)
     try:
         if isinstance(value, list):
-            pub.pub(topic, [rounding(v) for v in value])
+            Pub().pub(topic, [rounding(v) for v in value])
         else:
-            pub.pub(topic, rounding(value))
+            Pub().pub(topic, rounding(value))
     except Exception as e:
         process_error(e)
 
