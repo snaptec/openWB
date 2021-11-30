@@ -58,8 +58,7 @@
 				array_push($files, "");
 
 				$loopCount = 0;
-				foreach($files as $currentFile)
-				{
+				foreach($files as $currentFile){
 					$currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
 
 					$bridgeLines = $currentFile != "" ? file($currentFile) : array();
@@ -151,7 +150,7 @@
 					<div class="card-body">
 						<div class="card-text alert alert-danger">
 						<u>ACHTUNG</u>: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen!<br/>
-						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)  mit persönlichenm Login und
+						Es wird dringend empfohlen, dies nur für nicht-öffentliche MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS) mit persönlichem Login und
 						strenger Zugriffskontrolle (zumindest für die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
 						</div>
 						<div class="form-group">
@@ -162,48 +161,48 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($bridgeEnabled == 0) echo " active" ?>">
-											<input type="radio" name="bridgeEnabled" id="bridgeEnabledoldOff" value="0" <?php if($bridgeEnabled == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="bridgeEnabled" value="0" <?php if($bridgeEnabled == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($bridgeEnabled == 1) echo " active" ?>">
-											<input type="radio" name="bridgeEnabled" id="bridgeEnabledoldOn" value="1" <?php if($bridgeEnabled == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="bridgeEnabled" value="1" <?php if($bridgeEnabled == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="ConnectionName" class="col-md-4 col-form-label">Name der Brücke</label>
+							<label for="ConnectionName<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Name der Brücke</label>
 							<div class="col">
-								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>">
+								<input class="form-control" type="text" size="35" name="ConnectionName" id="ConnectionName<?php echo $loopCount; ?>" pattern="^[a-zA-Z0-9]+$" value="<?php echo $connectionName; ?>">
 								<span class="form-text small">Der Name darf nur aus Buchstaben und Zahlen bestehen, keine Sonderzeichen oder Umlaute.</span>
 								<?php if($debugold >= 1) echo "<small>Config-File befindet sich in Datei '$currentFile'</small>"; ?>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="RemoteAddress" class="col-md-4 col-form-label">Addresse und Portnummer des entfernten MQTT-Servers</label>
+							<label for="RemoteAddress<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Adresse und Portnummer des entfernten MQTT-Servers</label>
 							<div class="col">
-								<input class="form-control" type="text" size="50" name="RemoteAddress" id="RemoteAddress" pattern="^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$" value="<?php echo $remoteAddressAndPort; ?>">
+								<input class="form-control" type="text" size="50" name="RemoteAddress" id="RemoteAddress<?php echo $loopCount; ?>" pattern="^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$" value="<?php echo $remoteAddressAndPort; ?>">
 								<span class="form-text small">Entfernter MQTT-Server und Port-Nummer. Standard Port ist 8883 für eine TLS-geschützte Verbindung.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="RemoteUser" class="col-md-4 col-form-label">Benutzer</label>
+							<label for="RemoteUser<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Benutzer</label>
 							<div class="col">
-								<input class="form-control" type="text" size="35" name="RemoteUser" id="RemoteUser" pattern="^([a-zA-Z0-9_\-+.]+)$" value="<?php echo $remoteUser; ?>">
+								<input class="form-control" type="text" size="35" name="RemoteUser" id="RemoteUser<?php echo $loopCount; ?>" pattern="^([a-zA-Z0-9_\-+.]+)$" value="<?php echo $remoteUser; ?>">
 								<span class="form-text small">Benutzername für den Login auf dem entfernten MQTT-Server.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="RemotePass" class="col-md-4 col-form-label">Passwort</label>
+							<label for="RemotePass<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Passwort</label>
 							<div class="col">
-								<input class="form-control" type="password" size="35" name="RemotePass" id="RemotePass" pattern="^\S.\S+$" value="<?php echo $remotePassword; ?>">
+								<input class="form-control" type="password" size="35" name="RemotePass" id="RemotePass<?php echo $loopCount; ?>" pattern="^\S.\S+$" value="<?php echo $remotePassword; ?>">
 								<span class="form-text small">Passwort für den Login auf dem entfernten MQTT-Server. Leerzeichen am Anfang und Ende des Passworts werden nicht unterstützt.</span>
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="RemotePrefix" class="col-md-4 col-form-label">Entfernter Präfix</label>
+							<label for="RemotePrefix<?php echo $loopCount; ?>" class="col-md-4 col-form-label">Entfernter Präfix</label>
 							<div class="col">
-								<input class="form-control" type="text" size="55" name="RemotePrefix" id="RemotePrefix" pattern="^[a-zA-Z0-9_\-\/]+[/]$" value="<?php echo $remotePrefix; ?>">
+								<input class="form-control" type="text" size="55" name="RemotePrefix" id="RemotePrefix<?php echo $loopCount; ?>" pattern="^[a-zA-Z0-9_\-\/]+[/]$" value="<?php echo $remotePrefix; ?>">
 								<span class="form-text small">MQTT-Thema Präfix, welches dem 'openWB/...' vorangestellt wird.<br/>
 									Beispiel: Wenn in diesem Feld 'pfx/' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</span>
 							</div>
@@ -213,10 +212,10 @@
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($mqttProtocol == "mqttv31") echo " active" ?>">
-										<input type="radio" name="mqttProtocol" id="mqttProtocol31" value="mqttv31" <?php if($mqttProtocol == "mqttv31") echo " checked=\"checked\"" ?>>v3.1
+										<input type="radio" name="mqttProtocol" value="mqttv31" <?php if($mqttProtocol == "mqttv31") echo " checked=\"checked\"" ?>>v3.1
 									</label>
 									<label class="btn btn-outline-info<?php if($mqttProtocol == "mqttv311") echo " active" ?>">
-										<input type="radio" name="mqttProtocol" id="mqttProtocol311" value="mqttv311" <?php if($mqttProtocol == "mqttv311") echo " checked=\"checked\"" ?>>v3.1.1
+										<input type="radio" name="mqttProtocol" value="mqttv311" <?php if($mqttProtocol == "mqttv311") echo " checked=\"checked\"" ?>>v3.1.1
 									</label>
 								</div>
 								<span class="form-text small">Version des MQTT Protokolls, welches zur Kommunikation mit dem entfernten Server verwendet wird.</span>
@@ -227,10 +226,10 @@
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($tlsVersion == "tlsv1.3") echo " active"; if(!$tlsv13Supported) echo " disabled"; ?>">
-										<input type="radio" name="tlsProtocol" id="tlsProtocol13" value="tlsv1.3" <?php if($tlsVersion == "tlsv1.3") echo " checked=\"checked\""; if(!$tlsv13Supported) echo " disabled";  ?>>TLS v1.3
+										<input type="radio" name="tlsProtocol" value="tlsv1.3" <?php if($tlsVersion == "tlsv1.3") echo " checked=\"checked\""; if(!$tlsv13Supported) echo " disabled";  ?>>TLS v1.3
 									</label>
 									<label class="btn btn-outline-info<?php if($tlsVersion == "tlsv1.2") echo " active" ?>">
-										<input type="radio" name="tlsProtocol" id="tlsProtocol12" value="tlsv1.2" <?php if($tlsVersion == "tlsv1.2") echo " checked=\"checked\"" ?>>TLS v1.2
+										<input type="radio" name="tlsProtocol" value="tlsv1.2" <?php if($tlsVersion == "tlsv1.2") echo " checked=\"checked\"" ?>>TLS v1.2
 									</label>
 								</div>
 								<span class="form-text small">
@@ -244,14 +243,14 @@
 							<div class="col">
 								<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($exportStatus == 0) echo " active" ?>">
-										<input type="radio" name="tryPrivate" id="tryPrivateOff" value="0"<?php if(! $tryPrivate) echo " checked=\"checked\"" ?>>Aus
+										<input type="radio" name="tryPrivate" value="0"<?php if(! $tryPrivate) echo " checked=\"checked\"" ?>>Aus
 									</label>
 									<label class="btn btn-outline-info<?php if($exportStatus == 1) echo " active" ?>">
-										<input type="radio" name="tryPrivate" id="tryPrivateOn" value="1"<?php if($tryPrivate) echo " checked=\"checked\"" ?>>An
+										<input type="radio" name="tryPrivate" value="1"<?php if($tryPrivate) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
-								<span class="form-text small">Aktiviert eine propriet&auml;re MQTT Protokoll-Erweiterung des Mosquitto Brokers, welche dem entfernten Broker signalisiert dass es sich um
-								eine MQTT Br&uumlcke handelt. Ergibt bessere Leistung mit Mosquitto-Brokern, ist jedoch inkompatibel mit vielen anderen MQTT-Brokern. Daher bitte nur aktivieren, wenn der Ziel-Broker
+								<span class="form-text small">Aktiviert eine proprietäre MQTT Protokoll-Erweiterung des Mosquitto Brokers, welche dem entfernten Broker signalisiert dass es sich um
+								eine MQTT Brücke handelt. Ergibt bessere Leistung mit Mosquitto-Brokern, ist jedoch inkompatibel mit vielen anderen MQTT-Brokern. Daher bitte nur aktivieren, wenn der Ziel-Broker
 								sicher ein Mosquitto-Broker ist.</span>
 							</div>
 						</div>
@@ -275,10 +274,10 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($exportStatus == 0) echo " active" ?>">
-											<input type="radio" name="exportStatus" id="exportStatusoldOff" value="0"<?php if($exportStatus == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="exportStatus" value="0"<?php if($exportStatus == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($exportStatus == 1) echo " active" ?>">
-											<input type="radio" name="exportStatus" id="exportStatusoldOn" value="1"<?php if($exportStatus == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="exportStatus" value="1"<?php if($exportStatus == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 									<span class="form-text small">Hausverbrauch, EVU, PV, Ladepunkte, Speicher</span>
@@ -293,10 +292,10 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($exportGraph == 0) echo " active" ?>">
-											<input type="radio" name="exportGraph" id="exportGrapholdOff" value="0"<?php if($exportGraph == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="exportGraph" value="0"<?php if($exportGraph == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($exportGraph == 1) echo " active" ?>">
-											<input type="radio" name="exportGraph" id="exportGrapholdOn" value="1"<?php if($exportGraph == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="exportGraph" value="1"<?php if($exportGraph == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
@@ -325,10 +324,10 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($subscribeConfigs == 0) echo " active" ?>">
-											<input type="radio" name="subscribeConfigs" id="subscribeConfigsoldOff" value="0" <?php if($subscribeConfigs == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="subscribeConfigs" value="0" <?php if($subscribeConfigs == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($subscribeConfigs == 1) echo " active" ?>">
-											<input type="radio" name="subscribeConfigs" id="subscribeConfigsoldOn" value="1" <?php if($subscribeConfigs == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="subscribeConfigs" value="1" <?php if($subscribeConfigs == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>

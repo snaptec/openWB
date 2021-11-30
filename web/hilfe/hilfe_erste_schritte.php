@@ -15,7 +15,7 @@
 <h5>PV Laden</h5>
 <p>
 	Geladen wird bei ausreichendem PV Überschuss. Der Ladestrom wird automatisch angepasst um den vorhandenen PV Überschuss bestmöglich zu nutzen.
-	Die Ladung startet automatisch beim Erreichen der Einschaltschwelle für die Einspeisung und stoppt beim Erreichen der Abschaltschelle oder beim Erreichen eines konfigurierten maximalen SoC.
+	Die Ladung startet automatisch beim Erreichen der Einschaltschwelle für die Einspeisung und stoppt beim Erreichen der Abschaltschwelle oder beim Erreichen eines konfigurierten maximalen SoC.
 	Je nach Fahrzeug und installierter openWB Variante kann die CP-Unterbrechung genutzt werden um Fahrzeuge für den Ladebeginn aus dem Schlaf aufzuwecken.
 </p>
 <h5>Min+PV Laden</h5>

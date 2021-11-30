@@ -95,7 +95,7 @@
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
-										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
+										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage</option>
 										<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
 										<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 									</optgroup>
@@ -177,7 +177,7 @@
 										</div>
 										<span class="form-text small">
 											IP-Adresse 1: Energy Manager (immer angeben)<br>
-											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+											IP-Adresse 2: Gateway (Zusätzlich, falls Abrufmethode Gateway)
 										</span>
 									</div>
 								</div>

@@ -37,24 +37,50 @@ class Battery_API {
 
 
 	function cache_remote_token( $token_data ) {
+		$cuser = $this->auth["username"];
+		$content = json_decode( @file_get_contents(
+				$this->token_file
+			)
+		);
+		$content->$cuser = $token_data;
 		file_put_contents(
 			$this->token_file,
-			json_encode( $token_data )
+			json_encode( $content )
 		);
 	}
 
 
+
 	function get_cached_token() {
-		return json_decode(
+		$cuser = $this->auth["username"];
+		$json_content = json_decode(
 			@file_get_contents(
 				$this->token_file
 			)
 		);
+		echo json_encode($json_content);
+		if(!empty($json_content->token)) {
+			unset($json_content["token"]);
+		}
+		if(!empty($json_content->expires)) {
+			unset($json_content["expires"]);
+		}
+		echo json_encode($json_content);
+		file_put_contents(
+			$this->token_file,
+			json_encode( $json_content )
+		);
+
+		return json_decode(
+			@file_get_contents(
+				$this->token_file
+			)
+		)->$cuser;
 	}
 
 
 	function get_token() {
-		// Get cached token
+		$cuser = $this->auth["username"];
 		if ( $cached_token_data = $this->get_cached_token() ) {
 			if ( $cached_token_data->expires > time() ) {
 				$token = $cached_token_data->token;
@@ -173,8 +199,8 @@ class Battery_API {
 		$updateTime = date( 'd.m.Y H:i', $updateTimestamp );
 		$electricRange = intval( $attributes->beRemainingRangeElectricKm );
 		$chargingLevel = intval( $attributes->chargingLevelHv );
-		$chargingActive = intval( $attributes->charging_status === 'CHARGINGACTIVE' );
-		$chargingError = intval( $attributes->charging_status === 'CHARGINGERROR' );
+		$chargingActive = intval( $attributes->chargingSystemStatus === 'CHARGINGACTIVE' );
+		$chargingError = intval( $attributes->chargingSystemStatus === 'CHARGINGERROR' );
 		//$chargingTimeRemaining = intval( $attributes->chargingTimeRemaining );
 		//$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 

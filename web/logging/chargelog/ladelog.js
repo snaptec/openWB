@@ -9,7 +9,7 @@ var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 // general helper functions
 
 function getIndex(topic) {
-	// get occurence of numbers between / / in topic
+	// get occurrence of numbers between / / in topic
 	// since this is supposed to be the index like in openwb/lp/4/w
 	// no lookbehind supported by safari, so workaround with replace needed
 	var index = topic.match(/(?:\/)([0-9]+)(?=\/)/g)[0].replace(/[^0-9]+/g, '');
@@ -20,7 +20,7 @@ function getIndex(topic) {
 }
 
 function getLadelogIndex(topic) {
-	// get occurence of numbers between / / in topic
+	// get occurrence of numbers between / / in topic
 	// since this is supposed to be the index like in openwb/lp/4/w
 	// no lookbehind supported by safari, so workaround with replace needed
 	var index = topic.match(/[1-9][0-9]*$/g)[0];
@@ -120,7 +120,7 @@ var publish = function (payload, topic) {
 	client.send(message);
 }
 
-// ladelog functions
+// lade log functions
 
 function initLadelog(){
 	ladelog1=0;
