@@ -75,7 +75,7 @@ function setToggleBtnGroup(groupId, option) {
     /** @function setToggleBtnGroup
      * sets the state of a button group
      * @param {string} groupId - the id of the button group
-     * @param {string} option - the option the group btns will be set to
+     * @param {string} option - the option the group buttons will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
     $('input[name="' + groupId + '"][data-option="' + option + '"]').prop('checked', true);

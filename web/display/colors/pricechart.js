@@ -2,8 +2,8 @@ class PriceChart {
 
   constructor() {
     this.width = 400;
-    this.height = 135;
-    this.margin = { top: 10, bottom: 20, left: 30, right: 20 };
+    this.height = 80;
+    this.margin = { top: 5, bottom: 15, left: 30, right: 20 };
 
   }
 
@@ -11,7 +11,7 @@ class PriceChart {
   init() {
     const figure = d3.select("figure#priceChart");
     this.svg = figure.append("svg")
-      .attr("viewBox", `0 0 400 135`);
+      .attr("viewBox", `0 0 400 80`);
     this.bgColor = 'var(--color-bg)';
     this.gridColor = 'var(--color-grid)';
     this.axisColor = 'var(--color-axis)';
@@ -28,7 +28,7 @@ class PriceChart {
       this.plotdata.shift();                                // remove first line
       this.plotdata = this.plotdata.map((line, i) => {      // split lines into tuples [time,price]
         return line.split(',')
-      }) .map(line => [line[0] * 1000, line[1]]);           // multiply timestamps by 1000
+      }) .map(line => [line[0] * 1000, +line[1]]);           // multiply timestamps by 1000
       this.drawGraph(svg);
     }
   }
@@ -85,11 +85,13 @@ class PriceChart {
     const xAxisGenerator = d3.axisBottom(this.xScale)
       .ticks(4)
       .tickFormat(d3.timeFormat("%H:%M"))
-
     const xAxis = this.svg.append("g")
       .attr("class", "axis")
       .call(xAxisGenerator);
     xAxis.attr("transform", "translate(" + this.margin.left + "," + (height + this.margin.top) + ")");
+    xAxis.selectAll(".tick")
+    .attr("font-size", 8)
+    .attr("color", "white");
 
     // Y Axis
     const yAxisGenerator = d3.axisLeft(this.yScale)
@@ -103,7 +105,7 @@ class PriceChart {
 
     yAxis.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
     yAxis.selectAll(".tick")
-      .attr("font-size", 12)
+      .attr("font-size", 8)
       .attr("color", "white");
 
     yAxis.selectAll(".tick line")
@@ -111,7 +113,7 @@ class PriceChart {
       .attr("stroke-width", "0.5");
 
     yAxis.select(".domain")
-      .attr("stroke", this.gridColor)
+      .attr("stroke", this.bgColor)
       ;
   }
 }

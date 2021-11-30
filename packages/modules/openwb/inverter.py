@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
 
-try:
-    from ...helpermodules import log
-    from ..common import modbus
-    from ..common.module_error import ModuleError, ModuleErrorLevel
-    from ..openwb_flex.inverter import PvKitFlex
-except (ImportError, ValueError):
-    from helpermodules import log
-    from modules.common import modbus
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
-    from modules.openwb_flex.inverter import PvKitFlex
+from helpermodules import log
+from modules.common import modbus
+from modules.common.fault_state import FaultState
+from modules.openwb_flex.inverter import PvKitFlex
 
 
 def get_default_config() -> dict:
@@ -25,7 +19,7 @@ def get_default_config() -> dict:
 
 
 class PvKit(PvKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict) -> None:
         try:
             self.data = {"config": component_config}
             version = self.data["config"]["configuration"]["version"]
@@ -34,11 +28,11 @@ class PvKit(PvKitFlex):
             elif version == 2:
                 id = 116
             else:
-                raise ModuleError("Version "+str(version) +
-                                  " unbekannt.", ModuleErrorLevel.ERROR)
+                raise FaultState.error("Version "+str(version) +
+                                       " unbekannt.")
             self.data["config"]["configuration"]["id"] = id
 
-            super().__init__(device_id, self.data["config"], tcp_client)
+            super().__init__(device_id, self.data["config"], modbus.ModbusClient("192.168.193.13", 8899))
         except Exception:
             log.MainLogger().exception("Fehler im Modul " +
                                        self.data["config"]["components"]["component0"]["name"])

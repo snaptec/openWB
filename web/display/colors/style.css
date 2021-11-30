@@ -485,8 +485,18 @@ h3 {
     font-size: 16px;
     padding: 9px;
 }
+ .modal-button {
+     font-size: 15px;
+     padding: 4px;
+ }
+ .modal-title {
+     font-size: 20px;
+    }
+.modal-header {
+    padding: 2px;
+    align-items: center;
 
-
+}
 .status-header,.status-title {
     text-align: center;
     font-size: 1em;

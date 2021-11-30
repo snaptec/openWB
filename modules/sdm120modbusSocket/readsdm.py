@@ -45,7 +45,7 @@ f = open('/var/www/html/openWB/ramdisk/socketpf', 'w')
 f.write(str(socketpf))
 f.close()
 
-time.sleep(0.1)
+time.sleep(0.15)
 resp = client.read_input_registers(0x0156,2, unit=sdmid)
 socketkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 socketkwh = float("%.3f" % socketkwh[0])

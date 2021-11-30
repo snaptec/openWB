@@ -152,7 +152,7 @@ var isSSL = location.protocol == 'https:';
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
-	//Gets Called if the connection has sucessfully been established
+	//Gets Called if the connection has been established
 	onSuccess: function () {
 		retries = 0;
 		thevalues.forEach(function(thevar) {
@@ -232,13 +232,13 @@ function buildCsvDataArray() {
 					// now format the array
 					var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
 					if ( columnCountDifference > 0 ) {
-						// not enough columns in dataset, maybe due to older logfile, so add zero-fields
+						// not enough columns in dataset, maybe due to older log file, so add zero-fields
 						while ( columnCountDifference > 0 ) {
 							dataRow.push(0);
 							columnCountDifference--;
 						}
 					} else if ( columnCountDifference < 0 ) {
-						// too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
+						// too many columns in dataset, maybe due to read-errors of log files, so delete fields
 						while ( columnCountDifference < 0 ) {
 							dataRow.pop();
 							columnCountDifference++;
@@ -305,13 +305,13 @@ function buildCsvDataArrayb() {
 					// now format the array
 					var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
 					if ( columnCountDifference > 0 ) {
-						// not enough columns in dataset, maybe due to older logfile, so add zero-fields
+						// not enough columns in dataset, maybe due to older log file, so add zero-fields
 						while ( columnCountDifference > 0 ) {
 							dataRow.push(0);
 							columnCountDifference--;
 						}
 					} else if ( columnCountDifference < 0 ) {
-						// too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
+						// too many columns in dataset, maybe due to read-errors of log files, so delete fields
 						while ( columnCountDifference < 0 ) {
 							dataRow.pop();
 							columnCountDifference++;
@@ -364,7 +364,7 @@ function fillLpCounterValuesArray() {
 	csvData.forEach((dataRow, rowIndex) => {
 		// process every day
 		var lpCounterValuesRow = [];  // row to hold the counter values of the day in kWh
-		if ( rowIndex < (csvData.length -1) ) {  // skipt last row of csvData-array, it is just needed for calculation
+		if ( rowIndex < (csvData.length -1) ) {  // skip last row of csvData-array, it is just needed for calculation
 			dataRow.forEach((value, columnIndex) => {
 				if ( LPCOLUMNS.includes(columnIndex) ) {
 					// current column is a LP-counter-value
@@ -432,7 +432,7 @@ function completeMonth() {
 }
 
 function formatDateColumn() {
-	// formats the first csvdata-column so date is displayed at labels like 'Mo, 16.03.20'
+	// formats the first csv data-column so date is displayed at labels like 'Mo, 16.03.20'
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
 		var theDate = new Date(csvData[rowIndex][0]);
 		var day = String(theDate.getDate()).padStart(2, '0');  // format with leading zeros
@@ -479,7 +479,7 @@ function loadgraph() {
   csvDatab.sort((date1, date2) => date1[0].localeCompare(date2[0]));
 	// and process array
 	fillDataGaps();  // completes gaps in data
-	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
+	fillLpCounterValuesArray();  // fills an array containing all counter values for every lp
 	//calcDailyValues();  // sum up values for totals
   calcDailyValuesNew();
 	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
@@ -1461,11 +1461,11 @@ function loadgraph() {
 						return dataPoint[0].xLabel + graphMonth + '.' + graphYear;
 					},
 					label: function(dataPoint, graphData) {
-						// get only the name of the respective dataline since total value is visible at legend
+						// get only the name of the respective data line since total value is visible at legend
 						var xLabel = graphData.datasets[dataPoint.datasetIndex].label.split(' ', 1)[0];
 						// get value for the tooltip-day
 						var yLabel = ', Tageswert: ' + dataPoint.yLabel.toFixed(2) + ' kWh';
-						// get counter value for the day (or empty string if not apliccable)
+						// get counter value for the day (or empty string if not applicable)
 						var counter = graphData.datasets[dataPoint.datasetIndex].toolTipData[dataPoint.index];
 						return xLabel + counter + yLabel;
 					}
@@ -1514,7 +1514,7 @@ function loadgraph() {
 				display: boolDisplayLegend,
 				position: 'bottom',
 				labels: {
-					// middle grey, opacy = 100% (visible)
+					// middle grey, opacity = 100% (visible)
 					fontColor: "rgba(153, 153, 153, 1)",
 				}
 			},
@@ -1526,7 +1526,7 @@ function loadgraph() {
 					type: 'category',
 					ticks: {
 						//source: 'data',
-						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacity = 100% (visible)
 					}
 				}],
 				yAxes: [{
@@ -1537,15 +1537,15 @@ function loadgraph() {
 					scaleLabel: {
 						display: true,
 						labelString: 'Energie [kWh]',
-						// middle grey, opacy = 100% (visible)
+						// middle grey, opacity = 100% (visible)
 						fontColor: "rgba(153, 153, 153, 1)"
 					},
 					gridLines: {
-						// light grey, opacy = 100% (visible)
+						// light grey, opacity = 100% (visible)
 						color: "rgba(204, 204, 204, 1)",
 					},
 					ticks: {
-						// middle grey, opacy = 100% (visible)
+						// middle grey, opacity = 100% (visible)
 						fontColor: "rgba(153, 153, 153, 1)"
 					},
 				}]
@@ -1553,7 +1553,7 @@ function loadgraph() {
 		}
 	});
 	$('#canvas').click (function(evt) {
-		// on click of datapoint, jump to day view
+		// on click of data point, jump to day view
 		var activePoint = myLine.getElementAtEvent(event);
 		if ( activePoint.length > 0) {
 			var clickedElementindex = activePoint[0]._index;

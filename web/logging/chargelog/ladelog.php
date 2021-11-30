@@ -70,7 +70,7 @@
 
  		<div role="main" class="container">
 
-			<h1>Ladelog Monatsansicht</h1>
+			<h1>Lade-Log Monatsansicht</h1>
 
 			<div class="row justify-content-center">
 				<div class="col-8 col-sm-6 col-md-5 col-lg-4">
@@ -182,11 +182,11 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Ladelog - <a href="logging/chargelog/ladelogexport.php">Ladelog Export</a></small>
+				<small>Sie befinden sich hier: Lade-Log - <a href="logging/chargelog/ladelogexport.php">Lade-Log Export</a></small>
 			</div>
 		</footer>
 
-		<!-- get parsed date, setup datepicker and load ladelog -->
+		<!-- get parsed date, setup datepicker and load lade log -->
 		<script>
 			var parsedDate;
 			var dateToParseStr;
@@ -273,7 +273,7 @@
 			$('#prevmonth').click(function(e) {
 				// on click of prev month button
 				let dateToParse = new Date(parsedDate.getTime());  // copy currently selected date
-				dateToParse.setMonth(parsedDate.getMonth() - 1);  // and substract month
+				dateToParse.setMonth(parsedDate.getMonth() - 1);  // and subtract month
 				if ( dateToParse >= earliestDate ) {
 					let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
 					dateToParseStr = dateToParse.getFullYear() + '-' + mm;
