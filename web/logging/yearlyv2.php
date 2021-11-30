@@ -66,7 +66,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
 				<div class="col" style="text-align: center;">
-					<h4>Logging Jahresansicht Aufteilung (nighlty)</h4>
+					<h4>Logging Jahresansicht Aufteilung (nightly)</h4>
 				</div>
 			</div>
 			<div class="row justify-content-center">
@@ -115,8 +115,8 @@
 			$(document).ready(function(){
 				// GET expects date format Y like 2020
 				// get parsed date and format nicely for input field
-				const EARLIESTDATE = '01/01/2018';  // no earlier date choosable
-				// TODO: set earliestdate to first occurance of valid logging data
+				const EARLIESTDATE = '01/01/2018';  // no earlier date
+				// TODO: set earliest date to first occurrence of valid logging data
 				var LATESTDATE = '12/31/' + new Date().getFullYear();
 				var earliestDate = new Date(EARLIESTDATE);
 				var latestDate = new Date(LATESTDATE);

@@ -47,9 +47,6 @@
 			#preloader-info {
 				color:grey;
 			}
-			#thegraph > div {
-				height: 350px;
-			}
 		</style>
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.6.0.min.js"></script>
@@ -465,7 +462,7 @@
 				<!-- Smarthome -->
 				<div class="card border-info " id="Smarthome">
 					<div class="card-header bg-info">
-						Smarthome 2.0
+						Smart Home 2.0
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -599,7 +596,7 @@
 
 		<script>
 
-			// load navbar, be carefull: it loads asynchonously
+			// load navbar, be careful: it loads asynchronous
 			$.get(
 				{ url: "themes/navbar.html", cache: false },
 				function(data){
@@ -635,8 +632,8 @@
 					countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
 					var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
 					var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
-					var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
-					if ( timeBetweenTwoMesagges > 3000 ) {
+					var timeBetweenTwoMessages = Date.now() - timeOfLastMqttMessage;
+					if ( timeBetweenTwoMessages > 3000 ) {
 						console.log('timeout');
 						// latest after 3 sec without new messages
 						percentageReceived = 100;

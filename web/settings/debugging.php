@@ -80,7 +80,7 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Mit dieser Einstellung können zusätzliche Logmeldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.
+										Mit dieser Einstellung können zusätzliche Log-Meldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.
 									</span>
 								</div>
 							</div>

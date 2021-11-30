@@ -463,7 +463,7 @@ function loadgraph(animationDuration = 1000) {
 	}
 
 	function doGraphResponsive(chartInstance) {
-		// changes graph resonding to screen size
+		// changes graph responding to screen size
 		// quantity of x-axis labels
 		chartInstance.config.options.scales.xAxes[0].ticks.maxTicksLimit = getMaxTicksLimit(chartInstance.width);
 		// other settings
@@ -571,7 +571,7 @@ function loadgraph(animationDuration = 1000) {
 							fontColor: fontCol
 						},
 						gridLines: {
-							// black, opacy = 0% (invisible)
+							// black, opacity = 0% (invisible)
 							color: gridSocCol,
 						},
 						ticks: {
@@ -616,7 +616,7 @@ function putgraphtogether() {
 			  csvData.push(rawcsv[i].split(","));
 		}
 		csvData.pop();
-		// Retrived data from csv file content
+		// Retrieved data from csv file content
 		var splittime = [];
 		getCol(csvData, 0).forEach(function(zeit){
 			splittime.push(zeit.substring(0, zeit.length -3));

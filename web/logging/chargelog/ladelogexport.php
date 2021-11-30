@@ -63,7 +63,7 @@
 
 		<div role="main" class="container">
 
-			<h1>Ladelog Export</h1>
+			<h1>Lade-Log Export</h1>
 
 			<div class="card border-secondary">
 				<div class="card-header bg-secondary">
@@ -99,7 +99,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: <a href="logging/chargelog/ladelog.php">Ladelog</a> - Ladelog Exprt</small>
+				<small>Sie befinden sich hier: <a href="logging/chargelog/ladelog.php">Lade-Log</a> - Lade-Log Export</small>
 			</div>
 		</footer>
 

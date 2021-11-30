@@ -4,7 +4,7 @@ from modules.common.fault_state import ComponentInfo, FaultState
 
 
 class BatState:
-    def __init__(self, imported: float, exported: float, power: float, soc: int):
+    def __init__(self, imported: float, exported: float, power: float, soc: int = 0):
         self.imported = imported
         self.exported = exported
         self.power = power

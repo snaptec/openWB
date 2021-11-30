@@ -26,7 +26,7 @@ class Mpm3pm:
 
     def get_imported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0002, ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0002, ModbusDataType.INT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 
@@ -41,7 +41,7 @@ class Mpm3pm:
 
     def get_exported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0004, ModbusDataType.FLOAT_64, unit=self.id) * 10
+            return self.client.read_input_registers(0x0004, ModbusDataType.INT_64, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 

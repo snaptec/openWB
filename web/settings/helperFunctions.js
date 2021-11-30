@@ -164,7 +164,7 @@ function setToggleBtnGroup(groupId, option) {
     /** @function setInputValue
      * sets the value-label (if exists) attached to the element to the element value
      * @param {string} elementId - the id of the button group
-     * @param {string} option - the option the group btns will be set to
+     * @param {string} option - the option the group buttons will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
     $('input[name=' + groupId + '][data-option="' + option + '"]').prop('checked', true);
@@ -199,7 +199,7 @@ function sendValues() {
             var value = this[topic].toString();
             setTimeout(function () {
                 // console.log("publishing changed value: "+topic+": "+value);
-                // as all empty messages are not processed by mqttsub.py, we have to send something usefull
+                // as all empty messages are not processed by mqttsub.py, we have to send something useful
                 if ( value.length == 0 ) {
                     publish("none", topic);
                     // delete empty values as we will never get an answer

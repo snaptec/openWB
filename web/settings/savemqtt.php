@@ -58,7 +58,7 @@ if ($bridgeToConfig == "eindeutiger-verbindungs-bezeichner")
 }
 
 if(!preg_match('/^[a-zA-Z0-9]+$/', $bridgeToConfig)) {
-	cleanAndExit("Der Bezeichener f&uuml;r die Bridge ('" . htmlentities($bridgeToConfig) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichner f&uuml;r die Bridge ('" . htmlentities($bridgeToConfig) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("Bridge to configure: '$bridgeToConfig'");
@@ -129,7 +129,7 @@ if ($remoteHost == "entfernter.mqtt.host:8883") {
 	cleanAndExit("Bitte die Adresse und den Port des entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 if(!preg_match('/^([a-zA-Z0-9][a-zA-Z0-9.-]+):([1-9][0-9]*)$/', $remoteHost, $matches)) {
-	cleanAndExit("Der Bezeichener f&uuml;r den Namen oder die IP Adresse des entfernten MQTT-Servers ('" . htmlentities($remoteHost) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 und Punkt sind vor dem Doppelpunkt erlaubt. Nach dem Doppelpunkt sind nur noch Ziffern 0-9 erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichner f&uuml;r den Namen oder die IP Adresse des entfernten MQTT-Servers ('" . htmlentities($remoteHost) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9 und Punkt sind vor dem Doppelpunkt erlaubt. Nach dem Doppelpunkt sind nur noch Ziffern 0-9 erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 $hostOrAddress = $matches[1];
@@ -149,7 +149,7 @@ if ($remoteUser == "nutzername-auf-dem-entfernten-host") {
 	cleanAndExit("Bitte einen Benutzernamen f&uuml;r den entfernten MQTT-Servers setzen.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 if(!preg_match('/^([a-zA-Z0-9_\-+.]+)$/', $remoteUser)) {
-	cleanAndExit("Der Bezeichener f&uuml;r den Benutzer auf dem entfernten MQTT-Servers ('" . htmlentities($remoteUser) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Punkt, Unterstrich, Minus und Plus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichner f&uuml;r den Benutzer auf dem entfernten MQTT-Servers ('" . htmlentities($remoteUser) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Punkt, Unterstrich, Minus und Plus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("RemoteUser: '$remoteUser'");
@@ -163,7 +163,7 @@ debugPrint("RemotePass: <em>&gt;vorhanden&lt;</em>");
 
 $remotePrefix = $_POST['RemotePrefix'];
 if(!preg_match('/^[a-zA-Z0-9_\-\/]+$/', $remotePrefix)) {
-	cleanAndExit("Der Bezeichener f&uuml;r den Topic-Pr&auml;fix auf dem entfernten MQTT-Server ('" . htmlentities($remotePrefix) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Unterstrich, Schr&auml;gstrich und Minus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
+	cleanAndExit("Der Bezeichner f&uuml;r den Topic-Pr&auml;fix auf dem entfernten MQTT-Server ('" . htmlentities($remotePrefix) . "') enth&auml;t ung&uuml;tige Zeichen. Nur a-z, A-Z, 0-9, Unterstrich, Schr&auml;gstrich und Minus sind erlaubt.<br/>Verwende die &quot;Zur&uuml;ck&quot;-Funktion des Webbrowsers um zur&uuml;ck zum Formular zu kommen.");
 }
 
 debugPrint("RemotePrefix: $remotePrefix");
@@ -197,7 +197,7 @@ if (!$configFile) {
 	cleanAndExit("Interner Fehler: Kann die Konfigurationsdatei f&uuml;r die Br&uuml;cke nicht erzeugen.");
 }
 
-debugPrint("Openend '$fileToUseForNewConfig' and now writing configuration to it");
+debugPrint("Opened '$fileToUseForNewConfig' and now writing configuration to it");
 
 fwrite($configFile, <<<EOS
 # bridge to $remoteHost

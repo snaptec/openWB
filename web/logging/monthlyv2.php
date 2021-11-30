@@ -8,7 +8,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>Logging Monatsansicht Aufteilung (nightly)</title>
-		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
+		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
@@ -168,7 +168,7 @@
 				$('#prevmonth').click(function(e) {
 					// on click of prev month button
 					let dateToParse = new Date(parsedDate.getTime());  // copy currently selected date
-					dateToParse.setMonth(parsedDate.getMonth() - 1);  // and substract month
+					dateToParse.setMonth(parsedDate.getMonth() - 1);  // and subtract month
 					if ( dateToParse >= earliestDate ) {
 						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
 						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
