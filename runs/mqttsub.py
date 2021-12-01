@@ -1207,7 +1207,7 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
             if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
-                if (float(msg.payload) >= -50 and float(msg.payload) <=50):
+                if (float(msg.payload) >= -50 and float(msg.payload) <=95):
                     f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
