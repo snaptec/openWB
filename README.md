@@ -1,8 +1,5 @@
 # openWB
 
-
-
-
 Die Software steht frei für jeden zur Verfügung, siehe GPLv3 Bedingungen.
 
 	Unterstüztung ist gerne gesehen!
@@ -19,14 +16,17 @@ Eine Fehlkonfiguration der Software kann höchstens ein nicht geladenes Auto bed
 Falsch zusammengebaute Hardware kann lebensgefährlich sein. Im Zweifel diesen Part von einem Elektriker durchführen lassen.
 Keine Gewährleistung für die Software - use at your own RISK!
 
+# Spezielle Anpassungen
+Bei diesem Fork wurden Anpassungen auf meine Bedürfnisse durchgeführt. Zu einem eine Anpassung für die go-eCharger und zu anderem für den SENEC Speicher. Da der SENEC Speicher angezeigt werden soll, aber nicht extern gesteuert werden kann, wurde der SENEC Speicher nur zur Anzeige hinzugefügt. Die Vorarbeit des "SENEC-Moduls" wurde von "cjungde" aus dem openWB-Forum initial zur Verfügung gestellt. Vielen Danke dafür!
+
+Damit die beiden go-eCharger nicht den Speicher ungewollt entleeren, wurden diese physikalisch vor dem EnFluRi gesetzt, damit der SENEC Speicher die Verbräuche nicht erfassen kann und somit nicht versucht den Verbrauch zu decken und sich der Speicher in die Autos entleeren würde.
+Damit aber die PV-Regelung und damit die Erfassung der Verbräuche wiederrum richtig aufsummiert werden, habe ich die Werte der beiden Chargern im SENEC Modul hinzugefügt.
+
+
 # Wofür?
 Steuerung einer EVSE DIN oder anderer Ladepunkte für sofortiges laden, Überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
 
 Unterstützt wird jedes EV das den AC Ladestandard unterstützt.
-
-
-
-
 
 # Bezug
 openWB gibt es unter 
@@ -34,13 +34,9 @@ openWB gibt es unter
 	https://openwb.de/shop/
 
 
-
 # Installation
 
-
 Bei fertigen openWB vorinstalliert
-
-
 
 Software:
 
@@ -68,7 +64,6 @@ hier einfügen:
 	* * * * * sleep 30 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 40 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 50 && /var/www/html/openWB/modules/_senec/senec.py && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-
 
 
  # SENEC Speicher HTTP Abfrage
