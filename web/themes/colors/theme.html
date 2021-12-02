@@ -78,9 +78,6 @@
 			height: 350px;
 		}
 
-		#electricityPriceChartCanvasDiv {
-			height: 150px;
-		}
 	</style>
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.6.0.min.js"></script>
@@ -114,6 +111,8 @@
 	<script src="themes/colors/chargePointList.js"></script>
 	<script src="themes/colors/smartHomeList.js"></script>
 	<script src="themes/colors/batteryList.js"></script>
+	<script src="themes/colors/pricechart.js"></script>
+
 
 </head>
 
@@ -175,18 +174,21 @@
 						<div class="col-4 px-0" style="text-align: right;">
 							<div class="dropdown">
 								<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-									<span	class="fa fa-bars fa-sm"></span>
+									<span class="fa fa-bars fa-sm"></span>
 								</button>
 								<div class="dropdown-menu dropdown-menu-right colormenu">
-									<a class="dropdown-item" href="#" onclick="switchTheme()"><span class="fa fa-adjust px-0"></span> Hintergrund ändern</a>
-									<a class="dropdown-item" href="#" onclick="toggleGrid()"><span
-										class="fa fa-th px-0"></span> Graph: Raster an/aus</a>
+									<a class="dropdown-item" href="#" onclick="switchTheme()"><span class="fa fa-adjust px-0"></span>
+										Hintergrund ändern</a>
+									<a class="dropdown-item" href="#" onclick="toggleGrid()"><span class="fa fa-th px-0"></span> Graph:
+										Raster an/aus</a>
 									<a class="dropdown-item" href="#" onclick="switchDisplay()"><span
-										class="fa fa-chart-area px-0"></span> Fixe Bögen an/aus</a>
+											class="fa fa-chart-area px-0"></span> Fixe Bögen an/aus</a>
 									<a class="dropdown-item hide" id="meterResetButton" href="#" onclick="resetButtonClicked()"><span
-										class="fa fa-undo"></span> Bögen reset</a>
-									<a class="dropdown-item" href="#" onclick="switchDecimalPlaces()"><span class="fa fa-sliders-h px-0"></span> Dezimalstellen kW & kWh ändern</a>
-									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
+											class="fa fa-undo"></span> Bögen reset</a>
+									<a class="dropdown-item" href="#" onclick="switchDecimalPlaces()"><span
+											class="fa fa-sliders-h px-0"></span> Dezimalstellen kW & kWh ändern</a>
+									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span
+											class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
 								</div>
 							</div>
 
@@ -223,7 +225,7 @@
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
 							<button class="btn btn-outline-secondary btn-sm " id="calendarButton"><span
-								class="fa fa-calendar-alt px-0"></span></button>
+									class="fa fa-calendar-alt px-0"></span></button>
 							<button class="btn btn-outline-secondary btn-sm " id="energyLeftButton"><span
 									class="fa fa-chevron-circle-left px-0"></span></button>
 							<button class="btn btn-outline-secondary btn-sm " id="energyRightButton"><span
@@ -262,33 +264,40 @@
 					</form>
 
 					<form id="sofortladenEinstellungen" class="hide">
-						<div class="hide" id="priceBasedCharging">
+					
+					 <!-- price based charging -->
+						<div class="priceConfiguration">
 							<hr class="border-secondary">
 							<div class="row justify-content-center">
-								<h4 class=" text-center">Preisbasiertes Laden</h4>
+								<h4 class="text-center">Preisbasiertes Laden</h4>
 							</div>
-							<div class="row justify-content-center my-2">
-								<div id="electricityPriceChartCanvasDiv" class="col text-center">
-									<canvas id="electricityPriceChartCanvas"></canvas>
+							<div class="row p-0 m-0 ">
+								<div class="col-12 pricechartColumn p-0 m-0">
+									<figure id="priceChart"></figure>
 								</div>
 							</div>
-							<div class="form-row form-group mb-1 vaRow regularTextSize">
-								<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
-								<div class="col">
-									<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="95"
-										step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
+							<div class="form-row vaRow p-0 m-0">
+								<div class="col m-0 p-0 tablecell maxPrice">
+									<label for="maxPrice" class=" col-form-label p-0 m-0 ">Max. Preis: </label>
+									<label for="maxPrice" class=" labelMaxPrice col-form-label p-0 m-0" data-suffix="ct"></label>
 								</div>
-								<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="ct/kWh"></label>
+
 							</div>
-							<div class="row justify-content-center regularTextSize vaRow">
-								<button type="button" class="btn btn-secondary mr-3 priceLess"><i
-										class="far fa-minus-square"></i></button>
-								Preis
-								<button type="button" class="btn btn-secondary ml-3 priceMore"><i
-										class="far fa-plus-square"></i></button>
+							<div class="row justify-content-center regularTextSize vaRow m-2">
+								<div class="col-2">
+									<button type="button" class="btn btn-secondary mr-3 priceLess"><i
+											class="far fa-minus-square"></i></button>
+								</div>
+								<div class="col-8">
+									<input type="range" class="form-control-range maxPriceInput" id="maxPrice" min="-25" max="95"
+										step="0.1" value="0" data-initialized="0">
+								</div>
+								<div class="col-2">
+									<button type="button" class="btn btn-secondary ml-3 priceMore"><i
+											class="far fa-plus-square"></i></button>
+								</div>
 							</div>
 						</div>
-						<!--/ priceBasedCharging -->
 
 						<hr class="border-secondary">
 						<div class="row justify-content-center">
@@ -698,6 +707,9 @@
 					<br>
 				</div>
 			</div>
+
+
+
 			<!-- Speicher (batteryList) -->
 			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
 				<h3>Speicher</h3>
@@ -712,6 +724,7 @@
 					<div id="smartHomeTable"></div>
 				</div>
 			</div>
+
 
 		</div>
 	</div>
@@ -903,10 +916,6 @@
 				'themes/colors/helperFunctions.js?ver=20200526-c',
 				// functions for processing messages
 				'themes/colors/processAllMqttMsg.js?ver=20210213',
-				// respective Chart.js definition live
-				// 'themes/dark/livechart.js?ver=20200530-b',
-				// respective Chart.js definition
-				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
 				'themes/colors/setupMqttServices.js?ver=20210129',
 			];
@@ -924,6 +933,7 @@
 			chargePointList.init();
 			smartHomeList.init();
 			batteryList.init();
+			priceChart.init();
 
 			$('.enableLp').click(function (event) {
 				// send mqtt set to enable/disable charge point after click
@@ -1048,28 +1058,6 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
-			$('.priceMore, .priceLess').click(function (event) {
-				// change Slider upon click on buttons
-				event.preventDefault();
-				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
-				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
-				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
-				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
-				if ($(this).hasClass('priceLess')) {
-					currentMaxPrice -= step;
-				} else {
-					currentMaxPrice += step;
-				}
-				// prevent timeout of delayUserInput when clicking "beyond" range
-				if (currentMaxPrice < rangeMin) {
-					currentMaxPrice = rangeMin;
-				} else if (currentMaxPrice > rangeMax) {
-					currentMaxPrice = rangeMax;
-				}
-				$('#MaxPriceForCharging').val(currentMaxPrice);
-				$('#MaxPriceForCharging').trigger('input');
-			});
-
 			$('.rangeInput').on('input', function () {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
@@ -1077,12 +1065,7 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
-				if ($.escapeSelector(elementId) == 'MaxPriceForCharging') {
-					// marks times in the price chart where the price is low enough so charging would be allowed
-					var priceAnnotations = createPriceAnnotations();
-					electricityPricechart.options.annotation.annotations = priceAnnotations;
-					electricityPricechart.update();
-				}
+				
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt
@@ -1124,7 +1107,7 @@
 					// once page is unhidden... reload graph completely
 					if (wbdata.graphMode == 'live') {
 						powerGraph.deactivateDay();
-							powerGraph.activateLive();
+						powerGraph.activateLive();
 					} else {
 						powerGraph.deactivateLive();
 						powerGraph.activateDay();
