@@ -24,6 +24,7 @@ class WbData {
 		this.batteryEnergyImport = 0;
 		this.batteryPowerExport = 0;
 		this.batteryPowerImport = 0;
+		this.chargeMode="0"
 		this.graphDate = new Date();
 		this.graphMonth = {
 			"month": this.graphDate.getMonth(),
@@ -281,6 +282,20 @@ class WbData {
 				break;
 		}
 		batteryList.update();
+	}
+
+
+	updateET(field,value) {
+		this[field]=value;
+		
+		switch (field) {
+			case 'etPrice':
+			case 'isEtEnabled': chargePointList.updateValues();
+			break;
+			default:
+				break;
+		}
+		priceChart.update()
 	}
 
 	updateSourceSummary(cat, field, value) {
