@@ -382,6 +382,9 @@ h3 {
 	}
 }
 
+.maxPrice {
+	text-align: center;
+}
 /* Overarching colors */
 :root {
 	--fontCol: rgba(160, 160, 160, 0.82);

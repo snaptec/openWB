@@ -24,18 +24,26 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- Font Awesome, all styles -->
+		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+		<!-- Bootstrap-Datepicker -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker/bootstrap-datepicker3.min.css">
 		<!-- include stromtarif-style	-->
-		<link rel="stylesheet" type="text/css" href="../modules/et_tibber/stromtarifinfo/stromtarifinfo_style.css">
+		<link rel="stylesheet" type="text/css" href="../modules/et_tibber/stromtarifinfo/stromtarifinfo_style.css?ver=20211108">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script src="js/Chart.bundle.min.js"></script>
 
+		<!-- load Bootstrap-Datepicker library -->
+		<script src="js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+		<script src="js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
+
 		<!-- special stromtarif scripts to be loaded -->
-		<script src="../modules/et_tibber/tibber.js?ver=20210211"></script>
-		<script src="../modules/et_tibber/stromtarifinfo/tibberElectricityPricechart.js?ver=20210104"></script>
-		<script src="../modules/et_tibber/stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20210104-b"></script>
+		<script src="../modules/et_tibber/tibber.js?ver=20211108"></script>
+		<script src="../modules/et_tibber/stromtarifinfo/tibberElectricityPricechart.js?ver=20211108"></script>
+		<script src="../modules/et_tibber/stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20211108"></script>
 
 		<script>
 			function getCookie(cname) {
@@ -83,7 +91,6 @@
 				Fehler bei der Abfrage der Tibber-API (<span id="dataErrorText"></span>).
 			</div>
 
-
 			<div id="validData" style="display: none;">
 
 				<div class="card border-secondary">
@@ -99,8 +106,6 @@
 									<span id="street"></span><br>
 									<span id="city"></span><br>
 								</p>
-								<b>letzter Datenabruf:</b><br>
-								<span id="lastDataReceived"></span>
 							</div>
 						</div>
 					</div>
@@ -137,9 +142,21 @@
 
 				<div id="cardTagesbezug" class="card border-secondary hide">
 					<div class="card-header bg-secondary">
-						Tagesbezug <span id="dateYesterday"></span>
+						Tagesbezug
 					</div>
 					<div class="card-body">
+						<div class="row justify-content-center">
+							<div class="col-8 col-sm-6 col-md-5 col-lg-4">
+								<div class="input-group mb-3">
+									<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Tag" id="prevday"></i>
+									<input class="form-control datepicker" id="theDate" type="text" readonly>
+								  	<div class="input-group-append">
+								    	<span class="input-group-text far fa-calendar-alt fa-lg vaRow"></span>
+								  	</div>
+									<i class="far fa-caret-square-right fa-lg vaRow ml-4" title="nächster Tag" id="nextday"></i>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col smallTextSize">
 								Gesamtbezug:  <span id="totalConsumptionDay"></span><br>
@@ -149,6 +166,9 @@
 						</div>
 						<div class="row justify-content-center my-2">
 							<div class="col-sm-12 text-center smallTextSize">
+								<div id="noDailychartDiv" class="hide">
+									Keine Daten für Tagesbezugs-Chart verfügbar.
+								</div>
 								<div id="dailyConsumptionchartCanvasDiv" class="col text-center" style="position: relative; height:250px;">
 									<canvas id="consumptionchartCanvas"></canvas>
 								</div>
@@ -158,39 +178,12 @@
 					</div>
 				</div>
 
-				<div id="cardMonatsbezug" class="card border-secondary hide">
-					<div class="card-header bg-secondary">
-						Monatsbezug
-					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="col smallTextSize">
-								Derzeit noch nicht implementiert.
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div id="cardJahresbezug" class="card border-secondary hide">
-					<div class="card-header bg-secondary">
-						Jahresbezug
-					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="col">
-								Derzeit noch nicht implementiert.
-							</div>
-						</div>
-					</div>
-				</div>
-
 			</div>
-
 
 		</div>  <!-- container -->
 
 		<script>
-
+			var initialDataRead = true;
 			// load navbar, be carefull: it loads asynchonously
 			$.get(
 				{ url: "themes/navbar.html", cache: false },
@@ -201,33 +194,107 @@
 				}
 			);
 
-			$(document).ready(function(){
+			function getDateAsBase64 (dateToProcess) {
+				// returns date as base64-encoded formatted string
+				// format of ISO string is like 2021-11-04T23:00:00.000+01:00
+				var timeString = dateToProcess.toISOString().replace('Z', '');  // now formatted like 2021-11-04T23:00:00.000, offset missing
+				// calculate tz offset and get formatted string
+				var timezone_offset_min = dateToProcess.getTimezoneOffset(),
+					offset_hrs = parseInt(Math.abs(timezone_offset_min/60)),
+					offset_min = Math.abs(timezone_offset_min%60),
+					timezone_standard;
+				if (offset_hrs < 10)
+					offset_hrs = '0' + offset_hrs;
+				if (offset_min < 10)
+					offset_min = '0' + offset_min;
+				// Add an opposite sign to the offset
+				// If offset is 0, it means timezone is UTC
+				if (timezone_offset_min < 0)
+					timezone_standard = '+' + offset_hrs + ':' + offset_min;
+				else if(timezone_offset_min > 0)
+					timezone_standard = '-' + offset_hrs + ':' + offset_min;
+				else if(timezone_offset_min == 0)
+					timezone_standard = 'Z';
+				// Timezone difference now in hours and minutes, String such as +5:30 or -6:00 or Z
+				timeString += timezone_standard;  // now formatted like 2021-11-04T23:00:00.000+01:00
+				return btoa(timeString);
+			}
 
-				// calculate amount of datasets to be received since Tibber only sends valid data for
-				// past hours/days/months
-				var now = new Date();
-				const hoursToReceive = now.getHours() + 24; // Tibber sends hourly data for past hours
-				const daysToReceive = now.getDate() + 1;  // Tibber sends daily data for past days
-				var monthsToReceive = now.getMonth();  // no index correction since Tibber sends monthly data for past months
+			function requestData (theDate) {
 				var tibberToken = "<?php echo $tibbertokenold; ?>";
 				var tibberHomeID = "<?php echo $tibberhomeidold; ?>";
-				const tibberAPI = "https://api.tibber.com/v1-beta/gql";
-				const tibberQueryHead = '{ "query": "{viewer {name home(id:\\"' + tibberHomeID + '\\") {';
-				const tibberQueryGetAdress = 'address {address1 postalCode city}';
-				const tibberQueryGetPriceInfo = 'currentSubscription {priceInfo {current{total energy tax startsAt} today {total startsAt} tomorrow {total startsAt}}}';
-				const tibberQueryGetHourlyConsumption = 'cons_hourly: consumption(resolution: HOURLY, last:' + hoursToReceive + ') {nodes {from to cost unitPrice unitPriceVAT consumption}}';
-				const tibberQueryTail = '}}}"}';
+				var timeStringBase64 = getDateAsBase64(theDate);
+				var tibberAPI = "https://api.tibber.com/v1-beta/gql";
+				if (initialDataRead) {
+					// reads complete Dataset including home-info and price chart
+					initialDataRead = false;
+					var tibberQueryHead = '{ "query": "{viewer {name home(id:\\"' + tibberHomeID + '\\") {';
+					var tibberQueryGetAdress = 'address {address1 postalCode city} ';
+					var tibberQueryGetPriceInfo = 'currentSubscription {priceInfo {current{total energy tax startsAt} today {total startsAt} tomorrow {total startsAt}}} ';
+				} else {
+					var tibberQueryHead = '{ "query": "{viewer {home(id:\\"' + tibberHomeID + '\\") {';
+					var tibberQueryGetAdress = '';
+					var tibberQueryGetPriceInfo = '';
+				}
+				var tibberQueryGetHourlyConsumption = 'cons_hourly: consumption(resolution: HOURLY, after:\\"' + timeStringBase64 + '\\", first: 25) {nodes {from to cost unitPrice unitPriceVAT consumption}}';
+				var tibberQueryTail = '}}}" }';
 				var tibberQuery = tibberQueryHead + tibberQueryGetAdress + tibberQueryGetPriceInfo + tibberQueryGetHourlyConsumption + tibberQueryTail;
 
+				$("#dataError").hide();
 				readTibberAPI(tibberToken, tibberQuery)
 					.then((data) => {
-	    				processTibberResponse(data)
+						processTibberResponse(data, theDate)
 					})
 					.catch((error) => {
 						$("#waitForData").hide();
 						$("#dataErrorText").text(error);
 						$("#dataError").show();
-	  				})
+						$('#validData').hide();
+					})
+			}
+
+			$(document).ready(function(){
+				// config the datepicker
+				$('#theDate').datepicker({
+					format: 'D, dd.mm.yyyy',
+					language: 'de-DE',
+					startDate: '01.01.2019',
+					endDate: '0d',
+					daysOfWeekHighlighted: '0',
+					todayBtn: true,
+					todayHighlight: true,
+					autoclose: true
+				})
+				.on('changeDate', function(e) {
+					// `e` here contains the extra attributes
+					requestData(e.date);
+				});
+				// set initial date to yesterday and end date to today, this triggers 'onchange'
+				$('#theDate').datepicker('setEndDate', new Date(new Date().setHours(0, 0, 0, 0)));
+				var theDate = new Date(new Date().setHours(0, 0, 0, 0));  // set to midnight
+				theDate.setDate(theDate.getDate() - 1);  // yesterday
+				$('#theDate').datepicker('setDate', theDate);
+
+				$('#prevday').click(function(e) {
+					// on click of prev day button
+					let currentDateSelected = new Date($('#theDate').datepicker('getDate').setHours(0,0,0,0));
+					let datepickerStartDate = new Date($('#theDate').datepicker('getStartDate').setHours(0,0,0,0));
+					if ( currentDateSelected > datepickerStartDate ) {
+						currentDateSelected.setDate(currentDateSelected.getDate() - 1);  // substract 1 day from currently selected date
+						$('#theDate').datepicker('setDate', currentDateSelected);
+					}
+				});
+
+				$('#nextday').click(function(e) {
+					// on click of next day button
+					let currentDateSelected = new Date($('#theDate').datepicker('getDate').setHours(0,0,0,0));
+					let datepickerEndDate = new Date($('#theDate').datepicker('getEndDate').setHours(0,0,0,0));
+					datepickerEndDate.setDate(datepickerEndDate.getDate() - 1);  // stop forwarding one day before
+					if ( currentDateSelected < datepickerEndDate ) {
+						currentDateSelected.setDate(currentDateSelected.getDate() + 1);  // add 1 day to currently selected date
+						$('#theDate').datepicker('setDate', currentDateSelected);
+					}
+				});
 			});
 
 		</script>

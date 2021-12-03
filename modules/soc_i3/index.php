@@ -14,7 +14,7 @@ class Battery_API {
 	private $auth;
 	private $token;
 	private $json;
-	
+
 	function __construct ( $chargepoint, $user, $password, $vin ) {
 
 		$this->auth = array(
@@ -37,24 +37,50 @@ class Battery_API {
 
 
 	function cache_remote_token( $token_data ) {
+		$cuser = $this->auth["username"];
+		$content = json_decode( @file_get_contents(
+				$this->token_file
+			)
+		);
+		$content->$cuser = $token_data;
 		file_put_contents(
 			$this->token_file,
-			json_encode( $token_data )
+			json_encode( $content )
 		);
 	}
 
-	
+
+
 	function get_cached_token() {
-		return json_decode(
+		$cuser = $this->auth["username"];
+		$json_content = json_decode(
 			@file_get_contents(
 				$this->token_file
 			)
 		);
+		echo json_encode($json_content);
+		if(!empty($json_content->token)) {
+			unset($json_content["token"]);
+		}
+		if(!empty($json_content->expires)) {
+			unset($json_content["expires"]);
+		}
+		echo json_encode($json_content);
+		file_put_contents(
+			$this->token_file,
+			json_encode( $json_content )
+		);
+
+		return json_decode(
+			@file_get_contents(
+				$this->token_file
+			)
+		)->$cuser;
 	}
 
 
 	function get_token() {
-		// Get cached token
+		$cuser = $this->auth["username"];
 		if ( $cached_token_data = $this->get_cached_token() ) {
 			if ( $cached_token_data->expires > time() ) {
 				$token = $cached_token_data->token;

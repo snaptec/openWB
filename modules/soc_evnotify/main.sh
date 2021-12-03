@@ -1,4 +1,5 @@
 #!/bin/bash
+SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
@@ -65,15 +66,7 @@ if (( soctimer < 4 )); then
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
-	answer=$(curl -s -X GET 'https://app.evnotify.de/soc?akey='$akey'&token='$token)
-	# extract the soc value
-	soc=$(echo $answer | jq .soc_display)
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC from Server: $soc"
-	# parse to int to be able to check in condition - to determine if valid or not
-	isvalid=$(echo $soc | cut -d "." -f 1 | cut -d "," -f 1)
-	if (( isvalid >= 0 && isvalid != null)); then
-		echo $isvalid > $socfile
-	else
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC is invalid!"
-	fi
+	pythonOut=$(python3 "$SCRIPT_DIR/evnotify.py" "$akey" "$token" "$CHARGEPOINT" "$DEBUGLEVEL" 2>&1)
+	exitCode=$?
+	[ $exitCode -eq 0 ] || openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Calling python failed ($exitCode): $pythonOut"
 fi

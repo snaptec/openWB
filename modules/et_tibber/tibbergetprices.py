@@ -190,33 +190,39 @@ def _get_utcfromtimestamp(timestamp):
     return datetime_obj
 
 def _cleanup_pricelist(pricelist):
-    # bereinigt Preisliste, löscht Einträge die älter als aktuelle Stunde sind
+    # bereinigt sortierte Preisliste, löscht Einträge die älter als aktuelle Stunde sind
     # und über morgen hinausgehen
     # wenn der erste Preis nicht für die aktuelle Stunde ist, wird leere Liste zurückgegeben
     # prüft auf Abstand der Preise: ist dieser >1h, wird Liste ab diesem Punkt abgeschnitten
     if len(pricelist) > 0:
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         now_full_hour = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
-        starttime_utc_prev = now  # speichert in Schleife Zeitstempel des vorherigen Listeneintrags
+        now_full_hour_timestamp = datetime.timestamp(now_full_hour)
+        # zuerst filtern auf "ab diese Stunde" bis "längstens morgen"
         for index, price in enumerate(pricelist[:]):  # über Kopie der Liste iterieren, um das Original zu manipulieren
             try:
                 starttime_utc = _get_utcfromtimestamp(float(price[0]))  # Start-Zeitstempel aus Preisliste umwandeln
             except:
                 raise TypeError('Zeitstempel-Umwandlung fehlgeschlagen') from None
-            if starttime_utc < now_full_hour or starttime_utc.date() > now.date() + timedelta(days=1):
+            # ältere als aktuelle Stunde und weiter als morgen löschen
+            if (float(price[0]) < now_full_hour_timestamp) or (starttime_utc.date() > now.date() + timedelta(days=1)):
                 pricelist.remove(price)
-            if index > 0:
-                # wenn der Abstand zum letzten Preis in Liste > 1 Std, dann Rest der Liste entfernen und Ende
-                hourdiff = divmod((starttime_utc - starttime_utc_prev).total_seconds(), 60)
-                if hourdiff != (60.0, 0.0):
-                    del pricelist[index:]
-                    break
-            starttime_utc_prev = starttime_utc
-        # wenn noch Einträge in Liste verblieben sind auf Aktulität prüfen
+        # jetzt prüfen auf Start mit aktueller Stunde und Stundenabstände
         if len(pricelist) > 0:
+            timestamp_prev = float(pricelist[0][0])  # erster Listeneintrag
             starttime_utc = _get_utcfromtimestamp(float(pricelist[0][0]))
-            if starttime_utc == now_full_hour:  # erster Preis ist der aktuelle
-                return pricelist
+            if _get_utcfromtimestamp(timestamp_prev) == now_full_hour:  # erster Preis ist der von aktueller Stunde
+                for index, price in enumerate(pricelist[:]):  # über Kopie der Liste iterieren, um das Original zu manipulieren
+                    if index > 0:
+                        timestamp = float(price[0])
+                        secondsdiff = timestamp - timestamp_prev
+                        timestamp_prev = float(price[0])
+                        if secondsdiff != 3600.0:  # ist Abstand <> 1h dann ab hier Liste löschen
+                            del pricelist[index:]
+                            break
+            else:
+                return []
+            return pricelist
     return []
 
 def _get_updated_pricelist():
@@ -342,7 +348,6 @@ def update_pricedata(tibber_token, home_id, debug_level):
             _exit_on_invalid_price_data('Modul-Abbruch: ' + str(e), MODULE_NAME)
 
     _openWB_debug_level = debug_level  # zwecks Nutzung in Hilfsfunktionen
-
     _write_log_entry('Lese bisherige Preisliste', 1)
     pricelist_in_file = []
     module_name_in_file = None
@@ -351,7 +356,6 @@ def update_pricedata(tibber_token, home_id, debug_level):
     except Exception as e:
         _write_log_entry('Fehler: ' + str(e), 0)
         _write_log_entry("Vorhandene Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
-
     current_module_name = MODULE_NAME  # analog zu aWATTar, vielleicht gibt es irgendwann Ländervarianten
     if len(pricelist_in_file) > 0 and pricelist_in_file[0][1] == '99.99':
         _write_log_entry('Bisherige Preisliste enthaelt nur Fehlerpreise 99.99ct/kWh', 1)

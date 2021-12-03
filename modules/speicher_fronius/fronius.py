@@ -11,6 +11,9 @@ Debug = int(os.environ.get('debug'))
 myPid = str(os.getpid())
 
 wrfroniusip = str(sys.argv[1])
+wrfroniusisgen24 = int(sys.argv[2])
+froniuserzeugung = sys.argv[3]
+
 
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
@@ -24,7 +27,8 @@ if Debug >= 2:
 params = (
     ('Scope', 'System'),
 )
-response = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=5).json()
+response = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                        params=params, timeout=5).json()
 try:
     speicherwatt = int(response["Body"]["Data"]["Site"]["P_Akku"])
 except:
@@ -34,7 +38,7 @@ speicherwatt = speicherwatt * -1
 
 # wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
 ra = '^-?[0-9]+$'
-if re.search(ra, speicherwatt) == None:
+if re.search(ra, str(speicherwatt)) == None:
     speicherwatt = "0"
 if Debug >= 1:
     DebugLog('Speicherleistung: ' + str(speicherwatt))
@@ -42,11 +46,15 @@ with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(speicherwatt))
 
 try:
-    speichersoc = int(response["Body"]["Data"]["Inverters"]["1"]["SOC"])
+    if wrfroniusisgen24 == 1:
+        response_soc = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetStorageRealtimeData.cgi', timeout=5).json()
+        speichersoc = int(response["Body"]["Data"][froniuserzeugung]["Controller"]["StateOfCharge_Relative"])
+    else:
+        speichersoc = int(response["Body"]["Data"]["Inverters"]["1"]["SOC"])
 except:
     traceback.print_exc()
     exit(1)
-if re.search(ra, speichersoc) == None:
+if re.search(ra, str(speichersoc)) == None:
     speichersoc = "0"
 if Debug >= 1:
     DebugLog('Soc: ' + str(speichersoc))

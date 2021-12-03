@@ -295,11 +295,32 @@ def refreshToken(email):
     tokens["expires_in"] = resp_json["expires_in"]
     return saveTokens()
 
-def getVehicleId(vehicle):
+def listCars():
+    myList = []
     myVehicles = requestData('vehicles')
-    myVehicleId = json.loads(myVehicles)["response"][vehicle]["id"]
+    for index, car in enumerate(json.loads(myVehicles)["response"]):
+        myList.append(json.loads("{\"id\":\"%s\", \"vin\":\"%s\", \"name\":\"%s\"}"%(index, car["vin"], car["display_name"])))
+    print(json.dumps(myList))
+
+def getVehicleIdByVin(vin):
+    myVehicles = requestData('vehicles')
+    for car in json.loads(myVehicles)["response"]:
+        if( verbose ):
+            eprint("VIN: %s"%(car["vin"]))
+        if( car["vin"] == vin):
+            myVehicleId = car["id"]
+            if( verbose ):
+                eprint("vehicle_id for vin %s: %s"%(vin, str(myVehicleId)))
+            return myVehicleId
+    eprint("vin not found: %s"%(vin))
+    for index, car in enumerate(json.loads(myVehicles)["response"]):
+        eprint("Index: %d VIN: %s"%(index, car["vin"]))
+
+def getVehicleIdByIndex(index):
+    myVehicles = requestData('vehicles')
+    myVehicleId = json.loads(myVehicles)["response"][index]["id"]
     if( verbose ):
-        eprint("vehicle_id for entry %d: %s"%(vehicle, str(myVehicleId)))
+        eprint("vehicle_id for entry %d: %s"%(index, str(myVehicleId)))
     return myVehicleId
 
 def requestData(dataPart):
@@ -348,8 +369,10 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--tokensfile", type=str, required=False, default="tesla.token", help="Filename to save tokens")
     parser.add_argument("-d", "--data", type=str, required=False, default=None, help="data part to request, use \"#\" as placeholder for \"vehicle_id\" if required")
     parser.add_argument("-c", "--command", type=str, required=False, default=None, help="command to send, use \"#\" as placeholder for \"vehicle_id\" if required")
-    parser.add_argument("-v", "--vehicle", type=int, required=False, default=0, help="vehicle number to use, dafeults to \"0\"")
+    parser.add_argument("-v", "--vehicle", type=int, required=False, default=0, help="vehicle number to use, defaults to \"0\"")
+    parser.add_argument("-V", "--vin", type=str, required=False, default=None, help="vin to use, optional instead of \"--vehicle\"")
     parser.add_argument("-l", "--logprefix", type=str, required=False, default=None, help="identifier used for logging to stderr")
+    parser.add_argument("--listcars", required=False, default=False, action="store_true", help="list avilable cars by index and vin")
     parser.add_argument("--verbose", required=False, default=False, action="store_true", help="be verbose")
     args = parser.parse_args()
 
@@ -374,11 +397,18 @@ if __name__ == "__main__":
                 eprint("Token Refresh failed")
                 sys.exit(2)
 
-    vehicleID = getVehicleId(args.vehicle)
-    if( args.data != None ):
-        response = requestData(args.data.replace("#", str(vehicleID)))
-        print(json.dumps(json.loads(response)["response"]))
-    if( args.command != None ):
-        response = postCommand(args.command.replace("#", str(vehicleID)))
-        print(json.dumps(json.loads(response)["response"]))
+    if(args.listcars):
+        listCars()
+        sys.exit()
+    if( args.vin != None ):
+        vehicleID = getVehicleIdByVin(args.vin)
+    else :
+        vehicleID = getVehicleIdByIndex(args.vehicle)
+    if( vehicleID != None ):
+        if( args.data != None ):
+            response = requestData(args.data.replace("#", str(vehicleID)))
+            print(json.dumps(json.loads(response)["response"]))
+        if( args.command != None ):
+            response = postCommand(args.command.replace("#", str(vehicleID)))
+            print(json.dumps(json.loads(response)["response"]))
     sys.exit()
