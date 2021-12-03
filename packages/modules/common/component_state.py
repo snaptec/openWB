@@ -1,5 +1,6 @@
 from typing import List
 
+
 class BatState:
     def __init__(self, imported: float, exported: float, power: float, soc: int = 0):
         self.imported = imported
@@ -49,3 +50,7 @@ class InverterState:
         self.power = power
         self.counter = counter
 
+
+class CarState:
+    def __init__(self, soc: float):
+        self.soc = soc
