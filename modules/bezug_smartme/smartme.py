@@ -10,17 +10,20 @@ bezug_smartme_url = str(sys.argv[1])
 bezug_smartme_user = str(sys.argv[2])
 bezug_smartme_pass = str(sys.argv[3])
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
 
 if Debug >= 2:
     DebugLog('Smartme URL: ' + bezug_smartme_url)
     DebugLog('Smartme User: ' + bezug_smartme_user)
     DebugLog('Smartme Passwort: ' + bezug_smartme_pass)
+
 
 def get_power_value(key, file=None):
     try:
@@ -109,7 +112,7 @@ get_value("CurrentL3", "bezuga3")
 
 # Prüfen ob Werte gültig
 regex = '^[-+]?[0-9]+\.?[0-9]*$'
-if re.search(regex, wattbezug) == None:
+if re.search(regex, str(wattbezug)) == None:
     with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
         wattbezug = f.read()
 # Ausgabe

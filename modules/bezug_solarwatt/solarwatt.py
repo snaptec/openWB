@@ -10,15 +10,17 @@ solarwattmethod = int(sys.argv[1])
 speicher1_ip = str(sys.argv[2])
 speicher1_ip2 = str(sys.argv[3])
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
 
 if Debug >= 2:
-    DebugLog('Solarwatt Methode: ' + solarwattmethod)
+    DebugLog('Solarwatt Methode: ' + str(solarwattmethod))
     DebugLog('Solarwatt IP1: ' + speicher1_ip)
     DebugLog('Solarwatt IP2: ' + speicher1_ip2)
 
@@ -34,7 +36,8 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
                 if "tagValues" in sresponse["result"]["items"][item]:
                     if "PowerConsumedFromGrid" in sresponse["result"]["items"][item]["tagValues"]:
                         if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerConsumedFromGrid"]:
-                            bezugw = int(sresponse["result"]["items"][item]["tagValues"]["PowerConsumedFromGrid"]["value"])
+                            bezugw = int(sresponse["result"]["items"][item]["tagValues"]
+                                         ["PowerConsumedFromGrid"]["value"])
                             break
             except:
                 traceback.print_exc()

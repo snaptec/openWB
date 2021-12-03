@@ -45,7 +45,8 @@ def request(command):
             s.sendall(command)
             response = s.recv(1024)
     except Exception as e:
-        log("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+str(solarview_hostname)+", port: "+str(port)+", timeout: "+str(timeout))
+        log("Error: request to SolarView failed. Details: return-code: " + str(e) + ", host: " + str(solarview_hostname) +
+            ", port: " + str(port) + ", timeout: " + str(timeout))
         traceback.print_exc()
         sys.exit(0)
 
@@ -113,7 +114,7 @@ def request(command):
 
     if debug != 0:
         # Werte ausgeben
-        log("ID: "+id)
+        log("ID: "+str(id))
         log("Zeitpunkt: "+str(timestamp))
         log("Temperatur: "+str(temperature)+" °C")
         log("Leistung: "+str(power)+" W")
