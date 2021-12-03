@@ -4,7 +4,7 @@ import sys
 from helpermodules import log
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_state import SingleComponentUpdateContext
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.openwb_flex import bat
 from modules.openwb_flex import counter
 from modules.openwb_flex import inverter

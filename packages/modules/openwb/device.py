@@ -3,7 +3,7 @@ import sys
 
 from helpermodules import log
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_state import SingleComponentUpdateContext
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.openwb import bat
 from modules.openwb import counter
 from modules.openwb import inverter
