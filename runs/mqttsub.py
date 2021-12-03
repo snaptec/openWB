@@ -851,6 +851,24 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL1"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL2"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL3"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL3', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
             if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL1"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=200):
                     f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL1', 'w')
