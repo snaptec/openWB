@@ -17,7 +17,7 @@ def get_default_config() -> dict:
     return {
         "name": "Alpha ESS",
         "type": "alpha_ess",
-        "id": None
+        "id": 0
     }
 
 
@@ -73,7 +73,6 @@ def read_legacy(argv: List[str]) -> None:
         num = None
 
     device_config = get_default_config()
-    device_config["id"] = 0
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
