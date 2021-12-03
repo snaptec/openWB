@@ -5,7 +5,7 @@ from typing import Callable, Generic, TypeVar, Union
 from helpermodules import compatibility
 from helpermodules import log
 from helpermodules.pub import Pub
-from modules.common.component_state import BatState, CounterState, InverterState
+from modules.common.component_state import BatState, CounterState, InverterState, CarState
 from modules.common.fault_state import FaultState
 
 
@@ -159,6 +159,28 @@ class InverterValueStoreBroker(ValueStore[InverterState]):
             pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/currents", inverter_state.currents, 1)
         except Exception as e:
             process_error(e)
+
+
+class CarValueStoreRamdisk(ValueStore[CarState]):
+    def __init__(self, charge_point: int):
+        self.filename = "soc" if charge_point == 1 else "soc1"
+
+    def set(self, state: CarState) -> None:
+        write_to_file(self.filename, state.soc, 0)
+
+
+class CarValueStoreBroker(ValueStore[CarState]):
+    def __init__(self, vehicle_id: int):
+        self.topic = "openWB/set/ev/{}/get/counter".format(vehicle_id)
+
+    def set(self, state: CarState) -> None:
+        pub_to_broker(self.topic, state.soc)
+
+
+def get_car_value_store(id: int) -> ValueStore[CarState]:
+    if compatibility.is_ramdisk_in_use():
+        return CarValueStoreRamdisk(id)
+    return CarValueStoreBroker(id)
 
 
 def get_bat_value_store(component_num: int) -> ValueStore[BatState]:
