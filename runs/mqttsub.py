@@ -834,20 +834,38 @@ def on_message(client, userdata, msg):
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL2"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL3"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL1"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL2"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL3"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
