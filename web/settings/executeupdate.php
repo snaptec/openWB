@@ -1,3 +1,8 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+	exit('Diese Seite muss als HTTP-POST aufgerufen werden.');
+}
+?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -77,7 +82,7 @@
 
 				infoText.text("Update der openWB angefordert...");
 
-				$.get({ url: "settings/updatePerformNow.php", cache: false }).done(function() {
+				$.post({ url: "settings/updatePerformNow.php", cache: false }).done(function() {
 					infoText.text("Update läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
 					infoText.removeClass("alert-info");
 					infoText.addClass("alert-success");
