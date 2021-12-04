@@ -1,18 +1,20 @@
-from typing import Iterable, Union
+from pathlib import Path
+from typing import Iterable, Optional
 
 from modules.common.store._util import get_rounding_function_by_digits, process_error
 
+RAMDISK_PATH = Path(__file__).resolve().parents[4] / "ramdisk"
 
-def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
+
+def ramdisk_write_to_files(prefix: str, values: Iterable, digits: int = None):
     for index, value in enumerate(values):
-        write_to_file(prefix + str(index + 1), value, digits)
+        ramdisk_write(prefix + str(index + 1), value, digits)
 
 
-def write_to_file(file: str, value, digits: Union[int, None] = None) -> None:
+def ramdisk_write(file: str, value, digits: Optional[int] = None) -> None:
     try:
         rounding = get_rounding_function_by_digits(digits)
-        with open("/var/www/html/openWB/ramdisk/" + file, "w") as f:
+        with open(RAMDISK_PATH / file, "w") as f:
             f.write(str(rounding(value)))
-        return value
     except Exception as e:
         process_error(e)

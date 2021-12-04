@@ -2,7 +2,7 @@ from helpermodules import log, compatibility
 from modules.common.component_state import CounterState
 from modules.common.store import ValueStore
 from modules.common.store._broker import pub_to_broker
-from modules.common.store._ramdisk import write_array_to_files, write_to_file
+from modules.common.store._ramdisk import ramdisk_write_to_files, ramdisk_write
 from modules.common.store._util import process_error
 
 
@@ -12,17 +12,17 @@ class CounterValueStoreRamdisk(ValueStore[CounterState]):
 
     def set(self, counter_state: CounterState):
         try:
-            write_array_to_files("/evuv", counter_state.voltages, 1)
-            write_array_to_files("/bezuga", counter_state.currents, 1)
-            write_array_to_files("/bezugw", counter_state.powers, 0)
-            write_array_to_files("/evupf", counter_state.power_factors, 2)
-            imported = write_to_file("/bezugkwh", counter_state.imported)
-            exported = write_to_file("/einspeisungkwh", counter_state.exported)
-            power_all = write_to_file("/wattbezug", counter_state.power_all, 0)
-            write_to_file("/evuhz", counter_state.frequency, 2)
-            log.MainLogger().info('EVU Watt: ' + str(power_all))
-            log.MainLogger().info('EVU Bezug: ' + str(imported))
-            log.MainLogger().info('EVU Einspeisung: ' + str(exported))
+            ramdisk_write_to_files("evuv", counter_state.voltages, 1)
+            ramdisk_write_to_files("bezuga", counter_state.currents, 1)
+            ramdisk_write_to_files("bezugw", counter_state.powers, 0)
+            ramdisk_write_to_files("evupf", counter_state.power_factors, 2)
+            ramdisk_write("bezugkwh", counter_state.imported)
+            ramdisk_write("einspeisungkwh", counter_state.exported)
+            ramdisk_write("wattbezug", counter_state.power_all, 0)
+            ramdisk_write("evuhz", counter_state.frequency, 2)
+            log.MainLogger().info('EVU Watt: ' + str(counter_state.power_all))
+            log.MainLogger().info('EVU Bezug: ' + str(counter_state.imported))
+            log.MainLogger().info('EVU Einspeisung: ' + str(counter_state.exported))
         except Exception as e:
             process_error(e)
 

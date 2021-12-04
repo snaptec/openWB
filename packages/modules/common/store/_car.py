@@ -2,7 +2,7 @@ from helpermodules import compatibility
 from modules.common.component_state import CarState
 from modules.common.store import ValueStore
 from modules.common.store._broker import pub_to_broker
-from modules.common.store._ramdisk import write_to_file
+from modules.common.store._ramdisk import ramdisk_write
 
 
 class CarValueStoreRamdisk(ValueStore[CarState]):
@@ -10,7 +10,7 @@ class CarValueStoreRamdisk(ValueStore[CarState]):
         self.filename = "soc" if charge_point == 1 else "soc1"
 
     def set(self, state: CarState) -> None:
-        write_to_file(self.filename, state.soc, 0)
+        ramdisk_write(self.filename, state.soc, 0)
 
 
 class CarValueStoreBroker(ValueStore[CarState]):
