@@ -4,8 +4,8 @@ from typing import Callable, Generic, TypeVar, Union
 
 from helpermodules import compatibility
 from helpermodules import log
-from helpermodules import pub
-from modules.common.component_state import BatState, CounterState, InverterState
+from helpermodules.pub import Pub
+from modules.common.component_state import BatState, CounterState, InverterState, CarState
 from modules.common.fault_state import FaultState
 
 
@@ -15,7 +15,7 @@ def process_error(e):
 
 def write_array_to_files(prefix: str, values: Iterable, digits: int = None):
     for index, value in enumerate(values):
-        write_to_file(prefix+str(index + 1), value, digits)
+        write_to_file(prefix + str(index + 1), value, digits)
 
 
 def write_to_file(file: str, value, digits: Union[int, None] = None) -> None:
@@ -41,9 +41,9 @@ def pub_to_broker(topic: str, value, digits: Union[int, None] = None) -> None:
     rounding = get_rounding_function_by_digits(digits)
     try:
         if isinstance(value, list):
-            pub.pub(topic, [rounding(v) for v in value])
+            Pub().pub(topic, [rounding(v) for v in value])
         else:
-            pub.pub(topic, rounding(value))
+            Pub().pub(topic, rounding(value))
     except Exception as e:
         process_error(e)
 
@@ -159,6 +159,28 @@ class InverterValueStoreBroker(ValueStore[InverterState]):
             pub_to_broker("openWB/set/pv/"+str(self.num)+"/get/currents", inverter_state.currents, 1)
         except Exception as e:
             process_error(e)
+
+
+class CarValueStoreRamdisk(ValueStore[CarState]):
+    def __init__(self, charge_point: int):
+        self.filename = "soc" if charge_point == 1 else "soc1"
+
+    def set(self, state: CarState) -> None:
+        write_to_file(self.filename, state.soc, 0)
+
+
+class CarValueStoreBroker(ValueStore[CarState]):
+    def __init__(self, vehicle_id: int):
+        self.topic = "openWB/set/ev/{}/get/counter".format(vehicle_id)
+
+    def set(self, state: CarState) -> None:
+        pub_to_broker(self.topic, state.soc)
+
+
+def get_car_value_store(id: int) -> ValueStore[CarState]:
+    if compatibility.is_ramdisk_in_use():
+        return CarValueStoreRamdisk(id)
+    return CarValueStoreBroker(id)
 
 
 def get_bat_value_store(component_num: int) -> ValueStore[BatState]:

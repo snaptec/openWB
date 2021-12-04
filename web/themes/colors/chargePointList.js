@@ -66,11 +66,11 @@ class ChargePointList {
       .text(data => data);
     rows.append((row, i) => this.cpSocButtonCell(row, i));
 
-    if (wbdata.isPriceChartEnabled) {
+    if (wbdata.isEtEnabled) {
       this.footer.append('p')
         .attr("class", "pt-3 pb-0 m-0")
         .style("text-align", "center")
-        .text("Aktueller Strompreis: " + wbdata.currentPowerPrice + " Cent/kWh");
+        .text("Aktueller Strompreis: " + wbdata.etPrice + " ct/kWh");
     }
   }
 

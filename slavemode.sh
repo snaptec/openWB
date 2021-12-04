@@ -4,7 +4,6 @@ declare -r SlaveModeAllowedLoadImbalanceDefault=20.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
-declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
 declare -r SocketActivatedFile="ramdisk/socketActivated"
 declare -r SocketApprovedFile="ramdisk/socketApproved"
@@ -155,7 +154,6 @@ function computeAndSetCurrentForChargePoint() {
 		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
 		if (( fixedCurrent >= 0 )); then
 			openwbDebugLog "MAIN" 2 "Slave Mode: Forced to ${fixedCurrent} A, ignoring imbalance"
-			echo "0" > "${LastImbalanceFile}${chargePoint}"
 			callSetCurrent $fixedCurrent $chargePoint $LmStatusSuperseded
 			return 0
 		fi
@@ -327,14 +325,14 @@ function computeLoadImbalanceCompensation() {
 	local llWantedIncrease=$((llWanted - PreviousExpectedChargeCurrent))
 
 	#           are we not contributing to maximum load phase ?                       or also to minimal current phase                 or not charging
-	if ( (( ChargingOnPhase[$PhaseWithMaximumTotalCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
-#		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
+	if ( (( ChargingOnPhase[$PhaseWithMaximumImbalanceCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumImbalanceCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
+#		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumImbalanceCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumImbalanceCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumImbalanceCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumImbalanceCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
 		return 0
 	fi
 
-	local currentLoadImbalance=$(echo "scale=3; (${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
+	local currentLoadImbalance=$SystemLoadImbalance
 
-	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumTotalCurrent} - L${PhaseWithMinimumTotalCurrent}: ${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} = ${currentLoadImbalance} A (limit is ${SlaveModeAllowedLoadImbalance} A)"
+	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumImbalanceCurrent} - L${PhaseWithMinimumImbalanceCurrent}: ${ImbalanceCurrentConsumptionOnPhase[$PhaseWithMaximumImbalanceCurrent]} - ${ImbalanceCurrentConsumptionOnPhase[$PhaseWithMinimumImbalanceCurrent]} = ${currentLoadImbalance} A (limit is ${SlaveModeAllowedLoadImbalance} A)"
 
 	local chargingVehiclesToUse=$ChargingVehiclesAdjustedForThisCp
 	if (( chargingVehiclesToUse == 0 )); then
@@ -550,30 +548,52 @@ function setVariablesFromRamdisk() {
 	# phase with maximum current
 	PhaseWithMaximumTotalCurrent=0
 	PhaseWithMinimumTotalCurrent=0
+	PhaseWithMaximumImbalanceCurrent=0
+	PhaseWithMinimumImbalanceCurrent=0
 	MaximumTotalCurrent=0
 	MinimumTotalCurrent=999999
+	MaximumImbalanceCurrent=0
+	MinimumImbalanceCurrent=999999
 
 	TotalCurrentConsumptionOnPhase=(0 0 0 0)
+	ImbalanceCurrentConsumptionOnPhase=(0 0 0 0)
 	ChargingVehiclesOnPhase=(0 0 0 0)
 	for i in {1..3}
 	do
 		TotalCurrentConsumptionOnPhase[i]=$(<"ramdisk/TotalCurrentConsumptionOnL${i}")
 		ChargingVehiclesOnPhase[i]=$(<"ramdisk/ChargingVehiclesOnL${i}")
 
+		if [ -f "ramdisk/ImbalanceCurrentConsumptionOnL${i}" ]; then
+			ImbalanceCurrentConsumptionOnPhase[i]=$(<"ramdisk/ImbalanceCurrentConsumptionOnL${i}")
+		else
+			ImbalanceCurrentConsumptionOnPhase[i]=${TotalCurrentConsumptionOnPhase[i]}
+		fi
+
 		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} > $MaximumTotalCurrent" | bc` == 1 )); then
 			MaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMaximumTotalCurrent=${i}
+		fi
+
+		if (( `echo "${ImbalanceCurrentConsumptionOnPhase[i]} > $MaximumImbalanceCurrent" | bc` == 1 )); then
+			MaximumImbalanceCurrent=${ImbalanceCurrentConsumptionOnPhase[i]}
+			PhaseWithMaximumImbalanceCurrent=${i}
 		fi
 
 		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} < $MinimumTotalCurrent" | bc` == 1 )); then
 			MinimumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMinimumTotalCurrent=${i}
 		fi
+
+		if (( `echo "${ImbalanceCurrentConsumptionOnPhase[i]} < $MinimumImbalanceCurrent" | bc` == 1 )); then
+			MinimumImbalanceCurrent=${ImbalanceCurrentConsumptionOnPhase[i]}
+			PhaseWithMinimumImbalanceCurrent=${i}
+		fi
 	done
 
-	SystemLoadImbalance=$(echo "scale=3; $MaximumTotalCurrent - $MinimumTotalCurrent" | bc)
+	SystemLoadImbalance=$(echo "scale=3; $MaximumImbalanceCurrent - $MinimumImbalanceCurrent" | bc)
 
-	openwbDebugLog "MAIN" 2 "TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
+	openwbDebugLog "MAIN" 2 "TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A"
+	openwbDebugLog "MAIN" 2 "ImbalanceCurrentConsumptionOnPhase=${ImbalanceCurrentConsumptionOnPhase[@]:1}, Phase with max imbalance current = ${PhaseWithMaximumImbalanceCurrent} @ ${MaximumImbalanceCurrent} A, min current = ${PhaseWithMinimumImbalanceCurrent} @ ${MinimumImbalanceCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
 
 	# heartbeat
 	Heartbeat=$(<ramdisk/heartbeat)
