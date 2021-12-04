@@ -10,4 +10,4 @@ if __name__ == '__main__':
         print("unable to parse arguments. Expected: <akey> <token> <charge point>")
         raise
 
-    EVNotify(EVNotifyConfiguration(charge_point, akey, token)).get_values()
+    EVNotify(EVNotifyConfiguration(charge_point, akey, token)).update()
