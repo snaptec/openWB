@@ -26,7 +26,6 @@ DebugLog(2, 'Fronius Gen24: ' + wrfroniusisgen24)
 params = (
     ('Scope', 'System'),
 )
-regex='^-?[0-9]+$'
 
 # Auslesen eines Fronius Symo WR über die integrierte API des WR.
 # Rückgabewert ist die aktuelle Wirkleistung in [W].
@@ -34,21 +33,14 @@ response = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtim
 pvwatttmp = response.json()
 DebugLog(1, 'response: ' + str(response))
 DebugLog(2, 'response_pvwatt: ' + str(pvwatttmp))
-try:
-    pvwatt = int(pvwatttmp["Body"]["Data"]["Site"]["P_PV"])
-except:
-    # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0
-    pvwatt = 0
+# Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+pvwatt = pvwatttmp["Body"]["Data"]["Site"]["P_PV"] or 0
 
 if wrfroniusisgen24 == "0":
     pvkwh_start = 0
     pvkwh_offset = 0
-    try:
-	    pvkwh = int(pvwatttmp["Body"]["Data"]["Site"]["E_Total"])
-	    pvday = round(pvwatttmp["Body"]["Data"]["Site"]["E_Day"])
-    except:
-        traceback.print_exc()
-        exit(1)
+    pvkwh = pvwatttmp["Body"]["Data"]["Site"]["E_Total"]
+    pvday = pvwatttmp["Body"]["Data"]["Site"]["E_Day"]
     try:
         with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "r") as f:
             pvkwh_offset = int(f.read())
@@ -57,46 +49,40 @@ if wrfroniusisgen24 == "0":
     try:
         with open("/var/www/html/openWB/ramdisk/pvkwh_start", "r") as f:
             pvkwh_start = int(f.read())
-            pvkwh_new = pvkwh_start + pvday + pvkwh_offset
-            if pvkwh_new > pvkwh:
-                if pvkwh_new - pvkwh >= 100:
-                    # Korregiere Abweichung
-                    pvkwh_diff = pvkwh_new - pvkwh - 99
-                    pvkwh_offset -= pvkwh_diff
-                    pvkwh_new -= pvkwh_diff
-                pvkwh = pvkwh_new
-            else:
-                # Berechne Abweichung als Mittelwert von aktueller und bisheriger Abweichung
-                pvkwh_offset = round((pvkwh_offset + pvkwh - pvkwh_start - pvday) / 2)
+        pvkwh_new = pvkwh_start + pvday + pvkwh_offset
+        if pvkwh_new > pvkwh:
+            if pvkwh_new - pvkwh >= 100:
+                # Korregiere Abweichung
+                pvkwh_diff = pvkwh_new - pvkwh - 99
+                pvkwh_offset -= pvkwh_diff
+                pvkwh_new -= pvkwh_diff
+            pvkwh = pvkwh_new
+        else:
+            # Berechne Abweichung als Mittelwert von aktueller und bisheriger Abweichung
+            pvkwh_offset = round((pvkwh_offset + pvkwh - pvkwh_start - pvday) / 2)
     except FileNotFoundError as e:
         DebugLog(1, str(e))
 
 if wrfronius2ip != "none":
-    try:
-        response = requests.get('http://'+wrfronius2ip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
-        pv2watttmp = response.json()
-        DebugLog(1, 'response: ' + str(response))
-        DebugLog(2, 'response_pv2watt: ' + str(pv2watttmp))
-        pv2watt = int(pv2watttmp["Body"]["Data"]["Site"]["P_PV"])
-    except:
-        # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0
-        pv2watt = 0
+    response = requests.get('http://'+wrfronius2ip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
+    pv2watttmp = response.json()
+    DebugLog(1, 'response: ' + str(response))
+    DebugLog(2, 'response_pv2watt: ' + str(pv2watttmp))
+    # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+    pv2watt = pv2watttmp["Body"]["Data"]["Site"]["P_PV"] or 0
     pvwatt = (pvwatt + pv2watt) * -1
     DebugLog(2, 'pvwatt: ' + str(pvwatt))
     # Zur weiteren Verwendung im Webinterface
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
     if wrfroniusisgen24 == "0":
-        try:
-            pv2kwh = int(pv2watttmp["Body"]["Data"]["Site"]["E_Total"])
-        except:
-            pv2kwh = 0
+        pv2kwh = pv2watttmp["Body"]["Data"]["Site"]["E_Total"]
         pvgkwh = pvkwh + pv2kwh
         if pvgkwh > 0:
             with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
                 f.write(str(pvgkwh))
             with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
-                f.write('{:.3f}'.format(round(pvgkwh / 1000, 3)))
+                f.write('{:.3f}'.format(pvgkwh / 1000))
 else:
     pvwatt *= -1
     DebugLog(2, 'pvwatt: ' + str(pvwatt))
@@ -118,6 +104,6 @@ else:
         with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
             f.write(str(pvkwh))
         with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
-            f.write('{:.3f}'.format(round(pvkwh / 1000, 3)))
+            f.write('{:.3f}'.format(pvkwh / 1000))
 
 exit(0)
