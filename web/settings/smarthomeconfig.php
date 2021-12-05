@@ -90,6 +90,7 @@ $numDevices = 9;
 											<option value="mystrom" data-option="mystrom">MyStrom</option>
 											<option value="viessmann" data-option="viessmann">Viessmann</option>
 											<option value="mqtt" data-option="mqtt">Mqtt</option>
+											<option value="solarlog" data-option="solarlog">SolarLog</option>
 											<option value="pyt" data-option="pyt">Pyt (veraltet, bitte andere Option wählen)</option>
 										</select>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-none hide">
@@ -119,10 +120,8 @@ $numDevices = 9;
 										</span>
 
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-viessmann hide">
-											Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wp kann eingestellt werden, ob für diese Funktion  die Elektroheizung (Heizstab) benutzt werden soll.
+											Vitocal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wp kann eingestellt werden, ob für diese Funktion  die Elektroheizung (Heizstab) benutzt werden soll.
 										</span>
-
-
 
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-elwa hide">
 											Heizstab ELWA-E  der Firma my-PV<br>
@@ -153,6 +152,12 @@ $numDevices = 9;
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mystrom hide">
 											Mit diesem Typ werden SmartHome Geräte des Herstellers MyStrom unterstützt.<br>
+										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mystrom hide">
+											Ermöglicht die Einbindung von Unterverbrauchszählern aus Solarlog (z.B. Pro380, Pro1).<br>
+											<div class="card-text alert alert-info">
+												Die zugehörige IP Adresse ist im PV Modul einzustellen.
+											</div>
 										</span>
 									</div>
 								</div>
@@ -508,6 +513,18 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
+
+							<div class="form-group device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-solarlog hide">
+								<hr class="border-secondary">
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Zähler ID</label>
+									<div class="col">
+										<input id="device_solarlog_uz<?php echo $devicenum; ?>" name="device_solarlog_uz" class="form-control" type="number" min="0" max="99" step="100" required="required" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">ID des Zählers im SolarLog. SolarLog hat 2 RS485 Schnittstellen und die Sortierung scheint B,A zu sein. In der Webansicht http://solarlog.ip/#ilang=DE&b=p_live_table unter Verbrauchszähler bei 0 anfrangen zu zählen.</span>
+									</div>
+								</div>
+							</div>
+
 							<hr class="border-secondary">
 							<div class="form-group">
 								<div class="form-row mb-1">
