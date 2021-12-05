@@ -184,6 +184,8 @@ class WbData {
 				powerMeter.update();
 				break;
 			case 'currentPowerPrice':
+				case 'chargeMode':
+				priceChart.update();
 				chargePointList.update();
 			default:
 				break;

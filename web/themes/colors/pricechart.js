@@ -103,8 +103,13 @@ class PriceChart {
     xAxis.attr("transform", "translate(" + this.margin.left + "," + (height + this.margin.top) + ")");
     xAxis.selectAll(".tick")
     .attr("font-size", 8)
-    .attr("color", "white");
-
+    .attr("color", this.bgColor);
+    xAxis.selectAll(".tick line")
+    .attr("stroke", this.bgColor)
+    .attr("stroke-width", "0.5");
+    xAxis.select(".domain")
+    .attr("stroke", this.bgColor)
+    ;
     // Y Axis
     const yAxisGenerator = d3.axisLeft(this.yScale)
       .ticks(6)
@@ -118,7 +123,7 @@ class PriceChart {
     yAxis.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
     yAxis.selectAll(".tick")
       .attr("font-size", 8)
-      .attr("color", "white");
+      .attr("color", this.bgColor);
 
     yAxis.selectAll(".tick line")
       .attr("stroke", this.bgColor)
