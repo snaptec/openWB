@@ -144,7 +144,7 @@
 
 		<script>
 
-			// load navbar, be carefull: it loads asynchonously
+			// load navbar, be careful: it loads asynchronous
 			$.get(
 				{ url: "settings/navbar.html", cache: false },
 				function(data){

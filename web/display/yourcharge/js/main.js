@@ -76,7 +76,7 @@ window.setInterval(function () {
 }, 15000);
 
 var delayUserInput = (function () {
-	// sets a timeout on call and resets timout if called again for same id before timeout fires
+	// sets a timeout on call and resets timeout if called again for same id before timeout fires
 	var timeoutHandles = {};
 	return function (id, callback, ms) {
 		if (timeoutHandles[id]) {
@@ -230,10 +230,10 @@ $(document).ready(function () {
 				publish(value, topic);
 				var label = $('label[for="' + id + '"].valueLabel');
 				label.removeClass("text-danger");
-				// if rangeInput is for chargeLimitation, recalc progress
+				// if rangeInput is for chargeLimitation, recalculate progress
 				if (id.includes("/energyToCharge")) {
 					var parent = elem.closest(".chargeLimitation"); // get parent div element for charge limitation
-					var element = parent.find(".progress-bar"); // now get parents progressbar
+					var element = parent.find(".progress-bar"); // now get parents progress bar
 					var actualCharged = element.data("actualCharged"); // get stored value
 					if (isNaN(parseFloat(actualCharged))) {
 						actualCharged = 0; // minimum value

@@ -89,7 +89,7 @@ class PowerGraph {
       unsubscribeMqttGraphSegments();
       unsubscribeGraphUpdates();
     } catch (err) {
-      // on intial run this method is not existing
+      // on initial run this method is not existing
     }
   }
 
@@ -159,7 +159,7 @@ class PowerGraph {
   }
 
   updateLive(topic, payload) {
-    if (wbdata.graphMode == 'live') { // only udpdate if live graph is active
+    if (wbdata.graphMode == 'live') { // only update if live graph is active
       if (this.initialized) { // steady state
         if (topic === "openWB/graph/lastlivevalues") {
           const values = this.extractLiveValues(payload.toString());
@@ -306,8 +306,16 @@ class PowerGraph {
 
   extractLiveValues(payload) {
     const elements = payload.split(",");
+    const now = new Date (Date.now());
+    const mSecondsPerDay = 86400000 // milliseconds in a day
     var values = {};
     values.date = new Date(d3.timeParse("%H:%M:%S")(elements[0]));
+    values.date.setDate (now.getDate())
+    values.date.setMonth (now.getMonth())
+    values.date.setFullYear (now.getFullYear())
+    if (values.date.getHours() > now.getHours()) { // this is an entry from yesterday
+      values.date = new Date (values.date.getTime() - mSecondsPerDay) // change date to yesterday
+    }
     // evu
     if (+elements[1] > 0) {
       values.gridPull = +elements[1];

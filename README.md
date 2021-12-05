@@ -48,13 +48,13 @@ Installiertes Raspbian auf einem Raspberry pi 3.
 
 Installationsanleitung für Windows: http://openwb.de/main/wp-content/uploads/2019/07/install_openWB_v2.pdf
 
-Raspbian installieren
+Raspbian installieren aktuell werden in der Version 1.9 nur Stretch (bevorzugt) und Buster unterstützt.
 
-	https://www.raspberrypi.org/downloads/raspbian/
+	http://downloads.raspberrypi.org/raspbian_full/images/
 
 In der Shell folgendes eingeben:
 
-	curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
+	curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo bash
 
 
 
