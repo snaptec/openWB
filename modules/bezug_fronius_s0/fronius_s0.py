@@ -2,10 +2,8 @@
 # coding: utf8
 from datetime import datetime, timezone
 import os
-import re
 import requests
 import sys
-import traceback
 
 # Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
 # Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv)
@@ -29,32 +27,21 @@ response_fi = requests.get('http://'+ip_address+'/solar_api/v1/GetPowerFlowRealt
 response = response_fi.json()
 DebugLog(1, 'response_fi: ' + str(response_fi))
 DebugLog(2, 'response_fi_data: ' + str(response))
-try:
-    if primo == str(1):
-        wattbezug=int(response["Body"]["Data"]["Site"]["P_Grid"])
-    else:
-        wattbezug=int(response["Body"]["Data"]["PowerReal_P_Sum"])
-except:
-    traceback.print_exc()
+if primo == str(1):
+    # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+    wattbezug=int(response["Body"]["Data"]["Site"]["P_Grid"] or 0)
+else:
+    # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+    wattbezug=int(response["Body"]["Data"]["PowerReal_P_Sum"] or 0)
 
 #pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 #pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
-f = open( "ramdisk/pvwatt" , 'r')
-pvwatt =int(f.read())
-f.close()
-wattb=pvwatt + wattbezug
-
-#wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
-regex='^[0-9]+$'
-ra='^-[0-9]+$'
-if re.search(regex, str(wattbezug)) == None:
-    if re.search(ra, str(wattbezug)) == None:
-        wattbezug=0
+with open( "ramdisk/pvwatt" , 'r') as f:
+    pvwatt =int(f.read())
 
 # zur weiteren verwendung im webinterface
-f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
-f.write(str(wattbezug))
-f.close()
+with open('/var/www/html/openWB/ramdisk/wattbezug', 'w') as f:
+    f.write(str(wattbezug))
 
 # Summe der vom Netz bezogene Energie total in Wh
 # nur für Smartmeter  im Einspeisepunkt!
@@ -66,41 +53,33 @@ response = response_s0.json()
 DebugLog(1, 'response_s0: ' + str(response_fi))
 DebugLog(2, 'response_s0_data: ' + str(response))
 # jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
-try:
-    for location in response["Body"]["Data"]:
-        if "EnergyReal_WAC_Minus_Absolute" in response["Body"]["Data"][location]:
-            ikwh = str(response["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"])
-        else:
-            f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'r')
+for location in response["Body"]["Data"]:
+    if "EnergyReal_WAC_Minus_Absolute" in response["Body"]["Data"][location]:
+        ikwh = response["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"]
+    else:
+        with open('/var/www/html/openWB/ramdisk/bezugkwh', 'r') as f:
             ikwh = float(f.read())
-            f.close()
-            if wattbezug > 0:
-                # OpenWB Regelintervall 10s, Intervallfrequenz 360/h
-                ikwh += float(wattbezug) / 360
-except:
-    traceback.print_exc()
+        if wattbezug > 0:
+            # OpenWB Regelintervall 10s, Intervallfrequenz 360/h
+            ikwh += float(wattbezug) / 360
 
 #ikwh=$(echo ${kwhtmp##*EnergyReal_WAC_Minus_Absolute} | tr -d ' ' |  tr -d '\"' | tr -d ':' | tr -d '}' | tr -d '\n')
 #echo $ikwh #Test-Ausgabe
-f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
-f.write(str(ikwh))
-f.close()
+with open('/var/www/html/openWB/ramdisk/bezugkwh', 'w') as f:
+    f.write(str(ikwh))
+
 # Eingespeiste Energie total in Wh (für Smartmeter im Einspeisepunkt)
 # bei Smartmeter im Verbrauchsweig immer 0
 #ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
-try:
-    for location in response["Body"]["Data"]:
-        if "EnergyReal_WAC_Plus_Absolute" in response["Body"]["Data"][location]:
-            ekwh = str(response["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"])
-        else:
-            f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'r')
+for location in response["Body"]["Data"]:
+    if "EnergyReal_WAC_Plus_Absolute" in response["Body"]["Data"][location]:
+        ekwh = response["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"]
+    else:
+        with open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'r') as f:
             ekwh = float(f.read())
-            f.close()
-            if wattbezug < 0:
-                # OpenWB Regelintervall 10s, Intervallfrequenz 360/h
-                ekwh += float(abs(wattbezug)) / 360
-except:
-    traceback.print_exc()
-f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
-f.write(str(ekwh))
-f.close()
+        if wattbezug < 0:
+            # OpenWB Regelintervall 10s, Intervallfrequenz 360/h
+            ekwh += float(abs(wattbezug)) / 360
+
+with open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w') as f:
+    f.write(str(ekwh))
