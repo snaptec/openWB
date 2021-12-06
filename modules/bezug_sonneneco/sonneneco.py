@@ -8,12 +8,14 @@ import traceback
 sonnenecoalternativ = int(sys.argv[1])
 sonnenecoip = str(sys.argv[2])
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
 
 if Debug >= 2:
     DebugLog('Sonneneco Alternativ: ' + sonnenecoalternativ)
@@ -21,15 +23,9 @@ if Debug >= 2:
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems
 if sonnenecoalternativ == 2:
-    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M39', timeout=5)
-    response.encoding = 'utf-8'
-    evubezug = response.text.replace("\n", "")
-    response = requests.get('http://'+sonnenecoip+':7979/rest/devices/battery/M38', timeout=5)
-    response.encoding = 'utf-8'
-    evueinspeisung = response.text.replace("\n", "")
-    evubezug = int(evubezug)
-    evueinspeisung = int(evueinspeisung)
-    wattbezug = evubezug - evueinspeisung
+    evu_bezug = int(requests.get('http://' + sonnenecoip + ':7979/rest/devices/battery/M39', timeout=5).text)
+    evu_einspeisung = int(requests.get('http://' + sonnenecoip + ':7979/rest/devices/battery/M38', timeout=5).text)
+    wattbezug = evu_bezug - evu_einspeisung
 
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
         f.write(str(wattbezug))

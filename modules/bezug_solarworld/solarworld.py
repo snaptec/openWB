@@ -8,18 +8,21 @@ import traceback
 
 solarworld_emanagerip = str(sys.argv[1])
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
+
 
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
 
 if Debug >= 2:
     DebugLog('Solarworld IP: ' + solarworld_emanagerip)
 
 # Auslesen eines Solarworl eManagers über die integrierte JSON-API
-emanagerantwort = requests.get('http://'+solarworld_emanagerip+'/rest/solarworld/lpvm/powerAndBatteryData', timeout=5).json()
+emanagerantwort = requests.get(
+    'http://'+solarworld_emanagerip+'/rest/solarworld/lpvm/powerAndBatteryData', timeout=5).json()
 try:
     em_in_watt = emanagerantwort["PowerIn"]
 except:
@@ -32,14 +35,11 @@ except:
     exit(1)
 
 # Bezug ist entweder -Out oder In; bei Einspeisung ist 'em_in_watt' immer 0
-# use printf zum runden, LC_ALL=C wegen Dezimalpunkt
 bezug_watt = int(em_in_watt - em_out_watt)
 
 # wenn eManager aus bzw. keine Antwort ersetze leeren Wert durch eine 0
 ra = '^-?[0-9]+$'
 
-if re.search(bezug_watt, ra) == None:
-    bezug_watt = "0"
 if Debug >= 1:
     DebugLog('Leistung: ' + str(bezug_watt))
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:

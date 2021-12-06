@@ -31,39 +31,21 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
         with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
             bezugwatt = f.read()
     else:
-        for item in sresponse["result"]["items"]:
+        for item in sresponse["result"]["items"].values():
             try:
-                if "tagValues" in sresponse["result"]["items"][item]:
-                    if "PowerConsumedFromGrid" in sresponse["result"]["items"][item]["tagValues"]:
-                        if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerConsumedFromGrid"]:
-                            bezugw = int(sresponse["result"]["items"][item]["tagValues"]
-                                         ["PowerConsumedFromGrid"]["value"])
-                            break
-            except:
-                traceback.print_exc()
-                exit(1)
-        for item in sresponse["result"]["items"]:
+                bezugw = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
+            except KeyError:
+                pass
+
+        for item in sresponse["result"]["items"].values():
             try:
-                if "tagValues" in sresponse["result"]["items"][item]:
-                    if "PowerOut" in sresponse["result"]["items"][item]["tagValues"]:
-                        if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerOut"]:
-                            einspeisungw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
-                            break
-            except:
-                traceback.print_exc()
-                exit(1)
-        bezugwatt = int(bezugw - einspeisungw)
+                einspeisungw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
+            except KeyError:
+                pass
+        bezugwatt = bezugw - einspeisungw
 if solarwattmethod == 1:  # Abruf über Gateway
     sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
-    if len(str(sresponse)) < 10:
-        with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
-            bezugwatt = f.read()
-    else:
-        try:
-            bezugwatt = int(sresponse["FData"]["PGrid"])
-        except:
-            traceback.print_exc()
-            exit(1)
+    bezugwatt = int(sresponse["FData"]["PGrid"])
 
 if Debug >= 1:
     DebugLog("Netzbezug: "+str(bezugwatt)+" W")

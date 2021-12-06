@@ -44,9 +44,6 @@ def get_power_value(key, file=None):
 def get_im_ex_value(key, file=None):
     try:
         value = round(response[key] * 1000, 3)
-        if re.search(regex, value) == None:
-            with open("/var/www/html/openWB/ramdisk/bezugkwh", "r") as f:
-                value = f.read()
         if Debug >= 1:
             DebugLog(file+': ' + str(value))
         f = open('/var/www/html/openWB/ramdisk/'+file, 'w')

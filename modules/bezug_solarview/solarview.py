@@ -10,8 +10,8 @@ import sys
 import traceback
 
 solarview_hostname = str(sys.argv[1])
-solarview_port = int(sys.argv[2])
-solarview_timeout = int(sys.argv[3])
+solarview_port = int(sys.argv[2]) # default: 1500
+solarview_timeout = int(sys.argv[3]) # default: 1
 debug = int(sys.argv[4])
 
 
@@ -30,28 +30,19 @@ def write_value(value, file):
 
 def request(command):
     try:
-        port = solarview_port
-    except:
-        port = 15000
-    try:
-        timeout = solarview_timeout
-    except:
-        timeout = 1
-
-    try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(timeout)
-            s.connect((solarview_hostname, port))
+            s.settimeout(solarview_timeout)
+            s.connect((solarview_hostname, solarview_port))
             s.sendall(command)
-            response = s.recv(1024)
+            response = str(s.recv(1024))
     except Exception as e:
         log("Error: request to SolarView failed. Details: return-code: " + str(e) + ", host: " + str(solarview_hostname) +
-            ", port: " + str(port) + ", timeout: " + str(timeout))
+            ", port: " + str(solarview_port) + ", timeout: " + str(solarview_timeout))
         traceback.print_exc()
         sys.exit(0)
 
     if debug != 0:
-        log("Raw response: "+str(response))
+        log("Raw response: "+response)
     #
     # Format:    {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,UDCD,IDCD,TKK},Checksum
     # Beispiele: {22,09,09,2019,10,37,0001.2,00024,000903,00007817,01365,000,000.0,000,000.0,000,000.0,000,000.0,00},:

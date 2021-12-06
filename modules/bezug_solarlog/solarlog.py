@@ -7,7 +7,7 @@ import sys
 import traceback
 
 bezug_solarlog_ip = str(sys.argv[1])
-bezug_solarlog_speicherv = str(sys.argv[1])
+bezug_solarlog_speicherv = str(sys.argv[2])
 
 Debug         = int(os.environ.get('debug'))
 myPid         = str(os.getpid())
