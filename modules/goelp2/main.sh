@@ -2,6 +2,8 @@
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
+python /var/www/html/openWB/modules/goelp2/restzeit.py
+
 output=$(curl --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/status)
 if [[ $? == "0" ]] ; then
 	goecorrectionfactor=$(echo "scale=0;$goecorrectionfactorlp2 * 100000 /1" |bc)
@@ -107,4 +109,7 @@ if [[ $? == "0" ]] ; then
 	lastseen=$(date +"%d.%m.%Y %H:%M:%S")
 	echo $lastseen >/var/www/html/openWB/ramdisk/goelp2lastcontact
     mosquitto_pub -t openWB/lp/2/lastSeen -r -m "$lastseen"
+	
+	goelp2estimatetime=$(</var/www/html/openWB/ramdisk/goelp2estimatetime)
+	mosquitto_pub -t openWB/lp/2/goelp2estimatetime -r -m "$goelp2estimatetime"
 fi
