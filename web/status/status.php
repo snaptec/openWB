@@ -199,6 +199,10 @@
 											<th scope="row">Letzte Verbindung</th>
 											<td class="lpLastSeen"></td>
 										</tr>
+										<tr class="lpgoeestimatetimeRow hide">
+											<th scope="row">Geladen bis</th>
+											<td class="lpgoeestimatetime"></td>
+										</tr>
 										<tr class="faultStrSocLpRow hide">
 											<th scope="row">Störungsbeschreibung</th>
 											<td class="faultStrSocLp"></td>

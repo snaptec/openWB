@@ -308,6 +308,10 @@ function processLpMsg (mqttmsg, mqttpayload) {
 		textShow(mqttpayload, '#lp' + index + ' .lpLastSeen');
 		showSection('#lp' + index + ' .lpLastSeenRow');
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/goeestimatetime$/i ) ) {
+		textShow(mqttpayload, '#lp' + index + ' .lpgoeestimatetime');
+		showSection('#lp' + index + ' .lpgoeestimatetimeRow');
+	}
 	else {
 		switch (mqttmsg) {
 			case "openWB/lp/1/PfPhase1":
