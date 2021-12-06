@@ -27,9 +27,7 @@ class CarloGavazziCounter:
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.__simulation = {}
         self.__store = get_counter_value_store(component_config["id"])
-        self.component_info = ComponentInfo(self.component_config["id"],
-                                            self.component_config["name"],
-                                            self.component_config["type"])
+        self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
         unit = 1
