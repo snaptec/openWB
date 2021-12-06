@@ -34,13 +34,13 @@ pvwatttmp = response.json()
 DebugLog(1, 'response: ' + str(response))
 DebugLog(2, 'response_pvwatt: ' + str(pvwatttmp))
 # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
-pvwatt = pvwatttmp["Body"]["Data"]["Site"]["P_PV"] or 0
+pvwatt = int(pvwatttmp["Body"]["Data"]["Site"]["P_PV"] or 0)
 
 if wrfroniusisgen24 == "0":
     pvkwh_start = 0
     pvkwh_offset = 0
-    pvkwh = pvwatttmp["Body"]["Data"]["Site"]["E_Total"]
-    pvday = pvwatttmp["Body"]["Data"]["Site"]["E_Day"]
+    pvkwh = int(pvwatttmp["Body"]["Data"]["Site"]["E_Total"])
+    pvday = int(pvwatttmp["Body"]["Data"]["Site"]["E_Day"])
     try:
         with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "r") as f:
             pvkwh_offset = int(f.read())
@@ -69,14 +69,14 @@ if wrfronius2ip != "none":
     DebugLog(1, 'response: ' + str(response))
     DebugLog(2, 'response_pv2watt: ' + str(pv2watttmp))
     # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
-    pv2watt = pv2watttmp["Body"]["Data"]["Site"]["P_PV"] or 0
+    pv2watt = int(pv2watttmp["Body"]["Data"]["Site"]["P_PV"] or 0)
     pvwatt = (pvwatt + pv2watt) * -1
     DebugLog(2, 'pvwatt: ' + str(pvwatt))
     # Zur weiteren Verwendung im Webinterface
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
     if wrfroniusisgen24 == "0":
-        pv2kwh = pv2watttmp["Body"]["Data"]["Site"]["E_Total"]
+        pv2kwh = int(pv2watttmp["Body"]["Data"]["Site"]["E_Total"])
         pvgkwh = pvkwh + pv2kwh
         if pvgkwh > 0:
             with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
