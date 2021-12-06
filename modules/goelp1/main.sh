@@ -113,5 +113,5 @@ if [[ $? == "0" ]] ; then
     mosquitto_pub -t openWB/lp/1/lastSeen -r -m "$lastseen"
 	
 	goelp1estimatetime=$(</var/www/html/openWB/ramdisk/goelp1estimatetime)
-	mosquitto_pub -t openWB/lp/1/goelp1estimatetime -r -m "$goelp1estimatetime"
+	mosquitto_pub -t openWB/lp/1/goeestimatetime -r -m "$goelp1estimatetime"
 fi

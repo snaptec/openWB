@@ -33,8 +33,6 @@ def loadpoint():
     global kwh_percent
     cupra_accu_capacity = fh.get_device_attribute(fhem_device_cupra, "Accu")*0.01
     hyundai_accu_capacity = fh.get_device_attribute(fhem_device_hyundai, "Accu")*0.01
-    openWBLog("Cupra Accu Capacity:"+str(cupra_accu_capacity))
-    openWBLog("Hyundai Accu Capacity:"+str(hyundai_accu_capacity))
     loadpoint_assignment = fh.get_device_reading(fhem_device_lp, "loadpoint_assignment")
     loadpoint_assignment = loadpoint_assignment["Value"]
     openWBLog("Loadpoint Assignment:"+str(loadpoint_assignment))
@@ -42,6 +40,7 @@ def loadpoint():
         kwh_percent = cupra_accu_capacity
     elif loadpoint_assignment == "LP2_Hyundai_LP1_Cupra":
         kwh_percent = hyundai_accu_capacity
+    openWBLog("Accu Capacity:"+str(kwh_percent))
     return kwh_percent
 
 def readVal(filePath):
@@ -53,9 +52,10 @@ def readVal(filePath):
 
 loadpoint()
 current_soc = readVal('/var/www/html/openWB/ramdisk/soc1')
-print(current_soc)
+# print(current_soc)
 current_watt = readVal('/var/www/html/openWB/ramdisk/llaktuells1')
-print(current_watt)
+current_watt = current_watt / 1000
+# print(current_watt)
 
 loading_soc = 100 - current_soc
 soc_in_kwh = kwh_percent * loading_soc
@@ -78,10 +78,10 @@ if current_watt >= 1:
     b = float(b)*60
     full_time = (a + b + time_now + offset_time)
     finish_time = time.strftime("%H:%M:%S", gmtime(full_time))
-    print(finish_time)
+    # print(finish_time)
     with open('/var/www/html/openWB/ramdisk/goelp2estimatetime', 'w') as f:
         f.write(str(finish_time))
-    print(finish_time)
+    # print(finish_time)
 else:
      with open('/var/www/html/openWB/ramdisk/goelp2estimatetime', 'w') as f:
         f.write(str("--:--"))
