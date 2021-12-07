@@ -93,7 +93,7 @@ get_value("VoltageL1", "evuv1")
 get_value("VoltageL2", "evuv2")
 get_value("VoltageL3", "evuv3")
 bezuga1 = get_value("CurrentL1")
-if bezuga1 == 'null':
+if bezuga1 is None:
     try:
         bezuga1 = response["Current"]
     except:
