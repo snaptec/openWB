@@ -46,7 +46,7 @@ class Device(AbstractDevice):
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"], component_config, self.client))
 
-    def get_values(self) -> None:
+    def update(self) -> None:
         log.MainLogger().debug("Start device reading" + str(self._components))
         if self._components:
             for component in self._components:
@@ -101,7 +101,7 @@ def read_legacy(argv: List[str]):
     log.MainLogger().debug('openWB flex-Kit Port: ' + str(port))
     log.MainLogger().debug('openWB flex-Kit ID: ' + str(id))
 
-    dev.get_values()
+    dev.update()
 
 
 if __name__ == "__main__":

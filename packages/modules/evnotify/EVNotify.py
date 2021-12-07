@@ -37,6 +37,6 @@ class EVNotify(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         pass  # EVNotify does not have any components
 
-    def get_values(self) -> None:
+    def update(self) -> None:
         with SingleComponentUpdateContext(self.component_info):
             self.value_store.set(CarState(soc=api.fetch_soc(self.config.akey, self.config.token)))

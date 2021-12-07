@@ -11,5 +11,5 @@ class AbstractDevice:
         pass
 
     @abstractmethod
-    def get_values(self) -> None:
+    def update(self) -> None:
         pass
