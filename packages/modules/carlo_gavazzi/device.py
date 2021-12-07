@@ -5,7 +5,7 @@ from typing import List
 from helpermodules import log
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_state import SingleComponentUpdateContext
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.carlo_gavazzi import counter
 
 
@@ -47,7 +47,7 @@ class Device(AbstractDevice):
                 ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
             )
 
-    def get_values(self) -> None:
+    def update(self) -> None:
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
             for component in self._components:
@@ -87,7 +87,7 @@ def read_legacy(argv: List[str]) -> None:
 
     log.MainLogger().debug('carlo gavazzi IP-Adresse: ' + str(ip_address))
 
-    dev.get_values()
+    dev.update()
 
 
 if __name__ == "__main__":
