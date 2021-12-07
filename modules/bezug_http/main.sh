@@ -1,37 +1,24 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
+#For development only
+#Debug=1
 
-wattbezug=$(curl --connect-timeout 10 -s $bezug_http_w_url)
-
-re='^-?[0-9]+$'
-
-if ! [[ $wattbezug =~ $re ]] ; then
-	   wattbezug="0"
+if [ $DMOD == "MAIN" ]; then
+    MYLOGFILE="$RAMDISKDIR/openWB.log"
+else
+    MYLOGFILE="$RAMDISKDIR/evu_json.log"
 fi
+
+python3 /var/www/html/openWB/modules/bezug_http/read_http.py "${bezug_http_w_url}" "${bezug_http_ikwh_url}" "${bezug_http_ekwh_url}" "${bezug_http_l1_url}" "${bezug_http_l2_url}" "${bezug_http_l3_url}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug
-echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
-
-if [[ $bezug_http_ikwh_url != "none" ]]; then
-	ikwh=$(curl --connect-timeout 5 -s $bezug_http_ikwh_url)
-	echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
-fi
-if [[ $bezug_http_ekwh_url != "none" ]]; then
-	ekwh=$(curl --connect-timeout 5 -s $bezug_http_ekwh_url)
-	echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
-fi
-if [[ $bezug_http_l1_url != "none" ]]; then
-	l1a=$(curl --connect-timeout 5 -s $bezug_http_l1_url)
-	echo $l1a > /var/www/html/openWB/ramdisk/bezuga1
-fi
-if [[ $bezug_http_l2_url != "none" ]]; then
-	l2a=$(curl --connect-timeout 5 -s $bezug_http_l2_url)
-	echo $l2a > /var/www/html/openWB/ramdisk/bezuga2
-fi
-if [[ $bezug_http_l3_url != "none" ]]; then
-	l3a=$(curl --connect-timeout 5 -s $bezug_http_l3_url)
-	echo $l3a > /var/www/html/openWB/ramdisk/bezuga3
-fi
-
-
-
-

@@ -39,6 +39,7 @@ mqttvar["lp/3/APhase3"]=llas23
 mqttvar["lp/1/APhase1"]=lla1
 mqttvar["lp/1/APhase2"]=lla2
 mqttvar["lp/1/APhase3"]=lla3
+mqttvar["global/kWhCounterAllChargePoints"]=llkwhges
 mqttvar["lp/1/kWhCounter"]=llkwh
 mqttvar["lp/2/kWhCounter"]=llkwhs1
 mqttvar["lp/3/kWhCounter"]=llkwhs2
@@ -56,8 +57,7 @@ mqttvar["evu/WhExported"]=einspeisungkwh
 mqttvar["evu/WhImported"]=bezugkwh
 mqttvar["housebattery/WhExported"]=speicherekwh
 mqttvar["housebattery/WhImported"]=speicherikwh
-mqttvar["pv/CounterTillStartPvCharging"]=pvcounter
-mqttvar["pv/WhCounter"]=pvkwh
+mqttvar["lp/1/MeterSerialNumber"]=lp1Serial
 mqttvar["lp/1/PfPhase1"]=llpf1
 mqttvar["lp/1/PfPhase2"]=llpf2
 mqttvar["lp/1/PfPhase3"]=llpf3
@@ -171,7 +171,22 @@ mqttvar["lp/5/AutolockConfigured"]=autolockconfiguredlp5
 mqttvar["lp/6/AutolockConfigured"]=autolockconfiguredlp6
 mqttvar["lp/7/AutolockConfigured"]=autolockconfiguredlp7
 mqttvar["lp/8/AutolockConfigured"]=autolockconfiguredlp8
+mqttvar["pv/CounterTillStartPvCharging"]=pvcounter
+mqttvar["pv/bool70PVDynStatus"]=nurpv70dynstatus
+mqttvar["pv/WhCounter"]=pvallwh
 mqttvar["pv/DailyYieldKwh"]=daily_pvkwhk
+mqttvar["pv/MonthlyYieldKwh"]=monthly_pvkwhk
+mqttvar["pv/YearlyYieldKwh"]=yearly_pvkwhk
+mqttvar["pv/1/W"]=pv1watt
+mqttvar["pv/1/WhCounter"]=pvkwh
+mqttvar["pv/1/DailyYieldKwh"]=daily_pvkwhk1
+mqttvar["pv/1/MonthlyYieldKwh"]=monthly_pvkwhk1
+mqttvar["pv/1/YearlyYieldKwh"]=yearly_pvkwhk1
+mqttvar["pv/2/W"]=pv2watt
+mqttvar["pv/2/WhCounter"]=pv2kwh
+mqttvar["pv/2/DailyYieldKwh"]=daily_pvkwhk2
+mqttvar["pv/2/MonthlyYieldKwh"]=monthly_pvkwhk2
+mqttvar["pv/2/YearlyYieldKwh"]=yearly_pvkwhk2
 mqttvar["evu/DailyYieldImportKwh"]=daily_bezugkwh
 mqttvar["evu/DailyYieldExportKwh"]=daily_einspeisungkwh
 mqttvar["global/DailyYieldAllChargePointsKwh"]=daily_llakwh
@@ -191,7 +206,6 @@ mqttvar["global/boolRse"]=rsestatus
 mqttvar["hook/1/boolHookStatus"]=hook1akt
 mqttvar["hook/2/boolHookStatus"]=hook2akt
 mqttvar["hook/3/boolHookStatus"]=hook3akt
-mqttvar["pv/bool70PVDynStatus"]=nurpv70dynstatus
 mqttvar["lp/1/countPhasesInUse"]=lp1phasen
 mqttvar["lp/2/countPhasesInUse"]=lp2phasen
 mqttvar["lp/3/countPhasesInUse"]=lp3phasen
@@ -223,12 +237,25 @@ mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
+if [[ "$standardSocketInstalled" == "1" ]]; then
+	mqttvar["config/get/slave/SocketActivated"]=socketActivated
+	mqttvar["config/get/slave/SocketRequested"]=socketActivationRequested
+	mqttvar["config/get/slave/SocketApproved"]=socketApproved
+	mqttvar["socket/A"]=socketa
+	mqttvar["socket/V"]=socketv
+	mqttvar["socket/W"]=socketp
+	mqttvar["socket/kWhCounter"]=socketkwh
+	mqttvar["socket/Pf"]=socketpf
+	mqttvar["socket/MeterSerialNumber"]=socketSerial
+fi
+
 for i in $(seq 1 8);
 do
 	for f in \
 		"lp/${i}/plugStartkWh:pluggedladunglp${i}startkwh" \
 		"lp/${i}/pluggedladungakt:pluggedladungaktlp${i}" \
-		"lp/${i}/lmStatus:lmStatusLp${i}"
+		"lp/${i}/lmStatus:lmStatusLp${i}" \
+		"lp/${i}/tagScanInfo:tagScanInfoLp${i}"
 	do
 		IFS=':' read -r -a tuple <<< "$f"
 		#echo "Setting mqttvar[${tuple[0]}]=${tuple[1]}"
@@ -261,6 +288,16 @@ for mq in "${!mqttvar[@]}"; do
 	fi
 done
 
+sysinfo=$(cd web/tools; sudo php programmloggerinfo.php 2>/dev/null)
+tempPubList="${tempPubList}\nopenWB/global/cpuModel=$(cat /proc/cpuinfo | grep -m 1 "model name" | sed "s/^.*: //")"
+tempPubList="${tempPubList}\nopenWB/global/cpuUse=$(echo ${sysinfo} | jq -r '.cpuuse')"
+tempPubList="${tempPubList}\nopenWB/global/cpuTemp=$(echo "scale=2; $(echo ${sysinfo} | jq -r '.cputemp') / 1000" | bc)"
+tempPubList="${tempPubList}\nopenWB/global/cpuFreq=$(($(echo ${sysinfo} | jq -r '.cpufreq') / 1000))"
+tempPubList="${tempPubList}\nopenWB/global/memTotal=$(echo ${sysinfo} | jq -r '.memtot')"
+tempPubList="${tempPubList}\nopenWB/global/memUse=$(echo ${sysinfo} | jq -r '.memuse')"
+tempPubList="${tempPubList}\nopenWB/global/memFree=$(echo ${sysinfo} | jq -r '.memfree')"
+tempPubList="${tempPubList}\nopenWB/global/diskUse=$(echo ${sysinfo} | jq -r '.diskuse')"
+tempPubList="${tempPubList}\nopenWB/global/diskFree=$(echo ${sysinfo} | jq -r '.diskfree')"
 
 #echo "Publist:"
 #echo -e $tempPubList

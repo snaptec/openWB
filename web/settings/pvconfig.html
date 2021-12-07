@@ -26,33 +26,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css?ver=20200416-a">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -86,7 +66,7 @@
 								<span class="form-text small">Auswahl des Regelmodus in beiden Lademodi. Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.</span>
 							</div>
 						</div>
-						<div class="form-row mb-1 manualsetpoint">
+						<div class="form-row mb-1 manualsetpoint hide">
 							<label class="col-md-4 col-form-label">manueller Regelpunkt</label>
 							<div class="col">
 								<div class="form-row vaRow">
@@ -110,9 +90,9 @@
 						$(document).ready(function(){
 							$('input[type=radio][name=chargeSubmode]').change(function(){
 								if(this.value == '2') {
-									$('.manualsetpoint').show();
+									showSection('.manualsetpoint');
 								} else {
-									$('.manualsetpoint').hide();
+									hideSection('.manualsetpoint');
 								}
 							})
 						});
@@ -218,7 +198,7 @@
 											<input type="radio" name="boolAdaptiveCharging" id="boolAdaptiveChargingOn" data-option="1">eingeschaltet
 										</label>
 									</div>
-									<span class="form-text small">Auswahl der adaptiven Ladung im Modus PV-Laden. Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird. Die Gewichtung der Ladeleistung ist abhängig von der Einstellung "adaptiver Regelfaktor". Diese Einstellung beinflusst die Regelung nur dann, wenn zwei EV gleichzeitig laden, für beide ein SoC verfügbar ist und beide EV mit derselben Anzahl an Phasen laden.</span>
+									<span class="form-text small">Auswahl der adaptiven Ladung im Modus PV-Laden. Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird. Die Gewichtung der Ladeleistung ist abhängig von der Einstellung "adaptiver Regelfaktor". Diese Einstellung beeinflusst die Regelung nur dann, wenn zwei EV gleichzeitig laden, für beide ein SoC verfügbar ist und beide EV mit derselben Anzahl an Phasen laden.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -256,7 +236,7 @@
 								<label for="nurpv70dynw" class="col-md-4 col-form-label">70%-Regelpunkt</label>
 								<div class="col">
 									<input id="nurpv70dynw" class="form-control naturalNumber" type="number" required min="2000" max="50000" value="2000" data-default="2000" data-topicprefix="openWB/config/get/pv/">
-									<span class="form-text small">Parameter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet". Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp betragen.</span>
+									<span class="form-text small">Parameter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet". Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp betragen. Die Nutzung dieser Option ergibt nur Sinn wenn ein Wechselrichter und Smartmeter verbaut ist welches eine dynamische 70% Abriegelung bietet.</span>
 								</div>
 							</div>
 						</div>
@@ -265,9 +245,9 @@
 						$(document).ready(function(){
 							$('input[type=radio][name=nurpv70dynact]').change(function(){
 								if(this.value == '1') {
-									$('.nurpv70options').show();
+									showSection('.nurpv70options');
 								} else {
-									$('.nurpv70options').hide();
+									hideSection('.nurpv70options');
 								}
 							})
 						});
@@ -289,7 +269,7 @@
 											<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" name="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="0" data-default="0" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 										</div>
 									</div>
-									<span class="form-text small">Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.</span>
+									<span class="form-text small">Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer mit der Mindest-SoC-Stromstärke</b> geladen wird. Der Wert 0 schaltet die Funktion aus.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -301,7 +281,7 @@
 											<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" name="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 										</div>
 									</div>
-									<span class="form-text small">Parameter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden. Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.</span>
+									<span class="form-text small">Parameter in Ampere [A] für den Strom bei Mindest-SoC-Ladung im Modus PV-Laden. Definiert den Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -313,12 +293,11 @@
 											<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" name="maxSocToChargeTo" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 										</div>
 									</div>
-									<span class="form-text small">Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird.</span>
+									<span class="form-text small">Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Maximal-SoC, bei dessen Überschreitung die Ladung gestoppt wird.</span>
 								</div>
 							</div>
 						</div>
 						<div class="form-group soclp1options">
-							<hr class="border-success">
 							<div class="form-row">
 								<div class="col">
 									SoC-Begrenzung
@@ -334,15 +313,29 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp1" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/1/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp1" id="socLimitationLp1Off" data-option="0">ausgeschaltet
+											<input type="radio" name="socLimitationLp1" id="socLimitationLp1Off" data-option="0" value="0">ausgeschaltet
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp1" id="socLimitationLp1On" data-option="1">eingeschaltet
+											<input type="radio" name="socLimitationLp1" id="socLimitationLp1On" data-option="1" value="1">eingeschaltet
 										</label>
 									</div>
 								</div>
 							</div>
-
+							<div class="form-row mb-1 soclp1optionsactive">
+								<label for="maxSocLp1" class="col-md-4 col-form-label">Maximal-SoC Ladepunkt 1</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="maxSocLp1" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+										</div>
+									</div>
+									<span class="form-text small">
+										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 1 im Modus PV-Laden.
+										Definiert einen EV-Maximal-SoC, bei dessen Überschreitung die Ladung gestoppt wird. Diese Funktion ist nur dafür gedacht wenn mehrere Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+									</span>
+								</div>
+							</div>
 						</div>
 						<div class="form-group soclp2options">
 							<div class="form-row mb-1">
@@ -352,31 +345,16 @@
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp2" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/2/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp2" id="socLimitationLp2Off" data-option="0">ausgeschaltet
+											<input type="radio" name="socLimitationLp2" id="socLimitationLp2Off" data-option="0" value="0">ausgeschaltet
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="socLimitationLp2" id="socLimitationLp2On" data-option="1">eingeschaltet
+											<input type="radio" name="socLimitationLp2" id="socLimitationLp2On" data-option="1" value="1">eingeschaltet
 										</label>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="soclp1options">
-							<div class="form-row mb-1">
-								<label for="maxSocLp1" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt 1</label>
-								<div class="col-md-8">
-									<div class="form-row vaRow mb-1">
-										<label for="maxSocLp1" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
-										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="soclp2options">
-							<div class="form-row mb-1">
-								<label for="maxSocLp2" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt 2</label>
+							<div class="form-row mb-1 soclp2optionsactive">
+								<label for="maxSocLp2" class="col-md-4 col-form-label">Maximal-SoC Ladepunkt 2</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
 										<label for="maxSocLp2" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
@@ -384,18 +362,32 @@
 											<input type="range" class="form-control-range rangeInput" id="maxSocLp2" name="maxSoc" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 										</div>
 									</div>
-								</div>
-							</div>
-						</div>
-						<div class="soclp1options">
-							<div class="form-row justify-content-end mb-0">
-								<div class="col-md-8 small">
-									Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 1 bzw. 2 im Modus PV-Laden.
-									Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+									<span class="form-text small">
+										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 2 im Modus PV-Laden.
+										Definiert einen EV-Maximal-SoC, bei dessen Überschreitung die Ladung gestoppt wird. Diese Funktion ist nur dafür gedacht wenn mehrere Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+									</span>
 								</div>
 							</div>
 						</div>
 					</div>  <!-- end card body EV-SoC-Steuerung PV -->
+					<script>
+						$(document).ready(function(){
+							$('input[type=radio][name=socLimitationLp1]').change(function(){
+								if(this.value == '1') {
+									showSection('.soclp1optionsactive');
+								} else {
+									hideSection('.soclp1optionsactive');
+								}
+							})
+							$('input[type=radio][name=socLimitationLp2]').change(function(){
+								if(this.value == '1') {
+									showSection('.soclp2optionsactive');
+								} else {
+									hideSection('.soclp2optionsactive');
+								}
+							})
+						});
+					</script>
 				</div>  <!-- end card EV-SoC-Steuerung PV -->
 
 				<div class="card border-success">
@@ -471,11 +463,11 @@
 						$(document).ready(function(){
 							$('input[type=radio][name=priorityModeEVBattery]').change(function(){
 								if(this.value == '0') {
-									$('.priorityevoptions').hide();
-									$('.prioritybatoptions').show();
+									hideSection('.priorityevoptions');
+									showSection('.prioritybatoptions');
 								} else {
-									$('.prioritybatoptions').hide();
-									$('.priorityevoptions').show();
+									hideSection('.prioritybatoptions');
+									showSection('.priorityevoptions');
 								}
 							})
 						});
@@ -572,7 +564,7 @@
 						</div>
 						<!-- modal footer -->
 						<div class="modal-footer d-flex justify-content-center">
-							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn" disabled="disabled">Fortfahren</button>
+							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn">Fortfahren</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 						</div>
 					</div>
@@ -635,8 +627,6 @@
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200911" ></script>
-		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200505-a" ></script>
 		<!-- load mqtt handler-->
@@ -652,84 +642,97 @@
 				
 				if ( elementId == "boolHouseBatteryConfigured") {
 					if ( mqttpayload == 0 ) {
-						$('.housebatteryoptions').hide();
-						$('.nohousebattery').show();
+						hideSection('.housebatteryoptions');
+						showSection('.nohousebattery');
 					} else {
-						$('.housebatteryoptions').show();
-						$('.nohousebattery').hide();
+						showSection('.housebatteryoptions');
+						hideSection('.nohousebattery');
 					}
 				}
 				if ( elementId == "boolSocConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp1options').hide();
+						hideSection('.soclp1options');
 						soc1vis = 0;
 					} else {
-						$('.soclp1options').show();
+						showSection('.soclp1options');
 						soc1vis = 1;
 					}
 				}
 				if ( elementId == "boolSocConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp2options').hide();
+						hideSection('.soclp2options');
 						soc2vis = 0;
 					} else {
-						$('.soclp2options').show();
+						showSection('.soclp2options');
 						soc2vis = 1;
 					}
 				}
-				if ( soc1vis == 1 && soc2vis == 0){
-					$('.onlysoclp1options').show();
-					$('.soclp1options').hide();
-
+				if ( lp1vis == 1 && lp2vis == 0 && soc1vis == 1 ){
+					showSection('.onlysoclp1options');
+					hideSection('.soclp1options');
 				} else {
-					$('.onlysoclp1options').hide();
+					hideSection('.onlysoclp1options');
 				}
 				if ( soc1vis == 1 && soc2vis == 1){
-					$('.soclp12options').show();
+					showSection('.soclp12options');
 
 				} else {
-					$('.soclp12options').hide();
+					hideSection('.soclp12options');
 				}
 
 				if ( elementId == "boolChargePointConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.lp1options').hide();
+						hideSection('.lp1options');
 						lp1vis = 0;
 					} else {
-						$('.lp1options').show();
+						showSection('.lp1options');
 						lp1vis = 1;
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.lp2options').hide();
+						hideSection('.lp2options');
 						lp2vis = 0;
 					} else {
-						$('.lp1options').show();
+						showSection('.lp1options');
 						lp2vis = 1;
 					}
 				}
 				if ( elementId == "chargeSubmode") {
 					if ( mqttpayload == 2 ) {
-						$('.manualsetpoint').show();
+						showSection('.manualsetpoint');
 					} else {
-						$('.manualsetpoint').hide();
+						hideSection('.manualsetpoint');
 					}
 				}
 				if ( elementId == "nurpv70dynact") {
 					if ( mqttpayload == 1 ) {
-						$('.nurpv70options').show();
+						showSection('.nurpv70options');
 					} else {
-						$('.nurpv70options').hide();
+						hideSection('.nurpv70options');
 					}
 				}
 				if ( elementId == "priorityModeEVBattery") {
 					if ( mqttpayload == 0 ) {
-						$('.priorityevoptions').hide();
-						$('.prioritybatoptions').show();
+						hideSection('.priorityevoptions');
+						showSection('.prioritybatoptions');
 					} else {
-						$('.prioritybatoptions').hide();
-						$('.priorityevoptions').show();
+						hideSection('.prioritybatoptions');
+						showSection('.priorityevoptions');
+					}
+				}
+				if ( elementId == "socLimitationLp1" ) {
+					if( mqttpayload == 1 ) {
+						showSection('.soclp1optionsactive');
+					} else {
+						hideSection('.soclp1optionsactive');
+					}
+				}
+				if ( elementId == "socLimitationLp2" ) {
+					if( mqttpayload == 1 ) {
+						showSection('.soclp2optionsactive');
+					} else {
+						hideSection('.soclp2optionsactive');
 					}
 				}
 			}

@@ -57,8 +57,6 @@ var d8bgCol = style.getPropertyValue('--d8bgCol');
 var d9Col = style.getPropertyValue('--d9Col');
 var d9bgCol = style.getPropertyValue('--d9bgCol');
 
-var awattartime = [];
-var graphawattarprice;
 var initialread = 0;
 var graphloaded = 0;
 var boolDisplayHouseConsumption;
@@ -135,7 +133,7 @@ var all16p;
 var hidehaus;
 var myLine;
 
-function loadgraph() {
+function loadgraph(animationDuration = 1000) {
 	var lineChartData = {
 		labels: atime,
 		datasets: [{
@@ -465,7 +463,7 @@ function loadgraph() {
 	}
 
 	function doGraphResponsive(chartInstance) {
-		// changes graph resonding to screen size
+		// changes graph responding to screen size
 		// quantity of x-axis labels
 		chartInstance.config.options.scales.xAxes[0].ticks.maxTicksLimit = getMaxTicksLimit(chartInstance.width);
 		// other settings
@@ -492,8 +490,8 @@ function loadgraph() {
 
 	window.myLine = new Chart.Line(ctx, {
 		plugins: {
-        	afterInit: doGraphResponsive,
-        	resize: doGraphResponsive
+			afterInit: doGraphResponsive,
+			resize: doGraphResponsive
 		},
 		data: lineChartData,
 		options: {
@@ -504,6 +502,13 @@ function loadgraph() {
 				point: {
 					radius: 0
 				}
+			},
+			animation: {
+				duration: animationDuration,
+				onComplete: function(animation) {
+					// if duration was set to 0 to avoid pumping after reload, set back to default
+					this.options.animation.duration = 1000
+			}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -529,11 +534,11 @@ function loadgraph() {
 						gridLines: {
 							color: xgridCol
 						},
-         				ticks: {
+					ticks: {
 							fontColor: tickCol,
 							maxTicksLimit: 15
-         				}
-      				}],
+					}
+				}],
 				yAxes: [
 					{
 						// horizontal line for values displayed on the left side (power)
@@ -542,10 +547,10 @@ function loadgraph() {
 						type: 'linear',
 						display: true,
 						scaleLabel: {
-		        			display: true,
-		        			labelString: 'Leistung [kW]',
+						display: true,
+						labelString: 'Leistung [kW]',
 							fontColor: fontCol
-		      			},
+					},
 						gridLines: {
 							color: gridCol
 						},
@@ -582,6 +587,7 @@ function loadgraph() {
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
+
 // Sichtbarkeit für SmartHome Devices im Graph
 function setvisibility(datarr,hidevar,hidevalue,booldisplay){
 	var arrayLength = datarr.length;
@@ -600,6 +606,7 @@ function setvisibility(datarr,hidevar,hidevalue,booldisplay){
 
 	}
 }
+
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) && (all9 == 1) && (all10 == 1) && (all11 == 1) && (all12 == 1) && (all13 == 1) && (all14 == 1) && (all15 == 1) && (all16 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p + "\n" + all9p + "\n" + all10p + "\n" + all11p + "\n" + all12p + "\n" + all13p + "\n" + all14p + "\n" + all15p + "\n" + all16p;
@@ -728,7 +735,6 @@ function updateGraph(dataset) {
 		//var shd1t0 = lines[i].split(",")[29];
 		//var shd1t1 = lines[i].split(",")[30];
 		//var shd1t2 = lines[i].split(",")[31];
-
 	}
 	myLine.data.labels.push(ldate.substring(0, ldate.length -3));
 	myLine.data.datasets[2].data.push(lbezug / 1000);
@@ -770,43 +776,43 @@ function updateGraph(dataset) {
 
 function checkgraphload(){
 	if ( graphloaded == 1 ) {
-       	myLine.destroy();
-		loadgraph();
+		myLine.destroy();
+		loadgraph(0);  // when reloading graph, no more "pumping" animations
 		return;
 	}
 	if ( typeof boolDisplayHouseConsumption === "boolean" &&
-		 typeof boolDisplayLoad1 === "boolean" &&
-		 typeof boolDisplayLp1Soc === "boolean" &&
-		 typeof boolDisplayLp2Soc === "boolean" &&
-		 typeof boolDisplayLoad2 === "boolean" &&
-	 	 typeof boolDisplayLp1 === "boolean" &&
-	 	 typeof boolDisplayLp2 === "boolean" &&
-	 	 typeof boolDisplayLp3 === "boolean" &&
-	 	 typeof boolDisplayLp4 === "boolean" &&
-	 	 typeof boolDisplayLp5 === "boolean" &&
-	 	 typeof boolDisplayLp6 === "boolean" &&
-	 	 typeof boolDisplayLp7 === "boolean" &&
-	 	 typeof boolDisplayLp8 === "boolean" &&
-	 	 typeof boolDisplayLpAll === "boolean" &&
-	 	 typeof boolDisplaySpeicherSoc === "boolean" &&
-	 	 typeof boolDisplaySpeicher === "boolean" &&
-	 	 typeof boolDisplayEvu === "boolean" &&
-	 	 typeof boolDisplayPv === "boolean" &&
-	 	 typeof boolDisplayLegend === "boolean" ) {
+		typeof boolDisplayLoad1 === "boolean" &&
+		typeof boolDisplayLp1Soc === "boolean" &&
+		typeof boolDisplayLp2Soc === "boolean" &&
+		typeof boolDisplayLoad2 === "boolean" &&
+		typeof boolDisplayLp1 === "boolean" &&
+		typeof boolDisplayLp2 === "boolean" &&
+		typeof boolDisplayLp3 === "boolean" &&
+		typeof boolDisplayLp4 === "boolean" &&
+		typeof boolDisplayLp5 === "boolean" &&
+		typeof boolDisplayLp6 === "boolean" &&
+		typeof boolDisplayLp7 === "boolean" &&
+		typeof boolDisplayLp8 === "boolean" &&
+		typeof boolDisplayLpAll === "boolean" &&
+		typeof boolDisplaySpeicherSoc === "boolean" &&
+		typeof boolDisplaySpeicher === "boolean" &&
+		typeof boolDisplayEvu === "boolean" &&
+		typeof boolDisplayPv === "boolean" &&
+		typeof boolDisplayLegend === "boolean" ) {
 		if ( initialread != 0 ) {
 			if ( graphloaded == 0 ) {
 				graphloaded = 1;
 			} else {
-   				myLine.destroy();
+				myLine.destroy();
 			}
 			loadgraph();
 		}
 	}
 }
 
-window.onload = function(){
-	setTimeout(forcegraphload, 15000)
-}
+$(document).ready(function(){
+	setTimeout(forcegraphload, 15000);
+});
 
 function forcegraphload() {
 	if ( graphloaded == 0 ) {

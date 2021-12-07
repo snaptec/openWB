@@ -31,6 +31,4 @@ if (( mpm3pmevuhaus == 1 )); then
 	echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
 	echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
 	echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
-
 fi
-

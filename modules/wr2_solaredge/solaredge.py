@@ -1,48 +1,46 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 ipaddress = str(sys.argv[1])
 slave1id = int(sys.argv[2])
-from pymodbus.client.sync import ModbusTcpClient
+
 client = ModbusTcpClient(ipaddress, port=502)
-#batterie auslesen und pv leistung korrigieren
-resp= client.read_holding_registers(40084,2,unit=slave1id)
-multipli = resp.registers[0]
-multiplint = format(multipli, '04x')
-fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
 
-respw= client.read_holding_registers(40083,2,unit=slave1id)
-value1w = respw.registers[0]
-allw = format(value1w, '04x')
-rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
-resp= client.read_holding_registers(40084,2,unit=slave1id)
-mult2ipli = resp.registers[0]
-mult2iplint = format(mult2ipli, '04x')
-fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
-
-if fmultiplint == fmult2iplint:
-    if fmultiplint == 0:
-        rawprodw = rawprodw
-    if fmultiplint == -1:
-        rawprodw = rawprodw / 10 
-    if fmultiplint == -2:
-        rawprodw = rawprodw / 100
-    if fmultiplint == -3:
-        rawprodw = rawprodw / 1000
-    if fmultiplint == -4:
-        rawprodw = rawprodw / 10000
-    if fmultiplint == -5:
-        rawprodw = rawprodw / 100000
+# batterie auslesen und pv leistung korrigieren
+resp= client.read_holding_registers(40083,2,unit=slave1id)
+# read watt
+watt=format(resp.registers[0], '04x')
+wr1watt=int(struct.unpack('>h', watt.decode('hex'))[0]) * -1
+# read multiplier
+multiplier=format(resp.registers[1], '04x')
+fmultiplier=int(struct.unpack('>h', multiplier.decode('hex'))[0])
+if fmultiplier == 2:
+    fwr1watt = wr1watt * 100
+if fmultiplier == 1:
+    fwr1watt = wr1watt * 10
+if fmultiplier == 0:
+    fwr1watt = wr1watt
+if fmultiplier == -1:
+    fwr1watt = wr1watt / 10
+if fmultiplier == -2:
+    fwr1watt = wr1watt / 100
+if fmultiplier == -3:
+    fwr1watt = wr1watt / 1000
+if fmultiplier == -4:
+    fwr1watt = wr1watt / 10000
+if fmultiplier == -5:
+    fwr1watt = wr1watt / 10000
 f = open('/var/www/html/openWB/ramdisk/pv2watt', 'w')
-f.write(str(rawprodw))
+f.write(str(fwr1watt))
 f.close()
-
 
 resp= client.read_holding_registers(40093,2,unit=slave1id)
 value1 = resp.registers[0]
@@ -56,7 +54,3 @@ pvkwhk= final / 1000
 f = open('/var/www/html/openWB/ramdisk/pv2kwhk', 'w')
 f.write(str(pvkwhk))
 f.close()
-
-
-
-

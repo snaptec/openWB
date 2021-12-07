@@ -1,9 +1,9 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import struct
+# import os
+# import time
+# import getopt
+# import struct
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder

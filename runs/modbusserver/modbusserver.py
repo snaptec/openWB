@@ -37,7 +37,7 @@ def form_lpkwhsint32(value, startreg):
         data_store[secondreg] = low_byte
     except:
         data_store[startreg] = -1
-        data_store[secondreg] = -1        
+        data_store[secondreg] = -1
 def form_sint16(value, startreg):
     try:
         with open('/var/www/html/openWB/ramdisk/' + value, 'r') as var:
@@ -46,7 +46,7 @@ def form_sint16(value, startreg):
             raise Exception("Number to big")
         data_store[startreg] = readvar
     except:
-        data_store[startreg] = -1   
+        data_store[startreg] = -1
 def form_100sint16(value, startreg):
     try:
         with open('/var/www/html/openWB/ramdisk/' + value, 'r') as var:
@@ -56,7 +56,7 @@ def form_100sint16(value, startreg):
             raise Exception("Number to big")
         data_store[startreg] = readvar
     except:
-        data_store[startreg] = -1   
+        data_store[startreg] = -1
 def get_pos(number, n):
     return number // 10**n % 10
 @app.route(slave_ids=[1], function_codes=[3, 4], addresses=list(range(0, 32000)))
@@ -71,17 +71,17 @@ def read_data_store(slave_id, function_code, address):
     elif ( address == 302 ):
         form_100sint16("bezuga1", address)
     elif ( address == 303 ):
-        form_100sint16("bezuga2", address) 
+        form_100sint16("bezuga2", address)
     elif ( address == 304 ):
-        form_100sint16("bezuga3", address) 
+        form_100sint16("bezuga3", address)
     elif ( address == 305 ):
-        form_100sint16("evuv1", address) 
+        form_100sint16("evuv1", address)
     elif ( address == 306 ):
-        form_100sint16("evuv2", address) 
+        form_100sint16("evuv2", address)
     elif ( address == 307 ):
         form_100sint16("evuv3", address)
     elif ( address == 308 ):
-        form_sint32("bezugkwh", address) 
+        form_sint32("bezugkwh", address)
     elif ( address == 310 ):
         form_sint32("einspeisungkwh", address)
     elif ( address == 400 ):
@@ -91,11 +91,11 @@ def read_data_store(slave_id, function_code, address):
     elif ( address == 500 ):
         form_sint32("speicherleistung", address)
     elif ( address == 502 ):
-        form_sint16("speichersoc", address)       
+        form_sint16("speichersoc", address)
     elif ( address == 503 ):
-        form_sint32("speicherikwh", address) 
+        form_sint32("speicherikwh", address)
     elif ( address == 505 ):
-        form_sint32("speicherekwh", address)           
+        form_sint32("speicherekwh", address)
     elif ( address > 10099 ):
         chargepoint=get_pos(address, 2)
         askedvalue=int(str(address)[-2:])
@@ -106,7 +106,7 @@ def read_data_store(slave_id, function_code, address):
                 form_sint32("llaktuells1", address)
             elif ( chargepoint == 3 ):
                 form_sint32("llaktuells2", address)
-            else:                
+            else:
                 form_sint32("llaktuelllp"+str(chargepoint), address)
         if ( askedvalue == 2):
             if ( chargepoint == 1 ):
@@ -133,7 +133,7 @@ def read_data_store(slave_id, function_code, address):
                 form_100sint16("llvs12", address)
             elif ( chargepoint == 3 ):
                 form_100sint16("llvs22", address)
-            else:            
+            else:
                 form_100sint16("llv2lp"+str(chargepoint), address)
         if ( askedvalue == 6):
             if ( chargepoint == 1 ):
@@ -143,7 +143,7 @@ def read_data_store(slave_id, function_code, address):
             elif ( chargepoint == 3 ):
                 form_100sint16("llvs23", address)
             else:
-                form_100sint16("llv3lp"+str(chargepoint), address)      
+                form_100sint16("llv3lp"+str(chargepoint), address)
         if ( askedvalue == 7):
             if ( chargepoint == 1 ):
                 form_100sint16("lla1", address)
@@ -152,7 +152,7 @@ def read_data_store(slave_id, function_code, address):
             elif ( chargepoint == 3 ):
                 form_100sint16("llas21", address)
             else:
-                form_100sint16("lla1lp"+str(chargepoint), address)  
+                form_100sint16("lla1lp"+str(chargepoint), address)
         if ( askedvalue == 8):
             if ( chargepoint == 1 ):
                 form_100sint16("lla2", address)
@@ -160,8 +160,8 @@ def read_data_store(slave_id, function_code, address):
                 form_100sint16("llas12", address)
             elif ( chargepoint == 3 ):
                 form_100sint16("llas22", address)
-            else:            
-                form_100sint16("lla2lp"+str(chargepoint), address)  
+            else:
+                form_100sint16("lla2lp"+str(chargepoint), address)
         if ( askedvalue == 9):
             if ( chargepoint == 1 ):
                 form_100sint16("lla3", address)
@@ -178,7 +178,7 @@ def read_data_store(slave_id, function_code, address):
                 form_sint16("mqttlastmanagement", address)
             elif ( chargepoint == 3):
                 form_sint16("mqttlastmanagements2", address)
-            else:                
+            else:
                 form_sint16("mqttlastmanagementlp"+str(chargepoint), address)
         if ( askedvalue == 11):
             form_sint16("lp"+str(chargepoint)+"enabled", address)
@@ -190,8 +190,8 @@ def read_data_store(slave_id, function_code, address):
             elif ( chargepoint == 2):
                 form_sint16("plugstats1", address)
             elif ( chargepoint == 3):
-                form_sint16("plugstats2", address)
-            else:                
+                form_sint16("plugstatlp3", address)
+            else:
                 form_sint16("plugstatlp"+str(chargepoint), address)
         if ( askedvalue == 15):
             if (chargepoint == 1 ):
@@ -199,8 +199,8 @@ def read_data_store(slave_id, function_code, address):
             elif ( chargepoint == 2):
                 form_sint16("chargestats1", address)
             elif ( chargepoint == 3):
-                form_sint16("chargestats2", address)
-            else:                
+                form_sint16("chargestatlp3", address)
+            else:
                 form_sint16("chargestatlp"+str(chargepoint), address)
         if ( askedvalue == 16):
             if (chargepoint == 1 ):
@@ -209,8 +209,8 @@ def read_data_store(slave_id, function_code, address):
                 form_sint16("llsolls1", address)
             elif ( chargepoint == 3):
                 form_sint16("llsolls2", address)
-            else:                
-                form_sint16("llsolllp"+str(chargepoint), address)                        
+            else:
+                form_sint16("llsolllp"+str(chargepoint), address)
     elif ( address == 19916 ):
         form_sint16("llsolllp8", address)
 

@@ -1,21 +1,29 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
+#For development only
+#Debug=1
 
+if [ $DMOD == "MAIN" ]; then
+    MYLOGFILE="$RAMDISKDIR/openWB.log"
+else
+    MYLOGFILE="$RAMDISKDIR/bezug_smartme.log"
+fi
 
+openwbDebugLog ${DMOD} 2 "Bezug Solarwatt Methode: ${solarwattmethod}"
+openwbDebugLog ${DMOD} 2 "Bezug Solarwatt IP1 : ${speicher1_ip}"
+openwbDebugLog ${DMOD} 2 "Bezug Solarwatt IP2: ${speicher1_ip2}"
 
-sresponse=$(curl --connect-timeout 3 -s "http://$speichersolarwattip/rest/kiwigrid/wizard/devices")
+python3 /var/www/html/openWB/modules/bezug_solarwatt/solarwatt.py "${solarwattmethod}" "${speicher1_ip}" "${speicher1_ip2}" >>$MYLOGFILE 2>&1
+ret=$?
 
-bezugwh=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.WorkConsumedFromGrid.value != null) | .tagValues.WorkConsumedFromGrid.value' | sed 's/\..*$//')
-echo $bezugwh > /var/www/html/openWB/ramdisk/bezugkwh
-einspeisungwh=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.WorkOut.value != null) | .tagValues.WorkOut.value' | sed 's/\..*$//')
-echo $einspeisungwh  > /var/www/html/openWB/ramdisk/einspeisungkwh
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-bezugw=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerConsumedFromGrid.value != null) | .tagValues.PowerConsumedFromGrid.value' | sed 's/\..*$//')
-
-einspeisungw=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerOut.value != null) | .tagValues.PowerOut.value' | head -n 1 | sed 's/\..*$//')
-bezugwatt=$(echo "scale=0; $bezugw - $einspeisungw /1" |bc)
-
-echo $bezugwatt > /var/www/html/openWB/ramdisk/wattbezug
-
-echo $bezugwatt
+wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+echo $wattbezug

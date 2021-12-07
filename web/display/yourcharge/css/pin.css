@@ -1,0 +1,177 @@
+.blur {
+  filter: blur(6px);
+  transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+
+#lockModal,
+#changeLockModal,
+#changeDisplayTimeoutModal {
+  transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25);
+  border: 0; }
+  #lockModal .modal-dialog,
+  #changeLockModal .modal-dialog,
+  #changeDisplayTimeoutModal .modal-dialog {
+    min-width: 460px; }
+  #lockModal .close,
+  #changeLockModal .close,
+  #changeDisplayTimeoutModal .close {
+    position: absolute;
+    padding: 1rem;
+    right: 2.2rem;
+    opacity: 1;
+    text-shadow: none;
+    font-size: 2rem;
+    z-index: 2; }
+  #lockModal .modal-content,
+  #changeLockModal .modal-content,
+  #changeDisplayTimeoutModal .modal-content {
+    border: 0;
+    max-width: 300px;
+    background: #3b3f72;
+    background: linear-gradient(138deg, #3b3f72 10%, #1b1c34 180%);
+    padding: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto; }
+    #lockModal .modal-content span,
+    #changeLockModal .modal-content span,
+    #changeDisplayTimeoutModal .modal-content span {
+      font-size: 1.8rem;
+      display: block;
+      text-align: center;
+      color: #6dbb95;
+      margin-left: auto;
+      margin-right: auto; }
+    #lockModal .modal-content .modal-header,
+    #changeLockModal .modal-content .modal-header,
+    #changeDisplayTimeoutModal .modal-content .modal-header {
+      border: 0; }
+      #lockModal .modal-content .modal-header .logo,
+      #changeLockModal .modal-content .modal-header .logo,
+      #changeDisplayTimeoutModal .modal-content .modal-header .logo {
+        max-width: 265px;
+        margin-left: auto;
+        margin-right: auto; }
+    #lockModal .modal-content input,
+    #changeLockModal .modal-content input,
+    #changeDisplayTimeoutModal .modal-content input {
+      background: transparent;
+      color: #6dbb95 !important;
+      padding: 0 4px;
+      border: 0;
+      width: 205px;
+      margin-bottom: 1.4rem;
+      border-bottom: 2px solid #6dbb95;
+      font-size: 2.8rem; }
+    #lockModal .modal-content .successIcon,
+    #changeLockModal .modal-content .successIcon,
+    #changeDisplayTimeoutModal .modal-content .successIcon {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+      #lockModal .modal-content .successIcon .icon,
+      #changeLockModal .modal-content .successIcon .icon,
+      #changeDisplayTimeoutModal .modal-content .successIcon .icon {
+        margin-top: -20px; }
+      #lockModal .modal-content .successIcon.show,
+      #changeLockModal .modal-content .successIcon.show,
+      #changeDisplayTimeoutModal .modal-content .successIcon.show {
+        display: flex !important;
+        transform: translate(-50%, -50%) scale(0.55);
+        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+    #lockModal .modal-content #Lockcode,
+    #lockModal .modal-content #changeDisplayTimeout,
+    #changeLockModal .modal-content #Lockcode,
+    #changeLockModal .modal-content #changeDisplayTimeout,
+    #changeDisplayTimeoutModal .modal-content #Lockcode,
+    #changeDisplayTimeoutModal .modal-content #changeDisplayTimeout {
+      width: 240px;
+      margin-left: auto;
+      margin-right: auto; }
+    #lockModal .modal-content .PINbutton,
+    #changeLockModal .modal-content .PINbutton,
+    #changeDisplayTimeoutModal .modal-content .PINbutton {
+      background: transparent;
+      color: #6dbb95;
+      border: 1px solid #6dbb95;
+      border-radius: 300px;
+      font-size: 3rem;
+      text-align: center;
+      width: calc(20rem / 3 - 6px);
+      height: calc(20rem / 3 - 6px);
+      margin: 3px;
+      padding: 0;
+      transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+      #lockModal .modal-content .PINbutton.text-danger,
+      #changeLockModal .modal-content .PINbutton.text-danger,
+      #changeDisplayTimeoutModal .modal-content .PINbutton.text-danger {
+        border-color: red; }
+      #lockModal .modal-content .PINbutton#continue, #lockModal .modal-content .PINbutton#continueDisplayTimeout,
+      #changeLockModal .modal-content .PINbutton#continue,
+      #changeLockModal .modal-content .PINbutton#continueDisplayTimeout,
+      #changeDisplayTimeoutModal .modal-content .PINbutton#continue,
+      #changeDisplayTimeoutModal .modal-content .PINbutton#continueDisplayTimeout {
+        display: block;
+        height: auto;
+        width: auto;
+        padding: 1.5rem 7rem;
+        font-size: 2.4rem;
+        margin-top: 2.8rem;
+        margin-left: auto;
+        margin-right: auto; }
+      #lockModal .modal-content .PINbutton:active,
+      #changeLockModal .modal-content .PINbutton:active,
+      #changeDisplayTimeoutModal .modal-content .PINbutton:active {
+        background: #6dbb95;
+        color: #3b3f72;
+        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+      #lockModal .modal-content .PINbutton.success,
+      #changeLockModal .modal-content .PINbutton.success,
+      #changeDisplayTimeoutModal .modal-content .PINbutton.success {
+        background: #6dbb95;
+        color: #3b3f72;
+        height: 360px;
+        width: 360px;
+        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+        #lockModal .modal-content .PINbutton.success .icon,
+        #changeLockModal .modal-content .PINbutton.success .icon,
+        #changeDisplayTimeoutModal .modal-content .PINbutton.success .icon {
+          height: 200px;
+          width: 200px;
+          max-width: 200px;
+          margin-bottom: -10px;
+          transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+          #lockModal .modal-content .PINbutton.success .icon svg,
+          #changeLockModal .modal-content .PINbutton.success .icon svg,
+          #changeDisplayTimeoutModal .modal-content .PINbutton.success .icon svg {
+            height: 200px;
+            width: 200px;
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+      #lockModal .modal-content .PINbutton.enter,
+      #changeLockModal .modal-content .PINbutton.enter,
+      #changeDisplayTimeoutModal .modal-content .PINbutton.enter {
+        text-align: center;
+        transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+        #lockModal .modal-content .PINbutton.enter .icon,
+        #changeLockModal .modal-content .PINbutton.enter .icon,
+        #changeDisplayTimeoutModal .modal-content .PINbutton.enter .icon {
+          margin-left: auto;
+          margin-right: auto;
+          height: 28px;
+          width: 28px;
+          margin-bottom: 10px;
+          transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+          #lockModal .modal-content .PINbutton.enter .icon svg,
+          #changeLockModal .modal-content .PINbutton.enter .icon svg,
+          #changeDisplayTimeoutModal .modal-content .PINbutton.enter .icon svg {
+            transition: all 0.25s cubic-bezier(0.25, 0.75, 0.5, 1.25); }
+
+.modal-backdrop {
+  transition: all 0.1s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.1); }

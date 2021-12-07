@@ -1,0 +1,150 @@
+.openwb-logo {
+	filter:invert(1);
+}
+
+.bg-warning, .bg-info, .bg-success, .bg-light {
+	color: #212529;
+}
+
+.btn-outline-secondary,
+.table,
+pre {
+	color: #ffffff;
+}
+
+.card {
+	background-color: #212529;
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-primary .btn-outline-info:not(.active):not(:hover) {
+	background-color: #212529;
+}
+
+.card-header.bg-success .btn-outline-info.focus {
+	box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
+}
+
+.card-header.bg-success .btn-outline-info.active,
+.card-header.bg-success .btn-outline-info:hover {
+	border-color: #212529;
+}
+
+.form-control,
+.form-control:focus,
+.custom-file-label {
+	background-color: #343a40;
+	border: 1px solid #ced4da;
+	color: #ffffff;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+	background-color: #000000;
+}
+
+.input-group-text {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+.modal-content {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+body {
+	background: linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px, linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px, linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px, linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px, linear-gradient(90deg, #1b1b1b 10px, transparent 10px), linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+	background-color: #131313;
+	background-size: 20px 20px;
+	color: #ffffff;
+}
+
+input, select {
+	background-color: #6c757d;
+	color: #ffffff;
+}
+
+input[type="text"], input[type="password"], select {
+	border: 1px solid #ced4da;
+}
+
+hr {
+	border-top-color: rgba(255, 255, 255, 0.5);
+}
+
+.modal-content,
+.modal-header,
+.modal-footer {
+	border-color: dimgrey;
+}
+
+.clockpicker-popover,
+.datepicker.datepicker-dropdown {
+	background-color: #343a40;
+}
+
+.clockpicker-popover .popover-title,
+.clockpicker-popover .popover-content {
+	background-color: transparent;
+}
+
+.clockpicker-plate {
+	background-color: black;
+}
+
+.datepicker .datepicker-switch,
+.datepicker .prev:not(.disabled),
+.datepicker .next:not(.disabled),
+.datepicker .today,
+.datepicker .month,
+.datepicker .year {
+	color: #ffffff;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover {
+	background: #eeeeee;
+	color: #000000;
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover {
+	background: #eeeeee;
+	color: #000000;
+}
+
+.carousel-caption,
+.carousel-control-next,
+.carousel-control-prev {
+	color: #ffffff;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+	filter: none;
+}
+
+.carousel-indicators li {
+	background-color: #ffffff;
+}
+
+.cssload-inner.cssload-one {
+	border-bottom: 5px solid #ffffff;
+}
+
+.cssload-inner.cssload-two {
+	border-right: 5px solid #ffffff;
+}
+
+.cssload-inner.cssload-three {
+	border-top: 5px solid #ffffff;
+}
+
+canvas.chartjs-render-monitor {
+	background: #343a40;
+}

@@ -159,7 +159,7 @@ function loadgraph() {
 				mm = String(currentTimestamp.getMonth() + 1).padStart(2, '0'); //January is 0!
 				HH = String(currentTimestamp.getHours()).padStart(2, '0');
 				MM = String(currentTimestamp.getMinutes()).padStart(2, '0');
-				SS = String(currentTimestamp.getSeconds() - 1).padStart(2, '0');  // // substract a second from current timestamp
+				SS = String(currentTimestamp.getSeconds() - 1).padStart(2, '0');  // // subtract a second from current timestamp
 				// set timestamp
 				valueArrayRight[0] = currentTimestamp.getFullYear() + '/' + mm + '/' + dd + ' ' + HH + ':' + MM + ':' + SS;
 				// insert into csvData
@@ -388,41 +388,41 @@ function loadgraph() {
 					radius: 0
 				},
 				line: {
-            		tension: 0
-        		}
+					tension: 0
+				}
 			},
 			plugins: {
-			    zoom: {
+				zoom: {
 					// Container for pan options
 					pan: {
-					    // Boolean to enable panning
-					    enabled: true,
+						// Boolean to enable panning
+						enabled: true,
 
-					    // Panning directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow panning in the y direction
-					    mode: 'x',
-					    rangeMin: {
-						    x: null
-					    },
-					    rangeMax: {
-						    x: null
-					    },
-					    speed: 1000
+						// Panning directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow panning in the y direction
+						mode: 'x',
+						rangeMin: {
+							x: null
+						},
+						rangeMax: {
+							x: null
+						},
+						speed: 1000
 					},
 
 					// Container for zoom options
 					zoom: {
-					    // Boolean to enable zooming
-					    enabled: true,
+						// Boolean to enable zooming
+						enabled: true,
 
-					    // Zooming directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow zooming in the y direction
-					    mode: 'x',
+						// Zooming directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow zooming in the y direction
+						mode: 'x',
 
-					    sensitivity: 0.01
+						sensitivity: 0.01
 
 					}
-				    }
+				}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -434,7 +434,7 @@ function loadgraph() {
 				display: true,
 				position: 'bottom',
 				labels: {
-					// middle grey, opacy = 100% (visible)
+					// middle grey, opacity = 100% (visible)
 					fontColor: "rgba(153, 153, 153, 1)",
 					filter: function(item,chart) {
 						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hidebezug) ) {
@@ -450,71 +450,71 @@ function loadgraph() {
 			},
 			scales: {
 				xAxes: [
-                    {
-    					type: 'time',
-    					time: {
-    						parser: 'YYYY/MM/DD HH:mm:ss',
-    						unit: 'minute',
-    						displayFormats: {
-    							'minute': 'DD.MM.YY - HH:mm',
-    						},
-    						distribution: 'linear',
-    						precision: 60
-    					},
-    					ticks: {
-    						//source: 'data',
-    						maxTicksLimit: 25,
-    						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
-    					}
-          			}
-                ],
+					{
+						type: 'time',
+						time: {
+							parser: 'YYYY/MM/DD HH:mm:ss',
+							unit: 'minute',
+							displayFormats: {
+								'minute': 'DD.MM.YY - HH:mm',
+							},
+							distribution: 'linear',
+							precision: 60
+						},
+						ticks: {
+							//source: 'data',
+							maxTicksLimit: 25,
+							fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacity = 100% (visible)
+						}
+					}
+				],
 				yAxes: [
-                    {
-    					// horizontal line for values displayed on the left side (power)
-    					position: 'left',
-    					id: 'y-axis-1',
-    					type: 'linear',
-    					avoidFirstLastClippingEnabled: true,
-    					display: true,
-    					scaleLabel: {
-    	        			display: true,
-    	        			labelString: 'Leistung [kW]',
-    						// middle grey, opacy = 100% (visible)
-    						fontColor: "rgba(153, 153, 153, 1)"
-    	      			},
-    					gridLines: {
-    						// light grey, opacy = 100% (visible)
-    						color: "rgba(204, 204, 204, 1)",
-    					},
-    					ticks: {
-    						// middle grey, opacy = 100% (visible)
-    						fontColor: "rgba(153, 153, 153, 1)"
-    					}
-                    },
-                    {
-    					// horizontal line for values displayed on the right side (SoC)
-    					position: 'right',
-    					id: 'y-axis-2',
-    					type: 'linear',
-    					display: true,
-    					scaleLabel: {
-    						display: true,
-    						labelString: 'SoC [%]',
-    						// middle grey, opacy = 100% (visible)
-    						fontColor: "rgba(153, 153, 153, 1)"
-    					},
-    					gridLines: {
-    						// black, opacy = 0% (invisible)
-    						color: "rgba(0, 0, 0, 0)",
-    					},
-    					ticks: {
-    						min: 1,
-    						suggestedMax: 100,
-    						// middle grey, opacy = 100% (visible)
-    						fontColor: "rgba(153, 153, 153, 1)"
-    					}
-                    }
-                ]
+					{
+						// horizontal line for values displayed on the left side (power)
+						position: 'left',
+						id: 'y-axis-1',
+						type: 'linear',
+						avoidFirstLastClippingEnabled: true,
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Leistung [kW]',
+							// middle grey, opacity = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						gridLines: {
+							// light grey, opacity = 100% (visible)
+							color: "rgba(204, 204, 204, 1)",
+						},
+						ticks: {
+							// middle grey, opacity = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						}
+					},
+					{
+						// horizontal line for values displayed on the right side (SoC)
+						position: 'right',
+						id: 'y-axis-2',
+						type: 'linear',
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'SoC [%]',
+							// middle grey, opacity = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						gridLines: {
+							// black, opacity = 0% (invisible)
+							color: "rgba(0, 0, 0, 0)",
+						},
+						ticks: {
+							min: 1,
+							suggestedMax: 100,
+							// middle grey, opacity = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						}
+					}
+				]
 			}
 		}
 	});
