@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 import os
 import requests
 import sys
-import traceback
 
 wrfroniusip = str(sys.argv[1])
 wrfronius2ip = str(sys.argv[2])
@@ -52,7 +51,7 @@ if wrfroniusisgen24 == "0":
         pvkwh_new = pvkwh_start + pvday + pvkwh_offset
         if pvkwh_new > pvkwh:
             if pvkwh_new - pvkwh >= 100:
-                # Korregiere Abweichung
+                # Korrigiere Abweichung
                 pvkwh_diff = pvkwh_new - pvkwh - 99
                 pvkwh_offset -= pvkwh_diff
                 pvkwh_new -= pvkwh_diff
