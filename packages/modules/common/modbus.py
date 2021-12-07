@@ -25,6 +25,7 @@ class ModbusDataType(Enum):
     INT_16 = 16, "decode_16bit_int"
     INT_32 = 32, "decode_32bit_int"
     INT_64 = 64, "decode_64bit_int"
+    FLOAT_16 = 16, "decode_16bit_float"
     FLOAT_32 = 32, "decode_32bit_float"
     FLOAT_64 = 64, "decode_64bit_float"
 

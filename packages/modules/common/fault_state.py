@@ -17,6 +17,10 @@ class ComponentInfo:
         self.name = name
         self.type = type
 
+    @staticmethod
+    def from_component_config(component_config: dict):
+        return ComponentInfo(component_config["id"], component_config["name"], component_config["type"])
+
 
 class FaultState(Exception):
     type_name_mapping = {"bat": "houseBattery", "counter": "evu", "inverter": "pv"}

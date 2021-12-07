@@ -19,7 +19,6 @@ jobs:
         uses: TrueBrain/actions-flake8@v2.1
         with:
           path: packages
-          max_line_length: 120
       - name: Test with pytest
         run: |
           cd packages && python -m pytest

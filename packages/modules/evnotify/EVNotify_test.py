@@ -43,9 +43,9 @@ class TestEVNotify:
         monkeypatch.setattr(store, "get_car_value_store", Mock(return_value=self.mock_value_store))
         monkeypatch.setattr(SingleComponentUpdateContext, '__exit__', self.mock_context_exit)
 
-    def test_get_values_updates_value_store(self, monkeypatch):
+    def test_update_updates_value_store(self, monkeypatch):
         # execution
-        EVNotify(EVNotifyConfiguration(1, "someKey", "someToken")).get_values()
+        EVNotify(EVNotifyConfiguration(1, "someKey", "someToken")).update()
 
         # evaluation
         self.assert_context_manager_called_with(None)
@@ -53,13 +53,13 @@ class TestEVNotify:
         assert self.mock_value_store.set.call_count == 1
         assert self.mock_value_store.set.call_args[0][0].soc == 42.5
 
-    def test_get_values_passes_errors_to_context(self, monkeypatch):
+    def test_update_passes_errors_to_context(self, monkeypatch):
         # setup
         dummy_error = Exception()
         self.mock_fetch_soc.side_effect = dummy_error
 
         # execution
-        EVNotify(EVNotifyConfiguration(1, "someKey", "someToken")).get_values()
+        EVNotify(EVNotifyConfiguration(1, "someKey", "someToken")).update()
 
         # evaluation
         self.assert_context_manager_called_with(dummy_error)
