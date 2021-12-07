@@ -95,7 +95,7 @@
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
-										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
+										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage</option>
 										<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
 										<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 									</optgroup>
@@ -177,7 +177,7 @@
 										</div>
 										<span class="form-text small">
 											IP-Adresse 1: Energy Manager (immer angeben)<br>
-											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+											IP-Adresse 2: Gateway (Zusätzlich, falls Abrufmethode Gateway)
 										</span>
 									</div>
 								</div>
@@ -280,23 +280,26 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
+						
 						<div id="divspeicherrct2" class="hide">
-				<div class="card-header bg-secondary">
-					Speicher Hardware
-				</div>
-				<div class="card-body">
-					<div class="row">
-						<div class="col">
-						<pre><?php
-						   // $lines=[];
-							// exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
-							// echo implode('<br>',$lines);
-						  ?></pre>
-						</div>
-					</div>
-				</div>
-
-						</div>
+							<div class="card-header bg-secondary">
+								RCT Speicher Hardware
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col">
+										<pre><?php 
+										if( $wattbezugmodulold == "bezug_rct2"  && $speichermodulold == "speicher_rct2" && isset($bezug1_ipold) ) {
+											$lines=[];
+											exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
+											echo implode('<br>',$lines);
+										} else echo "<span class=\"text-warning text-center\">Kein RCT Speicher-Module konfiguriert.</span>";
+										?></pre>
+									</div>
+								</div>
+							</div>
+			 			</div>
+						
 						<div id="divspeichervarta" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">

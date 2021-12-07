@@ -41,7 +41,7 @@
 		?>
 		<br><br>
 		<p>
-		<h4> Neue Wlanverbindung einrichten</h3>
+		<h4> Neue Wlan-Verbindung einrichten</h3>
 		</p>
 		<h5> Gefundene Wlan Netze:</h5>
 		<?php

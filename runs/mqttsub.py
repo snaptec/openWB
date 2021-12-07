@@ -764,6 +764,13 @@ def on_message(client, userdata, msg):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeUseLastChargingPhase=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/slave/UseLastChargingPhase", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/slave/lp" in msg.topic) and ("EnergyLimit" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= 8 and -1 <= int(msg.payload) <= 99999999):
+                    f = open('/var/www/html/openWB/ramdisk/energyLimitLp'+str(devicenumb), 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    client.publish("openWB/config/get/slave/lp/" + str(devicenumb) + "/EnergyLimit", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
                     f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
@@ -827,20 +834,38 @@ def on_message(client, userdata, msg):
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL2"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL3"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL1"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL2"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL3"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
@@ -1230,7 +1255,7 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
             if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
-                if (float(msg.payload) >= -50 and float(msg.payload) <=50):
+                if (float(msg.payload) >= -50 and float(msg.payload) <=95):
                     f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()

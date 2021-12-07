@@ -2063,7 +2063,7 @@ updateConfig(){
 		sed -i "/speicherpwpass='/b; s/^speicherpwpass=\(.*\)/speicherpwpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "multifems=" $ConfigFile; then
-		echo "multifems=1" >> $ConfigFile
+		echo "multifems=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
 		echo "solaredgezweiterspeicher=0" >> $ConfigFile

@@ -62,7 +62,7 @@
 						?>
 						<div class="card-body">
 							<div class="alert alert-info">
-								Debugdaten werden im Hintergrund gesammelt und verschickt. Dieser Vorgang dauert etwa eine Minute.<br>
+								Debug-Daten werden im Hintergrund gesammelt und verschickt. Dieser Vorgang dauert etwa eine Minute.<br>
 								Sie werden danach auf die Hauptseite weitergeleitet.
 							</div>
 							<div class="row">

@@ -8,21 +8,14 @@ import sys
 import time
 import typing
 
-try:
-    from ..common.module_error import ModuleError, ModuleErrorLevel
-    from ...helpermodules import compatibility
-    from ...helpermodules import log
-    from ...helpermodules import pub
-except (ImportError, ValueError, SystemError):
-    # for 1.9 compatibility
-    from helpermodules import compatibility
-    from helpermodules import log
-    from helpermodules import pub
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+from helpermodules import compatibility
+from helpermodules import log
+from helpermodules import pub
+from modules.common.fault_state import FaultState
 
 
 def process_error(e):
-    raise ModuleError(__name__+" "+str(type(e))+" "+str(e), ModuleErrorLevel.ERROR) from e
+    raise FaultState.error(__name__+" "+str(type(e))+" "+str(e)) from e
 
 
 class SimCountFactory:
@@ -44,7 +37,7 @@ def get_topic(prefix: str) -> str:
         elif prefix == "speicher":
             topic = "housebattery"
         else:
-            raise ModuleError("Fehler im Modul simcount: Unbekannter Präfix", ModuleErrorLevel.ERROR)
+            raise FaultState.error("Fehler im Modul simcount: Unbekannter Präfix")
         return topic
     except Exception as e:
         process_error(e)
@@ -117,7 +110,8 @@ class SimCountLegacy:
             else:
                 timestamp_previous = timestamp_previous+1
                 seconds_since_previous = timestamp_present - timestamp_previous
-                imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
+                imp_exp = calculate_import_export(
+                    seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
                 log.MainLogger().debug(
@@ -140,7 +134,8 @@ class SimCountLegacy:
                     pub.pub_single("openWB/"+topic+"/WHImported_temp", counter_import_present, no_json=True)
                 write_ramdisk_file(prefix+'watt0neg', counter_export_present)
                 if counter_export_present != counter_export_previous:
-                    pub.pub_single("openWB/"+topic+"/WHExport_temp", counter_export_present, no_json=True)
+                    pub.pub_single("openWB/"+topic+"/WHExport_temp",
+                                   counter_export_present, no_json=True)
                 return wattposkh, wattnegkh
         except Exception as e:
             process_error(e)
@@ -245,13 +240,13 @@ class SimCount:
                     str(counter_export_present) + "Ws"
                 )
                 start_new = False
-            pub.pub(topic+"simulation/timestamp_present", "%22.6f" % timestamp_present)
-            pub.pub(topic+"simulation/power_present", power_present)
+            pub.Pub().pub(topic+"simulation/timestamp_present", "%22.6f" % timestamp_present)
+            pub.Pub().pub(topic+"simulation/power_present", power_present)
 
             if start_new:
                 log.MainLogger().debug("Neue Simulation")
-                pub.pub(topic+"simulation/present_imported", 0)
-                pub.pub(topic+"simulation/present_exported", 0)
+                pub.Pub().pub(topic+"simulation/present_imported", 0)
+                pub.Pub().pub(topic+"simulation/present_exported", 0)
                 return 0, 0
             else:
                 timestamp_previous = timestamp_previous+1
@@ -273,8 +268,8 @@ class SimCount:
                     "simcount Zwischenergebnisse atkuelle Berechnung: Import: " + str(counter_import_present) +
                     " Export: " + str(counter_export_present) + " Power: " + str(power_present)
                 )
-                pub.pub(topic+"simulation/present_imported", counter_import_present)
-                pub.pub(topic+"simulation/present_exported", counter_export_present)
+                pub.Pub().pub(topic+"simulation/present_imported", counter_import_present)
+                pub.Pub().pub(topic+"simulation/present_exported", counter_export_present)
                 return wattposkh, wattnegkh
         except Exception as e:
             process_error(e)
