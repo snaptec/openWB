@@ -199,8 +199,8 @@
 											<th scope="row">Letzte Verbindung</th>
 											<td class="lpLastSeen"></td>
 										</tr>
-										<tr class="lpgoeestimatetimeRow hide">
-											<th scope="row">Geladen bis</th>
+										<tr class="lpgoeestimatetimeRow">
+											<th scope="row">Voll geladen um</th>
 											<td class="lpgoeestimatetime"></td>
 										</tr>
 										<tr class="faultStrSocLpRow hide">
