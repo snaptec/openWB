@@ -3,7 +3,6 @@ from typing import Tuple
 import pytest as pytest
 
 from modules.common.simcount import Number, calculate_import_export
-from testutils.mock import ignore_logging
 
 
 class Params:
@@ -49,10 +48,7 @@ cases.extend(map(lambda case: case.invert(), cases[:]))
 
 
 @pytest.mark.parametrize("params", cases, ids=[c.name for c in cases])
-def test_energy_calculation(params: Params, monkeypatch):
-    # setup
-    ignore_logging(monkeypatch)
-
+def test_energy_calculation(params: Params):
     # execution
     actual = calculate_import_export(params.seconds, params.power_previous, params.power_present)
 
