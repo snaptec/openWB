@@ -14,7 +14,7 @@ def ramdisk_write_to_files(prefix: str, values: Iterable, digits: int = None):
 def ramdisk_write(file: str, value, digits: Optional[int] = None) -> None:
     try:
         rounding = get_rounding_function_by_digits(digits)
-        with open(RAMDISK_PATH / file, "w") as f:
+        with open(str(RAMDISK_PATH / file), "w") as f:
             f.write(str(rounding(value)))
     except Exception as e:
         process_error(e)
