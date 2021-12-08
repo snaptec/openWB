@@ -1624,8 +1624,8 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
@@ -1718,8 +1718,8 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann Methode 2 dieser Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
@@ -1813,8 +1813,8 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="psa_manufacturerlp1" class="col-md-4 col-form-label">Hersteller</label>
@@ -3388,8 +3388,8 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
@@ -3483,8 +3483,8 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
@@ -3578,8 +3578,8 @@
 								<div class="form-group">
 									<div class="card-text alert alert-info">
 										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt. <a href="https://github.com/flobz/psa_car_controller" target="_blank" rel="noopener noreferrer">https://github.com/flobz/psa_car_controller</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206&start=20#p19412" target="_blank" rel="noopener noreferrer">im Forum.</a>
+										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
+										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
 									</div>
 									<div class="form-row mb-1">
 										<label for="psa_manufacturerlp2" class="col-md-4 col-form-label">Hersteller</label>

@@ -2,12 +2,12 @@
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
 import sys
-from typing import List, Union
+from typing import Dict, List, Union
 
 from helpermodules import log
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_state import SingleComponentUpdateContext
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.alpha_ess import bat
 from modules.alpha_ess import counter
 from modules.alpha_ess import inverter
@@ -17,8 +17,11 @@ def get_default_config() -> dict:
     return {
         "name": "Alpha ESS",
         "type": "alpha_ess",
-        "id": None
+        "id": 0
     }
+
+
+alpha_ess_component_classes = Union[bat.AlphaEssBat, counter.AlphaEssCounter, inverter.AlphaEssInverter]
 
 
 class Device(AbstractDevice):
@@ -28,9 +31,8 @@ class Device(AbstractDevice):
         "inverter": inverter.AlphaEssInverter
     }
 
-    _components = []  # type: List[Union[bat.AlphaEssBat, counter.AlphaEssCounter, inverter.AlphaEssInverter]]
-
     def __init__(self, device_config: dict) -> None:
+        self._components = {}  # type: Dict[str, alpha_ess_component_classes]
         try:
             self.client = modbus.ModbusClient("192.168.193.125", 8899)
             self.device_config = device_config
@@ -40,16 +42,21 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components.append(self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"], component_config, self.client))
+        else:
+            raise Exception(
+                "illegal component type " + component_type + ". Allowed values: " +
+                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
+            )
 
-    def get_values(self) -> None:
-        log.MainLogger().debug("Start device reading" + str(self._components))
+    def update(self) -> None:
+        log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
             for component in self._components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(component.component_info):
-                    component.update()
+                with SingleComponentUpdateContext(self._components[component].component_info):
+                    self._components[component].update()
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
@@ -71,7 +78,6 @@ def read_legacy(argv: List[str]) -> None:
         num = None
 
     device_config = get_default_config()
-    device_config["id"] = 0
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
@@ -86,7 +92,7 @@ def read_legacy(argv: List[str]) -> None:
 
     log.MainLogger().debug('alpha_ess Version: ' + str(version))
 
-    dev.get_values()
+    dev.update()
 
 
 if __name__ == "__main__":
