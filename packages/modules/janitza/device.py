@@ -6,13 +6,13 @@ from helpermodules import log
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
-from modules.carlo_gavazzi import counter
+from modules.janitza import counter
 
 
 def get_default_config() -> dict:
     return {
-        "name": "Carlo Gavazzi",
-        "type": "carlo_gavazzi",
+        "name": "Janitza",
+        "type": "janitza",
         "id": 0,
         "configuration":
         {
@@ -23,11 +23,11 @@ def get_default_config() -> dict:
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-        "counter": counter.CarloGavazziCounter,
+        "counter": counter.JanitzaCounter
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, counter.CarloGavazziCounter]
+        self._components = {}  # type: Dict[str, counter.JanitzaCounter]
         try:
             ip_address = device_config["configuration"]["ip_address"]
             self.client = modbus.ModbusClient(ip_address, 502)
@@ -38,8 +38,8 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.client)
+            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"], component_config, self.client))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -84,7 +84,7 @@ def read_legacy(argv: List[str]) -> None:
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('carlo gavazzi IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Janitza IP-Adresse: ' + str(ip_address))
 
     dev.update()
 
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     try:
         read_legacy(sys.argv)
     except Exception:
-        log.MainLogger().exception("Fehler im Carlo Gavazzi Skript")
+        log.MainLogger().exception("Fehler im Janitza Skript")
