@@ -19,6 +19,9 @@ hook(){
 						if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 							./runs/pushover.sh "Gerät 1 eingeschaltet bei $uberschuss"
 						fi
+						if ((telebsmarthome == "1")) && ((telebenachrichtigung == "1")); then
+							./runs/telegram.sh "Gerät 1 eingeschaltet bei $uberschuss"
+						fi
 					fi
 				else
 					hook1einschaltverzcounter=$((hook1einschaltverzcounter +10))
@@ -47,6 +50,9 @@ hook(){
 						if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 							./runs/pushover.sh "Gerät 1 ausgeschaltet bei $uberschuss"
 						fi
+						if ((telebsmarthome == "1")) && ((telebenachrichtigung == "1")); then
+							./runs/telegram.sh "Gerät 1 ausgeschaltet bei $uberschuss"
+						fi
 					fi
 				fi
 			fi
@@ -70,6 +76,9 @@ hook(){
 						openwbDebugLog "MAIN" 1 "Gerät 2 aktiviert"
 						if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 							./runs/pushover.sh "Gerät 2 eingeschaltet bei $uberschuss"
+						fi
+						if ((telebsmarthome == "1")) && ((telebenachrichtigung == "1")); then
+							./runs/telegram.sh "Gerät 2 eingeschaltet bei $uberschuss"
 						fi
 					fi
 				else
@@ -99,6 +108,9 @@ hook(){
 						if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 							./runs/pushover.sh "Gerät 2 ausgeschaltet bei $uberschuss"
 						fi
+						if ((telebsmarthome == "1")) && ((telebenachrichtigung == "1")); then
+							./runs/telegram.sh "Gerät 2 ausgeschaltet bei $uberschuss"
+						fi
 					fi
 				fi
 			fi
@@ -117,6 +129,9 @@ hook(){
 				if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 					./runs/pushover.sh "Gerät 3 eingeschaltet bei $uberschuss"
 				fi
+				if ((telebsmarthome == "1")) && ((telebenachrichtigung == "1")); then
+					./runs/telegram.sh "Gerät 3 eingeschaltet bei $uberschuss"
+				fi
 			fi
 		fi
 		if [ -e ramdisk/hook3aktiv  ]; then
@@ -134,6 +149,9 @@ hook(){
 						openwbDebugLog "MAIN" 1 "Gerät 3 deaktiviert"
 						if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 							./runs/pushover.sh "Gerät 3 ausgeschaltet bei $uberschuss"
+						fi
+						if ((telebsmarthome == "1")) && ((telebenachrichtigung == "1")); then
+							./runs/telegram.sh "Gerät 3 ausgeschaltet bei $uberschuss"
 						fi
 					fi
 				fi

@@ -103,6 +103,11 @@ if (( ladeleistung > 100 )); then
 				./runs/pushover.sh "$lp1name Ladung gestartet$soctext"
 			fi
 		fi
+		if ((telebenachrichtigung == "1")) ; then
+			if ((telebstartl == "1")) ; then
+				./runs/telegram.sh "$lp1name Ladung gestartet$soctext"
+			fi
+		fi
 		openwbDebugLog "CHARGESTAT" 0 "LP1, Ladung gestartet."
 	fi
 	echo 0 > ramdisk/llog1
@@ -135,11 +140,21 @@ else
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauerh H $laderest Min mit durchschnittlich $ladegeschw kW geladen$soctext"
 					fi
 				fi
+				if ((telebenachrichtigung == "1")) ; then
+					if ((telebstopl == "1")) ; then
+						./runs/telegram.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauerh H $laderest Min mit durchschnittlich $ladegeschw kW geladen$soctext"
+					fi
+				fi
 			else
 				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1',$loglademodus,$rfidlp1 $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauer Min mit durchschnittlich $ladegeschw kW geladen$soctext"
+					fi
+				fi
+				if ((telebenachrichtigung == "1")) ; then
+					if ((telebstopl == "1")) ; then
+						./runs/telegram.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauer Min mit durchschnittlich $ladegeschw kW geladen$soctext"
 					fi
 				fi
 			fi
@@ -212,6 +227,11 @@ if (( lastmanagement == 1 )); then
 					./runs/pushover.sh "$lp2name Ladung gestartet$soctext1"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp2name Ladung gestartet$soctext1"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP2, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp2
@@ -251,11 +271,21 @@ if (( lastmanagement == 1 )); then
 							./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauerhs1 H $laderests1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauerhs1 H $laderests1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
+						fi
+					fi
 				else
 					sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2',$loglademodus,$rfidlp2 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauers1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauers1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
 						fi
 					fi
 				fi
@@ -329,6 +359,11 @@ if (( lastmanagements2 == 1 )); then
 					./runs/pushover.sh "$lp3name Ladung gestartet"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp3name Ladung gestartet"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP3, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp3
@@ -369,11 +404,21 @@ if (( lastmanagements2 == 1 )); then
 							./runs/pushover.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauerhs2 H $laderests2 Min mit durchschnittlich $ladegeschws2 kW geladen."
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauerhs2 H $laderests2 Min mit durchschnittlich $ladegeschws2 kW geladen."
+						fi
+					fi
 				else
 					sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauers2' Min,3',$lademodus,$rfidlp3 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauers2 Min mit durchschnittlich $ladegeschws2 kW geladen."
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauers2 Min mit durchschnittlich $ladegeschws2 kW geladen."
 						fi
 					fi
 
@@ -448,6 +493,11 @@ if (( lastmanagementlp4 == 1 )); then
 					./runs/pushover.sh "$lp4name Ladung gestartet"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp4name Ladung gestartet"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP4, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp4
@@ -488,12 +538,22 @@ if (( lastmanagementlp4 == 1 )); then
 							./runs/pushover.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerhlp4 H $laderestlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerhlp4 H $laderestlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
+						fi
+					fi
 
 				else
 					sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerlp4' Min,4',$lademodus,$rfidlp4 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
 						fi
 					fi
 
@@ -567,6 +627,11 @@ if (( lastmanagementlp5 == 1 )); then
 					./runs/pushover.sh "$lp5name Ladung gestartet"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp5name Ladung gestartet"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP5, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp5
@@ -607,12 +672,22 @@ if (( lastmanagementlp5 == 1 )); then
 							./runs/pushover.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerhlp5 H $laderestlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerhlp5 H $laderestlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
+						fi
+					fi
 
 				else
 					sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerlp5' Min,5',$lademodus,$rfidlp5 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
 						fi
 					fi
 
@@ -687,6 +762,11 @@ if (( lastmanagementlp6 == 1 )); then
 					./runs/pushover.sh "$lp6name Ladung gestartet"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp6name Ladung gestartet"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP6, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp6
@@ -727,12 +807,22 @@ if (( lastmanagementlp6 == 1 )); then
 							./runs/pushover.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerhlp6 H $laderestlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerhlp6 H $laderestlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
+						fi
+					fi
 
 				else
 					sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerlp6' Min,6',$lademodus,$rfidlp6 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
 						fi
 					fi
 
@@ -807,6 +897,11 @@ if (( lastmanagementlp7 == 1 )); then
 					./runs/pushover.sh "$lp7name Ladung gestartet"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp7name Ladung gestartet"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP7, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp7
@@ -847,12 +942,22 @@ if (( lastmanagementlp7 == 1 )); then
 							./runs/pushover.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerhlp7 H $laderestlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerhlp7 H $laderestlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
+						fi
+					fi
 
 				else
 					sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerlp7' Min,7',$lademodus,$rfidlp7 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
 						fi
 					fi
 
@@ -927,6 +1032,11 @@ if (( lastmanagementlp8 == 1 )); then
 					./runs/pushover.sh "$lp8name Ladung gestartet"
 				fi
 			fi
+			if ((telebenachrichtigung == "1")) ; then
+				if ((telebstartl == "1")) ; then
+					./runs/telegram.sh "$lp8name Ladung gestartet"
+				fi
+			fi
 			openwbDebugLog "CHARGESTAT" 0 "LP8, Ladung gestartet"
 
 			echo 1 > ramdisk/ladungaktivlp8
@@ -967,12 +1077,22 @@ if (( lastmanagementlp8 == 1 )); then
 							./runs/pushover.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerhlp8 H $laderestlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
 						fi
 					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerhlp8 H $laderestlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
+						fi
+					fi
 
 				else
 					sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerlp8' Min,8',$lademodus,$rfidlp8 $monthlyfile
 					if ((pushbenachrichtigung == "1")) ; then
 						if ((pushbstopl == "1")) ; then
 							./runs/pushover.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
+						fi
+					fi
+					if ((telebenachrichtigung == "1")) ; then
+						if ((telebstopl == "1")) ; then
+							./runs/telegram.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
 						fi
 					fi
 
