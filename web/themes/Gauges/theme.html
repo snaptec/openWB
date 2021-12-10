@@ -638,7 +638,7 @@
 					<span class="actualRunningTimeDevice">lade Daten</span>
 				</div>
 			</div>
-		</div>  <!-- end smarthome -->
+		</div>  <!-- end smart home -->
 
 		<!-- depending on charge mode show options -->
 		<form id="minundpvladenEinstellungen" class="hide">
@@ -1239,7 +1239,7 @@
 	<script>
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
-		// load navbar, be carefull: it loads asynchonously
+		// load navbar, be careful: it loads asynchronous
 		$.get(
 			{ url: "themes/navbar.html", cache: false },
 			function(data){
@@ -1275,8 +1275,8 @@
 				countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
 				var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
 				var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
-				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
-				if ( timeBetweenTwoMesagges > 3000 ) {
+				var timeBetweenTwoMessages = Date.now() - timeOfLastMqttMessage;
+				if ( timeBetweenTwoMessages > 3000 ) {
 					// latest after 3 sec without new messages
 					percentageReceived = 100;
 					// debug output
@@ -1301,7 +1301,7 @@
 		}
 
 		var delayUserInput = (function () {
-			// sets a timeout on call and resets timout if called again for same id before timeout fires
+			// sets a timeout on call and resets timeout if called again for same id before timeout fires
 			var timeoutHandles = {};
 			return function (id, callback, ms) {
 				if ( timeoutHandles[id] ) {
@@ -1675,10 +1675,10 @@
 				// some helper functions
 				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20210307',
+				'themes/Gauges/processAllMqttMsg.js?ver=20211125',
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20210307',
-				// respective Chart.js definition pricechart
+				// respective Chart.js definition price chart
 				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
 				'themes/Gauges/setupMqttServices.js?ver=20210129'
@@ -1764,7 +1764,7 @@
 			});
 
 			$('.priorityModeBtn').click(function(event){
-				// prio: 0 = battery, 1 = ev
+				// priority: 0 = battery, 1 = ev
 				var priority = $(this).attr('priority');
 				if ( priority == '0' || priority == '1' ) {
 					publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
@@ -1867,7 +1867,7 @@
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
 				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
-					// marks times in the pricechart where the price is low enough so charging would be allowed
+					// marks times in the price chart where the price is low enough so charging would be allowed
 	 				var priceAnnotations = createPriceAnnotations();
 	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
 	 				electricityPricechart.update();
@@ -1881,7 +1881,7 @@
 					publish(value, topic);
 					var label = $('label[for="' + id + '"].valueLabel');
 					label.removeClass('text-danger');
-					// if rangeInput is for chargeLimitation, recalc progress
+					// if rangeInput is for chargeLimitation, recalculate progress
 					if ( id.includes('/energyToCharge') ) {
 						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
 						var element = parent.find('.progress-bar');  // now get parents progressbar
@@ -1910,7 +1910,7 @@
 			}
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
-					// once page is unhidden... reload graph completety
+					// once page is unhidden... reload graph completely
 					initialread = 0;
 					all1 = 0;
 					all2 = 0;

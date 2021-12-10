@@ -4,11 +4,11 @@ declare -r SlaveModeAllowedLoadImbalanceDefault=20.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
-declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
 declare -r SocketActivatedFile="ramdisk/socketActivated"
 declare -r SocketApprovedFile="ramdisk/socketApproved"
 declare -r SocketRequestedFile="ramdisk/socketActivationRequested"
+declare -r EnergyLimitFile="ramdisk/energyLimitLp"
 declare -r SystemVoltage=240
 declare -r MaxCurrentOffset=1.0
 declare -r LmStatusFile="ramdisk/lmStatusLp"
@@ -19,7 +19,9 @@ declare -r LmStatusDownByLm=2
 declare -r LmStatusDownByEv=3
 declare -r LmStatusDownByError=4
 declare -r LmStatusDownByDisable=5
+# 6-7 reserved for LM use
 declare -r LmStatusDownForSocket=8
+declare -r LmStatusDownByEnergyLimit=9
 
 if (( lastmanagement > 0 )); then
 	declare -r -i NumberOfSupportedChargePoints=2
@@ -152,7 +154,6 @@ function computeAndSetCurrentForChargePoint() {
 		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
 		if (( fixedCurrent >= 0 )); then
 			openwbDebugLog "MAIN" 2 "Slave Mode: Forced to ${fixedCurrent} A, ignoring imbalance"
-			echo "0" > "${LastImbalanceFile}${chargePoint}"
 			callSetCurrent $fixedCurrent $chargePoint $LmStatusSuperseded
 			return 0
 		fi
@@ -173,6 +174,8 @@ function computeAndSetCurrentForChargePoint() {
 			return 0
 		fi
 	fi
+
+	if endChargeAndAbortOnChargeLimits $chargePoint; then return 0; fi
 
 	# compute difference between allowed current on the total current of the phase that has the highest total current and is actually used for charging
 	# in floats for not to loose too much precision
@@ -267,6 +270,53 @@ function computeAndSetCurrentForChargePoint() {
 	return 0
 }
 
+function endChargeAndAbortOnChargeLimits() {
+
+	local chargePoint=$1
+
+	local cpEnergyLimitFile="${EnergyLimitFile}${chargePoint}"
+	if [ ! -f "${cpEnergyLimitFile}" ]; then
+		# no energy limit file available for the CP --> no energy limit
+		openwbDebugLog "MAIN" 2 "Slave Mode: No energy limit setting: Energy limit disabled"
+		return 1
+	fi
+
+	local energyLimit=$(<"${cpEnergyLimitFile}")
+	if (( `echo "$energyLimit <= 0" | bc` == 1 )); then
+		# 0 doesn't make sense - treat it equal to no energy limit
+		openwbDebugLog "MAIN" 2 "Slave Mode: 0 or negative energy limit setting: Energy limit disabled"
+		return 1
+	fi
+
+	local energyChargedSincePlugin=0
+
+	if (( chargePoint == 1 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladen")
+	elif (( chargePoint == 2 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp2")
+	elif (( chargePoint == 3 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp3")
+	elif (( chargePoint >= 4 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp4")
+	else
+		openwbDebugLog "MAIN" 0 "Slave Mode limit processing ERROR: Charge Point #${chargePoint} is not supported"
+		# returning != 0 here would abort control loop of this CP, but we don't want that just for sake of energy limits
+		return 1
+	fi
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Active energy limit: ${energyLimit} Wh, already charged ${energyChargedSincePlugin} kWh"
+
+	if (( `echo "($energyChargedSincePlugin * 1000) > $energyLimit" | bc` == 1 )); then
+
+		openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit reached: Disabling charge"
+		callSetCurrent 0 0  $LmStatusDownByEnergyLimit
+		return 0
+	fi
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit not reached: Continue to charge"
+	return 1
+}
+
 function computeLoadImbalanceCompensation() {
 
 	# the charge point that we're looking at is our first parameter, second param is the new charge current considering only total current limit
@@ -275,14 +325,14 @@ function computeLoadImbalanceCompensation() {
 	local llWantedIncrease=$((llWanted - PreviousExpectedChargeCurrent))
 
 	#           are we not contributing to maximum load phase ?                       or also to minimal current phase                 or not charging
-	if ( (( ChargingOnPhase[$PhaseWithMaximumTotalCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
-#		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumTotalCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumTotalCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
+	if ( (( ChargingOnPhase[$PhaseWithMaximumImbalanceCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumImbalanceCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
+#		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumImbalanceCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumImbalanceCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumImbalanceCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumImbalanceCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
 		return 0
 	fi
 
-	local currentLoadImbalance=$(echo "scale=3; (${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
+	local currentLoadImbalance=$SystemLoadImbalance
 
-	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumTotalCurrent} - L${PhaseWithMinimumTotalCurrent}: ${TotalCurrentConsumptionOnPhase[$PhaseWithMaximumTotalCurrent]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} = ${currentLoadImbalance} A (limit is ${SlaveModeAllowedLoadImbalance} A)"
+	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumImbalanceCurrent} - L${PhaseWithMinimumImbalanceCurrent}: ${ImbalanceCurrentConsumptionOnPhase[$PhaseWithMaximumImbalanceCurrent]} - ${ImbalanceCurrentConsumptionOnPhase[$PhaseWithMinimumImbalanceCurrent]} = ${currentLoadImbalance} A (limit is ${SlaveModeAllowedLoadImbalance} A)"
 
 	local chargingVehiclesToUse=$ChargingVehiclesAdjustedForThisCp
 	if (( chargingVehiclesToUse == 0 )); then
@@ -498,30 +548,52 @@ function setVariablesFromRamdisk() {
 	# phase with maximum current
 	PhaseWithMaximumTotalCurrent=0
 	PhaseWithMinimumTotalCurrent=0
+	PhaseWithMaximumImbalanceCurrent=0
+	PhaseWithMinimumImbalanceCurrent=0
 	MaximumTotalCurrent=0
 	MinimumTotalCurrent=999999
+	MaximumImbalanceCurrent=0
+	MinimumImbalanceCurrent=999999
 
 	TotalCurrentConsumptionOnPhase=(0 0 0 0)
+	ImbalanceCurrentConsumptionOnPhase=(0 0 0 0)
 	ChargingVehiclesOnPhase=(0 0 0 0)
 	for i in {1..3}
 	do
 		TotalCurrentConsumptionOnPhase[i]=$(<"ramdisk/TotalCurrentConsumptionOnL${i}")
 		ChargingVehiclesOnPhase[i]=$(<"ramdisk/ChargingVehiclesOnL${i}")
 
+		if [ -f "ramdisk/ImbalanceCurrentConsumptionOnL${i}" ]; then
+			ImbalanceCurrentConsumptionOnPhase[i]=$(<"ramdisk/ImbalanceCurrentConsumptionOnL${i}")
+		else
+			ImbalanceCurrentConsumptionOnPhase[i]=${TotalCurrentConsumptionOnPhase[i]}
+		fi
+
 		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} > $MaximumTotalCurrent" | bc` == 1 )); then
 			MaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMaximumTotalCurrent=${i}
+		fi
+
+		if (( `echo "${ImbalanceCurrentConsumptionOnPhase[i]} > $MaximumImbalanceCurrent" | bc` == 1 )); then
+			MaximumImbalanceCurrent=${ImbalanceCurrentConsumptionOnPhase[i]}
+			PhaseWithMaximumImbalanceCurrent=${i}
 		fi
 
 		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} < $MinimumTotalCurrent" | bc` == 1 )); then
 			MinimumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMinimumTotalCurrent=${i}
 		fi
+
+		if (( `echo "${ImbalanceCurrentConsumptionOnPhase[i]} < $MinimumImbalanceCurrent" | bc` == 1 )); then
+			MinimumImbalanceCurrent=${ImbalanceCurrentConsumptionOnPhase[i]}
+			PhaseWithMinimumImbalanceCurrent=${i}
+		fi
 	done
 
-	SystemLoadImbalance=$(echo "scale=3; $MaximumTotalCurrent - $MinimumTotalCurrent" | bc)
+	SystemLoadImbalance=$(echo "scale=3; $MaximumImbalanceCurrent - $MinimumImbalanceCurrent" | bc)
 
-	openwbDebugLog "MAIN" 2 "TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
+	openwbDebugLog "MAIN" 2 "TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A"
+	openwbDebugLog "MAIN" 2 "ImbalanceCurrentConsumptionOnPhase=${ImbalanceCurrentConsumptionOnPhase[@]:1}, Phase with max imbalance current = ${PhaseWithMaximumImbalanceCurrent} @ ${MaximumImbalanceCurrent} A, min current = ${PhaseWithMinimumImbalanceCurrent} @ ${MinimumImbalanceCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
 
 	# heartbeat
 	Heartbeat=$(<ramdisk/heartbeat)
@@ -645,12 +717,6 @@ function callSetCurrent() {
 		currentToSet=$MaximumCurrentPossibleForCp
 	fi
 
-	if (( PreviousExpectedChargeCurrent != currentToSet )); then
-
-		openwbDebugLog "MAIN" 2 "Setting current to ${currentToSet} A for CP#${chargePoint}"
-		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
-	fi
-
 	if (( $statusReason == -1 )); then
 		if (( $CpIsCharging == 1 )) || (( $currentToSet == 0 )); then
 			statusReason=$computedReason
@@ -668,6 +734,14 @@ function callSetCurrent() {
 		do
 			echo "$statusReason" > "${LmStatusFile}${i}"
 		done
+	fi
+
+	if (( PreviousExpectedChargeCurrent != currentToSet )); then
+
+		openwbDebugLog "MAIN" 2 "Setting current from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}"
+		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
+	else
+		return 0
 	fi
 
 	runs/set-current.sh $currentToSet "${chargePointString}"

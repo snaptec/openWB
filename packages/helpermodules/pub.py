@@ -3,58 +3,38 @@
 
 import json
 import os
-from typing import Optional
 
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
-from . import log
-
-client = None  # type: Optional[mqtt.Client]
+from helpermodules import log
 
 
-def setup_connection():
-    """Öffnet die Verbindung zum Broker.
+class PubSingleton:
+    def __init__(self) -> None:
+        self.client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
+        self.client.connect("localhost", 1886)
+        self.client.loop_start()
 
-    Bei Verbindungsabbruch wird automatisch versucht, eine erneute Verbindung herzustellen.
-    """
-    try:
-        global client
-        client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
-        client.connect("localhost", 1886)
-        client.loop_start()
-    except Exception:
-        log.MainLogger().exception("Fehler im pub-Modul")
-
-
-def pub(topic, payload):
-    """ published das übergebene Payload als json-Objekt an das übergebene Topic.
-
-    Parameter
-    ---------
-    topic : str
-        Topic, an das gepusht werden soll
-
-    payload : int, str, list, float
-        Payload, der gepusht werden soll
-    """
-    try:
-        if payload == "":
-            client.publish(topic, payload, qos=0, retain=True)
-        else:
-            client.publish(topic, payload=json.dumps(payload), qos=0, retain=True)
-    except Exception:
-        log.MainLogger().exception("Fehler im pub-Modul")
+    def pub(self, topic: str, payload) -> None:
+        try:
+            if payload == "":
+                self.client.publish(topic, payload, qos=0, retain=True)
+            else:
+                self.client.publish(topic, payload=json.dumps(payload), qos=0, retain=True)
+        except Exception:
+            log.MainLogger().exception("Fehler im pub-Modul")
 
 
-def delete_connection():
-    """ schließt die Verbindung zum Broker.
-    """
-    try:
-        client.loop_stop()
-        client.disconnect
-    except Exception:
-        log.MainLogger().exception("Fehler im pub-Modul")
+class Pub:
+    instance = None
+
+    def __init__(self) -> None:
+        if not Pub.instance:
+            Pub.instance = PubSingleton()
+
+    def __getattr__(self, name):
+        return getattr(self.instance, name)
 
 
 def pub_single(topic, payload, hostname="localhost", no_json=False):
