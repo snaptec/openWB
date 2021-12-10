@@ -4,13 +4,13 @@ Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul 
 import os
 import re
 import paho.mqtt.client as mqtt
-import sys
 import time
 import typing
 
 from helpermodules import compatibility
 from helpermodules import log
 from helpermodules import pub
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common.fault_state import FaultState
 
 
@@ -307,8 +307,12 @@ def calculate_import_export(
         process_error(e)
 
 
+def run_cli(power_present: int, prefix: str):
+    SimCountLegacy().sim_count(power_present=power_present, prefix=prefix)
+
+
 if __name__ == "__main__":
     try:
-        SimCountLegacy().sim_count(power_present=int(sys.argv[1]), prefix=str(sys.argv[2]))
+        run_using_positional_cli_args(run_cli)
     except Exception as e:
         process_error(e)
