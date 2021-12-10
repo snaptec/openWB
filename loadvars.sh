@@ -1423,12 +1423,12 @@ loadvars(){
 	ohook2_aktiv=$(<ramdisk/mqtthook2_aktiv)
 	if [[ "$ohook2_aktiv" != "$hook2_aktiv" ]]; then
 		tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2_aktiv}"
-		echo $hook1_aktiv > ramdisk/mqtthook2_aktiv
+		echo $hook2_aktiv > ramdisk/mqtthook2_aktiv
 	fi
 	ohook3_aktiv=$(<ramdisk/mqtthook3_aktiv)
 	if [[ "$ohook3_aktiv" != "$hook3_aktiv" ]]; then
 		tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3_aktiv}"
-		echo $hook1_aktiv > ramdisk/mqtthook3_aktiv
+		echo $hook3_aktiv > ramdisk/mqtthook3_aktiv
 	fi
 
 	if (( ohook1aktiv != hook1aktiv )); then
