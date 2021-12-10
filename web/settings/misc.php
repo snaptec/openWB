@@ -981,7 +981,7 @@
 						<div id="teleban" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="teleoveruser" class="col-md-4 col-form-label">Telegram Chat-ID</label>
+									<label for="telegramuser" class="col-md-4 col-form-label">Telegram Chat-ID</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
@@ -989,12 +989,12 @@
 													<i class="fa fa-user"></i>
 												</div>
 											</div>
-											<input type="text" name="teleoveruser" id="teleoveruser" value="<?php echo $teleoveruserold ?>" placeholder="Chat-ID" class="form-control">
+											<input type="text" name="telegramuser" id="telegramuser" value="<?php echo $telegramuserold ?>" placeholder="Chat-ID" class="form-control">
 										</div>
 									</div>
 								</div>
 								<div class="form-row">
-									<label for="teleovertoken" class="col-md-4 col-form-label">Telegram API-Token</label>
+									<label for="telegramtoken" class="col-md-4 col-form-label">Telegram API-Token</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
@@ -1002,7 +1002,7 @@
 													<i class="fa fa-lock"></i>
 												</div>
 											</div>
-											<input type="text" name="teleovertoken" id="teleovertoken" value="<?php echo $teleovertokenold ?>" placeholder="Api Token" class="form-control">
+											<input type="text" name="telegramtoken" id="telegramtoken" value="<?php echo $telegramtokenold ?>" placeholder="Api Token" class="form-control">
 										</div>
 									</div>
 								</div>
