@@ -21,4 +21,4 @@ jobs:
           path: packages
       - name: Test with pytest
         run: |
-          cd packages && python -m pytest
+          PYTHONPATH=packages python -m pytest packages modules
