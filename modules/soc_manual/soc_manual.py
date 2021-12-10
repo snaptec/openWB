@@ -1,7 +1,7 @@
 import argparse
 import logging
-import sys
 
+from helpermodules.cli import run_using_positional_cli_args
 from helpermodules.log import setup_logging_stdout
 from modules.common.store import ramdisk_write, ramdisk_read_float
 
@@ -52,14 +52,9 @@ def run(charge_point: int, battery_size: float, efficiency: float):
     ramdisk_write(file_soc, soc_new * 100, digits=0)
 
 
-def run_command_line():
-    parser = argparse.ArgumentParser(description='Calculate SoC based on kWh charged')
-    parser.add_argument("charge_point", type=int)
-    parser.add_argument("efficiency", type=float)
-    parser.add_argument("battery_size", type=float)
-    args = parser.parse_args()
-    run(charge_point=args.charge_point, efficiency=args.efficiency / 100, battery_size=args.battery_size)
+def run_command_line(charge_point: int, efficiency: float, battery_size: float):
+    run(charge_point, battery_size, efficiency / 100)
 
 
 if __name__ == '__main__':
-    run_command_line()
+    run_using_positional_cli_args(run_command_line)
