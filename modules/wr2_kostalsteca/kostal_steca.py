@@ -28,51 +28,38 @@ def DebugLog(message):
 if Debug >= 2:
     DebugLog('PV Kostal Steca IP:' + pv2ip)
 
-if Debug > 1:
-    measure = requests.get("http://"+pv2ip+"/measurements.xml", timeout=5).text
-    msg = "'MEASURE: "+str(measure)+"'"
-    subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 2 '+msg])
+
 
 # call for XML file and parse it for current PV power
 response = requests.get("http://"+pv2ip+"/measurements.xml", timeout=5).text
-tree = ET.fromstring(response)
-root = tree.getroot()
-for element in root.iter("Measurement"):
-    if element.get("Type") == "AC_Power":
-        power_kostal_piko_MP = element.get("Value")
-        break
+if Debug >= 1:
+    DebugLog("MEASURE: "+str(response))
+power_kostal_piko_MP = ET.fromstring(response).find("Measurement[@Type='AC_Power']").get("Value")
 
 # cut the comma and the digit behind the comma
-power_kostal_piko_MP = int(power_kostal_piko_MP)
+power_kostal_piko_MP = int(float(power_kostal_piko_MP))
 
 # allow only numbers
 regex = '^-?[0-9]+$'
 if re.search(regex, power_kostal_piko_MP) == None:
     power_kostal_piko_MP = "0"
 
-msg = "'PVWatt: "+str(power_kostal_piko_MP)+"'"
-subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 1 '+msg])
+DebugLog("'PVWatt: "+str(power_kostal_piko_MP)+"'")
 
 # call for XML file and parse it for total produced kwh
 if Debug > 1:
     yields = requests.get("http://"+pv2ip+"/yields.xml", timeout=5).text
-    msg = "'YIELD: "+yields+"'"
-    subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 2 '+msg])
+    DebugLog("YIELD: "+yields)
 
 response = requests.get("http://"+pv2ip+"/yields.xml", timeout=5).text
-tree = ET.fromstring(response)
-root = tree.getroot()
-for element in root.iter("YieldValue"):
-    pvkwh_kostal_piko_MP = element.get("Value")
-    break
+pvkwh_kostal_piko_MP = ET.fromstring(response).find("YieldValue").get("Value")
 
 if re.search(regex, pvkwh_kostal_piko_MP) == None:
-    subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 2 "PVkWh: NaN get prev. Value"'])
+    DebugLog("PVkWh: NaN get prev. Value")
     with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
         pvkwh_kostal_piko_MP = f.read()
 
-msg = "'PVkWh: "+str(pvkwh_kostal_piko_MP)+"'"
-subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 1 '+msg])
+DebugLog('PVkWh: '+str(pvkwh_kostal_piko_MP))
 
 # Daten in Ramdisk schreiben
 if Debug >= 1:

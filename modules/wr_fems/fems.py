@@ -22,14 +22,15 @@ if Debug >= 2:
     DebugLog('Wechselrichter FEMS Passwort: ' + femskacopw)
     DebugLog('Wechselrichter FEMS IP: ' + femsip)
 
-response = requests.get('http://x:'+femskacopw+'@'+femsip+':8084/rest/channel/_sum/ProductionActivePower').json()
+response = requests.get('http://'+femsip+':8084/rest/channel/_sum/ProductionActivePower', auth=("x", femskacopw)).json()
 try:
     pvwatt = response["value"] * -1
 except:
     traceback.print_exc()
     exit(1)
 
-response = requests.get('http://x:'+femskacopw+'@'+femsip+':8084/rest/channel/_sum/ProductionActiveEnergy').json()
+response = requests.get('http://'+femsip+':8084/rest/channel/_sum/ProductionActiveEnergy',
+                        auth=("x", femskacopw)).json()
 try:
     pvwh = response["value"]
 except:
