@@ -619,11 +619,11 @@ updateConfig(){
 	if ! grep -Fq "telebenachrichtigung=" $ConfigFile; then
 		echo "telebenachrichtigung=0" >> $ConfigFile
 	fi
-	if ! grep -Fq "teleovertoken=" $ConfigFile; then
-		echo "teleovertoken='demotoken'" >> $ConfigFile
+	if ! grep -Fq "telegramtoken=" $ConfigFile; then
+		echo "telegramtoken='0'" >> $ConfigFile
 	fi
-	if ! grep -Fq "teleoveruser=" $ConfigFile; then
-		echo "teleoveruser='demouser'" >> $ConfigFile
+	if ! grep -Fq "telegramuser=" $ConfigFile; then
+		echo "telegramuser='0'" >> $ConfigFile
 	fi
 	if ! grep -Fq "telebstartl=" $ConfigFile; then
 		echo "telebstartl=1" >> $ConfigFile
@@ -1232,6 +1232,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "pushbplug=" $ConfigFile; then
 		echo "pushbplug=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "telebplug=" $ConfigFile; then
+		echo "telebplug=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "wrsmawebbox=" $ConfigFile; then
 		echo "wrsmawebbox=0" >> $ConfigFile
