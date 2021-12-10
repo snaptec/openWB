@@ -616,6 +616,21 @@ updateConfig(){
 	if ! grep -Fq "pushbstopl=" $ConfigFile; then
 		echo "pushbstopl=1" >> $ConfigFile
 	fi
+	if ! grep -Fq "telebenachrichtigung=" $ConfigFile; then
+		echo "telebenachrichtigung=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "teleovertoken=" $ConfigFile; then
+		echo "teleovertoken='demotoken'" >> $ConfigFile
+	fi
+	if ! grep -Fq "teleoveruser=" $ConfigFile; then
+		echo "teleoveruser='demouser'" >> $ConfigFile
+	fi
+	if ! grep -Fq "telebstartl=" $ConfigFile; then
+		echo "telebstartl=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "telebstopl=" $ConfigFile; then
+		echo "telebstopl=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "smashmbezugid=" $ConfigFile; then
 		echo "smashmbezugid=1234567789" >> $ConfigFile
 	fi
@@ -1340,6 +1355,12 @@ updateConfig(){
 	if ! grep -Fq "pushbsmarthome=" $ConfigFile; then
 		echo "pushbsmarthome=1" >> $ConfigFile
 	fi
+	if ! grep -Fq "telebsmarthome=" $ConfigFile; then
+		echo "telebsmarthome=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "telebsmarthome=" $ConfigFile; then
+		echo "telebsmarthome=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "graphsocdyn=" $ConfigFile; then
 		echo "graphsocdyn=1" >> $ConfigFile
 	fi
@@ -1836,16 +1857,6 @@ updateConfig(){
 	fi
 	if ! grep -Fq "ssdisplay=" $ConfigFile; then
 		echo "ssdisplay=0" >> $ConfigFile
-	fi
-	if ! grep -Fq "owbpro1ip=" $ConfigFile; then
-		echo "owbpro1ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro2ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro3ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro4ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro5ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro6ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro7ip=192.168.1.100" >> $ConfigFile
-		echo "owbpro8ip=192.168.1.100" >> $ConfigFile
 	fi
 	if ! grep -Fq "chargep1ip=" $ConfigFile; then
 		echo "chargep1ip=192.168.1.100" >> $ConfigFile
