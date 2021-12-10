@@ -954,6 +954,139 @@
 						});
 					</script>
 				</div>
+				<!<!-- Benachrichtigungen mit Telegram -->
+<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Benachrichtigungen mit Telegram</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-sm btn-outline-info<?php if($telebenachrichtigungold == 0) echo " active" ?>">
+											<input type="radio" name="telebenachrichtigung" id="telebenachrichtigungOff" value="0"<?php if($telebenachrichtigungold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-sm btn-outline-info<?php if($telebenachrichtigungold == 1) echo " active" ?>">
+											<input type="radio" name="telebenachrichtigung" id="telebenachrichtigungOn" value="1"<?php if($telebenachrichtigungold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info">
+							<p>Zur Nutzung von Telegram muss ein Telegram-Bot vorhanden sein. Dazu muss per "BotFather" ein Telegram-Bot (https://t.me/botfather) erstellt werden.</p>
+							Wenn Telegram eingeschaltet ist, werden die Zählerstände aller konfigurierten Ladepunkte immer zum 1. des Monats getelet.
+						</div>
+						<div id="teleban" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="telegramuser" class="col-md-4 col-form-label">Telegram Chat-ID</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-user"></i>
+												</div>
+											</div>
+											<input type="text" name="telegramuser" id="telegramuser" value="<?php echo $telegramuserold ?>" placeholder="Chat-ID" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="form-row">
+									<label for="telegramtoken" class="col-md-4 col-form-label">Telegram API-Token</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-lock"></i>
+												</div>
+											</div>
+											<input type="text" name="telegramtoken" id="telegramtoken" value="<?php echo $telegramtokenold ?>" placeholder="Api Token" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr class="border-secondary">
+							<div class="form-group">
+								<div class="form-row">
+									<div class="col">
+										Benachrichtigungen
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">Beim Starten der Ladung</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($telebstartlold == 0) echo " active" ?>">
+											<input type="radio" name="telebstartl" id="telebstartlOff" value="0"<?php if($telebstartlold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($telebstartlold == 1) echo " active" ?>">
+											<input type="radio" name="telebstartl" id="telebstartlOn" value="1"<?php if($telebstartlold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">Beim Stoppen der Ladung</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($telebstoplold == 0) echo " active" ?>">
+											<input type="radio" name="telebstopl" id="telebstoplOff" value="0"<?php if($telebstoplold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($telebstoplold == 1) echo " active" ?>">
+											<input type="radio" name="telebstopl" id="telebstoplOn" value="1"<?php if($telebstoplold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">Beim Einstecken des Fahrzeugs</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($telebplugold == 0) echo " active" ?>">
+											<input type="radio" name="telebplug" id="telebplugOff" value="0"<?php if($telebplugold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($telebplugold == 1) echo " active" ?>">
+											<input type="radio" name="telebplug" id="telebplugOn" value="1"<?php if($telebplugold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">Bei Triggern von Smart Home Aktionen</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($telebsmarthomeold == 0) echo " active" ?>">
+											<input type="radio" name="telebsmarthome" id="telebsmarthomeOff" value="0"<?php if($telebsmarthomeold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($telebsmarthomeold == 1) echo " active" ?>">
+											<input type="radio" name="telebsmarthome" id="telebsmarthomeOn" value="1"<?php if($telebsmarthomeold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script>
+						function visibility_telebenachrichtigung() {
+							if($('#telebenachrichtigungOff').prop("checked")) {
+								hideSection('#teleban');
+							} else {
+								showSection('#teleban');
+							}
+						}
+
+						$(document).ready(function(){
+							$('input[type=radio][name=telebenachrichtigung]').change(function(){
+								visibility_telebenachrichtigung();
+							});
+
+							visibility_telebenachrichtigung();
+						});
+					</script>
+				</div>
 
 				<!-- LED Ausgänge -->
 				<div class="card border-secondary">
