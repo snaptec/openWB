@@ -1834,6 +1834,16 @@ updateConfig(){
 	if ! grep -Fq "ssdisplay=" $ConfigFile; then
 		echo "ssdisplay=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "owbpro1ip=" $ConfigFile; then
+		echo "owbpro1ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro2ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro3ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro4ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro5ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro6ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro7ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro8ip=192.168.1.100" >> $ConfigFile
+	fi
 	if ! grep -Fq "chargep1ip=" $ConfigFile; then
 		echo "chargep1ip=192.168.1.100" >> $ConfigFile
 	fi

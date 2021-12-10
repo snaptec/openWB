@@ -13,6 +13,9 @@ if [[ "$1" == "1" ]]; then
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "1"
 	fi
+	if [[ $evsecon == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro1ip/connect.php
+	fi
 	# chargepoint 2
 	if [[ $lastmanagement == 1 && $evsecons1 == "modbusevse" && $u1p3plp2aktiv == "1" ]]; then
 		openwbDebugLog "MAIN" 0 "Pause nach Umschaltung: ${u1p3ppause}s"
@@ -24,9 +27,16 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep2ip -m "1"
 	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro2ip/connect.php
+	fi
+
 	# chargepoint 3
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep3ip -m "1"
+	fi
+	if [[ $lastmanagements2 == 1 && $evsecons2 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro3ip/connect.php
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp3 -i $u1p3plp3id -p 1 -d $u1p3ppause
@@ -38,6 +48,10 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp4 -i $u1p3plp4id -p 1 -d $u1p3ppause
 	fi
+	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro4ip/connect.php
+	fi
+
 	# chargepoint 5
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep5ip -m "1"
@@ -45,12 +59,19 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "ipevse" && $u1p3plp5aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp5 -i $u1p3plp5id -p 1 -d $u1p3ppause
 	fi
+	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro5ip/connect.php
+	fi
+
 	# chargepoint 6
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep6ip -m "1"
 	fi
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "ipevse" && $u1p3plp6aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp6 -i $u1p3plp6id -p 1 -d $u1p3ppause
+	fi
+	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro6ip/connect.php
 	fi
 	# chargepoint 7
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "extopenwb" ]]; then
@@ -59,6 +80,10 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "ipevse" && $u1p3plp7aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp7 -i $u1p3plp7id -p 1 -d $u1p3ppause
 	fi
+	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro7ip/connect.php
+	fi
+
 	# chargepoint 8
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep8ip -m "1"
@@ -66,6 +91,10 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "ipevse" && $u1p3plp8aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp8 -i $u1p3plp8id -p 1 -d $u1p3ppause
 	fi
+	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=1" $owbpro8ip/connect.php
+	fi
+
 	echo 1 > ramdisk/u1p3pstat
 fi
 
@@ -82,26 +111,55 @@ if [[ "$1" == "3" ]]; then
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "3"
 	fi
+	if [[ $evsecon == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro1ip/connect.php
+	fi
+
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep2ip -m "3"
 	fi
+	if [[ $lastmanagement == 1 && $evsecons1 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro2ip/connect.php
+	fi
+
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep3ip -m "3"
 	fi
+	if [[ $lastmanagements2 == 1 && $evsecons2 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro3ip/connect.php
+	fi
+
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep4ip -m "3"
+	fi
+	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro4ip/connect.php
 	fi
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep5ip -m "3"
 	fi
+	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro5ip/connect.php
+	fi
+
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep6ip -m "3"
 	fi
+	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro6ip/connect.php
+	fi
+
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep7ip -m "3"
 	fi
+	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro7ip/connect.php
+	fi
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep8ip -m "3"
+	fi
+	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "owbpro" ]]; then
+		curl -s -X POST --data "phasetarget=3" $owbpro8ip/connect.php
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
 		sudo python runs/u1p3premote.py -a $evseiplp1 -i $u1p3plp2id -p 3 -d $u1p3ppause
