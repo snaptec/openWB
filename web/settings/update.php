@@ -107,7 +107,7 @@
 					<div class="row">
 						<div class="col">
 							<p>Vor dem Update sind ggf. angeschlossene Fahrzeuge abzustecken!</p>
-							<p>Eventuell vorhandene externe openWB die als Ladepunkt konfiguiert sind erhalten automatisch ebenso ein Update.</p>
+							<p>Eventuell vorhandene externe openWB die als Ladepunkt konfiguriert sind erhalten automatisch ebenso ein Update.</p>
 						</div>
 					</div>
 				</div>
