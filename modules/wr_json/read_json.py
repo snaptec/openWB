@@ -1,82 +1,52 @@
 #!/usr/bin/env python3
 
+import re
 import requests
+import subprocess
 import sys
 import traceback
-import jq
-import re
-from datetime import datetime, timezone
-import os
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+num = int(sys.argv[1])
+wrjsonurl = str(sys.argv[2])
+wrjsonkwh = str(sys.argv[3]).replace(".", "")
+wrjsonwatt = str(sys.argv[4]).replace(".", "")
 
+if num == 1:
+    file_ext = ""
+elif num == 2:
+    file_ext = "2"
 
-#renumeric ='^-?[0-9]+$'
-renumeric ='^[-+]?[0-9]+\.?[0-9]*$'
-
-jsonurl = str(sys.argv[1])
-
-jsonwatt = str(sys.argv[2])
-jsonkwh = str(sys.argv[3])
-numpv = int(str(sys.argv[4]))
-
-RAMDISKDIR='/var/www/html/openWB/ramdisk/'
-
-def DebugLog(message):
-	local_time = datetime.now(timezone.utc).astimezone()
-	print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
-
-numcheck = re.compile(renumeric)
-
-if Debug >= 2:
-	DebugLog('PV' + str(numpv) + ' JQ Watt: ' + jsonwatt)
-	DebugLog('PV' + str(numpv) + ' JQ Wh  : ' + jsonkwh)
-	DebugLog('PV' + str(numpv) + ' JQ numpv  : ' + str(numpv))
-
-
-response = requests.get(jsonurl, timeout=5).json()
-if Debug>=2:
-	DebugLog('JSON Response: ' + str(response))
+regex = '^[-+]?[0-9]+\.?[0-9]*$'
+answer = requests.get(wrjsonurl, timeout=5).json()
 try:
-	watt = jq.compile(jsonwatt).input(response).first()
-	if Debug>=1:
-		DebugLog('Leistung: ' + str(watt))
-	if not numcheck.match(str(watt)):
-		DebugLog('Leistung (Watt) nicht numerisch. Bitte Filterausdruck ueberpruefen -->0')
-		watt=0
-
-	watt=int(watt)
-	if watt >= 0:
-		watt = watt*(-1)
-	if numpv == 1:
-		with open(RAMDISKDIR + "pvwatt", "w") as f:
-			f.write(str(watt))
-	else:
-		DebugLog(RAMDISKDIR + "pv" + str(numpv) + "watt"+ "W:"+str(watt))
-		with open(RAMDISKDIR + "pv" + str(numpv) + "watt" , "w") as f:
-			f.write(str(watt))
+    pvwatt = int(answer[wrjsonwatt])
 except:
-	traceback.print_exc()
-	exit(1)
-if Debug >= 1:
-	DebugLog('PV' + str(numpv) + 'Watt: ' + str(watt))
+    traceback.print_exc()
+# Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0
+if re.search(regex, pvwatt) == None:
+    msg = "'PV"+str(file_ext)+"Watt Not Numeric: "+str(pvwatt)+" . Check if Filter is correct or WR is in standby'"
+    subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 1 '+msg])
+    pvwatt = 0
 
-try:
-	if jsonkwh != "":
-		kwh = jq.compile(jsonkwh).input(response).first()
-	else:
-		kwh = 0
-	if numpv == 1:
-		with open(RAMDISKDIR + "pvkwh", "w") as f:
-			f.write(str(kwh))
-	else:
-		with open(RAMDISKDIR + "pv" + str(numpv) + "kwh" , "w") as f:
-			f.write(str(kwh))
-except:
-	traceback.print_exc()
-	exit(1)
-if Debug >= 1:
-	DebugLog('PV' + str(numpv) + 'kWh: ' + str(kwh))
+if pvwatt > 5:
+    pvwatt = pvwatt*-1
+with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"watt", "w") as f:
+    f.write(str(pvwatt))
 
-exit(0)
+if wrjsonkwh != "":
+    try:
+        pvkwh = answer[wrjsonkwh]
+    except:
+        traceback.print_exc()
+    if re.search(regex, pvkwh) == None:
+        msg = "'PV"+str(file_ext)+"kWh Not Numeric: "+str(pvkwh)+" . Check if Filter is correct or WR is in standby'"
+        subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 1 '+msg])
+        with open("/var/www/html/openWB/ramdisk/pvkwh", "r") as f:
+            pvkwh = f.read()
+else:
+    msg = "'PV"+str(file_ext)+"kWh NoFilter is set'"
+    subprocess.run(['bash', '-c', 'source /var/www/html/openWB/helperFunctions.sh; openwbDebugLog "PV" 2 '+msg])
+    pvkwh = 0
+
+with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"kwh", "w") as f:
+    f.write(str(pvkwh))
