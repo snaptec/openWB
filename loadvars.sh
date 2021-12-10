@@ -101,6 +101,10 @@ loadvars(){
 						message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 						/var/www/html/openWB/runs/pushover.sh "$message"
 					fi
+					if [[ $telebplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $telebenachrichtigung == "1" ]] ; then
+						message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+						/var/www/html/openWB/runs/telegram.sh "$message"
+					fi					
 					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 					fi
@@ -126,6 +130,10 @@ loadvars(){
 			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
 				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 				/var/www/html/openWB/runs/pushover.sh "$message"
+			fi
+			if [[ $telebplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $telebenachrichtigung == "1" ]] ; then
+				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+				/var/www/html/openWB/runs/telegram.sh "$message"
 			fi
 			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
