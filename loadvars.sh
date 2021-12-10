@@ -96,14 +96,14 @@ loadvars(){
 		if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
 			if [[ $evseplugstate > "1" ]]; then
 				plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
+				msg_text="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 				if [[ $plugstat == "0" ]] ; then
 					if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-						message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-						/var/www/html/openWB/runs/pushover.sh "$message"
+						
+						/var/www/html/openWB/runs/pushover.sh "$msg_text"
 					fi
 					if [[ $telebplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $telebenachrichtigung == "1" ]] ; then
-						message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-						/var/www/html/openWB/runs/telegram.sh "$message"
+						/var/www/html/openWB/runs/telegram.sh "$msg_text"
 					fi					
 					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
@@ -126,14 +126,13 @@ loadvars(){
 		fi
 	else
 		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
+		msg_text="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 		if [ "$pluggedin" -gt "0" ]; then
 			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-				/var/www/html/openWB/runs/pushover.sh "$message"
+				/var/www/html/openWB/runs/pushover.sh "$msg_text"
 			fi
 			if [[ $telebplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $telebenachrichtigung == "1" ]] ; then
-				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-				/var/www/html/openWB/runs/telegram.sh "$message"
+				/var/www/html/openWB/runs/telegram.sh "$msg_text"
 			fi
 			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep

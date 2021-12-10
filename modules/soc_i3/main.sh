@@ -93,14 +93,14 @@ else
 	#Benachrichtigung bei Ladeabbruch
 	error=$(echo $abfrage | jq '.chargingError')
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: chargingEror: $error"
+	message="ACHTUNG - Ladung bei "
+	message+="$soclevel"
+	message+="% abgebrochen"
 	if [[ $error == 1 ]] && [[ $pushbenachrichtigung == 1 ]] ; then
 		#Abfrage, ob Fehler schon dokumentiert
 		chargingError=$(<$RAMDISKDIR/chargingerror)
 		#wiederholte Benachrichtigungen verhindern
 		if [[ $chargingError == 0 ]] ; then
-			message="ACHTUNG - Ladung bei "
-			message+="$soclevel"
-			message+="% abgebrochen"
 			/var/www/html/openWB/runs/pushover.sh "$message"
 			#dokumetieren des Fehlers in der Ramdisk
 			echo 1 > $RAMDISKDIR/chargingerror
@@ -110,9 +110,6 @@ else
 		chargingError=$(<$RAMDISKDIR/chargingerror)
 		#wiederholte Benachrichtigungen verhindern
 		if [[ $chargingError == 0 ]] ; then
-			message="ACHTUNG - Ladung bei "
-			message+="$soclevel"
-			message+="% abgebrochen"
 			/var/www/html/openWB/runs/telegram.sh "$message"
 			#dokumetieren des Fehlers in der Ramdisk
 			echo 1 > $RAMDISKDIR/chargingerror
