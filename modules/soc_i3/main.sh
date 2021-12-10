@@ -105,6 +105,18 @@ else
 			#dokumetieren des Fehlers in der Ramdisk
 			echo 1 > $RAMDISKDIR/chargingerror
 		fi
+	if [[ $error == 1 ]] && [[ $telebenachrichtigung == 1 ]] ; then
+		#Abfrage, ob Fehler schon dokumentiert
+		chargingError=$(<$RAMDISKDIR/chargingerror)
+		#wiederholte Benachrichtigungen verhindern
+		if [[ $chargingError == 0 ]] ; then
+			message="ACHTUNG - Ladung bei "
+			message+="$soclevel"
+			message+="% abgebrochen"
+			/var/www/html/openWB/runs/telegram.sh "$message"
+			#dokumetieren des Fehlers in der Ramdisk
+			echo 1 > $RAMDISKDIR/chargingerror
+		fi
 	else
 		echo 0 > $RAMDISKDIR/chargingerror
 	fi
