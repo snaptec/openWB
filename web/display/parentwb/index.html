@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="de">
-    <head>
-        <base href="/openWB/web/">
-        <meta charset="UTF-8">
-        <!-- display style -->
-        <link rel="stylesheet" type="text/css" href="display/parentwb/style.css">
-        <!-- important scripts to be loaded -->
-        <script src="js/jquery-3.6.0.min.js"></script>
-    </head>
+	<head>
+		<base href="/openWB/web/">
+		<meta charset="UTF-8">
+		<!-- display style -->
+		<link rel="stylesheet" type="text/css" href="display/parentwb/style.css">
+		<!-- important scripts to be loaded -->
+		<script src="js/jquery-3.6.0.min.js"></script>
+	</head>
 
-    <body style="margin: -3px 0;"> <!-- prevent duplicate scrollbars -->
-        <iframe id="parentOpenWB" src="display/parentwb/loading.html" title="parentOpenWB"></iframe>
+	<body style="margin: -3px 0;"> <!-- prevent duplicate scrollbars -->
+		<iframe id="parentOpenWB" src="display/parentwb/loading.html" title="parentOpenWB"></iframe>
 
-        <script>
-            $(document).ready(function(){
+		<script>
+			$(document).ready(function(){
 
-                // load scripts synchronously in order specified
-                var scriptsToLoad = [
-                    // load mqtt library
-                    'js/mqttws31.js',
-                    // functions for processing messages
-                    'display/parentwb/processAllMqttMsg.js?ver=20201201',
-                    // functions performing mqtt and start mqtt-service
-                    'display/parentwb/setupMqttServices.js?ver=20201201',
-                ];
+				// load scripts synchronous in order specified
+				var scriptsToLoad = [
+					// load mqtt library
+					'js/mqttws31.js',
+					// functions for processing messages
+					'display/parentwb/processAllMqttMsg.js?ver=20201201',
+					// functions performing mqtt and start mqtt-service
+					'display/parentwb/setupMqttServices.js?ver=20201201',
+				];
 
-                scriptsToLoad.forEach(function(src) {
-                    var script = document.createElement('script');
-                    script.src = src;
-                    script.async = false;
-                    document.body.appendChild(script);
-                });
+				scriptsToLoad.forEach(function(src) {
+					var script = document.createElement('script');
+					script.src = src;
+					script.async = false;
+					document.body.appendChild(script);
+				});
 
-            });
-        </script>
-    </body>
+			});
+		</script>
+	</body>
 </html>

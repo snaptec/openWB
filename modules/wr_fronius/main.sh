@@ -1,19 +1,28 @@
 #!/bin/bash
-
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MYLOGFILE="$RAMDISKDIR/openWB.log"
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "wr_fronius: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
-	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_fronius.log"
 fi
 
-python3 /var/www/html/openWB/modules/wr_fronius/fronius.py "${wrfroniusip}" "${wrfronius2ip}" "${wrfroniusisgen24}" &>>$MYLOGFILE
+openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
+openwbDebugLog ${DMOD} 2 "WR Gen 24: ${wrfroniusisgen24}"
+openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
 
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+python3 /var/www/html/openWB/modules/wr_fronius/fronius.py "${wrfroniusip}" "${wrfroniusisgen24}" "${wrfronius2ip}" &>>$MYLOGFILE
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt

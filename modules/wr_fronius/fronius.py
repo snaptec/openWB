@@ -1,33 +1,31 @@
 #!/usr/bin/env python3
+
 from datetime import datetime, timezone
 import os
 import requests
 import sys
 
-wrfroniusip = str(sys.argv[1])
-wrfronius2ip = str(sys.argv[2])
-wrfroniusisgen24 = str(sys.argv[3])
-
 Debug = int(os.environ.get('debug'))
 myPid = str(os.getpid())
 
+wrfroniusip = str(sys.argv[1])
+wrfroniusisgen24 = int(sys.argv[2])
+wrfronius2ip = str(sys.argv[3])
 
 def DebugLog(level, message):
     if Debug >= level:
         local_time = datetime.now(timezone.utc).astimezone()
-        print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+        print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
 
-
-DebugLog(2, 'Fronius IP: ' + wrfroniusip)
-DebugLog(2, 'Fronius 2 IP: ' + wrfronius2ip)
-DebugLog(2, 'Fronius Gen24: ' + wrfroniusisgen24)
-
-params = (
-    ('Scope', 'System'),
-)
+DebugLog(2, 'WechselrichterFronius IP: ' + wrfroniusip)
+DebugLog(2, 'WechselrichterFronius Gen24: ' + wrfroniusisgen24)
+DebugLog(2, 'WechselrichterFronius 2 IP: ' + wrfronius2ip)
 
 # Auslesen eines Fronius Symo WR über die integrierte API des WR.
 # Rückgabewert ist die aktuelle Wirkleistung in [W].
+params = (
+    ('Scope', 'System'),
+)
 response = requests.get('http://'+wrfroniusip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
 pvwatttmp = response.json()
 DebugLog(1, 'response: ' + str(response))
@@ -63,6 +61,7 @@ if wrfroniusisgen24 == "0":
         DebugLog(1, str(e))
 
 if wrfronius2ip != "none":
+    params = (('Scope', 'System'),)
     response = requests.get('http://'+wrfronius2ip+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
     pv2watttmp = response.json()
     DebugLog(1, 'response: ' + str(response))
@@ -70,22 +69,23 @@ if wrfronius2ip != "none":
     # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
     pv2watt = int(pv2watttmp["Body"]["Data"]["Site"]["P_PV"] or 0)
     pvwatt = (pvwatt + pv2watt) * -1
-    DebugLog(2, 'pvwatt: ' + str(pvwatt))
     # Zur weiteren Verwendung im Webinterface
+    DebugLog(1, 'WR Leistung: ' + str(pvwatt))
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
     if wrfroniusisgen24 == "0":
         pv2kwh = int(pv2watttmp["Body"]["Data"]["Site"]["E_Total"])
         pvgkwh = pvkwh + pv2kwh
         if pvgkwh > 0:
+            DebugLog(1, 'WR Energie: ' + str(pvgkwh))
             with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
                 f.write(str(pvgkwh))
             with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
                 f.write('{:.3f}'.format(pvgkwh / 1000))
 else:
     pvwatt *= -1
-    DebugLog(2, 'pvwatt: ' + str(pvwatt))
     # Zur weiteren Verwendung im Webinterface
+    DebugLog(1, 'WR Leistung: ' + str(pvwatt))
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
     if wrfroniusisgen24 == "0" and pvkwh > 0:
@@ -100,9 +100,11 @@ else:
         else:
             with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "w") as f:
                 f.write(str(pvkwh_offset))
+        DebugLog(1, 'WR Energie: ' + str(pvkwh))
         with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
             f.write(str(pvkwh))
+        pvkwhk = round(pvkwh / 1000, 3)
         with open("/var/www/html/openWB/ramdisk/pvkwhk", "w") as f:
-            f.write('{:.3f}'.format(pvkwh / 1000))
+            f.write(str(pvkwhk))
 
 exit(0)

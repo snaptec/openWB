@@ -8,7 +8,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>Logging Jahresansicht</title>
-		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
+		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
@@ -115,8 +115,8 @@
 			$(document).ready(function(){
 				// GET expects date format Y like 2020
 				// get parsed date and format nicely for input field
-				const EARLIESTDATE = '01/01/2018';  // no earlier date choosable
-				// TODO: set earliestdate to first occurance of valid logging data
+				const EARLIESTDATE = '01/01/2018';  // no earlier date
+				// TODO: set earliest date to first occurrence of valid logging data
 				var LATESTDATE = '12/31/' + new Date().getFullYear();
 				var earliestDate = new Date(EARLIESTDATE);
 				var latestDate = new Date(LATESTDATE);

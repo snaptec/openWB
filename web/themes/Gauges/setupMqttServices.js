@@ -6,7 +6,7 @@
  */
 
 // these topics will be subscribed
-// index 1 represents flag if value was received, needed for preloaderbar progress
+// index 1 represents flag if value was received, needed for preloader progress bar
 // if flags are preset with 1 they are not counted on reload and page will show even if topic was not received
 var topicsToSubscribe = [
 	// Status Konfiguration Ladepunkt
@@ -50,7 +50,7 @@ var topicsToSubscribe = [
 	["openWB/global/awattar/MaxPriceForCharging", 1],
 	["openWB/global/awattar/ActualPriceForCharging", 1],
 	["openWB/global/awattar/pricelist", 1],
-	// graph topcis
+	// graph topics
 	//
 	["openWB/graph/lastlivevalues", 1],
 	["openWB/graph/1alllivevalues", 1],
@@ -254,7 +254,7 @@ var topicsToSubscribe = [
 	["openWB/hook/1/boolHookStatus", 1],
 	["openWB/hook/2/boolHookStatus", 1],
 	["openWB/hook/3/boolHookStatus", 1],
-	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
+	// Smart Home Devices, only configured is definitely set, other values only set if configured, assume they are there!
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],
@@ -339,7 +339,7 @@ var isSSL = location.protocol == 'https:'
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
-	//Gets Called if the connection has sucessfully been established
+	//Gets Called if the connection has been established
 	onSuccess: function () {
 		retries = 0;
 		topicsToSubscribe.forEach((topic) => {

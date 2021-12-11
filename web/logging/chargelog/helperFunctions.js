@@ -1,5 +1,5 @@
 /**
- * helper functions for ladelog-pages
+ * helper functions for lade log pages
  *
  * @author Lutz Bender
  */

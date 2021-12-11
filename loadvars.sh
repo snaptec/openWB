@@ -443,6 +443,14 @@ loadvars(){
 	llaltlp1=$llalt
 
 	#PV Leistung ermitteln
+	# pv1watt Leistung WR1
+	# pv2watt Leistung WR2
+	# pvwatt gesamtleistung WR1 und WR2
+	# pvallwatt gleich zu pvwatt
+	# pv Counter
+	# pvkwh zaehler wr1
+	# pv2kwh zaehler wr2
+	# pvallwh summe von pvkwh und pv2kwh (wird in cron5 und cronnighly verwendet)
 	if [[ $pvwattmodul != "none" ]]; then
 		pv1vorhanden="1"
 		echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
@@ -461,17 +469,19 @@ loadvars(){
 		pv2vorhanden="1"
 		echo 1 > /var/www/html/openWB/ramdisk/pv2vorhanden
 		pv2watt=$(modules/$pv2wattmodul/main.sh || true)
+		if ! [[ $pv2watt =~ $re ]] ; then
+			pv2watt="0"
+		fi
 		echo $pv2watt > ramdisk/pv2watt
 		pvwatt=$(( pvwatt + pv2watt ))
-		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
-		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
-		pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
-		#echo $pvallkwh > /var/www/html/openWB/ramdisk/pvkwh
-		echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
-		echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
 		if ! [[ $pvwatt =~ $re ]] ; then
 			pvwatt="0"
 		fi
+		echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
+		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
+		pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
+		echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
 	else
 		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 		pv2vorhanden="0"
@@ -496,17 +506,34 @@ loadvars(){
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
 			pv1vorhanden="1"
-
+			echo $pvwatt > ramdisk/pv1watt
 		fi
 		if [[ $speichermodul == "speicher_sonneneco" ]] ; then
 			pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 			echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
 			pv1vorhanden="1"
+			echo $pvwatt > ramdisk/pv1watt
 		fi
 	else
 		speichervorhanden="0"
 		echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 	fi
+	#addition pv nach Speicherauslesung
+	if [[ $pv2vorhanden == "1" ]]; then
+		pv1watt=$(</var/www/html/openWB/ramdisk/pv1watt)
+		pv2watt=$(</var/www/html/openWB/ramdisk/pv2watt)
+		pvwatt=$(( pv1watt + pv2watt ))
+		echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
+		echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+	else
+		if [[ $pv1vorhanden == "1" ]]; then
+			pv1watt=$(</var/www/html/openWB/ramdisk/pv1watt)
+			pvwatt=$pv1watt
+			echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
+			echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+		fi
+	fi
+
 	llphaset=3
 
 	#Ladeleistung ermitteln
@@ -1001,7 +1028,7 @@ loadvars(){
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_huawei" ]] || [[ $wattbezugmodul == "bezug_carlogavazzilan" ]]|| [[ $wattbezugmodul == "bezug_siemens" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_sungrow" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_huawei" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
 		usesimbezug=1
 	fi
 	if [[ $usesimbezug == "1" ]]; then
@@ -1055,12 +1082,13 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $wrfroniusisgen24 == "1" ]]; then
 		usesimpv=1
 	fi
-	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_siemens" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
 	if [[ $usesimpv == "1" ]]; then
 		ra='^-?[0-9]+$'
-		watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
+		#rechnen nur auf wr1
+		watt3=$(</var/www/html/openWB/ramdisk/pv1watt)
 		if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
 			importtemp=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
 		else
@@ -1092,8 +1120,55 @@ loadvars(){
 		fi
 		# sim pv end
 	fi
+	#simcount für wr2
+	usesimpv2=0
+	if [[ $pv2wattmodul == "wr2_shelly" ]]; then
+		usesimpv2=1
+	fi
+	if [[ $usesimpv2 == "1" ]]; then
+		ra='^-?[0-9]+$'
+		#rechnen auf wr2
+		watt4=$(</var/www/html/openWB/ramdisk/pv2watt)
+		if [[ -e /var/www/html/openWB/ramdisk/pv2watt0pos ]]; then
+			importtemp=$(</var/www/html/openWB/ramdisk/pv2watt0pos)
+		else
+			importtemp=$(timeout 4 mosquitto_sub -t openWB/pv/WH2Imported_temp)
+			if ! [[ $importtemp =~ $ra ]] ; then
+				importtemp="0"
+			fi
+			openwbDebugLog "MAIN" 0 "loadvars read openWB/pv/WH2Imported_temp from mosquito $importtemp"
+			echo $importtemp > /var/www/html/openWB/ramdisk/pv2watt0pos
+		fi
+		if [[ -e /var/www/html/openWB/ramdisk/pv2watt0neg ]]; then
+			exporttemp=$(</var/www/html/openWB/ramdisk/pv2watt0neg)
+		else
+			exporttemp=$(timeout 4 mosquitto_sub -t openWB/pv/WH2Export_temp)
+			if ! [[ $exporttemp =~ $ra ]] ; then
+				exporttemp="0"
+			fi
+			openwbDebugLog "MAIN" 0 "loadvars read openWB/pv/WH2Export_temp from mosquito $exporttemp"
+			echo $exporttemp > /var/www/html/openWB/ramdisk/pv2watt0neg
+		fi
+		sudo python /var/www/html/openWB/runs/simcount.py $watt4 pv2 pv2poskwh pv2kwh
+		importtemp1=$(</var/www/html/openWB/ramdisk/pv2watt0pos)
+		exporttemp1=$(</var/www/html/openWB/ramdisk/pv2watt0neg)
+		if [[ $importtemp !=  $importtemp1 ]]; then
+			mosquitto_pub -t openWB/pv/WH2Imported_temp -r -m "$importtemp1"
+		fi
+		if [[ $exporttemp !=  $exporttemp1 ]]; then
+			mosquitto_pub -t openWB/pv/WH2Export_temp -r -m "$exporttemp1"
+		fi
+		# sim pv2 end
+	fi
+	#addition Zaehler pv1 und pv2 nach Simcount
+	if [[ $pv2vorhanden == "1" ]]; then
+		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
+		pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
+		echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
+	fi
 
-	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_huawei" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_sungrow" ]] || [[ $speichermodul == "speicher_siemens" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_saxpower" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
+	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_huawei" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
