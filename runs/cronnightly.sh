@@ -41,7 +41,7 @@ is_configured_cp7=$lastmanagementlp7
 is_configured_cp8=$lastmanagementlp8
 
 # wenn Pushover oder Telegram aktiviert, Zählerstände senden
-if (( pushbenachrichtigung == "1" )) | (( telebenachrichtigung == "1" )) ; then
+if (( pushbenachrichtigung == "1" )) || (( telebenachrichtigung == "1" )) ; then
 	if [ $(date +%d) == "01" ] ; then
 		msg_header="Zählerstände zum $(date +%d.%m.%y:)"$'\n'
 		msg_text=""
