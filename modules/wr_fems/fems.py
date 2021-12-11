@@ -38,9 +38,9 @@ except:
     exit(1)
 
 regex = '^-?[0-9]+$'
-if re.search(regex, pvwatt) == None:
+if re.search(regex, str(pvwatt)) == None:
     pvwatt = "0"
-if re.search(regex, pvwh) != None:
+if re.search(regex, str(pvwh)) != None:
     if Debug >= 1:
         DebugLog('WR Energie: ' + str(pvwh))
     with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
