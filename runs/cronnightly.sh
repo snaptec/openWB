@@ -1,15 +1,15 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../ && pwd)
+OPENWBBASEDIR=$(cd $(dirname $0)/../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 
 . $OPENWBBASEDIR/loadconfig.sh
 
 echo "Start cron nightly @ $(date)"
 #logfile aufräumen
-echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
+echo "$(tail -1000 /var/log/openWB.log)" >/var/log/openWB.log
 # echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
-echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
+echo "reset" >/var/www/html/openWB/ramdisk/mqtt.log
 
 monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m)"
 
@@ -21,51 +21,49 @@ else
 	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
 fi
 
-ll1=$(<$RAMDISKDIR/llkwh)  # Zählerstand LP1
+ll1=$(<$RAMDISKDIR/llkwh)    # Zählerstand LP1
 ll2=$(<$RAMDISKDIR/llkwhs1)  # Zählerstand LP2
 ll3=$(<$RAMDISKDIR/llkwhs2)  # Zählerstand LP3
-ll4=$(<$RAMDISKDIR/llkwhlp4)  # Zählerstand LP4
-ll5=$(<$RAMDISKDIR/llkwhlp5)  # Zählerstand LP5
-ll6=$(<$RAMDISKDIR/llkwhlp6)  # Zählerstand LP6
-ll7=$(<$RAMDISKDIR/llkwhlp7)  # Zählerstand LP7
-ll8=$(<$RAMDISKDIR/llkwhlp8)  # Zählerstand LP8
-llg=$(<$RAMDISKDIR/llkwhges)  # Zählerstand Gesamt
+ll4=$(<$RAMDISKDIR/llkwhlp4) # Zählerstand LP4
+ll5=$(<$RAMDISKDIR/llkwhlp5) # Zählerstand LP5
+ll6=$(<$RAMDISKDIR/llkwhlp6) # Zählerstand LP6
+ll7=$(<$RAMDISKDIR/llkwhlp7) # Zählerstand LP7
+ll8=$(<$RAMDISKDIR/llkwhlp8) # Zählerstand LP8
+llg=$(<$RAMDISKDIR/llkwhges) # Zählerstand Gesamt
 
-is_configured_cp1="1"                 #Ladepunkt 1 ist immer konfiguriert
-is_configured_cp2=$lastmanagement     # LP2 konfiguriert?
-is_configured_cp3=$lastmanagements2   # LP3 konfiguriert?
-is_configured_cp4=$lastmanagementlp4  # LP4 konfiguriert?
-is_configured_cp5=$lastmanagementlp5  # ...
+is_configured_cp1="1"                #Ladepunkt 1 ist immer konfiguriert
+is_configured_cp2=$lastmanagement    # LP2 konfiguriert?
+is_configured_cp3=$lastmanagements2  # LP3 konfiguriert?
+is_configured_cp4=$lastmanagementlp4 # LP4 konfiguriert?
+is_configured_cp5=$lastmanagementlp5 # ...
 is_configured_cp6=$lastmanagementlp6
 is_configured_cp7=$lastmanagementlp7
 is_configured_cp8=$lastmanagementlp8
 
 # wenn Pushover oder Telegram aktiviert, Zählerstände senden
-if (( pushbenachrichtigung == "1" )) || (( telebenachrichtigung == "1" )) ; then
-	if [ $(date +%d) == "01" ] ; then
+if ((pushbenachrichtigung == "1")) || ((telebenachrichtigung == "1")); then
+	if [ $(date +%d) == "01" ]; then
 		msg_header="Zählerstände zum $(date +%d.%m.%y:)"$'\n'
 		msg_text=""
 		lp_count=0
-		for (( i=1; i<=8; i++ ))
-		do
+		for ((i = 1; i <= 8; i++)); do
 			var_name_energy="ll$i"
 			var_name_cpname="lp${i}name"
 			var_name_cp_configured="is_configured_cp${i}"
-			if (( ${!var_name_cp_configured} == "1" )) ; then
+			if ((${!var_name_cp_configured} == "1")); then
 				((lp_count++))
 				msg_text+="LP$i (${!var_name_cpname}): ${!var_name_energy} kWh"$'\n'
 			fi
 		done
-		if (( lp_count > 1 )) ; then
+		if ((lp_count > 1)); then
 			msg_text+="Gesamtzähler: $llg kWh"
 		fi
-		if (( pushbenachrichtigung == "1" )) ; then
+		if ((pushbenachrichtigung == "1")); then
 			$OPENWBBASEDIR/runs/pushover.sh "$msg_header$msg_text"
 		fi
-		if (( telebenachrichtigung == "1" )) ; then
+		if ((telebenachrichtigung == "1")); then
 			$OPENWBBASEDIR/runs/telegram.sh "$msg_header$msg_text"
 		fi
-		if
 	fi
 fi
 
@@ -97,7 +95,7 @@ d8=$(</var/www/html/openWB/ramdisk/device8_wh)
 d9=$(</var/www/html/openWB/ramdisk/device9_wh)
 d10="0"
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >>$monthlyfile.csv
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then
 	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
@@ -128,14 +126,14 @@ if [[ $verbraucher2_typ == "tasmota" ]]; then
 	fi
 fi
 
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version >/var/www/html/openWB/ramdisk/vnightly
+curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version >/var/www/html/openWB/ramdisk/vbeta
+curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version >/var/www/html/openWB/ramdisk/vstable
 
 if [[ -s /var/www/html/openWB/ramdisk/randomSleepValue ]]; then
 	randomSleep=$(</var/www/html/openWB/ramdisk/randomSleepValue)
 fi
-if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
+if [[ ! -z $randomSleep ]] && (($(echo "$randomSleep != 0" | bc) == 1)); then
 	echo $(date +%s): Deleting randomSleepValue to force new randomization
 	rm /var/www/html/openWB/ramdisk/randomSleepValue
 else
@@ -168,5 +166,5 @@ if [[ $evseconlp8 == "owbpro" ]]; then
 fi
 
 # monthly . csv updaten
-  echo "Trigger update of logfiles..."
-  python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
+echo "Trigger update of logfiles..."
+python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode A >>/var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
