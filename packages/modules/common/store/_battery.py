@@ -1,8 +1,8 @@
 from helpermodules import log, compatibility
 from modules.common.component_state import BatState
 from modules.common.store import ValueStore
+from modules.common.store.ramdisk import files
 from modules.common.store._broker import pub_to_broker
-from modules.common.store._ramdisk import ramdisk_write
 from modules.common.store._util import process_error
 
 
@@ -12,10 +12,10 @@ class BatteryValueStoreRamdisk(ValueStore[BatState]):
 
     def set(self, bat_state: BatState):
         try:
-            ramdisk_write("speicherleistung", bat_state.power, 0)
-            ramdisk_write("speichersoc", bat_state.soc, 0)
-            ramdisk_write("speicherikwh", bat_state.imported, 2)
-            ramdisk_write("speicherekwh", bat_state.exported, 2)
+            files.battery.power.write(bat_state.power)
+            files.battery.soc.write(bat_state.soc)
+            files.battery.energy_imported.write(bat_state.imported)
+            files.battery.energy_exported.write(bat_state.exported)
             log.MainLogger().info('BAT Watt: ' + str(bat_state.power))
             log.MainLogger().info('BAT Einspeisung: ' + str(bat_state.exported))
             log.MainLogger().info('BAT Bezug: ' + str(bat_state.imported))

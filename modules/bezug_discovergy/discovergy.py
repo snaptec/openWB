@@ -1,77 +1,47 @@
 #!/usr/bin/env python3
+import logging
 
 import requests
-import sys
-import traceback
 
-username = str(sys.argv[1])
-password = str(sys.argv[2])
-id = str(sys.argv[3])
+from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.log import setup_logging_stdout
+from modules.common.store.ramdisk import files
 
-def get_value(key, file, div, toint = False):
-    value = response["values"][key] / div
-    f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
-    if(toint):
-        value = int(value)
-    f.write(str(value))
-    f.close()
-    return value
+setup_logging_stdout()
+log = logging.getLogger("EVU Discovergy")
 
-params = (
-    ('meterId', id),
-)
 
-response = requests.get('https://api.discovergy.com/public/v1/last_reading', params=params, auth=(username, password), timeout = 3).json()
+def get_last_reading(user: str, password: str, meter_id: str):
+    response = requests.get(
+        "https://api.discovergy.com/public/v1/last_reading",
+        params={"meterId": meter_id},
+        auth=(user, password),
+        timeout=3
+    )
+    response.raise_for_status()
+    return response.json()
 
-get_value("energyOut", "einspeisungkwh", 10000000)
-get_value("energy", "bezugkwh", 10000000)
 
-try:
-    vl1=get_value("phase1Voltage", "evuv1", 1000)
-except KeyError:
-    vl1=0
-try:
-    vl2=get_value("phase2Voltage", "evuv2", 1000)
-except KeyError:
-    vl2=0
-try:
-    vl3=get_value("phase3Voltage", "evuv3", 1000)
-except KeyError:
-    vl3=0
+def write_readings_to_ramdisk(discovergy: dict):
+    values = discovergy["values"]
+    voltages = [values["voltage" + str(phase)] / 1000 for phase in range(1, 4)]
+    powers = [values["power" + str(phase)] / 1000 for phase in range(1, 4)]
+    power_total = values["power"] / 1000
 
-get_value("power", "wattbezug", 1000, True)
-try:
-    wattl1=get_value("phase1Power", "bezugw1", 1000)
-except KeyError:
-    wattl1=get_value("power1", "bezugw1", 1000)
-try:
-    wattl2=get_value("phase2Power", "bezugw2", 1000)
-except KeyError:
-    wattl2=get_value("power2", "bezugw2", 1000)
-try:
-    wattl3=get_value("phase3Power", "bezugw3", 1000)
-except KeyError:
-    wattl3=get_value("power3", "bezugw3", 1000)
+    files.evu.power_import.write(power_total)
+    files.evu.energy_export.write(values["energyOut"] / 10000000)
+    files.evu.energy_import.write(values["energy"] / 10000000)
+    files.evu.voltages.write(voltages)
+    files.evu.powers_import.write(powers)
+    files.evu.currents.write(powers[i] / voltages[i] for i in range(3))
+    log.debug("Update complete. Total Power: %g W", power_total)
 
-if vl1 > 150:
-    al1 = wattl1 / vl1 
-else:
-    al1 = wattl1 / 230
-if vl2 > 150:
-    al2 = wattl2 / vl2
-else:
-    al2 = wattl2 / 230
-if vl3 > 150:
-    al3 = wattl3 / vl3
-else:
-    al3 = wattl3 / 230
 
-f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(al1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(al2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(al3))
-f.close()
+def update(user: str, password: str, meter_id: str):
+    log.debug("Beginning update")
+    write_readings_to_ramdisk(get_last_reading(user, password, meter_id))
+    log.debug("Update completed successfully")
+
+
+if __name__ == '__main__':
+    run_using_positional_cli_args(update)
