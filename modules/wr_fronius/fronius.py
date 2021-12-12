@@ -18,7 +18,7 @@ def DebugLog(level, message):
         print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
 
 DebugLog(2, 'WechselrichterFronius IP: ' + wrfroniusip)
-DebugLog(2, 'WechselrichterFronius Gen24: ' + wrfroniusisgen24)
+DebugLog(2, 'WechselrichterFronius Gen24: ' + str(wrfroniusisgen24))
 DebugLog(2, 'WechselrichterFronius 2 IP: ' + wrfronius2ip)
 
 # Auslesen eines Fronius Symo WR über die integrierte API des WR.
@@ -33,7 +33,7 @@ DebugLog(2, 'response_pvwatt: ' + str(pvwatttmp))
 # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
 pvwatt = int(pvwatttmp["Body"]["Data"]["Site"]["P_PV"] or 0)
 
-if wrfroniusisgen24 == "0":
+if wrfroniusisgen24 == 0:
     pvkwh_start = 0
     pvkwh_offset = 0
     pvkwh = int(pvwatttmp["Body"]["Data"]["Site"]["E_Total"])
@@ -73,7 +73,7 @@ if wrfronius2ip != "none":
     DebugLog(1, 'WR Leistung: ' + str(pvwatt))
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
-    if wrfroniusisgen24 == "0":
+    if wrfroniusisgen24 == 0:
         pv2kwh = int(pv2watttmp["Body"]["Data"]["Site"]["E_Total"])
         pvgkwh = pvkwh + pv2kwh
         if pvgkwh > 0:
@@ -88,7 +88,7 @@ else:
     DebugLog(1, 'WR Leistung: ' + str(pvwatt))
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
-    if wrfroniusisgen24 == "0" and pvkwh > 0:
+    if wrfroniusisgen24 == 0 and pvkwh > 0:
         if pvday == 0 and pvkwh > pvkwh_start + pvkwh_offset:
             with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                 f.write(str(pvkwh))
