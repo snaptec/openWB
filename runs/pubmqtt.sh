@@ -236,6 +236,8 @@ mqttvar["lp/5/TimeRemaining"]=restzeitlp5
 mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
+mqttvar["system/CommitHash"]=currentCommitHash
+mqttvar["system/CommitBranches"]=currentCommitBranches
 
 if [[ "$standardSocketInstalled" == "1" ]]; then
 	mqttvar["config/get/slave/SocketActivated"]=socketActivated
