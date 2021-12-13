@@ -4,10 +4,12 @@ from datetime import datetime, timezone
 import os
 import json
 import requests
-import re
 import sys
 import time
 import traceback
+
+from modules.common.component_state import InverterState
+from modules.common.store import get_inverter_value_store
 
 Debug = int(os.environ.get('debug'))
 myPid = str(os.getpid())
@@ -81,17 +83,13 @@ if speicherpwloginneeded == 1:
 
 answer = requests.get("https://"+speicherpwip+"/api/meters/aggregates", cookies=cookie, verify=False, timeout=5).json()
 pvwatt=int(answer["solar"]["instant_power"])
+pvkwh=answer["solar"]["energy_exported"]
+
 if pvwatt > 5:
-	pvwatt=pvwatt*-1
+    pvwatt=pvwatt*-1
 if Debug >= 1:
     DebugLog('WR Leistung: ' + str(pvwatt))
-with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-    f.write(str(pvwatt))
-
-pvkwh=answer["solar"]["energy_exported"]
-if Debug >= 1:
     DebugLog('WR Energie: ' + str(pvkwh))
-with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
-    f.write(str(pvkwh))
 
-exit(0)
+
+get_inverter_value_store(1).set(InverterState(counter=pvkwh, power=pvwatt))
