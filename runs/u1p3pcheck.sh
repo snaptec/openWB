@@ -13,12 +13,9 @@ if [[ "$1" == "1" ]]; then
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "1"
 	fi
-<<<<<<< HEAD
 	if [[ $evsecon == "goe" ]]; then
 		sudo python runs/u1p3pgoe.py -a $goeiplp1 -p 1
 	fi
-=======
->>>>>>> 3764f02bcb4061392c2a6b174ccb2c63209aa699
 	if [[ $evsecon == "owbpro" ]]; then
 		curl -s -X POST --data "phasetarget=1" $owbpro1ip/connect.php
 	fi
@@ -33,12 +30,9 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep2ip -m "1"
 	fi
-<<<<<<< HEAD
 	if [[ $lastmanagement == 1 && $evsecons1 == "goe" ]]; then
 		sudo python runs/u1p3pgoe.py -a $goeiplp2 -p 1
 	fi
-=======
->>>>>>> 3764f02bcb4061392c2a6b174ccb2c63209aa699
 	if [[ $lastmanagement == 1 && $evsecons1 == "owbpro" ]]; then
 		curl -s -X POST --data "phasetarget=1" $owbpro2ip/connect.php
 	fi
