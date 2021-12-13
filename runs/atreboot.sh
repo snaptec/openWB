@@ -227,10 +227,10 @@ echo "timezone..."
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 
-if [ ! -f /home/pi/ssl_patched ]; then 
-	sudo apt-get update 
-	sudo apt-get -qq install -y openssl libcurl3 curl libgcrypt20 libgnutls30 libssl1.1 libcurl3-gnutls libssl1.0.2 php7.0-cli php7.0-gd php7.0-opcache php7.0 php7.0-common php7.0-json php7.0-readline php7.0-xml php7.0-curl libapache2-mod-php7.0 
-	touch /home/pi/ssl_patched 
+if [ ! -f /home/pi/ssl_patched ]; then
+	sudo apt-get update
+	sudo apt-get -qq install -y openssl libcurl3 curl libgcrypt20 libgnutls30 libssl1.1 libcurl3-gnutls libssl1.0.2 php7.0-cli php7.0-gd php7.0-opcache php7.0 php7.0-common php7.0-json php7.0-readline php7.0-xml php7.0-curl libapache2-mod-php7.0
+	touch /home/pi/ssl_patched
 fi
 
 
@@ -367,6 +367,10 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /v
 
 # update our local version
 sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /var/www/html/openWB/web/lastcommit
+# and record the current commit details
+commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
+echo $commitId > /var/www/html/openWB/ramdisk/currentCommitHash
+echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > /var/www/html/openWB/ramdisk/currentCommitBranches
 
 # update broker
 echo "update broker..."
