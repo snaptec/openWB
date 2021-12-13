@@ -84,6 +84,7 @@
 										<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v2">Series1/2 mit geeichtem Zähler Variante 2</option>
 										<option <?php if($evseconold == "buchse") echo "selected" ?> value="buchse">Buchse</option>
 										<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evseconold == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">Ladepunkt in Verbindung mit Standalone</option>
 										<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">Satellit </option>
 									</optgroup>
@@ -229,6 +230,21 @@
 								</div>
 							</div>
 						</div>
+						<div id="evseconowbpro" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="owbprolp1">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="chargep1ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="owbpro1ip" id="owbpro1ip" value="<?php echo $owbpro1ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<div id="evseconmod" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -2118,6 +2134,7 @@
 							hideSection('#openwbbuchse');
 							hideSection('#openwbdaemon');
 							hideSection('#evseconextopenwb');
+							hideSection('#evseconowbpro');
 							hideSection('#evseconmqtt');
 
 							if($('#evsecon').val() == 'modbusevse') {
@@ -2147,6 +2164,9 @@
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('#evseconextopenwb');
+							}
+							if($('#evsecon').val() == 'owbpro') {
+								showSection('#evseconowbpro');
 							}
 							if($('#evsecon').val() == 'daemon') {
 								showSection('#openwbdaemon');
@@ -2430,6 +2450,7 @@
 									<optgroup label="openWB">
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">Series1/2 Duo 1. Version</option>
 										<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">Series1/2 Duo (ab Herbst 2020)</option>
+										<option <?php if($evsecons1old == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evsecons1old == "daemon") echo "selected" ?> value="daemon">openWB Duo Daemon </option>
 										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
@@ -2472,6 +2493,21 @@
 								</div>
 							</div>
 						</div>
+						<div id="evseconowbprolp2" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="owbprolp2">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="owbpro2ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="owbpro2ip" id="owbpro2ip" value="<?php echo $owbpro2ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<div id="evsecondaemonlp2" class="hide">
 							<input type="hidden" name="ladeleistungs1modul" value="lldaemonlp2">
 							<div class="card-text alert alert-info">
@@ -4102,6 +4138,7 @@
 							hideSection('#openwb12s1v1');
 							hideSection('#openwb12s1v2');
 							hideSection('#evseconextopenwblp2');
+							hideSection('#evseconowbprolp2');
 							hideSection('#evsecondaemonlp2');
 							hideSection('#evseconipevselp2');
 							hideSection('#evseconmqtts1');
@@ -4142,6 +4179,10 @@
 							if($('#evsecons1').val() == 'extopenwb') {
 								showSection('#evseconextopenwblp2');
 							}
+							if($('#evsecons1').val() == 'owbpro') {
+								showSection('#evseconowbprolp2');
+							}
+
 							if($('#evsecons1').val() == 'daemon') {
 								showSection('#evsecondaemonlp2');
 							}
@@ -4418,6 +4459,7 @@
 								<select name="evsecons2" id="evsecons2" class="form-control">
 									<optgroup label="openWB">
 										<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if($evsecons2old == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">dritter Ladepunkt</option>
 										<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
 									</optgroup>
@@ -4461,6 +4503,21 @@
 								</div>
 							</div>
 						</div>
+						<div id="evseconowbprolp3" class="hide">
+							<input type="hidden" name="ladeleistungs2modul" value="owbprolp3">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="owbpro3ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="owbpro3ip" id="owbpro3ip" value="<?php echo $owbpro3ipold ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<div id="evseconipevselp3" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -4763,6 +4820,7 @@
 							hideSection('#evsecongoes2');
 							hideSection('#evseconipevselp3');
 							hideSection('#evseconextopenwblp3');
+							hideSection('#evseconowbprolp3');
 							hideSection('#evseconthirdeth');
 							hideSection('#evseconmqtts2');
 
@@ -4789,6 +4847,9 @@
 							}
 							if($('#evsecons2').val() == 'extopenwb') {
 								showSection('#evseconextopenwblp3');
+							}
+							if($('#evsecons2').val() == 'owbpro') {
+								showSection('#evseconowbprolp3');
 							}
 							if($('#evsecons2').val() == 'goe') {
 								showSection('#evsecongoes2');
@@ -4890,6 +4951,7 @@
 									<select name="evseconlp<?php echo $chargepointNum; ?>" id="evseconlp<?php echo $chargepointNum; ?>" class="form-control">
 										<optgroup label="openWB">
 											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
 										</optgroup>
 									</select>
@@ -4916,6 +4978,20 @@
 									</div>
 								</div>
 							</div>
+							<div id="evseconowbprolp<?php echo $chargepointNum; ?>" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="owbpro<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">IP Adresse</label>
+										<div class="col">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="owbpro<?php echo $chargepointNum; ?>ip" id="owbpro<?php echo $chargepointNum; ?>ip" value="<?php echo ${'owbpro'.$chargepointNum.'ipold'} ?>">
+											<span class="form-text small">
+												Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
 							<div id="evseconipevselp<?php echo $chargepointNum; ?>" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -4957,7 +5033,10 @@
 							function display_lp<?php echo $chargepointNum; ?> () {
 								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>');
 								hideSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
-
+								hideSection('#evseconowbprolp<?php echo $chargepointNum; ?>');
+								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'owbpro') {
+									showSection('#evseconowbprolp<?php echo $chargepointNum; ?>');
+								}
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'extopenwb') {
 									showSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 								}
