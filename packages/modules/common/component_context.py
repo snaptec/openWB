@@ -31,7 +31,7 @@ class MultiComponentUpdateContext:
                 component.update()
     """
 
-    def __init__(self, device_components: list):
+    def __init__(self, device_components: dict):
         self.__device_components = device_components
 
     def __enter__(self):
@@ -40,5 +40,5 @@ class MultiComponentUpdateContext:
     def __exit__(self, exception_type, exception, exception_traceback) -> bool:
         fault_state = FaultState.from_exception(exception)
         for component in self.__device_components:
-            fault_state.store_error(component.component_info)
+            fault_state.store_error(self.__device_components[component].component_info)
         return True
