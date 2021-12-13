@@ -32,6 +32,7 @@ def update_solar_edge(client: ModbusClient,
 
     total_energy = 0
     total_power = 0
+    total_currents = [0, 0, 0]
 
     for slave_id in slave_ids:
         # 40083 = AC Power value (Watt), 40084 = AC Power scale factor
@@ -39,7 +40,14 @@ def update_solar_edge(client: ModbusClient,
         total_power -= power_base * math.pow(10, power_scale)
         # 40093 = AC Lifetime Energy production (Watt hours)
         total_energy += client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave_id)
-
+        # 40072/40073/40074 = AC Phase A/B/C Current value (Amps)
+        # 40075 = AC Current scale factor
+        currents = client.read_holding_registers(
+            40072, [ModbusDataType.UINT_16] * 3 + [ModbusDataType.INT_16], unit=slave_id
+        )
+        currents_scale = math.pow(10, currents[3])
+        for i in range(3):
+            total_currents[i] += currents[i] * currents_scale
     if extprodakt == 1:
         # 40380 = "Meter 2/Total Real Power (sum of active phases)" (Watt)
         total_power -= client.read_holding_registers(40380, ModbusDataType.INT_16, unit=slave_ids[0])
@@ -48,7 +56,9 @@ def update_solar_edge(client: ModbusClient,
     else:
         total_power -= sum(storage_powers)
 
-    get_inverter_value_store(1).set(InverterState(counter=total_energy, power=total_power))
+    get_inverter_value_store(1).set(InverterState(
+        counter=total_energy, power=total_power, currents=total_currents
+    ))
 
 
 def update_solar_edge_cli(ipaddress: str,
