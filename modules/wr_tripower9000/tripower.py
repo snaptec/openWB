@@ -28,11 +28,11 @@ if wrsmawebbox == 1:
     headers = {'Content-Type': 'application/json', }
     data = {'RPC': '{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}'}
     response = requests.post('http://'+tri9000ip+'/rpc', headers=headers, data=data, timeout=3).json()
-    rekwh = '^[-+]?[0-9]+\.?[0-9]*$'
+    rekwh = '^[-+]?[0-9]+.?[0-9]*$'
     try:
         pvwatt = int(response["result"]["overview"][0]["value"])
         pvwatt = pvwatt * -1
-        if re.search(rekwh, pvwatt):
+        if re.search(rekwh, str(pvwatt)):
             if Debug >= 1:
                 DebugLog('WR Leistung: ' + str(pvwatt))
             with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
@@ -44,7 +44,7 @@ if wrsmawebbox == 1:
     try:
         pvkwh = response["result"]["overview"][2]["value"]
         pvwh = int(pvkwh) * 1000
-        if re.search(rekwh, pvwh) != None:
+        if re.search(rekwh, str(pvwh)) != None:
             if Debug >= 1:
                 DebugLog('WR Energie: ' + str(pvkwh))
             with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
@@ -58,7 +58,7 @@ else:
     counter = 0
 
     # Länge von sys.argv = Dateiname + Webbox + IP-Adressen
-    for i in len(sys.argv)-2:
+    for i in range(len(sys.argv)-2):
         try:
             ipaddress = str(sys.argv[i+2])
             if Debug >= 2:
