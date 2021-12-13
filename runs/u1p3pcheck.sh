@@ -15,6 +15,7 @@ if [[ "$1" == "1" ]]; then
 	fi
 	if [[ $evsecon == "goe" ]]; then
 		sudo python runs/u1p3pgoe.py -a $goeiplp1 -p 1
+	fi
 	if [[ $evsecon == "owbpro" ]]; then
 		curl -s -X POST --data "phasetarget=1" $owbpro1ip/connect.php
 	fi
