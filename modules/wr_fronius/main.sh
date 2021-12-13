@@ -19,7 +19,7 @@ openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
 openwbDebugLog ${DMOD} 2 "WR Gen 24: ${wrfroniusisgen24}"
 openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
 
-python3 /var/www/html/openWB/modules/wr_fronius/fronius.py "${wrfroniusip}" "${wrfroniusisgen24}" "${wrfronius2ip}" >>$MYLOGFILE 2>&1
+python3 /var/www/html/openWB/modules/wr_fronius/fronius.py "${wrfroniusip}" "${wrfroniusisgen24}" "${wrfronius2ip}" &>>$MYLOGFILE
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
