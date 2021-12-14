@@ -77,7 +77,6 @@
 		#thegraph>div {
 			height: 350px;
 		}
-
 	</style>
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.6.0.min.js"></script>
@@ -236,7 +235,8 @@
 				<figure id="energymeter" class="wb-subwidget mb-0"></figure>
 			</div>
 		</div>
-		<div class="row py-0">
+
+		<div class="row py-0 px-0">
 			<!-- Ladepunkte (chargePointList) -->
 			<div class="wb-widget col-md-6 p-2 m-1">
 				<h3 class="mt-0">Ladepunkte</h3>
@@ -246,9 +246,67 @@
 					</div>
 					<div id="socSelector"></div>
 					<div id="chargePointTable"></div>
+				</div>
+			</div>
+
+			<!-- Speicher (batteryList) -->
+			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
+				<h3>Speicher</h3>
+				<div class="wb-subwidget pb-3 ">
+					<div id="batteryStatus"></div>
+				</div>
+			</div>
+
+			<!-- Smart Home (smartHomeList) -->
+			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
+				<h3>Geräte</h3>
+				<div class="wb-subwidget pb-3 ">
+					<div id="smartHomeTable"></div>
+				</div>
+			</div>
+
+			<!-- Preisbasiertes Laden -->
+			<div class="wb-widget col-md-4 p-2 m-1 priceConfiguration" id="priceConfigWidget">
+				<h3 class="mt-0">Preisbasiertes Laden</h3>
+				<div class="pb-3 wb-subwidget">
+					<div class="row p-0 m-0 ">
+						<div class="col-12 pricechartColumn p-0 m-0">
+							<figure id="priceChart"></figure>
+						</div>
+					</div>
+					<div class="container-fluid m-0 p-0">
+
+
+						<div class="row vaRow m-0 p-0">
+							<div class="col-2 m-0 p-0">
+								<button type="button" class="btn btn-secondary priceLess"><i
+										class="far fa-minus-square"></i></button>
+							</div>
+							<div class="col-8">
+								<input type="range" class="form-control-range maxPriceInput" id="maxPrice" min="-25" max="95" step="0.1"
+									value="0" data-initialized="0">
+							</div>
+							<div class="col-2 m-0 p-0 text-right">
+								<button type="button" class="btn btn-secondary priceMore"><i
+										class="far fa-plus-square"></i></button>
+							</div>
+						</div>
+						<div class="form-row vaRow p-0 m-0">
+							<div class="col m-0 p-0 tablecell maxPrice">
+								<label for="maxPrice" class=" col-form-label p-0 m-0 ">Max. Preis: </label>
+								<label for="maxPrice" class=" labelMaxPrice col-form-label p-0 m-0" data-suffix="ct"></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Ladepunkt Konfig -->
+			<div class="wb-widget col-md p-2 m-1" id="chargePointConfigWidget">
+				<h3 class="mt-0">Einstellungen Ladepunkte</h3>
+				<div class="pb-3 wb-subwidget">
 					<!-- depending on charge mode show options -->
 					<form id="minundpvladenEinstellungen" class="hide">
-						<hr class="border-secondary">
 						<div class="row justify-content-center">
 							<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 						</div>
@@ -264,42 +322,6 @@
 					</form>
 
 					<form id="sofortladenEinstellungen" class="hide">
-					
-					 <!-- price based charging -->
-						<div class="priceConfiguration">
-							<hr class="border-secondary">
-							<div class="row justify-content-center">
-								<h4 class="text-center">Preisbasiertes Laden</h4>
-							</div>
-							<div class="row p-0 m-0 ">
-								<div class="col-12 pricechartColumn p-0 m-0">
-									<figure id="priceChart"></figure>
-								</div>
-							</div>
-							<div class="form-row vaRow p-0 m-0">
-								<div class="col m-0 p-0 tablecell maxPrice">
-									<label for="maxPrice" class=" col-form-label p-0 m-0 ">Max. Preis: </label>
-									<label for="maxPrice" class=" labelMaxPrice col-form-label p-0 m-0" data-suffix="ct"></label>
-								</div>
-
-							</div>
-							<div class="row justify-content-center regularTextSize vaRow m-2">
-								<div class="col-2">
-									<button type="button" class="btn btn-secondary mr-3 priceLess"><i
-											class="far fa-minus-square"></i></button>
-								</div>
-								<div class="col-8">
-									<input type="range" class="form-control-range maxPriceInput" id="maxPrice" min="-25" max="95"
-										step="0.1" value="0" data-initialized="0">
-								</div>
-								<div class="col-2">
-									<button type="button" class="btn btn-secondary ml-3 priceMore"><i
-											class="far fa-plus-square"></i></button>
-								</div>
-							</div>
-						</div>
-
-						<hr class="border-secondary">
 						<div class="row justify-content-center">
 							<h4 class="text-center">Sofortladen Stromstärke</h4>
 						</div>
@@ -370,7 +392,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="1">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -420,7 +441,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="2">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -470,7 +490,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="3">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -509,7 +528,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="4">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -548,7 +566,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="5">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -587,7 +604,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="6">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -626,7 +642,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="7">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -665,7 +680,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="8">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -704,27 +718,8 @@
 						</div>
 
 					</form>
-					<br>
 				</div>
 			</div>
-
-
-
-			<!-- Speicher (batteryList) -->
-			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
-				<h3>Speicher</h3>
-				<div class="wb-subwidget pb-3 ">
-					<div id="batteryStatus"></div>
-				</div>
-
-			</div><!-- Smart Home (smartHomeList) -->
-			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
-				<h3>Geräte</h3>
-				<div class="wb-subwidget pb-3 ">
-					<div id="smartHomeTable"></div>
-				</div>
-			</div>
-
 
 		</div>
 	</div>
@@ -1065,7 +1060,7 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
-				
+
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt

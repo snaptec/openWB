@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from datetime import datetime, timezone
 import os
+import re
 import requests
 import sys
 import traceback
@@ -12,9 +13,20 @@ Debug = int(os.environ.get('debug'))
 myPid = str(os.getpid())
 
 
-def DebugLog(message):
+def DebugLog(message: str) -> None:
     local_time = datetime.now(timezone.utc).astimezone()
     print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+
+ra = '^-?[0-9]+(\.[0-9]+)?$' # re for valid float as str
+
+def check_write_value(valueString: str, file: str, fallback: str = "0") -> None:
+    if re.search(ra, valueString) == None:
+        DebugLog('invalid valueString: ' + valueString + ' setting fallback of \'' + fallback + '\'')
+        valueString = fallback
+    if Debug >= 1:
+        DebugLog(file+': ' + valueString)
+    with open("/var/www/html/openWB/ramdisk/" + file, "w") as f:
+        f.write(valueString)
 
 
 if Debug >= 2:
@@ -23,15 +35,50 @@ if Debug >= 2:
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems
 if sonnenecoalternativ == 2:
-    evu_bezug = int(requests.get('http://' + sonnenecoip + ':7979/rest/devices/battery/M39', timeout=5).text)
-    evu_einspeisung = int(requests.get('http://' + sonnenecoip + ':7979/rest/devices/battery/M38', timeout=5).text)
+    baseurl = 'http://' + sonnenecoip + ':7979/rest/devices/battery/'
+    evu_bezug = int(requests.get(baseurl + 'M39', timeout=5).text)
+    evu_einspeisung = int(requests.get(baseurl + 'M38', timeout=5).text)
     wattbezug = evu_bezug - evu_einspeisung
-
-    with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-        f.write(str(wattbezug))
+    check_write_value(str(wattbezug), "wattbezug")
 else:
     if sonnenecoalternativ == 1:
         speicherantwort = requests.get("http://"+sonnenecoip+"/api/v1/status", timeout=5).json()
+        '''
+        example data:
+        {
+            "Apparent_output": 225,
+            "BackupBuffer": "0",
+            "BatteryCharging": false,
+            "BatteryDischarging": false,
+            "Consumption_Avg": 2114,
+            "Consumption_W": 2101,
+            "Fac": 49.97200393676758,
+            "FlowConsumptionBattery": false,
+            "FlowConsumptionGrid": true,
+            "FlowConsumptionProduction": false,
+            "FlowGridBattery": false,
+            "FlowProductionBattery": false,
+            "FlowProductionGrid": false,
+            "GridFeedIn_W": -2106,
+            "IsSystemInstalled": 1,
+            "OperatingMode": "2",
+            "Pac_total_W": -5,
+            "Production_W": 0,
+            "RSOC": 6,
+            "RemainingCapacity_Wh": 2377,
+            "Sac1": 75,
+            "Sac2": 75,
+            "Sac3": 75,
+            "SystemStatus": "OnGrid",
+            "Timestamp": "2021-12-13 07:54:48",
+            "USOC": 0,
+            "Uac": 231,
+            "Ubat": 48,
+            "dischargeNotAllowed": true,
+            "generator_autostart": false,
+            "NVM_REINIT_STATUS": 0
+        }
+        '''
         try:
             wattbezug = speicherantwort["GridFeedIn_W"]
         except:
@@ -73,41 +120,23 @@ else:
     # Schreibe alle Werte in die Ramdisk.
     if Debug >= 1:
         DebugLog('Leistung: ' + str(wattbezug))
-    with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-        f.write(str(wattbezug))
-    with open("/var/www/html/openWB/ramdisk/evuv1", "w") as f:
-        f.write(str(evuv1))
-    with open("/var/www/html/openWB/ramdisk/evuv2", "w") as f:
-        f.write(str(evuv2))
-    with open("/var/www/html/openWB/ramdisk/evuv3", "w") as f:
-        f.write(str(evuv3))
-    with open("/var/www/html/openWB/ramdisk/bezugw1", "w") as f:
-        f.write(str(bezugw1))
-    with open("/var/www/html/openWB/ramdisk/bezugw2", "w") as f:
-        f.write(str(bezugw2))
-    with open("/var/www/html/openWB/ramdisk/bezugw3", "w") as f:
-        f.write(str(bezugw3))
-    with open("/var/www/html/openWB/ramdisk/bezuga1", "w") as f:
-        f.write(str(bezuga1))
-    with open("/var/www/html/openWB/ramdisk/bezuga2", "w") as f:
-        f.write(str(bezuga2))
-    with open("/var/www/html/openWB/ramdisk/bezuga3", "w") as f:
-        f.write(str(bezuga3))
-    with open("/var/www/html/openWB/ramdisk/evuhz", "w") as f:
-        f.write(str(evuhz))
-    with open("/var/www/html/openWB/ramdisk/evupf1", "w") as f:
-        f.write(str(evupf1))
-    with open("/var/www/html/openWB/ramdisk/evupf2", "w") as f:
-        f.write(str(evupf2))
-    with open("/var/www/html/openWB/ramdisk/evupf3", "w") as f:
-        f.write(str(evupf3))
-    if Debug >= 1:
         DebugLog('Import: ' + str(ikwh))
-    with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
-        f.write(str(ikwh))
-    if Debug >= 1:
         DebugLog('Export: ' + str(ekwh))
-    with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
-        f.write(str(ekwh))
+    check_write_value(str(wattbezug), "wattbezug")
+    check_write_value(str(evuv1), "evuv1")
+    check_write_value(str(evuv2), "evuv2")
+    check_write_value(str(evuv3), "evuv3")
+    check_write_value(str(bezugw1), "bezugw1")
+    check_write_value(str(bezugw2), "bezugw2")
+    check_write_value(str(bezugw3), "bezugw3")
+    check_write_value(str(bezuga1), "bezuga1")
+    check_write_value(str(bezuga2), "bezuga2")
+    check_write_value(str(bezuga3), "bezuga3")
+    check_write_value(str(evuhz), "evuhz")
+    check_write_value(str(evupf1), "evupf1")
+    check_write_value(str(evupf2), "evupf2")
+    check_write_value(str(evupf3), "evupf3")
+    check_write_value(str(ikwh), "bezugkwh")
+    check_write_value(str(ekwh), "einspeisungkwh")
 
 exit(0)
