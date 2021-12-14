@@ -21,11 +21,11 @@ def get_value(url, file):
             value = response.text.replace("\n", "")
             with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
                 f.write(str(value))
+            if Debug >= 1:
+                DebugLog(file+': ' + str(value))                
     except:
         traceback.print_exc()
         exit(1)
-    if Debug >= 1:
-        DebugLog(file+': ' + str(wattbezug))
 
 
 bezug_http_w_url = str(sys.argv[1])
