@@ -10,7 +10,7 @@ echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 mosquitto_pub -t "openWB/global/strLastmanagementActive" -r -m "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist"
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
-chmod 777 var/www/html/openWB/ramdisk/mqttlastregelungaktiv
+chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 
 if [[ "$releasetrain" == "stable" ]]; then
 	train=stable17

@@ -122,9 +122,9 @@ if [[ $verbraucher2_typ == "tasmota" ]]; then
 	fi
 fi
 
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
 if [[ -s /var/www/html/openWB/ramdisk/randomSleepValue ]]; then
 	randomSleep=$(</var/www/html/openWB/ramdisk/randomSleepValue)
@@ -134,6 +134,31 @@ if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
 	rm /var/www/html/openWB/ramdisk/randomSleepValue
 else
 	echo "Not deleting randomSleepValue of \"$randomSleep\""
+fi
+#set heartbeat openWB Pro
+if [[ $evsecon == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro1ip/connect.php
+fi
+if [[ $evsecons1 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro2ip/connect.php
+fi
+if [[ $evsecons2 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro3ip/connect.php
+fi
+if [[ $evseconlp4 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro4ip/connect.php
+fi
+if [[ $evseconlp5 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro5ip/connect.php
+fi
+if [[ $evseconlp6 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro6ip/connect.php
+fi
+if [[ $evseconlp7 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro7ip/connect.php
+fi
+if [[ $evseconlp8 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro8ip/connect.php
 fi
 
 # monthly . csv updaten
