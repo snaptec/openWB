@@ -299,7 +299,7 @@ fi
 echo "version..."
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
-curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
+curl --connect-timeout 10 -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
 
 # all done, remove warning in display
 echo "clear warning..."
@@ -361,9 +361,9 @@ ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
 echo "load versions..."
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
 # update our local version
 sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /var/www/html/openWB/web/lastcommit
