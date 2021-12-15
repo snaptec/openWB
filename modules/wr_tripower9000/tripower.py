@@ -8,6 +8,9 @@ import struct
 import traceback
 from pymodbus.client.sync import ModbusTcpClient
 
+from modules.common.component_state import InverterState
+from modules.common.store import get_inverter_value_store
+
 Debug = int(os.environ.get('debug'))
 myPid = str(os.getpid())
 
@@ -87,15 +90,6 @@ else:
     power = power * -1
     if Debug >= 1:
         DebugLog('WR Leistung: ' + str(power))
-    f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-    f.write(str(power))
-    f.close()
-
-    if Debug >= 1:
         DebugLog('WR Energie: ' + str(counter))
-    f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-    f.write(str(counter))
-    f.close()
 
-
-exit(0)
+    get_inverter_value_store(1).set(InverterState(counter=counter, power=power))
