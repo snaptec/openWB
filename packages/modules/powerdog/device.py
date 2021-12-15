@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import sys
-from typing import Dict, List, Union
+from typing import Dict, Union, Optional
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
@@ -86,14 +86,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
-    component_type = argv[1]
-    ip_address = argv[2]
-    try:
-        num = int(argv[3])
-    except IndexError:
-        num = None
-
+def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> None:
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)
@@ -120,6 +113,6 @@ def read_legacy(argv: List[str]) -> None:
 
 if __name__ == "__main__":
     try:
-        read_legacy(sys.argv)
+        run_using_positional_cli_args(read_legacy)
     except Exception:
         log.MainLogger().exception("Fehler im Powerdog Skript")
