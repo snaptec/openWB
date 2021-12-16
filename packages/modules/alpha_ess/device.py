@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
-import sys
-from typing import Dict, List, Union
+from typing import Dict, Union, Optional
 
 from helpermodules import log
-from modules.common import modbus
-from modules.common.abstract_device import AbstractDevice
-from modules.common.component_context import SingleComponentUpdateContext
+from helpermodules.cli import run_using_positional_cli_args
 from modules.alpha_ess import bat
 from modules.alpha_ess import counter
 from modules.alpha_ess import inverter
+from modules.common import modbus
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_context import SingleComponentUpdateContext
 
 
 def get_default_config() -> dict:
@@ -64,19 +64,12 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
+def read_legacy(component_type: str, version: int, num: Optional[int]) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
         "inverter": inverter
     }
-    component_type = argv[1]
-    version = int(argv[2])
-    try:
-        num = int(argv[3])
-    except IndexError:
-        num = None
-
     device_config = get_default_config()
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
@@ -97,6 +90,6 @@ def read_legacy(argv: List[str]) -> None:
 
 if __name__ == "__main__":
     try:
-        read_legacy(sys.argv)
+        run_using_positional_cli_args(read_legacy)
     except Exception:
         log.MainLogger().exception("Fehler im Alpha Ess Skript")

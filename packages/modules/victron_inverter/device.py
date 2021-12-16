@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import sys
-from typing import Dict, List
+from typing import Dict, Optional
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.victron_inverter import inverter
@@ -54,19 +54,10 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
+def read_legacy(component_type: str, ip_address: str, modbus_id: str, mppt: str, num: Optional[int]) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "inverter": inverter
     }
-    component_type = argv[1]
-    ip_address = argv[2]
-    modbus_id = argv[3]
-    mppt = argv[4]
-    try:
-        num = int(argv[5])
-    except IndexError:
-        num = None
-
     device_config = get_default_config()
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
@@ -91,6 +82,6 @@ def read_legacy(argv: List[str]) -> None:
 
 if __name__ == "__main__":
     try:
-        read_legacy(sys.argv)
+        run_using_positional_cli_args(read_legacy)
     except Exception:
         log.MainLogger().exception("Fehler im Victron Skript")
