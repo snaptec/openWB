@@ -8,8 +8,8 @@ import sys
 import time
 import traceback
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+Debug = int(os.environ.get('debug'))
+myPid = str(os.getpid())
 
 base_dir = str(sys.argv[1])
 speicherpwloginneeded = int(sys.argv[2])
@@ -46,11 +46,12 @@ def get_value(answer, key, file):
     if Debug >= 1:
         DebugLog(file+': ' + str(value))
 
+
 if Debug >= 2:
     DebugLog('Powerwall IP: ' + speicherpwip)
     DebugLog('Powerwall User: ' + speicherpwuser)
     DebugLog('Powerwall Passwort: ' + speicherpwpass)
-    DebugLog('Powerwall Login: ' + speicherpwloginneeded)
+    DebugLog('Powerwall Login: ' + str(speicherpwloginneeded))
 
 if speicherpwloginneeded == 1:
     # delete our login cookie after some time as it may be invalid
@@ -64,11 +65,12 @@ if speicherpwloginneeded == 1:
     if os.path.isfile(cookie_file) == False:
         # log in and save cookie for later use
         DebugLog("Trying to authenticate...")
-        headers = {'Content-Type': 'application/json',}
-        data = {"username":"customer","password":speicherpwpass, "email":speicherpwuser,"force_sm_off":False}
+        headers = {'Content-Type': 'application/json', }
+        data = {"username": "customer", "password": speicherpwpass, "email": speicherpwuser, "force_sm_off": False}
         data = json.dumps(data)
         try:
-            response = requests.post('https://'+speicherpwip+'/api/login/Basic', headers=headers, data=data, verify=False, timeout=5)
+            response = requests.post('https://'+speicherpwip+'/api/login/Basic',
+                                     headers=headers, data=data, verify=False, timeout=5)
         except requests.exceptions.RequestException as e:
             DebugLog("Something went wrong. RequestException: "+str(e))
             sys.exit(0)
@@ -83,9 +85,9 @@ if speicherpwloginneeded == 1:
             # cookie = f.read()
             cookie = requests.utils.cookiejar_from_dict(f.read())
 
-answer = requests.get("https://"+speicherpwip+"/api/meters/aggregates", cookies = cookie, verify=False, timeout=5).json()
+answer = requests.get("https://"+speicherpwip+"/api/meters/aggregates", cookies=cookie, verify=False, timeout=5).json()
 try:
-    evuwatt=int(answer["site"]["instant_power"])
+    evuwatt = int(answer["site"]["instant_power"])
 except:
     traceback.print_exc()
     exit(1)
@@ -95,7 +97,7 @@ with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
     f.write(str(evuwatt))
 
 try:
-    evuikwh=answer["site"]["energy_imported"]
+    evuikwh = answer["site"]["energy_imported"]
 except:
     traceback.print_exc()
     exit(1)
@@ -105,7 +107,7 @@ with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
     f.write(str(evuikwh))
 
 try:
-    evuekwh=answer["site"]["energy_exported"]
+    evuekwh = answer["site"]["energy_exported"]
 except:
     traceback.print_exc()
     exit(1)
@@ -114,9 +116,9 @@ if Debug >= 1:
 with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
     f.write(str(evuekwh))
 
-answer = requests.get("https://"+speicherpwip+"/api/status", cookies = cookie, verify=False, timeout=5).json()
+answer = requests.get("https://"+speicherpwip+"/api/status", cookies=cookie, verify=False, timeout=5).json()
 try:
-    powerwallfirmwareversion=int(answer["version"])
+    powerwallfirmwareversion = int(answer["version"])
 except:
     traceback.print_exc()
     exit(1)
@@ -126,7 +128,7 @@ with open("/var/www/html/openWB/ramdisk/powerwallfirmwareversion", "w") as f:
     f.write(str(powerwallfirmwareversion))
 
 if powerwallfirmwareversion >= 20490:
-    answer = requests.get("https://"+speicherpwip+"/api/meters/site", cookies = cookie, verify=False, timeout=5).json()
+    answer = requests.get("https://"+speicherpwip+"/api/meters/site", cookies=cookie, verify=False, timeout=5).json()
     get_value(answer, "v_l1n", "evuv1")
     get_value(answer, "v_l2n", "evuv2")
     get_value(answer, "v_l3n", "evuv3")

@@ -19,9 +19,10 @@ wr_piko2_url = str(sys.argv[2])
 wr_piko2_user = str(sys.argv[3])
 wr_piko2_pass = str(sys.argv[4])
 
+
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
 
 
 if Debug >= 2:
@@ -33,6 +34,8 @@ if num == 1:
     file_ext = ""
 elif num == 2:
     file_ext = "2"
+else:
+    raise Exception("unbekannte Modul-ID")
 
 # Daten einlesen
 response = requests.get(wr_piko2_url, verify=False, auth=(wr_piko2_user, wr_piko2_pass), timeout=10)
@@ -51,12 +54,12 @@ if HTML != "":             # check if valid content of request
             counter = counter + 1
             # PART2=${LINE##*F\">}   # strip before number
             # VALUE=${PART2%%<*}   # strip after number
-            VALUE = re.search('^[0-9]+\.?[0-9]*$', LINE).group()
+            VALUE = re.search('^[0-9]+.?[0-9]*$', LINE).group()
 
             if counter == 1:   # pvwatt
                 if VALUE == "xxx":    # off-value equals zero
                     VALUE = "0"
-                regex = '^[-+]?[0-9]+\.?[0-9]*$'
+                regex = '^[-+]?[0-9]+.?[0-9]*$'
                 if re.search(regex, VALUE) == None:   # check for valid number
                     with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"watt", "r") as f:
                         VALUE = f.read()

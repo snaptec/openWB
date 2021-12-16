@@ -46,7 +46,7 @@ if Debug >= 2:
     DebugLog('Powerwall IP: ' + speicherpwip)
     DebugLog('Powerwall User: ' + speicherpwuser)
     DebugLog('Powerwall Passwort: ' + speicherpwpass)
-    DebugLog('Powerwall Login: ' + speicherpwloginneeded)
+    DebugLog('Powerwall Login: ' + str(speicherpwloginneeded))
 
 if speicherpwloginneeded == 1:
     # delete our login cookie after some time as it may be invalid

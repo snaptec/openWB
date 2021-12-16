@@ -29,7 +29,6 @@ if Debug >= 2:
     DebugLog('PV Kostal Steca IP:' + pv2ip)
 
 
-
 # call for XML file and parse it for current PV power
 response = requests.get("http://"+pv2ip+"/measurements.xml", timeout=5).text
 if Debug >= 1:
@@ -41,7 +40,7 @@ power_kostal_piko_MP = int(float(power_kostal_piko_MP))
 
 # allow only numbers
 regex = '^-?[0-9]+$'
-if re.search(regex, power_kostal_piko_MP) == None:
+if re.search(regex, str(power_kostal_piko_MP)) == None:
     power_kostal_piko_MP = "0"
 
 DebugLog("'PVWatt: "+str(power_kostal_piko_MP)+"'")
@@ -54,7 +53,7 @@ if Debug > 1:
 response = requests.get("http://"+pv2ip+"/yields.xml", timeout=5).text
 pvkwh_kostal_piko_MP = ET.fromstring(response).find("YieldValue").get("Value")
 
-if re.search(regex, pvkwh_kostal_piko_MP) == None:
+if re.search(regex, str(pvkwh_kostal_piko_MP)) == None:
     DebugLog("PVkWh: NaN get prev. Value")
     with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
         pvkwh_kostal_piko_MP = f.read()
