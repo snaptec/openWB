@@ -13,18 +13,18 @@ def get_default_config() -> dict:
         "type": "bat",
         "configuration":
         {
-            "power_url": "/power.txt",
-            "imported_url": "/imported.txt",
-            "exported_url": "/exported.txt",
-            "soc_url": "/soc.txt"
+            "power_path": "/power.txt",
+            "imported_path": "/imported.txt",
+            "exported_path": "/exported.txt",
+            "soc_path": "/soc.txt"
         }
     }
 
 
 class HttpBat:
-    def __init__(self, component_config: dict, ip_address: str) -> None:
+    def __init__(self, component_config: dict, domain: str) -> None:
         self.component_config = component_config
-        self.ip_address = ip_address
+        self.domain = domain
         self.__store = get_bat_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
@@ -32,10 +32,10 @@ class HttpBat:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         config = self.component_config["configuration"]
 
-        power = request_value(self.ip_address + config["power_url"])
-        imported = request_value(self.ip_address + config["imported_url"])
-        exported = request_value(self.ip_address + config["exported_url"])
-        soc = request_value(self.ip_address + config["soc_url"])
+        power = request_value(self.domain + config["power_path"])
+        imported = request_value(self.domain + config["imported_path"])
+        exported = request_value(self.domain + config["exported_path"])
+        soc = request_value(self.domain + config["soc_path"])
 
         bat_state = BatState(
             power=power,

@@ -14,16 +14,16 @@ def get_default_config() -> dict:
         "type": "inverter",
         "configuration":
         {
-            "power_url": "/power.txt",
-            "counter_url": "/counter.txt",
+            "power_path": "/power.txt",
+            "counter_path": "/counter.txt",
         }
     }
 
 
 class HttpInverter:
-    def __init__(self, component_config: dict, ip_address: str) -> None:
+    def __init__(self, component_config: dict, domain: str) -> None:
         self.component_config = component_config
-        self.ip_address = ip_address
+        self.domain = domain
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
@@ -31,8 +31,8 @@ class HttpInverter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         config = self.component_config["configuration"]
 
-        power = request_value(self.ip_address + config["power_url"])
-        counter = request_value(self.ip_address + config["counter_url"])
+        power = request_value(self.domain + config["power_path"])
+        counter = request_value(self.domain + config["counter_path"])
 
         inverter_state = InverterState(
             power=power,

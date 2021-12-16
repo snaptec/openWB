@@ -20,7 +20,8 @@ def get_default_config() -> dict:
         "id": 0,
         "configuration":
         {
-            "ip_address": "192.168.193.15"
+            "protocol": "http",
+            "domain": "192.168.193.15"
         }
     }
 
@@ -45,8 +46,10 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
+            domain = self.device_config["configuration"]["protocol"] + \
+                "://" + self.device_config["configuration"]["domain"]
             self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                component_config, self.device_config["configuration"]["ip_address"])
+                component_config, domain)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -76,32 +79,34 @@ def read_legacy(argv: List[str]) -> None:
     component_type = argv[1]
 
     device_config = get_default_config()
-    device_config["configuration"]["ip_address"] = re.search("http://[0-9.]+", argv[2]).group()
+    regex = re.search("(http[s]?)://([0-9.]+)", argv[2])
+    device_config["configuration"]["protocol"] = regex.group(1)
+    device_config["configuration"]["domain"] = regex.group(2)
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "bat":
             component_config["configuration"] = {
-                "power_url": argv[2].replace(re.search("http://[0-9.]+", argv[2]).group(), ""),
-                "imported_url": argv[3].replace(re.search("http://[0-9.]+", argv[3]).group(), ""),
-                "exported_url": argv[4].replace(re.search("http://[0-9.]+", argv[4]).group(), ""),
-                "soc_url": argv[5].replace(re.search("http://[0-9.]+", argv[5]).group(), "")
+                "power_path": argv[2].replace(re.search("http[s]?://[0-9.]+", argv[2]).group(), ""),
+                "imported_path": argv[3].replace(re.search("http[s]?://[0-9.]+", argv[3]).group(), ""),
+                "exported_path": argv[4].replace(re.search("http[s]?://[0-9.]+", argv[4]).group(), ""),
+                "soc_path": argv[5].replace(re.search("http[s]?://[0-9.]+", argv[5]).group(), "")
             }
             num = None
         elif component_type == "counter":
             component_config["configuration"] = {
-                "power_all_url": argv[2].replace(re.search("http://[0-9.]+", argv[2]).group(), ""),
-                "imported_url": argv[3].replace(re.search("http://[0-9.]+", argv[3]).group(), ""),
-                "exported_url": argv[4].replace(re.search("http://[0-9.]+", argv[4]).group(), ""),
-                "power_l1_url": argv[5].replace(re.search("http://[0-9.]+", argv[5]).group(), ""),
-                "power_l2_url": argv[6].replace(re.search("http://[0-9.]+", argv[6]).group(), ""),
-                "power_l3_url": argv[7].replace(re.search("http://[0-9.]+", argv[7]).group(), "")
+                "power_all_path": argv[2].replace(re.search("http[s]?://[0-9.]+", argv[2]).group(), ""),
+                "imported_path": argv[3].replace(re.search("http[s]?://[0-9.]+", argv[3]).group(), ""),
+                "exported_path": argv[4].replace(re.search("http[s]?://[0-9.]+", argv[4]).group(), ""),
+                "power_l1_path": argv[5].replace(re.search("http[s]?://[0-9.]+", argv[5]).group(), ""),
+                "power_l2_path": argv[6].replace(re.search("http[s]?://[0-9.]+", argv[6]).group(), ""),
+                "power_l3_path": argv[7].replace(re.search("http[s]?://[0-9.]+", argv[7]).group(), "")
             }
             num = None
         else:
             component_config["configuration"] = {
-                "power_url": argv[2].replace(re.search("http://[0-9.]+", argv[2]).group(), ""),
-                "counter_url": argv[3].replace(re.search("http://[0-9.]+", argv[3]).group(), "")
+                "power_path": argv[2].replace(re.search("http[s]?://[0-9.]+", argv[2]).group(), ""),
+                "counter_path": argv[3].replace(re.search("http[s]?://[0-9.]+", argv[3]).group(), "")
             }
             num = argv[4]
     else:
