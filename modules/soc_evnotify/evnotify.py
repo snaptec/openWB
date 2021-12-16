@@ -1,13 +1,10 @@
-import sys
-
+from helpermodules.cli import run_using_positional_cli_args
 from modules.evnotify.EVNotify import EVNotify, EVNotifyConfiguration
 
-if __name__ == '__main__':
-    try:
-        akey, token, charge_point_str = sys.argv[1:]
-        charge_point = int(charge_point_str)
-    except ValueError:
-        print("unable to parse arguments. Expected: <akey> <token> <charge point>")
-        raise
 
+def evnotify_update(akey: str, token: str, charge_point: int):
     EVNotify(EVNotifyConfiguration(charge_point, akey, token)).update()
+
+
+if __name__ == '__main__':
+    run_using_positional_cli_args(evnotify_update)

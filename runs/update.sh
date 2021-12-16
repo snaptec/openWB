@@ -79,6 +79,7 @@ sudo cp /tmp/soc_eq_acc_lp2 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp2
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*
 sudo chmod +x /var/www/html/openWB/runs/*
+sudo chmod +x /var/www/html/openWB/*.sh
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
 sleep 2
