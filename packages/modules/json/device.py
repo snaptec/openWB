@@ -106,7 +106,7 @@ def read_legacy(argv: List[str]) -> None:
             "jq_power": argv[3],
             "jq_counter": argv[4]
         }
-        num = argv[5]
+        num = int(argv[5])
 
     component_config["id"] = num
     dev.add_component(component_config)
