@@ -22,9 +22,9 @@ if Debug >= 2:
 
 sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
 
-for item in sresponse["result"]["items"]:
+for item in sresponse["result"]["items"].values():
     try:
-        pvwatt = int(sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]["value"])
+        pvwatt = int(item["tagValues"]["PowerProduced"]["value"])
         break
     except KeyError:
         pass

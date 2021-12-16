@@ -34,7 +34,7 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
             bezugw = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
 
         for item in sresponse["result"]["items"].values():
-            einspeisungw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
+            einspeisungw = int(item["tagValues"]["PowerOut"]["value"])
         bezugwatt = bezugw - einspeisungw
 if solarwattmethod == 1:  # Abruf über Gateway
     sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
