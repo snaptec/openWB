@@ -70,8 +70,23 @@ class Device(AbstractDevice):
             )
 
 
-def __extract_url_path(arg):
-    return re.search("^(?:https?://[^/]+)?(.*)", arg).group(1)
+def create_paths_dict(**kwargs):
+    regex = re.compile("^(https?://[^/]+)(.*)")
+    result = {}
+    host_scheme = None
+    for key, path in kwargs.items():
+        if path == "none":
+            result[key] = "none"
+        else:
+            match = regex.search(path)
+            if match is None:
+                raise Exception("Invalid URL <" + path + ">: Absolute HTTP or HTTPS URL required")
+            if host_scheme is None:
+                host_scheme = match.group(1)
+            elif host_scheme != match.group(1):
+                raise Exception("All URLs must have the same scheme and host. However URLs are: " + str(kwargs))
+            result[key] = match.group(2)
+    return result
 
 
 def run_device_legacy(device_config: dict, component_config: dict):
@@ -93,36 +108,36 @@ def create_legacy_device_config(url: str):
 
 def read_legacy_bat(power_path: str, imported_path: str, exported_path: str, soc_path: str) -> None:
     component_config = bat.get_default_config()
-    component_config["configuration"] = {
-        "power_path": __extract_url_path(power_path),
-        "imported_path": __extract_url_path(imported_path),
-        "exported_path": __extract_url_path(exported_path),
-        "soc_path": __extract_url_path(soc_path),
-    }
+    component_config["configuration"] = create_paths_dict(
+        power_path=power_path,
+        imported_path=imported_path,
+        exported_path=exported_path,
+        soc_path=soc_path,
+    )
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
 def read_legacy_counter(power_all_path: str, imported_path: str, exported_path: str, power_l1_path: str,
                         power_l2_path: str, power_l3_path: str):
     component_config = counter.get_default_config()
-    component_config["configuration"] = {
-        "power_all_path": __extract_url_path(power_all_path),
-        "imported_path": __extract_url_path(imported_path),
-        "exported_path": __extract_url_path(exported_path),
-        "power_l1_path": __extract_url_path(power_l1_path),
-        "power_l2_path": __extract_url_path(power_l2_path),
-        "power_l3_path": __extract_url_path(power_l3_path),
-    }
+    component_config["configuration"] = create_paths_dict(
+        power_all_path=power_all_path,
+        imported_path=imported_path,
+        exported_path=exported_path,
+        power_l1_path=power_l1_path,
+        power_l2_path=power_l2_path,
+        power_l3_path=power_l3_path,
+    )
     run_device_legacy(create_legacy_device_config(power_all_path), component_config)
 
 
 def read_legacy_inverter(power_path: str, counter_path: str, num: int):
     component_config = inverter.get_default_config()
     component_config["id"] = num
-    component_config["configuration"] = {
-        "power_path": __extract_url_path(power_path),
-        "counter_path": __extract_url_path(counter_path),
-    }
+    component_config["configuration"] = create_paths_dict(
+        power_path=power_path,
+        counter_path=counter_path,
+    )
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
