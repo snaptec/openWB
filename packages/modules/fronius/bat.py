@@ -43,7 +43,7 @@ class FroniusBat:
         resp_json = response.json()
         try:
             power = int(resp_json["Body"]["Data"]["Site"]["P_Akku"]) * -1
-        except ValueError:
+        except TypeError:
             # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
             power = 0
 
@@ -52,7 +52,7 @@ class FroniusBat:
                 soc = float(resp_json["Body"]["Data"][meter_id]["Controller"]["StateOfCharge_Relative"])
             else:
                 soc = float(resp_json["Body"]["Data"]["Inverters"]["1"]["SOC"])
-        except ValueError:
+        except TypeError:
             # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
             soc = 0
 
