@@ -2,26 +2,21 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
-#DMOD="EVU"
-DMOD="MAIN"
+DMOD="PV"
+#DMOD="MAIN"
 Debug=$debug
 
 #For development only
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	MYLOGFILE="${RAMDISKDIR}/wr_http.log"
+        MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-openwbDebugLog ${DMOD} 2 "WR Leistung URL: ${wr_http_w_url}"
-openwbDebugLog ${DMOD} 2 "WR Energie URL: ${wr_http_kwh_url}"
 
-python3 /var/www/html/openWB/modules/wr_http/read_http.py "${wr_http_w_url}" "${wr_http_kwh_url}" >>$MYLOGFILE 2>&1
-ret=$?
+python3 ${OPENWBBASEDIR}/packages/modules/openwb/device.py "inverter" "${wr_http_w_url}" "${wr_http_kwh_url}" "1">>${MYLOGFILE} 2>&1
 
-openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
+pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt
