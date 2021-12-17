@@ -14,6 +14,7 @@ multifems = str(sys.argv[1])
 femskacopw = str(sys.argv[2])
 femsip = str(sys.argv[3])
 
+
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
     print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
@@ -24,10 +25,11 @@ if Debug >= 2:
     DebugLog("Speicher Passwort: " + femskacopw)
     DebugLog("Speicher Multi: " + multifems)
 
+
 def write_ramdisk(value, file):
     try:
         if file == "speichersoc":
-            if re.search("^[-+]?[0-9]+\.?[0-9]*$", str(value)) == None:
+            if re.search("^[-+]?[0-9]+.?[0-9]*$", str(value)) == None:
                 value = "0"
         if Debug >= 1:
             DebugLog(file+': ' + str(value))
@@ -40,7 +42,9 @@ def write_ramdisk(value, file):
 
 if multifems == "0":
     try:
-        response = requests.get("http://"+femsip+":8084/rest/channel/ess0/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)", auth=("x", femskacopw)).json()
+        response = requests.get(
+            "http://" + femsip + ":8084/rest/channel/ess0/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)",
+            auth=("x", femskacopw)).json()
     except:
         traceback.print_exc()
         exit(1)
@@ -54,7 +58,9 @@ if multifems == "0":
             write_ramdisk(singleValue["value"], "speicherekwh")
 else:
     try:
-        response = requests.get("http://"+femsip+":8084/rest/channel/ess2/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)", auth=("x", femskacopw)).json()
+        response = requests.get(
+            "http://" + femsip + ":8084/rest/channel/ess2/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)",
+            auth=("x", femskacopw)).json()
     except:
         traceback.print_exc()
         exit(1)
@@ -68,7 +74,9 @@ else:
             write_ramdisk(singleValue["value"], "speicherekwh")
 
 try:
-    response = requests.get("http://"+femsip+":8084/rest/channel/_sum/(GridActivePower|ProductionActivePower|ConsumptionActivePower)", auth=("x", femskacopw)).json()
+    response = requests.get(
+        "http://" + femsip + ":8084/rest/channel/_sum/(GridActivePower|ProductionActivePower|ConsumptionActivePower)",
+        auth=("x", femskacopw)).json()
 except:
     traceback.print_exc()
     exit(1)
@@ -83,7 +91,7 @@ for singleValue in response:
 
 leistung = grid + pv - haus
 
-ra = "^[-+]?[0-9]+\.?[0-9]*$"
+ra = "^[-+]?[0-9]+.?[0-9]*$"
 if re.search(ra, str(leistung)) == None:
     leistung = "0"
 if Debug >= 1:

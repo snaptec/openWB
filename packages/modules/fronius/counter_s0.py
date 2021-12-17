@@ -37,7 +37,7 @@ class FroniusS0Counter:
                 power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
             else:
                 power_all = float(response.json()["Body"]["Data"]["PowerReal_P_Sum"])
-        except ValueError:
+        except TypeError:
             # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
             power_all = 0
 

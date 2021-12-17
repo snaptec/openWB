@@ -29,13 +29,10 @@ fname = str(sys.argv[2])
 aktpower = 0
 
 # Versuche Daten von Shelly abzurufen.
-try:
-    answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
-    f = open('/var/www/html/openWB/ramdisk/shelly_wr_ret.' + str(ipadr), 'w')
-    f.write(str(answer))
-    f.close()
-except:
-    pass
+answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
+f = open('/var/www/html/openWB/ramdisk/shelly_wr_ret.' + str(ipadr), 'w')
+f.write(str(answer))
+f.close()
 # Versuche Werte aus der Antwort zu extrahieren.
 try:
     aktpower = totalPowerFromShellyJson(answer) * -1

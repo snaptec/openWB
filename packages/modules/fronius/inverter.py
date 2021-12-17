@@ -50,7 +50,7 @@ class FroniusInverter:
         response.raise_for_status()
         try:
             power = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
-        except ValueError:
+        except TypeError:
             # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
             power = 0
 
@@ -91,7 +91,7 @@ class FroniusInverter:
             response.raise_for_status()
             try:
                 power2 = int(response.json()["Body"]["Data"]["Site"]["P_PV"])
-            except ValueError:
+            except TypeError:
                 # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
                 power2 = 0
             if self.component_config["configuration"]["gen24"] == 0:
