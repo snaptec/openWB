@@ -5,9 +5,6 @@ from modules.common.component_state import CounterState
 from modules.common import req
 from modules.common import simcount
 from helpermodules import log
-<< << << < HEAD
-== == == =
->>>>>> > common module for get responses
 
 
 def get_default_config() -> dict:
@@ -31,7 +28,8 @@ class FroniusS0Counter:
     def update(self, bat: bool) -> CounterState:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
-        response = req.get_http_session().get(
+        session = req.get_http_session()
+        response = session.get(
             'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             timeout=5)
         # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
@@ -40,7 +38,7 @@ class FroniusS0Counter:
         # Summe der vom Netz bezogene Energie total in Wh
         # nur für Smartmeter  im Einspeisepunkt!
         # bei Smartmeter im Verbrauchszweig  entspricht das dem Gesamtverbrauch
-        response = req.get_http_session().get(
+        response = session.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)

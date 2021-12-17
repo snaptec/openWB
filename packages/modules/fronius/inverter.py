@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from typing import Optional, Tuple
+
+import requests
 import paho.mqtt.client as mqtt
 import time
 
@@ -86,8 +88,8 @@ class FroniusInverter:
         if ip_address2 != "none":
             try:
                 params = (('Scope', 'System'),)
-                response = req.get_http_session().get('http://'+ip_address2+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
-                                        params=params, timeout=3)
+                response = req.get_http_session().get(
+                    'http://' + ip_address2 + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
                 response.raise_for_status()
                 try:
                     power2 = float(response.json()["Body"]["Data"]["Site"]["P_PV"])

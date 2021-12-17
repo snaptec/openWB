@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from requests import Session
 from typing import Tuple
 
 from helpermodules import log
@@ -37,15 +38,17 @@ class FroniusSmCounter:
         variant = self.component_config["configuration"]["variant"]
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
+        session = req.get_http_session()
+
         if variant == 0 or variant == 1:
-            counter_state, meter_location = self.__update_variant_0_1()
+            counter_state, meter_location = self.__update_variant_0_1(session)
         elif variant == 2:
-            counter_state, meter_location = self.__update_variant_2()
+            counter_state, meter_location = self.__update_variant_2(session)
         else:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
         if meter_location == MeterLocation.load:
-            response = req.get_http_session().get(
+            response = session.get(
                 'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                 params=(('Scope', 'System'),),
                 timeout=5)
@@ -69,7 +72,7 @@ class FroniusSmCounter:
         log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power_all))
         self.__store.set(counter_state)
 
-    def __update_variant_0_1(self) -> Tuple[CounterState, MeterLocation]:
+    def __update_variant_0_1(self, session: Session) -> Tuple[CounterState, bool]:
         variant = self.component_config["configuration"]["variant"]
         meter_id = self.device_config["meter_id"]
         if variant == 0:
@@ -85,7 +88,7 @@ class FroniusSmCounter:
             )
         else:
             raise FaultState.error("Unbekannte Generation: "+str(variant))
-        response = req.get_http_session().get(
+        response = session.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=params,
             timeout=5)
@@ -121,9 +124,9 @@ class FroniusSmCounter:
             power_factors=power_factors
         ), meter_location
 
-    def __update_variant_2(self) -> Tuple[CounterState, bool]:
+    def __update_variant_2(self, session: Session) -> Tuple[CounterState, bool]:
         meter_id = str(self.device_config["meter_id"])
-        response = req.get_http_session().get(
+        response = session.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)
