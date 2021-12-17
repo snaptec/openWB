@@ -1,95 +1,61 @@
 #!/usr/bin/env python3
-from datetime import datetime, timezone
-import os
-import re
-import requests
+import logging
 import sys
-import struct
-import traceback
-from pymodbus.client.sync import ModbusTcpClient
+from typing import Iterable
 
+import requests
+
+from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import InverterState
+from modules.common.modbus import ModbusClient, ModbusDataType
 from modules.common.store import get_inverter_value_store
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
-
-wrsmawebbox = int(sys.argv[1])
-tri9000ip = str(sys.argv[2])
+SMA_INT32_NAN = -0x80000000  # SMA uses this value to represent NaN
+log = logging.getLogger("SMA ModbusTCP WR")
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
-
-
-if Debug >= 2:
-    DebugLog('Wechselrichter Tripower Webbox: ' + str(wrsmawebbox))
-    DebugLog('Wechselrichter Tripower IP: ' + tri9000ip)
-
-if wrsmawebbox == 1:
-    headers = {'Content-Type': 'application/json', }
+def update_sma_webbox(address: str):
     data = {'RPC': '{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}'}
-    response = requests.post('http://'+tri9000ip+'/rpc', headers=headers, data=data, timeout=3).json()
-    rekwh = '^[-+]?[0-9]+.?[0-9]*$'
-    try:
-        pvwatt = int(response["result"]["overview"][0]["value"])
-        pvwatt = pvwatt * -1
-        if re.search(rekwh, str(pvwatt)):
-            if Debug >= 1:
-                DebugLog('WR Leistung: ' + str(pvwatt))
-            with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-                f.write(str(pvwatt))
-    except:
-        traceback.print_exc()
-        exit(1)
+    response = requests.post('http://' + address + '/rpc', json=data, timeout=3)
+    response.raise_for_status()
+    response_data = response.json()
+    get_inverter_value_store(1).set(InverterState(
+        counter=response_data["result"]["overview"][2]["value"] * 1000,
+        power=-response_data["result"]["overview"][0]["value"]
+    ))
 
-    try:
-        pvkwh = response["result"]["overview"][2]["value"]
-        pvwh = int(pvkwh) * 1000
-        if re.search(rekwh, str(pvwh)) != None:
-            if Debug >= 1:
-                DebugLog('WR Energie: ' + str(pvkwh))
-            with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
-                f.write(str(pvwh))
-    except:
-        traceback.print_exc()
-        exit(1)
-else:
 
-    power = 0
-    counter = 0
+def update_sma_modbus(addresses: Iterable[str]):
+    power_total = 0
+    energy_total = 0
 
-    # Länge von sys.argv = Dateiname + Webbox + IP-Adressen
-    for i in range(len(sys.argv)-2):
-        try:
-            ipaddress = str(sys.argv[i+2])
-            if Debug >= 2:
-                DebugLog('Wechselrichter Tripower IP'+str(i+2)+': ' + ipaddress)
-            client = ModbusTcpClient(ipaddress, port=502)
+    for ipaddress in addresses:
+        with ModbusClient(ipaddress) as client:
+            # AC Wirkleistung über alle Phasen (W) [Pac]:
+            power = client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
+            # Gesamtertrag (Wh) [E-Total]:
+            energy = client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
 
-            # pv watt
-            resp = client.read_holding_registers(30775, 2, unit=3)
-            value1 = resp.registers[0]
-            value2 = resp.registers[1]
-            all = format(value1, '04x') + format(value2, '04x')
-            power = power + int(struct.unpack('>i', all.decode('hex'))[0])
+            log.debug("%s: power = %d W, energy = %d Wh", ipaddress, power, energy)
+            if power == SMA_INT32_NAN:
+                log.debug("Power value is NaN - ignoring")
+            else:
+                power_total += power
+            energy_total += energy
 
-            # pv Wh
-            resp = client.read_holding_registers(30529, 2, unit=3)
-            value1 = resp.registers[0]
-            value2 = resp.registers[1]
-            all = format(value1, '04x') + format(value2, '04x')
-            counter = counter + int(struct.unpack('>i', all.decode('hex'))[0])
-        except:
-            traceback.print_exc()
-            exit(1)
+    power_total = -max(power_total, 0)
+    get_inverter_value_store(1).set(InverterState(counter=energy_total, power=power_total))
 
-    if power < 0:
-        power = 0
-    power = power * -1
-    if Debug >= 1:
-        DebugLog('WR Leistung: ' + str(power))
-        DebugLog('WR Energie: ' + str(counter))
 
-    get_inverter_value_store(1).set(InverterState(counter=counter, power=power))
+def update_sma():
+    log.debug("Beginning update")
+    if sys.argv[1] == "1":
+        update_sma_webbox(sys.argv[2])
+    else:
+        update_sma_modbus(filter("none".__ne__, sys.argv[2:]))
+    log.debug("Update completed successfully")
+
+
+if __name__ == '__main__':
+    setup_logging_stdout()
+    update_sma()
