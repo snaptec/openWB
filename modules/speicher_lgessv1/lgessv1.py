@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import datetime
 from datetime import datetime, timezone
 import json
 import os
@@ -26,6 +25,7 @@ ess_url = "https://"+lgessv1ip
 
 Debug = int(os.environ.get('debug'))
 myPid = str(os.getpid())
+
 
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
@@ -90,7 +90,8 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
     #
     headers = {'Content-Type': 'application/json', }
     data = json.dumps(outjson)
-    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
+    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers,
+                             data=data, verify=False, timeout=5).json()
     #
     # Sessionkey in der Ramdisk abspeichern
     #
@@ -131,7 +132,7 @@ if is_battery_discharging_ == "1":
 #
 # Daten für Langzeitlog holen
 #
-today = datetime.datetime.today()
+today = datetime.today()
 jahr = today.strftime("%Y")
 monat = today.strftime("%m")
 arr_pos = monat

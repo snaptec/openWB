@@ -48,7 +48,7 @@ if Debug >= 2:
     DebugLog('Powerwall IP: ' + speicherpwip)
     DebugLog('Powerwall User: ' + speicherpwuser)
     DebugLog('Powerwall Passwort: ' + speicherpwpass)
-    DebugLog('Powerwall Login: ' + speicherpwloginneeded)
+    DebugLog('Powerwall Login: ' + str(speicherpwloginneeded))
 
 if speicherpwloginneeded == 1:
     # delete our login cookie after some time as it may be invalid
@@ -66,7 +66,8 @@ if speicherpwloginneeded == 1:
         data = {"username": "customer", "password": speicherpwpass, "email": speicherpwuser, "force_sm_off": False}
         data = json.dumps(data)
         try:
-            response = requests.post('https://'+speicherpwip+'/api/login/Basic', headers=headers, data=data, verify=False, timeout=5)
+            response = requests.post('https://'+speicherpwip+'/api/login/Basic',
+                                     headers=headers, data=data, verify=False, timeout=5)
         except requests.exceptions.RequestException as e:
             DebugLog("Something went wrong. RequestException: "+str(e))
             exit(1)
@@ -82,11 +83,11 @@ if speicherpwloginneeded == 1:
 
 
 answer = requests.get("https://"+speicherpwip+"/api/meters/aggregates", cookies=cookie, verify=False, timeout=5).json()
-pvwatt=int(answer["solar"]["instant_power"])
-pvkwh=answer["solar"]["energy_exported"]
+pvwatt = int(answer["solar"]["instant_power"])
+pvkwh = answer["solar"]["energy_exported"]
 
 if pvwatt > 5:
-    pvwatt=pvwatt*-1
+    pvwatt = pvwatt*-1
 if Debug >= 1:
     DebugLog('WR Leistung: ' + str(pvwatt))
     DebugLog('WR Energie: ' + str(pvkwh))
