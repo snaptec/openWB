@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-""" Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
-"""
 import re
 import sys
 from typing import Dict, List, Union
@@ -87,26 +85,26 @@ def read_legacy(argv: List[str]) -> None:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "bat":
             component_config["configuration"] = {
-                "power_path": argv[2].replace(re.search("http[s]?://[0-9.]+", argv[2]).group(), ""),
-                "imported_path": argv[3].replace(re.search("http[s]?://[0-9.]+", argv[3]).group(), ""),
-                "exported_path": argv[4].replace(re.search("http[s]?://[0-9.]+", argv[4]).group(), ""),
-                "soc_path": argv[5].replace(re.search("http[s]?://[0-9.]+", argv[5]).group(), "")
+                "power_path": __extract_url_path(argv[2]),
+                "imported_path": __extract_url_path(argv[3]),
+                "exported_path": __extract_url_path(argv[4]),
+                "soc_path": __extract_url_path(argv[5]),
             }
             num = None
         elif component_type == "counter":
             component_config["configuration"] = {
-                "power_all_path": argv[2].replace(re.search("http[s]?://[0-9.]+", argv[2]).group(), ""),
-                "imported_path": argv[3].replace(re.search("http[s]?://[0-9.]+", argv[3]).group(), ""),
-                "exported_path": argv[4].replace(re.search("http[s]?://[0-9.]+", argv[4]).group(), ""),
-                "power_l1_path": argv[5].replace(re.search("http[s]?://[0-9.]+", argv[5]).group(), ""),
-                "power_l2_path": argv[6].replace(re.search("http[s]?://[0-9.]+", argv[6]).group(), ""),
-                "power_l3_path": argv[7].replace(re.search("http[s]?://[0-9.]+", argv[7]).group(), "")
+                "power_all_path": __extract_url_path(argv[2]),
+                "imported_path": __extract_url_path(argv[3]),
+                "exported_path": __extract_url_path(argv[4]),
+                "power_l1_path": __extract_url_path(argv[5]),
+                "power_l2_path": __extract_url_path(argv[6]),
+                "power_l3_path": __extract_url_path(argv[7]),
             }
             num = None
         else:
             component_config["configuration"] = {
-                "power_path": argv[2].replace(re.search("http[s]?://[0-9.]+", argv[2]).group(), ""),
-                "counter_path": argv[3].replace(re.search("http[s]?://[0-9.]+", argv[3]).group(), "")
+                "power_path": __extract_url_path(argv[2]),
+                "counter_path": __extract_url_path(argv[3]),
             }
             num = argv[4]
     else:
@@ -117,9 +115,14 @@ def read_legacy(argv: List[str]) -> None:
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Http Konfiguration: ' + str(component_config["configuration"]))
+    log.MainLogger().debug(
+        'Http Konfiguration: ' + str(device_config["configuration"]) + str(component_config["configuration"]))
 
     dev.update()
+
+
+def __extract_url_path(arg):
+    return re.search("^(?:https?://[^/]+)?(.*)", arg).group(1)
 
 
 if __name__ == "__main__":
