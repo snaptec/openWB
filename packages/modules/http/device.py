@@ -85,26 +85,26 @@ def read_legacy(argv: List[str]) -> None:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "bat":
             component_config["configuration"] = {
-                "power_path": __parse_arg(argv[2]),
-                "imported_path": __parse_arg(argv[3]),
-                "exported_path": __parse_arg(argv[4]),
-                "soc_path": __parse_arg(argv[5]),
+                "power_path": __extract_url_path(argv[2]),
+                "imported_path": __extract_url_path(argv[3]),
+                "exported_path": __extract_url_path(argv[4]),
+                "soc_path": __extract_url_path(argv[5]),
             }
             num = None
         elif component_type == "counter":
             component_config["configuration"] = {
-                "power_all_path": __parse_arg(argv[2]),
-                "imported_path": __parse_arg(argv[3]),
-                "exported_path": __parse_arg(argv[4]),
-                "power_l1_path": __parse_arg(argv[5]),
-                "power_l2_path": __parse_arg(argv[6]),
-                "power_l3_path": __parse_arg(argv[7]),
+                "power_all_path": __extract_url_path(argv[2]),
+                "imported_path": __extract_url_path(argv[3]),
+                "exported_path": __extract_url_path(argv[4]),
+                "power_l1_path": __extract_url_path(argv[5]),
+                "power_l2_path": __extract_url_path(argv[6]),
+                "power_l3_path": __extract_url_path(argv[7]),
             }
             num = None
         else:
             component_config["configuration"] = {
-                "power_path": __parse_arg(argv[2]),
-                "counter_path": __parse_arg(argv[3]),
+                "power_path": __extract_url_path(argv[2]),
+                "counter_path": __extract_url_path(argv[3]),
             }
             num = argv[4]
     else:
@@ -121,10 +121,8 @@ def read_legacy(argv: List[str]) -> None:
     dev.update()
 
 
-def __parse_arg(arg):
-    if arg != "none":
-        arg = arg.replace(re.search("http[s]?://[0-9.]+", arg).group(), "")
-    return arg
+def __extract_url_path(arg):
+    return re.search("^(?:https?://[^/]+)?(.*)", arg).group(1)
 
 
 if __name__ == "__main__":
