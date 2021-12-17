@@ -30,8 +30,7 @@ if Debug >= 2:
 response = requests.get(wr_smartme_url, auth=(wr_smartme_user, wr_smartme_pass), timeout=10).json()
 # Aktuelle Leistung (kW --> W)
 wattwr = response["ActivePower"]
-wattwr = round(wattwr * 1000, 3)
-wattwr = int(wattwr)
+wattwr = round(wattwr * 1000)
 
 # Zählerstand Export (kWh --> Wh)
 pvkwh = response["CounterReadingExport"]
