@@ -3,9 +3,9 @@ from typing import Optional, Tuple
 import paho.mqtt.client as mqtt
 import time
 
-import requests
 from helpermodules import log
 from helpermodules import pub
+from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -44,12 +44,11 @@ class FroniusInverter:
         params = (
             ('Scope', 'System'),
         )
-        response = requests.get(
+        response = req.get_json(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params,
             timeout=3)
-        response.raise_for_status()
         try:
-            power = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
+            power = float(response["Body"]["Data"]["Site"]["P_PV"])
         except TypeError:
             # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
             power = 0
@@ -62,8 +61,8 @@ class FroniusInverter:
         if gen24:
             _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
         else:
-            counter = float(response.json()["Body"]["Data"]["Site"]["E_Total"])
-            daily_yield = float(response.json()["Body"]["Data"]["Site"]["E_Day"])
+            counter = float(response["Body"]["Data"]["Site"]["E_Total"])
+            daily_yield = float(response["Body"]["Data"]["Site"]["E_Day"])
             counter, counter_start, counter_offset = self.__calculate_offset(counter, daily_yield)
             counter = counter + counter2
             if counter > 0:
@@ -87,7 +86,7 @@ class FroniusInverter:
         if ip_address2 != "none":
             try:
                 params = (('Scope', 'System'),)
-                response = requests.get('http://'+ip_address2+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                response = req.get_json('http://'+ip_address2+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                                         params=params, timeout=3)
                 response.raise_for_status()
                 try:

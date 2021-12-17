@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 from typing import Tuple
-import requests
 
 from helpermodules import log
+from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo, FaultState
@@ -45,12 +45,11 @@ class FroniusSmCounter:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
         if meter_location == MeterLocation.load:
-            response = requests.get(
+            response = req.get_json(
                 'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                 params=(('Scope', 'System'),),
                 timeout=5)
-            response.raise_for_status()
-            counter_state.power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
+            counter_state.power_all = float(response["Body"]["Data"]["Site"]["P_Grid"])
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
@@ -70,7 +69,7 @@ class FroniusSmCounter:
         log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power_all))
         self.__store.set(counter_state)
 
-    def __update_variant_0_1(self) -> Tuple[CounterState, bool]:
+    def __update_variant_0_1(self) -> Tuple[CounterState, MeterLocation]:
         variant = self.component_config["configuration"]["variant"]
         meter_id = self.device_config["meter_id"]
         if variant == 0:
@@ -86,21 +85,20 @@ class FroniusSmCounter:
             )
         else:
             raise FaultState.error("Unbekannte Generation: "+str(variant))
-        response = requests.get(
+        response = req.get_json(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=params,
             timeout=5)
-        response.raise_for_status()
-        response_json_id = response.json()["Body"]["Data"]
+        response_json_id = response["Body"]["Data"]
+
         # old request for variant == 1
         # params = (
         #     ('Scope', 'System'),
         # )
-        # response = requests.get(
+        # response = req.get_json(
         #     'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetMeterRealtimeData.cgi',
         #  params=params, timeout=5)
-        # response.raise_for_status()
-        # response_json_id = response.json()["Body"]["Data"][meter_id]
+        # response_json_id = response["Body"]["Data"][meter_id]
         meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
@@ -126,12 +124,11 @@ class FroniusSmCounter:
 
     def __update_variant_2(self) -> Tuple[CounterState, bool]:
         meter_id = str(self.device_config["meter_id"])
-        response = requests.get(
+        response = req.get_json(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)
-        response.raise_for_status()
-        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
+        response_json_id = dict(response["Body"]["Data"]).get(meter_id)
         meter_location = self.component_config["configuration"]["meter_location"]
 
         power_all = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
