@@ -3,6 +3,8 @@ import re
 import sys
 from typing import Dict, List, Union
 
+from urllib3.util.url import parse_url
+
 from helpermodules import log
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -77,9 +79,10 @@ def read_legacy(argv: List[str]) -> None:
     component_type = argv[1]
 
     device_config = get_default_config()
-    regex = re.search("(http[s]?)://([0-9.]+)", argv[2])
-    device_config["configuration"]["protocol"] = regex.group(1)
-    device_config["configuration"]["domain"] = regex.group(2)
+
+    parsed_url = parse_url(argv[2])
+    device_config["configuration"]["protocol"] = parsed_url.scheme
+    device_config["configuration"]["domain"] = parsed_url.hostname
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
