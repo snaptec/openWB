@@ -4,7 +4,7 @@ from requests import HTTPError
 
 from modules.evnotify import api
 
-EVNOTIFY_OK_RESPONSE = '{\'last_soc\': 1638446395, \'soc_display\': \'35\', \'soc_bms\': 34} >'
+EVNOTIFY_OK_RESPONSE = '{"soc_display":35,"soc_bms":34,"last_soc":1638446395}'
 
 
 def test_fetch_soc_returns_soc(requests_mock: requests_mock.mock):
@@ -42,7 +42,7 @@ def test_fetch_soc_throws_if_evnotify_returns_illegal_json(requests_mock: reques
 
 def test_fetch_soc_throws_if_evnotify_returns_not_a_number(requests_mock: requests_mock.mock):
     # setup
-    response = EVNOTIFY_OK_RESPONSE.replace("35", "'some string'")
+    response = EVNOTIFY_OK_RESPONSE.replace("35", '"some string"')
     requests_mock.get("https://app.evnotify.de/soc?akey=someKey&token=someToken", text=response)
 
     # execution & evaluation

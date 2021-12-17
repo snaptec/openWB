@@ -45,11 +45,11 @@ class FroniusSmCounter:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
         if meter_location == MeterLocation.load:
-            response = req.get_json(
+            response = req.get_http_session().get(
                 'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                 params=(('Scope', 'System'),),
                 timeout=5)
-            counter_state.power_all = float(response["Body"]["Data"]["Site"]["P_Grid"])
+            counter_state.power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
@@ -85,17 +85,16 @@ class FroniusSmCounter:
             )
         else:
             raise FaultState.error("Unbekannte Generation: "+str(variant))
-        response = req.get_json(
+        response = req.get_http_session().get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=params,
             timeout=5)
-        response_json_id = response["Body"]["Data"]
-
+        response_json_id = response.json()["Body"]["Data"]
         # old request for variant == 1
         # params = (
         #     ('Scope', 'System'),
         # )
-        # response = req.get_json(
+        # response = req.get_http_session().get(
         #     'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetMeterRealtimeData.cgi',
         #  params=params, timeout=5)
         # response_json_id = response["Body"]["Data"][meter_id]
@@ -124,11 +123,11 @@ class FroniusSmCounter:
 
     def __update_variant_2(self) -> Tuple[CounterState, bool]:
         meter_id = str(self.device_config["meter_id"])
-        response = req.get_json(
+        response = req.get_http_session().get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)
-        response_json_id = dict(response["Body"]["Data"]).get(meter_id)
+        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
         meter_location = self.component_config["configuration"]["meter_location"]
 
         power_all = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]

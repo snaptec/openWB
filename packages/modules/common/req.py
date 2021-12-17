@@ -1,20 +1,11 @@
 
-import requests
+from requests import Session
 
 from helpermodules import log
 
 
-def get_json(url, params=None, **kwargs) -> dict:
-    return __get(url, params, **kwargs).json()
-
-
-def get_text(url, params=None, **kwargs) -> str:
-    return __get(url, params, **kwargs).text
-
-
-def __get(url, params, **kwargs) -> requests.Response:
-    response = requests.get(url, params, **kwargs)
-    response.raise_for_status()
-    response.encoding = 'utf-8'
-    log.MainLogger().debug("Get-Response " + url + ": " + response.text)
-    return response
+def get_http_session() -> Session:
+    session = Session()
+    session.hooks['response'].append(lambda r, *args, **kwargs: r.raise_for_status())
+    session.hooks['response'].append(lambda r, *args, **kwargs: log.MainLogger().debug("Get-Response: " + r.text))
+    return session

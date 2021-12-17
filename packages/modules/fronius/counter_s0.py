@@ -31,21 +31,21 @@ class FroniusS0Counter:
     def update(self, bat: bool) -> CounterState:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
-        response = req.get_json(
+        response = req.get_http_session().get(
             'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             timeout=5)
         # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
-        power_all = float(response["Body"]["Data"]["Site"]["P_Grid"]) or 0
+        power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
 
         # Summe der vom Netz bezogene Energie total in Wh
         # nur für Smartmeter  im Einspeisepunkt!
         # bei Smartmeter im Verbrauchszweig  entspricht das dem Gesamtverbrauch
-        response = req.get_json(
+        response = req.get_http_session().get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)
         meter_id = str(self.device_config["meter_id"])
-        response_json_id = dict(response["Body"]["Data"]).get(meter_id)
+        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
         if "EnergyReal_WAC_Minus_Absolute" in response_json_id and \
            "EnergyReal_WAC_Plus_Absolute" in response_json_id:
             imported = float(response_json_id["EnergyReal_WAC_Minus_Absolute"])

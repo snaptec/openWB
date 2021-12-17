@@ -54,11 +54,11 @@ class Device(AbstractDevice):
     def update(self) -> None:
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
-            response = req.get_json(self.device_config["configuration"]["ip_address"], timeout=5)
+            response = req.get_http_session().get(self.device_config["configuration"]["ip_address"], timeout=5)
             for component in self._components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update(response)
+                    self._components[component].update(response.json())
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
