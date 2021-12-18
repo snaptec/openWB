@@ -3,23 +3,23 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #MODULEDIR=$(cd `dirname $0` && pwd)
-#DMOD="PV"
-DMOD="MAIN"
+DMOD="PV"
+#DMOD="MAIN"
 Debug=$debug
 
-#For Development only
+#For development only
 #Debug=1
 
-if [ $DMOD == "MAIN" ]; then
-	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	MYLOGFILE="${RAMDISKDIR}/wr_sunways.log"
+        MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${wrsunwaysip}"
 openwbDebugLog ${DMOD} 2 "PV Passwort: ${wrsunwayspw}"
 
-python3 /var/www/html/openWB/modules/wr_sunways/sunways.py "${wrsunwaysip}" "${wrsunwayspw}" >>$MYLOGFILE 2>&1
+python3 /var/www/html/openWB/packages/modules/sunways/device.py "inverter" "${wrsunwaysip}" "${wrsunwayspw}" "1">>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
