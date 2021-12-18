@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from datetime import datetime, timezone
 import os
-import datetime
 import json
 import os.path
 import requests
@@ -27,9 +26,10 @@ ess_pass = str(sys.argv[2])
 ess_api_ver = str(sys.argv[3])
 ess_url = "https://"+lgessv1ip
 
+
 def DebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
 
 
 if Debug >= 2:
@@ -67,7 +67,8 @@ else:
 try:
     headers = {'Content-Type': 'application/json', }
     data = json.dumps({"auth_key": session_key})
-    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
+    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers,
+                             data=data, verify=False, timeout=5).json()
     authchk = response['auth']
 except:
     traceback.print_exc()
@@ -90,7 +91,8 @@ if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
     #
     headers = {'Content-Type': 'application/json', }
     data = json.dumps(outjson)
-    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers, data=data, verify=False, timeout=5).json()
+    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers,
+                             data=data, verify=False, timeout=5).json()
     #
     # Sessionkey in der Ramdisk abspeichern
     #
@@ -108,7 +110,7 @@ except:
 #
 # Daten für Langzeitlog holen
 #
-today = datetime.datetime.today()
+today = datetime.today()
 jahr = today.strftime("%Y")
 monat = today.strftime("%m")
 arr_pos = monat

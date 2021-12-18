@@ -17,7 +17,9 @@ def DebugLog(message: str) -> None:
     local_time = datetime.now(timezone.utc).astimezone()
     print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
 
-ra = '^-?[0-9]+(\.[0-9]+)?$' # re for valid float as str
+
+ra = '^-?[0-9]+(.[0-9]+)?$'  # re for valid float as str
+
 
 def check_write_value(valueString: str, file: str, fallback: str = "0") -> None:
     if re.search(ra, valueString) == None:
@@ -30,7 +32,7 @@ def check_write_value(valueString: str, file: str, fallback: str = "0") -> None:
 
 
 if Debug >= 2:
-    DebugLog('Sonneneco Alternativ: ' + sonnenecoalternativ)
+    DebugLog('Sonneneco Alternativ: ' + str(sonnenecoalternativ))
     DebugLog('Sonneneco IP: ' + sonnenecoip)
 
 # Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems

@@ -22,16 +22,14 @@ if Debug >= 2:
 
 sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
 
-try:
-    for item in sresponse["result"]["items"]:
-        if "tagValues" in sresponse["result"]["items"][item]:
-            if "PowerProduced" in sresponse["result"]["items"][item]["tagValues"]:
-                if "value" in sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]:
-                    pvwatt = int(sresponse["result"]["items"][item]["tagValues"]["PowerProduced"]["value"])
-                    break
-except:
-    traceback.print_exc()
-    exit(1)
+for item in sresponse["result"]["items"].values():
+    try:
+        pvwatt = int(item["tagValues"]["PowerProduced"]["value"])
+        break
+    except KeyError:
+        pass
+else:
+    raise Exception("Solarwatt konnte keine WR-Leistung ermitteln.")
 pvwatt = pvwatt * -1
 if Debug >= 1:
     DebugLog("PV-Leistung: "+str(pvwatt)+" W")
