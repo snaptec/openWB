@@ -106,7 +106,7 @@ def read_legacy(argv: List[str]) -> None:
                 "power_path": __extract_url_path(argv[2]),
                 "counter_path": __extract_url_path(argv[3]),
             }
-            num = argv[4]
+            num = int(argv[4])
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
