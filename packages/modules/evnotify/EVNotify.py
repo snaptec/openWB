@@ -1,5 +1,6 @@
-from typing import Union
+from typing import Union, List
 
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common import store
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -40,3 +41,11 @@ class EVNotify(AbstractDevice):
     def update(self) -> None:
         with SingleComponentUpdateContext(self.component_info):
             self.value_store.set(CarState(soc=api.fetch_soc(self.config.akey, self.config.token)))
+
+
+def evnotify_update(akey: str, token: str, charge_point: int):
+    EVNotify(EVNotifyConfiguration(charge_point, akey, token)).update()
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(evnotify_update, argv)
