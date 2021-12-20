@@ -89,7 +89,6 @@ while True:
     if len(sock_data) < 608:
         continue
     emparts=decode_speedwire(sock_data)
-
     # Output...
     # don't know what P,Q and S means:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
