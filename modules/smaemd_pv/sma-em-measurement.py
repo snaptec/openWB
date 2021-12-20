@@ -85,7 +85,10 @@ except BaseException:
 # processing received messages
 while True:
     emparts = {}
-    emparts=decode_speedwire(sock.recv(608))
+    sock_data = sock.recv(608)
+    if len(sock_data) < 608:  
+        continue
+    emparts=decode_speedwire(sock_data)
     # Output...
     # don't know what P,Q and S means:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
