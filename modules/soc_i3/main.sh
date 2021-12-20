@@ -15,7 +15,7 @@ fi
 
 socDebug=$debug
 # for developement only
-socDebug=1
+#socDebug=1
 
 case $CHARGEPOINT in
 	2)
