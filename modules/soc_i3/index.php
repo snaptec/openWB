@@ -9,7 +9,9 @@ class Battery_API {
 	private $auth_api = 'https://customer.bmwgroup.com/gcdm/oauth/authenticate';
 	// private $vehicle_api = 'https://www.bmw-connecteddrive.de/api/vehicle';
 	// quick fix: .de url broken after 11.03.2021
-	private $vehicle_api = 'https://www.bmw-connecteddrive.com/api/vehicle';
+	// private $vehicle_api = 'https://www.bmw-connecteddrive.com/api/vehicle';
+	// openWB forum hint (old API still available): https://openwb.de/forum/viewtopic.php?p=52754#p52754
+	private $vehicle_api = 'https://b2vapi.bmwgroup.com/api/vehicle';
 
 	private $auth;
 	private $token;
@@ -58,14 +60,16 @@ class Battery_API {
 				$this->token_file
 			)
 		);
-		echo json_encode($json_content);
+
+		//echo json_encode($json_content);
 		if(!empty($json_content->token)) {
 			unset($json_content["token"]);
 		}
 		if(!empty($json_content->expires)) {
 			unset($json_content["expires"]);
 		}
-		echo json_encode($json_content);
+
+		//echo json_encode($json_content);
 		file_put_contents(
 			$this->token_file,
 			json_encode( $json_content )
@@ -199,9 +203,9 @@ class Battery_API {
 		$updateTime = date( 'd.m.Y H:i', $updateTimestamp );
 		$electricRange = intval( $attributes->beRemainingRangeElectricKm );
 		$chargingLevel = intval( $attributes->chargingLevelHv );
-		$chargingActive = intval( $attributes->chargingSystemStatus === 'CHARGINGACTIVE' );
-		$chargingError = intval( $attributes->chargingSystemStatus === 'CHARGINGERROR' );
-		//$chargingTimeRemaining = intval( $attributes->chargingTimeRemaining );
+		$chargingActive = intval( $attributes->charging_status === 'CHARGINGACTIVE' );
+		$chargingError = intval( $attributes->charging_status === 'CHARGINGERROR' );
+		$chargingTimeRemaining = intval( $attributes->remaining_charging_time_minutes );
 		//$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 
 		$stateOfCharge = number_format( round( $attributes->soc, 2 ), 2, ',', '.');
@@ -220,7 +224,7 @@ class Battery_API {
 					'chargingLevel' => $chargingLevel,
 					'chargingActive' => $chargingActive,
 					'chargingError' => $chargingError,
-					//'chargingTimeRemaining' => $chargingTimeRemaining,
+					'chargingTimeRemaining' => $chargingTimeRemaining,
 					'stateOfCharge' => $stateOfCharge,
 					'stateOfChargeMax' => $stateOfChargeMax
 				)
