@@ -7,6 +7,7 @@ from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.store import get_counter_value_store
+from modules.fronius.meter import MeterLocation
 
 
 def get_default_config() -> dict:
@@ -17,7 +18,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "variant": 0,
-            "meter_location": "0"
+            "meter_location": MeterLocation.grid.value
         }
     }
 
@@ -43,7 +44,7 @@ class FroniusSmCounter:
         else:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
-        if meter_location == "1":
+        if meter_location == MeterLocation.load:
             response = requests.get(
                 'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                 params=(('Scope', 'System'),),
@@ -53,6 +54,9 @@ class FroniusSmCounter:
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
+            # Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus
+            # dem Wechselrichter kam.
+            # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
             counter_state.imported, counter_state.exported = self.__sim_count.sim_count(
                 counter_state.power_all,
                 topic=topic_str,
@@ -97,7 +101,7 @@ class FroniusSmCounter:
         #  params=params, timeout=5)
         # response.raise_for_status()
         # response_json_id = response.json()["Body"]["Data"][meter_id]
-        meter_location = bool(response_json_id["Meter_Location_Current"])
+        meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
         power_all = response_json_id["PowerReal_P_Sum"]
