@@ -30,7 +30,8 @@ class HttpCounter:
         self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
         self.__get_powers = [
             create_request_function(domain,
-                                    component_config["configuration"]["power_l" + str(i) + "_path"]) for i in range(1, 4)
+                                    component_config["configuration"]["power_l" + str(i) + "_path"])
+            for i in range(1, 4)
         ]
 
         self.component_config = component_config
