@@ -61,3 +61,18 @@ def test_run_using_cli_args_int_arg(monkeypatch, function_factory, argv, arg_par
 
     # evaluation
     mock.assert_called_once_with(arg_parsed)
+
+
+def test_run_using_cli_args_multi_command(monkeypatch):
+    # setup
+    monkeypatch.setattr(sys, "argv", ["dummy", "a", "42"])
+    mock_a = Mock()
+    mock_b = Mock()
+    commands = {"a": create_int_arg_function(mock_a), "b": create_str_arg_function(mock_b)}
+
+    # execution
+    run_using_positional_cli_args(commands)
+
+    # evaluation
+    mock_a.assert_called_once_with(42)
+    mock_b.assert_not_called()
