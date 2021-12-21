@@ -72,10 +72,10 @@ class Battery_API {
 
 			//echo json_encode($json_content);
 			if(!empty($json_content->token)) {
-				unset($json_content["token"]);
+				unset($json_content->token);
 			}
 			if(!empty($json_content->expires)) {
-				unset($json_content["expires"]);
+				unset($json_content->expires);
 			}
 
 			//echo json_encode($json_content);
