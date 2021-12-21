@@ -1,20 +1,27 @@
 #!/bin/bash
-wattwr=$(curl --connect-timeout 10 -s $wr_http_w_url)
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
-re='^-?[0-9]+$'
+#For development only
+#Debug=1
 
-if ! [[ $wattwr =~ $re ]] ; then
-	wattwr="0"
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_http.log"
 fi
-if (( wattwr > 3 )); then
-	wattwr=$(( wattwr * -1 ))
-fi
-echo $wattwr
-echo $wattwr > /var/www/html/openWB/ramdisk/pvwatt
 
-if [[ $wr_http_kwh_url != "none" ]]; then
-	ekwh=$(curl --connect-timeout 5 -s $wr_http_kwh_url)
-	echo $ekwh > /var/www/html/openWB/ramdisk/pvkwh
-	pvkwhk=$(echo "scale=3;$ekwh / 1000" |bc)
-	echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
-fi
+openwbDebugLog ${DMOD} 2 "WR Leistung URL: ${wr_http_w_url}"
+openwbDebugLog ${DMOD} 2 "WR Energie URL: ${wr_http_kwh_url}"
+
+python3 /var/www/html/openWB/modules/wr_http/read_http.py "${wr_http_w_url}" "${wr_http_kwh_url}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
+echo $pvwatt

@@ -385,6 +385,11 @@ if (( $pingcheckactive == 1 )); then
 	$OPENWBBASEDIR/runs/pingcheck.sh &
 fi
 
+# record the current commit details
+commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
+echo "$commitId" > $RAMDISKDIR/currentCommitHash
+echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > $RAMDISKDIR/currentCommitBranches
+
 # EVSE Check
 openwbDebugLog "MAIN" 1 "starting evsecheck"
 $OPENWBBASEDIR/runs/evsecheck

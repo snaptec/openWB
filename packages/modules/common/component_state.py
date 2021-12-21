@@ -2,7 +2,7 @@ from typing import List
 
 
 class BatState:
-    def __init__(self, imported: float, exported: float, power: float, soc: int = 0):
+    def __init__(self, imported: float = 0, exported: float = 0, power: float = 0, soc: float = 0):
         self.imported = imported
         self.exported = exported
         self.power = power
