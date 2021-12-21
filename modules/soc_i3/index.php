@@ -72,10 +72,10 @@ class Battery_API {
 
 			//echo json_encode($json_content);
 			if(!empty($json_content->token)) {
-				unset($json_content["token"]);
+				unset($json_content->token);
 			}
 			if(!empty($json_content->expires)) {
-				unset($json_content["expires"]);
+				unset($json_content->expires);
 			}
 
 			//echo json_encode($json_content);
@@ -90,7 +90,7 @@ class Battery_API {
 				)
 			)->$cuser;
 		}
-		catch(Exception $e)
+		catch(Throwable $e)
 		{
 			// Something must be really defective in this file but we don't know what exactly.
 			// So we delete the file and have it re-created from scratch (because we return null).
