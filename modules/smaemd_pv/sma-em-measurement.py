@@ -86,7 +86,8 @@ except BaseException:
 while True:
     emparts = {}
     sock_data = sock.recv(608)
-    if len(sock_data) < 608:  
+    #Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
+    if sock_data[16:18] != b'\x60\x69':
         continue
     emparts=decode_speedwire(sock_data)
     # Output...
