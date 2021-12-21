@@ -16,7 +16,7 @@ else
 fi
 
 
-python3 ${OPENWBBASEDIR}/packages/modules/victron_inverter/device.py "inverter" "${pv1_ipa}" "100" "0" "1">>${MYLOGFILE} 2>&1
+python3 ${OPENWBBASEDIR}/packages/modules/victron/device.py "inverter" "${pv1_ipa}" "100" "0" "1">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt
