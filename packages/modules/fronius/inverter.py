@@ -151,7 +151,7 @@ class FroniusInverter:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                     f.write(str(counter))
                 with open("/var/www/html/openWB/ramdisk/pvkwh", "r") as ff:
-                    counter_old = ff.read()
+                    counter_old = int(ff.read())
             else:
                 topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
                     str(self.component_config["id"])+"/pvkwh_start"
