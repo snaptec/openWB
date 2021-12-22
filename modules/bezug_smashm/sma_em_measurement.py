@@ -29,11 +29,13 @@
 """
 
 import signal
-import sys
-#import smaem
+# import smaem
 import socket
 import struct
+import sys
+
 from speedwiredecoder import decode_speedwire
+
 
 # clean exit
 def abortprogram(signal,frame):
