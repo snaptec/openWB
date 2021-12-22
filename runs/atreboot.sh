@@ -371,6 +371,8 @@ sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /v
 commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
 echo $commitId > /var/www/html/openWB/ramdisk/currentCommitHash
 echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > /var/www/html/openWB/ramdisk/currentCommitBranches
+sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitHash
+sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitBranches
 
 # update broker
 echo "update broker..."
