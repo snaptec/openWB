@@ -41,8 +41,7 @@ class CarloGavazziCounter:
         power_all = sum(powers)
         currents = [abs(val / 1000) for val in self.__tcp_client.read_input_registers(
             0x0C, [ModbusDataType.INT_32] * 3, unit=unit)]
-        # ModbusDataType.FLOAT_16 wird erst ab Python 3.6 unterstützt
-        frequency = self.__tcp_client.delegate.read_input_registers(0x33, 2, unit=unit)[0] / 10
+        frequency = self.__tcp_client.read_input_registers(0x33, ModbusDataType.INT_16, unit=unit) / 10
         if frequency > 100:
             frequency = frequency / 10
 
