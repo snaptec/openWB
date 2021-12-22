@@ -56,7 +56,7 @@ class Device(AbstractDevice):
         if self._components:
             response = requests.get(self.device_config["configuration"]["ip_address"], timeout=5)
             log.MainLogger().debug(
-                "Antwort auf "+str(self.device_config["configuration"]["ip_address"])+": "+str(response))
+                "Antwort auf "+str(self.device_config["configuration"]["ip_address"])+": "+str(response.text))
             response.raise_for_status()
             response = response.json()
             for component in self._components:

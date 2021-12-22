@@ -25,11 +25,13 @@ def get_default_config() -> dict:
 
 class HttpCounter:
     def __init__(self, component_config: dict, domain: str) -> None:
-        self.__get_power_all = create_request_function(domain, component_config["power_all_path"])
-        self.__get_imported = create_request_function(domain, component_config["imported_path"])
-        self.__get_exported = create_request_function(domain, component_config["exported_path"])
+        self.__get_power_all = create_request_function(domain, component_config["configuration"]["power_all_path"])
+        self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
+        self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
         self.__get_powers = [
-            create_request_function(domain, component_config["power_l" + str(i) + "_path"]) for i in range(1, 4)
+            create_request_function(domain,
+                                    component_config["configuration"]["power_l" + str(i) + "_path"])
+            for i in range(1, 4)
         ]
 
         self.component_config = component_config

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-import sys
-from typing import Dict, List, Union
+from typing import Dict, Optional, Union
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.victron import bat
 from modules.victron import counter
+from modules.victron import inverter
 
 
 def get_default_config() -> dict:
@@ -25,7 +26,8 @@ def get_default_config() -> dict:
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
         "bat": bat.VictronBat,
-        "counter": counter.VictronCounter
+        "counter": counter.VictronCounter,
+        "inverter": inverter.VictronInverter
     }
 
     def __init__(self, device_config: dict) -> None:
@@ -62,13 +64,17 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
+def read_legacy(
+        component_type: str,
+        ip_address: str,
+        modbus_id: Optional[int] = 100,
+        mppt: Optional[bool] = False,
+        num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
-        "counter": counter
+        "counter": counter,
+        "inverter": inverter
     }
-    component_type = argv[1]
-    ip_address = argv[2]
 
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
@@ -76,32 +82,24 @@ def read_legacy(argv: List[str]) -> None:
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "counter":
-            modbus_id = argv[3]
-            component_config["configuration"]["modbus_id"] = modbus_id
-            try:
-                num = int(argv[4])
-            except IndexError:
-                num = None
-        else:
-            try:
-                num = int(argv[3])
-            except IndexError:
-                num = None
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config["id"] = num
+    component_config["configuration"]["modbus_id"] = modbus_id
+    component_config["configuration"]["mppt"] = mppt
     dev.add_component(component_config)
 
     log.MainLogger().debug('Victron IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Victron Modbus-ID: ' + str(modbus_id))
+    log.MainLogger().debug('Victron MPPT: ' + str(mppt))
     dev.update()
 
 
 if __name__ == "__main__":
     try:
-        read_legacy(sys.argv)
+        run_using_positional_cli_args(read_legacy)
     except Exception:
         log.MainLogger().exception("Fehler im Victron Skript")

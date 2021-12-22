@@ -22,8 +22,8 @@ def get_default_config() -> dict:
 
 class HttpInverter:
     def __init__(self, component_config: dict, domain: str) -> None:
-        self.__get_power = create_request_function(domain, component_config["power_path"])
-        self.__get_counter = create_request_function(domain, component_config["counter_path"])
+        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
+        self.__get_counter = create_request_function(domain, component_config["configuration"]["counter_path"])
         self.component_config = component_config
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
