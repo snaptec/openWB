@@ -106,12 +106,17 @@ class FroniusInverter:
             try:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "r") as f:
                     counter_offset = int(f.read())
+            except FileNotFoundError as e:
+                log.MainLogger().exception(str(e))
+                counter_offset = 0
+            try:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "r") as f:
                     counter_start = int(f.read())
             except FileNotFoundError as e:
                 log.MainLogger().exception(str(e))
-            counter_offset = 0
-            counter_start = None
+                counter_start = counter - daily_yield
+                with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
+                    f.write(str(counter_start))
         else:
             topic = "openWB/system/device/" + str(self.__device_id)+"/component/" + \
                 str(self.component_config["id"])+"/counter_offset"
@@ -146,7 +151,7 @@ class FroniusInverter:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                     f.write(str(counter))
                 with open("/var/www/html/openWB/ramdisk/pvkwh", "r") as ff:
-                    counter_old = ff.read()
+                    counter_old = int(ff.read())
             else:
                 topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
                     str(self.component_config["id"])+"/pvkwh_start"
