@@ -21,7 +21,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "ip_address2": "none",
-            "gen24": 0
+            "gen24": False
         }
     }
 
@@ -59,15 +59,15 @@ class FroniusInverter:
         power1 = power
         power *= -1
         topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + str(self.component_config["id"])+"/"
-        if gen24 == 0:
+        if gen24:
+            _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
+        else:
             counter = int(response.json()["Body"]["Data"]["Site"]["E_Total"])
             daily_yield = int(response.json()["Body"]["Data"]["Site"]["E_Day"])
             counter, counter_start, counter_offset = self.__calculate_offset(counter, daily_yield)
             counter = counter + counter2
             if counter > 0 and self.component_config["configuration"]["ip_address2"] == "none":
                 counter = self.__add_and_save_offset(daily_yield, counter, counter_start, counter_offset)
-        else:
-            _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
 
         if bat is True:
             _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
@@ -94,7 +94,7 @@ class FroniusInverter:
             except TypeError:
                 # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
                 power2 = 0
-            if self.component_config["configuration"]["gen24"] == 0:
+            if not self.component_config["configuration"]["gen24"]:
                 counter2 = int(response.json()["Body"]["Data"]["Site"]["E_Total"])
         else:
             power2 = 0

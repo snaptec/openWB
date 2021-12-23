@@ -18,7 +18,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "variant": 0,
-            "meter_location": MeterLocation.grid.value
+            "meter_location": MeterLocation.grid
         }
     }
 
@@ -81,7 +81,7 @@ class FroniusSmCounter:
         elif variant == 1:
             params = (
                 ('Scope', 'Device'),
-                ('DeviceID', meter_id),
+                ('DeviceId', meter_id),
                 ('DataCollection', 'MeterRealtimeData'),
             )
         else:
@@ -131,7 +131,7 @@ class FroniusSmCounter:
             params=(('Scope', 'System'),),
             timeout=5)
         response.raise_for_status()
-        response_json_id = response.json()["Body"]["Data"][meter_id]
+        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
         meter_location = self.component_config["configuration"]["meter_location"]
 
         power_all = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]

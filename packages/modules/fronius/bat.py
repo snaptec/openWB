@@ -15,7 +15,7 @@ def get_default_config() -> dict:
         "type": "bat",
         "configuration":
         {
-            "gen24": 0
+            "gen24": False
         }
     }
 
@@ -48,7 +48,7 @@ class FroniusBat:
             power = 0
 
         try:
-            if gen24 == 1:
+            if gen24:
                 soc = float(resp_json["Body"]["Data"][meter_id]["Controller"]["StateOfCharge_Relative"])
             else:
                 soc = float(resp_json["Body"]["Data"]["Inverters"]["1"]["SOC"])
