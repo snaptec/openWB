@@ -32,7 +32,7 @@ class EVNotify(AbstractDevice):
             if isinstance(device_config, EVNotifyConfiguration) \
             else EVNotifyConfiguration.from_dict(device_config)
         self.value_store = store.get_car_value_store(self.config.id)
-        self.component_info = ComponentInfo(self.config.id, "EVNotify", "ev")
+        self.component_info = ComponentInfo(self.config.id, "EVNotify", "vehicle")
 
     def add_component(self, component_config: dict) -> None:
         pass  # EVNotify does not have any components
