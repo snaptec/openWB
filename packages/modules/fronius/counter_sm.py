@@ -50,7 +50,7 @@ class FroniusSmCounter:
                 params=(('Scope', 'System'),),
                 timeout=5)
             response.raise_for_status()
-            counter_state.power_all = int(response.json()["Body"]["Data"]["Site"]["P_Grid"])
+            counter_state.power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
