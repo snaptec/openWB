@@ -382,17 +382,24 @@ $numDevices = 9;
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
-											<label class="col-md-4 col-form-label">Bei Autoladen reduzieren</label>
+											<label class="col-md-4 col-form-label">Bei Autoladen...</label>
 											<div class="col">
 												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" name="device_deactivateWhileEvCharging" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													<label class="btn btn-outline-info">
-														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">Nein
+														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">nichts tun
 													</label>
 													<label class="btn btn-outline-info">
-														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
+														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ausschaltschwelle anpassen
+													</label>
+												 	<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>2" data-option="2" value="2">ausschalten/nicht einschalten
 													</label>
 												</div>
-												<span class="form-text small">Diese Option sorgt dafür, dass die aktuelle Leistungsaufnahme von diesem Gerät in den die Pv Überschussberechnung miteinbezogen wird. Wenn dann ein Auto geladen wird (> 1000 Watt Leistungsaufnahme), wird die Ausschaltschwelle (sofern eine Bezugsschwelle definiert ist) auf 0 gesetzt. Ebenso wird die Ausschaltverzögerung auf 0 gesetzt. Dadurch werden diese Geräte als erstes abgeschaltet, wenn das Auto lädt und der Überschuss nicht ausreicht.</span>
+												<span class="form-text small">Diese Option (bei Auschaltschwelle anpassen oder auschalten/nicht einschalten) sorgt dafür, dass die aktuelle Leistungsaufnahme von diesem Gerät in den die Pv Überschussberechnung miteinbezogen wird. Wenn dann ein Auto geladen wird (> 1000 Watt Leistungsaufnahme),<br>
+												wird bei Ausschaltschwelle anpassen: Die Ausschaltverzögerung auf 0 gesetzt und die Ausschaltschwelle (sofern eine Bezugsschwelle definiert ist) auf 0 gesetzt. Dadurch werden diese Geräte als erstes abgeschaltet, wenn das Auto lädt und der Überschuss nicht ausreicht.
+												<br>
+												wird bei ausschalten/nicht einschalten: Das Gerät abgeschaltet.		Dann steht die aktuelle Leistungsaufnahme sofort für die Autoladung zur Verfügung.										
+												</span>
 											</div>
 										</div>
 									</div>
