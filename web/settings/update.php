@@ -25,33 +25,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -84,7 +64,7 @@
 			</div>
 
 			<div class="card border-secondary">
-				<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
+				<form class="form" id="releasetrainForm" action="./settings/saveupdate.php" method="POST">
 					<div class="card-header bg-secondary">
 						Versionsauswahl
 					</div>
@@ -95,13 +75,6 @@
 								<label class="custom-control-label vaRow" for="radioBtnStable">
 									Stable:
 									<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
-								</label>
-							</div>
-							<div class="custom-control custom-radio">
-								<input class="custom-control-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
-								<label class="custom-control-label vaRow" for="radioBtnStableold">
-									Stable old:
-									<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
 								</label>
 							</div>
 							<div class="custom-control custom-radio">
@@ -128,17 +101,35 @@
 
 			<div class="card border-secondary">
 				<div class="card-header bg-secondary">
+					Hinweise
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+							<p>Vor dem Update sind ggf. angeschlossene Fahrzeuge abzustecken!</p>
+							<p>Eventuell vorhandene externe openWB die als Ladepunkt konfiguriert sind erhalten automatisch ebenso ein Update.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card border-secondary">
+				<div class="card-header bg-secondary">
 					Versionserläuterung
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="col">
+							<p class="alert alert-warning">
+								Für alle Versionen gilt: <span class="text-danger">Ein Downgrade auf eine ältere Version kann zu Fehlern führen!</span> Vor dem Update am Besten ein Backup erstellen und dieses im Zweifelsfall wieder einspielen, anstatt ein Downgrade durchzuführen.
+							</p>
 							<h2>Stable</h2>
-							<p>Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.</p>
-							<h2>Stable old</h2>
-							<p>Ist das letzte (ältere) Release. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.</p>
+							<p>
+								Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.
+							</p>
 							<h2>Beta</h2>
-							<p>Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.</p>
+							<p>
+								Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.
+							</p>
 							<h2>Nightly</h2>
 							<p>
 								Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.<br>
@@ -233,7 +224,6 @@
 
 				$(function getAllVersions() {
 					displayVersion("Stable", 'https://raw.githubusercontent.com/snaptec/openWB/stable17/web/version');
-					displayVersion("Stableold", 'https://raw.githubusercontent.com/snaptec/openWB/stable/web/version');
 					displayVersion("Beta", 'https://raw.githubusercontent.com/snaptec/openWB/beta/web/version');
 					displayVersion("Nightly", 'https://raw.githubusercontent.com/snaptec/openWB/master/web/version');
 				});
@@ -276,10 +266,6 @@
 						} else if ( releasetrains.includes("stable17") ) {
 							// version from config file not availabe so select stable
 							$("input[value='stable17']").prop('checked', true);
-						} else if ( releasetrains.includes("stable") ) {
-							// version from config file not availabe so select stable
-							$("input[value='stable']").prop('checked', true);
-
 						} else if ( releasetrains.includes("beta") ) {
 							// stable not availabe so select beta
 							$("input[value='beta']").prop('checked', true);
@@ -299,9 +285,6 @@
 					switch (choice) {
 						case "stable":
 							$("#selectedVersionSpan").text( $("#availStableVersionSpan").data("version") );
-							break;
-						case "stableold":
-							$("#selectedVersionSpan").text( $("#availStableoldVersionSpan").data("version") );
 							break;
 						case "beta":
 							$("#selectedVersionSpan").text( $("#availBetaVersionSpan").data("version") );

@@ -55,7 +55,7 @@ function getTopicToSendTo (elementId) {
     var topic = element.data('topicprefix') + elementId;
     topic = topic.replace('/get/', '/set/');
     if (topic.includes('MaxPriceForCharging')) {
-	    topic = 'openWB/set/awattar/MaxPriceForCharging'
+        topic = 'openWB/set/awattar/MaxPriceForCharging'
     }
     return topic;
 }
@@ -64,7 +64,7 @@ function setToggleBtnGroup(groupId, option) {
     /** @function setInputValue
      * sets the value-label (if exists) attached to the element to the element value
      * @param {string} elementId - the id of the button group
-     * @param {string} option - the option the group btns will be set to
+     * @param {string} option - the option the group buttons will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
     $('input[name="' + groupId + '"][data-option="' + option + '"]').prop('checked', true);

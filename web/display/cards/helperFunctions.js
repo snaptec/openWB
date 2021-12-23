@@ -1,9 +1,19 @@
 /**
- * helper functions for setup-pages
+ * helper functions for cards display theme
  *
  * @author Michael Ortenstein
  * @author Lutz Bender
  */
+
+/**
+ * detect touch devices and map contextmenu (long press) to normal click
+ */
+$('body').on("contextmenu", function(event){
+    if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+        $(event.target).trigger("click"); // fire a click event
+        event.preventDefault();
+    }
+});
 
 function updateLabel(elementId) {
     /** @function updateLabel
@@ -65,7 +75,7 @@ function setToggleBtnGroup(groupId, option) {
     /** @function setToggleBtnGroup
      * sets the state of a button group
      * @param {string} groupId - the id of the button group
-     * @param {string} option - the option the group btns will be set to
+     * @param {string} option - the option the group buttons will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
     $('input[name="' + groupId + '"][data-option="' + option + '"]').prop('checked', true);

@@ -14,7 +14,7 @@ else
 	echo "echo" > /dev/null
 fi
 
-if [[ $sdm120modbusllid1s2 != "none" ]] && [[ $sdm120modbusllid2s2 != "none" ]] && [[ $sdm120modbusllid3s2 != "none" ]] ; then
+if [[ $sdm120modbusllid1s2 != "254" ]] && [[ $sdm120modbusllid2s2 != "254" ]] && [[ $sdm120modbusllid3s2 != "254" ]] ; then
 	n=0
 	output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120lp3source $sdm120modbusllid1s2 $sdm120modbusllid2s2 $sdm120modbusllid3s2)
 	while read -r line; do
@@ -85,7 +85,7 @@ if [[ $sdm120modbusllid1s2 != "none" ]] && [[ $sdm120modbusllid2s2 != "none" ]] 
 			llkwh3=${llkwh3%???}
 			fi
 		n=$((n + 1))
-	    done <<< "$output"
+	done <<< "$output"
 	if [[ $llkwh =~ $rekwh ]] && [[ $llkwh2 =~ $rekwh ]] && [[ $llkwh3 =~ $rekwh ]]; then
 		lltotal=`echo "($llkwh+$llkwh2+$llkwh3)" |bc`
 		LANG=C printf "%.3f\n" $lltotal > /var/www/html/openWB/ramdisk/llkwhs2
@@ -94,9 +94,8 @@ if [[ $sdm120modbusllid1s2 != "none" ]] && [[ $sdm120modbusllid2s2 != "none" ]] 
 	 	llaktuell=`echo "($wl1+$wl2+$wl3)" |bc`
 		echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuells2
 	fi
-
 else
-	if [[ $sdm120modbusllid2s2 != "none" ]] ; then
+	if [[ $sdm120modbusllid2s2 != "254" ]] ; then
 		n=0
 		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120lp3source $sdm120modbusllid1s2 $sdm120modbusllid2s2)
 		while read -r line; do
@@ -145,7 +144,7 @@ else
 				llkwh2=${llkwh2%???}
 			fi
 			n=$((n + 1))
-		    done <<< "$output"
+		done <<< "$output"
 		if [[ $llkwh =~ $rekwh ]] && [[ $llkwh2 =~ $rekwh ]] ; then
 			lltotal=`echo "($llkwh+$llkwh2)" |bc`
 			LANG=C printf "%.3f\n" $lltotal > /var/www/html/openWB/ramdisk/llkwhs2
@@ -158,11 +157,3 @@ else
 		sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm1.py $sdm120lp3source $sdm120modbusllid1s2
 	fi
 fi
-
-
-
-
-
-
-
-

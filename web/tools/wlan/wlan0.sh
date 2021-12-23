@@ -1,10 +1,15 @@
 #!/bin/bash
-sudo iwlist wlan0 scan |grep ESSID: > /var/www/html/openWB/ramdisk/wifilist.txt
-sudo iwconfig wlan0|grep ESSID: > /var/www/html/openWB/ramdisk/wifilist2.txt
-input=$(</var/www/html/openWB/ramdisk/wifilist2.txt)
+
+ramdiskdir=/var/www/html/openWB/ramdisk
+
+sudo iwlist wlan0 scan |grep "ESSID:"|sort|uniq > ${ramdiskdir}/wifilist.txt
+sudo iwconfig wlan0|grep ESSID: > ${ramdiskdir}/wifilist2.txt
+input=$(<${ramdiskdir}/wifilist2.txt)
 temp="${input#*ESSID:}"
-awk 'BEGIN{print " "} {for(i=1;i<=NF;i++)print "<br> " $i " "} END{print " "}' /var/www/html/openWB/ramdisk/wifilist.txt > /var/www/html/openWB/ramdisk/wifilist1.txt
-cat  /var/www/html/openWB/ramdisk/wifilist1.txt
+while read  line
+do
+  echo "${line}<br>" 
+done <${ramdiskdir}/wifilist.txt
 echo "<br>"
 echo "<br>"
 echo "aktuell verbunden mit ESSID: <b> " $temp  "</b>"

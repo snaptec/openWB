@@ -1,11 +1,25 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
-answer=$(curl -k --connect-timeout 5 -s "https://$speicherpwip/api/meters/aggregates")
-evuwatt=$(echo $answer | jq -r '.site.instant_power'  | sed 's/\..*$//')
-echo $evuwatt
-echo $evuwatt > /var/www/html/openWB/ramdisk/wattbezug
-evuikwh=$(echo $answer | jq -r '.site.energy_imported')
-echo $evuikwh > /var/www/html/openWB/ramdisk/bezugkwh
-evuekwh=$(echo $answer | jq -r '.site.energy_exported')
-echo $evuekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+#For development only
+#Debug=1
+
+if [ $DMOD == "MAIN" ]; then
+    MYLOGFILE="$RAMDISKDIR/openWB.log"
+else
+    MYLOGFILE="$RAMDISKDIR/evu_json.log"
+fi
+
+python3 /var/www/html/openWB/modules/bezug_powerwall/powerwall.py "${OPENWBBASEDIR}" "${speicherpwloginneeded}" "${speicherpwuser}" "${speicherpwpass}" "${speicherpwip}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+echo $wattbezug

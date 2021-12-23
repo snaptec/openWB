@@ -1,24 +1,31 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BATT"
+DMOD="MAIN"
+Debug=$debug
 
-speicherwatttmp=$(curl -k --connect-timeout 5 -s "https://$speicherpwip/api/meters/aggregates")
+#For Development only
+#Debug=1
 
-
-speicherwatt=$(echo $speicherwatttmp | jq .battery.instant_power | sed 's/\..*$//')
-speicherwatt=$(echo "$speicherwatt * -1" | bc)
-ra='^[-+]?[0-9]+\.?[0-9]*$'
-if ! [[ $speicherwatt =~ $ra ]] ; then
-		  speicherwatt="0"
+if [ ${DMOD} == "MAIN" ]; then
+    MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+    MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
-echo $speicherwatt > /var/www/html/openWB/ramdisk/speicherleistung
+openwbDebugLog ${DMOD} 2 "Speicher Login erforderlich: ${speicherpwloginneeded}"
+openwbDebugLog ${DMOD} 2 "Speicher User: ${speicherpwuser}"
+openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${speicherpwpass}"
+openwbDebugLog ${DMOD} 2 "Speicher IP: ${speicherpwip}"
 
-speichersoc=$(curl -k --connect-timeout 5 -s "https://$speicherpwip/api/system_status/soe")
-soc=$(echo $speichersoc | jq .percentage)
-soc=$(echo "($soc+0.5)/1" | bc)
-if ! [[ $soc =~ $ra ]] ; then
-	soc="0"
-fi
+python3 /var/www/html/openWB/modules/speicher_powerwall/powerwall.py "${OPENWBBASEDIR}" "${speicherpwloginneeded}" "${speicherpwuser}" "${speicherpwpass}" "${speicherpwip}" >>$MYLOGFILE 2>&1
+ret=$?
 
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-echo $soc > /var/www/html/openWB/ramdisk/speichersoc
+speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+
+openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"

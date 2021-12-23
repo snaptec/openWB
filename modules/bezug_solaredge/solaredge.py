@@ -1,22 +1,25 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-ipaddress = str(sys.argv[1])
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(ipaddress, port=502)
-slaveid = int(sys.argv[2])
+
+ipaddress = str(sys.argv[1])
+modbusport = int(sys.argv[2])
+slaveid = int(sys.argv[3])
+
+client = ModbusTcpClient(ipaddress, port=modbusport)
 
 resp= client.read_holding_registers(40206,5,unit=slaveid)
 value1 = resp.registers[0] 
 all = format(value1, '04x') 
 final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
- 
+
 sf = resp.registers[4] 
 sf = format(sf, '04x') 
 fsf = int(struct.unpack('>h', sf.decode('hex'))[0]) 
@@ -36,12 +39,10 @@ if fsf == -3:
     final = final / 1000 
 if fsf == -4: 
     final = final / 10000 
- 
+
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w') 
 f.write(str(final)) 
 f.close() 
- 
-
 
 resp= client.read_holding_registers(40194,2,unit=slaveid)
 multipli = resp.registers[0]
@@ -59,7 +60,6 @@ resp= client.read_holding_registers(40193,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finala3 = int(struct.unpack('>h', all.decode('hex'))[0]) 
-
 
 resp= client.read_holding_registers(40194,2,unit=slaveid)
 mult2ipli = resp.registers[0]
@@ -119,7 +119,6 @@ f.write(str(finala3))
 f.close()
 
 #voltage
-
 resp= client.read_holding_registers(40196,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
@@ -143,12 +142,11 @@ f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
 f.write(str(finale3))
 f.close()
 
- #watt pro phase
+#watt pro phase
 resp= client.read_holding_registers(40207,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale1 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
-
 
 resp= client.read_holding_registers(40208,1,unit=slaveid)
 value1 = resp.registers[0]
@@ -159,8 +157,6 @@ value1 = resp.registers[0]
 all = format(value1, '04x')
 finale3 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
 
-
-        
 f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
 f.write(str(finale1))
 f.close()
@@ -171,16 +167,11 @@ f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
 f.write(str(finale3))
 f.close()
 
-
-
 #hz
-        
-
 resp= client.read_holding_registers(40204,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finalhz = int(struct.unpack('>h', all.decode('hex'))[0]) 
-
 
 resp= client.read_holding_registers(40205,1,unit=slaveid)
 multipli = resp.registers[0]
@@ -188,33 +179,29 @@ multiplint = format(multipli, '04x')
 fmuliplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
 
 if fmultiplint == 4:
-        finalhz = finalhz * 1000
+    finalhz = finalhz * 1000
 if fmultiplint == 3:
-        finalhz = finalhz * 100
+    finalhz = finalhz * 100
 if fmultiplint == 2:
-        finalhz = finalhz * 10
+    finalhz = finalhz * 10
 if fmultiplint == 1:
-        finalhz = finalhz * 1
+    finalhz = finalhz * 1
 if fmultiplint == 0:
-        finalhz = finalhz  / 10
+    finalhz = finalhz  / 10
 if fmultiplint == -1:
-        finalhz = finalhz / 100
+    finalhz = finalhz / 100
 if fmultiplint == -2:
-        finalhz = finalhz / 1000
+    finalhz = finalhz / 1000
 if fmultiplint == -3:
-        finalhz = finalhz / 10000
+    finalhz = finalhz / 10000
 if fmultiplint == -4:
-        finalhz = finalhz / 100000
+    finalhz = finalhz / 100000
 if fmultiplint == -5:
-        finalhz = finalhz / 1000000
-        
+    finalhz = finalhz / 1000000
+
 f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
 f.write(str(finalhz))
 f.close()
-
-
-
-
 
 #resp= client.read_holding_registers(40084,2,unit=1)
 #multipli = resp.registers[0]
@@ -250,7 +237,6 @@ f.close()
 #f.write(str(pvkwhk))
 #f.close()
 
-
 resp= client.read_holding_registers(40234,2,unit=slaveid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
@@ -268,4 +254,3 @@ final = int(struct.unpack('>i', all.decode('hex'))[0])
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(final))
 f.close()
-

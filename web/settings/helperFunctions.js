@@ -2,7 +2,92 @@
  * helper functions for setup-pages
  *
  * @author Michael Ortenstein
+ * @author Lutz Bender
  */
+
+/**
+ * setCookie
+ * stores a cookie in the current browser
+ * @param {string} cname cookie name
+ * @param {string} cvalue cookie value
+ * @param {int} exdays expires in days
+ */
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/openWB/";
+}
+
+/**
+ * getCookie
+ * returns a cookie value
+ * @param {string} cname cookie name
+ * @returns {string}
+ */
+function getCookie(cname) {
+    var name = cname + '=';
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return '';
+}
+
+// get selected theme and set style
+var themeCookie = getCookie('openWBTheme');
+if( '' != themeCookie ){
+    $('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210330">');
+}
+
+/**
+ * hideSection
+ * add class 'hide' to element with selector 'section' in JQuery syntax
+ * disables all contained input and select elements if 'disableChildren' is not set to false
+**/
+function hideSection(section, disableChildren=true) {
+    $(section).addClass('hide');
+    updateFormFieldVisibility();
+}
+
+/**
+ * showSection
+ * remove class 'hide' from element with selector 'section' in JQuery syntax
+ * enables all contained input and select elements if 'enableChildren' is not set to false
+**/
+function showSection(section, enableChildren=true) {
+    $(section).removeClass('hide');
+    updateFormFieldVisibility();
+}
+
+/**
+ * updateFormFields
+ * checks every input and select element for a parent with class 'hide'
+ * if there is a match, disable this element
+**/
+function updateFormFieldVisibility() {
+    $('input').each(function() {
+        if( $(this).closest('.hide').length == 0 ) {
+            $(this).prop("disabled", false);
+        } else {
+            $(this).prop("disabled", true);
+        }
+    });
+    $('select').each(function() {
+        if( $(this).closest('.hide').length == 0 ) {
+            $(this).prop("disabled", false);
+        } else {
+            $(this).prop("disabled", true);
+        }
+    });
+}
 
 var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
 
@@ -12,8 +97,12 @@ var changedValuesHandler = {
         // if array is empty after delete, all send topics have been received with correct value
         // so redirect to main page
         // array is only filled by function getChangedValues!
+        // console.log("num changed values left: "+Object.keys(changedValues).length);
         if ( Object.keys(changedValues).length === 0 ) {
-            window.location.href = './index.php';
+            // console.log("done");
+            setTimeout( function(){
+                window.location.href = './index.php';
+            }, 200);
         } else {
             return true;
         }
@@ -66,8 +155,8 @@ function setInputValue(elementId, value) {
             updateLabel(elementId);
         }
     } else {
-	var element = $('#' + elementId);
-	element.val(value);
+        var element = $('#' + elementId);
+        element.val(value);
     }
 }
 
@@ -75,7 +164,7 @@ function setToggleBtnGroup(groupId, option) {
     /** @function setInputValue
      * sets the value-label (if exists) attached to the element to the element value
      * @param {string} elementId - the id of the button group
-     * @param {string} option - the option the group btns will be set to
+     * @param {string} option - the option the group buttons will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
     $('input[name=' + groupId + '][data-option="' + option + '"]').prop('checked', true);
@@ -109,7 +198,16 @@ function sendValues() {
         Object.keys(changedValues).forEach(function(topic, index) {
             var value = this[topic].toString();
             setTimeout(function () {
-                publish(value, topic);
+                // console.log("publishing changed value: "+topic+": "+value);
+                // as all empty messages are not processed by mqttsub.py, we have to send something useful
+                if ( value.length == 0 ) {
+                    publish("none", topic);
+                    // delete empty values as we will never get an answer
+                    console.log("deleting empty changedValue: "+topic)
+                    delete changedValues[topic];
+                } else {
+                    publish(value, topic);
+                }
             }, index * intervall);
         }, changedValues);
 
@@ -126,7 +224,7 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
+    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="url"]:not(:disabled), input[type="password"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
         if ( typeof topicSubGroup == 'undefined' ) {
@@ -159,6 +257,7 @@ function getChangedValues() {
         if ( ( value != undefined ) && ( originalValues[topic] != value ) ) {
             topic = topic.replace('/get/', '/set/');
             changedValues[topic] = value;
+            // console.log("ChangedValue found: "+topic+": "+value);
         }
     });
 }
@@ -167,20 +266,20 @@ function setToDefaults() {
     /** @function setToDefaults
      * sets all inputs and button-groups to their default value
      */
-     $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
-         // first all number-field and range sliders
-         var defaultValue = $(this).data('default');
-         if ( typeof defaultValue !== 'undefined' ) {
-             setInputValue($(this).attr('id'), defaultValue);
-         }
-     });
-     $('.btn-group-toggle').each(function() {
-         // then all toggle btn-groups
-         var defaultValue = $(this).data('default');
-         if ( typeof defaultValue !== 'undefined' ) {
-             setToggleBtnGroup($(this).attr('id'), defaultValue);
-         }
-     });
+    $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
+        // first all number-field and range sliders
+        var defaultValue = $(this).data('default');
+        if ( typeof defaultValue !== 'undefined' ) {
+            setInputValue($(this).attr('id'), defaultValue);
+        }
+    });
+    $('.btn-group-toggle').each(function() {
+        // then all toggle btn-groups
+        var defaultValue = $(this).data('default');
+        if ( typeof defaultValue !== 'undefined' ) {
+            setToggleBtnGroup($(this).attr('id'), defaultValue);
+        }
+    });
 }
 
 function formatToNaturalNumber(element) {
@@ -189,11 +288,11 @@ function formatToNaturalNumber(element) {
      * @param {object} element - the input element
      * @requires max value set up for input field properly
      */
-     if ( element.value.length > 0 ) {
-         element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
-     }
-     var max = $(element).attr('max');
-     if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
-         element.value = max;
-     }
+    if ( element.value.length > 0 ) {
+        element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
+    }
+    var max = $(element).attr('max');
+    if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
+        element.value = max;
+    }
 }

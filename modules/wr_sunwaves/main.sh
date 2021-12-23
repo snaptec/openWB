@@ -1,18 +1,29 @@
-variable=$(curl --digest -u customer:$wrsunwavespw http://$wrsunwavesip/data/ajax.txt?CAN=1)
-count=0
-IFS=";"
-for v in $variable
-do
-	if (( count == 1 ));then
-		pvwatt=$(echo ${v//[!0-9]/})
-	       	pvwatt=$(echo "$pvwatt*-1" |bc)
-		echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-		echo $pvwatt 
-	fi
-	if (( count == 16 ));then
-		echo $(echo "$v*1000" | bc) > /var/www/html/openWB/ramdisk/pvkwh
-	fi
+#!/bin/bash
+
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="PV"
+DMOD="MAIN"
+Debug=$debug
+
+#For Development only
+#Debug=1
+
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_sunwaves.log"
+fi
+
+openwbDebugLog ${DMOD} 2 "PV IP: ${wrsunwavesip}"
+openwbDebugLog ${DMOD} 2 "PV Passwort: ${wrsunwavespw}"
 
 
-	count=$((count+1))
-done
+python3 /var/www/html/openWB/modules/wr_sunwaves/sunwaves.py "${wrsunwavesip}" "${wrsunwavespw}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
+echo $pvwatt

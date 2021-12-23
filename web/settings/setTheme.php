@@ -22,48 +22,28 @@
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css">
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
 
 		<?php
-			// support function for dynmic built of carousel content
+			// support function for dynamic built of carousel content
 			function dir_list($rootDir){
 				// returns all directories as theme names from themes folder
 				// except for themes hidden and standard
 				$dirList[] = "standard";  // standard always first
 				foreach( array_diff(scandir($rootDir),array('.','..')) as $subDir ) {
-					if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "hidden") !== 0 && strcasecmp($subDir, "standard") !== 0) {
+					if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "standard") !== 0) {
 						$dirList[] = $subDir;
 					}
 				}
@@ -104,7 +84,7 @@
 			}
 
 			// call function to read all directories to $allThemes
-			$allThemes = dir_list('/var/www/html/openWB/web/themes');
+			$allThemes = dir_list($_SERVER['DOCUMENT_ROOT'] . '/openWB/web/themes');
 			// set default theme
 			$themeCookie = 'standard';
 			// check if theme cookie exists
@@ -150,7 +130,7 @@
 				</div> <!-- card-body -->
 				<div class="card-footer">
 					<div class="row justify-content-center">
-						<button onclick="saveTheme()" class="btn btn-success">Theme übernehmen</button>
+						<button id="saveButton" onclick="saveTheme()" class="btn btn-success">Theme übernehmen</button>
 					</div>
 				</div> <!-- card-footer -->
 			</div> <!-- card -->
@@ -174,15 +154,31 @@
 
 			function saveTheme() {
 				var selectedTheme = $('.carousel-item.active').find('img').attr('title');  // get theme name from active carousel item
-				$.ajax({
-					type: "GET",
-					url: "setThemeCookie.php" ,
-					data: { theme: selectedTheme },
-					success : function() {
-						window.location.href = "index.php";
-					}
-				});
+				// console.log("selected Theme: " + selectedTheme);
+				$('link[rel="stylesheet"][href^="themes/' + themeCookie + '/settings.css"]').remove();
+				$('head').append('<link rel="stylesheet" href="themes/' + selectedTheme + '/settings.css?v=20200801">');
+				setCookie("openWBTheme", selectedTheme, 365);
+				themeCookie = selectedTheme;
+				$('#saveButton').removeClass('btn-warning');
+				$('#saveButton').addClass('btn-success');
 			}
+
+			function notSaved() {
+				$('#saveButton').removeClass('btn-success');
+				$('#saveButton').addClass('btn-warning');
+			};
+
+			$(document).ready(function(){
+				$('.carousel-control-prev').click(function(){
+					notSaved();
+				});
+				$('.carousel-control-next').click(function(){
+					notSaved();
+				});
+				$('.carousel-indicators li').click(function(){
+					notSaved();
+				});
+			});
 		</script>
 
 	</body>

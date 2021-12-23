@@ -1,27 +1,30 @@
 #!/bin/bash
-#!/bin/bash
 
-sresponse=$(curl --connect-timeout 3 -s "http://$speichersolarwattip/rest/kiwigrid/wizard/devices")
-#pvwh=$(echo $sresponse | jq '.result.items | .[0].tagValues.WorkProduced.value')
-#echo "PV erzeugt $pvwh"
-#pvwatt=$(echo $sresponse | jq '.result.items | .[0].tagValues.PowerProduced.value')
-#echo "PV Leistung aktuellt $pvwatt"
-#bezugwh=$(echo $sresponse | jq '.result.items | .[0].tagValues.WorkConsumedFromGrid.value')
-#echo "Vom Netz bezogen Gesamt $bezugwh"
-#bezugw=$(echo $sresponse | jq '.result.items | .[0].tagValues.PowerConsumedFromGrid.value')
-#einspeisungw=$(echo $sresponse | jq '.result.items | .[0].tagValues.PowerOut.value')
-#bezugwatt=$(echo "scale=0; $bezugw - $einspeisungw /1" |bc)
-#echo "Bezug/Einspeisung am Übergabepunkt $bezugwatt"
-#einspeisungwh=$(echo $sresponse | jq '.result.items | .[0].tagValues.WorkOut.value')
-#echo "Ins Netz eingespeist Gesamt $einspeisungwh" 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BATT"
+DMOD="MAIN"
+Debug=$debug
 
-speichere=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerConsumedFromStorage.value != null) | .tagValues.PowerConsumedFromStorage.value' | sed 's/\..*$//') 
-speicherein=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerOutFromStorage.value != null) | .tagValues.PowerOutFromStorage.value' | sed 's/\..*$//') 
-speicheri=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerBuffered.value != null) | .tagValues.PowerBuffered.value' | sed 's/\..*$//') 
-#speicherleistung=$((speichere + speicherin - speicheri)) 
-speicherleistung=$(echo "scale=0; ($speichere + $speicherin - $speicheri) *-1" | bc) 
-echo $speicherleistung > /var/www/html/openWB/ramdisk/speicherleistung 
-#echo "Batterieladung/entladung $speicherleistung" 
-speichersoc=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.StateOfCharge.value != null) | .tagValues.StateOfCharge.value' | sed 's/\..*$//') 
-#echo "Batterieladezustand $speichersoc" 
-echo $speichersoc > /var/www/html/openWB/ramdisk/speichersoc 
+#For Development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+    MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+    MYLOGFILE="${RAMDISKDIR}/speicher.log"
+fi
+
+openwbDebugLog ${DMOD} 2 "Speicher Methode: ${solarwattmethod}"
+openwbDebugLog ${DMOD} 2 "Speicher IP1: ${speicher1_ip}"
+openwbDebugLog ${DMOD} 2 "Speicher IP2: ${speicher1_ip2}"
+
+python3 /var/www/html/openWB/modules/speicher_solarwatt/solarwatt.py "${solarwattmethod}" "${speicher1_ip}" "${speicher1_ip2}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+
+openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"

@@ -6,7 +6,7 @@
  */
 
 // these topics will be subscribed
-// index 1 represents flag if value was received, needed for preloaderbar progress
+// index 1 represents flag if value was received, needed for preloader progress bar
 // if flags are preset with 1 they are not counted on reload and page will show even if topic was not received
 var topicsToSubscribe = [
 	// Status Konfiguration Ladepunkt
@@ -24,13 +24,13 @@ var topicsToSubscribe = [
 	["openWB/hook/3/boolHookConfigured", 0],
 	// verbraucher Konfiguration
 	["openWB/Verbraucher/1/Configured", 0],
-	["openWB/Verbraucher/1/Name", 0],
-	["openWB/Verbraucher/1/Watt", 0],
-	["openWB/Verbraucher/1/DailyYieldImportkWh", 0],
+	["openWB/Verbraucher/1/Name", 1],
+	["openWB/Verbraucher/1/Watt", 1],
+	["openWB/Verbraucher/1/DailyYieldImportkWh", 1],
 	["openWB/Verbraucher/2/Configured", 0],
-	["openWB/Verbraucher/2/Name", 0],
-	["openWB/Verbraucher/2/Watt", 0],
-	["openWB/Verbraucher/2/DailyYieldImportkWh", 0],
+	["openWB/Verbraucher/2/Name", 1],
+	["openWB/Verbraucher/2/Watt", 1],
+	["openWB/Verbraucher/2/DailyYieldImportkWh", 1],
 	// housebattery Konfiguration
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	// SmartHome Konfiguration
@@ -53,12 +53,13 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
 	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
 
-	// awattar topcis
-	["openWB/global/awattar/boolAwattarEnabled", 1],
+	// etprovider topics
+	["openWB/global/ETProvider/modulePath", 1],
+	["openWB/global/awattar/boolAwattarEnabled", 0],
 	["openWB/global/awattar/MaxPriceForCharging", 1],
 	["openWB/global/awattar/ActualPriceForCharging", 1],
 	["openWB/global/awattar/pricelist", 1],
-	// graph topcis
+	// graph topics
 	//
 	["openWB/graph/lastlivevalues", 1],
 	["openWB/graph/1alllivevalues", 1],
@@ -176,6 +177,9 @@ var topicsToSubscribe = [
 	// Status Konfiguration SoC
 	["openWB/lp/1/boolSocConfigured", 1],
 	["openWB/lp/2/boolSocConfigured", 1],
+	// manual SoC
+	["openWB/lp/1/boolSocManual", 1],
+	["openWB/lp/2/boolSocManual", 1],
 	// Status Nachtladen
 	["openWB/lp/1/boolChargeAtNight", 1],
 	["openWB/lp/2/boolChargeAtNight", 1],
@@ -268,7 +272,7 @@ var topicsToSubscribe = [
 	["openWB/hook/2/boolHookStatus", 1],
 	["openWB/hook/3/boolHookStatus", 1],
 
-	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
+	// Smart Home Devices, only configured is definitely set, other values only set if configured, assume they are there!
 	["openWB/SmartHome/Devices/1/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/2/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/3/DailyYieldKwh", 1],
@@ -293,6 +297,15 @@ var topicsToSubscribe = [
 	["openWB/SmartHome/Devices/7/Watt", 1],
 	["openWB/SmartHome/Devices/8/Watt", 1],
 	["openWB/SmartHome/Devices/9/Watt", 1],
+	["openWB/SmartHome/Devices/1/Status", 1],
+	["openWB/SmartHome/Devices/2/Status", 1],
+	["openWB/SmartHome/Devices/3/Status", 1],
+	["openWB/SmartHome/Devices/4/Status", 1],
+	["openWB/SmartHome/Devices/5/Status", 1],
+	["openWB/SmartHome/Devices/6/Status", 1],
+	["openWB/SmartHome/Devices/7/Status", 1],
+	["openWB/SmartHome/Devices/8/Status", 1],
+	["openWB/SmartHome/Devices/9/Status", 1],
 	["openWB/SmartHome/Devices/1/RelayStatus", 1],
 	["openWB/SmartHome/Devices/2/RelayStatus", 1],
 	["openWB/SmartHome/Devices/3/RelayStatus", 1],
@@ -362,7 +375,7 @@ var isSSL = location.protocol == 'https:'
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
-	//Gets Called if the connection has sucessfully been established
+	//Gets Called if the connection has been established
 	onSuccess: function () {
 		retries = 0;
 		topicsToSubscribe.forEach((topic) => {
@@ -371,12 +384,12 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		setTimeout(function() { client.conect(options); }, 5000);
+		setTimeout(function() { client.connect(options); }, 5000);
 	}
 };
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-var client = new Messaging.Client(location.host, 9001, clientuid);
+var client = new Messaging.Client(location.hostname, 9001, clientuid);
 
 $(document).ready(function(){
 	client.connect(options);

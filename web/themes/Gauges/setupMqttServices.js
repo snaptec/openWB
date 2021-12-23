@@ -6,7 +6,7 @@
  */
 
 // these topics will be subscribed
-// index 1 represents flag if value was received, needed for preloaderbar progress
+// index 1 represents flag if value was received, needed for preloader progress bar
 // if flags are preset with 1 they are not counted on reload and page will show even if topic was not received
 var topicsToSubscribe = [
 	// Status Konfiguration Ladepunkt
@@ -44,12 +44,13 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
 	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
 
-	// awattar topcis
+	// etprovider topcis
+	["openWB/global/ETProvider/modulePath", 1],
 	["openWB/global/awattar/boolAwattarEnabled", 1],
 	["openWB/global/awattar/MaxPriceForCharging", 1],
 	["openWB/global/awattar/ActualPriceForCharging", 1],
 	["openWB/global/awattar/pricelist", 1],
-	// graph topcis
+	// graph topics
 	//
 	["openWB/graph/lastlivevalues", 1],
 	["openWB/graph/1alllivevalues", 1],
@@ -91,6 +92,7 @@ var topicsToSubscribe = [
 
 	// global topics
 	["openWB/global/WHouseConsumption", 1],
+	["openWB/global/DailyYieldHausverbrauchKwh", 1],
 	["openWB/global/ChargeMode", 1],
 	["openWB/global/WAllChargePoints", 1],
 	["openWB/global/strLastmanagementActive", 1],
@@ -166,6 +168,9 @@ var topicsToSubscribe = [
 	// Status Konfiguration SoC
 	["openWB/lp/1/boolSocConfigured", 1],
 	["openWB/lp/2/boolSocConfigured", 1],
+	// manual SoC
+	["openWB/lp/1/boolSocManual", 1],
+	["openWB/lp/2/boolSocManual", 1],
 	// Status Nachtladen
 	["openWB/lp/1/boolChargeAtNight", 1],
 	["openWB/lp/2/boolChargeAtNight", 1],
@@ -249,7 +254,7 @@ var topicsToSubscribe = [
 	["openWB/hook/1/boolHookStatus", 1],
 	["openWB/hook/2/boolHookStatus", 1],
 	["openWB/hook/3/boolHookStatus", 1],
-	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
+	// Smart Home Devices, only configured is definitely set, other values only set if configured, assume they are there!
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],
@@ -311,15 +316,15 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
 	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
 
-    ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/5/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
-    ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
 	["openWB/config/get/pv/nurpv70dynact", 1]
 ];
@@ -334,7 +339,7 @@ var isSSL = location.protocol == 'https:'
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
-	//Gets Called if the connection has sucessfully been established
+	//Gets Called if the connection has been established
 	onSuccess: function () {
 		retries = 0;
 		topicsToSubscribe.forEach((topic) => {
@@ -343,12 +348,12 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		client.connect(options);
+		setTimeout(function() { client.connect(options); }, 5000);
 	}
 };
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-var client = new Messaging.Client(location.host, 9001, clientuid);
+var client = new Messaging.Client(location.hostname, 9001, clientuid);
 
 $(document).ready(function(){
 	client.connect(options);

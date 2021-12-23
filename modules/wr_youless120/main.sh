@@ -1,19 +1,28 @@
 #!/bin/bash
 
-#Auslesen vom S0-Eingang eines Youless LS120 Energy Monitor.
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="PV"
+DMOD="MAIN"
+Debug=$debug
 
-answer=$(curl --connect-timeout 5 -s $wryoulessip/a?f=j)
+#For Development only
+#Debug=1
 
-#aktuelle Ausgangsleistung am WR [W]
-pvwatt=$(echo $answer | jq -r '.ps0' | sed 's/\..*$//')
-if (( $pvwatt > 5 )); then
-	pvwatt=$(echo "$pvwatt*-1" |bc)
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_youless120.log"
 fi
+
+openwbDebugLog ${DMOD} 2 "PV IP: ${wryoulessip}"
+openwbDebugLog ${DMOD} 2 "PV Alternative: ${wryoulessalt}"
+
+python3 /var/www/html/openWB/modules/wr_youless120/youless.py "${wryoulessip}" "${wryoulessalt}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-#Gesamtz‰hlerstand am WR [Wh]
-pvkwh=$(echo $answer | jq -r '.cs0' | sed 's/,//g')
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-#Gesamtz‰hlerstand am WR [kWh]
-pvkwh=$(echo "$pvkwh/1000" |bc)
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk

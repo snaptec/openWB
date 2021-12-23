@@ -26,33 +26,13 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
+		<link rel="stylesheet" type="text/css" href="css/settings_style.css?ver=20200416-a">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script>
-			function getCookie(cname) {
-				var name = cname + '=';
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
-					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
-					}
-				}
-				return '';
-			}
-			var themeCookie = getCookie('openWBTheme');
-			// include special Theme style
-			if( '' != themeCookie ){
-				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
-			}
-		</script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
@@ -118,14 +98,14 @@
 										<label class="btn btn-outline-info btn-toggle">
 											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="0" value="0"> keine
 										</label>
-										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Energiemenge
-										</label>
 										<?php if( $chargepoint <= 2 ){ ?>
-										<label class="btn btn-outline-info btn-toggle">
+										<label class="btn btn-outline-info btn-toggle lp<?php echo $chargepoint; ?>socoptions">
 											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="2" value="2"> EV-SoC
 										</label>
 										<?php } ?>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Energiemenge
+										</label>
 									</div>
 									<span class="form-text small">Auswahl der Lademengen-Begrenzung im Modus Sofortladen.
 										<span class="text-danger">
@@ -165,7 +145,7 @@
 											</div>
 										</div>
 										<span class="form-text small">
-											Parameter in Prozent [%] für die Lademengenbegrenzung im Modus Sofortladen. Definiert den EV-SoC, auf den der Ladevorgang begrenzt werden soll.
+											Parameter in Prozent [%] für die Lademengenbegrenzung im Modus Sofortladen. Definiert den EV-SoC, bei dessen Überschreitung die Ladung gestoppt wird.
 											<span class="text-danger">
 												Dieser Parameter kann auf der Hauptseite der openWB per Sofortzugriff im Modus Sofortladen jederzeit geändert werden.
 											</span>
@@ -179,20 +159,20 @@
 							$(document).ready(function(){
 								$('input[type=radio][name=chargeLimitationLp<?php echo $chargepoint; ?>]').change(function(){
 									if(this.value == '0') {
-										$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+										hideSection('.lp<?php echo $chargepoint; ?>limitenergy');
 										<?php if( $chargepoint <= 2 ){ ?>
-										$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+										hideSection('.lp<?php echo $chargepoint; ?>limitsoc');
 										<?php } ?>
 									} else {
 										if(this.value == 1) {
-											$('.lp<?php echo $chargepoint; ?>limitenergy').show();
+											showSection('.lp<?php echo $chargepoint; ?>limitenergy');
 											<?php if( $chargepoint <= 2 ){ ?>
-											$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+											hideSection('.lp<?php echo $chargepoint; ?>limitsoc');
 											<?php } ?>
 										} else {
-											$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+											hideSection('.lp<?php echo $chargepoint; ?>limitenergy');
 											<?php if( $chargepoint <= 2 ){ ?>
-											$('.lp<?php echo $chargepoint; ?>limitsoc').show();
+											showSection('.lp<?php echo $chargepoint; ?>limitsoc');
 											<?php } ?>
 										}
 									}
@@ -295,8 +275,6 @@
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_sofortconfig.js?ver=20200503-a" ></script>
-		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
 		<!-- load mqtt handler-->
@@ -318,24 +296,33 @@
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 1) {
-						$('.lp' + index + 'options').show();
+						showSection('.lp' + index + 'options');
 					} else {
-						$('.lp' + index + 'options').hide();
+						hideSection('.lp' + index + 'options');
+					}
+				}
+				if ( elementId.match( /^boolSocConfiguredLp[1-9]*$/i ) ) {
+					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
+					// now call functions or set variables corresponding to the index
+					if ( mqttpayload == 1) {
+						showSection('.lp' + index + 'socoptions');
+					} else {
+						hideSection('.lp' + index + 'socoptions');
 					}
 				}
 				if ( elementId.match( /^chargeLimitationLp[1-2]*$/i ) ) {
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 0) {
-						$('.lp' + index + 'limitenergy').hide();
-						$('.lp' + index + 'limitsoc').hide();
+						hideSection('.lp' + index + 'limitenergy');
+						hideSection('.lp' + index + 'limitsoc');
 					} else {
 						if ( mqttpayload == 1 ) {
-							$('.lp' + index + 'limitenergy').show();
-							$('.lp' + index + 'limitsoc').hide();
+							showSection('.lp' + index + 'limitenergy');
+							hideSection('.lp' + index + 'limitsoc');
 						} else {
-							$('.lp' + index + 'limitenergy').hide();
-							$('.lp' + index + 'limitsoc').show();
+							hideSection('.lp' + index + 'limitenergy');
+							showSection('.lp' + index + 'limitsoc');
 						}
 					}
 				}
@@ -343,9 +330,9 @@
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 0) {
-						$('.lp' + index + 'limitenergy').hide();
+						hideSection('.lp' + index + 'limitenergy');
 					} else {
-						$('.lp' + index + 'limitenergy').show();
+						showSection('.lp' + index + 'limitenergy');
 					}
 				}
 			}

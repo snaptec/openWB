@@ -1,13 +1,27 @@
 #!/bin/bash
 
-#!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="PV"
+DMOD="MAIN"
+Debug=$debug
 
-sresponse=$(curl --connect-timeout 3 -s "http://$speichersolarwattip/rest/kiwigrid/wizard/devices")
+#For Development only
+#Debug=1
 
-#pvwh=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.WorkProduced.value != null) | .tagValues.WorkProduced.value' | sed 's/\..*$//')
-#echo "PV erzeugt $pvwh"
-#echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
-pvwatt=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerProduced.value != null) | .tagValues.PowerProduced.value' | sed 's/\..*$//')
-pvwatt=$((pvwatt * -1))
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_solarwatt.log"
+fi
+
+openwbDebugLog ${DMOD} 2 "PV IP: ${speicher1_ip}"
+
+python3 /var/www/html/openWB/modules/wr_solarwatt/solarwatt.py "${speicher1_ip}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt

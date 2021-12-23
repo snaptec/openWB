@@ -1,15 +1,7 @@
 #!/usr/bin/python
-import argparse
 import paho.mqtt.client as mqtt
-import sys
 import os 
 import time 
-import datetime
-import getopt 
-import socket 
-import struct 
-import binascii 
-import RPi.GPIO as GPIO
 
 os.chdir('/var/www/html/openWB/')
 loglevel=1
@@ -177,7 +169,7 @@ def getplugstat():
 
 def conditions():
     if ( Values["lastpluggedlp"] != "0"):
-        logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
+        #logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
         try:
             with open('ramdisk/readtag', 'r') as value:
                 Values.update({'lastscannedtag' : str(value.read().rstrip())})

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 ikwh=$(cat /run/shm/em-$smaemdbezugid-pregardcounter)
 ekwh=$(cat /run/shm/em-$smaemdbezugid-psurpluscounter)
 bezuga1=$(cat /run/shm/em-$smaemdbezugid-p1regard |sed 's/\..*$//')
@@ -21,9 +19,8 @@ echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
 echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
 echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
 
-
 if (( $watteinspeisung > 5 ));then
-		wattbezug=$(echo -$watteinspeisung)
-	fi
-	echo $wattbezug
-	echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
+	wattbezug=$(echo -$watteinspeisung)
+fi
+echo $wattbezug
+echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
