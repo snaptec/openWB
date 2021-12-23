@@ -29,11 +29,14 @@
 """
 
 import signal
-import sys
-#import smaem
 import socket
 import struct
+import sys
+from pathlib import Path
+from typing import Optional
+
 from speedwiredecoder import decode_speedwire
+
 
 # clean exit
 def abortprogram(signal,frame):
@@ -42,9 +45,7 @@ def abortprogram(signal,frame):
     sys.exit(0)
 
 def writeToFile(filename, content):
-    """Write content to file"""
-    with open(filename, 'w') as f:
-        f.write(str(content))
+    Path(filename).write_text(str(content))
 
 # abort-signal
 signal.signal(signal.SIGINT, abortprogram)
@@ -53,12 +54,11 @@ signal.signal(signal.SIGINT, abortprogram)
 #read configuration
 #parser = ConfigParser()
 #default values
-smaserials = sys.argv[1] if len(sys.argv) > 1 else None
 ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
 MCAST_PORT = 9522
 
-basepath = '/var/www/html/openWB/ramdisk/'
+basepath = str(Path(__file__).parents[2] / "ramdisk") + "/"
 #                filename:  channel
 mappingdict      = { 'evuhz':   'frequency' }
 phasemappingdict = { 'bezuga%i': { 'from': 'i%i', 'sign': True },
@@ -73,23 +73,27 @@ phasemappingdict = { 'bezuga%i': { 'from': 'i%i', 'sign': True },
 #except:
 #    print('Cannot find config /etc/smaemd/config... using defaults')
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-sock.bind(('', MCAST_PORT))
-try:
-    mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-except BaseException:
-    print('could not connect to mulicast group or bind to given interface')
-    sys.exit(1)
-# processing received messages
-while True:
-    emparts = {}
-    sock_data = sock.recv(608)
+
+def run(smaserials: Optional[str] = None):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind(('', MCAST_PORT))
+    try:
+        mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+    except BaseException:
+        print('could not connect to mulicast group or bind to given interface')
+        sys.exit(1)
+    # processing received messages
+    while not process_datagram(sock.recv(608), smaserials):
+        pass
+
+
+def process_datagram(datagram: bytes, smaserials: Optional[str] = None):
     #Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
-    if sock_data[16:18] != b'\x60\x69':
-        continue
-    emparts=decode_speedwire(sock_data)
+    if datagram[16:18] != b'\x60\x69':
+        return
+    emparts=decode_speedwire(datagram)
     # Output...
     # don't know what P,Q and S means:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
@@ -98,7 +102,7 @@ while True:
     positive = [ 1,1,1,1 ]
     if smaserials is None or smaserials == 'none' or str(emparts['serial']) == smaserials:
         # Special treatment for positive / negative power
-        
+
         try:
             watt=int(emparts['pconsume'])
             if watt < 5:
@@ -135,4 +139,8 @@ while True:
                     writeToFile(basepath + filename, emparts[key])
         except:
             pass
-        sys.exit(0)
+        return True
+
+
+if __name__ == '__main__':
+    run(sys.argv[1] if len(sys.argv) > 1 else None)
