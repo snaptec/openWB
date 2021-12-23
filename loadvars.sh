@@ -1,4 +1,32 @@
 #!/bin/bash
+
+run_soc_module() {
+	module_dir="modules/$1"
+	if [ -d "$module_dir" ];
+	then
+		"$module_dir/main.sh" &
+	elif [[ "$module_dir" =~ ^(.*)((s)([1-9])|(lp)([2-9]))$ ]]; then
+		# Historically if each SoC-Module applied to a single charge point, only. Thus if multiple charge points were
+		# to be supported the module was copied and got the suffix "s1" or "lp2" for the second charge point.
+		# With the new structure we call the script for charge point one with the actual charge point number as parameter
+		if [ "${BASH_REMATCH[3]}" == "s" ]
+		then
+			charge_point_num=$(( ${BASH_REMATCH[4]} + 1 ))
+		else
+			charge_point_num=${BASH_REMATCH[6]}
+		fi
+		module_dir_lp1=${BASH_REMATCH[1]}
+		if [ -d "$module_dir_lp1" ];
+		then
+			"$module_dir_lp1/main.sh" "$charge_point_num" &
+		else
+			openwbDebugLog "MAIN" 0 "Neither <$module_dir> nor <$module_dir_lp1> exist!"
+		fi
+	else
+		openwbDebugLog "MAIN" 0 "SoC-Module <$module_dir> does not exist"
+	fi
+}
+
 loadvars(){
 	#reload mqtt vars
 	renewmqtt=$(</var/www/html/openWB/ramdisk/renewmqtt)
@@ -591,7 +619,7 @@ loadvars(){
 	#zweiter ladepunkt
 	if [[ $lastmanagement == "1" ]]; then
 		if [[ $socmodul1 != "none" ]]; then
-			modules/$socmodul1/main.sh &
+			run_soc_module "$socmodul1"
 			soc1=$(</var/www/html/openWB/ramdisk/soc1)
 			tmpsoc1=$(</var/www/html/openWB/ramdisk/tmpsoc1)
 			if ! [[ $soc1 =~ $re ]] ; then
