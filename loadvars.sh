@@ -1,4 +1,32 @@
 #!/bin/bash
+
+run_soc_module() {
+	module_dir="modules/$1"
+	if [ -d "$module_dir" ];
+	then
+		"$module_dir/main.sh" &
+	elif [[ "$module_dir" =~ ^(.*)((s)([1-9])|(lp)([2-9]))$ ]]; then
+		# Historically if each SoC-Module applied to a single charge point, only. Thus if multiple charge points were
+		# to be supported the module was copied and got the suffix "s1" or "lp2" for the second charge point.
+		# With the new structure we call the script for charge point one with the actual charge point number as parameter
+		if [ "${BASH_REMATCH[3]}" == "s" ]
+		then
+			charge_point_num=$(( ${BASH_REMATCH[4]} + 1 ))
+		else
+			charge_point_num=${BASH_REMATCH[6]}
+		fi
+		module_dir_lp1=${BASH_REMATCH[1]}
+		if [ -d "$module_dir_lp1" ];
+		then
+			"$module_dir_lp1/main.sh" "$charge_point_num" &
+		else
+			openwbDebugLog "MAIN" 0 "Neither <$module_dir> nor <$module_dir_lp1> exist!"
+		fi
+	else
+		openwbDebugLog "MAIN" 0 "SoC-Module <$module_dir> does not exist"
+	fi
+}
+
 loadvars(){
 	#reload mqtt vars
 	renewmqtt=$(</var/www/html/openWB/ramdisk/renewmqtt)
@@ -591,7 +619,7 @@ loadvars(){
 	#zweiter ladepunkt
 	if [[ $lastmanagement == "1" ]]; then
 		if [[ $socmodul1 != "none" ]]; then
-			modules/$socmodul1/main.sh &
+			run_soc_module "$socmodul1"
 			soc1=$(</var/www/html/openWB/ramdisk/soc1)
 			tmpsoc1=$(</var/www/html/openWB/ramdisk/tmpsoc1)
 			if ! [[ $soc1 =~ $re ]] ; then
@@ -1026,9 +1054,8 @@ loadvars(){
 		echo "0" > /var/www/html/openWB/ramdisk/hausverbrauch.invalid
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
-	fronius_sm_bezug_meterlocation=$(</var/www/html/openWB/ramdisk/fronius_sm_bezug_meterlocation)
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_huawei" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] || [[ $fronius_sm_bezug_meterlocation == "1" ]]; then
+	if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]] ; then
 		usesimbezug=1
 	fi
 	if [[ $usesimbezug == "1" ]]; then
@@ -1076,13 +1103,8 @@ loadvars(){
 	if [[ $speichermodul == "speicher_solaredge" ]] && [[ $pvwattmodul == "wr_solaredge" ]]; then
 		usesimpv=1
 	fi
-	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
-		usesimpv=1
-	fi
-	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $wrfroniusisgen24 == "1" ]]; then
-		usesimpv=1
-	fi
-	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+
+	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
 	if [[ $usesimpv == "1" ]]; then
@@ -1168,15 +1190,15 @@ loadvars(){
 		echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
 	fi
 	# monthly / yearly fuer status rechnen (csv aus cronnight und laufend)
-  pvdaily=$(</var/www/html/openWB/ramdisk/daily_pvkwhk)
-  pvyearlycsv=$(</var/www/html/openWB/ramdisk/yearly_pvkwhk_csv)
-  pvmonthlycsv=$(</var/www/html/openWB/ramdisk/monthly_pvkwhk_csv)
-  pvyearly=$(echo "$pvdaily + $pvyearlycsv" |bc)
-  pvmonthly=$(echo "$pvdaily + $pvmonthlycsv" |bc)
-  echo $pvyearly > /var/www/html/openWB/ramdisk/yearly_pvkwhk
-  echo $pvmonthly > /var/www/html/openWB/ramdisk/monthly_pvkwhk
-  # rechnen ende
-	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_huawei" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
+	pvdaily=$(</var/www/html/openWB/ramdisk/daily_pvkwhk)
+	pvyearlycsv=$(</var/www/html/openWB/ramdisk/yearly_pvkwhk_csv)
+	pvmonthlycsv=$(</var/www/html/openWB/ramdisk/monthly_pvkwhk_csv)
+	pvyearly=$(echo "$pvdaily + $pvyearlycsv" |bc)
+	pvmonthly=$(echo "$pvdaily + $pvmonthlycsv" |bc)
+	echo $pvyearly > /var/www/html/openWB/ramdisk/yearly_pvkwhk
+	echo $pvmonthly > /var/www/html/openWB/ramdisk/monthly_pvkwhk
+	# rechnen ende
+	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] ; then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
