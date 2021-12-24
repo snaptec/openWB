@@ -87,8 +87,17 @@ else:
 # We also have to take care if there are more than one EnergyMeter in the network sending, that's why we check the modification time in scenario 2.
 # Without this check we would generate a ret-file everytime we receive data from a not desired EnergyMeter.
 emparts={}
-emparts=decode_speedwire(sock.recv(608))
+sock_data = sock.recv(608)
 
+# Ignore data package if the SMA protocol id is not 0x6069 - adoption of PR 1845
+if sock_data[16:18] != b'\x60\x69':
+     sys.exit("Module SMAEM: Invalid data package received. No need to worry, this is a normal situation if a SMA HomeManager is sending in the network.")
+
+# Ignore data package if the length is smaller 18
+if len(sock_data) < 18
+     sys.exit("Module SMAEM: Invalid data package received. The length of the received data package is smaller than 18 Byte.")
+
+emparts=decode_speedwire(sock_data)
 debugfile.write(str(datetime.datetime.now()) + ': smaserial: #' + str(smaserial) + '# - Current SMA serial number:#' + str(emparts['serial']) + '# - watt:#' + str(int(emparts.get("pconsume"))) + '# - wattc:#' + str("{:.3f}".format(int(emparts.get('pconsumecounter')*1000))) + '#\n')
 
 # Remember: We assume that beside of our EnergyMeter there are more SMA devices present (like HomeManager 2.0 or other EnergyMeter) - so must not accept any data or smaserial = None
