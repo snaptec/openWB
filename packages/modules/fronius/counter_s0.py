@@ -30,7 +30,6 @@ class FroniusS0Counter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self, bat: bool) -> CounterState:
-        primo = self.component_config["configuration"]["primo"]
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         response = requests.get(
@@ -51,7 +50,7 @@ class FroniusS0Counter:
         response = response.json()
         for location in response["Body"]["Data"]:
             if "EnergyReal_WAC_Minus_Absolute" in response["Body"]["Data"][location] and \
-            "EnergyReal_WAC_Plus_Absolute" in response["Body"]["Data"][location]:
+               "EnergyReal_WAC_Plus_Absolute" in response["Body"]["Data"][location]:
                 imported = float(response["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"])
                 exported = float(response["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"])
             else:
