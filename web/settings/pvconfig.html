@@ -198,7 +198,7 @@
 											<input type="radio" name="boolAdaptiveCharging" id="boolAdaptiveChargingOn" data-option="1">eingeschaltet
 										</label>
 									</div>
-									<span class="form-text small">Auswahl der adaptiven Ladung im Modus PV-Laden. Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird. Die Gewichtung der Ladeleistung ist abhängig von der Einstellung "adaptiver Regelfaktor". Diese Einstellung beinflusst die Regelung nur dann, wenn zwei EV gleichzeitig laden, für beide ein SoC verfügbar ist und beide EV mit derselben Anzahl an Phasen laden.</span>
+									<span class="form-text small">Auswahl der adaptiven Ladung im Modus PV-Laden. Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird. Die Gewichtung der Ladeleistung ist abhängig von der Einstellung "adaptiver Regelfaktor". Diese Einstellung beeinflusst die Regelung nur dann, wenn zwei EV gleichzeitig laden, für beide ein SoC verfügbar ist und beide EV mit derselben Anzahl an Phasen laden.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -293,7 +293,7 @@
 											<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" name="maxSocToChargeTo" min="50" max="100" step="5" value="100" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 										</div>
 									</div>
-									<span class="form-text small">Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird.</span>
+									<span class="form-text small">Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Maximal-SoC, bei dessen Überschreitung die Ladung gestoppt wird.</span>
 								</div>
 							</div>
 						</div>
@@ -322,7 +322,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 soclp1optionsactive">
-								<label for="maxSocLp1" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt 1</label>
+								<label for="maxSocLp1" class="col-md-4 col-form-label">Maximal-SoC Ladepunkt 1</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
 										<label for="maxSocLp1" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
@@ -332,7 +332,7 @@
 									</div>
 									<span class="form-text small">
 										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 1 im Modus PV-Laden.
-										Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+										Definiert einen EV-Maximal-SoC, bei dessen Überschreitung die Ladung gestoppt wird. Diese Funktion ist nur dafür gedacht wenn mehrere Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
 									</span>
 								</div>
 							</div>
@@ -354,7 +354,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 soclp2optionsactive">
-								<label for="maxSocLp2" class="col-md-4 col-form-label">Maximal-SoC Ladpunkt 2</label>
+								<label for="maxSocLp2" class="col-md-4 col-form-label">Maximal-SoC Ladepunkt 2</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
 										<label for="maxSocLp2" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
@@ -364,7 +364,7 @@
 									</div>
 									<span class="form-text small">
 										Parameter in Prozent [%] für den Maximal-SoC am Ladepunkt 2 im Modus PV-Laden.
-										Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+										Definiert einen EV-Maximal-SoC, bei dessen Überschreitung die Ladung gestoppt wird. Diese Funktion ist nur dafür gedacht wenn mehrere Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
 									</span>
 								</div>
 							</div>

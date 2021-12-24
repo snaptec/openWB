@@ -100,7 +100,7 @@ function convertToKw(dataColum) {
 }
 
 function getIndex(topic) {
-  // get occurence of numbers between / / in topic
+  // get occurrence of numbers between / / in topic
   // since this is supposed to be the index like in openwb/lp/4/w
   // no lookbehind supported by safari, so workaround with replace needed
   var index = topic.match(/(?:\/)([0-9]+)(?=\/)/g)[0].replace(/[^0-9]+/g, "");
@@ -204,7 +204,7 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
         $("#70ModeBtn").addClass("hide");
         break;
       case "1":
-        // activiert
+        // aktiviert
         $("#70ModeBtn").removeClass("hide");
         break;
     }
@@ -353,12 +353,12 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
     // set modal button colors depending on charge mode
     // set visibility of divs
     // set visibility of priority icon depending on charge mode
-    // (priority icon is encapsulated in another element hidden/shown by housebattery configured or not)
+    // (priority icon is encapsulated in another element hidden/shown by house battery configured or not)
     switch (mqttpayload) {
       case "0":
         // mode sofort
-        $(".chargeModeSelectBtnText").text("Sofort"); // text btn mainpage
-        $(".chargeModeBtn").removeClass("btn-success"); // changes to select btns in modal
+        $(".chargeModeSelectBtnText").text("Sofort"); // text btn main page
+        $(".chargeModeBtn").removeClass("btn-success"); // changes to select buttons in modal
         $(".chargeModeBtnSofort").addClass("btn-success");
         $(".priorityEvBatteryIcon").addClass("hide"); // visibility of priority icon
         $(".chargeMode").addClass("hide"); // modal chargepoint config
@@ -792,7 +792,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
       mqttpayload = 0;
     }
     var parent = $('[data-lp="' + index + '"]'); // get parent div element for charge limitation
-    var element = parent.find(".limit-progress-bar"); // now get parents progressbar
+    var element = parent.find(".limit-progress-bar"); // now get parents progress bar
     element.data("actualCharged", mqttpayload); // store value received
     var limitElementId = "lp/" + index + "/energyToCharge";
     var actualCharged = parseFloat(mqttpayload, 10);

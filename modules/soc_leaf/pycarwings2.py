@@ -72,7 +72,7 @@ from responses import *
 import base64
 from Crypto.Cipher import Blowfish
 
-BASE_URL = "https://gdcportalgw.its-mo.com/api_v190426_NE/gdc/"
+BASE_URL = "https://gdcportalgw.its-mo.com/api_v210707_NE/gdc/"
 
 log = logging.getLogger(__name__)
 

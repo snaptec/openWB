@@ -1,15 +1,27 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
-pvwatt=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
-pvwatt=$(( pvwatt * -1 ))
-pvwh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActiveEnergy" | jq .value)
+#For development only
+#Debug=1
 
-re='^-?[0-9]+$'
-if ! [[ $pvwatt =~ $re ]] ; then
-   pvwatt="0"
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_fems.log"
 fi
-if [[ $pvwh =~ $re ]] ; then
-		echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
-fi
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+
+openwbDebugLog ${DMOD} 2 "WR Passwort: ${femskacopw}"
+openwbDebugLog ${DMOD} 2 "WR IP: ${femsip}"
+
+python3 /var/www/html/openWB/modules/wr_fems/fems.py "${femskacopw}" "${femsip}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt

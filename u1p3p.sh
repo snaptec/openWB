@@ -180,9 +180,19 @@ u1p3pswitch(){
 								if (( oldll == maximalstromstaerke )); then
 									uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
 									if (( uhcounter < uhwaittime )); then
-										uhcounter=$((uhcounter + 10))
-										echo $uhcounter > /var/www/html/openWB/ramdisk/uhcounter
-										openwbDebugLog "MAIN" 1 "Umschaltcounter Erhoehung auf $uhcounter erhoeht fuer Min PV Automatik Phasenumschaltung"
+										if (( maximalstromstaerke == 16 )); then
+											if (( uberschuss > 500 )); then
+												uhcounter=$((uhcounter + 10))
+												echo $uhcounter > /var/www/html/openWB/ramdisk/uhcounter
+												openwbDebugLog "MAIN" 1 "Umschaltcounter Erhoehung auf $uhcounter erhoeht fuer Min PV Automatik Phasenumschaltung, genug uberschuss fuer 3 Phasen Ladung"
+											else
+												openwbDebugLog "MAIN" 1 "Umschaltcounter nicht erhöht fuer Min PV Automatik Phasenumschaltung, fehlender uberschuss fuer 3 Phasen Ladung"
+											fi
+										else
+											uhcounter=$((uhcounter + 10))
+											echo $uhcounter > /var/www/html/openWB/ramdisk/uhcounter
+											openwbDebugLog "MAIN" 1 "Umschaltcounter Erhoehung auf $uhcounter erhoeht fuer Min PV Automatik Phasenumschaltung"
+										fi
 									else
 										openwbDebugLog "MAIN" 1 "Min PV Laden derzeit $u1p3pstat Phasen, auf MinPV Automatik konfiguriert, unterbreche Ladung und  aendere auf 3 Phasen..."
 										echo 1 > ramdisk/blockall

@@ -41,6 +41,12 @@ if [[ $? == "0" ]] ; then
 	if [[ $llkwh =~ $rekwh ]] ; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs2
 	fi
+	rfid=$(echo $output | jq -r '.uby')
+	oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp3rfid)
+	if [[ $rfid != $oldrfid ]] ; then
+		echo $rfid > /var/www/html/openWB/ramdisk/readtag
+		echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp3rfid
+	fi
 	#car status 1 Ladestation bereit, kein Auto
 	#car status 2 Auto lädt
 	#car status 3 Warte auf Fahrzeug

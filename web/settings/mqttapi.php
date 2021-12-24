@@ -45,7 +45,7 @@ if(isset($_GET["topic"])) {
 	}
 }
 else{
-    http_response_code(400);
+	http_response_code(400);
 	echo "Error: No 'topic' field provided. \nExample reading a MQTT-Topic: 'http://IP/openWB/web/settings/mqttapi.php?topic=openWB/pv/W' \nExample writing a MQTT-Topic: 'http://IP/openWB/web/settings/mqttapi.php?topic=openWB/set/pv/1/W&message=-1000' ";
 }
 ?>

@@ -72,9 +72,11 @@
 						break;
 					case 'wlanreset':
 						// reset wlan credentials
-						$result1 = file_put_contents('/home/pi/wssid','');
-						$result2 = file_put_contents('/home/pi/wpassword','');
-						if( $result1 === false || $result2 === false ){
+						$result1 = file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/tmp/wssid', '');
+						$result2 = file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/tmp/wpassword', '');
+						$cmd = 'nohup sudo /bin/bash /var/www/html/wlanconnect.sh > /dev/null 2>&1 &';
+						exec($cmd, $output, $returnval);
+						if( $result1 === false || $result2 === false || $returnval !== 0 ){
 							?>
 							<div class="col alert alert-danger" role="alert">
 								Die Zugangsdaten konnten nicht entfernt werden!<br>
@@ -89,9 +91,7 @@
 							Die openWB wird jetzt neu gestartet.
 						</div>
 						<script>
-							window.setTimeout(() => {
-								$("#rebootConfirmationModal").modal("show");
-							}, 3000);
+							$.get({ url: "settings/restart.php", cache: false });
 						</script>
 						<?php
 						break;
@@ -125,9 +125,9 @@
 							<div class="row form-group">
 								<label for="hostname" class="col-md-4 col-form-label">Neuer Hostname</label>
 								<div class="col">
-									<input type="text" name="hostname" id="hostname" value="<?php echo $currentHostname; ?>" placeholder="Name" aria-describedby="hostnameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9_-]*">
+									<input type="text" name="hostname" id="hostname" value="<?php echo $currentHostname; ?>" placeholder="Name" aria-describedby="hostnameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]">
 									<span id="hostnameHelpBlock" class="form-text small">
-										Der Hostname darf nur Buchstaben, Zahlen und die Zeichen "-_" enthalten. Keine Umlaute, Sonderzeichen oder Leerzeichen.<br>
+										Der Hostname darf nur Buchstaben, Zahlen und einen Bindestrich enthalten. Keine Umlaute, Sonderzeichen oder Leerzeichen. Das erste und letzte Zeichen darf kein Bindestrich sein.<br>
 										<span class="text-danger">Die openWB wird direkt nach der Änderung neu gestartet! Alle Fahrzeuge sind vorher abzustecken!</span>
 									</span>
 								</div>
