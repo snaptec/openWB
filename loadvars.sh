@@ -1189,7 +1189,15 @@ loadvars(){
 		pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
 		echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
 	fi
-
+	# monthly / yearly fuer status rechnen (csv aus cronnight und laufend)
+	pvdaily=$(</var/www/html/openWB/ramdisk/daily_pvkwhk)
+	pvyearlycsv=$(</var/www/html/openWB/ramdisk/yearly_pvkwhk_csv)
+	pvmonthlycsv=$(</var/www/html/openWB/ramdisk/monthly_pvkwhk_csv)
+	pvyearly=$(echo "$pvdaily + $pvyearlycsv" |bc)
+	pvmonthly=$(echo "$pvdaily + $pvmonthlycsv" |bc)
+	echo $pvyearly > /var/www/html/openWB/ramdisk/yearly_pvkwhk
+	echo $pvmonthly > /var/www/html/openWB/ramdisk/monthly_pvkwhk
+	# rechnen ende
 	if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] ; then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)

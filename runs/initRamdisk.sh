@@ -245,6 +245,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/daily_pvkwhk1
 	echo 0 > $RamdiskPath/daily_pvkwhk2
 	echo 0 > $RamdiskPath/monthly_pvkwhk
+	echo 0 > $RamdiskPath/monthly_pvkwhk_csv	
 	echo 0 > $RamdiskPath/monthly_pvkwhk1
 	echo 0 > $RamdiskPath/monthly_pvkwhk2
 	echo 0 > $RamdiskPath/nurpv70dynstatus
@@ -268,6 +269,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/pvwatt1
 	echo 0 > $RamdiskPath/pvwatt2
 	echo 0 > $RamdiskPath/yearly_pvkwhk
+	echo 0 > $RamdiskPath/yearly_pvkwhk_csv
 	echo 0 > $RamdiskPath/yearly_pvkwhk1
 	echo 0 > $RamdiskPath/yearly_pvkwhk2
 
