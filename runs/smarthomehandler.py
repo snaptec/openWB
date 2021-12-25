@@ -1175,7 +1175,7 @@ def conditions(nummer):
                 logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Soll nicht eingeschaltet werden bei Ladung, pruefe " + str( testcharge) )
                 if chargestatus == 1:
                     logDebug(LOGLEVELDEBUG,"(" + str(nummer) + ") " + str(name) + " Ladung läuft, wird nicht eingeschaltet")
-                return
+                    return
     # Auto ladung ende
     # Art vom ueberschussberechnung pruefen
     ueberschussberechnung = 0
