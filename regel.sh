@@ -44,6 +44,26 @@ else
 	exit 0
 fi
 
+########### Laufzeit protokolieren
+startregel=$(date +%s)
+function cleanup()
+{
+ local endregel=$(date +%s)
+ local t=$((endregel-startregel))
+ 
+ if [ "$t" -le "7" ] ; then   # 1..7 Ok
+ 	openwbDebugLog "MAIN" 0 "**** Regulation loop needs $t seconds"
+ elif [ "$t" -le "8" ] ; then # 8 Warning 
+	openwbDebugLog "MAIN" 0 "**** WARNING **** Regulation loop needs $t seconds"
+ else                         # 9,10,... Fatal
+	openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
+ 	openwbDebugLog "MAIN" 0 "**** FATAL Regulation loop needs $t seconds"
+	openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
+  fi
+}
+trap cleanup EXIT
+########### End Laufzeit protokolieren
+
 #config file einlesen
 . /var/www/html/openWB/loadconfig.sh
 
@@ -89,6 +109,9 @@ if [[ $isss == "1" ]]; then
 	heartbeat=$(<ramdisk/heartbeat)
 	heartbeat=$((heartbeat+10))
 	echo $heartbeat > ramdisk/heartbeat
+	mosquitto_pub -r -t "openWB/system/Uptime" -m "$(uptime)"
+	mosquitto_pub -r -t "openWB/system/Timestamp" -m "$(date +%s)"
+	mosquitto_pub -r -t "openWB/system/Date" -m "$(date)"
 	exit 0
 fi
 

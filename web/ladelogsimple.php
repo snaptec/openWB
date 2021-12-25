@@ -63,7 +63,7 @@ if (isset($_GET['bis'])) {
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h3> Ladelog </h3>
+					<h3> Lade-Log </h3>
 				</div>
 			</div>
 			<div class="row">
@@ -281,7 +281,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				</div>
 				<div class="col-xs-7">
 					<form name="limitlines" id="limitlines" action="ladelogsimple.php" method="GET">
-						<label for="lines">Anzahl berücksichtiger Ladungen</label>
+						<label for="lines">Anzahl berücksichtigter Ladungen</label>
 						<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" /><br>
 						<label for="zeitakt">Filter aktiv:</label>
 						<input id="zeitakt" name="zeitakt" type="checkbox" <?php if (isset($_GET['zeitakt'])){ if ( $_GET['zeitakt'] == "on"){ echo "checked"; }} ?> ><br>

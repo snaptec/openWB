@@ -85,19 +85,19 @@ function loadElectricityPriceChart() {
 			tooltips: {
 				enabled: true,
 				callbacks: {
-                    label: function(tooltipItem, data) {
+					label: function(tooltipItem, data) {
 						let i = tooltipItem.index;
-                        return data.datasets[0].data[i] + ' ct/kWh';
-                    },
+						return data.datasets[0].data[i] + ' ct/kWh';
+					},
 					title: function(tooltipItem, data) {
 						let i = tooltipItem[0].index;
 						let title = 'jetzt';
 						if ( i > 0 ) {
 							title =  'ab ' + xLabels[i];
 						}
-                        return title;
-                    }
-                }
+						return title;
+					}
+				}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -139,8 +139,8 @@ function loadElectricityPriceChart() {
 				}]
 			},
 			annotation: {
-		        annotations: createPriceAnnotations()
-		    }
+				annotations: createPriceAnnotations()
+			}
 		}
 	});
 }

@@ -101,4 +101,8 @@ openwbDebugLog() {
 	fi
 }
 
+# Enable all python scripts to import from the "package"-directory without fiddling with sys.path individually
+SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+export PYTHONPATH="$SCRIPT_DIR/packages"
+
 export -f openwbDebugLog
