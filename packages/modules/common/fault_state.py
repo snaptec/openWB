@@ -23,7 +23,8 @@ class ComponentInfo:
 
 
 class FaultState(Exception):
-    type_name_mapping = {"bat": "houseBattery", "counter": "evu", "inverter": "pv"}
+    type_topic_mapping_comp = {"bat": "houseBattery", "counter": "evu", "inverter": "pv", "vehicle": "lp"}
+    type_topic_mapping = {"bat": "bat", "counter": "counter", "inverter": "pv", "vehicle": "vehicle"}
 
     def __init__(self, fault_str: str, fault_state: FaultStateLevel) -> None:
         self.fault_str = fault_str
@@ -38,19 +39,23 @@ class FaultState(Exception):
                                        traceback.format_exc())
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
-                type = self.type_name_mapping.get(component_info.type, component_info.type)
-                prefix = "openWB/set/" + type + "/"
+                topic = self.type_topic_mapping_comp.get(component_info.type, component_info.type)
+                prefix = "openWB/set/" + topic + "/"
                 if component_info.id is not None:
-                    prefix += str(component_info.id) + "/"
-                pub.pub_single(prefix + "faultStr", self.fault_str)
-                pub.pub_single(prefix + "faultState", self.fault_state.value)
+                    if topic == "lp":
+                        prefix += str(component_info.id) + "/socF"
+                    else:
+                        prefix += str(component_info.id) + "/f"
+                else:
+                    prefix += "f"
+                pub.pub_single(prefix + "aultStr", self.fault_str)
+                pub.pub_single(prefix + "aultState", self.fault_state.value)
             else:
+                topic = self.type_topic_mapping.get(component_info.type, component_info.type)
                 pub.Pub().pub(
-                    "openWB/set/" + component_info.type + "/" + str(component_info.id) +
-                    "/get/fault_str", self.fault_str)
+                    "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_str", self.fault_str)
                 pub.Pub().pub(
-                    "openWB/set/" + component_info.type + "/" + str(component_info.id) +
-                    "/get/fault_state", self.fault_state.value)
+                    "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_state", self.fault_state.value)
         except Exception:
             log.MainLogger().exception("Fehler im Modul fault_state")
 
