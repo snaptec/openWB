@@ -1,42 +1,40 @@
 #!/usr/bin/python
-import sys
-# import os
-# import time
-# import getopt
-# import socket
-# import ConfigParser
-import struct
-# import binascii
-from pymodbus.client.sync import ModbusTcpClient
+import logging
+from statistics import mean
+from typing import Iterable
 
-ipaddress = str(sys.argv[1])
-zweiterspeicher = int(sys.argv[2])
-storage2power = 0
+from pymodbus.constants import Endian
 
-client = ModbusTcpClient(ipaddress, port=502)
+from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.log import setup_logging_stdout
+from modules.common.component_state import BatState
+from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.store import get_bat_value_store
 
-rr = client.read_holding_registers(62836, 2, unit=1)
-raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-storagepower = int(struct.unpack('>f', raw)[0])
-if zweiterspeicher == 1:
-    rr = client.read_holding_registers(62836, 2, unit=2)
-    raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-    storage2power = int(struct.unpack('>f', raw)[0])
-final=storagepower+storage2power
-f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
-f.write(str(final))
-f.close()
+log = logging.getLogger("SolarEdge Battery")
 
-rr = client.read_holding_registers(62852, 2, unit=1)
-raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-soc = int(struct.unpack('>f', raw)[0])
-if zweiterspeicher == 1:
-    rr = client.read_holding_registers(62852, 2, unit=2)
-    raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-    soc2 = int(struct.unpack('>f', raw)[0])
-    fsoc=(soc+soc2)/2
-else:
-    fsoc=soc
-f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
-f.write(str(fsoc))
-f.close()
+
+def update_solaredge_battery(client: ModbusClient, slave_ids: Iterable[int]):
+    all_socs = [client.read_holding_registers(
+        62852, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=slave_id
+    ) for slave_id in slave_ids]
+    storage_powers = [
+        client.read_holding_registers(
+            62836, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=slave_id
+        ) for slave_id in slave_ids
+    ]
+    log.debug("Battery SoCs=%s, powers=%s", all_socs, storage_powers)
+    get_bat_value_store(1).set(BatState(power=sum(storage_powers), soc=mean(all_socs)))
+
+
+def main(address: str, second_battery: int):
+    # `second_battery` is 0 or 1
+    log.debug("Beginning update")
+    with ModbusClient(address) as client:
+        update_solaredge_battery(client, range(1, 2 + second_battery))
+    log.debug("Update completed successfully")
+
+
+if __name__ == '__main__':
+    setup_logging_stdout()
+    run_using_positional_cli_args(main)
