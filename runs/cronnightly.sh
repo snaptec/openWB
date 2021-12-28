@@ -136,6 +136,46 @@ else
 	echo "Not deleting randomSleepValue of \"$randomSleep\""
 fi
 
+#set heartbeat openWB Pro
+if [[ $evsecon == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro1ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro1ip/connect.php
+fi
+if [[ $evsecons1 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro2ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
+fi
+if [[ $evsecons2 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro3ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+fi
+if [[ $evseconlp4 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro4ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
+fi
+if [[ $evseconlp5 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro5ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
+fi
+if [[ $evseconlp6 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro6ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
+fi
+if [[ $evseconlp7 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro7ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
+fi
+if [[ $evseconlp8 == "owbpro" ]]; then
+	curl -s -X POST --data "heartbeatenabled=1" $owbpro8ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
+fi
+
 # monthly . csv updaten
   echo "Trigger update of logfiles..."
   python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
