@@ -47,7 +47,7 @@ version = None
 tree = ET.parse(response)
 root = tree.getroot()
 version = get_xml_text(root, "value", "id", "version")
-if version < 6:
+if len(version) < 6:
     versionshort = version[:-6]
 else:
     versionshort = "oldversion"

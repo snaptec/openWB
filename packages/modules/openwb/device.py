@@ -1,7 +1,7 @@
-from typing import Dict, List, Union
-import sys
+from typing import Dict, Union, Optional
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.openwb import bat
@@ -53,7 +53,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]):
+def read_legacy(component_type: str, version: int, num: Optional[int]):
     """ Ausführung des Moduls als Python-Skript
     """
     COMPONENT_TYPE_TO_MODULE = {
@@ -61,13 +61,6 @@ def read_legacy(argv: List[str]):
         "counter": counter,
         "inverter": inverter
     }
-    component_type = argv[1]
-    version = int(argv[2])
-    try:
-        num = int(argv[3])
-    except IndexError:
-        num = None
-
     device_config = get_default_config()
     dev = Device(device_config)
 
@@ -88,6 +81,6 @@ def read_legacy(argv: List[str]):
 
 if __name__ == "__main__":
     try:
-        read_legacy(sys.argv)
+        run_using_positional_cli_args(read_legacy)
     except Exception:
         log.MainLogger().exception("Fehler im Modul openwb")

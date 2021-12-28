@@ -21,7 +21,7 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" &>>$MYLOGFILE)
+python3 /var/www/html/openWB/packages/modules/fronius/device.py "counter_sm" "${wrfroniusip}" "${froniuserzeugung}" "0" "${froniusvar2}" "0" "0" "none" "" &>>$MYLOGFILE
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

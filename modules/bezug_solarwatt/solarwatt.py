@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from datetime import datetime, timezone
 import os
-import datetime
 import requests
 import sys
 import traceback
@@ -32,16 +31,10 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
             bezugwatt = f.read()
     else:
         for item in sresponse["result"]["items"].values():
-            try:
-                bezugw = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
-            except KeyError:
-                pass
+            bezugw = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
 
         for item in sresponse["result"]["items"].values():
-            try:
-                einspeisungw = int(sresponse["result"]["items"][item]["tagValues"]["PowerOut"]["value"])
-            except KeyError:
-                pass
+            einspeisungw = int(item["tagValues"]["PowerOut"]["value"])
         bezugwatt = bezugw - einspeisungw
 if solarwattmethod == 1:  # Abruf über Gateway
     sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()

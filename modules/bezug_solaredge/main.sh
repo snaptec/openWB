@@ -1,5 +1,4 @@
 #!/bin/bash
-
-sudo python /var/www/html/openWB/modules/bezug_solaredge/solaredge.py $solaredgeip $solaredgemodbusport $solaredgepvslave1
-wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
-echo $wattbezug
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+python3 "$OPENWBBASEDIR/modules/bezug_solaredge/solaredge.py" "$solaredgeip" "$solaredgemodbusport" "$solaredgepvslave1" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1
+cat "$OPENWBBASEDIR/ramdisk/wattbezug"

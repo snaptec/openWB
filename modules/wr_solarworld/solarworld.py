@@ -21,7 +21,8 @@ if Debug >= 2:
     DebugLog('PV Solarworld IP:' + solarworld_emanagerip)
 
 # Auslesen eines Solarworld eManagers über die integrierte JSON-API
-emanagerantwort = requests.get("http://"+solarworld_emanagerip+"/rest/solarworld/lpvm/powerAndBatteryData", timeout=5).json()
+emanagerantwort = requests.get(
+    "http://"+solarworld_emanagerip+"/rest/solarworld/lpvm/powerAndBatteryData", timeout=5).json()
 
 try:
     wr_watt = int(emanagerantwort["PowerTotalPV"])
@@ -32,7 +33,7 @@ except:
 # wenn eManager aus bzw. keine Antwort ersetze leeren Wert durch eine 0
 ra = '^-?[0-9]+$'
 
-if re.search(ra, wr_watt) == None:
+if re.search(ra, str(wr_watt)) == None:
     wr_watt = 0
 
 # PV ezeugte Leistung muss negativ sein

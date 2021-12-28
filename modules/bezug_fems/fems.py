@@ -7,6 +7,7 @@ import traceback
 password = str(sys.argv[1])
 ip_address = str(sys.argv[2])
 
+
 def write_ramdisk(val, file):
     try:
         f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
@@ -15,11 +16,11 @@ def write_ramdisk(val, file):
     except:
         traceback.print_exc()
 
+
 # Grid meter values
-try:
-    response = requests.get('http://x:'+password+'@'+ip_address+':8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)', timeout = 1).json()
-except:
-    traceback.print_exc()
+response = requests.get('http://x:' + password + '@' + ip_address +
+                        ':8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)', timeout=1).json()
+
 
 v1, v2, v3 = 0, 0, 0
 p1, p2, p3 = 0, 0, 0
@@ -60,7 +61,8 @@ if (v3 != 0):
 
 # Grid total energy sums
 try:
-    response = requests.get('http://x:'+password+'@'+ip_address+':8084/rest/channel/_sum/Grid.+ActiveEnergy', timeout = 1).json()
+    response = requests.get(
+        'http://x:'+password+'@'+ip_address+':8084/rest/channel/_sum/Grid.+ActiveEnergy', timeout=1).json()
 except:
     traceback.print_exc()
 

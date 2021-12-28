@@ -75,7 +75,7 @@ def request(command):
 
     # Werte formatiert in Variablen speichern
     id = values[0]
-    timestamp = values[3]+"-"+values[2]+"-"+values[1]+" "+values[4]+":"+values[5]
+    timestamp = str(values[3])+"-"+str(values[2])+"-"+str(values[1])+" "+str(values[4])+":"+str(values[5])
     #  PAC = '-0357' bedeutet: 357 W Bezug, 0 W Einspeisung
     #  PAC =  '0246' bedeutet: 0 W Bezug, 246 W Einspeisung
     power = -1 * int(values[10])
@@ -142,8 +142,8 @@ def request(command):
 
 if Debug >= 2:
 	DebugLog('Solarview Hostname: ' + solarview_hostname)
-	DebugLog('Solarview Port: ' + solarview_port)
-	DebugLog('Solarview Timeout: ' + solarview_timeout)
+	DebugLog('Solarview Port: ' + str(solarview_port))
+	DebugLog('Solarview Timeout: ' + str(solarview_timeout))
 
 # Checks
 if solarview_hostname == None or solarview_hostname == "":

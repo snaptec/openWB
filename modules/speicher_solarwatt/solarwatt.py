@@ -28,7 +28,7 @@ if Debug >= 2:
 
 
 def get_value(key, sresponse):
-    value = None
+    value = 0
     try:
         for item in sresponse["result"]["items"]:
             if "tagValues" in sresponse["result"]["items"][item]:
@@ -46,47 +46,36 @@ if solarwattmethod == 0:  # Abruf über Energy Manager
     sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=5).json()
     if len(str(sresponse)) < 10:
         sys.exit(1)
-    
-    speichere=get_value("PowerConsumedFromStorage", sresponse)
-    speicherein=get_value("PowerOutFromStorage", sresponse)
-    speicheri=get_value("PowerBuffered", sresponse)
-    speicherleistung=int((speichere + speicherein - speicheri) *-1)
-    speichersoc=get_value("StateOfCharge", sresponse)
+
+    speichere = get_value("PowerConsumedFromStorage", sresponse)
+    speicherein = get_value("PowerOutFromStorage", sresponse)
+    speicheri = get_value("PowerBuffered", sresponse)
+    speicherleistung = int((speichere + speicherein - speicheri) * -1)
+    speichersoc = get_value("StateOfCharge", sresponse)
 
 
-if solarwattmethod == 1: 	#Abruf über Gateway
-    sresponse=requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
+elif solarwattmethod == 1:  # Abruf über Gateway
+    sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
     if len(str(sresponse)) < 10:
         sys.exit(1)
-    
-    try:
-        ibat=sresponse["FData"]["IBat"]
-    except:
-        traceback.print_exc()
-        exit(1)
-    try:
-        vbat=sresponse["FData"]["VBat"]
-    except:
-        traceback.print_exc()
-        exit(1)
-    speicherleistung=ibat * vbat
-    speicherleistung=int(speicherleistung / (-1))
-    try:
-        speichersoc=int(sresponse["SData"]["SoC"])
-        if Debug >= 1:
-            DebugLog('SpeicherSoC: ' + str(speichersoc))
-        if not str(speichersoc).isnumeric():
-            DebugLog('SpeicherSoc nicht numerisch. -->0')
-            speichersoc = 0
-    except:
-        traceback.print_exc()
-        exit(1)
+    ibat = sresponse["FData"]["IBat"]
+    vbat = sresponse["FData"]["VBat"]
 
+    speicherleistung = ibat * vbat
+    speicherleistung = int(speicherleistung / (-1))
+    speichersoc = int(sresponse["SData"]["SoC"])
+    if Debug >= 1:
+        DebugLog('SpeicherSoC: ' + str(speichersoc))
+    if not str(speichersoc).isnumeric():
+        DebugLog('SpeicherSoc nicht numerisch. -->0')
+        speichersoc = 0
+else:
+    raise Exception("Unbekannte Abrufmethode fuer Solarwatt")
 
-DebugLog("Speicherleistung: "+speicherleistung+" W")
+DebugLog("Speicherleistung: "+str(speicherleistung)+" W")
 with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
     f.write(str(speicherleistung))
-DebugLog("SpeicherSoC: "+speichersoc+" %")
+DebugLog("SpeicherSoC: "+str(speichersoc)+" %")
 with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
     f.write(str(speichersoc))
 
