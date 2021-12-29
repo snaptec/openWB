@@ -8,13 +8,13 @@ if [[ $answer == *"vehicle_id"* ]]; then
 	APhase1=$(echo $answer | jq ".currents[0]" ) 
 	APhase2=$(echo $answer | jq ".currents[1]" ) 
 	APhase3=$(echo $answer | jq ".currents[2]" ) 
-	boolChargeStat=$(echo $answer | jq ".plug_state" )
+	boolChargeStat=$(echo $answer | jq ".charge_state" )
 	if [ $boolChargeStat = true ]; then
 		boolChargeStat=1
 	else
 		boolChargeStat=0
 	fi
-	boolPlugStat=$(echo $answer | jq ".charge_state") 
+	boolPlugStat=$(echo $answer | jq ".plug_state") 
 	if [ $boolPlugStat = true ]; then
 		boolPlugStat=1
 	else
