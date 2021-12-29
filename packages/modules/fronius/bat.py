@@ -33,7 +33,7 @@ class FroniusBat:
     def update(self, bat: bool) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         gen24 = self.component_config["configuration"]["gen24"]
-        meter_id = self.device_config["meter_id"]
+        meter_id = str(self.device_config["meter_id"])
 
         response = requests.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
@@ -49,9 +49,11 @@ class FroniusBat:
 
         try:
             if gen24:
-                soc = float(resp_json["Body"]["Data"][meter_id]["Controller"]["StateOfCharge_Relative"])
+                resp_json_id = dict(resp_json["Body"]["Data"])
+                soc = float(resp_json_id.get(meter_id)["Controller"]["StateOfCharge_Relative"])
             else:
-                soc = float(resp_json["Body"]["Data"]["Inverters"]["1"]["SOC"])
+                resp_json_id = dict(resp_json["Body"]["Data"]["Inverters"])
+                soc = float(resp_json_id.get(meter_id)["SOC"])
         except TypeError:
             # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
             soc = 0
