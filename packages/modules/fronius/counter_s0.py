@@ -11,11 +11,7 @@ def get_default_config() -> dict:
     return {
         "name": "Fronius S0 Zähler",
         "id": 0,
-        "type": "counter_s0",
-        "configuration":
-        {
-            "primo": False
-        }
+        "type": "counter_s0"
     }
 
 
@@ -47,23 +43,22 @@ class FroniusS0Counter:
             params=(('Scope', 'System'),),
             timeout=5)
         response.raise_for_status()
-        response = response.json()
-        for location in response["Body"]["Data"]:
-            if "EnergyReal_WAC_Minus_Absolute" in response["Body"]["Data"][location] and \
-               "EnergyReal_WAC_Plus_Absolute" in response["Body"]["Data"][location]:
-                imported = float(response["Body"]["Data"][location]["EnergyReal_WAC_Minus_Absolute"])
-                exported = float(response["Body"]["Data"][location]["EnergyReal_WAC_Plus_Absolute"])
-            else:
-                topic_str = "openWB/set/system/device/{}/component/{}/".format(
-                    self.__device_id, self.component_config["id"]
-                )
-                imported, exported = self.__sim_count.sim_count(
-                    power_all,
-                    topic=topic_str,
-                    data=self.simulation,
-                    prefix="bezug"
-                )
-            break
+        meter_id = str(self.device_config["meter_id"])
+        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
+        if "EnergyReal_WAC_Minus_Absolute" in response_json_id and \
+           "EnergyReal_WAC_Plus_Absolute" in response_json_id:
+            imported = float(response_json_id["EnergyReal_WAC_Minus_Absolute"])
+            exported = float(response_json_id["EnergyReal_WAC_Plus_Absolute"])
+        else:
+            topic_str = "openWB/set/system/device/{}/component/{}/".format(
+                self.__device_id, self.component_config["id"]
+            )
+            imported, exported = self.__sim_count.sim_count(
+                power_all,
+                topic=topic_str,
+                data=self.simulation,
+                prefix="bezug"
+            )
 
         counter_state = CounterState(
             imported=imported,

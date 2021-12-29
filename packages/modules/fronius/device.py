@@ -107,7 +107,6 @@ def read_legacy(
         meter_id: int,
         gen24: int,
         variant: int,
-        primo: int,
         meter_location: int = meter.MeterLocation.grid.value,
         ip_address2: str = "none",
         bat_module: str = "none",
@@ -127,8 +126,6 @@ def read_legacy(
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "bat":
             component_config["configuration"]["gen24"] = bool(gen24)
-        elif component_type == "counter_s0":
-            component_config["configuration"]["primo"] = bool(primo)
         elif component_type == "counter_sm":
             component_config["configuration"]["variant"] = variant
             component_config["configuration"]["meter_location"] = meter.MeterLocation(meter_location)

@@ -125,7 +125,7 @@ class FroniusSmCounter:
         ), meter_location
 
     def __update_variant_2(self) -> Tuple[CounterState, bool]:
-        meter_id = self.device_config["meter_id"]
+        meter_id = str(self.device_config["meter_id"])
         response = requests.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
