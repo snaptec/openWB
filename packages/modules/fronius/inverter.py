@@ -118,14 +118,15 @@ class FroniusInverter:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                     f.write(str(counter_start))
         else:
-            topic = "openWB/system/device/" + str(self.__device_id)+"/component/" + \
-                str(self.component_config["id"])+"/counter_offset"
+            topic = "openWB/pv/"+str(self.component_config["id"])+"/get/counter_offset"
             counter_offset = Offset().offset(topic)
             if counter_offset is None:
                 counter_offset = 0
-            topic = "openWB/system/device/" + str(self.__device_id)+"/component/" + \
-                str(self.component_config["id"])+"/counter_start"
+            topic = "openWB/pv/"+str(self.component_config["id"])+"/get/counter_start"
             counter_start = Offset().offset(topic)
+            if counter_start is None:
+                counter_start = counter - daily_yield
+                pub.pub_single(topic, counter_start)
 
         if counter_start is not None:
             counter_new = counter_start + daily_yield + counter_offset
@@ -153,8 +154,7 @@ class FroniusInverter:
                 with open("/var/www/html/openWB/ramdisk/pvkwh", "r") as ff:
                     counter_old = float(ff.read())
             else:
-                topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
-                    str(self.component_config["id"])+"/pvkwh_start"
+                topic = "openWB/pv/"+str(self.component_config["id"])+"/get/counter_start"
                 pub.pub_single(topic, counter)
                 topic = "openWB/pv/" + str(self.component_config["id"])+"/counter"
                 try:
@@ -167,16 +167,14 @@ class FroniusInverter:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "w") as f:
                     f.write(str(counter_offset))
             else:
-                topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
-                    str(self.component_config["id"])+"/counter_offset"
+                topic = "openWB/pv/"+str(self.component_config["id"])+"/get/counter_offset"
                 pub.pub_single(topic, counter_offset)
         else:
             if ramdisk:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "w") as f:
                     f.write(str(counter_offset))
             else:
-                topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
-                    str(self.component_config["id"])+"/counter_offset"
+                topic = "openWB/pv/"+str(self.component_config["id"])+"/get/counter_offset"
                 pub.pub_single(topic, counter_offset)
         return counter
 
