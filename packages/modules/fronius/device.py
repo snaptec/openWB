@@ -130,7 +130,7 @@ def read_legacy(
             component_config["configuration"]["variant"] = variant
             component_config["configuration"]["meter_location"] = meter.MeterLocation(meter_location)
         elif component_type == "inverter":
-            component_config["ip_address2"] = ip_address2
+            component_config["configuration"]["ip_address2"] = ip_address2
             component_config["configuration"]["gen24"] = bool(gen24)
             if bat_module == "speicher_fronius":
                 dev.bat_configured = True
