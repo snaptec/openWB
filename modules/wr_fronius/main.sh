@@ -19,7 +19,7 @@ openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
 openwbDebugLog ${DMOD} 2 "WR Gen 24: ${wrfroniusisgen24}"
 openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
 
-python3 /var/www/html/openWB/packages/modules/fronius/device.py "inverter" "${wrfroniusip}" "0" "${wrfroniusisgen24}" "0" "0" "0" "${wrfronius2ip}" "${speichermodul}" "1" &>>$MYLOGFILE
+python3 /var/www/html/openWB/packages/modules/fronius/device.py "inverter" "${wrfroniusip}" "0" "${wrfroniusisgen24}" "0" "0" "${wrfronius2ip}" "${speichermodul}" "1" &>>$MYLOGFILE
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

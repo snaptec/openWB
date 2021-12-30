@@ -18,7 +18,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "variant": 0,
-            "meter_location": MeterLocation.grid.value
+            "meter_location": MeterLocation.grid
         }
     }
 
@@ -50,7 +50,7 @@ class FroniusSmCounter:
                 params=(('Scope', 'System'),),
                 timeout=5)
             response.raise_for_status()
-            counter_state.power_all = int(response.json()["Body"]["Data"]["Site"]["P_Grid"])
+            counter_state.power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
@@ -81,7 +81,7 @@ class FroniusSmCounter:
         elif variant == 1:
             params = (
                 ('Scope', 'Device'),
-                ('DeviceID', meter_id),
+                ('DeviceId', meter_id),
                 ('DataCollection', 'MeterRealtimeData'),
             )
         else:
@@ -125,13 +125,13 @@ class FroniusSmCounter:
         ), meter_location
 
     def __update_variant_2(self) -> Tuple[CounterState, bool]:
-        meter_id = self.device_config["meter_id"]
+        meter_id = str(self.device_config["meter_id"])
         response = requests.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)
         response.raise_for_status()
-        response_json_id = response.json()["Body"]["Data"][meter_id]
+        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
         meter_location = self.component_config["configuration"]["meter_location"]
 
         power_all = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]

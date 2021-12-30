@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import requests
 from helpermodules import log
+from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
@@ -10,36 +11,29 @@ def get_default_config() -> dict:
     return {
         "name": "Fronius S0 Zähler",
         "id": 0,
-        "type": "counter_s0",
-        "configuration":
-        {
-            "primo": False
-        }
+        "type": "counter_s0"
     }
 
 
 class FroniusS0Counter:
     def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
+        self.__device_id = device_id
         self.component_config = component_config
         self.device_config = device_config
+        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
+        self.simulation = {}
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self, bat: bool) -> CounterState:
-        primo = self.component_config["configuration"]["primo"]
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         response = requests.get(
-            'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.cgi', timeout=5)
+            'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+            timeout=5)
         response.raise_for_status()
-        try:
-            if primo:
-                power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
-            else:
-                power_all = float(response.json()["Body"]["Data"]["PowerReal_P_Sum"])
-        except TypeError:
-            # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
-            power_all = 0
+        # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
+        power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
 
         # Summe der vom Netz bezogene Energie total in Wh
         # nur für Smartmeter  im Einspeisepunkt!
@@ -49,8 +43,22 @@ class FroniusS0Counter:
             params=(('Scope', 'System'),),
             timeout=5)
         response.raise_for_status()
-        imported = float(response.json()["Body"]["Data"]["0"]["EnergyReal_WAC_Minus_Absolute"])
-        exported = float(response.json()["Body"]["Data"]["0"]["EnergyReal_WAC_Plus_Absolute"])
+        meter_id = str(self.device_config["meter_id"])
+        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
+        if "EnergyReal_WAC_Minus_Absolute" in response_json_id and \
+           "EnergyReal_WAC_Plus_Absolute" in response_json_id:
+            imported = float(response_json_id["EnergyReal_WAC_Minus_Absolute"])
+            exported = float(response_json_id["EnergyReal_WAC_Plus_Absolute"])
+        else:
+            topic_str = "openWB/set/system/device/{}/component/{}/".format(
+                self.__device_id, self.component_config["id"]
+            )
+            imported, exported = self.__sim_count.sim_count(
+                power_all,
+                topic=topic_str,
+                data=self.simulation,
+                prefix="bezug"
+            )
 
         counter_state = CounterState(
             imported=imported,

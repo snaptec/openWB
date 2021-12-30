@@ -15,7 +15,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/fronius/device.py "counter_s0" "${wrfroniusip}" "0" "0" "0" "${froniusprimo}" "0" "none" "" >>${MYLOGFILE} 2>&1
+python3 ${OPENWBBASEDIR}/packages/modules/fronius/device.py "counter_s0" "${wrfroniusip}" "${froniuserzeugung}" "${wrfroniusisgen24}" "${froniusvar2}" "${froniusmeterlocation}" "${wrfronius2ip}" "${speichermodul}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
