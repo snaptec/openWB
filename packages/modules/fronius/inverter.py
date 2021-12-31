@@ -66,7 +66,7 @@ class FroniusInverter:
             daily_yield = float(response.json()["Body"]["Data"]["Site"]["E_Day"])
             counter, counter_start, counter_offset = self.__calculate_offset(counter, daily_yield)
             counter = counter + counter2
-            if counter > 0 and self.component_config["configuration"]["ip_address2"] == "none":
+            if counter > 0:
                 counter = self.__add_and_save_offset(daily_yield, counter, counter_start, counter_offset)
 
         if bat is True:
@@ -85,17 +85,21 @@ class FroniusInverter:
         ip_address2 = self.component_config["configuration"]["ip_address2"]
         counter2 = 0
         if ip_address2 != "none":
-            params = (('Scope', 'System'),)
-            response = requests.get('http://'+ip_address2+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
-                                    params=params, timeout=3)
-            response.raise_for_status()
             try:
-                power2 = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
-            except TypeError:
-                # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+                params = (('Scope', 'System'),)
+                response = requests.get('http://'+ip_address2+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                                        params=params, timeout=3)
+                response.raise_for_status()
+                try:
+                    power2 = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
+                except TypeError:
+                    # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+                    power2 = 0
+                if not self.component_config["configuration"]["gen24"]:
+                    counter2 = float(response.json()["Body"]["Data"]["Site"]["E_Total"])
+            except (requests.ConnectTimeout, requests.ConnectionError):
+                # Nachtmodus: WR ist ausgeschaltet
                 power2 = 0
-            if not self.component_config["configuration"]["gen24"]:
-                counter2 = float(response.json()["Body"]["Data"]["Site"]["E_Total"])
         else:
             power2 = 0
         return power2, counter2
@@ -146,7 +150,9 @@ class FroniusInverter:
     def __add_and_save_offset(
             self, daily_yield: float, counter: float, counter_start: float, counter_offset: float) -> float:
         ramdisk = compatibility.is_ramdisk_in_use()
-        if daily_yield == 0 and counter > counter_start + counter_offset:
+        if daily_yield == 0 and \
+           counter > counter_start + counter_offset and \
+           self.component_config["configuration"]["ip_address2"] == "none":
             if ramdisk:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                     f.write(str(counter))
