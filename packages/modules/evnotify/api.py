@@ -1,13 +1,12 @@
 from typing import Union
 
-import requests
+from modules.common import req
 
 _SOC_PROPERTY = "soc_display"
 
 
 def fetch_soc(akey: str, token: str) -> Union[int, float]:
-    response = requests.get("https://app.evnotify.de/soc", params={"akey": akey, "token": token})
-    response.raise_for_status()
+    response = req.get_http_session().get("https://app.evnotify.de/soc", params={"akey": akey, "token": token})
     try:
         soc_display = response.json()[_SOC_PROPERTY]
         if not isinstance(soc_display, (int, float)):

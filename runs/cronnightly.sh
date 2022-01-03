@@ -138,27 +138,41 @@ fi
 #set heartbeat openWB Pro
 if [[ $evsecon == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro1ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro1ip/connect.php
 fi
 if [[ $evsecons1 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro2ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
 fi
 if [[ $evsecons2 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro3ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
 fi
 if [[ $evseconlp4 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro4ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
 fi
 if [[ $evseconlp5 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro5ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
 fi
 if [[ $evseconlp6 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro6ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
 fi
 if [[ $evseconlp7 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro7ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
 fi
 if [[ $evseconlp8 == "owbpro" ]]; then
 	curl -s -X POST --data "heartbeatenabled=1" $owbpro8ip/connect.php
+	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
+
 fi
 
 # monthly . csv updaten

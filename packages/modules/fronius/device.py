@@ -105,10 +105,9 @@ def read_legacy(
         component_type: str,
         ip_address: str,
         meter_id: int,
-        gen24: bool,
+        gen24: int,
         variant: int,
-        primo: bool = False,
-        meter_location: str = meter.MeterLocation.grid,
+        meter_location: int = meter.MeterLocation.grid.value,
         ip_address2: str = "none",
         bat_module: str = "none",
         num: Optional[int] = None) -> None:
@@ -126,15 +125,13 @@ def read_legacy(
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "bat":
-            device_config["configuration"]["gen24"] = gen24
-        elif component_type == "counter_s0":
-            component_config["primo"] = primo
+            component_config["configuration"]["gen24"] = bool(gen24)
         elif component_type == "counter_sm":
-            component_config["variant"] = variant
-            component_config["meter_location"] = meter_location
+            component_config["configuration"]["variant"] = variant
+            component_config["configuration"]["meter_location"] = meter.MeterLocation(meter_location)
         elif component_type == "inverter":
-            component_config["ip_address2"] = ip_address2
-            device_config["configuration"]["gen24"] = gen24
+            component_config["configuration"]["ip_address2"] = ip_address2
+            component_config["configuration"]["gen24"] = bool(gen24)
             if bat_module == "speicher_fronius":
                 dev.bat_configured = True
     else:

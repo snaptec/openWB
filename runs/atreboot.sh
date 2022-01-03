@@ -1,4 +1,5 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
 echo "atreboot.sh started"
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
 
@@ -134,6 +135,11 @@ then
 	sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 fi
 python3 /var/www/html/openWB/runs/mqttsub.py &
+
+# restart legacy run server
+echo "legacy run server..."
+bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
+
 
 # check crontab for user pi
 echo "crontab 1..."

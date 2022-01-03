@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 from typing import Optional, Tuple
+
+import requests
 import paho.mqtt.client as mqtt
 import time
 
-import requests
 from helpermodules import log
 from helpermodules import pub
+from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -21,7 +23,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "ip_address2": "none",
-            "gen24": 0
+            "gen24": False
         }
     }
 
@@ -44,10 +46,9 @@ class FroniusInverter:
         params = (
             ('Scope', 'System'),
         )
-        response = requests.get(
+        response = req.get_http_session().get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params,
             timeout=3)
-        response.raise_for_status()
         try:
             power = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
         except TypeError:
@@ -59,15 +60,15 @@ class FroniusInverter:
         power1 = power
         power *= -1
         topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + str(self.component_config["id"])+"/"
-        if gen24 == 0:
-            counter = int(response.json()["Body"]["Data"]["Site"]["E_Total"])
-            daily_yield = int(response.json()["Body"]["Data"]["Site"]["E_Day"])
+        if gen24:
+            _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
+        else:
+            counter = float(response.json()["Body"]["Data"]["Site"]["E_Total"])
+            daily_yield = float(response.json()["Body"]["Data"]["Site"]["E_Day"])
             counter, counter_start, counter_offset = self.__calculate_offset(counter, daily_yield)
             counter = counter + counter2
-            if counter > 0 and self.component_config["configuration"]["ip_address2"] == "none":
+            if counter > 0:
                 counter = self.__add_and_save_offset(daily_yield, counter, counter_start, counter_offset)
-        else:
-            _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
 
         if bat is True:
             _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
@@ -85,17 +86,21 @@ class FroniusInverter:
         ip_address2 = self.component_config["configuration"]["ip_address2"]
         counter2 = 0
         if ip_address2 != "none":
-            params = (('Scope', 'System'),)
-            response = requests.get('http://'+ip_address2+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
-                                    params=params, timeout=3)
-            response.raise_for_status()
             try:
-                power2 = int(response.json()["Body"]["Data"]["Site"]["P_PV"])
-            except TypeError:
-                # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+                params = (('Scope', 'System'),)
+                response = req.get_http_session().get(
+                    'http://' + ip_address2 + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params, timeout=3)
+                response.raise_for_status()
+                try:
+                    power2 = float(response.json()["Body"]["Data"]["Site"]["P_PV"])
+                except TypeError:
+                    # Ohne PV Produktion liefert der WR 'null', ersetze durch Zahl 0
+                    power2 = 0
+                if not self.component_config["configuration"]["gen24"]:
+                    counter2 = float(response.json()["Body"]["Data"]["Site"]["E_Total"])
+            except (requests.ConnectTimeout, requests.ConnectionError):
+                # Nachtmodus: WR ist ausgeschaltet
                 power2 = 0
-            if self.component_config["configuration"]["gen24"] == 0:
-                counter2 = int(response.json()["Body"]["Data"]["Site"]["E_Total"])
         else:
             power2 = 0
         return power2, counter2
@@ -105,13 +110,13 @@ class FroniusInverter:
         if ramdisk:
             try:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_offset", "r") as f:
-                    counter_offset = int(f.read())
+                    counter_offset = float(f.read())
             except FileNotFoundError as e:
                 log.MainLogger().exception(str(e))
                 counter_offset = 0
             try:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "r") as f:
-                    counter_start = int(f.read())
+                    counter_start = float(f.read())
             except FileNotFoundError as e:
                 log.MainLogger().exception(str(e))
                 counter_start = counter - daily_yield
@@ -146,12 +151,14 @@ class FroniusInverter:
     def __add_and_save_offset(
             self, daily_yield: float, counter: float, counter_start: float, counter_offset: float) -> float:
         ramdisk = compatibility.is_ramdisk_in_use()
-        if daily_yield == 0 and counter > counter_start + counter_offset:
+        if daily_yield == 0 and \
+           counter > counter_start + counter_offset and \
+           self.component_config["configuration"]["ip_address2"] == "none":
             if ramdisk:
                 with open("/var/www/html/openWB/ramdisk/pvkwh_start", "w") as f:
                     f.write(str(counter))
                 with open("/var/www/html/openWB/ramdisk/pvkwh", "r") as ff:
-                    counter_old = int(ff.read())
+                    counter_old = float(ff.read())
             else:
                 topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
                     str(self.component_config["id"])+"/pvkwh_start"

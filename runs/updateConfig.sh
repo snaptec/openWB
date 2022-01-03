@@ -1097,9 +1097,6 @@ updateConfig(){
 	if ! grep -Fq "froniuserzeugung=" $ConfigFile; then
 		echo "froniuserzeugung=0" >> $ConfigFile
 	fi
-	if ! grep -Fq "froniusprimo=" $ConfigFile; then
-		echo "froniusprimo=0" >> $ConfigFile
-	fi
 	if ! grep -Fq "froniusvar2=" $ConfigFile; then
 		echo "froniusvar2=0" >> $ConfigFile
 	fi
