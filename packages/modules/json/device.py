@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import requests
 import sys
 from typing import Dict, List, Union
 
 from helpermodules import log
+from modules.common import req
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.json import bat
@@ -54,15 +54,11 @@ class Device(AbstractDevice):
     def update(self) -> None:
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
-            response = requests.get(self.device_config["configuration"]["ip_address"], timeout=5)
-            log.MainLogger().debug(
-                "Antwort auf "+str(self.device_config["configuration"]["ip_address"])+": "+str(response.text))
-            response.raise_for_status()
-            response = response.json()
+            response = req.get_http_session().get(self.device_config["configuration"]["ip_address"], timeout=5)
             for component in self._components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update(response)
+                    self._components[component].update(response.json())
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +

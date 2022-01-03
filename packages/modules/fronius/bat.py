@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-import requests
-
 from helpermodules import log
+from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.fault_state import ComponentInfo
@@ -35,12 +34,10 @@ class FroniusBat:
         gen24 = self.component_config["configuration"]["gen24"]
         meter_id = str(self.device_config["meter_id"])
 
-        response = requests.get(
+        resp_json = req.get_http_session().get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             params=(('Scope', 'System'),),
-            timeout=5)
-        response.raise_for_status()
-        resp_json = response.json()
+            timeout=5).json()
         try:
             power = int(resp_json["Body"]["Data"]["Site"]["P_Akku"]) * -1
         except TypeError:
