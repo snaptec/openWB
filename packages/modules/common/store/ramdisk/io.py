@@ -3,7 +3,7 @@ from typing import Iterable, Optional, TypeVar, Callable
 
 from modules.common.store._util import get_rounding_function_by_digits, process_error
 
-RAMDISK_PATH = Path(__file__).resolve().parents[4] / "ramdisk"
+RAMDISK_PATH = Path(__file__).resolve().parents[5] / "ramdisk"
 
 T = TypeVar('T')
 
@@ -26,7 +26,9 @@ def ramdisk_write(file: str, value, digits: Optional[int] = None) -> None:
 
 
 def ramdisk_read(file: str) -> str:
-    return (RAMDISK_PATH / file).read_text()
+    # Using `strip`, because oftentimes values are written from bash like `echo value > file` which adds a newline at
+    # the end of file
+    return (RAMDISK_PATH / file).read_text().strip()
 
 
 def ramdisk_read_mapping(file: str, mapper: Callable[[str], T], error_message: str) -> T:
