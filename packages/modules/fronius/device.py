@@ -9,6 +9,7 @@ from modules.fronius import bat
 from modules.fronius import counter_sm
 from modules.fronius import counter_s0
 from modules.fronius import inverter
+from modules.fronius import meter
 
 
 def get_default_config() -> dict:
@@ -72,7 +73,7 @@ class Device(AbstractDevice):
                 for component in self._components:
                     if isinstance(self._components[component], counter_sm.FroniusSmCounter):
                         counter_state, meter_location = self._components[component].update(self.bat_configured)
-                        if meter_location == "1":
+                        if meter_location == meter.MeterLocation.load:
                             # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
                             # PV Leistung wird gleichmäßig auf alle Phasen verteilt
                             # Spannungen und Leistungsfaktoren sind am Verbrauchszweig == Einspeisepunkt
@@ -83,11 +84,6 @@ class Device(AbstractDevice):
                             currents = [powers[i] / counter_state.voltages[i] for i in range(0, 3)]
                             counter_state.powers = powers
                             counter_state.currents = currents
-                            # Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus
-                            # dem Wechselrichter kam.
-                            counter_state.imported = 0
-                            # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
-                            counter_state.exported = 0
                         self._components[component].set_counter_state(counter_state)
                         break
                     elif isinstance(self._components[component], counter_s0.FroniusS0Counter):
@@ -109,10 +105,9 @@ def read_legacy(
         component_type: str,
         ip_address: str,
         meter_id: int,
-        gen24: bool,
+        gen24: int,
         variant: int,
-        primo: bool = False,
-        meter_location: str = "0",
+        meter_location: int = meter.MeterLocation.grid.value,
         ip_address2: str = "none",
         bat_module: str = "none",
         num: Optional[int] = None) -> None:
@@ -130,15 +125,13 @@ def read_legacy(
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "bat":
-            device_config["configuration"]["gen24"] = gen24
-        elif component_type == "counter_s0":
-            component_config["primo"] = primo
+            component_config["configuration"]["gen24"] = bool(gen24)
         elif component_type == "counter_sm":
-            component_config["variant"] = variant
-            component_config["meter_location"] = meter_location
+            component_config["configuration"]["variant"] = variant
+            component_config["configuration"]["meter_location"] = meter.MeterLocation(meter_location)
         elif component_type == "inverter":
-            component_config["ip_address2"] = ip_address2
-            device_config["configuration"]["gen24"] = gen24
+            component_config["configuration"]["ip_address2"] = ip_address2
+            component_config["configuration"]["gen24"] = bool(gen24)
             if bat_module == "speicher_fronius":
                 dev.bat_configured = True
     else:

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import re
-import sys
-from typing import Dict, List, Union
+from typing import Dict, Union
+
+from urllib3.util import parse_url
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.http import bat
@@ -68,65 +70,78 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
-    component_type = argv[1]
-
-    device_config = get_default_config()
-    regex = re.search("(http[s]?)://([0-9.]+)", argv[2])
-    device_config["configuration"]["protocol"] = regex.group(1)
-    device_config["configuration"]["domain"] = regex.group(2)
-    dev = Device(device_config)
-    if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "bat":
-            component_config["configuration"] = {
-                "power_path": __extract_url_path(argv[2]),
-                "imported_path": __extract_url_path(argv[3]),
-                "exported_path": __extract_url_path(argv[4]),
-                "soc_path": __extract_url_path(argv[5]),
-            }
-            num = None
-        elif component_type == "counter":
-            component_config["configuration"] = {
-                "power_all_path": __extract_url_path(argv[2]),
-                "imported_path": __extract_url_path(argv[3]),
-                "exported_path": __extract_url_path(argv[4]),
-                "power_l1_path": __extract_url_path(argv[5]),
-                "power_l2_path": __extract_url_path(argv[6]),
-                "power_l3_path": __extract_url_path(argv[7]),
-            }
-            num = None
+def create_paths_dict(**kwargs):
+    regex = re.compile("^(https?://[^/]+)(.*)")
+    result = {}
+    host_scheme = None
+    for key, path in kwargs.items():
+        if path == "none":
+            result[key] = "none"
         else:
-            component_config["configuration"] = {
-                "power_path": __extract_url_path(argv[2]),
-                "counter_path": __extract_url_path(argv[3]),
-            }
-            num = argv[4]
-    else:
-        raise Exception(
-            "illegal component type " + component_type + ". Allowed values: " +
-            ','.join(COMPONENT_TYPE_TO_MODULE.keys())
-        )
-    component_config["id"] = num
-    dev.add_component(component_config)
+            match = regex.search(path)
+            if match is None:
+                raise Exception("Invalid URL <" + path + ">: Absolute HTTP or HTTPS URL required")
+            if host_scheme is None:
+                host_scheme = match.group(1)
+            elif host_scheme != match.group(1):
+                raise Exception("All URLs must have the same scheme and host. However URLs are: " + str(kwargs))
+            result[key] = match.group(2)
+    return result
 
+
+def run_device_legacy(device_config: dict, component_config: dict):
+    device = Device(device_config)
+    device.add_component(component_config)
     log.MainLogger().debug(
-        'Http Konfiguration: ' + str(device_config["configuration"]) + str(component_config["configuration"]))
+        'Http Konfiguration: ' + str(device_config["configuration"]) + str(component_config["configuration"])
+    )
+    device.update()
 
-    dev.update()
+
+def create_legacy_device_config(url: str):
+    parsed_url = parse_url(url)
+    device_config = get_default_config()
+    device_config["configuration"]["protocol"] = parsed_url.scheme
+    device_config["configuration"]["domain"] = parsed_url.hostname
+    return device_config
 
 
-def __extract_url_path(arg):
-    return re.search("^(?:https?://[^/]+)?(.*)", arg).group(1)
+def read_legacy_bat(power_path: str, imported_path: str, exported_path: str, soc_path: str) -> None:
+    component_config = bat.get_default_config()
+    component_config["configuration"] = create_paths_dict(
+        power_path=power_path,
+        imported_path=imported_path,
+        exported_path=exported_path,
+        soc_path=soc_path,
+    )
+    run_device_legacy(create_legacy_device_config(power_path), component_config)
+
+
+def read_legacy_counter(power_all_path: str, imported_path: str, exported_path: str, power_l1_path: str,
+                        power_l2_path: str, power_l3_path: str):
+    component_config = counter.get_default_config()
+    component_config["configuration"] = create_paths_dict(
+        power_all_path=power_all_path,
+        imported_path=imported_path,
+        exported_path=exported_path,
+        power_l1_path=power_l1_path,
+        power_l2_path=power_l2_path,
+        power_l3_path=power_l3_path,
+    )
+    run_device_legacy(create_legacy_device_config(power_all_path), component_config)
+
+
+def read_legacy_inverter(power_path: str, counter_path: str, num: int):
+    component_config = inverter.get_default_config()
+    component_config["id"] = num
+    component_config["configuration"] = create_paths_dict(
+        power_path=power_path,
+        counter_path=counter_path,
+    )
+    run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
 if __name__ == "__main__":
-    try:
-        read_legacy(sys.argv)
-    except Exception:
-        log.MainLogger().exception("Fehler im HTTP Skript")
+    run_using_positional_cli_args(
+        {"bat": read_legacy_bat, "counter": read_legacy_counter, "inverter": read_legacy_inverter}
+    )

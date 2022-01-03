@@ -288,6 +288,16 @@ else
 	python3 $OPENWBBASEDIR/runs/mqttsub.py &
 fi
 
+# check if our legacy run server is running
+pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" > /dev/null
+if [ $? == 1 ]
+then
+	openwbDebugLog "MAIN" 0 "legacy_run_server is not running. Restarting process"
+	bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
+else
+	openwbDebugLog "MAIN" 1 "legacy_run_server is already running"
+fi
+
 # check if our smarthome handler is running
 if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomehandler.py" > /dev/null
 then

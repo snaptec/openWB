@@ -1,4 +1,5 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
 echo "atreboot.sh started"
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
 
@@ -134,6 +135,11 @@ then
 	sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 fi
 python3 /var/www/html/openWB/runs/mqttsub.py &
+
+# restart legacy run server
+echo "legacy run server..."
+bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
+
 
 # check crontab for user pi
 echo "crontab 1..."
@@ -371,6 +377,8 @@ sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /v
 commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
 echo $commitId > /var/www/html/openWB/ramdisk/currentCommitHash
 echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > /var/www/html/openWB/ramdisk/currentCommitBranches
+sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitHash
+sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitBranches
 
 # update broker
 echo "update broker..."

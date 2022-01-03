@@ -2,24 +2,21 @@ from helpermodules import log, compatibility
 from modules.common.component_state import CounterState
 from modules.common.store import ValueStore
 from modules.common.store._broker import pub_to_broker
-from modules.common.store._ramdisk import ramdisk_write_to_files, ramdisk_write
 from modules.common.store._util import process_error
+from modules.common.store.ramdisk import files
 
 
 class CounterValueStoreRamdisk(ValueStore[CounterState]):
-    def __init__(self, component_num: int) -> None:
-        self.num = component_num
-
     def set(self, counter_state: CounterState):
         try:
-            ramdisk_write_to_files("evuv", counter_state.voltages, 1)
-            ramdisk_write_to_files("bezuga", counter_state.currents, 1)
-            ramdisk_write_to_files("bezugw", counter_state.powers, 0)
-            ramdisk_write_to_files("evupf", counter_state.power_factors, 2)
-            ramdisk_write("bezugkwh", counter_state.imported)
-            ramdisk_write("einspeisungkwh", counter_state.exported)
-            ramdisk_write("wattbezug", counter_state.power_all, 0)
-            ramdisk_write("evuhz", counter_state.frequency, 2)
+            files.evu.voltages.write(counter_state.voltages)
+            files.evu.currents.write(counter_state.currents)
+            files.evu.powers_import.write(counter_state.powers)
+            files.evu.power_factors.write(counter_state.power_factors)
+            files.evu.energy_import(counter_state.imported)
+            files.evu.energy_export(counter_state.exported)
+            files.evu.powers_import(counter_state.power_all)
+            files.evu.frequency(counter_state.frequency)
             log.MainLogger().info('EVU Watt: ' + str(counter_state.power_all))
             log.MainLogger().info('EVU Bezug: ' + str(counter_state.imported))
             log.MainLogger().info('EVU Einspeisung: ' + str(counter_state.exported))
@@ -47,5 +44,5 @@ class CounterValueStoreBroker(ValueStore[CounterState]):
 
 def get_counter_value_store(component_num: int) -> ValueStore[CounterState]:
     if compatibility.is_ramdisk_in_use():
-        return CounterValueStoreRamdisk(component_num)
+        return CounterValueStoreRamdisk()
     return CounterValueStoreBroker(component_num)

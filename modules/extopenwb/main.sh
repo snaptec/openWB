@@ -18,7 +18,7 @@ myipaddress=$(</var/www/html/openWB/ramdisk/ipaddress)
 
 if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 
-	watt=$(grep 1\/W /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}') 
+	watt=$(grep \/W /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}') 
 	VPhase1=$(grep VPhase1 /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}') 
 	VPhase2=$(grep VPhase2 /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}') 
 	VPhase3=$(grep VPhase3 /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}') 

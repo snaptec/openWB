@@ -15,6 +15,7 @@ from modules.common.store import get_inverter_value_store, get_bat_value_store
 # Sunspec (API) documentation: https://www.solaredge.com/sites/default/files/sunspec-implementation-technical-note.pdf
 
 
+UINT16_UNSUPPORTED = 0xFFFF
 log = logging.getLogger("SolarEdge")
 
 
@@ -47,17 +48,24 @@ def update_solar_edge(client: ModbusClient,
         power_base, power_scale = client.read_holding_registers(40083, [ModbusDataType.INT_16] * 2, unit=slave_id)
         total_power -= power_base * math.pow(10, power_scale)
         # 40093 = AC Lifetime Energy production (Watt hours)
-        energy = client.read_holding_registers(40093, ModbusDataType.INT_32, unit=slave_id)
-        total_energy += energy
+        energy_base, energy_scale = client.read_holding_registers(
+            40093, [ModbusDataType.UINT_32, ModbusDataType.INT_16], unit=slave_id
+        )
         # 40072/40073/40074 = AC Phase A/B/C Current value (Amps)
         # 40075 = AC Current scale factor
         currents = client.read_holding_registers(
             40072, [ModbusDataType.UINT_16] * 3 + [ModbusDataType.INT_16], unit=slave_id
         )
+        # Registers that are not applicable to a meter class return the unsupported value. (e.g. Single Phase
+        # meters will support only summary and phase A values):
+        for i in range(3):
+            if currents[i] == UINT16_UNSUPPORTED:
+                currents[i] = 0
         log.debug(
-            "slave=%d: power=%d*10^%d, energy=%d, currents=%s * 10^%d",
-            slave_id, power_base, power_scale, energy, currents[0:3], currents[3]
+            "slave=%d: power=%d*10^%d, energy=%d*10^%d, currents=%s * 10^%d",
+            slave_id, power_base, power_scale, energy_base, energy_scale, currents[0:3], currents[3]
         )
+        total_energy += energy_base * math.pow(10, energy_scale)
         currents_scale = math.pow(10, currents[3])
         for i in range(3):
             total_currents[i] += currents[i] * currents_scale
@@ -70,7 +78,7 @@ def update_solar_edge(client: ModbusClient,
         total_power -= sum(storage_powers)
 
     get_inverter_value_store(1).set(InverterState(
-        counter=total_energy, power=total_power, currents=total_currents
+        counter=total_energy, power=min(0, total_power), currents=total_currents
     ))
 
 

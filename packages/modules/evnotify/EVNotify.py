@@ -1,5 +1,6 @@
-from typing import Union
+from typing import Union, List
 
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common import store
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -32,7 +33,7 @@ class EVNotify(AbstractDevice):
             if isinstance(device_config, EVNotifyConfiguration) \
             else EVNotifyConfiguration.from_dict(device_config)
         self.value_store = store.get_car_value_store(self.config.id)
-        self.component_info = ComponentInfo(self.config.id, "EVNotify", "ev")
+        self.component_info = ComponentInfo(self.config.id, "EVNotify", "vehicle")
 
     def add_component(self, component_config: dict) -> None:
         pass  # EVNotify does not have any components
@@ -40,3 +41,11 @@ class EVNotify(AbstractDevice):
     def update(self) -> None:
         with SingleComponentUpdateContext(self.component_info):
             self.value_store.set(CarState(soc=api.fetch_soc(self.config.akey, self.config.token)))
+
+
+def evnotify_update(akey: str, token: str, charge_point: int):
+    EVNotify(EVNotifyConfiguration(charge_point, akey, token)).update()
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(evnotify_update, argv)

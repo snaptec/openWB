@@ -6,7 +6,7 @@ formatieren.
 """
 from enum import Enum
 from typing import Callable, Iterable, Union, overload, List
-
+import struct
 import pymodbus
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
@@ -80,7 +80,8 @@ class ModbusClient:
             if response.isError():
                 raise FaultState.error(__name__+" "+str(response))
             decoder = BinaryPayloadDecoder.fromRegisters(response.registers, byteorder, wordorder)
-            result = [getattr(decoder, t.decoding_method)() for t in types]
+            result = [struct.unpack(">e", struct.pack(">H", decoder.decode_16bit_uint())) if t ==
+                      ModbusDataType.FLOAT_16 else getattr(decoder, t.decoding_method)() for t in types]
             return result if multi_request else result[0]
         except pymodbus.exceptions.ConnectionException as e:
             raise FaultState.error(

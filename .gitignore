@@ -4,7 +4,7 @@ web/logging/data/
 *.log
 *.pyc
 *.bak
-ramdisk/
+/ramdisk/
 .DS_Store
 .ftp*
 web/settings/.htaccess

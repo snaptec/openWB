@@ -3,7 +3,7 @@ from helpermodules import log
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
-from modules.http.api import request_value
+from modules.http.api import create_request_function
 
 
 def get_default_config() -> dict:
@@ -25,24 +25,26 @@ def get_default_config() -> dict:
 
 class HttpCounter:
     def __init__(self, component_config: dict, domain: str) -> None:
+        self.__get_power_all = create_request_function(domain, component_config["configuration"]["power_all_path"])
+        self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
+        self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
+        self.__get_powers = [
+            create_request_function(domain,
+                                    component_config["configuration"]["power_l" + str(i) + "_path"])
+            for i in range(1, 4)
+        ]
+
         self.component_config = component_config
-        self.domain = domain
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-        config = self.component_config["configuration"]
-
-        power_all = request_value(self.domain + config["power_all_path"])
-        imported = request_value(self.domain + config["imported_path"])
-        exported = request_value(self.domain + config["exported_path"])
-        powers = [request_value(self.domain + config["power_l"+str(i)+"_path"]) for i in range(1, 4)]
 
         counter_state = CounterState(
-            powers=powers,
-            imported=imported,
-            exported=exported,
-            power_all=power_all
+            powers=[getter() for getter in self.__get_powers],
+            imported=self.__get_imported(),
+            exported=self.__get_exported(),
+            power_all=self.__get_power_all()
         )
         self.__store.set(counter_state)

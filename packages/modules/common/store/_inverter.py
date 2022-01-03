@@ -3,25 +3,19 @@ from modules.common.component_state import InverterState
 from modules.common.fault_state import FaultState
 from modules.common.store import ValueStore
 from modules.common.store._broker import pub_to_broker
-from modules.common.store._ramdisk import ramdisk_write, ramdisk_write_to_files
+from modules.common.store.ramdisk import files
 
 
 class InverterValueStoreRamdisk(ValueStore[InverterState]):
     def __init__(self, component_num: int) -> None:
-        self.num = component_num
+        self.__pv = files.pv[component_num - 1]
 
     def set(self, inverter_state: InverterState):
         try:
-            if self.num == 1:
-                filename_extension = ""
-            elif self.num == 2:
-                filename_extension = "2"
-            else:
-                raise FaultState.error("Unbekannte PV-Nummer " + str(self.num))
-            ramdisk_write("pv" + filename_extension + "watt", inverter_state.power, 0)
-            ramdisk_write("pv" + filename_extension + "kwh", inverter_state.counter, 3)
-            ramdisk_write("pv" + filename_extension + "kwhk", inverter_state.counter / 1000, 3)
-            ramdisk_write_to_files("pv" + filename_extension + "a", inverter_state.currents, 1)
+            self.__pv.power.write(inverter_state.power)
+            self.__pv.energy.write(inverter_state.counter)
+            self.__pv.energy_k.write(inverter_state.counter / 1000)
+            self.__pv.currents.write(inverter_state.currents)
             log.MainLogger().info('PV Watt: ' + str(inverter_state.power))
         except Exception as e:
             raise FaultState.from_exception(e)

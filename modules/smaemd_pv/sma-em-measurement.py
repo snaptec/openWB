@@ -85,7 +85,11 @@ except BaseException:
 # processing received messages
 while True:
     emparts = {}
-    emparts=decode_speedwire(sock.recv(608))
+    sock_data = sock.recv(608)
+    #Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
+    if sock_data[16:18] != b'\x60\x69':
+        continue
+    emparts=decode_speedwire(sock_data)
     # Output...
     # don't know what P,Q and S means:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
