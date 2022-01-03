@@ -1,79 +1,35 @@
-# initially created by Stefan Schefler for openWB 2019
-# modified by Kevin Wieland
-# modified by Lena Kuemmel
-# based on Homematic Script v0.2 (c) 2018 by Alchy
-
 #!/usr/bin/env python3
-
-from datetime import datetime, timezone
-import os
+import logging
 import re
+
 import requests
-import sys
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
+from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.log import setup_logging_stdout
+from modules.common.component_state import InverterState
+from modules.common.store import get_inverter_value_store
 
-num = int(sys.argv[1])
-wr_piko2_url = str(sys.argv[2])
-wr_piko2_user = str(sys.argv[3])
-wr_piko2_pass = str(sys.argv[4])
+log = logging.getLogger("Kostal Piko Var2")
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+def parse_kostal_piko_var2_html(html: str):
+    result = re.search(r"aktuell</td>\s*<td[^>]*>\s*(\d+).*Gesamtenergie</td>\s*<td[^>]*>\s*(\d+)", html, re.DOTALL)
+    if result is None:
+        raise Exception("Given HTML does not match the expected regular expression. Ignoring.")
+    return InverterState(
+        counter=int(result.group(2)),
+        power=int(result.group(1))
+    )
 
 
-if Debug >= 2:
-    DebugLog('Wechselrichter Kostal Piko Var 2 User: ' + wr_piko2_user)
-    DebugLog('Wechselrichter Kostal Piko Var 2 Passwort: ' + wr_piko2_pass)
-    DebugLog('Wechselrichter Kostal Piko Var 2 URL: ' + wr_piko2_url)
+def update(num: int, wr_piko2_url: str, wr_piko2_user: str, wr_piko2_pass: str):
+    log.debug("Beginning update")
+    response = requests.get(wr_piko2_url, verify=False, auth=(wr_piko2_user, wr_piko2_pass), timeout=10)
+    response.raise_for_status()
+    get_inverter_value_store(num).set(parse_kostal_piko_var2_html(response.text))
+    log.debug("Update completed successfully")
 
-if num == 1:
-    file_ext = ""
-elif num == 2:
-    file_ext = "2"
-else:
-    raise Exception("unbekannte Modul-ID")
 
-# Daten einlesen
-response = requests.get(wr_piko2_url, verify=False, auth=(wr_piko2_user, wr_piko2_pass), timeout=10)
-# request html, concat to one line, remove spaces, add spaces before color changes (#)
-response.encoding = 'utf-8'
-HTML = response.text
-HTML = HTML.replace("\r", "")
-HTML = HTML.replace("\n", "")
-HTML = HTML.replace(" ", "")
-HTML = HTML.replace("#", " ")
-
-if HTML != "":             # check if valid content of request
-    counter = 0
-    for LINE in HTML:         # parse all html lines
-        if re.search("FFFFFF", LINE) != None:   # search for white background color
-            counter = counter + 1
-            # PART2=${LINE##*F\">}   # strip before number
-            # VALUE=${PART2%%<*}   # strip after number
-            VALUE = re.search('^[0-9]+.?[0-9]*$', LINE).group()
-
-            if counter == 1:   # pvwatt
-                if VALUE == "xxx":    # off-value equals zero
-                    VALUE = "0"
-                regex = '^[-+]?[0-9]+.?[0-9]*$'
-                if re.search(regex, VALUE) == None:   # check for valid number
-                    with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"watt", "r") as f:
-                        VALUE = f.read()
-                if Debug >= 1:
-                    DebugLog('WR Leistung: ' + str(VALUE*-1))
-                with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"watt", "w") as f:
-                    f.write(str(VALUE*-1))
-            elif counter == 2:   # pvkwhk
-                if Debug >= 1:
-                    DebugLog('WR Energie: ' + str(VALUE))
-                with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"kwhk", "w") as f:
-                    f.write(str(VALUE))
-                if num == 1:
-                    with open("/var/www/html/openWB/ramdisk/pv"+file_ext+"kwh", "w") as f:
-                        f.write(str(VALUE*1000))
-
-exit(0)
+if __name__ == '__main__':
+    setup_logging_stdout()
+    run_using_positional_cli_args(update)
