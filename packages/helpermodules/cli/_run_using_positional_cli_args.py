@@ -1,6 +1,6 @@
 import argparse
 import inspect
-from typing import Callable, Union, Dict
+from typing import Callable, Union, Dict, Optional, List
 
 NoneType = type(None)
 
@@ -19,7 +19,8 @@ def _add_positional_parser_args(parser: argparse.ArgumentParser, function: Calla
     parser.set_defaults(RUN=lambda args: function(*[getattr(args, argument_name) for argument_name in arg_spec.args]))
 
 
-def run_using_positional_cli_args(specification: Union[Callable, Dict[str, Callable]]):
+def run_using_positional_cli_args(specification: Union[Callable, Dict[str, Callable]],
+                                  argv: Optional[List[str]] = None):
     parser = argparse.ArgumentParser()
     if isinstance(specification, dict):
         sub_parsers = parser.add_subparsers(dest="command")
@@ -29,5 +30,5 @@ def run_using_positional_cli_args(specification: Union[Callable, Dict[str, Calla
     else:
         _add_positional_parser_args(parser, specification)
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     args.RUN(args)
