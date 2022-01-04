@@ -146,8 +146,10 @@ def read_legacy(
 
     dev.update()
 
+
 def main(argv: List[str]) -> None:
     run_using_positional_cli_args(read_legacy, argv)
+
 
 if __name__ == "__main__":
     try:
