@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -145,6 +145,10 @@ def read_legacy(
     log.MainLogger().debug('Fronius IP-Adresse: ' + str(ip_address))
 
     dev.update()
+
+
+def main(argv: List[str]) -> None:
+    run_using_positional_cli_args(read_legacy, argv)
 
 
 if __name__ == "__main__":
