@@ -36,7 +36,15 @@ class VictronInverter:
         modbus_id = self.component_config["configuration"]["modbus_id"]
 
         if self.component_config["configuration"]["mppt"]:
-            power = self.__tcp_client.read_holding_registers(789, ModbusDataType.UINT_16, unit=modbus_id) / -10
+            try:
+                power = self.__tcp_client.read_holding_registers(789, ModbusDataType.UINT_16, unit=modbus_id) / -10
+            except Exception as e:
+                if "GatewayPathUnavailable" in str(e):
+                    power = 0
+                    log.MainLogger().debug(self.component_config["name"] +
+                                           ": Reg 789 konnte nicht gelesen werden, Power auf 0 gesetzt.")
+                else:
+                    raise
         else:
             # Adresse 808-810 ac output connected pv
             # Adresse 811-813 ac input connected pv
