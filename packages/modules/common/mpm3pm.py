@@ -32,10 +32,10 @@ class Mpm3pm:
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = [val / 100 for val in self.client.read_input_registers(
+            powers = [val / 100 for val in self.client.read_input_registers(
                 0x14, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
             power_all = self.client.read_input_registers(0x26, ModbusDataType.FLOAT_32, unit=self.id) / 100
-            return power_per_phase, power_all
+            return powers, power_all
         except Exception as e:
             self.__process_error(e)
 

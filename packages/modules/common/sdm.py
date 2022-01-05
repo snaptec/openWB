@@ -63,9 +63,9 @@ class Sdm630(Sdm):
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = self.client.read_input_registers(0x0C, [ModbusDataType.FLOAT_32]*3, unit=self.id)
-            power_all = sum(power_per_phase)
-            return power_per_phase, power_all
+            powers = self.client.read_input_registers(0x0C, [ModbusDataType.FLOAT_32]*3, unit=self.id)
+            power_all = sum(powers)
+            return powers, power_all
         except Exception as e:
             self.process_error(e)
 

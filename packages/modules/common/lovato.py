@@ -33,11 +33,11 @@ class Lovato:
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = [val / 100 for val in self.client.read_input_registers(
+            powers = [val / 100 for val in self.client.read_input_registers(
                 0x0013, [ModbusDataType.INT_32]*3, unit=self.id
             )]
-            power_all = sum(power_per_phase)
-            return power_per_phase, power_all
+            power_all = sum(powers)
+            return powers, power_all
         except Exception as e:
             self.__process_error(e)
 
