@@ -300,6 +300,8 @@ if python3 -c "import ipparser" &> /dev/null; then
 else
 	sudo pip3 install ipparser
 fi
+# update outdated urllib3 for Tesla Powerwall
+pip3 install --upgrade urllib3
 
 # update version
 echo "version..."

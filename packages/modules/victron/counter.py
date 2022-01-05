@@ -34,11 +34,12 @@ class VictronCounter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = self.component_config["configuration"]["modbus_id"]
         power_all = sum(self.__tcp_client.read_holding_registers(2600, [ModbusDataType.INT_16]*3, unit=unit))
-        currents_voltages = [val / 10
-                             for val in self.__tcp_client.read_holding_registers(
-                                 2616, [ModbusDataType.INT_16] * 6, unit=unit)]
-        voltages = [currents_voltages[0], currents_voltages[2], currents_voltages[4]]
-        currents = [currents_voltages[1], currents_voltages[3], currents_voltages[5]]
+        currents = [
+            self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit) / 10
+            for reg in [2617, 2619, 2621]]
+        voltages = [
+            self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_16, unit=unit) / 10
+            for reg in [2616, 2618, 2610]]
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]
