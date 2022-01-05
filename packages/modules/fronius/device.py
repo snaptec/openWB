@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -124,9 +124,7 @@ def read_legacy(
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "bat":
-            component_config["configuration"]["gen24"] = bool(gen24)
-        elif component_type == "counter_sm":
+        if component_type == "counter_sm":
             component_config["configuration"]["variant"] = variant
             component_config["configuration"]["meter_location"] = meter.MeterLocation(meter_location)
         elif component_type == "inverter":
@@ -145,6 +143,10 @@ def read_legacy(
     log.MainLogger().debug('Fronius IP-Adresse: ' + str(ip_address))
 
     dev.update()
+
+
+def main(argv: List[str]) -> None:
+    run_using_positional_cli_args(read_legacy, argv)
 
 
 if __name__ == "__main__":

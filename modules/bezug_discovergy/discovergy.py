@@ -24,8 +24,15 @@ def get_last_reading(user: str, password: str, meter_id: str):
 
 def write_readings_to_ramdisk(discovergy: dict):
     values = discovergy["values"]
-    voltages = [values["voltage" + str(phase)] / 1000 for phase in range(1, 4)]
-    powers = [values["power" + str(phase)] / 1000 for phase in range(1, 4)]
+    try:
+        voltages = [values["voltage" + str(phase)] / 1000 for phase in range(1, 4)]
+    # Es gibt verschiedene Antworten vom Discovergy-Modul.
+    except KeyError:
+        voltages = [values["phase" + str(phase) + "Voltage"] / 1000 for phase in range(1, 4)]
+    try:
+        powers = [values["power" + str(phase)] / 1000 for phase in range(1, 4)]
+    except KeyError:
+        powers = [values["phase" + str(phase) + "Power"] / 1000 for phase in range(1, 4)]
     power_total = values["power"] / 1000
 
     files.evu.power_import.write(power_total)

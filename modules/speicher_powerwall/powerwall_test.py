@@ -149,7 +149,7 @@ def test_powerwall_update_if_cookie_cached(monkeypatch, requests_mock: requests_
     mock_ramdisk[COOKIE_FILE_NAME] = """{"AuthCookie": "auth-cookie", "UserRecord": "user-record"}"""
 
     # execution
-    powerwall.update("sample-address", "some password")
+    powerwall.update("sample-address", "sample@mail.com", "some password")
 
     # evaluation
     assert_battery_state_correct(mock_bat_value_store.set.call_args[0][0])
@@ -178,7 +178,7 @@ def test_powerwall_update_retrieves_new_cookie_if_cookie_rejected(monkeypatch,
         mock_ramdisk[COOKIE_FILE_NAME] = cookie_file
 
     # execution
-    powerwall.update("sample-address", "some password")
+    powerwall.update("sample-address", "sample@mail.com", "some password")
 
     # evaluation
     assert json.loads(mock_ramdisk[COOKIE_FILE_NAME]) == {"AuthCookie": "auth-cookie", "UserRecord": "user-record"}
