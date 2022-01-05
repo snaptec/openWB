@@ -22,8 +22,7 @@ def update(ipaddress: str):
     currents = [0]*3
     voltages = [230]*3
     for i in range(0, 3):
-        if powers[i] > 0:
-            currents[i]=powers[i]/voltages[i]
+        currents[i]=powers[i]/voltages[i]
     get_counter_value_store(1).set(CounterState(
         power_all=power_all,
         powers=powers,
