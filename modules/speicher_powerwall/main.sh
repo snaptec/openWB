@@ -21,7 +21,7 @@ openwbDebugLog ${DMOD} 2 "Speicher User: ${speicherpwuser}"
 openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${speicherpwpass}"
 openwbDebugLog ${DMOD} 2 "Speicher IP: ${speicherpwip}"
 
-python3 /var/www/html/openWB/modules/speicher_powerwall/powerwall.py "${speicherpwip}" "${speicherpwpass}" >>$MYLOGFILE 2>&1
+python3 /var/www/html/openWB/modules/speicher_powerwall/powerwall.py "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
