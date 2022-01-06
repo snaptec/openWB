@@ -50,8 +50,7 @@ class AlphaEssBat:
         soc_reg = self.__tcp_client.read_holding_registers(0x0102, ModbusDataType.INT_16, unit=sdmid)
         soc = int(soc_reg * 0.1)
 
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
+        topic_str = "openWB/bat/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.__simulation, prefix="speicher"
         )

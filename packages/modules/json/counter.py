@@ -37,9 +37,7 @@ class JsonCounter:
 
         power_all = jq.compile(config["jq_power"]).input(response).first()
         if config["jq_imported"] == "" or config["jq_exported"] == "":
-            topic_str = "openWB/set/system/device/{}/component/{}/".format(
-                self.__device_id, self.component_config["id"]
-            )
+            topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
             imported, exported = self.__sim_count.sim_count(
                 power_all,
                 topic=topic_str,

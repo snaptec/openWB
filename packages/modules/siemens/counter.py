@@ -36,9 +36,7 @@ class SiemensCounter:
 
         power_all = self.__tcp_client.read_holding_registers(14, ModbusDataType.INT_32, unit=1)
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config["id"]
-        )
+        topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
             power_all,
             topic=topic_str,

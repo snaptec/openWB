@@ -49,9 +49,7 @@ class FroniusS0Counter:
             imported = float(response_json_id["EnergyReal_WAC_Minus_Absolute"])
             exported = float(response_json_id["EnergyReal_WAC_Plus_Absolute"])
         else:
-            topic_str = "openWB/set/system/device/{}/component/{}/".format(
-                self.__device_id, self.component_config["id"]
-            )
+            topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
             imported, exported = self.__sim_count.sim_count(
                 power_all,
                 topic=topic_str,

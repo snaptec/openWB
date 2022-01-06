@@ -38,11 +38,8 @@ class JsonInverter:
         if power >= 0:
             power = power * -1
         if config["jq_counter"] == "":
-            topic_str = "openWB/set/system/device/" + \
-                str(self.__device_id)+"/component/" + \
-                str(self.component_config["id"])+"/"
-            _, counter = self.__sim_count.sim_count(
-                power, topic=topic_str, data=self.simulation, prefix="pv")
+            topic_str = "openWB/pv/" + str(self.component_config["id"]) + "/get/"
+            _, counter = self.__sim_count.sim_count(power, topic=topic_str, data=self.simulation, prefix="pv")
             inverter_state = InverterState(
                 power=power,
                 counter=counter,

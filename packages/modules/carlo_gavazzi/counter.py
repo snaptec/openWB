@@ -47,7 +47,7 @@ class CarloGavazziCounter:
         if frequency > 100:
             frequency = frequency / 10
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config["id"])
+        topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
             power_all,
             topic=topic_str,

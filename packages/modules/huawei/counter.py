@@ -39,9 +39,7 @@ class HuaweiCounter:
         currents = [val / -100 for val in self.__tcp_client.read_holding_registers(
             37107, [ModbusDataType.INT_32] * 3, unit=self.__modbus_id)]
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config["id"]
-        )
+        topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
             power_all,
             topic=topic_str,
