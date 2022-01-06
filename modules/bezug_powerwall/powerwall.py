@@ -1,142 +1,118 @@
 #!/usr/bin/env python3
 
-import datetime
 import json
+import logging
+from json import JSONDecodeError
 import requests
-import os
-import sys
-import time
-import traceback
+from requests import HTTPError
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
+from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.log import setup_logging_stdout
+from modules.common.component_state import CounterState
+from modules.common.store import get_counter_value_store, RAMDISK_PATH
 
-base_dir = str(sys.argv[1])
-speicherpwloginneeded = int(sys.argv[2])
-speicherpwuser = str(sys.argv[3])
-speicherpwpass = str(sys.argv[4])
-speicherpwip = str(sys.argv[5])
-
-ramdiskdir = base_dir+"/ramdisk"
-module = "EVU"
-logfile = ramdiskdir+"/openWB.log"
-cookie_file = ramdiskdir+"/powerwall_bezug_cookie.txt"
-cookie = ""
+COOKIE_FILE = RAMDISK_PATH / "powerwall_cookie.txt"
+log = logging.getLogger("Powerwall")
 
 
-def DebugLog(msg):
-    if Debug > 0:
-        timestamp = datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-        if Debug == 2:
-            with open(logfile, "a") as f:
-                f.write(str(timestamp)+": "+str(module)+": PID:"+myPid+": "+msg)
-        else:
-            with open(logfile, "a") as f:
-                f.write(str(timestamp)+": "+str(module)+": "+msg)
+def authenticate(url: str, email: str, password: str):
+    '''
+    email is not yet required for login (2022/01), but we simulate the whole login page
+    '''
+    response = requests.post(
+        "https://" + url + "/api/login/Basic",
+        json={"username": "customer", "email": email, "password": password},
+        verify=False,
+        timeout=5
+    )
+    response.raise_for_status()
+    log.debug("Authentication endpoint responded %s", response.text)
+    log.debug("Authentication endpoint send cookies %s", str(response.cookies))
+    return {"AuthCookie": response.cookies["AuthCookie"], "UserRecord": response.cookies["UserRecord"]}
 
 
-def get_value(answer, key, file):
-    try:
-        value = answer["0"]["Cached_readings"][key]
-        with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
-            f.write(str(value))
-    except:
-        traceback.print_exc()
-        exit(1)
-    if Debug >= 1:
-        DebugLog(file+': ' + str(value))
+def read_site(address: str, cookie):
+    response = requests.get("https://" + address + "/api/meters/site", cookies=cookie, verify=False, timeout=5)
+    response.raise_for_status()
+    return response.json()
 
 
-if Debug >= 2:
-    DebugLog('Powerwall IP: ' + speicherpwip)
-    DebugLog('Powerwall User: ' + speicherpwuser)
-    DebugLog('Powerwall Passwort: ' + speicherpwpass)
-    DebugLog('Powerwall Login: ' + str(speicherpwloginneeded))
+def read_status(address: str, cookie):
+    response = requests.get("https://" + address + "/api/status", cookies=cookie, verify=False, timeout=5)
+    response.raise_for_status()
+    return response.json()
 
-if speicherpwloginneeded == 1:
-    # delete our login cookie after some time as it may be invalid
-    if os.path.isfile(cookie_file) == True:
-        edited = os.stat(cookie_file).st_mtime
-        now = time.time()
-        edit_diff = now - edited
-        if edit_diff > 3600:
-            DebugLog("Deleting saved login cookie after 1 hour as it may not be valid anymore.")
-            os.remove(cookie_file)
-    if os.path.isfile(cookie_file) == False:
-        # log in and save cookie for later use
-        DebugLog("Trying to authenticate...")
-        headers = {'Content-Type': 'application/json', }
-        data = {"username": "customer", "password": speicherpwpass, "email": speicherpwuser, "force_sm_off": False}
-        data = json.dumps(data)
-        try:
-            response = requests.post('https://'+speicherpwip+'/api/login/Basic',
-                                     headers=headers, data=data, verify=False, timeout=5)
-        except requests.exceptions.RequestException as e:
-            DebugLog("Something went wrong. RequestException: "+str(e))
-            sys.exit(0)
-        else:
-            DebugLog("Login successfull.")
-            cookie = response.cookies
-            with open(cookie_file, "w") as f:
-                f.write(str(requests.utils.dict_from_cookiejar(cookie)))
+
+def read_aggregate(address: str, cookie):
+    response = requests.get("https://" + address + "/api/meters/aggregates", cookies=cookie, verify=False, timeout=5)
+    response.raise_for_status()
+    return response.json()
+
+
+def update_using_cookie(address: str, cookie):
+    # read firmware version
+    status = read_status(address, cookie)
+    # since 21.44.1 tesla adds the commit hash '21.44.1 c58c2df3'
+    # so we split by whitespace and take the first element for comparison
+    firmwareversion = int(status["version"].split()[0])
+    log.debug('Version: ' + str(firmwareversion))
+    # read aggregate
+    aggregate = read_aggregate(address, cookie)
+    # read additional info if firmware supports
+    if firmwareversion >= 20490:
+        meters_site = read_site(address, cookie)
+        get_counter_value_store(1).set(CounterState(
+            imported = aggregate["site"]["energy_imported"],
+            exported = aggregate["site"]["energy_exported"],
+            power_all = aggregate["site"]["instant_power"],
+            voltages = [
+                meters_site["0"]["Cached_readings"]["v_l" + str(phase) + "n"] for phase in range (1,4)
+            ],
+            currents = [
+                meters_site["0"]["Cached_readings"]["i_" + phase + "_current"] for phase in ["a", "b", "c"]
+            ],
+            powers = [
+                meters_site["0"]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]
+            ]
+        ))
     else:
-        DebugLog("Using saved login cookie.")
-        with open(cookie_file, "r") as f:
-            # cookie = f.read()
-            cookie = requests.utils.cookiejar_from_dict(f.read())
+        get_counter_value_store(1).set(CounterState(
+            imported = aggregate["site"]["energy_imported"],
+            exported = aggregate["site"]["energy_exported"],
+            power_all = aggregate["site"]["instant_power"]
+        ))
 
-answer = requests.get("https://"+speicherpwip+"/api/meters/aggregates", cookies=cookie, verify=False, timeout=5).json()
-try:
-    evuwatt = int(answer["site"]["instant_power"])
-except:
-    traceback.print_exc()
-    exit(1)
-if Debug >= 1:
-    DebugLog('Leistung: ' + str(evuwatt))
-with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-    f.write(str(evuwatt))
 
-try:
-    evuikwh = answer["site"]["energy_imported"]
-except:
-    traceback.print_exc()
-    exit(1)
-if Debug >= 1:
-    DebugLog('Bezug: ' + str(evuikwh))
-with open("/var/www/html/openWB/ramdisk/bezugkwh", "w") as f:
-    f.write(str(evuikwh))
+def authenticate_and_update(address: str, email: str, password: str):
+    cookie = authenticate(address, email, password)
+    COOKIE_FILE.write_text(json.dumps(cookie))
+    update_using_cookie(address, cookie)
 
-try:
-    evuekwh = answer["site"]["energy_exported"]
-except:
-    traceback.print_exc()
-    exit(1)
-if Debug >= 1:
-    DebugLog('Einspeisung: ' + str(evuekwh))
-with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:
-    f.write(str(evuekwh))
 
-answer = requests.get("https://"+speicherpwip+"/api/status", cookies=cookie, verify=False, timeout=5).json()
-try:
-    powerwallfirmwareversion = int(answer["version"])
-except:
-    traceback.print_exc()
-    exit(1)
-if Debug >= 1:
-    DebugLog('Version: ' + str(powerwallfirmwareversion))
-with open("/var/www/html/openWB/ramdisk/powerwallfirmwareversion", "w") as f:
-    f.write(str(powerwallfirmwareversion))
+def update(address: str, email: str, password: str):
+    log.debug("Beginning update")
+    cookies = None
+    try:
+        cookies = json.loads(COOKIE_FILE.read_text())
+    except FileNotFoundError:
+        log.debug("Cookie-File <%s> does not exist. It will be created.", COOKIE_FILE)
+    except JSONDecodeError as e:
+        log.warning("Could not parse Cookie-File <%s>. It will be re-created.", COOKIE_FILE, exc_info=e)
 
-if powerwallfirmwareversion >= 20490:
-    answer = requests.get("https://"+speicherpwip+"/api/meters/site", cookies=cookie, verify=False, timeout=5).json()
-    get_value(answer, "v_l1n", "evuv1")
-    get_value(answer, "v_l2n", "evuv2")
-    get_value(answer, "v_l3n", "evuv3")
-    get_value(answer, "i_a_current", "bezuga1")
-    get_value(answer, "i_b_current", "bezuga2")
-    get_value(answer, "i_c_current", "bezuga3")
-    get_value(answer, "real_power_a", "bezugw1")
-    get_value(answer, "real_power_b", "bezugw2")
-    get_value(answer, "real_power_c", "bezugw3")
+    if cookies is None:
+        authenticate_and_update(address, email, password)
+        return
+    try:
+        update_using_cookie(address, cookies)
+        return
+    except HTTPError as e:
+        if e.response.status_code != 401 and e.response.status_code != 403:
+            raise e
+        log.warning("Login to powerwall with existing cookie failed. Will retry with new cookie...")
+    authenticate_and_update(address, email, password)
+    log.debug("Update completed successfully")
 
-exit(0)
+
+if __name__ == '__main__':
+    setup_logging_stdout()
+    run_using_positional_cli_args(update)
