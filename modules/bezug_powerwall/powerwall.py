@@ -66,19 +66,13 @@ def update_using_cookie(address: str, cookie):
             exported = aggregate["site"]["energy_exported"],
             power_all = aggregate["site"]["instant_power"],
             voltages = [
-                meters_site["0"]["Cached_readings"]["v_l1n"],
-                meters_site["0"]["Cached_readings"]["v_l2n"],
-                meters_site["0"]["Cached_readings"]["v_l3n"]
+                meters_site["0"]["Cached_readings"]["v_l" + str(phase) + "n"] for phase in range (1,4)
             ],
             currents = [
-                meters_site["0"]["Cached_readings"]["i_a_current"],
-                meters_site["0"]["Cached_readings"]["i_b_current"],
-                meters_site["0"]["Cached_readings"]["i_c_current"]
+                meters_site["0"]["Cached_readings"]["i_" + phase + "_current"] for phase in ["a", "b", "c"]
             ],
             powers = [
-                meters_site["0"]["Cached_readings"]["real_power_a"],
-                meters_site["0"]["Cached_readings"]["real_power_b"],
-                meters_site["0"]["Cached_readings"]["real_power_c"]
+                meters_site["0"]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]
             ]
         ))
     else:
