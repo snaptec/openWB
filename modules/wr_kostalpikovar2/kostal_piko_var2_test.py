@@ -20,4 +20,4 @@ def test_parse_html(mock_ramdisk: MockRamdisk):
 
     # evaluation
     assert actual.power == 50
-    assert actual.counter == 73288
+    assert actual.counter == 73288000
