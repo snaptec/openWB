@@ -19,7 +19,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "variant": 0,
-            "meter_location": MeterLocation.grid
+            "meter_location": MeterLocation.grid.value
         }
     }
 
@@ -28,13 +28,15 @@ class FroniusSmCounter:
     def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
         self.__device_id = device_id
         self.component_config = component_config
+        self.component_config["configuration"]["meter_location"] = MeterLocation(
+            self.component_config["configuration"]["meter_location"])
         self.device_config = device_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self, bat: bool) -> Tuple[CounterState, bool]:
+    def update(self, bat: bool) -> Tuple[CounterState, MeterLocation]:
         variant = self.component_config["configuration"]["variant"]
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
@@ -70,7 +72,7 @@ class FroniusSmCounter:
         log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power_all))
         self.__store.set(counter_state)
 
-    def __update_variant_0_1(self, session: Session) -> Tuple[CounterState, bool]:
+    def __update_variant_0_1(self, session: Session) -> Tuple[CounterState, MeterLocation]:
         variant = self.component_config["configuration"]["variant"]
         meter_id = self.device_config["meter_id"]
         if variant == 0:
@@ -122,7 +124,7 @@ class FroniusSmCounter:
             power_factors=power_factors
         ), meter_location
 
-    def __update_variant_2(self, session: Session) -> Tuple[CounterState, bool]:
+    def __update_variant_2(self, session: Session) -> Tuple[CounterState, MeterLocation]:
         meter_id = str(self.device_config["meter_id"])
         response = session.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
