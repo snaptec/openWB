@@ -68,7 +68,7 @@ def read_legacy(
         component_type: str,
         ip_address: str,
         modbus_id: Optional[int] = 100,
-        mppt: Optional[bool] = False,
+        mppt: Optional[int] = 0,
         num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
