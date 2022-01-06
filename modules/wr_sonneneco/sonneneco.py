@@ -5,8 +5,8 @@ import requests
 
 from helpermodules.cli import run_using_positional_cli_args
 from helpermodules.log import setup_logging_stdout
-from modules.common.component_state import BatState
-from modules.common.store import get_bat_value_store
+from modules.common.component_state import InverterState
+from modules.common.store import get_inverter_value_store
 from modules.common.fault_state import FaultState
 
 log = logging.getLogger("Sonnenbatterie")
@@ -19,15 +19,7 @@ def read_variant_0(address: str):
 
 def update_variant_0(address: str):
     # Auslesen einer Sonnenbatterie Eco 4 über die integrierte JSON-API des Batteriesystems
-    battery_state = read_variant_0(address)
-    battery_soc = int(battery_state["M05"])
-    battery_export_power = int(battery_state["M34"])
-    battery_import_power = int(battery_state["M35"])
-    battery_power = battery_import_power - battery_export_power
-    get_bat_value_store(1).set(BatState(
-        power = battery_power,
-        soc = battery_soc
-    ))
+    log.debug("Die Variante '0' bietet keine PV Daten!")
 
 
 def read_variant_1(address: str):
@@ -76,16 +68,10 @@ def update_variant_1(address: str):
     '''
     battery_state = read_variant_1(address)
 
-    battery_power = -battery_state["Pac_total_W"]
-    log.debug('Speicher Leistung: ' + str(battery_power))
-    battery_soc = battery_state["USOC"]
-    log.debug('Speicher SoC: ' + str(battery_soc))
-    # pv_power muss im Wechselrichter Modul gesetzt werden!
     pv_power = -battery_state["Production_W"]
-    log.debug('Speicher PV Leistung (wird nicht verwendet, bitte als PV-Modul konfigurieren): ' + str(pv_power))
-    get_bat_value_store(1).set(BatState(
-        power = battery_power,
-        soc = battery_soc
+    log.debug('Speicher PV Leistung: ' + str(pv_power))
+    get_inverter_value_store(1).set(InverterState(
+        power = pv_power
     ))
 
 
@@ -98,16 +84,10 @@ def read_variant_2_element(address: str, element: str):
 
 def update_variant_2(address: str):
     # Auslesen einer Sonnenbatterie Eco 6 über die integrierte REST-API des Batteriesystems
-    battery_soc = int(read_variant_2_element(address, "M05"))
-    battery_export_power = int(read_variant_2_element(address, "M01"))
-    battery_import_power = int(read_variant_2_element(address, "M02"))
-    battery_power = battery_import_power - battery_export_power
-    # pv_power muss im Wechselrichter Modul gesetzt werden!
     pv_power = -int(read_variant_2_element(address, "M03"))
-    log.debug('Speicher PV Leistung (wird nicht verwendet, bitte als PV-Modul konfigurieren): ' + str(pv_power))
-    get_bat_value_store(1).set(BatState(
-        power = battery_power,
-        soc = battery_soc
+    log.debug('Speicher PV Leistung (wird nicht verwendet): ' + str(pv_power))
+    get_inverter_value_store(1).set(InverterState(
+        power = pv_power
     ))
 
 
