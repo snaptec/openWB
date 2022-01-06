@@ -38,7 +38,7 @@ class SungrowCounter:
         else:
             power_all = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32, unit=unit) * -1
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config["id"])
+        topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
             power_all,
             topic=topic_str,

@@ -53,9 +53,7 @@ class FroniusSmCounter:
                 params=(('Scope', 'System'),),
                 timeout=5)
             counter_state.power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
-            topic_str = "openWB/set/system/device/{}/component/{}/".format(
-                self.__device_id, self.component_config["id"]
-            )
+            topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
             # Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus
             # dem Wechselrichter kam.
             # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.

@@ -53,8 +53,7 @@ class VictronInverter:
             power_temp2 = self.__tcp_client.read_holding_registers(850, ModbusDataType.UINT_16, unit=100)
             power = (sum(power_temp1)+power_temp2) * -1
 
-        topic_str = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
-            str(self.component_config["id"])+"/"
+        topic_str = "openWB/pv/" + str(self.component_config["id"]) + "/get/"
         _, counter = self.__sim_count.sim_count(power, topic=topic_str, data=self.__simulation, prefix="pv")
         inverter_state = InverterState(
             power=power,

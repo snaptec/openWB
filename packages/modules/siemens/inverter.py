@@ -36,11 +36,8 @@ class SiemensInverter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         power = self.__tcp_client.read_holding_registers(16, ModbusDataType.INT_32, unit=1) * -1
 
-        topic_str = "openWB/set/system/device/" + \
-            str(self.__device_id)+"/component/" + \
-            str(self.component_config["id"])+"/"
-        _, counter = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.__simulation, prefix="pv")
+        topic_str = "openWB/pv/" + str(self.component_config["id"]) + "/get/"
+        _, counter = self.__sim_count.sim_count(power, topic=topic_str, data=self.__simulation, prefix="pv")
         inverter_state = InverterState(
             power=power,
             counter=counter

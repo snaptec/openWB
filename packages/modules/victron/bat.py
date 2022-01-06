@@ -33,8 +33,7 @@ class VictronBat:
         power = self.__tcp_client.read_holding_registers(842, ModbusDataType.INT_16, unit=100)
         soc = self.__tcp_client.read_holding_registers(843, ModbusDataType.UINT_16, unit=100)
 
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
+        topic_str = "openWB/bat/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.__simulation, prefix="speicher"
         )
