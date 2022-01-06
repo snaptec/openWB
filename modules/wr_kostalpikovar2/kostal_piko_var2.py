@@ -17,7 +17,7 @@ def parse_kostal_piko_var2_html(html: str):
     if result is None:
         raise Exception("Given HTML does not match the expected regular expression. Ignoring.")
     return InverterState(
-        counter=int(result.group(2)),
+        counter=int(result.group(2)) * 1000,
         power=int(result.group(1))
     )
 
