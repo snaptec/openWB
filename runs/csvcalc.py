@@ -15,19 +15,23 @@ def outfiledefyear(jjjjinput):
     # heutiges Jahr nachgerechnet, ramdisk nehmen
         file_stringo =  outputa + 'logaktyearonl.csv'
         file_stringos =  outputa + 'logaktyearonls.csv'
+        akt_year = 1
     else:
         file_stringo =  outputp + str(jjjjinput) + 'onl.csv'
         file_stringos =  outputp + str(jjjjinput) + 'onls.csv'
-    return (file_stringo,file_stringos)
+        akt_year = 0
+    return (file_stringo,file_stringos,akt_year)
 def outfiledef(jjjjmminput):
     if (str(jjjjmminput) == str(aktjjjjmm)):
     # heutiger Monat nachgerechnet, ramdisk nehmen
         file_stringo =  outputa + 'logaktmonthonl.csv'
         file_stringos =  outputa + 'logaktmonthonls.csv'
+        akt_month = 1
     else:
         file_stringo =  outputp + str(jjjjmminput) + 'onl.csv'
         file_stringos =  outputp + str(jjjjmminput) + 'onls.csv'
-    return (file_stringo,file_stringos)
+        akt_month = 0
+    return (file_stringo,file_stringos,akt_month)
 def exceldate(datestring):
     datestringexcel =  datestring[-2:]  + '.' + datestring[4:6] + '.' + datestring[:4]
     return datestringexcel
@@ -284,7 +288,7 @@ def fillcount(row,  datestring  ,file_stringo,firstfile):
         sumcsv [i] = float(0)
     return
 
-def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
+def fillcounts(monhtrow,file_stringos,lastdate,lastzeit,akt_month):
     f1 = open(  file_stringos, 'w')
     line='Anzahl Spalten,' + str(SUMCOLUMNSTART*2) + ',Letzes Datum,' + lastdate + ',Letzte Zeit,' + lastzeit + ',  \n'
     f1.write(str(line))
@@ -305,6 +309,14 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
     f1.write(str(line))
     f1.close()
     os.chmod(file_stringos, 0o777)
+#hier aktuelle pv Leistung fuer diesen Monat schreiben
+    if (akt_month == 1):
+        f1 = open('/var/www/html/openWB/ramdisk/monthly_pvkwhk_csv', 'w')
+        # pv pos 3
+        sumt=float(sumcsvt [3]/1000)
+        f1.write(str(float("%.3f" % sumt)))
+        f1.close()
+        os.chmod('/var/www/html/openWB/ramdisk/monthly_pvkwhk_csv', 0o777)
     print ('%s %s written' % (getTime(),file_stringos))
     for i in range(1,SUMCOLUMNSTART):
         if (i < len(monhtrow)):
@@ -312,6 +324,8 @@ def fillcounts(monhtrow,file_stringos,lastdate,lastzeit):
         sumcsvt [i] = float(0)
     return
 def reyeardet(calcyear):
+    for i in range(1,SUMCOLUMNSTART):
+        sumcsvtj [i] = float(0)
     firstfile=1
     validdata=0
     #print ('%s actyear ' % (calcyear))
@@ -323,9 +337,9 @@ def reyeardet(calcyear):
         dds = '0' + str (dd)
         datestring = int(str(calcyear) + dds[-2:])
         #summenfile montssuchen
-        (file_stringi,file_stringis) = outfiledef(datestring)
+        (file_stringi,file_stringis,akt_month) = outfiledef(datestring)
         #outputfile year
-        (file_stringo,file_stringos) = outfiledefyear(calcyear)
+        (file_stringo,file_stringos,akt_year) = outfiledefyear(calcyear)
         if os.path.isfile(file_stringis):
             ifile=1
         else:
@@ -361,7 +375,9 @@ def reyeardet(calcyear):
                         f1.write(str(headerline))
                     sumline=''
                     for i in range(1,startspalten+2):
-                        #print ('I %s ' % (str(i-1)))
+                        if (i > int(startspalten/2)) and (i < startspalten):
+                            sumcsvtj [i - int(startspalten/2)] = float (sumcsvtj [i - int(startspalten/2)] )  + float( sumrow [i] )
+                            #print ('I %s %s ' % (str(i),str(sumrow [i])))
                         sumline=sumline+ str(sumrow [i-1])
                         if i < (startspalten+1):
                             sumline=sumline+ ','
@@ -378,6 +394,13 @@ def reyeardet(calcyear):
         f1.write(str(headerline))
         f1.close()
         os.chmod(file_stringos, 0o777)
+        #hier aktuelle pv Leistung fuer diesen jahr schreiben
+        if (akt_year == 1):
+            f1 = open('/var/www/html/openWB/ramdisk/yearly_pvkwhk_csv', 'w')
+            # pv pos 3
+            f1.write(str(float("%.3f" % sumcsvtj [3])))
+            f1.close()
+            os.chmod('/var/www/html/openWB/ramdisk/yearly_pvkwhk_csv', 0o777)
         print ('%s %s written' % (getTime(),file_stringos))
     return
 def remonth(jjjjmm):
@@ -397,7 +420,7 @@ def remonth(jjjjmm):
         dds = '0' + str (dd)
         datestring = str(jjjjmm) + dds[-2:]
         file_stringi =  inputp + datestring + '.csv'
-        (file_stringo,file_stringos) = outfiledef(jjjjmm)
+        (file_stringo,file_stringos,akt_month) = outfiledef(jjjjmm)
         if os.path.isfile(file_stringi):
             ifile=1
         else:
@@ -464,7 +487,7 @@ def remonth(jjjjmm):
                 except Exception as e:
                     print ('%s error1 %s inhalt %s' % (getTime(),datestring, str(e) ))
     #summenfile schreiben
-    fillcounts(monhtrow,file_stringos,lastdate,lastzeit)
+    fillcounts(monhtrow,file_stringos,lastdate,lastzeit,akt_month)
     return
 def checkyear(calcyear):
     #lesen summenfile year
@@ -476,7 +499,7 @@ def checkyear(calcyear):
     lastspalten = 0
     dfile=0
     ifile=0
-    (file_stringo,file_stringos) = outfiledefyear(calcyear)
+    (file_stringo,file_stringos,akt_year) = outfiledefyear(calcyear)
     try:
         if os.path.isfile(file_stringos):
             ifile=1
@@ -493,7 +516,7 @@ def checkyear(calcyear):
             dds = '0' + str (dd)
             datestring = int(str(calcyear) + dds[-2:])
             #letzses summenfile montssuchen
-            (file_stringi,file_stringis) = outfiledef(datestring)
+            (file_stringi,file_stringis,akt_month) = outfiledef(datestring)
             if os.path.isfile(file_stringis):
                 dfile=1
                 f = open(  file_stringis, 'r')
@@ -527,7 +550,7 @@ def checkmonth(jjjjmm):
     compspalten = 0
     dfile=0
     ifile=0
-    (file_stringo,file_stringos) = outfiledef(jjjjmm)
+    (file_stringo,file_stringos,akt_month) = outfiledef(jjjjmm)
     try:
         if os.path.isfile(file_stringos):
             ifile=1
@@ -648,11 +671,12 @@ if __name__ == "__main__":
     countercsv = []
     sumcsv = []
     sumcsvt = []
+    sumcsvtj = []
     for i in range (1,SUMCOLUMNSTART+1):
         countercsv.append("0")
         sumcsv.append("0")
         sumcsvt.append(float(0))
-
+        sumcsvtj.append(float(0))
     prep()
     print ('%s csvcalc.py processing mode %s date jjjjmm %6d' % (getTime(),mode,jjjjmm))
     if (mode == 'M'):
