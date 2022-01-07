@@ -60,7 +60,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip_address: str, num: int) -> None:
+def read_legacy(component_type: str, ip_address: str) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat
     }
@@ -74,7 +74,7 @@ def read_legacy(component_type: str, ip_address: str, num: int) -> None:
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    component_config["id"] = None
     dev.add_component(component_config)
 
     log.MainLogger().debug('Saxpower IP-Adresse: ' + str(ip_address))
