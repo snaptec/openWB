@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
-import sys
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -67,48 +67,23 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "inverter": inverter
-    }
-    component_type = argv[1]
-    ip_address = argv[2]
-
+def read_legacy(ip_address: str, component_config: dict, id: Optional[int], **kwargs):
+    component_config["id"] = id
+    component_config["configuration"].update(kwargs)
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)
-    if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "bat":
-            try:
-                num = int(argv[3])
-            except IndexError:
-                num = None
-        else:
-            vc_count = int(argv[3])
-            vc_type = argv[4]
-            try:
-                num = int(argv[5])
-            except IndexError:
-                num = None
-            component_config["configuration"]["vc_count"] = vc_count
-            component_config["configuration"]["vc_type"] = vc_type
-    else:
-        raise Exception(
-            "illegal component type " + component_type + ". Allowed values: " +
-            ','.join(COMPONENT_TYPE_TO_MODULE.keys())
-        )
-    component_config["id"] = num
     dev.add_component(component_config)
-
-    log.MainLogger().debug('Studer IP-Adresse: ' + str(ip_address))
-
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        read_legacy(sys.argv)
-    except Exception:
-        log.MainLogger().exception("Fehler im Studer Skript")
+def read_legacy_bat(ip_address: str, num: Optional[int]):
+    read_legacy(ip_address, bat.get_default_config(), num)
+
+
+def read_legacy_inverter(ip_address: str, vc_count: int, vc_type: str, num: Optional[int]):
+    read_legacy(ip_address, inverter.get_default_config(), num, vc_count=vc_count, vc_type=vc_type)
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args({"bat": read_legacy_bat, "inverter": read_legacy_inverter}, argv)

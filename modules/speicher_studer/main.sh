@@ -15,7 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/studer/device.py "bat" "${studer_ip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.studer.device" "bat" "${studer_ip}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"
