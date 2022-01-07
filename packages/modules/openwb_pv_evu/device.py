@@ -1,7 +1,7 @@
-from typing import Dict, List
-import sys
+from typing import Dict, List, Optional
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.openwb import inverter
@@ -49,38 +49,17 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]):
-    """ Ausführung des Moduls als Python-Skript
-    """
-    COMPONENT_TYPE_TO_MODULE = {
-        "inverter": inverter
-    }
-    component_type = argv[1]
-    version = int(argv[2])
-    try:
-        num = int(argv[3])
-    except IndexError:
-        num = None
-
-    device_config = get_default_config()
-    dev = Device(device_config)
-
-    if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-    else:
-        raise Exception("illegal component type " + component_type +
-                        ". Allowed values: " +
-                        ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
+def read_legacy(version: int, num: Optional[int]):
+    component_config = inverter.get_default_config()
     component_config["id"] = num
     component_config["configuration"]["version"] = version
+
+    dev = Device(get_default_config())
     dev.add_component(component_config)
 
     log.MainLogger().debug('Zähler an EVU-Kit Version: ' + str(version))
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        read_legacy(sys.argv)
-    except Exception:
-        log.MainLogger().exception("Fehler im Modul Zähler an EVU-Kit")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)
