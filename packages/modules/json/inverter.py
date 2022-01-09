@@ -40,11 +40,6 @@ class JsonInverter:
         if config["jq_counter"] == "":
             topic_str = "openWB/pv/" + str(self.component_config["id"]) + "/get/"
             _, counter = self.__sim_count.sim_count(power, topic=topic_str, data=self.simulation, prefix="pv")
-            inverter_state = InverterState(
-                power=power,
-                counter=counter,
-                currents=[0, 0, 0]
-            )
         else:
             counter = jq.compile(config["jq_counter"]).input(response).first()
 
