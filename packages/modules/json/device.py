@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from typing import Dict, List, Union, Optional
 
+from requests import ConnectionError, ConnectTimeout
+
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
@@ -55,9 +57,14 @@ class Device(AbstractDevice):
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
             with MultiComponentUpdateContext(self._components):
-                response = req.get_http_session().get(self.device_config["configuration"]["ip_address"], timeout=5)
+                try:
+                    response = req.get_http_session().get(self.device_config["configuration"]["ip_address"], timeout=5)
+                    response_json = response.json()
+                except (ConnectionError, ConnectTimeout) as e:
+                    log.MainLogger().debug("Verbindungsfehler: " + str(e))
+                    response_json = None
                 for component in self._components:
-                    self._components[component].update(response.json())
+                    self._components[component].update(response_json)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
