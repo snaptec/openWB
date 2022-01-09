@@ -66,17 +66,20 @@ class FroniusInverter:
             counter = float(response.json()["Body"]["Data"]["Site"]["E_Total"])
             daily_yield = float(response.json()["Body"]["Data"]["Site"]["E_Day"])
             counter, counter_start, counter_offset = self.__calculate_offset(counter, daily_yield)
-            counter = counter + counter2
-            if counter > 0:
-                counter = self.__add_and_save_offset(daily_yield, counter, counter_start, counter_offset)
+            if counter2 is None:
+                # Wenn der zweite WR abgeschaltet ist, kann kein neuer Gesamtzählerstand ermittelt werden
+                counter = None
+            else:
+                counter = counter + counter2
+                if counter > 0:
+                    counter = self.__add_and_save_offset(daily_yield, counter, counter_start, counter_offset)
 
         if bat is True:
             _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
 
         inverter_state = InverterState(
             power=power,
-            counter=counter,
-            currents=[0, 0, 0]
+            counter=counter
         )
         self.__store.set(inverter_state)
         # Rückgabe der Leistung des ersten WR ohne Vorzeichenumkehr
@@ -101,6 +104,7 @@ class FroniusInverter:
             except (requests.ConnectTimeout, requests.ConnectionError):
                 # Nachtmodus: WR ist ausgeschaltet
                 power2 = 0
+                counter2 = None
         else:
             power2 = 0
         return power2, counter2
