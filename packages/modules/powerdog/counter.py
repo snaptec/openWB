@@ -34,10 +34,10 @@ class PowerdogCounter:
         log.MainLogger().debug("Powerdog Hausverbrauch[W]: " + str(home_consumption))
         return home_consumption
 
-    def set_counter_state(self, power_all: float) -> None:
+    def set_counter_state(self, power: float) -> None:
         topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
-            power_all,
+            power,
             topic=topic_str,
             data=self.simulation,
             prefix="bezug"
@@ -45,7 +45,7 @@ class PowerdogCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
-        log.MainLogger().debug("Powerdog Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Powerdog Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

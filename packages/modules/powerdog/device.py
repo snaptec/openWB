@@ -63,7 +63,7 @@ class Device(AbstractDevice):
                         self._components[component].update()
                 else:
                     raise Exception(
-                        "Wenn ein EVU-Zaehler konfiguriert wurde, muss immer auch ein WR konfiguriert sein.")
+                        "Wenn ein EVU-Zähler konfiguriert wurde, muss immer auch ein WR konfiguriert sein.")
         elif len(self._components) == 2:
             with MultiComponentUpdateContext(self._components):
                 for component in self._components:
@@ -75,10 +75,10 @@ class Device(AbstractDevice):
                         raise Exception(
                             "illegal component type " + self._components[component].component_config["type"] +
                             ". Allowed values: " + ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
-                counter_power_all = home_consumption + inverter_power
+                counter_power = home_consumption + inverter_power
                 for component in self._components:
                     if isinstance(self._components[component], counter.PowerdogCounter):
-                        self._components[component].set_counter_state(counter_power_all)
+                        self._components[component].set_counter_state(counter_power)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
