@@ -88,7 +88,7 @@ class Device(AbstractDevice):
                         break
                     elif isinstance(self._components[component], counter_s0.FroniusS0Counter):
                         counter_state = self._components[component].update(self.bat_configured)
-                        counter_state.power_all += power_inverter
+                        counter_state.power += power_inverter
                         self._components[component].set_counter_state(counter_state)
                         break
                 for component in self._components:

@@ -17,7 +17,7 @@ class Mpm3pm:
         else:
             raise FaultState.error(__name__+" "+str(type(e))+" " + str(e)) from e
 
-    def get_voltage(self) -> List[float]:
+    def get_voltages(self) -> List[float]:
         try:
             return [val / 10 for val in self.client.read_input_registers(
                 0x08, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
@@ -32,10 +32,10 @@ class Mpm3pm:
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = [val / 100 for val in self.client.read_input_registers(
+            powers = [val / 100 for val in self.client.read_input_registers(
                 0x14, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
-            power_all = self.client.read_input_registers(0x26, ModbusDataType.FLOAT_32, unit=self.id) / 100
-            return power_per_phase, power_all
+            power = self.client.read_input_registers(0x26, ModbusDataType.FLOAT_32, unit=self.id) / 100
+            return powers, power
         except Exception as e:
             self.__process_error(e)
 
@@ -45,7 +45,7 @@ class Mpm3pm:
         except Exception as e:
             self.__process_error(e)
 
-    def get_power_factor(self) -> List[float]:
+    def get_power_factors(self) -> List[float]:
         try:
             return [val / 100 for val in self.client.read_input_registers(
                 0x20, [ModbusDataType.FLOAT_32]*3, unit=self.id)]
@@ -58,7 +58,7 @@ class Mpm3pm:
         except Exception as e:
             self.__process_error(e)
 
-    def get_current(self) -> List[float]:
+    def get_currents(self) -> List[float]:
         try:
             return [val / 100 for val in self.client.read_input_registers(
                 0x0E, [ModbusDataType.FLOAT_32]*3, unit=self.id)]

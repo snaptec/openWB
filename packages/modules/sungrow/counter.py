@@ -34,13 +34,13 @@ class SungrowCounter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = 1
         if self.component_config["configuration"]["version"] == 1:
-            power_all = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32, unit=unit)
+            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32, unit=unit)
         else:
-            power_all = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32, unit=unit) * -1
+            power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32, unit=unit) * -1
 
         topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
-            power_all,
+            power,
             topic=topic_str,
             data=self.__simulation,
             prefix="bezug"
@@ -49,7 +49,7 @@ class SungrowCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
-        log.MainLogger().debug("Sungrow Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Sungrow Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

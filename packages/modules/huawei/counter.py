@@ -34,14 +34,14 @@ class HuaweiCounter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         time.sleep(0.1)
-        power_all = self.__tcp_client.read_holding_registers(37113, ModbusDataType.INT_32, unit=self.__modbus_id) * -1
+        power = self.__tcp_client.read_holding_registers(37113, ModbusDataType.INT_32, unit=self.__modbus_id) * -1
         time.sleep(0.1)
         currents = [val / -100 for val in self.__tcp_client.read_holding_registers(
             37107, [ModbusDataType.INT_32] * 3, unit=self.__modbus_id)]
 
         topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
         imported, exported = self.__sim_count.sim_count(
-            power_all,
+            power,
             topic=topic_str,
             data=self.simulation,
             prefix="bezug"
@@ -51,6 +51,6 @@ class HuaweiCounter:
             currents=currents,
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
         self.__store.set(counter_state)
