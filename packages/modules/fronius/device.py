@@ -6,8 +6,8 @@ from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext
 from modules.fronius import bat
-from modules.fronius import counter_sm
 from modules.fronius import counter_s0
+from modules.fronius import counter_sm
 from modules.fronius import inverter
 from modules.fronius import meter
 
@@ -147,10 +147,3 @@ def read_legacy(
 
 def main(argv: List[str]) -> None:
     run_using_positional_cli_args(read_legacy, argv)
-
-
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Fronius Skript")
