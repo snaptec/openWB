@@ -36,11 +36,11 @@ class PvKitFlex:
         """
         try:
             counter = self.__client.get_counter()
-            power_per_phase, power_all = self.__client.get_power()
+            powers, power_all = self.__client.get_power()
 
             version = self.component_config["configuration"]["version"]
             if version == 1:
-                power_all = sum(power_per_phase)
+                power_all = sum(powers)
             if power_all > 10:
                 power_all = power_all*-1
             currents = self.__client.get_current()

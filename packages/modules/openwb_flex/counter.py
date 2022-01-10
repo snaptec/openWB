@@ -42,7 +42,7 @@ class EvuKitFlex:
         # dass ungeschlossene Verbindungen den Modbus-Adapter blockieren.
         try:
             voltages = self.__client.get_voltage()
-            power_per_phase, power_all = self.__client.get_power()
+            powers, power_all = self.__client.get_power()
             frequency = self.__client.get_frequency()
             power_factors = self.__client.get_power_factor()
 
@@ -56,10 +56,10 @@ class EvuKitFlex:
             self.__tcp_client.close_connection()
         version = self.component_config["configuration"]["version"]
         if version == 0:
-            currents = [power_per_phase[i] / voltages[i] for i in range(3)]
+            currents = [powers[i] / voltages[i] for i in range(3)]
         else:
             if version == 1:
-                power_all = sum(power_per_phase)
+                power_all = sum(powers)
             topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
             imported, exported = self.__sim_count.sim_count(
                 power_all,
@@ -70,7 +70,7 @@ class EvuKitFlex:
         counter_state = CounterState(
             voltages=voltages,
             currents=currents,
-            powers=power_per_phase,
+            powers=powers,
             power_factors=power_factors,
             imported=imported,
             exported=exported,
