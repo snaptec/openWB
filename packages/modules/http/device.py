@@ -102,7 +102,8 @@ def create_legacy_device_config(url: str):
     parsed_url = parse_url(url)
     device_config = get_default_config()
     device_config["configuration"]["protocol"] = parsed_url.scheme
-    device_config["configuration"]["domain"] = parsed_url.hostname
+    device_config["configuration"]["domain"] = parsed_url.hostname+":" + \
+        str(parsed_url.port) if parsed_url.port else parsed_url.hostname
     return device_config
 
 
