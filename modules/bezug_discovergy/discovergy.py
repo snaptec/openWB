@@ -5,7 +5,8 @@ import requests
 
 from helpermodules.cli import run_using_positional_cli_args
 from helpermodules.log import setup_logging_stdout
-from modules.common.store.ramdisk import files
+from modules.common.component_state import CounterState
+from modules.common.store import get_counter_value_store
 
 setup_logging_stdout()
 log = logging.getLogger("EVU Discovergy")
@@ -28,19 +29,25 @@ def write_readings_to_ramdisk(discovergy: dict):
         voltages = [values["voltage" + str(phase)] / 1000 for phase in range(1, 4)]
     # Es gibt verschiedene Antworten vom Discovergy-Modul.
     except KeyError:
-        voltages = [values["phase" + str(phase) + "Voltage"] / 1000 for phase in range(1, 4)]
+        try:
+            voltages = [values["phase" + str(phase) + "Voltage"] / 1000 for phase in range(1, 4)]
+        except KeyError:
+            # Some discovergy counters do not report voltage at all
+            voltages = None
     try:
         powers = [values["power" + str(phase)] / 1000 for phase in range(1, 4)]
     except KeyError:
         powers = [values["phase" + str(phase) + "Power"] / 1000 for phase in range(1, 4)]
     power_total = values["power"] / 1000
 
-    files.evu.power_import.write(power_total)
-    files.evu.energy_export.write(values["energyOut"] / 10000000)
-    files.evu.energy_import.write(values["energy"] / 10000000)
-    files.evu.voltages.write(voltages)
-    files.evu.powers_import.write(powers)
-    files.evu.currents.write(powers[i] / voltages[i] for i in range(3))
+    get_counter_value_store(1).set(CounterState(
+        imported=values["energy"] / 10000000,
+        exported=values["energyOut"] / 10000000,
+        power=power_total,
+        voltages=voltages,
+        currents=[power / voltage for power, voltage in zip(powers, [230] * 3 if voltages is None else voltages)],
+        powers=powers
+    ))
     log.debug("Update complete. Total Power: %g W", power_total)
 
 
