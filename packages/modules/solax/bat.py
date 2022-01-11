@@ -33,7 +33,8 @@ class SolaxBat:
         power = self.__tcp_client.read_input_registers(22, ModbusDataType.INT_16)
         soc = self.__tcp_client.read_input_registers(28, ModbusDataType.UINT_16)
 
-        topic_str = "openWB/bat/" + str(self.component_config["id"]) + "/get/"
+        topic_str = "openWB/set/system/device/" + str(
+            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.__simulation, prefix="speicher"
         )

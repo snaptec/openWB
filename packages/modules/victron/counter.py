@@ -41,7 +41,9 @@ class VictronCounter:
             self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_16, unit=unit) / 10
             for reg in [2616, 2618, 2610]]
 
-        topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(
+            self.__device_id, self.component_config["id"]
+        )
         imported, exported = self.__sim_count.sim_count(
             power,
             topic=topic_str,

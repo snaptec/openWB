@@ -59,7 +59,7 @@ class FroniusInverter:
         power += power2
         power1 = power
         power *= -1
-        topic = "openWB/pv/" + str(self.component_config["id"]) + "/get/"
+        topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + str(self.component_config["id"])+"/"
         if gen24:
             _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
         else:
