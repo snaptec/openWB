@@ -36,7 +36,8 @@ class SiemensBat:
         power = self.__tcp_client.read_holding_registers(6, ModbusDataType.INT_32, unit=1) * -1
         soc = int(self.__tcp_client.read_holding_registers(8, ModbusDataType.INT_32, unit=1))
 
-        topic_str = "openWB/bat/" + str(self.component_config["id"]) + "/get/"
+        topic_str = "openWB/set/system/device/" + str(
+            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.__simulation, prefix="speicher"
         )

@@ -33,7 +33,8 @@ class SaxpowerBat:
         soc = self.__tcp_client.read_holding_registers(46, ModbusDataType.INT_16, unit=64)
         power = self.__tcp_client.read_holding_registers(47, ModbusDataType.UINT_16, unit=64) * -1
 
-        topic_str = "openWB/bat/" + str(self.component_config["id"]) + "/get/"
+        topic_str = "openWB/set/system/device/" + str(
+            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.__simulation, prefix="speicher"
         )

@@ -60,7 +60,9 @@ class EvuKitFlex:
         else:
             if version == 1:
                 power = sum(powers)
-            topic_str = "openWB/counter/" + str(self.component_config["id"]) + "/get/"
+            topic_str = "openWB/set/system/device/{}/component/{}/".format(
+                self.__device_id, self.component_config["id"]
+            )
             imported, exported = self.__sim_count.sim_count(
                 power,
                 topic=topic_str,
