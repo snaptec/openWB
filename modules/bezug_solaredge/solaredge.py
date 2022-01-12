@@ -56,7 +56,7 @@ def update(ipaddress: str, modbusport: int, slaveid: int):
     get_counter_value_store(1).set(CounterState(
         imported=counter_imported,
         exported=counter_exported,
-        power_all=powers[0],
+        power=powers[0],
         powers=powers[1:],
         voltages=voltages,
         currents=currents,
