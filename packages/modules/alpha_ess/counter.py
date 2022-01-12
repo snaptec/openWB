@@ -27,9 +27,7 @@ class AlphaEssCounter:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__store = get_counter_value_store(component_config["id"])
-        self.component_info = ComponentInfo(self.component_config["id"],
-                                            self.component_config["name"],
-                                            self.component_config["type"])
+        self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
         log.MainLogger().debug(
@@ -44,7 +42,7 @@ class AlphaEssCounter:
         return self.__get_values_before_v123 if version == 0 else self.__get_values_since_v123
 
     def __get_values_before_v123(self, unit: int) -> CounterState:
-        power_all, exported, imported = self.__tcp_client.read_holding_registers(
+        power, exported, imported = self.__tcp_client.read_holding_registers(
             0x6, [modbus.ModbusDataType.INT_32] * 3, unit=unit)
         exported *= 10
         imported *= 10
@@ -58,13 +56,13 @@ class AlphaEssCounter:
             power_factors=[0, 0, 0],
             imported=imported,
             exported=exported,
-            power_all=power_all,
+            power=power,
             frequency=50
         )
         return counter_state
 
     def __get_values_since_v123(self, unit: int) -> CounterState:
-        power_all = self.__tcp_client.read_holding_registers(
+        power = self.__tcp_client.read_holding_registers(
             0x0021, ModbusDataType.INT_32, unit=unit)
         exported = self.__tcp_client.read_holding_registers(
             0x0010, ModbusDataType.INT_32, unit=unit) * 10
@@ -80,7 +78,7 @@ class AlphaEssCounter:
             power_factors=[0, 0, 0],
             imported=imported,
             exported=exported,
-            power_all=power_all,
+            power=power,
             frequency=50
         )
         return counter_state

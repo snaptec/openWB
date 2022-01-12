@@ -47,7 +47,7 @@ version = None
 tree = ET.parse(response)
 root = tree.getroot()
 version = get_xml_text(root, "value", "id", "version")
-if version < 6:
+if len(version) < 6:
     versionshort = version[:-6]
 else:
     versionshort = "oldversion"
@@ -125,12 +125,6 @@ regex = '^[-+]?[0-9]+\.?[0-9]*$'
 if re.search(regex, wattbezug) == None:
     with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
         wattbezug = int(f.read())
-if re.search(regex, ikwh) == None:
-    with open("/var/www/html/openWB/ramdisk/bezugkwh", "r") as f:
-        ikwh = int(f.read())
-if re.search(regex, ekwh) == None:
-    with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "r") as f:
-        ekwh = int(f.read())
 
 # Ausgabe
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:

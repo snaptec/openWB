@@ -288,6 +288,16 @@ else
 	python3 $OPENWBBASEDIR/runs/mqttsub.py &
 fi
 
+# check if our legacy run server is running
+pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" > /dev/null
+if [ $? == 1 ]
+then
+	openwbDebugLog "MAIN" 0 "legacy_run_server is not running. Restarting process"
+	bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
+else
+	openwbDebugLog "MAIN" 1 "legacy_run_server is already running"
+fi
+
 # check if our smarthome handler is running
 if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomehandler.py" > /dev/null
 then
@@ -384,6 +394,11 @@ if (( $pingcheckactive == 1 )); then
 	openwbDebugLog "MAIN" 1 "pingcheck configured; starting"
 	$OPENWBBASEDIR/runs/pingcheck.sh &
 fi
+
+# record the current commit details
+commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
+echo "$commitId" > $RAMDISKDIR/currentCommitHash
+echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > $RAMDISKDIR/currentCommitBranches
 
 # EVSE Check
 openwbDebugLog "MAIN" 1 "starting evsecheck"

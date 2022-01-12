@@ -26,33 +26,30 @@ class PvKitFlex:
         self.component_config = component_config
         factory = kit_counter_inverter_version_factory(
             component_config["configuration"]["version"])
-        self.__client = factory(component_config["configuration"]["id"],
-                                tcp_client)
+        self.__client = factory(component_config["configuration"]["id"], tcp_client)
         self.__tcp_client = tcp_client
         self.__store = get_inverter_value_store(component_config["id"])
-        self.component_info = ComponentInfo(self.component_config["id"],
-                                            self.component_config["name"],
-                                            self.component_config["type"])
+        self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
         """ liest die Werte des Moduls aus.
         """
         try:
             counter = self.__client.get_counter()
-            power_per_phase, power_all = self.__client.get_power()
+            powers, power = self.__client.get_power()
 
             version = self.component_config["configuration"]["version"]
             if version == 1:
-                power_all = sum(power_per_phase)
-            if power_all > 10:
-                power_all = power_all*-1
-            currents = self.__client.get_current()
+                power = sum(powers)
+            if power > 10:
+                power = power*-1
+            currents = self.__client.get_currents()
         finally:
             self.__tcp_client.close_connection()
 
-        log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power_all))
+        log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power))
         inverter_state = InverterState(
-            power=power_all,
+            power=power,
             counter=counter,
             currents=currents
         )

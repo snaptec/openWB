@@ -707,19 +707,6 @@
 								</div>
 								<hr>
 								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für die Primo Reihe</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniusprimoold == 0) echo " active" ?>">
-												<input type="radio" name="froniusprimo" id="froniusprimoOff" value="0"<?php if($froniusprimoold == 0) echo " checked=\"checked\"" ?>>Aus
-											</label>
-											<label class="btn btn-outline-info<?php if($froniusprimoold == 1) echo " active" ?>">
-												<input type="radio" name="froniusprimo" id="froniusprimoOn" value="1"<?php if($froniusprimoold == 1) echo " checked=\"checked\"" ?>>An
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">

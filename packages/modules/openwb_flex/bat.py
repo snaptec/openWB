@@ -31,9 +31,7 @@ class BatKitFlex:
                                 tcp_client)
         self.__tcp_client = tcp_client
         self.__store = get_bat_value_store(component_config["id"])
-        self.component_info = ComponentInfo(self.component_config["id"],
-                                            self.component_config["name"],
-                                            self.component_config["type"])
+        self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
         log.MainLogger().debug("Start kit reading")
@@ -43,7 +41,8 @@ class BatKitFlex:
             imported = self.__client.get_imported()
             exported = self.__client.get_exported()
             if self.component_config["configuration"]["version"] == 2:
-                _, power = self.__client.get_power() * -1
+                _, power = self.__client.get_power()
+                power = power * -1
             else:
                 _, power = self.__client.get_power()
         finally:
