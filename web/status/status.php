@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
-
 	<head>
 		<base href="/openWB/web/">
-
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +19,10 @@
 		<meta name="msapplication-TileColor" content="#00a8ff">
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
-
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
-
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="status/status_style.css?ver=20210209">
@@ -50,9 +46,6 @@
 			}
 			#preloader-info {
 				color:grey;
-			}
-			#thegraph > div {
-				height: 350px;
 			}
 		</style>
 		<!-- important scripts to be loaded -->
@@ -84,7 +77,7 @@
 		</script>
 
 		<script>
-			function readLogFile(urlStr, variable) {
+			function readLogFile(urlStr, target) {
 				$.ajax({
 					url: urlStr,
 					complete: function(request){
@@ -92,7 +85,7 @@
 						var result = "";
 						for(var i=0; i<lines.length-1; i++)
 							result = lines[i] + "\n" + result;
-						$(variable).text(result);
+						$(target).text(result);
 					}
 				});
 			}
@@ -100,41 +93,34 @@
 			function loadstatuslog() {
 				readLogFile("/openWB/ramdisk/ladestatus.log", "#ladestatuslogdiv");
 			}
-			loadstatuslog();
 
 			function mqttlog() {
 				readLogFile("/openWB/ramdisk/mqtt.log", "#mqttdiv");
 			}
-			mqttlog();
 
 			function rfidlog() {
 				readLogFile("/openWB/ramdisk/rfid.log", "#rfiddiv");
 			}
-			rfidlog();
 
 			function debuglog() {
 				readLogFile("/openWB/ramdisk/openWB.log", "#debugdiv");
 			}
-			debuglog();
 
 			function smarthomelog() {
 				readLogFile("/openWB/ramdisk/smarthome.log", "#smarthomediv");
 			}
-			smarthomelog();
 
 			function nurpvlog() {
 				readLogFile("/openWB/ramdisk/nurpv.log", "#nurpvdiv");
 			}
-			nurpvlog();
 
 			function soclog() {
 				readLogFile("/openWB/ramdisk/soc.log", "#socdiv");
 			}
-			soclog();
+
 			function llanbindunglog() {
 				readLogFile("/openWB/ramdisk/isss.log", "#llanbindungdiv");
 			}
-			llanbindunglog();
 		</script>
 
 	</head>
@@ -472,11 +458,11 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- Smarthome -->
 				<div class="card border-info " id="Smarthome">
 					<div class="card-header bg-info">
-						Smarthome 2.0
+						Smart Home 2.0
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -502,12 +488,11 @@
 										<th scope="row">Maximale Speicherladung [W]</th>
 										<td><div id="wmaxspeicherladung"></div></td>
 									</tr>
-								</tbody>								
+								</tbody>
 							</table>
 						</div>
 					</div>
-				</div>			
-				
+				</div>
 
 				<!--Verbraucher-->
 				<?php for( $loadsNum = 1; $loadsNum <= 2; $loadsNum++ ){ ?>
@@ -547,56 +532,56 @@
 					</div>
 					<div id="collapseOne" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadLadestatusLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="ladestatuslogdiv"></pre>
+						<pre id="ladestatuslogdiv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseTwo">
 						<a class="card-title">SmartHome Log </a>
 					</div>
 					<div id="collapseTwo" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadSmartHomeLog mr-3" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="smarthomediv"></pre>
+						<pre id="smarthomediv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseThree">
 						<a class="card-title">RFID Log </a>
 					</div>
 					<div id="collapseThree" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadRfidLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="rfiddiv"></pre>
+						<pre id="rfiddiv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseFour">
 						<a class="card-title">Mqtt Log </a>
 					</div>
 					<div id="collapseFour" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadMqttLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="mqttdiv"></pre>
+						<pre id="mqttdiv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseFive">
 						<a class="card-title">Debug Log </a>
 					</div>
 					<div id="collapseFive" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadDebugLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="debugdiv"></pre>
+						<pre id="debugdiv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseSix">
 						<a class="card-title">Nur PV Log </a>
 					</div>
 					<div id="collapseSix" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadPvLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="nurpvdiv"></pre>
+						<pre id="nurpvdiv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseSeven">
 						<a class="card-title">EV SoC Log </a>
 					</div>
 					<div id="collapseSeven" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadSocLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="socdiv"></pre>
+						<pre id="socdiv">Lade Daten...</pre>
 					</div>
 					<div class="card-header bg-secondary collapsed" data-toggle="collapse" data-target="#collapseEight">
 						<a class="card-title">Nur Ladepunkt Log </a>
 					</div>
 					<div id="collapseEight" class="card-body collapse" data-parent="#accordion">
 						<button class="btn btn-info reloadLLAnbindungLog" style="margin-bottom:12px" type="reset">Aktualisieren <i class="fas fa-redo-alt"></i> </button>
-						<pre id="llanbindungdiv"></pre>
+						<pre id="llanbindungdiv">Lade Daten...</pre>
 					</div>
 				</div>
 			</div>
@@ -611,7 +596,7 @@
 
 		<script>
 
-			// load navbar, be carefull: it loads asynchonously
+			// load navbar, be careful: it loads asynchronous
 			$.get(
 				{ url: "themes/navbar.html", cache: false },
 				function(data){
@@ -647,8 +632,8 @@
 					countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
 					var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
 					var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
-					var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
-					if ( timeBetweenTwoMesagges > 3000 ) {
+					var timeBetweenTwoMessages = Date.now() - timeOfLastMqttMessage;
+					if ( timeBetweenTwoMessages > 3000 ) {
 						console.log('timeout');
 						// latest after 3 sec without new messages
 						percentageReceived = 100;
@@ -695,25 +680,49 @@
 			$('.reloadLadestatusLog').click(function(event){
 				loadstatuslog();
 			});
+			$('#collapseOne').on('shown.bs.collapse', function(){
+				loadstatuslog();
+			});
 			$('.reloadSmartHomeLog').click(function(event){
+				smarthomelog();
+			});
+			$('#collapseTwo').on('shown.bs.collapse', function(){
 				smarthomelog();
 			});
 			$('.reloadRfidLog').click(function(event){
 				rfidlog();
 			});
+			$('#collapseThree').on('shown.bs.collapse', function(){
+				rfidlog();
+			});
 			$('.reloadMqttLog').click(function(event){
+				mqttlog();
+			});
+			$('#collapseFour').on('shown.bs.collapse', function(){
 				mqttlog();
 			});
 			$('.reloadDebugLog').click(function(event){
 				debuglog();
 			});
+			$('#collapseFive').on('shown.bs.collapse', function(){
+				debuglog();
+			});
 			$('.reloadPvLog').click(function(event){
+				nurpvlog();
+			});
+			$('#collapseSix').on('shown.bs.collapse', function(){
 				nurpvlog();
 			});
 			$('.reloadSocLog').click(function(event){
 				soclog();
 			});
+			$('#collapseSeven').on('shown.bs.collapse', function(){
+				soclog();
+			});
 			$('.reloadLLAnbindungLog').click(function(event){
+				llanbindunglog();
+			});
+			$('#collapseEight').on('shown.bs.collapse', function(){
 				llanbindunglog();
 			});
 		</script>

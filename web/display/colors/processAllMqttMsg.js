@@ -38,7 +38,7 @@ function convertToKw(dataColum) {
 }
 
 function getIndex(topic) {
-	// get occurence of numbers between / / in topic
+	// get occurrence of numbers between / / in topic
 	// since this is supposed to be the index like in openwb/lp/4/w
 	// no lookbehind supported by safari, so workaround with replace needed
 	var index = topic.match(/(?:\/)([0-9]+)(?=\/)/g)[0].replace(/[^0-9]+/g, '');
@@ -52,6 +52,8 @@ function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
 	if (mqttmsg.match(/^openwb\/graph\//i)) { processGraphMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/evu\//i)) { processEvuMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/global\/awattar\//i) ) { processETProviderMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/global\/ETProvider\//i) ) { processETProviderMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/global\//i)) { processGlobalMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/housebattery\//i)) { processHousebatteryMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/system\//i)) { processSystemMessages(mqttmsg, mqttpayload); }
@@ -62,10 +64,73 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Status\//i)) { processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\//i)) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/SmartHome\/Devices\//i)) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
-
-
-
+	
 }  // end handlevar
+
+function processETProviderMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/global
+	// called by handlevar
+	//processPreloader(mqttmsg);
+	
+	// colors theme
+	if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
+		wbdata.updateET ('etProviderName', mqttpayload);
+	} else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
+		wbdata.updateET ('etModulePath', mqttpayload);
+	} else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		wbdata.updateET('isEtEnabled' ,(mqttpayload == '1'))
+	} else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
+		wbdata.updateET('etPriceList',mqttpayload);
+	} else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
+		wbdata.updateET ('etMaxPrice', parseFloat(mqttpayload));
+	} else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		wbdata.updateET ('etPrice', parseFloat(mqttpayload));
+	}
+
+/* 	if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
+		$('.etproviderName').text(mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
+		$('.etproviderLink').attr("href", "/openWB/modules/"+mqttpayload+"/stromtarifinfo/infopage.php");
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		// sets icon, graph and price-info-field visible/invisible
+		if ( mqttpayload == '1' ) {
+			$('#etproviderEnabledIcon').removeClass('hide');
+			$('#priceBasedCharging').removeClass('hide');
+			$('#strompreis').removeClass('hide');
+			$('#navStromtarifInfo').removeClass('hide');
+		} else {
+			$('#etproviderEnabledIcon').addClass('hide');
+			$('#priceBasedCharging').addClass('hide');
+			$('#strompreis').addClass('hide');
+			$('#navStromtarifInfo').addClass('hide');
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
+		// read etprovider values and trigger graph creation
+		// loadElectricityPriceChart will show electricityPriceChartCanvas if etprovideraktiv=1 in openwb.conf
+		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
+		var csvData = [];
+		var rawcsv = mqttpayload.split(/\r?\n|\r/);
+		// skip first entry: it is module-name responsible for list
+		for (var i = 1; i < rawcsv.length; i++) {
+			csvData.push(rawcsv[i].split(','));
+		}
+		// Timeline (x-Achse) ist UNIX Timestamp in UTC, deshalb Umrechnung (*1000) in Javascript-Timestamp (mit Millisekunden)
+		electricityPriceTimeline = getCol(csvData, 0).map(function(x) { return x * 1000; });
+		// Chartline (y-Achse) ist Preis in ct/kWh
+		electricityPriceChartline = getCol(csvData, 1);
+
+	//	loadElectricityPriceChart();
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
+		setInputValue('MaxPriceForCharging', mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' ct/kWh');
+	}
+ */}
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
 	// color theme
@@ -104,7 +169,7 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 
 	// colors theme
-	var index = getIndex(mqttmsg); // extraxt number between two / /
+	var index = getIndex(mqttmsg); // extract number between two / /
 	if (mqttmsg.match(/^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/current$/i)) {
 		var current = parseInt(mqttpayload, 10);
 		if (isNaN(current)) {
@@ -229,12 +294,12 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// set modal button colors depending on charge mode
 		// set visibility of divs
 		// set visibility of priority icon depending on charge mode
-		// (priority icon is encapsulated in another element hidden/shown by housebattery configured or not)
+		// (priority icon is encapsulated in another element hidden/shown by house battery configured or not)
 		switch (mqttpayload) {
 			case '0':
 				// mode sofort
-				$('.chargeModeSelectBtnText').text('Sofort');  // text btn mainpage
-				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
+				$('.chargeModeSelectBtnText').text('Sofort');  // text btn main page
+				$('.chargeModeBtn').removeClass('btn-success');  // changes to select buttons in modal
 				$('.chargeModeBtnSofort').addClass('btn-success');
 				$('.priorityEvBatteryIcon').addClass('hide');  // visibility of priority icon
 				$('.chargeMode').addClass('hide'); // modal chargepoint config
@@ -452,7 +517,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 
 	// color theme
 
-	var index = getIndex(mqttmsg); // extraxt number between two / /
+	var index = getIndex(mqttmsg); // extract number between two / /
 	if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/w$/i)) {
 		var actualPower = parseInt(mqttpayload, 10);
 		if (isNaN(actualPower)) {
@@ -673,7 +738,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 	}
 }
 function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
-	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSMartHomeDevices
+	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSmartHomeDevices
 	// called by handlevar
 	// color theme
 	var index = getIndex(mqttmsg);  // extract number between two / /

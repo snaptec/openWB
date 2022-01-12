@@ -44,9 +44,9 @@ class ChargePointList {
   }
 
   updateValues() { // A value has changed. Only update the values, do not redraw all
-      this.chargepoints.map((cp, i) => {
+    this.chargepoints.map((cp, i) => {
       let powerString = formatWatt(cp.power) + " " + this.phaseSymbols[cp.phasesInUse] + " " + cp.targetCurrent + " A";
-      let energyString = formatWatt(cp.energy * 1000) + " / " + Math.round(cp.energy / cp.energyPer100km * 1000) / 10 + " km"
+      let energyString = formatWattH(cp.energy * 1000) + " / " + Math.round(cp.energy / cp.energyPer100km * 1000) / 10 + " km"
       if (cp.configured) {
         d3.select(".cpname-" + i).text(cp.name) // name
         if (cp.isSocConfigured) { // soc
@@ -71,28 +71,17 @@ class ChargePointList {
         d3.select(".priority-" + i).classed("hide", !cp.isEnabled || !wbdata.isBatteryConfigured || (wbdata.chargeMode != "1" && wbdata.chargeMode != "2"))
         d3.select(".priority-" + i).classed("fa-car", wbdata.hasEVPriority); // car icon
         d3.select(".priority-" + i).classed("fa-car-battery", !wbdata.hasEVPriority); //battery icon
-        //  d3.select("input#energyLimit").property("value", cp.energyToCharge); // Set the minimal Current for PV loading
-        //  d3.select(".labelEnergyLimit").text(cp.energyToCharge + " kWh"); 
-
-        // modal charge limitation selectors
-        /* if (i == wbdata.chargePointToConfig) {
-          const noLimitButton = d3.select(".buttonNoLimit");
-          const socLimitButton = d3.select(".buttonSocLimit");
-          const energyLimitButton = d3.select(".buttonEnergyLimit");
-          const limitMode = cp.chargeLimitation;
-          console.log("charge limitation for cp " + i +  ": " + limitMode)
-          noLimitButton.classed("active", (limitMode == '0'));
-          socLimitButton.classed("active", (limitMode == '2'));
-          energyLimitButton.classed("active", (limitMode == '1'));
-          d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
-          d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
-        } */
-
       }
-      // modal update
-      // d3.select ("input#minCurrentMinPv").attr ("value", wbdata.minCurrent); // Set the minimal Current for PV loading in the range control
-      // d3.select (".labelMinPv").text(wbdata.minCurrent + " A"); // Display the minimal Current for PV loading
     })
+    d3.select(".currentPrice").classed("hide", !((wbdata.chargeMode == "0") && wbdata.isEtEnabled))
+    d3.select(".currentPrice").text("Preis: " + wbdata.etPrice + " ct/kWh");
+
+    const limitMode = wbdata.chargePoint[wbdata.chargePointToConfig].chargeLimitation;
+    d3.select(".pricechartColumn").classed ("col-12", (limitMode == 0));
+    d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 || limitMode == 1));
+    // d3.select(".pricechartColumn").classed ("col-10", (limitMode == 1));
+    d3.select(".energyResetButton").classed ("hide", (limitMode != 1));
+
   }
 
   calculateValues() {
@@ -165,6 +154,14 @@ class ChargePointList {
     } else {
       d3.select(".socConfiguredLp").classed("hide", true)
     }
+    // show/hide config sections depending on charge mode
+    d3.select(".chargeModeSofort").classed ("hide", wbdata.chargeMode != '0')
+    d3.select(".chargeModeMinPv").classed ("hide", wbdata.chargeMode != '1')
+    d3.select(".chargeModePv").classed ("hide", wbdata.chargeMode != '2')
+    d3.select(".chargeModeStop").classed ("hide", wbdata.chargeMode != '3')
+    d3.select(".chargeModeStandby").classed ("hide", wbdata.chargeMode != '4')
+
+
     // charge limit selectors
     const noLimitButton = d3.select(".buttonNoLimit");
     const socLimitButton = d3.select(".buttonSocLimit");
@@ -175,6 +172,12 @@ class ChargePointList {
     energyLimitButton.classed("active", (limitMode == '1'));
     d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
     d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
+    d3.select(".priceConfiguration").classed("hide", !((wbdata.chargeMode == "0") && wbdata.isEtEnabled));
+    d3.select(".labelMaxPrice").text(wbdata.etMaxPrice + " Cent");
+    d3.select(".maxPriceInput").property("value", wbdata.etMaxPrice);
+
+    d3.select(".pricechartColumn").classed ("col-12", (limitMode == 0));
+    d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 ||  limitMode == 1));
   }
 }
 
@@ -214,11 +217,14 @@ function configButtonClicked(index) {
 }
 
 function modeButtonClicked(index) {
+  wbdata.chargePointToConfig = index; // remember the CP we are configuring
+
   if (displaylocked == false) {
-    let div = d3.select("div#disableButton").attr("class", "col-sm-4 px-3 pb-3 pt-1 modalLabel");
-    div.selectAll("*").remove();
+    // Enable/Disable button
+    let enableDiv = d3.select("div#disableButton").attr("class", "col-sm-4 px-3 pb-3 pt-1 modalLabel");
+    enableDiv.selectAll("*").remove();
     let buttonText = (chargePointList.chargepoints[index].isEnabled ? "Deaktivieren" : "LP Aktivieren")
-    let b = div.append("button")
+    let b = enableDiv.append("button")
       .attr("type", "button")
       .text(buttonText)
       .attr("class", " chargeModeBtn chargeModeBtnDisable btn btn-lg btn-block")
@@ -229,7 +235,52 @@ function modeButtonClicked(index) {
     b.classed("btn-danger", chargePointList.chargepoints[index].isEnabled)
     b.classed("btn-info", !chargePointList.chargepoints[index].isEnabled)
 
-    $("#chargeModeModal").modal("show");
+    if (wbdata.chargePoint[index].isSocConfigured) {
+      let socSetDiv = d3.select("div#socSetButton").attr("class", "col px-3 pb-3 pt-1 modalLabel hide");
+      socSetDiv.selectAll("*").remove();
+      let socLoadDiv = d3.select("div#socLoadButton").attr("class", "col px-3 pb-3 pt-1 modalLabel hide");
+      socLoadDiv.selectAll("*").remove();
+      if (wbdata.chargePoint[index].isSocManual) {
+        // SOC set button
+        socSetDiv.classed("hide",false);
+        socSetDiv.append("button")
+          .attr("type", "button")
+          .text("SOC setzen")
+          .attr("class", " chargeModeBtn btn-info btn btn-lg btn-block")
+          .attr("data-dismiss", "modal")
+          .on("click", () => {
+            socSetButtonClicked(index);
+          })
+      } else {
+        // SOC load button
+        socLoadDiv.classed("hide",false)
+        socLoadDiv.append("button")
+          .attr("type", "button")
+          .text("SOC abfragen")
+          .attr("class", " chargeModeBtn btn-info btn btn-lg btn-block")
+          .attr("data-dismiss", "modal")
+          .on("click", () => {
+            socLoadButtonClicked(index);
+          })
+      }
+    }
+
+  $("#chargeModeModal").modal("show");
+} else {
+  $("#lockInfoModal").modal("show");
+}
+}
+
+function socSetButtonClicked(index) {
+  if (displaylocked == false) {
+    $("#socModal").modal("show");
+  } else {
+    $("#lockInfoModal").modal("show");
+  }
+}
+function socLoadButtonClicked(index) {
+  if (displaylocked == false) {
+    publish("1", "openWB/set/lp/" + (+index + 1) + "/ForceSoCUpdate");
   } else {
     $("#lockInfoModal").modal("show");
   }

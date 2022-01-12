@@ -66,7 +66,5 @@ if (( soctimer < 4 )); then
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
-	pythonOut=$(python3 "$SCRIPT_DIR/evnotify.py" "$akey" "$token" "$CHARGEPOINT" "$DEBUGLEVEL" 2>&1)
-	exitCode=$?
-	[ $exitCode -eq 0 ] || openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Calling python failed ($exitCode): $pythonOut"
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.evnotify.EVNotify" "$akey" "$token" "$CHARGEPOINT" 2>> "$RAMDISKDIR/openWB.log"
 fi

@@ -2,127 +2,78 @@
 
 from typing import List, Tuple
 
-try:
-    from ..common import connect_tcp
-    from ...helpermodules import log
-except:
-    # for 1.9 compability
-    import os
-    from pathlib import Path
-    import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import log
-    from modules.common import connect_tcp
+from modules.common import modbus
+from modules.common.fault_state import FaultState
+from modules.common.modbus import ModbusDataType
 
 
 class Lovato:
-    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         self.client = client
-        self.name = device_config["components"]["component0"]["name"]
-        self.id = device_config["components"]["component0"]["configuration"]["id"]
+        self.id = modbus_id
 
-    def get_voltage(self) -> List[int]:
-        """
-        """
+    def __process_error(self, e):
+        if isinstance(e, FaultState):
+            raise
+        else:
+            raise FaultState.error(__name__+" "+str(type(e))+" "+str(e)) from e
+
+    def get_voltages(self) -> List[float]:
         try:
-            voltage = []
-            regs = [0x0001, 0x0003, 0x0005]
-            for register in regs:
-                value = float(self.client.read_registers(register, 2, self.id) / 100)
-                voltage.append(value)
-            return voltage
+            return [val / 100 for val in self.client.read_input_registers(
+                0x0001, [ModbusDataType.INT_32]*3, unit=self.id)]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_imported(self) -> float:
-        """
-        """
         try:
-            imported = self.client.read_float_registers(0x0048, 2, self.id) * 1000
-            return imported
+            return self.client.read_input_registers(0x0048, ModbusDataType.FLOAT_32, unit=self.id) * 1000
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = []
-            regs = [0x0013, 0x0015, 0x0017]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id) / 100
-                power_per_phase.append(value)
-
-            if self.type == "Bat-Kit":
-                power_all = self.client.read_float_registers(0x000C, 2, self.id)
-            else:
-                power_all = sum(power_per_phase)
-
-            return power_per_phase, power_all
+            powers = [val / 100 for val in self.client.read_input_registers(
+                0x0013, [ModbusDataType.INT_32]*3, unit=self.id
+            )]
+            power = sum(powers)
+            return powers, power
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None], None
+            self.__process_error(e)
 
     def get_exported(self) -> float:
-        """
-        """
         try:
-            exported = self.client.read_float_registers(0x004a, 2, self.id) * 1000
-            return exported
+            return self.client.read_input_registers(0x004a, ModbusDataType.FLOAT_32, unit=self.id) * 1000
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
-        """
-        """
+    def get_power_factors(self) -> List[float]:
         try:
-            power_factor = []
-            regs = [0x0025, 0x0027, 0x0029]
-            for register in regs:
-                value = float(self.client.read_registers(register, 2, self.id)) / 10000
-                power_factor.append(value)
-            return power_factor
+            return [val / 10000 for val in self.client.read_input_registers(
+                0x0025, [ModbusDataType.INT_32]*3, unit=self.id)]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
-            frequency = float(self.client.read_registers(0x0031, 2, self.id)) / 100
+            frequency = self.client.read_input_registers(0x0031, ModbusDataType.INT_32, unit=self.id) / 100
             if frequency > 100:
                 frequency = frequency / 10
             return frequency
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_error(e)
 
-    def get_current(self) -> List[int]:
-        """
-        """
+    def get_currents(self) -> List[float]:
         try:
-            current = []
-            regs = [0x0007, 0x0009, 0x000b]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id) / 10000
-                current.append(value)
-            return current
+            return [val / 10000 for val in self.client.read_input_registers(
+                0x0007, [ModbusDataType.INT_32]*3, unit=self.id)]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_counter(self) -> float:
         try:
-            finalbezug1 = self.client.read_integer_registers(0x1a1f, 2, self.id)
-            finalbezug2 = self.client.read_input_registers(0x1a21, 2, self.id)
-            if (finalbezug1 > finalbezug2):
-                counter = finalbezug1
-            else:
-                counter = finalbezug2
-            return counter
+            final_bezug_1 = self.client.read_input_registers(0x1a1f, ModbusDataType.INT_32, unit=self.id)
+            final_bezug_2 = self.client.read_input_registers(0x1a21, ModbusDataType.INT_32, unit=self.id)
+            return max(final_bezug_1, final_bezug_2)
         except Exception as e:
-            log.log_exception_comp(e, self.ramdisk, self.type+str(self.pv_num))
-            return None
+            self.__process_error(e)

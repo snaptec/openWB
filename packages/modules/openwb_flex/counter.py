@@ -1,107 +1,83 @@
 #!/usr/bin/env python3
-import sys
+
+from helpermodules import log
+from modules.common import modbus
+from modules.common import simcount
+from modules.common.component_state import CounterState
+from modules.common.fault_state import ComponentInfo
+from modules.common.store import get_counter_value_store
+from modules.openwb_flex.versions import kit_counter_inverter_version_factory
 
 
-try:
-    from ...helpermodules import log
-    from ...helpermodules import simcount
-    from ..common import lovato
-    from ..common import mpm3pm
-    from ..common import sdm630
-    from ..common import store
-except:
-    from pathlib import Path
-    import os
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import log
-    from helpermodules import simcount
-    from modules.common import store
-
-    from modules.common import lovato
-    from modules.common import mpm3pm
-    from modules.common import sdm630
-
-
-def get_default(type: str) -> dict:
-    if type == "counter":
-        component_default = {
-            "name": "EVU-Kit flex",
-            "type": "counter",
-            "id": None,
-            "configuration":
-            {
-                "version": 2,
-                "id": 115
-            }
+def get_default_config() -> dict:
+    return {
+        "name": "EVU-Kit flex",
+        "type": "counter",
+        "id": None,
+        "configuration": {
+            "version": 2,
+            "id": 115
         }
-    return component_default
+    }
 
 
-class EvuKitFlex():
-    def __init__(self, device_id: int, component_config: dict, tcp_client) -> None:
+class EvuKitFlex:
+    def __init__(self, device_id: int, component_config: dict,
+                 tcp_client: modbus.ModbusClient) -> None:
+        self.__device_id = device_id
+        self.component_config = component_config
+        factory = kit_counter_inverter_version_factory(
+            component_config["configuration"]["version"])
+        self.__client = factory(component_config["configuration"]["id"],
+                                tcp_client)
+        self.__tcp_client = tcp_client
+        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
+        self.simulation = {}
+        self.__store = get_counter_value_store(component_config["id"])
+        self.component_info = ComponentInfo.from_component_config(component_config)
+
+    def update(self):
+        log.MainLogger().debug("Start kit reading")
+        # TCP-Verbindung schließen möglichst bevor etwas anderes gemacht wird, um im Fehlerfall zu verhindern,
+        # dass offene Verbindungen den Modbus-Adapter blockieren.
         try:
-            self.data = {}
-            self.data["config"] = component_config
-            self.device_id = device_id
-            version = self.data["config"]["configuration"]["version"]
-            self.data["simulation"] = {}
-            factory = self.__counter_factory(version)
-            self.tcp_client = tcp_client
-            self.counter = factory(self.data["config"], self.tcp_client)
-            self.value_store = (store.ValueStoreFactory().get_storage("counter"))()
-            simcount_factory = simcount.SimCountFactory().get_sim_counter()
-            self.sim_count = simcount_factory()
-        except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+            voltages = self.__client.get_voltages()
+            powers, power = self.__client.get_power()
+            frequency = self.__client.get_frequency()
+            power_factors = self.__client.get_power_factors()
 
-    def __counter_factory(self, version: int):
-        try:
+            version = self.component_config["configuration"]["version"]
             if version == 0:
-                return mpm3pm.Mpm3pm
-            elif version == 1:
-                return lovato.Lovato
-            elif version == 2:
-                return sdm630.Sdm630
-        except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
-
-    def read(self):
-        """ liest die Werte des Moduls aus.
-        """
-        try:
-            log.MainLogger().debug("Start kit reading")
-            voltages = self.counter.get_voltage()
-            power_per_phase, power_all = self.counter.get_power()
-            frequency = self.counter.get_frequency()
-            power_factors = self.counter.get_power_factor()
-
-            if self.data["config"]["configuration"]["version"] == 0:
-                try:
-                    if None not in power_per_phase and None not in voltages:
-                        currents = [(power_per_phase[i]/voltages[i]) for i in range(3)]
-                    else:
-                        currents = [0, 0, 0]
-                except:
-                    log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
-                    currents = [0, 0, 0]
-                imported = self.counter.get_imported()
-                exported = self.counter.get_exported()
+                imported = self.__client.get_imported()
+                exported = self.__client.get_exported()
             else:
-                currents = self.counter.get_current()
-                if None not in currents:
-                    currents = [abs(currents[i]) for i in range(3)]
-                else:
-                    currents = [0, 0, 0]
-                topic_str = "openWB/set/system/device/" + str(self.device_id)+"/component/"+str(self.data["config"]["id"])+"/"
-                if power_all != None:
-                    imported, exported = self.sim_count.sim_count(power_all, topic=topic_str, data=self.data["simulation"], prefix="bezug")
-                else:
-                    imported, exported = None, None
-            log.MainLogger().debug("EVU-Kit Leistung[W]: "+str(power_all))
-            self.tcp_client.close_connection()
-            self.value_store.set(self.data["config"]["id"], voltages=voltages, currents=currents, powers=power_per_phase,
-                                 power_factors=power_factors, imported=imported, exported=exported, power_all=power_all, frequency=frequency)
-            log.MainLogger().debug("Stop kit reading "+str(power_all))
-        except:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+                currents = list(map(abs, self.__client.get_currents()))
+        finally:
+            self.__tcp_client.close_connection()
+        version = self.component_config["configuration"]["version"]
+        if version == 0:
+            currents = [powers[i] / voltages[i] for i in range(3)]
+        else:
+            if version == 1:
+                power = sum(powers)
+            topic_str = "openWB/set/system/device/{}/component/{}/".format(
+                self.__device_id, self.component_config["id"]
+            )
+            imported, exported = self.__sim_count.sim_count(
+                power,
+                topic=topic_str,
+                data=self.simulation,
+                prefix="bezug"
+            )
+        counter_state = CounterState(
+            voltages=voltages,
+            currents=currents,
+            powers=powers,
+            power_factors=power_factors,
+            imported=imported,
+            exported=exported,
+            power=power,
+            frequency=frequency
+        )
+        log.MainLogger().debug("EVU-Kit Leistung[W]: " + str(counter_state.power))
+        self.__store.set(counter_state)

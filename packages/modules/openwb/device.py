@@ -1,79 +1,86 @@
-from typing import List
+from typing import Dict, Union, Optional
 
-try:
-    from ..common import connect_tcp
-    from ...helpermodules import log
-    from . import counter
-except:
-    from pathlib import Path
-    import os
-    import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import log
-    from modules.common import connect_tcp
-    import counter
+from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_context import SingleComponentUpdateContext
+from modules.openwb import bat
+from modules.openwb import counter
+from modules.openwb import inverter
 
-def get_default() -> dict:
+
+def get_default_config() -> dict:
     return {
-        "name": "OpenWB-Kit", 
-        "type": "openwb", 
-        "id": None
-        }
+        "name": "OpenWB-Kit",
+        "type": "openwb",
+        "id": 0
+    }
 
-class Device():
+
+class Device(AbstractDevice):
+    COMPONENT_TYPE_TO_CLASS = {
+        "bat": bat.BatKit,
+        "counter": counter.EvuKit,
+        "inverter": inverter.PvKit
+    }
+
     def __init__(self, device_config: dict) -> None:
-        try:
-            self.data = {}
-            self.data["config"] = device_config
-            self.data["components"] = {}
-            #ip_address = "192.168.193.15"
-            ip_address = "192.168.1.101"
-            port = "8899"
-            self.client = connect_tcp.ConnectTcp(self.data["config"]["name"], self.data["config"]["id"], ip_address, port)
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+        self.device_config = device_config
+        self._components = {}  # type: Dict[str, Union[counter.EvuKit, inverter.PvKit]]
 
     def add_component(self, component_config: dict) -> None:
-        try:
-            if component_config["type"] == "counter":
-                self.data["components"]["component"+str(component_config["id"])] = counter.EvuKit(self.data["config"]["id"], component_config, self.client)
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+        component_type = component_config["type"]
+        if component_type in self.COMPONENT_TYPE_TO_CLASS:
+            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"], component_config))
+        else:
+            raise Exception(
+                "illegal component type " + component_type + ". Allowed values: " +
+                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
+            )
 
-    def read(self):
-        try:
-            if len(self.data["components"]) > 0:
-                for component in self.data["components"]:
-                    self.data["components"][component].read()
-            else:
-                log.MainLogger().warning(self.data["config"]["name"]+": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden.")
-        except Exception as e:
-            log.MainLogger().exception("Fehler im Modul "+self.data["config"]["name"])
+    def update(self) -> None:
+        log.MainLogger().debug("Start device reading " + str(self._components))
+        if self._components:
+            for component in self._components:
+                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
+                with SingleComponentUpdateContext(self._components[component].component_info):
+                    self._components[component].update()
+        else:
+            log.MainLogger().warning(
+                self.device_config["name"] +
+                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
+            )
 
 
-def read_legacy(argv: List):
+def read_legacy(component_type: str, version: int, num: Optional[int]):
     """ Ausführung des Moduls als Python-Skript
     """
-    try:
-        component_type = str(sys.argv[1])
-        version = int(sys.argv[2])
+    COMPONENT_TYPE_TO_MODULE = {
+        "bat": bat,
+        "counter": counter,
+        "inverter": inverter
+    }
+    device_config = get_default_config()
+    dev = Device(device_config)
 
-        default = get_default()
-        default["id"] = 0
-        dev = Device(default)
+    if component_type in COMPONENT_TYPE_TO_MODULE:
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+    else:
+        raise Exception("illegal component type " + component_type +
+                        ". Allowed values: " +
+                        ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
+    component_config["id"] = num
+    component_config["configuration"]["version"] = version
+    dev.add_component(component_config)
 
-        component_default = counter.get_default()
-        component_default["id"] = 0
-        component_default["configuration"]["version"] = version
-        dev.add_component(component_default)
+    log.MainLogger().debug('openWB Version: ' + str(version))
 
-        log.MainLogger().debug('openWB Version: ' + str(version))
-
-        dev.read()
-    except Exception as e:
-        log.MainLogger().exception("Fehler im Modul openwb")
+    dev.update()
 
 
 if __name__ == "__main__":
-    read_legacy(sys.argv)
+    try:
+        run_using_positional_cli_args(read_legacy)
+    except Exception:
+        log.MainLogger().exception("Fehler im Modul openwb")

@@ -84,6 +84,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 										<option <?php if($wattbezugmodulold == "bezug_powerfox") echo "selected" ?> value="bezug_powerfox">Powerfox</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
+										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
@@ -119,7 +120,7 @@
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
-							<div class="card-text alert alert-info">
+							<div class="form-row mb-1">
 								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
 								<div class="col">
 									<select name="sungrowsr" id="sungrowsr" class="form-control">
@@ -129,7 +130,6 @@
 								</div>
 							</div>
 						</div>
-
 						<div id="wattbezugsonneneco" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
@@ -707,19 +707,6 @@
 								</div>
 								<hr>
 								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für die Primo Reihe</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniusprimoold == 0) echo " active" ?>">
-												<input type="radio" name="froniusprimo" id="froniusprimoOff" value="0"<?php if($froniusprimoold == 0) echo " checked=\"checked\"" ?>>Aus
-											</label>
-											<label class="btn btn-outline-info<?php if($froniusprimoold == 1) echo " active" ?>">
-												<input type="radio" name="froniusprimo" id="froniusprimoOn" value="1"<?php if($froniusprimoold == 1) echo " checked=\"checked\"" ?>>An
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
@@ -974,6 +961,10 @@
 								}
 
 								if($('#wattbezugmodul').val() == 'bezug_rct') {
+									showSection('#wattbezugrct');
+									showSection('#wattbezugip');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_rct2') {
 									showSection('#wattbezugrct');
 									showSection('#wattbezugip');
 								}
