@@ -18,7 +18,7 @@ fi
 openwbDebugLog ${DMOD} 2 "PV2 IP: ${pv2ip}"
 
 
-python3 ${OPENWBBASEDIR}/packages/modules/solax/device.py "inverter" "${pv2ip}" "2">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "inverter" "${pv2ip}" "2">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt

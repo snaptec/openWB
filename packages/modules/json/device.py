@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import sys
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 from helpermodules import log
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext
@@ -65,54 +65,37 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(argv: List[str]) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
-    component_type = argv[1]
+def read_legacy(ip_address: str, component_config: dict, num: Optional[int] = None, **kwargs) -> None:
+    component_config["configuration"].update(kwargs)
+    component_config["id"] = num
 
     device_config = get_default_config()
-    device_config["configuration"]["ip_address"] = argv[2]
+    device_config["configuration"]["ip_address"] = ip_address
+
     dev = Device(device_config)
-    if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-    else:
-        raise Exception(
-            "illegal component type " + component_type + ". Allowed values: " +
-            ','.join(COMPONENT_TYPE_TO_MODULE.keys())
-        )
-    if component_type == "bat":
-        component_config["configuration"] = {
-            "jq_power": argv[3],
-            "jq_soc": argv[4]
-        }
-        num = None
-    elif component_type == "counter":
-        component_config["configuration"] = {
-            "jq_power": argv[3],
-            "jq_imported": argv[4],
-            "jq_exported": argv[5]
-        }
-        num = None
-    else:
-        component_config["configuration"] = {
-            "jq_power": argv[3],
-            "jq_counter": argv[4]
-        }
-        num = int(argv[5])
-
-    component_config["id"] = num
     dev.add_component(component_config)
-
-    log.MainLogger().debug('Json Konfiguration: ' + str(component_config["configuration"]))
-
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        read_legacy(sys.argv)
-    except Exception:
-        log.MainLogger().exception("Fehler im Json Skript")
+def read_legacy_bat(ip_address: str, jq_power: str, jq_soc: str):
+    read_legacy(ip_address, bat.get_default_config(), jq_power=jq_power, jq_soc=jq_soc)
+
+
+def read_legacy_counter(ip_address: str, jq_power: str, jq_imported: str, jq_exported: str):
+    read_legacy(
+        ip_address,
+        counter.get_default_config(),
+        jq_power=jq_power,
+        jq_imported=jq_imported,
+        jq_exported=jq_exported
+    )
+
+
+def read_legacy_inverter(ip_address: str, jq_power: str, jq_counter: str, num: int):
+    read_legacy(ip_address, inverter.get_default_config(), num, jq_power=jq_power, jq_counter=jq_counter)
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(
+        {"bat": read_legacy_bat, "counter": read_legacy_counter, "inverter": read_legacy_inverter}, argv
+    )

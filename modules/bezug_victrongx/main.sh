@@ -15,7 +15,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/victron/device.py "counter" "${bezug_victronip}" "${bezug_id}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "counter" "${bezug_victronip}" "${bezug_id}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
