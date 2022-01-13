@@ -92,6 +92,7 @@
 										<option <?php if($pvwattmodulold == "wr_solarwatt") echo "selected" ?> value="wr_solarwatt">Solarwatt / My Reserver Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_solarworld") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 										<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
+										<option <?php if($pvwattmodulold == "wr_sonneneco") echo "selected" ?> value="wr_sonneneco">Sonnen Eco</option>
 										<option <?php if($pvwattmodulold == "wr_studer") echo "selected" ?> value="wr_studer">Studer-Innotec System</option>
 										<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
 										<option <?php if($pvwattmodulold == "wr_sunways") echo "selected" ?> value="wr_sunways">Sunways</option>
@@ -118,6 +119,11 @@
 								Per MQTT zu schreiben:<br>
 								<span class="text-info">openWB/set/pv/1/W</span> PV-Leistung in Watt, int, negativ<br>
 								<span class="text-info">openWB/set/pv/1/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
+						<div id="pvsonneneco" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="pvalphaess" class="hide">
@@ -888,6 +894,7 @@
 								hideSection('#pvwrstuder');
 								hideSection('#pvsungrow');
 								hideSection('#pvalphaess');
+								hideSection('#pvsonneneco');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -947,65 +954,68 @@
 								if($('#pvwattmodul').val() == 'vzloggerpv') {
 									showSection('#pvvzl');
 								}
-								if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
+								if($('#pvwattmodul').val() == 'sdm630modbuswr') {
 									showSection('#pvsdmwr');
 								}
-								if($('#pvwattmodul').val() == 'wr_fronius')   {
+								if($('#pvwattmodul').val() == 'wr_fronius') {
 									showSection('#pvwrfronius');
 								}
-								if($('#pvwattmodul').val() == 'wr_http')   {
+								if($('#pvwattmodul').val() == 'wr_http') {
 									showSection('#pvhttp');
 								}
-								if($('#pvwattmodul').val() == 'smaemd_pv')   {
+								if($('#pvwattmodul').val() == 'smaemd_pv') {
 									showSection('#pvsma');
 								}
-								if($('#pvwattmodul').val() == 'wr_json')   {
+								if($('#pvwattmodul').val() == 'wr_json') {
 									showSection('#pvwrjson');
 								}
-								if($('#pvwattmodul').val() == 'mpm3pmpv')   {
+								if($('#pvwattmodul').val() == 'mpm3pmpv') {
 									showSection('#pvmpm3pm');
 								}
-								if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
+								if($('#pvwattmodul').val() == 'wr_kostalpiko') {
 									showSection('#pvwrkostalpiko');
 								}
-								if($('#pvwattmodul').val() == 'wr_solaredge')   {
+								if($('#pvwattmodul').val() == 'wr_solaredge') {
 									showSection('#pvwrsolaredge');
 								}
-								if($('#pvwattmodul').val() == 'wr_studer')   {
+								if($('#pvwattmodul').val() == 'wr_studer') {
 									showSection('#pvwrstuder');
 								}
-								if($('#pvwattmodul').val() == 'wr_solax')   {
+								if($('#pvwattmodul').val() == 'wr_solax') {
 									showSection('#pvwrsolax');
 								}
-								if($('#pvwattmodul').val() == 'wr_smartme')   {
+								if($('#pvwattmodul').val() == 'wr_smartme') {
 									showSection('#pvsmartme');
 								}
-								if($('#pvwattmodul').val() == 'wr_tripower9000')   {
+								if($('#pvwattmodul').val() == 'wr_tripower9000') {
 									showSection('#pvwrtri9000');
 								}
-								if($('#pvwattmodul').val() == 'wr_plenticore')   {
+								if($('#pvwattmodul').val() == 'wr_plenticore') {
 									showSection('#pvplenti');
 								}
-								if($('#pvwattmodul').val() == 'wr_solarlog')   {
+								if($('#pvwattmodul').val() == 'wr_solarlog') {
 									showSection('#pvsolarlog');
 								}
-								if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
+								if($('#pvwattmodul').val() == 'wr_kostalpikovar2') {
 									showSection('#pvpiko2');
 								}
-								if($('#pvwattmodul').val() == 'wr_powerwall')   {
+								if($('#pvwattmodul').val() == 'wr_powerwall') {
 									showSection('#pvpowerwall');
 								}
-								if($('#pvwattmodul').val() == 'wr_lgessv1')   {
+								if($('#pvwattmodul').val() == 'wr_lgessv1') {
 									showSection('#pvlgessv1');
 								}
-								if($('#pvwattmodul').val() == 'wr_solarwatt')   {
+								if($('#pvwattmodul').val() == 'wr_solarwatt') {
 									showSection('#pvsolarwatt');
 								}
-								if($('#pvwattmodul').val() == 'wr_alphaess')   {
+								if($('#pvwattmodul').val() == 'wr_alphaess') {
 									showSection('#pvalphaess');
 								}
-								if($('#pvwattmodul').val() == 'wr_sungrow')   {
+								if($('#pvwattmodul').val() == 'wr_sungrow') {
 									showSection('#pvsungrow');
+								}
+								if($('#pvwattmodul').val() == 'wr_sonneneco') {
+									showSection('#sonneneco');
 								}
 							}
 
