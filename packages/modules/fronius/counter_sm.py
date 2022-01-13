@@ -36,7 +36,7 @@ class FroniusSmCounter:
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self, bat: bool) -> Tuple[CounterState, MeterLocation]:
+    def update(self) -> Tuple[CounterState, MeterLocation]:
         variant = self.component_config["configuration"]["variant"]
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
@@ -112,8 +112,16 @@ class FroniusSmCounter:
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
         power_factors = [response_json_id["PowerFactor_Phase_"+str(num)] for num in range(1, 4)]
         frequency = response_json_id["Frequency_Phase_Average"]
-        imported = response_json_id["EnergyReal_WAC_Sum_Consumed"]
-        exported = response_json_id["EnergyReal_WAC_Sum_Produced"]
+
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(
+            self.__device_id, self.component_config["id"]
+        )
+        imported, exported = self.__sim_count.sim_count(
+            power,
+            topic=topic_str,
+            data=self.simulation,
+            prefix="bezug"
+        )
 
         return CounterState(
             voltages=voltages,
@@ -141,8 +149,16 @@ class FroniusSmCounter:
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
         power_factors = [response_json_id["SMARTMETER_FACTOR_POWER_0"+str(num)+"_F64"] for num in range(1, 4)]
         frequency = response_json_id["GRID_FREQUENCY_MEAN_F32"]
-        imported = response_json_id["SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64"]
-        exported = response_json_id["SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64"]
+
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(
+            self.__device_id, self.component_config["id"]
+        )
+        imported, exported = self.__sim_count.sim_count(
+            power,
+            topic=topic_str,
+            data=self.simulation,
+            prefix="bezug"
+        )
 
         return CounterState(
             voltages=voltages,

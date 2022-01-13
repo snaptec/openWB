@@ -25,7 +25,7 @@ class FroniusS0Counter:
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self, bat: bool) -> CounterState:
+    def update(self) -> CounterState:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         session = req.get_http_session()
@@ -35,29 +35,15 @@ class FroniusS0Counter:
         # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
         power = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
 
-        # Summe der vom Netz bezogene Energie total in Wh
-        # nur für Smartmeter  im Einspeisepunkt!
-        # bei Smartmeter im Verbrauchszweig  entspricht das dem Gesamtverbrauch
-        response = session.get(
-            'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
-            params=(('Scope', 'System'),),
-            timeout=5)
-        meter_id = str(self.device_config["meter_id"])
-        response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
-        if "EnergyReal_WAC_Minus_Absolute" in response_json_id and \
-           "EnergyReal_WAC_Plus_Absolute" in response_json_id:
-            imported = float(response_json_id["EnergyReal_WAC_Minus_Absolute"])
-            exported = float(response_json_id["EnergyReal_WAC_Plus_Absolute"])
-        else:
-            topic_str = "openWB/set/system/device/{}/component/{}/".format(
-                self.__device_id, self.component_config["id"]
-            )
-            imported, exported = self.__sim_count.sim_count(
-                power,
-                topic=topic_str,
-                data=self.simulation,
-                prefix="bezug"
-            )
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(
+            self.__device_id, self.component_config["id"]
+        )
+        imported, exported = self.__sim_count.sim_count(
+            power,
+            topic=topic_str,
+            data=self.simulation,
+            prefix="bezug"
+        )
 
         counter_state = CounterState(
             imported=imported,
