@@ -49,25 +49,6 @@ class FroniusSmCounter:
         else:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
-        if meter_location == MeterLocation.load:
-            response = session.get(
-                'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
-                params=(('Scope', 'System'),),
-                timeout=5)
-            counter_state.power = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
-            topic_str = "openWB/set/system/device/{}/component/{}/".format(
-                self.__device_id, self.component_config["id"]
-            )
-            # Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus
-            # dem Wechselrichter kam.
-            # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
-            counter_state.imported, counter_state.exported = self.__sim_count.sim_count(
-                counter_state.power,
-                topic=topic_str,
-                data=self.simulation,
-                prefix="bezug"
-            )
-
         return counter_state, meter_location
 
     def set_counter_state(self, counter_state: CounterState) -> None:
@@ -106,7 +87,10 @@ class FroniusSmCounter:
         meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
-        power = response_json_id["PowerReal_P_Sum"]
+        if meter_location == MeterLocation.grid:
+            power = response_json_id["PowerReal_P_Sum"]
+        else:
+            power = self.__get_flow_power(session)
         voltages = [response_json_id["Voltage_AC_Phase_"+str(num)] for num in range(1, 4)]
         powers = [response_json_id["PowerReal_P_Phase_"+str(num)] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
@@ -143,7 +127,10 @@ class FroniusSmCounter:
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
         meter_location = self.component_config["configuration"]["meter_location"]
 
-        power = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
+        if meter_location == MeterLocation.grid:
+            power = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
+        else:
+            power = self.__get_flow_power(session)
         voltages = [response_json_id["SMARTMETER_VOLTAGE_0"+str(num)+"_F64"] for num in range(1, 4)]
         powers = [response_json_id["SMARTMETER_POWERACTIVE_MEAN_0"+str(num)+"_F64"] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
@@ -170,3 +157,13 @@ class FroniusSmCounter:
             frequency=frequency,
             power_factors=power_factors
         ), meter_location
+
+    def __get_flow_power(self, session: Session) -> float:
+        # Beim Energiebezug ist nicht klar, welcher Anteil aus dem Netz bezogen wurde, und was aus
+        # dem Wechselrichter kam.
+        # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
+        response = session.get(
+            'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+            params=(('Scope', 'System'),),
+            timeout=5)
+        return float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
