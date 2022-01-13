@@ -74,7 +74,7 @@ def update_variant_1(address: str):
     grid_frequency = battery_state["Fac"]
     log.debug('EVU Netzfrequenz: ' + str(grid_frequency))
     get_counter_value_store(1).set(CounterState(
-        power_all = grid_power,
+        power = grid_power,
         voltages = [grid_voltage]*3,
         frequency = grid_frequency
     ))
@@ -93,7 +93,7 @@ def update_variant_2(address: str):
     grid_export_power = int(read_variant_2_element(address, "M38"))
     grid_power = grid_import_power - grid_export_power
     get_counter_value_store(1).set(CounterState(
-        power_all = grid_power
+        power = grid_power
     ))
 
 
