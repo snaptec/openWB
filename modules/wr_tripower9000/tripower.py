@@ -15,11 +15,8 @@ log = logging.getLogger("SMA ModbusTCP WR")
 
 
 def update_sma_webbox(address: str):
-    # response = requests.post('http://' + address + '/rpc', json=data, timeout=3)
-    # does not give the same result
-    headers = {'Content-Type': 'application/json', }
     data = {'RPC': '{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}'}
-    response = requests.post('http://' + address + '/rpc', headers=headers, data=data, timeout=3)
+    response = requests.post('http://' + address + '/rpc', data=data, timeout=3)
     response.raise_for_status()
     response_data = response.json()
     get_inverter_value_store(1).set(InverterState(
