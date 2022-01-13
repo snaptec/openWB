@@ -1015,7 +1015,7 @@
 									showSection('#pvsungrow');
 								}
 								if($('#pvwattmodul').val() == 'wr_sonneneco') {
-									showSection('#sonneneco');
+									showSection('#pvsonneneco');
 								}
 							}
 

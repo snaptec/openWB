@@ -70,7 +70,9 @@ def update_variant_1(address: str):
 
     pv_power = -battery_state["Production_W"]
     log.debug('Speicher PV Leistung: ' + str(pv_power))
+    # ToDo: Simcount
     get_inverter_value_store(1).set(InverterState(
+        counter = 0,
         power = pv_power
     ))
 
@@ -85,19 +87,21 @@ def read_variant_2_element(address: str, element: str):
 def update_variant_2(address: str):
     # Auslesen einer Sonnenbatterie Eco 6 über die integrierte REST-API des Batteriesystems
     pv_power = -int(read_variant_2_element(address, "M03"))
-    log.debug('Speicher PV Leistung (wird nicht verwendet): ' + str(pv_power))
+    log.debug('Speicher PV Leistung: ' + str(pv_power))
+    # ToDo: Simcount
     get_inverter_value_store(1).set(InverterState(
+        counter = 0,
         power = pv_power
     ))
 
 
 def update(address: str, variant: str):
     log.debug("Beginning update")
-    if variant == 0:
+    if variant == "0":
         update_variant_0(address)
-    elif variant == 1:
+    elif variant == "1":
         update_variant_1(address)
-    elif variant == 2:
+    elif variant == "2":
         update_variant_2(address)
     else:
         raise FaultState.error("Unbekannte Variante: " + variant)

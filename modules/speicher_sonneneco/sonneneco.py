@@ -113,11 +113,11 @@ def update_variant_2(address: str):
 
 def update(address: str, variant: str):
     log.debug("Beginning update")
-    if variant == 0:
+    if variant == "0":
         update_variant_0(address)
-    elif variant == 1:
+    elif variant == "1":
         update_variant_1(address)
-    elif variant == 2:
+    elif variant == "2":
         update_variant_2(address)
     else:
         raise FaultState.error("Unbekannte Variante: " + variant)
