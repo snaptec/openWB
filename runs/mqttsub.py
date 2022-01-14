@@ -692,6 +692,11 @@ def on_message(client, userdata, msg):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherwattnurpv=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/pv/batteryDischargePowerAtBattPriority", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (msg.topic == "openWB/config/set/pv/batteryDischargePowerAtBattPriorityHybrid"):
+                if (int(msg.payload) >= 0 and int(msg.payload) <= 100000):
+                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherwattnurpvhybrid=", msg.payload.decode("utf-8")]
+                    subprocess.run(sendcommand)
+                    client.publish("openWB/config/get/pv/batteryDischargePowerAtBattPriorityHybrid", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/pv/socStartChargeAtMinPv"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 101):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speichersocminpv=", msg.payload.decode("utf-8")]

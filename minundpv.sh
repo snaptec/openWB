@@ -68,11 +68,8 @@ minundpvlademodus(){
 			fi
 		fi
 	fi
-	if [[ $speichervorhanden == "1" ]]; then 
-		if (( speicherleistung < 0 )); then 
-			uberschuss=$((uberschuss + speicherleistung)) 
-		fi 
-	else
+
+	if [[ $speichervorhanden == "0" ]]; then 
 		speichersoc=0
 		speichersochystminpv=0
 		speichersocminpv=0
@@ -104,15 +101,10 @@ minundpvlademodus(){
 					llneu=$llalt
 				fi
 				if (( uberschuss > schaltschwelle )); then
-					if [[ $pvbezugeinspeisung == "0" ]]; then
-						llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
-
+					if (( llalt == minimalampv )); then
+						llneu=$(( llalt + 1 ))
 					else
-						if (( llalt == minimalampv )); then
-							llneu=$(( llalt + 1 ))
-						else
-							llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
-						fi
+						llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
 					fi
 					if (( llneu > maximalstromstaerke )); then
 						llneu=$maximalstromstaerke

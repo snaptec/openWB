@@ -221,37 +221,19 @@ nurpvlademodus(){
 			fi
 		fi
 	else
-		if [[ $speichervorhanden == "1" ]]; then
-			if (( speicherleistung < 10 )); then
-				if (( speichersoc > speichersocnurpv )); then
-					uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
-					openwbDebugLog "PV" 0 "SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss"
-				else
-					uberschuss=$((uberschuss + speicherleistung))
-					openwbDebugLog "PV" 0 "SpeicherSoc ($speichersoc) unter konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss"
-				fi
-			fi
-		fi
+
 		if (( uberschuss > schaltschwelle )); then
 			if (( llalt == maximalstromstaerke )); then
 				openwbDebugLog "MAIN" 1 "llalt == maximalstromstaerke"
 				#exit 0
 			fi
-			if [[ $pvbezugeinspeisung == "0" ]]; then
+			if (( llalt == minimalapv )); then
+				llneu=$(( llalt + 1 ))
+			else
 				if (( nurpvslowup == 1 )); then
 					llneu=$(( llalt + 1 ))
 				else
-					llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
-				fi
-			else
-				if (( llalt == minimalapv )); then
-					llneu=$(( llalt + 1 ))
-				else
-					if (( nurpvslowup == 1 )); then
-						llneu=$(( llalt + 1 ))
-					else
-						llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
-					fi
+					llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
 				fi
 			fi
 			if (( llneu > maximalstromstaerke )); then
@@ -365,7 +347,32 @@ nurpvlademodus(){
 				fi
 				openwbDebugLog "MAIN" 1 "Abschaltschwelle: $((-abschaltuberschuss)), Überschuss derzeit: $uberschuss"
 
+				pvLadungAusschalten=0
+
 				if (( uberschuss < -abschaltuberschuss )); then
+
+					if (( speichersoc > speichersocnurpv )); then
+						if ((minSpeicherLeistung < - speicherwattnurpv )); then
+							if ((speicherleistung < -speicherwattnurpv)); then
+				                openwbDebugLog "PV" 0 "Speicherentladung ($speicherleistung) höher als erlaubt ($speicherwattnurpv)"
+								pvLadungAusschalten=1
+							else
+								openwbDebugLog "PV" 0 "Speicher SOC ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), erlaubte Speicherentladung: $speicherwattnurpv"
+							fi
+						else
+							if ((speicherleistung < minSpeicherLeistung)); then
+                				openwbDebugLog "PV" 0 "Speicherentladung ($speicherleistung) höher als möglich ($minSpeicherLeistung) (Hybrid)"
+								pvLadungAusschalten=1
+							else
+								openwbDebugLog "PV" 0 "Speicher SOC ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), mögliche Speicherentladung: $((0-minSpeicherLeistung)) (Hybrid)"
+							fi
+						fi
+					else
+						pvLadungAusschalten=1
+					fi
+				fi
+
+				if (( pvLadungAusschalten > 0 )); then
 					pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 					if (( pvcounter < abschaltverzoegerung )); then
 						pvcounter=$((pvcounter + 10))
