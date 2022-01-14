@@ -1,7 +1,6 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname $0)/../../" && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd "$(dirname $0)" && pwd)
 #DMOD="EVU"
 DMOD="MAIN"
 
@@ -11,7 +10,10 @@ else
     MYLOGFILE="$RAMDISKDIR/bezug_sonneneco.log"
 fi
 
-python3 "${MODULEDIR}/sonneneco.py" "${sonnenecoip}" "${sonnenecoalternativ}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sonnenbatterie.device" "counter" "${sonnenecoip}" "${sonnenecoalternativ}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
 wattbezug=$(<${RAMDISKDIR}/wattbezug)
 echo $wattbezug
