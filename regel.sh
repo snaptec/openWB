@@ -543,6 +543,49 @@ fi
 
 ########################
 # Berechnung für PV Regelung
+if [[ $speichervorhanden == "1" ]]; then
+
+	if (( speicherwattnurpvhybrid < 100000)); then
+		minSpeicherLeistung=$((0 - pvwatt - speicherwattnurpvhybrid))
+	else
+		minSpeicherLeistung=$((0 - speicherwattnurpvhybrid))
+	fi
+
+
+    if (( speichersoc > speichersocnurpv )); then
+		openwbDebugLog "PV" 0 "Speicher SOC ($minSpeicherLeistung) über konfiguriertem Wert ($speichersocnurpv)"
+		if ((minSpeicherLeistung < - speicherwattnurpv )); then
+			openwbDebugLog "PV" 0 "Entlade Speicher mit bis zu $speicherwattnurpv W"
+			uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
+		else
+			openwbDebugLog "PV" 0 "Entlade Speicher mit bis zu $((0-minSpeicherLeistung)) W (Hybridsystem)"
+			uberschuss=$((uberschuss + speicherleistung - minSpeicherLeistung))
+		fi
+    else
+		if ((speicherleistung < 0)); then 
+			openwbDebugLog "PV" 0 "Speicher entläd, gib leistung frei"
+            uberschuss=$((uberschuss + speicherleistung ))
+        elif [[ $speicherpveinbeziehen == "1" ]]; then
+			if ((speichermaxwatt <= minSpeicherLeistung)); then
+				#EV hat vorrang, aber Speicher bekommt reservierten Ladewert, wenn dieser den nehmen kann
+            	if ((speicherleistung > minSpeicherLeistung)); then
+					openwbDebugLog "PV" 0 "Speicherleistung ($speicherleistung) über konfiguriertem Wert ($minSpeicherLeistung) (Hybridsystem)"
+					uberschuss=$((uberschuss + speicherleistung - minSpeicherLeistung))
+				fi
+			else
+            	#EV hat vorrang, aber Speicher bekommt reservierten Ladewert, wenn dieser den nehmen kann
+            	if ((speicherleistung > speichermaxwatt)); then
+					openwbDebugLog "PV" 0 "Speicherleistung ($speicherleistung) über konfiguriertem Wert ($speichermaxwatt)"
+					uberschuss=$((uberschuss + speicherleistung - speichermaxwatt))
+				fi
+			fi
+
+        fi
+    	#Speicher bekommt maximal möglichen Ladewert.
+        
+    fi
+fi
+
 if [[ $nurpv70dynact == "1" ]]; then
 	nurpv70status=$(<ramdisk/nurpv70dynstatus)
 	if [[ $nurpv70status == "1" ]]; then
@@ -563,14 +606,12 @@ wattkombiniert=$((ladeleistung + uberschuss))
 if [[ $pvbezugeinspeisung == "0" ]]; then
 	pvregelungm="0"
 	schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-fi
-if [[ $pvbezugeinspeisung == "1" ]]; then
+elif [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
 	schaltschwelle="0"
-fi
-if [[ $pvbezugeinspeisung == "2" ]]; then
+elif [[ $pvbezugeinspeisung == "2" ]]; then
 	pvregelungm=$offsetpv
-	schaltschwelle=$((schaltschwelle + offsetpv))
+	schaltschwelle=$(((230*$anzahlphasen)+ offsetpv))
 fi
 openwbDebugLog "PV" 0 "Schaltschwelle: $schaltschwelle, zum runterregeln: $pvregelungm"
 # Debug Ausgaben

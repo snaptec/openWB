@@ -446,6 +446,13 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 prioritybatoptions">
+								<label for="batteryDischargePowerAtBattPriorityHybrid" class="col-md-4 col-form-label">hybridsystem Leistung</label>
+								<div class="col">
+									<input id="batteryDischargePowerAtBattPriorityHybrid" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="100000" value="0" data-default="0" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Watt [W] für die Maximale Entladung des Speichers und PV Leistung zusammen (Hybrid System). Der Wert 100.000 schaltet die Funktion ab.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1 prioritybatoptions">
 								<label for="minBatteryDischargeSocAtBattPriority" class="col-md-4 col-form-label">minimaler Entlade-SoC</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
