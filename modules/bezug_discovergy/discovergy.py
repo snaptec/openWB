@@ -45,7 +45,6 @@ def write_readings_to_ramdisk(discovergy: dict):
         exported=values["energyOut"] / 10000000,
         power=power_total,
         voltages=voltages,
-        currents=[power / voltage for power, voltage in zip(powers, [230] * 3 if voltages is None else voltages)],
         powers=powers
     ))
     log.debug("Update complete. Total Power: %g W", power_total)

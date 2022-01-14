@@ -50,14 +50,10 @@ class AlphaEssCounter:
             0x0000, [ModbusDataType.INT_32]*3, unit=unit)]
 
         counter_state = CounterState(
-            voltages=[0, 0, 0],
             currents=currents,
-            powers=[0, 0, 0],
-            power_factors=[0, 0, 0],
             imported=imported,
             exported=exported,
-            power=power,
-            frequency=50
+            power=power
         )
         return counter_state
 
