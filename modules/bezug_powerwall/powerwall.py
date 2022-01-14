@@ -54,8 +54,8 @@ def update_using_cookie(address: str, cookie):
     status = read_status(address, cookie)
     # since 21.44.1 tesla adds the commit hash '21.44.1 c58c2df3'
     # so we split by whitespace and take the first element for comparison
-    firmwareversion = int(status["version"].split()[0])
-    log.debug('Version: ' + str(firmwareversion))
+    log.debug('Firmware: ' + status["version"])
+    firmwareversion = int(''.join(status["version"].split()[0].split(".")))
     # read aggregate
     aggregate = read_aggregate(address, cookie)
     # read additional info if firmware supports
