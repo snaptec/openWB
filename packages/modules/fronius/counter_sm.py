@@ -49,6 +49,16 @@ class FroniusSmCounter:
         else:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(
+            self.__device_id, self.component_config["id"]
+        )
+        counter_state.imported, counter_state.exported = self.__sim_count.sim_count(
+            counter_state.power,
+            topic=topic_str,
+            data=self.simulation,
+            prefix="bezug"
+        )
+
         return counter_state, meter_location
 
     def set_counter_state(self, counter_state: CounterState) -> None:
@@ -76,14 +86,7 @@ class FroniusSmCounter:
             params=params,
             timeout=5)
         response_json_id = response.json()["Body"]["Data"]
-        # old request for variant == 1
-        # params = (
-        #     ('Scope', 'System'),
-        # )
-        # response = req.get_http_session().get(
-        #     'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetMeterRealtimeData.cgi',
-        #  params=params, timeout=5)
-        # response_json_id = response["Body"]["Data"][meter_id]
+
         meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
@@ -97,22 +100,10 @@ class FroniusSmCounter:
         power_factors = [response_json_id["PowerFactor_Phase_"+str(num)] for num in range(1, 4)]
         frequency = response_json_id["Frequency_Phase_Average"]
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config["id"]
-        )
-        imported, exported = self.__sim_count.sim_count(
-            power,
-            topic=topic_str,
-            data=self.simulation,
-            prefix="bezug"
-        )
-
         return CounterState(
             voltages=voltages,
             currents=currents,
             powers=powers,
-            imported=imported,
-            exported=exported,
             power=power,
             frequency=frequency,
             power_factors=power_factors
@@ -137,22 +128,10 @@ class FroniusSmCounter:
         power_factors = [response_json_id["SMARTMETER_FACTOR_POWER_0"+str(num)+"_F64"] for num in range(1, 4)]
         frequency = response_json_id["GRID_FREQUENCY_MEAN_F32"]
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config["id"]
-        )
-        imported, exported = self.__sim_count.sim_count(
-            power,
-            topic=topic_str,
-            data=self.simulation,
-            prefix="bezug"
-        )
-
         return CounterState(
             voltages=voltages,
             currents=currents,
             powers=powers,
-            imported=imported,
-            exported=exported,
             power=power,
             frequency=frequency,
             power_factors=power_factors
