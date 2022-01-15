@@ -19,18 +19,11 @@ def update(ipaddress: str):
     power_all = client.read_holding_registers(40073, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
 #40130 Phasenleistung in Watt
     powers = client.read_holding_registers(40129, [ModbusDataType.INT_16] * 3, unit=1)
-    currents = [0]*3
-    voltages = [230]*3
-    for i in range(0, 3):
-        currents[i]=powers[i]/voltages[i]
     get_counter_value_store(1).set(CounterState(
-        power_all=power_all,
-        powers=powers,
-        voltages=voltages,
-        currents=currents
+        power=power_all,
+        powers=powers
     ))
     log.debug("Update completed successfully")
-
 if __name__ == '__main__':
     setup_logging_stdout()
     run_using_positional_cli_args(update)
