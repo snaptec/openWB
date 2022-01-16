@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -84,8 +84,5 @@ def read_legacy(component_type: str, ip_address: str, password: str, num: Option
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Sunways Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

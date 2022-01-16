@@ -391,18 +391,22 @@ class SHDevice {
 };
 
 function formatWatt(watt) {
-	if (watt >= 1000) {
+	if (watt >= 10000) {
+		return (Math.round(watt / 1000) + " kW");
+	} else if (watt >= 1000) {
 		return ((Math.round(watt / 100) / 10) + " kW");
 	} else {
 		return (watt + " W");
 	}
 }
 
-function formatWattH(watt) {
-	if (watt >= 1000) {
-		return ((Math.round(watt / 100) / 10) + " kWh");
+function formatWattH(watth) {
+	if (watth >= 10000) {
+		return (Math.round(watth / 1000) + " kWh");
+	} else if (watth >= 1000) {
+		return ((Math.round(watth / 100) / 10) + " kWh");
 	} else {
-		return (Math.round(watt) + " Wh");
+		return (Math.round(watth) + " Wh");
 	}
 }
 function formatTime(seconds) {

@@ -16,7 +16,7 @@ else
 fi
 
 
-python3 ${OPENWBBASEDIR}/packages/modules/http/device.py "inverter" "${wr_http_w_url}" "${wr_http_kwh_url}" "1">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.http.device" "inverter" "${wr_http_w_url}" "${wr_http_kwh_url}" "1">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt

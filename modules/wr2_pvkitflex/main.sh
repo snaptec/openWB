@@ -24,7 +24,7 @@ openwbDebugLog ${DMOD} 2 "PV ID : ${pv2flexid}"
 
 #python3 ${OPENWBBASEDIR}/modules/wr_pvkitflex/test.py "2" ${pv2flexip} ${pv2flexport} ${pv2flexid} >>${MYLOGFILE} 2>&1
 
-python3 ${OPENWBBASEDIR}/packages/modules/openwb_flex/device.py "inverter" "${pv2flexversion}" "${pv2flexip}" "${pv2flexport}" "${pv2flexid}" "2">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_flex.device" "inverter" "${pv2flexversion}" "${pv2flexip}" "${pv2flexport}" "${pv2flexid}" "2">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pv2watt)
 echo $pvwatt

@@ -16,7 +16,7 @@ else
 fi
 
 
-python3 ${OPENWBBASEDIR}/packages/modules/openwb/device.py "inverter" "${pvkitversion}" "1">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "inverter" "${pvkitversion}" "1">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt

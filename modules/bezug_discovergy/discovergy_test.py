@@ -4,6 +4,7 @@ from unittest.mock import Mock
 import pytest
 
 import discovergy
+from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
 
 SAMPLE_JSON_1 = """{
@@ -44,8 +45,22 @@ SAMPLE_JSON_2 = """{
 }"""
 
 
+SAMPLE_JSON_3 = """{
+    "time": 1641807548104,
+    "values": {
+        "power": 460000,
+        "power3": -230000,
+        "energyOut": 294243456924000,
+        "power1": -345000,
+        "energy": 43083460817000,
+        "power2": 575000
+    }
+}"""
+
+
 @pytest.fixture(scope='function')
 def mock_ramdisk(monkeypatch):
+    monkeypatch.setattr(compatibility, 'is_ramdisk_in_use', lambda: True)
     return MockRamdisk(monkeypatch)
 
 
@@ -101,3 +116,28 @@ def test_sample_json_2(mock_ramdisk: MockRamdisk, monkeypatch):
     assert mock_ramdisk["bezuga1"] == "0.36057649667405767"
     assert mock_ramdisk["bezuga2"] == "1.0687720848056537"
     assert mock_ramdisk["bezuga3"] == "0.7169312169312169"
+
+
+def test_sample_json_3(mock_ramdisk: MockRamdisk, monkeypatch):
+    # setup
+    mock_get_last_reading = Mock(return_value=json.loads(SAMPLE_JSON_3))
+    monkeypatch.setattr(discovergy, 'get_last_reading', mock_get_last_reading)
+
+    # exeuction
+    discovergy.update("someUser", "somePassword", "someMeterId")
+
+    # evaluation
+    mock_get_last_reading.assert_called_once_with("someUser", "somePassword", "someMeterId")
+
+    assert mock_ramdisk["bezugkwh"] == "4308346.0817"
+    assert mock_ramdisk["bezugw1"] == "-345"
+    assert mock_ramdisk["bezugw2"] == "575"
+    assert mock_ramdisk["bezugw3"] == "-230"
+    assert mock_ramdisk["einspeisungkwh"] == "29424345.6924"
+    assert mock_ramdisk["evuv1"] == "0"
+    assert mock_ramdisk["evuv2"] == "0"
+    assert mock_ramdisk["evuv3"] == "0"
+    assert mock_ramdisk["wattbezug"] == "460"
+    assert mock_ramdisk["bezuga1"] == "-1.5"
+    assert mock_ramdisk["bezuga2"] == "2.5"
+    assert mock_ramdisk["bezuga3"] == "-1.0"

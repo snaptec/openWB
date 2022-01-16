@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import re
-from typing import Dict, Union
+from typing import Dict, Union, List
 
 from urllib3.util import parse_url
 
@@ -142,7 +142,7 @@ def read_legacy_inverter(power_path: str, counter_path: str, num: int):
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
-if __name__ == "__main__":
+def main(argv: List[str]):
     run_using_positional_cli_args(
-        {"bat": read_legacy_bat, "counter": read_legacy_counter, "inverter": read_legacy_inverter}
+        {"bat": read_legacy_bat, "counter": read_legacy_counter, "inverter": read_legacy_inverter}, argv
     )

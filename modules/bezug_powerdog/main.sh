@@ -16,7 +16,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu_powerdog.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/powerdog/device.py "counter" "${bezug1_ip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.powerdog.device" "counter" "${bezug1_ip}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
