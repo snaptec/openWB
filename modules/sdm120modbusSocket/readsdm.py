@@ -56,11 +56,13 @@ f.close()
 if not os.path.isfile("/var/www/html/openWB/ramdisk/socketSerial"):
     print("Trying to read socket meter serial number once from meter at address " + str(seradd) + ", ID " + str(sdmid))
     try:
+        time.sleep(0.2)
         resp = client.read_holding_registers(0xFC00,2, unit=sdmid)
         sn = struct.unpack('>I',struct.pack('>HH',*resp.registers))[0]
         f = open('/var/www/html/openWB/ramdisk/socketSerial', 'w')
         f.write(str(sn))
         f.close()
+        print("Socket meter serial number from meter at address " + str(seradd) + ", ID " + str(sdmid) + " is " + str(sn))
     except:
         print("Socket meter serial number of meter at address " + str(seradd) + ", ID " + str(sdmid) + " is not available")
         f = open('/var/www/html/openWB/ramdisk/socketSerial', 'w')

@@ -681,6 +681,18 @@ function callSetCurrent() {
 	local statusReason=$3
 	local computedReason=$statusReason
 
+	# PreviousExpectedChargeCurrent can be empty in case of "early exit" in case of error (e.g. heartbeat timeout)
+	if [ "$PreviousExpectedChargeCurrent" == "" ]; then
+		if (( chargePoint != 0 )); then
+			aggregateDataForChargePoint $chargePoint
+		else
+			for i in $(seq 1 $NumberOfSupportedChargePoints);
+			do
+				aggregateDataForChargePoint $i
+			done
+		fi
+	fi
+
 	# we have to do a slightly ugly if-else-cascade to set the charge point selector for set-current.sh
 	# Note: There's currently only one current limit (min/max) per box - so setting same for all CPs
 	if (( chargePoint == 0 )); then
@@ -694,7 +706,7 @@ function callSetCurrent() {
 	elif (( chargePoint >= 4 )); then
 		local chargePointString="lp${chargePoint}"
 	else
-		openwbDebugLog "MAIN" 0 "Slave Mode charge current set ERROR: Charge Point #${chargePoint} is not supported"
+		openwbDebugLog "MAIN" 0 "Slave Mode: charge current set ERROR: Charge Point #${chargePoint} is not supported"
 		return 1
 	fi
 
@@ -703,17 +715,17 @@ function callSetCurrent() {
 	# finally limit to the configured min or max values
 	if ( (( currentToSet < MinimumCurrentPossibleForCp )) || ((LpEnabled == 0)) ) && (( currentToSet != 0 )); then
 		if ((LpEnabled != 0)); then
-			openwbDebugLog "MAIN" 2 "Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < MinimumCurrentPossibleForCp=$MinimumCurrentPossibleForCp --> setze currentToSet=0"
+			openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < MinimumCurrentPossibleForCp=$MinimumCurrentPossibleForCp --> setze currentToSet=0"
 			computedReason=$LmStatusDownByLm
 		else
-			openwbDebugLog "MAIN" 2 "Slave Mode Aktiv, LP deakt. --> setze currentToSet=0"
+			openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, LP deakt. --> setze currentToSet=0"
 			computedReason=$LmStatusDownByDisable
 		fi
 		currentToSet=0
 	fi
 
 	if (( currentToSet > MaximumCurrentPossibleForCp )); then
-		openwbDebugLog "MAIN" 2 "Slave Mode Aktiv, currentToSet=$currentToSet < MaximumCurrentPossibleForCp=$MaximumCurrentPossibleForCp --> setze currentToSet=$MaximumCurrentPossibleForCp"
+		openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, currentToSet=$currentToSet < MaximumCurrentPossibleForCp=$MaximumCurrentPossibleForCp --> setze currentToSet=$MaximumCurrentPossibleForCp"
 		currentToSet=$MaximumCurrentPossibleForCp
 	fi
 
@@ -724,8 +736,6 @@ function callSetCurrent() {
 			statusReason=$LmStatusDownByEv
 		fi
 	fi
-
-	openwbDebugLog "MAIN" 2 "Settings status reason = $statusReason"
 
 	if (( chargePoint != 0 )); then
 		echo "$statusReason" > "${LmStatusFile}${chargePoint}"
@@ -738,7 +748,7 @@ function callSetCurrent() {
 
 	if (( PreviousExpectedChargeCurrent != currentToSet )); then
 
-		openwbDebugLog "MAIN" 2 "Setting current from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}"
+		openwbDebugLog "MAIN" 2 "Slave Mode: Setting current from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}, status reason $statusReason"
 		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
 	else
 		return 0
