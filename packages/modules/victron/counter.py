@@ -33,7 +33,7 @@ class VictronCounter:
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = self.component_config["configuration"]["modbus_id"]
-        power_all = sum(self.__tcp_client.read_holding_registers(2600, [ModbusDataType.INT_16]*3, unit=unit))
+        power = sum(self.__tcp_client.read_holding_registers(2600, [ModbusDataType.INT_16]*3, unit=unit))
         currents = [
             self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit) / 10
             for reg in [2617, 2619, 2621]]
@@ -45,7 +45,7 @@ class VictronCounter:
             self.__device_id, self.component_config["id"]
         )
         imported, exported = self.__sim_count.sim_count(
-            power_all,
+            power,
             topic=topic_str,
             data=self.simulation,
             prefix="bezug"
@@ -56,7 +56,7 @@ class VictronCounter:
             currents=currents,
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
-        log.MainLogger().debug("Victron Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Victron Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

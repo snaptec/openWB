@@ -13,7 +13,7 @@ def get_default_config() -> dict:
         "type": "counter",
         "configuration":
         {
-            "power_all_path": "/power_all.txt",
+            "power_path": "/power.txt",
             "imported_path": "/imported.txt",
             "exported_path": "/exported.txt",
             "power_l1_path": "/power_l1.txt",
@@ -25,7 +25,7 @@ def get_default_config() -> dict:
 
 class HttpCounter:
     def __init__(self, component_config: dict, domain: str) -> None:
-        self.__get_power_all = create_request_function(domain, component_config["configuration"]["power_all_path"])
+        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
         self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
         self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
         self.__get_powers = [
@@ -45,6 +45,6 @@ class HttpCounter:
             powers=[getter() for getter in self.__get_powers],
             imported=self.__get_imported(),
             exported=self.__get_exported(),
-            power_all=self.__get_power_all()
+            power=self.__get_power()
         )
         self.__store.set(counter_state)

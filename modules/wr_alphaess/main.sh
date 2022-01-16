@@ -21,7 +21,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "Speicher Version: ${alphav123}"
 
-python3 $OPENWBBASEDIR/packages/modules/alpha_ess/device.py "inverter" "${alphav123}" "1">>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.alpha_ess.device" "inverter" "${alphav123}" "1">>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

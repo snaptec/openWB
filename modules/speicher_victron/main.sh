@@ -15,7 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/victron/device.py "bat" "${bezug_victronip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "bat" "${bezug_victronip}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"

@@ -21,7 +21,7 @@ openwbDebugLog ${DMOD} 2 "Speicher Import: ${speicherikwh_http}"
 openwbDebugLog ${DMOD} 2 "Speicher Watt: ${speicherleistung_http}"
 openwbDebugLog ${DMOD} 2 "Speicher SoC: ${speichersoc_http}"
 
-python3 /var/www/html/openWB/packages/modules/http/device.py "bat" "${speicherleistung_http}" "${speicherikwh_http}" "${speicherekwh_http}" "${speichersoc_http}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.http.device" "bat" "${speicherleistung_http}" "${speicherikwh_http}" "${speicherekwh_http}" "${speichersoc_http}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

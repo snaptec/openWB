@@ -19,7 +19,7 @@ def get_default_config() -> dict:
         "configuration":
         {
             "variant": 0,
-            "meter_location": MeterLocation.grid
+            "meter_location": MeterLocation.grid.value
         }
     }
 
@@ -28,13 +28,15 @@ class FroniusSmCounter:
     def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
         self.__device_id = device_id
         self.component_config = component_config
+        self.component_config["configuration"]["meter_location"] = MeterLocation(
+            self.component_config["configuration"]["meter_location"])
         self.device_config = device_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self, bat: bool) -> Tuple[CounterState, bool]:
+    def update(self, bat: bool) -> Tuple[CounterState, MeterLocation]:
         variant = self.component_config["configuration"]["variant"]
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
@@ -52,7 +54,7 @@ class FroniusSmCounter:
                 'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                 params=(('Scope', 'System'),),
                 timeout=5)
-            counter_state.power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
+            counter_state.power = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
@@ -60,7 +62,7 @@ class FroniusSmCounter:
             # dem Wechselrichter kam.
             # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
             counter_state.imported, counter_state.exported = self.__sim_count.sim_count(
-                counter_state.power_all,
+                counter_state.power,
                 topic=topic_str,
                 data=self.simulation,
                 prefix="bezug"
@@ -69,10 +71,10 @@ class FroniusSmCounter:
         return counter_state, meter_location
 
     def set_counter_state(self, counter_state: CounterState) -> None:
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)
 
-    def __update_variant_0_1(self, session: Session) -> Tuple[CounterState, bool]:
+    def __update_variant_0_1(self, session: Session) -> Tuple[CounterState, MeterLocation]:
         variant = self.component_config["configuration"]["variant"]
         meter_id = self.device_config["meter_id"]
         if variant == 0:
@@ -104,7 +106,7 @@ class FroniusSmCounter:
         meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
-        power_all = response_json_id["PowerReal_P_Sum"]
+        power = response_json_id["PowerReal_P_Sum"]
         voltages = [response_json_id["Voltage_AC_Phase_"+str(num)] for num in range(1, 4)]
         powers = [response_json_id["PowerReal_P_Phase_"+str(num)] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
@@ -119,12 +121,12 @@ class FroniusSmCounter:
             powers=powers,
             imported=imported,
             exported=exported,
-            power_all=power_all,
+            power=power,
             frequency=frequency,
             power_factors=power_factors
         ), meter_location
 
-    def __update_variant_2(self, session: Session) -> Tuple[CounterState, bool]:
+    def __update_variant_2(self, session: Session) -> Tuple[CounterState, MeterLocation]:
         meter_id = str(self.device_config["meter_id"])
         response = session.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
@@ -133,7 +135,7 @@ class FroniusSmCounter:
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
         meter_location = self.component_config["configuration"]["meter_location"]
 
-        power_all = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
+        power = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
         voltages = [response_json_id["SMARTMETER_VOLTAGE_0"+str(num)+"_F64"] for num in range(1, 4)]
         powers = [response_json_id["SMARTMETER_POWERACTIVE_MEAN_0"+str(num)+"_F64"] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
@@ -148,7 +150,7 @@ class FroniusSmCounter:
             powers=powers,
             imported=imported,
             exported=exported,
-            power_all=power_all,
+            power=power,
             frequency=frequency,
             power_factors=power_factors
         ), meter_location

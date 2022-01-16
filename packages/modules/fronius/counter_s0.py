@@ -33,7 +33,7 @@ class FroniusS0Counter:
             'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             timeout=5)
         # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
-        power_all = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
+        power = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
 
         # Summe der vom Netz bezogene Energie total in Wh
         # nur für Smartmeter  im Einspeisepunkt!
@@ -53,7 +53,7 @@ class FroniusS0Counter:
                 self.__device_id, self.component_config["id"]
             )
             imported, exported = self.__sim_count.sim_count(
-                power_all,
+                power,
                 topic=topic_str,
                 data=self.simulation,
                 prefix="bezug"
@@ -62,11 +62,11 @@ class FroniusS0Counter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         return counter_state
 
     def set_counter_state(self, counter_state: CounterState) -> None:
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

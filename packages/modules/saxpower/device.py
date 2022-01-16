@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict
+from typing import Dict, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -60,7 +60,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip_address: str, num: int) -> None:
+def read_legacy(component_type: str, ip_address: str) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat
     }
@@ -74,7 +74,7 @@ def read_legacy(component_type: str, ip_address: str, num: int) -> None:
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    component_config["id"] = None
     dev.add_component(component_config)
 
     log.MainLogger().debug('Saxpower IP-Adresse: ' + str(ip_address))
@@ -82,8 +82,5 @@ def read_legacy(component_type: str, ip_address: str, num: int) -> None:
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Saxpower Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

@@ -39,32 +39,32 @@ class EvuKitFlex:
     def update(self):
         log.MainLogger().debug("Start kit reading")
         # TCP-Verbindung schließen möglichst bevor etwas anderes gemacht wird, um im Fehlerfall zu verhindern,
-        # dass ungeschlossene Verbindungen den Modbus-Adapter blockieren.
+        # dass offene Verbindungen den Modbus-Adapter blockieren.
         try:
-            voltages = self.__client.get_voltage()
-            power_per_phase, power_all = self.__client.get_power()
+            voltages = self.__client.get_voltages()
+            powers, power = self.__client.get_power()
             frequency = self.__client.get_frequency()
-            power_factors = self.__client.get_power_factor()
+            power_factors = self.__client.get_power_factors()
 
             version = self.component_config["configuration"]["version"]
             if version == 0:
                 imported = self.__client.get_imported()
                 exported = self.__client.get_exported()
             else:
-                currents = list(map(abs, self.__client.get_current()))
+                currents = list(map(abs, self.__client.get_currents()))
         finally:
             self.__tcp_client.close_connection()
         version = self.component_config["configuration"]["version"]
         if version == 0:
-            currents = [power_per_phase[i] / voltages[i] for i in range(3)]
+            currents = [powers[i] / voltages[i] for i in range(3)]
         else:
             if version == 1:
-                power_all = sum(power_per_phase)
+                power = sum(powers)
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
             imported, exported = self.__sim_count.sim_count(
-                power_all,
+                power,
                 topic=topic_str,
                 data=self.simulation,
                 prefix="bezug"
@@ -72,12 +72,12 @@ class EvuKitFlex:
         counter_state = CounterState(
             voltages=voltages,
             currents=currents,
-            powers=power_per_phase,
+            powers=powers,
             power_factors=power_factors,
             imported=imported,
             exported=exported,
-            power_all=power_all,
+            power=power,
             frequency=frequency
         )
-        log.MainLogger().debug("EVU-Kit Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("EVU-Kit Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

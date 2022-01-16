@@ -49,13 +49,13 @@ class Sdm630(Sdm):
     def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         super().__init__(modbus_id, client)
 
-    def get_current(self) -> List[float]:
+    def get_currents(self) -> List[float]:
         try:
             return self.client.read_input_registers(0x06, [ModbusDataType.FLOAT_32]*3, unit=self.id)
         except Exception as e:
             self.process_error(e)
 
-    def get_power_factor(self) -> List[float]:
+    def get_power_factors(self) -> List[float]:
         try:
             return self.client.read_input_registers(0x1E, [ModbusDataType.FLOAT_32]*3, unit=self.id)
         except Exception as e:
@@ -63,13 +63,13 @@ class Sdm630(Sdm):
 
     def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = self.client.read_input_registers(0x0C, [ModbusDataType.FLOAT_32]*3, unit=self.id)
-            power_all = sum(power_per_phase)
-            return power_per_phase, power_all
+            powers = self.client.read_input_registers(0x0C, [ModbusDataType.FLOAT_32]*3, unit=self.id)
+            power = sum(powers)
+            return powers, power
         except Exception as e:
             self.process_error(e)
 
-    def get_voltage(self) -> List[float]:
+    def get_voltages(self) -> List[float]:
         try:
             return self.client.read_input_registers(0x00, [ModbusDataType.FLOAT_32]*3, unit=self.id)
         except Exception as e:
