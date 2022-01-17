@@ -45,8 +45,7 @@ class AlphaEssInverter:
             power, topic=topic_str, data=self.__simulation, prefix="pv")
         inverter_state = InverterState(
             power=power,
-            counter=counter,
-            currents=[0, 0, 0]
+            counter=counter
         )
         self.__store.set(inverter_state)
 
