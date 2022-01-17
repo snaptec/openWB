@@ -84,15 +84,23 @@ if (( rseenabled == 1 )); then
 fi
 
 # check if rfid is configured and start daemons to listen on input devices
+
+# Kill only if process exists, avoid error messages
+if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/readrfid.py" > /dev/null
+then
+	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
+fi
+if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/readrfid2.py" > /dev/null
+then
+	sudo kill $(ps aux |grep '[r]eadrfid2.py' | awk '{print $2}')
+fi
 if (( rfidakt == 1 )); then
 	echo "rfid 1..."
-	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
 if (( rfidakt == 2 )); then
 	echo "rfid 2..."
-	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
