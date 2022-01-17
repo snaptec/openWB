@@ -1,5 +1,3 @@
-from itertools import repeat
-
 from requests import Session
 
 from modules.common.component_state import CounterState
@@ -29,6 +27,5 @@ def get_last_reading(session: Session, meter_id: str):
         exported=values["energyOut"] / 10000000,
         power=values["power"] / 1000,
         voltages=voltages,
-        currents=[power / voltage for power, voltage in zip(powers, repeat(230) if voltages is None else voltages)],
         powers=powers
     )

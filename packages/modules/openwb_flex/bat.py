@@ -36,7 +36,7 @@ class BatKitFlex:
     def update(self):
         log.MainLogger().debug("Start kit reading")
         # TCP-Verbindung schließen möglichst bevor etwas anderes gemacht wird, um im Fehlerfall zu verhindern,
-        # dass ungeschlossene Verbindungen den Modbus-Adapter blockieren.
+        # dass offene Verbindungen den Modbus-Adapter blockieren.
         try:
             imported = self.__client.get_imported()
             exported = self.__client.get_exported()

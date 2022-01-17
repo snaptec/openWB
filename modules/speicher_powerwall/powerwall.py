@@ -47,10 +47,10 @@ def read_aggregate(address: str, cookie):
 def update_using_cookie(address: str, cookie):
     aggregate = read_aggregate(address, cookie)
     get_bat_value_store(1).set(BatState(
-        imported = aggregate["battery"]["energy_imported"],
-        exported = aggregate["battery"]["energy_exported"],
-        power = -aggregate["battery"]["instant_power"],
-        soc = read_soc(address, cookie)
+        imported=aggregate["battery"]["energy_imported"],
+        exported=aggregate["battery"]["energy_exported"],
+        power=-aggregate["battery"]["instant_power"],
+        soc=read_soc(address, cookie)
     ))
 
 

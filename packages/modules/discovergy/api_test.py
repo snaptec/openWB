@@ -106,6 +106,5 @@ def test_sample_json_3(mock_discovery_response):
     assert actual.imported == 4308346.0817
     assert actual.powers == [-345, 575, -230]
     assert actual.exported == 29424345.6924
-    assert actual.voltages == [0, 0, 0]
     assert actual.power == 460
     assert actual.currents == [-1.5, 2.5, -1.0]
