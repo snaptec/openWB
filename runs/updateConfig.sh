@@ -2114,9 +2114,6 @@ updateConfig(){
 		echo "soc_evcc_vin_lp2=''" >> $ConfigFile
 		echo "soc_evcc_token_lp2=''" >> $ConfigFile
 	fi
-	if ! grep -Fq "wrfroniusisgen24=" $ConfigFile; then
-		echo "wrfroniusisgen24=0" >> $ConfigFile
-	fi
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
 		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
