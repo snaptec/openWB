@@ -123,7 +123,10 @@
 						</div>
 						<div id="pvsonneneco" class="hide">
 							<div class="card-text alert alert-info">
-								Keine Konfiguration erforderlich.
+								Keine Konfiguration erforderlich. Alle Einstellungen werden in dem Speicher-Modul vorgenommen.
+							</div>
+							<div class="card-text alert alert-warning">
+								Die PV-Leistung steht nur in den Varianten "Rest-API 2" und "JSON-API" zur Verfügung!
 							</div>
 						</div>
 						<div id="pvalphaess" class="hide">
