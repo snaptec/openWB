@@ -5,6 +5,21 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 . $OPENWBBASEDIR/loadconfig.sh
 . $OPENWBBASEDIR/helperFunctions.sh
 
+if [ -e $OPENWBBASEDIR/ramdisk/updateinprogress ] && [ -e $OPENWBBASEDIR/ramdisk/bootinprogress ]; then
+	updateinprogress=$(<$OPENWBBASEDIR/ramdisk/updateinprogress)
+	bootinprogress=$(<$OPENWBBASEDIR/ramdisk/bootinprogress)
+	if (( updateinprogress == "1" )); then
+		openwbDebugLog "MAIN" 0 "##### cron5min.sh Update in progress"
+		exit 0
+	elif (( bootinprogress == "1" )); then
+		openwbDebugLog "MAIN" 0 "##### cron5min.sh Boot in progress"
+		exit 0
+	fi
+else
+	openwbDebugLog "MAIN" 0 "##### cron5min.sh Ramdisk not set up. Maybe we are still booting."
+	exit 0
+fi
+
 openwbDebugLog "MAIN" 0 "##### cron5min.sh started #####"
 
 dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d)"
