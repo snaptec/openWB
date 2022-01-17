@@ -8,6 +8,7 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
 from modules.common.fault_state import FaultState
 
+
 def get_default_config() -> dict:
     return {
         "name": "SonnenBatterie Zähler",
@@ -28,15 +29,13 @@ class SonnenbatterieCounter:
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-
     def __read_variant_1(self):
         response = requests.get("http://" + self.__device_address + "/api/v1/status", timeout=5)
         response.raise_for_status()
         return response.json()
 
-
     def __update_variant_1(self) -> CounterState:
-        # Auslesen einer Sonnenbatterie Eco 8 über die integrierte JSON-API des Batteriesystems
+        # Auslesen einer Sonnenbatterie 8 oder 10 über die integrierte JSON-API v1 des Batteriesystems
         '''
         example data:
         {
@@ -74,7 +73,6 @@ class SonnenbatterieCounter:
         }
         '''
         counter_state = self.__read_variant_1()
-
         grid_power = -counter_state["GridFeedIn_W"]
         log.MainLogger().debug('EVU Leistung: ' + str(grid_power))
         # Es wird nur eine Spannung ausgegeben
@@ -82,27 +80,24 @@ class SonnenbatterieCounter:
         log.MainLogger().debug('EVU Spannung: ' + str(grid_voltage))
         grid_frequency = counter_state["Fac"]
         log.MainLogger().debug('EVU Netzfrequenz: ' + str(grid_frequency))
-
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         imported, exported = self.__sim_count.sim_count(
             grid_power, topic=topic_str, data=self.__simulation, prefix="bezug"
         )
         return CounterState(
-            power = grid_power,
-            voltages = [grid_voltage]*3,
-            frequency = grid_frequency,
+            power=grid_power,
+            voltages=[grid_voltage]*3,
+            frequency=grid_frequency,
             imported=imported,
             exported=exported,
         )
-
 
     def __read_variant_2_element(self, element: str) -> str:
         response = requests.get('http://' + self.__device_address + ':7979/rest/devices/battery/' + element, timeout=5)
         response.raise_for_status()
         response.encoding = 'utf-8'
         return response.text.replace("\n", "")
-
 
     def __update_variant_2(self) -> CounterState:
         # Auslesen einer Sonnenbatterie Eco 6 über die integrierte REST-API des Batteriesystems
@@ -115,15 +110,15 @@ class SonnenbatterieCounter:
             grid_power, topic=topic_str, data=self.__simulation, prefix="bezug"
         )
         return CounterState(
-            power = grid_power,
+            power=grid_power,
             imported=imported,
             exported=exported,
         )
 
-
     def update(self) -> None:
-        log.MainLogger().debug("Komponente '"+str(self.component_config["id"])+"' "+self.component_config["name"]+" wird auslesen.")
-        log.MainLogger().debug("Variante: "+str(self.__device_variant))
+        log.MainLogger().debug("Komponente '" + str(self.component_config["id"]) + "' "
+                               + self.component_config["name"] + " wird auslesen.")
+        log.MainLogger().debug("Variante: " + str(self.__device_variant))
         if self.__device_variant == 0:
             log.MainLogger().debug("Die Variante '0' bietet keine EVU Daten!")
         elif self.__device_variant == 1:

@@ -25,8 +25,11 @@ def get_default_config() -> dict:
     }
 
 
-sonnenbatterie_component_classes = Union[bat.SonnenbatterieBat, counter.SonnenbatterieCounter, inverter.SonnenbatterieInverter]
-# sonnenbatterie_component_classes = bat.SonnenbatterieBat
+sonnenbatterie_component_classes = Union[
+                                         bat.SonnenbatterieBat,
+                                         counter.SonnenbatterieCounter,
+                                         inverter.SonnenbatterieInverter
+                                        ]
 
 
 class Device(AbstractDevice):
@@ -90,10 +93,8 @@ def read_legacy(component_type: str, address: str, variant: int, num: Optional[i
         )
     component_config["id"] = num
     dev.add_component(component_config)
-
     log.MainLogger().debug('SonnenBatterie address: ' + address)
     log.MainLogger().debug('SonnenBatterie variant: ' + str(variant))
-
     dev.update()
 
 
