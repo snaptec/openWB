@@ -7,13 +7,16 @@ parameter.
 Thanks to the server running continuously this means that python code can be executed without bootstrapping the python
 environment first.
 """
+import contextlib
 import importlib
+import io
 import json
 import logging
 import socket
 import sys
 import threading
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Callable
 
@@ -30,6 +33,29 @@ def read_all_bytes(connection: socket.socket):
             buffer += tmp
         else:
             return buffer
+
+
+@contextmanager
+def redirect_stdout_stderr_exceptions_to_log():
+    with contextlib.redirect_stderr(io.StringIO()) as io_stderr:
+        with contextlib.redirect_stdout(io.StringIO()) as io_stdout:
+            unhandled_exception = None
+            try:
+                yield
+            except Exception as e:
+                unhandled_exception = e
+            except SystemExit:
+                # e.g. ArgumentParser attempts to exit. Since we are in a separate thread this is ignored anyway,
+                # but we still want to print stderr and stdout
+                pass
+            stderr = io_stderr.getvalue().strip()
+            stdout = io_stdout.getvalue().strip()
+            if stderr:
+                log.warning(stderr)
+            if stdout:
+                log.info(stdout)
+            if unhandled_exception:
+                log.error("Unhandled exception", exc_info=unhandled_exception)
 
 
 class SocketListener:
@@ -52,8 +78,9 @@ class SocketListener:
                 def handle_connection():
                     # We keep the connection open during `callback`. Closing the connection is the signal to the
                     # caller that processing completed
-                    with connection:
-                        self.__callback(read_all_bytes(connection))
+                    with redirect_stdout_stderr_exceptions_to_log():
+                        with connection:
+                            self.__callback(read_all_bytes(connection))
 
                 threading.Thread(target=handle_connection).start()
             except Exception as e:
