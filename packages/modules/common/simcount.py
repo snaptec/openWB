@@ -88,12 +88,12 @@ class SimCountLegacy:
                 try:
                     counter_import_present = int(float(read_ramdisk_file(prefix+'watt0pos')))
                 except Exception:
-                    counter_import_present = int(Restore().restore_value("watt0pos", prefix))
+                    counter_import_present = int(float(Restore().restore_value("watt0pos", prefix)))
                 counter_import_previous = counter_import_present
                 try:
                     counter_export_present = int(float(read_ramdisk_file(prefix+'watt0neg')))
                 except Exception:
-                    counter_export_present = int(Restore().restore_value("watt0neg", prefix))
+                    counter_export_present = int(float(Restore().restore_value("watt0neg", prefix)))
                 if counter_export_present < 0:
                     # runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab.
                     counter_export_present = counter_export_present * -1
@@ -157,8 +157,11 @@ class Restore():
             time.sleep(0.5)
             client.loop_stop()
 
-            ra = '^-?[0-9]+$'
-            if re.search(ra, str(self.temp)) is None:
+            #ra = '^-?[0-9]+$'
+            #if re.search(ra, str(self.temp)) is None:
+            try:
+                float(self.temp)
+            except ValueError:
                 log.MainLogger().info("Keine Werte auf dem Broker gefunden. neue Simulation gestartet.")
                 self.temp = "0"
             write_ramdisk_file(prefix+value, self.temp)
