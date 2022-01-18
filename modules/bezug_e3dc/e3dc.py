@@ -23,8 +23,8 @@ def update(ipaddress: str):
     cnt= SimCountFactory().get_sim_counter()().sim_count(power_all, prefix="bezug")
     #print ('0 %f, 1 %f' % (cnt[0],cnt[1]))  
     get_counter_value_store(1).set(CounterState(
-        imported= float("%.3f" % cnt[0]),
-        exported= float("%.3f" % cnt[1]),  
+        imported= cnt[0],
+        exported= cnt[1],  
         power=power_all,
         powers=powers
     ))
