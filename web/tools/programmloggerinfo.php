@@ -12,6 +12,7 @@ $cpufreq = exec("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq");
 $memtot = exec($MEMTOT);
 $memuse = exec($MEMUSE);
 $memfree = exec($MEMFREE);
+$disktot = exec($DISKTOT);
 $diskuse = exec($DISKUSE);
 $diskfree = exec($DISKFREE);
 $diskusedprz=exec($DISKUSEDPRZ);
