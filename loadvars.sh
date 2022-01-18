@@ -30,6 +30,31 @@ run_soc_module() {
 	fi
 }
 
+run_inverter_module() {
+	module_dir="modules/$1"
+	if [ -f "$module_dir/main.sh" ]
+	then
+		openwbDebugLog "MAIN" 2 "Calling inverter module <$module_dir/main.sh>"
+		"$module_dir/main.sh" "$2"
+	elif [[ "$1" =~ ^wr([0-9]+)_(.*)$ ]]
+	then
+		# Historically if each Inverter-Module applied to a single inverter position, only. Thus if multiple inverters
+		# were to be supported the module was copied and got the prefix "wr2_" instead of "wr_" for the second inverter.
+		# With the new structure we call the script for inverter one with the actual inverter number as parameter.
+		module_dir_inverter1="modules/wr_${BASH_REMATCH[2]}"
+		inverter_num="${BASH_REMATCH[1]}"
+		if [ -d "$module_dir_inverter1" ]
+		then
+			openwbDebugLog "MAIN" 2 "Calling inverter module <$module_dir_inverter1/main.sh> for inverter $inverter_num"
+			"$module_dir_inverter1/main.sh" "$inverter_num" "$2"
+		else
+			openwbDebugLog "MAIN" 0 "Neither <$module_dir> nor <$module_dir_inverter1> exist!"
+		fi
+	else
+		openwbDebugLog "MAIN" 0 "inverter module <$module_dir> does not exist"
+	fi
+}
+
 loadvars(){
 	#reload mqtt vars
 	renewmqtt=$(</var/www/html/openWB/ramdisk/renewmqtt)
@@ -482,47 +507,43 @@ loadvars(){
 	# pvkwh zaehler wr1
 	# pv2kwh zaehler wr2
 	# pvallwh summe von pvkwh und pv2kwh (wird in cron5 und cronnighly verwendet)
-	if [[ $pvwattmodul != "none" ]]; then
-		pv1vorhanden="1"
-		echo 1 > /var/www/html/openWB/ramdisk/pv1vorhanden
-		pvwatt=$("modules/$pvwattmodul/main.sh" || true)
-		if ! [[ $pvwatt =~ $re ]] ; then
-			openwbDebugLog "MAIN" 0 "ungültiger Wert für pvwatt: $pvwatt"
-			pvwatt="0"
+	pvwatt=0
+	pvallwh=0
+	for pv_num in 1 2
+	do
+		((pv_num == 1)) && pv_num_str="" || pv_num_str="$pv_num"
+		declare -n "pv_module=pv${pv_num_str}wattmodul"
+		declare -n pv_exists="pv${pv_num}vorhanden"
+		declare -n pv_n_watt="pv${pv_num}watt"
+		declare -n pv_n_energy="pv${pv_num_str}kwh"
+		if [[ "$pv_module" != "none" ]]
+		then
+			pv_exists=1
+			pv_n_watt=$(run_inverter_module "$pv_module" "$pv_num")
+			if ! [[ "$pvwatt" =~ $re ]]
+			then
+				openwbDebugLog "MAIN" 0 "PV Module $pv_module reports illegal value for power: $pvwatt. Assuming 0W"
+				pv_n_watt=0
+			fi
+			pv_n_energy=$(<"/var/www/html/openWB/ramdisk/pv${pv_num_str}kwh")
+			# Use `bc` for float-support
+			pvwatt=$(echo "$pvwatt+$pv_n_watt" | bc)
+			pvallwh=$(echo "$pvallwh+$pv_n_energy" | bc)
+		else
+			pv_exists=0
+			pv_n_watt=0
+			pv_n_energy=0
 		fi
-		pv1watt=$pvwatt
-		echo "$pv1watt" > ramdisk/pv1watt
-	else
-		pv1vorhanden="0"
-		echo 0 > /var/www/html/openWB/ramdisk/pv1vorhanden
-		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
-	fi
-	if [[ $pv2wattmodul != "none" ]]; then
-		pv2vorhanden="1"
-		echo 1 > /var/www/html/openWB/ramdisk/pv2vorhanden
-		pv2watt=$("modules/$pv2wattmodul/main.sh" || true)
-		if ! [[ $pv2watt =~ $re ]] ; then
-			openwbDebugLog "MAIN" 0 "ungültiger Wert für pv2watt: $pv2watt"
-			pv2watt="0"
-		fi
-		echo $pv2watt > ramdisk/pv2watt
-		pvwatt=$((pvwatt + pv2watt))
-		if ! [[ $pvwatt =~ $re ]] ; then
-			openwbDebugLog "MAIN" 0 "ungültiger Wert für PV Gesamtleistung: $pvwatt"
-			pvwatt="0"
-		fi
-		echo "$pvwatt" > /var/www/html/openWB/ramdisk/pvallwatt
-		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
-		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
-		pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
-		echo "$pvallwh" > /var/www/html/openWB/ramdisk/pvallwh
-	else
-		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
-		pv2vorhanden="0"
-		echo 0 > /var/www/html/openWB/ramdisk/pv2vorhanden
-		echo "$pvkwh" > /var/www/html/openWB/ramdisk/pvallwh
-		echo "$pvwatt" > /var/www/html/openWB/ramdisk/pvallwatt
-	fi
+		echo "$pv_exists" > "/var/www/html/openWB/ramdisk/pv${pv_num}vorhanden"
+		echo "$pv_n_watt" > "/var/www/html/openWB/ramdisk/pv${pv_num}watt"
+		((pv_num++))
+	done
+	echo "$pvwatt" > /var/www/html/openWB/ramdisk/pvallwatt
+	echo "$pvallwh" > /var/www/html/openWB/ramdisk/pvallwh
+	pvallwatt="$pvwatt"
+
+	openwbDebugLog "MAIN" 2 "pv1vorhanden=$pv1vorhanden pv2vorhanden=$pv2vorhanden pv1watt=$pv1watt pv2watt=$pv2watt pvwatt=$pvwatt pvallwatt=$pvallwatt pvkwh=$pvkwh pv2kwh=$pv2kwh pvallwh=$pvallwh"
+
 
 	#Speicher werte
 	if [[ $speichermodul != "none" ]] ; then
