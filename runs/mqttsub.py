@@ -1357,8 +1357,8 @@ def on_message(client, userdata, msg):
                     f.close()
             set_pv_match = re.match(r"^openWB/set/pv/([12])/(.*)$", msg.topic)
             if set_pv_match is not None:
-                pv = files.pv[int(set_pv_match[1]) - 1]
-                subtopic = set_pv_match[2]
+                pv = files.pv[int(set_pv_match.group(1)) - 1]
+                subtopic = set_pv_match.group(2)
                 if subtopic == "kWhCounter":
                     value = float(msg.payload)
                     if 0 <= value <= 10000000000:
