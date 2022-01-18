@@ -2,7 +2,6 @@
 Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul / Speicher diese nicht liefert.
 """
 import os
-import re
 import paho.mqtt.client as mqtt
 import time
 import typing
@@ -157,8 +156,6 @@ class Restore():
             time.sleep(0.5)
             client.loop_stop()
 
-            #ra = '^-?[0-9]+$'
-            #if re.search(ra, str(self.temp)) is None:
             try:
                 float(self.temp)
             except ValueError:
