@@ -89,7 +89,7 @@ class FaultState(Exception):
         return FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR)
 
     @staticmethod
-    def from_exception(exception: Optional[Exception]) -> "FaultState":
+    def from_exception(exception: Optional[Exception] = None) -> "FaultState":
         if exception is None:
             return FaultState.no_error()
         if isinstance(exception, FaultState):

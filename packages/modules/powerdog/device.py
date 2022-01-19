@@ -86,7 +86,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> None:
+def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None) -> None:
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)

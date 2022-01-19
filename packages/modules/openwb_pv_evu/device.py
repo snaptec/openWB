@@ -49,7 +49,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(version: int, num: Optional[int]):
+def read_legacy(version: int, num: Optional[int] = None):
     component_config = inverter.get_default_config()
     component_config["id"] = num
     component_config["configuration"]["version"] = version

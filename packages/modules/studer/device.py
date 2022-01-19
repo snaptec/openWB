@@ -67,7 +67,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(ip_address: str, component_config: dict, id: Optional[int], **kwargs):
+def read_legacy(ip_address: str, component_config: dict, id: Optional[int] = None, **kwargs):
     component_config["id"] = id
     component_config["configuration"].update(kwargs)
     device_config = get_default_config()
@@ -77,11 +77,11 @@ def read_legacy(ip_address: str, component_config: dict, id: Optional[int], **kw
     dev.update()
 
 
-def read_legacy_bat(ip_address: str, num: Optional[int]):
+def read_legacy_bat(ip_address: str, num: Optional[int] = None):
     read_legacy(ip_address, bat.get_default_config(), num)
 
 
-def read_legacy_inverter(ip_address: str, vc_count: int, vc_type: str, num: Optional[int]):
+def read_legacy_inverter(ip_address: str, vc_count: int, vc_type: str, num: int):
     read_legacy(ip_address, inverter.get_default_config(), num, vc_count=vc_count, vc_type=vc_type)
 
 
