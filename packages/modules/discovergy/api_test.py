@@ -54,6 +54,19 @@ SAMPLE_JSON_3 = """{
     }
 }"""
 
+SAMPLE_JSON_4 = """{
+    "time":1642590304850,
+    "values":{
+        "energyOut":75910110000000,
+        "energy2":0,
+        "energy1":73284260000000,
+        "energyOut1":75910110000000,
+        "power":6131200,
+        "energyOut2":0,
+        "energy":73284260000000
+    }
+}"""
+
 
 @pytest.fixture
 def mock_discovery_response(requests_mock):
@@ -108,3 +121,16 @@ def test_sample_json_3(mock_discovery_response):
     assert actual.exported == 29424345.6924
     assert actual.power == 460
     assert actual.currents == [-1.5, 2.5, -1.0]
+
+
+def test_sample_json_4(mock_discovery_response):
+    # setup
+    mock_discovery_response(SAMPLE_JSON_4)
+
+    # execution
+    actual = get_last_reading(requests.Session(), "someMeterId")
+
+    # evaluation
+    assert actual.imported == 7328426.0000
+    assert actual.exported == 7591011.0000
+    assert actual.power == 6131.2

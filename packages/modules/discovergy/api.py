@@ -10,17 +10,15 @@ def get_last_reading(session: Session, meter_id: str):
         timeout=3
     ).json()["values"]
 
-    def read_phases(*args: str, required: bool):
+    def read_phases(*args: str):
         for format in args:
             try:
                 return [values[format % phase] / 1000 for phase in range(1, 4)]
             except KeyError:
                 pass
-        if required:
-            raise Exception("None of %s found in %s", args, values)
 
-    voltages = read_phases("voltage%i", "phase%iVoltage", required=False)
-    powers = read_phases("power%i", "phase%iPower", required=True)
+    voltages = read_phases("voltage%i", "phase%iVoltage")
+    powers = read_phases("power%i", "phase%iPower")
 
     return CounterState(
         imported=values["energy"] / 10000000,
