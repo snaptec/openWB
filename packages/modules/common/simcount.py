@@ -87,12 +87,12 @@ class SimCountLegacy:
                 try:
                     counter_import_present = int(float(read_ramdisk_file(prefix+'watt0pos')))
                 except Exception:
-                    counter_import_present = int(float(Restore().restore_value("watt0pos", prefix)))
+                    counter_import_present = int(Restore().restore_value("watt0pos", prefix))
                 counter_import_previous = counter_import_present
                 try:
                     counter_export_present = int(float(read_ramdisk_file(prefix+'watt0neg')))
                 except Exception:
-                    counter_export_present = int(float(Restore().restore_value("watt0neg", prefix)))
+                    counter_export_present = int(Restore().restore_value("watt0neg", prefix))
                 if counter_export_present < 0:
                     # runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab.
                     counter_export_present = counter_export_present * -1
