@@ -2,7 +2,6 @@
 Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul / Speicher diese nicht liefert.
 """
 import os
-import re
 import paho.mqtt.client as mqtt
 import time
 import typing
@@ -142,7 +141,7 @@ class SimCountLegacy:
 
 
 class Restore():
-    def restore_value(self, value: str, prefix: str) -> str:
+    def restore_value(self, value: str, prefix: str) -> float:
         try:
             self.temp = ""
             self.value = value
@@ -156,11 +155,12 @@ class Restore():
             client.loop_start()
             time.sleep(0.5)
             client.loop_stop()
-
-            ra = '^-?[0-9]+$'
-            if re.search(ra, str(self.temp)) is None:
+            try:
+                result = float(self.temp)
+            except ValueError:
                 log.MainLogger().info("Keine Werte auf dem Broker gefunden. neue Simulation gestartet.")
                 self.temp = "0"
+                result = 0
             write_ramdisk_file(prefix+value, self.temp)
             if value == "watt0pos":
                 log.MainLogger().info(
@@ -171,7 +171,7 @@ class Restore():
         except Exception:
             log.MainLogger().exception("Fehler in der Restore-Klasse")
         finally:
-            return self.temp
+            return result
 
     def __on_connect(self, client, userdata, flags, rc):
         """ connect to broker and subscribe to set topics
