@@ -545,10 +545,10 @@ fi
 # Berechnung für PV Regelung
 if [[ $speichervorhanden == "1" ]]; then
 
-	if (( speicherwattnurpvhybrid < 100000)); then
+	if (( speicherwattnurpvhybrid > 0)); then
 		minSpeicherLeistung=$((0 - pvwatt - speicherwattnurpvhybrid))
 	else
-		minSpeicherLeistung=$((0 - speicherwattnurpvhybrid))
+		minSpeicherLeistung=$((-100000))
 	fi
 
 
