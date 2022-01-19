@@ -64,7 +64,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, num: Optional[int]) -> None:
+def read_legacy(component_type: str, version: int, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
