@@ -20,7 +20,7 @@ def get_last_reading(session: Session, meter_id: str):
             raise Exception("None of %s found in %s", args, values)
 
     voltages = read_phases("voltage%i", "phase%iVoltage", required=False)
-    powers = read_phases("power%i", "phase%iPower", required=True)
+    powers = read_phases("power%i", "phase%iPower", required=False)
 
     return CounterState(
         imported=values["energy"] / 10000000,
