@@ -1,16 +1,18 @@
-import paho.mqtt.client as mqtt
-from subprocess import run
-# import os
-import sys
-import subprocess
-import time
-import fileinput
-from datetime import datetime
 import configparser
+import fileinput
 import re
+import subprocess
+import sys
 import threading
+import time
+from datetime import datetime
 from json import loads as json_loads
 from json.decoder import JSONDecodeError
+from pathlib import Path
+
+import paho.mqtt.client as mqtt
+
+from modules.common.store.ramdisk import files
 
 global inaction
 inaction=0
@@ -20,6 +22,7 @@ shconfigfile='/var/www/html/openWB/smarthome.ini'
 config.read(shconfigfile)
 numberOfSupportedDevices=9 # limit number of smarthome devices
 lock=threading.Lock()
+RAMDISK_PATH = Path(__file__).resolve().parents[1] / "ramdisk"
 
 for i in range(1,(numberOfSupportedDevices+1)):
     try:
@@ -184,7 +187,7 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_einschaltschwelle", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_deactivateWhileEvCharging" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 1):
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 2):
                     writetoconfig(shconfigfile,'smarthomedevices','device_deactivateWhileEvCharging_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_deactivateWhileEvCharging", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_ausschaltschwelle" in msg.topic)):
@@ -454,19 +457,22 @@ def on_message(client, userdata, msg):
                     f.close()
             if (( "openWB/set/lp" in msg.topic) and ("manualSoc" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
-                    client.publish("openWB/lp/"+str(devicenumb)+"/manualSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
-                    f = open('/var/www/html/openWB/ramdisk/manual_soc_lp'+str(devicenumb), 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-                    client.publish("openWB/lp/"+str(devicenumb)+"/%Soc", msg.payload.decode("utf-8"), qos=0, retain=True)
-                    if ( int(devicenumb) == 1 ):
-                        socFile = '/var/www/html/openWB/ramdisk/soc'
-                    elif ( int(devicenumb) == 2 ):
-                        socFile = '/var/www/html/openWB/ramdisk/soc1'
-                    f = open(socFile, 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
+                devicenumb_int = int(devicenumb)
+                soc = int(msg.payload)
+                if 1 <= devicenumb_int <= 2 and 0 <= soc <= 100:
+                    if devicenumb_int == 1:
+                        soc_suffix = ""
+                        counter_suffix = ""
+                    else:
+                        soc_suffix = str(devicenumb_int - 1)
+                        counter_suffix = "s" + soc_suffix
+                    for soc_file in ["manual_soc_lp" + devicenumb, "soc" + soc_suffix]:
+                        (RAMDISK_PATH / soc_file).write_text(str(soc))
+                    RAMDISK_PATH.joinpath("manual_soc_meter_lp" + devicenumb).write_text(
+                        RAMDISK_PATH.joinpath("llkwh" + counter_suffix).read_text()
+                    )
+                    for topic_suffix in ["manualSoc", "%Soc"]:
+                        client.publish("openWB/lp/"+devicenumb+"/"+topic_suffix, soc, qos=0, retain=True)
             if (( "openWB/config/set/sofort/lp" in msg.topic) and ("energyToCharge" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
                 if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 100):
@@ -764,6 +770,13 @@ def on_message(client, userdata, msg):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeUseLastChargingPhase=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/slave/UseLastChargingPhase", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/slave/lp" in msg.topic) and ("EnergyLimit" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= 8 and -1 <= int(msg.payload) <= 99999999):
+                    f = open('/var/www/html/openWB/ramdisk/energyLimitLp'+str(devicenumb), 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    client.publish("openWB/config/get/slave/lp/" + str(devicenumb) + "/EnergyLimit", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
                     f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
@@ -827,20 +840,38 @@ def on_message(client, userdata, msg):
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL2"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL3"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
                     f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL1"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL2"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    setTopicCleared = True
+            if (msg.topic == "openWB/set/configure/ImbalanceCurrentConsumptionOnL3"):
+                if (float(msg.payload) >= 0 and float(msg.payload) <=2000):
+                    f = open('/var/www/html/openWB/ramdisk/ImbalanceCurrentConsumptionOnL3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     setTopicCleared = True
@@ -920,10 +951,10 @@ def on_message(client, userdata, msg):
                     finally:
                         if (re.match(emailallowed, json_payload["email"])):
                             f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
-                            f.write(json_payload["message"])
+                            f.write("%s\n%s\n" % (json_payload["message"], json_payload["email"]))
                             f.close()
-                            f = open('/var/www/html/openWB/ramdisk/debugmail', 'w')
-                            f.write(json_payload["email"])
+                            f = open('/var/www/html/openWB/ramdisk/debugemail', 'w')
+                            f.write(json_payload["email"] + "\n")
                             f.close()
                         else:
                             file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
@@ -1230,7 +1261,7 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
             if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
-                if (float(msg.payload) >= -50 and float(msg.payload) <=50):
+                if (float(msg.payload) >= -50 and float(msg.payload) <=95):
                     f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
@@ -1324,46 +1355,22 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/pv/1/kWhCounter"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
-                    pvkwhcounter=float(msg.payload.decode("utf-8"))*1000
-                    f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-                    f.write(str(pvkwhcounter))
-                    f.close()
-            if (msg.topic == "openWB/set/pv/1/WhCounter"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
-                    f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/pv/1/W"):
-                if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
-                    if (float(msg.payload) > 1):
-                        pvwatt=int(float(msg.payload.decode("utf-8"))) * -1
-                    else:
-                        pvwatt=int(float(msg.payload.decode("utf-8")))
-                    f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-                    f.write(str(pvwatt))
-                    f.close()
-            if (msg.topic == "openWB/set/pv/2/kWhCounter"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
-                    pvkwhcounter=float(msg.payload.decode("utf-8"))*1000
-                    f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-                    f.write(str(pvkwhcounter))
-                    f.close()
-            if (msg.topic == "openWB/set/pv/2/WhCounter"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
-                    f = open('/var/www/html/openWB/ramdisk/pv2kwh', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/pv/2/W"):
-                if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
-                    if (float(msg.payload) > 1):
-                        pvwatt=int(float(msg.payload.decode("utf-8"))) * -1
-                    else:
-                        pvwatt=int(float(msg.payload.decode("utf-8")))
-                    f = open('/var/www/html/openWB/ramdisk/pv2watt', 'w')
-                    f.write(str(pvwatt))
-                    f.close()
+            set_pv_match = re.match(r"^openWB/set/pv/([12])/(.*)$", msg.topic)
+            if set_pv_match is not None:
+                pv = files.pv[int(set_pv_match.group(1)) - 1]
+                subtopic = set_pv_match.group(2)
+                if subtopic == "kWhCounter":
+                    value = float(msg.payload)
+                    if 0 <= value <= 10000000000:
+                        pv.energy.write(float(msg.payload) * 1000)
+                elif subtopic == "WhCounter":
+                    value = float(msg.payload)
+                    if 0 <= value <= 10000000000:
+                        pv.energy.write(float(msg.payload))
+                elif subtopic == "W":
+                    value = abs(float(msg.payload))
+                    if value <= 100000000:
+                        pv.power.write(-float(msg.payload))
             if (msg.topic == "openWB/set/lp/1/AutolockStatus"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=3):
                     f = open('/var/www/html/openWB/ramdisk/autolockstatuslp1', 'w')

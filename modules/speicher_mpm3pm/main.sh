@@ -1,9 +1,21 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BAT"
+DMOD="MAIN"
+Debug=$debug
 
-if (( speicherkitversion == 1 )); then
-	sudo python /var/www/html/openWB/modules/speicher_mpm3pm/readsdm120.py 
-elif (( speicherkitversion == 2 )); then
-	sudo python /var/www/html/openWB/modules/speicher_mpm3pm/readsdm630.py 
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	sudo python /var/www/html/openWB/modules/speicher_mpm3pm/readmpm3pm.py 
+        MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "bat" "${speicherkitversion}" >>${MYLOGFILE} 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"

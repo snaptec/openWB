@@ -95,7 +95,7 @@
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
-										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
+										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage</option>
 										<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
 										<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 									</optgroup>
@@ -177,7 +177,7 @@
 										</div>
 										<span class="form-text small">
 											IP-Adresse 1: Energy Manager (immer angeben)<br>
-											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+											IP-Adresse 2: Gateway (Zusätzlich, falls Abrufmethode Gateway)
 										</span>
 									</div>
 								</div>
@@ -399,13 +399,33 @@
 										<span class="form-text small">
 											Je nach Sonnen Batterie muss die richtige Datenverbindung ausgewählt werden.
 											Folgende URLs werden zum Abruf der Daten genutzt und können auch manuell über einen Browser abgefragt werden, um die richtige Einstellung zu finden:<br>
-											Rest-API 1: [ip]:7979/rest/devices/battery<br>
-											Rest-API 2: [ip]:7979/rest/devices/battery/M05<br>
-											JSON-API: [ip]/api/v1/status
+											Rest-API 1: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery"></a><br>
+											Rest-API 2: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery/M05"></a><br>
+											JSON-API: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]/api/v1/status"></a>
 										</span>
 									</div>
 								</div>
 							</div>
+							<script>
+								$(function() {
+									function updateSonnenIp() {
+										let myIp = $("#sonnenecoip").val();
+										console.log(myIp);
+										let myLinks = $("#divspeicherseco a.api-link").each(function() {
+											let myLink = $(this).data("template").replace("[ip]", myIp);
+											$(this).text(myLink);
+											$(this).attr("href", myLink);
+										});;
+										console.log(myLinks);
+									}
+
+									$("#sonnenecoip").keyup(function() {
+										updateSonnenIp();
+									});
+
+									updateSonnenIp();
+								})
+							</script>
 						</div>
 
 						<div id="divspeichere3dc" class="hide">

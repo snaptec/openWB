@@ -21,7 +21,7 @@ openwbDebugLog ${DMOD} 2 "Speicher URL: ${battjsonurl}"
 openwbDebugLog ${DMOD} 2 "Speicher Watt: ${battjsonwatt}"
 openwbDebugLog ${DMOD} 2 "Speicher SoC: ${battjsonsoc}"
 
-python3 $OPENWBBASEDIR/modules/speicher_json/read_json.py "${battjsonurl}" "${battjsonwatt}" "${battjsonsoc}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.json.device" "bat" "${battjsonurl}" "${battjsonwatt}" "${battjsonsoc}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

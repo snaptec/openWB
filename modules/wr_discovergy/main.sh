@@ -1,12 +1,6 @@
 #!/bin/bash
-output=$(curl --connect-timeout 5 -s -u $discovergyuser:"$discovergypass" "https://api.discovergy.com/public/v1/last_reading?meterId=$discovergypvid")
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 
-pvwh=$(echo $output | jq .values.energyOut)
-pvwh=$(( pvwh / 10000000 ))
-echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.discovergy.device" "$discovergyuser" "$discovergypass" "$discovergyevuid" "$discovergypvid" &>> "$OPENWBBASEDIR/ramdisk/openWB.log"
 
-watt=$(echo $output | jq .values.power)
-watt=$(( watt / 1000 ))
-echo $watt > /var/www/html/openWB/ramdisk/pvwatt
-
-echo $watt
+cat "$OPENWBBASEDIR/ramdisk/pvwatt"

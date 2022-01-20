@@ -20,7 +20,7 @@ openwbDebugLog ${DMOD} 2 "Filter Watt : ${bezugjsonwatt}"
 openwbDebugLog ${DMOD} 2 "Filter Bezug: ${bezugjsonkwh}"
 openwbDebugLog ${DMOD} 2 "Filter Einsp: ${einspeisungjsonkwh}"
 
-python3 $OPENWBBASEDIR/modules/bezug_json/read_json.py "${bezugjsonurl}" "${bezugjsonwatt}" "${bezugjsonkwh}" "${einspeisungjsonkwh}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.json.device" "counter" "${bezugjsonurl}" "${bezugjsonwatt}" "${bezugjsonkwh}" "${einspeisungjsonkwh}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

@@ -1,7 +1,22 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+DMOD="PV"
+#DMOD="MAIN"
+Debug=$debug
 
-python /var/www/html/openWB/modules/wr_studer/studer_wr.py $studer_ip $studer_xt $studer_vc $studer_vc_type
+#For development only
+#Debug=1
 
-# Rückgabe des Wertes Gesamt-PV-Leistung
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+        MYLOGFILE="${RAMDISKDIR}/nurpv.log"
+fi
+
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.studer.device" "inverter" "${studer_ip}" "${studer_vc}" "${studer_vc_type}" "1">>${MYLOGFILE} 2>&1
+
+pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt

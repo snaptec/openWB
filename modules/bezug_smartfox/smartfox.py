@@ -44,10 +44,9 @@ response.encoding = 'utf-8'
 response = response.text.replace("\n", "")
 # Version ermitteln
 version = None
-tree = ET.parse(response)
-root = tree.getroot()
+root = ET.fromstring(response)
 version = get_xml_text(root, "value", "id", "version")
-if version < 6:
+if len(version) < 6:
     versionshort = version[:-6]
 else:
     versionshort = "oldversion"
@@ -97,11 +96,13 @@ wattbezug3 = get_xml_text(root, "value", "id", var_wattbezug3)
 
 # Zählerstand Import(kWh)
 ikwh = (get_xml_text(root, "value", "id", var_ikwh))[:-4]
-ikwh = round(ikwh * 1000, 2)
+ikwh = round(float(ikwh) * 1000, 2)
+ikwh = str(ikwh)
 
 # Zählerstand Export(kWh)
 ekwh = (get_xml_text(root, "value", "id", var_ekwh))[:-4]
-ekwh = round(ekwh * 1000, 2)
+ekwh = round(float(ekwh) * 1000, 2)
+ekwh = str(ekwh)
 
 # Weitere Zählerdaten für die Statusseite (PowerFaktor, Spannung und Strom)
 # Powerfaktor ist nach dem Firmwareupgrade auf EM2 00.01.03.06 (04-2021) nicht mehr in der values.xml daher fix auf 1
@@ -125,12 +126,6 @@ regex = '^[-+]?[0-9]+\.?[0-9]*$'
 if re.search(regex, wattbezug) == None:
     with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
         wattbezug = int(f.read())
-if re.search(regex, ikwh) == None:
-    with open("/var/www/html/openWB/ramdisk/bezugkwh", "r") as f:
-        ikwh = int(f.read())
-if re.search(regex, ekwh) == None:
-    with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "r") as f:
-        ekwh = int(f.read())
 
 # Ausgabe
 with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:

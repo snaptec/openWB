@@ -1,0 +1,249 @@
+<html><head>
+<title>RunData</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<link href="RunData-Dateien/default.css" rel="stylesheet" type="text/css">
+<script language="javascript">
+function submitForm(){    
+	var form = document.getElementById("RunData");
+	form.submit();
+}
+</script>
+</head>
+<body>
+<center>
+<br>
+<h3>Run Data</h3>
+</center>
+<hr>
+<center>
+<br>
+<form method="post" name="RunData" id="RunData" action="/goform/SetRunData">
+<table class="common_table" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+<td colspan="2" width="20%"><h3>Array Num:</h3></td>
+<td width="60%"><select name="ArrayNum" onchange="submitForm();">
+<option value="1" id="1" selected="selected">1</option>
+</select></td></tr>
+<tr>
+<td width="5%"></td>
+<td width="15%">ArrayVoltage:</td>
+<td width="60%"><input readonly="readonly" type="text" value="423.607">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>PackVoltage:</td>
+<td><input readonly="readonly" type="text" value="423.799">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>Current:</td>
+<td><input readonly="readonly" type="text" value="-3.230">&nbsp;&nbsp;A</td>
+</tr>
+<tr>
+<td></td>
+<td>SOC:</td>
+<td><input readonly="readonly" type="text" value="95.900%"></td>
+</tr>
+<tr>
+<td></td>
+</tr><tr>
+<td></td>
+<td>SysTemp:</td>
+<td><input readonly="readonly" type="text" value="24.000">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>MaxCellVol:</td>
+<td><input readonly="readonly" type="text" value="3.311">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>MinCellVol:</td>
+<td><input readonly="readonly" type="text" value="3.306">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>MaxCellTemp:</td>
+<td><input readonly="readonly" type="text" value="24.300">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>MinCellTemp:</td>
+<td><input readonly="readonly" type="text" value="22.100">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>MaxVolPos:</td>
+<td><input readonly="readonly" type="text" value="2"></td>
+</tr>
+<tr>
+<td></td>
+<td>MinVolPos:</td>
+<td><input readonly="readonly" type="text" value="4"></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxTempPos:</td>
+<td><input readonly="readonly" type="text" value="7"></td>
+</tr>
+<tr>
+<td></td>
+<td>MinTempPos:</td>
+<td><input readonly="readonly" type="text" value="1"></td>
+</tr>
+<tr>
+<td></td>
+<td>Power:</td>
+<td><input readonly="readonly" type="text" value="-1.355">&nbsp;&nbsp;KW</td>
+</tr>
+</tbody></table><br>
+<table class="common_table" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+<td colspan="2" width="40%"><h3>Series Battery Num:</h3></td>
+<td width="40%"><select name="SeriesBatteryNum" onchange="submitForm();">
+<option value="1" id="1" selected="selected">1</option>
+<option value="2" id="2">2</option>
+<option value="3" id="3">3</option>
+<option value="4" id="4">4</option>
+<option value="5" id="5">5</option>
+<option value="6" id="6">6</option>
+<option value="7" id="7">7</option>
+<option value="8" id="8">8</option>
+</select></td>
+</tr><tr>
+<td width="5%"></td>
+<td width="15%">SerialNumber:</td>
+<td width="60%"><input readonly="readonly" type="text" value="1C361810-00276" 2018="" 9="" 3="" 16:00:18="">&nbsp;&nbsp;</td>
+</tr><tr>
+<td width="5%"></td>
+<td width="15%">BattVol:</td>
+<td width="60%"><input readonly="readonly" type="text" value="52.929">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVolDiff:</td>
+<td><input readonly="readonly" type="text" value="0.002">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[1]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[2]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[3]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[4]:</td>
+<td><input readonly="readonly" type="text" value="3.309">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[5]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[6]:</td>
+<td><input readonly="readonly" type="text" value="3.309">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[7]:</td>
+<td><input readonly="readonly" type="text" value="3.309">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[8]:</td>
+<td><input readonly="readonly" type="text" value="3.309">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[9]:</td>
+<td><input readonly="readonly" type="text" value="3.307">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[10]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[11]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[12]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[13]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[14]:</td>
+<td><input readonly="readonly" type="text" value="3.307">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[15]:</td>
+<td><input readonly="readonly" type="text" value="3.308">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVol[16]:</td>
+<td><input readonly="readonly" type="text" value="3.307">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVolMax:</td>
+<td><input readonly="readonly" type="text" value="3.309">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellVolMin:</td>
+<td><input readonly="readonly" type="text" value="3.307">&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>CellTemp[1]:</td>
+<td><input readonly="readonly" type="text" value="22.300">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>CellTemp[2]:</td>
+<td><input readonly="readonly" type="text" value="22.300">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>CellTemp[3]:</td>
+<td><input readonly="readonly" type="text" value="22.400">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>CellTemp[4]:</td>
+<td><input readonly="readonly" type="text" value="22.100">&nbsp;&nbsp;℃</td>
+</tr>
+<tr>
+<td></td>
+<td>BalanceCtrl:</td>
+<td>1:<input type="checkbox" checked="checked" onclick="return false;">2:<input type="checkbox" onclick="return false;">3:<input type="checkbox" onclick="return false;">4:<input type="checkbox" onclick="return false;">5:<input type="checkbox" onclick="return false;">6:<input type="checkbox" onclick="return false;">7:<input type="checkbox" onclick="return false;">8:<input type="checkbox" onclick="return false;">9:<input type="checkbox" onclick="return false;">10:<input type="checkbox" onclick="return false;">11:<input type="checkbox" onclick="return false;">12:<input type="checkbox" onclick="return false;">13:<input type="checkbox" checked="checked" onclick="return false;">14:<input type="checkbox" checked="checked" onclick="return false;">15:<input type="checkbox" onclick="return false;">16:<input type="checkbox" onclick="return false;">
+</td>
+</tr>
+</tbody></table>
+</form>
+</center>
+
+
+</body></html>

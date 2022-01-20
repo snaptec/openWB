@@ -76,10 +76,10 @@
             <!-- Rechte Spalte (Ladepunkte)-->
             <div class=" col-3 px-1">
                 <div id="chargePointTable"></div>
-                <div class="container-fluid mt-5 p-2">
-                    <div class="row">
-                        <div class="col">
-                            <p class="currentPrice hide">Strompreis: 0 ct/kWh</p> 
+                <div class="container-fluid mt-5 mr-1 p-1">
+                    <div class="row m-1">
+                        <div class="col p-0">
+                            <p class="currentPrice hide">Strompreis: 0 ct/kWh</p>
                         </div>
                     </div>
                 </div>
@@ -250,7 +250,7 @@
                         <div class="modal-title text-light text-center">Einstellungen Ladepunkt <span
                                 class="configLp"></span></div>
                     </div>
-                   
+
                 </div>
                 <!-- modal body -->
                 <div class="modal-body">
@@ -323,24 +323,24 @@
                                             class="labelEnergyLimit modalLabel col-form-label valueLabel pull-right"
                                             data-suffix="kWh"></label>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-8">
                                         <input type="range" class="form-control-range energyRangeInput" id="energyLimit"
                                             min="2" max="100" step="2" value="2"
                                             data-topicprefix="openWB/config/get/sofort/">
                                     </div>
-                                    <div class="col-12 d-flex justify-content-end">
+                                    <!--  <div class="col-4 d-flex justify-content-end">
                                         <input class="btn btn-warning btn-lg modal-button resetEnergyToCharge"
                                             type="button" id="lp/1/resetEnergyToCharge"
                                             value="Energiemenge zurücksetzen"
                                             data-topicprefix="openWB/config/get/sofort/">
-                                    </div>
+                                    </div> -->
                                 </div> <!-- end limit energy -->
                                 <!-- options if limit is set to EV SoC (2) -->
-                                <div class="socLimitSettings form-row vaRow form-group hide" data-option="2">
-                                    <div class="col-4">
-                                        <label for="socLimit" class="modalLabel col-form-label">SoC:</label>
+                                <div class="socLimitSettings form-row vaRow form-group hide pb-0 mb-0" data-option="2">
+                                    <div class="col-4 pb-0 mb-0 ">
+                                        <label for="socLimit" class="modalLabel col-form-label pb-0 mb-0 ">SoC:</label>
                                         <label for="socLimit"
-                                            class="labelSocLimit modalLabel col-form-label valueLabel pull-right"
+                                            class="labelSocLimit modalLabel col-form-label valueLabel pull-right pb-0 mb-0 "
                                             data-suffix="%"></label>
                                     </div>
                                     <div class="col">
@@ -374,12 +374,18 @@
                     </div>
                     <!-- price based charging configuration-->
                     <div class="priceConfiguration hide">
-                        <figure id="priceChart"></figure>
-                        <div class="form-row vaRow">
-                            <div class="col-4">
-                                <label for="maxPrice" class="modalLabel col-form-label">Maximal: </label>
+                        <div class="row p-0 m-0 ">
+                            <div class="col"></div>
+                            <div class="col-12 pricechartColumn p-0 m-0">
+                                <figure id="priceChart"></figure>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="form-row vaRow p-0 m-0">
+                            <div class="col-4 m-0 p-0">
+                                <label for="maxPrice" class="modalLabel col-form-label p-0 m-0 ">Maximal: </label>
                                 <label for="maxPrice"
-                                    class="modalLabel labelMaxPrice col-form-label valueLabel pull-right"
+                                    class="modalLabel labelMaxPrice col-form-label valueLabel pull-right p-0 m-0"
                                     data-suffix="A"></label>
                             </div>
                             <div class="col">
@@ -388,11 +394,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
 
+                    <div class="row">
+                        <div class="col pt-1 px-3 energyResetButton hide">
+                            <input class="btn btn-warning btn-lg modal-button resetEnergyToCharge" type="button"
+                                id="lp/1/resetEnergyToCharge" value="Energiemenge zurücksetzen"
+                                data-topicprefix="openWB/config/get/sofort/">
+                        </div>
                         <div class="col pt-1 px-3">
-                            <button type="button" class="btn btn-info btn-block btn-lg modal-button" data-dismiss="modal"><i
-                                    class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
+                            <button type="button" class="btn btn-info btn-block btn-lg modal-button"
+                                data-dismiss="modal"><i class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
                         </div>
                     </div>
                 </div> <!-- /modal body -->
@@ -661,7 +672,7 @@
                         <div id="socSetButton"></div>
                         <div id="socLoadButton"></div>
                     </div>
-                      
+
                     <!-- priority buttons -->
                     <div id='priorityModeBtns' class="hide">
                         <hr>

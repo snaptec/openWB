@@ -5,19 +5,15 @@ Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, 
 formatieren.
 """
 from enum import Enum
-from typing import Callable, Iterable, Union
-
+from typing import Callable, Iterable, Union, overload, List
+import struct
 import pymodbus
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 
-try:
-    from ...helpermodules import log
-    from ..common.module_error import ModuleError, ModuleErrorLevel
-except (ImportError, ValueError, SystemError):
-    from helpermodules import log
-    from modules.common.module_error import ModuleError, ModuleErrorLevel
+from helpermodules import log
+from modules.common.fault_state import FaultState
 
 
 class ModbusDataType(Enum):
@@ -29,6 +25,7 @@ class ModbusDataType(Enum):
     INT_16 = 16, "decode_16bit_int"
     INT_32 = 32, "decode_32bit_int"
     INT_64 = 64, "decode_64bit_int"
+    FLOAT_16 = 16, "decode_16bit_float"
     FLOAT_32 = 32, "decode_32bit_float"
     FLOAT_64 = 64, "decode_64bit_float"
 
@@ -38,6 +35,7 @@ class ModbusDataType(Enum):
 
 
 _MODBUS_HOLDING_REGISTER_SIZE = 16
+Number = Union[int, float]
 
 
 class ModbusClient:
@@ -58,13 +56,14 @@ class ModbusClient:
             log.MainLogger().debug("Close Modbus TCP connection")
             self.delegate.close()
         except Exception as e:
-            raise ModuleError(__name__+" "+str(type(e))+" " +
-                              str(e), ModuleErrorLevel.ERROR) from e
+            raise FaultState.error(__name__+" "+str(type(e))+" " +
+                                   str(e)) from e
 
     def __read_registers(self, read_register_method: Callable,
                          address: int,
                          types: Union[Iterable[ModbusDataType], ModbusDataType],
-                         big_endian: bool = True,
+                         byteorder: Endian = Endian.Big,
+                         wordorder: Endian = Endian.Big,
                          **kwargs):
         try:
             multi_request = isinstance(types, Iterable)
@@ -79,30 +78,57 @@ class ModbusClient:
             response = read_register_method(
                 address, number_of_addresses, **kwargs)
             if response.isError():
-                raise response
-            decoder = BinaryPayloadDecoder.fromRegisters(
-                response.registers, Endian.Big if big_endian else Endian.Little)
-            result = [getattr(decoder, t.decoding_method)() for t in types]
+                raise FaultState.error(__name__+" "+str(response))
+            decoder = BinaryPayloadDecoder.fromRegisters(response.registers, byteorder, wordorder)
+            result = [struct.unpack(">e", struct.pack(">H", decoder.decode_16bit_uint())) if t ==
+                      ModbusDataType.FLOAT_16 else getattr(decoder, t.decoding_method)() for t in types]
             return result if multi_request else result[0]
         except pymodbus.exceptions.ConnectionException as e:
-            raise ModuleError("TCP-Client konnte keine Verbindung zu " + str(self.address) + ":" + str(self.port) +
-                              "aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " + "Hardware-Anschluss pruefen.",
-                              ModuleErrorLevel.ERROR) from e
+            raise FaultState.error(
+                "TCP-Client konnte keine Verbindung zu " + str(self.address) + ":" + str(self.port) +
+                " aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " + "Hardware-Anschluss pruefen.") from e
         except pymodbus.exceptions.ModbusIOException as e:
-            raise ModuleError(
+            raise FaultState.warning(
                 "TCP-Client " + str(self.address) + ":" + str(self.port) +
                 " konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red," +
-                "beenden und bei anhaltender Fehlermeldung Zaehler neustarten.", ModuleErrorLevel.WARNING) from e
+                "beenden und bei anhaltender Fehlermeldung Zaehler neustarten.") from e
         except Exception as e:
-            raise ModuleError(__name__+" "+str(type(e))+" " +
-                              str(e), ModuleErrorLevel.ERROR) from e
+            raise FaultState.error(__name__+" "+str(type(e))+" " +
+                                   str(e)) from e
+
+    @overload
+    def read_holding_registers(self, address: int, types: Iterable[ModbusDataType], byteorder: Endian = Endian.Big,
+                               wordorder: Endian = Endian.Big, **kwargs) -> List[Number]:
+        pass
+
+    @overload
+    def read_holding_registers(self, address: int, types: ModbusDataType, byteorder: Endian = Endian.Big,
+                               wordorder: Endian = Endian.Big, **kwargs) -> Number:
+        pass
 
     def read_holding_registers(self, address: int,
                                types: Union[Iterable[ModbusDataType], ModbusDataType],
+                               byteorder: Endian = Endian.Big,
+                               wordorder: Endian = Endian.Big,
                                **kwargs):
-        return self.__read_registers(self.delegate.read_holding_registers, address, types, **kwargs)
+        return self.__read_registers(
+            self.delegate.read_holding_registers, address, types, byteorder, wordorder, **kwargs
+        )
+
+    @overload
+    def read_input_registers(self, address: int, types: Iterable[ModbusDataType], byteorder: Endian = Endian.Big,
+                             wordorder: Endian = Endian.Big,
+                             **kwargs) -> List[Number]:
+        pass
+
+    @overload
+    def read_input_registers(self, address: int, types: ModbusDataType, byteorder: Endian = Endian.Big,
+                             wordorder: Endian = Endian.Big, **kwargs) -> Number:
+        pass
 
     def read_input_registers(self, address: int,
                              types: Union[Iterable[ModbusDataType], ModbusDataType],
+                             byteorder: Endian = Endian.Big,
+                             wordorder: Endian = Endian.Big,
                              **kwargs):
-        return self.__read_registers(self.delegate.read_input_registers, address, types, **kwargs)
+        return self.__read_registers(self.delegate.read_input_registers, address, types, byteorder, wordorder, **kwargs)

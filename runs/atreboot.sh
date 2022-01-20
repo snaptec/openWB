@@ -1,10 +1,12 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
 echo "atreboot.sh started"
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
 
 # read openwb.conf
 echo "loading config"
 . /var/www/html/openWB/loadconfig.sh
+. "$OPENWBBASEDIR/helperFunctions.sh"
 
 # load functions to init ramdisk and update config
 # no code will run here, functions need to be called
@@ -83,15 +85,23 @@ if (( rseenabled == 1 )); then
 fi
 
 # check if rfid is configured and start daemons to listen on input devices
+
+# Kill only if process exists, avoid error messages
+if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/readrfid.py" > /dev/null
+then
+	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
+fi
+if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/readrfid2.py" > /dev/null
+then
+	sudo kill $(ps aux |grep '[r]eadrfid2.py' | awk '{print $2}')
+fi
 if (( rfidakt == 1 )); then
 	echo "rfid 1..."
-	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
 if (( rfidakt == 2 )); then
 	echo "rfid 2..."
-	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
@@ -134,6 +144,11 @@ then
 	sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 fi
 python3 /var/www/html/openWB/runs/mqttsub.py &
+
+# restart legacy run server
+echo "legacy run server..."
+bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
+
 
 # check crontab for user pi
 echo "crontab 1..."
@@ -227,10 +242,10 @@ echo "timezone..."
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 
-if [ ! -f /home/pi/ssl_patched ]; then 
-	sudo apt-get update 
-	sudo apt-get -qq install -y openssl libcurl3 curl libgcrypt20 libgnutls30 libssl1.1 libcurl3-gnutls libssl1.0.2 php7.0-cli php7.0-gd php7.0-opcache php7.0 php7.0-common php7.0-json php7.0-readline php7.0-xml php7.0-curl libapache2-mod-php7.0 
-	touch /home/pi/ssl_patched 
+if [ ! -f /home/pi/ssl_patched ]; then
+	sudo apt-get update
+	sudo apt-get -qq install -y openssl libcurl3 curl libgcrypt20 libgnutls30 libssl1.1 libcurl3-gnutls libssl1.0.2 php7.0-cli php7.0-gd php7.0-opcache php7.0 php7.0-common php7.0-json php7.0-readline php7.0-xml php7.0-curl libapache2-mod-php7.0
+	touch /home/pi/ssl_patched
 fi
 
 
@@ -294,12 +309,14 @@ if python3 -c "import ipparser" &> /dev/null; then
 else
 	sudo pip3 install ipparser
 fi
+# update outdated urllib3 for Tesla Powerwall
+pip3 install --upgrade urllib3
 
 # update version
 echo "version..."
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
-curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
+curl --connect-timeout 10 -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
 
 # all done, remove warning in display
 echo "clear warning..."
@@ -361,12 +378,18 @@ ip route get 1 | awk '{print $7;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 # update current published versions
 echo "load versions..."
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
 # update our local version
 sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /var/www/html/openWB/web/lastcommit
+# and record the current commit details
+commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
+echo $commitId > /var/www/html/openWB/ramdisk/currentCommitHash
+echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > /var/www/html/openWB/ramdisk/currentCommitBranches
+sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitHash
+sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitBranches
 
 # update broker
 echo "update broker..."

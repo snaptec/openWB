@@ -1097,9 +1097,6 @@ updateConfig(){
 	if ! grep -Fq "froniuserzeugung=" $ConfigFile; then
 		echo "froniuserzeugung=0" >> $ConfigFile
 	fi
-	if ! grep -Fq "froniusprimo=" $ConfigFile; then
-		echo "froniusprimo=0" >> $ConfigFile
-	fi
 	if ! grep -Fq "froniusvar2=" $ConfigFile; then
 		echo "froniusvar2=0" >> $ConfigFile
 	fi
@@ -1834,6 +1831,16 @@ updateConfig(){
 	if ! grep -Fq "ssdisplay=" $ConfigFile; then
 		echo "ssdisplay=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "owbpro1ip=" $ConfigFile; then
+		echo "owbpro1ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro2ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro3ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro4ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro5ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro6ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro7ip=192.168.1.100" >> $ConfigFile
+		echo "owbpro8ip=192.168.1.100" >> $ConfigFile
+	fi
 	if ! grep -Fq "chargep1ip=" $ConfigFile; then
 		echo "chargep1ip=192.168.1.100" >> $ConfigFile
 	fi
@@ -2063,7 +2070,7 @@ updateConfig(){
 		sed -i "/speicherpwpass='/b; s/^speicherpwpass=\(.*\)/speicherpwpass=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "multifems=" $ConfigFile; then
-		echo "multifems=1" >> $ConfigFile
+		echo "multifems=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
 		echo "solaredgezweiterspeicher=0" >> $ConfigFile
@@ -2106,9 +2113,6 @@ updateConfig(){
 		echo "soc_evcc_password_lp2=''" >> $ConfigFile
 		echo "soc_evcc_vin_lp2=''" >> $ConfigFile
 		echo "soc_evcc_token_lp2=''" >> $ConfigFile
-	fi
-	if ! grep -Fq "wrfroniusisgen24=" $ConfigFile; then
-		echo "wrfroniusisgen24=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
