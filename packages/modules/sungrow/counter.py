@@ -4,7 +4,7 @@ from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusDataType
+from modules.common.modbus import ModbusDataType, Endian
 from modules.common.store import get_counter_value_store
 
 
@@ -13,8 +13,7 @@ def get_default_config() -> dict:
         "name": "Sungrow Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
+        "configuration": {
             "version": 1
         }
     }
@@ -34,9 +33,11 @@ class SungrowCounter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = 1
         if self.component_config["configuration"]["version"] == 1:
-            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32, unit=unit)
+            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
+                                                           wordorder=Endian.Little, unit=unit)
         else:
-            power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32, unit=unit) * -1
+            power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32,
+                                                           wordorder=Endian.Little, unit=unit) * -1
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config["id"])
         imported, exported = self.__sim_count.sim_count(
