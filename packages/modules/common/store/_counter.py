@@ -1,6 +1,7 @@
-from helpermodules import log, compatibility
+from helpermodules import compatibility
 from modules.common.component_state import CounterState
 from modules.common.store import ValueStore
+from modules.common.store._api import LoggingValueStore
 from modules.common.store._broker import pub_to_broker
 from modules.common.store._util import process_error
 from modules.common.store.ramdisk import files
@@ -17,9 +18,6 @@ class CounterValueStoreRamdisk(ValueStore[CounterState]):
             files.evu.energy_export.write(counter_state.exported)
             files.evu.power_import.write(counter_state.power)
             files.evu.frequency.write(counter_state.frequency)
-            log.MainLogger().info('EVU Watt: ' + str(counter_state.power))
-            log.MainLogger().info('EVU Bezug: ' + str(counter_state.imported))
-            log.MainLogger().info('EVU Einspeisung: ' + str(counter_state.exported))
         except Exception as e:
             process_error(e)
 
@@ -43,6 +41,6 @@ class CounterValueStoreBroker(ValueStore[CounterState]):
 
 
 def get_counter_value_store(component_num: int) -> ValueStore[CounterState]:
-    if compatibility.is_ramdisk_in_use():
-        return CounterValueStoreRamdisk()
-    return CounterValueStoreBroker(component_num)
+    return LoggingValueStore(
+        CounterValueStoreRamdisk() if compatibility.is_ramdisk_in_use() else CounterValueStoreBroker(component_num)
+    )
