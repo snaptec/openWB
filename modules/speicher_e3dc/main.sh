@@ -1,4 +1,3 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-pvwattold=$(</var/www/html/openWB/ramdisk/pvwatt)
-python3 "$OPENWBBASEDIR/modules/speicher_e3dc/e3dc.py" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" "$pvwattold" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1
+python3 "$OPENWBBASEDIR/modules/speicher_e3dc/e3dc.py" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1
