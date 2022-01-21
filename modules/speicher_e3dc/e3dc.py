@@ -15,7 +15,7 @@ from modules.common.store.ramdisk import files
 
 log = logging.getLogger("E3DC Battery")
 
-def update_e3dc_battery(addresses: Iterable[str],read_external: int,pv_other: int):
+def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: bool):
     soc = 0
     count = 0
     battery_power = 0
@@ -25,7 +25,7 @@ def update_e3dc_battery(addresses: Iterable[str],read_external: int,pv_other: in
     # pv -> pv Leistung die direkt an e3dc angeschlossen ist
     pv = 0
     for address in addresses:
-        log.debug("Battery Ip: %s, read_external %d pv_other %d ", address, read_external, pv_other)
+        log.debug("Battery Ip: %s, read_external %d pv_other %s", address, read_external, pv_other)
         count += 1
         with ModbusClient(address, port=502) as client:
             #40082 soc
@@ -46,15 +46,15 @@ def update_e3dc_battery(addresses: Iterable[str],read_external: int,pv_other: in
     pv_total = pv + pv_external
     # Wenn wr1 nicht definiert ist, gilt nur die PV Leistung die hier im Modul ermittelt wurde
     # als gesamte PV Leistung für wr1
-    if (pv_other == 0) or (pv_total != 0):
+    if not pv_other or pv_total != 0:
         # Wenn wr1 definiert ist, gilt die bestehende PV Leistung aus Wr1 und das was hier im Modul ermittelt wurde
         # als gesamte PV Leistung für wr1
-        if pv_other == 1:
+        if pv_other:
             try:
                 pv_total = pv_total + files.pv[0].power.read()
             except:
                 pass
-        log.debug(" wr update pv_other %d pv_total %d", pv_other, pv_total)
+        log.debug("wr update pv_other %s pv_total %d", pv_other, pv_total)
         _, counter_pv= SimCountFactory().get_sim_counter()().sim_count(pv_total, prefix="pv")
         get_inverter_value_store(1).set(InverterState(counter=counter_pv, power=pv_total))
 
