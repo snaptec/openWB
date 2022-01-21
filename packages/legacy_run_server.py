@@ -8,10 +8,14 @@ Thanks to the server running continuously this means that python code can be exe
 environment first.
 """
 import contextlib
+import fcntl
 import importlib
 import io
 import json
 import logging
+import os
+import re
+import signal
 import socket
 import sys
 import threading
@@ -105,8 +109,89 @@ def handle_message(message: bytes):
     log.debug("Completed running command in %.2fs: %.100s", time.time() - time_start, message_str)
 
 
+def try_update_log_level_from_config():
+    try:
+        config_file_contents = (Path(__file__).parents[1] / "openwb.conf").read_text("utf-8")
+    except Exception as e:
+        # In case we cannot read the config file (maybe due to some lock, race conditions or someone moved the file
+        # temporarily), we just ignore the change
+        log.debug("Could not read openwb.conf. Ignoring.", exc_info=e)
+        return
+    match = re.search("^debug=([012])", config_file_contents, re.MULTILINE)
+    if match is None:
+        logging.getLogger().setLevel(logging.DEBUG)
+        log.warning("Debug setting not found in config. Assuming log-level DEBUG")
+        return
+    log_level_new = [logging.WARNING, logging.INFO, logging.DEBUG][int(match.group(1))]
+    log_level_old = logging.getLogger().level
+    if log_level_new != log_level_old:
+        # Emit log message before AND after changing the level so that in case the level WAS or WILL BE >= INFO this
+        # is logged:
+        log_level_names = logging.getLevelName(log_level_old), logging.getLevelName(log_level_new)
+        log.info("Changing log level %s -> %s", *log_level_names)
+        logging.getLogger().setLevel(log_level_new)
+        log.info("Log level changed %s -> %s", *log_level_names)
+
+
+def update_log_level_from_config():
+    try:
+        try_update_log_level_from_config()
+    except Exception as e:
+        log.error("Could not update log level from openwb.conf", exc_info=e)
+
+
+class AtomicInteger:
+    def __init__(self):
+        self._value = 0
+        self._lock = threading.Lock()
+
+    def increment_and_get(self):
+        with self._lock:
+            self._value += 1
+            return self._value
+
+    def get(self):
+        with self._lock:
+            return self._value
+
+
+def watch_config():
+    """This function watches the openwb.conf file for modifications. If it is modified, the log level is refreshed
+
+    The function uses the F_NOTIFY Linux kernel feature to receive a notification if a file in the directory where
+    openwb.conf is stored changes.
+
+    However the linux kernel is very fast in sending notifications. If a process changes a file it is likely that the
+    file is changed in multiple write operations that all happen within a few milliseconds. In this case we also receive
+    multiple notifications. Thus we cannot tell if the process modifying our file has finished updating the file (best
+    would be to use file locks, but openWB does not use file locks. It would require changes at a vast number of
+    places).
+
+    To workaround the issue we simply wait 200ms after a change was detected. If within these 200ms another change is
+    detected, the timer is reset. If there has not been any notification for 200ms we assume that there are no pending
+    updates.
+    """
+    latest_signal_id = AtomicInteger()
+
+    def signal_handler_delayed(current_signal_id: int):
+        time.sleep(.2)
+        if current_signal_id == latest_signal_id.get():
+            # The signal id has not changed. This means there have not been any further updates during the last 200ms.
+            update_log_level_from_config()
+
+    def signal_handler(_signum, _frame):
+        threading.Thread(target=signal_handler_delayed, args=(latest_signal_id.increment_and_get(),)).start()
+
+    signal.signal(signal.SIGIO, signal_handler)
+    file_descriptor = os.open(str(Path(__file__).parents[1]), os.O_RDONLY)
+    fcntl.fcntl(file_descriptor, fcntl.F_SETSIG, 0)
+    fcntl.fcntl(file_descriptor, fcntl.F_NOTIFY, fcntl.DN_MODIFY | fcntl.DN_MULTISHOT)
+
+
 if __name__ == '__main__':
     setup_logging_stdout()
     sys.excepthook = exception_handler
+    update_log_level_from_config()
+    watch_config()
     log.info("Starting legacy run server")
     SocketListener(Path(__file__).parent / "legacy_run_server.sock", handle_message).handle_connections()
