@@ -1,6 +1,9 @@
 from typing import List
 
+from helpermodules.auto_str import auto_str
 
+
+@auto_str
 class BatState:
     def __init__(self, imported: float = 0, exported: float = 0, power: float = 0, soc: float = 0):
         self.imported = imported
@@ -9,6 +12,7 @@ class BatState:
         self.soc = soc
 
 
+@auto_str
 class CounterState:
     def __init__(self,
                  imported: float = 0,
@@ -40,6 +44,7 @@ class CounterState:
         self.frequency = frequency
 
 
+@auto_str
 class InverterState:
     def __init__(
         self,
@@ -54,6 +59,7 @@ class InverterState:
         self.counter = counter
 
 
+@auto_str
 class CarState:
     def __init__(self, soc: float):
         self.soc = soc
