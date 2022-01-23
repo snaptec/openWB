@@ -19,9 +19,10 @@ fi
 openwbDebugLog ${DMOD} 2 "PV Hostname: ${solarview_hostname}"
 openwbDebugLog ${DMOD} 2 "PV Port: ${solarview_port}"
 openwbDebugLog ${DMOD} 2 "PV Timeout: ${solarview_timeout}"
+openwbDebugLog ${DMOD} 2 "PV Command: ${solarview_command_wr}"
 
 
-python3 /var/www/html/openWB/modules/wr_solarview/solarview.py "${solarview_hostname}" "${solarview_port}" "${solarview_timeout}" >>$MYLOGFILE 2>&1
+python3 /var/www/html/openWB/modules/wr_solarview/solarview.py "${solarview_hostname}" "${solarview_port}" "${solarview_timeout}" "${solarview_command_wr}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
