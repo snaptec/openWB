@@ -158,7 +158,7 @@ if solarview_port:
 # '00*': Gesamte Anlage
 # '01*': Wechselrichter 1
 # '02*': Wechselrichter 2
-command="1:-00*"
+command="00*"
 
 request(command)
 
