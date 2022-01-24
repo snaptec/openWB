@@ -1006,9 +1006,6 @@
 								if($('#wattbezugmodul').val() == 'bezug_http')   {
 									showSection('#wattbezughttp');
 								}
-								if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
-									showSection('#wattbezugsma');
-								}
 								if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 									showSection('#wattbezugfronius');
 								}

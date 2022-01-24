@@ -30,48 +30,44 @@
 
 import signal
 import sys
-#import smaem
 import socket
 import struct
-from speedwiredecoder import *
+from speedwiredecoder import decode_speedwire
+
 
 # clean exit
-def abortprogram(signal,frame):
+def abortprogram(signal, frame):
     # Housekeeping -> nothing to cleanup
     print('STRG + C = end program')
     sys.exit(0)
+
 
 def writeToFile(filename, content):
     """Write content to file"""
     with open(filename, 'w') as f:
         f.write(str(content))
 
+
 # abort-signal
 signal.signal(signal.SIGINT, abortprogram)
 
 
-#read configuration
-#parser = ConfigParser()
-#default values
+# read configuration
+# parser = ConfigParser()
+# default values
 smaserials = sys.argv[1] if len(sys.argv) > 1 else None
 ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
 MCAST_PORT = 9522
 
 basepath = '/var/www/html/openWB/ramdisk/'
-#                filename:  channel
-mapping      = { 'evuhu':   'frequency' }
-phasemapping = { 'bezuga%i': { 'from': 'i%i', 'sign': True },
-                 'evuv%i':   { 'from': 'u%i'   },
-                 'evupf%i':  { 'from': 'cosphi%i' }
-               }
-#try:
-#    smaemserials=parser.get('SMA-EM', 'serials')
-#    ipbind=parser.get('DAEMON', 'ipbind')
-#    MCAST_GRP = parser.get('DAEMON', 'mcastgrp')
-#    MCAST_PORT = int(parser.get('DAEMON', 'mcastport'))
-#except:
-#    print('Cannot find config /etc/smaemd/config... using defaults')
+# filename:  channel
+mapping = {'evuhz': 'frequency'}
+phasemapping = {
+    'bezuga%i': {'from': 'i%i', 'sign': True},
+    'evuv%i': {'from': 'u%i'},
+    'evupf%i': {'from': 'cosphi%i'}
+}
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -80,26 +76,25 @@ try:
     mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
     sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 except BaseException:
-    print('could not connect to mulicast group or bind to given interface')
+    print('could not connect to multicast group or bind to given interface')
     sys.exit(1)
 # processing received messages
 while True:
     emparts = {}
     sock_data = sock.recv(608)
-    #Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
+    # Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
     if sock_data[16:18] != b'\x60\x69':
         continue
-    emparts=decode_speedwire(sock_data)
+    emparts = decode_speedwire(sock_data)
     # Output...
     # don't know what P,Q and S means:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
     # thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
     # cos phi is always positive, no matter what quadrant
-    positive = [ 1,1,1,1 ]
+    positive = [1, 1, 1, 1]
     if smaserials is None or smaserials == 'none' or str(emparts['serial']) == smaserials:
         # Special treatment for positive / negative power
-        
-        watt=-int(emparts['psupply'])
+        watt = -int(emparts['psupply'])
         writeToFile(basepath + 'pvwatt', watt)
         writeToFile(basepath + 'pvkwh', emparts['psupplycounter'] * 1000)
         sys.exit(0)
