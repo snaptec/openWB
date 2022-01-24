@@ -35,9 +35,27 @@ class SungrowCounter:
         if self.component_config["configuration"]["version"] == 1:
             power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
                                                            wordorder=Endian.Little, unit=unit)
+            frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
+            voltages = self.__tcp_client.read_input_registers(5018, [ModbusDataType.UINT_16] * 3,
+                                                              wordorder=Endian.Little, unit=unit)
+            voltages = [voltage / 10 for voltage in voltages]
+            # no valid data for powers per phase
+            # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.UINT_16] * 3,
+            #                                                 wordorder=Endian.Little, unit=unit)
+            # powers = [power / 10 for power in powers]
+            # log.MainLogger().info("power: " + str(power) + " powers?: " + str(powers))
         else:
             power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32,
                                                            wordorder=Endian.Little, unit=unit) * -1
+            frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
+            voltages = self.__tcp_client.read_input_registers(5018, [ModbusDataType.UINT_16] * 3,
+                                                              wordorder=Endian.Little, unit=unit)
+            voltages = [voltage / 10 for voltage in voltages]
+            # no valid data for powers per phase
+            # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.INT_16] * 3,
+            #                                                 wordorder=Endian.Little, unit=unit)
+            # powers = [power / 10 for power in powers]
+            # log.MainLogger().info("power: " + str(power) + " powers?: " + str(powers))
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config["id"])
         imported, exported = self.__sim_count.sim_count(
@@ -50,7 +68,9 @@ class SungrowCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power=power
+            power=power,
+            voltages=voltages,
+            frequency=frequency
         )
         log.MainLogger().debug("Sungrow Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)
