@@ -268,7 +268,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|[a-zA-Z0-9.\-_]+$" name="solarview_hostname" id="solarview_hostname" value="<?php echo $solarview_hostnameold ?>">
 									<span class="form-text small">
-										Gültige Werte Hostname oder IP-Adresse.
+										Gültige Werte: Hostname oder IP-Adresse
 									</span>
 								</div>
 							</div>
@@ -277,7 +277,25 @@
 								<div class="col">
 									<input class="form-control" type="number" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 									<span class="form-text small">
-										Gültige Werte Port, z.B. 15000.
+										Gültige Werte: Port, z.B. 15000
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="solarview_timeout" class="col-md-4 col-form-label">Timeout für den Solarview TCP-Server</label>
+								<div class="col">
+									<input class="form-control" type="number" name="solarview_timeout" id="solarview_timeout" value="<?php echo htmlspecialchars($solarview_timeoutold) ?>">
+									<span class="form-text small">
+										Gültige Werte: Dauer in Sekunden, z.B. 3
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="solarview_command_wr" class="col-md-4 col-form-label">Kommando für die Abfrage der Wechselrichter</label>
+								<div class="col">
+								<input class="form-control" type="text" pattern="^\d{2}\*$" name="solarview_command_wr" id="solarview_command_wr" value="<?php echo $solarview_command_wrold ?>">
+									<span class="form-text small">
+										Gültige Werte: Kommandos gemäß SolarView-Dokumentation, z.B.: <code>00*</code> (gesamte Anlage), <code>01*</code> (Wechselrichter 1), <code>02*</code> (Wechselrichter 2)
 									</span>
 								</div>
 							</div>

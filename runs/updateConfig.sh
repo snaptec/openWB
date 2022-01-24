@@ -1459,7 +1459,13 @@ updateConfig(){
 		echo "solarview_hostname=192.168.0.31" >> $ConfigFile
 	fi
 	if ! grep -Fq "solarview_port=" $ConfigFile; then
-		echo "solarview_port=80" >> $ConfigFile
+		echo "solarview_port=15000" >> $ConfigFile
+	fi
+	if ! grep -Fq "solarview_timeout=" $ConfigFile; then
+		echo "solarview_timeout=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "solarview_command_wr=" $ConfigFile; then
+		echo "solarview_command_wr=00*" >> $ConfigFile
 	fi
 	if ! grep -Fq "discovergyuser=" $ConfigFile; then
 		echo "discovergyuser=name@mail.de" >> $ConfigFile
