@@ -39,7 +39,10 @@ class VictronCounter:
             for reg in [2617, 2619, 2621]]
         voltages = [
             self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_16, unit=unit) / 10
-            for reg in [2616, 2618, 2610]]
+            for reg in [2616, 2618, 2620]]
+        powers = [
+            self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit)
+            for reg in [2600, 2601, 2602]]
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]
@@ -54,6 +57,7 @@ class VictronCounter:
         counter_state = CounterState(
             voltages=voltages,
             currents=currents,
+            powers=powers,
             imported=imported,
             exported=exported,
             power=power
