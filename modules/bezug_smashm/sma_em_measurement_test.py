@@ -24,7 +24,7 @@ OkkgBJBAAAAAPokAAAAAIAElIAAAAA
 
 @pytest.fixture
 def mock_ramdisk(monkeypatch):
-    monkeypatch.setattr(compatibility, "is_ramdisk_in_use", lambda : True)
+    monkeypatch.setattr(compatibility, "is_ramdisk_in_use", lambda: True)
     return MockRamdisk(monkeypatch)
 
 

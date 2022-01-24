@@ -28,7 +28,7 @@ def run(sma_serials: Optional[str] = None):
         mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
     except BaseException:
-        print('could not connect to mulicast group or bind to given interface')
+        print('could not connect to multicast group or bind to given interface')
         sys.exit(1)
     # processing received messages
     while not process_datagram(sock.recv(608), sma_serials):

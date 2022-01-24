@@ -483,7 +483,6 @@
 											<option <?php if($ladeleistungmodulold == "mpm3pmll") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
 											<option <?php if($ladeleistungmodulold == "sdm120modbusll") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
 											<option <?php if($ladeleistungmodulold == "sdm630modbusll") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
-											<option <?php if($ladeleistungmodulold == "smaemd_ll") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
 											<option <?php if($ladeleistungmodulold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 										</optgroup>
 										<optgroup label="generische Module">
@@ -695,19 +694,6 @@
 							<div id="llswifi" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.
-								</div>
-							</div>
-							<div id="llsma" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="smaemdllid" class="col-md-4 col-form-label">Seriennummer</label>
-										<div class="col">
-											<input class="form-control" type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>">
-											<span class="form-text small">
-												Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben.
-											</span>
-										</div>
-									</div>
 								</div>
 							</div>
 							<div id="mqttll" class="hide">
@@ -2273,7 +2259,6 @@
 							hideSection('#llmsdm');
 							hideSection('#llmpm3pm');
 							hideSection('#llswifi');
-							hideSection('#llsma');
 							hideSection('#sdm120div');
 							hideSection('#rs485lanlp1');
 							hideSection('#llmfsm');
@@ -2297,9 +2282,6 @@
 							if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 								showSection('#llmsdm');
 								showSection('#rs485lanlp1');
-							}
-							if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-								showSection('#llsma');
 							}
 							if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
 								showSection('#sdm120div');
