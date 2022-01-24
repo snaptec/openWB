@@ -57,7 +57,7 @@ class VictronCounter:
         counter_state = CounterState(
             voltages=voltages,
             currents=currents,
-			powers=powers,
+            powers=powers,
             imported=imported,
             exported=exported,
             power=power
