@@ -295,7 +295,7 @@
 								<div class="col">
 								<input class="form-control" type="text" pattern="^\d{2}\*$" name="solarview_command_wr" id="solarview_command_wr" value="<?php echo $solarview_command_wrold ?>">
 									<span class="form-text small">
-										Gültige Werte: Kommandos, z.B. 01*
+										Gültige Werte: Kommandos gemäß SolarView-Dokumentation, z.B.: <code>00*</code> (gesamte Anlage), <code>01*</code> (Wechselrichter 1), <code>02*</code> (Wechselrichter 2)
 									</span>
 								</div>
 							</div>
