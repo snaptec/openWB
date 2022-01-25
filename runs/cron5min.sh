@@ -22,7 +22,7 @@ fi
 
 openwbDebugLog "MAIN" 0 "##### cron5min.sh started #####"
 
-dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d)"
+dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d).csv"
 monthlyladelogfile="$OPENWBBASEDIR/web/logging/data/ladelog/$(date +%Y%m).csv"
 
 # check if a monthly logfile exists and create a new one if not
@@ -98,8 +98,8 @@ d8haus=$(<$RAMDISKDIR/smarthome_device_minhaus_8)
 d9haus=$(<$RAMDISKDIR/smarthome_device_minhaus_9)
 
 # now add a line to our daily csv
-echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile.csv
-openwbDebugLog "MAIN" 1 "daily csv updated: $dailyfile.csv"
+echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile
+openwbDebugLog "MAIN" 1 "daily csv updated: $dailyfile"
 
 # grid protection
 # temporary disabled
