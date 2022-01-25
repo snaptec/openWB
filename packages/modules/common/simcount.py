@@ -97,9 +97,9 @@ class SimCountLegacy:
                     # runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab.
                     counter_export_present = counter_export_present * -1
                 counter_export_previous = counter_export_present
-                log.MainLogger().debug("simcount Zwischenergebnisse letzte Berechnung: Import: " + str(
-                    counter_import_previous) + " Export: " + str(counter_export_previous) + " Power: " + str(
-                    power_previous))
+                log.MainLogger().debug("simcount Zwischenergebnisse letzte Berechnung: Import: " +
+                                       str(counter_import_previous) + " Export: " + str(counter_export_previous) +
+                                       " Leistung: " + str(power_previous))
                 start_new = False
             write_ramdisk_file(prefix+'sec0', "%22.6f" % timestamp_present)
             write_ramdisk_file(prefix+'wh0', power_present)
@@ -117,16 +117,17 @@ class SimCountLegacy:
                     "simcount aufsummierte Energie: Bezug[Ws]: " + str(counter_import_present) + ", Einspeisung[Ws]: " +
                     str(counter_export_present)
                 )
-                wattposkh = counter_import_present/3600
-                wattnegkh = counter_export_present/3600
+                energy_positive_kWh = counter_import_present / 3600
+                energy_negative_kWh = counter_export_present / 3600
                 log.MainLogger().info(
-                    "simcount Ergebnis: Bezug[Wh]: " + str(wattposkh) + ", Einspeisung[Wh]: " + str(wattnegkh)
+                    "simcount Ergebnis: Bezug[Wh]: " + str(energy_positive_kWh) +
+                    ", Einspeisung[Wh]: " + str(energy_negative_kWh)
                 )
 
                 topic = get_topic(prefix)
                 log.MainLogger().debug(
-                    "simcount Zwischenergebnisse atkuelle Berechnung: Import: " + str(counter_import_present) +
-                    " Export: " + str(counter_export_present) + " Power: " + str(power_present)
+                    "simcount Zwischenergebnisse aktuelle Berechnung: Import: " + str(counter_import_present) +
+                    " Export: " + str(counter_export_present) + " Leistung: " + str(power_present)
                 )
                 write_ramdisk_file(prefix+'watt0pos', counter_import_present)
                 if counter_import_present != counter_import_previous:
@@ -135,7 +136,7 @@ class SimCountLegacy:
                 if counter_export_present != counter_export_previous:
                     pub.pub_single("openWB/"+topic+"/WHExport_temp",
                                    counter_export_present, no_json=True)
-                return wattposkh, wattnegkh
+                return energy_positive_kWh, energy_negative_kWh
         except Exception as e:
             process_error(e)
 
@@ -212,7 +213,7 @@ class SimCount:
         Parameters
         ----------
         power_present: aktuelle Leistung
-        topic: str Topic, an das gepublished werden soll
+        topic: str Topic, in welches veröffentlicht werden soll
         data: Komponenten-Daten
         Return
         ------
@@ -236,7 +237,7 @@ class SimCount:
                 else:
                     counter_export_present = 0
                 log.MainLogger().debug(
-                    "Fortsetzen der Simulation: Importzaehler: " + str(counter_import_present)+"Ws, Export-Zaehler: " +
+                    "Fortsetzen der Simulation: Importzähler: " + str(counter_import_present)+"Ws, Export-Zähler: " +
                     str(counter_export_present) + "Ws"
                 )
                 start_new = False
@@ -259,18 +260,19 @@ class SimCount:
                     ", Einspeisung[Ws]: " +
                     str(counter_export_present)
                 )
-                wattposkh = counter_import_present/3600
-                wattnegkh = counter_export_present/3600
+                energy_positive_kWh = counter_import_present / 3600
+                energy_negative_kWh = counter_export_present / 3600
                 log.MainLogger().info(
-                    "simcount Ergebnis: Bezug[Wh]: " + str(wattposkh) + ", Einspeisung[Wh]: " + str(wattnegkh)
+                    "simcount Ergebnis: Bezug[Wh]: " + str(energy_positive_kWh) +
+                    ", Einspeisung[Wh]: " + str(energy_negative_kWh)
                 )
                 log.MainLogger().debug(
-                    "simcount Zwischenergebnisse atkuelle Berechnung: Import: " + str(counter_import_present) +
+                    "simcount Zwischenergebnisse aktuelle Berechnung: Import: " + str(counter_import_present) +
                     " Export: " + str(counter_export_present) + " Power: " + str(power_present)
                 )
                 pub.Pub().pub(topic+"simulation/present_imported", counter_import_present)
                 pub.Pub().pub(topic+"simulation/present_exported", counter_export_present)
-                return wattposkh, wattnegkh
+                return energy_positive_kWh, energy_negative_kWh
         except Exception as e:
             process_error(e)
 
