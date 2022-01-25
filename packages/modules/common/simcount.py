@@ -107,7 +107,7 @@ class SimCountLegacy:
             if start_new:
                 return 0, 0
             else:
-                timestamp_previous = timestamp_previous+1
+                # timestamp_previous = timestamp_previous + 1  # do not increment time if calculating areas!
                 seconds_since_previous = timestamp_present - timestamp_previous
                 imp_exp = calculate_import_export(
                     seconds_since_previous, power_previous, power_present)
@@ -249,7 +249,7 @@ class SimCount:
                 pub.Pub().pub(topic+"simulation/present_exported", 0)
                 return 0, 0
             else:
-                timestamp_previous = timestamp_previous+1
+                # timestamp_previous = timestamp_previous + 1  # do not increment time if calculating areas!
                 seconds_since_previous = timestamp_present - timestamp_previous
                 imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
