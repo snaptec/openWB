@@ -835,7 +835,7 @@
 								<div class="col">
 									<input class="form-control" type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>">
 									<span class="form-text small">
-										Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf "0" gesetzt. Der Wert muss in Watt sein. Erzeugungsleistung muss negativ angegeben werden!
+										Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf "0" gesetzt. Der Wert muss in Watt sein. Erzeugungsleistung muss positiv angegeben werden!
 									</span>
 								</div>
 							</div>

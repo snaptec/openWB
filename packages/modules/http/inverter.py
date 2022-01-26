@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from helpermodules import log
+from helpermodules import log, compatibility
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
@@ -30,9 +30,9 @@ class HttpInverter:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
         inverter_state = InverterState(
-            power=self.__get_power(),
+            # for compatibility: in 1.x power URL values are positive!
+            power=(-self.__get_power() if compatibility.is_ramdisk_in_use() else self.__get_power()),
             counter=self.__get_counter()
         )
         self.__store.set(inverter_state)
