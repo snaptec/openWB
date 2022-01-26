@@ -27,7 +27,10 @@ class CounterState:
             voltages = [230]*3
         self.voltages = voltages
         if powers is None:
-            powers = [0]*3
+            if currents is None:
+                powers = [0]*3
+            else:
+                powers = [currents[i]*voltages[i] for i in range(0, 3)]
         self.powers = powers
         if currents is None:
             if powers:
