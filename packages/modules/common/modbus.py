@@ -86,12 +86,12 @@ class ModbusClient:
         except pymodbus.exceptions.ConnectionException as e:
             raise FaultState.error(
                 "TCP-Client konnte keine Verbindung zu " + str(self.address) + ":" + str(self.port) +
-                " aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " + "Hardware-Anschluss pruefen.") from e
+                " aufbauen. Bitte Einstellungen (IP-Adresse, ..) und " + "Hardware-Anschluss prüfen.") from e
         except pymodbus.exceptions.ModbusIOException as e:
             raise FaultState.warning(
                 "TCP-Client " + str(self.address) + ":" + str(self.port) +
                 " konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red," +
-                "beenden und bei anhaltender Fehlermeldung Zaehler neustarten.") from e
+                "beenden und bei anhaltender Fehlermeldung Zähler neustarten.") from e
         except Exception as e:
             raise FaultState.error(__name__+" "+str(type(e))+" " +
                                    str(e)) from e

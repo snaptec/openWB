@@ -15,7 +15,7 @@ from modules.huawei import inverter
 def get_default_config() -> dict:
     return {
         "name": "Huawei",
-        "type": "hauwei",
+        "type": "huawei",
         "id": 0,
         "configuration":
         {
