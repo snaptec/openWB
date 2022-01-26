@@ -16,9 +16,9 @@ def get_default_config() -> dict:
             "power_path": "/power.txt",
             "imported_path": "/imported.txt",
             "exported_path": "/exported.txt",
-            "power_l1_path": "/power_l1.txt",
-            "power_l2_path": "/power_l2.txt",
-            "power_l3_path": "/power_l3.txt",
+            "current_l1_path": "/current_l1.txt",
+            "current_l2_path": "/current_l2.txt",
+            "current_l3_path": "/current_l3.txt",
         }
     }
 
@@ -28,9 +28,9 @@ class HttpCounter:
         self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
         self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
         self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
-        self.__get_powers = [
+        self.__get_currents = [
             create_request_function(domain,
-                                    component_config["configuration"]["power_l" + str(i) + "_path"])
+                                    component_config["configuration"]["current_l" + str(i) + "_path"])
             for i in range(1, 4)
         ]
 
@@ -42,7 +42,7 @@ class HttpCounter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         counter_state = CounterState(
-            powers=[getter() for getter in self.__get_powers],
+            currents=[getter() for getter in self.__get_currents],
             imported=self.__get_imported(),
             exported=self.__get_exported(),
             power=self.__get_power()
