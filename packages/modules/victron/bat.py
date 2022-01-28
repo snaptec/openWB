@@ -29,9 +29,9 @@ class VictronBat:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        power = self.__tcp_client.read_holding_registers(842, ModbusDataType.INT_16, unit=100)
-        soc = self.__tcp_client.read_holding_registers(843, ModbusDataType.UINT_16, unit=100)
+        with self.__tcp_client:
+            power = self.__tcp_client.read_holding_registers(842, ModbusDataType.INT_16, unit=100)
+            soc = self.__tcp_client.read_holding_registers(843, ModbusDataType.UINT_16, unit=100)
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"

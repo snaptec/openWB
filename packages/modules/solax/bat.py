@@ -29,9 +29,9 @@ class SolaxBat:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        power = self.__tcp_client.read_input_registers(22, ModbusDataType.INT_16)
-        soc = self.__tcp_client.read_input_registers(28, ModbusDataType.UINT_16)
+        with self.__tcp_client:
+            power = self.__tcp_client.read_input_registers(22, ModbusDataType.INT_16)
+            soc = self.__tcp_client.read_input_registers(28, ModbusDataType.UINT_16)
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"

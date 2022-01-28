@@ -34,7 +34,7 @@ class PvKitFlex:
     def update(self) -> None:
         """ liest die Werte des Moduls aus.
         """
-        try:
+        with self.__tcp_client:
             counter = self.__client.get_counter()
             powers, power = self.__client.get_power()
 
@@ -44,8 +44,6 @@ class PvKitFlex:
             if power > 10:
                 power = power*-1
             currents = self.__client.get_currents()
-        finally:
-            self.__tcp_client.close_connection()
 
         log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power))
         inverter_state = InverterState(
