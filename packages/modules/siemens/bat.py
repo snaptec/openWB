@@ -33,8 +33,9 @@ class SiemensBat:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-        power = self.__tcp_client.read_holding_registers(6, ModbusDataType.INT_32, unit=1) * -1
-        soc = int(self.__tcp_client.read_holding_registers(8, ModbusDataType.INT_32, unit=1))
+        with self.__tcp_client:
+            power = self.__tcp_client.read_holding_registers(6, ModbusDataType.INT_32, unit=1) * -1
+            soc = int(self.__tcp_client.read_holding_registers(8, ModbusDataType.INT_32, unit=1))
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
