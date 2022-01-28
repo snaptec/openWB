@@ -26,10 +26,10 @@ class SolaxInverter:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        power_temp = self.__tcp_client.read_input_registers(10, [ModbusDataType.UINT_16] * 2)
-        power = sum(power_temp) * -1
-        counter = self.__tcp_client.read_input_registers(82, ModbusDataType.UINT_32, wordorder=Endian.Little) / 10
+        with self.__tcp_client:
+            power_temp = self.__tcp_client.read_input_registers(10, [ModbusDataType.UINT_16] * 2)
+            power = sum(power_temp) * -1
+            counter = self.__tcp_client.read_input_registers(82, ModbusDataType.UINT_32, wordorder=Endian.Little) / 10
 
         inverter_state = InverterState(
             power=power,

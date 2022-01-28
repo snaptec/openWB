@@ -32,11 +32,11 @@ class HuaweiBat:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        time.sleep(0.1)
-        power = self.__tcp_client.read_holding_registers(37765, ModbusDataType.INT_32, unit=self.__modbus_id)
-        time.sleep(0.1)
-        soc = self.__tcp_client.read_holding_registers(37760, ModbusDataType.INT_16, unit=self.__modbus_id) / 10
+        with self.__tcp_client:
+            time.sleep(0.1)
+            power = self.__tcp_client.read_holding_registers(37765, ModbusDataType.INT_32, unit=self.__modbus_id)
+            time.sleep(0.1)
+            soc = self.__tcp_client.read_holding_registers(37760, ModbusDataType.INT_16, unit=self.__modbus_id) / 10
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"

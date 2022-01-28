@@ -32,12 +32,12 @@ class HuaweiCounter:
 
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        time.sleep(0.1)
-        power = self.__tcp_client.read_holding_registers(37113, ModbusDataType.INT_32, unit=self.__modbus_id) * -1
-        time.sleep(0.1)
-        currents = [val / -100 for val in self.__tcp_client.read_holding_registers(
-            37107, [ModbusDataType.INT_32] * 3, unit=self.__modbus_id)]
+        with self.__tcp_client:
+            time.sleep(0.1)
+            power = self.__tcp_client.read_holding_registers(37113, ModbusDataType.INT_32, unit=self.__modbus_id) * -1
+            time.sleep(0.1)
+            currents = [val / -100 for val in self.__tcp_client.read_holding_registers(
+                37107, [ModbusDataType.INT_32] * 3, unit=self.__modbus_id)]
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]

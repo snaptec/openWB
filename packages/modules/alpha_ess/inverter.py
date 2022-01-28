@@ -53,10 +53,11 @@ class AlphaEssInverter:
         return 0x0012 if version == 0 else 0x00A1
 
     def __get_power(self, unit: int, reg_p: int) -> int:
-        powers = [
-            self.__tcp_client.read_holding_registers(address, ModbusDataType.INT_32, unit=unit)
-            for address in [reg_p, 0x041F, 0x0423, 0x0427]
-        ]
+        with self.__tcp_client:
+            powers = [
+                self.__tcp_client.read_holding_registers(address, ModbusDataType.INT_32, unit=unit)
+                for address in [reg_p, 0x041F, 0x0423, 0x0427]
+            ]
         powers[0] = abs(powers[0])
         power = sum(powers) * -1
         log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: " + str(powers))

@@ -37,18 +37,20 @@ class AlphaEssBat:
         # keine Unterschiede zwischen den Versionen
         sdmid = 85
 
-        time.sleep(0.1)
-        voltage = self.__tcp_client.read_holding_registers(0x0100, ModbusDataType.INT_16, unit=sdmid)
-        time.sleep(0.1)
-        current = self.__tcp_client.read_holding_registers(0x0101, ModbusDataType.INT_16, unit=sdmid)
+        with self.__tcp_client:
+            time.sleep(0.1)
+            voltage = self.__tcp_client.read_holding_registers(0x0100, ModbusDataType.INT_16, unit=sdmid)
+            time.sleep(0.1)
+            current = self.__tcp_client.read_holding_registers(0x0101, ModbusDataType.INT_16, unit=sdmid)
 
-        power = voltage * current * -1 / 100
-        log.MainLogger().debug(
-            "Alpha Ess Leistung[W]: %f, Speicher-Register: Spannung[V]: %f, Strom[A]: %f" % (power, voltage, current)
-        )
-        time.sleep(0.1)
-        soc_reg = self.__tcp_client.read_holding_registers(0x0102, ModbusDataType.INT_16, unit=sdmid)
-        soc = int(soc_reg * 0.1)
+            power = voltage * current * -1 / 100
+            log.MainLogger().debug(
+                "Alpha Ess Leistung[W]: %f, Speicher-Register: Spannung[V]: %f, Strom[A]: %f" %
+                (power, voltage, current)
+            )
+            time.sleep(0.1)
+            soc_reg = self.__tcp_client.read_holding_registers(0x0102, ModbusDataType.INT_16, unit=sdmid)
+            soc = int(soc_reg * 0.1)
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
