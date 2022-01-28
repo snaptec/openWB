@@ -9,7 +9,8 @@ import sys
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
 
-Debug = int(os.environ.get('debug'))
+# Debug = int(os.environ.get('debug'))
+Debug = 2
 myPid = str(os.getpid())
 
 bezug_solarlog_ip = str(sys.argv[1])
