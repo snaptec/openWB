@@ -102,7 +102,7 @@ class SimCountLegacy:
                                        " Leistung: " + str(power_previous))
                 start_new = False
             write_ramdisk_file(prefix+'sec0', "%22.6f" % timestamp_present)
-            write_ramdisk_file(prefix+'wh0', power_present)
+            write_ramdisk_file(prefix+'wh0', int(power_present))
 
             if start_new:
                 return 0, 0
