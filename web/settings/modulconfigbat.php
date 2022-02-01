@@ -205,8 +205,8 @@
 							</div>
 						</div>
 						<div id="divspeicherhuawei" class="hide">
-							<div class="alert alert-info">
-								Konfiguration im PV Huawei Modul.
+							<div class="alert alert-danger">
+								Es muss zwingend auch das Huawei PV Modul konfiguriert werden, da alle Daten dort abgerufen werden!
 							</div>
 						</div>
 
