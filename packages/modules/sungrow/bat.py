@@ -30,13 +30,13 @@ class SungrowBat:
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = 1
-
-        soc = int(self.__tcp_client.read_input_registers(13022, ModbusDataType.INT_16, unit=unit) / 10)
-        resp = self.__tcp_client.delegate.read_input_registers(13000, 1, unit=unit)
-        binary = bin(resp.registers[0])[2:].zfill(8)
-        power = self.__tcp_client.read_input_registers(13021, ModbusDataType.INT_16, unit=unit)
-        if binary[5] == "1":
-            power = power * -1
+        with self.__tcp_client:
+            soc = int(self.__tcp_client.read_input_registers(13022, ModbusDataType.INT_16, unit=unit) / 10)
+            resp = self.__tcp_client.delegate.read_input_registers(13000, 1, unit=unit)
+            binary = bin(resp.registers[0])[2:].zfill(8)
+            power = self.__tcp_client.read_input_registers(13021, ModbusDataType.INT_16, unit=unit)
+            if binary[5] == "1":
+                power = power * -1
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"

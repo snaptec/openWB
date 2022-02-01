@@ -42,43 +42,37 @@ class AlphaEssCounter:
         return self.__get_values_before_v123 if version == 0 else self.__get_values_since_v123
 
     def __get_values_before_v123(self, unit: int) -> CounterState:
-        power, exported, imported = self.__tcp_client.read_holding_registers(
-            0x6, [modbus.ModbusDataType.INT_32] * 3, unit=unit)
-        exported *= 10
-        imported *= 10
-        currents = [val / 230 for val in self.__tcp_client.read_holding_registers(
-            0x0000, [ModbusDataType.INT_32]*3, unit=unit)]
+        with self.__tcp_client:
+            power, exported, imported = self.__tcp_client.read_holding_registers(
+                0x6, [modbus.ModbusDataType.INT_32] * 3, unit=unit)
+            exported *= 10
+            imported *= 10
+            currents = [val / 230 for val in self.__tcp_client.read_holding_registers(
+                0x0000, [ModbusDataType.INT_32]*3, unit=unit)]
 
         counter_state = CounterState(
-            voltages=[0, 0, 0],
             currents=currents,
-            powers=[0, 0, 0],
-            power_factors=[0, 0, 0],
             imported=imported,
             exported=exported,
-            power=power,
-            frequency=50
+            power=power
         )
         return counter_state
 
     def __get_values_since_v123(self, unit: int) -> CounterState:
-        power = self.__tcp_client.read_holding_registers(
-            0x0021, ModbusDataType.INT_32, unit=unit)
-        exported = self.__tcp_client.read_holding_registers(
-            0x0010, ModbusDataType.INT_32, unit=unit) * 10
-        imported = self.__tcp_client.read_holding_registers(
-            0x0012, ModbusDataType.INT_32, unit=unit) * 10
-        currents = [val / 1000 for val in self.__tcp_client.read_holding_registers(
-            0x0017, [ModbusDataType.INT_16]*3, unit=unit)]
+        with self.__tcp_client:
+            power = self.__tcp_client.read_holding_registers(
+                0x0021, ModbusDataType.INT_32, unit=unit)
+            exported = self.__tcp_client.read_holding_registers(
+                0x0010, ModbusDataType.INT_32, unit=unit) * 10
+            imported = self.__tcp_client.read_holding_registers(
+                0x0012, ModbusDataType.INT_32, unit=unit) * 10
+            currents = [val / 1000 for val in self.__tcp_client.read_holding_registers(
+                0x0017, [ModbusDataType.INT_16]*3, unit=unit)]
 
         counter_state = CounterState(
-            voltages=[0, 0, 0],
             currents=currents,
-            powers=[0, 0, 0],
-            power_factors=[0, 0, 0],
             imported=imported,
             exported=exported,
-            power=power,
-            frequency=50
+            power=power
         )
         return counter_state

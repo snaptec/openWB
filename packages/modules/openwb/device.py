@@ -53,7 +53,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, num: Optional[int]):
+def read_legacy(component_type: str, version: int, num: Optional[int] = None):
     """ Ausführung des Moduls als Python-Skript
     """
     COMPONENT_TYPE_TO_MODULE = {

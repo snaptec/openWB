@@ -132,7 +132,11 @@
 						</div>
 						<div id="wattbezugsonneneco" class="hide">
 							<div class="card-text alert alert-info">
-								Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
+								Keine Konfiguration erforderlich. Alle Einstellungen werden in dem Speicher-Modul vorgenommen.
+							</div>
+							<div class="card-text alert alert-warning">
+								Die EVU-Leistung steht nur in den Varianten "Rest-API 2" und "JSON-API" zur Verfügung!<br />
+								Mit diesem Modul ist kein Lastmanagement möglich, da keine Ströme der einzelnen Phasen gemessen werden!
 							</div>
 						</div>
 						<div id="wattbezugvarta" class="hide">
@@ -199,8 +203,8 @@
 							</div>
 						</div>
 						<div id="wattbezughuawei" class="hide">
-							<div class="card-text alert alert-info">
-								Konfiguration erfolgt im zugehörigen PV Modul.
+							<div class="card-text alert alert-danger">
+								Es muss zwingend auch das Huawei PV Modul konfiguriert werden, da alle Daten dort abgerufen werden!
 							</div>
 						</div>
 
@@ -1001,9 +1005,6 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_http')   {
 									showSection('#wattbezughttp');
-								}
-								if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
-									showSection('#wattbezugsma');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 									showSection('#wattbezugfronius');

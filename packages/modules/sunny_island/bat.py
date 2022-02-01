@@ -26,10 +26,10 @@ class SunnyIslandBat:
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = 3
-
-        soc = self.__tcp_client.read_holding_registers(30845, ModbusDataType.INT_32, unit=unit)
-        power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=unit) * -1
-        [imported, exported] = self.__tcp_client.read_holding_registers(30595, [ModbusDataType.INT_32]*2, unit=unit)
+        with self.__tcp_client:
+            soc = self.__tcp_client.read_holding_registers(30845, ModbusDataType.INT_32, unit=unit)
+            power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=unit) * -1
+            [imported, exported] = self.__tcp_client.read_holding_registers(30595, [ModbusDataType.INT_32]*2, unit=unit)
 
         bat_state = BatState(
             power=power,

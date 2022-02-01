@@ -20,7 +20,7 @@ def setup_logging_stdout():
     if not root_logger.hasHandlers():
         handler = logging.StreamHandler(sys.stdout)
         handler.setFormatter(
-            logging.Formatter("%(asctime)s: PID: %(process)d: %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+            logging.Formatter(u"%(asctime)s: PID: %(process)d: %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
         )
         root_logger.addHandler(handler)
         root_logger.setLevel(get_log_level_from_environment())

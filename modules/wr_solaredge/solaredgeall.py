@@ -71,7 +71,11 @@ def update_solar_edge(client: ModbusClient,
             total_currents[i] += currents[i] * currents_scale
     if extprodakt == 1:
         # 40380 = "Meter 2/Total Real Power (sum of active phases)" (Watt)
-        total_power -= client.read_holding_registers(40380, ModbusDataType.INT_16, unit=slave_ids[0])
+        try:
+            total_power -= client.read_holding_registers(40380, ModbusDataType.INT_16, unit=slave_ids[0])
+        except Exception:
+            # catch wrong configured "extprodakt"
+            log.error("Unable to read secondary SmartMeter! Check configuration!")
     if subbat == 1:
         total_power -= sum(min(p, 0) for p in storage_powers)
     else:

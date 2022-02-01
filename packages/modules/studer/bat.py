@@ -26,11 +26,11 @@ class StuderBat:
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = 60
-
-        power = self.__tcp_client.read_input_registers(6, ModbusDataType.FLOAT_32, unit=unit)
-        imported = self.__tcp_client.read_input_registers(14, ModbusDataType.FLOAT_32, unit=unit) * 48
-        exported = self.__tcp_client.read_input_registers(16, ModbusDataType.FLOAT_32, unit=unit) * 48
-        soc = self.__tcp_client.read_input_registers(4, ModbusDataType.FLOAT_32, unit=unit)
+        with self.__tcp_client:
+            power = self.__tcp_client.read_input_registers(6, ModbusDataType.FLOAT_32, unit=unit)
+            imported = self.__tcp_client.read_input_registers(14, ModbusDataType.FLOAT_32, unit=unit) * 48
+            exported = self.__tcp_client.read_input_registers(16, ModbusDataType.FLOAT_32, unit=unit) * 48
+            soc = self.__tcp_client.read_input_registers(4, ModbusDataType.FLOAT_32, unit=unit)
 
         bat_state = BatState(
             power=power,

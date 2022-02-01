@@ -118,16 +118,16 @@ def read_legacy_bat(power_path: str, imported_path: str, exported_path: str, soc
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
-def read_legacy_counter(power_path: str, imported_path: str, exported_path: str, power_l1_path: str,
-                        power_l2_path: str, power_l3_path: str):
+def read_legacy_counter(power_path: str, imported_path: str, exported_path: str, current_l1_path: str,
+                        current_l2_path: str, current_l3_path: str):
     component_config = counter.get_default_config()
     component_config["configuration"] = create_paths_dict(
         power_path=power_path,
         imported_path=imported_path,
         exported_path=exported_path,
-        power_l1_path=power_l1_path,
-        power_l2_path=power_l2_path,
-        power_l3_path=power_l3_path,
+        current_l1_path=current_l1_path,
+        current_l2_path=current_l2_path,
+        current_l3_path=current_l3_path,
     )
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 

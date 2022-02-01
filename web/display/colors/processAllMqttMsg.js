@@ -161,6 +161,22 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 	}
 	else if (mqttmsg == 'openWB/config/get/pv/minCurrentMinPv') {
 	//	setInputValue('minCurrentMinPv', mqttpayload);
+	} else if ( mqttmsg == 'openWB/config/get/pv/priorityModeEVBattery' ) {
+		// sets button color in charge mode modal and sets icon in mode select button
+		switch (mqttpayload) {
+			case '0':
+				// battery priority
+				$('#evPriorityBtn').removeClass('btn-success');
+				$('#batteryPriorityBtn').addClass('btn-success');
+				$('.priorityEvBatteryIcon').removeClass('fa-car').addClass('fa-car-battery')
+				break;
+			case '1':
+				// ev priority
+				$('#evPriorityBtn').addClass('btn-success');
+				$('#batteryPriorityBtn').removeClass('btn-success');
+				$('.priorityEvBatteryIcon').removeClass('fa-car-battery').addClass('fa-car')
+				break;
+		}
 	}
 }
 
@@ -271,6 +287,9 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// '3': mode stop
 		// '4': mode standby
 	}
+	else if ( mqttmsg == 'openWB/global/rfidConfigured' ) {
+		wbdata.updateGlobal("rfidConfigured", (mqttpayload == 1))
+	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
 		wbdata.updateGlobal("chargeEnergy", makeFloat(mqttpayload));
 	}
@@ -289,8 +308,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			$('#lastregelungaktiv').text('');
 			$('#lastmanagementShowBtn').addClass('hide');
 		}
-	}
-	else if (mqttmsg == 'openWB/global/ChargeMode') {
+	} else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		// set modal button colors depending on charge mode
 		// set visibility of divs
 		// set visibility of priority icon depending on charge mode

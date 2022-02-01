@@ -4,7 +4,7 @@ from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
-from modules.openwb import inverter
+from modules.openwb_pv_evu import inverter
 
 
 def get_default_config() -> dict:
@@ -49,7 +49,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(version: int, num: Optional[int]):
+def read_legacy(version: int, num: Optional[int] = None):
     component_config = inverter.get_default_config()
     component_config["id"] = num
     component_config["configuration"]["version"] = version
