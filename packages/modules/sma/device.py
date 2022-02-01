@@ -51,20 +51,20 @@ class Device(AbstractDevice):
             ipbind = '0.0.0.0'
             MCAST_GRP = '239.12.255.254'
             MCAST_PORT = 9522
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            sock.bind(('', MCAST_PORT))
-            try:
-                mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
-                sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-            except BaseException:
-                raise FaultState.error('could not connect to multicast group or bind to given interface')
-            # processing received messages
-            while not self.__process_datagram(sock.recv(608)):
-                pass
+            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as sock:
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                sock.bind(('', MCAST_PORT))
+                try:
+                    mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
+                    sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+                except BaseException:
+                    raise FaultState.error('could not connect to multicast group or bind to given interface')
+                # processing received messages
+                while not self.__process_datagram(sock.recv(608)):
+                    pass
             log.MainLogger().debug("Update completed successfully")
 
-    def __process_datagram(self, datagram: bytes):
+    def __process_datagram(self, datagram: bytes) -> bool:
         # Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
         if datagram[16:18] != b'\x60\x69':
             return False
@@ -85,7 +85,7 @@ class Device(AbstractDevice):
         return True
 
 
-def read_legacy(component_type: str, serials: int, num: Optional[int] = None) -> None:
+def read_legacy(component_type: str, serials: Optional[str] = None, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "counter": counter,
         "inverter": inverter
