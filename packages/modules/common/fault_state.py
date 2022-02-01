@@ -23,9 +23,6 @@ class ComponentInfo:
 
 
 class FaultState(Exception):
-    type_topic_mapping_comp = {"bat": "houseBattery", "counter": "evu", "inverter": "pv", "vehicle": "lp"}
-    type_topic_mapping = {"bat": "bat", "counter": "counter", "inverter": "pv", "vehicle": "vehicle"}
-
     def __init__(self, fault_str: str, fault_state: FaultStateLevel) -> None:
         self.fault_str = fault_str
         self.fault_state = fault_state
@@ -39,7 +36,7 @@ class FaultState(Exception):
                                        traceback.format_exc())
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
-                topic = self.type_topic_mapping_comp.get(component_info.type, component_info.type)
+                topic = self.__type_topic_mapping_comp(component_info.type)
                 prefix = "openWB/set/" + topic + "/"
                 if component_info.id is not None:
                     if topic == "lp":
@@ -51,13 +48,33 @@ class FaultState(Exception):
                 pub.pub_single(prefix + "aultStr", self.fault_str)
                 pub.pub_single(prefix + "aultState", self.fault_state.value)
             else:
-                topic = self.type_topic_mapping.get(component_info.type, component_info.type)
+                topic = self.__type_topic_mapping(component_info.type)
                 pub.Pub().pub(
                     "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_str", self.fault_str)
                 pub.Pub().pub(
                     "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_state", self.fault_state.value)
         except Exception:
             log.MainLogger().exception("Fehler im Modul fault_state")
+
+    def __type_topic_mapping(self, component_type: str) -> str:
+        if "counter" in component_type:
+            return "counter"
+        elif "inverter" in component_type:
+            return "pv"
+        else:
+            return component_type
+
+    def __type_topic_mapping_comp(self, component_type: str) -> str:
+        if "bat" in component_type:
+            return "houseBattery"
+        elif "counter" in component_type:
+            return "evu"
+        elif "inverter" in component_type:
+            return "pv"
+        elif "vehicle" in component_type:
+            return "lp"
+        else:
+            raise Exception("Unbekannter Komponententyp: "+str(component_type))
 
     @staticmethod
     def error(message: str) -> "FaultState":
@@ -72,7 +89,7 @@ class FaultState(Exception):
         return FaultState("Kein Fehler.", FaultStateLevel.NO_ERROR)
 
     @staticmethod
-    def from_exception(exception: Optional[Exception]) -> "FaultState":
+    def from_exception(exception: Optional[Exception] = None) -> "FaultState":
         if exception is None:
             return FaultState.no_error()
         if isinstance(exception, FaultState):

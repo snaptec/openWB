@@ -34,13 +34,14 @@ class SiemensCounter:
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
-        power_all = self.__tcp_client.read_holding_registers(14, ModbusDataType.INT_32, unit=1)
+        with self.__tcp_client:
+            power = self.__tcp_client.read_holding_registers(14, ModbusDataType.INT_32, unit=1)
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]
         )
         imported, exported = self.__sim_count.sim_count(
-            power_all,
+            power,
             topic=topic_str,
             data=self.simulation,
             prefix="bezug"
@@ -49,7 +50,7 @@ class SiemensCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
-        log.MainLogger().debug("Siemens Zaehler Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Siemens Zähler Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

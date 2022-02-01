@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -63,7 +63,7 @@ class Device(AbstractDevice):
                         self._components[component].update()
                 else:
                     raise Exception(
-                        "Wenn ein EVU-Zaehler konfiguriert wurde, muss immer auch ein WR konfiguriert sein.")
+                        "Wenn ein EVU-Zähler konfiguriert wurde, muss immer auch ein WR konfiguriert sein.")
         elif len(self._components) == 2:
             with MultiComponentUpdateContext(self._components):
                 for component in self._components:
@@ -75,10 +75,10 @@ class Device(AbstractDevice):
                         raise Exception(
                             "illegal component type " + self._components[component].component_config["type"] +
                             ". Allowed values: " + ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
-                counter_power_all = home_consumption + inverter_power
+                counter_power = home_consumption + inverter_power
                 for component in self._components:
                     if isinstance(self._components[component], counter.PowerdogCounter):
-                        self._components[component].set_counter_state(counter_power_all)
+                        self._components[component].set_counter_state(counter_power)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
@@ -86,7 +86,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> None:
+def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None) -> None:
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)
@@ -111,8 +111,5 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> Non
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Powerdog Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

@@ -1,56 +1,71 @@
-#!/usr/bin/python
-import sys
-# import os
-# import time
-# import getopt
-# import socket
-# import ConfigParser
-import struct
-# import binascii
-from pymodbus.client.sync import ModbusTcpClient
+#!/usr/bin/python3
+import logging
+from statistics import mean
+from typing import Iterable
 
-ipaddress = str(sys.argv[1])
-addext = int(sys.argv[2])
+from pymodbus.constants import Endian
 
-client = ModbusTcpClient(ipaddress, port=502)
+from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.log import setup_logging_stdout
+from modules.common.component_state import InverterState, BatState
+from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.store import get_inverter_value_store, get_bat_value_store
+from modules.common.simcount import SimCountFactory
+from modules.common.store.ramdisk import files
 
-# battsoc
-resp= client.read_holding_registers(40082,1,unit=1)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-final = int(struct.unpack('>h', all.decode('hex'))[0]) 
-f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
-f.write(str(final))
-f.close()
-# print "hausverbrauch"
-# resp= client.read_holding_registers(40071,2,unit=1)
-# value1 = resp.registers[0]
-# value2 = resp.registers[1]
-# all = format(value2, '04x') + format(value1, '04x')
-# final = int(struct.unpack('>i', all.decode('hex'))[0])
-# print final
-# pv punkt
-ext = 0
-if addext == 1:
-    resp= client.read_holding_registers(40075,2,unit=1)
-    value1 = resp.registers[0]
-    value2 = resp.registers[1]
-    all = format(value2, '04x') + format(value1, '04x')
-    ext = int(struct.unpack('>i', all.decode('hex'))[0])
-resp= client.read_holding_registers(40067,2,unit=1)
-value1 = resp.registers[0]
-value2 = resp.registers[1]
-all = format(value2, '04x') + format(value1, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0]) * -1
-f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(final+ext))
-f.close()
-#battleistung
-resp= client.read_holding_registers(40069,2,unit=1)
-value1 = resp.registers[0]
-value2 = resp.registers[1]
-all = format(value2, '04x') + format(value1, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0])
-f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
-f.write(str(final))
-f.close()
+log = logging.getLogger("E3DC Battery")
+
+def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: bool):
+    soc = 0
+    count = 0
+    battery_power = 0
+    # pv_external - > pv Leistung die als externe Produktion an e3dc angeschlossen ist
+    # nur auslesen wenn als relevant parametrisiert  (read_external = 1) , sonst doppelte Auslesung
+    pv_external = 0
+    # pv -> pv Leistung die direkt an e3dc angeschlossen ist
+    pv = 0
+    for address in addresses:
+        log.debug("Battery Ip: %s, read_external %d pv_other %s", address, read_external, pv_other)
+        count += 1
+        with ModbusClient(address, port=502) as client:
+            #40082 soc
+            soc += client.read_holding_registers(40082, ModbusDataType.INT_16, unit=1)
+            #40069 speicherleistung
+            battery_power += client.read_holding_registers(40069, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
+            #40067 pv Leistung
+            pv += (client.read_holding_registers(40067, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1) * -1)
+            if read_external == 1:
+                #40075 externe pv Leistung
+                pv_external += client.read_holding_registers(40075, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
+    soc = soc / count
+    log.debug("Battery soc %d battery_power %d pv %d pv_external %d count ip %d", soc, battery_power, pv, pv_external, count)
+    counter_import, counter_export = SimCountFactory().get_sim_counter()().sim_count(battery_power, prefix="speicher")
+    get_bat_value_store(1).set(BatState(power=battery_power, soc=soc, imported=counter_import, exported=counter_export))
+    # pv_other sagt aus, ob wr definiert ist, und dessen pv Leistungs auch gilt
+    # wenn 0 gilt nur pv und pv_external aus e3dc
+    pv_total = pv + pv_external
+    # Wenn wr1 nicht definiert ist, gilt nur die PV Leistung die hier im Modul ermittelt wurde
+    # als gesamte PV Leistung für wr1
+    if not pv_other or pv_total != 0:
+        # Wenn wr1 definiert ist, gilt die bestehende PV Leistung aus Wr1 und das was hier im Modul ermittelt wurde
+        # als gesamte PV Leistung für wr1
+        if pv_other:
+            try:
+                pv_total = pv_total + files.pv[0].power.read()
+            except:
+                pass
+        log.debug("wr update pv_other %s pv_total %d", pv_other, pv_total)
+        _, counter_pv= SimCountFactory().get_sim_counter()().sim_count(pv_total, prefix="pv")
+        get_inverter_value_store(1).set(InverterState(counter=counter_pv, power=pv_total))
+
+def main(address1: str, address2: str, read_external: int, pvmodul: str):
+    # read_external is 0 or 1
+    log.debug("Beginning update")
+    addresses = [address for address in [address1, address2] if address != "none"]
+    pv_other = pvmodul != "none"
+    update_e3dc_battery(addresses, read_external, pv_other)
+    log.debug("Update completed successfully")
+
+if __name__ == '__main__':
+    setup_logging_stdout()
+    run_using_positional_cli_args(main)

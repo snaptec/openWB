@@ -3,7 +3,6 @@
 import json
 import logging
 from json import JSONDecodeError
-
 import requests
 from requests import HTTPError
 

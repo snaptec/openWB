@@ -2,7 +2,8 @@ import base64
 
 import pytest
 
-import sma_em_measurement as sma
+from modules.sma import counter, speedwiredecoder
+from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
 
 # This sample was collected from an SMA Energy Meter with Firmware 2.0.18.R on 2021-12-22:
@@ -23,15 +24,18 @@ OkkgBJBAAAAAPokAAAAAIAElIAAAAA
 
 @pytest.fixture
 def mock_ramdisk(monkeypatch):
+    monkeypatch.setattr(compatibility, "is_ramdisk_in_use", lambda: True)
     return MockRamdisk(monkeypatch)
 
 
 def test_process_datagram_energy_meter(mock_ramdisk):
     # setup
     data = base64.b64decode(SAMPLE_SMA_ENERGY_EM)
+    sma_data = speedwiredecoder.decode_speedwire(data)
+    sma_counter = counter.SmaCounter(counter.get_default_config())
 
     # execution
-    sma.process_datagram(data)
+    sma_counter.update(sma_data)
 
     # evaluation
     assert mock_ramdisk.files["wattbezug"] == "-11967"

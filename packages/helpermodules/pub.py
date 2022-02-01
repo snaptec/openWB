@@ -49,7 +49,7 @@ def pub_single(topic, payload, hostname="localhost", no_json=False):
     hostname: str
         IP des Hosts
     no_json: bool
-        Kompabilität mit isss, die ramdisk verwenden.
+        Kompatibilität mit ISSS, die ramdisk verwenden.
     """
     try:
         if no_json:

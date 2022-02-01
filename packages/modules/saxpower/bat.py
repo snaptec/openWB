@@ -29,9 +29,10 @@ class SaxpowerBat:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        soc = self.__tcp_client.read_holding_registers(46, ModbusDataType.INT_16, unit=64)
-        power = self.__tcp_client.read_holding_registers(47, ModbusDataType.UINT_16, unit=64) * -1
+        with self.__tcp_client:
+            # Die beiden Register müssen zwingend zusammen ausgelesen werden, sonst scheitert die zweite Abfrage.
+            soc, power = self.__tcp_client.read_holding_registers(46, [ModbusDataType.INT_16]*2, unit=64)
+            power = power * -1
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"

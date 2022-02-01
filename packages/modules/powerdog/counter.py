@@ -29,17 +29,17 @@ class PowerdogCounter:
 
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        home_consumption = self.__tcp_client.read_input_registers(40026, ModbusDataType.INT_32, unit=1)
+        with self.__tcp_client:
+            home_consumption = self.__tcp_client.read_input_registers(40026, ModbusDataType.INT_32, unit=1)
         log.MainLogger().debug("Powerdog Hausverbrauch[W]: " + str(home_consumption))
         return home_consumption
 
-    def set_counter_state(self, power_all: float) -> None:
+    def set_counter_state(self, power: float) -> None:
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]
         )
         imported, exported = self.__sim_count.sim_count(
-            power_all,
+            power,
             topic=topic_str,
             data=self.simulation,
             prefix="bezug"
@@ -47,7 +47,7 @@ class PowerdogCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
-        log.MainLogger().debug("Powerdog Leistung[W]: " + str(counter_state.power_all))
+        log.MainLogger().debug("Powerdog Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

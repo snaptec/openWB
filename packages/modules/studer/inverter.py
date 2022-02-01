@@ -35,29 +35,31 @@ class StuderInverter:
         vc_count = self.component_config["configuration"]["vc_count"]
         vc_type = self.component_config["configuration"]["vc_type"]
 
-        if vc_type == 'VS':
-            mb_unit = 40
-            mb_register = 20  # MB:20; ID: 15010; PV power kW
-        elif vc_type == 'VT':
-            mb_unit = 20
-            mb_register = 8  # MB:8; ID: 11004; Power of the PV generator kW
-        else:
-            raise FaultState.error("Unbekannter VC-Typ: "+str(vc_type))
-        power = 0
-        for i in range(1, vc_count+1):
-            mb_unit_dev = mb_unit+i
-            power += self.__tcp_client.read_input_registers(mb_register, ModbusDataType.FLOAT_32, unit=mb_unit_dev)
-        power = power * -1000
+        with self.__tcp_client:
+            if vc_type == 'VS':
+                mb_unit = 40
+                mb_register = 20  # MB:20; ID: 15010; PV power kW
+            elif vc_type == 'VT':
+                mb_unit = 20
+                mb_register = 8  # MB:8; ID: 11004; Power of the PV generator kW
+            else:
+                raise FaultState.error("Unbekannter VC-Typ: "+str(vc_type))
+            power = 0
+            for i in range(1, vc_count+1):
+                mb_unit_dev = mb_unit+i
+                power += self.__tcp_client.read_input_registers(mb_register, ModbusDataType.FLOAT_32, unit=mb_unit_dev)
+            power = power * -1000
 
-        if vc_type == 'VS':
-            mb_register = 46  # MB:46; ID: 15023; Desc: Total PV produced energy MWh
-        elif vc_type == 'VT':
-            mb_register = 18  # MB:18; ID: 11009; Desc: Total produced energy MWh
-        counter = 0
-        for i in range(1, vc_count + 1):
-            mb_unit_dev = mb_unit + i
-            counter += self.__tcp_client.read_input_registers(mb_register, ModbusDataType.FLOAT_32, unit=mb_unit_dev)
-        counter = counter * 1000000
+            if vc_type == 'VS':
+                mb_register = 46  # MB:46; ID: 15023; Desc: Total PV produced energy MWh
+            elif vc_type == 'VT':
+                mb_register = 18  # MB:18; ID: 11009; Desc: Total produced energy MWh
+            counter = 0
+            for i in range(1, vc_count + 1):
+                mb_unit_dev = mb_unit + i
+                counter += self.__tcp_client.read_input_registers(mb_register, ModbusDataType.FLOAT_32,
+                                                                  unit=mb_unit_dev)
+            counter = counter * 1000000
 
         inverter_state = InverterState(
             power=power,

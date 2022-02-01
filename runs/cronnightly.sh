@@ -11,7 +11,7 @@ echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
 echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
 
-monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m)"
+monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m).csv"
 
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
 einspeisung=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
@@ -91,7 +91,7 @@ d8=$(</var/www/html/openWB/ramdisk/device8_wh)
 d9=$(</var/www/html/openWB/ramdisk/device9_wh)
 d10="0"
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then
 	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
@@ -136,44 +136,18 @@ else
 	echo "Not deleting randomSleepValue of \"$randomSleep\""
 fi
 #set heartbeat openWB Pro
-if [[ $evsecon == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro1ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro1ip/connect.php
-fi
-if [[ $evsecons1 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro2ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-
-fi
-if [[ $evsecons2 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro3ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-fi
-if [[ $evseconlp4 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro4ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-
-fi
-if [[ $evseconlp5 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro5ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-
-fi
-if [[ $evseconlp6 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro6ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-
-fi
-if [[ $evseconlp7 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro7ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-
-fi
-if [[ $evseconlp8 == "owbpro" ]]; then
-	curl -s -X POST --data "heartbeatenabled=1" $owbpro8ip/connect.php
-	curl -s -X POST --data "update=1" $owbpro2ip/connect.php
-
-fi
+owbpro_num=1
+for i in evsecon evsecons{1..2} evseconlp{4..8}
+do
+	if [[ "${!i}" == "owbpro" ]]
+	then
+		owbpro_ip_var="owbpro${owbpro_num}ip"
+		owbpro_url="${!owbpro_ip_var}/connect.php"
+		curl -s -X POST --data "heartbeatenabled=1" "$owbpro_url"
+		curl -s -X POST --data "update=1" "$owbpro_url"
+	fi
+	((owbpro_num++))
+done
 
 # monthly . csv updaten
   echo "Trigger update of logfiles..."

@@ -35,13 +35,13 @@ class JsonCounter:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         config = self.component_config["configuration"]
 
-        power_all = jq.compile(config["jq_power"]).input(response).first()
+        power = jq.compile(config["jq_power"]).input(response).first()
         if config["jq_imported"] == "" or config["jq_exported"] == "":
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]
             )
             imported, exported = self.__sim_count.sim_count(
-                power_all,
+                power,
                 topic=topic_str,
                 data=self.simulation,
                 prefix="bezug"
@@ -53,6 +53,6 @@ class JsonCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power_all=power_all
+            power=power
         )
         self.__store.set(counter_state)

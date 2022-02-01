@@ -1,7 +1,8 @@
-from helpermodules import log, compatibility
+from helpermodules import compatibility
 from modules.common.component_state import InverterState
 from modules.common.fault_state import FaultState
 from modules.common.store import ValueStore
+from modules.common.store._api import LoggingValueStore
 from modules.common.store._broker import pub_to_broker
 from modules.common.store.ramdisk import files
 
@@ -16,7 +17,6 @@ class InverterValueStoreRamdisk(ValueStore[InverterState]):
             self.__pv.energy.write(inverter_state.counter)
             self.__pv.energy_k.write(inverter_state.counter / 1000)
             self.__pv.currents.write(inverter_state.currents)
-            log.MainLogger().info('PV Watt: ' + str(inverter_state.power))
         except Exception as e:
             raise FaultState.from_exception(e)
 
@@ -35,6 +35,6 @@ class InverterValueStoreBroker(ValueStore[InverterState]):
 
 
 def get_inverter_value_store(component_num: int) -> ValueStore[InverterState]:
-    if compatibility.is_ramdisk_in_use():
-        return InverterValueStoreRamdisk(component_num)
-    return InverterValueStoreBroker(component_num)
+    return LoggingValueStore(
+        (InverterValueStoreRamdisk if compatibility.is_ramdisk_in_use() else InverterValueStoreBroker)(component_num)
+    )

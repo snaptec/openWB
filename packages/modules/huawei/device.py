@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import time
-from typing import Dict, Union
+from typing import Dict, Union, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -16,7 +15,7 @@ from modules.huawei import inverter
 def get_default_config() -> dict:
     return {
         "name": "Huawei",
-        "type": "hauwei",
+        "type": "huawei",
         "id": 0,
         "configuration":
         {
@@ -74,18 +73,25 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(ip_address: str, modbus_id: int) -> None:
+def read_legacy(ip_address: str, modbus_id: int, read_counter: str = "False", read_battery: str = "False") -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
         "inverter": inverter
     }
 
+    components_to_read = ["inverter"]
+    if read_counter.lower() == "true":
+        components_to_read.append("counter")
+    if read_battery.lower() == "true":
+        components_to_read.append("bat")
+    log.MainLogger().debug("components to read: " + str(components_to_read))
+
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     device_config["configuration"]["modbus_id"] = modbus_id
     dev = Device(device_config)
-    for component_type in ["bat", "counter", "inverter"]:
+    for component_type in components_to_read:
         if component_type in COMPONENT_TYPE_TO_MODULE:
             component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         else:
@@ -106,6 +112,5 @@ def read_legacy(ip_address: str, modbus_id: int) -> None:
     dev.update()
 
 
-if __name__ == "__main__":
-    setup_logging_stdout()
-    run_using_positional_cli_args(read_legacy)
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

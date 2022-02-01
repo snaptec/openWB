@@ -18,7 +18,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "Speicher IP: ${wrfroniusip}"
 
-python3 /var/www/html/openWB/packages/modules/fronius/device.py "bat" "${wrfroniusip}" "${froniuserzeugung}" "${wrfroniusisgen24}" "0" "0" "none" "" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "bat" "${wrfroniusip}" "${froniuserzeugung}" "0" "0" "none" "" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

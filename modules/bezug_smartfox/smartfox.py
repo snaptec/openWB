@@ -44,8 +44,7 @@ response.encoding = 'utf-8'
 response = response.text.replace("\n", "")
 # Version ermitteln
 version = None
-tree = ET.parse(response)
-root = tree.getroot()
+root = ET.fromstring(response)
 version = get_xml_text(root, "value", "id", "version")
 if len(version) < 6:
     versionshort = version[:-6]
@@ -97,11 +96,13 @@ wattbezug3 = get_xml_text(root, "value", "id", var_wattbezug3)
 
 # Zählerstand Import(kWh)
 ikwh = (get_xml_text(root, "value", "id", var_ikwh))[:-4]
-ikwh = round(ikwh * 1000, 2)
+ikwh = round(float(ikwh) * 1000, 2)
+ikwh = str(ikwh)
 
 # Zählerstand Export(kWh)
 ekwh = (get_xml_text(root, "value", "id", var_ekwh))[:-4]
-ekwh = round(ekwh * 1000, 2)
+ekwh = round(float(ekwh) * 1000, 2)
+ekwh = str(ekwh)
 
 # Weitere Zählerdaten für die Statusseite (PowerFaktor, Spannung und Strom)
 # Powerfaktor ist nach dem Firmwareupgrade auf EM2 00.01.03.06 (04-2021) nicht mehr in der values.xml daher fix auf 1

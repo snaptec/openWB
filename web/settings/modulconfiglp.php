@@ -45,10 +45,6 @@
 				list($key, $value) = explode("=", $line, 2);
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-			// read available vehicles for EVCC SoC module from web API
-			$soc_evcc_vehicles = json_decode(file_get_contents('https://cloud.evcc.io/api/vehicles'), true);
-			$firstentry=array("id" => "none", "name" => "Bitte auswählen");
-			array_unshift($soc_evcc_vehicles , $firstentry);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -487,7 +483,6 @@
 											<option <?php if($ladeleistungmodulold == "mpm3pmll") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
 											<option <?php if($ladeleistungmodulold == "sdm120modbusll") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
 											<option <?php if($ladeleistungmodulold == "sdm630modbusll") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
-											<option <?php if($ladeleistungmodulold == "smaemd_ll") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
 											<option <?php if($ladeleistungmodulold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 										</optgroup>
 										<optgroup label="generische Module">
@@ -699,19 +694,6 @@
 							<div id="llswifi" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.
-								</div>
-							</div>
-							<div id="llsma" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="smaemdllid" class="col-md-4 col-form-label">Seriennummer</label>
-										<div class="col">
-											<input class="form-control" type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>">
-											<span class="form-text small">
-												Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben.
-											</span>
-										</div>
-									</div>
 								</div>
 							</div>
 							<div id="mqttll" class="hide">
@@ -1295,17 +1277,37 @@
 							<div id="socevcc" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<label for="soc_evcc_select_vehicle_lp1" class="col-md-4 col-form-label">Unterstützte Fahrzeuge</label>
 										<div class="col">
-											<select name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" class="form-control">
-												<?php
-													foreach($soc_evcc_vehicles as $item => $value)
-													{
-														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp1old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
-													}
-												?>
-											</select>
-											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+											<div class="input-group">
+												<div class="input-group-prepend clickable">
+													<div id="soc_evcc_load_vehicles_lp1" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_evcc_select_vehicle_lp1" class="form-control" readonly>
+													<option value="">-- Bitte aktualisieren --</option>
+												</select>
+											</div>
+											<span class="form-text small">
+												Die Auswahlliste dient nur der einfachen Eingabe des Fahrzeugtyps.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_evcc_vehicle_id_lp1" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" value="<?php echo $soc_evcc_type_lp1old ?>">
+											</div>
+											<span class="form-text small">
+												Dies ist der intern verwendete Typ, nicht der lesbare Name aus der Auswahlliste.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -1363,6 +1365,45 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$('#soc_evcc_select_vehicle_lp1').change(function(){
+										$('#soc_evcc_type_lp1').val($(this).val());
+									});
+
+									$('#soc_evcc_load_vehicles_lp1').click(function(){
+										$('#soc_evcc_load_vehicles_lp1').removeClass("bg-danger");
+										$('#soc_evcc_load_vehicles_lp1').removeClass("bg-success");
+										$('#soc_evcc_load_vehicles_lp1').addClass("bg-warning");
+										$(this).find('.fa-sync').addClass('fa-spin');
+										$("#soc_evcc_select_vehicle_lp1").empty();
+										$.ajax({
+											type: "GET",
+											url: "https://cloud.evcc.io/api/vehicles",
+											success: function(vehicledata){
+												$('#soc_evcc_load_vehicles_lp1').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp1').addClass("bg-success");
+												var vehicleid = $('#soc_evcc_type_lp1').val();
+												$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_evcc_select_vehicle_lp1');
+												vehicledata.forEach(function(vehicle){
+													newVehicle = $("<option/>").val(vehicle.id).text(vehicle.name);
+													if( vehicleid == vehicle.id ){
+														newVehicle.attr('selected','selected');
+													}
+													newVehicle.appendTo('#soc_evcc_select_vehicle_lp1');
+												});
+												$('#soc_evcc_select_vehicle_lp1').attr('readonly', false);
+											},
+											error: function(errMsg) {
+												$('#soc_evcc_load_vehicles_lp1').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp1').addClass("bg-danger");
+												alert("Fahrzeuge konnten nicht abgerufen werden!");
+											},
+											complete: function(){
+												$('#soc_evcc_load_vehicles_lp1').find('.fa-sync').removeClass('fa-spin');
+											}
+										});
+									});
+								</script>
 							</div>
 							<div id="socmhttp" class="hide">
 								<div class="form-group">
@@ -2010,12 +2051,12 @@
 										<label for="soc_tronity_select_vehicle_lp1" class="col-md-4 col-form-label">Fahrzeug</label>
 										<div class="col">
 											<div class="input-group">
-												<div class="input-group-prepend">
+												<div class="input-group-prepend clickable">
 													<div id="soc_tronity_load_vehicles_lp1" class="input-group-text">
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" disabled>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -2093,7 +2134,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
 															});
-															$('#soc_tronity_select_vehicle_lp1').attr('disabled', false);
+															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -2218,7 +2259,6 @@
 							hideSection('#llmsdm');
 							hideSection('#llmpm3pm');
 							hideSection('#llswifi');
-							hideSection('#llsma');
 							hideSection('#sdm120div');
 							hideSection('#rs485lanlp1');
 							hideSection('#llmfsm');
@@ -2242,9 +2282,6 @@
 							if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 								showSection('#llmsdm');
 								showSection('#rs485lanlp1');
-							}
-							if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-								showSection('#llsma');
 							}
 							if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
 								showSection('#sdm120div');
@@ -2671,7 +2708,7 @@
 							</div>
 						</div>
 						<div id="evsecontwcmanagers1" class="hide">
-							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp2">
+							<input type="hidden" name="ladeleistungs1modul" value="twcmanagerlp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<div class="col-md-4">
@@ -3961,12 +3998,12 @@
 										<label for="soc_tronity_select_vehicle_lp2" class="col-md-4 col-form-label">Fahrzeug</label>
 										<div class="col">
 											<div class="input-group">
-												<div class="input-group-prepend">
+												<div class="input-group-prepend clickable">
 													<div id="soc_tronity_load_vehicles_lp2" class="input-group-text">
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" disabled>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -4025,7 +4062,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
 															});
-															$('#soc_tronity_select_vehicle_lp2').attr('disabled', false);
+															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -4046,17 +4083,37 @@
 							<div id="socevcclp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<label for="soc_evcc_select_vehicle_lp2" class="col-md-4 col-form-label">Unterstützte Fahrzeuge</label>
 										<div class="col">
-											<select name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" class="form-control">
-												<?php
-													foreach($soc_evcc_vehicles as $item => $value)
-													{
-														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp2old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
-													}
-												?>
-											</select>
-											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+											<div class="input-group">
+												<div class="input-group-prepend clickable">
+													<div id="soc_evcc_load_vehicles_lp2" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_evcc_select_vehicle_lp2" class="form-control" readonly>
+													<option value="">-- Bitte aktualisieren --</option>
+												</select>
+											</div>
+											<span class="form-text small">
+												Die Auswahlliste dient nur der einfachen Eingabe des Fahrzeugtyps.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_evcc_vehicle_id_lp2" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" value="<?php echo $soc_evcc_type_lp2old ?>">
+											</div>
+											<span class="form-text small">
+												Dies ist der intern verwendete Typ, nicht der lesbare Name aus der Auswahlliste.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -4096,6 +4153,45 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$('#soc_evcc_select_vehicle_lp2').change(function(){
+										$('#soc_evcc_type_lp2').val($(this).val());
+									});
+
+									$('#soc_evcc_load_vehicles_lp2').click(function(){
+										$('#soc_evcc_load_vehicles_lp2').removeClass("bg-danger");
+										$('#soc_evcc_load_vehicles_lp2').removeClass("bg-success");
+										$('#soc_evcc_load_vehicles_lp2').addClass("bg-warning");
+										$(this).find('.fa-sync').addClass('fa-spin');
+										$("#soc_evcc_select_vehicle_lp2").empty();
+										$.ajax({
+											type: "GET",
+											url: "https://cloud.evcc.io/api/vehicles",
+											success: function(vehicledata){
+												$('#soc_evcc_load_vehicles_lp2').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp2').addClass("bg-success");
+												var vehicleid = $('#soc_evcc_type_lp2').val();
+												$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_evcc_select_vehicle_lp2');
+												vehicledata.forEach(function(vehicle){
+													newVehicle = $("<option/>").val(vehicle.id).text(vehicle.name);
+													if( vehicleid == vehicle.id ){
+														newVehicle.attr('selected','selected');
+													}
+													newVehicle.appendTo('#soc_evcc_select_vehicle_lp2');
+												});
+												$('#soc_evcc_select_vehicle_lp2').attr('readonly', false);
+											},
+											error: function(errMsg) {
+												$('#soc_evcc_load_vehicles_lp2').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp2').addClass("bg-danger");
+												alert("Fahrzeuge konnten nicht abgerufen werden!");
+											},
+											complete: function(){
+												$('#soc_evcc_load_vehicles_lp2').find('.fa-sync').removeClass('fa-spin');
+											}
+										});
+									});
+								</script>
 							</div>
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">

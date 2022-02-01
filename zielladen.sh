@@ -18,12 +18,12 @@ ziellademodus(){
 	zuladendewh=$(( akkuglp1wh / 100 * zuladendersoc ))
 
 	#ladeleistung ermitteln
-	lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 220 ))
+	lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 230 ))
 
-	wunschawh=$(( zielladenalp1 * zielladenphasenlp1 * 220 ))
+	wunschawh=$(( zielladenalp1 * zielladenphasenlp1 * 230 ))
 	#ladezeit ermitteln
 	if (( llalt > 5 )); then
-		wunschawh=$(( llalt * zielladenphasenlp1 * 220 ))
+		wunschawh=$(( llalt * zielladenphasenlp1 * 230 ))
 	fi
 	moeglichewh=$(( wunschawh / 60 * minzeitdiff ))
 

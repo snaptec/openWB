@@ -15,7 +15,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/sungrow/device.py "counter" "${speicher1_ip}" "${sungrowsr}">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sungrow.device" "counter" "${speicher1_ip}" "${sungrowsr}">>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

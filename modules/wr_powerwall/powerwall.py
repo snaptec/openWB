@@ -1,96 +1,83 @@
 #!/usr/bin/env python3
 
-from datetime import datetime, timezone
-import os
 import json
+import logging
+from json import JSONDecodeError
 import requests
-import sys
-import time
-import traceback
+from requests import HTTPError
 
+from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import InverterState
-from modules.common.store import get_inverter_value_store
+from modules.common.store import get_inverter_value_store, RAMDISK_PATH
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
-
-base_dir = str(sys.argv[1])
-speicherpwloginneeded = int(sys.argv[2])
-speicherpwuser = str(sys.argv[3])
-speicherpwpass = str(sys.argv[4])
-speicherpwip = str(sys.argv[5])
-
-ramdiskdir = base_dir+"/ramdisk"
-module = "PV"
-logfile = ramdiskdir+"/openWB.log"
-cookie_file = ramdiskdir+"/powerwall_cookie.txt"
-cookie = ""
+COOKIE_FILE = RAMDISK_PATH / "powerwall_cookie.txt"
+log = logging.getLogger("Powerwall")
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+def authenticate(url: str, email: str, password: str):
+    '''
+    email is not yet required for login (2022/01), but we simulate the whole login page
+    '''
+    response = requests.post(
+        "https://" + url + "/api/login/Basic",
+        json={"username": "customer", "email": email, "password": password},
+        verify=False,
+        timeout=5
+    )
+    response.raise_for_status()
+    log.debug("Authentication endpoint responded %s", response.text)
+    log.debug("Authentication endpoint send cookies %s", str(response.cookies))
+    return {"AuthCookie": response.cookies["AuthCookie"], "UserRecord": response.cookies["UserRecord"]}
 
 
-def get_value(answer, key, file):
+def read_aggregate(address: str, cookie):
+    response = requests.get("https://" + address + "/api/meters/aggregates", cookies=cookie, verify=False, timeout=5)
+    response.raise_for_status()
+    return response.json()
+
+
+def update_using_cookie(address: str, cookie):
+    aggregate = read_aggregate(address, cookie)
+    pv_watt = aggregate["solar"]["instant_power"]
+    if pv_watt > 5:
+        pv_watt = pv_watt*-1
+    get_inverter_value_store(1).set(InverterState(
+        counter=aggregate["solar"]["energy_exported"],
+        power=pv_watt
+    ))
+
+
+def authenticate_and_update(address: str, email: str, password: str):
+    cookie = authenticate(address, email, password)
+    COOKIE_FILE.write_text(json.dumps(cookie))
+    update_using_cookie(address, cookie)
+
+
+def update(address: str, email: str, password: str):
+    log.debug("Beginning update")
+    cookies = None
     try:
-        value = answer["0"]["Cached_readings"][key]
-        with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
-            f.write(str(value))
-    except:
-        traceback.print_exc()
-        exit(1)
-    if Debug >= 1:
-        DebugLog(file+': ' + str(value))
+        cookies = json.loads(COOKIE_FILE.read_text())
+    except FileNotFoundError:
+        log.debug("Cookie-File <%s> does not exist. It will be created.", COOKIE_FILE)
+    except JSONDecodeError as e:
+        log.warning("Could not parse Cookie-File <%s>. It will be re-created.", COOKIE_FILE, exc_info=e)
+
+    if cookies is None:
+        authenticate_and_update(address, email, password)
+        return
+    try:
+        update_using_cookie(address, cookies)
+        return
+    except HTTPError as e:
+        if e.response.status_code != 401 and e.response.status_code != 403:
+            raise e
+        log.warning("Login to powerwall with existing cookie failed. Will retry with new cookie...")
+    authenticate_and_update(address, email, password)
+    log.debug("Update completed successfully")
 
 
-if Debug >= 2:
-    DebugLog('Powerwall IP: ' + speicherpwip)
-    DebugLog('Powerwall User: ' + speicherpwuser)
-    DebugLog('Powerwall Passwort: ' + speicherpwpass)
-    DebugLog('Powerwall Login: ' + str(speicherpwloginneeded))
-
-if speicherpwloginneeded == 1:
-    # delete our login cookie after some time as it may be invalid
-    if os.path.isfile(cookie_file) == True:
-        edited = os.stat(cookie_file).st_mtime
-        now = time.time()
-        edit_diff = now - edited
-        if edit_diff < 3600:
-            DebugLog("Deleting saved login cookie after 1 hour as it may not be valid anymore.")
-            os.remove(cookie_file)
-    if os.path.isfile(cookie_file) == False:
-        # log in and save cookie for later use
-        DebugLog("Trying to authenticate...")
-        headers = {'Content-Type': 'application/json', }
-        data = {"username": "customer", "password": speicherpwpass, "email": speicherpwuser, "force_sm_off": False}
-        data = json.dumps(data)
-        try:
-            response = requests.post('https://'+speicherpwip+'/api/login/Basic',
-                                     headers=headers, data=data, verify=False, timeout=5)
-        except requests.exceptions.RequestException as e:
-            DebugLog("Something went wrong. RequestException: "+str(e))
-            exit(1)
-        else:
-            DebugLog("Login successfull.")
-            cookie = response.cookies
-            with open(cookie_file, "w") as f:
-                f.write(str(requests.utils.dict_from_cookiejar(cookie)))
-    else:
-        DebugLog("Using saved login cookie.")
-    with open(cookie_file, "r") as f:
-        cookie = f.read()
-
-
-answer = requests.get("https://"+speicherpwip+"/api/meters/aggregates", cookies=cookie, verify=False, timeout=5).json()
-pvwatt = int(answer["solar"]["instant_power"])
-pvkwh = answer["solar"]["energy_exported"]
-
-if pvwatt > 5:
-    pvwatt = pvwatt*-1
-if Debug >= 1:
-    DebugLog('WR Leistung: ' + str(pvwatt))
-    DebugLog('WR Energie: ' + str(pvkwh))
-
-
-get_inverter_value_store(1).set(InverterState(counter=pvkwh, power=pvwatt))
+if __name__ == '__main__':
+    setup_logging_stdout()
+    run_using_positional_cli_args(update)

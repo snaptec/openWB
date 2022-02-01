@@ -16,7 +16,7 @@ else
 fi
 
 
-python3 ${OPENWBBASEDIR}/packages/modules/studer/device.py "inverter" "${studer_ip}" "${studer_vc}" "${studer_vc_type}" "1">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.studer.device" "inverter" "${studer_ip}" "${studer_vc}" "${studer_vc_type}" "1">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt

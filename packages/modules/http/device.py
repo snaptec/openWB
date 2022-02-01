@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import re
-from typing import Dict, Union
+from typing import Dict, Union, List
 
 from urllib3.util import parse_url
 
@@ -102,7 +102,8 @@ def create_legacy_device_config(url: str):
     parsed_url = parse_url(url)
     device_config = get_default_config()
     device_config["configuration"]["protocol"] = parsed_url.scheme
-    device_config["configuration"]["domain"] = parsed_url.hostname
+    device_config["configuration"]["domain"] = parsed_url.hostname+":" + \
+        str(parsed_url.port) if parsed_url.port else parsed_url.hostname
     return device_config
 
 
@@ -117,18 +118,18 @@ def read_legacy_bat(power_path: str, imported_path: str, exported_path: str, soc
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
-def read_legacy_counter(power_all_path: str, imported_path: str, exported_path: str, power_l1_path: str,
-                        power_l2_path: str, power_l3_path: str):
+def read_legacy_counter(power_path: str, imported_path: str, exported_path: str, current_l1_path: str,
+                        current_l2_path: str, current_l3_path: str):
     component_config = counter.get_default_config()
     component_config["configuration"] = create_paths_dict(
-        power_all_path=power_all_path,
+        power_path=power_path,
         imported_path=imported_path,
         exported_path=exported_path,
-        power_l1_path=power_l1_path,
-        power_l2_path=power_l2_path,
-        power_l3_path=power_l3_path,
+        current_l1_path=current_l1_path,
+        current_l2_path=current_l2_path,
+        current_l3_path=current_l3_path,
     )
-    run_device_legacy(create_legacy_device_config(power_all_path), component_config)
+    run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
 def read_legacy_inverter(power_path: str, counter_path: str, num: int):
@@ -141,7 +142,7 @@ def read_legacy_inverter(power_path: str, counter_path: str, num: int):
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
-if __name__ == "__main__":
+def main(argv: List[str]):
     run_using_positional_cli_args(
-        {"bat": read_legacy_bat, "counter": read_legacy_counter, "inverter": read_legacy_inverter}
+        {"bat": read_legacy_bat, "counter": read_legacy_counter, "inverter": read_legacy_inverter}, argv
     )
