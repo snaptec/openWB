@@ -73,18 +73,25 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(ip_address: str, modbus_id: int) -> None:
+def read_legacy(ip_address: str, modbus_id: int, read_counter: str = "False", read_battery: str = "False") -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
         "inverter": inverter
     }
 
+    components_to_read = ["inverter"]
+    if read_counter.lower() == "true":
+        components_to_read.append("counter")
+    if read_battery.lower() == "true":
+        components_to_read.append("bat")
+    log.MainLogger().debug("components to read: " + str(components_to_read))
+
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     device_config["configuration"]["modbus_id"] = modbus_id
     dev = Device(device_config)
-    for component_type in ["bat", "counter", "inverter"]:
+    for component_type in components_to_read:
         if component_type in COMPONENT_TYPE_TO_MODULE:
             component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         else:

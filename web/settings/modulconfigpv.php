@@ -149,6 +149,11 @@
 								Konfiguration im zugehörigen Speichermodul des Solarwatt/My Reserve erforderlich.
 							</div>
 						</div>
+						<div id="pvhuawei" class="hide">
+							<div class="card-text alert alert-danger">
+								Die Abfrage der Huawei Wechselrichter benötigt sehr viel Zeit. Es wird empfohlen das Regelintervall auf "langsam" zu stellen.
+							</div>
+						</div>
 						<div id="pvip" class="hide">
 							<div class="form-row mb-1">
 								<label for="pv1_ipa" class="col-md-4 col-form-label">IP Adresse</label>
@@ -900,6 +905,7 @@
 								hideSection('#pvsungrow');
 								hideSection('#pvalphaess');
 								hideSection('#pvsonneneco');
+								hideSection('#pvhuawei');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -908,6 +914,7 @@
 									showSection('#pvip');
 								}
 								if($('#pvwattmodul').val() == 'wr_huawei') {
+									showSection('#pvhuawei');
 									showSection('#pvip');
 									showSection('#pvid');
 								}

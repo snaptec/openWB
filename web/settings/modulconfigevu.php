@@ -203,8 +203,8 @@
 							</div>
 						</div>
 						<div id="wattbezughuawei" class="hide">
-							<div class="card-text alert alert-info">
-								Konfiguration erfolgt im zugehörigen PV Modul.
+							<div class="card-text alert alert-danger">
+								Es muss zwingend auch das Huawei PV Modul konfiguriert werden, da alle Daten dort abgerufen werden!
 							</div>
 						</div>
 
