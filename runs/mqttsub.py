@@ -535,11 +535,11 @@ def on_message(client, userdata, msg):
                     if (int(msg.payload) == 1):
                         sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstatlp"+str(devicenumb)+"=", "1"]
                         subprocess.run(sendcommand)
-                        client.publish("openWB/lp/5/boolDirectModeChargekWh", msg.payload.decode("utf-8"), qos=0, retain=True)
+                        client.publish("openWB/lp/"+str(devicenumb)+"/boolDirectModeChargekWh", msg.payload.decode("utf-8"), qos=0, retain=True)
                     else:
                         sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstatlp"+str(devicenumb)+"=", "0"]
                         subprocess.run(sendcommand)
-                        client.publish("openWB/lp/5/boolDirectModeChargekWh", "0", qos=0, retain=True)
+                        client.publish("openWB/lp/"+str(devicenumb)+"/boolDirectModeChargekWh", "0", qos=0, retain=True)
                     client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
                 if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
