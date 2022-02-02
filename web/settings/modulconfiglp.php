@@ -729,7 +729,6 @@
 										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
-										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
 										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
@@ -741,8 +740,6 @@
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
-										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
-										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -1141,72 +1138,6 @@
 									</div>
 								</div>
 							</div>
-							<div id="socmaudi" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="soc_audi_username" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="email" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>">
-											<span class="form-text small">
-												Email Adresse des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_audi_passwort" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>">
-											<span class="form-text small">
-												Password des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_audi_vin" class="col-md-4 col-form-label">VIN</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_audi_vin" id="soc_audi_vin" value="<?php echo $soc_audi_vinold ?>">
-											<span class="form-text small">
-												VIN des Fahrzeugs.
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="socmid" class="hide">
-								<div class="form-group">
-									<div class="alert alert-info">
-										Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
-											<span class="form-text small">
-												Email Adresse des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
-											<span class="form-text small">
-												Password des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
-											<span class="form-text small">
-												Vollständige VIN des Fahrzeugs.
-											</span>
-										</div>
-									</div>
-
-								</div>
-							</div>
 							<div id="socevcc" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -1569,40 +1500,6 @@
 										<label for="soci3intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
-											<span class="form-text small">
-												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="soccarnet" class="hide">
-								<div class="form-group">
-									<div class="alert alert-info">
-										Das VAG Modul kann alternativ genutzt werden und ruft den SoC in 1-Prozent Schritten ab.
-									</div>
-									<div class="form-row mb-1">
-										<label for="carnetuser" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>">
-											<span class="form-text small">
-												VW Carnet Benutzername. Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="carnetpass" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="carnetpass" id="carnetpass" value="<?php echo $carnetpassold ?>">
-											<span class="form-text small">
-												VW Carnet Passwort
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soccarnetintervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo $soccarnetintervallold ?>">
 											<span class="form-text small">
 												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 											</span>
@@ -2247,11 +2144,8 @@
 							hideSection('#soczoe');
 							hideSection('#socevnotify');
 							hideSection('#socmtesla');
-							hideSection('#soccarnet');
 							hideSection('#socmzerong');
 							hideSection('#socmeq');
-							hideSection('#socmaudi');
-							hideSection('#socmid');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
 							hideSection('#socmkia');
@@ -2282,10 +2176,6 @@
 								showSection('#socsupportinfo');
 								showSection('#socmqtt');
 							}
-							if($('#socmodul').val() == 'soc_id') {
-								showSection('#socoldevccwarning');
-								showSection('#socmid');
-							}
 							if($('#socmodul').val() == 'soc_evcc') {
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3134')
 								showSection('#socsupportinfo');
@@ -2295,10 +2185,6 @@
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3137')
 								showSection('#socsupportinfo');
 								showSection('#socmkia');
-							}
-							if($('#socmodul').val() == 'soc_audi') {
-								showSection('#socoldevccwarning');
-								showSection('#socmaudi');
 							}
 							if($('#socmodul').val() == 'soc_myrenault') {
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3139')
@@ -2334,9 +2220,6 @@
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3141')
 								showSection('#socsupportinfo');
 								showSection('#socmtesla');
-							}
-							if($('#socmodul').val() == 'soc_carnet') {
-								showSection('#soccarnet');
 							}
 							if($('#socmodul').val() == 'soc_mypeugeot') {
 								showSection('#socmypeugeot');
@@ -2925,7 +2808,6 @@
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
-										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
 										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
@@ -2937,8 +2819,6 @@
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
-										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
@@ -2957,27 +2837,6 @@
 							<!-- soc is always requested, ignoring plug stat -->
 							<div id="socmnone1" class="hide">
 								<!-- nothing here -->
-							</div>
-							<div id="socmtype2" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($soc2typeold == 'vw') echo " active" ?>">
-													<input type="radio" name="soc2type" id="soc2type_vw" value="vw"<?php if($soc2typeold == 'vw') echo " checked=\"checked\"" ?>>VW
-												</label>
-												<label class="btn btn-outline-info<?php if($soc2typeold == 'id') echo " active" ?>">
-													<input type="radio" name="soc2type" id="soc2type_id" value="id"<?php if($soc2typeold == 'id') echo " checked=\"checked\"" ?>>ID
-												</label>
-												<label class="btn btn-outline-info<?php if($soc2typeold == 'porsche') echo " active" ?>">
-													<input type="radio" name="soc2type" id="soc2type_porsche" value="porsche"<?php if($soc2typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
-												</label>
-											</div>
-											<span class="form-text small">Auswahl Fahrzeugtyp</span>
-										</div>
-									</div>
-								</div>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3122,37 +2981,6 @@
 											<span class="form-text small">
 												Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos während des Ladens abgefragt werden soll.<br>
 												Je nach Ladeleistung werden 5 - 10 Minuten empfohlen, damit eventuell eingestellte SoC-Grenzen rechtzeitig erkannt werden können.
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="soccarnetlp2" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="carnetlp2user" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo $carnetlp2userold ?>">
-											<span class="form-text small">
-												VW Carnet Benutzername. Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="carnetlp2pass" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo $carnetlp2passold ?>">
-											<span class="form-text small">
-												VW Carnet Passwort
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soccarnetlp2intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo $soccarnetlp2intervallold ?>">
-											<span class="form-text small">
-												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 											</span>
 										</div>
 									</div>
@@ -4263,10 +4091,8 @@
 						}
 
 						function display_socmodul1() {
-
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
-							hideSection('#socmtype2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
@@ -4279,7 +4105,6 @@
 							hideSection('#socmteslalp2');
 							hideSection('#socmeqlp2');
 							hideSection('#socmyrenaultlp2');
-							hideSection('#soccarnetlp2');
 							hideSection('#socmzeronglp2');
 							hideSection('#socmypeugeotlp2');
 							hideSection('#socmyopellp2');
@@ -4312,12 +4137,6 @@
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
-							if($('#socmodul1').val() == 'soc_audilp2') {
-								showSection('#socoldevccwarninglp2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmvin2');
-							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3137')
 								showSection('#socsupportinfolp2');
@@ -4327,12 +4146,6 @@
 								showSection('#socmvin2');
 								showSection('#socmintervall2');
 								showSection('#socmkialp2');
-							}
-							if($('#socmodul1').val() == 'soc_idlp2') {
-								showSection('#socoldevccwarninglp2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_evcclp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3134')
@@ -4362,9 +4175,6 @@
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3135')
 								showSection('#socsupportinfolp2');
 								showSection('#socmeqlp2');
-							}
-							if($('#socmodul1').val() == 'soc_carnetlp2') {
-								showSection('#soccarnetlp2');
 							}
 							if($('#socmodul1').val() == 'soc_teslalp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3141')
