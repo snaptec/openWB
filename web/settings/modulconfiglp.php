@@ -740,7 +740,6 @@
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
-										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
@@ -1206,72 +1205,6 @@
 										</div>
 									</div>
 
-								</div>
-							</div>
-							<div id="socvag" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'vw') echo " active" ?>">
-													<input type="radio" name="soc_vag_type" id="soc_vag_type_vw" value="vw"<?php if($soc_vag_typeold == 'vw') echo " checked=\"checked\"" ?>>VW
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'id') echo " active" ?>">
-													<input type="radio" name="soc_vag_type" id="soc_vag_type_id" value="id"<?php if($soc_vag_typeold == 'id') echo " checked=\"checked\"" ?>>ID
-												</label>
-												<label class="btn btn-outline-info<?php if($soc_vag_typeold == 'porsche') echo " active" ?>">
-													<input type="radio" name="soc_vag_type" id="soc_vag_type_porsche" value="porsche"<?php if($soc_vag_typeold == 'porsche') echo " checked=\"checked\"" ?>>Porsche
-												</label>
-											</div>
-											<span class="form-text small">Auswahl Fahrzeugtyp</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_vag_username" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="email" name="soc_vag_username" id="soc_vag_username" value="<?php echo $soc_vag_usernameold ?>">
-											<span class="form-text small">
-												Email Adresse des Logins
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_vag_password" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_vag_password" id="soc_vag_password" value="<?php echo $soc_vag_passwordold ?>">
-											<span class="form-text small">
-												Passwort des Logins
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_vag_vin" class="col-md-4 col-form-label">VIN</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_vag_vin" id="soc_vag_vin" value="<?php echo $soc_vag_vinold ?>">
-											<span class="form-text small">
-												Vollständige VIN des Fahrzeugs
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_vag_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
-										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervall" id="soc_vag_intervall" value="<?php echo $soc_vag_intervallold ?>">
-											<span class="form-text small">
-												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_vag_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
-										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_vag_intervallladen" id="soc_vag_intervallladen" value="<?php echo $soc_vag_intervallladenold ?>">
-											<span class="form-text small">
-												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
-											</span>
-										</div>
-									</div>
 								</div>
 							</div>
 							<div id="socevcc" class="hide">
@@ -2319,7 +2252,6 @@
 							hideSection('#socmeq');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
-							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
 							hideSection('#socmkia');
@@ -2353,10 +2285,6 @@
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('#socoldevccwarning');
 								showSection('#socmid');
-							}
-							if($('#socmodul').val() == 'soc_vag') {
-								showSection('#socoldevccwarning');
-								showSection('#socvag');
 							}
 							if($('#socmodul').val() == 'soc_evcc') {
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3134')
@@ -3008,7 +2936,6 @@
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
-										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
@@ -4406,15 +4333,6 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
-							}
-							if($('#socmodul1').val() == 'soc_vaglp2') {
-								showSection('#socoldevccwarninglp2');
-								showSection('#socmtype2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmvin2');
-								showSection('#socmintervall2');
-								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_evcclp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3134')
