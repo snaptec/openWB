@@ -1,4 +1,3 @@
-import argparse
 import logging
 
 from helpermodules.cli import run_using_positional_cli_args
@@ -12,7 +11,6 @@ log = logging.getLogger("SoC Manual")
 
 def run(charge_point: int, battery_size: float, efficiency: float):
     """
-
     :param charge_point: charge point number >= 1
     :param battery_size: battery size in kWh
     :param efficiency: efficiency as fraction (usually between 0 and 1)
@@ -43,6 +41,9 @@ def run(charge_point: int, battery_size: float, efficiency: float):
         energy_counted, efficiency * 100, battery_size, battery_soc_gain * 100
     )
     log.info("%g%% + %g kWh = %g%%", soc_start * 100, energy_battery_gain, soc_new * 100)
+    if soc_new > 1:
+        log.warning("Calculated SoC of %g%% exceeds maximum and is limited to 100%%! Check your settings!", soc_new * 100)
+        soc_new = 1
     charge_point_files.soc.write(soc_new * 100)
 
 
