@@ -743,7 +743,8 @@
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
-										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID-alt</option>
+										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID-neu</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -1200,12 +1201,64 @@
 										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
-											<span class="form-text small">
+											<spa-altn class="form-text small">
 												Vollständige VIN des Fahrzeugs.
 											</span>
 										</div>
 									</div>
 
+								</div>
+							</div>
+							<div id="socmvwid" class="hide">
+								<div class="form-group">
+									<div class="alert alert-info">
+										Dieses ID Modul ist neu und auf python3 und libvwid.py basiert.
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_password" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_id_password" id="soc_id_password" value="<?php echo $soc_id_passwordold ?>">
+											<span class="form-text small">
+												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervall" id="soc_id_intervall" value="<?php echo $soc_id_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socvag" class="hide">
@@ -2319,6 +2372,7 @@
 							hideSection('#socmeq');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
+							hideSection('#socmvwid');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2353,6 +2407,10 @@
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('#socoldevccwarning');
 								showSection('#socmid');
+							}
+							if($('#socmodul').val() == 'soc_vwid') {
+								showSection('#socvwidlpxinfo');
+								showSection('#socmvwid');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
@@ -3011,7 +3069,8 @@
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID-alt</option>
+										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID-neu</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
@@ -4406,6 +4465,14 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+							}
+							if($('#socmodul1').val() == 'soc_vwidlp2') {
+								showSection('#socvwidlpxinfo');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_vaglp2') {
 								showSection('#socoldevccwarninglp2');

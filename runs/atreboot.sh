@@ -224,7 +224,13 @@ then
 	sleep 1
 	sudo apt-get -qq install -y php7.0-xml
 fi
-
+# required package for soc_vwid
+if [ $(dpkg-query -W -f='${Status}' libxslt1-dev 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+	sudo apt-get -qq update
+	sleep 1
+	sudo apt-get -qq install -y libxslt1-dev
+fi
 # no need to reload config
 # . /var/www/html/openWB/loadconfig.sh
 
@@ -308,6 +314,12 @@ if python3 -c "import ipparser" &> /dev/null; then
 	echo 'ipparser installed...'
 else
 	sudo pip3 install ipparser
+fi
+#Prepare for lxml used in soc module libvwid in Python
+if python3 -c "import lxml" &> /dev/null; then
+	echo 'lxml installed...'
+else
+	sudo pip3 install lxml
 fi
 # update outdated urllib3 for Tesla Powerwall
 pip3 install --upgrade urllib3
