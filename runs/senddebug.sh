@@ -1,6 +1,9 @@
 #!/bin/bash
-echo "***** debuglog start..." >> /var/www/html/openWB/ramdisk/openWB.log
+echo "***** debuglog level 1 start..." >> /var/www/html/openWB/ramdisk/openWB.log
 sed -i 's/debug.*/debug=1/' /var/www/html/openWB/openwb.conf
+sleep 60
+echo "***** debuglog level 2 start..." >> /var/www/html/openWB/ramdisk/openWB.log
+sed -i 's/debug.*/debug=2/' /var/www/html/openWB/openwb.conf
 sleep 60
 
 debugFile=/var/www/html/openWB/ramdisk/debug.log
