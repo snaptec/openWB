@@ -81,27 +81,24 @@ incrementTimer(){
 
 soctimer=$(<$soctimerfile)
 openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
-echo 0 > $soctimerfile
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "0" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
-# if (( ladeleistung > 1000 )); then
-# 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is charging"
-# 	if (( soctimer < socintervallladen )); then
-# 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-# 		incrementTimer
-# 	else
-# 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
-# 		echo 0 > $soctimerfile
-# 		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "1" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
-# 	fi
-# else
-# 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
-# 	if (( soctimer < socintervall )); then
-# 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
-# 		incrementTimer
-# 	else
-# 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
-# 		echo 0 > $soctimerfile
-# 		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "0" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
-# 	fi
-# fi
+if (( ladeleistung > 1000 )); then
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is charging"
+	if (( soctimer < socintervallladen )); then
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		incrementTimer
+	else
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+		echo 0 > $soctimerfile
+		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "1" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
+	fi
+else
+	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
+	if (( soctimer < socintervall )); then
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		incrementTimer
+	else
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
+		echo 0 > $soctimerfile
+		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
+	fi
+fi

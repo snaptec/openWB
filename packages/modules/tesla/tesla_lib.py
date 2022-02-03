@@ -34,7 +34,6 @@ tokens = {
     "refresh_token": ""
 }
 expiration = 0
-verbose = False
 
 
 def gen_params():
@@ -47,20 +46,17 @@ def gen_params():
 
 def loadTokens():
     global tokens, expiration
-    MainLogger().debug("TokenFile"+str(tokensFilename))
     try:
         with open(tokensFilename, "r") as R:
             tokens = json.load(R)
-            MainLogger().debug("Token"+str(tokens))
             # do not trust teslas expiration date!
             # expiration = tokens["created_at"] + tokens["expires_in"] - 86400
             expiration = tokens["created_at"] + 2500000
             return True
     except IOError as e:
-        if(verbose):
-            MainLogger().exception(
-                "Could not read from file %s: %s (pressing on in hopes of alternate authenticaiton)" %
-                (tokensFilename, str(e)))
+        MainLogger().exception(
+            "Could not read from file %s: %s (pressing on in hopes of alternate authenticaiton)" %
+            (tokensFilename, str(e)))
         return False
 
 
@@ -99,8 +95,7 @@ def login(email, password, mfaPasscode):
         resp = session.get("https://auth.tesla.com/oauth2/v3/authorize", headers=headers, params=params)
 
         if resp.ok and "<title>" in resp.text:
-            if(verbose):
-                MainLogger().debug("Get auth form success - %d attempt(s)." % (attempt + 1))
+            MainLogger().debug("Get auth form success - %d attempt(s)." % (attempt + 1))
             break
         time.sleep(3)
     else:
@@ -124,8 +119,7 @@ def login(email, password, mfaPasscode):
         resp = session.post("https://auth.tesla.com/oauth2/v3/authorize", headers=headers,
                             params=params, data=data, allow_redirects=False)
         if resp.ok and (resp.status_code == 302 or "<title>" in resp.text):
-            if(verbose):
-                MainLogger().debug("Post auth form success - %d attempt(s)." % (attempt + 1))
+            MainLogger().debug("Post auth form success - %d attempt(s)." % (attempt + 1))
             break
         time.sleep(3)
     else:
@@ -153,16 +147,14 @@ def login(email, password, mfaPasscode):
         #         }
         #     ]
         # }
-        if(verbose):
-            MainLogger().debug(resp.text)
+        MainLogger().debug(resp.text)
         factor_id = resp.json()["data"][0]["id"]
 
         # Can use Passcode
         data = {"transaction_id": transaction_id, "factor_id": factor_id, "passcode": mfaPasscode}
         resp = session.post("https://auth.tesla.com/oauth2/v3/authorize/mfa/verify", headers=headers, json=data)
         # ^^ Content-Type - application/json
-        if(verbose):
-            MainLogger().debug(resp.text)
+        MainLogger().debug(resp.text)
         # {
         #     "data": {
         #         "id": "63375dc0-3a11-11eb-8b23-75a3281a8aa8",
@@ -213,17 +205,15 @@ def login(email, password, mfaPasscode):
                 allow_redirects=False,
             )
             if resp.headers.get("location"):
-                if(verbose):
-                    MainLogger().debug("Got location in %d attempt(s)." % (attempt + 1))
+                MainLogger().debug("Got location in %d attempt(s)." % (attempt + 1))
                 break
         else:
             raise ValueError("Didn't get location in %d attempts." % (MAX_ATTEMPTS))
 
     # Step 3: Exchange authorization code for bearer token
     code = parse_qs(resp.headers["location"])["https://auth.tesla.com/void/callback?code"]
-    if(verbose):
-        MainLogger().debug("received callback code")
-        # MainLogger().debug("Code -", code)
+    MainLogger().debug("received callback code")
+    # MainLogger().debug("Code -", code)
 
     # headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
     headers = {}
@@ -239,9 +229,8 @@ def login(email, password, mfaPasscode):
     resp_json = resp.json()
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
-    if(verbose):
-        MainLogger().debug("received refresh token")
-        # MainLogger().debug("{\"refresh_token\": \"" + refresh_token + "\"}")
+    MainLogger().debug("received refresh token")
+    # MainLogger().debug("{\"refresh_token\": \"" + refresh_token + "\"}")
 
     # Step 4: Exchange bearer token for access token
     headers["authorization"] = "bearer " + access_token
@@ -276,9 +265,8 @@ def refreshToken(email):
     resp_json = resp.json()
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
-    if(verbose):
-        MainLogger().debug("received refresh token")
-        # MainLogger().debug("{\"refresh_token\": \"" + refresh_token + "\"}")
+    MainLogger().debug("received refresh token")
+    # MainLogger().debug("{\"refresh_token\": \"" + refresh_token + "\"}")
 
     # Step 4: Exchange bearer token for access token
     headers["authorization"] = "bearer " + access_token
@@ -309,12 +297,10 @@ def listCars():
 def getVehicleIdByVin(vin):
     myVehicles = requestData('vehicles')
     for car in json.loads(myVehicles)["response"]:
-        if(verbose):
-            MainLogger().debug("VIN: %s" % (car["vin"]))
+        MainLogger().debug("VIN: %s" % (car["vin"]))
         if(car["vin"] == vin):
             myVehicleId = car["id"]
-            if(verbose):
-                MainLogger().debug("vehicle_id for vin %s: %s" % (vin, str(myVehicleId)))
+            MainLogger().debug("vehicle_id for vin %s: %s" % (vin, str(myVehicleId)))
             return myVehicleId
     MainLogger().debug("vin not found: %s" % (vin))
     for index, car in enumerate(json.loads(myVehicles)["response"]):
@@ -324,14 +310,12 @@ def getVehicleIdByVin(vin):
 def getVehicleIdByIndex(index):
     myVehicles = requestData('vehicles')
     myVehicleId = json.loads(myVehicles)["response"][index]["id"]
-    if(verbose):
-        MainLogger().debug("vehicle_id for entry %d: %s" % (index, str(myVehicleId)))
+    MainLogger().debug("vehicle_id for entry %d: %s" % (index, str(myVehicleId)))
     return myVehicleId
 
 
 def requestData(dataPart):
-    if(verbose):
-        MainLogger().debug("Requesting data: \"%s\"" % (dataPart))
+    MainLogger().debug("Requesting data: \"%s\"" % (dataPart))
     session = requests.Session()
     headers = {
         "user-agent": UA,
@@ -344,14 +328,12 @@ def requestData(dataPart):
     owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
 
     resp = session.get("https://owner-api.teslamotors.com/api/1/" + dataPart, headers=owner_headers, timeout=120)
-    if(verbose):
-        MainLogger().debug(resp.text, "\n")
+    MainLogger().debug(resp.text, "\n")
     return resp.text
 
 
 def postCommand(command):
-    if(verbose):
-        MainLogger().debug("Sending command: \"%s\"" % (command))
+    MainLogger().debug("Sending command: \"%s\"" % (command))
     session = requests.Session()
     headers = {
         "user-agent": UA,
@@ -364,8 +346,7 @@ def postCommand(command):
     owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
 
     resp = session.post("https://owner-api.teslamotors.com/api/1/" + command, headers=owner_headers, timeout=120)
-    if(verbose):
-        MainLogger().debug(resp.text, "\n")
+    MainLogger().debug(resp.text, "\n")
     return resp.text
 
 
@@ -376,8 +357,7 @@ def lib(
         command: str = None,
         vehicle: int = 0,
         vin: str = None,
-        listcars=False,
-        verbose=False) -> str:
+        listcars=False) -> str:
     #     parser = argparse.ArgumentParser()
     #     parser.add_argument("-e", "--email", type=str, required=True, help="Tesla account email")
     #     parser.add_argument("-f", "--tokensfile", type=str, required=False, default="tesla.token", help="Filename to save tokens")
@@ -387,7 +367,6 @@ def lib(
     #     parser.add_argument("-V", "--vin", type=str, required=False, default=None, help="vin to use, optional instead of \"--vehicle\"")
     #     parser.add_argument("-l", "--logprefix", type=str, required=False, default=None, help="identifier used for logging to stderr")
     #     parser.add_argument("--listcars", required=False, default=False, action="store_true", help="list avilable cars by index and vin")
-    #     parser.add_argument("--verbose", required=False, default=False, action="store_true", help="be verbose")
     #     args = parser.parse_args()
 
     response = ""
@@ -396,15 +375,12 @@ def lib(
     if(not loadTokens()):
         raise Exception("Login with E-Mail and Password not supported (Captcha)!")
     else:
-        if(verbose):
-            MainLogger().debug("No need to authenticate. Valid tokens already present in " + tokensfile)
+        MainLogger().debug("No need to authenticate. Valid tokens already present in " + tokensfile)
         if(time.time() > expiration):
-            if(verbose):
-                MainLogger().debug("Access token expired. Refreshing token.")
+            MainLogger().debug("Access token expired. Refreshing token.")
             try:
                 if(refreshToken(email)):
-                    if(verbose):
-                        MainLogger().debug("Token Refresh succeeded")
+                    MainLogger().debug("Token Refresh succeeded")
             except ValueError as err:
                 raise Exception("Token Refresh failed")
 

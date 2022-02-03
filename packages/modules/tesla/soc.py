@@ -18,7 +18,7 @@ from helpermodules.cli import run_using_positional_cli_args
 
 def get_default_config():
     return {
-        "name": "Tesla SoC-Module",
+        "name": "Tesla SoC-Modul",
         "type": "tesla",
         "id": 0,
         "username": "user",
@@ -86,17 +86,15 @@ class Soc(AbstractSoc):
                 log.MainLogger().debug("Tesla "+str(self.config.id)+": Loop: "+str(counter)+", State: "+str(state))
             else:
                 raise FaultState.error("EV"+str(self.config.id)+" konnte nicht gewecket werden.")
-        log.MainLogger().info("Tesla "+str(self.config.id)+": Car state after wakeup: "+str(state))
+        log.MainLogger().info("Tesla "+str(self.config.id)+": Status nach Aufwecken: "+str(state))
         if state != "online":
             raise FaultState.error("EV"+str(self.config.id)+" konnte nicht geweckt werden.")
 
     def __get_soc(self):
         response = tesla_lib.lib(email=self.config.username, vehicle=self.config.tesla_ev_num,
                                  tokensfile=self.config.token_file, data="vehicles/#/vehicle_data")
-        # current state of car
         response = json.loads(response)
-        log.MainLogger().debug("Resp"+str(response))
-        log.MainLogger().debug("Tesla "+str(self.config.id)+": State: "+str(response["response"]["state"]))
+        log.MainLogger().debug("Tesla "+str(self.config.id)+": State: "+str(response))
         soc = response["response"]["charge_state"]["battery_level"]
         return float(soc)
 
@@ -105,7 +103,7 @@ def read_legacy(id: int,
                 username: str,
                 tokenfile: str,
                 tesla_ev_num: int,
-                charge_state: int):
+                charge_state: bool):
 
     log.MainLogger().debug('SoC-Module tesla num: ' + str(id))
     log.MainLogger().debug('SoC-Module tesla username: ' + str(username))
