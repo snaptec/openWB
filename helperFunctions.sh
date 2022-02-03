@@ -52,7 +52,6 @@ openwbModulePublishState() {
 			;;
 	esac
 }
-
 export -f openwbModulePublishState
 
 openwbDebugLog() {
@@ -101,8 +100,7 @@ openwbDebugLog() {
 		fi
 	fi
 }
+export -f openwbDebugLog
 
 # Enable all python scripts to import from the "package"-directory without fiddling with sys.path individually
 export PYTHONPATH="$SCRIPT_DIR/packages"
-
-export -f openwbDebugLog
