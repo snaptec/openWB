@@ -729,6 +729,7 @@
 										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodulold == "soc_aiways") echo "selected" ?> value="soc_aiways">Aiways</option>
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
@@ -1142,6 +1143,49 @@
 									</div>
 								</div>
 							</div>
+							<div id="socaiways" class="hide">
+                                <div class="form-group">
+                                    <div class="alert alert-info">
+                                        Anmeldedaten fuer den Aiways U5
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="aiwaysuser" class="col-md-4 col-form-label">Benutzername</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="aiwaysuser" id="aiwaysuser" value="<?php echo $aiwaysuserold ?>">
+                                            <span class="form-text small">
+                                                Aiways App Account-Name (nicht die E-Mail-Adresse)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="aiwayspass" class="col-md-4 col-form-label">Passwort</label>
+                                        <div class="col">
+											<input class="form-control" type="password" name="aiwayspass" id="aiwayspass" value="<?php echo $aiwayspassold ?>">
+                                            <span class="form-text small">
+                                                Aiways App Passwort
+                                            </span>
+                                        </div>
+                                    </div>
+									<div class="form-row mb-1">
+                                        <label for="aiwaysvin" class="col-md-4 col-form-label">VIN</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="aiwaysvin" id="aiwaysvin" value="<?php echo $aiwaysvinold ?>">
+                                            <span class="form-text small">
+                                                 VIN des Fahrzeugs
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="aiwaysintervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+                                        <div class="col">
+											<input class="form-control" type="text" name="aiwaysintervall" id="aiwaysintervall" value="<?php echo $aiwaysintervallold ?>">
+                                            <span class="form-text small">
+                                                Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>						
 							<div id="socmaudi" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2317,6 +2361,7 @@
 							hideSection('#soccarnet');
 							hideSection('#socmzerong');
 							hideSection('#socmeq');
+							hideSection('#socaiways');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
 							hideSection('#socvag');
@@ -2368,6 +2413,9 @@
 								showSection('#socsupportinfo');
 								showSection('#socmkia');
 							}
+							if($('#socmodul').val() == 'soc_aiways') {
+                                showSection('#socaiways');
+                            }
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
@@ -2997,6 +3045,7 @@
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodul1old == "soc_aiwayslp2") echo "selected" ?> value="soc_aiwayslp2">Aiways</option>
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
@@ -3200,6 +3249,46 @@
 									</div>
 								</div>
 							</div>
+							<div id="socaiwayslp2" class="hide">
+                                <div class="form-group">
+                                    <div class="form-row mb-1">
+                                        <label for="aiwayslp2user" class="col-md-4 col-form-label">Account</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="aiwayslp2user" id="aiwayslp2user" value="<?php echo $aiwayslp2userold ?>">
+                                            <span class="form-text small">
+                                                Aiways Account Name (nicht die E-Mail-Adresse!)
+                                            </span>
+                                        </div>
+                                    </div>
+									<div class="form-row mb-1">
+										<label for="aiwayslp2pass" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="aiwayslp2pass" id="aiwayslp2pass" value="<?php echo $aiwayslp2passold ?>">
+											<span class="form-text small">
+												Aiways Passwort
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="aiwayslp2vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="aiwayslp2vin" id="aiwayslp2vin" value="<?php echo $aiwayslp2vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="aiwayslp2intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<div class="col">
+											<input class="form-control" type="text" name="aiwayslp2intervall" id="aiwayslp2intervall" value="<?php echo $aiwayslp2intervallold ?>">
+											<span class="form-text small">
+												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+											</span>
+										</div>
+									</div>
+								</div>
+                            </div>
 							<div id="soccarnetlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -4384,6 +4473,12 @@
 								showSection('#socmhttp1');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
+							}
+							if($('#socmodul1').val() == 'soc_audilp2') {
+								showSection('#socoldevccwarninglp2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socoldevccwarninglp2');
