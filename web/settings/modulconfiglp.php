@@ -744,7 +744,7 @@
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID-alt</option>
-										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID-neu</option>
+										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
