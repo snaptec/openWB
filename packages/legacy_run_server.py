@@ -27,6 +27,7 @@ from typing import Callable
 from helpermodules.log import setup_logging_stdout
 
 log = logging.getLogger("legacy run server")
+debug_dirty = True
 
 
 def read_all_bytes(connection: socket.socket):
@@ -100,15 +101,6 @@ def exception_handler(_type, value, _traceback):
     log.error("Unhandled Exception", exc_info=value)
 
 
-def handle_message(message: bytes):
-    message_str = message.decode("utf-8").strip()
-    time_start = time.time()
-    log.debug("Received command %.100s", message_str)
-    parsed = json.loads(message_str)
-    importlib.import_module(parsed[0]).main(parsed[1:])
-    log.debug("Completed running command in %.2fs: %.100s", time.time() - time_start, message_str)
-
-
 def try_update_log_level_from_config():
     try:
         config_file_contents = (Path(__file__).parents[1] / "openwb.conf").read_text("utf-8")
@@ -134,25 +126,23 @@ def try_update_log_level_from_config():
 
 
 def update_log_level_from_config():
+    global debug_dirty
     try:
         try_update_log_level_from_config()
     except Exception as e:
         log.error("Could not update log level from openwb.conf", exc_info=e)
+    debug_dirty = False
 
 
-class AtomicInteger:
-    def __init__(self):
-        self._value = 0
-        self._lock = threading.Lock()
-
-    def increment_and_get(self):
-        with self._lock:
-            self._value += 1
-            return self._value
-
-    def get(self):
-        with self._lock:
-            return self._value
+def handle_message(message: bytes):
+    message_str = message.decode("utf-8").strip()
+    time_start = time.time()
+    if debug_dirty:
+        update_log_level_from_config()
+    log.debug("Received command %.100s", message_str)
+    parsed = json.loads(message_str)
+    importlib.import_module(parsed[0]).main(parsed[1:])
+    log.debug("Completed running command in %.2fs: %.100s", time.time() - time_start, message_str)
 
 
 def watch_config():
@@ -160,27 +150,11 @@ def watch_config():
 
     The function uses the F_NOTIFY Linux kernel feature to receive a notification if a file in the directory where
     openwb.conf is stored changes.
-
-    However the linux kernel is very fast in sending notifications. If a process changes a file it is likely that the
-    file is changed in multiple write operations that all happen within a few milliseconds. In this case we also receive
-    multiple notifications. Thus we cannot tell if the process modifying our file has finished updating the file (best
-    would be to use file locks, but openWB does not use file locks. It would require changes at a vast number of
-    places).
-
-    To workaround the issue we simply wait 200ms after a change was detected. If within these 200ms another change is
-    detected, the timer is reset. If there has not been any notification for 200ms we assume that there are no pending
-    updates.
     """
-    latest_signal_id = AtomicInteger()
-
-    def signal_handler_delayed(current_signal_id: int):
-        time.sleep(.2)
-        if current_signal_id == latest_signal_id.get():
-            # The signal id has not changed. This means there have not been any further updates during the last 200ms.
-            update_log_level_from_config()
 
     def signal_handler(_signum, _frame):
-        threading.Thread(target=signal_handler_delayed, args=(latest_signal_id.increment_and_get(),)).start()
+        global debug_dirty
+        debug_dirty = True
 
     signal.signal(signal.SIGIO, signal_handler)
     file_descriptor = os.open(str(Path(__file__).parents[1]), os.O_RDONLY)
