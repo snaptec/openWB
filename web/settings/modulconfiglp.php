@@ -744,7 +744,7 @@
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID-alt</option>
-										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID-neu</option>
+										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -1201,7 +1201,7 @@
 										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
-											<spa-altn class="form-text small">
+											<span class="form-text small">
 												Vollständige VIN des Fahrzeugs.
 											</span>
 										</div>
@@ -1211,9 +1211,6 @@
 							</div>
 							<div id="socmvwid" class="hide">
 								<div class="form-group">
-									<div class="alert alert-info">
-										Dieses ID Modul ist neu und auf python3 und libvwid.py basiert.
-									</div>
 									<div class="form-row mb-1">
 										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
@@ -2409,7 +2406,6 @@
 								showSection('#socmid');
 							}
 							if($('#socmodul').val() == 'soc_vwid') {
-								showSection('#socvwidlpxinfo');
 								showSection('#socmvwid');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
@@ -3070,7 +3066,7 @@
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID-alt</option>
-										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID-neu</option>
+										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
@@ -4467,7 +4463,6 @@
 								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
-								showSection('#socvwidlpxinfo');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
