@@ -2409,7 +2409,6 @@
 								showSection('#socmid');
 							}
 							if($('#socmodul').val() == 'soc_vwid') {
-								showSection('#socvwidlpxinfo');
 								showSection('#socmvwid');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
