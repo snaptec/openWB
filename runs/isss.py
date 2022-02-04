@@ -8,6 +8,17 @@ import struct
 import RPi.GPIO as GPIO
 from pymodbus.client.sync import ModbusSerialClient
 
+
+# handling of all logging statements
+def log_debug(level: int, msg: str) -> None:
+    if level >= int(loglevel):
+        with open('/var/www/html/openWB/ramdisk/isss.log', 'a') as log_file:
+            if int(level) == 2:
+                log_file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m') + '\n')
+            else:
+                log_file.write(time.ctime() + ': ' + str(msg) + '\n')
+
+
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(37, GPIO.OUT)
@@ -109,27 +120,16 @@ actcooldown = 0
 actcooldowntimestamp = 0
 
 # check for openWB DUO in slave mode
+lp2installed = False
 try:
     with open('ramdisk/issslp2act', 'r') as value:
         if int(value.read()) == 1:
-            lp2installed = 2
-        else:
-            lp2installed = 1
-except FileNotFoundError:
-    lp2installed = 1
+            lp2installed = True
+except (FileNotFoundError, ValueError):
+    log_debug(1, "Error reading issslp2act! Guessing cp2 is not configured.")
 
 # connect with USB/modbus device
 client = ModbusSerialClient(method="rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
-
-
-# handling of all logging statements
-def log_debug(level: int, msg: str) -> None:
-    if level >= int(loglevel):
-        with open('/var/www/html/openWB/ramdisk/isss.log', 'a') as log_file:
-            if int(level) == 2:
-                log_file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m') + '\n')
-            else:
-                log_file.write(time.ctime() + ': ' + str(msg) + '\n')
 
 
 # read all meter values and publish to mqtt broker
@@ -302,7 +302,7 @@ def getmeter():
         except Exception:
             lp1countphasesinuse = 1
 
-        if lp2installed == 2:
+        if lp2installed:
             try:
                 time.sleep(0.1)
                 resp = client.read_input_registers(0x0C, 2, unit=sdm2id)
@@ -459,7 +459,7 @@ def getmeter():
                 parentWB = str(ramdisk_file.read().replace('\\n', '').replace('\"', ''))
             with open('ramdisk/parentCPlp1', 'r') as ramdisk_file:
                 parentCPlp1 = str(int(re.sub(r'\D', '', ramdisk_file.read())))
-            if lp2installed == 2:
+            if lp2installed:
                 with open('ramdisk/parentCPlp2', 'r') as ramdisk_file:
                     parentCPlp2 = str(int(re.sub(r'\D', '', ramdisk_file.read())))
         except Exception:
@@ -594,7 +594,7 @@ def getmeter():
                     remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/rfid", payload=str(rfidtag),
                                          qos=0, retain=True)
                     remoteclient.loop(timeout=2.0)
-            if lp2installed == 2:
+            if lp2installed:
                 if "lp2countphasesinuse" in key:
                     if DeviceValues[str(key)] != str(lp2countphasesinuse):
                         mclient.publish("openWB/lp/2/countPhasesInUse", payload=str(lp2countphasesinuse),
@@ -836,7 +836,7 @@ def loadregelvars():
     else:
         if Values["lp1evsell"] != lp1solla:
             writelp1evse(lp1solla)
-    if lp2installed == 2:
+    if lp2installed:
         try:
             with open('ramdisk/llsolls1', 'r') as value:
                 if lp2evsehres == 0:
@@ -881,38 +881,39 @@ def loadregelvars():
             time.sleep(1)
         u1p3pstat = u1p3ptmpstat
         writelp1evse(lp1solla)
-    try:
-        with open('ramdisk/u1p3plp2stat', 'r') as value:
-            u1p3plp2tmpstat = int(value.read())
-    except Exception:
-        pass
-        u1p3plp2tmpstat = 3
-    try:
-        u1p3plp2stat
-    except Exception:
-        u1p3plp2stat = 3
-    if u1p3plp2stat != u1p3plp2tmpstat:
-        log_debug(1, "Umschaltung erfolgt auf " + str(u1p3plp2tmpstat) + " Phasen an Lp2")
-        writelp2evse(0)
-        time.sleep(1)
-        if u1p3plp2tmpstat == 1:
-            GPIO.output(15, GPIO.HIGH)
-            GPIO.output(11, GPIO.HIGH)
-            time.sleep(2)
-            GPIO.output(11, GPIO.LOW)
-            time.sleep(5)
-            GPIO.output(15, GPIO.LOW)
+    if lp2installed:
+        try:
+            with open('ramdisk/u1p3plp2stat', 'r') as value:
+                u1p3plp2tmpstat = int(value.read())
+        except Exception:
+            pass
+            u1p3plp2tmpstat = 3
+        try:
+            u1p3plp2stat
+        except Exception:
+            u1p3plp2stat = 3
+        if u1p3plp2stat != u1p3plp2tmpstat:
+            log_debug(1, "Umschaltung erfolgt auf " + str(u1p3plp2tmpstat) + " Phasen an Lp2")
+            writelp2evse(0)
             time.sleep(1)
-        if u1p3plp2tmpstat == 3:
-            GPIO.output(15, GPIO.HIGH)
-            GPIO.output(13, GPIO.HIGH)
-            time.sleep(2)
-            GPIO.output(13, GPIO.LOW)
-            time.sleep(5)
-            GPIO.output(15, GPIO.LOW)
-            time.sleep(1)
-        u1p3plp2stat = u1p3plp2tmpstat
-        writelp2evse(lp2solla)
+            if u1p3plp2tmpstat == 1:
+                GPIO.output(15, GPIO.HIGH)
+                GPIO.output(11, GPIO.HIGH)
+                time.sleep(2)
+                GPIO.output(11, GPIO.LOW)
+                time.sleep(5)
+                GPIO.output(15, GPIO.LOW)
+                time.sleep(1)
+            if u1p3plp2tmpstat == 3:
+                GPIO.output(15, GPIO.HIGH)
+                GPIO.output(13, GPIO.HIGH)
+                time.sleep(2)
+                GPIO.output(13, GPIO.LOW)
+                time.sleep(5)
+                GPIO.output(15, GPIO.LOW)
+                time.sleep(1)
+            u1p3plp2stat = u1p3plp2tmpstat
+            writelp2evse(lp2solla)
 
 
 def writelp2evse(lla):
