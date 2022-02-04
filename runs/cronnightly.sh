@@ -101,7 +101,7 @@ if [[ $verbraucher1_typ == "tasmota" ]]; then
 		else
 			verbraucher1_writewh=$(echo "scale=0;(($verbraucher1_oldwh * 1000) + $verbraucher1_tempwh) / 1" | bc)
 		fi
-		sed -i "s/verbraucher1_tempwh=.*/verbraucher1_tempwh=$verbraucher1_writewh/" /var/www/html/openWB/openwb.conf
+		sed -i "s/^verbraucher1_tempwh=.*/verbraucher1_tempwh=$verbraucher1_writewh/" /var/www/html/openWB/openwb.conf
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset1%200
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset2%200
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset3%200
@@ -115,7 +115,7 @@ if [[ $verbraucher2_typ == "tasmota" ]]; then
 		else
 			verbraucher2_writewh=$(echo "scale=0;(($verbraucher2_oldwh * 1000) + $verbraucher2_tempwh) / 1" | bc)
 		fi
-		sed -i "s/verbraucher2_tempwh=.*/verbraucher2_tempwh=$verbraucher2_writewh/" /var/www/html/openWB/openwb.conf
+		sed -i "s/^verbraucher2_tempwh=.*/verbraucher2_tempwh=$verbraucher2_writewh/" /var/www/html/openWB/openwb.conf
 		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset1%200
 		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset2%200
 		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset3%200

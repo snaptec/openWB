@@ -100,13 +100,13 @@ incrementTimer(){
 
 clearPassword(){
 	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Removing password from config."
-	sed -i "s/$passwordConfigText=.*/$passwordConfigText=''/" $CONFIGFILE
+	sed -i "s/^$passwordConfigText=.*/$passwordConfigText=''/" $CONFIGFILE
 }
 
 setTokenPassword(){
 	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Writing token password to config."
-	sed -i "s/$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
-	sed -i "s/$mfaPasscodeConfigText=.*/$mfaPasscodeConfigText=XXX/" $CONFIGFILE
+	sed -i "s/^$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
+	sed -i "s/^$mfaPasscodeConfigText=.*/$mfaPasscodeConfigText=XXX/" $CONFIGFILE
 }
 
 checkToken(){
