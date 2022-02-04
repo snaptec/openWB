@@ -169,15 +169,12 @@ goecheck
 nrgkickcheck
 
 #load charging vars
-if (( debug == 1)); then
-	startloadvars=$(date +%s)
-fi
+startloadvars=$(date +%s)
 loadvars
-if (( debug == 1)); then
-	endloadvars=$(date +%s)
-	timeloadvars=$((endloadvars-startloadvars))
-	openwbDebugLog "MAIN" 0 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
-fi
+endloadvars=$(date +%s)
+timeloadvars=$((endloadvars-startloadvars))
+openwbDebugLog "MAIN" 1 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
+
 if (( u1p3paktiv == 1 )); then
 	blockall=$(<ramdisk/blockall)
 	if (( blockall == 1 )); then
