@@ -69,7 +69,4 @@ class Mpm3pm:
             self.__process_error(e)
 
     def get_counter(self) -> float:
-        try:
-            return self.client.read_input_registers(0x0004, ModbusDataType.UINT_32, unit=self.id) / 100
-        except Exception as e:
-            self.__process_error(e)
+        return self.get_exported()
