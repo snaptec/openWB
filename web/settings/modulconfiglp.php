@@ -1201,7 +1201,7 @@
 										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
-											<spa-altn class="form-text small">
+											<span class="form-text small">
 												Vollständige VIN des Fahrzeugs.
 											</span>
 										</div>
