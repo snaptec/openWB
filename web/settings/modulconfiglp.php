@@ -4466,7 +4466,6 @@
 								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
-								showSection('#socvwidlpxinfo');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
