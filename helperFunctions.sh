@@ -1,5 +1,4 @@
 #!/bin/bash
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 openwbModulePublishState() {
 	# $1: Modultyp (EVU, LP, EVSOC, PV, BAT)
@@ -71,22 +70,22 @@ openwbDebugLog() {
 	if (( $2 <= DEBUGLEVEL )); then
 		case $1 in
 			"EVSOC")
-				LOGFILE="${SCRIPT_DIR}/ramdisk/soc.log"
+				LOGFILE="/var/www/html/openWB/ramdisk/soc.log"
 				;;
 			"PV")
-				LOGFILE="${SCRIPT_DIR}/ramdisk/nurpv.log"
+				LOGFILE="/var/www/html/openWB/ramdisk/nurpv.log"
 				;;
 			"MQTT")
-				LOGFILE="${SCRIPT_DIR}/ramdisk/mqtt.log"
+				LOGFILE="/var/www/html/openWB/ramdisk/mqtt.log"
 				;;
 			"RFID")
-				LOGFILE="${SCRIPT_DIR}/ramdisk/rfid.log"
+				LOGFILE="/var/www/html/openWB/ramdisk/rfid.log"
 				;;
 			"SMARTHOME")
-				LOGFILE="${SCRIPT_DIR}/ramdisk/smarthome.log"
+				LOGFILE="/var/www/html/openWB/ramdisk/smarthome.log"
 				;;
 			"CHARGESTAT")
-				LOGFILE="${SCRIPT_DIR}/ramdisk/ladestatus.log"
+				LOGFILE="/var/www/html/openWB/ramdisk/ladestatus.log"
 				;;
 			*)
 				# MAIN
@@ -103,4 +102,5 @@ openwbDebugLog() {
 export -f openwbDebugLog
 
 # Enable all python scripts to import from the "package"-directory without fiddling with sys.path individually
+SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 export PYTHONPATH="$SCRIPT_DIR/packages"
