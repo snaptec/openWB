@@ -20,11 +20,10 @@ case $CHARGEPOINT in
 		# second charge point
 		soctimerfile="$RAMDISKDIR/soctimer1"
 		socfile="$RAMDISKDIR/soc1"
-		intervall=$aiwayslp2intervall
-		username=$aiwayslp2user
-		password=$aiwayslp2pass
-		vin=$aiwayslp2vin
-		#registerid=$aiwayslp2registerid
+		intervall=$soc_aiwayslp2_intervall
+		username=$soc_aiwayslp2_user
+		password=$soc_aiwayslp2_pass
+		vin=$soc_aiwayslp2_vin
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -32,11 +31,10 @@ case $CHARGEPOINT in
 		CHARGEPOINT=1
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
-		intervall=$aiwaysintervall
-		username=$aiwaysuser
-		password=$aiwayspass
-		vin=$aiwaysvin
-		#registerid=$aiwaysregisterid
+		intervall=$soc_aiways_intervall
+		username=$soc_aiways_user
+		password=$soc_aiways_pass
+		vin=$soc_aiways_vin
 		;;
 esac
 
@@ -80,7 +78,7 @@ else
 		echo 0 > $soctimerfile
 	fi
 
-        response=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/aiways_get_soc.py --account="$username" --password="$password" --vin="$vin" --debuglevel=$debug)
+        response=$(PYTHONIOENCODING=UTF-8 python $MODULEDIR/aiways_get_soc.py --account="$username" --password="$password" --vin="$vin" --debuglevel=$debug)
 	soclevel=$(echo "$response")
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Filtered SoC from Server: $soclevel"
 	if  [[ $soclevel =~ $reValidSoc ]] ; then

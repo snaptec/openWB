@@ -2163,5 +2163,16 @@ updateConfig(){
 		echo "pv2flexid=1" >> $ConfigFile
 		echo "pv2flexversion=1" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_aiways_user=" $ConfigFile; then
+        echo "soc_aiways_user=''" >> $ConfigFile
+        echo "soc_aiways_pass=''" >> $ConfigFile
+        echo "soc_aiways_vin=''" >> $ConfigFile
+        echo "soc_aiways_intervall=''" >> $ConfigFile
+        echo "soc_aiwayslp2_user=''" >> $ConfigFile
+        echo "soc_aiwayslp2_pass=''" >> $ConfigFile
+        echo "soc_aiwayslp2_vin=''" >> $ConfigFile
+        echo "soc_aiwayslp2_intervall=''" >> $ConfigFile
+    fi
+
 	echo "Config file Update done."
 }
