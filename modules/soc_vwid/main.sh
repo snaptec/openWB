@@ -14,6 +14,15 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
+
+#Prepare for secrets used in soc module libvwid in Python
+if python3 -c "import secrets" &> /dev/null; then
+	echo 'secrets installed...'
+else
+	echo 'enable local secrets.py...'
+	ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
+fi
+
 case $CHARGEPOINT in
 	2)
 		# second charge point
@@ -35,7 +44,7 @@ case $CHARGEPOINT in
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		username=$soc_id_username
-		password=$soc_id_password
+		password=$soc_id_passwort
 		vin=$soc_id_vin
 		intervall=$(( soc_id_intervall * 6 ))
 		intervallladen=$(( soc_id_intervallladen * 6 ))
@@ -95,4 +104,9 @@ else
 	else
 		getAndWriteSoc
 	fi
+fi
+
+# remove local copy of secrets.py to allow later use of official version
+if [ -h $MODULEDIR/secrets.py ]; then
+	rm $MODULEDIR/secrets.py
 fi

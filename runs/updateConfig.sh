@@ -505,6 +505,12 @@ updateConfig(){
 	if ! grep -Fq "soc_tesla_intervall=" $ConfigFile; then
 		echo "soc_tesla_intervall=20" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_id_intervallladen=" $ConfigFile; then
+		echo "soc_id_intervallladen=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_intervall=" $ConfigFile; then
+		echo "soc_id_intervall=120" >> $ConfigFile
+	fi
 	if ! grep -Fq "releasetrain=" $ConfigFile; then
 		echo "releasetrain=stable" >> $ConfigFile
 	fi

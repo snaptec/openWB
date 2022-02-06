@@ -1221,9 +1221,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_id_password" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_id_password" id="soc_id_password" value="<?php echo $soc_id_passwordold ?>">
+											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
 											<span class="form-text small">
 												Password des Logins.
 											</span>
