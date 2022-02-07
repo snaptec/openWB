@@ -14,15 +14,6 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-
-#Prepare for secrets used in soc module libvwid in Python
-if python3 -c "import secrets" &> /dev/null; then
-	echo 'secrets installed...'
-else
-	echo 'enable local secrets.py...'
-	ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
-fi
-
 case $CHARGEPOINT in
 	2)
 		# second charge point
@@ -77,6 +68,13 @@ incrementTimer(){
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
+	#Prepare for secrets used in soc module libvwid in Python
+	if ! python3 -c "import secrets" &> /dev/null ; then
+		if [ ! -L $MODULEDIR/secrets.py ]; then
+			echo 'soc_vwid: enable local secrets.py...'
+			ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
+		fi
+	fi
 	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
@@ -106,7 +104,3 @@ else
 	fi
 fi
 
-# remove local copy of secrets.py to allow later use of official version
-if [ -h $MODULEDIR/secrets.py ]; then
-	rm $MODULEDIR/secrets.py
-fi
