@@ -976,33 +976,33 @@ loadvars(){
 	echo $uberschuss > /var/www/html/openWB/ramdisk/ueberschuss_mitsmart
 
 	#Soc ermitteln
-	if [[ $socmodul != "none" ]]; then
+	if [[ "$socmodul" != "none" ]]; then
 		socvorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 		if (( stopsocnotpluggedlp1 == 1 )); then
 			soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
 			# if (( plugstat == 1 )); then
-			if [ $plugstat -eq 1 -o $soctimer -eq 20005 ]; then # force soc update button sends 20005
-				modules/$socmodul/main.sh &
+			if [[ "$plugstat" == "1" || "$soctimer" == "20005" ]]; then # force soc update button sends 20005
+				"modules/$socmodul/main.sh" &
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 				tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 				if ! [[ $soc =~ $re ]] ; then
 					soc=$tmpsoc
 				else
-					echo $soc > /var/www/html/openWB/ramdisk/tmpsoc
+					echo "$soc" > /var/www/html/openWB/ramdisk/tmpsoc
 				fi
 			else
 				echo 600 > /var/www/html/openWB/ramdisk/soctimer
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 			fi
 		else
-			modules/$socmodul/main.sh &
+			"modules/$socmodul/main.sh" &
 			soc=$(</var/www/html/openWB/ramdisk/soc)
 			tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 			if ! [[ $soc =~ $re ]] ; then
 				soc=$tmpsoc
 			else
-				echo $soc > /var/www/html/openWB/ramdisk/tmpsoc
+				echo "$soc" > /var/www/html/openWB/ramdisk/tmpsoc
 			fi
 		fi
 	else
