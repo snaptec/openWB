@@ -24,9 +24,11 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Callable
 
+from helpermodules.debouncing_executor import DebouncingExecutor
 from helpermodules.log import setup_logging_stdout
 
 log = logging.getLogger("legacy run server")
+CONFIG_PATH = Path(__file__).parents[1] / "openwb.conf"
 
 
 def read_all_bytes(connection: socket.socket):
@@ -111,7 +113,7 @@ def handle_message(message: bytes):
 
 def try_update_log_level_from_config():
     try:
-        config_file_contents = (Path(__file__).parents[1] / "openwb.conf").read_text("utf-8")
+        config_file_contents = CONFIG_PATH.read_text("utf-8")
     except Exception as e:
         # In case we cannot read the config file (maybe due to some lock, race conditions or someone moved the file
         # temporarily), we just ignore the change
@@ -140,21 +142,6 @@ def update_log_level_from_config():
         log.error("Could not update log level from openwb.conf", exc_info=e)
 
 
-class AtomicInteger:
-    def __init__(self):
-        self._value = 0
-        self._lock = threading.Lock()
-
-    def increment_and_get(self):
-        with self._lock:
-            self._value += 1
-            return self._value
-
-    def get(self):
-        with self._lock:
-            return self._value
-
-
 def watch_config():
     """This function watches the openwb.conf file for modifications. If it is modified, the log level is refreshed
 
@@ -171,19 +158,10 @@ def watch_config():
     detected, the timer is reset. If there has not been any notification for 200ms we assume that there are no pending
     updates.
     """
-    latest_signal_id = AtomicInteger()
+    executor = DebouncingExecutor(.2, update_log_level_from_config)
 
-    def signal_handler_delayed(current_signal_id: int):
-        time.sleep(.2)
-        if current_signal_id == latest_signal_id.get():
-            # The signal id has not changed. This means there have not been any further updates during the last 200ms.
-            update_log_level_from_config()
-
-    def signal_handler(_signum, _frame):
-        threading.Thread(target=signal_handler_delayed, args=(latest_signal_id.increment_and_get(),)).start()
-
-    signal.signal(signal.SIGIO, signal_handler)
-    file_descriptor = os.open(str(Path(__file__).parents[1]), os.O_RDONLY)
+    signal.signal(signal.SIGIO, lambda _signum, _frame: executor())
+    file_descriptor = os.open(str(CONFIG_PATH.parent), os.O_RDONLY)
     fcntl.fcntl(file_descriptor, fcntl.F_SETSIG, 0)
     fcntl.fcntl(file_descriptor, fcntl.F_NOTIFY, fcntl.DN_MODIFY | fcntl.DN_MULTISHOT)
 
@@ -194,4 +172,8 @@ if __name__ == '__main__':
     update_log_level_from_config()
     watch_config()
     log.info("Starting legacy run server")
-    SocketListener(Path(__file__).parent / "legacy_run_server.sock", handle_message).handle_connections()
+    # Start the connection handler in a separate thread, so that the main thread remains available for signal handling:
+    threading.Thread(
+        name="legacy-run-connection-handler",
+        target=SocketListener(Path(__file__).parent / "legacy_run_server.sock", handle_message).handle_connections,
+    ).start()
