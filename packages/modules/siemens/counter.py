@@ -13,9 +13,8 @@ def get_default_config() -> dict:
         "name": "Siemens Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
-            "ip_address": "192.168.0.12"
+        "configuration": {
+            "ip_address": "192.168.0.12"  # ToDo: move IP to device
         }
     }
 

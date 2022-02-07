@@ -15,8 +15,7 @@ def get_default_config() -> dict:
         "name": "Alpha ESS Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
+        "configuration": {
             "version": 1
         }
     }
@@ -29,13 +28,13 @@ class AlphaEssCounter:
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self):
+    def update(self, unit_id: int):
         log.MainLogger().debug(
             "Komponente "+self.component_config["name"]+" auslesen.")
         time.sleep(0.1)
         factory_method = self.__get_values_factory(
             self.component_config["configuration"]["version"])
-        counter_state = factory_method(unit=85)
+        counter_state = factory_method(unit=unit_id)
         self.__store.set(counter_state)
 
     def __get_values_factory(self, version: int) -> Callable[[int], CounterState]:

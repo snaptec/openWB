@@ -11,8 +11,7 @@ def get_default_config() -> dict:
         "name": "SMA Smarthome Manager Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration":
-        {
+        "configuration": {
             "serials": None
         }
     }

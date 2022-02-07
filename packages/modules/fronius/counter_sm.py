@@ -16,8 +16,7 @@ def get_default_config() -> dict:
         "name": "Fronius SM Zähler",
         "id": 0,
         "type": "counter_sm",
-        "configuration":
-        {
+        "configuration": {
             "variant": 0,
             "meter_location": MeterLocation.grid.value
         }

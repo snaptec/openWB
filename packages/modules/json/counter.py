@@ -13,8 +13,7 @@ def get_default_config() -> dict:
         "name": "Json Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
+        "configuration": {
             "jq_power": ".power | .[1]",
             "jq_imported": ".imported",
             "jq_exported": ".exported"

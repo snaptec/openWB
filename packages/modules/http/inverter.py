@@ -12,8 +12,7 @@ def get_default_config() -> dict:
         "name": "HTTP Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration":
-        {
+        "configuration": {
             "power_path": "/power.txt",
             "counter_path": "/counter.txt",
         }
