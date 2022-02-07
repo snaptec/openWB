@@ -16,8 +16,7 @@ def get_default_config() -> dict:
         "name": "Victron",
         "type": "victron",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip_address": "192.168.193.15"
         }
     }

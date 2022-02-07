@@ -13,11 +13,9 @@ def get_default_config() -> dict:
         "name": "Studer Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration":
-        {
+        "configuration": {
             "vc_count": 1,  # studer_vc (count MPPT Devices)
             "vc_type": "VS"  # studer_vc_type (MPPT type VS or VT)
-
         }
     }
 

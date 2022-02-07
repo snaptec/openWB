@@ -13,8 +13,7 @@ def get_default_config() -> dict:
         "name": "SMA Smarthome Manager Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
+        "configuration": {
             "serials": None
         }
     }

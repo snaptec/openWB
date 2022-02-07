@@ -17,7 +17,8 @@ def get_default_config() -> dict:
     return {
         "name": "SMA Smarthome Manager",
         "type": "sma",
-        "id": 0
+        "id": 0,
+        "configuration": {}
     }
 
 

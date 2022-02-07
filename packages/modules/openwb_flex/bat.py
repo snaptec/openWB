@@ -13,11 +13,10 @@ def get_default_config() -> dict:
         "name": "Speicher-Kit flex",
         "type": "bat",
         "id": None,
-        "configuration":
-            {
-                "version": 2,
-                "id": 117
-            }
+        "configuration": {
+            "version": 2,
+            "id": 117
+        }
     }
 
 
