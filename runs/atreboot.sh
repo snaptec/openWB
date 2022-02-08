@@ -317,7 +317,7 @@ else
 fi
 #Prepare for secrets used in soc module libvwid in Python
 VWIDMODULEDIR=$OPENWBBASEDIR/modules/soc_vwid
-if python3 -c import secrets &> /dev/null; then
+if python3 -c "import secrets" &> /dev/null; then
 	echo 'soc_vwid: python3 secrets installed...'
 	if [ -L $VWIDMODULEDIR/secrets.py ]; then
 		echo 'soc_vwid: remove local python3 secrets.py...'
