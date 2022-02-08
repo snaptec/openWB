@@ -15,13 +15,9 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-timeout 3 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma.device" "counter" "${smashmbezugid}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma.device" "counter" "${smashmbezugid}" >>${MYLOGFILE} 2>&1
 ret=$?
-if [[ $ret -eq 124 ]] ; then
-    openwbModulePublishState "EVU" 2 "Die Werte konnten nicht innerhalb des Timeouts abgefragt werden. Bitte Konfiguration und Gerätestatus prüfen."
-    openwbDebugLog "MAIN" 0 "Fetching SMA counter data timed out"
-else
-    openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
-fi
+openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+
 wattbezug=$(<${RAMDISKDIR}/wattbezug)
 echo $wattbezug

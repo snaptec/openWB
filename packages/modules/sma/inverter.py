@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from helpermodules import log
 from modules.common.component_state import InverterState
-from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
+from modules.sma.utils import SpeedwireComponent
 
 
 def get_default_config() -> dict:
@@ -17,22 +16,12 @@ def get_default_config() -> dict:
     }
 
 
-class SmaInverter:
-    def __init__(self, component_config: dict) -> None:
-        self.component_config = component_config
-        self.__store = get_inverter_value_store(component_config["id"])
-        self.component_info = ComponentInfo.from_component_config(component_config)
+def parse_datagram(sma_data: dict):
+    return InverterState(
+        power=-int(sma_data['psupply']),
+        counter=sma_data['psupplycounter'] * 1000
+    )
 
-    def update(self, sma_data) -> None:
-        log.MainLogger().debug(
-            "Komponente "+self.component_config["name"]+" auslesen.")
 
-        # don't know what P,Q and S means:
-        # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
-        # thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
-        # cos phi is always positive, no matter what quadrant
-        inverter_state = InverterState(
-            power=-int(sma_data['psupply']),
-            counter=sma_data['psupplycounter'] * 1000
-        )
-        self.__store.set(inverter_state)
+def create_component(component_config: dict):
+    return SpeedwireComponent(get_inverter_value_store, parse_datagram, component_config)

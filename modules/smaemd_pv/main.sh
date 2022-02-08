@@ -21,15 +21,9 @@ fi
 
 openwbDebugLog ${DMOD} 2 "SMA serials: ${smaemdpvid}"
 
-timeout 3 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma.device" "inverter" "${smaemdpvid}" "1">>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma.device" "inverter" "${smaemdpvid}" "1">>$MYLOGFILE 2>&1
 ret=$?
-
-if [[ $ret -eq 124 ]] ; then
-    openwbModulePublishState "PV" 2 "Die Werte konnten nicht innerhalb des Timeouts abgefragt werden. Bitte Konfiguration und Gerätestatus prüfen." "1"
-    openwbDebugLog "MAIN" 0 "Fetching SMA counter data timed out"
-else
-    openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
-fi
+openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 
 watt=$(<${RAMDISKDIR}/pvwatt)
 echo ${watt}

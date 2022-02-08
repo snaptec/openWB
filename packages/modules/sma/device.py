@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
+import logging
 import socket
-import struct
-from typing import Dict, Union, Optional, List
+import time
+from typing import List, Callable, Iterator
 
-from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common.abstract_device import AbstractDevice
+from modules.common.component_context import MultiComponentUpdateContext
 from modules.common.fault_state import FaultState
 from modules.sma import counter
 from modules.sma import inverter
-from modules.common.abstract_device import AbstractDevice
-from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
-from modules.sma.speedwiredecoder import decode_speedwire
+from modules.sma.speedwire_listener import SpeedwireListener
+from modules.sma.utils import SpeedwireComponent
 
 
 def get_default_config() -> dict:
@@ -22,96 +23,72 @@ def get_default_config() -> dict:
     }
 
 
+log = logging.getLogger("SMA Speedwire")
+timeout_seconds = 5
+
+
 class Device(AbstractDevice):
-    COMPONENT_TYPE_TO_CLASS = {
-        "counter": counter.SmaCounter,
-        "inverter": inverter.SmaInverter
+    COMPONENT_FACTORIES = {
+        "counter": counter.create_component,
+        "inverter": inverter.create_component
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, Union[counter.SmaCounter, inverter.SmaInverter]]
-        try:
-            self.device_config = device_config
-        except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+        self.__components = []  # type: List[SpeedwireComponent]
+        self.device_config = device_config
 
     def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
-        if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                component_config))
-        else:
+        try:
+            factory = self.COMPONENT_FACTORIES[component_config["type"]]
+        except KeyError as e:
             raise Exception(
-                "illegal component type " + component_type + ". Allowed values: " +
-                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
+                "Unknown component type <%s>, known types are: <%s>", e, ','.join(self.COMPONENT_FACTORIES.keys())
             )
+        self.__components.append(factory(component_config))
 
     def update(self) -> None:
-        with MultiComponentUpdateContext(self._components):
-            log.MainLogger().debug("Beginning update")
-            ipbind = '0.0.0.0'
-            MCAST_GRP = '239.12.255.254'
-            MCAST_PORT = 9522
-            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as sock:
-                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                sock.bind(('', MCAST_PORT))
-                try:
-                    mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(ipbind))
-                    sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-                except BaseException:
-                    raise FaultState.error('could not connect to multicast group or bind to given interface')
-                # processing received messages
-                while not self.__process_datagram(sock.recv(608)):
-                    pass
-            log.MainLogger().debug("Update completed successfully")
+        log.debug("Beginning update")
+        with MultiComponentUpdateContext(self.__components):
+            if not self.__components:
+                raise FaultState.warning("Keine Komponenten konfiguriert")
 
-    def __process_datagram(self, datagram: bytes) -> bool:
-        # Paket ignorieren, wenn es nicht dem SMA-"energy meter protocol" mit protocol id = 0x6069 entspricht
-        if datagram[16:18] != b'\x60\x69':
-            return False
-        sma_data = decode_speedwire(datagram)
-        log.MainLogger().debug("SMA-Datagramm: "+str(sma_data))
-        if self._components:
-            for component in self._components:
-                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    sma_serials = self._components[component].component_config["configuration"]["serials"]
-                    if sma_serials is None or sma_serials == 'none' or str(sma_data['serial']) == sma_serials:
-                        self._components[component].update(sma_data)
-                        return True
-        else:
-            log.MainLogger().warning(
-                self.device_config["name"] +
-                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
-            )
-        return False
+            with SpeedwireListener(timeout_seconds) as speedwire:
+                self.__read_speedwire(speedwire)
+
+        log.debug("Update complete")
+
+    def __read_speedwire(self, speedwire: Iterator[dict]):
+        stop_time = time.time() + timeout_seconds
+        components_todo = self.__components
+        try:
+            for sma_data in speedwire:
+                components_todo = [component for component in components_todo if not component.read_datagram(sma_data)]
+                if not components_todo:
+                    log.debug("All components updated")
+                    return
+                if time.time() > stop_time:
+                    break
+        except socket.timeout:
+            pass
+        raise FaultState.error("Kein passendes Datagramm innerhalb des %ds timeout empfangen" % timeout_seconds)
 
 
-def read_legacy(component_type: str, serials: Optional[str] = None, num: Optional[int] = None) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "counter": counter,
-        "inverter": inverter
-    }
-    device_config = get_default_config()
-    dev = Device(device_config)
-    if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-    else:
-        raise Exception(
-            "illegal component type " + component_type + ". Allowed values: " +
-            ','.join(COMPONENT_TYPE_TO_MODULE.keys())
-        )
-    component_config["id"] = num
-    # serials-Feld kann auch leer bleiben
-    if serials == "":
-        serials = None
-    component_config["configuration"]["serials"] = serials
-    dev.add_component(component_config)
+def read_legacy(configuration_factory: Callable[[], dict], serial: str, **kwargs):
+    device = Device(get_default_config())
+    component_config = configuration_factory()
+    component_config["configuration"]["serials"] = int(serial) if serial.isnumeric() else None
+    component_config.update(kwargs)
+    device.add_component(component_config)
+    device.update()
 
-    log.MainLogger().debug('SMA serials: ' + str(serials))
 
-    dev.update()
+def read_legacy_counter(serial: str):
+    read_legacy(counter.get_default_config, serial)
+
+
+def read_legacy_inverter(serial: str, num: int):
+    read_legacy(inverter.get_default_config, serial, id=num)
 
 
 def main(argv: List[str]):
-    run_using_positional_cli_args(read_legacy, argv)
+    run_using_positional_cli_args({"counter": read_legacy_counter, "inverter": read_legacy_inverter}, argv)
