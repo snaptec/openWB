@@ -37,6 +37,7 @@ mkdir -p /var/www/html/openWB/web/logging/data/monthly
 mkdir -p /var/www/html/openWB/web/logging/data/ladelog
 mkdir -p /var/www/html/openWB/web/logging/data/v001
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
+sudo chmod +x /var/www/html/openWB/packages/*.sh
 
 # update openwb.conf
 updateConfig
