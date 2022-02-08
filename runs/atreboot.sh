@@ -322,6 +322,20 @@ if python3 -c "import lxml" &> /dev/null; then
 else
 	sudo pip3 install lxml
 fi
+#Prepare for secrets used in soc module libvwid in Python
+VWIDMODULEDIR=$OPENWBBASEDIR/modules/soc_vwid
+if python3 -c import secrets &> /dev/null; then
+	echo 'soc_vwid: python3 secrets installed...'
+	if [ -L $VWIDMODULEDIR/secrets.py ]; then
+		echo 'soc_vwid: remove local python3 secrets.py...'
+		rm $VWIDMODULEDIR/secrets.py
+	fi
+else
+	if [ ! -L $VWIDMODULEDIR/secrets.py ]; then
+		echo 'soc_vwid: enable local python3 secrets.py...'
+		ln -s $VWIDMODULEDIR/_secrets.py $VWIDMODULEDIR/secrets.py
+	fi
+fi
 # update outdated urllib3 for Tesla Powerwall
 pip3 install --upgrade urllib3
 

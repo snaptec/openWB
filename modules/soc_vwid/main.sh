@@ -35,7 +35,7 @@ case $CHARGEPOINT in
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		username=$soc_id_username
-		password=$soc_id_password
+		password=$soc_id_passwort
 		vin=$soc_id_vin
 		intervall=$(( soc_id_intervall * 6 ))
 		intervallladen=$(( soc_id_intervallladen * 6 ))
@@ -68,6 +68,13 @@ incrementTimer(){
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
+	#Prepare for secrets used in soc module libvwid in Python
+	if ! python3 -c "import secrets" &> /dev/null ; then
+		if [ ! -L $MODULEDIR/secrets.py ]; then
+			echo 'soc_vwid: enable local secrets.py...'
+			ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
+		fi
+	fi
 	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
@@ -96,3 +103,4 @@ else
 		getAndWriteSoc
 	fi
 fi
+

@@ -24,7 +24,6 @@ async def main():
     vin=args['vin']
     id=args['user']
     pw=args['password']
-#    print("id="+id + " pw=" + pw + " vin=" + vin)
 
     async with aiohttp.ClientSession() as session:
         w = libvwid.vwid(session)
@@ -33,11 +32,7 @@ async def main():
 
         data = await w.get_status()
         if (data):
-#            print (data['data'])
             print (data['data']['batteryStatus']['currentSOC_pct'])
-#            print (json.dumps(data,indent=4))
-#            parsed=json.loads("[" + data['data'] + "]")
-#            print (json.dumps(parsed))
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
