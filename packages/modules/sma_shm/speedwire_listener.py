@@ -3,7 +3,7 @@ import struct
 from typing import Iterator, Optional
 
 from modules.common.fault_state import FaultState
-from modules.sma.speedwiredecoder import decode_speedwire
+from modules.sma_shm.speedwiredecoder import decode_speedwire
 
 
 class SpeedwireListener:

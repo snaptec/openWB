@@ -23,6 +23,10 @@ updateConfig(){
 	if ! grep -Fq "smaemdbezugid=" $ConfigFile; then
 		echo "smaemdbezugid=1900123456" >> $ConfigFile
 	fi
+	# upgrade after renaming "smaemd_pv" -> "wr_smashm"
+	if grep -Fq "pvwattmodul=smaemd_pv" $ConfigFile; then
+		sed -i "s/^pvwattmodul=smaemd_pv/pvwattmodul=wr_smashm/g" $ConfigFile
+	fi
 	if ! grep -Fq "smaemdpvid=" $ConfigFile; then
 		echo "smaemdpvid=1900123456" >> $ConfigFile
 	fi

@@ -3,7 +3,7 @@ from math import copysign
 
 from modules.common.component_state import CounterState
 from modules.common.store import get_counter_value_store
-from modules.sma.utils import SpeedwireComponent
+from modules.sma_shm.utils import SpeedwireComponent
 
 
 def get_default_config() -> dict:

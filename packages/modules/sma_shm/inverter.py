@@ -2,7 +2,7 @@
 
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
-from modules.sma.utils import SpeedwireComponent
+from modules.sma_shm.utils import SpeedwireComponent
 
 
 def get_default_config() -> dict:
