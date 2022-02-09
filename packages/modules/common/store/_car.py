@@ -2,6 +2,7 @@ from helpermodules import compatibility
 from helpermodules import log
 from modules.common.component_state import CarState
 from modules.common.store import ValueStore
+from modules.common.store._api import LoggingValueStore
 from modules.common.store._broker import pub_to_broker
 from modules.common.store.ramdisk import files
 
@@ -26,6 +27,6 @@ class CarValueStoreBroker(ValueStore[CarState]):
 
 
 def get_car_value_store(id: int) -> ValueStore[CarState]:
-    if compatibility.is_ramdisk_in_use():
-        return CarValueStoreRamdisk(id)
-    return CarValueStoreBroker(id)
+    return LoggingValueStore(
+        CarValueStoreRamdisk(id) if compatibility.is_ramdisk_in_use() else CarValueStoreBroker(id)
+    )

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import pathlib
 import time
 from pathlib import Path
 from typing import List, Union
@@ -22,21 +23,18 @@ def get_default_config():
         "type": "tesla",
         "id": 0,
         "username": "user",
-        "token_file": str(Path(__file__).resolve().parents[0])+"tokens.ev"+str(id),
         "tesla_ev_num": 0
     }
 
 
 class TeslaConfiguration:
-    def __init__(self, id: int, username: str, token_file: str, tesla_ev_num: int):
+    def __init__(self, id: int, tesla_ev_num: int):
         self.id = id
-        self.username = username
-        self.token_file = token_file
         self.tesla_ev_num = tesla_ev_num
 
     @staticmethod
     def from_dict(device_config: dict):
-        keys = ["id", "username", "token_file", "tesla_ev_num"]
+        keys = ["id", "tesla_ev_num"]
         try:
             values = [device_config[key] for key in keys]
         except KeyError as e:
@@ -53,6 +51,7 @@ class Soc(AbstractSoc):
             else TeslaConfiguration.from_dict(device_config)
         self.value_store = store.get_car_value_store(self.config.id)
         self.component_info = ComponentInfo(self.config.id, "Tesla", "vehicle")
+        self.token_file = str(pathlib.Path().resolve()) + "/tokens.ev" + str(self.config.id)
 
     def update(self, chargepoint_state=None) -> None:
         if chargepoint_state is None:
@@ -61,7 +60,7 @@ class Soc(AbstractSoc):
         else:
             charge_state = chargepoint_state["get"]["charge_state"]
         with SingleComponentUpdateContext(self.component_info):
-            if Path(self.config.token_file).is_file():
+            if Path(self.token_file).is_file():
                 if charge_state is False:
                     self.__wake_up_car()
                 soc = self.__get_soc()
@@ -74,8 +73,8 @@ class Soc(AbstractSoc):
         counter = 0
         state = "offline"
         while counter <= 12:
-            response = tesla_lib.lib(email=self.config.username, vehicle=self.config.tesla_ev_num,
-                                     tokensfile=self.config.token_file, command="vehicles/#/wake_up")
+            response = tesla_lib.lib(vehicle=self.config.tesla_ev_num,
+                                     token_file=self.token_file, command="vehicles/#/wake_up")
             if response != "":
                 response = json.loads(response)
                 state = response["response"]["state"]
@@ -91,8 +90,8 @@ class Soc(AbstractSoc):
             raise FaultState.error("EV"+str(self.config.id)+" konnte nicht geweckt werden.")
 
     def __get_soc(self):
-        response = tesla_lib.lib(email=self.config.username, vehicle=self.config.tesla_ev_num,
-                                 tokensfile=self.config.token_file, data="vehicles/#/vehicle_data")
+        response = tesla_lib.lib(vehicle=self.config.tesla_ev_num,
+                                 token_file=self.token_file, data="vehicles/#/vehicle_data")
         response = json.loads(response)
         log.MainLogger().debug("Tesla "+str(self.config.id)+": State: "+str(response))
         soc = response["response"]["charge_state"]["battery_level"]
@@ -100,19 +99,18 @@ class Soc(AbstractSoc):
 
 
 def read_legacy(id: int,
-                username: str,
-                tokenfile: str,
+                token_file: str,
                 tesla_ev_num: int,
                 charge_state: bool):
 
     log.MainLogger().debug('SoC-Module tesla num: ' + str(id))
-    log.MainLogger().debug('SoC-Module tesla username: ' + str(username))
-    log.MainLogger().debug('SoC-Module tesla tokenfile: ' + str(tokenfile))
+    log.MainLogger().debug('SoC-Module tesla token_file: ' + str(token_file))
     log.MainLogger().debug('SoC-Module tesla tesla_ev_num: ' + str(tesla_ev_num))
     log.MainLogger().debug('SoC-Module tesla charge_state: ' + str(charge_state))
 
-    config = TeslaConfiguration(id, username, tokenfile, tesla_ev_num)
+    config = TeslaConfiguration(id, tesla_ev_num)
     soc = Soc(config)
+    soc.token_file = token_file
     chargepoint_state = {"get": {"charge_state": charge_state}}
     soc.update(chargepoint_state)
 
