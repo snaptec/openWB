@@ -30,7 +30,6 @@ case $CHARGEPOINT in
 		ladeleistung=$(<$RAMDISKDIR/llaktuells1)
 		soctimerfile="$RAMDISKDIR/soctimer1"
 		socfile="$RAMDISKDIR/soc1"
-		username=$soc_teslalp2_username
 		passwordConfigText="soc_teslalp2_password"
 		mfaPasscodeConfigText="soc_teslalp2_mfapasscode"
 		carnumber=$soc_teslalp2_carnumber
@@ -45,7 +44,6 @@ case $CHARGEPOINT in
 		ladeleistung=$(<$RAMDISKDIR/llaktuell)
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
-		username=$soc_tesla_username
 		passwordConfigText="soc_tesla_password"
 		mfaPasscodeConfigText="soc_tesla_mfapasscode"
 		carnumber=$soc_tesla_carnumber
@@ -89,7 +87,7 @@ if (( ladeleistung > 1000 )); then
 	else
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
-		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "1" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
+		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$tokensfile" "$carnumber" "1" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
 	fi
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Car is not charging"
@@ -99,6 +97,6 @@ else
 	else
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 		echo 0 > $soctimerfile
-		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$username" "$tokensfile" "$carnumber" "" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
+		bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.soc" "$CHARGEPOINT" "$tokensfile" "$carnumber" "" >> "$OPENWBBASEDIR/ramdisk/soc.log" 2>&1
 	fi
 fi
