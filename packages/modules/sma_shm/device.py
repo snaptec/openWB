@@ -8,10 +8,10 @@ from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext
 from modules.common.fault_state import FaultState
-from modules.sma import counter
-from modules.sma import inverter
-from modules.sma.speedwire_listener import SpeedwireListener
-from modules.sma.utils import SpeedwireComponent
+from modules.sma_shm import counter
+from modules.sma_shm import inverter
+from modules.sma_shm.speedwire_listener import SpeedwireListener
+from modules.sma_shm.utils import SpeedwireComponent
 
 
 def get_default_config() -> dict:

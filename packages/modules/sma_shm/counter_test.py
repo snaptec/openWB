@@ -3,7 +3,7 @@ import base64
 import pytest
 
 from helpermodules import compatibility
-from modules.sma import counter, speedwiredecoder
+from modules.sma_shm import counter, speedwiredecoder
 from test_utils.mock_ramdisk import MockRamdisk
 
 # This sample was collected from an SMA Energy Meter with Firmware 2.0.18.R on 2021-12-22:

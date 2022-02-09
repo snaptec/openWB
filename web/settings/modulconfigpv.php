@@ -83,7 +83,7 @@
 										<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
 										<option <?php if($pvwattmodulold == "wr_rct2") echo "selected" ?> value="wr_rct2">RCT V.2</option>
 										<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
-										<option <?php if($pvwattmodulold == "smaemd_pv") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
+										<option <?php if($pvwattmodulold == "wr_smashm") echo "selected" ?> value="wr_smashm">SMA Energy Meter</option>
 										<option <?php if($pvwattmodulold == "wr_tripower9000") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 										<option <?php if($pvwattmodulold == "wr_smartme") echo "selected" ?> value="wr_smartme">SmartMe</option>
 										<option <?php if($pvwattmodulold == "wr_solaredge") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
@@ -975,7 +975,7 @@
 								if($('#pvwattmodul').val() == 'wr_http') {
 									showSection('#pvhttp');
 								}
-								if($('#pvwattmodul').val() == 'smaemd_pv') {
+								if($('#pvwattmodul').val() == 'wr_smashm') {
 									showSection('#pvsma');
 								}
 								if($('#pvwattmodul').val() == 'wr_json') {
