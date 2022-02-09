@@ -4,7 +4,7 @@ web/logging/data/
 *.log
 *.pyc
 *.bak
-ramdisk/
+/ramdisk/
 .DS_Store
 .ftp*
 web/settings/.htaccess
@@ -14,3 +14,5 @@ modules/soc_tesla/tokens.*
 modules/soc_i3/token*
 modules/soc_eq/soc_eq_acc_*
 .vscode/settings.json
+.pytest_cache
+__pycache__

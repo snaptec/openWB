@@ -4,11 +4,11 @@ declare -r SlaveModeAllowedLoadImbalanceDefault=20.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
-declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
 declare -r SocketActivatedFile="ramdisk/socketActivated"
 declare -r SocketApprovedFile="ramdisk/socketApproved"
 declare -r SocketRequestedFile="ramdisk/socketActivationRequested"
+declare -r EnergyLimitFile="ramdisk/energyLimitLp"
 declare -r SystemVoltage=240
 declare -r MaxCurrentOffset=1.0
 declare -r LmStatusFile="ramdisk/lmStatusLp"
@@ -19,7 +19,9 @@ declare -r LmStatusDownByLm=2
 declare -r LmStatusDownByEv=3
 declare -r LmStatusDownByError=4
 declare -r LmStatusDownByDisable=5
+# 6-7 reserved for LM use
 declare -r LmStatusDownForSocket=8
+declare -r LmStatusDownByEnergyLimit=9
 
 if (( lastmanagement > 0 )); then
 	declare -r -i NumberOfSupportedChargePoints=2
@@ -30,6 +32,11 @@ fi
 #
 # the main entry point of the script that is called from outside
 openwbisslave() {
+
+	openwbDebugLog "MAIN" 2 ""
+	openwbDebugLog "MAIN" 2 "************************************"
+	openwbDebugLog "MAIN" 2 "** Slave mode: Control loop start **"
+	openwbDebugLog "MAIN" 2 "************************************"
 
 	setVariablesFromRamdisk
 
@@ -147,7 +154,6 @@ function computeAndSetCurrentForChargePoint() {
 		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
 		if (( fixedCurrent >= 0 )); then
 			openwbDebugLog "MAIN" 2 "Slave Mode: Forced to ${fixedCurrent} A, ignoring imbalance"
-			echo "0" > "${LastImbalanceFile}${chargePoint}"
 			callSetCurrent $fixedCurrent $chargePoint $LmStatusSuperseded
 			return 0
 		fi
@@ -168,6 +174,8 @@ function computeAndSetCurrentForChargePoint() {
 			return 0
 		fi
 	fi
+
+	if endChargeAndAbortOnChargeLimits $chargePoint; then return 0; fi
 
 	# compute difference between allowed current on the total current of the phase that has the highest total current and is actually used for charging
 	# in floats for not to loose too much precision
@@ -197,31 +205,23 @@ function computeAndSetCurrentForChargePoint() {
 		fi
 	fi
 
-	openwbDebugLog "MAIN" 2 "Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W, before load imbalance compensation lldiff=${lldiff} A"
-
-	# handle load imbalances - sets imbalDiff
-	computeLoadImbalanceCompensation ${chargePoint} "${lldiff}"
-
-	# final calculation of required adjustement
-	lldiff=$(echo "scale=3; ($lldiff + $imbalDiff)" | bc)
-
-	openwbDebugLog "MAIN" 2 "Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W, imbalDiff=${imbalDiff} A ==> lldiff=${lldiff}"
+	openwbDebugLog "MAIN" 2 "Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W, lldiff=${lldiff} A"
 
 	# new charge current in int but always rounded to the next _lower_ integer
 	llneu=$(echo "scale=0; ($PreviousExpectedChargeCurrent + $lldiff)/1" | bc)
 
-	openwbDebugLog "MAIN" 2 "Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A"
+	openwbDebugLog "MAIN" 2 "Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A -> llneu=${llneu} A"
 
 	# limit the change to +1, -1 or -3 if slow ramping is enabled,
 	# a value of 0 will be kept unchanged
 	if (( slaveModeSlowRamping == 1 )); then
 
 		local adjustment=0;
-		if (( `echo "$lldiff > 1.0" | bc` == 1 )); then
+		if (( `echo "$lldiff >= 1.0" | bc` == 1 )); then
 			adjustment=1
-		elif (( `echo "$lldiff < -3.0" | bc` == 1 )); then
+		elif (( `echo "$lldiff <= -3.0" | bc` == 1 )); then
 			adjustment=-3
-		elif (( `echo "$lldiff < -0.5" | bc` == 1 )); then
+		elif (( `echo "$lldiff <= -0.5" | bc` == 1 )); then
 			adjustment=-1
 		fi
 
@@ -244,7 +244,7 @@ function computeAndSetCurrentForChargePoint() {
 		# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
 		# For this case we limit to the total allowed current divided by the number of charging vehicals.
 		# The resulting value might get further limited to maximalstromstaerke below.
-		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+		if (( `echo "$llneu - 1 > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
 
 			if (( $llneu > $PreviousExpectedChargeCurrent )); then
 				openwbDebugLog "MAIN" 2 "Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu > PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Not changing allowed current."
@@ -258,6 +258,9 @@ function computeAndSetCurrentForChargePoint() {
 		fi
 	fi
 
+	# handle load imbalances - adjusts llneu !
+	computeLoadImbalanceCompensation ${chargePoint} "$llneu"
+
 	callSetCurrent $llneu $chargePoint -1
 
 	if (( PreviousExpectedChargeCurrent != llneu )); then
@@ -267,109 +270,87 @@ function computeAndSetCurrentForChargePoint() {
 	return 0
 }
 
+function endChargeAndAbortOnChargeLimits() {
+
+	local chargePoint=$1
+
+	local cpEnergyLimitFile="${EnergyLimitFile}${chargePoint}"
+	if [ ! -f "${cpEnergyLimitFile}" ]; then
+		# no energy limit file available for the CP --> no energy limit
+		openwbDebugLog "MAIN" 2 "Slave Mode: No energy limit setting: Energy limit disabled"
+		return 1
+	fi
+
+	local energyLimit=$(<"${cpEnergyLimitFile}")
+	if (( `echo "$energyLimit <= 0" | bc` == 1 )); then
+		# 0 doesn't make sense - treat it equal to no energy limit
+		openwbDebugLog "MAIN" 2 "Slave Mode: 0 or negative energy limit setting: Energy limit disabled"
+		return 1
+	fi
+
+	local energyChargedSincePlugin=0
+
+	if (( chargePoint == 1 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladen")
+	elif (( chargePoint == 2 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp2")
+	elif (( chargePoint == 3 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp3")
+	elif (( chargePoint >= 4 )); then
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp4")
+	else
+		openwbDebugLog "MAIN" 0 "Slave Mode limit processing ERROR: Charge Point #${chargePoint} is not supported"
+		# returning != 0 here would abort control loop of this CP, but we don't want that just for sake of energy limits
+		return 1
+	fi
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Active energy limit: ${energyLimit} Wh, already charged ${energyChargedSincePlugin} kWh"
+
+	if (( `echo "($energyChargedSincePlugin * 1000) > $energyLimit" | bc` == 1 )); then
+
+		openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit reached: Disabling charge"
+		callSetCurrent 0 0  $LmStatusDownByEnergyLimit
+		return 0
+	fi
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit not reached: Continue to charge"
+	return 1
+}
+
 function computeLoadImbalanceCompensation() {
 
-	# the charge point that we're looking at is our first parameter
+	# the charge point that we're looking at is our first parameter, second param is the new charge current considering only total current limit
 	local chargePoint=$1
-	local lldiff=$2
+	local llWanted=$2
+	local llWantedIncrease=$((llWanted - PreviousExpectedChargeCurrent))
 
-	# load imbalance handling
-	local imbalPhase=$PhaseWithMaximumTotalCurrent
-	local systemLoadImbalanceToUse=$SystemLoadImbalance
-
-	local lastImbalance=0
-	local lastImbalancePhase=$imbalPhase
-	if [ -f "${LastImbalanceFile}${chargePoint}" ]; then
-		lastImbalancePersistedValue=$(<${LastImbalanceFile}${chargePoint})
-		IFS=',' read -ra lastImbalanceArray <<< $lastImbalancePersistedValue
-		lastImbalance=${lastImbalanceArray[0]}
-		lastImbalancePhase=${lastImbalanceArray[1]}
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: lastImbalancePersistedValue=$lastImbalancePersistedValue, lastImbalance=$lastImbalance, lastImbalancePhase=$lastImbalancePhase"
+	#           are we not contributing to maximum load phase ?                       or also to minimal current phase                 or not charging
+	if ( (( ChargingOnPhase[$PhaseWithMaximumImbalanceCurrent] == 0 )) || (( ChargingOnPhase[$PhaseWithMinimumImbalanceCurrent] == 1 )) || (( CpIsCharging == 0 ))); then
+#		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llWanted A) for load imbalance needed: Not charging at all (CpIsCharging=${CpIsCharging}) or not on phase with highest current (L${PhaseWithMaximumImbalanceCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumImbalanceCurrent]}) or also charging on phase with lowest current (L${PhaseWithMinimumImbalanceCurrent}: ${ChargingOnPhase[[$PhaseWithMaximumImbalanceCurrent]}) -> not contributing to imbalance -> no adjustment of llneu"
+		return 0
 	fi
 
-	# stick to last compensated phase
-	if (( lastImbalancePhase > 0 )); then
+	local currentLoadImbalance=$SystemLoadImbalance
 
-		imbalPhase=$lastImbalancePhase
-		systemLoadImbalanceToUse=$(echo "scale=3; (${TotalCurrentConsumptionOnPhase[$imbalPhase]} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
+	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Current imbalance L${PhaseWithMaximumImbalanceCurrent} - L${PhaseWithMinimumImbalanceCurrent}: ${ImbalanceCurrentConsumptionOnPhase[$PhaseWithMaximumImbalanceCurrent]} - ${ImbalanceCurrentConsumptionOnPhase[$PhaseWithMinimumImbalanceCurrent]} = ${currentLoadImbalance} A (limit is ${SlaveModeAllowedLoadImbalance} A)"
 
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Sticking to previously reduced for imbalance on phase #${lastImbalancePhase} (@ ${TotalCurrentConsumptionOnPhase[$imbalPhase]} A) --> systemLoadImbalanceToUse=$systemLoadImbalanceToUse"
+	local chargingVehiclesToUse=$ChargingVehiclesAdjustedForThisCp
+	if (( chargingVehiclesToUse == 0 )); then
+		# if, for whatever reasons, we end up here even though no vehicles are reporting charging on same phases as we, we at least assume ourself charging
+		chargingVehiclesToUse=1
+	fi
+
+	local imbalanceAvailable=$(echo "scale=3; (${SlaveModeAllowedLoadImbalance} - ${currentLoadImbalance}) / $chargingVehiclesToUse" | bc)
+
+	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Available imbalance ${imbalanceAvailable} A (${chargingVehiclesToUse} charging vehicles), wanted charge current increase ${llWantedIncrease} A"
+
+	if (( `echo "($imbalanceAvailable - $llWantedIncrease) < 0.0" | bc` == 1 )); then
+		# need to reduce for imbalance
+		llneu=$(echo "scale=0; (${PreviousExpectedChargeCurrent} + ${imbalanceAvailable}) / 1" | bc)
+		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Adjusted to llneu=${llneu} A for imbalance limit"
 	else
-
-		imbalPhase=$ChargingPhaseWithMaximumTotalCurrent
-		systemLoadImbalanceToUse=$(echo "scale=3; (${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} - ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]})" | bc)
-
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Using ChargingPhaseWithMaximumTotalCurrent=${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A and PhaseWithMinimumTotalCurrent=${PhaseWithMinimumTotalCurrent} @ ${TotalCurrentConsumptionOnPhase[$PhaseWithMinimumTotalCurrent]} A for imbalance calculation --> systemLoadImbalanceToUse=$systemLoadImbalanceToUse"
+		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No adjustment of llneu ($llneu A) for load imbalance needed"
 	fi
-
-	imbalDiff=$(echo "scale=3; ($SlaveModeAllowedLoadImbalance - $systemLoadImbalanceToUse)" | bc)
-
-	openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: lastImbalance=$lastImbalance, systemLoadImbalanceToUse=$systemLoadImbalanceToUse - SlaveModeAllowedLoadImbalance=$SlaveModeAllowedLoadImbalance = imbalDiff=${imbalDiff} A"
-
-	#  have been compensating in last loop?                are we contributing ?                   we're not contributing to minimal current phase             is imbalance limit newly exceeded?
-	if        (( lastImbalance < 0 ))         || ( (( ChargingOnPhase[$imbalPhase] == 1 )) && (( ChargingOnPhase[$PhaseWithMinimumTotalCurrent] == 0 )) && (( `echo "$imbalDiff < 0.0" | bc` == 1 )) ); then
-
-		chargingVehiclesOnImbalPhase=${ChargingVehiclesOnPhase[$imbalPhase]}
-		if (( chargingVehiclesOnImbalPhase == 0 )); then
-			# there are no vehicles charging: shouldn't happen (likely a bug in controller)
-			# but we at leasts count ourself as we know that "we're contributing" and thereby prevent a div/0
-			chargingVehiclesOnImbalPhase=1;
-		fi
-
-		# we're contributing to imbalance and imbalance actually needs adjustment, first calculate our part of the contribution
-		imbalDiff=$(echo "scale=3; ($imbalDiff / ${chargingVehiclesOnImbalPhase})" | bc)
-
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: We're contributing! imbalPhase=$imbalPhase, ChargingVehiclesOnPhase[imbalPhase]=${ChargingVehiclesOnPhase[$imbalPhase]}, chargingVehiclesOnImbalPhase=${chargingVehiclesOnImbalPhase=} ==> imbalDiff=${imbalDiff} A"
-
-		# calculate new imbalance adjustement value in integer Ampere steps
-		# Note: We need to do the rounding to next lower Ampere of imbalance in order to really enforce an adjustement.
-		#       Using the float values might not trigger an adjustment immediately.
-		if (( `echo "$imbalDiff < 0.0" | bc` == 1 )); then
-
-			# newly calculated imbalance requires a reduction
-			imbalDiff=$(echo "scale=0; ($lastImbalance + $imbalDiff - 0.9999)/1" | bc)
-
-			openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Need to reduce current for imbalance compensation to imbalDiff=${imbalDiff} A"
-		elif  (( `echo "$imbalDiff > 1.0" | bc` == 1 )); then
-
-			# newly calculated imbalance allows more than 1 A more current
-			imbalDiff=$(echo "scale=0; ($lastImbalance + $imbalDiff - 0.9999)/1" | bc)
-
-			if (( PreviousExpectedChargeCurrent > 0)); then
-
-				# EV was charging --> increase and disable normally
-				if (( imbalDiff > 0 )) && (( PreviousExpectedChargeCurrent > 0)); then
-					openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No more limit contribution. Setting imbalDiff from ${imbalDiff} A to 0 A"
-					imbalDiff=0
-					imbalPhase=0
-				else
-					openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Can increase current even with imbalance compensation to imbalDiff=${imbalDiff} A"
-				fi
-			else
-
-				# charging was stopped --> increase only if the minimum current for the EV is exceeded
-				if (( `echo "$imbalDiff - $lastImbalance >= $minimalstromstaerke" | bc` == 1 )); then
-					openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Stopped charging. Possible increase sufficient to re-start ($imbalDiff - $lastImbalance >= $minimalstromstaerke), setting imbalDiff=${imbalDiff} A"
-				else
-					imbalDiff=${lastImbalance}
-					openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Stopped charging. Possible increase too low ($imbalDiff - $lastImbalance < $minimalstromstaerke), staying with imbalDiff=${imbalDiff} A"
-				fi
-			fi
-		else
-
-			# else we keep on using the previous imbalance
-			imbalDiff=${lastImbalance}
-			openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: No need to adjust imbalance compensation, keeping at lastImbalance as imbalDiff=${imbalDiff}"
-		fi
-	else
-
-		# no imbalance compensation needed at all
-		imbalDiff=0
-		imbalPhase=0
-		openwbDebugLog "MAIN" 2 "Slave Mode: Load Imbalance: Not contributing to imbalance (not charging on critical phase) or imbalance limit not hit ==> resetting compensation to 0"
-	fi
-
-	echo "${imbalDiff},${imbalPhase}" > "${LastImbalanceFile}${chargePoint}"
 }
 
 # determines the relevant phase for comparision against allowed current
@@ -567,30 +548,52 @@ function setVariablesFromRamdisk() {
 	# phase with maximum current
 	PhaseWithMaximumTotalCurrent=0
 	PhaseWithMinimumTotalCurrent=0
+	PhaseWithMaximumImbalanceCurrent=0
+	PhaseWithMinimumImbalanceCurrent=0
 	MaximumTotalCurrent=0
 	MinimumTotalCurrent=999999
+	MaximumImbalanceCurrent=0
+	MinimumImbalanceCurrent=999999
 
 	TotalCurrentConsumptionOnPhase=(0 0 0 0)
+	ImbalanceCurrentConsumptionOnPhase=(0 0 0 0)
 	ChargingVehiclesOnPhase=(0 0 0 0)
 	for i in {1..3}
 	do
 		TotalCurrentConsumptionOnPhase[i]=$(<"ramdisk/TotalCurrentConsumptionOnL${i}")
 		ChargingVehiclesOnPhase[i]=$(<"ramdisk/ChargingVehiclesOnL${i}")
 
+		if [ -f "ramdisk/ImbalanceCurrentConsumptionOnL${i}" ]; then
+			ImbalanceCurrentConsumptionOnPhase[i]=$(<"ramdisk/ImbalanceCurrentConsumptionOnL${i}")
+		else
+			ImbalanceCurrentConsumptionOnPhase[i]=${TotalCurrentConsumptionOnPhase[i]}
+		fi
+
 		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} > $MaximumTotalCurrent" | bc` == 1 )); then
 			MaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMaximumTotalCurrent=${i}
+		fi
+
+		if (( `echo "${ImbalanceCurrentConsumptionOnPhase[i]} > $MaximumImbalanceCurrent" | bc` == 1 )); then
+			MaximumImbalanceCurrent=${ImbalanceCurrentConsumptionOnPhase[i]}
+			PhaseWithMaximumImbalanceCurrent=${i}
 		fi
 
 		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} < $MinimumTotalCurrent" | bc` == 1 )); then
 			MinimumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMinimumTotalCurrent=${i}
 		fi
+
+		if (( `echo "${ImbalanceCurrentConsumptionOnPhase[i]} < $MinimumImbalanceCurrent" | bc` == 1 )); then
+			MinimumImbalanceCurrent=${ImbalanceCurrentConsumptionOnPhase[i]}
+			PhaseWithMinimumImbalanceCurrent=${i}
+		fi
 	done
 
-	SystemLoadImbalance=$(echo "scale=3; $MaximumTotalCurrent - $MinimumTotalCurrent" | bc)
+	SystemLoadImbalance=$(echo "scale=3; $MaximumImbalanceCurrent - $MinimumImbalanceCurrent" | bc)
 
-	openwbDebugLog "MAIN" 2 "TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
+	openwbDebugLog "MAIN" 2 "TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A"
+	openwbDebugLog "MAIN" 2 "ImbalanceCurrentConsumptionOnPhase=${ImbalanceCurrentConsumptionOnPhase[@]:1}, Phase with max imbalance current = ${PhaseWithMaximumImbalanceCurrent} @ ${MaximumImbalanceCurrent} A, min current = ${PhaseWithMinimumImbalanceCurrent} @ ${MinimumImbalanceCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
 
 	# heartbeat
 	Heartbeat=$(<ramdisk/heartbeat)
@@ -678,6 +681,18 @@ function callSetCurrent() {
 	local statusReason=$3
 	local computedReason=$statusReason
 
+	# PreviousExpectedChargeCurrent can be empty in case of "early exit" in case of error (e.g. heartbeat timeout)
+	if [ "$PreviousExpectedChargeCurrent" == "" ]; then
+		if (( chargePoint != 0 )); then
+			aggregateDataForChargePoint $chargePoint
+		else
+			for i in $(seq 1 $NumberOfSupportedChargePoints);
+			do
+				aggregateDataForChargePoint $i
+			done
+		fi
+	fi
+
 	# we have to do a slightly ugly if-else-cascade to set the charge point selector for set-current.sh
 	# Note: There's currently only one current limit (min/max) per box - so setting same for all CPs
 	if (( chargePoint == 0 )); then
@@ -691,7 +706,7 @@ function callSetCurrent() {
 	elif (( chargePoint >= 4 )); then
 		local chargePointString="lp${chargePoint}"
 	else
-		openwbDebugLog "MAIN" 0 "Slave Mode charge current set ERROR: Charge Point #${chargePoint} is not supported"
+		openwbDebugLog "MAIN" 0 "Slave Mode: charge current set ERROR: Charge Point #${chargePoint} is not supported"
 		return 1
 	fi
 
@@ -700,24 +715,18 @@ function callSetCurrent() {
 	# finally limit to the configured min or max values
 	if ( (( currentToSet < MinimumCurrentPossibleForCp )) || ((LpEnabled == 0)) ) && (( currentToSet != 0 )); then
 		if ((LpEnabled != 0)); then
-			openwbDebugLog "MAIN" 2 "Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < MinimumCurrentPossibleForCp=$MinimumCurrentPossibleForCp --> setze currentToSet=0"
+			openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < MinimumCurrentPossibleForCp=$MinimumCurrentPossibleForCp --> setze currentToSet=0"
 			computedReason=$LmStatusDownByLm
 		else
-			openwbDebugLog "MAIN" 2 "Slave Mode Aktiv, LP deakt. --> setze currentToSet=0"
+			openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, LP deakt. --> setze currentToSet=0"
 			computedReason=$LmStatusDownByDisable
 		fi
 		currentToSet=0
 	fi
 
 	if (( currentToSet > MaximumCurrentPossibleForCp )); then
-		openwbDebugLog "MAIN" 2 "Slave Mode Aktiv, currentToSet=$currentToSet < MaximumCurrentPossibleForCp=$MaximumCurrentPossibleForCp --> setze currentToSet=$MaximumCurrentPossibleForCp"
+		openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, currentToSet=$currentToSet < MaximumCurrentPossibleForCp=$MaximumCurrentPossibleForCp --> setze currentToSet=$MaximumCurrentPossibleForCp"
 		currentToSet=$MaximumCurrentPossibleForCp
-	fi
-
-	if (( PreviousExpectedChargeCurrent != currentToSet )); then
-
-		openwbDebugLog "MAIN" 2 "Setting current to ${currentToSet} A for CP#${chargePoint}"
-		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
 	fi
 
 	if (( $statusReason == -1 )); then
@@ -728,8 +737,6 @@ function callSetCurrent() {
 		fi
 	fi
 
-	openwbDebugLog "MAIN" 2 "Settings status reason = $statusReason"
-
 	if (( chargePoint != 0 )); then
 		echo "$statusReason" > "${LmStatusFile}${chargePoint}"
 	else
@@ -737,6 +744,14 @@ function callSetCurrent() {
 		do
 			echo "$statusReason" > "${LmStatusFile}${i}"
 		done
+	fi
+
+	if (( PreviousExpectedChargeCurrent != currentToSet )); then
+
+		openwbDebugLog "MAIN" 2 "Slave Mode: Setting current from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}, status reason $statusReason"
+		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
+	else
+		return 0
 	fi
 
 	runs/set-current.sh $currentToSet "${chargePointString}"

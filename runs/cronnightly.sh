@@ -11,7 +11,7 @@ echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
 mosquitto_pub -t openWB/system/reloadDisplay -m "1"
 echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
 
-monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m)"
+monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m).csv"
 
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
 einspeisung=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
@@ -91,7 +91,7 @@ d8=$(</var/www/html/openWB/ramdisk/device8_wh)
 d9=$(</var/www/html/openWB/ramdisk/device9_wh)
 d10="0"
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then
 	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
@@ -101,7 +101,7 @@ if [[ $verbraucher1_typ == "tasmota" ]]; then
 		else
 			verbraucher1_writewh=$(echo "scale=0;(($verbraucher1_oldwh * 1000) + $verbraucher1_tempwh) / 1" | bc)
 		fi
-		sed -i "s/verbraucher1_tempwh=.*/verbraucher1_tempwh=$verbraucher1_writewh/" /var/www/html/openWB/openwb.conf
+		sed -i "s/^verbraucher1_tempwh=.*/verbraucher1_tempwh=$verbraucher1_writewh/" /var/www/html/openWB/openwb.conf
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset1%200
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset2%200
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset3%200
@@ -115,16 +115,16 @@ if [[ $verbraucher2_typ == "tasmota" ]]; then
 		else
 			verbraucher2_writewh=$(echo "scale=0;(($verbraucher2_oldwh * 1000) + $verbraucher2_tempwh) / 1" | bc)
 		fi
-		sed -i "s/verbraucher2_tempwh=.*/verbraucher2_tempwh=$verbraucher2_writewh/" /var/www/html/openWB/openwb.conf
+		sed -i "s/^verbraucher2_tempwh=.*/verbraucher2_tempwh=$verbraucher2_writewh/" /var/www/html/openWB/openwb.conf
 		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset1%200
 		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset2%200
 		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset3%200
 	fi
 fi
 
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
 if [[ -s /var/www/html/openWB/ramdisk/randomSleepValue ]]; then
 	randomSleep=$(</var/www/html/openWB/ramdisk/randomSleepValue)
@@ -135,6 +135,19 @@ if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
 else
 	echo "Not deleting randomSleepValue of \"$randomSleep\""
 fi
+#set heartbeat openWB Pro
+owbpro_num=1
+for i in evsecon evsecons{1..2} evseconlp{4..8}
+do
+	if [[ "${!i}" == "owbpro" ]]
+	then
+		owbpro_ip_var="owbpro${owbpro_num}ip"
+		owbpro_url="${!owbpro_ip_var}/connect.php"
+		curl -s -X POST --data "heartbeatenabled=1" "$owbpro_url"
+		curl -s -X POST --data "update=1" "$owbpro_url"
+	fi
+	((owbpro_num++))
+done
 
 # monthly . csv updaten
   echo "Trigger update of logfiles..."

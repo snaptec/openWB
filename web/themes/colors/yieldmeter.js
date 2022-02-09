@@ -18,6 +18,7 @@ class YieldMeter {
 		};
 		this.labelfontsize = 16;
 		this.axisFontSize = 12;
+		this.textLength = 12;
 	}
 
 	// to be called when the document is loaded
@@ -34,12 +35,12 @@ class YieldMeter {
 		this.chargeColor = 'var(--color-charging)';
 		this.axisColor = 'var(--color-axis)';
 		this.gridColor = 'var(--color-grid)';
-   	d3.select("button#energyLeftButton")
+		d3.select("button#energyLeftButton")
 			.on("click", shiftLeft)
 		d3.select("button#energyRightButton")
 			.on("click", shiftRight)
-			d3.select("button#calendarButton")
-			.on("click", toggleMonthView)	
+		d3.select("button#calendarButton")
+			.on("click", toggleMonthView)
 	}
 
 	// to be called when values have changed
@@ -47,19 +48,19 @@ class YieldMeter {
 		switch (wbdata.graphMode) {
 			case 'live':
 				this.plotdata = Object.values(wbdata.sourceSummary)
-				.filter((row) => (row.energy > 0))
-				.concat(wbdata.usageDetails
-					.filter((row) => (row.energy > 0)));
+					.filter((row) => (row.energy > 0))
+					.concat(wbdata.usageDetails
+						.filter((row) => (row.energy > 0)));
 				break;
 			case 'day':
 				if (wbdata.showTodayGraph) {
 					this.plotdata = Object.values(wbdata.sourceSummary)
 						.filter((row) => (row.energy > 0))
 						.concat(wbdata.usageDetails
-							.filter((row) => (row.energy > 0)));			
+							.filter((row) => (row.energy > 0)));
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
-						.filter((row) => (row.energy > 0));		
+						.filter((row) => (row.energy > 0));
 				}
 				break;
 			case 'month':
@@ -67,7 +68,8 @@ class YieldMeter {
 					.filter((row) => (row.energy > 0));
 				break;
 			default: break;
-		}		
+		}
+		this.adjustLabelSize()
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
 		this.updateHeading();
@@ -88,7 +90,7 @@ class YieldMeter {
 	drawChart(svg) {
 		const ymax = d3.max(this.plotdata, (d) => d.energy);
 		this.xScale.domain(this.plotdata.map((d) => d.name));
-		this.yScale.domain([0, ymax]);
+		this.yScale.domain([0, Math.ceil(ymax)]);
 		const bargroups = svg
 			.selectAll(".bar")
 			.data(this.plotdata)
@@ -124,8 +126,8 @@ class YieldMeter {
 		yAxis.selectAll(".tick").attr("font-size", this.axisFontSize);
 		if (wbdata.showGrid) {
 			yAxis.selectAll(".tick line")
-			.attr("stroke", this.gridColor)
-			.attr ("stroke-width", "0.5");			
+				.attr("stroke", this.gridColor)
+				.attr("stroke-width", "0.5");
 		} else {
 			yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
 		}
@@ -152,7 +154,6 @@ class YieldMeter {
 			.attr("fill", (d) => d.color)
 			.text((d) => (formatWattH(d.energy * 1000)));
 
-
 		const categories = svg.selectAll(".category")
 			.data(this.plotdata)
 			.enter()
@@ -164,7 +165,7 @@ class YieldMeter {
 			.attr("font-size", this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
-			.text((d) => (d.name));
+			.text((d) => (this.truncateCategory(d.name)));
 	}
 
 	updateHeading() {
@@ -182,12 +183,47 @@ class YieldMeter {
 				}
 				break;
 			case 'month':
-				heading = "Monatswerte " + formatMonth (wbdata.graphMonth.month, wbdata.graphMonth.year);
+				heading = "Monatswerte " + formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
 				break;
 			default: break;
 		}
 		d3.select("h3#energyheading").text(heading);
 	}
+
+	adjustLabelSize() {
+		let xCount = this.plotdata.length
+		if (xCount <= 5) {
+			this.maxTextLength = 12;
+			this.labelfontsize = 16
+		} else if (xCount == 6) {
+			this.maxTextLength = 11;
+			this.labelfontsize = 14
+		} else if (xCount > 6 && xCount <= 8) {
+			this.maxTextLength = 8;
+			this.labelfontsize = 13
+		} else if (xCount == 9) {
+			this.maxTextLength = 8;
+			this.labelfontsize = 11;
+		} else if (xCount == 10) {
+			this.maxTextLength = 7;
+			this.labelfontsize = 10;
+		}
+		else {
+			this.maxTextLength = 6;
+			this.labelfontsize = 9
+		}
+	}
+
+	truncateCategory(name) {
+		if (name.length > this.maxTextLength) {
+			return name.substr(0, this.maxTextLength) + "."
+		} else {
+			return name
+		}
+	}
 }
+
+
+
 var yieldMeter = new YieldMeter();
 

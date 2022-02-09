@@ -1,18 +1,18 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
+# import binascii
+from pymodbus.client.sync import ModbusTcpClient
+
 ipadd = str(sys.argv[1])
 idadd = int(sys.argv[2])
 
-from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipadd, port=8899)
-
 
 if ( idadd < 100 ):
     #resp = client.read_input_registers(0x0002,2, unit=idadd)

@@ -1,18 +1,18 @@
 #!/usr/bin/python
 import sys
-import os
-import time
-import getopt
-import socket
-import ConfigParser
+# import os
+# import time
+# import getopt
+# import socket
+# import ConfigParser
 import struct
-import binascii
-seradd = str(sys.argv[1])
+# import binascii
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(seradd, port=8899)
 
-
+seradd = str(sys.argv[1])
 sdmid = int(sys.argv[2])
+
+client = ModbusTcpClient(seradd, port=8899)
 
 try:
     ser2add = str(sys.argv[3])
@@ -26,15 +26,12 @@ resp = client.read_input_registers(0x000C,2, unit=sdmid)
 watt = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 watt1 = int(watt[0])
 
-
-
 resp = client.read_input_registers(0x004a,2, unit=sdmid)
 vwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 vwh1 = float("%.3f" % vwh[0])
 resp = client.read_input_registers(0x0048,2, unit=sdmid)
 v1wh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
 v1wh1 = float("%.3f" % v1wh[0])
-
 
 try:
     if sdm2id > 0:
@@ -53,13 +50,11 @@ try:
         vwh2=0
         v1wh2=0
 
-
 except:
     watt2=0
     vwh2=0
     v1wh2=0
     pass
-
 
 watt=watt1+watt2
 if watt > 0:
@@ -67,7 +62,6 @@ if watt > 0:
 f = open("/var/www/html/openWB/ramdisk/pv2watt", 'w')
 f.write(str(watt))
 f.close()
-
 
 if vwh1 > v1wh1:
     final1wh=vwh1

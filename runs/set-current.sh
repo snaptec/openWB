@@ -72,6 +72,17 @@ function setChargingCurrentExtopenwb () {
 	fi
 }
 
+# function for setting the current - owbpro
+# Parameters:
+# 1: current
+# 2: owbpro1ip
+
+function setChargingCurrentOwbpro () {
+	current=$1
+	owbpro1ip=$2
+	# set desired charging current
+	curl -s -X POST --data "ampere=$current" $owbpro1ip/connect.php > /dev/null
+}
 # function for setting the current - modbusevse
 # Parameters:
 # 1: current
@@ -162,7 +173,15 @@ function setChargingCurrentWifi () {
 
 function setChargingCurrenttwcmanager () {
 	if [[ $evsecon == "twcmanager" ]]; then
-		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
+		if [[ $twcmanagerlp1httpcontrol -eq 1 ]]; then
+			if [[ $current -eq 0 ]]; then
+				curl -s --connect-timeout 3 -X POST -d '' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/cancelChargeNow" > /dev/null
+			else
+				curl -s --connect-timeout 3 -X POST -d '{ "chargeNowRate": '$current', "chargeNowDuration": 86400 }' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/chargeNow" > /dev/null
+			fi
+		else
+			curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
+		fi
 	fi
 }
 
@@ -270,7 +289,9 @@ function setChargingCurrent () {
 	if [[ $evsecon == "extopenwb" ]]; then
 		setChargingCurrentExtopenwb $current $chargep1ip $chargep1cp
 	fi
-
+	if [[ $evsecon == "owbpro" ]]; then
+		setChargingCurrentOwbpro $current $owbpro1ip
+	fi
 	if [[ $evsecon == "modbusevse" ]]; then
 		if [[ "$modbusevseid" == 0 ]]; then
 			if [ -f /var/www/html/openWB/ramdisk/evsemodulconfig ]; then
@@ -315,7 +336,7 @@ function setChargingCurrent () {
 		setChargingCurrentkeba $current $kebaiplp1
 	fi
 	if [[ $evsecon == "twcmanager" ]]; then
-		setChargingCurrenttwcmanager $current $twcmanagerlp1ip
+		setChargingCurrenttwcmanager $current $twcmanagerlp1ip $twcmanagerlp1port $twcmanagerlp1httpcontrol
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
 		setChargingCurrentIpModbus $current $evseip $ipevseid
@@ -467,6 +488,10 @@ if [[ $lastmanagement == "1" ]]; then
 		ipevseid=$evseidlp2
 		chargep1ip=$chargep2ip
 		chargep1cp=$chargep2cp
+		twcmanagerlp1ip=$twcmanagerlp2ip
+		twcmanagerlp1port=$twcmanagerlp2port
+		twcmanagerlp1httpcontrol=$twcmanagerlp2httpcontrol
+		owbpro1ip=$owbpro2ip
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then
 			oldcurrent=$current
@@ -498,6 +523,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 		ipevseid=$evseidlp3
 		chargep1ip=$chargep3ip
 		chargep1cp=$chargep3cp
+		owbpro1ip=$owbpro3ip
 		if (( lp3enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -519,6 +545,8 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 		ipevseid=$evseidlp4
 		chargep1ip=$chargep4ip
 		chargep1cp=$chargep4cp
+		owbpro1ip=$owbpro4ip
+
 		if (( lp4enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -540,6 +568,8 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 		ipevseid=$evseidlp5
 		chargep1ip=$chargep5ip
 		chargep1cp=$chargep5cp
+		owbpro1ip=$owbpro5ip
+
 		if (( lp5enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -561,6 +591,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 		ipevseid=$evseidlp6
 		chargep1ip=$chargep6ip
 		chargep1cp=$chargep6cp
+		owbpro1ip=$owbpro6ip
 		if (( lp6enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -582,6 +613,8 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 		ipevseid=$evseidlp7
 		chargep1ip=$chargep7ip
 		chargep1cp=$chargep7cp
+		owbpro1ip=$owbpro7ip
+
 		if (( lp7enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -603,6 +636,8 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		ipevseid=$evseidlp8
 		chargep1ip=$chargep8ip
 		chargep1cp=$chargep8cp
+		owbpro1ip=$owbpro8ip
+
 		if (( lp8enabled == 0 )); then
 			oldcurrent=$current
 			current=0

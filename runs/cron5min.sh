@@ -5,9 +5,24 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 . $OPENWBBASEDIR/loadconfig.sh
 . $OPENWBBASEDIR/helperFunctions.sh
 
+if [ -e $OPENWBBASEDIR/ramdisk/updateinprogress ] && [ -e $OPENWBBASEDIR/ramdisk/bootinprogress ]; then
+	updateinprogress=$(<$OPENWBBASEDIR/ramdisk/updateinprogress)
+	bootinprogress=$(<$OPENWBBASEDIR/ramdisk/bootinprogress)
+	if (( updateinprogress == "1" )); then
+		openwbDebugLog "MAIN" 0 "##### cron5min.sh Update in progress"
+		exit 0
+	elif (( bootinprogress == "1" )); then
+		openwbDebugLog "MAIN" 0 "##### cron5min.sh Boot in progress"
+		exit 0
+	fi
+else
+	openwbDebugLog "MAIN" 0 "##### cron5min.sh Ramdisk not set up. Maybe we are still booting."
+	exit 0
+fi
+
 openwbDebugLog "MAIN" 0 "##### cron5min.sh started #####"
 
-dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d)"
+dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d).csv"
 monthlyladelogfile="$OPENWBBASEDIR/web/logging/data/ladelog/$(date +%Y%m).csv"
 
 # check if a monthly logfile exists and create a new one if not
@@ -72,9 +87,19 @@ d7=$(<$RAMDISKDIR/device7_wh)
 d8=$(<$RAMDISKDIR/device8_wh)
 d9=$(<$RAMDISKDIR/device9_wh)
 d10="0"
+d1haus=$(<$RAMDISKDIR/smarthome_device_minhaus_1)
+d2haus=$(<$RAMDISKDIR/smarthome_device_minhaus_2)
+d3haus=$(<$RAMDISKDIR/smarthome_device_minhaus_3)
+d4haus=$(<$RAMDISKDIR/smarthome_device_minhaus_4)
+d5haus=$(<$RAMDISKDIR/smarthome_device_minhaus_5)
+d6haus=$(<$RAMDISKDIR/smarthome_device_minhaus_6)
+d7haus=$(<$RAMDISKDIR/smarthome_device_minhaus_7)
+d8haus=$(<$RAMDISKDIR/smarthome_device_minhaus_8)
+d9haus=$(<$RAMDISKDIR/smarthome_device_minhaus_9)
+
 # now add a line to our daily csv
-echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile.csv
-openwbDebugLog "MAIN" 1 "daily csv updated: $dailyfile.csv"
+echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile
+openwbDebugLog "MAIN" 1 "daily csv updated: $dailyfile"
 
 # grid protection
 # temporary disabled
@@ -230,6 +255,37 @@ do
 		echo $d9dailyyield > $RAMDISKDIR/daily_d9kwh
 	fi
 done
+
+#echo $(date +%H%M),$d1haus,$d2haus,$d3haus,$d4haus,$d5haus,$d6haus,$d7haus,$d8haus,$d9haus, $d1dailyyield ,$d2dailyyield , $d3dailyyield , $d4dailyyield , $d5dailyyield , $d6dailyyield , $d7dailyyield , $d8dailyyield , $d9dailyyield  >> $RAMDISKDIR/alog.log
+# zero out devices were kwh should be included in house consumtion
+if (( d1haus == 1 )); then
+ d1dailyyield=0
+fi
+if (( d2haus == 1 )); then
+ d2dailyyield=0
+fi
+if (( d3haus == 1 )); then
+ d3dailyyield=0
+fi
+if (( d4haus == 1 )); then
+ d4dailyyield=0
+fi
+if (( d5haus == 1 )); then
+ d5dailyyield=0
+fi
+if (( d6haus == 1 )); then
+ d6dailyyield=0
+fi
+if (( d7haus == 1 )); then
+ d7dailyyield=0
+fi
+if (( d8haus == 1 )); then
+ d8dailyyield=0
+fi
+if (( d9haus == 1 )); then
+ d9dailyyield=0
+fi
+#echo $(date +%H%M),$d1haus,$d2haus,$d3haus,$d4haus,$d5haus,$d6haus,$d7haus,$d8haus,$d9haus, $d1dailyyield ,$d2dailyyield , $d3dailyyield , $d4dailyyield , $d5dailyyield , $d6dailyyield , $d7dailyyield , $d8dailyyield , $d9dailyyield  >> $RAMDISKDIR/alog.log
 # now calculate the house consumption daily yield as difference of measured input and output
 hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $d6dailyyield - $d7dailyyield - $d8dailyyield - $d9dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
 echo $hausdailyyield > $RAMDISKDIR/daily_hausverbrauchkwh
@@ -245,6 +301,16 @@ then
 else
 	openwbDebugLog "MAIN" 0 "mqtt handler not running! restarting process"
 	python3 $OPENWBBASEDIR/runs/mqttsub.py &
+fi
+
+# check if our legacy run server is running
+pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" > /dev/null
+if [ $? == 1 ]
+then
+	openwbDebugLog "MAIN" 0 "legacy_run_server is not running. Restarting process"
+	bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
+else
+	openwbDebugLog "MAIN" 1 "legacy_run_server is already running"
 fi
 
 # check if our smarthome handler is running
@@ -270,9 +336,9 @@ else
 	openwbDebugLog "MAIN" 1 "external openWB or daemon mode not configured; checking network setup"
 	ethstate=$(</sys/class/net/eth0/carrier)
 	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+		sudo ifconfig eth0:0 $virtual_ip_eth0 netmask 255.255.255.0 up
 		if [ -d /sys/class/net/wlan0 ]; then
-			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+			sudo ifconfig wlan0:0 $virtual_ip_wlan0 netmask 255.255.255.0 down
 			wlanstate=$(</sys/class/net/wlan0/carrier)
 			if (( wlanstate == 1 )); then
 				sudo systemctl stop hostapd
@@ -281,9 +347,9 @@ else
 		fi
 	else
 		if [ -d /sys/class/net/wlan0 ]; then
-			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+			sudo ifconfig wlan0:0 $virtual_ip_wlan0 netmask 255.255.255.0 up
 		fi
-		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+		sudo ifconfig eth0:0 $virtual_ip_eth0 netmask 255.255.255.0 down
 	fi
 	# check for obsolete isss handler
 	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
@@ -343,6 +409,11 @@ if (( $pingcheckactive == 1 )); then
 	openwbDebugLog "MAIN" 1 "pingcheck configured; starting"
 	$OPENWBBASEDIR/runs/pingcheck.sh &
 fi
+
+# record the current commit details
+commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
+echo "$commitId" > $RAMDISKDIR/currentCommitHash
+echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > $RAMDISKDIR/currentCommitBranches
 
 # EVSE Check
 openwbDebugLog "MAIN" 1 "starting evsecheck"

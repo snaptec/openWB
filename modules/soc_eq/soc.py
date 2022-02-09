@@ -22,6 +22,10 @@ myPid         = str(os.getpid())
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
 
+
+soc = None
+range = None
+
 def socDebugLog(message):
 	local_time = datetime.now(timezone.utc).astimezone()
 	print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": PID:"+ myPid + ": " + message)

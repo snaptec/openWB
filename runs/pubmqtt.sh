@@ -236,6 +236,8 @@ mqttvar["lp/5/TimeRemaining"]=restzeitlp5
 mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
+mqttvar["system/CommitHash"]=currentCommitHash
+mqttvar["system/CommitBranches"]=currentCommitBranches
 
 if [[ "$standardSocketInstalled" == "1" ]]; then
 	mqttvar["config/get/slave/SocketActivated"]=socketActivated
@@ -288,7 +290,16 @@ for mq in "${!mqttvar[@]}"; do
 	fi
 done
 
-tempPubList="${tempPubList}\nopenWB/global/cpuTemp=$(echo "scale=2; `cat /sys/class/thermal/thermal_zone0/temp` / 1000" | bc)"
+sysinfo=$(cd web/tools; sudo php programmloggerinfo.php 2>/dev/null)
+tempPubList="${tempPubList}\nopenWB/global/cpuModel=$(cat /proc/cpuinfo | grep -m 1 "model name" | sed "s/^.*: //")"
+tempPubList="${tempPubList}\nopenWB/global/cpuUse=$(echo ${sysinfo} | jq -r '.cpuuse')"
+tempPubList="${tempPubList}\nopenWB/global/cpuTemp=$(echo "scale=2; $(echo ${sysinfo} | jq -r '.cputemp') / 1000" | bc)"
+tempPubList="${tempPubList}\nopenWB/global/cpuFreq=$(($(echo ${sysinfo} | jq -r '.cpufreq') / 1000))"
+tempPubList="${tempPubList}\nopenWB/global/memTotal=$(echo ${sysinfo} | jq -r '.memtot')"
+tempPubList="${tempPubList}\nopenWB/global/memUse=$(echo ${sysinfo} | jq -r '.memuse')"
+tempPubList="${tempPubList}\nopenWB/global/memFree=$(echo ${sysinfo} | jq -r '.memfree')"
+tempPubList="${tempPubList}\nopenWB/global/diskUse=$(echo ${sysinfo} | jq -r '.diskuse')"
+tempPubList="${tempPubList}\nopenWB/global/diskFree=$(echo ${sysinfo} | jq -r '.diskfree')"
 
 #echo "Publist:"
 #echo -e $tempPubList

@@ -11,7 +11,7 @@ import socket
 import select
 import struct
 import binascii
-import time
+# import time
 import operator
 
 class rct_id():
@@ -463,8 +463,8 @@ def init(argv):
             bVerbose = True
 
     id_tab_setup()
-    param_len = 0;
-    desc_len = 0;
+    param_len = 0
+    desc_len = 0
     for obj in id_tab:
         if len(obj.name) > param_len:
             param_len = len(obj.name)

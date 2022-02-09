@@ -1,16 +1,24 @@
 #!/bin/bash
-output=$(curl --connect-timeout 3 -s -u $powerfoxuser:"$powerfoxpass" "https://backend.powerfox.energy/api/2.0/my/$powerfoxid/current")
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
+#For development only
+#Debug=1
 
-einspeisungwh=$(echo $output | jq '.A_Minus')
-echo $einspeisungwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+if [ $DMOD == "MAIN" ]; then
+    MYLOGFILE="$RAMDISKDIR/openWB.log"
+else
+    MYLOGFILE="$RAMDISKDIR/evu_json.log"
+fi
 
-bezugwh=$(echo $output | jq '.A_Plus')
-echo $bezugwh > /var/www/html/openWB/ramdisk/bezugkwh
+python3 /var/www/html/openWB/modules/bezug_powerfox/powerfox.py "${powerfoxid}" "${powerfoxuser}" "${powerfoxpass}" >>$MYLOGFILE 2>&1
+ret=$?
 
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-watt=$(echo $output | jq '.Watt')
-echo $watt > /var/www/html/openWB/ramdisk/wattbezug
-
-
-echo $watt
+wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+echo $wattbezug

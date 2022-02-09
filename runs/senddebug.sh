@@ -1,5 +1,9 @@
 #!/bin/bash
-sed -i 's/debug.*/debug=1/' /var/www/html/openWB/openwb.conf
+echo "***** debuglog level 1 start..." >> /var/www/html/openWB/ramdisk/openWB.log
+sed -i 's/^debug=.*/debug=1/' /var/www/html/openWB/openwb.conf
+sleep 60
+echo "***** debuglog level 2 start..." >> /var/www/html/openWB/ramdisk/openWB.log
+sed -i 's/^debug=.*/debug=2/' /var/www/html/openWB/openwb.conf
 sleep 60
 
 debugFile=/var/www/html/openWB/ramdisk/debug.log
@@ -44,14 +48,18 @@ echo "############################ mqtt topics ##############" >> $debugFile
 timeout 1 mosquitto_sub -v -t 'openWB/#' >> $debugFile
 
 echo "############################ smarthome.log ##############" >> $debugFile
-echo "$(cat /var/www/html/openWB/ramdisk/smarthome.log)" >> $debugFile
+echo "$(tail -200 /var/www/html/openWB/ramdisk/smarthome.log)" >> $debugFile
 
 # echo "############################ file and directory listing ##############" >> $debugFile
 # ls -lRa /var/www/html/openWB/modules/soc_* >> $debugFile
 
+echo "***** uploading debuglog..." >> /var/www/html/openWB/ramdisk/openWB.log
 curl --upload $debugFile "https://openwb.de/tools/debug2.php?debugemail=$debugemail"
 
-sed -i 's/debug.*/debug=0/' /var/www/html/openWB/openwb.conf
+echo "***** cleanup..." >> /var/www/html/openWB/ramdisk/openWB.log
+sed -i 's/^debug=.*/debug=0/' /var/www/html/openWB/openwb.conf
 rm $debugFile
 rm /var/www/html/openWB/ramdisk/debuguser
 rm /var/www/html/openWB/ramdisk/debugemail
+
+echo "***** debuglog end" >> /var/www/html/openWB/ramdisk/openWB.log

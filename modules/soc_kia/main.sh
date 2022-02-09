@@ -23,6 +23,11 @@ case $CHARGEPOINT in
 		efficiency=$wirkungsgradlp2
 		abrp_enable=$kia_abrp_enable_2
 		abrp_token=$kia_abrp_token_2
+		advanced=$kia_advanced2
+		adv_cachevalid=$kia_adv_cachevalid2
+		adv_12v=$kia_adv_12v2
+		adv_interval_unplug=$kia_adv_interval_unplug2
+		adv_ratelimit=$kia_adv_ratelimit2
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -38,6 +43,11 @@ case $CHARGEPOINT in
 		efficiency=$wirkungsgradlp1
 		abrp_enable=$kia_abrp_enable
 		abrp_token=$kia_abrp_token
+		advanced=$kia_advanced
+		adv_cachevalid=$kia_adv_cachevalid
+		adv_12v=$kia_adv_12v
+		adv_interval_unplug=$kia_adv_interval_unplug
+		adv_ratelimit=$kia_adv_ratelimit
 		;;
 esac
 
@@ -56,6 +66,11 @@ ARGS+='"batterySize": "'"$akkug"'", '
 ARGS+='"efficiency": "'"$efficiency"'", '
 ARGS+='"abrpEnable": "'"$abrp_enable"'", '
 ARGS+='"abrpToken": "'"$abrp_token"'", '
+ARGS+='"advEnable": "'"$advanced"'", '
+ARGS+='"advCacheValid": "'"$adv_cachevalid"'", '
+ARGS+='"adv12vLimit": "'"$adv_12v"'", '
+ARGS+='"advIntUnplug": "'"$adv_interval_unplug"'", '
+ARGS+='"advRateLimit": "'"$adv_ratelimit"'", '
 ARGS+='"ramDiskDir": "'"$RAMDISKDIR"'", '
 ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 ARGS+='}'

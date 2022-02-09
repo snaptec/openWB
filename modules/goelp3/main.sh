@@ -36,16 +36,21 @@ if [[ $? == "0" ]] ; then
 	if [[ $llv3 =~ $re ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llvs23
 	fi
-
 	llkwh=$(echo $output | jq -r '.eto')
 	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
 	if [[ $llkwh =~ $rekwh ]] ; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs2
 	fi
-#car status 1 Ladestation bereit, kein Auto
-#car status 2 Auto lädt
-#car status 3 Warte auf Fahrzeug
-#car status 4 Ladung beendet, Fahrzeug verbunden
+	rfid=$(echo $output | jq -r '.uby')
+	oldrfid=$(</var/www/html/openWB/ramdisk/tmpgoelp3rfid)
+	if [[ $rfid != $oldrfid ]] ; then
+		echo $rfid > /var/www/html/openWB/ramdisk/readtag
+		echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp3rfid
+	fi
+	#car status 1 Ladestation bereit, kein Auto
+	#car status 2 Auto lädt
+	#car status 3 Warte auf Fahrzeug
+	#car status 4 Ladung beendet, Fahrzeug verbunden
 	car=$(echo $output | jq -r '.car')
 	if [[ $car == "1" ]] ; then
 		echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3

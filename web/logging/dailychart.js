@@ -184,7 +184,7 @@ var isSSL = location.protocol == 'https:';
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
-	//Gets Called if the connection has sucessfully been established
+	//Gets Called if the connection has been established
 	onSuccess: function () {
 		retries = 0;
 		thevalues.forEach(function(thevar) {
@@ -198,7 +198,7 @@ var options = {
 	}
 }
 
-//Creates a new Messagvar boolDisplayDevice1t1;
+//Creates a new message var boolDisplayDevice1t1;
 
 //ing.Message Object and sends it
 var publish = function (payload, topic) {
@@ -214,7 +214,7 @@ client.connect(options);
 var url_string = window.location.href
 var url = new URL(url_string);
 var graphdate = url.searchParams.get("date");
-if ( graphdate == null) {
+if (graphdate == null) {
 	var today = new Date();
 	var dd = String(today.getDate()).padStart(2, '0');
 	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!

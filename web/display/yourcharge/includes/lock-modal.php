@@ -14,7 +14,7 @@
             </div>
             <!-- modal body -->
             <div class="modal-body">
-<span class="headline">Pin eingeben</span>
+                <span class="headline">Pin eingeben</span>
                 <div id="successIcon" class="PINbutton success successIcon">
                     <div class="icon">
                         <?= file_get_contents("yourcharge/icons/check-solid.svg"); ?>
