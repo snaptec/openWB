@@ -825,15 +825,6 @@
 							<div id="socmtesla" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc_tesla_username" class="col-md-4 col-form-label">E-Mail</label>
-										<div class="col">
-											<input class="form-control" type="email" name="soc_tesla_username" id="soc_tesla_username" value="<?php echo $soc_tesla_usernameold ?>">
-											<span class="form-text small">
-												Email Adresse des Tesla Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
 										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
 											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_tesla_username" value="1">Bei Tesla anmelden</button>
