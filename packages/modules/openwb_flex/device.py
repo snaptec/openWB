@@ -1,4 +1,4 @@
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -15,10 +15,9 @@ def get_default_config() -> dict:
         "name": "OpenWB-Kit flex",
         "type": "openwb_flex",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip_address": "192.168.193.15",
-            "port": "8899"
+            "port": 8899
         }
     }
 
@@ -64,7 +63,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, ip_address: str, port: int, id: int, num: Optional[int]):
+def read_legacy(component_type: str, version: int, ip_address: str, port: int, id: int, num: Optional[int] = None):
     """ Ausführung des Moduls als Python-Skript
     """
     COMPONENT_TYPE_TO_MODULE = {
@@ -98,8 +97,5 @@ def read_legacy(component_type: str, version: int, ip_address: str, port: int, i
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Modul openwb_flex")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

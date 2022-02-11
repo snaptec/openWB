@@ -33,8 +33,8 @@
 
             <!-- Linke Spalte (Buttons)-->
             <div class="col-2 pl-1 pr-0">
-                <h4 id="date" class="text-center text-light pt-5">19.11.2020</h4>
-                <h4 id="time" class="text-center text-light pb-5 mb-3">12:36</h4>
+                <h4 id="date" class="text-center text-light pt-3">11.11.2020</h4>
+                <h4 id="time" class="text-center text-light pb-2 mb-1">11:11</h4>
                 <button class="btn btn-block btn-secondary display-button p-4" id="powerSelectButton" type="button">
                     <span><i class="fas fa-bolt"></i>&nbsp;&nbsp; Aktuell</span>
                 </button>
@@ -51,7 +51,12 @@
                     type="button">
                     <span><i class="fas fa-info-circle"></i>&nbsp;&nbsp; Status</span>
                 </button>
-                <div id="displaylock" class="mt-5">
+
+                <button class="btn btn-block btn-outline-secondary display-button  p-4" id="codeButton" type="button">
+                    <span><i class="fas fa-keyboard"></i>&nbsp;&nbsp; Code</span>
+                </button>
+
+                <div id="displaylock" class="mt-2">
                     <button class="btn btn-block btn-outline-secondary display-button p-4" id="lockButton"
                         type="button">
                         <i class="fas fa-lock text-danger "></i>
@@ -86,6 +91,70 @@
             </div>
         </div>
     </div>
+
+    <!-- Code -->
+    <div class="modal" id="codeModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header ">
+                    <div class="col-1">&nbsp;</div>
+                    <div class="col">
+                        <div class="status-title">Code eingeben</div>
+                    </div>
+                    <div class="col-1 pr-0">
+                        <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <div id="code" class="code ">
+                        <div id="PINcode" class="text-center">
+                            <input id="PINbox" type="text" value="" name="PINbox" disabled="disabled">
+                            <br>
+                            <input type="button" class="PINbutton" name="1" value="1" id="1" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton" name="2" value="2" id="2" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton" name="3" value="3" id="3" onclick="addNumber(this);">
+                            <br>
+                            <input type="button" class="PINbutton" name="4" value="4" id="4" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton" name="5" value="5" id="5" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton" name="6" value="6" id="6" onclick="addNumber(this);">
+                            <br>
+                            <input type="button" class="PINbutton" name="7" value="7" id="7" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton" name="8" value="8" id="8" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton" name="9" value="9" id="9" onclick="addNumber(this);">
+                            <br>
+                            <input type="button" class="PINbutton clear" name="-" value="clear" id="-"
+                                onclick="clearForm(this);">
+                            <input type="button" class="PINbutton" name="0" value="0" id="0" onclick="addNumber(this);">
+                            <input type="button" class="PINbutton enter" name="+" value="enter" id="+"
+                                onclick="submitForm(PINbox);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function addNumber(e) {
+            var v = $("#PINbox").val();
+            $("#PINbox").val(v + e.value);
+        }
+
+        function clearForm(e) {
+            $("#PINbox").val("");
+        }
+
+        function submitForm(e) {
+            console.log ("publishing: " + e.value)
+            publish(e.value, "openWB/set/system/SimulateRFID");
+            $("#PINbox").val("");
+            $("#codeModal").modal("hide");
+        };
+    </script>
+    </div>
+
 
     <!-- Status -->
     <div class="modal" id="statusModal">
@@ -328,12 +397,7 @@
                                             min="2" max="100" step="2" value="2"
                                             data-topicprefix="openWB/config/get/sofort/">
                                     </div>
-                                    <!--  <div class="col-4 d-flex justify-content-end">
-                                        <input class="btn btn-warning btn-lg modal-button resetEnergyToCharge"
-                                            type="button" id="lp/1/resetEnergyToCharge"
-                                            value="Energiemenge zurücksetzen"
-                                            data-topicprefix="openWB/config/get/sofort/">
-                                    </div> -->
+                                    
                                 </div> <!-- end limit energy -->
                                 <!-- options if limit is set to EV SoC (2) -->
                                 <div class="socLimitSettings form-row vaRow form-group hide pb-0 mb-0" data-option="2">
@@ -471,7 +535,7 @@
 
             function submitLockForm(e) {
                 $.get(
-                    { url: "display/colors/checklock.php?pin=" + $('#Lockbox').val(), cache: false },
+                    {url: "display/colors/checklock.php?pin=" + $('#Lockbox').val(), cache: false},
                     function (data) {
                         if (data == 1) {
                             lockDisplay(false);
@@ -682,13 +746,13 @@
                         <div class="row justify-content-center">
                             <div class="col-sm-5 py-1">
                                 <button id="evPriorityBtn" type="button"
-                                    class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-priority="1">
+                                    class="modal-button priorityModeBtn btn btn-lg btn-block btn-secondary" data-priority="1">
                                     EV <span class="fas fa-car">&nbsp;</span>
                                 </button>
                             </div>
                             <div class="col-sm-5 py-1">
                                 <button id="batteryPriorityBtn" type="button"
-                                    class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-priority="0">
+                                    class="modal-button priorityModeBtn btn btn-lg btn-block btn-secondary" data-priority="0">
                                     Speicher <span class="fas fa-car-battery">&nbsp;</span>
                                 </button>
                             </div>
@@ -712,7 +776,7 @@
                     <div class="row">
 
                         <div class="col pt-4 px-3">
-                            <button type="button" class="btn btn-info btn-block btn-lg" data-dismiss="modal"><i
+                            <button type="button" class="modal-button btn btn-info btn-block btn-lg" data-dismiss="modal"><i
                                     class="fas fa-check"></i>&nbsp;&nbsp; OK</button>
                         </div>
                     </div>
@@ -814,7 +878,7 @@
 
         window.setInterval(function () {
             $.get(
-                { url: "display/colors/checklock.php?lock=1", cache: false },
+                {url: "display/colors/checklock.php?lock=1", cache: false},
                 function (data) {
                     if (data == "1") {
                         displaypinaktiv = 1;
@@ -895,7 +959,7 @@
 
             // display lock
             $.get(
-                { url: "display/colors/checklock.php?lock=1", cache: false },
+                {url: "display/colors/checklock.php?lock=1", cache: false},
                 function (data) {
                     if (data == "1") {
                         displaypinaktiv = 1;

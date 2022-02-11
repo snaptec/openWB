@@ -15,7 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/siemens/device.py "counter" "${bezug1_ip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.siemens.device" "counter" "${bezug1_ip}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

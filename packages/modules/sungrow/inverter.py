@@ -5,7 +5,7 @@ from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusDataType
+from modules.common.modbus import ModbusDataType, Endian
 from modules.common.store import get_inverter_value_store
 
 
@@ -30,7 +30,9 @@ class SungrowInverter:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-        power = self.__tcp_client.read_holding_registers(5016, ModbusDataType.INT_32, unit=1) * -1
+        with self.__tcp_client:
+            power = self.__tcp_client.read_input_registers(5016, ModbusDataType.INT_32,
+                                                           wordorder=Endian.Little, unit=1) * -1
 
         topic_str = "openWB/set/system/device/" + \
             str(self.__device_id)+"/component/" + \

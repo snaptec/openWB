@@ -45,10 +45,6 @@
 				list($key, $value) = explode("=", $line, 2);
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-			// read available vehicles for EVCC SoC module from web API
-			$soc_evcc_vehicles = json_decode(file_get_contents('https://cloud.evcc.io/api/vehicles'), true);
-			$firstentry=array("id" => "none", "name" => "Bitte auswählen");
-			array_unshift($soc_evcc_vehicles , $firstentry);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -487,7 +483,6 @@
 											<option <?php if($ladeleistungmodulold == "mpm3pmll") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
 											<option <?php if($ladeleistungmodulold == "sdm120modbusll") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
 											<option <?php if($ladeleistungmodulold == "sdm630modbusll") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
-											<option <?php if($ladeleistungmodulold == "smaemd_ll") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
 											<option <?php if($ladeleistungmodulold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 										</optgroup>
 										<optgroup label="generische Module">
@@ -701,19 +696,6 @@
 									Keine Konfiguration erforderlich.
 								</div>
 							</div>
-							<div id="llsma" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="smaemdllid" class="col-md-4 col-form-label">Seriennummer</label>
-										<div class="col">
-											<input class="form-control" type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>">
-											<span class="form-text small">
-												Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben.
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
 							<div id="mqttll" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.<br>
@@ -747,6 +729,7 @@
 										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodulold == "soc_aiways") echo "selected" ?> value="soc_aiways">Aiways</option>
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
@@ -761,7 +744,8 @@
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
-										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID-alt</option>
+										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -1160,6 +1144,49 @@
 									</div>
 								</div>
 							</div>
+							<div id="socaiways" class="hide">
+                                <div class="form-group">
+                                    <div class="alert alert-info">
+                                        Anmeldedaten fuer den Aiways U5
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
+                                            <span class="form-text small">
+                                                Aiways Account Name (nicht die E-Mail-Adresse)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
+                                        <div class="col">
+											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
+                                            <span class="form-text small">
+                                                Aiways Passwort
+                                            </span>
+                                        </div>
+                                    </div>
+									<div class="form-row mb-1">
+                                        <label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
+                                            <span class="form-text small">
+                                                 VIN des Fahrzeugs
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+                                        <div class="col">
+											<input class="form-control" type="text" name="soc_aiways_intervall" id="soc_aiways_intervall" value="<?php echo $soc_aiways_intervallold ?>">
+                                            <span class="form-text small">
+                                                Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>						
 							<div id="socmaudi" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -1224,6 +1251,55 @@
 										</div>
 									</div>
 
+								</div>
+							</div>
+							<div id="socmvwid" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
+											<span class="form-text small">
+												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervall" id="soc_id_intervall" value="<?php echo $soc_id_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socvag" class="hide">
@@ -1295,17 +1371,37 @@
 							<div id="socevcc" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<label for="soc_evcc_select_vehicle_lp1" class="col-md-4 col-form-label">Unterstützte Fahrzeuge</label>
 										<div class="col">
-											<select name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" class="form-control">
-												<?php
-													foreach($soc_evcc_vehicles as $item => $value)
-													{
-														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp1old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
-													}
-												?>
-											</select>
-											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+											<div class="input-group">
+												<div class="input-group-prepend clickable">
+													<div id="soc_evcc_load_vehicles_lp1" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_evcc_select_vehicle_lp1" class="form-control" readonly>
+													<option value="">-- Bitte aktualisieren --</option>
+												</select>
+											</div>
+											<span class="form-text small">
+												Die Auswahlliste dient nur der einfachen Eingabe des Fahrzeugtyps.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_evcc_vehicle_id_lp1" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_evcc_type_lp1" id="soc_evcc_type_lp1" value="<?php echo $soc_evcc_type_lp1old ?>">
+											</div>
+											<span class="form-text small">
+												Dies ist der intern verwendete Typ, nicht der lesbare Name aus der Auswahlliste.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -1363,6 +1459,45 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$('#soc_evcc_select_vehicle_lp1').change(function(){
+										$('#soc_evcc_type_lp1').val($(this).val());
+									});
+
+									$('#soc_evcc_load_vehicles_lp1').click(function(){
+										$('#soc_evcc_load_vehicles_lp1').removeClass("bg-danger");
+										$('#soc_evcc_load_vehicles_lp1').removeClass("bg-success");
+										$('#soc_evcc_load_vehicles_lp1').addClass("bg-warning");
+										$(this).find('.fa-sync').addClass('fa-spin');
+										$("#soc_evcc_select_vehicle_lp1").empty();
+										$.ajax({
+											type: "GET",
+											url: "https://cloud.evcc.io/api/vehicles",
+											success: function(vehicledata){
+												$('#soc_evcc_load_vehicles_lp1').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp1').addClass("bg-success");
+												var vehicleid = $('#soc_evcc_type_lp1').val();
+												$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_evcc_select_vehicle_lp1');
+												vehicledata.forEach(function(vehicle){
+													newVehicle = $("<option/>").val(vehicle.id).text(vehicle.name);
+													if( vehicleid == vehicle.id ){
+														newVehicle.attr('selected','selected');
+													}
+													newVehicle.appendTo('#soc_evcc_select_vehicle_lp1');
+												});
+												$('#soc_evcc_select_vehicle_lp1').attr('readonly', false);
+											},
+											error: function(errMsg) {
+												$('#soc_evcc_load_vehicles_lp1').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp1').addClass("bg-danger");
+												alert("Fahrzeuge konnten nicht abgerufen werden!");
+											},
+											complete: function(){
+												$('#soc_evcc_load_vehicles_lp1').find('.fa-sync').removeClass('fa-spin');
+											}
+										});
+									});
+								</script>
 							</div>
 							<div id="socmhttp" class="hide">
 								<div class="form-group">
@@ -2010,12 +2145,12 @@
 										<label for="soc_tronity_select_vehicle_lp1" class="col-md-4 col-form-label">Fahrzeug</label>
 										<div class="col">
 											<div class="input-group">
-												<div class="input-group-prepend">
+												<div class="input-group-prepend clickable">
 													<div id="soc_tronity_load_vehicles_lp1" class="input-group-text">
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" disabled>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -2093,7 +2228,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp1');
 															});
-															$('#soc_tronity_select_vehicle_lp1').attr('disabled', false);
+															$('#soc_tronity_select_vehicle_lp1').attr('readonly', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -2218,7 +2353,6 @@
 							hideSection('#llmsdm');
 							hideSection('#llmpm3pm');
 							hideSection('#llswifi');
-							hideSection('#llsma');
 							hideSection('#sdm120div');
 							hideSection('#rs485lanlp1');
 							hideSection('#llmfsm');
@@ -2242,9 +2376,6 @@
 							if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 								showSection('#llmsdm');
 								showSection('#rs485lanlp1');
-							}
-							if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-								showSection('#llsma');
 							}
 							if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
 								showSection('#sdm120div');
@@ -2280,8 +2411,10 @@
 							hideSection('#soccarnet');
 							hideSection('#socmzerong');
 							hideSection('#socmeq');
+							hideSection('#socaiways');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
+							hideSection('#socmvwid');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2317,6 +2450,9 @@
 								showSection('#socoldevccwarning');
 								showSection('#socmid');
 							}
+							if($('#socmodul').val() == 'soc_vwid') {
+								showSection('#socmvwid');
+							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
 								showSection('#socvag');
@@ -2331,6 +2467,9 @@
 								showSection('#socsupportinfo');
 								showSection('#socmkia');
 							}
+							if($('#socmodul').val() == 'soc_aiways') {
+                                showSection('#socaiways');
+                            }
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
@@ -2671,7 +2810,7 @@
 							</div>
 						</div>
 						<div id="evsecontwcmanagers1" class="hide">
-							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp2">
+							<input type="hidden" name="ladeleistungs1modul" value="twcmanagerlp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<div class="col-md-4">
@@ -2960,6 +3099,7 @@
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodul1old == "soc_aiwayslp2") echo "selected" ?> value="soc_aiwayslp2">Aiways</option>
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
@@ -2974,7 +3114,8 @@
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID-alt</option>
+										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
@@ -3163,6 +3304,46 @@
 									</div>
 								</div>
 							</div>
+							<div id="socaiwayslp2" class="hide">
+                                <div class="form-group">
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
+                                            <span class="form-text small">
+                                                Aiways Account Name (nicht die E-Mail-Adresse)
+                                            </span>
+                                        </div>
+                                    </div>
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_pass" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_aiwayslp2_pass" id="soc_aiwayslp2_pass" value="<?php echo $soc_aiwayslp2_passold ?>">
+											<span class="form-text small">
+												Aiways Passwort
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_vin" id="soc_aiwayslp2_vin" value="<?php echo $soc_aiwayslp2_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_intervall" id="soc_aiwayslp2_intervall" value="<?php echo $soc_aiwayslp2_intervallold ?>">
+											<span class="form-text small">
+												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+											</span>
+										</div>
+									</div>
+								</div>
+                            </div>
 							<div id="soccarnetlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3961,12 +4142,12 @@
 										<label for="soc_tronity_select_vehicle_lp2" class="col-md-4 col-form-label">Fahrzeug</label>
 										<div class="col">
 											<div class="input-group">
-												<div class="input-group-prepend">
+												<div class="input-group-prepend clickable">
 													<div id="soc_tronity_load_vehicles_lp2" class="input-group-text">
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" disabled>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -4025,7 +4206,7 @@
 																}
 																newVehicle.appendTo('#soc_tronity_select_vehicle_lp2');
 															});
-															$('#soc_tronity_select_vehicle_lp2').attr('disabled', false);
+															$('#soc_tronity_select_vehicle_lp2').attr('readonly', false);
 														},
 														error: function(errMsg) {
 															alert("Fahrzeuge konnten nicht abgerufen werden!");
@@ -4046,17 +4227,37 @@
 							<div id="socevcclp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label class="col-md-4 col-form-label">Fahrzeugtyp</label>
+										<label for="soc_evcc_select_vehicle_lp2" class="col-md-4 col-form-label">Unterstützte Fahrzeuge</label>
 										<div class="col">
-											<select name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" class="form-control">
-												<?php
-													foreach($soc_evcc_vehicles as $item => $value)
-													{
-														echo sprintf( '<option %svalue="%s">%s</option>', ($soc_evcc_type_lp2old == $value["id"]) ? "selected " : "", $value["id"], $value["name"] );
-													}
-												?>
-											</select>
-											<span class="form-text small">Auswahl Fahrzeugtyp</span>
+											<div class="input-group">
+												<div class="input-group-prepend clickable">
+													<div id="soc_evcc_load_vehicles_lp2" class="input-group-text">
+														<i class="fas fa-sync"></i>
+													</div>
+												</div>
+												<select id="soc_evcc_select_vehicle_lp2" class="form-control" readonly>
+													<option value="">-- Bitte aktualisieren --</option>
+												</select>
+											</div>
+											<span class="form-text small">
+												Die Auswahlliste dient nur der einfachen Eingabe des Fahrzeugtyps.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_evcc_vehicle_id_lp2" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<div class="col">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text">
+														<i class="fas fa-car"></i>
+													</div>
+												</div>
+												<input required readonly class="form-control" type="text" name="soc_evcc_type_lp2" id="soc_evcc_type_lp2" value="<?php echo $soc_evcc_type_lp2old ?>">
+											</div>
+											<span class="form-text small">
+												Dies ist der intern verwendete Typ, nicht der lesbare Name aus der Auswahlliste.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -4096,6 +4297,45 @@
 										</div>
 									</div>
 								</div>
+								<script>
+									$('#soc_evcc_select_vehicle_lp2').change(function(){
+										$('#soc_evcc_type_lp2').val($(this).val());
+									});
+
+									$('#soc_evcc_load_vehicles_lp2').click(function(){
+										$('#soc_evcc_load_vehicles_lp2').removeClass("bg-danger");
+										$('#soc_evcc_load_vehicles_lp2').removeClass("bg-success");
+										$('#soc_evcc_load_vehicles_lp2').addClass("bg-warning");
+										$(this).find('.fa-sync').addClass('fa-spin');
+										$("#soc_evcc_select_vehicle_lp2").empty();
+										$.ajax({
+											type: "GET",
+											url: "https://cloud.evcc.io/api/vehicles",
+											success: function(vehicledata){
+												$('#soc_evcc_load_vehicles_lp2').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp2').addClass("bg-success");
+												var vehicleid = $('#soc_evcc_type_lp2').val();
+												$("<option/>").val('').text("-- Bitte auswählen --").appendTo('#soc_evcc_select_vehicle_lp2');
+												vehicledata.forEach(function(vehicle){
+													newVehicle = $("<option/>").val(vehicle.id).text(vehicle.name);
+													if( vehicleid == vehicle.id ){
+														newVehicle.attr('selected','selected');
+													}
+													newVehicle.appendTo('#soc_evcc_select_vehicle_lp2');
+												});
+												$('#soc_evcc_select_vehicle_lp2').attr('readonly', false);
+											},
+											error: function(errMsg) {
+												$('#soc_evcc_load_vehicles_lp2').removeClass("bg-warning");
+												$('#soc_evcc_load_vehicles_lp2').addClass("bg-danger");
+												alert("Fahrzeuge konnten nicht abgerufen werden!");
+											},
+											complete: function(){
+												$('#soc_evcc_load_vehicles_lp2').find('.fa-sync').removeClass('fa-spin');
+											}
+										});
+									});
+								</script>
 							</div>
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
@@ -4289,6 +4529,9 @@
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
+							if($('#socmodul1').val() == 'soc_aiwayslp2') {
+                                showSection('#socaiwayslp2');
+                            }
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socoldevccwarninglp2');
 								showSection('#socmuser2');
@@ -4310,6 +4553,13 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+							}
+							if($('#socmodul1').val() == 'soc_vwidlp2') {
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_vaglp2') {
 								showSection('#socoldevccwarninglp2');

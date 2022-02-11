@@ -13,9 +13,8 @@ def get_default_config() -> dict:
         "name": "Siemens Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
-            "ip_address": "192.168.0.12"
+        "configuration": {
+            "ip_address": "192.168.0.12"  # ToDo: move IP to device
         }
     }
 
@@ -34,7 +33,8 @@ class SiemensCounter:
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
-        power = self.__tcp_client.read_holding_registers(14, ModbusDataType.INT_32, unit=1)
+        with self.__tcp_client:
+            power = self.__tcp_client.read_holding_registers(14, ModbusDataType.INT_32, unit=1)
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]

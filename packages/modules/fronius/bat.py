@@ -12,10 +12,7 @@ def get_default_config() -> dict:
         "name": "Fronius Speicher",
         "id": 0,
         "type": "bat",
-        "configuration":
-        {
-            "gen24": False
-        }
+        "configuration": {}
     }
 
 
@@ -29,7 +26,7 @@ class FroniusBat:
         self.__store = get_bat_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self, bat: bool) -> None:
+    def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         meter_id = str(self.device_config["meter_id"])
 

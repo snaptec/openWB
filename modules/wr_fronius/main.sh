@@ -20,11 +20,10 @@ if [[ -z "$debug" ]]; then
 fi
 
 openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
-openwbDebugLog ${DMOD} 2 "WR Gen 24: ${wrfroniusisgen24}"
 openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
 openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "inverter" "${wrfroniusip}" "0" "${wrfroniusisgen24}" "0" "0" "${wrfronius2ip}" "${speichermodul}" "1" 2>>$MYLOGFILE
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "inverter" "${wrfroniusip}" "0" "0" "0" "${wrfronius2ip}" "${speichermodul}" "1" 2>>$MYLOGFILE
 
 pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt

@@ -33,6 +33,7 @@ class WbData {
 		this.etMaxPrice = 0;
 		this.etPriceList = "";
 		this.isEtEnabled = false;
+		this.rfidConfigured = false;
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
@@ -126,6 +127,9 @@ class WbData {
 			.on("click", switchToEnergyView);
 		d3.select("button#statusButton")
 			.on("click", showStatus);
+		d3.select("button#codeButton")
+			.on("click", showCode);
+			
 		d3.select(".minpvRangeInput")
 			.on("input", function () { updateMinpvRangeInput(this.value) });
 		d3.select(".sofortRangeInput")
@@ -136,7 +140,7 @@ class WbData {
 			.on("input", function () { updateEnergyRangeInput(this.value) });
 		d3.select(".maxPriceInput")
 			.on("input", function () { updateMaxPriceInput(this.value) });
-
+		d3.select("#codeButton").classed ("hide", !this.rfidConfigured)
 		powerMeter.init()
 		powerGraph.init()
 		yieldMeter.init()
@@ -188,6 +192,10 @@ class WbData {
 				break;
 			case 'chargeMode':
 				chargePointList.updateValues();
+				break;
+			case 'rfidConfigured':
+				d3.select('#codeButton').classed ("hide", (!value))
+				break
 			default:
 				break;
 		}
@@ -391,18 +399,22 @@ class SHDevice {
 };
 
 function formatWatt(watt) {
-	if (watt >= 1000) {
+	if (watt >= 10000) {
+		return (Math.round(watt / 1000) + " kW");
+	} else if (watt >= 1000) {
 		return ((Math.round(watt / 100) / 10) + " kW");
 	} else {
 		return (watt + " W");
 	}
 }
 
-function formatWattH(watt) {
-	if (watt >= 1000) {
-		return ((Math.round(watt / 100) / 10) + " kWh");
+function formatWattH(watth) {
+	if (watth >= 10000) {
+		return (Math.round(watth / 1000) + " kWh");
+	} else if (watth >= 1000) {
+		return ((Math.round(watth / 100) / 10) + " kWh");
 	} else {
-		return (Math.round(watt) + " Wh");
+		return (Math.round(watth) + " Wh");
 	}
 }
 function formatTime(seconds) {
@@ -460,6 +472,11 @@ function switchToEnergyView() {
 }
 function showStatus() {
 	$("#statusModal").modal("show");
+}
+
+function showCode() {
+	$("#codeModal").modal("show");
+	
 }
 
 function updateMinpvRangeInput(value) {

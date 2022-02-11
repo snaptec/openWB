@@ -48,18 +48,18 @@ fi
 startregel=$(date +%s)
 function cleanup()
 {
- local endregel=$(date +%s)
- local t=$((endregel-startregel))
- 
- if [ "$t" -le "7" ] ; then   # 1..7 Ok
- 	openwbDebugLog "MAIN" 0 "**** Regulation loop needs $t seconds"
- elif [ "$t" -le "8" ] ; then # 8 Warning 
-	openwbDebugLog "MAIN" 0 "**** WARNING **** Regulation loop needs $t seconds"
- else                         # 9,10,... Fatal
-	openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
- 	openwbDebugLog "MAIN" 0 "**** FATAL Regulation loop needs $t seconds"
-	openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
-  fi
+	local endregel=$(date +%s)
+	local t=$((endregel-startregel))
+
+	if [ "$t" -le "7" ] ; then   # 1..7 Ok
+		openwbDebugLog "MAIN" 2 "**** Regulation loop needs $t seconds"
+	elif [ "$t" -le "8" ] ; then # 8 Warning 
+		openwbDebugLog "MAIN" 0 "**** WARNING **** Regulation loop needs $t seconds"
+	else                         # 9,10,... Fatal
+		openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
+		openwbDebugLog "MAIN" 0 "**** FATAL Regulation loop needs $t seconds"
+		openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
+	fi
 }
 trap cleanup EXIT
 ########### End Laufzeit protokolieren
@@ -169,15 +169,12 @@ goecheck
 nrgkickcheck
 
 #load charging vars
-if (( debug == 1)); then
-	startloadvars=$(date +%s)
-fi
+startloadvars=$(date +%s)
 loadvars
-if (( debug == 1)); then
-	endloadvars=$(date +%s)
-	timeloadvars=$((endloadvars-startloadvars))
-	openwbDebugLog "MAIN" 0 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
-fi
+endloadvars=$(date +%s)
+timeloadvars=$((endloadvars-startloadvars))
+openwbDebugLog "MAIN" 1 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
+
 if (( u1p3paktiv == 1 )); then
 	blockall=$(<ramdisk/blockall)
 	if (( blockall == 1 )); then

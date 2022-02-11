@@ -54,32 +54,32 @@ def update_using_cookie(address: str, cookie):
     status = read_status(address, cookie)
     # since 21.44.1 tesla adds the commit hash '21.44.1 c58c2df3'
     # so we split by whitespace and take the first element for comparison
-    firmwareversion = int(status["version"].split()[0])
-    log.debug('Version: ' + str(firmwareversion))
+    log.debug('Firmware: ' + status["version"])
+    firmwareversion = int(''.join(status["version"].split()[0].split(".")))
     # read aggregate
     aggregate = read_aggregate(address, cookie)
     # read additional info if firmware supports
     if firmwareversion >= 20490:
         meters_site = read_site(address, cookie)
         get_counter_value_store(1).set(CounterState(
-            imported = aggregate["site"]["energy_imported"],
-            exported = aggregate["site"]["energy_exported"],
-            power_all = aggregate["site"]["instant_power"],
-            voltages = [
-                meters_site["0"]["Cached_readings"]["v_l" + str(phase) + "n"] for phase in range (1,4)
+            imported=aggregate["site"]["energy_imported"],
+            exported=aggregate["site"]["energy_exported"],
+            power=aggregate["site"]["instant_power"],
+            voltages=[
+                meters_site["0"]["Cached_readings"]["v_l" + str(phase) + "n"] for phase in range(1, 4)
             ],
-            currents = [
+            currents=[
                 meters_site["0"]["Cached_readings"]["i_" + phase + "_current"] for phase in ["a", "b", "c"]
             ],
-            powers = [
+            powers=[
                 meters_site["0"]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]
             ]
         ))
     else:
         get_counter_value_store(1).set(CounterState(
-            imported = aggregate["site"]["energy_imported"],
-            exported = aggregate["site"]["energy_exported"],
-            power_all = aggregate["site"]["instant_power"]
+            imported=aggregate["site"]["energy_imported"],
+            exported=aggregate["site"]["energy_exported"],
+            power=aggregate["site"]["instant_power"]
         ))
 
 

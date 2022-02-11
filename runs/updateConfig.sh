@@ -23,6 +23,10 @@ updateConfig(){
 	if ! grep -Fq "smaemdbezugid=" $ConfigFile; then
 		echo "smaemdbezugid=1900123456" >> $ConfigFile
 	fi
+	# upgrade after renaming "smaemd_pv" -> "wr_smashm"
+	if grep -Fq "pvwattmodul=smaemd_pv" $ConfigFile; then
+		sed -i "s/^pvwattmodul=smaemd_pv/pvwattmodul=wr_smashm/g" $ConfigFile
+	fi
 	if ! grep -Fq "smaemdpvid=" $ConfigFile; then
 		echo "smaemdpvid=1900123456" >> $ConfigFile
 	fi
@@ -507,6 +511,12 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_tesla_intervall=" $ConfigFile; then
 		echo "soc_tesla_intervall=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_intervallladen=" $ConfigFile; then
+		echo "soc_id_intervallladen=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_intervall=" $ConfigFile; then
+		echo "soc_id_intervall=120" >> $ConfigFile
 	fi
 	if ! grep -Fq "releasetrain=" $ConfigFile; then
 		echo "releasetrain=stable" >> $ConfigFile
@@ -1462,7 +1472,13 @@ updateConfig(){
 		echo "solarview_hostname=192.168.0.31" >> $ConfigFile
 	fi
 	if ! grep -Fq "solarview_port=" $ConfigFile; then
-		echo "solarview_port=80" >> $ConfigFile
+		echo "solarview_port=15000" >> $ConfigFile
+	fi
+	if ! grep -Fq "solarview_timeout=" $ConfigFile; then
+		echo "solarview_timeout=1" >> $ConfigFile
+	fi
+	if ! grep -Fq "solarview_command_wr=" $ConfigFile; then
+		echo "solarview_command_wr=00*" >> $ConfigFile
 	fi
 	if ! grep -Fq "discovergyuser=" $ConfigFile; then
 		echo "discovergyuser=name@mail.de" >> $ConfigFile
@@ -2117,9 +2133,6 @@ updateConfig(){
 		echo "soc_evcc_vin_lp2=''" >> $ConfigFile
 		echo "soc_evcc_token_lp2=''" >> $ConfigFile
 	fi
-	if ! grep -Fq "wrfroniusisgen24=" $ConfigFile; then
-		echo "wrfroniusisgen24=0" >> $ConfigFile
-	fi
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		echo "cpunterbrechungmindestlaufzeitaktiv=0" >> $ConfigFile
 		echo "cpunterbrechungmindestlaufzeit=30" >> $ConfigFile
@@ -2134,10 +2147,10 @@ updateConfig(){
 		echo "alphav123=0" >> $ConfigFile
 	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
-		sed -i "s/socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
+		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
 	fi
 	if grep -Fq "socmodul1=soc_bluelinklp2" $ConfigFile; then
-		sed -i "s/socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
+		sed -i "s/^socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
 	fi
 	if ! grep -Fq "virtual_ip_eth0=" $ConfigFile; then
 		echo "virtual_ip_eth0='192.168.193.5'" >> $ConfigFile
@@ -2163,5 +2176,16 @@ updateConfig(){
 		echo "pv2flexid=1" >> $ConfigFile
 		echo "pv2flexversion=1" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_aiways_user=" $ConfigFile; then
+		echo "soc_aiways_user=''" >> $ConfigFile
+		echo "soc_aiways_pass=''" >> $ConfigFile
+		echo "soc_aiways_vin=''" >> $ConfigFile
+		echo "soc_aiways_intervall=''" >> $ConfigFile
+		echo "soc_aiwayslp2_user=''" >> $ConfigFile
+		echo "soc_aiwayslp2_pass=''" >> $ConfigFile
+		echo "soc_aiwayslp2_vin=''" >> $ConfigFile
+		echo "soc_aiwayslp2_intervall=''" >> $ConfigFile
+	fi
+
 	echo "Config file Update done."
 }

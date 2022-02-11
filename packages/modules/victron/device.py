@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -16,8 +16,7 @@ def get_default_config() -> dict:
         "name": "Victron",
         "type": "victron",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip_address": "192.168.193.15"
         }
     }
@@ -98,8 +97,5 @@ def read_legacy(
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Victron Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

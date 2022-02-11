@@ -1,5 +1,5 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/../.. && pwd)
 
 #datenauslesung erfolgt im PV Modul
-echo $watt < /var/www/html/openWB/ramdisk/wattbezug
-echo $watt
+cat "$OPENWBBASEDIR/ramdisk/wattbezug"

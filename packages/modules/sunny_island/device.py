@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -16,8 +16,7 @@ def get_default_config() -> dict:
         "name": "Sunny Island",
         "type": "sunny_island",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip_address": "192.168.193.15"
         }
     }
@@ -62,7 +61,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> None:
+def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat
     }
@@ -83,8 +82,5 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> Non
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Sunny Island Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)

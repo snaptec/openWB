@@ -39,12 +39,12 @@ def read_aggregate(address: str, cookie):
 
 def update_using_cookie(address: str, cookie):
     aggregate = read_aggregate(address, cookie)
-    pvwatt = aggregate["solar"]["instant_power"]
-    if pvwatt > 5:
-        pvwatt = pvwatt*-1
+    pv_watt = aggregate["solar"]["instant_power"]
+    if pv_watt > 5:
+        pv_watt = pv_watt*-1
     get_inverter_value_store(1).set(InverterState(
-        counter = aggregate["solar"]["energy_exported"],
-        power = pvwatt
+        counter=aggregate["solar"]["energy_exported"],
+        power=pv_watt
     ))
 
 

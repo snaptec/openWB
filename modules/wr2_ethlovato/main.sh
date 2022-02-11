@@ -17,7 +17,7 @@ fi
 
 #python3 ${OPENWBBASEDIR}/modules/wr_pvkitflex/test.py "2" ${pvflexip} ${pvflexport} ${pvflexid} >>${MYLOGFILE} 2>&1
 
-python3 ${OPENWBBASEDIR}/packages/modules/openwb/device.py "inverter" "${pvkitversion}" "2">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "inverter" "${pvkitversion}" "2">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pv2watt)
 echo $pvwatt

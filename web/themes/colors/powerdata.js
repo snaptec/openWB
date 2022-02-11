@@ -30,6 +30,7 @@ class WbData {
 			"month": this.graphDate.getMonth(),
 			"year": this.graphDate.getFullYear()
 		}
+		this.rfidConfigured = false;
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
@@ -187,6 +188,10 @@ class WbData {
 				case 'chargeMode':
 				priceChart.update();
 				chargePointList.update();
+				break
+			case 'rfidConfigured':
+				d3.select('#codeButton').classed ("hide", (!value))
+				break
 			default:
 				break;
 		}

@@ -22,6 +22,14 @@ try:
     solarview_timeout = int(sys.argv[3])
 except:
     solarview_timeout = 1
+try:
+    solarview_command_wr = str(sys.argv[4])
+except:
+    # Sende-Kommando (siehe SolarView-Dokumentation); Beispiele:
+    # '00*': Gesamte Anlage
+    # '01*': Wechselrichter 1
+    # '02*': Wechselrichter 2
+    solarview_command_wr = "00*"
 
 
 def DebugLog(message):
@@ -153,13 +161,10 @@ if solarview_port:
     if solarview_port < 1 or solarview_port > 65535:
         DebugLog("Invalid value "+str(solarview_port)+" for variable 'solarview_port'")
         exit(1)
+if solarview_command_wr == None or solarview_command_wr == "":
+    DebugLog("Missing value for variable 'solarview_command_wr'")
+    exit(1)
 
-# Sende-Kommando (siehe SolarView-Dokumentation); Beispiele:
-# '00*': Gesamte Anlage
-# '01*': Wechselrichter 1
-# '02*': Wechselrichter 2
-command="1:-00*"
-
-request(command)
+request(solarview_command_wr)
 
 exit(0)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Modul zum Auslesen von Alpha Ess Speichern, Zählern und Wechselrichtern.
 """
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -17,11 +17,13 @@ def get_default_config() -> dict:
     return {
         "name": "Alpha ESS",
         "type": "alpha_ess",
-        "id": 0
+        "id": 0,
+        "configuration": {}
     }
 
 
 alpha_ess_component_classes = Union[bat.AlphaEssBat, counter.AlphaEssCounter, inverter.AlphaEssInverter]
+default_unit_id = 85
 
 
 class Device(AbstractDevice):
@@ -56,7 +58,7 @@ class Device(AbstractDevice):
             for component in self._components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                    self._components[component].update(unit_id=default_unit_id)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
@@ -64,7 +66,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, num: Optional[int]) -> None:
+def read_legacy(component_type: str, version: int, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
@@ -88,8 +90,5 @@ def read_legacy(component_type: str, version: int, num: Optional[int]) -> None:
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Alpha Ess Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)
