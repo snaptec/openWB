@@ -1338,6 +1338,9 @@ updateConfig(){
 	if ! grep -Fq "bezug_victronip=" $ConfigFile; then
 		echo "bezug_victronip=192.168.15.3" >> $ConfigFile
 	fi
+	if ! grep -Fq "victron_energy_meter=" $ConfigFile; then
+		echo "victron_energy_meter=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "pushbsmarthome=" $ConfigFile; then
 		echo "pushbsmarthome=1" >> $ConfigFile
 	fi
