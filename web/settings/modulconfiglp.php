@@ -749,6 +749,11 @@
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
+								<div id="socmvwidinfo" class="mt-1 alert alert-info hide">
+									Für VW Fahrzeuge. Es wird benötigt:<br>
+									- We Connect (ID) Account aktiv<br>
+									- We Connect ID App eingerichtet - auch für nicht-ID!<br>
+								</div>
 								<div id="socoldevccwarning" class="mt-1 alert alert-danger hide">
 									Dieses Modul nutzt eine nicht mehr unterstützte Version von EVCC-SOC und wird nicht weiter gepflegt.
 								</div>
@@ -2451,6 +2456,7 @@
 								showSection('#socmid');
 							}
 							if($('#socmodul').val() == 'soc_vwid') {
+								showSection('#socmvwidinfo');
 								showSection('#socmvwid');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
@@ -3119,6 +3125,11 @@
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
+								<div id="socmvwidinfolp2" class="mt-1 alert alert-info hide">
+									Für VW Fahrzeuge. Es wird benötigt:<br>
+									- We Connect (ID) Account aktiv<br>
+									- We Connect ID App eingerichtet - auch für nicht-ID!<br>
+								</div>
 								<div id="socoldevccwarninglp2" class="mt-1 alert alert-danger hide">
 									Dieses Modul nutzt eine nicht mehr unterstützte Version von EVCC-SOC und wird nicht weiter gepflegt.
 								</div>
@@ -4509,6 +4520,8 @@
 							hideSection('#socevcclp2');
 							hideSection('#socmkialp2');
 							hideSection('#socoldevccwarninglp2');
+							hideSection('#socmvwidinfo');
+							hideSection('#socmvwidinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
 
@@ -4555,6 +4568,7 @@
 								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
+								showSection('#socmvwidinfolp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
