@@ -211,38 +211,38 @@ if [[ "$1" == "stop" ]]; then
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		oldlls1=$(<ramdisk/llsolls1)
-		echo $oldlls1 > ramdisk/tmpllsolls1
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep2ip -m "0"
+		echo "$oldlls1" > ramdisk/tmpllsolls1
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep2ip" -m "0"
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
 		oldlls2=$(<ramdisk/llsolls2)
-		echo $oldlls2 > ramdisk/tmpllsolls2
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep3ip -m "0"
+		echo "$oldlls2" > ramdisk/tmpllsolls2
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep3ip" -m "0"
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "extopenwb" ]]; then
 		oldlllp4=$(<ramdisk/llsolllp4)
-		echo $oldlllp4 > ramdisk/tmpllsolllp4
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "0"
+		echo "$oldlllp4" > ramdisk/tmpllsolllp4
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep4ip" -m "0"
 	fi
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "extopenwb" ]]; then
 		oldlllp5=$(<ramdisk/llsolllp5)
-		echo $oldlllp5 > ramdisk/tmpllsolllp5
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "0"
+		echo "$oldlllp5" > ramdisk/tmpllsolllp5
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep5ip" -m "0"
 	fi
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "extopenwb" ]]; then
 		oldlllp6=$(<ramdisk/llsolllp6)
-		echo $oldlllp6 > ramdisk/tmpllsolllp6
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "0"
+		echo "$oldlllp6" > ramdisk/tmpllsolllp6
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep6ip" -m "0"
 	fi
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "extopenwb" ]]; then
 		oldlllp7=$(<ramdisk/llsolllp7)
-		echo $oldlllp7 > ramdisk/tmpllsolllp7
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "0"
+		echo "$oldlllp7" > ramdisk/tmpllsolllp7
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep7ip" -m "0"
 	fi
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "extopenwb" ]]; then
 		oldlllp8=$(<ramdisk/llsolllp8)
-		echo $oldlllp8 > ramdisk/tmpllsolllp8
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "0"
+		echo "$oldlllp8" > ramdisk/tmpllsolllp8
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep8ip" -m "0"
 	fi
 
 	if [[ $evsecon == "ipevse" ]]; then
@@ -308,35 +308,35 @@ if [[ "$1" == "start" ]]; then
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		oldll=$(<ramdisk/tmpllsoll)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$oldll"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep1ip" -m "$oldll"
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		oldlls1=$(<ramdisk/tmpllsolls1)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep2ip -m "$oldlls1"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep2ip" -m "$oldlls1"
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
 		oldlls2=$(<ramdisk/tmpllsolls2)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep3ip -m "$oldlls1"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep3ip" -m "$oldlls1"
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "extopenwb" ]]; then
 		oldlllp4=$(<ramdisk/tmpllsolllp4)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "$oldlllp4"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep4ip" -m "$oldlllp4"
 	fi
 	if [[ $lastmanagementlp5 == 1 && $evseconlp5 == "extopenwb" ]]; then
 		oldlllp5=$(<ramdisk/tmpllsolllp5)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "$oldlllp5"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep5ip" -m "$oldlllp5"
 	fi
 	if [[ $lastmanagementlp6 == 1 && $evseconlp6 == "extopenwb" ]]; then
 		oldlllp6=$(<ramdisk/tmpllsolllp6)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "$oldlllp6"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep6ip" -m "$oldlllp6"
 	fi
 	if [[ $lastmanagementlp7 == 1 && $evseconlp7 == "extopenwb" ]]; then
 		oldlllp7=$(<ramdisk/tmpllsolllp7)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "$oldlllp7"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep7ip" -m "$oldlllp7"
 	fi
 	if [[ $lastmanagementlp8 == 1 && $evseconlp8 == "extopenwb" ]]; then
 		oldlllp8=$(<ramdisk/tmpllsolllp8)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep4ip -m "$oldlllp8"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep8ip" -m "$oldlllp8"
 	fi
 
 	if [[ $lastmanagement == 1 && $evsecons1 == "modbusevse" && $u1p3plp2aktiv == "1" ]]; then
