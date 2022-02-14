@@ -93,9 +93,9 @@ openwbDebugLog() {
 				;;
 		esac
 		if (( DEBUGLEVEL > 0 )); then
-			echo "$timestamp: $3 (LV$2) at $(caller 0)" >> $LOGFILE
+			echo "$timestamp: PID: $$: $3 (LV$2) at $(caller 0)" >> $LOGFILE
 		else
-			echo "$timestamp: $3 (LV$2)" >> $LOGFILE
+			echo "$timestamp: PID: $$: $3 (LV$2)" >> $LOGFILE
 		fi
 	fi
 }
