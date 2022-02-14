@@ -2456,6 +2456,7 @@
 								showSection('#socmid');
 							}
 							if($('#socmodul').val() == 'soc_vwid') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
 								showSection('#socsupportinfo');
 								showSection('#socmvwid');
 							}
@@ -4567,6 +4568,7 @@
 								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
 								showSection('#socsupportinfolp2');
 								showSection('#socmvwidinfolp2');
 								showSection('#socmuser2');
