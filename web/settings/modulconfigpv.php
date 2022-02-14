@@ -117,7 +117,7 @@
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Per MQTT zu schreiben:<br>
-								<span class="text-info">openWB/set/pv/1/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/1/W</span> PV-Erzeugungsleistung in Watt, int, positiv<br>
 								<span class="text-info">openWB/set/pv/1/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
 							</div>
 						</div>
@@ -1209,7 +1209,7 @@
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Per MQTT zu schreiben:<br>
-								<span class="text-info">openWB/set/pv/2/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/2/W</span> PV-Erzeugungsleistung in Watt, int, positiv<br>
 								<span class="text-info">openWB/set/pv/2/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
 							</div>
 						</div>
