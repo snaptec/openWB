@@ -3,6 +3,7 @@
 import json
 import logging
 from json import JSONDecodeError
+from typing import List
 import requests
 from requests import HTTPError
 
@@ -84,6 +85,5 @@ def update(address: str, email: str, password: str):
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(update)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

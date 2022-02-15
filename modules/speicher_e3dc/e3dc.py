@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import logging
 from statistics import mean
-from typing import Iterable
+from typing import Iterable, List
 
 from pymodbus.constants import Endian
 
@@ -58,7 +58,7 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
         _, counter_pv= SimCountFactory().get_sim_counter()().sim_count(pv_total, prefix="pv")
         get_inverter_value_store(1).set(InverterState(counter=counter_pv, power=pv_total))
 
-def main(address1: str, address2: str, read_external: int, pvmodul: str):
+def update(address1: str, address2: str, read_external: int, pvmodul: str):
     # read_external is 0 or 1
     log.debug("Beginning update")
     addresses = [address for address in [address1, address2] if address != "none"]
@@ -66,6 +66,5 @@ def main(address1: str, address2: str, read_external: int, pvmodul: str):
     update_e3dc_battery(addresses, read_external, pv_other)
     log.debug("Update completed successfully")
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(main)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

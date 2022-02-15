@@ -39,7 +39,7 @@ class BydParser(HTMLParser):
         return BatState(power=float(self.values["Power:"]) * 1000, soc=float(self.values["SOC:"][:-1]))
 
 
-def update_byd(bydhvip: str, bydhvuser: str, bydhvpass: str):
+def update(bydhvip: str, bydhvuser: str, bydhvpass: str):
     log.debug("Beginning update")
     response = requests.get('http://' + bydhvip + '/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
     response.raise_for_status()
@@ -47,6 +47,5 @@ def update_byd(bydhvip: str, bydhvuser: str, bydhvpass: str):
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(update_byd)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

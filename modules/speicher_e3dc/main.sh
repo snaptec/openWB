@@ -1,3 +1,21 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-python3 "$OPENWBBASEDIR/modules/speicher_e3dc/e3dc.py" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BAT"
+DMOD="MAIN"
+Debug=$debug
+
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+        MYLOGFILE="${RAMDISKDIR}/bat.log"
+fi
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_e3dc.e3dc" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" >>${MYLOGFILE} 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"

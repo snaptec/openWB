@@ -86,7 +86,7 @@ def update_solar_edge(client: ModbusClient,
     ))
 
 
-def update_solar_edge_cli(ipaddress: str,
+def update(ipaddress: str,
                           slave_id0: str,
                           slave_id1: str,
                           slave_id2: str,
@@ -108,6 +108,5 @@ def update_solar_edge_cli(ipaddress: str,
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(update_solar_edge_cli)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

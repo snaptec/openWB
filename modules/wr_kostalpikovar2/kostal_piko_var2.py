@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import logging
 import re
+from typing import List
 
 import requests
 
@@ -30,6 +31,5 @@ def update(num: int, wr_piko2_url: str, wr_piko2_user: str, wr_piko2_pass: str):
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(update)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)
