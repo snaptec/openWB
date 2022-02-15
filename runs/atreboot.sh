@@ -18,25 +18,25 @@ mkdir -p /var/www/html/openWB/web/backup
 touch /var/www/html/openWB/web/backup/.donotdelete
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
-sudo chmod 777 /var/www/html/openWB/openwb.conf
-sudo chmod 777 /var/www/html/openWB/smarthome.ini
-sudo chmod 777 /var/www/html/openWB/ramdisk
-sudo chmod 777 /var/www/html/openWB/ramdisk/
-sudo chmod 777 /var/www/html/openWB/web/files/*
+sudo chmod ugo=rwX /var/www/html/openWB/openwb.conf
+sudo chmod ugo=rwX /var/www/html/openWB/smarthome.ini
+sudo chmod ugo=rwX /var/www/html/openWB/ramdisk
+sudo chmod ugo=rwX /var/www/html/openWB/ramdisk/
+sudo chmod ugo=rwX /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
-sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
-sudo chmod -R 777 /var/www/html/openWB/modules/soc_eq
-sudo chmod -R 777 /var/www/html/openWB/modules/soc_tesla
+sudo chmod -R ugo=rwX /var/www/html/openWB/modules/soc_i3
+sudo chmod -R ugo=rwX /var/www/html/openWB/modules/soc_eq
+sudo chmod -R ugo=rwX /var/www/html/openWB/modules/soc_tesla
 
-sudo chmod 777 /var/www/html/openWB/web/files/*
+sudo chmod ugo=rwX /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 mkdir -p /var/www/html/openWB/web/logging/data/ladelog
 mkdir -p /var/www/html/openWB/web/logging/data/v001
-sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
+sudo chmod -R ugo=rwX /var/www/html/openWB/web/logging/data/
 sudo chmod +x /var/www/html/openWB/packages/*.sh
 
 # update openwb.conf
@@ -349,7 +349,7 @@ curl --connect-timeout 10 -d "update="$releasetrain$uuid"vers"$owbv"" -H "Conten
 echo "clear warning..."
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo "" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
-chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
+chmod ugo=rwX /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 
 # check for slave config and start handler
 if (( isss == 1 )); then
@@ -415,8 +415,8 @@ sudo git -C /var/www/html/openWB show --pretty='format:%ci [%h]' | head -n1 > /v
 commitId=`git -C /var/www/html/openWB log --format="%h" -n 1`
 echo $commitId > /var/www/html/openWB/ramdisk/currentCommitHash
 echo `git -C /var/www/html/openWB branch -a --contains $commitId | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs` > /var/www/html/openWB/ramdisk/currentCommitBranches
-sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitHash
-sudo chmod 777 /var/www/html/openWB/ramdisk/currentCommitBranches
+sudo chmod ugo=rwX /var/www/html/openWB/ramdisk/currentCommitHash
+sudo chmod ugo=rwX /var/www/html/openWB/ramdisk/currentCommitBranches
 
 # update broker
 echo "update broker..."
@@ -443,9 +443,9 @@ rm -rf /var/www/html/openWB/web/themes/dark19_01
 (sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m "$bootmodus") &
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m "$bootmodus") &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
-chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
-chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
-chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
+chmod ugo=rwX /var/www/html/openWB/ramdisk/lastregelungaktiv
+chmod ugo=rwX /var/www/html/openWB/ramdisk/smarthome.log
+chmod ugo=rwX /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 
 # update etprovider pricelist
 echo "etprovider..."
