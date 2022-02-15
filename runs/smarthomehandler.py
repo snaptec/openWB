@@ -61,7 +61,7 @@ for i in range(1, (numberOfSupportedDevices+1)):
     f = open(filename, 'w')
     f.write(str("0"))
     f.close()
-    os.chmod(filename, 0o777)
+    os.chmod(filename, 0o666)
 global numberOfDevices
 
 def cleardef(nummer):

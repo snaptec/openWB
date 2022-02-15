@@ -284,7 +284,7 @@ def fillcount(row, datestring, file_stringo, firstfile):
         f1 = open(file_stringo, 'w')
         f1.write(str(headerst))
         f1.close()
-        os.chmod(file_stringo, 0o777)
+        os.chmod(file_stringo, 0o666)
     else:
         f1 = open(file_stringo, 'a')
         excelstring = exceldate(countercsv[0])
@@ -329,7 +329,7 @@ def fillcounts(monhtrow, file_stringos, lastdate, lastzeit):
     line = line + str(0) + '\n'
     f1.write(str(line))
     f1.close()
-    os.chmod(file_stringos, 0o777)
+    os.chmod(file_stringos, 0o666)
     print('%s %s written' % (getTime(), file_stringos))
     for i in range(1, SUMCOLUMNSTART):
         if (i < len(monhtrow)):
@@ -396,13 +396,13 @@ def reyeardet(calcyear):
                 print('%s Yearerror %s inhalt %s' % (getTime(), file_stringis, str(e)))
     if (validdata == 1):
         f1.close()
-        os.chmod(file_stringo, 0o777)
+        os.chmod(file_stringo, 0o666)
         f1 = open(file_stringos, 'w')
         line = 'Anzahl Spalten,' + str(startspalten) + ',Letzes Datum,' + complastdate + ',Letzte Zeit,' + complastzeit + ', \n'
         f1.write(str(line))
         f1.write(str(headerline))
         f1.close()
-        os.chmod(file_stringos, 0o777)
+        os.chmod(file_stringos, 0o666)
         print('%s %s written' % (getTime(), file_stringos))
     return
 
