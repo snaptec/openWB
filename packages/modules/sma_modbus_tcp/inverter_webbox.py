@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Optional
 from modules.common import req
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -23,12 +24,14 @@ class SmaWebboxInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
+        self.__store.set(self.read_inverter_state())
+
+    def read_inverter_state(self) -> Optional[InverterState]:
         data = {'RPC': '{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}'}
         response = req.get_http_session().post(
             'http://' + self.__device_address + '/rpc', data=data, timeout=3).json()
 
-        inverter_state = InverterState(
+        return InverterState(
             counter=float(response["result"]["overview"][2]["value"]) * 1000,
             power=-int(response["result"]["overview"][0]["value"])
         )
-        self.__store.set(inverter_state)

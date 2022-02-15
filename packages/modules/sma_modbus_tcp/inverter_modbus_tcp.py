@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Optional
 from helpermodules.log import MainLogger
 from modules.common import modbus
 from modules.common.component_state import InverterState
@@ -29,19 +30,18 @@ class SmaModbusTcpInverter:
 
     def update(self) -> None:
         MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
+        self.__store.set(self.read_inverter_state())
+
+    def read_inverter_state(self) -> Optional[InverterState]:
         with self.__tcp_client:
             # AC Wirkleistung über alle Phasen (W) [Pac]:
             power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
+            if power == self.SMA_INT32_NAN:
+                power = 0
             # Gesamtertrag (Wh) [E-Total]:
             energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
 
-        if power == self.SMA_INT32_NAN:
-            MainLogger().debug("Power value is NaN - ignoring")
-            return
-
-        power = -max(power, 0)
-        inverter_state = InverterState(
-            power=power,
-            counter=energy
-        )
-        self.__store.set(inverter_state)
+            return InverterState(
+                power=-max(power, 0),
+                counter=energy
+            )

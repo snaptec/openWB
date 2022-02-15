@@ -9,9 +9,8 @@ from modules.common.component_state import InverterState
 from modules.sma_modbus_tcp import inverter_modbus_tcp
 from modules.sma_modbus_tcp import inverter_webbox
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_context import SingleComponentUpdateContext
+from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
 from modules.common.store import get_inverter_value_store
-from modules.common.store.ramdisk import files
 
 
 def get_default_config() -> dict:
@@ -70,7 +69,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, num: int) -> None:
+def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, num: int) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "inverter_modbus_tcp": inverter_modbus_tcp,
         "inverter_webbox": inverter_webbox
@@ -82,28 +81,26 @@ def read_legacy(component_type: str, ip1: str, webbox: int, ip2: str, ip3: str, 
         component_config = COMPONENT_TYPE_TO_MODULE["inverter_webbox"].get_default_config()
     else:
         component_config = COMPONENT_TYPE_TO_MODULE["inverter_modbus_tcp"].get_default_config()
-    component_config["id"] = num
+    component_config["id"] = 0
     dev.add_component(component_config)
-    log.MainLogger().debug('SMA ModbsuTCP address: ' + ip1)
-    log.MainLogger().debug('SMA ModbsuTCP Webbox: ' + str(webbox))
-    dev.update()
+    log.MainLogger().debug('SMA ModbusTCP address: ' + ip1)
+    log.MainLogger().debug('SMA ModbusTCP Webbox: ' + str(webbox))
 
-    power_total = files.pv[num - 1].power.read()
-    energy_total = files.pv[num - 1].energy.read()
-
+    i = 1
     for ip in [ip2, ip3, ip4]:
         if ip != "none":
-            device_config = get_default_config()
-            device_config["configuration"]["ip"] = ip
-            dev = Device(device_config)
             component_config = COMPONENT_TYPE_TO_MODULE["inverter_modbus_tcp"].get_default_config()
-            component_config["id"] = num
+            component_config["id"] = i
             dev.add_component(component_config)
-            log.MainLogger().debug('SMA ModbsuTCP address: ' + ip)
-            log.MainLogger().debug('SMA ModbsuTCP Webbox: ' + str(webbox))
-            dev.update()
-            power_total += files.pv[num - 1].power.read()
-            energy_total += files.pv[num - 1].energy.read()
+            log.MainLogger().debug('SMA ModbusTCP address: ' + ip)
+            i += 1
+
+    power_total, energy_total = 0, 0
+    with MultiComponentUpdateContext(dev._components):
+        for comp in dev._components.values():
+            inverter_state = comp.read_inverter_state()
+            power_total += inverter_state.power
+            energy_total += inverter_state.counter
 
     get_inverter_value_store(num).set(InverterState(counter=energy_total, power=power_total))
 
