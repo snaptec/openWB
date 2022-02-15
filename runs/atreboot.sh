@@ -21,7 +21,6 @@ sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod ugo=rwX /var/www/html/openWB/openwb.conf
 sudo chmod ugo=rwX /var/www/html/openWB/smarthome.ini
 sudo chmod ugo=rwX /var/www/html/openWB/ramdisk
-sudo chmod ugo=rwX /var/www/html/openWB/ramdisk/
 sudo chmod ugo=rwX /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 
