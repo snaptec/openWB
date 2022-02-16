@@ -26,6 +26,7 @@ from helpermodules.skip_while_unchanged import skip_while_unchanged
 
 log = logging.getLogger("legacy run server")
 openwb_conf_path = Path(__file__).parents[1] / "openwb.conf"
+sys.path.insert(0, str(Path(__file__).parents[1] / 'modules'))
 
 
 def read_all_bytes(connection: socket.socket):
