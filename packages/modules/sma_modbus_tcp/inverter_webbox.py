@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+import logging
 
-from helpermodules.log import MainLogger
 from modules.common import req
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -16,6 +16,9 @@ def get_default_config() -> dict:
     }
 
 
+log = logging.getLogger("SMA Webbox")
+
+
 class SmaWebboxInverter:
     def __init__(self, device_address: str, component_config: dict) -> None:
         self.__device_address = device_address
@@ -27,7 +30,7 @@ class SmaWebboxInverter:
         self.__store.set(self.read_inverter_state())
 
     def read_inverter_state(self) -> InverterState:
-        MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
+        log.debug("Komponente "+self.component_config["name"]+" auslesen.")
         data = {'RPC': '{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}'}
         response = req.get_http_session().post(
             'http://' + self.__device_address + '/rpc', data=data, timeout=3).json()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+import logging
 
-from helpermodules.log import MainLogger
 from modules.common import modbus
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -17,6 +17,9 @@ def get_default_config() -> dict:
     }
 
 
+log = logging.getLogger("SMA ModbusTCP")
+
+
 class SmaModbusTcpInverter:
 
     SMA_INT32_NAN = -0x80000000  # SMA uses this value to represent NaN
@@ -31,7 +34,7 @@ class SmaModbusTcpInverter:
         self.__store.set(self.read_inverter_state())
 
     def read_inverter_state(self) -> InverterState:
-        MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
+        log.debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
             # AC Wirkleistung über alle Phasen (W) [Pac]:
             power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
