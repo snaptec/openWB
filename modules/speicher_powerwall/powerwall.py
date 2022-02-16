@@ -8,7 +8,6 @@ import requests
 from requests import HTTPError
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import BatState
 from modules.common.store import get_bat_value_store, RAMDISK_PATH
 

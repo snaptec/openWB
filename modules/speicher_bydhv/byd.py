@@ -6,7 +6,6 @@ from typing import List, Tuple
 import requests
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import BatState
 from modules.common.store import get_bat_value_store
 

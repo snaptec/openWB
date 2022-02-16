@@ -2,11 +2,9 @@ import logging
 from typing import List
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.store import ramdisk_write, ramdisk_read_float
 from modules.common.store.ramdisk import files
 
-setup_logging_stdout()
 log = logging.getLogger("SoC Manual")
 
 
