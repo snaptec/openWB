@@ -18,18 +18,12 @@ mkdir -p /var/www/html/openWB/web/backup
 touch /var/www/html/openWB/web/backup/.donotdelete
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
+
 sudo chmod ugo=rwX /var/www/html/openWB/openwb.conf
 sudo chmod ugo=rwX /var/www/html/openWB/smarthome.ini
-sudo chmod ugo=rwX /var/www/html/openWB/ramdisk
-sudo chmod ugo=rwX /var/www/html/openWB/web/files/*
-sudo chmod -R +x /var/www/html/openWB/modules/*
-
-sudo chmod -R ugo=rwX /var/www/html/openWB/modules/soc_i3
-sudo chmod -R ugo=rwX /var/www/html/openWB/modules/soc_eq
-sudo chmod -R ugo=rwX /var/www/html/openWB/modules/soc_tesla
-
-sudo chmod ugo=rwX /var/www/html/openWB/web/files/*
-sudo chmod -R +x /var/www/html/openWB/modules/*
+sudo chmod -R ugo=rwX /var/www/html/openWB/ramdisk/
+sudo chmod -R ugo=rwX /var/www/html/openWB/web/files/
+sudo chmod -R ugo=rwx /var/www/html/openWB/modules/
 
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
