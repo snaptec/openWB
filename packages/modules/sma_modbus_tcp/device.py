@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-""" Modul zum Auslesen von sonnenBatterie Speichern.
-"""
+import itertools
+import logging
 from typing import Dict, Union, List
 
-from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.component_state import InverterState
 from modules.sma_modbus_tcp import inverter_modbus_tcp
 from modules.sma_modbus_tcp import inverter_webbox
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.store import get_inverter_value_store
+
+
+log = logging.getLogger("SMA Inverter")
 
 
 def get_default_config() -> dict:
@@ -41,7 +43,7 @@ class Device(AbstractDevice):
         try:
             self.device_config = device_config
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+device_config["name"])
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
@@ -56,53 +58,46 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading " + str(self._components))
+        log.debug("Start device reading " + str(self._components))
         if self._components:
-            for component in self._components:
+            for component in self._components.values():
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                with SingleComponentUpdateContext(component.component_info):
+                    component.update()
         else:
-            log.MainLogger().warning(
+            log.warning(
                 self.device_config["name"] +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
 
 def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, num: int) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "inverter_modbus_tcp": inverter_modbus_tcp,
-        "inverter_webbox": inverter_webbox
-    }
-    device_config = get_default_config()
-    device_config["configuration"]["ip"] = ip1
-    dev = Device(device_config)
-    if webbox == 1:
-        component_config = COMPONENT_TYPE_TO_MODULE["inverter_webbox"].get_default_config()
-    else:
-        component_config = COMPONENT_TYPE_TO_MODULE["inverter_modbus_tcp"].get_default_config()
-    component_config["id"] = 0
-    dev.add_component(component_config)
-    log.MainLogger().debug('SMA ModbusTCP address: ' + ip1)
-    log.MainLogger().debug('SMA ModbusTCP Webbox: ' + str(webbox))
+    def create_webbox_inverter(address: str):
+        config = inverter_webbox.get_default_config()
+        config["id"] = num
+        return inverter_webbox.SmaWebboxInverter(address, config)
 
-    i = 1
-    for ip in [ip2, ip3, ip4]:
-        if ip != "none":
-            component_config = COMPONENT_TYPE_TO_MODULE["inverter_modbus_tcp"].get_default_config()
-            component_config["id"] = i
-            dev.add_component(component_config)
-            log.MainLogger().debug('SMA ModbusTCP address: ' + ip)
-            i += 1
+    def create_modbus_inverter(address: str):
+        config = inverter_modbus_tcp.get_default_config()
+        config["id"] = num
+        return inverter_modbus_tcp.SmaModbusTcpInverter(address, config)
 
-    power_total, energy_total = 0, 0
-    with MultiComponentUpdateContext(dev._components):
-        for comp in dev._components.values():
-            inverter_state = comp.read_inverter_state()
-            power_total += inverter_state.power
-            energy_total += inverter_state.counter
-
-    get_inverter_value_store(num).set(InverterState(counter=energy_total, power=power_total))
+    inverter1 = (create_webbox_inverter if webbox else create_modbus_inverter)(ip1)
+    inverters_additional = (create_modbus_inverter(address) for address in [ip2, ip3, ip4] if address != "none")
+    # In legacy we were able to configure multiple IP-Addresses for a single SMA-component, effectively creating a
+    # virtual component that represents the sum of its subcomponents. This was probably done in order to circumvent
+    # the limitation to have a maximum of two inverters configured in legacy.
+    # Since openWB 2 does not have a limitation on the number of inverters we do not implement this there. However
+    # we still need to implement this for the read_legacy-bridge.
+    # Here we act like we only update the first inverter, while we actually query all inverters and sum them up:
+    with SingleComponentUpdateContext(inverter1.component_info):
+        total_power = 0
+        total_energy = 0
+        for inverter in itertools.chain((inverter1,), inverters_additional):
+            state = inverter.read_inverter_state()
+            total_power += state.power
+            total_energy += state.counter
+        get_inverter_value_store(num).set(InverterState(counter=total_energy, power=total_power))
 
 
 def main(argv: List[str]):
