@@ -13,8 +13,10 @@ def get_default_config() -> dict:
         "name": "Victron Zähler",
         "id": 0,
         "type": "counter",
-        "configuration": {
-            "modbus_id": 1
+        "configuration":
+        {
+            "modbus_id": 1,
+            "energy_meter": True
         }
     }
 
@@ -32,17 +34,20 @@ class VictronCounter:
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = self.component_config["configuration"]["modbus_id"]
+        energy_meter = self.component_config["configuration"]["energy_meter"]
         with self.__tcp_client:
-            power = sum(self.__tcp_client.read_holding_registers(2600, [ModbusDataType.INT_16]*3, unit=unit))
-            currents = [
-                self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit) / 10
-                for reg in [2617, 2619, 2621]]
-            voltages = [
-                self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_16, unit=unit) / 10
-                for reg in [2616, 2618, 2620]]
-            powers = [
-                self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit)
-                for reg in [2600, 2601, 2602]]
+            if energy_meter:
+                powers = self.__tcp_client.read_holding_registers(2600, [ModbusDataType.INT_16]*3, unit=unit)
+                currents = [
+                    self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit) / 10
+                    for reg in [2617, 2619, 2621]]
+                voltages = [
+                    self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_16, unit=unit) / 10
+                    for reg in [2616, 2618, 2620]]
+                power = sum(powers)
+            else:
+                powers = self.__tcp_client.read_holding_registers(820, [ModbusDataType.INT_16]*3, unit=unit)
+                power = sum(powers)
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]
@@ -54,13 +59,21 @@ class VictronCounter:
             prefix="bezug"
         )
 
-        counter_state = CounterState(
-            voltages=voltages,
-            currents=currents,
-            powers=powers,
-            imported=imported,
-            exported=exported,
-            power=power
-        )
+        if energy_meter:
+            counter_state = CounterState(
+                voltages=voltages,
+                currents=currents,
+                powers=powers,
+                imported=imported,
+                exported=exported,
+                power=power
+            )
+        else:
+            counter_state = CounterState(
+                powers=powers,
+                imported=imported,
+                exported=exported,
+                power=power
+            )
         log.MainLogger().debug("Victron Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)
