@@ -67,7 +67,7 @@ def read_legacy(
         component_type: str,
         ip_address: str,
         modbus_id: Optional[int] = 100,
-        energy_meter: int = 1,
+        energy_meter: Optional[int] = 1,
         mppt: Optional[int] = 0,
         num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
