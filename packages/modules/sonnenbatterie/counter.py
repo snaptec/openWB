@@ -97,12 +97,12 @@ class SonnenbatterieCounter:
         response = requests.get('http://' + self.__device_address + ':7979/rest/devices/battery/' + element, timeout=5)
         response.raise_for_status()
         response.encoding = 'utf-8'
-        return response.text.replace("\n", "")
+        return response.text.strip(" \n\r")
 
     def __update_variant_2(self) -> CounterState:
         # Auslesen einer Sonnenbatterie Eco 6 über die integrierte REST-API des Batteriesystems
-        grid_import_power = int(self.__read_variant_2_element("M39"))
-        grid_export_power = int(self.__read_variant_2_element("M38"))
+        grid_import_power = int(float(self.__read_variant_2_element("M39")))
+        grid_export_power = int(float(self.__read_variant_2_element("M38")))
         grid_power = grid_import_power - grid_export_power
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
