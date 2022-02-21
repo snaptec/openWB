@@ -14,7 +14,7 @@ def get_default_config() -> dict:
         "type": "sunways",
         "id": 0,
         "configuration": {
-            "ip_address": "192.168.193.15",
+            "ip_address": "",
             "password": ""
         }
     }
@@ -65,6 +65,8 @@ def read_legacy(component_type: str, ip_address: str, password: str, num: Option
     }
 
     device_config = get_default_config()
+    device_config["configuration"]["ip_address"] = ip_address
+    device_config["configuration"]["password"] = password
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
@@ -73,8 +75,6 @@ def read_legacy(component_type: str, ip_address: str, password: str, num: Option
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["configuration"]["ip_address"] = ip_address
-    component_config["configuration"]["password"] = password
     component_config["id"] = num
     dev.add_component(component_config)
 
