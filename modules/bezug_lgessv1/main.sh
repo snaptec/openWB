@@ -11,7 +11,7 @@ else
 	MYLOGFILE="$RAMDISKDIR/evu_json.log"
 fi
 
-python3 "$MODULEDIR/lgessv1.py" "${lgessv1ip}" "${lgessv1pass}" "${ess_api_ver}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_lgessv1.lgessv1" "${lgessv1ip}" "${lgessv1pass}" "${ess_api_ver}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
