@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 from typing import Dict
-import requests
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
-from modules.common.fault_state import FaultState
 
 
 def get_default_config() -> dict:

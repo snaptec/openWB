@@ -94,7 +94,11 @@ class Device(AbstractDevice):
                     headers = {'Content-Type': 'application/json', }
                     data = json.dumps({"password": self.device_config["configuration"]["password"]})
                     response = session.put(
-                        "https://"+self.device_config["configuration"]["ip"] + "/v1/login", headers=headers, data=data, verify=False, timeout=5).json()
+                        "https://"+self.device_config["configuration"]["ip"] + "/v1/login",
+                        headers=headers,
+                        data=data,
+                        verify=False,
+                        timeout=5).json()
                     self.session_key = response["auth_key"]
                     log.MainLogger().debug("Neuen Session-Key erhalten.")
                     return self.__post_data(session)
@@ -106,8 +110,11 @@ class Device(AbstractDevice):
     def __post_data(self, session) -> Dict:
         headers = {'Content-Type': 'application/json', }
         data = json.dumps({"auth_key": self.session_key})
-        return session.post("https://"+self.device_config["configuration"]["ip"] + "/v1/user/essinfo/home", headers=headers,
-                            data=data, verify=False, timeout=5).json()
+        return session.post("https://"+self.device_config["configuration"]["ip"] + "/v1/user/essinfo/home",
+                            headers=headers,
+                            data=data,
+                            verify=False,
+                            timeout=5).json()
 
 
 def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] = None) -> None:
