@@ -85,6 +85,7 @@ class Device(AbstractDevice):
             response = self.__post_data(session)
             return response
         except HTTPError as e:
+            # Login mit ungültigem Session-Key wirft einen Http-Error.
             # missing "auth" in response indicates successful data request.
             if e.response.status_code == 405 and "auth" in e.response.json():
                 # Prüfen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen.
