@@ -2,7 +2,7 @@
 import json
 import os
 from typing import Dict, Union, Optional, List
-
+from requests import HTTPError
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
@@ -69,8 +69,8 @@ class Device(AbstractDevice):
     def update(self) -> None:
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
-            response = self.get_state()
             with MultiComponentUpdateContext(self._components):
+                response = self.get_state()
                 for component in self._components:
                     self._components[component].update(response)
         else:
@@ -81,22 +81,26 @@ class Device(AbstractDevice):
 
     def get_state(self) -> Dict:
         session = req.get_http_session()
-        response = self.__post_data(session)
-        # missing "auth" in response indicates successful data request.
-        if "auth" in response:
-            # Prüfen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen.
-            auth_check = response['auth']
-            if auth_check == "auth_key failed" or auth_check == "auth timeout" or auth_check == "not done":
-                headers = {'Content-Type': 'application/json', }
-                data = json.dumps({"password": self.device_config["configuration"]["password"]})
-                response = session.put(
-                    "https://"+self.device_config["configuration"]["ip"] + "/v1/login", headers=headers, data=data, verify=False, timeout=5).json()
-                self.session_key = response["auth_key"]
-                return self.__post_data(session)
-            else:
-                raise FaultState.error("Unbekannter Fehler im Login-Prozess: "+str(auth_check))
-        else:
+        try:
+            response = self.__post_data(session)
             return response
+        except HTTPError as e:
+            # missing "auth" in response indicates successful data request.
+            if e.response.status_code == 405 and "auth" in e.response.json():
+                # Prüfen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen.
+                auth_check = e.response.json()['auth']
+                if auth_check == "auth_key failed" or auth_check == "auth timeout" or auth_check == "not done":
+                    headers = {'Content-Type': 'application/json', }
+                    data = json.dumps({"password": self.device_config["configuration"]["password"]})
+                    response = session.put(
+                        "https://"+self.device_config["configuration"]["ip"] + "/v1/login", headers=headers, data=data, verify=False, timeout=5).json()
+                    self.session_key = response["auth_key"]
+                    log.MainLogger().debug("Neuen Session-Key erhalten.")
+                    return self.__post_data(session)
+                else:
+                    raise FaultState.error("Unbekannter Fehler im Login-Prozess: "+str(auth_check))
+            else:
+                raise e
 
     def __post_data(self, session) -> Dict:
         headers = {'Content-Type': 'application/json', }
@@ -121,6 +125,8 @@ def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] 
             # erste Zeile ohne Zeilenumbruch lesen
             old_session_key = f.readline().strip()
             dev.session_key = old_session_key
+    else:
+        old_session_key = dev.session_key
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
