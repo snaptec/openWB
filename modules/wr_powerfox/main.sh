@@ -1,10 +1,13 @@
 #!/bin/bash
-output=$(curl --connect-timeout 3 -s -u $powerfoxuser:"$powerfoxpass" "https://backend.powerfox.energy/api/2.0/my/$powerfoxpvid/current")
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 
-bezugwh=$(echo $output | jq '.A_Plus')
-echo $bezugwh > /var/www/html/openWB/ramdisk/pvkwh
+output=$(curl --connect-timeout 3 -s -u "$powerfoxuser":"$powerfoxpass" "https://backend.powerfox.energy/api/2.0/my/$powerfoxpvid/current")
 
-watt=$(echo $output | jq '.Watt')
-echo $watt > /var/www/html/openWB/ramdisk/pvwatt
+pvwh=$(echo "$output" | jq '.A_Plus')
+echo "$pvwh" > "$RAMDISKDIR/pvkwh"
 
-echo $watt
+watt=$(echo "$output" | jq '.Watt')
+echo "$watt" > "$RAMDISKDIR/pvwatt"
+
+echo "$watt"
