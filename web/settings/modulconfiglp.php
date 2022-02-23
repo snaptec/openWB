@@ -729,6 +729,7 @@
 										<option <?php if($socmodulold == "soc_tronity") echo "selected" ?> value="soc_tronity">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodulold == "soc_aiways") echo "selected" ?> value="soc_aiways">Aiways</option>
 										<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
@@ -743,7 +744,8 @@
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
-										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID-alt</option>
+										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -1142,6 +1144,49 @@
 									</div>
 								</div>
 							</div>
+							<div id="socaiways" class="hide">
+                                <div class="form-group">
+                                    <div class="alert alert-info">
+                                        Anmeldedaten fuer den Aiways U5
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
+                                            <span class="form-text small">
+                                                Aiways Account Name (nicht die E-Mail-Adresse)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
+                                        <div class="col">
+											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
+                                            <span class="form-text small">
+                                                Aiways Passwort
+                                            </span>
+                                        </div>
+                                    </div>
+									<div class="form-row mb-1">
+                                        <label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
+                                            <span class="form-text small">
+                                                 VIN des Fahrzeugs
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+                                        <div class="col">
+											<input class="form-control" type="text" name="soc_aiways_intervall" id="soc_aiways_intervall" value="<?php echo $soc_aiways_intervallold ?>">
+                                            <span class="form-text small">
+                                                Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>						
 							<div id="socmaudi" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -1206,6 +1251,60 @@
 										</div>
 									</div>
 
+								</div>
+							</div>
+							<div id="socmvwid" class="hide">
+								<div class="form-group">
+									<div class="alert alert-info">
+										Für VW Fahrzeuge. Es wird benötigt:<br>
+										- We Connect (ID) Account aktiv<br>
+										- We Connect ID App eingerichtet - auch für nicht-ID!<br>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
+											<span class="form-text small">
+												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervall" id="soc_id_intervall" value="<?php echo $soc_id_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div id="socvag" class="hide">
@@ -2317,8 +2416,10 @@
 							hideSection('#soccarnet');
 							hideSection('#socmzerong');
 							hideSection('#socmeq');
+							hideSection('#socaiways');
 							hideSection('#socmaudi');
 							hideSection('#socmid');
+							hideSection('#socmvwid');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2354,6 +2455,11 @@
 								showSection('#socoldevccwarning');
 								showSection('#socmid');
 							}
+							if($('#socmodul').val() == 'soc_vwid') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
+								showSection('#socsupportinfo');
+								showSection('#socmvwid');
+							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
 								showSection('#socvag');
@@ -2368,6 +2474,9 @@
 								showSection('#socsupportinfo');
 								showSection('#socmkia');
 							}
+							if($('#socmodul').val() == 'soc_aiways') {
+                                showSection('#socaiways');
+                            }
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
@@ -2997,6 +3106,7 @@
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
 									</optgroup>
 									<optgroup label="Fahrzeughersteller">
+										<option <?php if($socmodul1old == "soc_aiwayslp2") echo "selected" ?> value="soc_aiwayslp2">Aiways</option>
 										<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
@@ -3011,7 +3121,8 @@
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID-alt</option>
+										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
@@ -3051,6 +3162,11 @@
 										</div>
 									</div>
 								</div>
+							</div>
+							<div id="socmvwidinfolp2" class="mt-1 alert alert-info hide">
+								Für VW Fahrzeuge. Es wird benötigt:<br>
+								- We Connect (ID) Account aktiv<br>
+								- We Connect ID App eingerichtet - auch für nicht-ID!<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3200,6 +3316,46 @@
 									</div>
 								</div>
 							</div>
+							<div id="socaiwayslp2" class="hide">
+                                <div class="form-group">
+                                    <div class="form-row mb-1">
+                                        <label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
+                                        <div class="col">
+                                            <input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
+                                            <span class="form-text small">
+                                                Aiways Account Name (nicht die E-Mail-Adresse)
+                                            </span>
+                                        </div>
+                                    </div>
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_pass" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_aiwayslp2_pass" id="soc_aiwayslp2_pass" value="<?php echo $soc_aiwayslp2_passold ?>">
+											<span class="form-text small">
+												Aiways Passwort
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_vin" id="soc_aiwayslp2_vin" value="<?php echo $soc_aiwayslp2_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_intervall" id="soc_aiwayslp2_intervall" value="<?php echo $soc_aiwayslp2_intervallold ?>">
+											<span class="form-text small">
+												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+											</span>
+										</div>
+									</div>
+								</div>
+                            </div>
 							<div id="soccarnetlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -4365,6 +4521,7 @@
 							hideSection('#socevcclp2');
 							hideSection('#socmkialp2');
 							hideSection('#socoldevccwarninglp2');
+							hideSection('#socmvwidinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
 
@@ -4385,6 +4542,9 @@
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
+							if($('#socmodul1').val() == 'soc_aiwayslp2') {
+                                showSection('#socaiwayslp2');
+                            }
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socoldevccwarninglp2');
 								showSection('#socmuser2');
@@ -4406,6 +4566,16 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+							}
+							if($('#socmodul1').val() == 'soc_vwidlp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
+								showSection('#socsupportinfolp2');
+								showSection('#socmvwidinfolp2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_vaglp2') {
 								showSection('#socoldevccwarninglp2');

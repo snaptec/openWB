@@ -15,9 +15,8 @@ def get_default_config() -> dict:
         "name": "Fronius Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration":
-        {
-            "ip_address2": "none"
+        "configuration": {
+            "ip_address2": "none"  # ToDo: add second component instead
         }
     }
 

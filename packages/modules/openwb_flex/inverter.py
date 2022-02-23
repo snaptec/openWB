@@ -13,11 +13,10 @@ def get_default_config() -> dict:
         "name": "PV-Kit flex",
         "type": "inverter",
         "id": None,
-        "configuration":
-            {
-                "version": 2,
-                "id": 116
-            }
+        "configuration": {
+            "version": 2,
+            "id": 116
+        }
     }
 
 

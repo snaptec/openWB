@@ -20,7 +20,7 @@ openwbDebugLog ${DMOD} 2 "Speicher IP: ${bydhvip}"
 openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${bydhvuser}"
 openwbDebugLog ${DMOD} 2 "Speicher User: ${bydhvpass}"
 
-python3 /var/www/html/openWB/modules/speicher_bydhv/byd.py "${bydhvip}" "${bydhvuser}" "${bydhvpass}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_bydhv.byd" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

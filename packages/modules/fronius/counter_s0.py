@@ -11,7 +11,8 @@ def get_default_config() -> dict:
     return {
         "name": "Fronius S0 Zähler",
         "id": 0,
-        "type": "counter_s0"
+        "type": "counter_s0",
+        "configuration": {}
     }
 
 

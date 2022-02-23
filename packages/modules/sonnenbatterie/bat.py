@@ -110,13 +110,13 @@ class SonnenbatterieBat:
         response = requests.get('http://' + self.__device_address + ':7979/rest/devices/battery/' + element, timeout=5)
         response.raise_for_status()
         response.encoding = 'utf-8'
-        return response.text.replace("\n", "")
+        return response.text.strip(" \n\r")
 
     def __update_variant_2(self) -> BatState:
         # Auslesen einer Sonnenbatterie Eco 6 über die integrierte REST-API des Batteriesystems
-        battery_soc = int(self.__read_variant_2_element("M05"))
-        battery_export_power = int(self.__read_variant_2_element("M01"))
-        battery_import_power = int(self.__read_variant_2_element("M02"))
+        battery_soc = int(float(self.__read_variant_2_element("M05")))
+        battery_export_power = int(float(self.__read_variant_2_element("M01")))
+        battery_import_power = int(float(self.__read_variant_2_element("M02")))
         battery_power = battery_import_power - battery_export_power
         return BatState(
             power=battery_power,

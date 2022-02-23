@@ -13,8 +13,7 @@ def get_default_config() -> dict:
         "name": "Json Speicher",
         "id": 0,
         "type": "bat",
-        "configuration":
-        {
+        "configuration": {
             "jq_power": ".power | .[1]",
             "jq_soc": ".soc"
         }

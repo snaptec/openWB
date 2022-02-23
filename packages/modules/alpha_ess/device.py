@@ -17,11 +17,13 @@ def get_default_config() -> dict:
     return {
         "name": "Alpha ESS",
         "type": "alpha_ess",
-        "id": 0
+        "id": 0,
+        "configuration": {}
     }
 
 
 alpha_ess_component_classes = Union[bat.AlphaEssBat, counter.AlphaEssCounter, inverter.AlphaEssInverter]
+default_unit_id = 85
 
 
 class Device(AbstractDevice):
@@ -56,7 +58,7 @@ class Device(AbstractDevice):
             for component in self._components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                    self._components[component].update(unit_id=default_unit_id)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +

@@ -105,7 +105,17 @@ class SimCountLegacy:
             write_ramdisk_file(prefix+'wh0', int(power_present))
 
             if start_new:
-                return 0, 0
+                log.MainLogger().debug("Neue Simulation starten.")
+                if prefix == "bezug":
+                    imported = get_existing_imports_exports('bezugkwh')
+                    exported = get_existing_imports_exports('einspeisungkwh')
+                elif prefix == "pv":
+                    imported = 0
+                    exported = get_existing_imports_exports('pvkwh')
+                else:
+                    imported = get_existing_imports_exports('speicherikwh')
+                    exported = get_existing_imports_exports('speicherekwh')
+                return imported, exported
             else:
                 # timestamp_previous = timestamp_previous + 1  # do not increment time if calculating areas!
                 seconds_since_previous = timestamp_present - timestamp_previous
@@ -141,10 +151,20 @@ class SimCountLegacy:
             process_error(e)
 
 
+def get_existing_imports_exports(file: str) -> float:
+    if os.path.isfile('/var/www/html/openWB/ramdisk/'+file):
+        value = float(read_ramdisk_file(file))
+        log.MainLogger().info("Es wurde ein vorhandener Zählerstand in "+file+" gefunden: "+str(value)+"Wh")
+    else:
+        value = 0
+    return value
+
+
 class Restore():
     def restore_value(self, value: str, prefix: str) -> float:
+        result = 0
+        self.temp = ""
         try:
-            self.temp = ""
             self.value = value
             self.prefix = prefix
             client = mqtt.Client("openWB-simcount_restore-" + str(self.__getserial()))
@@ -158,17 +178,24 @@ class Restore():
             client.loop_stop()
             try:
                 result = float(self.temp)
+                if value == "watt0pos":
+                    log.MainLogger().info(
+                        "loadvars read openWB/"+get_topic(self.prefix)+"/WHImported_temp from mosquito "+str(self.temp))
+                else:
+                    log.MainLogger().info(
+                        "loadvars read openWB/"+get_topic(self.prefix)+"/WHExport_temp from mosquito "+str(self.temp))
             except ValueError:
-                log.MainLogger().info("Keine Werte auf dem Broker gefunden. neue Simulation gestartet.")
-                self.temp = "0"
-                result = 0
+                log.MainLogger().info("Keine Werte auf dem Broker gefunden.")
+                if prefix == "bezug":
+                    file = "bezugkwh" if value == "watt0pos" else "einspeisungkwh"
+                elif prefix == "pv":
+                    file = "pvkwh"
+                else:
+                    file = "speicherikwh" if value == "watt0pos" else "speicherekwh"
+                if os.path.isfile('/var/www/html/openWB/ramdisk/'+file):
+                    result = get_existing_imports_exports(file) * 3600
+                    self.temp = str(result)
             write_ramdisk_file(prefix+value, self.temp)
-            if value == "watt0pos":
-                log.MainLogger().info(
-                    "loadvars read openWB/"+get_topic(self.prefix)+"/WHImported_temp from mosquito "+str(self.temp))
-            else:
-                log.MainLogger().info(
-                    "loadvars read openWB/"+get_topic(self.prefix)+"/WHExport_temp from mosquito "+str(self.temp))
         except Exception:
             log.MainLogger().exception("Fehler in der Restore-Klasse")
         finally:

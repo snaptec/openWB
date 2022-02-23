@@ -1,17 +1,17 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
 echo "atreboot.sh started"
-(sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
+(sleep 600; sudo kill "$$"; echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
 
 # read openwb.conf
 echo "loading config"
-. /var/www/html/openWB/loadconfig.sh
+. "$OPENWBBASEDIR/loadconfig.sh"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 # load functions to init ramdisk and update config
 # no code will run here, functions need to be called
-. /var/www/html/openWB/runs/initRamdisk.sh
-. /var/www/html/openWB/runs/updateConfig.sh
+. "$OPENWBBASEDIR/runs/initRamdisk.sh"
+. "$OPENWBBASEDIR/runs/updateConfig.sh"
 
 sleep 5
 mkdir -p /var/www/html/openWB/web/backup
@@ -37,11 +37,12 @@ mkdir -p /var/www/html/openWB/web/logging/data/monthly
 mkdir -p /var/www/html/openWB/web/logging/data/ladelog
 mkdir -p /var/www/html/openWB/web/logging/data/v001
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
+sudo chmod +x /var/www/html/openWB/packages/*.sh
 
 # update openwb.conf
 updateConfig
 # reload our changed openwb.conf
-. /var/www/html/openWB/loadconfig.sh
+. "$OPENWBBASEDIR/loadconfig.sh"
 # now setup all files in ramdisk
 initRamdisk
 
@@ -224,9 +225,15 @@ then
 	sleep 1
 	sudo apt-get -qq install -y php7.0-xml
 fi
-
+# required package for soc_vwid
+if [ $(dpkg-query -W -f='${Status}' libxslt1-dev 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+	sudo apt-get -qq update
+	sleep 1
+	sudo apt-get -qq install -y libxslt1-dev
+fi
 # no need to reload config
-# . /var/www/html/openWB/loadconfig.sh
+# . $OPENWBBASEDIR/loadconfig.sh
 
 # update old ladelog
 /var/www/html/openWB/runs/transferladelog.sh
@@ -308,6 +315,26 @@ if python3 -c "import ipparser" &> /dev/null; then
 	echo 'ipparser installed...'
 else
 	sudo pip3 install ipparser
+fi
+#Prepare for lxml used in soc module libvwid in Python
+if python3 -c "import lxml" &> /dev/null; then
+	echo 'lxml installed...'
+else
+	sudo pip3 install lxml
+fi
+#Prepare for secrets used in soc module libvwid in Python
+VWIDMODULEDIR=$OPENWBBASEDIR/modules/soc_vwid
+if python3 -c "import secrets" &> /dev/null; then
+	echo 'soc_vwid: python3 secrets installed...'
+	if [ -L $VWIDMODULEDIR/secrets.py ]; then
+		echo 'soc_vwid: remove local python3 secrets.py...'
+		rm $VWIDMODULEDIR/secrets.py
+	fi
+else
+	if [ ! -L $VWIDMODULEDIR/secrets.py ]; then
+		echo 'soc_vwid: enable local python3 secrets.py...'
+		ln -s $VWIDMODULEDIR/_secrets.py $VWIDMODULEDIR/secrets.py
+	fi
 fi
 # update outdated urllib3 for Tesla Powerwall
 pip3 install --upgrade urllib3

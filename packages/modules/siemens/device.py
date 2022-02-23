@@ -14,7 +14,10 @@ def get_default_config() -> dict:
     return {
         "name": "Siemens",
         "type": "siemens",
-        "id": 0
+        "id": 0,
+        "configuration": {
+            # ToDo: add IP
+        }
     }
 
 

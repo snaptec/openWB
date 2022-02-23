@@ -11,10 +11,9 @@ def get_default_config() -> dict:
         "name": "PV-Kit",
         "type": "inverter",
         "id": 0,
-        "configuration":
-            {
-                "version": 2
-            }
+        "configuration": {
+            "version": 2
+        }
     }
 
 

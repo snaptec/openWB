@@ -1,12 +1,11 @@
 #!/usr/bin/python
 import logging
 from statistics import mean
-from typing import Iterable
+from typing import Iterable, List
 
 from pymodbus.constants import Endian
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import BatState
 from modules.common.modbus import ModbusClient, ModbusDataType
 from modules.common.store import get_bat_value_store
@@ -27,7 +26,7 @@ def update_solaredge_battery(client: ModbusClient, slave_ids: Iterable[int]):
     get_bat_value_store(1).set(BatState(power=sum(storage_powers), soc=mean(all_socs)))
 
 
-def main(address: str, second_battery: int):
+def update(address: str, second_battery: int):
     # `second_battery` is 0 or 1
     log.debug("Beginning update")
     with ModbusClient(address) as client:
@@ -35,6 +34,5 @@ def main(address: str, second_battery: int):
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(main)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)
