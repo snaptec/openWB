@@ -7,7 +7,7 @@ MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 DMOD="PV"
 Debug=$debug
 
-python3 "${MODULEDIR}/solarlog.py" "${bezug_solarlog_ip}" >> "${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarlog.solarlog" "${bezug_solarlog_ip}" >> "${MYLOGFILE}" 2>&1
 pvwatt=$(<"${RAMDISKDIR}/pvwatt")
 pvkwh=$(<"${RAMDISKDIR}/pvkwh")
 
