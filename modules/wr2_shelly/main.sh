@@ -1,5 +1,7 @@
 #!/bin/bash
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_shelly.shellywr" "$pv2ip" "pv2watt"
+ret=$?
 
-sudo python3 /var/www/html/openWB/modules/wr_shelly/shellywr.py $pv2ip pv2watt
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 pvwatt2=$(</var/www/html/openWB/ramdisk/pv2watt)
 echo $pvwatt2
