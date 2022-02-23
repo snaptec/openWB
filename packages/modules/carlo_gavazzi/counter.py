@@ -15,9 +15,7 @@ def get_default_config() -> dict:
         "name": "Carlo Gavazzi Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
-        }
+        "configuration": {}
     }
 
 

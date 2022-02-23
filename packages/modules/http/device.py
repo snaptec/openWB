@@ -18,10 +18,10 @@ def get_default_config() -> dict:
         "name": "HTTP",
         "type": "http",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "protocol": "http",
             "domain": "192.168.193.15"
+            # ToDo: add port
         }
     }
 

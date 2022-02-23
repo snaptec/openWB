@@ -11,8 +11,7 @@ def get_default_config() -> dict:
         "name": "HTTP Zähler",
         "id": 0,
         "type": "counter",
-        "configuration":
-        {
+        "configuration": {
             "power_path": "/power.txt",
             "imported_path": "/imported.txt",
             "exported_path": "/exported.txt",

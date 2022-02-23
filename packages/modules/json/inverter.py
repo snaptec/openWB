@@ -13,8 +13,7 @@ def get_default_config() -> dict:
         "name": "Json Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration":
-        {
+        "configuration": {
             "jq_power": ".power | .[1]",
             "jq_counter": ".counter"
         }

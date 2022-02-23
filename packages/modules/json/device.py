@@ -16,9 +16,10 @@ def get_default_config() -> dict:
         "name": "Json",
         "type": "json",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip_address": "192.168.193.15"
+            # ToDo: add protocol
+            # ToDo: add port
         }
     }
 

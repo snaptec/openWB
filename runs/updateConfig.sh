@@ -6,10 +6,14 @@ updateConfig(){
 	echo "Updating $ConfigFile..."
 
 	if ! grep -Fq "wr_http_w_url=" $ConfigFile; then
-		echo "wr_http_w_url=http://192.168.0.17/pvwatt.txt" >> $ConfigFile
+		echo "wr_http_w_url='http://192.168.0.17/pvwatt.txt'" >> $ConfigFile
+	else
+		sed -i "/wr_http_w_url='/b; s/^wr_http_w_url=\(.*\)/wr_http_w_url=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "hsocip1=" $ConfigFile; then
-		echo "hsocip1=http://10.0.0.110/soc.txt" >> $ConfigFile
+		echo "hsocip1='http://10.0.0.110/soc.txt'" >> $ConfigFile
+	else
+		sed -i "/hsocip1='/b; s/^hsocip1=\(.*\)/hsocip1=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "socmodul1=" $ConfigFile; then
 		echo "socmodul1=soc_http1" >> $ConfigFile
@@ -18,10 +22,16 @@ updateConfig(){
 		echo "dacregisters1=12" >> $ConfigFile
 	fi
 	if ! grep -Fq "wr_http_kwh_url=" $ConfigFile; then
-		echo "wr_http_kwh_url=http://192.168.0.17/pvwh.txt" >> $ConfigFile
+		echo "wr_http_kwh_url='http://192.168.0.17/pvwh.txt'" >> $ConfigFile
+	else
+		sed -i "/wr_http_kwh_url='/b; s/^wr_http_kwh_url=\(.*\)/wr_http_kwh_url=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "smaemdbezugid=" $ConfigFile; then
 		echo "smaemdbezugid=1900123456" >> $ConfigFile
+	fi
+	# upgrade after renaming "smaemd_pv" -> "wr_smashm"
+	if grep -Fq "pvwattmodul=smaemd_pv" $ConfigFile; then
+		sed -i "s/^pvwattmodul=smaemd_pv/pvwattmodul=wr_smashm/g" $ConfigFile
 	fi
 	if ! grep -Fq "smaemdpvid=" $ConfigFile; then
 		echo "smaemdpvid=1900123456" >> $ConfigFile
@@ -30,13 +40,19 @@ updateConfig(){
 		echo "smaemdllid=1900123456" >> $ConfigFile
 	fi
 	if ! grep -Fq "bezug_http_w_url=" $ConfigFile; then
-		echo "bezug_http_w_url=http://192.168.0.17/bezugwatt.txt" >> $ConfigFile
+		echo "bezug_http_w_url='http://192.168.0.17/bezugwatt.txt'" >> $ConfigFile
+	else
+		sed -i "/bezug_http_w_url='/b; s/^bezug_http_w_url=\(.*\)/bezug_http_w_url=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "bezug_http_ikwh_url=" $ConfigFile; then
-		echo "bezug_http_ikwh_url=http://192.168.0.17/bezugwh.txt" >> $ConfigFile
+		echo "bezug_http_ikwh_url='http://192.168.0.17/bezugwh.txt'" >> $ConfigFile
+	else
+		sed -i "/bezug_http_ikwh_url='/b; s/^bezug_http_ikwh_url=\(.*\)/bezug_http_ikwh_url=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "bezug_http_ekwh_url=" $ConfigFile; then
-		echo "bezug_http_ekwh_url=http://192.168.0.17/einspeisungwh.txt" >> $ConfigFile
+		echo "bezug_http_ekwh_url='http://192.168.0.17/einspeisungwh.txt'" >> $ConfigFile
+	else
+		sed -i "/bezug_http_ekwh_url='/b; s/^bezug_http_ekwh_url=\(.*\)/bezug_http_ekwh_url=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "minimalapv=" $ConfigFile; then
 		echo "minimalapv=6" >> $ConfigFile
@@ -354,21 +370,33 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wrjsonwatt=" $ConfigFile; then
 		echo "wrjsonwatt='.watt'" >> $ConfigFile
+	else
+		sed -i "/wrjsonwatt='/b; s/^wrjsonwatt=\(.*\)/wrjsonwatt=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonkwh=" $ConfigFile; then
 		echo "wrjsonkwh='.kwh'" >> $ConfigFile
+	else
+		sed -i "/wrjsonkwh='/b; s/^wrjsonkwh=\(.*\)/wrjsonkwh=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wrjsonurl=" $ConfigFile; then
-		echo "wrjsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
+		echo "wrjsonurl='http://192.168.0.12/solar_api'" >> $ConfigFile
+	else
+		sed -i "/wrjsonurl='/b; s/^wrjsonurl=\(.*\)/wrjsonurl=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonwatt=" $ConfigFile; then
 		echo "wr2jsonwatt='.watt'" >> $ConfigFile
+	else
+		sed -i "/wr2jsonwatt='/b; s/^wr2jsonwatt=\(.*\)/wr2jsonwatt=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonkwh=" $ConfigFile; then
 		echo "wr2jsonkwh='.kwh'" >> $ConfigFile
+	else
+		sed -i "/wr2jsonkwh='/b; s/^wr2jsonkwh=\(.*\)/wr2jsonkwh=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "wr2jsonurl=" $ConfigFile; then
-		echo "wr2jsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
+		echo "wr2jsonurl='http://192.168.0.12/solar_api'" >> $ConfigFile
+	else
+		sed -i "/wr2jsonurl='/b; s/^wr2jsonurl=\(.*\)/wr2jsonurl=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "hausbezugnone=" $ConfigFile; then
 		echo "hausbezugnone=200" >> $ConfigFile
@@ -411,15 +439,23 @@ updateConfig(){
 	fi
 	if ! grep -Fq "bezugjsonwatt=" $ConfigFile; then
 		echo "bezugjsonwatt='.watt'" >> $ConfigFile
+	else
+		sed -i "/bezugjsonwatt='/b; s/^bezugjsonwatt=\(.*\)/bezugjsonwatt=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonkwh=" $ConfigFile; then
 		echo "bezugjsonkwh='.kwh'" >> $ConfigFile
+	else
+		sed -i "/bezugjsonkwh='/b; s/^bezugjsonkwh=\(.*\)/bezugjsonkwh=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "einspeisungjsonkwh=" $ConfigFile; then
 		echo "einspeisungjsonkwh='.kwh'" >> $ConfigFile
+	else
+		sed -i "/einspeisungjsonkwh='/b; s/^einspeisungjsonkwh=\(.*\)/einspeisungjsonkwh=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "bezugjsonurl=" $ConfigFile; then
-		echo "bezugjsonurl=http://192.168.0.12/solar_api" >> $ConfigFile
+		echo "bezugjsonurl='http://192.168.0.12/solar_api'" >> $ConfigFile
+	else
+		sed -i "/bezugjsonurl='/b; s/^bezugjsonurl=\(.*\)/bezugjsonurl=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "mpm3pmlls1source=" $ConfigFile; then
 		echo "mpm3pmlls1source=/dev/ttyUSB0" >> $ConfigFile
@@ -470,23 +506,36 @@ updateConfig(){
 		echo "displayEinBeimAnstecken=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "speicherleistung_http=" $ConfigFile; then
-		echo "speicherleistung_http=192.168.0.10/watt" >> $ConfigFile
+		echo "speicherleistung_http='192.168.0.10/watt'" >> $ConfigFile
+	else
+		sed -i "/speicherleistung_http='/b; s/^speicherleistung_http=\(.*\)/speicherleistung_http=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "speichersoc_http=" $ConfigFile; then
-		echo "speichersoc_http=192.168.0.10/soc" >> $ConfigFile
+		echo "speichersoc_http='192.168.0.10/soc'" >> $ConfigFile
+	else
+		sed -i "/speichersoc_http='/b; s/^speichersoc_http=\(.*\)/speichersoc_http=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "speicherekwh_http=" $ConfigFile; then
-		echo "speicherekwh_http=192.168.0.10/eWh" >> $ConfigFile
-		echo "speicherikwh_http=192.168.0.10/iWh" >> $ConfigFile
+		echo "speicherekwh_http='192.168.0.10/eWh'" >> $ConfigFile
+		echo "speicherikwh_http='192.168.0.10/iWh'" >> $ConfigFile
+	else
+		sed -i "/speicherekwh_http='/b; s/^speicherekwh_http=\(.*\)/speicherekwh_http=\'\1\'/g" $ConfigFile
+		sed -i "/speicherikwh_http='/b; s/^speicherikwh_http=\(.*\)/speicherikwh_http=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "battjsonurl=" $ConfigFile; then
-		echo "battjsonurl=192.168.0.10/speicher" >> $ConfigFile
+		echo "battjsonurl='192.168.0.10/speicher'" >> $ConfigFile
+	else
+		sed -i "/battjsonurl='/b; s/^battjsonurl=\(.*\)/battjsonurl=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "battjsonsoc=" $ConfigFile; then
 		echo "battjsonsoc='.RSOC'" >> $ConfigFile
+	else
+		sed -i "/battjsonsoc='/b; s/^battjsonsoc=\(.*\)/battjsonsoc=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "battjsonwatt=" $ConfigFile; then
 		echo "battjsonwatt='.Consumption_W'" >> $ConfigFile
+	else
+		sed -i "/battjsonwatt='/b; s/^battjsonwatt=\(.*\)/battjsonwatt=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_tesla_username=" $ConfigFile; then
 		echo "soc_tesla_username=deine@email.com" >> $ConfigFile
@@ -504,6 +553,12 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_tesla_intervall=" $ConfigFile; then
 		echo "soc_tesla_intervall=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_intervallladen=" $ConfigFile; then
+		echo "soc_id_intervallladen=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_id_intervall=" $ConfigFile; then
+		echo "soc_id_intervall=120" >> $ConfigFile
 	fi
 	if ! grep -Fq "releasetrain=" $ConfigFile; then
 		echo "releasetrain=stable" >> $ConfigFile
@@ -1328,6 +1383,9 @@ updateConfig(){
 	if ! grep -Fq "bezug_victronip=" $ConfigFile; then
 		echo "bezug_victronip=192.168.15.3" >> $ConfigFile
 	fi
+	if ! grep -Fq "victron_energy_meter=" $ConfigFile; then
+		echo "victron_energy_meter=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "pushbsmarthome=" $ConfigFile; then
 		echo "pushbsmarthome=1" >> $ConfigFile
 	fi
@@ -1977,11 +2035,14 @@ updateConfig(){
 		echo "soc_eq_client_id_lp1=ID" >> $ConfigFile
 		echo "soc_eq_client_secret_lp1=Secret" >> $ConfigFile
 		echo "soc_eq_vin_lp1=VIN" >> $ConfigFile
-		echo "soc_eq_cb_lp1=http://openWB/openWB/modules/soc_eq/callback_lp1.php" >> $ConfigFile
+		echo "soc_eq_cb_lp1='http://openWB/openWB/modules/soc_eq/callback_lp1.php'" >> $ConfigFile
 		echo "soc_eq_client_id_lp2=ID" >> $ConfigFile
 		echo "soc_eq_client_secret_lp2=Secret" >> $ConfigFile
 		echo "soc_eq_vin_lp2=VIN" >> $ConfigFile
-		echo "soc_eq_cb_lp2=http://openWB/openWB/modules/soc_eq/callback_lp2.php" >> $ConfigFile
+		echo "soc_eq_cb_lp2='http://openWB/openWB/modules/soc_eq/callback_lp2.php'" >> $ConfigFile
+	else
+		sed -i "/soc_eq_cb_lp1='/b; s/^soc_eq_cb_lp1=\(.*\)/soc_eq_cb_lp1=\'\1\'/g" $ConfigFile
+		sed -i "/soc_eq_cb_lp2='/b; s/^soc_eq_cb_lp2=\(.*\)/soc_eq_cb_lp2=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_id_username=" $ConfigFile; then
 		echo "soc_id_username=User" >> $ConfigFile
@@ -2134,10 +2195,10 @@ updateConfig(){
 		echo "alphav123=0" >> $ConfigFile
 	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
-		sed -i "s/socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
+		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
 	fi
 	if grep -Fq "socmodul1=soc_bluelinklp2" $ConfigFile; then
-		sed -i "s/socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
+		sed -i "s/^socmodul1=soc_bluelinklp2/socmodul=soc_kialp2/g" $ConfigFile
 	fi
 	if ! grep -Fq "virtual_ip_eth0=" $ConfigFile; then
 		echo "virtual_ip_eth0='192.168.193.5'" >> $ConfigFile
@@ -2163,5 +2224,16 @@ updateConfig(){
 		echo "pv2flexid=1" >> $ConfigFile
 		echo "pv2flexversion=1" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_aiways_user=" $ConfigFile; then
+		echo "soc_aiways_user=''" >> $ConfigFile
+		echo "soc_aiways_pass=''" >> $ConfigFile
+		echo "soc_aiways_vin=''" >> $ConfigFile
+		echo "soc_aiways_intervall=''" >> $ConfigFile
+		echo "soc_aiwayslp2_user=''" >> $ConfigFile
+		echo "soc_aiwayslp2_pass=''" >> $ConfigFile
+		echo "soc_aiwayslp2_vin=''" >> $ConfigFile
+		echo "soc_aiwayslp2_intervall=''" >> $ConfigFile
+	fi
+
 	echo "Config file Update done."
 }

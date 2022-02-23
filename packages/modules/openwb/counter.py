@@ -10,10 +10,9 @@ def get_default_config() -> dict:
         "name": "EVU-Kit",
         "type": "counter",
         "id": 0,
-        "configuration":
-            {
-                "version": 2
-            }
+        "configuration": {
+            "version": 2
+        }
     }
 
 

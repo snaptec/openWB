@@ -5,7 +5,19 @@ from helpermodules.auto_str import auto_str
 
 @auto_str
 class BatState:
-    def __init__(self, imported: float = 0, exported: float = 0, power: float = 0, soc: float = 0):
+    def __init__(
+        self,
+        imported: float = 0,
+        exported: float = 0,
+        power: float = 0,
+        soc: float = 0,
+    ):
+        """Args:
+            imported: total imported energy in Wh
+            exported: total exported energy in Wh
+            power: actual power in W
+            soc: actual state of charge in percent
+        """
         self.imported = imported
         self.exported = exported
         self.power = power
@@ -14,15 +26,27 @@ class BatState:
 
 @auto_str
 class CounterState:
-    def __init__(self,
-                 imported: float = 0,
-                 exported: float = 0,
-                 power: float = 0,
-                 voltages: List[float] = None,
-                 currents: List[float] = None,
-                 powers: List[float] = None,
-                 power_factors: List[float] = None,
-                 frequency: float = 50):
+    def __init__(
+        self,
+        imported: float = 0,
+        exported: float = 0,
+        power: float = 0,
+        voltages: List[float] = None,
+        currents: List[float] = None,
+        powers: List[float] = None,
+        power_factors: List[float] = None,
+        frequency: float = 50,
+    ):
+        """Args:
+            imported: total imported energy in Wh
+            exported: total exported energy in Wh
+            power: actual power in W
+            voltages: actual voltages for 3 phases in V
+            currents: actual currents for 3 phases in A
+            powers: actual powers for 3 phases in W
+            power_factors: actual power factors for 3 phases
+            frequency: actual grid frequency in Hz
+        """
         if voltages is None:
             voltages = [230]*3
         self.voltages = voltages
@@ -55,6 +79,11 @@ class InverterState:
         power: float,
         currents: List[float] = None,
     ):
+        """Args:
+            counter: total energy in Wh
+            power: actual power in W
+            currents: actual currents for 3 phases in A
+        """
         if currents is None:
             currents = [0]*3
         self.currents = currents
@@ -64,5 +93,11 @@ class InverterState:
 
 @auto_str
 class CarState:
-    def __init__(self, soc: float):
+    def __init__(
+        self,
+        soc: float,
+    ):
+        """Args:
+            soc: actual state of charge in percent
+        """
         self.soc = soc

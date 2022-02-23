@@ -17,8 +17,7 @@ def get_default_config() -> dict:
         "name": "SonnenBatterie",
         "type": "sonnenbatterie",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip": "",
             "variant": 0
         }

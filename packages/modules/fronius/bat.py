@@ -12,10 +12,7 @@ def get_default_config() -> dict:
         "name": "Fronius Speicher",
         "id": 0,
         "type": "bat",
-        "configuration":
-        {
-            "gen24": False
-        }
+        "configuration": {}
     }
 
 

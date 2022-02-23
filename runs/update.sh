@@ -92,4 +92,4 @@ sudo chmod 777 /var/www/html/openWB/web/lade.log
 sleep 2
 
 # now treat system as in booting state
-nohup sudo /var/www/html/openWB/runs/atreboot.sh > /var/log/openWB.log 2>&1 &
+nohup sudo /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1 &

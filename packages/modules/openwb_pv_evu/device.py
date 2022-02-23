@@ -11,7 +11,8 @@ def get_default_config() -> dict:
     return {
         "name": "Zähler am EVU-Kit",
         "type": "openwb_pv_evu",
-        "id": 0
+        "id": 0,
+        "configuration": {}
     }
 
 

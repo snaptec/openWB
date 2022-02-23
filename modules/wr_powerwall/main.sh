@@ -12,7 +12,9 @@ else
 	MYLOGFILE="${RAMDISKDIR}/wr_powerwall.log"
 fi
 
-python3 "${MODULEDIR}/powerwall.py" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_powerwall.powerwall" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}">>$MYLOGFILE 2>&1
+ret=$?
 
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 pvwatt=$(<${RAMDISKDIR}/pvwatt) 
 echo $pvwatt
