@@ -16,18 +16,14 @@
 # WR3 kann auch eine Liste an einanderfolgenden IP haben 
 
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-#MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="PV"
-Debug=$debug
 Battery=0
 
-#For Development only
-#Debug=1
 if [[ $speichermodul == "speicher_kostalplenticore" ]]; then
 	Battery=1
-fi	
+fi
 
 if [ $DMOD == "MAIN" ]; then
 	MYLOGFILE="${RAMDISKDIR}/openWB.log"
@@ -35,11 +31,10 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-python3 $OPENWBBASEDIR/modules/wr_plenticore/read_kostalplenticore.py  "${kostalplenticoreip}" "${kostalplenticoreip2}" "${Battery}" "${kostalplenticoreip3}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_plenticore.read_kostalplenticore" "${kostalplenticoreip}" "${kostalplenticoreip2}" "${Battery}" "${kostalplenticoreip3}" >>"${MYLOGFILE}" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
 # Rückgabe des Wertes Gesamt-PV-Leistung
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
-echo $pvwatt
+pvwatt=$(<"$RAMDISKDIR/pvwatt")
+echo "$pvwatt"

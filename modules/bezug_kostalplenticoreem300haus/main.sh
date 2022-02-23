@@ -1,24 +1,19 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #DMOD="EVU"
 DMOD="MAIN"
-Debug=$debug
 
-#For development only
-#Debug=1
-
-if [ $DMOD == "MAIN" ]; then
-    MYLOGFILE="$RAMDISKDIR/openWB.log"
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-    MYLOGFILE="$RAMDISKDIR/evu_json.log"
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 /var/www/html/openWB/modules/bezug_kostalplenticoreem300haus/kostal_plenticore.py "${kostalplenticorehaus}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_kostalplenticoreem300haus.kostal_plenticore" "${kostalplenticorehaus}" >>"${MYLOGFILE}" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
-echo $wattbezug
+wattbezug=$(<"$RAMDISKDIR/wattbezug")
+echo "$wattbezug"
