@@ -15,32 +15,34 @@ def update(ipaddress: str, ip2address: str):
     client = ModbusTcpClient(ipaddress, port=502)
 
     # battsoc
-    resp = client.read_holding_registers(1068, 1, unit=1)
-    value1 = resp.registers[0]
-    all = format(value1, '04x')
+    with client:
+        resp = client.read_holding_registers(1068, 1, unit=1)
+        value1 = resp.registers[0]
+        all = format(value1, '04x')
 
-    sfinal = int(struct.unpack('>h', all.decode('hex'))[0])
+        sfinal = int(struct.unpack('>h', all.decode('hex'))[0])
 
-    # battleistung
-    resp = client.read_holding_registers(1066, 1, unit=1)
-    value1 = resp.registers[0]
-    all = format(value1, '04x')
-    lfinal = int(struct.unpack('>h', all.decode('hex'))[0])
+        # battleistung
+        resp = client.read_holding_registers(1066, 1, unit=1)
+        value1 = resp.registers[0]
+        all = format(value1, '04x')
+        lfinal = int(struct.unpack('>h', all.decode('hex'))[0])
 
     if ip2address != 'none':
         client2 = ModbusTcpClient(ip2address, port=502)
-        # battsoc
-        resp = client2.read_holding_registers(1068, 1, unit=1)
-        value1 = resp.registers[0]
-        all = format(value1, '04x')
-        final = int(struct.unpack('>h', all.decode('hex'))[0])
-        sfinal = (sfinal+final)/2
-        # battleistung
-        resp = client2.read_holding_registers(1066, 1, unit=1)
-        value1 = resp.registers[0]
-        all = format(value1, '04x')
-        final = int(struct.unpack('>h', all.decode('hex'))[0])
-        lfinal = lfinal+final
+        with client2:
+            # battsoc
+            resp = client2.read_holding_registers(1068, 1, unit=1)
+            value1 = resp.registers[0]
+            all = format(value1, '04x')
+            final = int(struct.unpack('>h', all.decode('hex'))[0])
+            sfinal = (sfinal+final)/2
+            # battleistung
+            resp = client2.read_holding_registers(1066, 1, unit=1)
+            value1 = resp.registers[0]
+            all = format(value1, '04x')
+            final = int(struct.unpack('>h', all.decode('hex'))[0])
+            lfinal = lfinal+final
 
     f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
     f.write(str(sfinal))
