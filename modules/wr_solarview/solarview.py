@@ -46,8 +46,13 @@ def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solar
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(solarview_timeout)
             s.connect((solarview_hostname, solarview_port))
-            s.sendall(solarview_command_wr)
+            s.sendall(solarview_command_wr.encode("ascii"))
             response = s.recv(1024)
+            message = response[:-2]
+            checksum = int.from_bytes(response[-1:], "big", signed=False)
+            calculated_checksum = int(sum(message)) % 256
+            log.debug("message: " + str(message))
+            log.debug("checksum: " + str(checksum) + " calculated: " + str(calculated_checksum))
     except Exception as e:
         log.debug("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+str(solarview_hostname)+", port: "+str(solarview_port)+", timeout: "+str(solarview_timeout))
         traceback.print_exc()
@@ -71,10 +76,8 @@ def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solar
     #  UL3, IL3= Netzspannung, Netzstrom Phase 3
     #  TKK= Temperatur Wechselrichter
 
-    # Geschweifte Klammern und Checksumme entfernen
-    values = response.split("}")[0]
-    values = values.replace("{", "")
-    values = values.split(",")
+    # Geschweifte Klammern entfernen
+    values = message.decode("ascii")[1:-1].split(",")
 
     # Werte formatiert in Variablen speichern
     id = values[0]
