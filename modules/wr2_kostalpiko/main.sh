@@ -17,5 +17,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" 1 "wr_kostalpiko.kostal_piko_var1" 
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-pvwatt=$(</var/www/html/openWB/ramdisk/pv2watt) 
-echo "$pvwatt"
+cat "$RAMDISKDIR/pv2watt"

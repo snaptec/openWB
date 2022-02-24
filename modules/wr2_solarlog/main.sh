@@ -1,4 +1,6 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 
 #DMOD="MAIN"
 DMOD="PV"
@@ -23,11 +25,11 @@ if (( pvwatt > 5 )); then
 fi
 if ! [[ $pvkwh =~ $re ]] ; then
 	openwbDebugLog ${DMOD} 2 "PVkWh: NaN get prev. Value"
-	pvkwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
+	pvkwh=$(<"$RAMDISKDIR/pv2kwh")
 fi
 
 openwbDebugLog ${DMOD} 2 "pvwatt: $pvwatt"
 openwbDebugLog ${DMOD} 2 "pvkwh: $pvkwh"
 echo "$pvwatt"
-echo "$pvwatt" > /var/www/html/openWB/ramdisk/pv2watt
-echo "$pvkwh" > /var/www/html/openWB/ramdisk/pv2kwh
+echo "$pvwatt" > "$RAMDISKDIR/pv2watt"
+echo "$pvkwh" > "$RAMDISKDIR/pv2kwh"

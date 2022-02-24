@@ -14,5 +14,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_shelly.shellywr" "$pv2ip" "pv2w
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-pvwatt2=$(<"$RAMDISKDIR/pv2watt")
-echo "$pvwatt2"
+cat "$RAMDISKDIR/pv2watt"

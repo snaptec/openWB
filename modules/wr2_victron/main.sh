@@ -12,5 +12,4 @@ fi
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "inverter" "${pv2ip}" "${pv2id}" "1" "2">>"$MYLOGFILE" 2>&1
 
-pvwatt=$(<"${RAMDISKDIR}/pvwatt")
-echo "$pvwatt"
+cat "$RAMDISKDIR/pv2watt"

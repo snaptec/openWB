@@ -17,5 +17,4 @@ openwbDebugLog ${DMOD} 2 "PV ID : ${pv2flexid}"
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_flex.device" "inverter" "${pv2flexversion}" "${pv2flexip}" "${pv2flexport}" "${pv2flexid}" "2">>"$MYLOGFILE" 2>&1
 
-pvwatt=$(<"${RAMDISKDIR}/pv2watt")
-echo "$pvwatt"
+cat "$RAMDISKDIR/pv2watt"
