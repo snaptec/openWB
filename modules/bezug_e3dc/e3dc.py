@@ -22,7 +22,7 @@ def update(ipaddress: str):
         # bei den meisten e3dc auf 40128
         # for i in range (40104,40132,4):
         for i in range(40128, 40103, -4):
-            #powers = client.read_holding_registers(40129, [ModbusDataType.INT_16] * 3, unit=1)
+            # powers = client.read_holding_registers(40129, [ModbusDataType.INT_16] * 3, unit=1)
             powers = client.read_holding_registers(i, [ModbusDataType.INT_16] * 4, unit=1)
             log.debug("I: %d, p[0] typ %d p[1] a1 %d p[2] a2 %d p[3] a3 %d",
                       i, powers[0], powers[1], powers[2], powers[3])
