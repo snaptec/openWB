@@ -3,38 +3,19 @@
 #
 # OpenWB-Modul für die Anbindung von SolarView über den integrierten TCP-Server
 # Details zur API: https://solarview.info/solarview-fb_Installieren.pdf
+# Sende-Kommando (siehe SolarView-Dokumentation); Beispiele:
+# '00*': Gesamte Anlage
+# '01*': Wechselrichter 1
+# '02*': Wechselrichter 2
 #
-from datetime import datetime, timezone
-import os
+from typing import List, Optional
+import logging
 import socket
-import sys
 import traceback
 
-Debug= int(os.environ.get('debug'))
-myPid= str(os.getpid())
+from helpermodules.cli import run_using_positional_cli_args
 
-solarview_hostname = str(sys.argv[1])
-try:
-    solarview_port = int(sys.argv[2])
-except:
-    solarview_port = 15000
-try:
-    solarview_timeout = int(sys.argv[3])
-except:
-    solarview_timeout = 1
-try:
-    solarview_command_wr = str(sys.argv[4])
-except:
-    # Sende-Kommando (siehe SolarView-Dokumentation); Beispiele:
-    # '00*': Gesamte Anlage
-    # '01*': Wechselrichter 1
-    # '02*': Wechselrichter 2
-    solarview_command_wr = "00*"
-
-
-def DebugLog(message):
-	local_time = datetime.now(timezone.utc).astimezone()
-	print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+log = logging.getLogger("Solarview WR")
 
 def write_value(value, file):
     try:
@@ -44,21 +25,40 @@ def write_value(value, file):
         traceback.print_exc()
         exit(1)
 
+def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solarview_timeout: Optional[int] = 1, solarview_command_wr:Optional[str] = "00*"):
+    log.debug('Solarview Hostname: ' + solarview_hostname)
+    log.debug('Solarview Port: ' + str(solarview_port))
+    log.debug('Solarview Timeout: ' + str(solarview_timeout))
 
-def request(command):
+    # Checks
+    if solarview_hostname == None or solarview_hostname == "":
+        log.debug("Missing required variable 'solarview_hostname'")
+        exit(1)
+    if solarview_port:
+        if solarview_port < 1 or solarview_port > 65535:
+            log.debug("Invalid value "+str(solarview_port)+" for variable 'solarview_port'")
+            exit(1)
+    if solarview_command_wr == None or solarview_command_wr == "":
+        log.debug("Missing value for variable 'solarview_command_wr'")
+        exit(1)
+
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(solarview_timeout)
             s.connect((solarview_hostname, solarview_port))
-            s.sendall(command)
+            s.sendall(solarview_command_wr.encode("ascii"))
             response = s.recv(1024)
+            message = response[:-2]
+            checksum = int.from_bytes(response[-1:], "big", signed=False)
+            calculated_checksum = int(sum(message)) % 256
+            log.debug("message: " + str(message))
+            log.debug("checksum: " + str(checksum) + " calculated: " + str(calculated_checksum))
     except Exception as e:
-        DebugLog("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+str(solarview_hostname)+", port: "+str(solarview_port)+", timeout: "+str(solarview_timeout))
+        log.debug("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+str(solarview_hostname)+", port: "+str(solarview_port)+", timeout: "+str(solarview_timeout))
         traceback.print_exc()
         exit(1)
 
-    if Debug != 0:
-        DebugLog("Raw response: "+str(response))
+    log.debug("Raw response: "+str(response))
     #
     # Format:   {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,UDCD,IDCD,UL1,IL1,UL2,IL2,UL3,IL3,TKK},Checksum
     # Beispiel: {01,09,09,2019,08,18,0000.0,00082,002617,00018691,00104,451,000.2,000,000.0,000,000.0,000,000.0,226,000.4,000,000.0,000,000.0,00},▒
@@ -76,10 +76,8 @@ def request(command):
     #  UL3, IL3= Netzspannung, Netzstrom Phase 3
     #  TKK= Temperatur Wechselrichter
 
-    # Geschweifte Klammern und Checksumme entfernen
-    values = response.split("}")[0]
-    values = values.replace("{", "")
-    values = values.split(",")
+    # Geschweifte Klammern entfernen
+    values = message.decode("ascii")[1:-1].split(",")
 
     # Werte formatiert in Variablen speichern
     id = values[0]
@@ -107,39 +105,38 @@ def request(command):
     grid3_current = round(float(values[24]), 1)
     temperature = int(values[25])
 
-    if Debug != 0:
-        # Werte ausgeben
-        DebugLog("ID: "+str(id))
-        DebugLog("Zeitpunkt: "+str(timestamp))
-        DebugLog("Temperatur: "+str(temperature)+" °C")
-        DebugLog("Leistung: "+str(power)+" W")
-        DebugLog("Energie:")
-        DebugLog("  Tag:    "+str(energy_day)+" Wh")
-        DebugLog("  Monat:  "+str(energy_month)+" Wh")
-        DebugLog("  Jahr:   "+str(energy_year)+" Wh")
-        DebugLog("  Gesamt: "+str(energy_total)+" Wh")
-        DebugLog("Generator-MPP-Tracker-1")
-        DebugLog("  Spannung: "+str(mpptracker1_voltage)+" V")
-        DebugLog("  Strom:    "+str(mpptracker1_current)+" A")
-        DebugLog("Generator-MPP-Tracker-2")
-        DebugLog("  Spannung: "+str(mpptracker2_voltage)+" V")
-        DebugLog("  Strom:    "+str(mpptracker2_current)+" A")
-        DebugLog("Generator-MPP-Tracker-3")
-        DebugLog("  Spannung: "+str(mpptracker3_voltage)+" V")
-        DebugLog("  Strom:    "+str(mpptracker3_current)+" A")
-        DebugLog("Generator-MPP-Tracker-4")
-        DebugLog("  Spannung: "+str(mpptracker4_voltage)+" V")
-        DebugLog("  Strom:    "+str(mpptracker4_current)+" A")
-        DebugLog("Netz:")
-        DebugLog("  Phase 1:")
-        DebugLog("    Spannung: "+str(grid1_voltage)+" V")
-        DebugLog("    Strom:    "+str(grid1_current)+" A")
-        DebugLog("  Phase 2:")
-        DebugLog("    Spannung: "+str(grid2_voltage)+" V")
-        DebugLog("    Strom:    "+str(grid2_current)+" A")
-        DebugLog("  Phase 3:")
-        DebugLog("    Spannung: "+str(grid3_voltage)+" V")
-        DebugLog("    Strom:    "+str(grid3_current)+" A")
+    # Werte ausgeben
+    log.debug("ID: "+str(id))
+    log.debug("Zeitpunkt: "+str(timestamp))
+    log.debug("Temperatur: "+str(temperature)+" °C")
+    log.debug("Leistung: "+str(power)+" W")
+    log.debug("Energie:")
+    log.debug("  Tag:    "+str(energy_day)+" Wh")
+    log.debug("  Monat:  "+str(energy_month)+" Wh")
+    log.debug("  Jahr:   "+str(energy_year)+" Wh")
+    log.debug("  Gesamt: "+str(energy_total)+" Wh")
+    log.debug("Generator-MPP-Tracker-1")
+    log.debug("  Spannung: "+str(mpptracker1_voltage)+" V")
+    log.debug("  Strom:    "+str(mpptracker1_current)+" A")
+    log.debug("Generator-MPP-Tracker-2")
+    log.debug("  Spannung: "+str(mpptracker2_voltage)+" V")
+    log.debug("  Strom:    "+str(mpptracker2_current)+" A")
+    log.debug("Generator-MPP-Tracker-3")
+    log.debug("  Spannung: "+str(mpptracker3_voltage)+" V")
+    log.debug("  Strom:    "+str(mpptracker3_current)+" A")
+    log.debug("Generator-MPP-Tracker-4")
+    log.debug("  Spannung: "+str(mpptracker4_voltage)+" V")
+    log.debug("  Strom:    "+str(mpptracker4_current)+" A")
+    log.debug("Netz:")
+    log.debug("  Phase 1:")
+    log.debug("    Spannung: "+str(grid1_voltage)+" V")
+    log.debug("    Strom:    "+str(grid1_current)+" A")
+    log.debug("  Phase 2:")
+    log.debug("    Spannung: "+str(grid2_voltage)+" V")
+    log.debug("    Strom:    "+str(grid2_current)+" A")
+    log.debug("  Phase 3:")
+    log.debug("    Spannung: "+str(grid3_voltage)+" V")
+    log.debug("    Strom:    "+str(grid3_current)+" A")
 
     # Werte speichern
     write_value(power, "pvwatt")
@@ -148,23 +145,5 @@ def request(command):
     write_value(energy_month, "monthly_pvkwh")
     write_value(energy_year, "yearly_pvkwh")
 
-if Debug >= 2:
-	DebugLog('Solarview Hostname: ' + solarview_hostname)
-	DebugLog('Solarview Port: ' + str(solarview_port))
-	DebugLog('Solarview Timeout: ' + str(solarview_timeout))
-
-# Checks
-if solarview_hostname == None or solarview_hostname == "":
-    DebugLog("Missing required variable 'solarview_hostname'")
-    exit(1)
-if solarview_port:
-    if solarview_port < 1 or solarview_port > 65535:
-        DebugLog("Invalid value "+str(solarview_port)+" for variable 'solarview_port'")
-        exit(1)
-if solarview_command_wr == None or solarview_command_wr == "":
-    DebugLog("Missing value for variable 'solarview_command_wr'")
-    exit(1)
-
-request(solarview_command_wr)
-
-exit(0)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

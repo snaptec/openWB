@@ -18,7 +18,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${speicher1_ip}"
 
-python3 /var/www/html/openWB/modules/wr_solarwatt/solarwatt.py "${speicher1_ip}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarwatt.solarwatt" "${speicher1_ip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

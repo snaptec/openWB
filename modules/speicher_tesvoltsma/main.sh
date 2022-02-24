@@ -1,3 +1,21 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BAT"
+DMOD="MAIN"
+Debug=$debug
 
-sudo python /var/www/html/openWB/modules/speicher_tesvoltsma/tripower.py $speicher1_ip
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+        MYLOGFILE="${RAMDISKDIR}/bat.log"
+fi
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_tesvoltsma.tripower" "${speicher1_ip}" >>${MYLOGFILE} 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"

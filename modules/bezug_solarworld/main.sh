@@ -17,7 +17,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "Bezug Solarworld IP: ${solarworld_emanagerip}"
 
-python3 /var/www/html/openWB/modules/bezug_solarworld/solarworld.py "${solarworld_emanagerip}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_solarworld.solarworld" "${solarworld_emanagerip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

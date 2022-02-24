@@ -19,7 +19,7 @@ fi
 openwbDebugLog ${DMOD} 2 "Bezug Solarlog IP: ${bezug_solarlog_ip}"
 openwbDebugLog ${DMOD} 2 "Bezug Solarlog Speicher : ${bezug_solarlog_speicherv}"
 
-python3 /var/www/html/openWB/modules/bezug_solarlog/solarlog.py "${bezug_solarlog_ip}" "${bezug_solarlog_speicherv}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_solarlog.solarlog" "${bezug_solarlog_ip}" "${bezug_solarlog_speicherv}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
