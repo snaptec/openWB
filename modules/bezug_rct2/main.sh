@@ -17,5 +17,4 @@ ret=$?
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
 # Nehme wattbezug als ergbenis mit zurueck da beim Bezug-Module ein Returnwert erwartet wird.
-wattbezug=$(<"$RAMDISKDIR/wattbezug")
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"

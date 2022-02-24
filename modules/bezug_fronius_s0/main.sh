@@ -28,5 +28,4 @@ openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "counter_s0" "${wrfroniusip}" "${froniuserzeugung}" "${froniusvar2}" "${froniusmeterlocation}" "${wrfronius2ip}" "${speichermodul}" >>"$MYLOGFILE" 2>&1
 
-wattbezug=$(<"${RAMDISKDIR}/wattbezug")
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"

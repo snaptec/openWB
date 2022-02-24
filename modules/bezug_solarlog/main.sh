@@ -18,5 +18,4 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-wattbezug=$(<"$RAMDISKDIR/wattbezug")
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"
