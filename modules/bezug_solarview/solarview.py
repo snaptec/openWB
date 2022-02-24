@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 #
 # OpenWB-Modul für die Anbindung von SolarView über den integrierten TCP-Server
 # Details zur API: https://solarview.info/solarview-fb_Installieren.pdf
@@ -15,12 +14,10 @@ from helpermodules.cli import run_using_positional_cli_args
 
 log = logging.getLogger("Solarview EVU")
 
+
 def write_value(value, file):
-    try:
-        with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
-            f.write(str(value))
-    except:
-        traceback.print_exc()
+    with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
+        f.write(str(value))
 
 
 def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int, command):
@@ -36,10 +33,11 @@ def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int
             log.debug("message: " + str(message))
             log.debug("checksum: " + str(checksum) + " calculated: " + str(calculated_checksum))
     except Exception as e:
-        log.debug("Error: request to SolarView failed. Details: return-code: " + str(e) + ", host: " + str(solarview_hostname) +
-            ", port: " + str(solarview_port) + ", timeout: " + str(solarview_timeout))
+        log.debug("Error: request to SolarView failed. Details: return-code: " + str(e) + ", host: " +
+                  str(solarview_hostname) + ", port: " + str(solarview_port) + ", timeout: " +
+                  str(solarview_timeout))
         traceback.print_exc()
-        sys.exit(0)
+        exit(1)
 
     log.debug("Raw response: "+response)
     #
@@ -55,6 +53,9 @@ def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int
     #  PAC= Generatorleistung in W
     #  UDC, UDCB, UDCC, UDCD= Generator-Spannungen in Volt pro MPP-Tracker
     #  IDC, IDCB, IDCC, IDCD= Generator-Ströme in Ampere pro MPP-Tracker
+    #  UL1, IL1= Netzspannung, Netzstrom Phase 1
+    #  UL2, IL2= Netzspannung, Netzstrom Phase 2
+    #  UL3, IL3= Netzspannung, Netzstrom Phase 3
     #  TKK= Temperatur Wechselrichter
 
     # Auszug aus der Doku vom 02.12.2020:
@@ -154,9 +155,10 @@ def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int
         except:
             pass
 
+
 def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solarview_timeout: Optional[int] = 1):
     # Checks
-    if solarview_hostname == None or solarview_hostname == "":
+    if solarview_hostname is None or solarview_hostname == "":
         log.debug("Missing required variable 'solarview_hostname'")
         sys.exit(1)
     if solarview_port:
@@ -169,6 +171,7 @@ def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solar
 
     request(solarview_hostname, solarview_port, solarview_timeout, command_einspeisung)
     request(solarview_hostname, solarview_port, solarview_timeout, command_bezug)
+
 
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)

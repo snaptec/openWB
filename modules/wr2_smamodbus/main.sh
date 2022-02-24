@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd "$(dirname $0)/../../" && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #DMOD="PV"
 DMOD="MAIN"
@@ -13,4 +13,4 @@ ret=$?
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
 pv2watt=$(</var/www/html/openWB/ramdisk/pv2watt)
-echo $pv2watt
+echo "$pv2watt"

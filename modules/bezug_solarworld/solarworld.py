@@ -29,9 +29,6 @@ def update(solarworld_emanagerip: str):
     # Bezug ist entweder -Out oder In; bei Einspeisung ist 'em_in_watt' immer 0
     bezug_watt = int(em_in_watt - em_out_watt)
 
-    # wenn eManager aus bzw. keine Antwort ersetze leeren Wert durch eine 0
-    ra = '^-?[0-9]+$'
-
     log.debug('Leistung: ' + str(bezug_watt))
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
         f.write(str(bezug_watt))

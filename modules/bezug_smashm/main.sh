@@ -1,11 +1,8 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #DMOD="EVU"
 DMOD="MAIN"
-
-#For development only
-#Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
 	MYLOGFILE="${RAMDISKDIR}/openWB.log"

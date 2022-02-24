@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 #
 # OpenWB-Modul für die Anbindung von SolarView über den integrierten TCP-Server
 # Details zur API: https://solarview.info/solarview-fb_Installieren.pdf
@@ -17,28 +16,27 @@ from helpermodules.cli import run_using_positional_cli_args
 
 log = logging.getLogger("Solarview WR")
 
-def write_value(value, file):
-    try:
-        with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
-            f.write(str(value))
-    except:
-        traceback.print_exc()
-        exit(1)
 
-def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solarview_timeout: Optional[int] = 1, solarview_command_wr:Optional[str] = "00*"):
+def write_value(value, file):
+    with open("/var/www/html/openWB/ramdisk/"+file, "w") as f:
+        f.write(str(value))
+
+
+def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solarview_timeout: Optional[int] = 1,
+           solarview_command_wr: Optional[str] = "00*"):
     log.debug('Solarview Hostname: ' + solarview_hostname)
     log.debug('Solarview Port: ' + str(solarview_port))
     log.debug('Solarview Timeout: ' + str(solarview_timeout))
 
     # Checks
-    if solarview_hostname == None or solarview_hostname == "":
+    if solarview_hostname is None or solarview_hostname == "":
         log.debug("Missing required variable 'solarview_hostname'")
         exit(1)
     if solarview_port:
         if solarview_port < 1 or solarview_port > 65535:
             log.debug("Invalid value "+str(solarview_port)+" for variable 'solarview_port'")
             exit(1)
-    if solarview_command_wr == None or solarview_command_wr == "":
+    if solarview_command_wr is None or solarview_command_wr == "":
         log.debug("Missing value for variable 'solarview_command_wr'")
         exit(1)
 
@@ -54,7 +52,9 @@ def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solar
             log.debug("message: " + str(message))
             log.debug("checksum: " + str(checksum) + " calculated: " + str(calculated_checksum))
     except Exception as e:
-        log.debug("Error: request to SolarView failed. Details: return-code: "+str(e)+", host: "+str(solarview_hostname)+", port: "+str(solarview_port)+", timeout: "+str(solarview_timeout))
+        log.debug("Error: request to SolarView failed. Details: return-code: " + str(e) + ", host: " +
+                  str(solarview_hostname) + ", port: " + str(solarview_port) + ", timeout: " +
+                  str(solarview_timeout))
         traceback.print_exc()
         exit(1)
 
@@ -144,6 +144,7 @@ def update(solarview_hostname: str, solarview_port: Optional[int] = 15000, solar
     write_value(energy_day, "daily_pvkwh")
     write_value(energy_month, "monthly_pvkwh")
     write_value(energy_year, "yearly_pvkwh")
+
 
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)

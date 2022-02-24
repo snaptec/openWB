@@ -13,7 +13,7 @@ log = logging.getLogger("SmartMe EVU")
 def get_power_value(key, response: Dict, file=None):
     try:
         value = int(response[key] * 1000)
-        if file == None:
+        if file is None:
             return value
         else:
             log.debug(file+': ' + str(value))
@@ -40,7 +40,7 @@ def get_im_ex_value(key, response: Dict, file):
 def get_value(key, response: Dict, file=None):
     try:
         value = response[key]
-        if file == None:
+        if file is None:
             return value
         else:
             log.debug(file+': ' + str(value))
@@ -94,7 +94,7 @@ def update(bezug_smartme_url: str, bezug_smartme_user: str, bezug_smartme_pass: 
 
     # Prüfen ob Werte gültig
     regex = '^[-+]?[0-9]+.?[0-9]*$'
-    if re.search(regex, str(wattbezug)) == None:
+    if re.search(regex, str(wattbezug)) is None:
         with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
             wattbezug = f.read()
     # Ausgabe
