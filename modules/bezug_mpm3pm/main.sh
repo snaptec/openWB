@@ -1,4 +1,19 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
+
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+        MYLOGFILE="${RAMDISKDIR}/evu.log"
+fi
 
 if [[ $mpm3pmevusource = *virtual* ]]
 then
@@ -11,7 +26,10 @@ then
 else
 	echo "echo" > /dev/null
 fi
-sudo python /var/www/html/openWB/modules/bezug_mpm3pm/readmpm3pm.py $mpm3pmevusource $mpm3pmevuid
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_mpm3pm.readmpm3pm" "${mpm3pmevusource}" "${mpm3pmevuid}" >>"${MYLOGFILE}" 2>&1
+ret=$?
+openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug
 
