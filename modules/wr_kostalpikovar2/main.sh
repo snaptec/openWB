@@ -20,5 +20,4 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
-echo "$pvwatt"
+cat "$RAMDISKDIR/pvwatt"

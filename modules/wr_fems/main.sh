@@ -17,5 +17,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_fems.fems" "${femskacopw}" "${f
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-pvwatt=$(<"$RAMDISKDIR/pvwatt") 
-echo "$pvwatt"
+cat "$RAMDISKDIR/pvwatt"

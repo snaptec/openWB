@@ -1,12 +1,9 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="PV"
 #DMOD="MAIN"
-
-#For Development only
-#Debug=1
 
 if [ $DMOD == "MAIN" ]; then
 	MYLOGFILE="${RAMDISKDIR}/openWB.log"
@@ -20,5 +17,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_shm.device" "inverter"
 ret=$?
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 
-watt=$(<"${RAMDISKDIR}/pvwatt")
-echo "${watt}"
+cat "$RAMDISKDIR/pvwatt"

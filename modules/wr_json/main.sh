@@ -1,5 +1,4 @@
 #!/bin/bash
-
 OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="PV"
@@ -20,5 +19,4 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-watt=$(<"${RAMDISKDIR}/pvwatt")
-echo "${watt}"
+cat "$RAMDISKDIR/pvwatt"

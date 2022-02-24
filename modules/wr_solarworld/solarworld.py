@@ -26,7 +26,7 @@ def update(solarworld_emanagerip: str):
     # wenn eManager aus bzw. keine Antwort ersetze leeren Wert durch eine 0
     ra = '^-?[0-9]+$'
 
-    if re.search(ra, str(wr_watt)) == None:
+    if re.search(ra, str(wr_watt)) is None:
         wr_watt = 0
 
     # PV ezeugte Leistung muss negativ sein

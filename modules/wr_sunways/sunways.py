@@ -27,7 +27,8 @@ params = (
     ('HASH', '00200403'),
     ('TYPE', '1'),
 )
-variable = requests.get("http://"+wrsunwaysip+"/data/ajax.txt", params=params, auth=HTTPDigestAuth("customer", wrsunwayspw))
+variable = requests.get("http://"+wrsunwaysip+"/data/ajax.txt", params=params,
+                        auth=HTTPDigestAuth("customer", wrsunwayspw))
 variable.encoding = 'utf-8'
 variable = variable.text.replace("\n", "")
 count = 0
@@ -46,5 +47,3 @@ for v in variable:
         with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
             f.write(str(v*1000))
     count = count+1
-
-exit(0)

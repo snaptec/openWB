@@ -1,14 +1,9 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-#MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="PV"
 DMOD="MAIN"
-Debug=$debug
-
-#For Development only
-#Debug=1
 
 if [ $DMOD == "MAIN" ]; then
 	MYLOGFILE="${RAMDISKDIR}/openWB.log"
@@ -19,10 +14,9 @@ fi
 openwbDebugLog ${DMOD} 2 "PV IP: ${wryoulessip}"
 openwbDebugLog ${DMOD} 2 "PV Alternative: ${wryoulessalt}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_youless120.youless" "${wryoulessip}" "${wryoulessalt}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_youless120.youless" "${wryoulessip}" "${wryoulessalt}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
-echo $pvwatt
+cat "$RAMDISKDIR/pvwatt"
