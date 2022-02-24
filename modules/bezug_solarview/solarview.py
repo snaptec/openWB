@@ -28,8 +28,13 @@ def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(solarview_timeout)
             s.connect((solarview_hostname, solarview_port))
-            s.sendall(command)
-            response = str(s.recv(1024))
+            s.sendall(command.encode("ascii"))
+            response = s.recv(1024)
+            message = response[:-2]
+            checksum = int.from_bytes(response[-1:], "big", signed=False)
+            calculated_checksum = int(sum(message)) % 256
+            log.debug("message: " + str(message))
+            log.debug("checksum: " + str(checksum) + " calculated: " + str(calculated_checksum))
     except Exception as e:
         log.debug("Error: request to SolarView failed. Details: return-code: " + str(e) + ", host: " + str(solarview_hostname) +
             ", port: " + str(solarview_port) + ", timeout: " + str(solarview_timeout))
@@ -59,17 +64,19 @@ def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int
     # KYR= Jahresertrag (kWh)
     # KT0= Gesamtertrag (kWh)
     # PAC= Generatorleistung in W
-    # UDC, UDCB, UDCC, UDCD = Generator-Spannungen in Volt pro MPP-Tracker IDC, IDCB, IDCC, IDCD = Generator-Ströme in Ampere pro MPP-Tracker UL1, IL1 = Netzspannung, Netzstrom Phase 1
-    # UL2, IL2 = Netzspannung, Netzstrom Phase 2 UL3, IL3 = Netzspannung, Netzstrom Phase 3 TKK= Temperatur Wechselrichter#
+    # UDC, UDCB, UDCC, UDCD = Generator-Spannungen in Volt pro MPP-Tracker
+    # IDC, IDCB, IDCC, IDCD = Generator-Ströme in Ampere pro MPP-Tracker
+    # UL1, IL1 = Netzspannung, Netzstrom Phase 1
+    # UL2, IL2 = Netzspannung, Netzstrom Phase 2
+    # UL3, IL3 = Netzspannung, Netzstrom Phase 3
+    # TKK= Temperatur Wechselrichter#
 
-    # Geschweifte Klammern und Checksumme entfernen
-    values = response.split("}")[0]
-    values = values.replace("{", "")
-    values = values.split(",")
+    # Geschweifte Klammern entfernen
+    values = message.decode("ascii")[1:-1].split(",")
 
     # Werte formatiert in Variablen speichern
     id = values[0]
-    timestamp = values[3]+"-"+values[2]+"-"+values[1]+" "+values[4]+":"+values[5]
+    timestamp = str(values[3]) + "-" + str(values[2]) + "-" + str(values[1]) + " " + str(values[4]) + ":" + str(values[5])
     #  PAC = '-0357' bedeutet: 357 W Bezug, 0 W Einspeisung
     #  PAC =  '0246' bedeutet: 0 W Bezug, 246 W Einspeisung
     power = -1 * int(values[10])
@@ -119,6 +126,16 @@ def request(solarview_hostname: str, solarview_port: int, solarview_timeout: int
     log.debug("Generator-MPP-Tracker-4")
     log.debug("  Spannung: "+str(mpptracker4_voltage)+" V")
     log.debug("  Strom:    "+str(mpptracker4_current)+" A")
+    log.debug("Netz:")
+    log.debug("  Phase 1:")
+    log.debug("    Spannung: "+str(grid1_voltage)+" V")
+    log.debug("    Strom:    "+str(grid1_current)+" A")
+    log.debug("  Phase 2:")
+    log.debug("    Spannung: "+str(grid2_voltage)+" V")
+    log.debug("    Strom:    "+str(grid2_current)+" A")
+    log.debug("  Phase 3:")
+    log.debug("    Spannung: "+str(grid3_voltage)+" V")
+    log.debug("    Strom:    "+str(grid3_current)+" A")
 
     # Werte speichern
     if command == '21*':
