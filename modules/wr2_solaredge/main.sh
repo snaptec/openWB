@@ -20,4 +20,4 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-cat "$OPENWBBASEDIR/ramdisk/pvwatt"
+cat "$RAMDISKDIR/pv2watt"
