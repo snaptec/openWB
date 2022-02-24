@@ -11,29 +11,31 @@ def update(seradd: str, sdmid: int, ser2add: str, sdm2id: int):
     if sdm2id > 0:
         client2 = ModbusTcpClient(ser2add, port=8899)
 
-    resp = client.read_input_registers(0x000C, 2, unit=sdmid)
-    watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
-    watt1 = int(watt[0])
+    with client:
+        resp = client.read_input_registers(0x000C, 2, unit=sdmid)
+        watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
+        watt1 = int(watt[0])
 
-    resp = client.read_input_registers(0x004a, 2, unit=sdmid)
-    vwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
-    vwh1 = float("%.3f" % vwh[0])
-    resp = client.read_input_registers(0x0048, 2, unit=sdmid)
-    v1wh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
-    v1wh1 = float("%.3f" % v1wh[0])
+        resp = client.read_input_registers(0x004a, 2, unit=sdmid)
+        vwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
+        vwh1 = float("%.3f" % vwh[0])
+        resp = client.read_input_registers(0x0048, 2, unit=sdmid)
+        v1wh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
+        v1wh1 = float("%.3f" % v1wh[0])
 
     try:
         if sdm2id > 0:
-            resp = client2.read_input_registers(0x000C, 2, unit=sdm2id)
-            watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
-            watt2 = int(watt[0])
+            with client2:
+                resp = client2.read_input_registers(0x000C, 2, unit=sdm2id)
+                watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
+                watt2 = int(watt[0])
 
-            resp = client2.read_input_registers(0x004a, 2, unit=sdm2id)
-            vwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
-            vwh2 = float("%.3f" % vwh[0])
-            resp = client2.read_input_registers(0x0048, 2, unit=sdm2id)
-            v1wh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
-            v1wh2 = float("%.3f" % v1wh[0])
+                resp = client2.read_input_registers(0x004a, 2, unit=sdm2id)
+                vwh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
+                vwh2 = float("%.3f" % vwh[0])
+                resp = client2.read_input_registers(0x0048, 2, unit=sdm2id)
+                v1wh = struct.unpack('>f', struct.pack('>HH', *resp.registers))
+                v1wh2 = float("%.3f" % v1wh[0])
         else:
             watt2 = 0
             vwh2 = 0
