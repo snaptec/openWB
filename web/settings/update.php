@@ -52,7 +52,7 @@
 				$releasetrain="stable";
 			}
 
-			$updateinprogress = file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress');
+			$updateinprogress = file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress')[0] !== "0";
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -161,7 +161,7 @@
 
 					<!-- modal body -->
 					<div class="modal-body text-center">
-						<?php if ($updateinprogress == "0") { ?>
+						<?php if (!$updateinprogress) { ?>
 							Aktuelle Version: <span id="modalInstalledVersionSpan"></span><br>
 							Soll wirklich ein Update der openWB auf<br>
 							<b>die verfügbare Version <span id="selectedVersionSpan"></span></b><br>
@@ -178,7 +178,7 @@
 
 					<!-- modal footer -->
 					<div class="modal-footer d-flex justify-content-center">
-						<?php if ($updateinprogress == "0") { ?>
+						<?php if (!$updateinprogress) { ?>
 							<button type="button" id="updateBtn" class="btn btn-success" data-dismiss="modal" disabled="disabled">Update</button>
 						<?php } ?>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
