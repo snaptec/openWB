@@ -6,15 +6,15 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="MAIN"
 
 if [ ${DMOD} == "MAIN" ]; then
-    MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-    MYLOGFILE="${RAMDISKDIR}/speicher.log"
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sonnenbatterie.device" "bat" "${sonnenecoip}" "${sonnenecoalternativ}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sonnenbatterie.device" "bat" "${sonnenecoip}" "${sonnenecoalternativ}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+speicherleistung=$(<"$RAMDISKDIR/speicherleistung")
 openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"

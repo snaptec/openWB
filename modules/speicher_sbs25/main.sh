@@ -1,3 +1,16 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="BAT"
+DMOD="MAIN"
 
-sudo python /var/www/html/openWB/modules/speicher_sbs25/sbs25.py $sbs25ip
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/bat.log"
+fi
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_sbs25.sbs25" "${sbs25ip}" >>"${MYLOGFILE}" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"

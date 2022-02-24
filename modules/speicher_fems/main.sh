@@ -19,5 +19,5 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_fems.fems" "${multifems}"
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+speicherleistung=$(<"$RAMDISKDIR/speicherleistung")
 openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"
