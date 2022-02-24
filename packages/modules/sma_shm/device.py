@@ -2,7 +2,7 @@
 import logging
 import socket
 import time
-from typing import List, Callable, Iterator
+from typing import Dict, List, Callable, Iterator
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
@@ -34,7 +34,7 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = []  # type: List[SpeedwireComponent]
+        self._components = {}  # type: Dict[str, SpeedwireComponent]
         self.device_config = device_config
 
     def add_component(self, component_config: dict) -> None:
@@ -44,7 +44,7 @@ class Device(AbstractDevice):
             raise Exception(
                 "Unknown component type <%s>, known types are: <%s>", e, ','.join(self.COMPONENT_FACTORIES.keys())
             )
-        self._components.append(factory(component_config))
+        self._components["component"+str(component_config["id"])] = factory(component_config)
 
     def update(self) -> None:
         log.debug("Beginning update")
@@ -59,7 +59,7 @@ class Device(AbstractDevice):
 
     def __read_speedwire(self, speedwire: Iterator[dict]):
         stop_time = time.time() + timeout_seconds
-        components_todo = self._components
+        components_todo = self._components.values()
         try:
             for sma_data in speedwire:
                 components_todo = [component for component in components_todo if not component.read_datagram(sma_data)]
