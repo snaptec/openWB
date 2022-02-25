@@ -2,6 +2,7 @@
 
 import logging
 from typing import List
+from urllib.error import HTTPError
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.component_state import CounterState
@@ -14,16 +15,13 @@ log = logging.getLogger("Powerwall")
 def update_using_powerwall_client(client: PowerwallHttpClient):
     # read firmware version
     status = client.get_json("/api/status")
-    # since 21.44.1 tesla adds the commit hash '21.44.1 c58c2df3'
-    # so we split by whitespace and take the first element for comparison
     log.debug('Firmware: ' + status["version"])
-    firmwareversion = int(''.join(status["version"].split()[0].split(".")))
     # read aggregate
     aggregate = client.get_json("/api/meters/aggregates")
-    # read additional info if firmware supports
-    if firmwareversion >= 20490:
+    try:
+        # read additional info if firmware supports
         meters_site = client.get_json("/api/meters/site")
-        get_counter_value_store(1).set(CounterState(
+        powerwall_state = CounterState(
             imported=aggregate["site"]["energy_imported"],
             exported=aggregate["site"]["energy_exported"],
             power=aggregate["site"]["instant_power"],
@@ -36,13 +34,15 @@ def update_using_powerwall_client(client: PowerwallHttpClient):
             powers=[
                 meters_site["0"]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]
             ]
-        ))
-    else:
-        get_counter_value_store(1).set(CounterState(
+        )
+    except [KeyError, HTTPError]:
+        log.debug("Firmware seems not to provide detailed phase measurements. Fallback to total power only.")
+        powerwall_state = CounterState(
             imported=aggregate["site"]["energy_imported"],
             exported=aggregate["site"]["energy_exported"],
             power=aggregate["site"]["instant_power"]
-        ))
+        )
+    get_counter_value_store(1).set(powerwall_state)
 
 
 def update(address: str, email: str, password: str):
