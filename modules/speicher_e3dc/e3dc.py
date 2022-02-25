@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import logging
-from statistics import mean
 from typing import Iterable, List
 
 from pymodbus.constants import Endian
@@ -28,15 +27,15 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
         log.debug("Battery Ip: %s, read_external %d pv_other %s", address, read_external, pv_other)
         count += 1
         with ModbusClient(address, port=502) as client:
-            # 40082 soc
+            # 40082 SoC
             soc += client.read_holding_registers(40082, ModbusDataType.INT_16, unit=1)
-            # 40069 speicherleistung
+            # 40069 Speicherleistung
             battery_power += client.read_holding_registers(40069,
                                                            ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
-            # 40067 pv Leistung
+            # 40067 PV Leistung
             pv += (client.read_holding_registers(40067, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1) * -1)
             if read_external == 1:
-                # 40075 externe pv Leistung
+                # 40075 externe PV Leistung
                 pv_external += client.read_holding_registers(40075,
                                                              ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
     soc = soc / count
@@ -44,8 +43,8 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
               soc, battery_power, pv, pv_external, count)
     counter_import, counter_export = SimCountFactory().get_sim_counter()().sim_count(battery_power, prefix="speicher")
     get_bat_value_store(1).set(BatState(power=battery_power, soc=soc, imported=counter_import, exported=counter_export))
-    # pv_other sagt aus, ob wr definiert ist, und dessen pv Leistungs auch gilt
-    # wenn 0 gilt nur pv und pv_external aus e3dc
+    # pv_other sagt aus, ob WR definiert ist, und dessen PV Leistung auch gilt
+    # wenn 0 gilt nur PV und pv_external aus e3dc
     pv_total = pv + pv_external
     # Wenn wr1 nicht definiert ist, gilt nur die PV Leistung die hier im Modul ermittelt wurde
     # als gesamte PV Leistung für wr1

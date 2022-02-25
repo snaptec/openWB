@@ -52,7 +52,7 @@
 				$releasetrain="stable";
 			}
 
-			$updateinprogress = file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress');
+			$updateinprogress = trim(file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress'));
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->

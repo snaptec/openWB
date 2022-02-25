@@ -20,7 +20,7 @@ openwbDebugLog ${DMOD} 2 "Speicher Methode: ${solarwattmethod}"
 openwbDebugLog ${DMOD} 2 "Speicher IP1: ${speicher1_ip}"
 openwbDebugLog ${DMOD} 2 "Speicher IP2: ${speicher1_ip2}"
 
-python3 /var/www/html/openWB/modules/speicher_solarwatt/solarwatt.py "${solarwattmethod}" "${speicher1_ip}" "${speicher1_ip2}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_solarwatt.solarwatt" "${solarwattmethod}" "${speicher1_ip}" "${speicher1_ip2}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

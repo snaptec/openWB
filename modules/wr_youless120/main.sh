@@ -19,7 +19,7 @@ fi
 openwbDebugLog ${DMOD} 2 "PV IP: ${wryoulessip}"
 openwbDebugLog ${DMOD} 2 "PV Alternative: ${wryoulessalt}"
 
-python3 /var/www/html/openWB/modules/wr_youless120/youless.py "${wryoulessip}" "${wryoulessalt}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_youless120.youless" "${wryoulessip}" "${wryoulessalt}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
