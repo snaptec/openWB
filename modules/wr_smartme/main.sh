@@ -20,7 +20,7 @@ openwbDebugLog ${DMOD} 2 "WR URL: ${wr_smartme_url}"
 openwbDebugLog ${DMOD} 2 "WR User: ${wr_smartme_user}"
 openwbDebugLog ${DMOD} 2 "WR Passwort: ${wr_smartme_pass}"
 
-python3 /var/www/html/openWB/modules/wr_smartme/smartme.py "${wr_smartme_url}" "${wr_smartme_user}" "${wr_smartme_pass}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_smartme.smartme" "${wr_smartme_url}" "${wr_smartme_user}" "${wr_smartme_pass}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

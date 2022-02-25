@@ -1,34 +1,35 @@
 #!/usr/bin/python
-import sys
-# import os
-# import time
-# import getopt
-# import socket
-# import ConfigParser
+from typing import List
 import struct
-# import binascii
 from pymodbus.client.sync import ModbusTcpClient
 
-ipaddress = str(sys.argv[1])
+from helpermodules.cli import run_using_positional_cli_args
 
-client = ModbusTcpClient(ipaddress, port=502)
 
-# print "SoC batt"
-resp= client.read_input_registers(1056,2,unit=25)
-value1 = resp.registers[0]
-value2 = resp.registers[1]
-all = format(value1, '04x') + format(value2, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0])/10
-f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
-f.write(str(final))
-f.close()
+def update(ipaddress: str):
+    client = ModbusTcpClient(ipaddress, port=502)
 
-# print "be-entladen watt"
-resp= client.read_input_registers(1012,2,unit=25)
-value1 = resp.registers[0]
-value2 = resp.registers[1]
-all = format(value1, '04x') + format(value2, '04x')
-ladung = int(struct.unpack('>i', all.decode('hex'))[0]) * -1
-f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
-f.write(str(ladung))
-f.close()
+    with client:
+        # print "SoC batt"
+        resp = client.read_input_registers(1056, 2, unit=25)
+        value1 = resp.registers[0]
+        value2 = resp.registers[1]
+        all = format(value1, '04x') + format(value2, '04x')
+        final = int(struct.unpack('>i', all.decode('hex'))[0])/10
+        f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
+        f.write(str(final))
+        f.close()
+
+        # print "be-entladen watt"
+        resp = client.read_input_registers(1012, 2, unit=25)
+        value1 = resp.registers[0]
+        value2 = resp.registers[1]
+        all = format(value1, '04x') + format(value2, '04x')
+        ladung = int(struct.unpack('>i', all.decode('hex'))[0]) * -1
+        f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
+        f.write(str(ladung))
+        f.close()
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)
