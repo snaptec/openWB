@@ -1,17 +1,17 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
 echo "atreboot.sh started"
-(sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
+(sleep 600; sudo kill "$$"; echo 0 > /var/www/html/openWB/ramdisk/bootinprogress; echo 0 > /var/www/html/openWB/ramdisk/updateinprogress) &
 
 # read openwb.conf
 echo "loading config"
-. /var/www/html/openWB/loadconfig.sh
+. "$OPENWBBASEDIR/loadconfig.sh"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 # load functions to init ramdisk and update config
 # no code will run here, functions need to be called
-. /var/www/html/openWB/runs/initRamdisk.sh
-. /var/www/html/openWB/runs/updateConfig.sh
+. "$OPENWBBASEDIR/runs/initRamdisk.sh"
+. "$OPENWBBASEDIR/runs/updateConfig.sh"
 
 sleep 5
 mkdir -p /var/www/html/openWB/web/backup
@@ -42,7 +42,7 @@ sudo chmod +x /var/www/html/openWB/packages/*.sh
 # update openwb.conf
 updateConfig
 # reload our changed openwb.conf
-. /var/www/html/openWB/loadconfig.sh
+. "$OPENWBBASEDIR/loadconfig.sh"
 # now setup all files in ramdisk
 initRamdisk
 
@@ -233,7 +233,7 @@ then
 	sudo apt-get -qq install -y libxslt1-dev
 fi
 # no need to reload config
-# . /var/www/html/openWB/loadconfig.sh
+# . $OPENWBBASEDIR/loadconfig.sh
 
 # update old ladelog
 /var/www/html/openWB/runs/transferladelog.sh

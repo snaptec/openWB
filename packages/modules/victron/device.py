@@ -67,6 +67,7 @@ def read_legacy(
         component_type: str,
         ip_address: str,
         modbus_id: Optional[int] = 100,
+        energy_meter: Optional[int] = 1,
         mppt: Optional[int] = 0,
         num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
@@ -81,6 +82,10 @@ def read_legacy(
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        if component_type == "counter":
+            component_config["configuration"]["energy_meter"] = bool(energy_meter)
+        elif component_type == "inverter":
+            component_config["configuration"]["mppt"] = mppt
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
@@ -88,10 +93,10 @@ def read_legacy(
         )
     component_config["id"] = num
     component_config["configuration"]["modbus_id"] = modbus_id
-    component_config["configuration"]["mppt"] = mppt
     dev.add_component(component_config)
 
     log.MainLogger().debug('Victron IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Victron Energy Meter: ' + str(bool(energy_meter)))
     log.MainLogger().debug('Victron Modbus-ID: ' + str(modbus_id))
     log.MainLogger().debug('Victron MPPT: ' + str(mppt))
     dev.update()
