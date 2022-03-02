@@ -410,13 +410,11 @@
 								$(function() {
 									function updateSonnenIp() {
 										let myIp = $("#sonnenecoip").val();
-										console.log(myIp);
 										let myLinks = $("#divspeicherseco a.api-link").each(function() {
 											let myLink = $(this).data("template").replace("[ip]", myIp);
 											$(this).text(myLink);
 											$(this).attr("href", myLink);
 										});;
-										console.log(myLinks);
 									}
 
 									$("#sonnenecoip").keyup(function() {
