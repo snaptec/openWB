@@ -1169,7 +1169,7 @@
 							<div class="form-row mb-1">
 									<label for="pv2flexid" class="col-md-4 col-form-label">Unit ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="pv2flexid" id="pv2flexid" value="<?php echo $pvflexidold ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="pv2flexid" id="pv2flexid" value="<?php echo $pv2flexidold ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
 									</div>
 								</div>
