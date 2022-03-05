@@ -450,19 +450,19 @@ function formatWatt(watt) {
 				wattResult = Math.round(watt / 1000);
 				break;
 			case 1:
-				wattResult = (Math.round(watt / 100) / 10).toFixed(1);
+				wattResult = (Math.round(watt / 100) / 10)
 				break;
 			case 2:
-				wattResult = (Math.round(watt / 10) / 100).toFixed(2);
+				wattResult = (Math.round(watt / 10) / 100)
 				break;
 			case 3:
-				wattResult = (Math.round(watt) / 1000).toFixed(3);
+				wattResult = (Math.round(watt) / 1000)
 				break;
 			default:
 				wattResult = Math.round(watt / 100) / 10;
 				break;
 		}
-		return (wattResult + " kW");
+		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kW");
 	} else {
 		return (watt + " W");
 	}
@@ -475,19 +475,19 @@ function formatWattH(watt) {
 				wattResult = Math.round(watt / 1000);
 				break;
 			case 1:
-				wattResult = (Math.round(watt / 100) / 10).toFixed(1);
+				wattResult = (Math.round(watt / 100) / 10)
 				break;
 			case 2:
-				wattResult = (Math.round(watt / 10) / 100).toFixed(2);
+				wattResult = (Math.round(watt / 10) / 100)
 				break;
 			case 3:
-				wattResult = (Math.round(watt) / 1000).toFixed(3);
+				wattResult = (Math.round(watt) / 1000)
 				break;
 			default:
 				wattResult = Math.round(watt / 100) / 10;
 				break;
 		}
-		return (wattResult + " kWh");
+		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kWh");
 	} else {
 		return (Math.round(watt) + " Wh");
 	}
