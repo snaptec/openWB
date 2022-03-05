@@ -279,42 +279,46 @@ class PowerGraph {
       }
     }
   }
-
   updateEnergyValues() {
-    const startValues = this.rawData[0].split(',');
-    const endValues = this.rawData[this.rawData.length - 1].split(',');
-    wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3]) / 1000;
-    wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1]) / 1000;
-    wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9]) / 1000;
-    wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2]) / 1000;
-    wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000;
-    var deviceEnergy = 0;
-    for (var i = 0; i < 10; i++) {
-      if (wbdata.graphMode == 'day') {
-        deviceEnergy = deviceEnergy + (endValues[26 + i] - startValues[26 + i]) / 1000;
-      } else {
-        deviceEnergy = deviceEnergy + (endValues[19 + i] - startValues[19 + i]) / 1000;
+    if (this.rawData.length) {
+      const startValues = this.rawData[0].split(',');
+      const endValues = this.rawData[this.rawData.length - 1].split(',');
+      wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3]) / 1000;
+      wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1]) / 1000;
+      wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9]) / 1000;
+      wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2]) / 1000;
+      wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000;
+      var deviceEnergySum = 0;
+      var deviceEnergy
+      for (var i = 0; i < 9; i++) {
+        if (wbdata.graphMode == 'day') {
+          deviceEnergy = (endValues[26 + i] - startValues[26 + i]) / 1000;
+          deviceEnergySum = deviceEnergySum + deviceEnergy
+        } else {
+          deviceEnergy = (endValues[19 + i] - startValues[19 + i]) / 1000;
+        }
+        deviceEnergySum = deviceEnergySum + deviceEnergy
+        wbdata.historicSummary['sh' + i].energy = deviceEnergy
       }
+      deviceEnergy = deviceEnergy + (endValues[10] - startValues[10]) / 1000;
+      deviceEnergy = deviceEnergy + (endValues[12] - startValues[12]) / 1000;
+      wbdata.historicSummary.devices.energy = deviceEnergy;
+      wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
+      wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
+        - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
     }
-    deviceEnergy = deviceEnergy + (endValues[10] - startValues[10]) / 1000;
-    deviceEnergy = deviceEnergy + (endValues[12] - startValues[12]) / 1000;
-    wbdata.historicSummary.devices.energy = deviceEnergy;
-    wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
-    wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
-      - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
   }
-
   extractLiveValues(payload) {
     const elements = payload.split(",");
-    const now = new Date (Date.now());
+    const now = new Date(Date.now());
     const mSecondsPerDay = 86400000 // milliseconds in a day
     var values = {};
     values.date = new Date(d3.timeParse("%H:%M:%S")(elements[0]));
-    values.date.setDate (now.getDate())
-    values.date.setMonth (now.getMonth())
-    values.date.setFullYear (now.getFullYear())
+    values.date.setDate(now.getDate())
+    values.date.setMonth(now.getMonth())
+    values.date.setFullYear(now.getFullYear())
     if (values.date.getHours() > now.getHours()) { // this is an entry from yesterday
-      values.date = new Date (values.date.getTime() - mSecondsPerDay) // change date to yesterday
+      values.date = new Date(values.date.getTime() - mSecondsPerDay) // change date to yesterday
     }
     // evu
     if (+elements[1] > 0) {
