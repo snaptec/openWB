@@ -444,7 +444,7 @@ class SHDevice {
 
 function formatWatt(watt) {
 	let wattResult;
-	if (watt >= 1000) {
+	if (watt >= 1000 && wbdata.decimalPlaces < 4) {
 		switch (wbdata.decimalPlaces) {
 			case 0:
 				wattResult = Math.round(watt / 1000);
@@ -464,12 +464,12 @@ function formatWatt(watt) {
 		}
 		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kW");
 	} else {
-		return (watt + " W");
+		return (Math.round(watt).toLocaleString(undefined) + " W");
 	}
 }
 
 function formatWattH(watt) {
-	if (watt >= 1000) {
+	if (watt >= 1000 && wbdata.decimalPlaces < 4) {
 		switch (wbdata.decimalPlaces) {
 			case 0:
 				wattResult = Math.round(watt / 1000);
@@ -489,7 +489,7 @@ function formatWattH(watt) {
 		}
 		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kWh");
 	} else {
-		return (Math.round(watt) + " Wh");
+		return (Math.round(watt).toLocaleString(undefined) + " Wh");
 	}
 }
 function formatTime(seconds) {
@@ -581,7 +581,7 @@ function toggleGrid() {
 }
 
 function switchDecimalPlaces() {
-	if (wbdata.decimalPlaces < 3) {
+	if (wbdata.decimalPlaces < 4) {
 		wbdata.decimalPlaces = wbdata.decimalPlaces + 1;
 	} else {
 		wbdata.decimalPlaces = 0;
