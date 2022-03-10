@@ -6,7 +6,9 @@ from typing import List, Tuple
 import requests
 
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import BatState
+from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
 
 log = logging.getLogger("BYD Battery")
@@ -40,9 +42,11 @@ class BydParser(HTMLParser):
 
 def update(bydhvip: str, bydhvuser: str, bydhvpass: str):
     log.debug("Beginning update")
-    response = requests.get('http://' + bydhvip + '/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
-    response.raise_for_status()
-    get_bat_value_store(1).set(BydParser.parse(response.text))
+    bat_info = ComponentInfo(None, "BYD", "bat")
+    with SingleComponentUpdateContext(bat_info):
+        response = requests.get('http://' + bydhvip + '/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
+        response.raise_for_status()
+        get_bat_value_store(1).set(BydParser.parse(response.text))
     log.debug("Update completed successfully")
 
 
