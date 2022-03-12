@@ -5,3 +5,4 @@ from enum import Enum
 class MeterLocation(Enum):
     grid = 0
     load = 1
+    external = 3
