@@ -103,7 +103,6 @@ def read_legacy(
         ip_address: str,
         meter_id: int,
         variant: int,
-        meter_location: int = meter.MeterLocation.grid.value,
         ip_address2: str = "none",
         bat_module: str = "none",
         num: Optional[int] = None) -> None:
@@ -122,7 +121,6 @@ def read_legacy(
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "counter_sm":
             component_config["configuration"]["variant"] = variant
-            component_config["configuration"]["meter_location"] = meter_location
         elif component_type == "inverter":
             component_config["configuration"]["ip_address2"] = ip_address2
     else:

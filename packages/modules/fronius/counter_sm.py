@@ -18,8 +18,7 @@ def get_default_config() -> dict:
         "type": "counter_sm",
         "configuration":
         {
-            "variant": 0,
-            "meter_location": MeterLocation.grid.value
+            "variant": 0
         }
     }
 
@@ -28,8 +27,6 @@ class FroniusSmCounter:
     def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
         self.__device_id = device_id
         self.component_config = component_config
-        self.component_config["configuration"]["meter_location"] = MeterLocation(
-            self.component_config["configuration"]["meter_location"])
         self.device_config = device_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
