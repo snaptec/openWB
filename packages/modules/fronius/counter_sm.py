@@ -116,7 +116,9 @@ class FroniusSmCounter:
             params=(('Scope', 'System'),),
             timeout=5)
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
-        meter_location = self.component_config["configuration"]["meter_location"]
+
+        meter_location = MeterLocation(response_json_id["SMARTMETER_VALUE_LOCATION_U16"])
+        log.MainLogger().debug("Einbauort: "+str(meter_location))
 
         if meter_location == MeterLocation.load:
             power = self.__get_flow_power(session)
