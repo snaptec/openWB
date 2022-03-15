@@ -6,7 +6,9 @@ from typing import Iterable, List
 from pymodbus.constants import Endian
 
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import BatState
+from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusClient, ModbusDataType
 from modules.common.store import get_bat_value_store
 
@@ -29,8 +31,10 @@ def update_solaredge_battery(client: ModbusClient, slave_ids: Iterable[int]):
 def update(address: str, second_battery: int):
     # `second_battery` is 0 or 1
     log.debug("Beginning update")
-    with ModbusClient(address) as client:
-        update_solaredge_battery(client, range(1, 2 + second_battery))
+    bat_info = ComponentInfo(None, "Solaredge", "bat")
+    with SingleComponentUpdateContext(bat_info):
+        with ModbusClient(address) as client:
+            update_solaredge_battery(client, range(1, 2 + second_battery))
     log.debug("Update completed successfully")
 
 

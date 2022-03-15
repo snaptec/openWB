@@ -25,7 +25,7 @@ def writeRam(fn, val, rctname):
 
 # Entry point with parameter check
 def main(argv: List[str]):
-    rct_lib.init(argv)
+    rct_lib.init(argv[0])
 
     clientsocket = rct_lib.connect_to_server()
     if clientsocket is not None:
