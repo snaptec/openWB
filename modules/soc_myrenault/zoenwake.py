@@ -5,7 +5,7 @@ import time
 import getopt
 import json
 import urllib
-import urllib2 
+import urllib2
 import requests
 
 loginID=str(sys.argv[1])
@@ -20,11 +20,12 @@ time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp"+chargepoint, 
 f = open('/var/www/html/openWB/ramdisk/zoereply1lp'+chargepoint, 'r')
 android_config = json.loads(f.read())
 f.close()
-gigyarooturl = android_config['servers']['gigyaProd']['target'] 
-gigyaapikey = android_config['servers']['gigyaProd']['apikey'] 
+gigyarooturl = android_config['servers']['gigyaProd']['target']
+gigyaapikey = android_config['servers']['gigyaProd']['apikey']
 kamereonrooturl = android_config['servers']['wiredProd']['target']
 #kamereonapikey = android_config['servers']['wiredProd']['apikey']
-kamereonapikey = 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2'
+#kamereonapikey = 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2'
+kamereonapikey = 'VAX7XYKGfa92yMvXculCkEFyfZbuM7Ss'
 #print(time_string, 'gigyarooturl',gigyarooturl,gigyaapikey,kamereonrooturl,kamereonapikey)
 #
 f = open('/var/www/html/openWB/ramdisk/zoereply4lp'+chargepoint, 'r')
@@ -54,10 +55,10 @@ if len(vin) < 10:
 print(time_string,'vin wakeup',vin)
 payload = {"data":{"type":"ChargingStart","attributes":{"action":"start"}}}
 data=json.dumps(payload)
-payloadc = {'country': country} 
+payloadc = {'country': country}
 #head1 = 'Bearer ' + kamereonaccesstoken
-#headers = {'Content-Type':'application/vnd.api+json','x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey,'x-kamereon-authorization': head1} 
-headers = {'Content-Type':'application/vnd.api+json','x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
+#headers = {'Content-Type':'application/vnd.api+json','x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey,'x-kamereon-authorization': head1}
+headers = {'Content-Type':'application/vnd.api+json','x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey}
 reg= kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/kamereon/kca/car-adapter/v1/cars/' + vin + '/actions/charging-start'
 response=requests.post(reg, params=payloadc, data=data, headers=headers)
 responsetext  = response.text
