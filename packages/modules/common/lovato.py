@@ -74,6 +74,6 @@ class Lovato:
         try:
             final_bezug_1 = self.client.read_input_registers(0x1a1f, ModbusDataType.INT_32, unit=self.id)
             final_bezug_2 = self.client.read_input_registers(0x1a21, ModbusDataType.INT_32, unit=self.id)
-            return max(final_bezug_1, final_bezug_2)
+            return max(final_bezug_1, final_bezug_2) * 1000
         except Exception as e:
             self.__process_error(e)

@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 
-import requests
 from requests.auth import HTTPDigestAuth
 
 from helpermodules import log
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
+from modules.common import req
 from modules.common.store import get_inverter_value_store
+
+"""Example Output for ajax.txt
+109 W;103 W;111 VA;41 var;333.8;223.2;0.3;0.5;109.0;103.0;---;---;0.93 c;1.60;105.2;190.2;55342.2;132;0;0;NT 5000;1;
+x
+00200403;01;00000001
+"""
 
 
 def get_default_config() -> dict:
@@ -28,16 +34,17 @@ class SunwaysInverter:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
-        response = requests.get(
-            "http://" + self.ip_address + "/data/ajax.txt?CAN=1", auth=HTTPDigestAuth("customer", self.password)
+        params = (
+            ('CAN', '1'),
+            ('HASH', '00200403'),
+            ('TYPE', '1'),
         )
-        response.raise_for_status()
-        log.MainLogger().debug("API Response: %s", response.text)
+        response = req.get_http_session().get("http://" + self.ip_address + "/data/ajax.txt", params=params,
+                                              auth=HTTPDigestAuth("customer", self.password))
         values = response.text.split(';')
 
         inverter_state = InverterState(
-            power=float(values[1]),
+            power=float(values[1].split(' ')[0])*-1,
             counter=float(values[16])*1000
         )
         self.__store.set(inverter_state)

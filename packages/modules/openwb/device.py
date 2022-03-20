@@ -13,7 +13,8 @@ def get_default_config() -> dict:
     return {
         "name": "OpenWB-Kit",
         "type": "openwb",
-        "id": 0
+        "id": 0,
+        "configuration": {}
     }
 
 

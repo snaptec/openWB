@@ -15,8 +15,7 @@ def get_default_config() -> dict:
         "name": "Alpha ESS Speicher",
         "id": 0,
         "type": "bat",
-        "configuration":
-        {
+        "configuration": {
             "version": 1
         }
     }
@@ -32,16 +31,15 @@ class AlphaEssBat:
         self.__store = get_bat_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self) -> None:
+    def update(self, unit_id: int) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         # keine Unterschiede zwischen den Versionen
-        sdmid = 85
 
         with self.__tcp_client:
             time.sleep(0.1)
-            voltage = self.__tcp_client.read_holding_registers(0x0100, ModbusDataType.INT_16, unit=sdmid)
+            voltage = self.__tcp_client.read_holding_registers(0x0100, ModbusDataType.INT_16, unit=unit_id)
             time.sleep(0.1)
-            current = self.__tcp_client.read_holding_registers(0x0101, ModbusDataType.INT_16, unit=sdmid)
+            current = self.__tcp_client.read_holding_registers(0x0101, ModbusDataType.INT_16, unit=unit_id)
 
             power = voltage * current * -1 / 100
             log.MainLogger().debug(
@@ -49,7 +47,7 @@ class AlphaEssBat:
                 (power, voltage, current)
             )
             time.sleep(0.1)
-            soc_reg = self.__tcp_client.read_holding_registers(0x0102, ModbusDataType.INT_16, unit=sdmid)
+            soc_reg = self.__tcp_client.read_holding_registers(0x0102, ModbusDataType.INT_16, unit=unit_id)
             soc = int(soc_reg * 0.1)
 
         topic_str = "openWB/set/system/device/" + str(

@@ -7,7 +7,6 @@ from typing import List
 from pymodbus.constants import Endian
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import InverterState, BatState
 from modules.common.modbus import ModbusClient, ModbusDataType
 from modules.common.store import get_inverter_value_store, get_bat_value_store
@@ -86,15 +85,15 @@ def update_solar_edge(client: ModbusClient,
     ))
 
 
-def update_solar_edge_cli(ipaddress: str,
-                          slave_id0: str,
-                          slave_id1: str,
-                          slave_id2: str,
-                          slave_id3: str,
-                          batwrsame: int,
-                          extprodakt: int,
-                          zweiterspeicher: int,
-                          subbat: int):
+def update(ipaddress: str,
+           slave_id0: str,
+           slave_id1: str,
+           slave_id2: str,
+           slave_id3: str,
+           batwrsame: int,
+           extprodakt: int,
+           zweiterspeicher: int,
+           subbat: int):
     log.debug("Beginning update")
     with ModbusClient(ipaddress) as client:
         update_solar_edge(
@@ -108,6 +107,5 @@ def update_solar_edge_cli(ipaddress: str,
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(update_solar_edge_cli)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

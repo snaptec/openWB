@@ -34,7 +34,7 @@ class SolaxCounter:
                 )]
             except Exception:
                 powers = None
-            exported, imported = [value / 100
+            exported, imported = [value * 10
                                   for value in self.__tcp_client.read_input_registers(
                                       72, [ModbusDataType.UINT_32] * 2, wordorder=Endian.Little
                                   )]

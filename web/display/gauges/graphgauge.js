@@ -24,9 +24,9 @@ var opts = {
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 	},
 	staticZones: [
-		{strokeStyle: "#F03E3E", min: 2000, max: 30000}, // Red from 100 to 130
-		{strokeStyle: "#FFDD00", min: 0, max: 2000}, // Yellow
-		{strokeStyle: "#30B32D", min: -20000, max: 0}, // Green
+		{strokeStyle: "#F03E3E", min: displayevumax * 0.1, max: displayevumax}, // Red from 100 to 130
+		{strokeStyle: "#FFDD00", min: 0, max: displayevumax * 0.1}, // Yellow
+		{strokeStyle: "#30B32D", min: displayevumax * -1, max: 0}, // Green
 	],
 };
 
@@ -99,8 +99,8 @@ var opts = {
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 	}, 
 	staticZones: [
-		{strokeStyle: "#F03E3E", min: displayspeichermax * -1, max: -300}, // Red from 100 to 130
-		{strokeStyle: "#FFDD00", min: -300, max: 0}, // Yellow
+		{strokeStyle: "#F03E3E", min: displayspeichermax * -1, max: displayspeichermax * -0.1}, // Red from 100 to 130
+		{strokeStyle: "#FFDD00", min: displayspeichermax * -0.1, max: 0}, // Yellow
 		{strokeStyle: "#30B32D", min: 0, max: displayspeichermax}, // Green
 	],
 };

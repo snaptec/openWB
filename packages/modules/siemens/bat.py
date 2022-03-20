@@ -13,9 +13,8 @@ def get_default_config() -> dict:
         "name": "Siemens Speicher",
         "id": 0,
         "type": "bat",
-        "configuration":
-        {
-            "ip_address": "192.168.0.12"
+        "configuration": {
+            "ip_address": "192.168.0.12"  # ToDo: move IP to device
         }
     }
 

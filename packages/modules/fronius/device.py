@@ -17,9 +17,8 @@ def get_default_config() -> dict:
         "name": "Fronius",
         "type": "fronius",
         "id": 0,
-        "configuration":
-        {
-            "meter_id": 0,
+        "configuration": {
+            "meter_id": 0,  # ToDo: move to counter_*
             "ip_address": "192.168.193.15"
         }
     }

@@ -26,7 +26,8 @@ class Mpm3pm:
 
     def get_imported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0002, ModbusDataType.UINT_32, unit=self.id) / 100
+            # Faktorisierung anders als in der Dokumentation angegeben
+            return self.client.read_input_registers(0x0002, ModbusDataType.UINT_32, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 
@@ -41,13 +42,15 @@ class Mpm3pm:
 
     def get_exported(self) -> float:
         try:
-            return self.client.read_input_registers(0x0004, ModbusDataType.UINT_32, unit=self.id) / 100
+            # Faktorisierung anders als in der Dokumentation angegeben
+            return self.client.read_input_registers(0x0004, ModbusDataType.UINT_32, unit=self.id) * 10
         except Exception as e:
             self.__process_error(e)
 
     def get_power_factors(self) -> List[float]:
         try:
-            return [val / 1000 for val in self.client.read_input_registers(
+            # Faktorisierung anders als in der Dokumentation angegeben
+            return [val / 10 for val in self.client.read_input_registers(
                 0x20, [ModbusDataType.UINT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
@@ -66,7 +69,4 @@ class Mpm3pm:
             self.__process_error(e)
 
     def get_counter(self) -> float:
-        try:
-            return self.client.read_input_registers(0x0004, ModbusDataType.UINT_32, unit=self.id) / 100
-        except Exception as e:
-            self.__process_error(e)
+        return self.get_exported()

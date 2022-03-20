@@ -15,3 +15,4 @@ modules/soc_i3/token*
 modules/soc_eq/soc_eq_acc_*
 .vscode/settings.json
 .pytest_cache
+__pycache__

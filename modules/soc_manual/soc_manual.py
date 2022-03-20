@@ -1,11 +1,10 @@
 import logging
+from typing import List
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.store import ramdisk_write, ramdisk_read_float
 from modules.common.store.ramdisk import files
 
-setup_logging_stdout()
 log = logging.getLogger("SoC Manual")
 
 
@@ -51,5 +50,5 @@ def run_command_line(charge_point: int, efficiency: float, battery_size: float):
     run(charge_point, battery_size, efficiency / 100)
 
 
-if __name__ == '__main__':
-    run_using_positional_cli_args(run_command_line)
+def main(argv: List[str]):
+    run_using_positional_cli_args(run_command_line, argv)

@@ -15,10 +15,9 @@ def get_default_config() -> dict:
         "name": "OpenWB-Kit flex",
         "type": "openwb_flex",
         "id": 0,
-        "configuration":
-        {
+        "configuration": {
             "ip_address": "192.168.193.15",
-            "port": "8899"
+            "port": 8899
         }
     }
 
