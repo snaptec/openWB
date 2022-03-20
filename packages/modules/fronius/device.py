@@ -62,7 +62,10 @@ class Device(AbstractDevice):
                 # zuerst den WR auslesen
                 for component in self._components:
                     if isinstance(self._components[component], inverter.FroniusInverter):
-                        power_inverter = self._components[component].update()
+                        inverter_state = self._components[component].update()
+                        self._components[component].set_inverter_state(inverter_state)
+                        # Rückgabe der Leistung des ersten WR mit zurückgesetzter Vorzeichenumkehr
+                        power_inverter = -1 * inverter_state.power
                         break
                 else:
                     power_inverter = 0
@@ -90,7 +93,8 @@ class Device(AbstractDevice):
                         break
                 for component in self._components:
                     if isinstance(self._components[component], bat.FroniusBat):
-                        self._components[component].update()
+                        bat_state = self._components[component].update()
+                        self._components[component].set_bat_state(bat_state)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
