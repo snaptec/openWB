@@ -1,6 +1,7 @@
 import pytest
 
-from packages.modules.fronius.meter import MeterLocation
+from modules.fronius.meter import MeterLocation
+
 
 def test_meter_enum():
     assert MeterLocation(0) == MeterLocation.grid
