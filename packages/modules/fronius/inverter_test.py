@@ -1,4 +1,3 @@
-from distutils.log import debug
 import pytest
 
 import requests_mock
