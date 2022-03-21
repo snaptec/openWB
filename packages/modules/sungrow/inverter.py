@@ -31,7 +31,7 @@ class SungrowInverter:
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
-            power = self.__tcp_client.read_input_registers(5016, ModbusDataType.INT_32,
+            power = self.__tcp_client.read_input_registers(5016, ModbusDataType.UINT_32,
                                                            wordorder=Endian.Little, unit=1) * -1
 
         topic_str = "openWB/set/system/device/" + \
