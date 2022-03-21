@@ -13,8 +13,8 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "inverter",
         "configuration": {
-            "power_path": "/power.txt",
-            "counter_path": "/counter.txt",
+            "power_path": "",
+            "counter_path": "none",
         }
     }
 
