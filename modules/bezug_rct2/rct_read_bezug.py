@@ -96,9 +96,9 @@ def main():
         faultStr = ''
         faultState = 0
 
-        if ( stat1 + stat2 + stat3 + stat4) > 0:
+        if (stat1 + stat2 + stat3 + stat4) > 0:
             faultStr = "ALARM EVU Status nicht 0"
-            faultState=2
+            faultState = 2
             # speicher in mqtt
 
         os.system('mosquitto_pub -r -t openWB/evu/faultState -m "' + str(faultState) + '"')
