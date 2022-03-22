@@ -10,13 +10,15 @@ import fnmatch
 #
 # Schreib und logge einen Wert in die Ramdisk
 #
+
+
 def writeRam(fn, val, rctname):
     fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
     if rct_lib.bVerbose == True:
         f = open(fnn, 'r')
         oldv = f.read()
         f.close()
-        rct_lib.dbglog("field " + str(fnn)+ " val is:"+ str(val) + " oldval:"+ str(oldv) + " "  + str(rctname) )
+        rct_lib.dbglog("field " + str(fnn) + " val is:" + str(val) + " oldval:" + str(oldv) + " " + str(rctname))
     f = open(fnn, 'w')
     f.write(str(val))
     f.close()
@@ -41,7 +43,7 @@ def main():
         writeRam('bezugkwh', totalload, '#0x62FBE7DC energy.e_grid_load_total')
 
         value = rct_lib.read(clientsocket, 0x6002891F)
-        writeRam('wattbezug', int(value )*1, '#0x6002891F g_sync.p_ac_sc_sum')
+        writeRam('wattbezug', int(value)*1, '#0x6002891F g_sync.p_ac_sc_sum')
 
         volt1 = int(rct_lib.read(clientsocket, 0xCF053085))
         volt1 = int(volt1 * 10) / 10.0
@@ -60,17 +62,17 @@ def main():
 
         watt = int(rct_lib.read(clientsocket, 0x27BE51D9))
         writeRam('bezugw1', watt, '0x27BE51D9 als Watt g_sync.p_ac_sc[0]')
-        ampere = int( watt / volt1 * 10.0) / 10.0
+        ampere = int(watt / volt1 * 10.0) / 10.0
         writeRam('bezuga1', ampere, '0x27BE51D9 als Ampere g_sync.p_ac_sc[0]')
 
         watt = int(rct_lib.read(clientsocket, 0xF5584F90))
         writeRam('bezugw2', watt, '0xF5584F90 als Watt g_sync.p_ac_sc[1]')
-        ampere = int( watt / volt2 * 10.0) / 10.0
+        ampere = int(watt / volt2 * 10.0) / 10.0
         writeRam('bezuga2', ampere, '0xF5584F90 als Ampere g_sync.p_ac_sc[1]')
 
         watt = int(rct_lib.read(clientsocket, 0xB221BCFA))
         writeRam('bezugw3', watt, '0xB221BCFA als Watt g_sync.p_ac_sc[2]')
-        ampere = int( watt / volt3 * 10.0) / 10.0
+        ampere = int(watt / volt3 * 10.0) / 10.0
         writeRam('bezuga3', ampere, '0xF5584F90 als Ampere g_sync.p_ac_sc[2]')
 
         freq = rct_lib.read(clientsocket, 0x1C4A665F)
@@ -80,24 +82,24 @@ def main():
         writeRam('llhz', freq, '0x1C4A665F grid_pll[0].f')
 
         stat1 = int(rct_lib.read(clientsocket, 0x37F9D5CA))
-        rct_lib.dbglog("status1 "+ str(stat1))
+        rct_lib.dbglog("status1 " + str(stat1))
 
         stat2 = int(rct_lib.read(clientsocket, 0x234B4736))
-        rct_lib.dbglog("status2 "+ str(stat2))
+        rct_lib.dbglog("status2 " + str(stat2))
 
         stat3 = int(rct_lib.read(clientsocket, 0x3B7FCD47))
-        rct_lib.dbglog("status3 "+ str(stat3))
+        rct_lib.dbglog("status3 " + str(stat3))
 
         stat4 = int(rct_lib.read(clientsocket, 0x7F813D73))
-        rct_lib.dbglog("status4 "+ str(stat4))
+        rct_lib.dbglog("status4 " + str(stat4))
 
-        faultStr=''
-        faultState=0
+        faultStr = ''
+        faultState = 0
 
         if ( stat1 + stat2 + stat3 + stat4) > 0:
             faultStr = "ALARM EVU Status nicht 0"
             faultState=2
-             # speicher in mqtt 
+            # speicher in mqtt
 
         os.system('mosquitto_pub -r -t openWB/evu/faultState -m "' + str(faultState) + '"')
         os.system('mosquitto_pub -r -t openWB/evu/faultStr -m "' + str(faultStr) + '"')
