@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
-from bezug_rct2 import rct_lib
+#from bezug_rct2 import rct_lib
+import rct_lib
 from typing import List
 
 
