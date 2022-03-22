@@ -66,7 +66,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
 				<div class="col" style="text-align: center;">
-					<h4>Logging Monatsansicht Aufteilung (nightly)</h4>
+					<h4>Logging Monatsansicht Aufteilung</h4>
 				</div>
 			</div>
 			<div class="row justify-content-center">
