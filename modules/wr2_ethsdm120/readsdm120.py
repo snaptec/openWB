@@ -7,11 +7,7 @@ from helpermodules.cli import run_using_positional_cli_args
 
 
 def update(seradd: str, sdmid: int, ser2add: str, sdm2id: int):
-    client = ModbusTcpClient(seradd, port=8899)
-    if sdm2id > 0:
-        client2 = ModbusTcpClient(ser2add, port=8899)
-
-    with client:
+    with ModbusTcpClient(seradd, port=8899) as client:
         resp = client.read_input_registers(0x000C, 2, unit=sdmid)
         watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
         watt1 = int(watt[0])
@@ -25,7 +21,7 @@ def update(seradd: str, sdmid: int, ser2add: str, sdm2id: int):
 
     try:
         if sdm2id > 0:
-            with client2:
+            with ModbusTcpClient(ser2add, port=8899) as client2:
                 resp = client2.read_input_registers(0x000C, 2, unit=sdm2id)
                 watt = struct.unpack('>f', struct.pack('>HH', *resp.registers))
                 watt2 = int(watt[0])
@@ -50,9 +46,8 @@ def update(seradd: str, sdmid: int, ser2add: str, sdm2id: int):
     watt = watt1+watt2
     if watt > 0:
         watt = watt*-1
-    f = open("/var/www/html/openWB/ramdisk/pv2watt", 'w')
-    f.write(str(watt))
-    f.close()
+    with open("/var/www/html/openWB/ramdisk/pv2watt", 'w') as f:
+        f.write(str(watt))
 
     if vwh1 > v1wh1:
         final1wh = vwh1
@@ -65,9 +60,8 @@ def update(seradd: str, sdmid: int, ser2add: str, sdm2id: int):
     finalwh = final1wh+final2wh
     vwh2 = float(finalwh) * int(1000)
     vwh3 = str(vwh2)
-    f = open("/var/www/html/openWB/ramdisk/pv2kwh", 'w')
-    f.write(str(vwh3))
-    f.close()
+    with open("/var/www/html/openWB/ramdisk/pv2kwh", 'w') as f:
+        f.write(str(vwh3))
 
 
 def main(argv: List[str]):
