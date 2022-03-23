@@ -34,7 +34,7 @@ def update(ipaddress: str, slave1id: int):
         if fmultiplier == -5:
             fwr1watt = wr1watt / 10000
         with open('/var/www/html/openWB/ramdisk/pv2watt', 'w') as f:
-            f.write(str(fwr1watt))
+            f.write(str(int(fwr1watt)))
 
         resp = client.read_holding_registers(40093, 2, unit=slave1id)
         value1 = resp.registers[0]
