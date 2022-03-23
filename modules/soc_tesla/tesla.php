@@ -144,7 +144,7 @@
 				{
 					global $tesla_api_redirect, $user_agent, $tesla_api_oauth2, $cid, $cs, $tesla_api_owners;
 
-					
+
 					$code = explode('https://auth.tesla.com/void/callback?code=', $weburl);
 					$code = explode("&", $code[1])[0];
 
@@ -156,24 +156,26 @@
 					$post = json_encode(array("grant_type" => "authorization_code", "client_id" => "ownerapi", "code" => $code, "code_verifier" => $code_verifier, "redirect_uri" => $tesla_api_redirect));
 					$response = tesla_connect($tesla_api_oauth2."/token", 1, "", $http_header, $post, 0);
 
-					$token_res = json_decode($response["response"], true);
-					$bearer_token = $token_res["access_token"];
-					$refresh_token = $token_res["refresh_token"];
+					// $token_res = json_decode($response["response"], true);
+					// $bearer_token = $token_res["access_token"];
+					// $refresh_token = $token_res["refresh_token"];
 
-					if(empty($bearer_token)) { return return_msg(0, "Bearer Token issue"); }
+					// if(empty($bearer_token)) { return return_msg(0, "Bearer Token issue"); }
 
-					// Final Step
-					unset($response);
-					$http_header = array('Authorization: Bearer '.$bearer_token, 'Content-Type: application/json');
-					$post = json_encode(array("grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer", "client_id" => $cid, "client_secret" => $cs));
-					$response = tesla_connect($tesla_api_owners, 1, "", $http_header, $post, 0);
+					// // Final Step
+					// unset($response);
+					// $http_header = array('Authorization: Bearer '.$bearer_token, 'Content-Type: application/json');
+					// $post = json_encode(array("grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer", "client_id" => $cid, "client_secret" => $cs));
+					// $response = tesla_connect($tesla_api_owners, 1, "", $http_header, $post, 0);
 
 					$tokens = json_decode($response["response"], true);
 
 					if(empty($tokens['access_token'])) { return return_msg(0, "Token issue"); }
 
-					$tokens["bearer_token"] = $bearer_token;
-					$tokens["bearer_refresh_token"] = $refresh_token;
+					// $tokens["bearer_token"] = $bearer_token;
+					// $tokens["bearer_refresh_token"] = $refresh_token;
+					$now = new DateTime();
+					$tokens["created_at"] = $now->getTimestamp();
 					$return_message = json_encode($tokens);
 
 					// Output
@@ -194,23 +196,25 @@
 					$response = tesla_connect($tesla_api_oauth2."/token", 1, "https://auth.tesla.com/", $http_header, $post, 0);
 
 
-					$token_res = json_decode($response["response"], true);
-					$bearer_token = $token_res["access_token"];
-					$refresh_token = $token_res["refresh_token"];
+					// $token_res = json_decode($response["response"], true);
+					// $bearer_token = $token_res["access_token"];
+					// $refresh_token = $token_res["refresh_token"];
 
 
-					if(empty($bearer_token)) { return return_msg(0, "Bearer Refresh Token is not valid"); }
+					// if(empty($bearer_token)) { return return_msg(0, "Bearer Refresh Token is not valid"); }
 
-					$http_header = array('Authorization: Bearer '.$bearer_token, 'Content-Type: application/json');
-					$post = json_encode(array("grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer", "client_id" => $cid, "client_secret" => $cs));
-					$response = tesla_connect($tesla_api_owners, 1, "", $http_header, $post, 0);
+					// $http_header = array('Authorization: Bearer '.$bearer_token, 'Content-Type: application/json');
+					// $post = json_encode(array("grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer", "client_id" => $cid, "client_secret" => $cs));
+					// $response = tesla_connect($tesla_api_owners, 1, "", $http_header, $post, 0);
 
 					$tokens = json_decode($response["response"], true);
 
 					if(empty($tokens['access_token'])) { return return_msg(0, "Token issue"); }
 
-					$tokens["bearer_token"] = $bearer_token;
-					$tokens["bearer_refresh_token"] = $refresh_token;
+					// $tokens["bearer_token"] = $bearer_token;
+					// $tokens["bearer_refresh_token"] = $refresh_token;
+					$now = new DateTime();
+					$tokens["created_at"] = $now->getTimestamp();
 					$return_message = json_encode($tokens);
 
 					// Output
@@ -301,7 +305,7 @@
 								// }
 								// now construct a json object with the data we need
 								$token = [
-									"refresh_token" => $message['bearer_refresh_token'],
+									"refresh_token" => $message['refresh_token'],
 									"access_token"  => $message['access_token'],
 									"expires_in"    => $message['expires_in'],
 									"created_at"    => $message['created_at']
