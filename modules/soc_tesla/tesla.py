@@ -434,15 +434,15 @@ if __name__ == "__main__":
     if(args.listcars):
         listCars()
         sys.exit()
-    if(args.vin is None):
+    if(args.vin is not None):
         vehicleID = getVehicleIdByVin(args.vin)
     else:
         vehicleID = getVehicleIdByIndex(args.vehicle)
-    if(vehicleID is None):
-        if(args.data is None):
+    if(vehicleID is not None):
+        if(args.data is not None):
             response = requestData(args.data.replace("#", str(vehicleID)))
             print(json.dumps(json.loads(response)["response"]))
-        if(args.command is None):
+        if(args.command is not None):
             response = postCommand(args.command.replace("#", str(vehicleID)))
             print(json.dumps(json.loads(response)["response"]))
     sys.exit()
