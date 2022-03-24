@@ -314,6 +314,7 @@
 								$tokenFileP = fopen( $token_file, 'w' );
 								fwrite( $tokenFileP, json_encode( $token ) );
 								fclose( $tokenFileP );
+								chmod( $token_file, 0666 );
 								?>
 									<div class="alert alert-success">
 										Anmeldung erfolgreich!<br>
