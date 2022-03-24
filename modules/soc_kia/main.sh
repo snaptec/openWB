@@ -2,13 +2,22 @@
 
 SOCMODULE="kia"
 
-MODULEDIR=$(cd `dirname $0` && pwd)
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
-DEBUGLEVEL=$debug
 
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "soc_kia: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. "$OPENWBBASEDIR/loadconfig.sh"
+	# load helperFunctions
+	. "$OPENWBBASEDIR/helperFunctions.sh"
+fi
+
+DEBUGLEVEL=$debug
 
 case $CHARGEPOINT in
 	2)
@@ -75,6 +84,6 @@ ARGS+='"ramDiskDir": "'"$RAMDISKDIR"'", '
 ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 ARGS+='}'
 
-echo $ARGS > $ARGSFILE
+echo $ARGS > "$ARGSFILE"
 
-sudo python3 $MODULEDIR/main.py $ARGSFILE &>> $LOGFILE &
+sudo python3 "$MODULEDIR/main.py" "$ARGSFILE" &>> $LOGFILE &
