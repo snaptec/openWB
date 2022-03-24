@@ -19,11 +19,10 @@ def writeRam(fn, val, rctname):
     f.close()
 
 # Entry point with parameter check
-
-
-def main(argv: List[str]):
-    rct_lib.init(argv[0])
-
+#def main(argv: List[str]):
+#    rct_lib.init(argv[0])
+def main():
+    rct_lib.init(sys.argv)
     clientsocket = rct_lib.connect_to_server()
     if clientsocket is not None:
 
@@ -78,4 +77,10 @@ def main(argv: List[str]):
 
         rct_lib.close(clientsocket)
     sys.exit(0)
+    
+    
+if __name__ == "__main__":
+    main()
+    exit
+    
 
