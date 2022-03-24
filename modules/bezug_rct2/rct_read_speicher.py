@@ -9,6 +9,7 @@ import fnmatch
 # Fragt die Werte gebuendelt ab,
 #
 
+
 def writeRam(fn, val, rctname):
     fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
     if rct_lib.bVerbose == True:
@@ -33,7 +34,7 @@ def main():
         soc = int(socx * 100.0)
         writeRam('speichersoc', soc, '0x959930BF battery.soc')
 
-        watt = int(rct_lib.read(clientsocket, 0x400F015B ) * -1.0) 
+        watt = int(rct_lib.read(clientsocket, 0x400F015B) * -1.0)
         writeRam('speicherleistung', watt, '0x400F015B g_sync.p_acc_lp')
 
         watt = int(rct_lib.read(clientsocket, 0x5570401B))
