@@ -1,25 +1,21 @@
 #!/usr/bin/python3
-import sys
 from bezug_rct2 import rct_lib
 from typing import List
 
 
 def writeRam(fn, val, rctname):
     fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-    if rct_lib.bVerbose == True:
+    if rct_lib.bVerbose:
         rct_lib.dbglog("val for " + str(fnn) + " is " + str(val) + " " + str(rctname))
-        f = open(fnn, 'r')
-        oldv = f.read()
-        f.close()
+        with open(fnn, 'r') as f:
+            oldv = f.read()
         rct_lib.dbglog("field " + str(fnn) + " val is " + str(val) + " oldval:" + str(oldv) + " " + str(rctname))
 
-    f = open(fnn, 'w')
-    f.write(str(val))
-    f.close()
+    with open(fnn, 'w') as f:
+        f.write(str(val))
+
 
 # Entry point with parameter check
-
-
 def main(argv: List[str]):
     rct_lib.init(argv[0])
 
@@ -58,23 +54,4 @@ def main(argv: List[str]):
         pvkwh = (pv1total + pv2total + pv3total)
         writeRam('pvkwh', pvkwh, 'Summe von pv1total pv1total pv1total')
 
-# mqttvar["pv/CounterTillStartPvCharging"]=pvcounter
-# mqttvar["pv/bool70PVDynStatus"]=nurpv70dynstatus
-# mqttvar["pv/WhCounter"]=pvallwh
-# mqttvar["pv/DailyYieldKwh"]=daily_pvkwhk
-# mqttvar["pv/MonthlyYieldKwh"]=monthly_pvkwhk
-# mqttvar["pv/YearlyYieldKwh"]=yearly_pvkwhk
-# mqttvar["pv/1/W"]=pv1watt
-# mqttvar["pv/1/WhCounter"]=pvkwh
-# mqttvar["pv/1/DailyYieldKwh"]=daily_pvkwhk1
-# mqttvar["pv/1/MonthlyYieldKwh"]=monthly_pvkwhk1
-# mqttvar["pv/1/YearlyYieldKwh"]=yearly_pvkwhk1
-# mqttvar["pv/2/W"]=pv2watt
-# mqttvar["pv/2/WhCounter"]=pv2kwh
-# mqttvar["pv/2/DailyYieldKwh"]=daily_pvkwhk2
-# mqttvar["pv/2/MonthlyYieldKwh"]=monthly_pvkwhk2
-# mqttvar["pv/2/YearlyYieldKwh"]=yearly_pvkwhk2
-
         rct_lib.close(clientsocket)
-    sys.exit(0)
-
