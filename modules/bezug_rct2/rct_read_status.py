@@ -1,8 +1,6 @@
 #!/usr/bin/python3
-import os
 import sys
 import rct_lib
-import fnmatch
 from rct_lib import rct_id
 
 # Author Heinz Hoefling
@@ -10,84 +8,61 @@ from rct_lib import rct_id
 
 id_tab = []
 
+
 def init_tab():
-    id_tab.append(rct_id(0         ,  0,  '-----------------Batterie-------------------- ',                                    0 , '' ))
-    id_tab.append(rct_id(0x959930BF, 545, 'battery.soc',                                      rct_id.t_float,   'SOC (State of charge)'))
-    id_tab.append(rct_id(0xACF7666B, 615, 'battery.efficiency',                               rct_id.t_float,   'Battery efficiency (used energy / stored energy)'))
-    id_tab.append(rct_id(0x0AFDD6CF,  38, 'acc_conv.i_acc_lp_fast',                           rct_id.t_float,   'Battery current [A]'))
-    id_tab.append(rct_id(0x21961B58, 113, 'battery.current',                                  rct_id.t_float,   'Battery current [A]'))
-    id_tab.append(rct_id(0x65EED11B, 353, 'battery.voltage',                                  rct_id.t_float,   'Battery voltage [V]'))
-    id_tab.append(rct_id(0x97E3A6F2, 555, 'power_mng.u_acc_lp',                               rct_id.t_float,   'Battery voltage (inverter) [V]'))
-    id_tab.append(rct_id(0xA7FA5C5D, 600, 'power_mng.u_acc_mix_lp',                           rct_id.t_float,   'Battery voltage [V]'))
-    id_tab.append(rct_id(0xB84FDCF9, 654, 'adc.u_acc',                                        rct_id.t_float,   'Battery voltage (inverter) [V]'))
-    id_tab.append(rct_id(0x400F015B, 219, 'g_sync.p_acc_lp',                                  rct_id.t_float,   'Battery power [W]'))
-    id_tab.append(rct_id(0xFC724A9E, 882, 'energy.e_dc_total[0]',                             rct_id.t_float,   'Solar generator A total energy [Wh]'))
-    id_tab.append(rct_id(0x68EEFD3D, 367, 'energy.e_dc_total[1]',                             rct_id.t_float,   'Solar generator B total energy [Wh]'))
-    
-    id_tab.append(rct_id(0         , 0,     '------------------- Panels A -----------------',                                    0,''))
-    id_tab.append(rct_id(0xB5317B78, 640, 'dc_conv.dc_conv_struct[0].p_dc',                   rct_id.t_float,   'Solar generator A power [W]'))
-    id_tab.append(rct_id(0xDB11855B, 766, 'dc_conv.dc_conv_struct[0].p_dc_lp',                rct_id.t_float,   'Solar generator A power [W]'))
-    id_tab.append(rct_id(0xB298395D, 632, 'dc_conv.dc_conv_struct[0].u_sg_lp',                rct_id.t_float,   'Solar generator A voltage [V]'))
-    id_tab.append(rct_id(0xB55BA2CE, 641, 'g_sync.u_sg_avg[0]',                               rct_id.t_float,   'Solar generator A voltage [V]'))
+    id_tab.append(rct_id(0,            0,  '-----------------Batterie-------------------- ',              0, ''))
+    id_tab.append(rct_id(0x959930BF, 545, 'battery.soc',                                     rct_id.t_float, 'SOC (State of charge)'))
+    id_tab.append(rct_id(0xACF7666B, 615, 'battery.efficiency',                              rct_id.t_float, 'Battery efficiency (used energy / stored energy)'))
+    id_tab.append(rct_id(0x0AFDD6CF,  38, 'acc_conv.i_acc_lp_fast',                          rct_id.t_float, 'Battery current [A]'))
+    id_tab.append(rct_id(0x21961B58, 113, 'battery.current',                                 rct_id.t_float, 'Battery current [A]'))
+    id_tab.append(rct_id(0x65EED11B, 353, 'battery.voltage',                                 rct_id.t_float, 'Battery voltage [V]'))
+    id_tab.append(rct_id(0x97E3A6F2, 555, 'power_mng.u_acc_lp',                              rct_id.t_float, 'Battery voltage (inverter) [V]'))
+    id_tab.append(rct_id(0xA7FA5C5D, 600, 'power_mng.u_acc_mix_lp',                          rct_id.t_float, 'Battery voltage [V]'))
+    id_tab.append(rct_id(0xB84FDCF9, 654, 'adc.u_acc',                                       rct_id.t_float, 'Battery voltage (inverter) [V]'))
+    id_tab.append(rct_id(0x400F015B, 219, 'g_sync.p_acc_lp',                                 rct_id.t_float, 'Battery power [W]'))
+    id_tab.append(rct_id(0xFC724A9E, 882, 'energy.e_dc_total[0]',                            rct_id.t_float, 'Solar generator A total energy [Wh]'))
+    id_tab.append(rct_id(0x68EEFD3D, 367, 'energy.e_dc_total[1]',                            rct_id.t_float, 'Solar generator B total energy [Wh]'))
 
-    id_tab.append(rct_id(0         , 0,     '----------------- Panels B --------------------',                                    0,''))
-    id_tab.append(rct_id(0xAA9AA253, 610, 'dc_conv.dc_conv_struct[1].p_dc',                   rct_id.t_float,   'Solar generator B power [W]'))
-    id_tab.append(rct_id(0x0CB5D21B,  44, 'dc_conv.dc_conv_struct[1].p_dc_lp',                rct_id.t_float,   'Solar generator B power [W]'))
-    id_tab.append(rct_id(0x5BB8075A, 319, 'dc_conv.dc_conv_struct[1].u_sg_lp',                rct_id.t_float,   'Solar generator B voltage [V]'))
-    id_tab.append(rct_id(0xB0041187, 619, 'g_sync.u_sg_avg[1]',                               rct_id.t_float,   'Solar generator B voltage [V]'))
+    id_tab.append(rct_id(0         , 0,     '------------------- Panels A ----------------',              0, ''))
+    id_tab.append(rct_id(0xB5317B78, 640, 'dc_conv.dc_conv_struct[0].p_dc',                  rct_id.t_float, 'Solar generator A power [W]'))
+    id_tab.append(rct_id(0xDB11855B, 766, 'dc_conv.dc_conv_struct[0].p_dc_lp',               rct_id.t_float, 'Solar generator A power [W]'))
+    id_tab.append(rct_id(0xB298395D, 632, 'dc_conv.dc_conv_struct[0].u_sg_lp',               rct_id.t_float, 'Solar generator A voltage [V]'))
+    id_tab.append(rct_id(0xB55BA2CE, 641, 'g_sync.u_sg_avg[0]',                              rct_id.t_float, 'Solar generator A voltage [V]'))
 
-    id_tab.append(rct_id(0         , 0,     '---------- WR/Netz/Haus Spannungen --------------',                                  0,''))
-    id_tab.append(rct_id(0xCF053085, 734, 'g_sync.u_l_rms[0]',                                rct_id.t_float,   'AC voltage phase 1 [V]'))
-    id_tab.append(rct_id(0x54B4684E, 295, 'g_sync.u_l_rms[1]',                                rct_id.t_float,   'AC voltage phase 2 [V]'))
-    id_tab.append(rct_id(0x2545E22D, 131, 'g_sync.u_l_rms[2]',                                rct_id.t_float,   'AC voltage phase 3 [V]'))
+    id_tab.append(rct_id(0         , 0,     '---------------- Panels B -------------------',              0, ''))
+    id_tab.append(rct_id(0xAA9AA253, 610, 'dc_conv.dc_conv_struct[1].p_dc',                  rct_id.t_float, 'Solar generator B power [W]'))
+    id_tab.append(rct_id(0x0CB5D21B,  44, 'dc_conv.dc_conv_struct[1].p_dc_lp',               rct_id.t_float, 'Solar generator B power [W]'))
+    id_tab.append(rct_id(0x5BB8075A, 319, 'dc_conv.dc_conv_struct[1].u_sg_lp',               rct_id.t_float, 'Solar generator B voltage [V]'))
+    id_tab.append(rct_id(0xB0041187, 619, 'g_sync.u_sg_avg[1]',                              rct_id.t_float, 'Solar generator B voltage [V]'))
 
+    id_tab.append(rct_id(0         , 0,     '-------- WR/Netz/Haus Spannungen ------------',              0, ''))
+    id_tab.append(rct_id(0xCF053085, 734, 'g_sync.u_l_rms[0]',                               rct_id.t_float, 'AC voltage phase 1 [V]'))
+    id_tab.append(rct_id(0x54B4684E, 295, 'g_sync.u_l_rms[1]',                               rct_id.t_float, 'AC voltage phase 2 [V]'))
+    id_tab.append(rct_id(0x2545E22D, 131, 'g_sync.u_l_rms[2]',                               rct_id.t_float, 'AC voltage phase 3 [V]'))
 
-    id_tab.append(rct_id(0         , 0,     '----------------------- WR --------------------- ',                                  0,''))
-    id_tab.append(rct_id(0x89EE3EB5, 493, 'g_sync.i_dr_eff[0]',                               rct_id.t_float,   'Current phase 1 [A]'))
-    id_tab.append(rct_id(0x650C1ED7, 348, 'g_sync.i_dr_eff[1]',                               rct_id.t_float,   'Current phase 2 [A]'))
-    id_tab.append(rct_id(0x92BC682B, 533, 'g_sync.i_dr_eff[2]',                               rct_id.t_float,   'Current phase 3 [A]'))
-    id_tab.append(rct_id(0         , 0,     '--------WR  3* U*I = Watt erzeugung des WR ------',                   0,''))
-    id_tab.append(rct_id(0x43257820, 227, 'g_sync.p_ac[0]',                                   rct_id.t_float,   'AC1  [W]'))
-    id_tab.append(rct_id(0x147E8E26,  72, 'g_sync.p_ac[1]',                                   rct_id.t_float,   'AC2  [W]'))
-    id_tab.append(rct_id(0xC03462F6, 677, 'g_sync.p_ac[2]',                                   rct_id.t_float,   'AC3  [W]'))
+    id_tab.append(rct_id(0         , 0,     '--------------------- WR ------------------- ',              0, ''))
+    id_tab.append(rct_id(0x89EE3EB5, 493, 'g_sync.i_dr_eff[0]',                              rct_id.t_float, 'Current phase 1 [A]'))
+    id_tab.append(rct_id(0x650C1ED7, 348, 'g_sync.i_dr_eff[1]',                              rct_id.t_float, 'Current phase 2 [A]'))
+    id_tab.append(rct_id(0x92BC682B, 533, 'g_sync.i_dr_eff[2]',                              rct_id.t_float, 'Current phase 3 [A]'))
+    id_tab.append(rct_id(0         , 0,     '-------WR  3* U*I = Watt Erzeugung des WR ---',              0, ''))
+    id_tab.append(rct_id(0x43257820, 227, 'g_sync.p_ac[0]',                                  rct_id.t_float, 'AC1  [W]'))
+    id_tab.append(rct_id(0x147E8E26,  72, 'g_sync.p_ac[1]',                                  rct_id.t_float, 'AC2  [W]'))
+    id_tab.append(rct_id(0xC03462F6, 677, 'g_sync.p_ac[2]',                                  rct_id.t_float, 'AC3  [W]'))
 
+    id_tab.append(rct_id(0         , 0,     '--------------- HAUS Verbrauch --------------',              0, ''))
+    id_tab.append(rct_id(0x03A39CA2,   9, 'g_sync.p_ac_load[0]',                             rct_id.t_float, 'Load household phase 1 [W]'))
+    id_tab.append(rct_id(0x2788928C, 141, 'g_sync.p_ac_load[1]',                             rct_id.t_float, 'Load household phase 2 [W]'))
+    id_tab.append(rct_id(0xF0B436DD, 832, 'g_sync.p_ac_load[2]',                             rct_id.t_float, 'Load household phase 3 [W]'))
 
-    id_tab.append(rct_id(0         , 0,     '--------------- HAUS Verbrauch --------------------',        0,''))
-    id_tab.append(rct_id(0x03A39CA2,   9, 'g_sync.p_ac_load[0]',                              rct_id.t_float,   'Load household phase 1 [W]'))
-    id_tab.append(rct_id(0x2788928C, 141, 'g_sync.p_ac_load[1]',                              rct_id.t_float,   'Load household phase 2 [W]'))
-    id_tab.append(rct_id(0xF0B436DD, 832, 'g_sync.p_ac_load[2]',                              rct_id.t_float,   'Load household phase 3 [W]'))
-    
-    id_tab.append(rct_id(0         , 0,     '--------------------- Netz ------------------' ,                     0,''))
-    id_tab.append(rct_id(0x27BE51D9, 142, 'g_sync.p_ac_sc[0]',                                rct_id.t_float,   'Grid power phase 1 [W]'))
-    id_tab.append(rct_id(0xF5584F90, 855, 'g_sync.p_ac_sc[1]',                                rct_id.t_float,   'Grid power phase 2 [W]'))
-    id_tab.append(rct_id(0xB221BCFA, 629, 'g_sync.p_ac_sc[2]',                                rct_id.t_float,   'Grid power phase 3 [W]'))
-    id_tab.append(rct_id(0x91617C58, 524, 'g_sync.p_ac_grid_sum_lp',                          rct_id.t_float,   'Total grid power [W] (Saldirend)'))
-    id_tab.append(rct_id(0x2848A1EE, 146, 'grid_offset',                                      rct_id.t_float,   'grid_offset'))
-    id_tab.append(rct_id(0x1C4A665F,  96, 'grid_pll[0].f',                                    rct_id.t_float,   'Grid frequency [Hz]'))
+    id_tab.append(rct_id(0         , 0,     '--------------------- Netz ------------------',              0, ''))
+    id_tab.append(rct_id(0x27BE51D9, 142, 'g_sync.p_ac_sc[0]',                               rct_id.t_float, 'Grid power phase 1 [W]'))
+    id_tab.append(rct_id(0xF5584F90, 855, 'g_sync.p_ac_sc[1]',                               rct_id.t_float, 'Grid power phase 2 [W]'))
+    id_tab.append(rct_id(0xB221BCFA, 629, 'g_sync.p_ac_sc[2]',                               rct_id.t_float, 'Grid power phase 3 [W]'))
+    id_tab.append(rct_id(0x91617C58, 524, 'g_sync.p_ac_grid_sum_lp',                         rct_id.t_float, 'Total grid power [W] (Saldirend)'))
+    id_tab.append(rct_id(0x2848A1EE, 146, 'grid_offset',                                     rct_id.t_float, 'grid_offset'))
+    id_tab.append(rct_id(0x1C4A665F,  96, 'grid_pll[0].f',                                   rct_id.t_float, 'Grid frequency [Hz]'))
 
-
-    id_tab.append(rct_id(0         , 0,     '--------------------- ----- ------------------' ,                     0,''))
-
-# Entry point with parameter check
-def main():
-    rct_lib.init(sys.argv)
-    init_tab()
-
-    clientsocket = rct_lib.connect_to_server()
-    if clientsocket is not None:                             
-        for t in id_tab:
-            if( t.id >0 ):
-                val = rct_lib.read(clientsocket, t.id)
-                print("{} \t{}:\t{} ".format(t.name,t.desc,val))
-            else:    
-                print("{}".format(t.name) )
-        
-        rct_lib.close(clientsocket)
-    sys.exit(0)
-    
-if __name__ == "__main__":
-    main()
-    exit
+    id_tab.append(rct_id(0,            0, '--------------------- ----- -------------------',              0, ''))
 
 
 def id_tab_setup():
@@ -156,9 +131,9 @@ def id_tab_setup():
     id_tab.append(rct_id(0xE0E16E63, 785, 'cs_map[0]',                                        rct_id.t_uint8,   'Associate current sensor 0 with phase L'))
     id_tab.append(rct_id(0x6D5318C8, 382, 'cs_map[1]',                                        rct_id.t_uint8,   'Associate current sensor 1 with phase L'))
     id_tab.append(rct_id(0xD451EF88, 746, 'cs_map[2]',                                        rct_id.t_uint8,   'Associate current sensor 2 with phase L'))
-    id_tab.append(rct_id(0x82258C01, 467, 'cs_neg[0]',                                        rct_id.t_float,   'Miltiply value of the current sensor 0 by'))
+    id_tab.append(rct_id(0x82258C01, 467, 'cs_neg[0]',                                        rct_id.t_float,   'Multiply value of the current sensor 0 by'))
     id_tab.append(rct_id(0x4C12C4C7, 257, 'cs_neg[1]',                                        rct_id.t_float,   ''))
-    id_tab.append(rct_id(0x019C0B60,   4, 'cs_neg[2]',                                        rct_id.t_float,   'Miltiply value of the current sensor 2 by'))
+    id_tab.append(rct_id(0x019C0B60,   4, 'cs_neg[2]',                                        rct_id.t_float,   'Multiply value of the current sensor 2 by'))
     id_tab.append(rct_id(0x87E4387A, 480, 'current_sensor_max',                               rct_id.t_float,   'Power Sensor current range [A]'))
     id_tab.append(rct_id(0xC24E85D0, 688, 'db.core_temp',                                     rct_id.t_float,   'Core temperature [?C]'))
     id_tab.append(rct_id(0x9981F1AC, 560, 'db.power_board.adc_m9V_meas',                      rct_id.t_float,   'db.power_board.adc_m9V_meas'))
@@ -669,3 +644,24 @@ def id_tab_setup():
     id_tab.append(rct_id(0xD5790CE1, 752, 'wifi.use_wifi',                                    rct_id.t_bool,    'Enable Wi-Fi Access Point'))
 
 
+# Entry point with parameter check
+def main():
+    rct_lib.init(sys.argv)
+    init_tab()
+
+    clientsocket = rct_lib.connect_to_server()
+    if clientsocket is not None:
+        for t in id_tab:
+            if(t.id > 0):
+                val = rct_lib.read(clientsocket, t.id)
+                print("{} \t{}:\t{} ".format(t.name, t.desc, val))
+            else:
+                print("{}".format(t.name))
+
+        rct_lib.close(clientsocket)
+    else:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

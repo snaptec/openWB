@@ -51,9 +51,8 @@ class FroniusS0Counter:
             exported=exported,
             power=power
         )
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
+        log.MainLogger().debug("Fronius S0 Leistung[W]: " + str(counter_state.power))
         return counter_state
 
     def set_counter_state(self, counter_state: CounterState) -> None:
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

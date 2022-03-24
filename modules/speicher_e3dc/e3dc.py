@@ -5,7 +5,9 @@ from typing import Iterable, List
 from pymodbus.constants import Endian
 
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import InverterState, BatState
+from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusClient, ModbusDataType
 from modules.common.store import get_inverter_value_store, get_bat_value_store
 from modules.common.simcount import SimCountFactory
@@ -66,7 +68,9 @@ def update(address1: str, address2: str, read_external: int, pvmodul: str):
     log.debug("Beginning update")
     addresses = [address for address in [address1, address2] if address != "none"]
     pv_other = pvmodul != "none"
-    update_e3dc_battery(addresses, read_external, pv_other)
+    bat_info = ComponentInfo(None, "E3DC", "bat")
+    with SingleComponentUpdateContext(bat_info):
+        update_e3dc_battery(addresses, read_external, pv_other)
     log.debug("Update completed successfully")
 
 

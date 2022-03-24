@@ -57,11 +57,10 @@ class FroniusSmCounter:
             data=self.simulation,
             prefix="bezug"
         )
-
+        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         return counter_state, meter_location
 
     def set_counter_state(self, counter_state: CounterState) -> None:
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)
 
     def __update_variant_0_1(self, session: Session) -> Tuple[CounterState, MeterLocation]:

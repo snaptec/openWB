@@ -47,7 +47,7 @@ for line in fd:
       client_secret = val
     if key == "soc_eq_cb_lp" + str(ChargePoint):
       printDebug("Found callback URL: " + val ,1)
-      callback = val
+      callback = val.replace("'","")
   except:
     
     val = ""
@@ -78,23 +78,6 @@ if act.status_code == 200:
 if act.status_code == 200:
     printHtml( "Anmeldung erfolgreich!" )
     print( "<a href=""javascript:window.close()"">Sie k&ouml;nnen das Fenster schlie&szlig;en.</a>" )
-elif act.status_code == 400:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Bad Request)")
-elif act.status_code == 401:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Invalid or missing authorization in header)")	
-elif act.status_code == 402:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Payment required)")		
-elif act.status_code == 403:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Forbidden)")			
-elif act.status_code == 404:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")				
-elif act.status_code == 429:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")					
-elif act.status_code == 500:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")						
-elif act.status_code == 503:
-    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")					
-else:
-    printHtml("Anmeldung Fehlgeschlagen unbekannter Code: " + str(act.status_code))					
-	
+else: 
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " " + act.text)
 print("</html>")

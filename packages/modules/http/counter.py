@@ -12,12 +12,12 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "counter",
         "configuration": {
-            "power_path": "/power.txt",
-            "imported_path": "/imported.txt",
-            "exported_path": "/exported.txt",
-            "current_l1_path": "/current_l1.txt",
-            "current_l2_path": "/current_l2.txt",
-            "current_l3_path": "/current_l3.txt",
+            "power_path": "",
+            "imported_path": "none",
+            "exported_path": "none",
+            "current_l1_path": "none",
+            "current_l2_path": "none",
+            "current_l3_path": "none",
         }
     }
 

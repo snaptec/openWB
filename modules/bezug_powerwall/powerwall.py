@@ -26,16 +26,16 @@ def update_using_powerwall_client(client: PowerwallHttpClient):
             exported=aggregate["site"]["energy_exported"],
             power=aggregate["site"]["instant_power"],
             voltages=[
-                meters_site["0"]["Cached_readings"]["v_l" + str(phase) + "n"] for phase in range(1, 4)
+                meters_site[0]["Cached_readings"]["v_l" + str(phase) + "n"] for phase in range(1, 4)
             ],
             currents=[
-                meters_site["0"]["Cached_readings"]["i_" + phase + "_current"] for phase in ["a", "b", "c"]
+                meters_site[0]["Cached_readings"]["i_" + phase + "_current"] for phase in ["a", "b", "c"]
             ],
             powers=[
-                meters_site["0"]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]
+                meters_site[0]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]
             ]
         )
-    except [KeyError, HTTPError]:
+    except (KeyError, HTTPError):
         log.debug("Firmware seems not to provide detailed phase measurements. Fallback to total power only.")
         powerwall_state = CounterState(
             imported=aggregate["site"]["energy_imported"],
