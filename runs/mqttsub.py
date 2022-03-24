@@ -1370,7 +1370,7 @@ def on_message(client, userdata, msg):
                 elif subtopic == "W":
                     value = abs(float(msg.payload))
                     if value <= 100000000:
-                        pv.power.write(-float(msg.payload))
+                        pv.power.write(-float(value))
             if (msg.topic == "openWB/set/lp/1/AutolockStatus"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=3):
                     f = open('/var/www/html/openWB/ramdisk/autolockstatuslp1', 'w')

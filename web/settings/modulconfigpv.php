@@ -465,6 +465,9 @@
 								<label for="wr_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo $wr_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>
@@ -1230,6 +1233,9 @@
 								<label for="wr2_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr2_piko2_url" id="wr2_piko2_url" value="<?php echo $wr2_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>
