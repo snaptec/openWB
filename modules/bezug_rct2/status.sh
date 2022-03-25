@@ -1,3 +1,2 @@
 #!/bin/bash
-MODULEDIR=$(cd "$(dirname "$0")" && pwd)
-python3 "$MODULEDIR/rct_read_status.py" --ip="$bezug1_ip"
+timeout -k 9 10 python3 /var/www/html/openWB/modules/bezug_rct2/rct_read_status.py --ip=$bezug1_ip
