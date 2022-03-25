@@ -1,66 +1,74 @@
 #!/usr/bin/python3
 import os
-from bezug_rct2 import rct_lib
-from typing import List
+import sys
+import rct_lib
+import time
 
 # Author Heinz Hoefling
 # Version 1.0 Okt.2021
-# Fragt die Werte gebündelt ab,
-
-
-def writeRam(fn, val, rctname):
-    fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-    if rct_lib.bVerbose:
-        with open(fnn, 'r') as f:
-            oldv = f.read()
-        rct_lib.dbglog("field " + str(fnn) + " val is " + str(val) + " oldval:" + str(oldv) + " " + str(rctname))
-    with open(fnn, 'w') as f:
-        f.write(str(val))
+# Fragt die Werte gebündelt ab
 
 
 # Entry point with parameter check
-def main(argv: List[str]):
-    rct_lib.init(argv[0])
+def main():
+    start_time = time.time()
+    rct_lib.init(sys.argv)
 
     clientsocket = rct_lib.connect_to_server()
     if clientsocket is not None:
+        try:
+            MyTab = []
+            socx    = rct_lib.add_by_name(MyTab, 'battery.soc')
+            watt1   = rct_lib.add_by_name(MyTab, 'g_sync.p_acc_lp')
+            watt2   = rct_lib.add_by_name(MyTab, 'battery.stored_energy')
+            watt3   = rct_lib.add_by_name(MyTab, 'battery.used_energy')
+            stat1   = rct_lib.add_by_name(MyTab, 'battery.bat_status')
+            stat2   = rct_lib.add_by_name(MyTab, 'battery.status')
+            stat3   = rct_lib.add_by_name(MyTab, 'battery.status2')
+            socsoll = rct_lib.add_by_name(MyTab, 'battery.soc_target')
 
-        socx = rct_lib.read(clientsocket, 0x959930BF)
+            # read all parameters
+            response = rct_lib.read(clientsocket, MyTab)
+            rct_lib.close(clientsocket)
+
+            # output all response elements
+            rct_lib.dbglog("Overall access time: {:.3f} seconds".format(time.time() - start_time))
+            rct_lib.dbglog(rct_lib.format_list(response))
+        except Exception as e:
+            rct_lib.close(clientsocket)
+            raise(e)
+
+        # postprocess values
+        socx    = socx.value
+        watt1   = int(watt1.value) * -1.0
+        watt2   = int(watt2.value)
+        watt3   = int(watt3.value)
+        stat1   = int(stat1.value)
+        stat2   = int(stat2.value)
+        stat3   = int(stat3.value)
+        socsoll = int(socsoll.value * 100.0)
+
+
         soc = int(socx * 100.0)
-        writeRam('speichersoc', soc, '0x959930BF battery.soc')
-
-        watt = int(rct_lib.read(clientsocket, 0x400F015B) * -1.0)
-        writeRam('speicherleistung', watt, '0x400F015B g_sync.p_acc_lp')
-
-        watt = int(rct_lib.read(clientsocket, 0x5570401B))
-        # rct_lib.dbglog("speicherikwh will be battery.stored_energy "+ str(watt))
-        writeRam('speicherikwh', watt, '0x5570401B battery.stored_energy')
-
-        watt = int(rct_lib.read(clientsocket, 0xA9033880))
-        # rct_lib.dbglog("speicherekwh will be battery.used_energy "+ str(watt))
-        writeRam('speicherekwh', watt, '#0xA9033880 battery.used_energy')
-
-        stat1 = int(rct_lib.read(clientsocket, 0x70A2AF4F))
-        rct_lib.dbglog("battery.bat_status " + str(stat1))
-
-        stat2 = int(rct_lib.read(clientsocket, 0x71765BD8))
-        rct_lib.dbglog("battery.status " + str(stat2))
-
-        stat3 = int(rct_lib.read(clientsocket, 0x0DE3D20D))
-        rct_lib.dbglog("battery.status2 " + str(stat3))
-
-        faultStr = ''
-        faultState = 0
+        rct_lib.write_ramdisk('speichersoc', soc, '0x959930BF battery.soc')
+        rct_lib.write_ramdisk('speicherleistung', watt1, '0x400F015B g_sync.p_acc_lp')
+        rct_lib.write_ramdisk('speicherikwh', watt2, '0x5570401B battery.stored_energy')
+        rct_lib.write_ramdisk('speicherekwh', watt3, '#0xA9033880 battery.used_energy')
 
         if (stat1 + stat2 + stat3) > 0:
             faultStr = "Battery ALARM Battery-Status nicht 0"
             faultState = 2
             # speicher in mqtt
+        else:
+            faultStr = ''
+            faultState = 0
 
         os.system('mosquitto_pub -r -t openWB/set/housebattery/faultState -m "' + str(faultState) + '"')
         os.system('mosquitto_pub -r -t openWB/set/housebattery/faultStr -m "' + str(faultStr) + '"')
-
-        socsoll = int(rct_lib.read(clientsocket, 0x8B9FF008) * 100.0)
         os.system('mosquitto_pub -r -t openWB/housebattery/soctarget -m "' + str(socsoll) + '"')
 
-        rct_lib.close(clientsocket)
+    sys.exit(0)
+   
+
+if __name__ == "__main__":
+    main()
