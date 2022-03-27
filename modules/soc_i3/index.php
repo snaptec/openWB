@@ -203,7 +203,7 @@ class Battery_API {
 
 		// Decode response
 		$json = (object)array_merge(
-			json_decode( $response_1, true )['attributesMap'],
+			json_decode( $response_1, true )['attributesMap']
 			//json_decode( $response_2, true )
 			//disabled parsing of response_2
 		);
