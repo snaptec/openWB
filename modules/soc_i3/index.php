@@ -199,7 +199,7 @@ class Battery_API {
 		$response_2 = curl_multi_getcontent( $ch_2 );
 
 		// Decode response
-		$json = json_decode( $response_1, true )['attributesMap'];
+		$json = (object)json_decode( $response_1, true )['attributesMap'];
 
 		// Exit if error
 		if ( json_last_error() ) {
