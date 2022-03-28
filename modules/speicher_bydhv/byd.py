@@ -40,10 +40,15 @@ class BydParser(HTMLParser):
 
 
 def update(bydhvip: str, bydhvuser: str, bydhvpass: str):
+    '''BYD Speicher bieten zwei HTML-Seiten, auf denen Informationen abgegriffen werden können:
+    /asp/Home.asp und /asp/RunData.asp. Aktuell (2022-03) ist die Leistungsangabe (Power) auf der
+    RunData.asp auf ganze kW gerundet und somit für openWB nicht brauchbar.
+    '''
     log.debug("Beginning update")
     bat_info = ComponentInfo(None, "BYD", "bat")
     with SingleComponentUpdateContext(bat_info):
-        response = req.get_http_session().get('http://' + bydhvip + '/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
+        # response = req.get_http_session().get('http://' + bydhvip + '/asp/RunData.asp', auth=(bydhvuser, bydhvpass))
+        response = req.get_http_session().get('http://' + bydhvip + '/asp/Home.asp', auth=(bydhvuser, bydhvpass))
         get_bat_value_store(1).set(BydParser.parse(response.text))
     log.debug("Update completed successfully")
 
