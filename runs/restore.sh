@@ -9,7 +9,7 @@ sudo tar -vxf backup.tar.gz
 echo "****************************************"
 echo "Step 3: replacing old files..."
 sudo cp -v -R /home/pi/var/www/html/openWB/* /var/www/html/openWB/
-sudo chmod 777 /var/www/html/openWB/openwb.conf
+sudo chmod ugo=rwX /var/www/html/openWB/openwb.conf
 echo "****************************************"
 echo "Step 4: cleanup after restore..."
 sudo rm /var/www/html/openWB/web/tools/upload/backup.tar.gz

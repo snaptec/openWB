@@ -13,6 +13,6 @@ if [ -e /var/www/html/openWB/web/ladelog ]; then
 	  done < "$oldlog"
 	  rm /var/www/html/openWB/web/ladelog
 	  chown -R pi:pi /var/www/html/openWB/web/logging/data/ladelog/
-	  chmod 777 /var/www/html/openWB/web/logging/data/ladelog/*
+	  chmod ugo=rwX /var/www/html/openWB/web/logging/data/ladelog/*
 
 fi

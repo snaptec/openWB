@@ -36,7 +36,7 @@ ziellademodus(){
 		if (( ladestatus == 1 )); then
 			echo 0 > ramdisk/ladungdurchziel
 			echo 0 > ramdisk/zielladenkorrektura
-			sed -e "s/zielladenaktivlp1=.*/zielladenaktivlp1=0/" openwb.conf > ramdisk/openwb.conf	&& mv ramdisk/openwb.conf openwb.conf && chmod 777 openwb.conf
+			sed -e "s/zielladenaktivlp1=.*/zielladenaktivlp1=0/" openwb.conf > ramdisk/openwb.conf && mv ramdisk/openwb.conf openwb.conf && chmod ugo=rwX openwb.conf
 			runs/set-current.sh 0 m
 		fi
 	else

@@ -101,9 +101,9 @@ def selmonth(jjjjmm):
     f1 = open(  outputfile + 'a_onl3', 'w')
     f1.write(str(sumlineb))
     f1.close()
-    os.chmod(outputfile + 'a_onl1', 0o777)
-    os.chmod(outputfile + 'a_onl2', 0o777)
-    os.chmod(outputfile + 'a_onl3', 0o777)
+    os.chmod(outputfile + 'a_onl1', 0o666)
+    os.chmod(outputfile + 'a_onl2', 0o666)
+    os.chmod(outputfile + 'a_onl3', 0o666)
     #lesen gesamtes monatsfile
     ifile=0
     try:
@@ -141,10 +141,10 @@ def selmonth(jjjjmm):
             f2.close()
             f3.close()
             f4.close()
-            os.chmod(outputfile + 'a_onl4', 0o777)
-            os.chmod(outputfile + 'a_onl5', 0o777)
-            os.chmod(outputfile + 'a_onl6', 0o777)
-            os.chmod(outputfile + 'a_onl7', 0o777)
+            os.chmod(outputfile + 'a_onl4', 0o666)
+            os.chmod(outputfile + 'a_onl5', 0o666)
+            os.chmod(outputfile + 'a_onl6', 0o666)
+            os.chmod(outputfile + 'a_onl7', 0o666)
     except Exception as e:
         print ('%s error1 %s inhalt %s' % (getTime(),datestring, str(e) ))
     if (ifile == 0):

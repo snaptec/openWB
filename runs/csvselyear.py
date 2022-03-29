@@ -86,7 +86,7 @@ def selyear(jjjjmm):
     f1 = open(  outputfile + 'b_onl1', 'w')
     f1.write(str(headerline))
     f1.close()
-    os.chmod(outputfile + 'b_onl1', 0o777)
+    os.chmod(outputfile + 'b_onl1', 0o666)
     #lesen gesamtes Jahresfile
     ifile=0
     try:
@@ -116,8 +116,8 @@ def selyear(jjjjmm):
             f.close()
             f1.close()
             f2.close()
-            os.chmod(outputfile + 'b_onl4', 0o777)
-            os.chmod(outputfile + 'b_onl5', 0o777)
+            os.chmod(outputfile + 'b_onl4', 0o666)
+            os.chmod(outputfile + 'b_onl5', 0o666)
     except Exception as e:
         print ('%s error1 %s inhalt %s' % (getTime(),file_cvsfinp, str(e) ))
     if (ifile == 0):
