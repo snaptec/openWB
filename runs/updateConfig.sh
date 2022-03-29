@@ -16,7 +16,9 @@ updateConfig(){
 		sed -i "/hsocip1='/b; s/^hsocip1=\(.*\)/hsocip1=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "socmodul1=" $ConfigFile; then
-		echo "socmodul1=soc_http1" >> $ConfigFile
+		echo "socmodul1=none" >> $ConfigFile
+	else
+		sed -i "s/^socmodul1=soc_http1/socmodul1=soc_httplp2/g" $ConfigFile
 	fi
 	if ! grep -Fq "dacregisters1=" $ConfigFile; then
 		echo "dacregisters1=12" >> $ConfigFile
