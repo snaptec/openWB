@@ -1224,27 +1224,27 @@
 										Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
+										<label for="soc_old_id_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
+											<input class="form-control" type="email" name="soc_id_username" id="soc_old_id_username" value="<?php echo $soc_id_usernameold ?>">
 											<span class="form-text small">
 												Email Adresse des Logins.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_old_id_passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
+											<input class="form-control" type="password" name="soc_id_passwort" id="soc_old_id_passwort" value="<?php echo $soc_id_passwortold ?>">
 											<span class="form-text small">
 												Password des Logins.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
+										<label for="soc_old_id_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
+											<input class="form-control" type="text" name="soc_id_vin" id="soc_old_id_vin" value="<?php echo $soc_id_vinold ?>">
 											<span class="form-text small">
 												Vollständige VIN des Fahrzeugs.
 											</span>
@@ -3100,7 +3100,7 @@
 									<optgroup label="universelle Module">
 										<option <?php if($socmodul1old == "soc_evcclp2") echo "selected" ?> value="soc_evcclp2">EVCC</option>
 										<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
-										<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
+										<option <?php if($socmodul1old == "soc_httplp2") echo "selected" ?> value="soc_httplp2">HTTP</option>
 										<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
 										<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
@@ -4535,7 +4535,7 @@
 								showSection('#socsupportinfolp2');
 								showSection('#socmqtt1');
 							}
-							if($('#socmodul1').val() == 'soc_http1') {
+							if($('#socmodul1').val() == 'soc_httplp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3143')
 								showSection('#socsupportinfolp2');
 								showSection('#socmhttp1');
@@ -4543,8 +4543,8 @@
 								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_aiwayslp2') {
-                                showSection('#socaiwayslp2');
-                            }
+								showSection('#socaiwayslp2');
+							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socoldevccwarninglp2');
 								showSection('#socmuser2');

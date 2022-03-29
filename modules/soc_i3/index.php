@@ -196,14 +196,8 @@ class Battery_API {
 		$response_1 = curl_multi_getcontent( $ch_1 );
 		$response_2 = curl_multi_getcontent( $ch_2 );
 
-		//echo "Response 1: '" . $response_1 . "'\n";
-		//echo "Response 2: '" . $response_2 . "'\n";
-
 		// Decode response
-		$json = (object)array_merge(
-			json_decode( $response_1, true )['attributesMap'],
-			json_decode( $response_2, true )
-		);
+		$json = (object)json_decode( $response_1, true )['attributesMap'];
 
 		// Exit if error
 		if ( json_last_error() ) {
