@@ -15,7 +15,7 @@ else
     MYLOGFILE="$RAMDISKDIR/evu_json.log"
 fi
 
-python3 /var/www/html/openWB/modules/bezug_smartfox/smartfox.py "${bezug_smartfox_ip}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_smartfox.smartfox" "${bezug_smartfox_ip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

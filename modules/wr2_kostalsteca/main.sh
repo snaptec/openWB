@@ -18,7 +18,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${pv2ip}"
 
-python3 /var/www/html/openWB/modules/wr2_kostalsteca/kostal_steca.py "${pv2ip}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr2_kostalsteca.kostal_steca" "${pv2ip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

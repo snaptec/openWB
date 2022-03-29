@@ -4,13 +4,15 @@
 Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu
 formatieren.
 """
+import struct
 from enum import Enum
 from typing import Callable, Iterable, Union, overload, List
-import struct
+
 import pymodbus
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
+from urllib3.util import parse_url
 
 from helpermodules import log
 from modules.common.fault_state import FaultState
@@ -40,8 +42,12 @@ Number = Union[int, float]
 
 class ModbusClient:
     def __init__(self, address: str, port: int = 502):
-        self.delegate = ModbusTcpClient(address, port)
-        self.address = address
+        parsed_url = parse_url(address)
+        host = parsed_url.host
+        if parsed_url.port is not None:
+            port = parsed_url.port
+        self.delegate = ModbusTcpClient(host, port)
+        self.address = host
         self.port = port
 
     def __enter__(self):

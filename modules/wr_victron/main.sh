@@ -16,7 +16,7 @@ else
 fi
 
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "inverter" "${pv1_ipa}" "100" "0" "1">>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "inverter" "${pv1_ipa}" "100" "${victron_energy_meter}" "0" "1">>${MYLOGFILE} 2>&1
 
 pvwatt=$(<${RAMDISKDIR}/pvwatt)
 echo $pvwatt

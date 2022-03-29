@@ -282,6 +282,9 @@
 						</div>
 						
 						<div id="divspeicherrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
+							</div>
 							<div class="card-header bg-secondary">
 								RCT Speicher Hardware
 							</div>
@@ -410,13 +413,11 @@
 								$(function() {
 									function updateSonnenIp() {
 										let myIp = $("#sonnenecoip").val();
-										console.log(myIp);
 										let myLinks = $("#divspeicherseco a.api-link").each(function() {
 											let myLink = $(this).data("template").replace("[ip]", myIp);
 											$(this).text(myLink);
 											$(this).attr("href", myLink);
 										});;
-										console.log(myLinks);
 									}
 
 									$("#sonnenecoip").keyup(function() {

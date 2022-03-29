@@ -1,146 +1,95 @@
 #!/usr/bin/env python3
-from datetime import datetime, timezone
+import logging
 import os
 import json
 import os.path
+from urllib.error import HTTPError
 import requests
-import sys
 import traceback
-
-# ess_url: IP/URL des LG ESS V1.0
-#
-# ess_pass: Passwort, um sich in den LG ESS V1.0 einzuloggen
-#            Das Passwort ist standardmäßig die Registrierungsnr.
-#            die sich auf dem PCS (dem Hybridwechselrichter und
-#            Batteriemanagementsystem) befindet (Aufkleber!). Alter-
-#            nativ findet man die Registrierungsnr. in der App unter
-#            dem Menüpunkt "Systeminformationen"
-#            Mit der Registrierungsnr. kann man sich dann in der
-#            Rolle "installer" einloggen.
-
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
-
-lgessv1ip = str(sys.argv[1])
-ess_pass = str(sys.argv[2])
-ess_api_ver = str(sys.argv[3])
-ess_url = "https://"+lgessv1ip
+from typing import List
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+from helpermodules.cli import run_using_positional_cli_args
+
+log = logging.getLogger("LG")
 
 
-if Debug >= 2:
-    DebugLog('Wechselrichter LG IP: ' + lgessv1ip)
-    DebugLog('Wechselrichter LG Passwort: ' + ess_pass)
-    DebugLog('Wechselrichter LG Version: ' + ess_api_ver)
+# Beispiel JSON-Objekte liegen im Ordner lgessv1/JSON-Beispiele.txt
+# lg_ess_url:  IP/URL des LG ESS V1.0
+# lg_ess_pass: Passwort, um sich in den LG ESS V1.0 einzuloggen
+#              Das Passwort ist standardmäßig die Registrierungsnr.
+#              die sich auf dem PCS (dem Hybridwechselrichter und
+#              Batteriemanagementsystem) befindet (Aufkleber!). Alter-
+#              nativ findet man die Registrierungsnr. in der App unter
+#              dem Menüpunkt "Systeminformationen"
+#              Mit der Registrierungsnr. kann man sich dann in der
+#              Rolle "installer" einloggen.
 
-#
-# Flag für unterschiedliche API-Versionen der Firmware
-#
-if ess_api_ver == "10.2019":
-    arr_pos = "13"
-else:
-    arr_pos = "1"
+def update(lg_ess_ip: str, lg_ess_pass: str, lg_ess_api_ver: str):
 
-#
-# Prüfen, ob ein Sessionkey in der Ramdisk vorhanden ist. Wenn nicht,
-#  z.b. wenn das System neu gestartet wurde, dann wird ein Dummykey an-
-#  gelegt
-if os.path.isfile("/var/www/html/openWB/ramdisk/ess_session_key"):
-    with open("/var/www/html/openWB/ramdisk/ess_session_key", "r") as f:
-        # erste Zeile ohne Anhaengen einer neuen Zeile lesen
-        session_key = f.readline().strip()
-else:
-    session_key = " "
+    lg_ess_ip = lg_ess_ip
+    lg_ess_pass = lg_ess_pass
+    lg_ess_api_ver = lg_ess_api_ver
+    lg_ess_url = "https://"+lg_ess_ip
 
-#
-# JSON-Objekt vom PCS abholen. Es können folgende JSON-Objekte zurück gegeben werden:
-#
-#  1. Wenn der Sessionkey nicht korrekt bzw. wenn die Session abgelaufen ist, dann wird ein
-#     JSON-Objekt mit einem Attribut "auth_key" zurück gegeben
-#  2. Der Sessionkey ist gültig, dann erhält man ein JSON-Objekt mit den wichtigsten Attribute.
-#     Beispiel JSON-Objekte liegen im Ordner lgessv1/JSON-Beispiele.txt
-#
-try:
-    headers = {'Content-Type': 'application/json', }
-    data = json.dumps({"auth_key": session_key})
-    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers,
-                             data=data, verify=False, timeout=5).json()
-    authchk = response['auth']
-except:
-    traceback.print_exc()
-    exit(1)
-#
-# Pruefen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
-#
-if authchk == "auth_key failed" or authchk == "auth timeout" or authchk == "":
+    log.debug('Wechselrichter LG IP: ' + lg_ess_ip)
+    log.debug('Wechselrichter LG Passwort: ' + lg_ess_pass)
+    log.debug('Wechselrichter LG Version: ' + lg_ess_api_ver)
+
+    # Prüfen, ob ein Sessionkey in der Ramdisk vorhanden ist. Wenn nicht,
+    #  z.b. wenn das System neu gestartet wurde, dann wird ein Dummykey an-
+    #  gelegt
+    if os.path.isfile("/var/www/html/openWB/ramdisk/ess_session_key"):
+        with open("/var/www/html/openWB/ramdisk/ess_session_key", "r") as f:
+            # erste Zeile ohne Zeilenumbruch lesen
+            session_key = f.readline().strip()
+    else:
+        session_key = " "
+
+    auth_check = "not done"
     try:
         headers = {'Content-Type': 'application/json', }
-        data = json.dumps({"password": ess_pass})
-        response = requests.put(ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
-        session_key = response["auth_key"]
-        outjson = {"auth_key": session_key}
-    except:
-        traceback.print_exc()
-        exit(1)
-    #
-    # aktuelle Daten aus dem PCS auslesen
-    #
-    headers = {'Content-Type': 'application/json', }
-    data = json.dumps(outjson)
-    response = requests.post(ess_url+'/v1/user/essinfo/home', headers=headers,
-                             data=data, verify=False, timeout=5).json()
-    #
-    # Sessionkey in der Ramdisk abspeichern
-    #
-    with open("/var/www/html/openWB/ramdisk/ess_session_key", "w") as f:
-        f.write(str(session_key))
+        data = json.dumps({"auth_key": session_key})
+        response = requests.post(lg_ess_url+'/v1/user/essinfo/home', headers=headers,
+                                 data=data, verify=False, timeout=5).json()
+        log.debug("response: " + str(response))
+        # ToDo: check http status by calling response.raise_for_status() on plain response
+        auth_check = response['auth']
+    except KeyError:
+        # missing "auth" in response indicates success
+        auth_check = ""
+        pass
 
-#
-# JSON-Objekt auswerten
-#
-try:
-    pcs_pv_total_power = response["statistics"]["pcs_pv_total_power"]
-except:
-    traceback.print_exc()
-    exit(1)
-#
-# Daten für Langzeitlog holen
-#
-today = datetime.today()
-jahr = today.strftime("%Y")
-monat = today.strftime("%m")
-arr_pos = monat
+    # Prüfen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen
+    if auth_check == "auth_key failed" or auth_check == "auth timeout" or auth_check == "not done":
+        try:
+            headers = {'Content-Type': 'application/json', }
+            data = json.dumps({"password": lg_ess_pass})
+            response = requests.put(lg_ess_url+'/v1/login', headers=headers, data=data, verify=False, timeout=5).json()
+            log.debug("response: " + str(response))
+            session_key = response["auth_key"]
+            outjson = {"auth_key": session_key}
+        except (HTTPError, KeyError):
+            log.debug("login failed! check password!")
+            traceback.print_exc()
+            exit(1)
+        # aktuelle Daten aus dem PCS auslesen
+        headers = {'Content-Type': 'application/json', }
+        data = json.dumps(outjson)
+        response = requests.post(lg_ess_url+'/v1/user/essinfo/home', headers=headers,
+                                 data=data, verify=False, timeout=5).json()
+        # Sessionkey in der Ramdisk abspeichern
+        with open("/var/www/html/openWB/ramdisk/ess_session_key", "w") as f:
+            f.write(str(session_key))
 
-headers = {'Content-Type': 'application/json', }
-data = json.dumps({"auth_key": session_key, "year": str(jahr)})
-response = requests.post(ess_url+'/v1/user/graph/pv/year', headers=headers, data=data, verify=False, timeout=5).json()
-try:
-    pvkwh = response["loginfo"][arr_pos]["total_generation"]
-    pvkwh = pvkwh.replace("kwh", "")
-    pvkwh = int(pvkwh)
-except:
-    traceback.print_exc()
-    exit(1)
-try:
-    ekwh = response["loginfo"][arr_pos]["total_Feed_in"]
-    ekwh = ekwh.replace("kwh", "")
-    ekwh = int(ekwh)
-except:
-    traceback.print_exc()
-    exit(1)
-#
-# Daten in Ramdisk schreiben
-#
-# echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-# echo $pvkwh > /var/www/html/openWB/ramdisk/pv1kwh_temp
-# echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
-if Debug >= 1:
-    DebugLog('WR Leistung: ' + "-"+str(pcs_pv_total_power))
-with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-    f.write("-"+str(pcs_pv_total_power))
+    # JSON-Objekt auswerten
+    pv_total_power = int(float(response["statistics"]["pcs_pv_total_power"])) * -1
 
-exit(0)
+    log.debug('WR Leistung: ' + str(pv_total_power))
+    # Daten in Ramdisk schreiben
+    with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
+        f.write(str(pv_total_power))
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

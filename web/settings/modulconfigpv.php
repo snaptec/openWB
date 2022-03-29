@@ -117,7 +117,7 @@
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Per MQTT zu schreiben:<br>
-								<span class="text-info">openWB/set/pv/1/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/1/W</span> PV-Erzeugungsleistung in Watt, int, positiv<br>
 								<span class="text-info">openWB/set/pv/1/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
 							</div>
 						</div>
@@ -182,6 +182,11 @@
 						<div id="pvpowerdog" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen EVU Modul.
+							</div>
+						</div>
+						<div id="pvrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
 							</div>
 						</div>
 						<div id="pvrct" class="hide">
@@ -465,6 +470,9 @@
 								<label for="wr_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo $wr_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>
@@ -569,9 +577,9 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
+									<input class="form-control" type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
-										Gültige Werte: IP Adresse des SolarEdge Wechselrichters. Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.
+										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
 								</div>
 							</div>
@@ -899,6 +907,7 @@
 								hideSection('#pvid');
 								hideSection('#pvsiemens');
 								hideSection('#pvrct');
+								hideSection('#pvrct2');
 								hideSection('#pvpowerdog');
 								hideSection('#pvsolarwatt');
 								hideSection('#pvwrstuder');
@@ -928,6 +937,7 @@
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_rct2') {
+									showSection('#pvrct2');
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_fems') {
@@ -1169,7 +1179,7 @@
 							<div class="form-row mb-1">
 									<label for="pv2flexid" class="col-md-4 col-form-label">Unit ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="pv2flexid" id="pv2flexid" value="<?php echo $pvflexidold ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="pv2flexid" id="pv2flexid" value="<?php echo $pv2flexidold ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
 									</div>
 								</div>
@@ -1209,7 +1219,7 @@
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Per MQTT zu schreiben:<br>
-								<span class="text-info">openWB/set/pv/2/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/2/W</span> PV-Erzeugungsleistung in Watt, int, positiv<br>
 								<span class="text-info">openWB/set/pv/2/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
 							</div>
 						</div>
@@ -1230,6 +1240,9 @@
 								<label for="wr2_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr2_piko2_url" id="wr2_piko2_url" value="<?php echo $wr2_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>

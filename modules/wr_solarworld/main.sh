@@ -18,10 +18,11 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${solarworld_emanagerip}"
 
-python3 /var/www/html/openWB/modules/wr_solarworld/solarworld.py "${solarworld_emanagerip}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarworld.solarworld" "${solarworld_emanagerip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
 
 pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt
