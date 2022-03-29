@@ -184,6 +184,11 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
+						<div id="pvrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
+							</div>
+						</div>
 						<div id="pvrct" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen EVU Modul.
@@ -902,6 +907,7 @@
 								hideSection('#pvid');
 								hideSection('#pvsiemens');
 								hideSection('#pvrct');
+								hideSection('#pvrct2');
 								hideSection('#pvpowerdog');
 								hideSection('#pvsolarwatt');
 								hideSection('#pvwrstuder');
@@ -931,6 +937,7 @@
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_rct2') {
+									showSection('#pvrct2');
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_fems') {
