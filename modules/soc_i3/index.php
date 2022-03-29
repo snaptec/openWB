@@ -137,9 +137,7 @@ class Battery_API {
 		curl_setopt( $ch, CURLOPT_COOKIESESSION, true );
 		curl_setopt( $ch, CURLOPT_POST, true );
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/x-www-form-urlencoded' ) );
-		//curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=dbf0a542-ebd1-4ff0-a9a7-55172fbfce35&redirect_uri=https%3A%2F%2Fwww.bmw-connecteddrive.com%2Fapp%2Fdefault%2Fstatic%2Fexternal-dispatch.html&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
-		//Update of ClientID and Redirect URI
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=31c357a0-7a1d-4590-aa99-33b97244d048&redirect_uri=com.bmw.connected%3A%2F%2Foauth&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=dbf0a542-ebd1-4ff0-a9a7-55172fbfce35&redirect_uri=https%3A%2F%2Fwww.bmw-connecteddrive.com%2Fapp%2Fdefault%2Fstatic%2Fexternal-dispatch.html&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
 
 		// Exec curl request
 		$response = curl_exec( $ch );
@@ -230,12 +228,8 @@ class Battery_API {
 		$chargingTimeRemaining = isset($attributes->remaining_charging_time_minutes) ? intval( $attributes->remaining_charging_time_minutes ) : 0;
 		//$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 
-		//$stateOfCharge = number_format( round( $attributes->soc, 2 ), 2, ',', '.');
-		//soc no longher available. New name beEnergyLevelHv
-		$stateOfCharge = number_format( round( $attributes->beEnergyLevelHv, 2 ), 2, ',', '.');
-		//$stateOfChargeMax = number_format( round( $attributes->socmax, 2 ), 2, ',', '.');
-		//socmax is no longer available. Filling with dummy.
-		$stateOfChargeMax = number_format( round( $attributes->beEnergyLevelHv, 2 ), 2, ',', '.');
+		$stateOfCharge = number_format( round( $attributes->soc, 2 ), 2, ',', '.');
+		$stateOfChargeMax = number_format( round( $attributes->socmax, 2 ), 2, ',', '.');
 
 		// Send Header
 		//header('Access-Control-Allow-Origin: https://' . $_SERVER['SERVER_NAME'] );
