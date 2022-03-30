@@ -12,7 +12,9 @@ def get_default_config() -> dict:
         "name": "Fronius Speicher",
         "id": 0,
         "type": "bat",
-        "configuration": {}
+        "configuration": {
+            "meter_id": 0
+        }
     }
 
 
@@ -28,7 +30,7 @@ class FroniusBat:
 
     def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-        meter_id = str(self.device_config["meter_id"])
+        meter_id = str(self.component_config["configuration"]["meter_id"])
 
         resp_json = req.get_http_session().get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',

@@ -17,7 +17,6 @@ def get_default_config() -> dict:
         "type": "fronius",
         "id": 0,
         "configuration": {
-            "meter_id": 0,  # ToDo: move to counter_*
             "ip_address": None
         }
     }
@@ -83,12 +82,20 @@ def read_legacy(
 
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
-    device_config["configuration"]["meter_id"] = meter_id
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "counter_sm":
+        if component_type == "bat":
+            component_config["configuration"]["meter_id"] = meter_id
+        elif component_type == "counter_sm":
             component_config["configuration"]["variant"] = variant
+
+
+<< << << < HEAD
+== == == =
+            component_config["configuration"]["meter_location"] = meter_location
+            component_config["configuration"]["meter_id"] = meter_id
+>>>>>> > Fronius: meter id to components
         elif component_type == "inverter":
             component_config["configuration"]["ip_address2"] = ip_address2
     else:
