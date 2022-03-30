@@ -25,12 +25,6 @@ class Lovato:
         except Exception as e:
             self.__process_error(e)
 
-    def get_imported(self) -> float:
-        try:
-            return self.client.read_input_registers(0x1a1f, ModbusDataType.UINT_32, unit=self.id)
-        except Exception as e:
-            self.__process_error(e)
-
     def get_power(self) -> Tuple[List[float], float]:
         try:
             powers = [val / 100 for val in self.client.read_input_registers(
@@ -38,12 +32,6 @@ class Lovato:
             )]
             power = sum(powers)
             return powers, power
-        except Exception as e:
-            self.__process_error(e)
-
-    def get_exported(self) -> float:
-        try:
-            return self.client.read_input_registers(0x1a21, ModbusDataType.UINT_32, unit=self.id)
         except Exception as e:
             self.__process_error(e)
 
