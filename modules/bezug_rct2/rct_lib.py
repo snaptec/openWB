@@ -496,8 +496,12 @@ def format_list(frame):
     fmt = ""
     for item in frame.idList:
         if(item.id > 0):
-            fmt_str = '#0x{:08X} {:'+str(frame.name_len)+'} -> {:'+str(frame.desc_len)+'} = {}\n'
-            fmt += fmt_str.format(item.id, item.name, item.desc, item.value)
+            if item.data_type == rct_data.t_enum:
+                ext = " (enum)"
+            else:
+                ext = ""
+            fmt_str = '#0x{:08X} {:'+str(frame.name_len)+'} -> {:'+str(frame.desc_len)+'} = {}{}\n'
+            fmt += fmt_str.format(item.id, item.name, item.desc, item.value, ext)
         else:
             fmt += item.name + '\n'
     return fmt
