@@ -14,18 +14,15 @@ def get_default_config() -> dict:
         "name": "Siemens Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration": {
-            "ip_address": None  # ToDo: move IP to device
-        }
+        "configuration": {}
     }
 
 
 class SiemensInverter:
-    def __init__(self, device_id: int, component_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         self.__device_id = device_id
         self.component_config = component_config
-        ip_address = component_config["configuration"]["ip_address"]
-        self.__tcp_client = modbus.ModbusClient(ip_address, 502)
+        self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_inverter_value_store(component_config["id"])
