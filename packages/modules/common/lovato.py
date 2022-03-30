@@ -70,11 +70,3 @@ class Lovato:
                 0x0007, [ModbusDataType.INT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
-
-    def get_counter(self) -> float:
-        try:
-            final_bezug_1 = self.get_imported()
-            final_bezug_2 = self.get_exported()
-            return max(final_bezug_1, final_bezug_2)
-        except Exception as e:
-            self.__process_error(e)
