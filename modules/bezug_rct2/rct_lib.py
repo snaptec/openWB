@@ -117,19 +117,16 @@ def decode_value(data_type, data):
         elif data_type == rct_data.t_int32:
             return struct.unpack(">i", data)[0]
         elif data_type == rct_data.t_enum:
-            return struct.unpack(">H", data)[0]
+            return struct.unpack(">B", data)[0]
         elif data_type == rct_data.t_float:
             return struct.unpack(">f", data)[0]
         elif data_type == rct_data.t_string:
-            if data.isascii() == True:
-                return data.decode("utf-8")
-            else:
-                return binascii.hexlify(data)
+            return data.decode("utf-8")
         else:
-            return 0
-    except:
-        return 0
-
+            return binascii.hexlify(data)
+    except Exception as e:
+#        raise(e)
+        return binascii.hexlify(data)
 
 # encode a value according to the id data type
 def encode_by_type(data_type, value):
