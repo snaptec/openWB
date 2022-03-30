@@ -22,7 +22,7 @@ function convertToKw(dataColum) {
 }
 
 function getIndex(topic) {
-	// get occurence of numbers between / / in topic
+	// get occurrence of numbers between / / in topic
 	// since this is supposed to be the index like in openwb/lp/4/w
 	// no lookbehind supported by safari, so workaround with replace needed
 	var index = topic.match(/(?:\/)([0-9]+)(?=\/)/g)[0].replace(/[^0-9]+/g, '');
@@ -94,6 +94,7 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
 		setInputValue('MaxPriceForCharging', mqttpayload);
+		loadElectricityPriceChart();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
 		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' ct/kWh');
@@ -128,7 +129,7 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 				$('#70ModeBtn').addClass('hide');
 				break;
 			case '1':
-				// activiert
+				// aktiviert
 				$('#70ModeBtn').removeClass('hide');
 			break;
 		}
@@ -286,7 +287,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 			updateGraph(mqttpayload);
 		}
 		if (graphrefreshcounter > 60) {
-			// reload graph completety
+			// reload graph completely
 			initialread = 0;
 			all1 = 0;
 			all2 = 0;
@@ -407,8 +408,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		switch (mqttpayload) {
 			case '0':
 				// mode sofort
-				$('#chargeModeSelectBtnText').text('Sofortladen');  // text btn mainpage
-				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
+				$('#chargeModeSelectBtnText').text('Sofortladen');  // text btn main page
+				$('.chargeModeBtn').removeClass('btn-success');  // changes to select buttons in modal
 				$('#chargeModeSofortBtn').addClass('btn-success');
 				$('#targetChargingProgress').removeClass('hide');  // visibility of divs for special settings
 				$('#sofortladenEinstellungen').removeClass('hide');
@@ -1029,24 +1030,30 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			actualPower += ' Min';
 		} else {
 			rest = (actualPower % 3600 / 60).toFixed(0);
-			var ganznot = (actualPower / 3600)
-			// nachkomma weg
-			ganz = (ganznot - (ganznot % 1)).toFixed(0);
+			ganz = Math.floor(actualPower / 3600);
 			actualPower = ganz + ' H ' + rest +' Min';
 		}
 		element.text(actualPower);
 	}
-	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Status$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameDevice').each(function() {  // check all elements of class '.nameLp'
 			var dev = $(this).closest('[data-dev]').data('dev');  // get attribute lp from parent
 			if ( dev == index ) {
 				if ( $(this).hasClass('enableDevice') ) {
 					// but only apply styles to element in chargepoint info data block
-					if ( mqttpayload == 0 ) {
-						$(this).removeClass('lpEnabledStyle').removeClass('lpWaitingStyle').addClass('lpDisabledStyle');
+					// 10 Device on (manuell oder automatisch)
+					if ( mqttpayload == 10 ) {
+						$(this).removeClass('lpEnabledStyle').removeClass('text-blue').removeClass('text-white').removeClass('lpWaitingStyle').addClass('lpDisabledStyle');
+					// 11 Device off(manuell oder automatisch)
+					} else if ( mqttpayload == 11 ) {
+						$(this).removeClass('lpDisabledStyle').removeClass('text-blue').removeClass('text-white').removeClass('lpWaitingStyle').addClass('lpEnabledStyle');
+					// 20 Anlauferkennung aktiv
+					} else if ( mqttpayload == 20) {
+						$(this).removeClass('lpDisabledStyle').removeClass('lpEnabledStyle').removeClass('text-white').removeClass('lpWaitingStyle').addClass('text-blue');
+					// 30 Finistime laueft
 					} else {
-						$(this).removeClass('lpDisabledStyle').removeClass('lpWaitingStyle').addClass('lpEnabledStyle');
+						$(this).removeClass('lpDisabledStyle').removeClass('lpEnabledStyle').removeClass('text-blue').removeClass('lpWaitingStyle').addClass('text-white');
 					}
 				}
 			}
@@ -1118,7 +1125,7 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		} else {
 			infoElement.addClass('hide');
 		}
-		var visibleRows = $('[data-dev]:visible');  // show/hide complete block depending on visible rows within
+		var visibleRows = $('.smartHome [data-dev]').not('.hide');  // show/hide complete block depending on visible rows within
 		if ( visibleRows.length > 0 ) {
 			$('.smartHome').removeClass('hide');
 		} else {

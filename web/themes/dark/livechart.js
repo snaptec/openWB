@@ -463,7 +463,7 @@ function loadgraph(animationDuration = 1000) {
 	}
 
 	function doGraphResponsive(chartInstance) {
-		// changes graph resonding to screen size
+		// changes graph responding to screen size
 		// quantity of x-axis labels
 		chartInstance.config.options.scales.xAxes[0].ticks.maxTicksLimit = getMaxTicksLimit(chartInstance.width);
 		// other settings
@@ -587,6 +587,7 @@ function loadgraph(animationDuration = 1000) {
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
+
 // Sichtbarkeit für SmartHome Devices im Graph
 function setvisibility(datarr,hidevar,hidevalue,booldisplay){
 	var arrayLength = datarr.length;
@@ -605,6 +606,7 @@ function setvisibility(datarr,hidevar,hidevalue,booldisplay){
 
 	}
 }
+
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) && (all9 == 1) && (all10 == 1) && (all11 == 1) && (all12 == 1) && (all13 == 1) && (all14 == 1) && (all15 == 1) && (all16 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p + "\n" + all9p + "\n" + all10p + "\n" + all11p + "\n" + all12p + "\n" + all13p + "\n" + all14p + "\n" + all15p + "\n" + all16p;
@@ -733,7 +735,6 @@ function updateGraph(dataset) {
 		//var shd1t0 = lines[i].split(",")[29];
 		//var shd1t1 = lines[i].split(",")[30];
 		//var shd1t2 = lines[i].split(",")[31];
-
 	}
 	myLine.data.labels.push(ldate.substring(0, ldate.length -3));
 	myLine.data.datasets[2].data.push(lbezug / 1000);

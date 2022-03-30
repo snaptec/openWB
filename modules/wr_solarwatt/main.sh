@@ -1,23 +1,27 @@
 #!/bin/bash
 
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULE="PV"
-LOGFILE="$RAMDISKDIR/openWB.log"
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="PV"
+DMOD="MAIN"
 Debug=$debug
 
-DebugLog(){
-	if (( Debug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: ${MODULE}: $@" >> $LOGFILE
-	fi
-}
+#For Development only
+#Debug=1
 
-sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip}/rest/kiwigrid/wizard/devices")
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_solarwatt.log"
+fi
 
-pvwatt=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerProduced.value != null) | .tagValues.PowerProduced.value' | sed 's/\..*$//')
-DebugLog "PV-Leistung: ${pvwatt} W"
-pvwatt=$((pvwatt * -1))
+openwbDebugLog ${DMOD} 2 "PV IP: ${speicher1_ip}"
 
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarwatt.solarwatt" "${speicher1_ip}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt

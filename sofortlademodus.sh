@@ -81,7 +81,7 @@ sofortlademodus(){
 							llneu=$((llalt - 1 ))
 							runs/set-current.sh $llneu m
 							openwbDebugLog "CHARGESTAT" 0 "LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere"
-							openwbDebugLog "MAIN" 1 "Sofort ladung reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+							openwbDebugLog "MAIN" 1 "Sofort ladung reduziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 							exit 0
 						fi
 						if (( llalt == minimalstromstaerke )); then

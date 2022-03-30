@@ -1,15 +1,21 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="EVU"
+DMOD="MAIN"
 
-pvwatt=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
-pvwatt=$(( pvwatt * -1 ))
-pvwh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActiveEnergy" | jq .value)
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_fems.log"
+fi
 
-re='^-?[0-9]+$'
-if ! [[ $pvwatt =~ $re ]] ; then
-   pvwatt="0"
-fi
-if [[ $pvwh =~ $re ]] ; then
-		echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
-fi
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-echo $pvwatt
+openwbDebugLog ${DMOD} 2 "WR Passwort: ${femskacopw}"
+openwbDebugLog ${DMOD} 2 "WR IP: ${femsip}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_fems.fems" "${femskacopw}" "${femsip}" >>"${MYLOGFILE}" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+pvwatt=$(<"$RAMDISKDIR/pvwatt") 
+echo "$pvwatt"

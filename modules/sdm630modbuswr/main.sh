@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 if [[ $sdm630modbuswrsource = *virtual* ]]
 then
 	if ps ax |grep -v grep |grep "socat pty,link=$sdm630modbuswrsource,raw tcp:$sdm630modbuswrlanip:26" > /dev/null
@@ -40,7 +38,6 @@ while read -r line; do
 		echo $wrwh > /var/www/html/openWB/ramdisk/pvkwh
 		LANG=C printf "%.4f\n" $wrkwh > /var/www/html/openWB/ramdisk/pvkwhk
 	fi
-
 	n=$((n + 1))
 done <<< "$output"
 
@@ -50,5 +47,3 @@ if (( wattwr > 0 )); then
 fi
 echo $wattwr
 echo $wattwr > /var/www/html/openWB/ramdisk/pvwatt
-
-

@@ -1,4 +1,5 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
 cd /var/www/html/openWB
 . /var/www/html/openWB/loadconfig.sh
 
@@ -10,7 +11,13 @@ echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 mosquitto_pub -t "openWB/global/strLastmanagementActive" -r -m "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist"
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
-chmod 777 var/www/html/openWB/ramdisk/mqttlastregelungaktiv
+chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
+
+# The update might replace a number of files which might currently be in use by the continuously running legacy-run
+# server. If we replace the source files while the process is running, funny things might happen.
+# Thus we shut-down the legacy run server before performing the update.
+# We need sudo, because this script may run as user www-data when executed from PHP:
+sudo pkill -f "$OPENWBBASEDIR/packages/legacy_run_server.py"
 
 if [[ "$releasetrain" == "stable" ]]; then
 	train=stable17
@@ -79,9 +86,10 @@ sudo cp /tmp/soc_eq_acc_lp2 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp2
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*
 sudo chmod +x /var/www/html/openWB/runs/*
+sudo chmod +x /var/www/html/openWB/*.sh
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
 sleep 2
 
 # now treat system as in booting state
-nohup sudo /var/www/html/openWB/runs/atreboot.sh > /var/log/openWB.log 2>&1 &
+nohup sudo /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1 &

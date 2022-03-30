@@ -44,6 +44,26 @@ else
 	exit 0
 fi
 
+########### Laufzeit protokolieren
+startregel=$(date +%s)
+function cleanup()
+{
+	local endregel=$(date +%s)
+	local t=$((endregel-startregel))
+
+	if [ "$t" -le "7" ] ; then   # 1..7 Ok
+		openwbDebugLog "MAIN" 2 "**** Regulation loop needs $t seconds"
+	elif [ "$t" -le "8" ] ; then # 8 Warning 
+		openwbDebugLog "MAIN" 0 "**** WARNING **** Regulation loop needs $t seconds"
+	else                         # 9,10,... Fatal
+		openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
+		openwbDebugLog "MAIN" 0 "**** FATAL Regulation loop needs $t seconds"
+		openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
+	fi
+}
+trap cleanup EXIT
+########### End Laufzeit protokolieren
+
 #config file einlesen
 . /var/www/html/openWB/loadconfig.sh
 
@@ -89,6 +109,9 @@ if [[ $isss == "1" ]]; then
 	heartbeat=$(<ramdisk/heartbeat)
 	heartbeat=$((heartbeat+10))
 	echo $heartbeat > ramdisk/heartbeat
+	mosquitto_pub -r -t "openWB/system/Uptime" -m "$(uptime)"
+	mosquitto_pub -r -t "openWB/system/Timestamp" -m "$(date +%s)"
+	mosquitto_pub -r -t "openWB/system/Date" -m "$(date)"
 	exit 0
 fi
 
@@ -146,15 +169,12 @@ goecheck
 nrgkickcheck
 
 #load charging vars
-if (( debug == 1)); then
-	startloadvars=$(date +%s)
-fi
+startloadvars=$(date +%s)
 loadvars
-if (( debug == 1)); then
-	endloadvars=$(date +%s)
-	timeloadvars=$((endloadvars-startloadvars))
-	openwbDebugLog "MAIN" 0 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
-fi
+endloadvars=$(date +%s)
+timeloadvars=$((endloadvars-startloadvars))
+openwbDebugLog "MAIN" 1 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
+
 if (( u1p3paktiv == 1 )); then
 	blockall=$(<ramdisk/blockall)
 	if (( blockall == 1 )); then
@@ -256,30 +276,38 @@ fi
 if (( cpunterbrechunglp2 == 1 )); then
 	if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
 		if (( llalts1 > 5 )); then
-			if (( ladeleistunglp2 < 200 )); then
+			if (( ladeleistunglp2 < 100 )); then
 				cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
-				if (( cpulp2waraktiv == 0 )); then
-					openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
-					if [[ $evsecons1 == "simpleevsewifi" ]]; then
-						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
-					elif [[ $evsecons1 == "ipevse" ]]; then
-						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
-						python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
-					elif [[ $evsecons1 == "extopenwb" ]]; then
-						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
-					else
-						openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
-						sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
+				cpulp2counter=$(<ramdisk/cpulp2counter)
+				if (( cpulp2counter > 5 )); then
+					if (( cpulp2waraktiv == 0 )); then
+						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
+						if [[ $evsecons1 == "simpleevsewifi" ]]; then
+							curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
+						elif [[ $evsecons1 == "ipevse" ]]; then
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+							python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
+						elif [[ $evsecons1 == "extopenwb" ]]; then
+							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
+						else
+							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
+							sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
+						fi
+						echo 1 > ramdisk/cpulp2waraktiv
+						date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
 					fi
-					echo 1 > ramdisk/cpulp2waraktiv
-					date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
+				else
+					cpulp2counter=$((cpulp2counter+1))
+					echo $cpulp2counter > ramdisk/cpulp2counter
 				fi
 			else
 				echo 0 > ramdisk/cpulp2waraktiv
+				echo 0 > ramdisk/cpulp2counter
 			fi
 		fi
 	else
 		echo 0 > ramdisk/cpulp2waraktiv
+		echo 0 > ramdisk/cpulp2counter
 	fi
 fi
 

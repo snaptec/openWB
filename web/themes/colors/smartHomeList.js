@@ -14,6 +14,11 @@ class SmartHomeList {
   // initialize after document is created
   init() {
     this.div = d3.select("div#smartHomeTable");
+    this.fgColor = "var(--color-fg)";
+    this.switchColorRed = "var(--color-switchRed)";
+    this.switchColorGreen = "var(--color-switchGreen)";
+    this.switchColorBlue = "var(--color-switchBlue)";
+    this.switchColorWhite = "var(--color-fg)";
   }
 
   // update if data has changed
@@ -25,7 +30,7 @@ class SmartHomeList {
       d3.select("div#smartHomeWidget").classed("hide", false);
       var table = this.div.append("table")
         .attr("class", "table table-borderless table-condensed p-0 m-0");
-      
+
       const headers = ["Gerät", "Verbrauch", "Laufzeit", "Modus"];
       const thead = table.append("thead");
       thead
@@ -47,19 +52,7 @@ class SmartHomeList {
         .data(this.consumers).enter()
         .append("tr")
         .attr("style", row => this.calcColor(row));
-
-      const cell = rows.append("td")
-        .attr("class", "tablecell py-1 px-1")
-        .attr("onClick", (row) => "shDeviceClicked(" + row.id + ")")
-        .attr("id", (row, i) => "shbutton-" + i)
-        .attr("style", "text-align:left; vertical-align:middle;");
-      // status indicator
-      cell.append("span")
-        .attr("id", (row) => "shbutton-" + row.id)
-        .attr("class", (row) => row.isOn ? "fa fa-toggle-on text-green pr-2" : "fa fa-toggle-off text-red pr-2");
-      // name
-      cell.append("span")
-        .text(row => row.name);
+      rows.append ((row,i) => this.formatName(row,i));
       // Power/energy
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
@@ -105,6 +98,31 @@ class SmartHomeList {
     }
   }
 
+  formatName(row, i) {
+    const cell = d3.create("td")
+      .attr("class", "tablecell py-1 px-1")
+      .attr("onClick", "shDeviceClicked(" + row.id + ")")
+      .attr("id", "shbutton-" + i)
+      .attr("style", "text-align:left; vertical-align:middle;");
+    // status indicator
+    cell.append("span")
+      .attr("id", "shbutton-" + row.id)
+      .attr("class", row.status == 'off' ? "fa fa-toggle-off pr-2" : "fa fa-toggle-on pr-2")
+      .style("color", (row.status == 'off') ? this.switchColorRed
+        : (row.status == 'on') ? this.switchColorGreen
+          : (row.status == 'on-by-detection') ? this.switchColorBlue
+            : (row.status == 'on-by-timeout') ? this.switchColorWhite
+              : this.switchColorRed);
+    // name
+    cell.append("span")
+      .text(row.name);
+    if (row.countAsHouse) {
+      cell.append("span")
+        .attr("class", "fa fa-xs fa-home pl-1")
+      // .style("color", this.fgColor);
+    }
+     return cell.node();
+  }
   calcColor(row) {
     return ("color:" + row.color + "; text-align:center");
   }

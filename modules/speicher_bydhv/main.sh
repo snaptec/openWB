@@ -1,7 +1,25 @@
 #!/bin/bash
 
-soc=$(curl -s -u $bydhvuser:$bydhvpass http://$bydhvip/asp/RunData.asp | grep -A 2 SOC: | sed -n 2p | cut -f1 -d"%" | sed 's/.*value=//')
-echo $soc > /var/www/html/openWB/ramdisk/speichersoc
-speicherleistung=$(curl -s -u $bydhvuser:$bydhvpass http://$bydhvip/asp/Home.asp | grep -A 2 Power: | sed -n 2p | sed 's/.*value=//' | cut -f1 -d">")
-speicherleistung=$(echo "($speicherleistung*1000)/1" |bc)
-echo $speicherleistung > /var/www/html/openWB/ramdisk/speicherleistung
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="BATT"
+DMOD="MAIN"
+
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
+fi
+
+openwbDebugLog ${DMOD} 2 "Speicher IP: ${bydhvip}"
+openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${bydhvuser}"
+openwbDebugLog ${DMOD} 2 "Speicher User: ${bydhvpass}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_bydhv.byd" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" >>"$MYLOGFILE" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+speicherleistung=$(<"${RAMDISKDIR}/speicherleistung")
+
+openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"

@@ -70,6 +70,7 @@
 										<option <?php if($pvwattmodulold == "wr_ethsdm120") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
 									</optgroup>
 									<optgroup label="andere Hersteller">
+										<option <?php if($pvwattmodulold == "wr_alphaess") echo "selected" ?> value="wr_alphaess">AlphaESS-Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
 										<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
 										<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
@@ -80,8 +81,9 @@
 										<option <?php if($pvwattmodulold == "wr_fems") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($pvwattmodulold == "wr_powerdog") echo "selected" ?> value="wr_powerdog">Powerdog</option>
 										<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
+										<option <?php if($pvwattmodulold == "wr_rct2") echo "selected" ?> value="wr_rct2">RCT V.2</option>
 										<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
-										<option <?php if($pvwattmodulold == "smaemd_pv") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
+										<option <?php if($pvwattmodulold == "wr_smashm") echo "selected" ?> value="wr_smashm">SMA Energy Meter</option>
 										<option <?php if($pvwattmodulold == "wr_tripower9000") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 										<option <?php if($pvwattmodulold == "wr_smartme") echo "selected" ?> value="wr_smartme">SmartMe</option>
 										<option <?php if($pvwattmodulold == "wr_solaredge") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
@@ -90,6 +92,7 @@
 										<option <?php if($pvwattmodulold == "wr_solarwatt") echo "selected" ?> value="wr_solarwatt">Solarwatt / My Reserver Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_solarworld") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 										<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
+										<option <?php if($pvwattmodulold == "wr_sonneneco") echo "selected" ?> value="wr_sonneneco">Sonnen Eco</option>
 										<option <?php if($pvwattmodulold == "wr_studer") echo "selected" ?> value="wr_studer">Studer-Innotec System</option>
 										<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
 										<option <?php if($pvwattmodulold == "wr_sunways") echo "selected" ?> value="wr_sunways">Sunways</option>
@@ -100,6 +103,7 @@
 									<optgroup label="generische Module">
 										<option <?php if($pvwattmodulold == "wr_http") echo "selected" ?> value="wr_http">Http</option>
 										<option <?php if($pvwattmodulold == "wr_json") echo "selected" ?> value="wr_json">Json</option>
+										<option <?php if($pvwattmodulold == "wr_pvkitflex") echo "selected" ?> value="wr_pvkitflex">openWB PV Kit flexible IP</option>
 										<option <?php if($pvwattmodulold == "mpm3pmpv") echo "selected" ?> value="mpm3pmpv">MPM3PM </option>
 										<option <?php if($pvwattmodulold == "wr_mqtt") echo "selected" ?> value="wr_mqtt">MQTT</option>
 										<option <?php if($pvwattmodulold == "sdm630modbuswr") echo "selected" ?> value="sdm630modbuswr">SDM 630 Modbus</option>
@@ -113,8 +117,21 @@
 							<div class="alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Per MQTT zu schreiben:<br>
-								<span class="text-info">openWB/set/pv/1/W</span> PV-Leistung in Watt, int, negativ<br>
+								<span class="text-info">openWB/set/pv/1/W</span> PV-Erzeugungsleistung in Watt, int, positiv<br>
 								<span class="text-info">openWB/set/pv/1/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
+						<div id="pvsonneneco" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich. Alle Einstellungen werden in dem Speicher-Modul vorgenommen.
+							</div>
+							<div class="card-text alert alert-warning">
+								Die PV-Leistung steht nur in den Varianten "Rest-API 2" und "JSON-API" zur Verfügung!
+							</div>
+						</div>
+						<div id="pvalphaess" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="pvsungrow" class="hide">
@@ -132,6 +149,11 @@
 								Konfiguration im zugehörigen Speichermodul des Solarwatt/My Reserve erforderlich.
 							</div>
 						</div>
+						<div id="pvhuawei" class="hide">
+							<div class="card-text alert alert-danger">
+								Die Abfrage der Huawei Wechselrichter benötigt sehr viel Zeit. Es wird empfohlen das Regelintervall auf "langsam" zu stellen.
+							</div>
+						</div>
 						<div id="pvip" class="hide">
 							<div class="form-row mb-1">
 								<label for="pv1_ipa" class="col-md-4 col-form-label">IP Adresse</label>
@@ -143,12 +165,28 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvid" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv1_ida" class="col-md-4 col-form-label">ID </label>
+								<div class="col">
+									<input class="form-control" type="text" name="pv1_ida" id="pv1_ida" value="<?php echo $pv1_idaold ?>">
+									<span class="form-text small">
+										Gültige Werte Id als Zahl.
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="pvsiemens" class="hide">
 							<!-- nothing here, just generic IP -->
 						</div>
 						<div id="pvpowerdog" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen EVU Modul.
+							</div>
+						</div>
+						<div id="pvrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
 							</div>
 						</div>
 						<div id="pvrct" class="hide">
@@ -176,19 +214,21 @@
 									</span>
 								</div>
 							</div>
-							<label class="col-md-4 col-form-label">Alternative Auslesung</label>
-							<div class="col">
-								<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-									<label class="btn btn-outline-info<?php if($wryoulessaltold == 0) echo " active" ?>">
-										<input type="radio" name="wryoulessalt" id="wryoulessaltNo" value="0"<?php if($wryoulessaltold == 0) echo " checked=\"checked\"" ?>>Nein (S0)
-									</label>
-									<label class="btn btn-outline-info<?php if($wryoulessaltold == 1) echo " active" ?>">
-										<input type="radio" name="wryoulessalt" id="wryoulessaltYes" value="1"<?php if($wryoulessaltold == 1) echo " checked=\"checked\"" ?>>Ja
-									</label>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Alternative Auslesung</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($wryoulessaltold == 0) echo " active" ?>">
+											<input type="radio" name="wryoulessalt" id="wryoulessaltNo" value="0"<?php if($wryoulessaltold == 0) echo " checked=\"checked\"" ?>>Nein (S0)
+										</label>
+										<label class="btn btn-outline-info<?php if($wryoulessaltold == 1) echo " active" ?>">
+											<input type="radio" name="wryoulessalt" id="wryoulessaltYes" value="1"<?php if($wryoulessaltold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren wenn statt des S0 der andere Eingang des Youless genutzt wird.
+									</span>
 								</div>
-								<span class="form-text small">
-									Diese Option aktivieren wenn statt des S0 der andere Eingang des Youless genutzt wird.
-								</span>
 							</div>
 						</div>
 						<div id="pvsunways" class="hide">
@@ -238,7 +278,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|[a-zA-Z0-9.\-_]+$" name="solarview_hostname" id="solarview_hostname" value="<?php echo $solarview_hostnameold ?>">
 									<span class="form-text small">
-										Gültige Werte Hostname oder IP-Adresse.
+										Gültige Werte: Hostname oder IP-Adresse
 									</span>
 								</div>
 							</div>
@@ -247,7 +287,25 @@
 								<div class="col">
 									<input class="form-control" type="number" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 									<span class="form-text small">
-										Gültige Werte Port, z.B. 15000.
+										Gültige Werte: Port, z.B. 15000
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="solarview_timeout" class="col-md-4 col-form-label">Timeout für den Solarview TCP-Server</label>
+								<div class="col">
+									<input class="form-control" type="number" name="solarview_timeout" id="solarview_timeout" value="<?php echo htmlspecialchars($solarview_timeoutold) ?>">
+									<span class="form-text small">
+										Gültige Werte: Dauer in Sekunden, z.B. 3
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="solarview_command_wr" class="col-md-4 col-form-label">Kommando für die Abfrage der Wechselrichter</label>
+								<div class="col">
+								<input class="form-control" type="text" pattern="^\d{2}\*$" name="solarview_command_wr" id="solarview_command_wr" value="<?php echo $solarview_command_wrold ?>">
+									<span class="form-text small">
+										Gültige Werte: Kommandos gemäß SolarView-Dokumentation, z.B.: <code>00*</code> (gesamte Anlage), <code>01*</code> (Wechselrichter 1), <code>02*</code> (Wechselrichter 2)
 									</span>
 								</div>
 							</div>
@@ -269,6 +327,44 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvflexdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pvflexversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<div class="col">
+									<select name="pvflexversion" id="pvflexversion" class="form-control">
+										<option <?php if($pvflexversionold == 0) echo "selected" ?> value="0">PV Kit mit MPM3PM Zähler</option>
+										<option <?php if($pvflexversionold == 1) echo "selected" ?> value="1">PV Kit mit Lovato Zähler</option>
+										<option <?php if($pvflexversionold == 2) echo "selected" ?> value="2">PV Kit mit Eastron SDM630 Zähler</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="pvflexip" class="col-md-4 col-form-label">PV Adapter IP</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pvflexip" id="pvflexip" value="<?php echo $pvflexipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										IP Adresse des Protoss/Elfin Adapters.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="pvflexport" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="pvflexport" id="pvflexport" value="<?php echo (empty($pvflexportold)?'502':$pvflexportold) ?>">
+									<span class="form-text small">
+										TCP Port der im Protoss/Elfin konfiguriert ist.<br>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="pvflexid" class="col-md-4 col-form-label">Unit ID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" max="254" step="1" name="pvflexid" id="pvflexid" value="<?php echo $pvflexidold ?>">
+									<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
+								</div>
+							</div>
+						</div>
 						<div id="pvplenti" class="hide">
 							<div class="form-row mb-1">
 								<label for="kostalplenticoreip" class="col-md-4 col-form-label">IP Adresse</label>
@@ -277,6 +373,9 @@
 									<span class="form-text small">
 										Gültige Werte: IP-Adresse des 1. Kostal Plenticore. An diesem muss (wenn vorhanden) der EM300/das KSEM und ggf. Speicher angeschlossen sein.
 										Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
+									</span>
+									<span class="form-text small">
+										Am 1. Plenticore darf ein Speicher angebunden sein. In diesem Fall ist im Batteriespeicher-Modul "Kostal Plenticore mit Speicher" auszuwählen. Der WR stellt alle Daten der angeschlossenen Batterie bereit.
 									</span>
 								</div>
 							</div>
@@ -297,6 +396,18 @@
 										Gültige Werte: IP-Adresse des 2. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein.
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
+									<span class="form-text small">
+										Am 2. Plenticore darf kein Speicher angebunden sein.
+									</span>
+								</div>
+								</div>
+								<div class="form-row mb-1">
+								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
+								<div class="col">
+									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
+									<span class="form-text small">
+										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
+									</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -307,14 +418,17 @@
 										Gültige Werte: IP-Adresse des 3. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein.
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 									</span>
+									<span class="form-text small">
+										Am 3. Plenticore darf kein Speicher angebunden sein.
+									</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
+								<label for="name_wechselrichter3" class="col-md-4 col-form-label">WR 3 Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
+									<input class="form-control" type="text" name="name_wechselrichter3" id="name_wechselrichter3" value="<?php echo $name_wechselrichter3old ?>">
 									<span class="form-text small">
-										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
+										Freie Bezeichnung des dritten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 									</span>
 								</div>
 							</div>
@@ -356,6 +470,9 @@
 								<label for="wr_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo $wr_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>
@@ -460,14 +577,14 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
+									<input class="form-control" type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
-										Gültige Werte: IPs. IP Adresse des SolarEdge Wechselrichters. Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.
+										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label class="col-md-4 col-form-label">Externes Meter mit auslesen</label>
+								<label class="col-md-4 col-form-label">Weiteres SmartMeter mit auslesen</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($wr1extprodold == 0) echo " active" ?>">
@@ -478,8 +595,9 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option aktivieren wenn ein Solaredge SmartMeter verbaut ist welches vorhandene Bestands PV Anlagen erfasst.
-										Das Meter muss an Position 2 konfiguriert sein.
+										Diese Option nur aktivieren, wenn ein weiteres Solaredge SmartMeter verbaut ist, welches z.B. die Leistung einer vorhandenen Bestands-PV-Anlage erfasst, 
+										so dass diese dem WR hinzuaddiert wird.
+										Dieses zusätzliche SmartMeter muss dann als "Zähler 2" / "Position 2" im WR-Konfiguratioonsmenü konfiguriert sein.
 									</span>
 								</div>
 							</div>
@@ -583,18 +701,18 @@
 										<span class="form-text small">Anzahl (1-9) der Studer MPPT Solarladeregler im System (VS/VT)</span>
 								</div>
 							</div>
-						</div> 
+						</div>
 						<div id="pvwrsolax" class="hide">
 							<div class="form-row mb-1">
 								<label for="solaxip" class="col-md-4 col-form-label">WR Solax IP</label>
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaxip" id="solaxip" value="<?php echo $solaxipold ?>">
 									<span class="form-text small">
-										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters. 
+										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters.
 									</span>
 								</div>
 							</div>
-						</div> 
+						</div>
 						<div id="pvwrfronius" class="hide">
 							<div class="form-row mb-1">
 								<label for="wrfroniusip" class="col-md-4 col-form-label">WR Fronius IP</label>
@@ -602,22 +720,6 @@
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.
-									</span>
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<label class="col-md-4 col-form-label">Handelt es sich um einen Gen24?</label>
-								<div class="col">
-									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 0) echo " active" ?>">
-											<input type="radio" name="froniusisgen24" id="froniusisgen24No" value="0"<?php if($wrfroniusisgen24old == 0) echo " checked=\"checked\"" ?>>Nein
-										</label>
-										<label class="btn btn-outline-info<?php if($wrfroniusisgen24old == 1) echo " active" ?>">
-											<input type="radio" name="froniusisgen24" id="froniusisgen24Yes" value="1"<?php if($wrfroniusisgen24old == 1) echo " checked=\"checked\"" ?>>Ja
-										</label>
-									</div>
-									<span class="form-text small">
-										Diese Option aktivieren wenn es sich um einen Gen24 handelt.
 									</span>
 								</div>
 							</div>
@@ -746,7 +848,7 @@
 								<div class="col">
 									<input class="form-control" type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>">
 									<span class="form-text small">
-										Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
+										Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf "0" gesetzt. Der Wert muss in Watt sein. Erzeugungsleistung muss positiv angegeben werden!
 									</span>
 								</div>
 							</div>
@@ -791,6 +893,7 @@
 								hideSection('#pvpiko2');
 								hideSection('#pvpowerwall');
 								hideSection('#pvkitdiv');
+								hideSection('#pvflexdiv');
 								hideSection('#pvethsdm120');
 								hideSection('#pvsolarview');
 								hideSection('#pvdiscovergy');
@@ -801,11 +904,17 @@
 								hideSection('#pvfems');
 								hideSection('#pvsolarworld');
 								hideSection('#pvip');
+								hideSection('#pvid');
 								hideSection('#pvsiemens');
 								hideSection('#pvrct');
+								hideSection('#pvrct2');
 								hideSection('#pvpowerdog');
 								hideSection('#pvsolarwatt');
+								hideSection('#pvwrstuder');
 								hideSection('#pvsungrow');
+								hideSection('#pvalphaess');
+								hideSection('#pvsonneneco');
+								hideSection('#pvhuawei');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -814,7 +923,9 @@
 									showSection('#pvip');
 								}
 								if($('#pvwattmodul').val() == 'wr_huawei') {
+									showSection('#pvhuawei');
 									showSection('#pvip');
+									showSection('#pvid');
 								}
 								if($('#pvwattmodul').val() == 'wr_shelly') {
 									showSection('#pvip');
@@ -823,6 +934,10 @@
 									showSection('#pvpowerdog');
 								}
 								if($('#pvwattmodul').val() == 'wr_rct') {
+									showSection('#pvrct');
+								}
+								if($('#pvwattmodul').val() == 'wr_rct2') {
+									showSection('#pvrct2');
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_fems') {
@@ -852,68 +967,77 @@
 								if($('#pvwattmodul').val() == 'wr_pvkit') {
 									showSection('#pvkitdiv');
 								}
+								if($('#pvwattmodul').val() == 'wr_pvkitflex') {
+									showSection('#pvflexdiv');
+								}
 								if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
 									showSection('#pvkitdiv');
 								}
 								if($('#pvwattmodul').val() == 'vzloggerpv') {
 									showSection('#pvvzl');
 								}
-								if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
+								if($('#pvwattmodul').val() == 'sdm630modbuswr') {
 									showSection('#pvsdmwr');
 								}
-								if($('#pvwattmodul').val() == 'wr_fronius')   {
+								if($('#pvwattmodul').val() == 'wr_fronius') {
 									showSection('#pvwrfronius');
 								}
-								if($('#pvwattmodul').val() == 'wr_http')   {
+								if($('#pvwattmodul').val() == 'wr_http') {
 									showSection('#pvhttp');
 								}
-								if($('#pvwattmodul').val() == 'smaemd_pv')   {
+								if($('#pvwattmodul').val() == 'wr_smashm') {
 									showSection('#pvsma');
 								}
-								if($('#pvwattmodul').val() == 'wr_json')   {
+								if($('#pvwattmodul').val() == 'wr_json') {
 									showSection('#pvwrjson');
 								}
-								if($('#pvwattmodul').val() == 'mpm3pmpv')   {
+								if($('#pvwattmodul').val() == 'mpm3pmpv') {
 									showSection('#pvmpm3pm');
 								}
-								if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
+								if($('#pvwattmodul').val() == 'wr_kostalpiko') {
 									showSection('#pvwrkostalpiko');
 								}
-								if($('#pvwattmodul').val() == 'wr_solaredge')   {
+								if($('#pvwattmodul').val() == 'wr_solaredge') {
 									showSection('#pvwrsolaredge');
 								}
-                                if($('#pvwattmodul').val() == 'wr_studer')   {
+								if($('#pvwattmodul').val() == 'wr_studer') {
 									showSection('#pvwrstuder');
 								}
-								if($('#pvwattmodul').val() == 'wr_solax')   {
+								if($('#pvwattmodul').val() == 'wr_solax') {
 									showSection('#pvwrsolax');
 								}
-								if($('#pvwattmodul').val() == 'wr_smartme')   {
+								if($('#pvwattmodul').val() == 'wr_smartme') {
 									showSection('#pvsmartme');
 								}
-								if($('#pvwattmodul').val() == 'wr_tripower9000')   {
+								if($('#pvwattmodul').val() == 'wr_tripower9000') {
 									showSection('#pvwrtri9000');
 								}
-								if($('#pvwattmodul').val() == 'wr_plenticore')   {
+								if($('#pvwattmodul').val() == 'wr_plenticore') {
 									showSection('#pvplenti');
 								}
-								if($('#pvwattmodul').val() == 'wr_solarlog')   {
+								if($('#pvwattmodul').val() == 'wr_solarlog') {
 									showSection('#pvsolarlog');
 								}
-								if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
+								if($('#pvwattmodul').val() == 'wr_kostalpikovar2') {
 									showSection('#pvpiko2');
 								}
-								if($('#pvwattmodul').val() == 'wr_powerwall')   {
+								if($('#pvwattmodul').val() == 'wr_powerwall') {
 									showSection('#pvpowerwall');
 								}
-								if($('#pvwattmodul').val() == 'wr_lgessv1')   {
+								if($('#pvwattmodul').val() == 'wr_lgessv1') {
 									showSection('#pvlgessv1');
 								}
-								if($('#pvwattmodul').val() == 'wr_solarwatt')   {
+								if($('#pvwattmodul').val() == 'wr_solarwatt') {
 									showSection('#pvsolarwatt');
 								}
-								if($('#pvsungrow').val() == 'wr_sungrow')   {
+								if($('#pvwattmodul').val() == 'wr_alphaess') {
+									showSection('#pvalphaess');
+								}
+								if($('#pvwattmodul').val() == 'wr_sungrow') {
 									showSection('#pvsungrow');
+								}
+								if($('#pvwattmodul').val() == 'wr_sonneneco') {
+									showSection('#pvsonneneco');
 								}
 							}
 
@@ -949,13 +1073,17 @@
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 										<option <?php if($pv2wattmodulold == "wr2_solaredge") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
+										<option <?php if($pv2wattmodulold == "wr2_solarlog") echo "selected" ?> value="wr2_solarlog">SolarLog</option>
 										<option <?php if($pv2wattmodulold == "wr2_solax") echo "selected" ?> value="wr2_solax">Solax</option>
 										<option <?php if($pv2wattmodulold == "wr2_sungrow") echo "selected" ?> value="wr2_sungrow">Sungrow</option>
 										<option <?php if($pv2wattmodulold == "wr2_victron") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($pv2wattmodulold == "wr2_json") echo "selected" ?> value="wr2_json">Json Abfrage</option>
+										<option <?php if($pv2wattmodulold == "wr2_mqtt") echo "selected" ?> value="wr2_mqtt">MQTT</option>
+										<option <?php if($pv2wattmodulold == "wr2_pvkitflex") echo "selected" ?> value="wr2_pvkitflex">openWB PV Kit flexible IP</option>
 										<option <?php if($pv2wattmodulold == "wr2_ethsdm120") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
+										<option <?php if($pv2wattmodulold == "wr2_shelly") echo "selected" ?> value="wr2_shelly">Shelly</option>
 									</optgroup>
 								</select>
 							</div>
@@ -987,6 +1115,8 @@
 								</div>
 							</div>
 						</div>
+
+
 						<div id="pv2iddiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="pv2id" class="col-md-4 col-form-label">Modbus ID</label>
@@ -995,6 +1125,64 @@
 									<span class="form-text small">Gültige Werte ID. ID Adresse</span>
 								</div>
 							</div>
+						</div>
+						<div id="pv2ip2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip2" class="col-md-4 col-form-label">Zweite IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip2" id="pv2ip2" value="<?php echo $pv2ip2old ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12 Ist nur relevant wenn ein zweiter Modbus/Netzwerk Adapter genutzt wird. Wird einer für 2 Zähler genutzt bitte die IP vom ersten nochmals eintragen.
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2id2div" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2id2" class="col-md-4 col-form-label">Zweite Modbus ID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="0" step="1" name="pv2id2" id="pv2id2" value="<?php echo $pv2id2old ?>">
+									<span class="form-text small">Gültige Werte ID. ID Adresse. Wenn kein zweiter Zähler genutzt wird auf 0 belassen.</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2flexdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2flexversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<div class="col">
+									<select name="pv2flexversion" id="pv2flexversion" class="form-control">
+										<option <?php if($pv2flexversionold == 0) echo "selected" ?> value="0">PV Kit mit MPM3PM Zähler</option>
+										<option <?php if($pv2flexversionold == 1) echo "selected" ?> value="1">PV Kit mit Lovato Zähler</option>
+										<option <?php if($pv2flexversionold == 2) echo "selected" ?> value="2">PV Kit mit Eastron SDM630 Zähler</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="pv2flexip" class="col-md-4 col-form-label">PV Adapter IP</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2flexip" id="pv2flexip" value="<?php echo $pv2flexipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										IP Adresse des Protoss/Elfin Adapters.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="pv2flexport" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="pv2flexport" id="pv2flexport" value="<?php echo (empty($pv2flexportold)?'502':$pv2flexportold) ?>">
+									<span class="form-text small">
+										TCP Port der im Protoss/Elfin konfiguriert ist.<br>
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+									<label for="pv2flexid" class="col-md-4 col-form-label">Unit ID</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="pv2flexid" id="pv2flexid" value="<?php echo $pv2flexidold ?>">
+										<span class="form-text small">Gültige Werte 1-254. Modbus ID des Gerätes.</span>
+									</div>
+								</div>
 						</div>
 						<div id="pv2wrjsondiv" class="hide">
 							<div class="form-row mb-1">
@@ -1027,6 +1215,14 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2mqttdiv" class="hide">
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Per MQTT zu schreiben:<br>
+								<span class="text-info">openWB/set/pv/2/W</span> PV-Erzeugungsleistung in Watt, int, positiv<br>
+								<span class="text-info">openWB/set/pv/2/WhCounter</span> Erzeugte Energie in Wh, float, nur positiv
+							</div>
+						</div>
 						<div id="pv2piko2" class="hide">
 							<div class="form-row mb-1">
 								<label for="wr2_piko2_user" class="col-md-4 col-form-label">Benutzername</label>
@@ -1044,6 +1240,21 @@
 								<label for="wr2_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr2_piko2_url" id="wr2_piko2_url" value="<?php echo $wr2_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2solarlogdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="bezug2_solarlog_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug2_solarlog_ip" id="bezug2_solarlog_ip" value="<?php echo $bezug2_solarlog_ipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+										Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul.
+									</span>
 								</div>
 							</div>
 						</div>
@@ -1052,9 +1263,14 @@
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
 								hideSection('#pv2iddiv');
+								hideSection('#pv2ip2div');
+								hideSection('#pv2id2div');
 								hideSection('#pv2kitdiv');
+								hideSection('#pv2flexdiv');
 								hideSection('#pv2wrjsondiv');
+								hideSection('#pv2mqttdiv');
 								hideSection('#pv2piko2');
+								hideSection('#pv2solarlogdiv');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1062,8 +1278,14 @@
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('#pv2wrjsondiv');
 								}
+								if($('#pv2wattmodul').val() == 'wr2_mqtt') {
+									showSection('#pv2mqttdiv');
+								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
 									showSection('#pv2kitdiv');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_pvkitflex') {
+									showSection('#pv2flexdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovato') {
 									showSection('#pv2kitdiv');
@@ -1095,7 +1317,15 @@
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {
 									showSection('#pv2ipdiv');
 									showSection('#pv2iddiv');
+									showSection('#pv2ip2div');
+									showSection('#pv2id2div');
 								}
+								if($('#pv2wattmodul').val() == 'wr2_solarlog')   {
+									showSection('#pv2solarlogdiv');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_shelly') {
+									showSection('#pv2ipdiv');
+								}								
 							}
 							$(function() {
 								display_pv2wattmodul();

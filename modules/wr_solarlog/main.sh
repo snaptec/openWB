@@ -1,18 +1,16 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname $0)/../../" && pwd)
+MODULEDIR=$(cd "$(dirname $0)" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 
+DMOD="PV"
+Debug=$debug
 
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarlog.solarlog" "${bezug_solarlog_ip}" >> "${MYLOGFILE}" 2>&1
+pvwatt=$(<"${RAMDISKDIR}/pvwatt")
+pvkwh=$(<"${RAMDISKDIR}/pvkwh")
 
-
-answer=$(curl -d {\"801\":{\"170\":null}} --connect-timeout 5 -s $bezug_solarlog_ip/getjp)
-
-pvwatt=$(echo $answer | jq '."801"."170"."101"' )
-pvkwh=$(echo $answer | jq '."801"."170"."109"' )
-
-
-if (( $pvwatt > 5 )); then
-	pvwatt=$(echo "$pvwatt*-1" |bc)
-fi
+openwbDebugLog ${DMOD} 2 "pvwatt: $pvwatt"
+openwbDebugLog ${DMOD} 2 "pvkwh: $pvkwh"
 echo $pvwatt
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-

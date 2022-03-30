@@ -1,43 +1,32 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname $0)"/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="EVU"
+DMOD="MAIN"
 
-#Auslesen eines Fronius Symo WR mit Fronius Smartmeter über die integrierte JSON-API des WR.
-#Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv)
-# Einspeiseleistung: PV-Leistung > Verbrauch, es wird Strom eingespeist
-# Bezugsleistug: PV-Leistung < Verbrauch, es wird Strom aus dem Netz bezogen
-
-wattbezugtmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi)
-if (( froniusprimo == 1 )); then
-	wattbezug=$(echo $wattbezugtmp | jq -r '.Body.Data.Site.P_Grid' |sed 's/\..*$//')
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	wattbezug=$(echo $wattbezugtmp | jq -r '.Body.Data.PowerReal_P_Sum' |sed 's/\..*$//')
-fi
-#pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
-#pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
-pvwatt=$(<ramdisk/pvwatt)
-wattb=$(( pvwatt + wattbezug ))
-
-#wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
-re='^[0-9]+$'
-ra='^-[0-9]+$'
-if ! [[ $wattbezug =~ $re ]] ; then
-	  if ! [[ $wattbezug =~ $ra ]] ; then
-		  wattbezug="0"
-	  fi
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
+# check if config file is already in env
+if [[ -z "$debug" ]]; then
+	echo "bezug_fronius_s0: Seems like openwb.conf is not loaded. Reading file."
+	# try to load config
+	. $OPENWBBASEDIR/loadconfig.sh
+	# load helperFunctions
+	. $OPENWBBASEDIR/helperFunctions.sh
+fi
+
+openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
+openwbDebugLog ${DMOD} 2 "WR Erzeugung: ${froniuserzeugung}"
+openwbDebugLog ${DMOD} 2 "WR Var2: ${froniusvar2}"
+openwbDebugLog ${DMOD} 2 "WR MeterLocation: ${froniusmeterlocation}"
+openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
+openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "counter_s0" "${wrfroniusip}" "${froniuserzeugung}" "${froniusvar2}" "${froniusmeterlocation}" "${wrfronius2ip}" "${speichermodul}" 2>>$MYLOGFILE
+
+wattbezug=$(<${RAMDISKDIR}/wattbezug)
 echo $wattbezug
-#zur weiteren verwendung im webinterface
-echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
-# Summe der vom Netz bezogene Energie total in Wh
-# nur für Smartmeter  im Einspeisepunkt!
-# bei Smartmeter im Verbrauchszweig  entspricht das dem Gesamtverbrauch
-kwhtmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System)
-# jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
-ikwh=$(echo ${kwhtmp##*EnergyReal_WAC_Minus_Absolute} | tr -d ' ' |  tr -d '\"' | tr -d ':' | tr -d '}' | tr -d '\n')
-#echo $ikwh #Test-Ausgabe
-echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
-# Eingespeiste Energie total in Wh (für Smartmeter im Einspeisepunkt)
-# bei Smartmeter im Verbrauchsweig immer 0
-ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
-#echo $ekwh #Test-Ausgabe
-echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh

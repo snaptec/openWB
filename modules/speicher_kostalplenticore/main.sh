@@ -1,21 +1,19 @@
 #!/bin/bash
 
-#########################################################
-#
-# liest aus Wechselrichter Kostal Plenticore
-# mit angeschlossener Batterie die Lade-/Entladeleistung
-# und den Batterie-SOC
-#
-# 2019 Michael Ortenstein
-# This file is part of openWB
-#
-#########################################################
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="BATT"
+DMOD="MAIN"
 
-# Daten aus temporärer ramdisk zur globalen Weiterverarbeitung in die
-# entsprechenden ramdisks kopieren. Die temporären Werte stammen aus dem
-# wr_plenticore Modul, werden dort zentral aus den Modbus-Registern gelesen
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
+fi
 
-# Speicherleistung WR 1
-"cp" /var/www/html/openWB/ramdisk/temp_speicherleistung /var/www/html/openWB/ramdisk/speicherleistung
-# Speicher Ladestand von Speicher am WR 1
-"cp" /var/www/html/openWB/ramdisk/temp_speichersoc /var/www/html/openWB/ramdisk/speichersoc
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_kostalplenticore.kostal_plenticore" >>"${MYLOGFILE}" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+speicherleistung=$(<"${RAMDISKDIR}/speicherleistung")
+openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"

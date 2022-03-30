@@ -64,7 +64,7 @@ payload = {'client_id':client_id}
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles?' + data
-headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm ': realm}
+headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm': realm}
 f = open('/var/www/html/openWB/ramdisk/opelreq2lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
@@ -85,7 +85,7 @@ data = urllib.urlencode(payload)
 data = data.encode('Big5')
 '/user/vehicles/{id}/status'
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles/'  + vin_id + '/status?' + data
-headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm ': realm}
+headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm': realm}
 f = open('/var/www/html/openWB/ramdisk/opelreq3lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
@@ -99,7 +99,13 @@ f.write(str(responsetext))
 f.write(str(responestatus))
 f.close()
 batt = json.loads(responsetext)
-soc = batt['energy'][0]['level']
+
+# filter to only include type=Electric but remove all others. Seen type=Fuel and type=Electric being returned.
+batt = filter(lambda x: x['type'] == 'Electric', batt['energy'])
+soc = batt[0]['level']
+
+#soc = batt['energy'][0]['level']
+
 #print(time_string,'soc lp'+chargepoint,soc)
 if (int(chargepoint) == 1):
     f = open('/var/www/html/openWB/ramdisk/soc', 'w')

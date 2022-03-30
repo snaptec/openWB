@@ -1,12 +1,24 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="EVU"
+DMOD="MAIN"
+Debug=$debug
 
+#For development only
+#Debug=1
 
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
+fi
 
-sudo python /var/www/html/openWB/modules/bezug_victrongx/victron.py $bezug_victronip $bezug_id
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "counter" "${bezug_victronip}" "${bezug_id}" "${victron_energy_meter}">>${MYLOGFILE} 2>&1
+ret=$?
 
-wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+
+wattbezug=$(<${RAMDISKDIR}/wattbezug)
 echo $wattbezug
-
-
-
-

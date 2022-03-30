@@ -60,7 +60,7 @@
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
-					// no menue entry for this page
+					// no menu entry for this page
 					// $('#navXXXXXX').addClass('disabled');
 				}
 			);
