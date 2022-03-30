@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from helpermodules import log
+from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
@@ -23,7 +24,7 @@ def get_default_config() -> dict:
 
 
 class HttpCounter:
-    def __init__(self, component_config: dict, domain: str) -> None:
+    def __init__(self, device_id: int, component_config: dict, domain: str) -> None:
         self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
         self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
         self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
@@ -33,17 +34,34 @@ class HttpCounter:
             for i in range(1, 4)
         ]
 
+        self.__device_id = device_id
         self.component_config = component_config
+        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
+        self.simulation = {}
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
+        imported = self.__get_imported()
+        exported = self.__get_exported()
+        power = self.__get_power()
+        if imported is None or exported is None:
+            topic_str = "openWB/set/system/device/{}/component/{}/".format(
+                self.__device_id, self.component_config["id"]
+            )
+            imported, exported = self.__sim_count.sim_count(
+                power,
+                topic=topic_str,
+                data=self.simulation,
+                prefix="bezug"
+            )
+
         counter_state = CounterState(
             currents=[getter() for getter in self.__get_currents],
-            imported=self.__get_imported(),
-            exported=self.__get_exported(),
-            power=self.__get_power()
+            imported=imported,
+            exported=exported,
+            power=power
         )
         self.__store.set(counter_state)
