@@ -49,7 +49,6 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"],
                 self.device_config["configuration"]["ip"],
                 component_config))
         else:
@@ -76,12 +75,12 @@ def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, num: int) -
     def create_webbox_inverter(address: str):
         config = inverter_webbox.get_default_config()
         config["id"] = num
-        return inverter_webbox.SmaWebboxInverter(0, address, config)
+        return inverter_webbox.SmaWebboxInverter(address, config)
 
     def create_modbus_inverter(address: str):
         config = inverter_modbus_tcp.get_default_config()
         config["id"] = num
-        return inverter_modbus_tcp.SmaModbusTcpInverter(0, address, config)
+        return inverter_modbus_tcp.SmaModbusTcpInverter(address, config)
 
     inverter1 = (create_webbox_inverter if webbox else create_modbus_inverter)(ip1)
     inverters_additional = (create_modbus_inverter(address) for address in [ip2, ip3, ip4] if address != "none")
