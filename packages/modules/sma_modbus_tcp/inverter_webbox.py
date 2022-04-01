@@ -20,7 +20,7 @@ log = logging.getLogger("SMA Webbox")
 
 
 class SmaWebboxInverter:
-    def __init__(self, device_address: str, component_config: dict) -> None:
+    def __init__(self, device_id: int, device_address: str, component_config: dict) -> None:
         self.__device_address = device_address
         self.component_config = component_config
         self.__store = get_inverter_value_store(component_config["id"])
