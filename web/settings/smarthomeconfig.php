@@ -406,7 +406,7 @@ $numDevices = 9;
 												<span class="form-text small">Diese Option (bei Auschaltschwelle anpassen oder auschalten/nicht einschalten) sorgt dafür, dass die aktuelle Leistungsaufnahme von diesem Gerät in den die Pv Überschussberechnung miteinbezogen wird. Wenn dann ein Auto geladen wird (> 1000 Watt Leistungsaufnahme),<br>
 												wird bei Ausschaltschwelle anpassen: Die Ausschaltverzögerung auf 0 gesetzt und die Ausschaltschwelle (sofern eine Bezugsschwelle definiert ist) auf 0 gesetzt. Dadurch werden diese Geräte als erstes abgeschaltet, wenn das Auto lädt und der Überschuss nicht ausreicht.
 												<br>
-												wird bei ausschalten/nicht einschalten: Das Gerät abgeschaltet.		Dann steht die aktuelle Leistungsaufnahme sofort für die Autoladung zur Verfügung.										
+												wird bei ausschalten/nicht einschalten: Das Gerät abgeschaltet.		Dann steht die aktuelle Leistungsaufnahme sofort für die Autoladung zur Verfügung.
 												</span>
 											</div>
 										</div>
@@ -717,6 +717,19 @@ $numDevices = 9;
 								</div>
 							</div>
 						</div>
+
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="smartmq" class="col-md-4 col-form-label">Smartmq handler verwenden (ohne Config file, noch in Entwicklung)</label>
+								<div class="col">
+									<select name="smartmq" id="smartmq" class="form-control" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
+										<option value="0" data-option="0">Nein</option>
+										<option value="1" data-option="1">Ja</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 

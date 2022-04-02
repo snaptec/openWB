@@ -436,6 +436,12 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     client.publish("openWB/config/get/SmartHome/maxBatteryPower", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (msg.topic == "openWB/config/set/SmartHome/smartmq"):
+                if (0 <= int(msg.payload) <= 1):
+                    f = open('/var/www/html/openWB/ramdisk/smartmq', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    client.publish("openWB/config/get/SmartHome/smartmq", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                     f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')
