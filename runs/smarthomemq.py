@@ -49,6 +49,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
+    global parammqtt
     devicenumb = re.sub(r'\D', '', msg.topic)
     input = msg.payload.decode("utf-8")
     if ("openWB/config/get/SmartHome/Devices" in msg.topic):
@@ -260,8 +261,6 @@ def conditions():
     global mydevices
     global speichersoc
     for mydevice in mydevices:
-        # if (mydevice._device_configured == '9'):
-        #    continue
         mydevice.conditions(speichersoc)
 
 
@@ -367,7 +366,6 @@ def readmq():
     client.connect("localhost")
     while True:
         client.loop()
-        # client.subscribe("openWB/SmartHome/#", 2)
         elapsedTime = time.time() - startTime
         if elapsedTime > waitTime:
             client.disconnect()

@@ -934,27 +934,12 @@ class Sbase(Sbase0):
             del self._mydevicemeasure
             self._oldmeasuretype1 = 'empty'
 
-    # def cleardef(self):
-    #   pass
-
-    # def gettyp(self):
-    #   pass
-
     def getueb(self):
         #    (1 = mit Speicher, 2 = mit offset , 0 = manual eingeschaltet)
         if (self.ueberschussberechnung == 2):
             self.devuberschuss = self._uberschussoffset
         else:
             self.devuberschuss = self._uberschuss
-
-    # def setueb(self):
-    #    pass
-
-    # def getdir(self):
-    #   pass
-
-    # def getdevicevalue(self):
-    #   pass
 
     def preturn(self, zustand, ueberschussberechnung, updatecnt):
         self.ueberschussberechnung = ueberschussberechnung
@@ -974,9 +959,6 @@ class Sbase(Sbase0):
             if updatecnt == 1:
                 self._c_eintime_f = 'Y'
                 self._c_eintime = int(time.time())
-
-    # def resetmaxeinschaltdauer(self):
-    #   pass
 
     def sepwatt(self, newwatt, newwattk):
         if (self._device_differentmeasurement == 0):
@@ -1588,11 +1570,3 @@ class Sbase(Sbase0):
             f = open(self._basePath+'/ramdisk/'+pref+'wh0', 'w')
             f.write(str(watt2))
             f.close()
-
-        # avm
-        self._device_actor = 'none'
-        self._device_username = 'none'
-        self._device_password = 'none'
-        self._device_measureavmactor = 'none'
-        self._device_measureavmusername = 'none'
-        self._device_measureavmpassword = 'none'
