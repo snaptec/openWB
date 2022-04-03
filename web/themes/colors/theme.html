@@ -146,23 +146,23 @@
 	<div id="nav-placeholder">
 	</div>
 	<div class="container-fluid">
-		<div class="row py-1 verySmallTextSize" style="color: var(--color-fg)">
-			<div id="date" class="col text-left">
+		<div class="d-flex justify-content-between py-1 verySmallTextSize" style="color: var(--color-fg)">
+			<div id="date" class=" col-3 m-0 p-0 text-left">
 				&nbsp;
 			</div>
-			<div class="col-5 text-center">
-				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize" id="chargeModeSelectBtn">
-					<span id="chargeModeSelectBtnText">Lademodus</span>
-					<span id="priorityEvBattery">
-						<span class="fas fa-car" id="priorityEvBatteryIcon">&nbsp;</span>
-					</span>
-				</button>
-				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize hide" id="codeButton">
-					<span>Code</span>
-					<span class="fas fa-hashtag" >&nbsp;</span>
-				</button>
-			</div>
-			<div id="time" class="col text-right">
+			
+			<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize" id="chargeModeSelectBtn">
+				<span id="chargeModeSelectBtnText">Lademodus</span>
+				<span id="priorityEvBattery">
+					<span class="fas fa-car" id="priorityEvBatteryIcon">&nbsp;</span>
+				</span>
+			</button>
+			<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize hide" id="codeButton">
+				<span>Code</span>
+				<span class="fas fa-hashtag">&nbsp;</span>
+			</button>
+		
+			<div id="time" class=" col-3 m-0 p-0 text-right">
 				&nbsp;
 			</div>
 		</div>
@@ -283,16 +283,14 @@
 
 						<div class="row vaRow m-0 p-0">
 							<div class="col-2 m-0 p-0">
-								<button type="button" class="btn btn-secondary priceLess"><i
-										class="far fa-minus-square"></i></button>
+								<button type="button" class="btn btn-secondary priceLess"><i class="far fa-minus-square"></i></button>
 							</div>
 							<div class="col-8">
 								<input type="range" class="form-control-range maxPriceInput" id="maxPrice" min="-25" max="95" step="0.1"
 									value="0" data-initialized="0">
 							</div>
 							<div class="col-2 m-0 p-0 text-right">
-								<button type="button" class="btn btn-secondary priceMore"><i
-										class="far fa-plus-square"></i></button>
+								<button type="button" class="btn btn-secondary priceMore"><i class="far fa-plus-square"></i></button>
 							</div>
 						</div>
 						<div class="form-row vaRow p-0 m-0">
@@ -843,13 +841,13 @@
 					</div>
 					<div class="row  mt-2">
 						<div class="col justify-content-end" style="text-align: end;">
-							<button type = "button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
-							</div>
-							</div>
+							<button type="button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
 
 	<!-- some scripts -->
 	<script>
@@ -1054,7 +1052,7 @@
 
 			function sendCode() {
 				let value = document.getElementById('codeInput').value
-				if(value.length >0) {
+				if (value.length > 0) {
 					publish(value, 'openWB/set/system/SimulateRFID')
 					$('#codeModal').modal('hide')
 				}
@@ -1063,7 +1061,7 @@
 				sendCode()
 			})
 
-			$('#codeInput').change (function() {
+			$('#codeInput').change(function () {
 				sendCode()
 			})
 
