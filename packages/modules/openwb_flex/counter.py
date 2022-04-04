@@ -5,6 +5,8 @@ from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
+from modules.common.lovato import Lovato
+from modules.common.mpm3pm import Mpm3pm
 from modules.common.store import get_counter_value_store
 from modules.openwb_flex.versions import kit_counter_inverter_version_factory
 
@@ -46,19 +48,17 @@ class EvuKitFlex:
             frequency = self.__client.get_frequency()
             power_factors = self.__client.get_power_factors()
 
-            version = self.component_config["configuration"]["version"]
-            if version == 0:
+            if isinstance(self.__client, Mpm3pm):
                 imported = self.__client.get_imported()
                 exported = self.__client.get_exported()
             else:
                 currents = list(map(abs, self.__client.get_currents()))
         finally:
             self.__tcp_client.close_connection()
-        version = self.component_config["configuration"]["version"]
-        if version == 0:
+        if isinstance(self.__client, Mpm3pm):
             currents = [powers[i] / voltages[i] for i in range(3)]
         else:
-            if version == 1:
+            if isinstance(self.__client, Lovato):
                 power = sum(powers)
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]

@@ -4,6 +4,7 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 DMOD="MAIN"
 
+openwbDebugLog ${DMOD} 2 "RCT Bezug start"
 
 wattbezug=$(echo "scale=0; $(python "${MODULEDIR}/rct_read.py" --ip="$bezug1_ip" --name='g_sync.p_ac_sc_sum')/1" | bc)
 openwbDebugLog ${DMOD} 2 "Bezug RCT Leistung: ${wattbezug}"

@@ -3,17 +3,15 @@
 #
 # Functions, definitions and classes to access RCT POWER
 # Implementation based on RCT Power Serial Communication Protocol (doc version 1.13)
-# Modified for Pyton3 by Heinz Hoefling 8/2021
+# Modified for Python3 by Heinz Hoefling 8/2021
 # can replace openwb\packages\modules\counter\rct_lib.py on openWB2.0
 #
 
 import sys
-import getopt
 import socket
 import select
 import struct
 import binascii
-import time
 import operator
 
 
@@ -65,19 +63,17 @@ def sort_by_id():
 def sort_by_name():
     id_tab.sort(key=operator.attrgetter('name'))
 
+
 # find a table entry by using the 32 bit ID
-
-
 def find_by_id(id):
-    for l in id_tab:
-        if l.id == id:
-            return l
+    for line in id_tab:
+        if line.id == id:
+            return line
 
     return None
 
+
 # find a table entry by using the 32 bit ID and return the data type
-
-
 def get_type_by_id(id):
     obj = find_by_id(id)
     if obj is None:
@@ -116,12 +112,11 @@ def decode_value(id, data):
             return hexdump(data, 512)
         else:
             return 0
-    except:
+    except:  # ToDo: only except expected errors
         return 0
 
+
 # encode a value according to the id data type
-
-
 def encode_value(id, value):
     data_type = get_type_by_id(id)
     return encode_by_type(data_type)
@@ -199,7 +194,6 @@ class Frame:
 
     # consume a data fragment until frame is complete
     # The function returns the number of consumed bytes in data
-
     def consume(self, data):
         i = 0
         for d in data:
@@ -241,7 +235,6 @@ class Frame:
         return i
 
     # decode a stream and store the values in the frame
-
     def decode(self):
         crc16_pos = len(self.stream)-2
         self.crc16 = struct.unpack(">H", self.stream[crc16_pos:crc16_pos+2])[0]
@@ -268,7 +261,8 @@ class Frame:
             idx += data_length
 
             # decode data using id and id data type
-            if data_length > 0 and (self.command == cmd_response or self.command == cmd_long_response or self.command == cmd_write or self.command == cmd_long_write):
+            if data_length > 0 and (self.command == cmd_response or self.command == cmd_long_response or
+                                    self.command == cmd_write or self.command == cmd_long_write):
                 self.value = decode_value(self.id, self.data)
 
     # encode a transmit stream using the frame values
@@ -333,7 +327,7 @@ class Frame:
                     crcsum = (crcsum & 0x0000FFFF) ^ polynom
         return crcsum
 
-    # prepare a frame and set alle class compontents
+    # prepare a frame and set alle class components
     def prepare(self, command, id, address, value=None):
         obj = find_by_id(id)
         if obj is None:
@@ -354,31 +348,26 @@ class Frame:
 def errlog(*args):
     sys.stderr.write(' '.join(map(str, args)) + '\n')
 
+
 # helper function to print debug messages
-
-
 def dbglog(*args):
-    if bVerbose == True:
+    if bVerbose:
         sys.stdout.write(' '.join(map(str, args)) + '\n')
 
-    return bVerbose
 
 # helper function to connect to the server (e.g. the RCT power device)
-
-
 def connect_to_server():
     try:
         clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         clientsocket.connect((host, port))
         dbglog('connect to ', host, 'port', port)
         return clientsocket
-    except:
+    except:  # ToDo: only except expected errors
         errlog('unable to connect to', host, 'port', port)
         return None
 
+
 # send a frame to RCT
-
-
 def send(clientsocket, cmd, id, address=0, value=0):
     frame = Frame()
     frame.prepare(cmd, id, address, value)
@@ -386,11 +375,10 @@ def send(clientsocket, cmd, id, address=0, value=0):
     clientsocket.send(frame.stream)
     return frame
 
+
 # this function reads from the socket.
 # Note: unexpected bytes within buf are discarded.
 #       According to the spec it should not happen and should not be a problem
-
-
 def receive(sock, id=0, timeout=receive_timeout):
     response = Frame()
     while True:
@@ -403,9 +391,9 @@ def receive(sock, id=0, timeout=receive_timeout):
             buf = sock.recv(512)
             if len(buf) > 0:
                 i = response.consume(buf)
-                if response.FrameComplete and response.CRCOk == True:
+                if response.FrameComplete and response.CRCOk:
                     if id > 0 and id != response.id:
-                        #errlog('response id', id, 'doesn\'t fit to the requested id ', response.id)
+                        # errlog('response id', id, 'doesn\'t fit to the requested id ', response.id)
                         # errlog(hexdump(buf))
                         return None
                     else:
@@ -421,9 +409,8 @@ def receive(sock, id=0, timeout=receive_timeout):
             # timeout
             return None
 
+
 # send a read request and wait for the response
-
-
 def read(clientsocket, id, address=0, timeout=receive_timeout):
     if clientsocket is not None:
         # repeat until the correct response has been received
@@ -453,10 +440,10 @@ def hexdump(src, length=16):
         if len(hex_) > 24:
             hex_ = '{} {}'.format(hex_[:24], hex_[24:])
         printable = ''.join(['{}'.format((x > 0 and x <= 127 and FILTER[x]) or '.') for x in chars])
-        if addr == True:
+        if addr:
             lines.append('{0:08x}  {1:{2}s} {3:{4}s}'.format(c, hex_, length * 3, printable, length))
         else:
-            lines.append('{1:{2}s} {3:{4}s}'.format(c, hex_, length * 3, printable, length))
+            lines.append('{0:{1}s} {2:{3}s}'.format(hex_, length * 3, printable, length))
 
         if c + length < len(src):
             lines.append("\n")
@@ -499,13 +486,13 @@ def id_tab_setup():
     id_tab.append(rct_id(0x01676FA6,   3, 'battery.cells_stat[3]',
                   rct_id.t_string,  'battery.cells_stat[3]'))
     id_tab.append(rct_id(0x019C0B60,   4, 'cs_neg[2]',
-                  rct_id.t_float,   'Miltiply value of the current sensor 2 by'))
+                  rct_id.t_float,   'Multiply value of the current sensor 2 by'))
     id_tab.append(rct_id(0x02247588,   5, 'battery_placeholder[0].cells_stat[2].u_min.value',
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[2].u_min.value'))
     id_tab.append(rct_id(0x031A6110,   6, 'energy.e_ext_month',
                   rct_id.t_float,   'External month energy [Wh]'))
-    id_tab.append(
-        rct_id(0x035E64EA,   7, 'battery_placeholder[0].module_sn[5]',              rct_id.t_string,  'Module 5 Serial Number'))
+    id_tab.append(rct_id(0x035E64EA,   7, 'battery_placeholder[0].module_sn[5]',
+                  rct_id.t_string,  'Module 5 Serial Number'))
     id_tab.append(rct_id(0x039BDE11,   8, 'hw_test.state',
                   rct_id.t_uint8,   'hw_test.state'))
     id_tab.append(rct_id(0x03A39CA2,   9, 'g_sync.p_ac_load[0]',
@@ -550,8 +537,8 @@ def id_tab_setup():
                   rct_id.t_uint16,  'Reference voltage 1 [V]'))
     id_tab.append(rct_id(0x08679611,  29, 'net.id',
                   rct_id.t_uint32,  'net.id'))
-    id_tab.append(rct_id(0x086C75B0,  30,
-                  'battery.stack_software_version[3]',                rct_id.t_uint32,  'Software version stack 3'))
+    id_tab.append(rct_id(0x086C75B0,  30, 'battery.stack_software_version[3]',
+                  rct_id.t_uint32,  'Software version stack 3'))
     id_tab.append(rct_id(0x0875C906,  31, 'hw_test.bt_time[2]',
                   rct_id.t_float,   'hw_test.bt_time[2]'))
     id_tab.append(rct_id(0x08E81725,  32, 'battery_placeholder[0].cells_stat[0].t_max.value',
@@ -576,9 +563,10 @@ def id_tab_setup():
                   rct_id.t_float,   'net.load_reduction'))
     id_tab.append(rct_id(0x0C588B75,  43, 'energy.e_ext_day_sum',
                   rct_id.t_float,   'energy.e_ext_day_sum'))
-    id_tab.append(rct_id(0x0CB5D21B,  44,
-                  'dc_conv.dc_conv_struct[1].p_dc_lp',                rct_id.t_float,   'Solar generator B power [W]'))
-    id_tab.append(rct_id(0x0CBA34B9,  45, 'nsm.u_q_u[3]',                                     rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x0CB5D21B,  44, 'dc_conv.dc_conv_struct[1].p_dc_lp',
+                  rct_id.t_float,   'Solar generator B power [W]'))
+    id_tab.append(rct_id(0x0CBA34B9,  45, 'nsm.u_q_u[3]',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x0CC4BDAA,  46, 'detect_phase_shift_enable',
                   rct_id.t_bool,    'Enable active island detection'))
     id_tab.append(rct_id(0x0CFA8BC4,  47, 'battery.stack_cycles[1]',
@@ -601,8 +589,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'battery_placeholder[0].cells_stat[6].u_max.index'))
     id_tab.append(rct_id(0x0E799A56,  56, 'io_board.rse_table[0]',
                   rct_id.t_float,   'K4..K1: 0000'))
-    id_tab.append(rct_id(0x0EC64BA7,  57,
-                  'battery_placeholder[0].stack_software_version[3]', rct_id.t_uint32,  'Software version stack 3'))
+    id_tab.append(rct_id(0x0EC64BA7,  57, 'battery_placeholder[0].stack_software_version[3]',
+                  rct_id.t_uint32,  'Software version stack 3'))
     id_tab.append(rct_id(0x0EF60C7E,  58, 'battery.cells_stat[3].u_max.value',
                   rct_id.t_float,   'battery.cells_stat[3].u_max.value'))
     id_tab.append(rct_id(0x0F28E2E1,  59, 'energy.e_ext_total_sum',
@@ -611,8 +599,8 @@ def id_tab_setup():
                   rct_id.t_int32,   'logger.minutes_ub_log_ts'))
     id_tab.append(rct_id(0x0FB40090,  61, 'io_board.check_rs485_result',
                   rct_id.t_uint8,   'io_board.check_rs485_result'))
-    id_tab.append(rct_id(0x1025B491,  62,
-                  'battery_placeholder[0].maximum_discharge_current', rct_id.t_float,   'Max. discharge current [A]'))
+    id_tab.append(rct_id(0x1025B491,  62, 'battery_placeholder[0].maximum_discharge_current',
+                  rct_id.t_float,   'Max. discharge current [A]'))
     id_tab.append(rct_id(0x10842019,  63, 'nsm.cos_phi_p[3][1]',
                   rct_id.t_float,   'Point 4 [cos(. )] (positive = overexcited)'))
     id_tab.append(rct_id(0x1089ACA9,  64, 'nsm.u_q_u[0]',
@@ -631,7 +619,8 @@ def id_tab_setup():
                   rct_id.t_int32,   'logger.minutes_temp2_log_ts'))
     id_tab.append(rct_id(0x1348AB07,  71, 'battery.cells[4]',
                   rct_id.t_string,  'battery.cells[4]'))
-    id_tab.append(rct_id(0x147E8E26,  72, 'g_sync.p_ac[1]',                                   rct_id.t_float,   'AC2'))
+    id_tab.append(rct_id(0x147E8E26,  72, 'g_sync.p_ac[1]',
+                  rct_id.t_float,   'AC2'))
     id_tab.append(rct_id(0x14C0E627,  73, 'wifi.password',
                   rct_id.t_string,  'WiFi password'))
     id_tab.append(rct_id(0x14FCA232,  74, 'nsm.rpm_lock_out_power',
@@ -682,7 +671,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Grid frequency [Hz]'))
     id_tab.append(rct_id(0x1D0623D6,  97, 'wifi.dns_address',
                   rct_id.t_string,  'DNS address'))
-    id_tab.append(rct_id(0x1D2994EA,  98, 'power_mng.soc_charge_power',                       rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x1D2994EA,  98, 'power_mng.soc_charge_power',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x1D49380A,  99, 'logger.minutes_eb_log_ts',
                   rct_id.t_int32,   'logger.minutes_eb_log_ts'))
     id_tab.append(rct_id(0x1D83D2A5, 100, 'battery_placeholder[0].cells[4]',
@@ -705,8 +695,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Min. voltage'))
     id_tab.append(rct_id(0x2082BFB6, 109, 'hw_test.bt_time[9]',
                   rct_id.t_float,   'hw_test.bt_time[9]'))
-    id_tab.append(
-        rct_id(0x20A3A91F, 110, 'battery_placeholder[0].module_sn[4]',              rct_id.t_string,  'Module 4 Serial Number'))
+    id_tab.append(rct_id(0x20A3A91F, 110, 'battery_placeholder[0].module_sn[4]',
+                  rct_id.t_string,  'Module 4 Serial Number'))
     id_tab.append(rct_id(0x20FD4419, 111, 'prim_sm.island_next_repeat_timeout',
                   rct_id.t_float,   'Next island trial timeout [s]'))
     id_tab.append(rct_id(0x21879805, 112, 'logger.minutes_eac1_log_ts',
@@ -717,10 +707,10 @@ def id_tab_setup():
                   rct_id.t_float,   'energy.e_dc_month_sum[1]'))
     id_tab.append(rct_id(0x21EE7CBB, 115, 'rb485.u_l_grid[2]',
                   rct_id.t_float,   'Grid phase 3 voltage [V]'))
-    id_tab.append(rct_id(0x2266DCB8, 116, 'flash_rtc.rtc_mcc_quartz_max_diff',                rct_id.t_float,
-                  'Maximum allowed quartz frequency difference between RTC and Microcontroller [ppm]'))
-    id_tab.append(
-        rct_id(0x226A23A4, 117, 'dc_conv.dc_conv_struct[0].u_target',               rct_id.t_float,   'MPP on input A [V]'))
+    id_tab.append(rct_id(0x2266DCB8, 116, 'flash_rtc.rtc_mcc_quartz_max_diff',
+                  rct_id.t_float,   'Max. allowed quartz frequency difference between RTC and Microcontroller [ppm]'))
+    id_tab.append(rct_id(0x226A23A4, 117, 'dc_conv.dc_conv_struct[0].u_target',
+                  rct_id.t_float,   'MPP on input A [V]'))
     id_tab.append(rct_id(0x2295401F, 118, 'battery_placeholder[0].cells_stat[3].u_max.time',
                   rct_id.t_uint32,  'battery_placeholder[0].cells_stat[3].u_max.time'))
     id_tab.append(rct_id(0x22CC80C6, 119, 'frt.u_min_end',
@@ -729,8 +719,8 @@ def id_tab_setup():
                   rct_id.t_uint32,  'Error bit field 2'))
     id_tab.append(rct_id(0x234DD4DF, 121, 'switch_on_cond.f_min',
                   rct_id.t_float,   'Min. frequency'))
-    id_tab.append(rct_id(0x235E0DF5, 122,
-                  'battery_placeholder[0].stack_software_version[1]', rct_id.t_uint32,  'Software version stack 1'))
+    id_tab.append(rct_id(0x235E0DF5, 122, 'battery_placeholder[0].stack_software_version[1]',
+                  rct_id.t_uint32,  'Software version stack 1'))
     id_tab.append(rct_id(0x236D2178, 123, 'frt.t_min[1]',
                   rct_id.t_float,   'Point 2 time [s]'))
     id_tab.append(rct_id(0x23D4A386, 124, 'battery_placeholder[0].cells_stat[0]',
@@ -787,7 +777,8 @@ def id_tab_setup():
                   rct_id.t_uint16,  'battery.stack_cycles[5]'))
     id_tab.append(rct_id(0x2A449E89, 150, 'logger.year_log_ts',
                   rct_id.t_int32,   'logger.year_log_ts'))
-    id_tab.append(rct_id(0x2AACCAA7, 151, 'battery.max_cell_voltage',                         rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x2AACCAA7, 151, 'battery.max_cell_voltage',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x2AE703F2, 152, 'energy.e_dc_day[0]',
                   rct_id.t_float,   'Solar generator A day energy [Wh]'))
     id_tab.append(rct_id(0x2BC1E72B, 153, 'battery.discharged_amp_hours',
@@ -862,8 +853,8 @@ def id_tab_setup():
                   rct_id.t_float,   'SOH (State of Health)'))
     id_tab.append(rct_id(0x383A3614, 188, 'db.power_board.afi_i60',
                   rct_id.t_float,   'AFI 60 mA threshold [A]'))
-    id_tab.append(rct_id(0x38789061, 189, 'nsm.f_low_rise_grad_storage',                      rct_id.t_float,
-                  'Power rise gradient for P(f) under-frequency mode with battery [1/Pn*Hz]'))
+    id_tab.append(rct_id(0x38789061, 189, 'nsm.f_low_rise_grad_storage',
+                  rct_id.t_float,   'Power rise gradient for P(f) under-frequency mode with battery [1/Pn*Hz]'))
     id_tab.append(rct_id(0x3903A5E9, 190, 'flash_rtc.flag_time_auto_switch',
                   rct_id.t_bool,    'Automatically adjust clock for daylight saving time'))
     id_tab.append(rct_id(0x3906A1D0, 191, 'logger.minutes_eext_log_ts',
@@ -892,12 +883,14 @@ def id_tab_setup():
                   rct_id.t_bool,    'Thin-film solar module'))
     id_tab.append(rct_id(0x3B0C6A53, 203, 'bat_mng_struct.profile_pdc_max',
                   rct_id.t_string,  'bat_mng_struct.profile_pdc_max'))
-    id_tab.append(rct_id(0x3B5F6B9D, 204, 'rb485.f_wr[0]',                                    rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x3B5F6B9D, 204, 'rb485.f_wr[0]',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x3B7FCD47, 205, 'fault[2].flt',
                   rct_id.t_uint32,  'Error bit field 3'))
     id_tab.append(rct_id(0x3BA1B77B, 206, 'battery.cells_stat[3].t_min.value',
                   rct_id.t_float,   'battery.cells_stat[3].t_min.value'))
-    id_tab.append(rct_id(0x3C24F3E8, 207, 'inv_struct.cosinus_phi',                           rct_id.t_float,   'cos .'))
+    id_tab.append(rct_id(0x3C24F3E8, 207, 'inv_struct.cosinus_phi',
+                  rct_id.t_float,   'cos .'))
     id_tab.append(rct_id(0x3C705F61, 208, 'io_board.rse_table[8]',
                   rct_id.t_float,   'K4..K1: 1000'))
     id_tab.append(rct_id(0x3C87C4F5, 209, 'energy.e_grid_feed_day',
@@ -936,7 +929,8 @@ def id_tab_setup():
                   rct_id.t_float,   'battery.cells_stat[5].u_min.value'))
     id_tab.append(rct_id(0x431509D1, 226, 'logger.month_eload_log_ts',
                   rct_id.t_int32,   'logger.month_eload_log_ts'))
-    id_tab.append(rct_id(0x43257820, 227, 'g_sync.p_ac[0]',                                   rct_id.t_float,   'AC1'))
+    id_tab.append(rct_id(0x43257820, 227, 'g_sync.p_ac[0]',
+                  rct_id.t_float,   'AC1'))
     id_tab.append(rct_id(0x437B8122, 228, 'rb485.available',
                   rct_id.t_bool,    'Power Switch is available'))
     id_tab.append(rct_id(0x4397D078, 229, 'nsm.cos_phi_p[1][1]',
@@ -953,8 +947,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'battery.cells_stat[0].t_max.index'))
     id_tab.append(rct_id(0x44D4C533, 235, 'energy.e_grid_feed_total',
                   rct_id.t_float,   'Total energy grid feed-in [Wh]'))
-    id_tab.append(rct_id(
-        0x4539A6D4, 236, 'can_bus.bms_update_response[0]',                   rct_id.t_uint32,  'can_bus.bms_update_response[0]'))
+    id_tab.append(rct_id(0x4539A6D4, 236, 'can_bus.bms_update_response[0]',
+                  rct_id.t_uint32,  'can_bus.bms_update_response[0]'))
     id_tab.append(rct_id(0x465DDB50, 237, 'battery_placeholder[0].cells_stat[2].t_min.value',
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[2].t_min.value'))
     id_tab.append(rct_id(0x46635546, 238, 'net.n_descendants',
@@ -987,15 +981,16 @@ def id_tab_setup():
                   rct_id.t_float,   'Point 4 P/Pn'))
     id_tab.append(rct_id(0x4AAEB0D2, 252, 'battery_placeholder[0].cells_stat[1]',
                   rct_id.t_string,  'battery_placeholder[0].cells_stat[1]'))
-    id_tab.append(rct_id(
-        0x4AE96C12, 253, 'dc_conv.dc_conv_struct[1].mpp.mpp_step',           rct_id.t_float,   'MPP search step on input B [V]'))
+    id_tab.append(rct_id(0x4AE96C12, 253, 'dc_conv.dc_conv_struct[1].mpp.mpp_step',
+                  rct_id.t_float,   'MPP search step on input B [V]'))
     id_tab.append(rct_id(0x4B51A539, 254, 'battery.prog_sn',
                   rct_id.t_string,  'battery.prog_sn'))
     id_tab.append(rct_id(0x4BC0F974, 255, 'buf_v_control.power_reduction_max_solar',
                   rct_id.t_float,   'Solar plant peak power [Wp]'))
     id_tab.append(rct_id(0x4BE02BB7, 256, 'energy.e_load_day_sum',
                   rct_id.t_float,   'energy.e_load_day_sum'))
-    id_tab.append(rct_id(0x4C12C4C7, 257, 'cs_neg[1]',                                        rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x4C12C4C7, 257, 'cs_neg[1]',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x4C14CC7C, 258, 'logger.year_ea_log_ts',
                   rct_id.t_int32,   'logger.year_ea_log_ts'))
     id_tab.append(rct_id(0x4C2A7CDC, 259, 'nsm.cos_phi_p[2][1]',
@@ -1034,12 +1029,12 @@ def id_tab_setup():
                   rct_id.t_enum,    'Digital I/O 2 usage'))
     id_tab.append(rct_id(0x4F735D10, 276, 'db.temp2',
                   rct_id.t_float,   'Heat sink (battery actuator) temperature [?C]'))
-    id_tab.append(
-        rct_id(0x4FC53F19, 277, 'battery_placeholder[0].module_sn[3]',              rct_id.t_string,  'Module 3 Serial Number'))
+    id_tab.append(rct_id(0x4FC53F19, 277, 'battery_placeholder[0].module_sn[3]',
+                  rct_id.t_string,  'Module 3 Serial Number'))
     id_tab.append(rct_id(0x4FEDC1BE, 278, 'battery_placeholder[0].cells_stat[5].t_min.value',
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[5].t_min.value'))
-    id_tab.append(rct_id(0x4FF8CCE2, 279,
-                  'battery_placeholder[0].stack_software_version[5]', rct_id.t_uint32,  'Software version stack 5'))
+    id_tab.append(rct_id(0x4FF8CCE2, 279, 'battery_placeholder[0].stack_software_version[5]',
+                  rct_id.t_uint32,  'Software version stack 5'))
     id_tab.append(rct_id(0x501A162D, 280, 'battery.cells_resist[5]',
                   rct_id.t_string,  'battery.cells_resist[5]'))
     id_tab.append(rct_id(0x50514732, 281, 'battery.cells_stat[6].u_min.index',
@@ -1088,8 +1083,8 @@ def id_tab_setup():
                   rct_id.t_string,  'WiFi authentication method'))
     id_tab.append(rct_id(0x576D2A08, 303, 'battery_placeholder[0].cells_stat[3].t_min.time',
                   rct_id.t_uint32,  'battery_placeholder[0].cells_stat[3].t_min.time'))
-    id_tab.append(rct_id(0x57945EE4, 304,
-                  'battery_placeholder[0].maximum_charge_current',    rct_id.t_float,   'Max. charge current [A]'))
+    id_tab.append(rct_id(0x57945EE4, 304, 'battery_placeholder[0].maximum_charge_current',
+                  rct_id.t_float,   'Max. charge current [A]'))
     id_tab.append(rct_id(0x58378BD0, 305, 'hw_test.bt_time[3]',
                   rct_id.t_float,   'hw_test.bt_time[3]'))
     id_tab.append(rct_id(0x5847E59E, 306, 'battery.maximum_charge_voltage_constant_u',
@@ -1100,7 +1095,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'io_board.check_state'))
     id_tab.append(rct_id(0x592B13DF, 309, 'power_mng.schedule[4]',
                   rct_id.t_string,  'power_mng.schedule[4]'))
-    id_tab.append(rct_id(0x59358EB2, 310, 'power_mng.maximum_charge_voltage',                 rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x59358EB2, 310, 'power_mng.maximum_charge_voltage',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x5939EC5D, 311, 'battery.module_sn[6]',
                   rct_id.t_string,  'Module 6 Serial Number'))
     id_tab.append(rct_id(0x5952E5E6, 312, 'wifi.mask',
@@ -1117,12 +1113,12 @@ def id_tab_setup():
                   rct_id.t_uint8,   'HeiPhoss mode'))
     id_tab.append(rct_id(0x5BA122A5, 318, 'battery.stack_cycles[2]',
                   rct_id.t_uint16,  'battery.stack_cycles[2]'))
-    id_tab.append(rct_id(
-        0x5BB8075A, 319, 'dc_conv.dc_conv_struct[1].u_sg_lp',                rct_id.t_float,   'Solar generator B voltage [V]'))
+    id_tab.append(rct_id(0x5BB8075A, 319, 'dc_conv.dc_conv_struct[1].u_sg_lp',
+                  rct_id.t_float,   'Solar generator B voltage [V]'))
     id_tab.append(rct_id(0x5BD2DB45, 320, 'io_board.io1_s0_imp_per_kwh',
                   rct_id.t_int16,   'Number of impulses per kWh for S0 signal on I/O 1'))
-    id_tab.append(
-        rct_id(0x5C93093B, 321, 'battery_placeholder[0].status2',                   rct_id.t_int32,   'Battery extra status'))
+    id_tab.append(rct_id(0x5C93093B, 321, 'battery_placeholder[0].status2',
+                  rct_id.t_int32,   'Battery extra status'))
     id_tab.append(rct_id(0x5CD75669, 322, 'db.power_board.afi_t150',
                   rct_id.t_float,   'AFI 150 mA switching off time [s]'))
     id_tab.append(rct_id(0x5D0CDCF0, 323, 'p_rec_available[2]',
@@ -1133,8 +1129,8 @@ def id_tab_setup():
                   rct_id.t_int32,   'logger.month_egrid_load_log_ts'))
     id_tab.append(rct_id(0x5E540FB2, 326, 'net.update_slaves',
                   rct_id.t_bool,    'Activate aut. update slaves'))
-    id_tab.append(rct_id(
-        0x5E942C62, 327, 'dc_conv.dc_conv_struct[1].mpp.fixed_voltage',      rct_id.t_float,   'Fixed voltage Solar generator B [V]'))
+    id_tab.append(rct_id(0x5E942C62, 327, 'dc_conv.dc_conv_struct[1].mpp.fixed_voltage',
+                  rct_id.t_float,   'Fixed voltage Solar generator B [V]'))
     id_tab.append(rct_id(0x5EE03C45, 328, 'io_board.alarm_home_relay_mode',
                   rct_id.t_enum,    'Multifunctional relay usage'))
     id_tab.append(rct_id(0x5EF54372, 329, 'battery_placeholder[0].cells_stat[0].u_max.index',
@@ -1167,8 +1163,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Phase to phase voltage 1 [V]'))
     id_tab.append(rct_id(0x6383DEA9, 343, 'battery_placeholder[0].cells_stat[1].t_max.value',
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[1].t_max.value'))
-    id_tab.append(rct_id(0x6388556C, 344,
-                  'battery.stack_software_version[0]',                rct_id.t_uint32,  'Software version stack 0'))
+    id_tab.append(rct_id(0x6388556C, 344, 'battery.stack_software_version[0]',
+                  rct_id.t_uint32,  'Software version stack 0'))
     id_tab.append(rct_id(0x6445D856, 345, 'battery.cells_stat[1].u_min.index',
                   rct_id.t_uint8,   'battery.cells_stat[1].u_min.index'))
     id_tab.append(rct_id(0x6476A836, 346, 'dc_conv.dc_conv_struct[0].mpp.enable_scan',
@@ -1199,24 +1195,26 @@ def id_tab_setup():
                   rct_id.t_uint8,   'Battery calibration days in advance'))
     id_tab.append(rct_id(0x6743CCCE, 359, 'battery_placeholder[0].cells_stat[6].t_max.index',
                   rct_id.t_uint8,   'battery_placeholder[0].cells_stat[6].t_max.index'))
-    id_tab.append(
-        rct_id(0x675776B1, 360, 'dc_conv.dc_conv_struct[1].u_target',               rct_id.t_float,   'MPP on input B [V]'))
+    id_tab.append(rct_id(0x675776B1, 360, 'dc_conv.dc_conv_struct[1].u_target',
+                  rct_id.t_float,   'MPP on input B [V]'))
     id_tab.append(rct_id(0x67BF3003, 361, 'display_struct.display_dir',
                   rct_id.t_bool,    'Rotate display'))
     id_tab.append(rct_id(0x67C0A2F5, 362, 'net.slave_p_total',
                   rct_id.t_float,   'net.slave_p_total'))
-    id_tab.append(rct_id(0x682CDDA1, 363, 'power_mng.battery_type',                           rct_id.t_enum,    ''))
+    id_tab.append(rct_id(0x682CDDA1, 363, 'power_mng.battery_type',
+                  rct_id.t_enum,    ''))
     id_tab.append(rct_id(0x6830F6E4, 364, 'io_board.rse_table[9]',
                   rct_id.t_float,   'K4..K1: 1001'))
     id_tab.append(rct_id(0x68BA92E1, 365, 'io_board.io2_s0_imp_per_kwh',
                   rct_id.t_int16,   'Number of impulses per kWh for S0 signal on I/O 2'))
-    id_tab.append(rct_id(0x68BC034D, 366, 'parameter_file',                                   rct_id.t_string,  'Norm'))
+    id_tab.append(rct_id(0x68BC034D, 366, 'parameter_file',
+                  rct_id.t_string,  'Norm'))
     id_tab.append(rct_id(0x68EEFD3D, 367, 'energy.e_dc_total[1]',
                   rct_id.t_float,   'Solar generator B total energy [Wh]'))
-    id_tab.append(
-        rct_id(0x690C32D2, 368, 'battery_placeholder[0].module_sn[0]',              rct_id.t_string,  'Module 0 Serial Number'))
-    id_tab.append(rct_id(0x6974798A, 369,
-                  'battery.stack_software_version[6]',                rct_id.t_uint32,  'Software version stack 6'))
+    id_tab.append(rct_id(0x690C32D2, 368, 'battery_placeholder[0].module_sn[0]',
+                  rct_id.t_string,  'Module 0 Serial Number'))
+    id_tab.append(rct_id(0x6974798A, 369, 'battery.stack_software_version[6]',
+                  rct_id.t_uint32,  'Software version stack 6'))
     id_tab.append(rct_id(0x69AA598A, 370, 'can_bus.requested_id',
                   rct_id.t_int32,   'can_bus.requested_id'))
     id_tab.append(rct_id(0x69B8FF28, 371, 'battery.cells[2]',
@@ -1229,8 +1227,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Max line voltage [V]'))
     id_tab.append(rct_id(0x6BFF1AF4, 375, 'hw_test.bt_power[2]',
                   rct_id.t_float,   'hw_test.bt_power[2]'))
-    id_tab.append(rct_id(0x6C03F5ED, 376,
-                  'battery_placeholder[0].bms_power_version',         rct_id.t_uint32,  'Software version BMS Power'))
+    id_tab.append(rct_id(0x6C03F5ED, 376, 'battery_placeholder[0].bms_power_version',
+                  rct_id.t_uint32,  'Software version BMS Power'))
     id_tab.append(rct_id(0x6C10E96A, 377, 'battery_placeholder[0].cells_stat[0].u_min.time',
                   rct_id.t_uint32,  'battery_placeholder[0].cells_stat[0].u_min.time'))
     id_tab.append(rct_id(0x6C243F71, 378, 'modbus.address',
@@ -1245,7 +1243,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'Associate current sensor 1 with phase L'))
     id_tab.append(rct_id(0x6D639C25, 383, 'battery_placeholder[0].cells_stat[0].t_min.value',
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[0].t_min.value'))
-    id_tab.append(rct_id(0x6D7C0BF4, 384, 'wifi.sockb_port',                                  rct_id.t_int32,   'Port'))
+    id_tab.append(rct_id(0x6D7C0BF4, 384, 'wifi.sockb_port',
+                  rct_id.t_int32,   'Port'))
     id_tab.append(rct_id(0x6DB1FDDC, 385, 'battery.cells_stat[4].u_min.value',
                   rct_id.t_float,   'battery.cells_stat[4].u_min.value'))
     id_tab.append(rct_id(0x6DCC4097, 386, 'net.master_timeout',
@@ -1266,8 +1265,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Power Storage phase 2 frequency [Hz]'))
     id_tab.append(rct_id(0x6FF4BD55, 394, 'energy.e_ext_month_sum',
                   rct_id.t_float,   'energy.e_ext_month_sum'))
-    id_tab.append(rct_id(0x701A0482, 395,
-                  'dc_conv.dc_conv_struct[0].enabled',                rct_id.t_bool,    'Solar generator A connected'))
+    id_tab.append(rct_id(0x701A0482, 395, 'dc_conv.dc_conv_struct[0].enabled',
+                  rct_id.t_bool,    'Solar generator A connected'))
     id_tab.append(rct_id(0x70349444, 396, 'battery.cells_stat[1].t_min.index',
                   rct_id.t_uint8,   'battery.cells_stat[1].t_min.index'))
     id_tab.append(rct_id(0x70A2AF4F, 397, 'battery.bat_status',
@@ -1308,7 +1307,8 @@ def id_tab_setup():
                   rct_id.t_float,   'AFI 300 mA threshold [A]'))
     id_tab.append(rct_id(0x74FD4609, 415, 'battery.cells_stat[2]',
                   rct_id.t_string,  'battery.cells_stat[2]'))
-    id_tab.append(rct_id(0x751E80CA, 416, 'prim_sm.island_reset_retrials_operation_time',     rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x751E80CA, 416, 'prim_sm.island_reset_retrials_operation_time',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x75898A45, 417, 'battery_placeholder[0].cells_stat[5].t_max.time',
                   rct_id.t_uint32,  'battery_placeholder[0].cells_stat[5].t_max.time'))
     id_tab.append(rct_id(0x75AE19ED, 418, 'hw_test.hw_switch_time',
@@ -1323,12 +1323,12 @@ def id_tab_setup():
                   rct_id.t_uint8,   'battery.cells_stat[0].u_max.index'))
     id_tab.append(rct_id(0x777DC0EB, 423, 'iso_struct.r_min',
                   rct_id.t_float,   'Minimum allowed insulation resistance [Ohm]'))
-    id_tab.append(rct_id(0x77A9480F, 424,
-                  'battery_placeholder[0].minimum_discharge_voltage', rct_id.t_float,   'Min. discharge voltage [V]'))
+    id_tab.append(rct_id(0x77A9480F, 424, 'battery_placeholder[0].minimum_discharge_voltage',
+                  rct_id.t_float,   'Min. discharge voltage [V]'))
     id_tab.append(rct_id(0x77DD4364, 425, 'hw_test.bt_time[5]',
                   rct_id.t_float,   'hw_test.bt_time[5]'))
-    id_tab.append(rct_id(0x77E5CEF1, 426,
-                  'battery_placeholder[0].stack_software_version[0]', rct_id.t_uint32,  'Software version stack 0'))
+    id_tab.append(rct_id(0x77E5CEF1, 426, 'battery_placeholder[0].stack_software_version[0]',
+                  rct_id.t_uint32,  'Software version stack 0'))
     id_tab.append(rct_id(0x78228507, 427, 'battery_placeholder[0].stack_cycles[6]',
                   rct_id.t_uint16,  'battery_placeholder[0].stack_cycles[6]'))
     id_tab.append(rct_id(0x7839EBCB, 428, 'battery_placeholder[0].cells_stat[3].u_min.time',
@@ -1345,14 +1345,14 @@ def id_tab_setup():
                   rct_id.t_float,   'Time for slow DC-component of Iac [s]'))
     id_tab.append(rct_id(0x79C0A724, 434, 'energy.e_ac_total_sum',
                   rct_id.t_float,   'energy.e_ac_total_sum'))
-    id_tab.append(
-        rct_id(0x79D7D617, 435, 'battery_placeholder[0].current',                   rct_id.t_float,   'Battery current [A]'))
+    id_tab.append(rct_id(0x79D7D617, 435, 'battery_placeholder[0].current',
+                  rct_id.t_float,   'Battery current [A]'))
     id_tab.append(rct_id(0x79E66CDF, 436, 'battery_placeholder[0].cells_stat[6].t_min.index',
                   rct_id.t_uint8,   'battery_placeholder[0].cells_stat[6].t_min.index'))
     id_tab.append(rct_id(0x7A5C91F8, 437, 'nsm.p_u[1][0]',
                   rct_id.t_float,   'Point 2 P/Pn'))
-    id_tab.append(rct_id(
-        0x7A67E33B, 438, 'can_bus.bms_update_response[1]',                   rct_id.t_uint32,  'can_bus.bms_update_response[1]'))
+    id_tab.append(rct_id(0x7A67E33B, 438, 'can_bus.bms_update_response[1]',
+                  rct_id.t_uint32,  'can_bus.bms_update_response[1]'))
     id_tab.append(rct_id(0x7A9091EA, 439, 'rb485.u_l_grid[1]',
                   rct_id.t_float,   'Grid phase 2 voltage [V]'))
     id_tab.append(rct_id(0x7AB9B045, 440, 'energy.e_dc_month[1]',
@@ -1387,8 +1387,8 @@ def id_tab_setup():
                   rct_id.t_float,   'energy.e_load_total_sum'))
     id_tab.append(rct_id(0x7E590128, 455, 'battery.cells_stat[0].u_max.time',
                   rct_id.t_uint32,  'battery.cells_stat[0].u_max.time'))
-    id_tab.append(rct_id(0x7E75B17A, 456, 'nsm.q_u_max_u_high_rel',                           rct_id.t_float,
-                  'Qmax at upper voltage level relative to Smax (positive = overexcited)'))
+    id_tab.append(rct_id(0x7E75B17A, 456, 'nsm.q_u_max_u_high_rel',
+                  rct_id.t_float,   'Qmax at upper voltage level relative to Smax (positive = overexcited)'))
     id_tab.append(rct_id(0x7F42BB82, 457, 'battery.cells_stat[6].u_max.index',
                   rct_id.t_uint8,   'battery.cells_stat[6].u_max.index'))
     id_tab.append(rct_id(0x7F813D73, 458, 'fault[3].flt',
@@ -1410,10 +1410,11 @@ def id_tab_setup():
     id_tab.append(rct_id(0x81AF854E, 466, 'nsm.pu_use',
                   rct_id.t_bool,    'P(U) active'))
     id_tab.append(rct_id(0x82258C01, 467, 'cs_neg[0]',
-                  rct_id.t_float,   'Miltiply value of the current sensor 0 by'))
+                  rct_id.t_float,   'Multiply value of the current sensor 0 by'))
     id_tab.append(rct_id(0x82CD1525, 468, 'grid_mon[1].u_under.threshold',
                   rct_id.t_float,   'Min. voltage level 2 [V]'))
-    id_tab.append(rct_id(0x82E3C121, 469, 'g_sync.q_ac[1]',                                   rct_id.t_float,   ''))
+    id_tab.append(rct_id(0x82E3C121, 469, 'g_sync.q_ac[1]',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0x8320B84C, 470, 'io_board.rse_data_delay',
                   rct_id.t_float,   'Delay for new K4..K1 data [s]'))
     id_tab.append(rct_id(0x8352F9DD, 471, 'battery_placeholder[0].cells_stat[4].t_min.value',
@@ -1426,8 +1427,8 @@ def id_tab_setup():
                   rct_id.t_float,   'energy.e_grid_feed_year_sum'))
     id_tab.append(rct_id(0x85886E2E, 475, 'p_rec_lim[0]',
                   rct_id.t_float,   'Max. compensation power [W]'))
-    id_tab.append(
-        rct_id(0x8594D11E, 476, 'battery_placeholder[0].module_sn[6]',              rct_id.t_string,  'Module 6 Serial Number'))
+    id_tab.append(rct_id(0x8594D11E, 476, 'battery_placeholder[0].module_sn[6]',
+                  rct_id.t_string,  'Module 6 Serial Number'))
     id_tab.append(rct_id(0x86782D58, 477, 'hw_test.bt_power[9]',
                   rct_id.t_float,   'hw_test.bt_power[9]'))
     id_tab.append(rct_id(0x867DEF7D, 478, 'energy.e_grid_load_day',
@@ -1436,8 +1437,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Dummy household load [W]'))
     id_tab.append(rct_id(0x87E4387A, 480, 'current_sensor_max',
                   rct_id.t_float,   'Power Sensor current range [A]'))
-    id_tab.append(rct_id(0x8822EF35, 481,
-                  'battery_placeholder[0].stack_software_version[2]', rct_id.t_uint32,  'Software version stack 2'))
+    id_tab.append(rct_id(0x8822EF35, 481, 'battery_placeholder[0].stack_software_version[2]',
+                  rct_id.t_uint32,  'Software version stack 2'))
     id_tab.append(rct_id(0x883DE9AB, 482, 'g_sync.s_ac_lp[2]',
                   rct_id.t_float,   'Apparent power phase 3 [VA]'))
     id_tab.append(rct_id(0x885BB57E, 483, 'battery.cells_stat[6].t_min.value',
@@ -1518,7 +1519,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Heat sink temperature target [?C]'))
     id_tab.append(rct_id(0x90C2AC13, 521, 'battery_placeholder[0].stack_cycles[3]',
                   rct_id.t_uint16,  'battery_placeholder[0].stack_cycles[3]'))
-    id_tab.append(rct_id(0x90F123FA, 522, 'io_board.io1_usage',                               rct_id.t_enum,    ''))
+    id_tab.append(rct_id(0x90F123FA, 522, 'io_board.io1_usage',
+                  rct_id.t_enum,    ''))
     id_tab.append(rct_id(0x915CD4A4, 523, 'grid_mon[1].f_over.threshold',
                   rct_id.t_float,   'Max. frequency level 2 [Hz]'))
     id_tab.append(rct_id(0x91617C58, 524, 'g_sync.p_ac_grid_sum_lp',
@@ -1615,15 +1617,16 @@ def id_tab_setup():
                   rct_id.t_uint32,  'Software version BMS Master'))
     id_tab.append(rct_id(0x9DC927AA, 570, 'bat_mng_struct.profile_load',
                   rct_id.t_string,  'bat_mng_struct.profile_load'))
-    id_tab.append(rct_id(
-        0x9E1A88F5, 571, 'dc_conv.dc_conv_struct[0].mpp.fixed_voltage',      rct_id.t_float,   'Fixed voltage Solar generator A [V]'))
+    id_tab.append(rct_id(0x9E1A88F5, 571, 'dc_conv.dc_conv_struct[0].mpp.fixed_voltage',
+                  rct_id.t_float,   'Fixed voltage Solar generator A [V]'))
     id_tab.append(rct_id(0x9E314430, 572, 'battery.cells_stat[2].u_max.time',
                   rct_id.t_uint32,  'battery.cells_stat[2].u_max.time'))
     id_tab.append(rct_id(0x9F52F968, 573, 'power_mng.feed_asymmetrical',
                   rct_id.t_bool,    'Allow asymmetrical feed'))
     id_tab.append(rct_id(0xA10D9A4B, 574, 'battery.min_cell_temperature',
                   rct_id.t_float,   'battery.min_cell_temperature'))
-    id_tab.append(rct_id(0xA1266D6B, 575, 'line_mon.time_lim',                                rct_id.t_float,   ''))
+    id_tab.append(rct_id(0xA1266D6B, 575, 'line_mon.time_lim',
+                  rct_id.t_float,   ''))
     id_tab.append(rct_id(0xA12BE39C, 576, 'energy.e_load_month_sum',
                   rct_id.t_float,   'energy.e_load_month_sum'))
     id_tab.append(rct_id(0xA12E9B43, 577, 'phase_marker',
@@ -1642,14 +1645,14 @@ def id_tab_setup():
                   rct_id.t_bool,    'Curve with hysteresis'))
     id_tab.append(rct_id(0xA3E48B21, 584, 'battery.cells_stat[2].t_min.value',
                   rct_id.t_float,   'battery.cells_stat[2].t_min.value'))
-    id_tab.append(rct_id(0xA40906BF, 585,
-                  'battery.stack_software_version[4]',                rct_id.t_uint32,  'Software version stack 4'))
+    id_tab.append(rct_id(0xA40906BF, 585, 'battery.stack_software_version[4]',
+                  rct_id.t_uint32,  'Software version stack 4'))
     id_tab.append(rct_id(0xA5044DCD, 586, 'nsm.p_u[2][0]',
                   rct_id.t_float,   'Point 3 P/Pn'))
     id_tab.append(rct_id(0xA5341F4A, 587, 'energy.e_grid_feed_month_sum',
                   rct_id.t_float,   'energy.e_grid_feed_month_sum'))
-    id_tab.append(rct_id(0xA54C4685, 588,
-                  'battery.stack_software_version[1]',                rct_id.t_uint32,  'Software version stack 1'))
+    id_tab.append(rct_id(0xA54C4685, 588, 'battery.stack_software_version[1]',
+                  rct_id.t_uint32,  'Software version stack 1'))
     id_tab.append(rct_id(0xA59C8428, 589, 'energy.e_ext_total',
                   rct_id.t_float,   'External total energy [Wh]'))
     id_tab.append(rct_id(0xA60082A9, 590, 'logger.minutes_egrid_feed_log_ts',
@@ -1670,8 +1673,8 @@ def id_tab_setup():
                   rct_id.t_int32,   'logger.minutes_eload_log_ts'))
     id_tab.append(rct_id(0xA7DBD28C, 598, 'battery.cells_stat[2].t_max.index',
                   rct_id.t_uint8,   'battery.cells_stat[2].t_max.index'))
-    id_tab.append(rct_id(0xA7F4123B, 599,
-                  'battery_placeholder[0].stack_software_version[6]', rct_id.t_uint32,  'Software version stack 6'))
+    id_tab.append(rct_id(0xA7F4123B, 599, 'battery_placeholder[0].stack_software_version[6]',
+                  rct_id.t_uint32,  'Software version stack 6'))
     id_tab.append(rct_id(0xA7FA5C5D, 600, 'power_mng.u_acc_mix_lp',
                   rct_id.t_float,   'Battery voltage [V]'))
     id_tab.append(rct_id(0xA7FE5C0C, 601, 'battery.cells_stat[2].t_min.index',
@@ -1698,8 +1701,8 @@ def id_tab_setup():
                   rct_id.t_uint32,  'battery.cells_stat[4].t_max.time'))
     id_tab.append(rct_id(0xAACE057A, 612, 'io_board.io1_s0_min_duration',
                   rct_id.t_float,   'Minimum S0 signal duration on I/O 1 [s]'))
-    id_tab.append(
-        rct_id(0xABA015FC, 613, 'battery_placeholder[0].module_sn[1]',              rct_id.t_string,  'Module 1 Serial Number'))
+    id_tab.append(rct_id(0xABA015FC, 613, 'battery_placeholder[0].module_sn[1]',
+                  rct_id.t_string,  'Module 1 Serial Number'))
     id_tab.append(rct_id(0xAC2E2A56, 614, 'io_board.rse_table[5]',
                   rct_id.t_float,   'K4..K1: 0101'))
     id_tab.append(rct_id(0xACF7666B, 615, 'battery.efficiency',
@@ -1728,15 +1731,16 @@ def id_tab_setup():
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[4].u_min.value'))
     id_tab.append(rct_id(0xB1EF67CE, 627, 'energy.e_ac_total',
                   rct_id.t_float,   'Total energy [Wh]'))
-    id_tab.append(rct_id(0xB20D1AD6, 628, 'logger.day_egrid_feed_log_ts',                     rct_id.t_int32,   ''))
+    id_tab.append(rct_id(0xB20D1AD6, 628, 'logger.day_egrid_feed_log_ts',
+                  rct_id.t_int32,   ''))
     id_tab.append(rct_id(0xB221BCFA, 629, 'g_sync.p_ac_sc[2]',
                   rct_id.t_float,   'Grid power phase 3 [W]'))
     id_tab.append(rct_id(0xB228EC94, 630, 'battery_placeholder[0].cells_stat[3].t_max.time',
                   rct_id.t_uint32,  'battery_placeholder[0].cells_stat[3].t_max.time'))
     id_tab.append(rct_id(0xB238942F, 631, 'last_successfull_flash_op',
                   rct_id.t_int16,   'last_successfull_flash_op'))
-    id_tab.append(rct_id(
-        0xB298395D, 632, 'dc_conv.dc_conv_struct[0].u_sg_lp',                rct_id.t_float,   'Solar generator A voltage [V]'))
+    id_tab.append(rct_id(0xB298395D, 632, 'dc_conv.dc_conv_struct[0].u_sg_lp',
+                  rct_id.t_float,   'Solar generator A voltage [V]'))
     id_tab.append(rct_id(0xB2FB9A90, 633, 'bat_mng_struct.k_trust',
                   rct_id.t_float,   'How fast the actual prediction can be trusted'))
     id_tab.append(rct_id(0xB399B5B3, 634, 'battery_placeholder[0].cells_stat[4].u_min.index',
@@ -1793,8 +1797,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'battery.cells_stat[5].u_min.index'))
     id_tab.append(rct_id(0xBA046C03, 660, 'battery_placeholder[0].cells_stat[5].t_max.value',
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[5].t_max.value'))
-    id_tab.append(rct_id(
-        0xBA8B8515, 661, 'dc_conv.dc_conv_struct[0].mpp.mpp_step',           rct_id.t_float,   'MPP search step on input A [V]'))
+    id_tab.append(rct_id(0xBA8B8515, 661, 'dc_conv.dc_conv_struct[0].mpp.mpp_step',
+                  rct_id.t_float,   'MPP search step on input A [V]'))
     id_tab.append(rct_id(0xBB302278, 662, 'battery.cells_stat[1].t_min.time',
                   rct_id.t_uint32,  'battery.cells_stat[1].t_min.time'))
     id_tab.append(rct_id(0xBB617E51, 663, 'nsm.u_q_u[1]',
@@ -1815,8 +1819,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Day energy [Wh]'))
     id_tab.append(rct_id(0xBD55D796, 671, 'energy.e_dc_year[1]',
                   rct_id.t_float,   'Solar generator B year energy [Wh]'))
-    id_tab.append(
-        rct_id(0xBD95C46C, 672, 'battery_placeholder[0].ah_capacity',               rct_id.t_float,   'Battery capacity [Ah]'))
+    id_tab.append(rct_id(0xBD95C46C, 672, 'battery_placeholder[0].ah_capacity',
+                  rct_id.t_float,   'Battery capacity [Ah]'))
     id_tab.append(rct_id(0xBDE3BF0A, 673, 'battery.cells_stat[6].t_max.index',
                   rct_id.t_uint8,   'battery.cells_stat[6].t_max.index'))
     id_tab.append(rct_id(0xBDFE5547, 674, 'io_board.rse_table[3]',
@@ -1825,14 +1829,16 @@ def id_tab_setup():
                   rct_id.t_string,  'Control software factory version'))
     id_tab.append(rct_id(0xBFFF3CAD, 676, 'net.n_slaves',
                   rct_id.t_uint8,   'net.n_slaves'))
-    id_tab.append(rct_id(0xC03462F6, 677, 'g_sync.p_ac[2]',                                   rct_id.t_float,   'AC3'))
-    id_tab.append(rct_id(0xC04A5F3A, 678,
-                  'battery_placeholder[0].bms_software_version',      rct_id.t_uint32,  'Software version BMS Master'))
+    id_tab.append(rct_id(0xC03462F6, 677, 'g_sync.p_ac[2]',
+                  rct_id.t_float,   'AC3'))
+    id_tab.append(rct_id(0xC04A5F3A, 678, 'battery_placeholder[0].bms_software_version',
+                  rct_id.t_uint32,  'Software version BMS Master'))
     id_tab.append(rct_id(0xC0680302, 679, 'battery.cells_stat[2].t_min.time',
                   rct_id.t_uint32,  'battery.cells_stat[2].t_min.time'))
     id_tab.append(rct_id(0xC07E02CE, 680, 'nsm.q_u_sel',
                   rct_id.t_enum,    'Voltage selection'))
-    id_tab.append(rct_id(0xC0A7074F, 681, 'net.slave_data',                                   rct_id.t_string,  ''))
+    id_tab.append(rct_id(0xC0A7074F, 681, 'net.slave_data',
+                  rct_id.t_string,  ''))
     id_tab.append(rct_id(0xC0B7C4D2, 682, 'db.power_board.afi_t30',
                   rct_id.t_float,   'AFI 30 mA switching off time [s]'))
     id_tab.append(rct_id(0xC0CC81B6, 683, 'energy.e_ac_year',
@@ -1873,8 +1879,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'battery_placeholder[0].cells_stat[4].t_max.index'))
     id_tab.append(rct_id(0xC642B9D6, 701, 'acc_conv.i_discharge_max',
                   rct_id.t_float,   'Max. battery converter discharge current [A]'))
-    id_tab.append(rct_id(0xC66665E8, 702,
-                  'battery_placeholder[0].temperature',               rct_id.t_float,   'Battery temperature [?C]'))
+    id_tab.append(rct_id(0xC66665E8, 702, 'battery_placeholder[0].temperature',
+                  rct_id.t_float,   'Battery temperature [?C]'))
     id_tab.append(rct_id(0xC66A522B, 703, 'hw_test.bt_time[1]',
                   rct_id.t_float,   'hw_test.bt_time[1]'))
     id_tab.append(rct_id(0xC6DA81A0, 704, 'battery.cells_stat[6].u_max.time',
@@ -1897,10 +1903,10 @@ def id_tab_setup():
                   rct_id.t_string,  'battery.cells[3]'))
     id_tab.append(rct_id(0xC88EB032, 713, 'battery.cells_stat[0].u_min.time',
                   rct_id.t_uint32,  'battery.cells_stat[0].u_min.time'))
-    id_tab.append(rct_id(0xC8BA1729, 714,
-                  'battery.stack_software_version[2]',                rct_id.t_uint32,  'Software version stack 2'))
-    id_tab.append(rct_id(0xC8E56803, 715,
-                  'battery_placeholder[0].maximum_charge_voltage',    rct_id.t_float,   'Max. charge voltage [V]'))
+    id_tab.append(rct_id(0xC8BA1729, 714, 'battery.stack_software_version[2]',
+                  rct_id.t_uint32,  'Software version stack 2'))
+    id_tab.append(rct_id(0xC8E56803, 715, 'battery_placeholder[0].maximum_charge_voltage',
+                  rct_id.t_float,   'Max. charge voltage [V]'))
     id_tab.append(rct_id(0xC937D38D, 716, 'battery_placeholder[0].stack_cycles[0]',
                   rct_id.t_uint16,  'battery_placeholder[0].stack_cycles[0]'))
     id_tab.append(rct_id(0xC9900716, 717, 'power_mng.is_island_only',
@@ -1937,9 +1943,10 @@ def id_tab_setup():
                   rct_id.t_uint8,   'battery_placeholder[0].cells_stat[2].t_max.index'))
     id_tab.append(rct_id(0xCF005C54, 733, 'prim_sm.phase_3_mode',
                   rct_id.t_bool,    'prim_sm.phase_3_mode'))
-    id_tab.append(rct_id(0xCF053085, 734, 'g_sync.u_l_rms[0]',                                rct_id.t_float,   ''))
-    id_tab.append(rct_id(0xCF096A6B, 735,
-                  'battery_placeholder[0].stack_software_version[4]', rct_id.t_uint32,  'Software version stack 4'))
+    id_tab.append(rct_id(0xCF053085, 734, 'g_sync.u_l_rms[0]',
+                  rct_id.t_float,   ''))
+    id_tab.append(rct_id(0xCF096A6B, 735, 'battery_placeholder[0].stack_software_version[4]',
+                  rct_id.t_uint32,  'Software version stack 4'))
     id_tab.append(rct_id(0xD0C47326, 736, 'battery.cells_stat[1].t_min.value',
                   rct_id.t_float,   'battery.cells_stat[1].t_min.value'))
     id_tab.append(rct_id(0xD143A391, 737, 'can_bus.set_cell_v_t',
@@ -2000,8 +2007,8 @@ def id_tab_setup():
                   rct_id.t_int16,   'Communication error'))
     id_tab.append(rct_id(0xDAC7DD86, 765, 'io_board.p_rse_desc_grad',
                   rct_id.t_float,   'Power descent gradient [P/Pn/s]'))
-    id_tab.append(rct_id(0xDB11855B, 766,
-                  'dc_conv.dc_conv_struct[0].p_dc_lp',                rct_id.t_float,   'Solar generator A power [W]'))
+    id_tab.append(rct_id(0xDB11855B, 766, 'dc_conv.dc_conv_struct[0].p_dc_lp',
+                  rct_id.t_float,   'Solar generator A power [W]'))
     id_tab.append(rct_id(0xDB2D69AE, 767, 'g_sync.p_ac_sum_lp',
                   rct_id.t_float,   'AC power [W]'))
     id_tab.append(rct_id(0xDB45ABD0, 768, 'dc_conv.dc_conv_struct[0].rescan_correction',
@@ -2042,7 +2049,8 @@ def id_tab_setup():
                   rct_id.t_uint8,   'Associate current sensor 0 with phase L'))
     id_tab.append(rct_id(0xE14B8679, 786, 'i_dc_slow_max',
                   rct_id.t_float,   'Max. slow DC-component of Iac [A]'))
-    id_tab.append(rct_id(0xE14F1CBA, 787, 'battery_placeholder[0].cells_stat[4]',             rct_id.t_string,  ''))
+    id_tab.append(rct_id(0xE14F1CBA, 787, 'battery_placeholder[0].cells_stat[4]',
+                  rct_id.t_string,  ''))
     id_tab.append(rct_id(0xE19C8B79, 788, 'battery_placeholder[0].cells_resist[1]',
                   rct_id.t_string,  'battery_placeholder[0].cells_resist[1]'))
     id_tab.append(rct_id(0xE1F49459, 789, 'frt.t_min[2]',
@@ -2067,8 +2075,8 @@ def id_tab_setup():
                   rct_id.t_int32,   'logger.year_eload_log_ts'))
     id_tab.append(rct_id(0xE6248312, 800, 'hw_test.bt_power[8]',
                   rct_id.t_float,   'hw_test.bt_power[8]'))
-    id_tab.append(
-        rct_id(0xE635A6C4, 801, 'battery_placeholder[0].module_sn[2]',              rct_id.t_string,  'Module 2 Serial Number'))
+    id_tab.append(rct_id(0xE635A6C4, 801, 'battery_placeholder[0].module_sn[2]',
+                  rct_id.t_string,  'Module 2 Serial Number'))
     id_tab.append(rct_id(0xE63A3529, 802, 'flash_result',
                   rct_id.t_uint16,  'Flash result'))
     id_tab.append(rct_id(0xE6F1CB83, 803, 'nsm.pu_ts',
@@ -2081,8 +2089,8 @@ def id_tab_setup():
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[0].u_min.value'))
     id_tab.append(rct_id(0xE94C2EFC, 807, 'g_sync.q_ac[0]',
                   rct_id.t_float,   'Reactive power phase 1 [var]'))
-    id_tab.append(rct_id(0xE952FF2D, 808, 'nsm.q_u_max_u_low_rel',                            rct_id.t_float,
-                  'Qmax at lower voltage level relative to Smax (positive = overexcited)'))
+    id_tab.append(rct_id(0xE952FF2D, 808, 'nsm.q_u_max_u_low_rel',
+                  rct_id.t_float,   'Qmax at lower voltage level relative to Smax (positive = overexcited)'))
     id_tab.append(rct_id(0xE96F1844, 809, 'io_board.s0_external_power',
                   rct_id.t_float,   'io_board.s0_external_power'))
     id_tab.append(rct_id(0xE9BBF6E4, 810, 'power_mng.amp_hours_measured',
@@ -2097,8 +2105,8 @@ def id_tab_setup():
                   rct_id.t_string,  'battery.cells_resist[6]'))
     id_tab.append(rct_id(0xEB7773BF, 815, 'nsm.p_u[1][1]',
                   rct_id.t_float,   'Point 2 voltage [V]'))
-    id_tab.append(
-        rct_id(0xEB7BCB93, 816, 'battery_placeholder[0].bms_sn',                    rct_id.t_string,  'BMS Serial Number'))
+    id_tab.append(rct_id(0xEB7BCB93, 816, 'battery_placeholder[0].bms_sn',
+                  rct_id.t_string,  'BMS Serial Number'))
     id_tab.append(rct_id(0xEBC62737, 817, 'android_description',
                   rct_id.t_string,  'Device name'))
     id_tab.append(rct_id(0xEBF7A4E8, 818, 'grid_mon[0].f_over.threshold',
@@ -2107,8 +2115,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Test time'))
     id_tab.append(rct_id(0xEE049B1F, 820, 'nsm.pf_hysteresis',
                   rct_id.t_bool,    'Hysteresis mode'))
-    id_tab.append(rct_id(0xEEA3F59B, 821,
-                  'battery.stack_software_version[5]',                rct_id.t_uint32,  'Software version stack 5'))
+    id_tab.append(rct_id(0xEEA3F59B, 821, 'battery.stack_software_version[5]',
+                  rct_id.t_uint32,  'Software version stack 5'))
     id_tab.append(rct_id(0xEEC44AA0, 822, 'battery_placeholder[0].cells_stat[2].u_min.index',
                   rct_id.t_uint8,   'battery_placeholder[0].cells_stat[2].u_min.index'))
     id_tab.append(rct_id(0xEECDFEFC, 823, 'battery.cells_stat[2].u_min.value',
@@ -2145,7 +2153,8 @@ def id_tab_setup():
                   rct_id.t_float,   'battery_placeholder[0].cells_stat[1].t_min.value'))
     id_tab.append(rct_id(0xF2405AC6, 839, 'nsm.p_limit',
                   rct_id.t_float,   'Max. grid power [W]'))
-    id_tab.append(rct_id(0xF247BB16, 840, 'display_struct.contrast',                          rct_id.t_uint8,   ''))
+    id_tab.append(rct_id(0xF247BB16, 840, 'display_struct.contrast',
+                  rct_id.t_uint8,   ''))
     id_tab.append(rct_id(0xF25591AA, 841, 'nsm.cos_phi_p[3][0]',
                   rct_id.t_float,   'Point 4 [P/Pn]'))
     id_tab.append(rct_id(0xF257D342, 842, 'battery.cells_stat[1].t_max.value',
@@ -2158,8 +2167,8 @@ def id_tab_setup():
                   rct_id.t_float,   'Available buffer power [W]'))
     id_tab.append(rct_id(0xF393B7B0, 846, 'power_mng.calib_charge_power',
                   rct_id.t_float,   'Calibration charge power [W]'))
-    id_tab.append(rct_id(0xF3FD6C4C, 847, 'nsm.pf_use_p_max',                                 rct_id.t_bool,
-                  'By over-frequency in P(f) use Pmax instead of Pmom (instant P).'))
+    id_tab.append(rct_id(0xF3FD6C4C, 847, 'nsm.pf_use_p_max',
+                  rct_id.t_bool,    'By over-frequency in P(f) use Pmax instead of Pmom (instant P).'))
     id_tab.append(rct_id(0xF3FD8CE6, 848, 'battery.cells_resist[2]',
                   rct_id.t_string,  'battery.cells_resist[2]'))
     id_tab.append(rct_id(0xF42D4DD0, 849, 'io_board.alarm_home_value',
@@ -2204,8 +2213,8 @@ def id_tab_setup():
                   rct_id.t_uint32,  'battery.cells_stat[3].t_min.time'))
     id_tab.append(rct_id(0xFA7DB323, 869, 'io_board.check_s0_result',
                   rct_id.t_uint16,  'io_board.check_s0_result'))
-    id_tab.append(rct_id(0xFAA837C8, 870, 'nsm.f_low_rise_grad',                              rct_id.t_float,
-                  'Power rise gradient for P(f) under-frequency mode without battery [1/Pn*Hz]'))
+    id_tab.append(rct_id(0xFAA837C8, 870, 'nsm.f_low_rise_grad',
+                  rct_id.t_float,   'Power rise gradient for P(f) under-frequency mode without battery [1/Pn*Hz]'))
     id_tab.append(rct_id(0xFAE429C5, 871, 'rb485.f_grid[1]',
                   rct_id.t_float,   'Grid phase 2 frequency [Hz]'))
     id_tab.append(rct_id(0xFB57BA65, 872, 'bat_mng_struct.count',
@@ -2230,8 +2239,8 @@ def id_tab_setup():
                   rct_id.t_float,   'SOC threshold for battery calibration in advance'))
     id_tab.append(rct_id(0xFC724A9E, 882, 'energy.e_dc_total[0]',
                   rct_id.t_float,   'Solar generator A total energy [Wh]'))
-    id_tab.append(
-        rct_id(0xFCA1CBB5, 883, 'battery_placeholder[0].voltage',                   rct_id.t_float,   'Battery voltage [V]'))
+    id_tab.append(rct_id(0xFCA1CBB5, 883, 'battery_placeholder[0].voltage',
+                  rct_id.t_float,   'Battery voltage [V]'))
     id_tab.append(rct_id(0xFCC39293, 884, 'nsm.rpm_lock_in_power',
                   rct_id.t_float,   'Reactive Power Mode lock-in power [P/Pn]'))
     id_tab.append(rct_id(0xFCF4E78D, 885, 'logger.day_ea_log_ts',
@@ -2250,8 +2259,8 @@ def id_tab_setup():
                   rct_id.t_string,  'battery_placeholder[0].cells_stat[5]'))
     id_tab.append(rct_id(0xFE44BA26, 892, 'battery.cells_stat[0].u_min.index',
                   rct_id.t_uint8,   'battery.cells_stat[0].u_min.index'))
-    id_tab.append(rct_id(0xFED51BD2, 893,
-                  'dc_conv.dc_conv_struct[1].enabled',                rct_id.t_bool,    'Solar generator B connected'))
+    id_tab.append(rct_id(0xFED51BD2, 893, 'dc_conv.dc_conv_struct[1].enabled',
+                  rct_id.t_bool,    'Solar generator B connected'))
     id_tab.append(rct_id(0xFF2A258B, 894, 'wifi.server_ip',
                   rct_id.t_string,  'wifi.server_ip'))
     id_tab.append(rct_id(0xFF5B8A54, 895, 'battery_placeholder[0].cells_stat[3]',

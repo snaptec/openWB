@@ -197,6 +197,11 @@
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
 							</div>
 						</div>
+						<div id="wattbezugrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
+							</div>
+						</div>
 						<div id="wattbezugrct" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des RCT Speichers eingeben.
@@ -693,20 +698,13 @@
 								<div id="wattbezugfroniusmeterid" class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Energymeter ID</label>
 									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniuserzeugungold == 0) echo " active" ?>">
-												<input type="radio" name="froniuserzeugung" id="froniuserzeugung0" value="0"<?php if($froniuserzeugungold == 0) echo " checked=\"checked\"" ?>>0
-											</label>
-											<label class="btn btn-outline-info<?php if($froniuserzeugungold == 1) echo " active" ?>">
-												<input type="radio" name="froniuserzeugung" id="froniuserzeugung1" value="1"<?php if($froniuserzeugungold == 1) echo " checked=\"checked\"" ?>>1
-											</label>
-										</div>
+										<input class="form-control" type="number" min="0" max="65535" step="1" name="froniuserzeugung" id="froniuserzeugung"value="<?php echo $froniuserzeugungold ?>">
 									</div>
 								</div>
 								<div id="wattbezugfroniusmeterlist" class="form-row mb-1 hide">
 									<label class="col-md-4 col-form-label">Energymeter</label>
 									<div class="col">
-										<select name="froniuserzeugung" id="froniuserzeugung" class="form-control"<?php if (isset($froniuserzeugungold)) echo " data-old=\"$froniuserzeugungold\"" ?>>
+										<select name="froniuserzeugung" id="froniuserzeugungselect" class="form-control"<?php if (isset($froniuserzeugungold)) echo " data-old=\"$froniuserzeugungold\"" ?>>
 											<option>Nicht ermittelbar</option>
 										</select>
 									</div>
@@ -746,6 +744,70 @@
 									</div>
 								</div>
 							</div>
+							<script>
+								// load meter data from Fronius inverter
+								$(document).ready(function(){
+									$('#wattbezugfroniusload').on("click",function() {
+										$('#wattbezugfroniusload').attr("disabled", true);
+										$('#wattbezugfroniusloadmessage').text("Lade Daten...");
+										$.getJSON('/openWB/modules/bezug_fronius_sm/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
+											var options = '';
+											// fill listbox, format <manufacturer> <meter model> (<serial>)
+											for(var i in data.Body.Data) {
+												var meter = data.Body.Data[i];
+												var meter_location = meter.hasOwnProperty('1SMARTMETER_VALUE_LOCATION_U16') ? parseInt(meter.SMARTMETER_VALUE_LOCATION_U16) : meter.Meter_Location_Current;
+												options += '<option value="'+i+'" data-meterlocation="'+meter_location+'"'
+												if($('#froniuserzeugungselect').attr("data-old") == i) {
+													options += ' selected=true';
+												}
+												options += '>';
+												options += meter.Details.Manufacturer+' '+meter.Details.Model;
+												options += ' ('+meter.Details.Serial+')';
+												options += '</option>';
+											}
+											$('#froniuserzeugungselect').html(options);
+											$('#wattbezugfroniusloadmessage').text("");
+
+											// set meter id corresponding to displayed entry in listbox
+											setInputValue('froniuserzeugung', $('#froniuserzeugungselect option:selected').attr('value'));
+											// set meter location corresponding to displayed entry in listbox
+											setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugungselect option:selected').attr('data-meterlocation'));
+
+											hideSection('#wattbezugfroniusload')
+											hideSection('#wattbezugfroniusmeterid');
+											showSection('#wattbezugfroniusmanual')
+											showSection('#wattbezugfroniusmeterlist');
+										})
+										.fail(function(jqXHR, textStatus, errorThrown) {
+											var errorMsg = 'Die Daten konnten nicht abgerufen werden. Eingabe pr&uuml;fen oder Daten manuell eingeben.';
+											if(jqXHR.responseText !== "") {
+												errorMsg += '<br>';
+												errorMsg += jqXHR.responseText;
+											}
+											$('#wattbezugfroniusloadmessage').html(errorMsg);
+										})
+										.always(function() {
+											$('#wattbezugfroniusload').attr("disabled", false);
+										});
+										
+									});
+
+									$('#wattbezugfroniusmanual').on("click",function() {
+										// switch back to default configuration form
+										hideSection('#wattbezugfroniusmanual')
+										hideSection('#wattbezugfroniusmeterlist');
+										showSection('#wattbezugfroniusload')
+										showSection('#wattbezugfroniusmeterid');
+									});
+
+									$('#froniuserzeugungselect').change(function() {
+										// on change entry of listbox, set corresponding meter id
+										setInputValue('froniuserzeugung', $('#froniuserzeugungselect option:selected').attr('value'));
+										// on change entry of listbox, set corresponding meter location
+										setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugungselect option:selected').attr('data-meterlocation'));
+									});
+								});
+							</script>
 						</div>
 						<div id="wattbezugjson" class="hide">
 							<div class="form-group">
@@ -933,6 +995,7 @@
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
+								hideSection('#wattbezugrct2');
 								hideSection('#wattbezughuawei');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
@@ -984,6 +1047,7 @@
 									showSection('#wattbezugip');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_rct2') {
+									showSection('#wattbezugrct2');
 									showSection('#wattbezugrct');
 									showSection('#wattbezugip');
 								}
@@ -1181,62 +1245,6 @@
 					$('#wizzarddoneForm').submit();
 				});
 
-				// load meter data from Fronius inverter
-				$('#wattbezugfroniusload').on("click",function() {
-					$('#wattbezugfroniusload').attr("disabled", true);
-					$('#wattbezugfroniusloadmessage').text("Lade Daten...");
-					$.getJSON('/openWB/modules/bezug_fronius_sm/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
-						var options = '';
-						// fill listbox, format <manufacturer> <meter model> (<serial>)
-						for(var i in data.Body.Data) {
-							var meter = data.Body.Data[i];
-							var meter_location = meter.hasOwnProperty('1SMARTMETER_VALUE_LOCATION_U16') ? parseInt(meter.SMARTMETER_VALUE_LOCATION_U16) : meter.Meter_Location_Current;
-							options += '<option value="'+i+'" data-meterlocation="'+meter_location+'"'
-							if($('#froniuserzeugung').attr("data-old") == i) {
-								options += ' selected=true';
-							}
-							options += '>';
-							options += meter.Details.Manufacturer+' '+meter.Details.Model;
-							options += ' ('+meter.Details.Serial+')';
-							options += '</option>';
-						}
-						$('#froniuserzeugung').html(options);
-						$('#wattbezugfroniusloadmessage').text("");
-
-						// set meter location corresponding to displayed entry in listbox
-						setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
-
-						hideSection('#wattbezugfroniusload')
-						hideSection('#wattbezugfroniusmeterid');
-						showSection('#wattbezugfroniusmanual')
-						showSection('#wattbezugfroniusmeterlist');
-					})
-					.fail(function(jqXHR, textStatus, errorThrown) {
-						var errorMsg = 'Die Daten konnten nicht abgerufen werden. Eingabe pr&uuml;fen oder Daten manuell eingeben.';
-						if(jqXHR.responseText !== "") {
-							errorMsg += '<br>';
-							errorMsg += jqXHR.responseText;
-						}
-						$('#wattbezugfroniusloadmessage').html(errorMsg);
-					})
-					.always(function() {
-						$('#wattbezugfroniusload').attr("disabled", false);
-					});
-					
-				});
-				
-				$('#wattbezugfroniusmanual').on("click",function() {
-					// switch back to default configuration form
-					hideSection('#wattbezugfroniusmanual')
-					hideSection('#wattbezugfroniusmeterlist');
-					showSection('#wattbezugfroniusload')
-					showSection('#wattbezugfroniusmeterid');
-				});
-				
-				$('#froniuserzeugung').change(function() {
-					// on change entry of listbox, set corresponding meter location
-					setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
-				});
 			});
 
 			var wizzarddone = <?php if(isset($wizzarddoneold)){ echo $wizzarddoneold; } else { echo 100; } ?>
