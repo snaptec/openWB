@@ -9,9 +9,9 @@ class Savm(Sbase):
         super().__init__()
         self._old_measuretype0 = 'none'
         self._smart_paramadd = {}
-        self._device_acthortype = 'none'
-        self._device_acthorpower = 'none'
-
+        self._device_actor = 'none'
+        self._device_username = 'none'
+        self._device_password = 'none'
         print('__init__ Savm excuted')
 
     def getwatt(self, uberschuss, uberschussoffset):
