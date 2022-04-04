@@ -431,21 +431,21 @@
 									<span class="form-text small">Auswahl der Vorrang-Anzeige im Modus PV-Laden. In einigen Themes kann die Anzeige des gewählten Vorrang-Modes angezeigt oder versteckt werden.</span>
 								</div>
 							</div>
-							<div class="form-row mb-1 priorityevoptions">
+							<div class="form-row mb-1">
 								<label for="minBatteryChargePowerAtEvPriority" class="col-md-4 col-form-label">Ladeleistung-Reserve</label>
 								<div class="col">
 									<input id="minBatteryChargePowerAtEvPriority" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/pv/">
 									<span class="form-text small">Parameter in Watt [W] für die Ladeleistung-Reserve des Speichers im Modus PV-Laden. Trotz vorrangiger Regelung der Ladeleistung des EV wird der hier eingestellte Wert immer für die Ladung des Speichers vorgehalten.</span>
 								</div>
 							</div>
-							<div class="form-row mb-1 prioritybatoptions">
+							<div class="form-row mb-1">
 								<label for="batteryDischargePowerAtBattPriority" class="col-md-4 col-form-label">erlaubte Entladeleistung</label>
 								<div class="col">
 									<input id="batteryDischargePowerAtBattPriority" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/pv/">
 									<span class="form-text small">Parameter in Watt [W] für die Entladeleistung Speichers im Modus PV-Laden. Dieser Parameter ist nur wirksam wenn bei "minimaler Entlade-SoC" ein Wert kleiner 100 % gewählt wurde. Definiert eine Entladeleistung, mit der der Speicher bei PV-Ladung zur Ladung des EV entladen werden darf.</span>
 								</div>
 							</div>
-							<div class="form-row mb-1 prioritybatoptions">
+							<div class="form-row mb-1">
 								<label for="minBatteryDischargeSocAtBattPriority" class="col-md-4 col-form-label">minimaler Entlade-SoC</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">

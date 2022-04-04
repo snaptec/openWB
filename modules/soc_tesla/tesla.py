@@ -5,7 +5,6 @@ import hashlib
 import os
 import sys
 import re
-import random
 import time
 import argparse
 import json
@@ -38,12 +37,14 @@ tokens = {
 expiration = 0
 verbose = False
 
+
 def eprint(*my_args, **my_kwargs):
     local_time = datetime.now(timezone.utc).astimezone()
-    prefix = local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +":"
-    if( args.logprefix ):
-        prefix += " %s:"%(args.logprefix)
+    prefix = local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ":"
+    if(args.logprefix):
+        prefix += " %s:" % (args.logprefix)
     print(prefix, *my_args, file=sys.stderr, **my_kwargs)
+
 
 def gen_params():
     verifier_bytes = os.urandom(86)
@@ -52,19 +53,22 @@ def gen_params():
     state = base64.urlsafe_b64encode(os.urandom(16)).rstrip(b"=").decode("utf-8")
     return code_verifier, code_challenge, state
 
+
 def loadTokens():
     global tokens, expiration
     try:
         with open(tokensFilename, "r") as R:
             tokens = json.load(R)
             # do not trust teslas expiration date!
-            # expiration = tokens["created_at"] + tokens["expires_in"] - 86400
-            expiration = tokens["created_at"] + 2500000
+            expiration = tokens["created_at"] + tokens["expires_in"]
+            # expiration = tokens["created_at"] + 2500000
             return True
     except IOError as e:
-        if( verbose ):
-            eprint("Could not read from file %s: %s (pressing on in hopes of alternate authentication)"%(tokensFilename, str(e)))
+        if(verbose):
+            eprint("Could not read from file %s: %s (pressing on in hopes of alternate authentication)" %
+                   (tokensFilename, str(e)))
         return False
+
 
 def saveTokens():
     try:
@@ -72,8 +76,9 @@ def saveTokens():
             W.write(json.dumps(tokens))
             return True
     except IOError as e:
-        eprint("Could not write to file %s: %s"%(tokensFilename, str(e)))
+        eprint("Could not write to file %s: %s" % (tokensFilename, str(e)))
         return False
+
 
 def login(email, password, mfaPasscode):
     headers = {
@@ -100,12 +105,12 @@ def login(email, password, mfaPasscode):
         resp = session.get("https://auth.tesla.com/oauth2/v3/authorize", headers=headers, params=params)
 
         if resp.ok and "<title>" in resp.text:
-            if( verbose ):
-                eprint("Get auth form success - %d attempt(s)."%(attempt + 1))
+            if(verbose):
+                eprint("Get auth form success - %d attempt(s)." % (attempt + 1))
             break
         time.sleep(3)
     else:
-        raise ValueError("Didn't get auth form in %d attempts."%(MAX_ATTEMPTS))
+        raise ValueError("Didn't get auth form in %d attempts." % (MAX_ATTEMPTS))
 
     # Step 2: Obtain an authorization code
     csrf = re.search(r'name="_csrf".+value="([^"]+)"', resp.text).group(1)
@@ -123,18 +128,23 @@ def login(email, password, mfaPasscode):
 
     for attempt in range(MAX_ATTEMPTS):
         resp = session.post(
-            "https://auth.tesla.com/oauth2/v3/authorize", headers=headers, params=params, data=data, allow_redirects=False
+            "https://auth.tesla.com/oauth2/v3/authorize",
+            headers=headers,
+            params=params,
+            data=data,
+            allow_redirects=False
         )
         if resp.ok and (resp.status_code == 302 or "<title>" in resp.text):
-            if( verbose ):
-                eprint("Post auth form success - %d attempt(s)."%(attempt + 1))
+            if(verbose):
+                eprint("Post auth form success - %d attempt(s)." % (attempt + 1))
             break
         time.sleep(3)
     else:
-        raise ValueError("Didn't post auth form in %d attempts."%(MAX_ATTEMPTS))
+        raise ValueError("Didn't post auth form in %d attempts." % (MAX_ATTEMPTS))
 
     # Determine if user has MFA enabled
-    # In that case there is no redirect to `https://auth.tesla.com/void/callback` and app shows new form with Passcode / Backup Passcode field
+    # In that case there is no redirect to `https://auth.tesla.com/void/callback` and app shows new form
+    # with Passcode / Backup Passcode field
     is_mfa = True if resp.status_code == 200 and "/mfa/verify" in resp.text else False
 
     if is_mfa:
@@ -155,7 +165,7 @@ def login(email, password, mfaPasscode):
         #         }
         #     ]
         # }
-        if( verbose ):
+        if(verbose):
             eprint(resp.text)
         factor_id = resp.json()["data"][0]["id"]
 
@@ -163,7 +173,7 @@ def login(email, password, mfaPasscode):
         data = {"transaction_id": transaction_id, "factor_id": factor_id, "passcode": mfaPasscode}
         resp = session.post("https://auth.tesla.com/oauth2/v3/authorize/mfa/verify", headers=headers, json=data)
         # ^^ Content-Type - application/json
-        if( verbose ):
+        if(verbose):
             eprint(resp.text)
         # {
         #     "data": {
@@ -215,18 +225,18 @@ def login(email, password, mfaPasscode):
                 allow_redirects=False,
             )
             if resp.headers.get("location"):
-                if( verbose ):
-                    eprint("Got location in %d attempt(s)."%(attempt + 1))
+                if(verbose):
+                    eprint("Got location in %d attempt(s)." % (attempt + 1))
                 break
         else:
-            raise ValueError("Didn't get location in %d attempts."%(MAX_ATTEMPTS))
+            raise ValueError("Didn't get location in %d attempts." % (MAX_ATTEMPTS))
 
     # Step 3: Exchange authorization code for bearer token
     code = parse_qs(resp.headers["location"])["https://auth.tesla.com/void/callback?code"]
-    if( verbose ):
+    if(verbose):
         eprint("received callback code")
         # eprint("Code -", code)
-    
+
     # headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
     headers = {}
     payload = {
@@ -241,7 +251,7 @@ def login(email, password, mfaPasscode):
     resp_json = resp.json()
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
-    if( verbose ):
+    if(verbose):
         eprint("received refresh token")
         # eprint("{\"refresh_token\": \"" + refresh_token + "\"}")
 
@@ -261,10 +271,16 @@ def login(email, password, mfaPasscode):
     tokens["expires_in"] = resp_json["expires_in"]
     return saveTokens()
 
+
 def refreshToken(email):
     global tokens
 
-    headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
+    # headers = {"user-agent": UA, "x-tesla-user-agent": X_TESLA_USER_AGENT}
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Referer": "https://auth.tesla.com/"
+    }
     payload = {
         "grant_type": "refresh_token",
         "client_id": "ownerapi",
@@ -277,122 +293,138 @@ def refreshToken(email):
     resp_json = resp.json()
     refresh_token = resp_json["refresh_token"]
     access_token = resp_json["access_token"]
-    if( verbose ):
-        eprint("received refresh token")
-        # eprint("{\"refresh_token\": \"" + refresh_token + "\"}")
+    if(verbose):
+        eprint("received token")
+        eprint("refresh_token: " + refresh_token)
+        eprint("access_token: " + access_token)
 
     # Step 4: Exchange bearer token for access token
-    headers["authorization"] = "bearer " + access_token
-    payload = {
-        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        "client_id": CLIENT_ID,
-    }
-    resp = session.post("https://owner-api.teslamotors.com/oauth/token", headers=headers, json=payload)
+    # headers["authorization"] = "bearer " + access_token
+    # payload = {
+    #     "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+    #     "client_id": CLIENT_ID,
+    # }
+    # resp = session.post("https://owner-api.teslamotors.com/oauth/token", headers=headers, json=payload)
 
     # save our tokens
-    resp_json = resp.json()
+    # resp_json = resp.json()
     tokens["refresh_token"] = refresh_token
     tokens["access_token"] = resp_json["access_token"]
-    tokens["created_at"] = resp_json["created_at"]
+    # tokens["created_at"] = resp_json["created_at"]
+    tokens["created_at"] = int(time.time())
     tokens["expires_in"] = resp_json["expires_in"]
     return saveTokens()
+
 
 def listCars():
     myList = []
     myVehicles = requestData('vehicles')
     for index, car in enumerate(json.loads(myVehicles)["response"]):
-        myList.append(json.loads("{\"id\":\"%s\", \"vin\":\"%s\", \"name\":\"%s\"}"%(index, car["vin"], car["display_name"])))
+        myList.append(json.loads("{\"id\":\"%s\", \"vin\":\"%s\", \"name\":\"%s\"}" %
+                      (index, car["vin"], car["display_name"])))
     print(json.dumps(myList))
+
 
 def getVehicleIdByVin(vin):
     myVehicles = requestData('vehicles')
     for car in json.loads(myVehicles)["response"]:
-        if( verbose ):
-            eprint("VIN: %s"%(car["vin"]))
-        if( car["vin"] == vin):
+        if(verbose):
+            eprint("VIN: %s" % (car["vin"]))
+        if(car["vin"] == vin):
             myVehicleId = car["id"]
-            if( verbose ):
-                eprint("vehicle_id for vin %s: %s"%(vin, str(myVehicleId)))
+            if(verbose):
+                eprint("vehicle_id for vin %s: %s" % (vin, str(myVehicleId)))
             return myVehicleId
-    eprint("vin not found: %s"%(vin))
+    eprint("vin not found: %s" % (vin))
     for index, car in enumerate(json.loads(myVehicles)["response"]):
-        eprint("Index: %d VIN: %s"%(index, car["vin"]))
+        eprint("Index: %d VIN: %s" % (index, car["vin"]))
+
 
 def getVehicleIdByIndex(index):
     myVehicles = requestData('vehicles')
     myVehicleId = json.loads(myVehicles)["response"][index]["id"]
-    if( verbose ):
-        eprint("vehicle_id for entry %d: %s"%(index, str(myVehicleId)))
+    if(verbose):
+        eprint("vehicle_id for entry %d: %s" % (index, str(myVehicleId)))
     return myVehicleId
 
+
 def requestData(dataPart):
-    if( verbose ):
-        eprint("Requesting data: \"%s\""%(dataPart))
+    if(verbose):
+        eprint("Requesting data: \"%s\"" % (dataPart))
     session = requests.Session()
     headers = {
         "user-agent": UA,
         "x-tesla-user-agent": X_TESLA_USER_AGENT,
         "authorization": "bearer " + tokens["access_token"]
-        }
+    }
 
     owner_headers = headers
     # owner_headers["authorization"] = "bearer " + tokens["access_token"]
     owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
 
     resp = session.get("https://owner-api.teslamotors.com/api/1/" + dataPart, headers=owner_headers, timeout=120)
-    if( verbose ):
+    if(verbose):
         eprint(resp.text, "\n")
     return resp.text
 
+
 def postCommand(command):
-    if( verbose ):
-        eprint("Sending command: \"%s\""%(command))
+    if(verbose):
+        eprint("Sending command: \"%s\"" % (command))
     session = requests.Session()
     headers = {
         "user-agent": UA,
         "x-tesla-user-agent": X_TESLA_USER_AGENT,
         "authorization": "bearer " + tokens["access_token"]
-        }
- 
+    }
+
     owner_headers = headers
     # owner_headers["authorization"] = "bearer " + tokens["access_token"]
     owner_headers = {**headers, "authorization": "bearer " + tokens["access_token"]}
 
     resp = session.post("https://owner-api.teslamotors.com/api/1/" + command, headers=owner_headers, timeout=120)
-    if( verbose ):
+    if(verbose):
         eprint(resp.text, "\n")
     return resp.text
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--email", type=str, required=True, help="Tesla account email")
-    # parser.add_argument("-p", "--password", type=str, required=False, default=None, help="Tesla account password")
-    # parser.add_argument("-m", "--mfapasscode", type=str, required=False, default=None, help="Passcode generated by your authenticator app")
-    parser.add_argument("-f", "--tokensfile", type=str, required=False, default="tesla.token", help="Filename to save tokens")
-    parser.add_argument("-d", "--data", type=str, required=False, default=None, help="data part to request, use \"#\" as placeholder for \"vehicle_id\" if required")
-    parser.add_argument("-c", "--command", type=str, required=False, default=None, help="command to send, use \"#\" as placeholder for \"vehicle_id\" if required")
-    parser.add_argument("-v", "--vehicle", type=int, required=False, default=0, help="vehicle number to use, defaults to \"0\"")
-    parser.add_argument("-V", "--vin", type=str, required=False, default=None, help="vin to use, optional instead of \"--vehicle\"")
-    parser.add_argument("-l", "--logprefix", type=str, required=False, default=None, help="identifier used for logging to stderr")
-    parser.add_argument("--listcars", required=False, default=False, action="store_true", help="list available cars by index and vin")
+    parser.add_argument("-f", "--tokensfile", type=str, required=False,
+                        default="tesla.token", help="Filename to save tokens")
+    parser.add_argument("-d", "--data", type=str, required=False, default=None,
+                        help="data part to request, use \"#\" as placeholder for \"vehicle_id\" if required")
+    parser.add_argument("-c", "--command", type=str, required=False, default=None,
+                        help="command to send, use \"#\" as placeholder for \"vehicle_id\" if required")
+    parser.add_argument("-v", "--vehicle", type=int, required=False, default=0,
+                        help="vehicle number to use, defaults to \"0\"")
+    parser.add_argument("-V", "--vin", type=str, required=False, default=None,
+                        help="vin to use, optional instead of \"--vehicle\"")
+    parser.add_argument("-l", "--logprefix", type=str, required=False,
+                        default=None, help="identifier used for logging to stderr")
+    parser.add_argument("--listcars", required=False, default=False,
+                        action="store_true", help="list available cars by index and vin")
     parser.add_argument("--verbose", required=False, default=False, action="store_true", help="be verbose")
     args = parser.parse_args()
 
     verbose = args.verbose
     tokensFilename = args.tokensfile
-    if( not loadTokens() ):
+    if(not loadTokens()):
         eprint("Tokens file not found: " + args.tokensfile)
         eprint("Login with E-Mail and Password not supported (Captcha)!")
         sys.exit(1)
     else:
-        if( verbose ):
+        if(verbose):
             eprint("No need to authenticate. Valid tokens already present in " + tokensFilename)
-        if( time.time() > expiration ):
-            if( verbose ):
+            eprint("Current timestamp: " + str(time.time()))
+            eprint("Token valid until: " + str(expiration))
+        if(time.time() > expiration):
+            if(verbose):
                 eprint("Access token expired. Refreshing token.")
             try:
-                if( refreshToken(args.email) ):
-                    if( verbose ):
+                if(refreshToken(args.email)):
+                    if(verbose):
                         eprint("Token Refresh succeeded")
             except ValueError as err:
                 eprint(err)
@@ -402,15 +434,15 @@ if __name__ == "__main__":
     if(args.listcars):
         listCars()
         sys.exit()
-    if( args.vin != None ):
+    if(args.vin is not None):
         vehicleID = getVehicleIdByVin(args.vin)
-    else :
+    else:
         vehicleID = getVehicleIdByIndex(args.vehicle)
-    if( vehicleID != None ):
-        if( args.data != None ):
+    if(vehicleID is not None):
+        if(args.data is not None):
             response = requestData(args.data.replace("#", str(vehicleID)))
             print(json.dumps(json.loads(response)["response"]))
-        if( args.command != None ):
+        if(args.command is not None):
             response = postCommand(args.command.replace("#", str(vehicleID)))
             print(json.dumps(json.loads(response)["response"]))
     sys.exit()

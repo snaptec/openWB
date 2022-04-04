@@ -184,6 +184,11 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
+						<div id="pvrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
+							</div>
+						</div>
 						<div id="pvrct" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen EVU Modul.
@@ -465,6 +470,9 @@
 								<label for="wr_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo $wr_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>
@@ -899,6 +907,7 @@
 								hideSection('#pvid');
 								hideSection('#pvsiemens');
 								hideSection('#pvrct');
+								hideSection('#pvrct2');
 								hideSection('#pvpowerdog');
 								hideSection('#pvsolarwatt');
 								hideSection('#pvwrstuder');
@@ -928,6 +937,7 @@
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_rct2') {
+									showSection('#pvrct2');
 									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_fems') {
@@ -1230,6 +1240,9 @@
 								<label for="wr2_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr2_piko2_url" id="wr2_piko2_url" value="<?php echo $wr2_piko2_urlold ?>">
+									<span class="form-text small">
+										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
 								</div>
 							</div>
 						</div>

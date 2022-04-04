@@ -25,12 +25,6 @@ class Lovato:
         except Exception as e:
             self.__process_error(e)
 
-    def get_imported(self) -> float:
-        try:
-            return self.client.read_input_registers(0x0048, ModbusDataType.FLOAT_32, unit=self.id) * 1000
-        except Exception as e:
-            self.__process_error(e)
-
     def get_power(self) -> Tuple[List[float], float]:
         try:
             powers = [val / 100 for val in self.client.read_input_registers(
@@ -38,12 +32,6 @@ class Lovato:
             )]
             power = sum(powers)
             return powers, power
-        except Exception as e:
-            self.__process_error(e)
-
-    def get_exported(self) -> float:
-        try:
-            return self.client.read_input_registers(0x004a, ModbusDataType.FLOAT_32, unit=self.id) * 1000
         except Exception as e:
             self.__process_error(e)
 
@@ -58,6 +46,7 @@ class Lovato:
         try:
             frequency = self.client.read_input_registers(0x0031, ModbusDataType.INT_32, unit=self.id) / 100
             if frequency > 100:
+                # needed if external measurement clamps connected
                 frequency = frequency / 10
             return frequency
         except Exception as e:
@@ -67,13 +56,5 @@ class Lovato:
         try:
             return [val / 10000 for val in self.client.read_input_registers(
                 0x0007, [ModbusDataType.INT_32]*3, unit=self.id)]
-        except Exception as e:
-            self.__process_error(e)
-
-    def get_counter(self) -> float:
-        try:
-            final_bezug_1 = self.client.read_input_registers(0x1a1f, ModbusDataType.INT_32, unit=self.id)
-            final_bezug_2 = self.client.read_input_registers(0x1a21, ModbusDataType.INT_32, unit=self.id)
-            return max(final_bezug_1, final_bezug_2) * 1000
         except Exception as e:
             self.__process_error(e)

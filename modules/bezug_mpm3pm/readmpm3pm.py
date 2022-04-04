@@ -83,7 +83,7 @@ def update(seradd: str, sdmid: int):
         all = format(value1, '04x') + format(value2, '04x')
         final = int(struct.unpack('>i', codecs.decode(all, 'hex'))[0]) / 100
         with open('/var/www/html/openWB/ramdisk/wattbezug', 'w') as f:
-            f.write(str(final))
+            f.write(str(int(final)))
 
         # export kwh
         resp = client.read_input_registers(0x0004, 4, unit=sdmid)
