@@ -192,7 +192,7 @@ class WbData {
 				chargePointList.update();
 				break
 			case 'rfidConfigured':
-				d3.select('#codeButton').classed("hide", (!value))
+				d3.select('#codeEntry').classed("hide", (!value))
 				break
 			default:
 				break;
