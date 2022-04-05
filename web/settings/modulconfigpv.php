@@ -529,6 +529,15 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
+								<label for="wrsmaversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<div class="col">
+									<select name="wrsmaversion" id="wrsmaversion" class="form-control">
+										<option <?php if($wrsmaversionold == 0) echo "selected" ?> value="0">Standard</option>
+										<option <?php if($wrsmaversionold == 1) echo "selected" ?> value="1">Core-2</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Handelt es sich um eine SMA Webbox?</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
@@ -1258,6 +1267,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2smamodbus" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2smaversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<div class="col">
+									<select name="wr2smaversion" id="wr2smaversion" class="form-control">
+										<option <?php if($wr2smaversionold == 0) echo "selected" ?> value="0">Standard</option>
+										<option <?php if($wr2smaversionold == 1) echo "selected" ?> value="1">Core-2</option>
+									</select>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
@@ -1271,6 +1291,7 @@
 								hideSection('#pv2mqttdiv');
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
+								hideSection('#pv2smamodbus');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1291,6 +1312,7 @@
 									showSection('#pv2kitdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
+									showSection('#pv2smamodbus');
 									showSection('#pv2ipdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solax') {
