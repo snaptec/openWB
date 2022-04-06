@@ -529,7 +529,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label for="wrsmaversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<label for="wrsmaversion" class="col-md-4 col-form-label">Version der Wechselrichter</label>
 								<div class="col">
 									<select name="wrsmaversion" id="wrsmaversion" class="form-control">
 										<option <?php if($wrsmaversionold == 0) echo "selected" ?> value="0">Standard</option>
@@ -1269,7 +1269,7 @@
 						</div>
 						<div id="pv2smamodbus" class="hide">
 							<div class="form-row mb-1">
-								<label for="wr2smaversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<label for="wr2smaversion" class="col-md-4 col-form-label">Version des Wechselrichters</label>
 								<div class="col">
 									<select name="wr2smaversion" id="wr2smaversion" class="form-control">
 										<option <?php if($wr2smaversionold == 0) echo "selected" ?> value="0">Standard</option>
