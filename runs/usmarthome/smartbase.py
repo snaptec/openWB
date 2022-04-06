@@ -1570,3 +1570,11 @@ class Sbase(Sbase0):
             f = open(self._basePath+'/ramdisk/'+pref+'wh0', 'w')
             f.write(str(watt2))
             f.close()
+
+    def getwatt(self, uberschuss, uberschussoffset):
+        self.newwatt = 0
+        self.newwattk = 0
+        self.relais = 0
+        
+    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+        pass
