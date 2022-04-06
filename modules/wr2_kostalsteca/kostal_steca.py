@@ -16,8 +16,10 @@ def update(pv2ip: str):
     # Unfortunately Kostal has introduced the third version of interface: XML
     # This script is for Kostal_Piko_MP_plus and StecaGrid coolcept (single phase inverter)
     # In fact Kostal is not developing own single phase inverter anymore but is sourcing them from Steca
-    # If you have the chance to test this module for the latest three phase inverter from Kostal (Plenticore) or Steca (coolcept3 or coolcept XL) let us know if it works
-    # DetMoerk 20210323: Anpassung fuer ein- und dreiphasige WR der Serie. Anstatt eine feste Zeile aus dem Ergebnis zu schneiden wird nach der Zeile mit AC_Power gesucht.
+    # If you have the chance to test this module for the latest three phase inverter from Kostal (Plenticore)
+    # or Steca (coolcept3 or coolcept XL) let us know if it works
+    # DetMoerk 20210323: Anpassung für ein- und dreiphasige WR der Serie. Anstatt eine feste Zeile aus
+    # dem Ergebnis zu schneiden wird nach der Zeile mit AC_Power gesucht.
 
     log.debug('PV Kostal Steca IP:' + pv2ip)
 
@@ -31,7 +33,7 @@ def update(pv2ip: str):
 
     # allow only numbers
     regex = '^-?[0-9]+$'
-    if re.search(regex, str(power_kostal_piko_MP)) == None:
+    if re.search(regex, str(power_kostal_piko_MP)) is None:
         power_kostal_piko_MP = "0"
 
     log.debug("'PVWatt: "+str(power_kostal_piko_MP)+"'")
@@ -43,7 +45,7 @@ def update(pv2ip: str):
     response = requests.get("http://"+pv2ip+"/yields.xml", timeout=2).text
     pvkwh_kostal_piko_MP = ET.fromstring(response).find("YieldValue").get("Value")
 
-    if re.search(regex, str(pvkwh_kostal_piko_MP)) == None:
+    if re.search(regex, str(pvkwh_kostal_piko_MP)) is None:
         log.debug("PVkWh: NaN get prev. Value")
         with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
             pvkwh_kostal_piko_MP = f.read()
