@@ -549,8 +549,7 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option aktivieren wenn ein Solaredge SmartMeter verbaut ist welches vorhandene Bestands PV Anlagen erfasst.
-										Das Meter muss an Position 2 konfiguriert sein.
+										Diese Option aktivieren wenn eine SMA Webbox auszulesen ist.
 									</span>
 								</div>
 							</div>
