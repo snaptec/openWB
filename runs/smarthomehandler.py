@@ -241,6 +241,8 @@ def sepwatt(oldwatt,oldwattk,nummer):
         argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
     elif meastyp == "shelly":
         argumentList[1] = prefixpy + 'shelly/watt.py'
+    elif meastyp == "tasmota": 
+        argumentList[1] = prefixpy + 'tasmota/watt.py'               
     elif meastyp == "mystrom":
         argumentList[1] = prefixpy + 'mystrom/watt.py'
     elif meastyp == "http":

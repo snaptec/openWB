@@ -166,7 +166,7 @@ def on_message(client, userdata, msg):
                         client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceMeasureTypes = ['shelly','http','mystrom','sdm630','we514','fronius','json','avm','mqtt','sdm120','smaem'] # 'pyt' is deprecated and will be removed!
+                validDeviceMeasureTypes = ['shelly','tasmota','http','mystrom','sdm630','we514','fronius','json','avm','mqtt','sdm120','smaem'] # 'pyt' is deprecated and will be removed!
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                     try:
                         deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))
@@ -436,6 +436,12 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     client.publish("openWB/config/get/SmartHome/maxBatteryPower", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (msg.topic == "openWB/config/set/SmartHome/smartmq"):
+                if (0 <= int(msg.payload) <= 1):
+                    f = open('/var/www/html/openWB/ramdisk/smartmq', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    client.publish("openWB/config/get/SmartHome/smartmq", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                     f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')

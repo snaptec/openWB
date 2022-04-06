@@ -406,7 +406,7 @@ $numDevices = 9;
 												<span class="form-text small">Diese Option (bei Auschaltschwelle anpassen oder auschalten/nicht einschalten) sorgt dafür, dass die aktuelle Leistungsaufnahme von diesem Gerät in den die Pv Überschussberechnung miteinbezogen wird. Wenn dann ein Auto geladen wird (> 1000 Watt Leistungsaufnahme),<br>
 												wird bei Ausschaltschwelle anpassen: Die Ausschaltverzögerung auf 0 gesetzt und die Ausschaltschwelle (sofern eine Bezugsschwelle definiert ist) auf 0 gesetzt. Dadurch werden diese Geräte als erstes abgeschaltet, wenn das Auto lädt und der Überschuss nicht ausreicht.
 												<br>
-												wird bei ausschalten/nicht einschalten: Das Gerät abgeschaltet.		Dann steht die aktuelle Leistungsaufnahme sofort für die Autoladung zur Verfügung.										
+												wird bei ausschalten/nicht einschalten: Das Gerät abgeschaltet.		Dann steht die aktuelle Leistungsaufnahme sofort für die Autoladung zur Verfügung.
 												</span>
 											</div>
 										</div>
@@ -569,6 +569,7 @@ $numDevices = 9;
 											<option value="mystrom" data-option="mystrom">MyStrom</option>
 											<option value="sdm630" data-option="sdm630">SDM630</option>
 											<option value="shelly" data-option="shelly">Shelly oder Shelly plus</option>
+												<option value="tasmota" data-option="tasmota">tasmota</option>
 											<option value="we514" data-option="we514">WE514</option>
 											<option value="avm" data-option="avm">AVM</option>
 											<option value="mqtt" data-option="mqtt">Mqtt</option>
@@ -577,7 +578,7 @@ $numDevices = 9;
 										</select>
 									</div>
 								</div>
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm120 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-mystrom deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-fronius deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-avm hide">
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-tasmota deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm120 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-mystrom deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-fronius deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-avm hide">
 									<label for="device_measureipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -717,6 +718,19 @@ $numDevices = 9;
 								</div>
 							</div>
 						</div>
+
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="smartmq" class="col-md-4 col-form-label">Smartmq handler verwenden (ohne Config file, noch in Entwicklung)</label>
+								<div class="col">
+									<select name="smartmq" id="smartmq" class="form-control" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
+										<option value="0" data-option="0">Nein</option>
+										<option value="1" data-option="1">Ja</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 
