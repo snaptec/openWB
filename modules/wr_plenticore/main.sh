@@ -36,5 +36,4 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 # Rückgabe des Wertes Gesamt-PV-Leistung
-pvwatt=$(<"$RAMDISKDIR/pvwatt")
-echo "$pvwatt"
+cat "$RAMDISKDIR/pvwatt"
