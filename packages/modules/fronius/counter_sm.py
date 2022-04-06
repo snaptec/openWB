@@ -82,7 +82,7 @@ class FroniusSmCounter:
             timeout=5)
         response_json_id = response.json()["Body"]["Data"]
 
-        meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
+        meter_location = MeterLocation.get(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
         if meter_location == MeterLocation.load:
@@ -112,7 +112,7 @@ class FroniusSmCounter:
             timeout=5)
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
 
-        meter_location = MeterLocation(response_json_id["SMARTMETER_VALUE_LOCATION_U16"])
+        meter_location = MeterLocation.get(response_json_id["SMARTMETER_VALUE_LOCATION_U16"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
         if meter_location == MeterLocation.load:
