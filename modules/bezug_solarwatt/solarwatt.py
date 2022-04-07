@@ -19,10 +19,10 @@ def update(solarwattmethod: int, speicher1_ip: str, speicher1_ip2: str):
             with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
                 bezugwatt = f.read()
         else:
-            for item in json_response["result"]["items"].values():
+            for item in json_response["result"]["items"]:
                 bezugw = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
 
-            for item in json_response["result"]["items"].values():
+            for item in json_response["result"]["items"]:
                 einspeisungw = int(item["tagValues"]["PowerOut"]["value"])
             bezugwatt = bezugw - einspeisungw
     if solarwattmethod == 1:  # Abruf über Gateway
