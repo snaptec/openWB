@@ -12,7 +12,7 @@ def update(speicher1_ip: str):
     log.debug('PV Solarwatt IP:' + speicher1_ip)
     json_response = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
 
-    for item in json_response["result"]["items"].values():
+    for item in json_response["result"]["items"]:
         try:
             pvwatt = int(item["tagValues"]["PowerProduced"]["value"])
             break
