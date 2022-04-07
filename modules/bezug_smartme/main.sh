@@ -1,6 +1,7 @@
 #!/bin/bash
+
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="EVU"
 DMOD="MAIN"
@@ -9,10 +10,10 @@ Debug=$debug
 #For development only
 #Debug=1
 
-if [ $DMOD == "MAIN" ]; then
-    MYLOGFILE="$RAMDISKDIR/openWB.log"
+if [ ${DMOD} == "MAIN" ]; then
+    MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-    MYLOGFILE="$RAMDISKDIR/bezug_smartme.log"
+    MYLOGFILE="${RAMDISKDIR}/bezug_smartme.log"
 fi
 
 openwbDebugLog ${DMOD} 2 "Bezug Smartme URL: ${bezug_smartme_url}"
