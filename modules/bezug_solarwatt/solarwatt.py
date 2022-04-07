@@ -17,21 +17,34 @@ def update(solarwattmethod: int, speicher1_ip: str, speicher1_ip2: str):
         json_response = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
         if len(str(json_response)) < 10:
             with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
-                bezugwatt = f.read()
+                bezug_watt = f.read()
         else:
             for item in json_response["result"]["items"]:
-                bezugw = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
+                try:
+                    power_consumed = int(item["tagValues"]["PowerConsumedFromGrid"]["value"])
+                    break
+                except KeyError:
+                    pass
+            else:
+                raise Exception("Solarwatt konnte keine EVU-Bezugsleistung ermitteln.")
 
             for item in json_response["result"]["items"]:
-                einspeisungw = int(item["tagValues"]["PowerOut"]["value"])
-            bezugwatt = bezugw - einspeisungw
+                try:
+                    power_out = int(item["tagValues"]["PowerOut"]["value"])
+                    break
+                except KeyError:
+                    pass
+            else:
+                raise Exception("Solarwatt konnte keine EVU-Einspeiseleistung ermitteln.")
+
+            bezug_watt = power_consumed - power_out
     if solarwattmethod == 1:  # Abruf über Gateway
         json_response = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
-        bezugwatt = int(json_response["FData"]["PGrid"])
+        bezug_watt = int(json_response["FData"]["PGrid"])
 
-    log.debug("Netzbezug: "+str(bezugwatt)+" W")
+    log.debug("Netzbezug: "+str(bezug_watt)+" W")
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-        f.write(str(bezugwatt))
+        f.write(str(bezug_watt))
 
 
 def main(argv: List[str]):
