@@ -130,13 +130,13 @@ class Slbase(Sbase0):
                 self._device_measurejsoncounter = value
             elif (key == 'device_measureavmactor'):
                 self._device_measureavmactor = value
-            elif (key == 'device_measureavmusername '):
+            elif (key == 'device_measureavmusername'):
                 self._device_measureavmusername = value
             elif (key == 'device_measureavmpassword'):
                 self._device_measureavmpassword = value
             elif (key == 'device_actor'):
                 self._device_actor = value
-            elif (key == 'device_username '):
+            elif (key == 'device_username'):
                 self._device_username = value
             elif (key == 'device_password'):
                 self._device_password = value
@@ -1572,9 +1572,11 @@ class Sbase(Sbase0):
             f.close()
 
     def getwatt(self, uberschuss, uberschussoffset):
+        self.prewatt(uberschuss, uberschussoffset)
         self.newwatt = 0
         self.newwattk = 0
         self.relais = 0
-        
+        self.postwatt()
+
     def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
         pass
