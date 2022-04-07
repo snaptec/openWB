@@ -32,7 +32,7 @@ class Savm(Sbase):
         for key, value in self._smart_paramadd.items():
             if (key == 'device_actor'):
                 self._device_actor = value
-            elif (key == 'device_username '):
+            elif (key == 'device_username'):
                 self._device_username = value
             elif (key == 'device_password'):
                 self._device_password = value
