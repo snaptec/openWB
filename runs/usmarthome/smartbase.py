@@ -620,16 +620,7 @@ class Sbase(Sbase0):
         self._c_ausverz_f = 'N'
         self._c_einverz = 0
         self._c_einverz_f = 'N'
-        pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
-        self.mqtt_param_del[pref + 'RelayStatus'] = '0'
-        self.mqtt_param_del[pref + 'Watt'] = '0'
-        self.mqtt_param_del[pref + 'self.oncountnor'] = '0'
-        self.mqtt_param_del[pref + 'OnCntStandby'] = '0'
-        self.mqtt_param_del[pref + 'Status'] = '0'
-        self.mqtt_param_del[pref + 'TemperatureSensor0'] = '300'
-        self.mqtt_param_del[pref + 'TemperatureSensor1'] = '300'
-        self.mqtt_param_del[pref + 'TemperatureSensor2'] = '300'
-        self.mqtt_param_del[pref + 'RunningTimeToday'] = '0'
+
 
     def __del__(self):
 
@@ -875,7 +866,16 @@ class Sbase(Sbase0):
                               + __class__.__name__ + " überlesen " + key +
                               " " + value)
         self._first_run = 0
-
+        pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        self.mqtt_param_del[pref + 'RelayStatus'] = '0'
+        self.mqtt_param_del[pref + 'Watt'] = '0'
+        self.mqtt_param_del[pref + 'self.oncountnor'] = '0'
+        self.mqtt_param_del[pref + 'OnCntStandby'] = '0'
+        self.mqtt_param_del[pref + 'Status'] = '0'
+        self.mqtt_param_del[pref + 'TemperatureSensor0'] = '300'
+        self.mqtt_param_del[pref + 'TemperatureSensor1'] = '300'
+        self.mqtt_param_del[pref + 'TemperatureSensor2'] = '300'
+        self.mqtt_param_del[pref + 'RunningTimeToday'] = '0'
         if (self.device_type == 'none'):
             self.device_canswitch = 0
         if (self._device_differentmeasurement == 1):
