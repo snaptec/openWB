@@ -89,7 +89,7 @@ class Slbase(Sbase0):
                         'device_speichersocbeforestart', 'device_endTime',
                         'device_maxeinschaltdauer', 'mode',
                         'WHImported_temp', 'RunningTimeToday',
-                        'self.oncountnor', 'OnCntStandby',
+                        'oncountnor', 'OnCntStandby',
                         'device_startupDetection']):
                 pass
             elif (key == 'device_differentMeasurement'):
@@ -655,11 +655,14 @@ class Sbase(Sbase0):
     def postwatt(self):
         (self.newwatt, self.newwattk) = self.sepwatt(self.newwatt,
                                                      self.newwattk)
-        # bei laufender Anlauferkennung deivce nicht aktiv setzten
+        # bei reiner Leistungsmessung relais nur nach Watt setzten
+        if (self.newwatt > 50) and (self.device_type == 'none'):
+            self.relais = 1           
+        # bei laufender Anlauferkennung deivce nicht aktiv setzten            
         if (self.relais == 1) and (self.devstatus != 20):
-            self.relais == 1
+            self.relais = 1
         else:
-            self.relais == 0
+            self.relais = 0
         self.mqtt_param = {}
         pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
         self.mqtt_param[pref + 'RelayStatus'] = self.relais
@@ -744,7 +747,7 @@ class Sbase(Sbase0):
         self.mqtt_param[pref + 'Watt'] = self._oldwatt
         self.mqtt_param[pref + 'Wh'] = self._wh
         self.mqtt_param[pref + 'WHImported_temp'] = self._wpos
-        self.mqtt_param[pref + 'self.oncountnor'] = self.oncountnor
+        self.mqtt_param[pref + 'oncountnor'] = self.oncountnor
         self.mqtt_param[pref + 'OnCntStandby'] = self.oncntstandby
         # nur bei Status 10 on status mitnehmen
         if (self.devstatus == 10):
@@ -847,7 +850,7 @@ class Sbase(Sbase0):
                     self.logClass(2, "(" + str(self.device_nummer) +
                                   ") aus mqtt übernommen " + key +
                                   " " + value)
-            elif (key == 'self.oncountnor'):
+            elif (key == 'oncountnor'):
                 if (self._first_run == 1):
                     self.oncountnor = value
                     self.logClass(2, "(" + str(self.device_nummer) +
@@ -869,7 +872,7 @@ class Sbase(Sbase0):
         pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
         self.mqtt_param_del[pref + 'RelayStatus'] = '0'
         self.mqtt_param_del[pref + 'Watt'] = '0'
-        self.mqtt_param_del[pref + 'self.oncountnor'] = '0'
+        self.mqtt_param_del[pref + 'oncountnor'] = '0'
         self.mqtt_param_del[pref + 'OnCntStandby'] = '0'
         self.mqtt_param_del[pref + 'Status'] = '0'
         self.mqtt_param_del[pref + 'TemperatureSensor0'] = '300'
