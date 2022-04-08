@@ -183,16 +183,12 @@ def loadregelvars():
 
 
 def getdevicevalues():
-    global totalwatt
-    global totalwattot
-    global totalminhaus
     global mydevices
-    totalwatt = 0
-    totalwattot = 0
-    totalminhaus = 0
     global uberschuss
     global uberschussoffset
-    global mqtt_cache
+    totalwatt = 0
+    totalwattot = 0
+    totalminhaus = 0   
     mqtt_all = {}
     for mydevice in mydevices:
         if (mydevice._device_configured == '9'):
@@ -241,9 +237,14 @@ def getdevicevalues():
     mqtt_all['openWB/SmartHome/Status/wattschalt'] = totalwatt
     mqtt_all['openWB/SmartHome/Status/wattnichtschalt'] = totalwattot
     mqtt_all['openWB/SmartHome/Status/wattnichtHaus'] = totalminhaus
+    sendmq(mqtt_all)
+
+
+def sendmq(mqtt_input):
+    global mqtt_cache
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
-    for key, value in mqtt_all.items():
+    for key, value in mqtt_input.items():
         valueold = mqtt_cache.get(key, 'not in cache')
         if (valueold == value):
             pass
@@ -255,7 +256,7 @@ def getdevicevalues():
             client.publish(key, payload=value, qos=0, retain=True)
             client.loop(timeout=2.0)
     client.disconnect()
-
+   
 
 def conditions():
     global mydevices
@@ -376,22 +377,29 @@ def readmq():
 def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
     global numberOfSupportedDevices
-    global mydevices
+    global mydevices   
+    mqtt_reset = {}      
     hour = time.strftime("%H")
     if (int(hour) == 0):
         if (int(resetmaxeinschaltdauer) == 0):
             for i in range(1, (numberOfSupportedDevices+1)):
                 for mydevice in mydevices:
                     if (str(i) == str(mydevice.device_nummer)):
+                        pref = 'openWB/SmartHome/Devices/' + str(i) + '/'
                         mydevice.runningtime = 0
+                        mqtt_reset[pref + 'RunningTimeToday'] = '0'
                         logDebug(LOGLEVELINFO, "(" + str(i) +
                                  ") RunningTime auf 0 gesetzt")
                         mydevice.oncountnor = '0'
+                        mqtt_reset[pref + 'oncountnor'] = '0'
                 # Sofern Anlauferkennung laueft counter nicht zuruecksetzen
                         if (mydevice.devstatus != 20):
                             mydevice.oncntstandby = '0'
+                            mqtt_reset[pref + 'OnCntStandby'] = '0'
                         mydevice.c_oldstampeinschaltdauer = 0
+                        mydevice.c_oldstampeinschaltdauer_f = 'N'
             resetmaxeinschaltdauer = 1
+            sendmq(mqtt_reset)
     if (int(hour) == 1):
         resetmaxeinschaltdauer = 0
 
