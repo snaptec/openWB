@@ -211,14 +211,23 @@ class Slshelly(Slbase):
             self.relais = int(answer['on'])
             if (self.device_temperatur_configured > 0):
                 self.temp0 = str(answer['temp0'])
+                f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) + '_temp0', 'w')
+                f.write(str(self.temp0))
+                f.close()
             else:
                 self.temp0 = '300'
             if (self.device_temperatur_configured > 1):
                 self.temp1 = str(answer['temp1'])
+                f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) + '_temp1', 'w')
+                f.write(str(self.temp1))
+                f.close()
             else:
                 self.temp1 = '300'
             if (self.device_temperatur_configured > 2):
                 self.temp2 = str(answer['temp2'])
+                f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) + '_temp2', 'w')
+                f.write(str(self.temp2))
+                f.close()
             else:
                 self.temp2 = '300'
         except Exception as e1:
@@ -360,6 +369,9 @@ class Slmystrom(Slbase):
             self.relais = int(answer['on'])
             if (self.device_temperatur_configured > 0):
                 self.temp0 = str(answer['temp0'])
+                f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) + '_temp0', 'w')
+                f.write(str(self.temp0))
+                f.close()
             else:
                 self.temp0 = '300'
         except Exception as e1:
@@ -656,9 +668,9 @@ class Sbase(Sbase0):
         (self.newwatt, self.newwattk) = self.sepwatt(self.newwatt,
                                                      self.newwattk)
         # bei reiner Leistungsmessung relais nur nach Watt setzten
-        if (self.newwatt > 50) and (self.device_type == 'none'):
-            self.relais = 1           
-        # bei laufender Anlauferkennung deivce nicht aktiv setzten            
+        if (self.newwatt > 1) and (self.device_type == 'none'):
+            self.relais = 1
+        # bei laufender Anlauferkennung deivce nicht aktiv setzten
         if (self.relais == 1) and (self.devstatus != 20):
             self.relais = 1
         else:
