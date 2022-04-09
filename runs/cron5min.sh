@@ -313,14 +313,47 @@ else
 	openwbDebugLog "MAIN" 1 "legacy_run_server is already running"
 fi
 
+
+
 # check if our smarthome handler is running
-if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomehandler.py" > /dev/null
-then
-	openwbDebugLog "MAIN" 1 "smarthome handler is already running"
+
+smartmq=$(<$OPENWBBASEDIR/ramdisk/smartmq)
+
+if (( smartmq == 0 )); then
+
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomemq.py" > /dev/null
+	then
+		sudo kill $(ps aux |grep '[s]marthomemq.py' | awk '{print $2}')
+		openwbDebugLog "MAIN" 1 "smarthomemq handler stoped"
+	fi
+
+	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomehandler.py" > /dev/null
+	then
+		openwbDebugLog "MAIN" 1 "smarthome handler is already running"
+	else
+		openwbDebugLog "MAIN" 0 "smarthome handler not running! restarting process"
+		python3 $OPENWBBASEDIR/runs/smarthomehandler.py >> $RAMDISKDIR/smarthome.log 2>&1 &
+	fi
+
 else
-	openwbDebugLog "MAIN" 0 "smarthome handler not running! restarting process"
-	python3 $OPENWBBASEDIR/runs/smarthomehandler.py >> $RAMDISKDIR/smarthome.log 2>&1 &
+
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
+	then
+		sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
+		openwbDebugLog "MAIN" 1 "smarthomeahndler handler stoped"
+	fi
+
+	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/smarthomemq.py" > /dev/null
+	then
+		openwbDebugLog "MAIN" 1 "smarthomemq handler is already running"
+	else
+		openwbDebugLog "MAIN" 0 "smarthomemq handler not running! restarting process"
+		python3 $OPENWBBASEDIR/runs/smarthomemq.py >> $RAMDISKDIR/smarthome.log 2>&1 &
+	fi
+
 fi
+
+
 
 # if this is a remote controlled system check if our isss handler is running
 if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]]; then

@@ -157,10 +157,7 @@
 						<span class="fas fa-car" id="priorityEvBatteryIcon">&nbsp;</span>
 					</span>
 				</button>
-				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize hide" id="codeButton">
-					<span>Code</span>
-					<span class="fas fa-hashtag" >&nbsp;</span>
-				</button>
+				
 			</div>
 			<div id="time" class="col text-right">
 				&nbsp;
@@ -799,6 +796,17 @@
 								</div>
 							</div>
 						</span>
+						<hr>
+						<div class="row hide" id="codeEntry">
+							<div class="col justify-content-center text-grey">
+								<input type="text" class="form-control" id="codeInput" placeholder="RFID-Code (1-3 Ziffern)">
+							</div>
+						</div>	
+						<div class="row  mt-2">
+							<div class="col justify-content-end" style="text-align: end;">
+								<button type = "button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
+							</div>
+						</div>
 						<span id='70ModeBtn'>
 							<hr>
 
@@ -816,6 +824,7 @@
 								</div>
 							</div>
 						</span>
+					
 					</div>
 				</div> <!-- /modal body -->
 
@@ -824,33 +833,7 @@
 		</div>
 	</div>
 
-	<!-- Modal for code entry -->
-	<div class="modal fade" id="codeModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<!-- modal header -->
-				<div class="modal-header bg-info">
-					<h4 class="modal-title">Code-Eingabe</h4>
-				</div>
-
-				<!-- modal body -->
-				<div class="modal-body">
-					<div class="row justify-content-center">
-						<div class="col">
-							<input type="text" class="form-control" id="codeInput" placeholder="RFID-Code (1-3 Ziffern)">
-						</div>
-					</div>
-					<div class="row  mt-2">
-						<div class="col justify-content-end" style="text-align: end;">
-							<button type = "button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
-							</div>
-							</div>
-				</div>
-			</div>
-		</div>
-	</div>	
-
+	
 	<!-- some scripts -->
 	<script>
 
@@ -1020,10 +1003,7 @@
 				$("#chargeModeModal").modal("show");
 			});
 
-			$('#codeButton').click(function (event) {
-				$("#codeModal").modal("show");
-			});
-
+			
 			$('.chargeModeBtn').click(function (event) {
 				var chargeMode = $(this).attr("chargeMode")
 				publish(chargeMode, "openWB/set/ChargeMode");
@@ -1056,7 +1036,7 @@
 				let value = document.getElementById('codeInput').value
 				if(value.length >0) {
 					publish(value, 'openWB/set/system/SimulateRFID')
-					$('#codeModal').modal('hide')
+					$('#chargeModeModal').modal('hide')
 				}
 			}
 			$('#codeEnterButton').click(function () {
