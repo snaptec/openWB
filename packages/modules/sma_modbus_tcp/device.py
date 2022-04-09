@@ -7,6 +7,7 @@ from helpermodules.cli import run_using_positional_cli_args
 from modules.common.component_state import InverterState
 from modules.sma_modbus_tcp import inverter_modbus_tcp
 from modules.sma_modbus_tcp import inverter_webbox
+from modules.sma_modbus_tcp.inverter_version import SmaInverterVersion
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.store import get_inverter_value_store
@@ -49,6 +50,7 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"],
                 self.device_config["configuration"]["ip"],
                 component_config))
         else:
@@ -71,16 +73,17 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, num: int) -> None:
+def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: int, num: int) -> None:
     def create_webbox_inverter(address: str):
         config = inverter_webbox.get_default_config()
         config["id"] = num
-        return inverter_webbox.SmaWebboxInverter(address, config)
+        return inverter_webbox.SmaWebboxInverter(0, address, config)
 
     def create_modbus_inverter(address: str):
         config = inverter_modbus_tcp.get_default_config()
         config["id"] = num
-        return inverter_modbus_tcp.SmaModbusTcpInverter(address, config)
+        config["configuration"]["version"] = SmaInverterVersion(version)
+        return inverter_modbus_tcp.SmaModbusTcpInverter(0, address, config)
 
     inverter1 = (create_webbox_inverter if webbox else create_modbus_inverter)(ip1)
     inverters_additional = (create_modbus_inverter(address) for address in [ip2, ip3, ip4] if address != "none")
