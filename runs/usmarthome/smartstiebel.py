@@ -18,11 +18,7 @@ class Sstiebel(Sbase):
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
-            self.f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                           str(self.device_nummer), 'r')
-            self.answerj = json.load(self.f1)
-            self.f1.close()
-            self.answer = json.loads(self.answerj)
+            self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
             self.relais = int(self.answer['on'])

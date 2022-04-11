@@ -27,6 +27,12 @@ class Sbase0:
                            + '-: ' + str(msg) + '\n')
             file.close
 
+    def readret(self):
+        with open(self._basePath+'/ramdisk/smarthome_device_ret' +
+                  str(self.device_nummer), 'r') as f1:
+            answer = json.loads(json.load(f1))
+        return answer
+        
 
 class Slbase(Sbase0):
     def __init__(self):
@@ -149,6 +155,7 @@ class Slbase(Sbase0):
         print('__del__ Slbase executed ')
 
 
+
 class Slmqtt(Slbase):
     def __init__(self):
         # setting
@@ -200,12 +207,8 @@ class Slshelly(Slbase):
                         str(self.device_nummer), str(ip), '0']
         try:
             proc = subprocess.Popen(argumentList)
-            proc.communicate()
-            f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                      str(self.device_nummer), 'r')
-            answerj = json.load(f1)
-            f1.close()
-            answer = json.loads(answerj)
+            proc.communicate()    
+            answer = self.readret()    
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
@@ -359,11 +362,7 @@ class Slmystrom(Slbase):
         try:
             proc = subprocess.Popen(argumentList)
             proc.communicate()
-            f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                      str(self.device_nummer), 'r')
-            answerj = json.load(f1)
-            f1.close()
-            answer = json.loads(answerj)
+            answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
@@ -503,11 +502,15 @@ class Slsdm630(Slbase):
         try:
             proc = subprocess.Popen(argumentList)
             proc.communicate()
-            f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                      str(self.device_nummer), 'r')
-            answerj = json.load(f1)
-            f1.close()
-            answer = json.loads(answerj)
+            # with open(self._basePath+'/ramdisk/smarthome_device_ret' +
+            #          str(self.device_nummer), 'r') as f1:
+            #    answer = json.loads(json.load(f1))
+            answer = self.readret()
+            #f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
+            #          str(self.device_nummer), 'r')
+            #answerj = json.load(f1)
+            #f1.close()
+            #answer = json.loads(answerj)
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
