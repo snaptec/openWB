@@ -78,7 +78,7 @@ try:
     with open('/home/pi/ppbuchse', 'r') as value:
         pp = int(value.read())
         buchseconfigured = 1
-except FileNotFoundError:
+except (FileNotFoundError, ValueError):
     pp = 32
     buchseconfigured = 0
 # initialize LL meter
@@ -96,7 +96,7 @@ except FileNotFoundError:
 try:
     with open('ramdisk/lpdaemonloglevel', 'r') as value:
         loglevel = int(value.read())
-except FileNotFoundError:
+except (FileNotFoundError, ValueError):
     loglevel = 1
 
 lp1evsehres = 0
@@ -463,6 +463,7 @@ def getmeter():
                 with open('ramdisk/parentCPlp2', 'r') as ramdisk_file:
                     parentCPlp2 = str(int(re.sub(r'\D', '', ramdisk_file.read())))
         except Exception:
+            log_debug(2, "Failed to get infos about parent wb! Setting default values.")
             parentWB = str("0")
             parentCPlp1 = str("0")
             parentCPlp2 = str("0")
@@ -732,7 +733,6 @@ def getmeter():
         metercounter = metercounter + 1
         if metercounter > 5:
             log_debug(2, "Get meter Fehler:" + str(exc_type) + str(fname) + str(exc_tb.tb_lineno) + "Fehler:" + str(e))
-        pass
 
 
 # control of socket lock
@@ -786,16 +786,16 @@ def loadregelvars():
         if GPIO.input(19) is True:
             actorstat = 0
     except Exception:
+        log_debug(2, "Error getting actorstat! Using default '0'.")
         actorstat = 0
-        pass
     try:
         with open('ramdisk/llsoll', 'r') as value:
             if lp1evsehres == 0:
                 lp1solla = int(float(value.read()))
             else:
                 lp1solla = int(float(value.read())*100)
-    except FileNotFoundError:
-        pass
+    except (FileNotFoundError, ValueError):
+        log_debug(2, "Error reading configured current! Using default '0'.")
         lp1solla = 0
     try:
         with open('ramdisk/heartbeat', 'r') as value:
@@ -803,14 +803,14 @@ def loadregelvars():
         if heartbeat > 80:
             lp1solla = 0
             log_debug(2, "Heartbeat Fehler seit " + str(heartbeat) + "Sekunden keine Verbindung, Stoppe Ladung.")
-    except FileNotFoundError:
+    except (FileNotFoundError, ValueError):
+        log_debug(2, "Error reading heartbeat! Using default '0'.")
         heartbeat = 0
-        pass
     log_debug(0, "LL Soll: " + str(lp1solla) + " ActorStatus: " + str(actorstat))
     if buchseconfigured == 1:
-        log_debug(1, "in Buchse" + str(evsefailure)+"lp1plugstat:"+str(Values["lp1plugstat"]))
+        log_debug(1, "in Buchse " + str(evsefailure) + " lp1plugstat:" + str(Values["lp1plugstat"]))
         if actcooldowntimestamp > 50:
-            tst = actcooldowntimestamp+300
+            tst = actcooldowntimestamp + 300
             if tst < int(time.time()):
                 actcooldowntimestamp = 0
                 actcooldown = 0
@@ -843,8 +843,8 @@ def loadregelvars():
                     lp2solla = int(float(value.read()))
                 else:
                     lp2solla = int(float(value.read())*100)
-        except Exception:
-            pass
+        except (FileNotFoundError, ValueError):
+            log_debug(2, "Error reading configured current for cp 2! Using default '0'.")
             lp2solla = 0
         log_debug(0, "LL lp2 Soll: " + str(lp2solla))
         if Values["lp2evsell"] != lp2solla:
@@ -852,8 +852,8 @@ def loadregelvars():
     try:
         with open('ramdisk/u1p3pstat', 'r') as value:
             u1p3ptmpstat = int(value.read())
-    except Exception:
-        pass
+    except (FileNotFoundError, ValueError):
+        log_debug(2, "Error reading used phases! Using default '3'.")
         u1p3ptmpstat = 3
     try:
         u1p3pstat
@@ -885,8 +885,8 @@ def loadregelvars():
         try:
             with open('ramdisk/u1p3plp2stat', 'r') as value:
                 u1p3plp2tmpstat = int(value.read())
-        except Exception:
-            pass
+        except (FileNotFoundError, ValueError):
+            log_debug(2, "Error reading used phases for cp 2! Using default '3'.")
             u1p3plp2tmpstat = 3
         try:
             u1p3plp2stat
@@ -921,7 +921,7 @@ def writelp2evse(lla):
         client.write_registers(1000, lla, unit=2)
         log_debug(1, "Write to EVSE lp2 " + str(lla))
     except Exception:
-        log_debug(2, "FAILEDWrite to EVSE lp2 " + str(lla))
+        log_debug(2, "FAILED Write to EVSE lp2 " + str(lla))
 
 
 def writelp1evse(lla):
