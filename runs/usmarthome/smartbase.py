@@ -27,6 +27,12 @@ class Sbase0:
                            + '-: ' + str(msg) + '\n')
             file.close
 
+    def readret(self):
+        with open(self._basePath+'/ramdisk/smarthome_device_ret' +
+                  str(self.device_nummer), 'r') as f1:
+            answer = json.loads(json.load(f1))
+        return answer
+        
 
 class Slbase(Sbase0):
     def __init__(self):
@@ -149,6 +155,7 @@ class Slbase(Sbase0):
         print('__del__ Slbase executed ')
 
 
+
 class Slmqtt(Slbase):
     def __init__(self):
         # setting
@@ -200,12 +207,8 @@ class Slshelly(Slbase):
                         str(self.device_nummer), str(ip), '0']
         try:
             proc = subprocess.Popen(argumentList)
-            proc.communicate()
-            f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                      str(self.device_nummer), 'r')
-            answerj = json.load(f1)
-            f1.close()
-            answer = json.loads(answerj)
+            proc.communicate()    
+            answer = self.readret()    
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
@@ -359,11 +362,7 @@ class Slmystrom(Slbase):
         try:
             proc = subprocess.Popen(argumentList)
             proc.communicate()
-            f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                      str(self.device_nummer), 'r')
-            answerj = json.load(f1)
-            f1.close()
-            answer = json.loads(answerj)
+            answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
@@ -503,11 +502,15 @@ class Slsdm630(Slbase):
         try:
             proc = subprocess.Popen(argumentList)
             proc.communicate()
-            f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                      str(self.device_nummer), 'r')
-            answerj = json.load(f1)
-            f1.close()
-            answer = json.loads(answerj)
+            # with open(self._basePath+'/ramdisk/smarthome_device_ret' +
+            #          str(self.device_nummer), 'r') as f1:
+            #    answer = json.loads(json.load(f1))
+            answer = self.readret()
+            #f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
+            #          str(self.device_nummer), 'r')
+            #answerj = json.load(f1)
+            #f1.close()
+            #answer = json.loads(answerj)
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
@@ -612,10 +615,8 @@ class Sbase(Sbase0):
         self.runningtime = 0
         self.oncountnor = '0'
         self.oncntstandby = '0'
-
         self._wh = 0
         self._wpos = 0
-        # DeviceValues.update( {str(nummer) + "wh" : round(wattposkh, 2)})
         self._deviceconfigured = '1'
         self._deviceconfiguredold = '9'
         # not none !
@@ -697,7 +698,7 @@ class Sbase(Sbase0):
                 self.logClass(2,
                               "(" + str(self.device_nummer) + ") von Manuell" +
                               " auf Automatisch gestellt oder startup," +
-                              " Uebergangsfrist laueft noch " + str(manverz) +
+                              " Übergangsfrist laueft noch " + str(manverz) +
                               " > " + str(timesince))
                 self.abschalt = 0
         self._oldwatt = self.newwatt
@@ -896,7 +897,7 @@ class Sbase(Sbase0):
         if (self._device_differentmeasurement == 1):
             if (self._oldmeasuretype1 == self._device_measuretype):
                 self.logClass(2, "(" + str(self.device_nummer) +
-                              ") Separate Leistungsmessung. Nur Parameter" +
+                              ") Separate Messung. Nur Parameter" +
                               " update " + self._device_measuretype)
                 self._mydevicemeasure.updatepar(self._smart_param)
             else:
@@ -904,7 +905,7 @@ class Sbase(Sbase0):
                     pass
                 else:
                     self.logClass(2, "(" + str(self.device_nummer) +
-                                  ") Separate Leistungsmessung. Altes Measure"
+                                  ") Separate Messung. Altes Measure"
                                   + "device gelöscht " + self._oldmeasuretype1)
                     del self._mydevicemeasure
                 if (self._device_measuretype == 'sdm630'):
@@ -938,12 +939,12 @@ class Sbase(Sbase0):
                 self._mydevicemeasure.updatepar(self._smart_param)
                 self._oldmeasuretype1 = self._device_measuretype
                 self.logClass(2, "(" + str(self.device_nummer) +
-                              ") Separate Leistungsmessung. Neues Measure" +
+                              ") Separate Messung. Neues Measure" +
                               "device erzeugt " + self._device_measuretype)
         if ((self._device_differentmeasurement == 0) and
            (self._oldmeasuretype1 != 'empty')):
             self.logClass(2, "(" + str(self.device_nummer) +
-                          ") Separate Leistungsmessung ausgeschaltet"
+                          ") Separate Messung ausgeschaltet."
                           " Altes Measure" +
                           "device gelöscht " + self._oldmeasuretype1)
             del self._mydevicemeasure
@@ -968,7 +969,7 @@ class Sbase(Sbase0):
             else:
                 self.oncntstandby = str(int(self.oncntstandby) + 1)
             self.logClass(2, "(" + str(self.device_nummer) +
-                          ") angeschaltet. Ueberschussberechnung (1 = mit " +
+                          ") angeschaltet. Überschussberechnung (1 = mit " +
                           " Speicher, 2 = mit Offset) " +
                           str(self.ueberschussberechnung))
             if updatecnt == 1:
