@@ -5,6 +5,7 @@ To recreate:
 1. get the dart sdk for ARMv7 https://dart.dev/get-dart/archive
 2. clone https://github.com/Tobiaswk/dartnissanconnect
 3. copy nissanconnect_soc.dart to bin directory
-4. compile with "dart --disable-analytics compile exe bin/nissanconnect_soc.dart"
+4. run "dart pub get" / "dart pub upgrade"
+5. compile with "dart --disable-analytics compile exe bin/nissanconnect_soc.dart"
 
-last done with version 2.13.0 of dart sdk
+last done with version 2.16.2 of dart sdk
