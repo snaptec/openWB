@@ -62,7 +62,7 @@ body > .container {
     width: 100%;
     height: 30px; /* fixed height of footer */
     line-height: 30px; /* vertically center the text there */
-    z-index: 1030; /* same as menue */
+    z-index: 1030; /* same as menu */
 }
 
 h1 {

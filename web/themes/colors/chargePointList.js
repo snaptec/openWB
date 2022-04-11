@@ -57,7 +57,7 @@ class ChargePointList {
     rows.selectAll("cells")
       .data(row => [
         formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A",
-        formatWattH(row.energy * 1000) + " / " + Math.round(row.energy / row.energyPer100km * 1000) / 10 + " km"
+        formatWattH(row.energy * 1000) + " / " + Math.round(row.energy / row.energyPer100km * 100)  + " km"
 
       ]).enter()
       .append("td")
@@ -66,12 +66,14 @@ class ChargePointList {
       .text(data => data);
     rows.append((row, i) => this.cpSocButtonCell(row, i));
 
-    if (wbdata.isPriceChartEnabled) {
+    if (wbdata.isEtEnabled) {
       this.footer.append('p')
         .attr("class", "pt-3 pb-0 m-0")
         .style("text-align", "center")
-        .text("Aktueller Strompreis: " + wbdata.currentPowerPrice + " Cent/kWh");
+        .text("Aktueller Strompreis: " + wbdata.etPrice + " ct/kWh");
     }
+
+    d3.select ("div#chargePointConfigWidget").classed ("hide", (wbdata.chargeMode != "0" && wbdata.chargeMode != "1"))
   }
 
   updateValues() {

@@ -1,6 +1,17 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="PV"
+DMOD="MAIN"
 
-python /var/www/html/openWB/modules/wr2_solax/solax.py $pv2ip
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
+fi
 
-pvwatt=$(</var/www/html/openWB/ramdisk/pv2watt)
-echo $pvwatt
+openwbDebugLog ${DMOD} 2 "PV2 IP: ${pv2ip}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "inverter" "${pv2ip}" "2">>"$MYLOGFILE" 2>&1
+
+cat "$RAMDISKDIR/pv2watt"

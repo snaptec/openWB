@@ -1,15 +1,16 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="BAT"
+DMOD="MAIN"
 
-if [[ $pvwattmodul != "none" ]]; then
-	pvwattold=$(</var/www/html/openWB/ramdisk/pvwatt)
-fi
-if [[ $e3dc2ip != "none" ]]; then
-	sudo python /var/www/html/openWB/modules/speicher_e3dc/e3dcfarm.py $e3dcip $e3dc2ip 
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	sudo python /var/www/html/openWB/modules/speicher_e3dc/e3dc.py $e3dcip $e3dcextprod
+	MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
-if [[ $pvwattmodul != "none" ]]; then
-	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
-	newpvwatt=$(( pvwattold + pvwatt ))
-	echo $newpvwatt > /var/www/html/openWB/ramdisk/pvwatt
-fi
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_e3dc.e3dc" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" >>"${MYLOGFILE}" 2>&1
+ret=$?
+
+openwbDebugLog "${DMOD}" 2 "BAT RET: ${ret}"

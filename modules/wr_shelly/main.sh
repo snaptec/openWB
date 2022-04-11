@@ -1,14 +1,23 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+DMOD="PV"
+#DMOD="MAIN"
+Debug=$debug
 
-pv_out=$(curl --connect-timeout 3 -s $pv1_ipa/status )
-pv_watt=$(echo $pv_out |jq '.meters[0].power' | sed 's/\..*$//')
-# if (( $pv_watt > 0 )); then
-# 	pv_watt=$(echo "$pv_watt*-1" |bc)
-# fi
-pv_watt=$(echo "$pv_watt * -1" | bc)
-re='^-?[0-9]+$'
-if ! [[ $pv_watt =~ $re ]] ; then
-	pv_watt="0"
+#For Development only
+#Debug=1
+
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
-echo $pv_watt > /var/www/html/openWB/ramdisk/pvwatt
-echo $pv_watt
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_shelly.shellywr" "${pv1_ipa}" pvwatt >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+cat "$OPENWBBASEDIR/ramdisk/pvwatt"

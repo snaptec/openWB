@@ -16,7 +16,7 @@ initRamdisk(){
 	echo "**** REBOOT ****" >> $RamdiskPath/nurpv.log
 	echo "**** REBOOT ****" >> $RamdiskPath/cleanup.log
 	echo "**** REBOOT ****" >> $RamdiskPath/smarthome.log
-
+	echo "**** REBOOT ****" >> $RamdiskPath/isss.log
 
 	echo $bootmodus > $RamdiskPath/lademodus
 
@@ -446,7 +446,6 @@ initRamdisk(){
 	do
 		for f in \
 			"pluggedladunglp${i}startkwh:openWB/lp/${i}/plugStartkWh:0" \
-			"manual_soc_lp${i}:openWB/lp/${i}/manualSoc:0" \
 			"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt:0" \
 			"lp${i}phasen::0" \
 			"lp${i}enabled::1" \
@@ -609,6 +608,13 @@ initRamdisk(){
 		importtemp="0"
 	fi
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
+
+	ra='^-?[0-9]+$'
+	smartmqtemp=$(timeout 1 mosquitto_sub -t openWB/config/get/SmartHome/smartmq)
+	if ! [[ $smartmqtemp =~ $ra ]] ; then
+		smartmqtemp="0"
+	fi
+	echo $smartmqtemp > $RamdiskPath/smartmq
 
 	sudo chmod 777 $RamdiskPath/*
 

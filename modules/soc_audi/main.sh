@@ -71,7 +71,7 @@ if (( soctimer < 180 )); then
 else
 	echo 0 > $soctimerfile
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
-	answer=$($MODULEDIR/../evcc-soc audi --user "$username" --password "$passsword" --vin "$vin" 2>&1)
+	answer=$($MODULEDIR/../evcc-soc audi --user "$username" --password "$password" --vin "$vin" 2>&1)
 	if [ $? -eq 0 ]; then
  		# we got a valid answer
  		echo $answer > $socfile

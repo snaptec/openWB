@@ -23,7 +23,7 @@ openwbDebugLog ${DMOD} 2 "PV URL : ${wrjsonurl}"
 openwbDebugLog ${DMOD} 2 "PV Watt: ${wrjsonwatt}"
 openwbDebugLog ${DMOD} 2 "PV kWh : ${wrjsonkwh}"
 
-python3 $OPENWBBASEDIR/modules/wr_json/read_json.py "${wrjsonurl}" "${wrjsonwatt}" "${wrjsonkwh}" "1" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.json.device" "inverter" "${wrjsonurl}" "${wrjsonwatt}" "${wrjsonkwh}" "1" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

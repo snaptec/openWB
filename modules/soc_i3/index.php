@@ -9,7 +9,9 @@ class Battery_API {
 	private $auth_api = 'https://customer.bmwgroup.com/gcdm/oauth/authenticate';
 	// private $vehicle_api = 'https://www.bmw-connecteddrive.de/api/vehicle';
 	// quick fix: .de url broken after 11.03.2021
-	private $vehicle_api = 'https://www.bmw-connecteddrive.com/api/vehicle';
+	// private $vehicle_api = 'https://www.bmw-connecteddrive.com/api/vehicle';
+	// openWB forum hint (old API still available): https://openwb.de/forum/viewtopic.php?p=52754#p52754
+	private $vehicle_api = 'https://b2vapi.bmwgroup.com/api/vehicle';
 
 	private $auth;
 	private $token;
@@ -37,24 +39,73 @@ class Battery_API {
 
 
 	function cache_remote_token( $token_data ) {
+		$cuser = $this->auth["username"];
+		if (file_exists($this->token_file))
+		{
+			$content = json_decode( @file_get_contents(
+				$this->token_file
+			));
+		}
+		else
+		{
+			$content = (object)array();
+		}
+
+		$content->$cuser = $token_data;
 		file_put_contents(
 			$this->token_file,
-			json_encode( $token_data )
+			json_encode( $content )
 		);
 	}
 
 
 	function get_cached_token() {
-		return json_decode(
-			@file_get_contents(
-				$this->token_file
-			)
-		);
+
+		try
+		{
+			$cuser = $this->auth["username"];
+			$json_content = json_decode(
+				@file_get_contents(
+					$this->token_file
+				)
+			);
+
+			//echo json_encode($json_content);
+			if(!empty($json_content->token)) {
+				unset($json_content->token);
+			}
+			if(!empty($json_content->expires)) {
+				unset($json_content->expires);
+			}
+
+			//echo json_encode($json_content);
+			file_put_contents(
+				$this->token_file,
+				json_encode( $json_content )
+			);
+
+			return json_decode(
+				@file_get_contents(
+					$this->token_file
+				)
+			)->$cuser;
+		}
+		catch(Throwable $e)
+		{
+			// Something must be really defective in this file but we don't know what exactly.
+			// So we delete the file and have it re-created from scratch (because we return null).
+			if (file_exists($this->token_file))
+			{
+				unlink ($this->token_file);
+			}
+
+			return NULL;
+		}
 	}
 
 
 	function get_token() {
-		// Get cached token
+		$cuser = $this->auth["username"];
 		if ( $cached_token_data = $this->get_cached_token() ) {
 			if ( $cached_token_data->expires > time() ) {
 				$token = $cached_token_data->token;
@@ -86,7 +137,9 @@ class Battery_API {
 		curl_setopt( $ch, CURLOPT_COOKIESESSION, true );
 		curl_setopt( $ch, CURLOPT_POST, true );
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/x-www-form-urlencoded' ) );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=dbf0a542-ebd1-4ff0-a9a7-55172fbfce35&redirect_uri=https%3A%2F%2Fwww.bmw-connecteddrive.com%2Fapp%2Fdefault%2Fstatic%2Fexternal-dispatch.html&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
+		//curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=dbf0a542-ebd1-4ff0-a9a7-55172fbfce35&redirect_uri=https%3A%2F%2Fwww.bmw-connecteddrive.com%2Fapp%2Fdefault%2Fstatic%2Fexternal-dispatch.html&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
+		//Update of ClientID and Redirect URI
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, 'username=' . urlencode( $this->auth["username"]) . '&password=' . urlencode( $this->auth["password"]) . '&client_id=31c357a0-7a1d-4590-aa99-33b97244d048&redirect_uri=com.bmw.connected%3A%2F%2Foauth&response_type=token&scope=authenticate_user%20fupo&state=eyJtYXJrZXQiOiJkZSIsImxhbmd1YWdlIjoiZGUiLCJkZXN0aW5hdGlvbiI6ImxhbmRpbmdQYWdlIn0&locale=DE-de' );
 
 		// Exec curl request
 		$response = curl_exec( $ch );
@@ -146,10 +199,7 @@ class Battery_API {
 		$response_2 = curl_multi_getcontent( $ch_2 );
 
 		// Decode response
-		$json = (object)array_merge(
-			json_decode( $response_1, true )['attributesMap'],
-			json_decode( $response_2, true )
-		);
+		$json = (object)json_decode( $response_1, true )['attributesMap'];
 
 		// Exit if error
 		if ( json_last_error() ) {
@@ -170,16 +220,20 @@ class Battery_API {
 			$updateTimestamp -= 3600;
 		}
 
+		//Some names of attributes needed updates
 		$updateTime = date( 'd.m.Y H:i', $updateTimestamp );
 		$electricRange = intval( $attributes->beRemainingRangeElectricKm );
 		$chargingLevel = intval( $attributes->chargingLevelHv );
 		$chargingActive = intval( $attributes->charging_status === 'CHARGINGACTIVE' );
 		$chargingError = intval( $attributes->charging_status === 'CHARGINGERROR' );
-		//$chargingTimeRemaining = intval( $attributes->chargingTimeRemaining );
+
+		// following property seems only present in BMW API if the EV is actually charging
+		$chargingTimeRemaining = isset($attributes->remaining_charging_time_minutes) ? intval( $attributes->remaining_charging_time_minutes ) : 0;
 		//$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 
-		$stateOfCharge = number_format( round( $attributes->soc, 2 ), 2, ',', '.');
-		$stateOfChargeMax = number_format( round( $attributes->socmax, 2 ), 2, ',', '.');
+		$stateOfCharge = number_format( round( $attributes->beEnergyLevelHv, 2 ), 2, ',', '.');
+		//SoCmax is no longer available. Filling with dummy.
+		$stateOfChargeMax = number_format( round( $attributes->beEnergyLevelHv, 2 ), 2, ',', '.');
 
 		// Send Header
 		//header('Access-Control-Allow-Origin: https://' . $_SERVER['SERVER_NAME'] );
@@ -194,7 +248,7 @@ class Battery_API {
 					'chargingLevel' => $chargingLevel,
 					'chargingActive' => $chargingActive,
 					'chargingError' => $chargingError,
-					//'chargingTimeRemaining' => $chargingTimeRemaining,
+					'chargingTimeRemaining' => $chargingTimeRemaining,
 					'stateOfCharge' => $stateOfCharge,
 					'stateOfChargeMax' => $stateOfChargeMax
 				)

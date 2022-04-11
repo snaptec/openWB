@@ -1,41 +1,23 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULE="EVU"
-LOGFILE="$RAMDISKDIR/openWB.log"
-Debug=$debug
-BEZUGFILE="$RAMDISKDIR/wattbezug"
+#DMOD="EVU"
+DMOD="MAIN"
 
-DebugLog(){
-	if (( Debug > 0 )); then
-		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
-		echo "$timestamp: ${MODULE}: $@" >> $LOGFILE
-	fi
-}
-
-if (( $solarwattmethod == 0 )); then 	#Abruf über Energy Manager
-	sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip}/rest/kiwigrid/wizard/devices")
-
-	if ((${#sresponse}  < 10)); then
-		bezugwatt=$(<$BEZUGFILE)
-	else
-		bezugw=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerConsumedFromGrid.value != null) | .tagValues.PowerConsumedFromGrid.value' | sed 's/\..*$//')
-		einspeisungw=$(echo $sresponse | jq '.result.items | .[] | select(.tagValues.PowerOut.value != null) | .tagValues.PowerOut.value' | head -n 1 | sed 's/\..*$//')
-		bezugwatt=$(echo "scale=0; $bezugw - $einspeisungw /1" |bc)
-	fi
-fi
-if (( $solarwattmethod == 1 )); then 	#Abruf über Gateway
-	sresponse=$(curl --connect-timeout 3 -s "http://${speicher1_ip2}:8080/")
-
-	if ((${#sresponse}  < 10)); then
-		bezugwatt=$(<$BEZUGFILE)
-	else
-		bezugw=$(echo $sresponse | jq '.FData.PGrid' | sed 's/\..*$//')
-		bezugwatt=$(echo "scale=0; $bezugw / 1" | bc)
-	fi
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="$RAMDISKDIR/openWB.log"
+else
+	MYLOGFILE="$RAMDISKDIR/bezug_smartme.log"
 fi
 
-DebugLog "Netzbezug: $bezugwatt W"
-echo $bezugwatt > $BEZUGFILE
-echo $bezugwatt
+openwbDebugLog ${DMOD} 2 "Bezug Solarwatt Methode: ${solarwattmethod}"
+openwbDebugLog ${DMOD} 2 "Bezug Solarwatt IP1 : ${speicher1_ip}"
+openwbDebugLog ${DMOD} 2 "Bezug Solarwatt IP2: ${speicher1_ip2}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_solarwatt.solarwatt" "${solarwattmethod}" "${speicher1_ip}" "${speicher1_ip2}" >>"$MYLOGFILE" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+cat "${RAMDISKDIR}/wattbezug"

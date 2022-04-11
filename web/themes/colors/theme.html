@@ -77,10 +77,6 @@
 		#thegraph>div {
 			height: 350px;
 		}
-
-		#electricityPriceChartCanvasDiv {
-			height: 150px;
-		}
 	</style>
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.6.0.min.js"></script>
@@ -114,6 +110,8 @@
 	<script src="themes/colors/chargePointList.js"></script>
 	<script src="themes/colors/smartHomeList.js"></script>
 	<script src="themes/colors/batteryList.js"></script>
+	<script src="themes/colors/pricechart.js"></script>
+
 
 </head>
 
@@ -159,6 +157,7 @@
 						<span class="fas fa-car" id="priorityEvBatteryIcon">&nbsp;</span>
 					</span>
 				</button>
+				
 			</div>
 			<div id="time" class="col text-right">
 				&nbsp;
@@ -175,18 +174,21 @@
 						<div class="col-4 px-0" style="text-align: right;">
 							<div class="dropdown">
 								<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-									<span	class="fa fa-bars fa-sm"></span>
+									<span class="fa fa-bars fa-sm"></span>
 								</button>
 								<div class="dropdown-menu dropdown-menu-right colormenu">
-									<a class="dropdown-item" href="#" onclick="switchTheme()"><span class="fa fa-adjust px-0"></span> Hintergrund ändern</a>
-									<a class="dropdown-item" href="#" onclick="toggleGrid()"><span
-										class="fa fa-th px-0"></span> Graph: Raster an/aus</a>
+									<a class="dropdown-item" href="#" onclick="switchTheme()"><span class="fa fa-adjust px-0"></span>
+										Hintergrund ändern</a>
+									<a class="dropdown-item" href="#" onclick="toggleGrid()"><span class="fa fa-th px-0"></span> Graph:
+										Raster an/aus</a>
 									<a class="dropdown-item" href="#" onclick="switchDisplay()"><span
-										class="fa fa-chart-area px-0"></span> Fixe Bögen an/aus</a>
+											class="fa fa-chart-area px-0"></span> Fixe Bögen an/aus</a>
 									<a class="dropdown-item hide" id="meterResetButton" href="#" onclick="resetButtonClicked()"><span
-										class="fa fa-undo"></span> Bögen reset</a>
-									<a class="dropdown-item" href="#" onclick="switchDecimalPlaces()"><span class="fa fa-sliders-h px-0"></span> Dezimalstellen kW & kWh ändern</a>
-									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
+											class="fa fa-undo"></span> Bögen reset</a>
+									<a class="dropdown-item" href="#" onclick="switchDecimalPlaces()"><span
+											class="fa fa-sliders-h px-0"></span> Dezimalstellen kW & kWh ändern</a>
+									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span
+											class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
 								</div>
 							</div>
 
@@ -223,7 +225,7 @@
 						</div>
 						<div class="col-4 px-0" style="text-align: right;">
 							<button class="btn btn-outline-secondary btn-sm " id="calendarButton"><span
-								class="fa fa-calendar-alt px-0"></span></button>
+									class="fa fa-calendar-alt px-0"></span></button>
 							<button class="btn btn-outline-secondary btn-sm " id="energyLeftButton"><span
 									class="fa fa-chevron-circle-left px-0"></span></button>
 							<button class="btn btn-outline-secondary btn-sm " id="energyRightButton"><span
@@ -234,7 +236,8 @@
 				<figure id="energymeter" class="wb-subwidget mb-0"></figure>
 			</div>
 		</div>
-		<div class="row py-0">
+
+		<div class="row py-0 px-0">
 			<!-- Ladepunkte (chargePointList) -->
 			<div class="wb-widget col-md-6 p-2 m-1">
 				<h3 class="mt-0">Ladepunkte</h3>
@@ -244,9 +247,67 @@
 					</div>
 					<div id="socSelector"></div>
 					<div id="chargePointTable"></div>
+				</div>
+			</div>
+
+			<!-- Speicher (batteryList) -->
+			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
+				<h3>Speicher</h3>
+				<div class="wb-subwidget pb-3 ">
+					<div id="batteryStatus"></div>
+				</div>
+			</div>
+
+			<!-- Smart Home (smartHomeList) -->
+			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
+				<h3>Geräte</h3>
+				<div class="wb-subwidget pb-3 ">
+					<div id="smartHomeTable"></div>
+				</div>
+			</div>
+
+			<!-- Preisbasiertes Laden -->
+			<div class="wb-widget col-md-4 p-2 m-1 priceConfiguration" id="priceConfigWidget">
+				<h3 class="mt-0">Preisbasiertes Laden</h3>
+				<div class="pb-3 wb-subwidget">
+					<div class="row p-0 m-0 ">
+						<div class="col-12 pricechartColumn p-0 m-0">
+							<figure id="priceChart"></figure>
+						</div>
+					</div>
+					<div class="container-fluid m-0 p-0">
+
+
+						<div class="row vaRow m-0 p-0">
+							<div class="col-2 m-0 p-0">
+								<button type="button" class="btn btn-secondary priceLess"><i
+										class="far fa-minus-square"></i></button>
+							</div>
+							<div class="col-8">
+								<input type="range" class="form-control-range maxPriceInput" id="maxPrice" min="-25" max="95" step="0.1"
+									value="0" data-initialized="0">
+							</div>
+							<div class="col-2 m-0 p-0 text-right">
+								<button type="button" class="btn btn-secondary priceMore"><i
+										class="far fa-plus-square"></i></button>
+							</div>
+						</div>
+						<div class="form-row vaRow p-0 m-0">
+							<div class="col m-0 p-0 tablecell maxPrice">
+								<label for="maxPrice" class=" col-form-label p-0 m-0 ">Max. Preis: </label>
+								<label for="maxPrice" class=" labelMaxPrice col-form-label p-0 m-0" data-suffix="ct"></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Ladepunkt Konfig -->
+			<div class="wb-widget col-md-4 p-2 m-1" id="chargePointConfigWidget">
+				<h3 class="mt-0">Einstellungen Ladepunkte</h3>
+				<div class="pb-3 wb-subwidget">
 					<!-- depending on charge mode show options -->
 					<form id="minundpvladenEinstellungen" class="hide">
-						<hr class="border-secondary">
 						<div class="row justify-content-center">
 							<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
 						</div>
@@ -262,35 +323,6 @@
 					</form>
 
 					<form id="sofortladenEinstellungen" class="hide">
-						<div class="hide" id="priceBasedCharging">
-							<hr class="border-secondary">
-							<div class="row justify-content-center">
-								<h4 class=" text-center">Preisbasiertes Laden</h4>
-							</div>
-							<div class="row justify-content-center my-2">
-								<div id="electricityPriceChartCanvasDiv" class="col text-center">
-									<canvas id="electricityPriceChartCanvas"></canvas>
-								</div>
-							</div>
-							<div class="form-row form-group mb-1 vaRow regularTextSize">
-								<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
-								<div class="col">
-									<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="95"
-										step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
-								</div>
-								<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="ct/kWh"></label>
-							</div>
-							<div class="row justify-content-center regularTextSize vaRow">
-								<button type="button" class="btn btn-secondary mr-3 priceLess"><i
-										class="far fa-minus-square"></i></button>
-								Preis
-								<button type="button" class="btn btn-secondary ml-3 priceMore"><i
-										class="far fa-plus-square"></i></button>
-							</div>
-						</div>
-						<!--/ priceBasedCharging -->
-
-						<hr class="border-secondary">
 						<div class="row justify-content-center">
 							<h4 class="text-center">Sofortladen Stromstärke</h4>
 						</div>
@@ -361,7 +393,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="1">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -411,7 +442,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="2">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -461,7 +491,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="3">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -500,7 +529,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="4">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -539,7 +567,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="5">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -578,7 +605,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="6">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -617,7 +643,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="7">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -656,7 +681,6 @@
 						</div>
 
 						<div class="chargeLimitation" data-lp="8">
-							<hr class="border-secondary">
 							<div class="row justify-content-center">
 								<h4 class="text-center">Lademengenbegrenzung <span class="nameLp"></span></h4>
 							</div>
@@ -695,21 +719,6 @@
 						</div>
 
 					</form>
-					<br>
-				</div>
-			</div>
-			<!-- Speicher (batteryList) -->
-			<div class="wb-widget col-md p-2 m-1" id="batteryWidget">
-				<h3>Speicher</h3>
-				<div class="wb-subwidget pb-3 ">
-					<div id="batteryStatus"></div>
-				</div>
-
-			</div><!-- Smart Home (smartHomeList) -->
-			<div class="wb-widget col-md p-2 m-1" id="smartHomeWidget">
-				<h3>Geräte</h3>
-				<div class="wb-subwidget pb-3 ">
-					<div id="smartHomeTable"></div>
 				</div>
 			</div>
 
@@ -789,7 +798,6 @@
 						</span>
 						<span id='70ModeBtn'>
 							<hr>
-
 							<div class="row">
 								<div class="col text-center text-grey">
 									70% beachten im Lademodus PV-Laden:
@@ -804,6 +812,20 @@
 								</div>
 							</div>
 						</span>
+						<!-- RFID Code entry -->
+						<span id="codeEntry" class="hide">
+							<hr>
+							<div class="row" >
+								<div class="col justify-content-center text-grey">
+									<input type="text" class="form-control" id="codeInput" placeholder="RFID-Code (1-3 Ziffern)">
+								</div>
+							</div>	
+							<div class="row  mt-2">
+								<div class="col justify-content-end" style="text-align: end;">
+									<button type = "button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
+								</div>
+							</div>
+						</span>
 					</div>
 				</div> <!-- /modal body -->
 
@@ -812,10 +834,11 @@
 		</div>
 	</div>
 
+	
 	<!-- some scripts -->
 	<script>
 
-		// load navbar, be carefull: it loads asynchonously
+		// load navbar, be careful: it loads asynchronous
 		$.get(
 			{ url: "themes/navbar.html", cache: false },
 			function (data) {
@@ -852,8 +875,8 @@
 				countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
 				var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
 				var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
-				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
-				if (timeBetweenTwoMesagges > 3000) {
+				var timeBetweenTwoMessages = Date.now() - timeOfLastMqttMessage;
+				if (timeBetweenTwoMessages > 3000) {
 					// latest after 3 sec without new messages
 					percentageReceived = 100;
 					// debug output
@@ -878,7 +901,7 @@
 		}
 
 		var delayUserInput = (function () {
-			// sets a timeout on call and resets timout if called again for same id before timeout fires
+			// sets a timeout on call and resets timeout if called again for same id before timeout fires
 			var timeoutHandles = {};
 			return function (id, callback, ms) {
 				if (timeoutHandles[id]) {
@@ -903,10 +926,6 @@
 				'themes/colors/helperFunctions.js?ver=20200526-c',
 				// functions for processing messages
 				'themes/colors/processAllMqttMsg.js?ver=20210213',
-				// respective Chart.js definition live
-				// 'themes/dark/livechart.js?ver=20200530-b',
-				// respective Chart.js definition
-				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
 				'themes/colors/setupMqttServices.js?ver=20210129',
 			];
@@ -924,6 +943,7 @@
 			chargePointList.init();
 			smartHomeList.init();
 			batteryList.init();
+			priceChart.init();
 
 			$('.enableLp').click(function (event) {
 				// send mqtt set to enable/disable charge point after click
@@ -984,6 +1004,7 @@
 				$("#chargeModeModal").modal("show");
 			});
 
+			
 			$('.chargeModeBtn').click(function (event) {
 				var chargeMode = $(this).attr("chargeMode")
 				publish(chargeMode, "openWB/set/ChargeMode");
@@ -1011,6 +1032,22 @@
 				var topic = getTopicToSendTo($(this).attr('id'));
 				publish("1", topic);
 			});
+
+			function sendCode() {
+				let value = document.getElementById('codeInput').value
+				if(value.length >0) {
+					publish(value, 'openWB/set/system/SimulateRFID')
+					$('#chargeModeModal').modal('hide')
+				}
+			}
+			$('#codeEnterButton').click(function () {
+				sendCode()
+			})
+
+			$('#codeInput').change (function() {
+				sendCode()
+			})
+
 
 			$('.sofortladenLadezielSelektor').change(function (event) {
 				// switches the visibility of the settings-divs according to dropdown selection
@@ -1048,28 +1085,6 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
-			$('.priceMore, .priceLess').click(function (event) {
-				// change Slider upon click on buttons
-				event.preventDefault();
-				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
-				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
-				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
-				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
-				if ($(this).hasClass('priceLess')) {
-					currentMaxPrice -= step;
-				} else {
-					currentMaxPrice += step;
-				}
-				// prevent timeout of delayUserInput when clicking "beyond" range
-				if (currentMaxPrice < rangeMin) {
-					currentMaxPrice = rangeMin;
-				} else if (currentMaxPrice > rangeMax) {
-					currentMaxPrice = rangeMax;
-				}
-				$('#MaxPriceForCharging').val(currentMaxPrice);
-				$('#MaxPriceForCharging').trigger('input');
-			});
-
 			$('.rangeInput').on('input', function () {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
@@ -1077,12 +1092,7 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
-				if ($.escapeSelector(elementId) == 'MaxPriceForCharging') {
-					// marks times in the pricechart where the price is low enough so charging would be allowed
-					var priceAnnotations = createPriceAnnotations();
-					electricityPricechart.options.annotation.annotations = priceAnnotations;
-					electricityPricechart.update();
-				}
+
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt
@@ -1092,7 +1102,7 @@
 					publish(value, topic);
 					var label = $('label[for="' + id + '"].valueLabel');
 					label.removeClass('text-danger');
-					// if rangeInput is for chargeLimitation, recalc progress
+					// if rangeInput is for chargeLimitation, recalculate progress
 					if (id.includes('/energyToCharge')) {
 						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
 						var element = parent.find('.progress-bar');  // now get parents progressbar
@@ -1121,10 +1131,10 @@
 			}
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
-					// once page is unhidden... reload graph completety
+					// once page is unhidden... reload graph completely
 					if (wbdata.graphMode == 'live') {
 						powerGraph.deactivateDay();
-							powerGraph.activateLive();
+						powerGraph.activateLive();
 					} else {
 						powerGraph.deactivateLive();
 						powerGraph.activateDay();

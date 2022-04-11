@@ -29,6 +29,11 @@ class WbData {
 			"month": this.graphDate.getMonth(),
 			"year": this.graphDate.getFullYear()
 		}
+		this.etPrice = 0;
+		this.etMaxPrice = 0;
+		this.etPriceList = "";
+		this.isEtEnabled = false;
+		this.rfidConfigured = false;
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
@@ -66,6 +71,8 @@ class WbData {
 		this.displayMode = "gray";
 		this.usageStackOrder = 0;
 		this.prefs = {};
+		this.chargePointToConfig = 0;
+		this.minCurrent = 6;
 	};
 
 	init() {
@@ -120,11 +127,25 @@ class WbData {
 			.on("click", switchToEnergyView);
 		d3.select("button#statusButton")
 			.on("click", showStatus);
-
+		d3.select("button#codeButton")
+			.on("click", showCode);
+			
+		d3.select(".minpvRangeInput")
+			.on("input", function () { updateMinpvRangeInput(this.value) });
+		d3.select(".sofortRangeInput")
+			.on("input", function () { updateSofortRangeInput(this.value) });
+		d3.select(".socRangeInput")
+			.on("input", function () { updateSocRangeInput(this.value) });
+		d3.select(".energyRangeInput")
+			.on("input", function () { updateEnergyRangeInput(this.value) });
+		d3.select(".maxPriceInput")
+			.on("input", function () { updateMaxPriceInput(this.value) });
+		d3.select("#codeButton").classed ("hide", !this.rfidConfigured)
 		powerMeter.init()
 		powerGraph.init()
 		yieldMeter.init()
 		chargePointList.init()
+		priceChart.init()
 	}
 
 	updateEvu(field, value) {
@@ -167,10 +188,14 @@ class WbData {
 				powerMeter.update();
 				break;
 			case 'currentPowerPrice':
-				chargePointList.update();
+				chargePointList.updateValues();
 				break;
 			case 'chargeMode':
-				chargePointList.update();
+				chargePointList.updateValues();
+				break;
+			case 'rfidConfigured':
+				d3.select('#codeButton').classed ("hide", (!value))
+				break
 			default:
 				break;
 		}
@@ -187,7 +212,8 @@ class WbData {
 				break;
 			case 'isBatteryConfigured':
 			case 'hasEVPriority':
-				chargePointList.update()
+			case 'minCurrent':
+				chargePointList.updateValues()
 				break;
 			default:
 				break;
@@ -239,14 +265,13 @@ class WbData {
 				yieldMeter.update();
 				break;
 			case 'soc':
-				powerMeter.update();
 				break;
-			case 'isEnabled':
-				chargePointList.update()
+			case 'configured':
+				chargePointList.updateConfig()
 			default:
 				break;
 		}
-		chargePointList.update();
+		chargePointList.updateValues();
 	}
 
 	updateBat(field, value) {
@@ -271,6 +296,19 @@ class WbData {
 			default:
 				break;
 		}
+	}
+
+	updateET(field,value) {
+		this[field]=value;
+		
+		switch (field) {
+			case 'etPrice':
+			case 'isEtEnabled': chargePointList.updateValues();
+			break;
+			default:
+				break;
+		}
+		priceChart.update()
 	}
 
 	updateSourceSummary(cat, field, value) {
@@ -316,6 +354,13 @@ class WbData {
 				+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
 		}
 	}
+
+	setChargeLimitMode(limitMode) {
+		d3.select(".socLimitSettings").classed("hide", (limitMode != "2"))
+		d3.select(".energyLimitSettings").classed("hide", (limitMode != "1"))
+		publish(limitMode, "openWB/config/set/sofort/lp/" + (this.chargePointToConfig + 1) + "/chargeLimitation")
+
+	}
 }
 
 
@@ -354,18 +399,22 @@ class SHDevice {
 };
 
 function formatWatt(watt) {
-	if (watt >= 1000) {
+	if (watt >= 10000) {
+		return (Math.round(watt / 1000) + " kW");
+	} else if (watt >= 1000) {
 		return ((Math.round(watt / 100) / 10) + " kW");
 	} else {
 		return (watt + " W");
 	}
 }
 
-function formatWattH(watt) {
-	if (watt >= 1000) {
-		return ((Math.round(watt / 100) / 10) + " kWh");
+function formatWattH(watth) {
+	if (watth >= 10000) {
+		return (Math.round(watth / 1000) + " kWh");
+	} else if (watth >= 1000) {
+		return ((Math.round(watth / 100) / 10) + " kWh");
 	} else {
-		return (Math.round(watt) + " Wh");
+		return (Math.round(watth) + " Wh");
 	}
 }
 function formatTime(seconds) {
@@ -383,7 +432,7 @@ function formatMonth(month, year) {
 	return (months[month] + " " + year);
 }
 
-// required for pricechart to work
+// required for price chart to work
 var evuCol;
 var xgridCol;
 var gridCol;
@@ -424,6 +473,68 @@ function switchToEnergyView() {
 function showStatus() {
 	$("#statusModal").modal("show");
 }
+
+function showCode() {
+	$("#codeModal").modal("show");
+	
+}
+
+function updateMinpvRangeInput(value) {
+	const label = d3.select(".labelMinPv").text(value + " A");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/pv/minCurrentMinPv")
+	}, 2000)
+}
+
+function updateSofortRangeInput(value) {
+	const label = d3.select(".labelSofortCurrent").text(value + " A");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/current")
+	}, 2000)
+}
+
+function updateSocRangeInput(value) {
+	const label = d3.select(".labelSocLimit").text(value + " %");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/socToChargeTo")
+	}, 2000)
+}
+
+function updateEnergyRangeInput(value) {
+	const label = d3.select(".labelEnergyLimit").text(value + " kWh");
+	label.classed("text-danger", true)
+	setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/config/set/sofort/lp/" + (wbdata.chargePointToConfig + 1) + "/energyToCharge")
+	}, 2000)
+
+
+}
+function updateMaxPriceInput(value) {
+	const label = d3.select(".labelMaxPrice").text(value + " Cent");
+	label.classed("text-danger", true)
+
+	wbdata.updateET ("etMaxPrice", value);
+	if (wbdata.maxPriceDelayTimer) {
+		clearTimeout(wbdata.maxPriceDelayTimer)
+	}
+	wbdata.maxPriceDelayTimer = setTimeout(() => {
+		label.classed("text-danger", false)
+		publish(value, "openWB/set/awattar/MaxPriceForCharging" )
+		wbdata.maxPriceDelayTimer = null;
+	}, 2000)
+
+
+}
+
+
+
 var wbdata = new WbData(new Date(Date.now()));
 
 

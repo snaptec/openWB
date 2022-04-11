@@ -1,5 +1,22 @@
 #!/bin/bash
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+DMOD="PV"
+#DMOD="MAIN"
+Debug=$debug
 
-python /var/www/html/openWB/modules/wr_siemens/siemens.py $pv1_ipa
-wattbezug=$(</var/www/html/openWB/ramdisk/pvwatt)
-echo $wattbezug
+#For development only
+#Debug=1
+
+if [ ${DMOD} == "MAIN" ]; then
+        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+        MYLOGFILE="${RAMDISKDIR}/nurpv.log"
+fi
+
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.siemens.device" "inverter" "${pv1_ipa}" "1">>${MYLOGFILE} 2>&1
+
+pvwatt=$(<${RAMDISKDIR}/pvwatt)
+echo $pvwatt

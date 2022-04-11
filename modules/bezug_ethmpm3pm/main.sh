@@ -15,7 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/openwb/module.py "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

@@ -79,7 +79,7 @@ payload = {'client_id':client_id}
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles?' + data
-headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm ': realm}
+headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm': realm}
 f = open('/var/www/html/openWB/ramdisk/psareq2lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
@@ -100,7 +100,7 @@ data = urllib.urlencode(payload)
 data = data.encode('Big5')
 '/user/vehicles/{id}/status'
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles/'  + vin_id + '/status?' + data
-headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm ': realm}
+headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm': realm}
 f = open('/var/www/html/openWB/ramdisk/psareq3lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))

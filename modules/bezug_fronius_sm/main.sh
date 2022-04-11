@@ -1,15 +1,13 @@
 #!/bin/bash
-
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname $0)"/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="EVU"
 DMOD="MAIN"
 
 if [ $DMOD == "MAIN" ]; then
-    MYLOGFILE="$RAMDISKDIR/openWB.log"
+	MYLOGFILE="$RAMDISKDIR/openWB.log"
 else
-    MYLOGFILE="$RAMDISKDIR/evu_json.log"
+	MYLOGFILE="$RAMDISKDIR/evu_json.log"
 fi
 
 # check if config file is already in env
@@ -21,10 +19,14 @@ if [[ -z "$debug" ]]; then
 	. $OPENWBBASEDIR/helperFunctions.sh
 fi
 
-ret=$(python3 /var/www/html/openWB/modules/bezug_fronius_sm/fronius_sm.py "${froniusvar2}" "${froniuserzeugung}" "${wrfroniusip}" "${froniusmeterlocation}" &>>$MYLOGFILE)
-ret=$?
+openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
+openwbDebugLog ${DMOD} 2 "WR Erzeugung: ${froniuserzeugung}"
+openwbDebugLog ${DMOD} 2 "WR Var2: ${froniusvar2}"
+openwbDebugLog ${DMOD} 2 "WR MeterLocation: ${froniusmeterlocation}"
+openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
+openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
 
-openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "counter_sm" "${wrfroniusip}" "${froniuserzeugung}" "${froniusvar2}" "${froniusmeterlocation}" "${wrfronius2ip}" "${speichermodul}" 2>>$MYLOGFILE
 
 wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 echo $wattbezug

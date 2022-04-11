@@ -1,18 +1,28 @@
 #!/bin/bash
 
-# Auslesen eines Solarworld eManagers über die integrierte JSON-API
-emanagerantwort=$(curl --connect-timeout 5 -s "$solarworld_emanagerip/rest/solarworld/lpvm/powerAndBatteryData")
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="PV"
+DMOD="MAIN"
+Debug=$debug
 
-wr_watt=$(LC_ALL=C printf "%.0f\n" $(echo $emanagerantwort | jq '.PowerTotalPV'))
+#For Development only
+#Debug=1
 
-# wenn eManager aus bzw. keine Antwort ersetze leeren Wert durch eine 0
-ra='^-?[0-9]+$'
-
-if ! [[ $wr_watt =~ $ra ]] ; then
-	wr_watt="0"
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/wr_solarworld.log"
 fi
 
-# PV ezeugte Leistung muss negativ sein
-pvwatt=$(echo "0 - $wr_watt" | bc)
+openwbDebugLog ${DMOD} 2 "PV IP: ${solarworld_emanagerip}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarworld.solarworld" "${solarworld_emanagerip}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt
-echo $pvwatt  > /var/www/html/openWB/ramdisk/pvwatt

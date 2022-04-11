@@ -17,13 +17,7 @@ fi
 
 #python3 ${OPENWBBASEDIR}/modules/wr_pvkitflex/test.py "2" ${pvflexip} ${pvflexport} ${pvflexid} >>${MYLOGFILE} 2>&1
 
-if (( pv2kitversion == 0 )); then
-	python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readlovato.py "2" "192.168.193.13" "8899" "8" >>${MYLOGFILE} 2>&1
-elif (( pv2kitversion == 1 )); then
-	python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readsdm.py "2" "192.168.193.13" "8899" "116" >>${MYLOGFILE} 2>&1
-else
-	echo "bla" > /dev/null
-	#python3 ${OPENWBBASEDIR}/modules/wr_pvkit/readmpm3pm.py "2" "192.168.193.13" "8899" "8" >>${MYLOGFILE} 2>&1
-fi
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "inverter" "${pvkitversion}" "2">>${MYLOGFILE} 2>&1
+
 pvwatt=$(<${RAMDISKDIR}/pv2watt)
 echo $pvwatt

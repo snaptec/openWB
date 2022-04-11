@@ -1,29 +1,23 @@
 #!/bin/bash
 
-if [[ $multifems == "0" ]]; then
-	soc=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/Soc" | jq .value)
-	speicheriwh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActiveChargeEnergy" | jq .value)
-	speicherewh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActiveDischargeEnergy" | jq .value)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="BATT"
+DMOD="MAIN"
+
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	soc=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess2/Soc" | jq .value)
-	speicheriwh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess2/ActiveChargeEnergy" | jq .value)
-	speicherewh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess2/ActiveDischargeEnergy" | jq .value)
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
-#leistung=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActivePower" | jq .value)
-grid=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/GridActivePower" | jq .value)
-pv=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
-haus=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ConsumptionActivePower" | jq .value)
 
-leistung=$(( grid + pv - haus ))
+openwbDebugLog ${DMOD} 2 "Speicher IP: ${femsip}"
+openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${femskacopw}"
+openwbDebugLog ${DMOD} 2 "Speicher Multi: ${multifems}"
 
-ra='^[-+]?[0-9]+\.?[0-9]*$'
-if ! [[ $soc =~ $ra ]] ; then
-	soc="0"
-fi
-if ! [[ $leistung =~ $ra ]] ; then
-	leistung="0"
-fi
-echo $soc > /var/www/html/openWB/ramdisk/speichersoc
-echo $leistung > /var/www/html/openWB/ramdisk/speicherleistung
-echo $speicheriwh > /var/www/html/openWB/ramdisk/speicherikwh
-echo $speicherewh > /var/www/html/openWB/ramdisk/speicherekwh
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_fems.fems" "${multifems}" "${femskacopw}" "${femsip}" >>"${MYLOGFILE}" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"

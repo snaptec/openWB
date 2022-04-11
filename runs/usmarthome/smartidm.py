@@ -1,0 +1,52 @@
+#!/usr/bin/python3
+from usmarthome.smartbase import Sbase
+import subprocess
+import json
+
+
+class Sidm(Sbase):
+    def __init__(self):
+        # setting
+        super().__init__()
+        print('__init__ Sidm executed')
+
+    def getwatt(self, uberschuss, uberschussoffset):
+        self.prewatt(uberschuss, uberschussoffset)
+        argumentList = ['python3', self._prefixpy + 'idm/watt.py',
+                        str(self.device_nummer), str(self._device_ip),
+                        str(self.devuberschuss)]
+        try:
+            self.proc = subprocess.Popen(argumentList)
+            self.proc.communicate()
+            self.f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
+                           str(self.device_nummer), 'r')
+            self.answerj = json.load(self.f1)
+            self.f1.close()
+            self.answer = json.loads(self.answerj)
+            self.newwatt = int(self.answer['power'])
+            self.newwattk = int(self.answer['powerc'])
+            self.relais = int(self.answer['on'])
+        except Exception as e1:
+            self.logClass(2, "(" + str(self.device_nummer) +
+                          ") Leistungsmessung %s %d %s Fehlermeldung: %s "
+                          % ('idm ', self.device_nummer,
+                             str(self._device_ip), str(e1)))
+        self.postwatt()
+
+    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+        self.preturn(zustand, ueberschussberechnung, updatecnt)
+        if (zustand == 1):
+            pname = "/on.py"
+        else:
+            pname = "/off.py"
+        argumentList = ['python3', self._prefixpy + 'idm' + pname,
+                        str(self.device_nummer), str(self._device_ip),
+                        str(self.devuberschuss)]
+        try:
+            self.proc = subprocess.Popen(argumentList)
+            self.proc.communicate()
+        except Exception as e1:
+            self.logClass(2, "(" + str(self.device_nummer) +
+                          ") on / off  %s %d %s Fehlermeldung: %s "
+                          % ('idm ', self.device_nummer,
+                             str(self._device_ip), str(e1)))

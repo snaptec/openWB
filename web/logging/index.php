@@ -8,7 +8,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>Logging Langzeitansicht</title>
-		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
+		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">

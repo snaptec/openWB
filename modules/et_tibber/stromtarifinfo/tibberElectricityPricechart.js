@@ -73,7 +73,8 @@ function loadElectricityPricechart(labels, dataPrice) {
 							color: 'rgba(204, 204, 204, 1)',
 						},
 						ticks: {
-							fontColor: 'rgba(153, 153, 153, 1)'
+							fontColor: 'rgba(153, 153, 153, 1)',
+							fontSize: 15
 						}
 
 					}]

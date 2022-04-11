@@ -52,6 +52,7 @@
 				$releasetrain="stable";
 			}
 
+			$updateinprogress = trim(file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress'));
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -107,7 +108,7 @@
 					<div class="row">
 						<div class="col">
 							<p>Vor dem Update sind ggf. angeschlossene Fahrzeuge abzustecken!</p>
-							<p>Eventuell vorhandene externe openWB die als Ladepunkt konfiguiert sind erhalten automatisch ebenso ein Update.</p>
+							<p>Eventuell vorhandene externe openWB die als Ladepunkt konfiguriert sind erhalten automatisch ebenso ein Update.</p>
 						</div>
 					</div>
 				</div>
@@ -160,20 +161,26 @@
 
 					<!-- modal body -->
 					<div class="modal-body text-center">
-						Aktuelle Version: <span id="modalInstalledVersionSpan"></span><br>
-						Soll wirklich ein Update der openWB auf<br>
-						<b>die verfügbare Version <span id="selectedVersionSpan"></span></b><br>
-						erfolgen?<br>
-						Das Update kann einige Zeit in Anspruch nehmen. Alle Einstellungen bleiben erhalten.<br>
-						<b>
-							Es wird empfohlen, zur Sicherheit zuvor ein Backup zu erstellen.<br>
-							<span class="text-danger">Fahrzeuge sind vor dem Update abzustecken!</span>
-						</b>
+						<?php if ($updateinprogress == "0") { ?>
+							Aktuelle Version: <span id="modalInstalledVersionSpan"></span><br>
+							Soll wirklich ein Update der openWB auf<br>
+							<b>die verfügbare Version <span id="selectedVersionSpan"></span></b><br>
+							erfolgen?<br>
+							Das Update kann je nach Internetanbindung bis zu 15 Minuten in Anspruch nehmen. Alle Einstellungen bleiben erhalten.<br>
+							<b>
+								Es wird empfohlen, zur Sicherheit zuvor ein Backup zu erstellen.<br>
+								<span class="text-danger">Fahrzeuge sind vor dem Update abzustecken!</span>
+							</b>
+						<?php } else { ?>
+							Es wird bereits ein Update der openWB ausgeführt!
+						<?php } ?>
 					</div>
 
 					<!-- modal footer -->
 					<div class="modal-footer d-flex justify-content-center">
-						<button type="button" id="updateBtn" class="btn btn-success" data-dismiss="modal" disabled="disabled">Update</button>
+						<?php if ($updateinprogress == "0") { ?>
+							<button type="button" id="updateBtn" class="btn btn-success" data-dismiss="modal" disabled="disabled">Update</button>
+						<?php } ?>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 					</div>
 

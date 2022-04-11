@@ -71,7 +71,7 @@ h3 {
     color: #ffffff;
 }
 .btn-block {
-    font-size: 16px;
+    font-size: 1.2em;
 }
 .card {
     background-color: rgba(0, 0, 0, 0)!important;
@@ -469,11 +469,14 @@ h3 {
 	border:1px solid var(--color-subframe) ;
 	padding:var(--padding-widget);
 }
-.chargePointName {
+.chargePointName, .currentPrice {
     font-size: 18px;
     text-align:center;
 }
 
+.currentPrice {
+    color: var(--color-charging);
+}
 .chargePointData {
     font-size: 15px;
 }
@@ -482,9 +485,23 @@ h3 {
     font-size: 16px;
     padding: 9px;
 }
+ .modal-button {
+     font-size: 15px;
+     padding: 4px;
+ }
+ .modal-title {
+     font-size: 20px;
+    }
+.modal-header {
+    padding: 2px;
+    align-items: center;
 
-
+}
 .status-header,.status-title {
     text-align: center;
     font-size: 1em;
+}
+
+.modalComment, .modalLabel {
+    font-size: 1.4em;
 }

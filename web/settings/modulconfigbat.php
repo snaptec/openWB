@@ -77,6 +77,7 @@
 										<option <?php if($speichermodulold == "speicher_lgessv1") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 										<option <?php if($speichermodulold == "speicher_fems") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 										<option <?php if($speichermodulold == "speicher_rct") echo "selected" ?> value="speicher_rct">RCT</option>
+										<option <?php if($speichermodulold == "speicher_rct2") echo "selected" ?> value="speicher_rct2">RCT V.2</option>
 										<option <?php if($speichermodulold == "speicher_saxpower") echo "selected" ?> value="speicher_saxpower">Saxpower</option>
 										<option <?php if($speichermodulold == "speicher_siemens") echo "selected" ?> value="speicher_siemens">Siemens</option>
 										<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
@@ -94,7 +95,7 @@
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($speichermodulold == "speicher_http") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
-										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage BETA!!!!</option>
+										<option <?php if($speichermodulold == "speicher_json") echo "selected" ?> value="speicher_json">JSON Abfrage</option>
 										<option <?php if($speichermodulold == "mpm3pmspeicher") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
 										<option <?php if($speichermodulold == "speicher_mqtt") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 									</optgroup>
@@ -160,7 +161,7 @@
 								<span class="text-info">openWB/set/houseBattery/%Soc</span> Ladestand des Speichers, int, 0-100
 							</div>
 						</div>
-						
+
 						<div id="divspeichersolarwatt" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -176,9 +177,9 @@
 										</div>
 										<span class="form-text small">
 											IP-Adresse 1: Energy Manager (immer angeben)<br>
-											IP-Adresse 2: Gateway (Zus&auml;tzlich, falls Abrufmethode Gateway)
+											IP-Adresse 2: Gateway (Zusätzlich, falls Abrufmethode Gateway)
 										</span>
-									</div>									
+									</div>
 								</div>
 							</div>
 							<script>
@@ -189,8 +190,8 @@
 										showSection('#divspeicherip2');
 									}
 								}
-								
-								$(function() {	
+
+								$(function() {
 									$('input[type=radio][name=solarwattmethod]').change(function(){
 										visibility_solarwatt_ip2();
 									});
@@ -204,8 +205,8 @@
 							</div>
 						</div>
 						<div id="divspeicherhuawei" class="hide">
-							<div class="alert alert-info">
-								Konfiguration im PV Huawei Modul.
+							<div class="alert alert-danger">
+								Es muss zwingend auch das Huawei PV Modul konfiguriert werden, da alle Daten dort abgerufen werden!
 							</div>
 						</div>
 
@@ -223,7 +224,7 @@
 								Hier bitte die IP Adresse des ModbusGateway's eintragen.
 							</div>
 						</div>
-						
+
 						<div id="divspeicherfems" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -249,7 +250,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div id="divspeicherip2" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -279,7 +280,29 @@
 								Konfiguration im zugehörigen EVU Modul.
 							</div>
 						</div>
-
+						
+						<div id="divspeicherrct2" class="hide">
+							<div class="alert alert-warning">
+								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
+							</div>
+							<div class="card-header bg-secondary">
+								RCT Speicher Hardware
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col">
+										<pre><?php 
+										if( $wattbezugmodulold == "bezug_rct2"  && $speichermodulold == "speicher_rct2" && isset($bezug1_ipold) ) {
+											$lines=[];
+											exec('/var/www/html/openWB/modules/speicher_rct2/info.sh', $lines);
+											echo implode('<br>',$lines);
+										} else echo "<span class=\"text-warning text-center\">Kein RCT Speicher-Module konfiguriert.</span>";
+										?></pre>
+									</div>
+								</div>
+							</div>
+			 			</div>
+						
 						<div id="divspeichervarta" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -379,13 +402,31 @@
 										<span class="form-text small">
 											Je nach Sonnen Batterie muss die richtige Datenverbindung ausgewählt werden.
 											Folgende URLs werden zum Abruf der Daten genutzt und können auch manuell über einen Browser abgefragt werden, um die richtige Einstellung zu finden:<br>
-											Rest-API 1: [ip]:7979/rest/devices/battery<br>
-											Rest-API 2: [ip]:7979/rest/devices/battery/M05<br>
-											JSON-API: [ip]/api/v1/status
+											Rest-API 1: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery"></a><br>
+											Rest-API 2: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery/M05"></a><br>
+											JSON-API: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]/api/v1/status"></a>
 										</span>
 									</div>
 								</div>
 							</div>
+							<script>
+								$(function() {
+									function updateSonnenIp() {
+										let myIp = $("#sonnenecoip").val();
+										let myLinks = $("#divspeicherseco a.api-link").each(function() {
+											let myLink = $(this).data("template").replace("[ip]", myIp);
+											$(this).text(myLink);
+											$(this).attr("href", myLink);
+										});;
+									}
+
+									$("#sonnenecoip").keyup(function() {
+										updateSonnenIp();
+									});
+
+									updateSonnenIp();
+								})
+							</script>
 						</div>
 
 						<div id="divspeichere3dc" class="hide">
@@ -570,6 +611,15 @@
 						<div id="divspeicherbydhv" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
+									<div class="col-md-4">
+									</div>
+									<div class="col">
+										<span class="form-text small">
+											Ist der BYD-Speicher am Kostal Plenticore angebunden, ist in diesem Fall das Batteriespeicher-Modul "Kostal Plenticore mit Speicher" auszuwählen. Der WR stellt alle Daten der angeschlossenen Batterie bereit.
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
 									<label for="bydhvuser" class="col-md-4 col-form-label">Benutzername</label>
 									<div class="col">
 										<input class="form-control" type="text" name="bydhvuser" id="bydhvuser" value="<?php echo $bydhvuserold ?>">
@@ -657,6 +707,7 @@
 								hideSection('#divspeicherip');
 								hideSection('#divspeichersiemens');
 								hideSection('#divspeicherrct');
+								hideSection('#divspeicherrct2');
 								hideSection('#divspeichersungrow');
 								hideSection('#divspeicherjson');
 								hideSection('#divspeichersolarwatt');
@@ -667,6 +718,10 @@
 								}
 								if($('#speichermodul').val() == 'speicher_rct') {
 									showSection('#divspeicherrct');
+								}
+								if($('#speichermodul').val() == 'speicher_rct2') {
+									showSection('#divspeicherrct');
+									showSection('#divspeicherrct2');
 								}
 								if($('#speichermodul').val() == 'speicher_siemens') {
 									showSection('#divspeicherip');

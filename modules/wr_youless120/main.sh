@@ -1,25 +1,28 @@
 #!/bin/bash
 
-# Auslesen vom S0-Eingang eines Youless LS120 Energy Monitor.
-answer=$(curl --connect-timeout 5 -s $wryoulessip/a?f=j)
-if [[ $wryoulessalt == 0 ]]; then
-	# aktuelle Ausgangsleistung am WR [W]
-	pvwatt=$(echo $answer | jq -r '.ps0' | sed 's/\..*$//')
-	# Gesamtz‰hlerstand am WR [Wh]
-	pvkwh=$(echo $answer | jq -r '.cs0' | sed 's/,//g')
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="PV"
+DMOD="MAIN"
+Debug=$debug
+
+#For Development only
+#Debug=1
+
+if [ $DMOD == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	# aktuelle Ausgangsleistung am WR [W]
-	pvwatt=$(echo $answer | jq -r '.pwr' | sed 's/\..*$//')
-	# Gesamtz‰hlerstand am WR [Wh]
-	pvkwh=$(echo $answer | jq -r '.cnt' | sed 's/,//g')
+	MYLOGFILE="${RAMDISKDIR}/wr_youless120.log"
 fi
 
-if (( $pvwatt > 5 )); then
-	pvwatt=$(echo "$pvwatt*-1" |bc)
-fi
+openwbDebugLog ${DMOD} 2 "PV IP: ${wryoulessip}"
+openwbDebugLog ${DMOD} 2 "PV Alternative: ${wryoulessalt}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_youless120.youless" "${wryoulessip}" "${wryoulessalt}" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
 echo $pvwatt
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-# Gesamtzählerstand am WR [kWh]
-pvkwh=$(echo "$pvkwh/1000" |bc)
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk

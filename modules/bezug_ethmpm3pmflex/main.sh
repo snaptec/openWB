@@ -15,7 +15,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu_json.log"
 fi
 
-python3 ${OPENWBBASEDIR}/packages/modules/openwb_flex/module.py "counter" "${evuflexversion}" "${evuflexip}" "${evuflexport}" "${evuflexid}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_flex.device" "counter" "${evuflexversion}" "${evuflexip}" "${evuflexport}" "${evuflexid}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

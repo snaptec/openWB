@@ -13,6 +13,7 @@ var topicsToSubscribe = [
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/config/get/SmartHome/logLevel", 0],
 	["openWB/config/get/SmartHome/maxBatteryPower", 0],
+	["openWB/config/get/SmartHome/smartmq", 0],
 	// SmartHome configuration
 	["openWB/config/get/SmartHome/Devices/+/device_configured", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_canSwitch", 0],
@@ -60,6 +61,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_homeConsumtion", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaser", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_onTime", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_onuntilTime", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaage", 0]
 
 ];

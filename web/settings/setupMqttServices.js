@@ -11,7 +11,7 @@ var isSSL = location.protocol == 'https:'
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
-	//Gets Called if the connection has sucessfully been established
+	//Gets Called if the connection has been established
 	onSuccess: function () {
 		topicsToSubscribe.forEach((topic) => {
 			client.subscribe(topic[0], {qos: 0});

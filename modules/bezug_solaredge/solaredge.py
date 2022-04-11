@@ -1,256 +1,69 @@
 #!/usr/bin/python
-import sys
-# import os
-# import time
-# import getopt
-# import socket
-# import ConfigParser
-import struct
-# import binascii
-from pymodbus.client.sync import ModbusTcpClient
+import logging
+import math
+from typing import List
 
-ipaddress = str(sys.argv[1])
-modbusport = int(sys.argv[2])
-slaveid = int(sys.argv[3])
+from helpermodules.cli import run_using_positional_cli_args
+from modules.common.component_state import CounterState
+from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.store import get_counter_value_store
 
-client = ModbusTcpClient(ipaddress, port=modbusport)
+log = logging.getLogger("SolarEdge EVU")
 
-resp= client.read_holding_registers(40206,5,unit=slaveid)
-value1 = resp.registers[0] 
-all = format(value1, '04x') 
-final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
 
-sf = resp.registers[4] 
-sf = format(sf, '04x') 
-fsf = int(struct.unpack('>h', sf.decode('hex'))[0]) 
-if fsf == 4: 
-    final = final * 10000 
-if fsf == 3: 
-    final = final * 1000 
-if fsf == 2: 
-    final = final * 100 
-if fsf == 1: 
-    final = final * 10 
-if fsf == -1: 
-    final = final / 10 
-if fsf == -2: 
-    final = final / 100 
-if fsf == -3: 
-    final = final / 1000 
-if fsf == -4: 
-    final = final / 10000 
+def scale_registers(registers: List[int]) -> List[float]:
+    scale = math.pow(10, registers[-1])
+    return [register * scale for register in registers[:-1]]
 
-f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w') 
-f.write(str(final)) 
-f.close() 
 
-resp= client.read_holding_registers(40194,2,unit=slaveid)
-multipli = resp.registers[0]
-multiplint = format(multipli, '04x')
-fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
-resp= client.read_holding_registers(40191,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finala1 = int(struct.unpack('>h', all.decode('hex'))[0]) 
-resp= client.read_holding_registers(40192,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finala2 = int(struct.unpack('>h', all.decode('hex'))[0]) 
-resp= client.read_holding_registers(40193,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finala3 = int(struct.unpack('>h', all.decode('hex'))[0]) 
+def update(ipaddress: str, modbusport: int, slaveid: int):
+    log.debug("Beginning update")
 
-resp= client.read_holding_registers(40194,2,unit=slaveid)
-mult2ipli = resp.registers[0]
-mult2iplint = format(mult2ipli, '04x')
-fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
+    def read_scaled_int16(address: int, count: int):
+        return scale_registers(
+            client.read_holding_registers(address, [ModbusDataType.INT_16] * (count+1), unit=slaveid)
+        )
 
-if fmultiplint == fmult2iplint:
-    if fmultiplint == 4:
-        finala1 = finala1 * 10000
-        finala2 = finala2 * 10000
-        finala3 = finala3 * 10000
-    if fmultiplint == 3:
-        finala1 = finala1 * 1000
-        finala2 = finala2 * 1000
-        finala3 = finala3 * 1000
-    if fmultiplint == 2:
-        finala1 = finala1 * 100
-        finala2 = finala2 * 100
-        finala3 = finala3 * 100
-    if fmultiplint == 1:
-        finala1 = finala1 * 10
-        finala2 = finala2 * 10
-        finala3 = finala3 * 10
-    if fmultiplint == 0:
-        finala1 = finala1
-        finala2 = finala2
-        finala3 = finala3
-    if fmultiplint == -1:
-        finala1 = finala1 / 10
-        finala2 = finala2 / 10
-        finala3 = finala3 / 10
-    if fmultiplint == -2:
-        finala1 = finala1 / 100
-        finala2 = finala2 / 100
-        finala3 = finala3 / 100
-    if fmultiplint == -3:
-        finala1 = finala1 / 1000
-        finala2 = finala2 / 1000
-        finala3 = finala3 / 1000
-    if fmultiplint == -4:
-        finala1 = finala1 / 10000
-        finala2 = finala2 / 10000
-        finala3 = finala3 / 10000
-    if fmultiplint == -5:
-        finala1 = finala1 / 100000
-        finala2 = finala2 / 100000
-        finala3 = finala3 / 100000
-        
-f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(finala1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(finala2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(finala3))
-f.close()
+    with ModbusClient(ipaddress, port=modbusport) as client:
+        # 40206: Total Real Power (sum of active phases)
+        # 40206/40207/40208: Real Power by phase
+        # 40210: AC Real Power Scale Factor
+        powers = [-power for power in read_scaled_int16(40206, 4)]
 
-#voltage
-resp= client.read_holding_registers(40196,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finale1 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
-resp= client.read_holding_registers(40197,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finale2 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
-resp= client.read_holding_registers(40198,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finale3 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
+        # 40191/40192/40193: AC Current by phase
+        # 40194: AC Current Scale Factor
+        currents = read_scaled_int16(40191, 3)
 
-f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
-f.write(str(finale1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
-f.write(str(finale2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
-f.write(str(finale3))
-f.close()
+        # 40196/40197/40198: Voltage per phase
+        # 40203: AC Voltage Scale Factor
+        voltages = read_scaled_int16(40196, 7)[:3]
 
-#watt pro phase
-resp= client.read_holding_registers(40207,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finale1 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
+        # 40204: AC Frequency
+        # 40205: AC Frequency Scale Factor
+        frequency, = read_scaled_int16(40204, 1)
 
-resp= client.read_holding_registers(40208,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finale2 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
-resp= client.read_holding_registers(40209,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finale3 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+        # 40222/40223/40224: Power factor by phase (unit=%)
+        # 40225: AC Power Factor Scale Factor
+        power_factors = [power_factor / 100 for power_factor in read_scaled_int16(40222, 3)]
 
-f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
-f.write(str(finale1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
-f.write(str(finale2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
-f.write(str(finale3))
-f.close()
+        # 40234: Total Imported Real Energy
+        counter_imported = client.read_holding_registers(40234, ModbusDataType.UINT_32, unit=slaveid)
 
-#hz
-resp= client.read_holding_registers(40204,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-finalhz = int(struct.unpack('>h', all.decode('hex'))[0]) 
+        # 40226: Total Exported Real Energy
+        counter_exported = client.read_holding_registers(40226, ModbusDataType.UINT_32, unit=slaveid)
 
-resp= client.read_holding_registers(40205,1,unit=slaveid)
-multipli = resp.registers[0]
-multiplint = format(multipli, '04x')
-fmuliplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
+    get_counter_value_store(1).set(CounterState(
+        imported=counter_imported,
+        exported=counter_exported,
+        power=powers[0],
+        powers=powers[1:],
+        voltages=voltages,
+        currents=currents,
+        power_factors=power_factors,
+        frequency=frequency
+    ))
+    log.debug("Update completed successfully")
 
-if fmultiplint == 4:
-    finalhz = finalhz * 1000
-if fmultiplint == 3:
-    finalhz = finalhz * 100
-if fmultiplint == 2:
-    finalhz = finalhz * 10
-if fmultiplint == 1:
-    finalhz = finalhz * 1
-if fmultiplint == 0:
-    finalhz = finalhz  / 10
-if fmultiplint == -1:
-    finalhz = finalhz / 100
-if fmultiplint == -2:
-    finalhz = finalhz / 1000
-if fmultiplint == -3:
-    finalhz = finalhz / 10000
-if fmultiplint == -4:
-    finalhz = finalhz / 100000
-if fmultiplint == -5:
-    finalhz = finalhz / 1000000
 
-f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
-f.write(str(finalhz))
-f.close()
-
-#resp= client.read_holding_registers(40084,2,unit=1)
-#multipli = resp.registers[0]
-#multiplint = format(multipli, '04x')
-#fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
-
-#respw= client.read_holding_registers(40083,2,unit=1)
-#value1w = respw.registers[0]
-#allw = format(value1w, '04x')
-#rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
-#if fmultiplint == -1:
-#    rawprodw = rawprodw / 10 
-#if fmultiplint == -2:
-#    rawprodw = rawprodw / 100
-#if fmultiplint == -3:
-#    rawprodw = rawprodw / 1000
-#if fmultiplint == -4:
-#    rawprodw = rawprodw / 10000
-#f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-#f.write(str(rawprodw))
-#f.close()
-
-#resp= client.read_holding_registers(40093,2,unit=1)
-#value1 = resp.registers[0]
-#value2 = resp.registers[1]
-#all = format(value1, '04x') + format(value2, '04x')
-#final = int(struct.unpack('>i', all.decode('hex'))[0])
-#f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-#f.write(str(final))
-#f.close()
-#pvkwhk= final / 1000
-#f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
-#f.write(str(pvkwhk))
-#f.close()
-
-resp= client.read_holding_registers(40234,2,unit=slaveid)
-value1 = resp.registers[0] 
-value2 = resp.registers[1] 
-all = format(value1, '04x') + format(value2, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0]) 
-f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
-f.write(str(final))
-f.close()
-
-resp= client.read_holding_registers(40226,2,unit=slaveid)
-value1 = resp.registers[0]
-value2 = resp.registers[1] 
-all = format(value1, '04x') + format(value2, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0])
-f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
-f.write(str(final))
-f.close()
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

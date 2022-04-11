@@ -1,114 +1,72 @@
 #!/usr/bin/env python3
 from typing import List, Tuple
-try:
-    from ..common import connect_tcp
-    from ...helpermodules import log
-except:
-    # for 1.9 compability
-    import os
-    from pathlib import Path
-    import sys
-    parentdir2 = str(Path(os.path.abspath(__file__)).parents[2])
-    sys.path.insert(0, parentdir2)
-    from helpermodules import log
-    from modules.common import connect_tcp
+
+from modules.common import modbus
+from modules.common.fault_state import FaultState
+from modules.common.modbus import ModbusDataType
 
 
 class Mpm3pm:
-    def __init__(self, device_config: dict, client: connect_tcp.ConnectTcp) -> None:
+    def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         self.client = client
-        self.name = device_config["components"]["component0"]["name"]
-        self.id = device_config["components"]["component0"]["configuration"]["id"]
+        self.id = modbus_id
 
-    def get_voltage(self) -> List[int]:
-        """
-        """
+    def __process_error(self, e):
+        if isinstance(e, FaultState):
+            raise
+        else:
+            raise FaultState.error(__name__+" "+str(type(e))+" " + str(e)) from e
+
+    def get_voltages(self) -> List[float]:
         try:
-            voltage = []
-            regs = [0x08, 0x0A, 0x0C]
-            for register in regs:
-                value = float(self.client.read_registers(register, 4, self.id) / 10)
-                voltage.append(value)
-            return voltage
+            return [val / 10 for val in self.client.read_input_registers(
+                0x08, [ModbusDataType.UINT_32]*3, unit=self.id)]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_imported(self) -> float:
-        """
-        """
         try:
-            imported = self.client.read_integer_registers(0x0002, 4, self.id) * 10
-            return imported
+            # Faktorisierung anders als in der Dokumentation angegeben
+            return self.client.read_input_registers(0x0002, ModbusDataType.UINT_32, unit=self.id) * 10
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_error(e)
 
-    def get_power(self) -> Tuple[List[int], float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
-            power_per_phase = []
-            regs = [0x14, 0x16, 0x18]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 2, self.id) / 100
-                power_per_phase.append(value)
-            power_all = self.client.read_integer_registers(0x26, 2, self.id) / 100
-            return power_per_phase, power_all
+            powers = [val / 100 for val in self.client.read_input_registers(
+                0x14, [ModbusDataType.INT_32]*3, unit=self.id)]
+            power = self.client.read_input_registers(0x26, ModbusDataType.INT_32, unit=self.id) / 100
+            return powers, power
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None], None
+            self.__process_error(e)
 
     def get_exported(self) -> float:
-        """
-        """
         try:
-            exported = self.client.read_integer_registers(0x0004, 4, self.id) * 10
-            return exported
+            # Faktorisierung anders als in der Dokumentation angegeben
+            return self.client.read_input_registers(0x0004, ModbusDataType.UINT_32, unit=self.id) * 10
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_error(e)
 
-    def get_power_factor(self) -> List[int]:
-        """
-        """
+    def get_power_factors(self) -> List[float]:
         try:
-            power_factor = []
-            regs = [0x20, 0x22, 0x24]
-            for register in regs:
-                value = self.client.read_integer_registers(register, 4, self.id) / 10
-                power_factor.append(value)
-            return power_factor
+            # Faktorisierung anders als in der Dokumentation angegeben
+            return [val / 10 for val in self.client.read_input_registers(
+                0x20, [ModbusDataType.UINT_32]*3, unit=self.id)]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_frequency(self) -> float:
-        """
-        """
         try:
-            frequency = self.client.read_integer_registers(0x2c, 4, self.id) / 100
-            return frequency
+            return self.client.read_input_registers(0x2c, ModbusDataType.UINT_32, unit=self.id) / 100
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+            self.__process_error(e)
 
-    def get_current(self) -> List[int]:
-        """
-        """
+    def get_currents(self) -> List[float]:
         try:
-            current = []
-            regs = [0x0E, 0x10, 0x12]
-            for register in regs:
-                value = float(self.client.read_registers(register, 2, self.id)) / 100
-                current.append(value)
-            return current
+            return [val / 100 for val in self.client.read_input_registers(
+                0x0E, [ModbusDataType.UINT_32]*3, unit=self.id)]
         except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return [None, None, None]
+            self.__process_error(e)
 
     def get_counter(self) -> float:
-        try:
-            counter = self.client.read_integer_registers(0x0004, 4, self.id) * 10
-            return counter
-        except Exception as e:
-            log.MainLogger().error(self.name, e)
-            return None
+        return self.get_exported()

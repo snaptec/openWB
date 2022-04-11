@@ -1,27 +1,28 @@
 #!/bin/bash
 
-#Auslesen eines Fronius Symo WR Hybrid mit Fronius Smartmeter und Batterie über die integrierte JSON-API des WR.
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#MODULEDIR=$(cd `dirname $0` && pwd)
+#DMOD="BATT"
+DMOD="MAIN"
+Debug=$debug
 
-speicherwatttmp=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
-speicherwatt=$(echo $speicherwatttmp | jq '.Body.Data.Site.P_Akku' | sed 's/\..*$//')
-speicherwatt=$(echo "$speicherwatt * -1" | bc)
-#wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
-ra='^-?[0-9]+$'
-if ! [[ $speicherwatt =~ $ra ]] ; then
-	speicherwatt="0"
-fi
+#For Development only
+#Debug=1
 
-echo $speicherwatt > /var/www/html/openWB/ramdisk/speicherleistung
-
-
-if [[ $wrfroniusisgen24 == 1 ]]; then
-	speichersoctmp=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetStorageRealtimeData.cgi")
-	speichersoc=$(echo $speichersoctmp | jq '.Body.Data."1".Controller.StateOfCharge_Relative' | sed 's/\..*$//')
+if [ ${DMOD} == "MAIN" ]; then
+    MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	speichersoc=$(echo $speicherwatttmp | jq '.Body.Data.Inverters."1".SOC' | sed 's/\..*$//')
-fi
-if ! [[ $speichersoc =~ $ra ]] ; then
-	speichersoc="0"
+    MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
-echo $speichersoc > /var/www/html/openWB/ramdisk/speichersoc
+openwbDebugLog ${DMOD} 2 "Speicher IP: ${wrfroniusip}"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "bat" "${wrfroniusip}" "${froniuserzeugung}" "0" "0" "none" "" >>$MYLOGFILE 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+speicherleistung=$(<${RAMDISKDIR}/speicherleistung)
+
+openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"
