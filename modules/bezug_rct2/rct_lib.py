@@ -21,6 +21,7 @@ import time
 import copy
 import operator
 from enum import Enum
+import inspect
 
 # valid data types
 class rct_data(Enum):
@@ -557,11 +558,15 @@ def init(argv):
 
     # parse command line arguments
     try:
-        options, remainder = getopt.getopt(argv[1:], 'i:v', ['ip=', 'verbose', 'info', 'id=', 'name='])
+        options, remainder = getopt.getopt(argv, 'i:v', ['ip=', 'verbose', 'info', 'id=', 'name='])
     except getopt.GetoptError as err:
         # print help information and exit:
         errlog(err)  # will print something like "option -a not recognized"
-        errlog('usage: ', argv[0], '[--ip_addr=<host>] [--verbose] [--info] [--port=<portnr>] [--id=0xXXXXXXXX|--name=<string>]')
+        # get calling file name
+        frame = inspect.stack()[1]
+        module = inspect.getmodule(frame[0])
+        filename = module.__file__
+        errlog('usage: ', filename, '[--ip_addr=<host>] [--verbose] [--info] [--port=<portnr>] [--id=0xXXXXXXXX|--name=<string>]')
         sys.exit(-1)
 
     for opt, arg in options:

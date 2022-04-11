@@ -1,15 +1,20 @@
 #!/usr/bin/python3
+import os
 import sys
-import rct_lib
 import time
+from typing import List
+try: # make script callable from command line and LRS
+    from bezug_rct2 import rct_lib
+except Exception as e:
+    import rct_lib
 
 # Author Heinz Hoefling
 # Version 1.0 Okt.2021
 
 # Entry point with parameter check
-def main():
+def main(argv: List[str]):
     start_time = time.time()
-    rct_lib.init(sys.argv)
+    rct_lib.init(argv)
 
     clientsocket = rct_lib.connect_to_server()
     if clientsocket is not None:
@@ -106,8 +111,7 @@ def main():
         except Exception as e:
             rct_lib.close(clientsocket)
             raise(e)
-            
-    sys.exit(0)
 
+            
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

@@ -1,14 +1,18 @@
 #!/usr/bin/python3
+import fnmatch
 import sys
 import time
-import rct_lib
-import fnmatch
+from typing import List
+try: # make script callable from command line and LRS
+    from bezug_rct2 import rct_lib
+except:
+    import rct_lib
 
 
 # Entry point with parameter check
-def main():
+def main(argv: List[str]):
     start_time = time.time()
-    rct_lib.init(sys.argv)
+    rct_lib.init(argv)
 
     clientsocket = rct_lib.connect_to_server()
     if clientsocket is not None:
@@ -33,5 +37,6 @@ def main():
             rct_lib.close(clientsocket)
             raise(e)
 
+
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
