@@ -303,7 +303,7 @@
 			</div>
 
 			<!-- Ladepunkt Konfig -->
-			<div class="wb-widget col-md p-2 m-1" id="chargePointConfigWidget">
+			<div class="wb-widget col-md-4 p-2 m-1" id="chargePointConfigWidget">
 				<h3 class="mt-0">Einstellungen Ladepunkte</h3>
 				<div class="pb-3 wb-subwidget">
 					<!-- depending on charge mode show options -->
@@ -796,20 +796,8 @@
 								</div>
 							</div>
 						</span>
-						<hr>
-						<div class="row hide" id="codeEntry">
-							<div class="col justify-content-center text-grey">
-								<input type="text" class="form-control" id="codeInput" placeholder="RFID-Code (1-3 Ziffern)">
-							</div>
-						</div>	
-						<div class="row  mt-2">
-							<div class="col justify-content-end" style="text-align: end;">
-								<button type = "button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
-							</div>
-						</div>
 						<span id='70ModeBtn'>
 							<hr>
-
 							<div class="row">
 								<div class="col text-center text-grey">
 									70% beachten im Lademodus PV-Laden:
@@ -824,7 +812,20 @@
 								</div>
 							</div>
 						</span>
-					
+						<!-- RFID Code entry -->
+						<span id="codeEntry" class="hide">
+							<hr>
+							<div class="row" >
+								<div class="col justify-content-center text-grey">
+									<input type="text" class="form-control" id="codeInput" placeholder="RFID-Code (1-3 Ziffern)">
+								</div>
+							</div>	
+							<div class="row  mt-2">
+								<div class="col justify-content-end" style="text-align: end;">
+									<button type = "button" class="btn btn-success" id="codeEnterButton">Eingabe</button>
+								</div>
+							</div>
+						</span>
 					</div>
 				</div> <!-- /modal body -->
 
