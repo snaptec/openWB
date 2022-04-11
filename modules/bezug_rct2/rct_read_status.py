@@ -3,10 +3,8 @@ import os
 import sys
 import time
 from typing import List
-try: # make script callable from command line and LRS
-    from bezug_rct2 import rct_lib
-except:
-    import rct_lib
+import rct_lib
+from rct_lib import rct_id
 
 # Author Heinz Hoefling
 # Version 1.0 Okt.2021
