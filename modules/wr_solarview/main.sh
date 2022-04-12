@@ -16,7 +16,6 @@ openwbDebugLog ${DMOD} 2 "PV Port: ${solarview_port}"
 openwbDebugLog ${DMOD} 2 "PV Timeout: ${solarview_timeout}"
 openwbDebugLog ${DMOD} 2 "PV Command: ${solarview_command_wr}"
 
-
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarview.solarview" "${solarview_hostname}" "${solarview_port}" "${solarview_timeout}" "${solarview_command_wr}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
