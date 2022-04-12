@@ -75,7 +75,7 @@ getAndWriteSoc(){
 			ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
 		fi
 	fi
-	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" 2>&1)
+	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile
