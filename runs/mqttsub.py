@@ -320,8 +320,8 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureavmactor", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_acthortype" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceTypes = ['M1','M3','9s']
-                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) == 2):
+                validDeviceTypes = ['M1','M3','9s','9s18']
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices) :
                     try:
                         # just check vor payload in list, deviceTypeIndex is not used
                         deviceTypeIndex = validDeviceTypes.index(msg.payload.decode("utf-8"))
@@ -332,7 +332,7 @@ def on_message(client, userdata, msg):
                         client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_acthortype", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_acthorpower" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 9000 ):
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 18000 ):
                     writetoconfig(shconfigfile,'smarthomedevices','device_acthorpower_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_acthorpower", msg.payload.decode("utf-8"), qos=0, retain=True)
 
