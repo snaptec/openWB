@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding: utf8
+# coding: utf8
 
 import time
 import RPi.GPIO as GPIO
@@ -11,7 +11,7 @@ parser.add_argument("-v", "--verbose", action="store_true", help="verbose debug 
 args = parser.parse_args()
 
 if(args.verbose):
-    print("Wartezeit vor und nach 1p/3p Umschaltung: %fs"%(args.duration))
+    print("Wartezeit vor und nach 1p/3p Umschaltung: %fs" % (args.duration))
 
 # setup GPIOs
 GPIO.setwarnings(False)
