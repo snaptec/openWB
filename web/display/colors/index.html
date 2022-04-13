@@ -659,7 +659,7 @@
   </div>
 
   <!-- modal chargemode-select-window -->
-  <div class="modal" id="chargeModeModal">
+  <div class="modal chargeModeModal" id="chargeModeModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- modal header -->
@@ -678,7 +678,7 @@
           <div class="row justify-content-center">
             <div class="col-sm-4 px-3 pb-3 pt-1 modalLabel ">
               <button type="button" class="chargeModeBtn chargeModeBtnSofort btn  btn-block btn-secondary"
-                data-chargeMode="0" data-dismiss="modal">Sofort</button>
+                data-chargeMode="0" >Sofort</button>
             </div>
             <div class="col-sm-4 px-3 pb-3 pt-1 modalLabel">
               <button type="button" class="chargeModeBtn chargeModeBtnPV btn btn-lg btn-block btn-secondary"
@@ -686,18 +686,18 @@
             </div>
             <div class="col-sm-4 px-3 pb-3 pt-1 modalLabel">
               <button type="button" class="chargeModeBtn chargeModeBtnMinPV btn btn-lg btn-block btn-secondary"
-                data-chargeMode="1" data-dismiss="modal">Min + PV</button>
+                data-chargeMode="1" >Min + PV</button>
             </div>
             <div class="col-sm-4 px-3 pb-3 pt-1" id="disableButton">
 
             </div>
             <div class="col-sm-4 px-3 pb-3 pt-1 modalLabel">
               <button type="button" class="chargeModeBtn chargeModeBtnStandby btn btn-lg btn-block btn-secondary"
-                data-chargeMode="4" data-dismiss="modal">Standby</button>
+                data-chargeMode="4" >Standby</button>
             </div>
             <div class="col-sm-4 px-3 pb-3 pt-1 modalLabel">
               <button type="button" class="chargeModeBtn chargeModeBtnStop btn btn-lg btn-block btn-secondary"
-                data-chargeMode="3" data-dismiss="modal">Stop</button>
+                data-chargeMode="3" >Stop</button>
             </div>
           </div>
           <div class="row justify-content-center">
@@ -709,7 +709,7 @@
           <div id='priorityModeBtns' class="hide">
             <hr>
             <div class="row">
-              <h3 class="col text-center text-light">Vorrang im Lademodus PV-Laden:</h3>
+              <h3 class="col text-center text-light">Vorrang im Modus PV oder Min + PV:</h3>
             </div>
             <div class="row justify-content-center">
               <div class="col-sm-5 py-1">
@@ -757,6 +757,9 @@
         if (displaylocked == false) {
           var chargeMode = $(this).attr("data-chargeMode");
           publish(chargeMode, "openWB/set/ChargeMode");
+          if (!wbdata.isBatteryConfigured || (chargeMode != '1' && chargeMode != '2')) {
+            $('#chargeModeModal').modal('hide')
+          }
         }
       });
 
