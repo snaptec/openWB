@@ -75,7 +75,8 @@ class ChargePointList {
     })
     d3.select(".currentPrice").classed("hide", !((wbdata.chargeMode == "0") && wbdata.isEtEnabled))
     d3.select(".currentPrice").text("Preis: " + wbdata.etPrice + " ct/kWh");
-
+    d3.select("#priorityModeBtns").classed ("hide", !wbdata.isBatteryConfigured || (wbdata.chargeMode != "1" && wbdata.chargeMode != "2"))
+    
     const limitMode = wbdata.chargePoint[wbdata.chargePointToConfig].chargeLimitation;
     d3.select(".pricechartColumn").classed ("col-12", (limitMode == 0));
     d3.select(".pricechartColumn").classed ("col-10", (limitMode == 2 || limitMode == 1));
@@ -233,7 +234,7 @@ function modeButtonClicked(index) {
       })
     b.classed("btn-danger", chargePointList.chargepoints[index].isEnabled)
     b.classed("btn-info", !chargePointList.chargepoints[index].isEnabled)
-    d3.select("#priorityModeBtns").classed ("hide", !wbdata.isBatteryConfigured)
+    d3.select("#priorityModeBtns").classed ("hide",  !wbdata.isBatteryConfigured || (wbdata.chargeMode != "1" && wbdata.chargeMode != "2"))
     d3.select("#evPriorityBtn").classed ("active", wbdata.hasEVPriority)
     d3.select("#batteryPriorityBtn").classed ("active", !wbdata.hasEVPriority)
     

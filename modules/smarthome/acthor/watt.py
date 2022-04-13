@@ -33,13 +33,16 @@ f.close()
 faktor=1.0
 if instpower == 0:
     instpower = 1000
-if atype == "9s":
+cap = 9000   
+if atype == "9s18":
+    faktor = 18000/instpower  
+    cap = 18000   
+elif atype == "9s":
     faktor = 9000/instpower
+elif atype == "M3":
+    faktor = 6000/instpower
 else:
-    if atype == "M3":
-        faktor = 6000/instpower
-    else:
-        faktor = 3000/instpower
+    faktor = 3000/instpower
 pvmodus = 0
 if os.path.isfile(file_stringpv):
    f = open( file_stringpv , 'r')
@@ -73,8 +76,8 @@ if count5==0:
       neupowertarget = int((uberschuss + aktpower) * faktor)
    if neupowertarget < 0:
       neupowertarget = 0
-   if neupowertarget > int(9000 * faktor):
-      neupowertarget = int(9000 * faktor)
+   if neupowertarget > int(cap * faktor):
+      neupowertarget = int(cap * faktor)
    # status nach handbuch Thor
    #0.. Aus
    #1-8 Geraetestart
