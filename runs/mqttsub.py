@@ -259,6 +259,11 @@ def on_message(client, userdata, msg):
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
                     writetoconfig(shconfigfile,'smarthomedevices','device_leistungurl_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_leistungurl", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_stateurl" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_stateurl_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_stateurl", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureurlc" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):

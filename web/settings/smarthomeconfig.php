@@ -209,6 +209,17 @@ $numDevices = 9;
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="device_stateurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Status-URL</label>
+										<div class="col">
+											<input id="device_stateurlDevices<?php echo $devicenum; ?>" name="device_stateurl" class="form-control" type="text" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">
+												Die hier angegebene URL wird aufgerufen, um den aktuellen Status (1 = an, 0 = aus) des Geräts zu erhalten. <br>
+												Der Parameter ist optional und kann somit auch leer gelassen werden. In diesem Fall wird der Parameter mit "none" vorbelegt und 
+                                                                                                die Erkennung, ob das Gerät angeschaltet ist, wird weiterhin über die Leistung ermittelt. <br>
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">

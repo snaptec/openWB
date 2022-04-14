@@ -37,6 +37,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_einschalturl", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_ausschalturl", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_leistungurl", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_stateurl", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measureurl", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measureurlc", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_username", 0],
