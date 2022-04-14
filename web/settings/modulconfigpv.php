@@ -603,7 +603,7 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option nur aktivieren, wenn ein weiteres Solaredge SmartMeter verbaut ist, welches z.B. die Leistung einer vorhandenen Bestands-PV-Anlage erfasst, 
+										Diese Option nur aktivieren, wenn ein weiteres Solaredge SmartMeter verbaut ist, welches z.B. die Leistung einer vorhandenen Bestands-PV-Anlage erfasst,
 										so dass diese dem WR hinzuaddiert wird.
 										Dieses zusätzliche SmartMeter muss dann als "Zähler 2" / "Position 2" im WR-Konfiguratioonsmenü konfiguriert sein.
 									</span>
@@ -717,6 +717,15 @@
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaxip" id="solaxip" value="<?php echo $solaxipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="pv1_ida" class="col-md-4 col-form-label">ID </label>
+								<div class="col">
+									<input class="form-control" type="text" name="pv1_ida" id="pv1_ida" value="<?php echo $pv1_idaold ?>">
+									<span class="form-text small">
+										Gültige Werte Id als Zahl. Für Gen3 0 eintragen für Gen4 ID vom WR eintragen (meistens 1)
 									</span>
 								</div>
 							</div>
@@ -1346,7 +1355,7 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_shelly') {
 									showSection('#pv2ipdiv');
-								}								
+								}
 							}
 							$(function() {
 								display_pv2wattmodul();
