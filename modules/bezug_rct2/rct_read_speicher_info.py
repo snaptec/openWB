@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os
-import sys
+import sys, traceback
 import time
 from typing import List
 try: # make script callable from command line and LRS
@@ -14,65 +14,60 @@ except Exception as e:
 # Entry point with parameter check
 def main(argv: List[str]):
     start_time = time.time()
-    rct_lib.init(argv)
+    rct = rct_lib.RCT(argv)
 
-    clientsocket = rct_lib.connect_to_server()
-    if clientsocket is not None:
+    if rct.connect_to_server() == True:
         try:
             # generate id list for fast bulk read
             MyTab = []
-            HWVersion = rct_lib.add_by_name(MyTab, 'battery.bms_power_version')
-            SWVersion = rct_lib.add_by_name(MyTab, "battery.bms_software_version")
-            Ser       = rct_lib.add_by_name(MyTab, "battery.bms_sn")
-            Status    = rct_lib.add_by_name(MyTab, "battery.bat_status") 
-            cap       = rct_lib.add_by_name(MyTab, "battery.ah_capacity") 
-            cycl      = rct_lib.add_by_name(MyTab, "battery.cycles")
-            Eff       = rct_lib.add_by_name(MyTab, "battery.efficiency")
-            Soh       = rct_lib.add_by_name(MyTab, "battery.soh")
-            SoC       = rct_lib.add_by_name(MyTab, "battery.soc") 
-            temp      = rct_lib.add_by_name(MyTab, "battery.max_cell_temperature") 
-            ms1       = rct_lib.add_by_name(MyTab, "battery.module_sn[0]")
-            ms2       = rct_lib.add_by_name(MyTab, "battery.module_sn[1]") 
-            ms3       = rct_lib.add_by_name(MyTab, "battery.module_sn[2]")
-            ms4       = rct_lib.add_by_name(MyTab, "battery.module_sn[3]") 
-            ms5       = rct_lib.add_by_name(MyTab, "battery.module_sn[4]") 
-            ms6       = rct_lib.add_by_name(MyTab, "battery.module_sn[5]") 
-            rct_lib.add_by_name(MyTab, "battery.module_sn[6]") 
-            Stat1     = rct_lib.add_by_name(MyTab, "battery.status")
-            Stat2     = rct_lib.add_by_name(MyTab, "battery.status2") 
-            Stor      = rct_lib.add_by_name(MyTab, "battery.stored_energy") 
-            Used      = rct_lib.add_by_name(MyTab, "battery.used_energy")
-            rct_lib.add_by_name(MyTab, "battery.temperature")
-            rct_lib.add_by_name(MyTab, "battery.voltage")
-            rct_lib.add_by_name(MyTab, "battery.prog_sn")
-            rct_lib.add_by_name(MyTab, "battery.soc_target")
-            rct_lib.add_by_name(MyTab, "battery.soc_target_high")
-            rct_lib.add_by_name(MyTab, "battery.soc_target_low")
-            rct_lib.add_by_name(MyTab, "battery.soc_update_since")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[0]")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[1]")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[2]")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[3]")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[4]")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[5]")
-            rct_lib.add_by_name(MyTab, "battery.stack_cycles[6]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[0]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[1]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[2]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[3]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[4]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[5]")
-            rct_lib.add_by_name(MyTab, "battery.stack_software_version[6]")
+            HWVersion = rct.add_by_name(MyTab, 'battery.bms_power_version')
+            SWVersion = rct.add_by_name(MyTab, "battery.bms_software_version")
+            Ser       = rct.add_by_name(MyTab, "battery.bms_sn")
+            Status    = rct.add_by_name(MyTab, "battery.bat_status") 
+            cap       = rct.add_by_name(MyTab, "battery.ah_capacity") 
+            cycl      = rct.add_by_name(MyTab, "battery.cycles")
+            Eff       = rct.add_by_name(MyTab, "battery.efficiency")
+            Soh       = rct.add_by_name(MyTab, "battery.soh")
+            SoC       = rct.add_by_name(MyTab, "battery.soc") 
+            temp      = rct.add_by_name(MyTab, "battery.max_cell_temperature") 
+            ms1       = rct.add_by_name(MyTab, "battery.module_sn[0]")
+            ms2       = rct.add_by_name(MyTab, "battery.module_sn[1]") 
+            ms3       = rct.add_by_name(MyTab, "battery.module_sn[2]")
+            ms4       = rct.add_by_name(MyTab, "battery.module_sn[3]") 
+            ms5       = rct.add_by_name(MyTab, "battery.module_sn[4]") 
+            ms6       = rct.add_by_name(MyTab, "battery.module_sn[5]") 
+            ms7       = rct.add_by_name(MyTab, "battery.module_sn[6]") 
+            Stat1     = rct.add_by_name(MyTab, "battery.status")
+            Stat2     = rct.add_by_name(MyTab, "battery.status2") 
+            Stor      = rct.add_by_name(MyTab, "battery.stored_energy") 
+            Used      = rct.add_by_name(MyTab, "battery.used_energy")
+            rct.add_by_name(MyTab, "battery.temperature")
+            rct.add_by_name(MyTab, "battery.voltage")
+            rct.add_by_name(MyTab, "battery.prog_sn")
+            rct.add_by_name(MyTab, "battery.soc_target")
+            rct.add_by_name(MyTab, "battery.soc_target_high")
+            rct.add_by_name(MyTab, "battery.soc_target_low")
+            rct.add_by_name(MyTab, "battery.soc_update_since")
+            rct.add_by_name(MyTab, "battery.stack_cycles[0]")
+            rct.add_by_name(MyTab, "battery.stack_cycles[1]")
+            rct.add_by_name(MyTab, "battery.stack_cycles[2]")
+            rct.add_by_name(MyTab, "battery.stack_cycles[3]")
+            rct.add_by_name(MyTab, "battery.stack_cycles[4]")
+            rct.add_by_name(MyTab, "battery.stack_cycles[5]")
+            rct.add_by_name(MyTab, "battery.stack_cycles[6]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[0]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[1]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[2]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[3]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[4]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[5]")
+            rct.add_by_name(MyTab, "battery.stack_software_version[6]")
 
             # read parameters
-            response = rct_lib.read(clientsocket, MyTab)
-            rct_lib.close(clientsocket)
+            response = rct.read(MyTab)
+            rct.close()
             
-            # output all response elements
-            rct_lib.dbglog("Overall access time: {:.3f} seconds".format(time.time() - start_time))
-            rct_lib.dbglog(rct_lib.format_list(response))
-
-            print( "Battery Controller   : " + str(rct_lib.host) )
+            print( "Battery Controller   : " + str(rct.host) )
             print( "Hardware Version     : " + str(HWVersion.value))
             print( "Software Version     : " + str(SWVersion.value) )
             print( "Serial Nr            : " + str(Ser.value) )
@@ -100,7 +95,6 @@ def main(argv: List[str]):
             if  str(ms6.value)>"  ":
                 print( "Batt.Pack 6 SN       : "  + str(ms6.value) )
 
-
             print( "Batt Status 1        : "  + str(Stat1.value) )
             print( "Batt Status 2        : "  + str(Stat2.value) )
             Stor=  (int(Stor.value) / 1000.0)
@@ -108,9 +102,15 @@ def main(argv: List[str]):
             Used=  (int(Used.value) / 1000.0)
             print(  "Entnommene Energy    : "  + str(Used) + ' Kwh' )
 
-        except Exception as e:
-            rct_lib.close(clientsocket)
-            raise(e)
+            # debug output of processing time and all response elements
+            rct.dbglog("Overall processing time: {:.3f} seconds".format(time.time() - start_time))
+            rct.dbglog(response.format_list())
+        except:
+            print("-"*100)
+            traceback.print_exc(file=sys.stdout)
+            rct.close()
+
+    rct = None
 
             
 if __name__ == "__main__":

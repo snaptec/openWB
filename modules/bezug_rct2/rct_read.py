@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import fnmatch
-import sys
+import sys, traceback
 import time
 from typing import List
 try: # make script callable from command line and LRS
@@ -12,31 +12,32 @@ except:
 # Entry point with parameter check
 def main(argv: List[str]):
     start_time = time.time()
-    rct_lib.init(argv)
+    rct = rct_lib.RCT(argv)
 
-    clientsocket = rct_lib.connect_to_server()
-    if clientsocket is not None:
+    if rct.connect_to_server() == True:
         try:
             MyTab = []
-            for obj in rct_lib.id_tab:
-                if rct_lib.search_id > 0 and obj.id != rct_lib.search_id:
+            for obj in rct.id_tab:
+                if rct.search_id > 0 and obj.id != rct.search_id:
                     continue
 
-                if rct_lib.search_name is not None and fnmatch.fnmatch(obj.name, rct_lib.search_name) is False:
+                if rct.search_name is not None and fnmatch.fnmatch(obj.name, rct.search_name) is False:
                     continue
 
-                rct_lib.add_by_id(MyTab, obj.id)
+                rct.add_by_id(MyTab, obj.id)
 
-            response = rct_lib.read(clientsocket, MyTab)
-            rct_lib.close(clientsocket)
+            response = rct.read(MyTab)
+            rct.close()
 
-            # output all response elements
-            rct_lib.dbglog("Overall access time: {:.3f} seconds".format(time.time() - start_time))
-            rct_lib.dbglog(rct_lib.format_list(response))
-        except Exception as e:
-            rct_lib.close(clientsocket)
-            raise(e)
+            # debug output of processing time and all response elements
+            rct.dbglog("Overall processing time: {:.3f} seconds".format(time.time() - start_time))
+            rct.dbglog(response.format_list())
+        except:
+            print("-"*100)
+            traceback.print_exc(file=sys.stdout)
+            rct.close()
 
+    rct = None
 
 if __name__ == "__main__":
     main(sys.argv[1:])
