@@ -90,8 +90,7 @@ def main(argv: List[str]):
             os.system('mosquitto_pub -r -t openWB/set/evu/faultStr -m "' + str(faultStr) + '"')
 
             # debug output of processing time and all response elements
-            rct.dbglog("Overall processing time: {:.3f} seconds".format(time.time() - start_time))
-            rct.dbglog(response.format_list())
+            rct.dbglog(response.format_list(time.time() - start_time))
         except:
             print("-"*100)
             traceback.print_exc(file=sys.stdout)

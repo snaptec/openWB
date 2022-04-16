@@ -251,8 +251,12 @@ class Frame:
         self.statisticRxDropped += 1
 
     # create a formated text string for all elements in frame.idList
-    def format_list(self):
-        fmt = "Formatted frame list\n"
+    def format_list(self, access_time=0):
+        if access_time == 0:
+            fmt = ""
+        else:
+            fmt = "Overall processing time: {:.3f} seconds\n".format(access_time)
+        fmt += "Formatted frame list\n"
         for item in self.idList:
             if(item.id > 0):
                 if item.data_type == rct_data.t_enum:
