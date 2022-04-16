@@ -515,12 +515,12 @@ class RCT():
             if len(stream) == 0:    # nothing to send
                 return #break
             
-            self.dbglog("Read    : {} id's".format(frame.pendingCount))
+            requestedCount = frame.pendingCount
             self.socket.send(stream)
 
             # wait for response and consume requested ids and set the value
             self.receive(frame, self.receive_timeout)
-            self.dbglog("Response: consumed {:4d} | dropped {:4d} | duplicate {:4d} | Crc16Error {:4d} | pending {:4d}".format(frame.statisticRxConsumed, frame.statisticRxDropped, frame.statisticRxDuplicate, frame.statisticCrc16Error, frame.pendingCount))
+            self.dbglog("Response: requested {:4d} | consumed {:4d} | dropped {:4d} | duplicate {:4d} | Crc16Error {:4d} | pending {:4d}".format(requestedCount, frame.statisticRxConsumed, frame.statisticRxDropped, frame.statisticRxDuplicate, frame.statisticCrc16Error, frame.pendingCount))
 
         return frame
 
