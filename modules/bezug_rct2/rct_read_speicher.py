@@ -1,12 +1,9 @@
 #!/usr/bin/python3
-import os
-import sys, traceback
-import time
 from typing import List
-try: # make script callable from command line and LRS
-    from bezug_rct2 import rct_lib
-except:
-    import rct_lib
+from pathlib import Path
+import os, sys, traceback, time
+sys.path.insert(0, str(Path(os.path.abspath(__file__)).parents[2]))
+from modules.bezug_rct2 import rct_lib
 
 # Author Heinz Hoefling
 # Version 1.0 Okt.2021

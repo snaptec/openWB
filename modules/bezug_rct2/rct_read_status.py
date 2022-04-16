@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-import os
-import sys, traceback
-import time
 from typing import List
-import rct_lib
-from rct_lib import rct_id
+from pathlib import Path
+import os, sys, traceback, time
+sys.path.insert(0, str(Path(os.path.abspath(__file__)).parents[2]))
+from modules.bezug_rct2 import rct_lib
+from modules.bezug_rct2.rct_lib import rct_id
 
 # Author Heinz Hoefling
 # Version 1.0 Okt.2021
@@ -72,7 +72,7 @@ def main(argv: List[str]):
             # debug output of processing time and all response elements
             rct.dbglog("Overall processing time: {:.3f} seconds".format(time.time() - start_time))
             rct.dbglog(response.format_list())
-        except Exception as e:
+        except:
             print("-"*100)
             traceback.print_exc(file=sys.stdout)
             rct.close()

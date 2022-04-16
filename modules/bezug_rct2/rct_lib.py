@@ -20,14 +20,11 @@ import binascii
 import time
 import copy
 import operator
+import logging
 from enum import Enum
 import inspect
 
-
 # helper function to print and error
-def errlog(*args):
-    sys.stderr.write(' '.join(map(str, args)) + '\n')
-
 def hexdump(src, length=16):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     lines = []
@@ -255,7 +252,7 @@ class Frame:
 
     # create a formated text string for all elements in frame.idList
     def format_list(self):
-        fmt = ""
+        fmt = "Formatted frame list\n"
         for item in self.idList:
             if(item.id > 0):
                 if item.data_type == rct_data.t_enum:
@@ -387,8 +384,6 @@ class RCT():
     def __init__(self, argv):
         # local variables
         self.id_tab = []
-        self.bVerbose = False
-        self.bInfo = False
         self.host = 'localhost'
         self.port = 8899
         self.socket = None
@@ -396,33 +391,31 @@ class RCT():
         self.start_time = 0
         self.search_id = 0
         self.search_name = None
+        logging.basicConfig(level=logging.DEBUG)
+        self.logger = logging.getLogger('RCT')
+
+        self.id_tab_setup()
 
         # parse command line arguments
         try:
-            options, remainder = getopt.getopt(argv, 'i:v', ['ip=', 'verbose', 'info', 'id=', 'name='])
-        except getopt.GetoptError as err:
-            # print help information and exit:
-            errlog(err)  # will print something like "option -a not recognized"
-            # get calling file name
+            options, remainder = getopt.getopt(argv, '', ['ip=', 'debug', 'info', 'id=', 'name='])
+            for opt, arg in options:
+                if opt in ('--ip'):
+                    self.host = arg
+                elif opt in ('--id'):
+                    self.search_id = int(arg, base=16)
+                elif opt in ('--name'):
+                    self.search_name = arg
+                elif opt in ('--debug'):
+                    self.logger.setLevel(logging.DEBUG)
+                elif opt in ('--info'):
+                    self.logger.setLevel(logging.INFO)
+        except:
+            traceback.print_exc(file=sys.stdout)
             frame = inspect.stack()[1]
             module = inspect.getmodule(frame[0])
-            filename = module.__file__
-            errlog('usage: ', filename, '[--ip_addr=<host>] [--verbose] [--info] [--port=<portnr>] [--id=0xXXXXXXXX|--name=<string>]')
-            return
+            self.errlog('usage:', module.__file__, '[--ip_addr=<host>] [--verbose] [--info] [--port=<portnr>] [--id=0xXXXXXXXX|--name=<string>]')
 
-        for opt, arg in options:
-            if opt in ('--ip'):
-                self.host = arg
-            elif opt in ('--id'):
-                self.search_id = int(arg, base=16)
-            elif opt in ('--name'):
-                self.search_name = arg
-            elif opt in ('-v', '--verbose'):
-                self.bVerbose = True
-            elif opt in ('--info'):
-                self.bInfo = True
-
-        self.id_tab_setup()
 
     # find a table entry by using the 32 bit ID
     def find_by_id(self, id, tab = []):
@@ -501,10 +494,6 @@ class RCT():
                     timeout = 0
                     if response.pendingCount <= 0:
                         return
-                    # errlog('response')
-                    # errlog(hexdump(buf))
-                    #response.pendingCount = 0
-                    #return
             else:
                 # timeout
                 return
@@ -522,12 +511,12 @@ class RCT():
             if len(stream) == 0:    # nothing to send
                 return #break
             
-            self.infolog("Read    : {} id's".format(frame.pendingCount))
+            self.dbglog("Read    : {} id's".format(frame.pendingCount))
             self.socket.send(stream)
 
             # wait for response and consume requested ids and set the value
             self.receive(frame, self.receive_timeout)
-            self.infolog("Response: consumed {:4d} | dropped {:4d} | duplicate {:4d} | Crc16Error {:4d} | pending {:4d}".format(frame.statisticRxConsumed, frame.statisticRxDropped, frame.statisticRxDuplicate, frame.statisticCrc16Error, frame.pendingCount))
+            self.dbglog("Response: consumed {:4d} | dropped {:4d} | duplicate {:4d} | Crc16Error {:4d} | pending {:4d}".format(frame.statisticRxConsumed, frame.statisticRxDropped, frame.statisticRxDuplicate, frame.statisticCrc16Error, frame.pendingCount))
 
         return frame
 
@@ -561,13 +550,13 @@ class RCT():
     def write_ramdisk(self, fn, val, rctname):
         try:
             fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-            if self.bVerbose == True:
-                f = open(fnn, 'r')
-                if f != None:
-                    oldv = f.read()
-                    f.close()
-                    self.dbglog("field " + str(fnn) + " val is:" + str(val) + " oldval:" + str(oldv) + " " + str(rctname))
-
+# Uncomment form debugging purposes
+#            if self.logger.logger == logging.DEBUG:
+#                f = open(fnn, 'r')
+#                if f != None:
+#                    oldv = f.read()
+#                    f.close()
+#                    self.dbglog("field " + str(fnn) + " val is:" + str(val) + " oldval:" + str(oldv) + " " + str(rctname))
             f = open(fnn, 'w')
             if f != None:
                 f.write(str(val))
@@ -576,14 +565,16 @@ class RCT():
             return
 
     # helper function to print debug messages
+    def errlog(self, *args):
+        self.logger.error(' '.join(map(str, args)))
+
+    # helper function to print debug messages
     def dbglog(self, *args):
-        if self.bVerbose:
-            sys.stdout.write(' '.join(map(str, args)) + '\n')
+        self.logger.debug(' '.join(map(str, args)))
 
     # helper function to print info messages
     def infolog(self, *args):
-        if self.bInfo:
-            sys.stdout.write(' '.join(map(str, args)) + '\n')
+        self.logger.info(' '.join(map(str, args)))
 
     def id_tab_setup(self):
         # add all known id's with name, data type, description and unit to the id table

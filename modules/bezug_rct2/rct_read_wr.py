@@ -1,12 +1,9 @@
 #!/usr/bin/python3
-import os
-import sys, traceback
-import time
 from typing import List
-try: # make script callable from command line and LRS
-    from bezug_rct2 import rct_lib
-except:
-    import rct_lib
+from pathlib import Path
+import os, sys, traceback, time
+sys.path.insert(0, str(Path(os.path.abspath(__file__)).parents[2]))
+from modules.bezug_rct2 import rct_lib
 
 # Entry point with parameter check
 def main(argv: List[str]):
@@ -54,10 +51,10 @@ def main(argv: List[str]):
             pv3total = int(pv3total.value)
 
             # aktuell
-            rct.write_ramdisk('pv1wattString1', int(pv1watt), 'pv1watt')
-            rct.write_ramdisk('pv1wattString2', int(pv2watt), 'pv2watt')
+            rct.write_ramdisk('pv1wattString1', pv1watt, 'pv1watt')
+            rct.write_ramdisk('pv1wattString2', pv2watt, 'pv2watt')
             pvwatt = ((pv1watt+pv2watt+pv3watt) * -1)
-            rct.write_ramdisk('pvwatt', int(pvwatt), 'negative Summe von pv1watt + pv2watt + pv3watt')
+            rct.write_ramdisk('pvwatt', pvwatt, 'negative Summe von pv1watt + pv2watt + pv3watt')
 
             # daily
             daily_pvkwhk = (dA + dB + dE) / 1000.0   # -> KW
