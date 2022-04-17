@@ -17,6 +17,7 @@ def main(argv: List[str]):
             pv1watt  = rct.add_by_name(MyTab, 'dc_conv.dc_conv_struct[0].p_dc')
             pv2watt  = rct.add_by_name(MyTab, 'dc_conv.dc_conv_struct[1].p_dc')
             pv3watt  = rct.add_by_name(MyTab, 'io_board.s0_external_power')
+            pLimit   = rct.add_by_name(MyTab, 'nsm.p_limit')
             dA       = rct.add_by_name(MyTab, 'energy.e_dc_day[0]')
             dB       = rct.add_by_name(MyTab, 'energy.e_dc_day[1]')
             dE       = rct.add_by_name(MyTab, 'energy.e_ext_day')
@@ -35,9 +36,10 @@ def main(argv: List[str]):
             rct.close()
 
             # postprocess values
-            pv1watt  = int(pv1watt.value)
-            pv2watt  = int(pv2watt.value)
-            pv3watt  = int(pv3watt.value)
+            pv1watt  = pv1watt.value
+            pv2watt  = pv2watt.value
+            pv3watt  = pv3watt.value
+            pLimit   = pLimit.value
             dA       = int(dA.value)
             dB       = int(dB.value)
             dE       = int(dE.value)
@@ -51,11 +53,14 @@ def main(argv: List[str]):
             pv2total = int(pv2total.value)
             pv3total = int(pv3total.value)
 
-            # aktuell
+            # actual DC power limited to Max. grid power [W]
+            # (that's the best known parameter to limit DC power to max. AC power) 
             rct.write_ramdisk('pv1wattString1', pv1watt, 'pv1watt')
             rct.write_ramdisk('pv1wattString2', pv2watt, 'pv2watt')
-            pvwatt = ((pv1watt+pv2watt+pv3watt) * -1)
-            rct.write_ramdisk('pvwatt', pvwatt, 'negative Summe von pv1watt + pv2watt + pv3watt')
+            pvwatt = pv1watt+pv2watt+pv3watt
+            if pvwatt > pLimit:
+                pvwatt = pLimit       # limit pvwatt to nsm.p_limit -> Max. grid power [W] 
+            rct.write_ramdisk('pvwatt', int(pvwatt) * -1, 'negative Summe max. possible AC power')
 
             # daily
             daily_pvkwhk = (dA + dB + dE) / 1000.0   # -> KW

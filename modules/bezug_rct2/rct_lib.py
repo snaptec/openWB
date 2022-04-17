@@ -251,12 +251,8 @@ class Frame:
         self.statisticRxDropped += 1
 
     # create a formated text string for all elements in frame.idList
-    def format_list(self, access_time=0):
-        if access_time == 0:
-            fmt = ""
-        else:
-            fmt = "Overall processing time: {:.3f} seconds\n".format(access_time)
-        fmt += "Formatted frame list\n"
+    def format_list(self, access_time):
+        fmt = "Overall processing time: {:.3f} seconds\n".format(access_time)
         for item in self.idList:
             if(item.id > 0):
                 if item.data_type == rct_data.t_enum:
@@ -274,47 +270,38 @@ class Frame:
     def encode(self):
         # build a byte stream
         buf_all = b""
-        count_start = 0
-        count_escape = 0
-        count_crc_start = 0
-        count_crc_escape = 0
         
         for item in self.idList:
+            # consider items with id != 0 but without previous response
             if item.id != 0 and item.pending == True:
+                # start buffer with command
                 buf = struct.pack('B', self.command)
     
-                # add length
+                # append length of value in bytes and consider "long" commands with 16 bit length
                 length = self.frame_type
                 if item.value != None:
                     length += len(item.value)
                 if self.command == cmd_long_write or self.command == cmd_long_response:
-                    buf += struct.pack('>H', length)  # 2 bytes
+                    buf += struct.pack('>H', length)  # 2 bytes for length
                 else:
-                    buf += struct.pack('>B', length)  # 1 byte
+                    buf += struct.pack('>B', length)  # 1 byte for length
 
+                # just for completness but PLANT frames are not used in send direction
                 if self.frame_type == FRAME_TYPE_PLANT:
                     buf += struct.pack('>I', self.address)                    # 4 bytes
 
-                dat = struct.pack('>I', item.id)
-                for b in dat:
-                    b = bytes([b])
-                    if b == start_token:
-                        count_start += 1
-                    if b == escape_token:
-                        count_escape += 1
-
-                # add id
+                # append id
                 buf += struct.pack('>I', item.id)                             # 4 bytes
 
-                # add data if valid
+                # append data if used
                 if item.value != None:
                     buf += self.encode_by_type(item.data_type, item.value)
 
-                # calculate and add CRC16
+                # calculate and append CRC16
                 crc16 = self.CRC16(buf)
                 buf += struct.pack('>H', crc16)                               # 2 bytes
 
-                # inject escape token in buf where necessary and extend buf_all
+                # add start token and inject escape tokens in buf where necessary to buf_all
                 buf_all += struct.pack('c', start_token) + self.createStream(buf)
 
         return buf_all
@@ -443,7 +430,7 @@ class RCT():
 
         return None
 
-    # search in id_tab an entry by name and append a copy to a tab
+    # search in id_tab by name and append a copy of the entry to the passed table tab
     def add_by_name(self, tab, name):
         for l in self.id_tab:
             if l.name == name:
@@ -453,7 +440,7 @@ class RCT():
 
         return None
 
-    # search in id_tab an entry by id and append a copy to a tab
+    # search in id_tab by id and append a copy of the entry to the passed table tab
     def add_by_id(self, tab, id):
         for l in self.id_tab:
             if l.id == id:
@@ -492,7 +479,7 @@ class RCT():
                 return
 
             if ready_to_read:
-                buf = self.socket.recv(8192)
+                buf = self.socket.recv(10000)
                 if len(buf) > 0:
                     response.consume(buf)
                     timeout = 0
