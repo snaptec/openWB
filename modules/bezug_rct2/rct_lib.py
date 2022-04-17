@@ -252,7 +252,7 @@ class Frame:
 
     # create a formated text string for all elements in frame.idList
     def format_list(self, access_time):
-        fmt = "Overall processing time: {:.3f} seconds\n".format(access_time)
+        fmt = ""
         for item in self.idList:
             if(item.id > 0):
                 if item.data_type == rct_data.t_enum:
@@ -263,6 +263,8 @@ class Frame:
                 fmt += fmt_str.format(item.id, item.name, item.desc, item.value, ext)
             else:
                 fmt += item.name + '\n'
+
+        fmt += "Overall processing time: {:.3f} seconds\n".format(access_time)
         return fmt
 
     # encode a transmit stream 
