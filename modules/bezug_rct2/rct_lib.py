@@ -384,7 +384,6 @@ class RCT():
         self.start_time = 0
         self.search_id = 0
         self.search_name = None
-        logging.basicConfig(level=logging.DEBUG)
         self.logger = logging.getLogger('RCT')
 
         self.id_tab_setup()
@@ -400,9 +399,9 @@ class RCT():
                 elif opt in ('--name'):
                     self.search_name = arg
                 elif opt in ('--debug'):
-                    self.logger.setLevel(logging.DEBUG)
+                    logging.basicConfig(level=logging.DEBUG)
                 elif opt in ('--info'):
-                    self.logger.setLevel(logging.INFO)
+                    logging.basicConfig(level=logging.INFO)
         except:
             traceback.print_exc(file=sys.stdout)
             frame = inspect.stack()[1]
