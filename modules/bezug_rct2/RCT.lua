@@ -31,7 +31,6 @@ t_enum = 8
 t_float = 9
 t_float = 10
 t_log_ts = 11
-t_sum_lp = 12
 
 HEADER_WITH_LENGTH = 1 + 1 + 2      -- frame length for header, command and 2 byte length
 FRAME_TYPE_STANDARD = 4             -- standard frame with id
@@ -267,14 +266,6 @@ function get_value(entry, payload)
             n = tonumber(payload:sub(0,8), 16)
             value = string.format("%s", os.date("%d.%m.%Y %H:%M:%S", n))
         end
-    elseif entry.DataType == t_sum_lp then
-        if(payload:len()>=8) then 
-            len = 8
-            n = tonumber(payload:sub(0,len), 16)
-            s = Struct.pack("I4", n)
-            v = Struct.unpack("f",s)
-            value = string.format("%.3f (%d)", v, n)
-        end
     else
         value = payload
     end
@@ -379,7 +370,7 @@ local rct_id =
     {msgid = 0x19608C98, idx =  89, Name = "partition[3].last_id",                             DataType = t_int32,   Desc = "partition[3].last_id"},
     {msgid = 0x19B814F2, idx =  90, Name = "logger.year_egrid_feed_log_ts",                    DataType = t_log_ts,  Desc = "logger.year_egrid_feed_log_ts"},
     {msgid = 0x1ABA3EE8, idx =  91, Name = "p_rec_req[0]",                                     DataType = t_float,   Desc = "Required compensation power [W]"},
-    {msgid = 0x1AC87AA0, idx =  92, Name = "g_sync.p_ac_load_sum_lp",                          DataType = t_sum_lp,  Desc = "Load household - external Power[W]"},
+    {msgid = 0x1AC87AA0, idx =  92, Name = "g_sync.p_ac_load_sum_lp",                          DataType = t_float,   Desc = "Load household - external Power[W]"},
     {msgid = 0x1B39A3A3, idx =  93, Name = "battery.bms_power_version",                        DataType = t_uint32,  Desc = "Software version BMS Power"},
     {msgid = 0x1B5445C4, idx =  94, Name = "io_board.check_rse_result",                        DataType = t_uint16,  Desc = "io_board.check_rse_result"},
     {msgid = 0x1BFA5A33, idx =  95, Name = "energy.e_grid_load_total_sum",                     DataType = t_float,   Desc = "energy.e_grid_load_total_sum"},
@@ -736,7 +727,7 @@ local rct_id =
     {msgid = 0x7BF3886B, idx = 446, Name = "battery_placeholder[0].stack_cycles[2]",           DataType = t_uint16,  Desc = "battery_placeholder[0].stack_cycles[2]"},
     {msgid = 0x7C0827C5, idx = 447, Name = "partition[5].last_id",                             DataType = t_int32,   Desc = "partition[5].last_id"},
     {msgid = 0x7C556C7A, idx = 448, Name = "io_board.io2_polarity",                            DataType = t_bool,    Desc = "Inverted signal on input I/O 2"},
-    {msgid = 0x7C78CBAC, idx = 449, Name = "g_sync.q_ac_sum_lp",                               DataType = t_sum_lp,  Desc = "Reactive power [var]"},
+    {msgid = 0x7C78CBAC, idx = 449, Name = "g_sync.q_ac_sum_lp",                               DataType = t_float,   Desc = "Reactive power [var]"},
     {msgid = 0x7C863EDB, idx = 450, Name = "battery_placeholder[0].cells[3]",                  DataType = t_string,  Desc = "battery_placeholder[0].cells[3]"},
     {msgid = 0x7D839AE6, idx = 451, Name = "battery_placeholder[0].cells_resist[2]",           DataType = t_string,  Desc = "battery_placeholder[0].cells_resist[2]"},
     {msgid = 0x7DA7D8B6, idx = 452, Name = "db.power_board.version_main",                      DataType = t_uint32,  Desc = "PIC software version"},
@@ -811,7 +802,7 @@ local rct_id =
     {msgid = 0x90C2AC13, idx = 521, Name = "battery_placeholder[0].stack_cycles[3]",           DataType = t_uint16,  Desc = "battery_placeholder[0].stack_cycles[3]"},
     {msgid = 0x90F123FA, idx = 522, Name = "io_board.io1_usage",                               DataType = t_enum,    Desc = "Digital I/O 1 usage"},
     {msgid = 0x915CD4A4, idx = 523, Name = "grid_mon[1].f_over.threshold",                     DataType = t_float,   Desc = "Max. frequency level 2 [Hz]"},
-    {msgid = 0x91617C58, idx = 524, Name = "g_sync.p_ac_grid_sum_lp",                          DataType = t_sum_lp,  Desc = "Total grid power [W]"},
+    {msgid = 0x91617C58, idx = 524, Name = "g_sync.p_ac_grid_sum_lp",                          DataType = t_float,   Desc = "Total grid power [W]"},
     {msgid = 0x917E3622, idx = 525, Name = "energy.e_ext_year",                                DataType = t_float,   Desc = "External year energy [Wh]"},
     {msgid = 0x91C325D9, idx = 526, Name = "battery.cells_stat[0].t_min.time",                 DataType = t_uint32,  Desc = "battery.cells_stat[0].t_min.time"},
     {msgid = 0x91FB68CD, idx = 527, Name = "battery.cells_stat[6].t_max.value",                DataType = t_float,   Desc = "battery.cells_stat[6].t_max.value"},
@@ -1054,11 +1045,11 @@ local rct_id =
     {msgid = 0xDABD323E, idx = 764, Name = "osci_struct.error",                                DataType = t_int16,   Desc = "Communication error"},
     {msgid = 0xDAC7DD86, idx = 765, Name = "io_board.p_rse_desc_grad",                         DataType = t_float,   Desc = "Power descent gradient [P/Pn/s]"},
     {msgid = 0xDB11855B, idx = 766, Name = "dc_conv.dc_conv_struct[0].p_dc_lp",                DataType = t_float,   Desc = "Solar generator A power [W]"},
-    {msgid = 0xDB2D69AE, idx = 767, Name = "g_sync.p_ac_sum_lp",                               DataType = t_sum_lp,  Desc = "AC power [W]"},
+    {msgid = 0xDB2D69AE, idx = 767, Name = "g_sync.p_ac_sum_lp",                               DataType = t_float,   Desc = "AC power [W]"},
     {msgid = 0xDB45ABD0, idx = 768, Name = "dc_conv.dc_conv_struct[0].rescan_correction",      DataType = t_float,   Desc = "Last global rescan MPP correction on input A [V]"},
     {msgid = 0xDB62DCB7, idx = 769, Name = "net.n_devices",                                    DataType = t_uint8,   Desc = "net.n_devices"},
     {msgid = 0xDC667958, idx = 770, Name = "power_mng.state",                                  DataType = t_uint8,   Desc = "Battery state machine"},
-    {msgid = 0xDCA1CF26, idx = 771, Name = "g_sync.s_ac_sum_lp",                               DataType = t_sum_lp,  Desc = "Apparent power [VA]"},
+    {msgid = 0xDCA1CF26, idx = 771, Name = "g_sync.s_ac_sum_lp",                               DataType = t_float,   Desc = "Apparent power [VA]"},
     {msgid = 0xDCAC0EA9, idx = 772, Name = "g_sync.i_dr_lp[1]",                                DataType = t_float,   Desc = "Current phase 2 (average) [A]"},
     {msgid = 0xDD5930A2, idx = 773, Name = "battery.cells_stat[0].t_min.index",                DataType = t_uint8,   Desc = "battery.cells_stat[0].t_min.index"},
     {msgid = 0xDD90A328, idx = 774, Name = "flash_rtc.time_stamp_update",                      DataType = t_uint32,  Desc = "Last update date"},
