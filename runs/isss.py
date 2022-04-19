@@ -8,8 +8,12 @@ import struct
 import RPi.GPIO as GPIO
 from pymodbus.client.sync import ModbusSerialClient
 
+import cpulp1
+import cpulp2
 
 # handling of all logging statements
+
+
 def log_debug(level: int, msg: str) -> None:
     if level >= int(loglevel):
         with open('/var/www/html/openWB/ramdisk/isss.log', 'a') as log_file:
@@ -881,6 +885,8 @@ def loadregelvars():
             time.sleep(1)
         u1p3pstat = u1p3ptmpstat
         writelp1evse(lp1solla)
+    cp_interruption("1")
+
     if lp2installed:
         try:
             with open('ramdisk/u1p3plp2stat', 'r') as value:
@@ -914,6 +920,23 @@ def loadregelvars():
                 time.sleep(1)
             u1p3plp2stat = u1p3plp2tmpstat
             writelp2evse(lp2solla)
+        cp_interruption("2")
+
+
+def cp_interruption(cp_num: str):
+    try:
+        with open('ramdisk/extcpulp'+cp_num, 'r') as f:
+            cp_interruption_duration = int(f.read())
+        if cp_interruption_duration > 0:
+            if cp_num == 1:
+                cpulp1.perform_cp_interruption(cp_interruption_duration, False)
+            else:
+                cpulp2.perform_cp_interruption(cp_interruption_duration, False)
+            log_debug(1, "LP"+cp_num+": CP-Unterbrechung %ds" % (cp_interruption_duration))
+            with open('ramdisk/extcpulp'+cp_num, 'w') as f:
+                f.write("0")
+    except (FileNotFoundError, ValueError):
+        log_debug(2, "Error reading extcpulp"+cp_num+"!")
 
 
 def writelp2evse(lla):

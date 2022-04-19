@@ -1247,8 +1247,13 @@ def on_message(client, userdata, msg):
                      f.write(msg.payload.decode("utf-8"))
                      f.close()
             if (msg.topic == "openWB/set/isss/Cpulp1"):
-                if (int(msg.payload) >= 0 and int(msg.payload) <=5):
+                if (int(msg.payload) >= 0 and int(msg.payload) <=150):
                     f = open('/var/www/html/openWB/ramdisk/extcpulp1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/isss/Cpulp2"):
+                if (int(msg.payload) >= 0 and int(msg.payload) <=150):
+                    f = open('/var/www/html/openWB/ramdisk/extcpulp2', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/isss/heartbeat"):

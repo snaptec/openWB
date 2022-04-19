@@ -176,6 +176,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/progevsedinlp22000
 	echo 0 > $RamdiskPath/progevsedinlp22007
 	echo 0 > $RamdiskPath/cpulp1counter
+	echo 0 > $RamdiskPath/extcpulp1
+	echo 0 > $RamdiskPath/extcpulp2
 	echo 0 > $RamdiskPath/soc
 	echo 0 > $RamdiskPath/soc-live.graph
 	echo 0 > $RamdiskPath/soc.graph
