@@ -17,7 +17,7 @@ def main(argv: List[str]):
             pv1watt  = rct.add_by_name(MyTab, 'dc_conv.dc_conv_struct[0].p_dc')
             pv2watt  = rct.add_by_name(MyTab, 'dc_conv.dc_conv_struct[1].p_dc')
             pv3watt  = rct.add_by_name(MyTab, 'io_board.s0_external_power')
-            pLimit   = rct.add_by_name(MyTab, 'buf_v_control.power_reduction_max_solar_grid')
+            pLimit   = rct.add_by_name(MyTab, 'p_rec_lim[2]')   # max. AC power according to RCT Power
             dA       = rct.add_by_name(MyTab, 'energy.e_dc_day[0]')
             dB       = rct.add_by_name(MyTab, 'energy.e_dc_day[1]')
             dE       = rct.add_by_name(MyTab, 'energy.e_ext_day')
