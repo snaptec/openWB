@@ -335,16 +335,29 @@
 						<div id="divspeicheralphaess" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
+									<label for="speicheralphaess" class="col-md-4 col-form-label">Firmware Version</label>
 									<div class="col">
 										<select name="alphav123" id="alphav123" class="form-control">
-											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
-											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
+											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">Alpha ESS-Kit: EMS älter als 1.23V</option>
+											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">Alpha ESS-Kit: EMS 1.23V oder neuer</option>
+											<option <?php if($alphav123old == "2") echo "selected" ?> value="2">Hi5/10</option>
 										</select>
 									</div>
 								</div>
 							</div>
 						</div>
+						<div id="divspeicheralphaessip" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="alphaip" class="col-md-4 col-form-label">IP-Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="alphaip" id="alphaip" value="<?php echo $alphaessipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12. Die Abfrage erfolgt an Port 502.</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 
 						<div id="divspeicherpw" class="hide">
 							<div class="form-group">
@@ -699,6 +712,7 @@
 								hideSection('#divspeicherseco');
 								hideSection('#divspeicherkit');
 								hideSection('#divspeichervarta');
+								hideSection('#divspeicheralphaessip');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichervictron');
 								hideSection('#divspeicherstuder');
@@ -745,6 +759,11 @@
 								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
 									showSection('#divspeicheralphaess');
+									if ($('#alphav123').val() < 2) {
+										hideSection('#divspeicheralphaessip');
+									} else {
+										showSection('#divspeicheralphaessip');
+									}
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
 									showSection('#divspeichermqtt');
@@ -811,6 +830,9 @@
 
 							$(function() {
 								$('#speichermodul').change( function(){
+									display_speichermodul();
+								});
+								$('#alphav123').change( function(){
 									display_speichermodul();
 								});
 

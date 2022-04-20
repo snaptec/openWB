@@ -15,30 +15,28 @@ def get_default_config() -> dict:
         "name": "Alpha ESS Zähler",
         "id": 0,
         "type": "counter",
-        "configuration": {
-            "version": 1
-        }
+        "configuration": {}
     }
 
 
 class AlphaEssCounter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient, version: int) -> None:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
+        self.__version = version
 
     def update(self, unit_id: int):
         log.MainLogger().debug(
             "Komponente "+self.component_config["name"]+" auslesen.")
         time.sleep(0.1)
-        factory_method = self.__get_values_factory(
-            self.component_config["configuration"]["version"])
-        counter_state = factory_method(unit=unit_id)
+        factory_method = self.__get_values_factory()
+        counter_state = factory_method(unit_id)
         self.__store.set(counter_state)
 
-    def __get_values_factory(self, version: int) -> Callable[[int], CounterState]:
-        return self.__get_values_before_v123 if version == 0 else self.__get_values_since_v123
+    def __get_values_factory(self,) -> Callable[[int], CounterState]:
+        return self.__get_values_before_v123 if self.__version == 0 else self.__get_values_since_v123
 
     def __get_values_before_v123(self, unit: int) -> CounterState:
         with self.__tcp_client:
