@@ -157,6 +157,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
+							
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-none hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
@@ -167,6 +168,21 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
+							
+							
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
+								<hr class="border-secondary">
+								<div class="form-row mb-1">
+									<label for="device_idmnavDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Navigator Version</label>
+									<div class="col">
+										<input id="device_idmnavDevices<?php echo $devicenum; ?>" name="device_idmnav" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="2" data-default="2" value="2" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Hauptversion vom Navigator 1 oder 2</span>
+									</div>
+								</div>
+							</div>							
+							
+							
+							
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
