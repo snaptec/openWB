@@ -557,7 +557,7 @@ def getmeter():
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'lp1llkwh': str(lp1llkwh)})
                 if parentWB != "0":
-                    remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/counter",
+                    remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/imported",
                                          payload=str(lp1llkwh*1000), qos=0, retain=True)
 
             if "lp1plugstat" in key:
@@ -689,7 +689,7 @@ def getmeter():
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2llkwh': str(lp2llkwh)})
                     if parentWB != "0":
-                        remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/counter",
+                        remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/imported",
                                              payload=str(lp2llkwh), qos=0, retain=True)
                 if "lp2plugstat" in key:
                     if DeviceValues[str(key)] != Values["lp2plugstat"]:
