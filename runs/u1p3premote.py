@@ -1,7 +1,5 @@
 #!/usr/bin/python
 from pymodbus.client.sync import ModbusTcpClient
-import sys
-import os
 import time
 import argparse
 
@@ -14,16 +12,15 @@ parser.add_argument("-v", "--verbose", required=False, action="store_true", help
 args = parser.parse_args()
 
 if(args.verbose):
-    print("Wartezeit vor und nach %dp Umschaltung %s #%d: %ds"%(args.phases, args.address, args.id, args.duration))
+    print("Wartezeit vor und nach %dp Umschaltung %s #%d: %ds" % (args.phases, args.address, args.id, args.duration))
 
 client = ModbusTcpClient(args.address, port=8899)
-if ( args.phases == 1 ):
+if (args.phases == 1):
     rq = client.write_register(0x0001, 256, unit=args.id)
     time.sleep(args.duration)
     rq = client.write_register(0x0001, 512, unit=args.id)
 
-elif ( args.phases == 3 ):
+elif (args.phases == 3):
     rq = client.write_register(0x0002, 256, unit=args.id)
     time.sleep(args.duration)
     rq = client.write_register(0x0002, 512, unit=args.id)
-

@@ -37,19 +37,22 @@ def update(kostalplenticorehaus: int):
         # EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
         # Werte aus (temporärer) ramdisk lesen
         # aktueller Hausverbrauch
-        with open("/var/www/html/openWB/ramdisk/temp_wattbezug", "r") as f:
-            home_consumption = int(f.read())
+        with open("/var/www/html/openWB/ramdisk/temp_wattbezug", "r") as file:
+            home_consumption = int(file.read())
         # aktuelle PV-Leistung
-        with open("/var/www/html/openWB/ramdisk/pvwatt", "r") as f:
-            pv_power_ac = int(f.read())
+        with open("/var/www/html/openWB/ramdisk/pvwatt", "r") as file:
+            pv_power_ac = int(file.read())
         # aktuelle Speicherleistung
-        with open("/var/www/html/openWB/ramdisk/temp_speicherleistung", "r") as f:
-            actual_batt_ch_disch_power = int(f.read())
+        try:
+            with open("/var/www/html/openWB/ramdisk/temp_speicherleistung", "r") as file:
+                actual_batt_ch_disch_power = int(file.read())
+        except FileNotFoundError:
+            actual_batt_ch_disch_power = 0
         # Bezug berechnen
         bezug = pv_power_ac + actual_batt_ch_disch_power + home_consumption
         # und in die ramdisk
-        with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:
-            f.write(str(bezug))
+        with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as file:
+            file.write(str(bezug))
         log.debug('Watt: ' + str(bezug))
 
     # Daten aus temporärer ramdisk zur globalen Weiterverarbeitung in die

@@ -12,7 +12,7 @@ import paho.mqtt.client as mqtt
 import re
 numberOfSupportedDevices=9 # limit number of smarthome devices
 def on_connect(client, userdata, flags, rc):
-    global devicenr
+    global devicenumber
     client.subscribe("openWB/SmartHome/set/Devices/"+devicenumber+ "/#",2)
     
 def on_message(client, userdata, msg):
