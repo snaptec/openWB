@@ -691,7 +691,7 @@ class Sbase(Sbase0):
                      str(self.device_nummer) + 'watt0pos', 'w')
             f.write(str(importtemp))
             f.close()
-            f = open(self._basePath++'/ramdisk/smarthome_device_' +
+            f = open(self._basePath+'/ramdisk/smarthome_device_' +
                      str(self.device_nummer) + 'watt0neg', 'w')
             f.write(str("0"))
             f.close()
