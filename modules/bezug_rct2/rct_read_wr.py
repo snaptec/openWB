@@ -35,13 +35,13 @@ def main(argv: List[str]):
             response = rct.read(MyTab)
             rct.close()
 
-            # actual DC power limited to max feed-in power 
-            # (that's the best known parameter to limit DC power to max. AC power) 
+            # actual DC power
             rct.write_ramdisk('pv1wattString1', pv1watt.value, 'pv1watt')
             rct.write_ramdisk('pv1wattString2', pv2watt.value, 'pv2watt')
-            pvwatt = pv1watt.value+pv2watt.value+pv3watt.value
+            pvwatt = pv1watt.value + pv2watt.value + pv3watt.value
             rct.write_ramdisk('pvwatt', int(pvwatt) * -1, 'negative Summe von pv1watt + pv2watt + pv3watt')
 
+            # max. possible AC power (might be used by the control loop to limit PV charging power)
             rct.write_ramdisk('maxACkW', int(pLimit.value), 'Maximale zur Ladung verwendete AC-Leistung des Wechselrichters')
 
             # daily
