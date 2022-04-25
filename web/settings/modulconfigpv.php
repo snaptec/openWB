@@ -716,16 +716,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaxip" id="solaxip" value="<?php echo $solaxipold ?>">
 									<span class="form-text small">
-										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters.
-									</span>
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<label for="pv1_ida" class="col-md-4 col-form-label">ID </label>
-								<div class="col">
-									<input class="form-control" type="text" name="pv1_ida" id="pv1_ida" value="<?php echo $pv1_idaold ?>">
-									<span class="form-text small">
-										Gültige Werte Id als Zahl. Für Gen3 0 eintragen für Gen4 ID vom WR eintragen (meistens 1)
+										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters. Für Gen3 0 bei ID eintragen für Gen4 ID vom WR eintragen (meistens > 2)
 									</span>
 								</div>
 							</div>
@@ -1022,6 +1013,7 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_solax') {
 									showSection('#pvwrsolax');
+									showSection('#pvid');									
 								}
 								if($('#pvwattmodul').val() == 'wr_smartme') {
 									showSection('#pvsmartme');
