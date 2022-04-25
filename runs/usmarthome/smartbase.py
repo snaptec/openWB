@@ -211,26 +211,23 @@ class Slshelly(Slbase):
             self.relais = int(answer['on'])
             if (self.device_temperatur_configured > 0):
                 self.temp0 = str(answer['temp0'])
-                f = open(self._basePath+'/ramdisk/device' +
-                         str(self.device_nummer) + '_temp0', 'w')
-                f.write(str(self.temp0))
-                f.close()
+                with open(self._basePath+'/ramdisk/device' +
+                          str(self.device_nummer) + '_temp0', 'w') as f:
+                    f.write(str(self.temp0))
             else:
                 self.temp0 = '300'
             if (self.device_temperatur_configured > 1):
                 self.temp1 = str(answer['temp1'])
-                f = open(self._basePath+'/ramdisk/device' +
-                         str(self.device_nummer) + '_temp1', 'w')
-                f.write(str(self.temp1))
-                f.close()
+                with open(self._basePath+'/ramdisk/device' +
+                          str(self.device_nummer) + '_temp1', 'w') as f:
+                    f.write(str(self.temp1))
             else:
                 self.temp1 = '300'
             if (self.device_temperatur_configured > 2):
                 self.temp2 = str(answer['temp2'])
-                f = open(self._basePath+'/ramdisk/device' +
-                         str(self.device_nummer) + '_temp2', 'w')
-                f.write(str(self.temp2))
-                f.close()
+                with open(self._basePath+'/ramdisk/device' +
+                          str(self.device_nummer) + '_temp2', 'w') as f:
+                    f.write(str(self.temp2))
             else:
                 self.temp2 = '300'
         except Exception as e1:
@@ -361,10 +358,9 @@ class Slmystrom(Slbase):
             self.relais = int(answer['on'])
             if (self.device_temperatur_configured > 0):
                 self.temp0 = str(answer['temp0'])
-                f = open(self._basePath+'/ramdisk/device' +
-                         str(self.device_nummer) + '_temp0', 'w')
-                f.write(str(self.temp0))
-                f.close()
+                with open(self._basePath+'/ramdisk/device' +
+                          str(self.device_nummer) + '_temp0', 'w') as f:
+                    f.write(str(self.temp0))
             else:
                 self.temp0 = '300'
         except Exception as e1:
@@ -668,14 +664,12 @@ class Sbase(Sbase0):
                               " > " + str(timesince))
                 self.abschalt = 0
         self._oldwatt = self.newwatt
-        f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
-                 '_watt', 'w')
-        f.write(str(self._oldwatt))
-        f.close()
-        f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
-                 '_relais', 'w')
-        f.write(str(self.relais))
-        f.close()
+        with open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
+                  '_watt', 'w') as f:
+            f.write(str(self._oldwatt))
+        with open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
+                  '_relais', 'w') as f:
+            f.write(str(self.relais))
         try:
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0pos', 'r') as value:
@@ -687,14 +681,13 @@ class Sbase(Sbase0):
                               str(self.device_nummer), self.newwattk)
         except Exception:
             importtemp = self._whimported_tmp
-            f = open(self._basePath+'/ramdisk/smarthome_device_' +
-                     str(self.device_nummer) + 'watt0pos', 'w')
-            f.write(str(importtemp))
-            f.close()
-            f = open(self._basePath+'/ramdisk/smarthome_device_' +
-                     str(self.device_nummer) + 'watt0neg', 'w')
-            f.write(str("0"))
-            f.close()
+
+            with open(self._basePath+'/ramdisk/smarthome_device_' +
+                      str(self.device_nummer) + 'watt0pos', 'w') as f:
+                f.write(str(importtemp))
+            with open(self._basePath+'/ramdisk/smarthome_device_' +
+                      str(self.device_nummer) + 'watt0neg', 'w') as f:
+                f.write(str("0"))
         if (self.relais == 1):
             newtime = int(time.time())
             if (self.c_oldstampeinschaltdauer_f == 'Y'):
@@ -927,10 +920,9 @@ class Sbase(Sbase0):
 
     def preturn(self, zustand, ueberschussberechnung, updatecnt):
         self.ueberschussberechnung = ueberschussberechnung
-        f = open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
-                 '_req_relais', 'w')
-        f.write(str(zustand))
-        f.close()
+        with open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
+                  '_req_relais', 'w') as f:
+            f.write(str(zustand))
         if (zustand == 1):
             if updatecnt == 1:
                 self.oncountnor = str(int(self.oncountnor) + 1)
@@ -963,9 +955,8 @@ class Sbase(Sbase0):
         file_charge = '/var/www/html/openWB/ramdisk/llkombiniert'
         testcharge = 0
         if os.path.isfile(file_charge):
-            f = open(file_charge, 'r')
-            testcharge = int(f.read())
-            f.close()
+            with open(file_charge, 'r') as f:
+                testcharge = int(f.read())
         if testcharge <= 1000:
             chargestatus = 0
         else:
@@ -1464,47 +1455,35 @@ class Sbase(Sbase0):
             wattnegkh = 0
             wattposh = wattks * 3600
             wattnegh = 0
-            f = open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w')
-            f.write(str(wattposh))
-            f.close()
+            with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w') as f:
+                f.write(str(wattposh))
             self._wpos = wattposh
-            f = open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w')
-            f.write(str(wattnegh))
-            f.close()
-            f = open(self._basePath+'/ramdisk/' + importfn, 'w')
-            #    f = open(basePath+'/ramdisk/speicherikwh', 'w')
+            with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w') as f:
+                f.write(str(wattnegh))
             self._wh = round(wattposkh, 2)
-            f.write(str(round(wattposkh, 2)))
-            f.close()
-            f = open(self._basePath+'/ramdisk/' + exportfn, 'w')
-            #   f = open(basePath+'/ramdisk/speicherekwh', 'w')
-            f.write(str(wattnegkh))
-            f.close()
+            with open(self._basePath+'/ramdisk/' + importfn, 'w') as f:
+                f.write(str(round(wattposkh, 2)))
+            with open(self._basePath+'/ramdisk/' + exportfn, 'w') as f:
+                f.write(str(wattnegkh))
             return
         # emulate import  export
         seconds2 = time.time()
         watt1 = 0
         seconds1 = 0.0
         if os.path.isfile(self._basePath+'/ramdisk/'+pref+'sec0'):
-            f = open(self._basePath+'/ramdisk/'+pref+'sec0', 'r')
-            seconds1 = float(f.read())
-            f.close()
-            f = open(self._basePath+'/ramdisk/'+pref+'wh0', 'r')
-            watt1 = int(f.read())
-            f.close()
-            f = open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'r')
-            wattposh = int(f.read())
-            f.close()
-            f = open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'r')
-            wattnegh = int(f.read())
-            f.close()
-            f = open(self._basePath+'/ramdisk/'+pref+'sec0', 'w')
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'r') as f:
+                seconds1 = float(f.read())
+            with open(self._basePath+'/ramdisk/'+pref+'wh0', 'r') as f:
+                watt1 = int(f.read())
+            with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'r') as f:
+                wattposh = int(f.read())
+            with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'r') as f:
+                wattnegh = int(f.read())
             value1 = "%22.6f" % seconds2
-            f.write(str(value1))
-            f.close()
-            f = open(self._basePath+'/ramdisk/'+pref+'wh0', 'w')
-            f.write(str(watt2))
-            f.close()
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
+                f.write(str(value1))
+            with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
+                f.write(str(watt2))
             seconds1 = seconds1 + 1
             deltasec = seconds2 - seconds1
             deltasectrun = int(deltasec * 1000) / 1000
@@ -1530,30 +1509,22 @@ class Sbase(Sbase0):
                     wattposh = wattposh + watt1
             wattposkh = wattposh/3600
             wattnegkh = (wattnegh*-1)/3600
-            f = open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w')
-            f.write(str(wattposh))
-            f.close()
+            with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w') as f:
+                f.write(str(wattposh))
             self._wpos = wattposh
-            f = open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w')
-            f.write(str(wattnegh))
-            f.close()
-            f = open(self._basePath+'/ramdisk/' + importfn, 'w')
-            #    f = open(basePath+'/ramdisk/speicherikwh', 'w')
+            with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w') as f:
+                f.write(str(wattnegh))
             self._wh = round(wattposkh, 2)
-            f.write(str(round(wattposkh, 2)))
-            f.close()
-            f = open(self._basePath+'/ramdisk/' + exportfn, 'w')
-            #   f = open(basePath+'/ramdisk/speicherekwh', 'w')
-            f.write(str(wattnegkh))
-            f.close()
+            with open(self._basePath+'/ramdisk/' + importfn, 'w') as f:
+                f.write(str(round(wattposkh, 2)))
+            with open(self._basePath+'/ramdisk/' + exportfn, 'w') as f:
+                f.write(str(wattnegkh))
         else:
-            f = open(self._basePath+'/ramdisk/'+pref+'sec0', 'w')
             value1 = "%22.6f" % seconds2
-            f.write(str(value1))
-            f.close()
-            f = open(self._basePath+'/ramdisk/'+pref+'wh0', 'w')
-            f.write(str(watt2))
-            f.close()
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
+                f.write(str(value1))
+            with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
+                f.write(str(watt2))
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)

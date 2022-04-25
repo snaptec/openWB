@@ -21,11 +21,13 @@ file_string = bp + str(devicenumber) + '_idm.log'
 file_stringpv = bp + str(devicenumber) + '_pv'
 file_stringcount = bp + str(devicenumber) + '_count'
 if os.path.isfile(file_string):
-    f = open(file_string, 'a')
+    pass
 else:
-    f = open(file_string, 'w')
-print('%s devicenr %s ipadr %s ueberschuss %6d try to connect (modbus)'
-      % (time_string, devicenumber, ipadr, uberschuss), file=f)
+    with open(file_string, 'w') as f:
+        print('IDM start log', file=f)
+with open(file_string, 'a') as f:
+    print('%s devicenr %s ipadr %s ueberschuss %6d try to connect (modbus)'
+          % (time_string, devicenumber, ipadr, uberschuss), file=f)
 client = ModbusTcpClient(ipadr, port=502)
 start = 4122
 if navvers == "2":
@@ -35,13 +37,11 @@ else:
 raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
 lkw = float(struct.unpack('>f', raw)[0])
 aktpower = int(lkw*1000)
-print('%s devicenr %s ipadr %s Akt Leistung  %6d ' %
-      (time_string, devicenumber, ipadr, aktpower), file=f)
-f.close()
-f = open(file_stringpv, 'w')
-f.write(str(1))
-f.close()
+with open(file_string, 'a') as f:
+    print('%s devicenr %s ipadr %s Akt Leistung  %6d ' %
+          (time_string, devicenumber, ipadr, aktpower), file=f)
+with open(file_stringpv, 'w') as f:
+    f.write(str(1))
 count1 = 999
-f = open(file_stringcount, 'w')
-f.write(str(count1))
-f.close()
+with open(file_stringcount, 'w') as f:
+    f.write(str(count1))
