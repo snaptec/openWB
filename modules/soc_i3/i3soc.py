@@ -176,11 +176,8 @@ def requestData(token, vin):
 # ---------------Main Function-------------------------------------------
 def main():
     try:
-        argsFile=str(sys.argv[1])
-        f = open(argsFile, 'r')
-        argsStr = f.read()
+        argsStr = base64.b64decode(str(sys.argv[1])).decode('utf-8')
         argsDict = json.loads(argsStr)
-        f.close()
         
         username = str(argsDict["user"])
         password = str(argsDict["pass"])
@@ -196,10 +193,9 @@ def main():
     except:
         raise 
         
-    try:
-        f = open(socfile, 'w')
-        f.write(str(int(soc)))
-        f.close()
+    try:     
+        with open(socfile, 'w') as f:
+            f.write(str(int(soc)))
     except:
         raise 
 
@@ -208,3 +204,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
