@@ -75,7 +75,7 @@ getAndWriteSoc(){
 			ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
 		fi
 	fi
-	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" 2>&1)
+	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile
@@ -89,14 +89,14 @@ getAndWriteSoc(){
 soctimer=$(<$soctimerfile)
 if (( ladeleistung > 500 )); then
 	if (( soctimer < intervallladen )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
 		getAndWriteSoc
 	fi
 else
 	if (( soctimer < intervall )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 		incrementTimer
 
 	else

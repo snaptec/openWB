@@ -5,15 +5,14 @@ import requests
 
 from helpermodules.cli import run_using_positional_cli_args
 
-
 log = logging.getLogger("Solarwatt WR")
 
 
 def update(speicher1_ip: str):
     log.debug('PV Solarwatt IP:' + speicher1_ip)
-    sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
+    json_response = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
 
-    for item in sresponse["result"]["items"].values():
+    for item in json_response["result"]["items"]:
         try:
             pvwatt = int(item["tagValues"]["PowerProduced"]["value"])
             break

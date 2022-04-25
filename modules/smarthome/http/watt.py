@@ -11,7 +11,7 @@ import binascii
 import urllib.request
 from urllib.parse import urlparse
 named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S http watty.py", named_tuple)
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S http watt.py", named_tuple)
 devicenumber=str(sys.argv[1])
 uberschuss=int(sys.argv[3])
 url=str(sys.argv[4])
@@ -19,8 +19,14 @@ try:
     urlc=str(sys.argv[5])
 except:
     urlc = "none"
+try:
+    urlstate=str(sys.argv[8])
+except:
+    urlstate = "none"
 if not urlparse(url).scheme:
    url = 'http://' + url
+if not urlparse(urlstate).scheme and not urlstate.startswith("none"):
+   urlstate = 'http://' + urlstate
 if uberschuss < 0:
    uberschuss = 0
 urlrep= url.replace("<openwb-ueberschuss>", str(uberschuss))
@@ -29,11 +35,26 @@ if os.path.isfile(file_string):
    f = open( file_string , 'a')
 else:
    f = open( file_string , 'w')
-print ('%s devicenr %s orig url %s replaced url %s urlc %s' % (time_string,devicenumber,url,urlrep,urlc),file=f)
+print ('%s devicenr %s orig url %s replaced url %s urlc %s urlstate %s'% (time_string,devicenumber,url,urlrep,urlc,urlstate),file=f)
+if not urlstate.startswith("none"):
+    stateurl_response = 0
+    try:
+        stateurl_response = urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        print('%s StateURL HTTP Error: %d'%(time_string,e.code),file=f)
+    except urllib.error.URLError as e:
+        print('%s StateURL URL Error: %s'%(time_string,e.reason),file=f)
+    try:
+        state = int(stateurl_response)
+    except ValueError:
+        print ('%s StateURL delivered no integer but: %s'%(time_string,stateurl_response),file=f)
+        state = 0
+else:
+    state = 0
 f.close()
 aktpowerfl = float(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
 aktpower = int(aktpowerfl)
-if aktpower > 50:
+if state == 1 or aktpower > 50:
     relais = 1
 else:
     relais = 0

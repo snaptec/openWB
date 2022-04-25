@@ -1732,11 +1732,11 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soci3intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<label for="soci3intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
 											<span class="form-text small">
-												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+												Abfrageintervall in Minuten
 											</span>
 										</div>
 									</div>
@@ -3577,11 +3577,11 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soci3intervall1" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<label for="soci3intervall1" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>">
 											<span class="form-text small">
-												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+												Abfrageintervall in Minuten
 											</span>
 										</div>
 									</div>

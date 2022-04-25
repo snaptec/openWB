@@ -1,0 +1,9 @@
+<root>
+	<Device Name="PIKO 3.0-1 MP plus" Type="Inverter" Platform="Net16" HmiPlatform="HMI17" NominalPower="3000" UserPowerLimit="nan" CountryPowerLimit="nan" Serial="xyz" OEMSerial="xyz" BusAddress="1" NetBiosName="INVxyz" WebPortal="PIKO Solar Portal" ManufacturerURL="kostal-solar-electric.com" IpAddress="192.xxx.xxx.xx" DateTime="2022-04-07T08:31:51" MilliSeconds="295">
+		<Yields>
+			<Yield Type="Produced" Slot="Total" Unit="Wh">
+				<YieldValue Value="12306056" TimeStamp="2019-03-22T12:00:00"/>
+			</Yield>
+		</Yields>
+	</Device>
+</root>
