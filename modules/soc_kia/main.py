@@ -8,9 +8,9 @@ import trigger
 import soc
 
 
-def initialize(argsFile):
+def initialize(args):
     try:
-        parameters.loadParameters(argsFile)
+        parameters.loadParameters(args)
         parameters.loadFileNames()
         parameters.loadBrandData()
     except:
