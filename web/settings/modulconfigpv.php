@@ -690,11 +690,11 @@
 								<label class="col-md-4 col-form-label">Typ des MPPT Solarladeregler</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VT) echo " active" ?>">
-											<input type="radio" name="studer_vc_type" id="studer_vc_typeNo" value="VT"<?php if($studer_vc_typeold == VT) echo " checked=\"checked\"" ?>>VT
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == 'VT') echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeNo" value="VT"<?php if($studer_vc_typeold == 'VT') echo " checked=\"checked\"" ?>>VT
 										</label>
-										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VS) echo " active" ?>">
-											<input type="radio" name="studer_vc_type" id="studer_vc_typeYes" value="VS"<?php if($studer_vc_typeold == VS) echo " checked=\"checked\"" ?>>VS
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == 'VS') echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeYes" value="VS"<?php if($studer_vc_typeold == 'VS') echo " checked=\"checked\"" ?>>VS
 										</label>
 									</div>
 									<span class="form-text small">
