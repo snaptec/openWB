@@ -335,12 +335,24 @@
 						<div id="divspeicheralphaess" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="speicheralphaess" class="col-md-4 col-form-label">Firmware Version</label>
+									<label for="alphasource" class="col-md-4 col-form-label">Ausleseart</label>
+									<div class="col">
+										<select name="alphasource" id="alphasource" class="form-control">
+											<option <?php if($alphasourceold == "0") echo "selected" ?> value="0">Alpha ESS-Kit</option>
+											<option <?php if($alphasourceold == "1") echo "selected" ?> value="1">Hi5/10</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="divspeicheralphaessfw" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="alphav123" class="col-md-4 col-form-label">Firmware Version</label>
 									<div class="col">
 										<select name="alphav123" id="alphav123" class="form-control">
-											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">Alpha ESS-Kit: EMS älter als 1.23V</option>
-											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">Alpha ESS-Kit: EMS 1.23V oder neuer</option>
-											<option <?php if($alphav123old == "2") echo "selected" ?> value="2">Hi5/10</option>
+											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
+											<option <?php if($alphav123old == "1") echo "selected" ?> value="1">EMS 1.23V oder neuer</option>
 										</select>
 									</div>
 								</div>
@@ -712,6 +724,7 @@
 								hideSection('#divspeicherseco');
 								hideSection('#divspeicherkit');
 								hideSection('#divspeichervarta');
+								hideSection('#divspeicheralphaessfw');
 								hideSection('#divspeicheralphaessip');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichervictron');
@@ -759,10 +772,12 @@
 								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
 									showSection('#divspeicheralphaess');
-									if ($('#alphav123').val() < 2) {
+									if ($('#alphasource').val() == 0) {
 										hideSection('#divspeicheralphaessip');
+										showSection('#divspeicheralphaessfw');
 									} else {
 										showSection('#divspeicheralphaessip');
+										hideSection('#divspeicheralphaessfw');
 									}
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
@@ -832,7 +847,7 @@
 								$('#speichermodul').change( function(){
 									display_speichermodul();
 								});
-								$('#alphav123').change( function(){
+								$('#alphasource').change( function(){
 									display_speichermodul();
 								});
 

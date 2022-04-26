@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import time
-from typing import Callable
+from typing import Callable, Dict
 
 from helpermodules import log
 from modules.common import modbus
@@ -20,12 +20,15 @@ def get_default_config() -> dict:
 
 
 class AlphaEssCounter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient, version: int) -> None:
+    def __init__(self, device_id: int,
+                 component_config: dict,
+                 tcp_client: modbus.ModbusClient,
+                 device_config: Dict) -> None:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
-        self.__version = version
+        self.__device_config = device_config
 
     def update(self, unit_id: int):
         log.MainLogger().debug(
@@ -36,7 +39,10 @@ class AlphaEssCounter:
         self.__store.set(counter_state)
 
     def __get_values_factory(self,) -> Callable[[int], CounterState]:
-        return self.__get_values_before_v123 if self.__version == 0 else self.__get_values_since_v123
+        if self.__device_config["source"] == 0 and self.__device_config["version"] == 0:
+            return self.__get_values_before_v123
+        else:
+            return self.__get_values_since_v123
 
     def __get_values_before_v123(self, unit: int) -> CounterState:
         with self.__tcp_client:

@@ -2237,6 +2237,9 @@ updateConfig(){
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "alphasource=" $ConfigFile; then
+		echo "alphasource=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "alphav123=" $ConfigFile; then
 		echo "alphav123=0" >> $ConfigFile
 	fi

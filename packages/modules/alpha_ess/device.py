@@ -19,8 +19,9 @@ def get_default_config() -> dict:
         "type": "alpha_ess",
         "id": 0,
         "configuration": {
-            "version": 1,  # 0: <V1.23, 1: >= V1.23, 2: Hi5/10 mit variabler IP
-            "ip_address": "1.1.1.1"
+            "source": 0,  # 0: AlphaEss-Kit, 1: Hi5/10 mit variabler IP
+            "version": 1,  # 0: <V1.23, 1: >= V1.23
+            "ip_address": None
         }
     }
 
@@ -39,7 +40,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self._components = {}  # type: Dict[str, alpha_ess_component_classes]
         try:
-            if device_config["configuration"]["version"] < 2:
+            if device_config["configuration"]["source"] == 0:
                 self.client = modbus.ModbusClient("192.168.193.125", 8899)
             else:
                 self.client = modbus.ModbusClient(device_config["configuration"]["ip_address"], 502)
@@ -54,7 +55,7 @@ class Device(AbstractDevice):
                 self.device_config["id"],
                 component_config,
                 self.client,
-                self.device_config["configuration"]["version"]))
+                self.device_config["configuration"]))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -75,13 +76,14 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, ip_address: str, num: Optional[int] = None) -> None:
+def read_legacy(component_type: str, source: int, version: int, ip_address: str, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
         "inverter": inverter
     }
     device_config = get_default_config()
+    device_config["configuration"]["source"] = source
     device_config["configuration"]["version"] = version
     device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)

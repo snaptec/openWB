@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Dict
 from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
@@ -19,7 +20,10 @@ def get_default_config() -> dict:
 
 
 class AlphaEssInverter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient, version: int) -> None:
+    def __init__(self, device_id: int,
+                 component_config: dict,
+                 tcp_client: modbus.ModbusClient,
+                 device_config: Dict) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.__tcp_client = tcp_client
@@ -27,7 +31,7 @@ class AlphaEssInverter:
         self.__simulation = {}
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
-        self.__version = version
+        self.__device_config = device_config
 
     def update(self, unit_id: int) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
@@ -46,7 +50,10 @@ class AlphaEssInverter:
         self.__store.set(inverter_state)
 
     def __version_factory(self) -> int:
-        return 0x0012 if self.__version == 0 else 0x00A1
+        if self.__device_config["source"] == 0 and self.__device_config["version"] == 0:
+            return 0x0012
+        else:
+            return 0x00A1
 
     def __get_power(self, unit: int, reg_p: int) -> Number:
         with self.__tcp_client:
