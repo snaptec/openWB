@@ -69,6 +69,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+										<option <?php if($wattbezugmodulold == "bezug_batterx") echo "selected" ?> value="bezug_batterx">BatterX</option>
 										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
@@ -123,6 +124,17 @@
 						<div id="wattbezuggoodwe" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im Wechselrichter
+							</div>
+						</div>
+						<div id="wattbezugbatterx" class="hide">
+							<div class="form-row mb-1">
+								<label for="batterx_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="batterx_ip" id="batterx_ip" value="<?php echo $batterx_ipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
@@ -1001,6 +1013,7 @@
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
 								hideSection('#wattbezuggoodwe');
+								hideSection('#wattbezugbatterx');
 								hideSection('#wattbezugsungrow');
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
@@ -1015,6 +1028,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_alphaess') {
 									showSection('#wattbezugalphaess');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_batterx') {
+									showSection('#wattbezugbatterx');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_sungrow') {
 									showSection('#wattbezugsungrow');
