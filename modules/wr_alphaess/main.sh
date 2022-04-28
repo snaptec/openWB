@@ -19,9 +19,10 @@ fi
 
 
 
+openwbDebugLog ${DMOD} 2 "Speicher Source: ${alphasource}"
 openwbDebugLog ${DMOD} 2 "Speicher Version: ${alphav123}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.alpha_ess.device" "inverter" "${alphav123}" "1">>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.alpha_ess.device" "inverter" "${alphasource}" "${alphav123}" "${alphaip}" "1">>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

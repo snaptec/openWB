@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import time
+from typing import Dict
 
 from helpermodules import log
 from modules.common import modbus
@@ -15,14 +16,15 @@ def get_default_config() -> dict:
         "name": "Alpha ESS Speicher",
         "id": 0,
         "type": "bat",
-        "configuration": {
-            "version": 1
-        }
+        "configuration": {}
     }
 
 
 class AlphaEssBat:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int,
+                 component_config: dict,
+                 tcp_client: modbus.ModbusClient,
+                 device_config: Dict) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.__tcp_client = tcp_client

@@ -17,9 +17,10 @@ else
 fi
 
 
+openwbDebugLog ${DMOD} 2 "Speicher Source: ${alphasource}"
 openwbDebugLog ${DMOD} 2 "Speicher Version: ${alphav123}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.alpha_ess.device" "bat" "${alphav123}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.alpha_ess.device" "bat" "${alphasource}" "${alphav123}" "${alphaip}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
