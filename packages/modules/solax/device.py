@@ -17,7 +17,8 @@ def get_default_config() -> dict:
         "type": "solax",
         "id": 0,
         "configuration": {
-            "ip_address": "192.168.193.15"
+            "ip_address": "192.168.193.15",
+            "modbus_id": 0
         }
     }
 
@@ -42,7 +43,8 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.client))
+                self.device_config["id"], component_config, self.client,
+                self.device_config["configuration"]["modbus_id"]))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -62,7 +64,7 @@ class Device(AbstractDevice):
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden.")
 
 
-def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None) -> None:
+def read_legacy(component_type: str, ip_address: str, modbus_id: int, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
@@ -70,6 +72,7 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None)
     }
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
+    device_config["configuration"]["modbus_id"] = modbus_id
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
@@ -82,6 +85,7 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None)
     dev.add_component(component_config)
 
     log.MainLogger().debug('Solax IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Solax ID: ' + str(modbus_id))
 
     dev.update()
 
