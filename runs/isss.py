@@ -765,6 +765,15 @@ def controlact(action: str):
     actcooldown = actcooldown + 1
 
 
+# get actual socket lock state
+def get_socket_state() -> int:
+    actorstat_tmp = GPIO.input(19)
+    if actorstat_tmp == GPIO.LOW:
+        return 1
+    else:
+        return 0
+
+
 # get all values to control our chargepoints
 def loadregelvars():
     global actorstat
@@ -780,14 +789,8 @@ def loadregelvars():
     global actcooldowntimestamp
     global lp1evsehres
     global lp2evsehres
-    try:
-        if GPIO.input(19) is False:
-            actorstat = 1
-        if GPIO.input(19) is True:
-            actorstat = 0
-    except Exception:
-        log_debug(2, "Error getting actorstat! Using default '0'.")
-        actorstat = 0
+
+    actorstat = get_socket_state()
     try:
         with open('ramdisk/llsoll', 'r') as value:
             if lp1evsehres == 0:
