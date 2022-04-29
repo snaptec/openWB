@@ -6,7 +6,9 @@ from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.openwb import bat
 from modules.openwb import counter
+from modules.openwb import evu_inverter
 from modules.openwb import inverter
+from modules.common import modbus
 
 
 def get_default_config() -> dict:
@@ -20,20 +22,23 @@ def get_default_config() -> dict:
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.BatKit,
-        "counter": counter.EvuKit,
-        "inverter": inverter.PvKit
+        "bat": bat,
+        "counter": counter,
+        "evu_inverter": evu_inverter,
+        "inverter": inverter
     }
 
     def __init__(self, device_config: dict) -> None:
         self.device_config = device_config
-        self._components = {}  # type: Dict[str, Union[counter.EvuKit, inverter.PvKit]]
+        # type: Dict[str, Union[bat.BatKitFlex, counter.EvuKitFlex, inverter.PvKitFlex]]
+        self._components = {}
+        self.tcp_client = None  # type: Optional[modbus.ModbusClient]
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config))
+            self.tcp_client, self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type].create_preconfigured_component(
+                self.device_config["id"], component_config, self.tcp_client))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -54,17 +59,32 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, num: Optional[int] = None):
+def read_legacy(component_type: str, version: int, num: Optional[int] = None, evu_version: Optional[int] = None):
     """ Ausführung des Moduls als Python-Skript
     """
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
+
     device_config = get_default_config()
     dev = Device(device_config)
 
+    component_config = get_component_config(component_type, version, num)
+    dev.add_component(component_config)
+    log.MainLogger().debug('openWB Version: ' + str(version))
+
+    if component_type == "evu_inverter" and evu_version:
+        component_config = get_component_config("counter", evu_version, None)
+        dev.add_component(component_config)
+        log.MainLogger().debug('openWB EVU-Version: ' + str(evu_version))
+
+    dev.update()
+
+
+def get_component_config(component_type: str, version: int, num: Optional[int] = None) -> Dict:
+    COMPONENT_TYPE_TO_MODULE = {
+        "bat": bat,
+        "counter": counter,
+        "evu_inverter": evu_inverter,
+        "inverter": inverter
+    }
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
     else:
@@ -73,11 +93,7 @@ def read_legacy(component_type: str, version: int, num: Optional[int] = None):
                         ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
     component_config["id"] = num
     component_config["configuration"]["version"] = version
-    dev.add_component(component_config)
-
-    log.MainLogger().debug('openWB Version: ' + str(version))
-
-    dev.update()
+    return component_config
 
 
 def main(argv: List[str]):

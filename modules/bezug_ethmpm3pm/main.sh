@@ -14,10 +14,11 @@ if [ ${DMOD} == "MAIN" ]; then
 else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
+if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]]; then
+        bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
+        ret=$?
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
-ret=$?
-
-openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+        openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+fi
 wattbezug=$(<${RAMDISKDIR}/wattbezug)
 echo $wattbezug

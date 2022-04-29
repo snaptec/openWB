@@ -9,8 +9,8 @@ from modules.openwb_flex.inverter import PvKitFlex
 
 def get_default_config() -> dict:
     return {
-        "name": "PV-Kit",
-        "type": "inverter",
+        "name": "PV-Kit an EVU-Kit",
+        "type": "evu_inverter",
         "id": 0,
         "configuration": {
             "version": 2
@@ -22,11 +22,11 @@ def create_preconfigured_component(device_id: int,
                                    component_config: dict,
                                    tcp_client: modbus.ModbusClient) -> Tuple[modbus.ModbusClient, PvKitFlex]:
     if tcp_client:
-        if tcp_client.address != "192.168.193.13" or tcp_client.port != 8899:
+        if tcp_client.address != "192.168.193.15" or tcp_client.port != 8899:
             raise FaultState.error(
                 "Das Device kann nur auf eine IP-Adresse zugreifen. Für ein weiteres Kit bitte ein neues Device anlegen.")
     else:
-        tcp_client = modbus.ModbusClient("192.168.193.13", 8899)
+        tcp_client = modbus.ModbusClient("192.168.193.15", 8899)
 
     version = component_config["configuration"]["version"]
     if version == 0 or version == 1:
