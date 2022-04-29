@@ -250,7 +250,7 @@ if (( cpunterbrechunglp1 == 1 )); then
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
 							python runs/cpuremote.py -a $evseiplp1 -i 4 -d $cpunterbrechungdauerlp1
 						elif [[ $evsecon == "extopenwb" ]]; then
-							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep1ip -m "$cpunterbrechungdauerlp1"
+							mosquitto_pub -r -t "openWB/set/isss/Cpulp${chargep1cp}" -h $chargep1ip -m "$cpunterbrechungdauerlp1"
 						else
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
 							sudo python runs/cpulp1.py -d $cpunterbrechungdauerlp1
@@ -288,7 +288,7 @@ if (( cpunterbrechunglp2 == 1 )); then
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
 							python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
 						elif [[ $evsecons1 == "extopenwb" ]]; then
-							mosquitto_pub -r -t openWB/set/isss/Cpulp2 -h $chargep2ip -m "$cpunterbrechungdauerlp2"
+							mosquitto_pub -r -t "openWB/set/isss/Cpulp${chargep2cp}" -h $chargep2ip -m "$cpunterbrechungdauerlp2"
 						else
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
 							sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
