@@ -12,6 +12,6 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV2 IP: ${pv2ip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "inverter" "${pv2ip}" "2">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "inverter" "${pv2ip}" "0" "2">>${MYLOGFILE} 2>&1
 
 cat "$RAMDISKDIR/pv2watt"

@@ -282,9 +282,6 @@
 						</div>
 						
 						<div id="divspeicherrct2" class="hide">
-							<div class="alert alert-warning">
-								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
-							</div>
 							<div class="card-header bg-secondary">
 								RCT Speicher Hardware
 							</div>
@@ -335,7 +332,20 @@
 						<div id="divspeicheralphaess" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
+									<label for="alphasource" class="col-md-4 col-form-label">Ausleseart</label>
+									<div class="col">
+										<select name="alphasource" id="alphasource" class="form-control">
+											<option <?php if($alphasourceold == "0") echo "selected" ?> value="0">Alpha ESS-Kit</option>
+											<option <?php if($alphasourceold == "1") echo "selected" ?> value="1">Hi5/10</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="divspeicheralphaessfw" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="alphav123" class="col-md-4 col-form-label">Firmware Version</label>
 									<div class="col">
 										<select name="alphav123" id="alphav123" class="form-control">
 											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
@@ -345,6 +355,18 @@
 								</div>
 							</div>
 						</div>
+						<div id="divspeicheralphaessip" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="alphaip" class="col-md-4 col-form-label">IP-Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="alphaip" id="alphaip" value="<?php echo $alphaessipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12. Die Abfrage erfolgt an Port 502.</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 
 						<div id="divspeicherpw" class="hide">
 							<div class="form-group">
@@ -699,6 +721,8 @@
 								hideSection('#divspeicherseco');
 								hideSection('#divspeicherkit');
 								hideSection('#divspeichervarta');
+								hideSection('#divspeicheralphaessfw');
+								hideSection('#divspeicheralphaessip');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichervictron');
 								hideSection('#divspeicherstuder');
@@ -745,6 +769,13 @@
 								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
 									showSection('#divspeicheralphaess');
+									if ($('#alphasource').val() == 0) {
+										hideSection('#divspeicheralphaessip');
+										showSection('#divspeicheralphaessfw');
+									} else {
+										showSection('#divspeicheralphaessip');
+										hideSection('#divspeicheralphaessfw');
+									}
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
 									showSection('#divspeichermqtt');
@@ -811,6 +842,9 @@
 
 							$(function() {
 								$('#speichermodul').change( function(){
+									display_speichermodul();
+								});
+								$('#alphasource').change( function(){
 									display_speichermodul();
 								});
 
