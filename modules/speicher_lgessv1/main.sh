@@ -19,7 +19,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "Speicher Version: ${alphav123}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.lg.device" "bat" "${lgessv1ip}" "${lgessv1pass}" "${ess_api_ver}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.lg.device" "bat" "${lgessv1ip}" "${lgessv1pass}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

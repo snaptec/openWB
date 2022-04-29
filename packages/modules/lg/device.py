@@ -2,7 +2,7 @@
 import json
 import os
 from typing import Dict, Union, Optional, List
-from requests import HTTPError
+from requests import HTTPError, Session
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
@@ -24,6 +24,48 @@ def get_default_config() -> dict:
             "password": "abc"
         }
     }
+
+
+class DeviceConfiguration:
+    def __init__(self, ip_address: str, password: str):
+        self.ip_address = ip_address
+        self.password = password
+
+    @staticmethod
+    def from_dict(device_config: dict):
+        keys = ["ip_address", "password"]
+        try:
+            values = [device_config[key] for key in keys]
+        except KeyError as e:
+            raise Exception(
+                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
+            ) from e
+        return DeviceConfiguration(*values)
+
+
+class LG:
+    def __init__(self, name: str, type: str, id: int, configuration: DeviceConfiguration) -> None:
+        self.name = name
+        self.type = type
+        self.id = id
+        self.configuration = configuration
+
+    @staticmethod
+    def from_dict(device_config: dict):
+        keys = ["name", "type", "id", "configuration"]
+        try:
+            values = [device_config[key] for key in keys]
+            values = []
+            for key in keys:
+                if isinstance(device_config[key], Dict):
+                    values.append(DeviceConfiguration.from_dict(device_config[key]))
+                else:
+                    values.append(device_config[key])
+        except KeyError as e:
+            raise Exception(
+                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
+            ) from e
+        return LG(*values)
 
 
 lg_component_classes = Union[bat.LgBat, counter.LgCounter, inverter.LgInverter]
@@ -50,15 +92,17 @@ class Device(AbstractDevice):
         self._components = {}  # type: Dict[str, lg_component_classes]
         self.session_key = " "
         try:
-            self.device_config = device_config
+            self.config = device_config \
+                if isinstance(device_config, LG) \
+                else LG.from_dict(device_config)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.MainLogger().exception("Fehler im Modul "+self.config.name)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"],
+                self.config.id,
                 component_config))
         else:
             raise Exception(
@@ -70,47 +114,38 @@ class Device(AbstractDevice):
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
             with MultiComponentUpdateContext(self._components):
-                response = self.get_state()
+                session = req.get_http_session()
+                response = self.__request_data(session)
+                # missing "auth" in response indicates success
+                if response.get('auth') == "auth_key failed" or response.get('auth') == "auth timeout" or response.get('auth') == "not done":
+                    self.__update_session_key(session)
+                    response = self.__request_data(session)
+
                 for component in self._components:
                     self._components[component].update(response)
         else:
             log.MainLogger().warning(
-                self.device_config["name"] +
+                self.config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
-    def get_state(self) -> Dict:
-        session = req.get_http_session()
+    def __update_session_key(self, session: Session):
         try:
-            response = self.__post_data(session)
-            return response
-        except HTTPError as e:
-            # Login mit ungültigem Session-Key wirft einen Http-Error.
-            # missing "auth" in response indicates successful data request.
-            if e.response.status_code == 405 and "auth" in e.response.json():
-                # Prüfen, ob Sessionkey ungültig ist, wenn ja, Login und neuen Sessionkey empfangen.
-                auth_check = e.response.json()['auth']
-                if auth_check == "auth_key failed" or auth_check == "auth timeout" or auth_check == "not done":
-                    headers = {'Content-Type': 'application/json', }
-                    data = json.dumps({"password": self.device_config["configuration"]["password"]})
-                    response = session.put(
-                        "https://"+self.device_config["configuration"]["ip"] + "/v1/login",
-                        headers=headers,
-                        data=data,
-                        verify=False,
-                        timeout=5).json()
-                    self.session_key = response["auth_key"]
-                    log.MainLogger().debug("Neuen Session-Key erhalten.")
-                    return self.__post_data(session)
-                else:
-                    raise FaultState.error("Unbekannter Fehler im Login-Prozess: "+str(auth_check))
-            else:
-                raise e
+            headers = {'Content-Type': 'application/json', }
+            data = json.dumps({"password": self.config.configuration.password})
+            response = session.post(self.config.configuration.ip_address+'/v1/login', headers=headers,
+                                    data=data, verify=False, timeout=5).json()
+            log.MainLogger().debug("response: " + str(response))
+            session_key = response["auth_key"]
+            outjson = {"auth_key": session_key}
+        except (HTTPError, KeyError):
+            raise FaultState.error("login failed! check password!")
+        self.session_key = session_key
 
-    def __post_data(self, session) -> Dict:
+    def __request_data(self, session: Session) -> Dict:
         headers = {'Content-Type': 'application/json', }
         data = json.dumps({"auth_key": self.session_key})
-        return session.post("https://"+self.device_config["configuration"]["ip"] + "/v1/user/essinfo/home",
+        return session.post("https://"+self.config.configuration.ip_address + "/v1/user/essinfo/home",
                             headers=headers,
                             data=data,
                             verify=False,
@@ -124,8 +159,8 @@ def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] 
         "inverter": inverter
     }
     device_config = get_default_config()
-    device_config["configuration"]["ip"] = ip
-    device_config["configuration"]["password"] = password
+    device_config.configuration.ip = ip
+    device_config.configuration.password = password
     dev = Device(device_config)
 
     if os.path.isfile("/var/www/html/openWB/ramdisk/ess_session_key"):
