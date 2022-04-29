@@ -102,7 +102,7 @@ graphing(){
 
 	#Long Time Graphing
 	if (( graphtimer == 1 )); then
-		if (( dpseed == "3" )); then
+		if (( dspeed == "3" )); then
 			livegraphtime="240"
 		else
 			livegraphtime="720"
