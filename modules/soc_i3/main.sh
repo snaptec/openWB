@@ -1,10 +1,7 @@
 #!/bin/bash
-
-SOCMODULE="i3"
-
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
+MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 LOGFILE="$RAMDISKDIR/soc.log"
 DMOD="EVSOC"
 CHARGEPOINT=$1
@@ -13,7 +10,9 @@ CHARGEPOINT=$1
 if [[ -z "$debug" ]]; then
 	echo "soc_i3: seems like openwb.conf is not loaded. Reading file."
 	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
+	. "$OPENWBBASEDIR/loadconfig.sh"
+	# load helperFunctions
+	. "$OPENWBBASEDIR/helperFunctions.sh"
 fi
 
 DEBUGLEVEL=$debug
@@ -60,21 +59,19 @@ incrementTimer(){
 			ticksize=1
 			;;
 	esac
-	soctimer=$((soctimer+$ticksize))
-	echo $soctimer > $soctimerfile
+	soctimer=$((soctimer + ticksize))
+	echo $soctimer > "$soctimerfile"
 }
 
-soctimer=$(<$soctimerfile)
+soctimer=$(<"$soctimerfile")
 openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
-cd /var/www/html/openWB/modules/soc_i3
+cd $MODULEDIR
 if (( soctimer < (6 * intervall) )); then
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 	incrementTimer
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
-	echo 0 > $soctimerfile
-	
-	ARGSFILE="$RAMDISKDIR/soc_${SOCMODULE}_lp${CHARGEPOINT}_args"
+	echo 0 > "$soctimerfile"
 
 	ARGS='{'
 	ARGS+='"user": "'"$user"'", '
@@ -84,11 +81,11 @@ else
 	ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 	ARGS+='}'
 
-	ARGSB64=`echo -n $ARGS | base64 --wrap=0`
-	
+	ARGSB64=$(echo -n $ARGS | base64 --wrap=0)
+
 	sudo python3 "$MODULEDIR/i3soc.py" "$ARGSB64" &>> $LOGFILE &
 
-	soclevel=$(<$socfile)
+	soclevel=$(<"$socfile")
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"
 
 fi
