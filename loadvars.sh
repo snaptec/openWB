@@ -1,10 +1,11 @@
 #!/bin/bash
 
 run_soc_module() {
+	openwbDebugLog "MAIN" 2 "Request to run SoC-Module: $1"
 	module_dir="modules/$1"
 	if [ -f "$module_dir/main.sh" ]
 	then
-		openwbDebugLog "MAIN" 2 "Calling SoC-Module <$module_dir/main.sh>"
+		openwbDebugLog "MAIN" 2 "Calling SoC-Module: $module_dir/main.sh"
 		"$module_dir/main.sh" &
 	elif [[ "$module_dir" =~ ^(.*)((s)([1-9])|(lp)([2-9]))$ ]]; then
 		# Historically if each SoC-Module applied to a single charge point, only. Thus if multiple charge points were
@@ -12,20 +13,20 @@ run_soc_module() {
 		# With the new structure we call the script for charge point one with the actual charge point number as parameter
 		if [ "${BASH_REMATCH[3]}" == "s" ]
 		then
-			charge_point_num=$(( ${BASH_REMATCH[4]} + 1 ))
+			charge_point_num=$(( BASH_REMATCH[4] + 1 ))
 		else
 			charge_point_num=${BASH_REMATCH[6]}
 		fi
 		module_dir_lp1=${BASH_REMATCH[1]}
 		if [ -d "$module_dir_lp1" ];
 		then
-			openwbDebugLog "MAIN" 2 "Calling SoC-Module <$module_dir_lp1/main.sh>"
+			openwbDebugLog "MAIN" 2 "Calling SoC-Module: $module_dir_lp1/main.sh for chargepoint $charge_point_num"
 			"$module_dir_lp1/main.sh" "$charge_point_num" &
 		else
-			openwbDebugLog "MAIN" 0 "Neither <$module_dir> nor <$module_dir_lp1> exist!"
+			openwbDebugLog "MAIN" 0 "Neither '$module_dir' nor '$module_dir_lp1' exist!"
 		fi
 	else
-		openwbDebugLog "MAIN" 0 "SoC-Module <$module_dir> does not exist"
+		openwbDebugLog "MAIN" 0 "SoC-Module '$module_dir' does not exist"
 	fi
 }
 
