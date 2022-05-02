@@ -115,11 +115,13 @@ class Device(AbstractDevice):
         if self._components:
             with MultiComponentUpdateContext(self._components):
                 session = req.get_http_session()
-                response = self.__request_data(session)
+                response = self._request_data(session)
                 # missing "auth" in response indicates success
-                if response.get('auth') == "auth_key failed" or response.get('auth') == "auth timeout" or response.get('auth') == "not done":
-                    self.__update_session_key(session)
-                    response = self.__request_data(session)
+                if (response.get('auth') == "auth_key failed" or
+                        response.get('auth') == "auth timeout" or
+                        response.get('auth') == "not done"):
+                    self._update_session_key(session)
+                    response = self._request_data(session)
 
                 for component in self._components:
                     self._components[component].update(response)
@@ -129,20 +131,17 @@ class Device(AbstractDevice):
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
-    def __update_session_key(self, session: Session):
+    def _update_session_key(self, session: Session):
         try:
             headers = {'Content-Type': 'application/json', }
             data = json.dumps({"password": self.config.configuration.password})
-            response = session.post(self.config.configuration.ip_address+'/v1/login', headers=headers,
-                                    data=data, verify=False, timeout=5).json()
-            log.MainLogger().debug("response: " + str(response))
-            session_key = response["auth_key"]
-            outjson = {"auth_key": session_key}
+            response = session.put("https://"+self.config.configuration.ip_address+'/v1/login', headers=headers,
+                                   data=data, verify=False, timeout=5).json()
+            self.session_key = response["auth_key"]
         except (HTTPError, KeyError):
             raise FaultState.error("login failed! check password!")
-        self.session_key = session_key
 
-    def __request_data(self, session: Session) -> Dict:
+    def _request_data(self, session: Session) -> Dict:
         headers = {'Content-Type': 'application/json', }
         data = json.dumps({"auth_key": self.session_key})
         return session.post("https://"+self.config.configuration.ip_address + "/v1/user/essinfo/home",
@@ -159,8 +158,8 @@ def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] 
         "inverter": inverter
     }
     device_config = get_default_config()
-    device_config.configuration.ip = ip
-    device_config.configuration.password = password
+    device_config["configuration"]["ip_address"] = ip
+    device_config["configuration"]["password"] = password
     dev = Device(device_config)
 
     if os.path.isfile("/var/www/html/openWB/ramdisk/ess_session_key"):
