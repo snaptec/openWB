@@ -147,8 +147,8 @@
 								<div class="form-row mb-1">
 									<label for="good_we_id" class="col-md-4 col-form-label">Unit ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="good_we_id" id="good_we_id" value="<?php echo $good_we_idold ?>">
-										<span class="form-text small">Gültige Werte 1-247. Modbus ID des Gerätes.</span>
+										<input class="form-control" type="number" min="1" max="247" step="1" name="good_we_id" id="good_we_id" value="<?php echo $good_we_idold ?>">
+										<span class="form-text small">Gültige Werte 1-247. Standard-ID ist 247. Modbus ID des Gerätes.</span>
 									</div>
 							</div>
 							</div>
