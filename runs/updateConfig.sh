@@ -2246,6 +2246,12 @@ updateConfig(){
 	if ! grep -Fq "alphaip=" $ConfigFile; then
 		echo "alphaip=192.168.193.15" >> $ConfigFile
 	fi
+	if ! grep -Fq "good_we_ip=" $ConfigFile; then
+		echo "good_we_ip=192.168.1.1" >> $ConfigFile
+	fi
+	if ! grep -Fq "good_we_id=" $ConfigFile; then
+		echo "good_we_id=247" >> $ConfigFile
+	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
 		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
 	fi

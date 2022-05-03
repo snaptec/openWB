@@ -74,6 +74,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_good_we") echo "selected" ?> value="bezug_good_we">GoodWe</option>
 										<option <?php if($wattbezugmodulold == "bezug_huawei") echo "selected" ?> value="bezug_huawei">Huawei mit SmartMeter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
@@ -117,6 +118,11 @@
 						<div id="wattbezugalphaess" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
+							</div>
+						</div>
+						<div id="wattbezuggoodwe" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im Wechselrichter
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
@@ -994,6 +1000,7 @@
 								hideSection('#wattbezughuawei');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
+								hideSection('#wattbezuggoodwe');
 								hideSection('#wattbezugsungrow');
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
@@ -1032,6 +1039,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_good_we') {
+									showSection('#wattbezuggoodwe');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_huawei') {
 									showSection('#wattbezughuawei');
