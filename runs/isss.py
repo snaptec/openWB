@@ -894,10 +894,11 @@ def detect_modbus_usb_port() -> str:
         return "/dev/serial0"
 
 
+loglevel = 2
 try:
     loglevel = int(read_from_ramdisk("lpdaemonloglevel"))
 except (FileNotFoundError, ValueError):
-    loglevel = 1
+    pass
 
 MaxEvseError = 5
 sdmid = 105
