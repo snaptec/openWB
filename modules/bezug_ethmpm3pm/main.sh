@@ -1,10 +1,7 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
-#DMOD="EVU"
 DMOD="MAIN"
-Debug=$debug
 
 #For development only
 #Debug=1
@@ -15,10 +12,10 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]]; then
-        bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb.device" "counter" "${evukitversion}" >>${MYLOGFILE} 2>&1
+        bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" >>"${MYLOGFILE}" 2>&1
         ret=$?
 
         openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 fi
-wattbezug=$(<${RAMDISKDIR}/wattbezug)
-echo $wattbezug
+wattbezug=$(<"${RAMDISKDIR}"/wattbezug)
+echo "$wattbezug"
