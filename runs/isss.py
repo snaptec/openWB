@@ -877,10 +877,10 @@ def check_for_socket() -> Tuple[bool, int]:
     try:
         with open('/home/pi/ppbuchse', 'r') as value:
             pp_value = int(value.read())
+            socket_is_configured = True
     except (FileNotFoundError, ValueError):
         pp_value = 32
-    # here we always have a socket
-    socket_is_configured = True
+        socket_is_configured = False
     log_debug(1, "check for socket: " + str(socket_is_configured) + " " + str(pp_value))
     return [socket_is_configured, pp_value]
 
