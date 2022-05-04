@@ -108,7 +108,7 @@ if (( netzabschaltunghz == 1 )); then
 	hz=$(<"$RAMDISKDIR/llhz")
 	hz=$(echo "$hz * 100" | bc | sed 's/\..*$//')
 	openwbDebugLog "MAIN" 1 "Netzschutz konfiguriert; aktuelle Frequenz: ${hz}"
-	netzschutz=$(<$"RAMDISKDIR/netzschutz")
+	netzschutz=$(<"$RAMDISKDIR/netzschutz")
 	if (( netzschutz == 0 )); then
 		# grid protection is not set
 		if (( hz > 4500 )) && (( hz < 5300 )); then
