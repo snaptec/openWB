@@ -95,7 +95,7 @@ class Slbase(Sbase0):
                         'device_speichersocbeforestart', 'device_endTime',
                         'device_maxeinschaltdauer', 'mode',
                         'WHImported_temp', 'RunningTimeToday',
-                        'oncountnor', 'OnCntStandby',
+                        'oncountnor', 'OnCntStandby', 'device_deactivateper',
                         'device_startupDetection']):
                 pass
             elif (key == 'device_differentMeasurement'):
@@ -569,6 +569,7 @@ class Sbase(Sbase0):
         self._device_onuntiltime = '00:00'
         self._device_nonewatt = 0
         self.device_manual_control = 0
+        self._device_deactivateper = 0
 
         self._oldrelais = '2'
         self._oldwatt = 0
@@ -808,6 +809,8 @@ class Sbase(Sbase0):
                 self.device_manual = valueint
             elif (key == 'device_manual_control'):
                 self.device_manual_control = valueint
+            elif (key == 'device_deactivateper'):
+                self._device_deactivateper = valueint
 # openWB/config/set/SmartHome/Devices/<ID>/mode auf 1 setzen -> Gerät wird
 # als 'Manuell' in der Geräteliste geführt
 # openWB/config/set/SmartHome/Devices/<ID>/device_manual_control -> 0
@@ -1287,6 +1290,22 @@ class Sbase(Sbase0):
                               self.device_name +
                               " Anlauferkennung nun aktiv, eingeschaltet ")
                 self.turndevicerelais(1, 0, 0)
+                return
+        # periodisch ausschalten
+        if (self.relais == 1) and (self._device_deactivateper > 0):
+            self.logClass(2, "(" + str(self.device_nummer) + ") " +
+                          self.device_name +
+                          " Soll periodisch ausgeschaltet werden " +
+                          " (1 = volle Stunde / " +
+                          " 2 = volle Stunde + halbe Stunde) pruefe " +
+                          str(self._device_deactivateper))
+            if (((self._device_deactivateper == 2) and (localminute == 30)) or
+               (localminute == 00)):
+                self.logClass(2, "(" + str(self.device_nummer) +
+                              ") " + self.device_name +
+                              " erfolgreich, schalte aus ")
+                self.turndevicerelais(0, 0, 1)
+                self._c_ausverz_f = 'N'
                 return
         if ((self.devuberschuss > self._device_einschaltschwelle)
            or (onnow == 1)):

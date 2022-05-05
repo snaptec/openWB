@@ -460,6 +460,30 @@ $numDevices = 9;
 											</div>
 										</div>
 									</div>
+									
+									<hr class="border-secondary">
+									<div class="form-group">
+										<div class="form-row mb-1">
+											<label class="col-md-4 col-form-label">Periodisch ausschalten...</label>
+											<div class="col">
+												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateperDevices<?php echo $devicenum; ?>" name="device_deactivateper" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">nie
+													</label>
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>1" data-option="1" value="1">jede volle Stunde
+													</label>
+												 	<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde
+													</label>
+												</div>
+												<span class="form-text small">Diese Option (bei jeder vollen Stunde / jede halbe Stunde) sorgt dafür, dass dieses Gerät periodisch ausgestellt wird ohne Ausschaltschwelle / Ausschaltverzögerung zu berücksichtigen. Dann können andere Geräte mit dem freiwerden Überschuss eingeschaltet werden.
+												</span>
+											</div>
+										</div>
+									</div>									
+									
+									
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
