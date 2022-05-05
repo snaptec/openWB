@@ -523,6 +523,9 @@ def read_meter():
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'rfidtag': str(rfidtag)})
                 if parentWB != "0":
+                    if rfidtag == '0\n':
+                        rfidtag = None
+                        # default value for 2.0 is None, not 0
                     remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/rfid", payload=str(rfidtag),
                                          qos=0, retain=True)
                     remoteclient.loop(timeout=2.0)
