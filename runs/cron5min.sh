@@ -4,6 +4,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 
 . "$OPENWBBASEDIR/loadconfig.sh"
 . "$OPENWBBASEDIR/helperFunctions.sh"
+. "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
 
 if [ -e "$OPENWBBASEDIR/ramdisk/updateinprogress" ] && [ -e "$OPENWBBASEDIR/ramdisk/bootinprogress" ]; then
 	updateinprogress=$(<"$OPENWBBASEDIR/ramdisk/updateinprogress")
@@ -390,44 +391,8 @@ else
 	sudo pkill -f '^python.*/buchse.py'
 fi
 
-# check if rfid is configured and start daemons to listen on input devices
-if (( rfidakt == 0 )); then
-	# daemon for input0
-	sudo pkill -f '^python.*/readrfid.py'
-	# daemon for input1
-	sudo pkill -f '^python.*/readrfid2.py'
-	# daemon for mode 2
-	sudo pkill -f '^python.*/rfid.py'
-else
-	if pgrep -f '^python.*/readrfid.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 0 "rfid mode $rfidakt configured and handler for input0 is running"
-	else
-		openwbDebugLog "MAIN" 0 "rfid mode $rfidakt configured but handler for input0 not running; starting process"
-		sudo python "$OPENWBBASEDIR/runs/readrfid.py" "$displayaktiv" &
-	fi
-	if pgrep -f '^python.*/readrfid2.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 0 "rfid mode $rfidakt configured and handler for input1 is running"
-	else
-		openwbDebugLog "MAIN" 0 "rfid mode $rfidakt configured but handler for input1 not running; starting process"
-		sudo python "$OPENWBBASEDIR/runs/readrfid2.py" "$displayaktiv" &
-	fi
-fi
-# if rfid mode 2 is configured check for our rfid handler
-if (( rfidakt == 2 )); then
-	openwbDebugLog "MAIN" 1 "rfid mode 2 configured"
-	echo "$rfidlist" > "$RAMDISKDIR/rfidlist"
-	if pgrep -f '^python.*/rfid.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "rfid handler already running"
-	else
-		openwbDebugLog "MAIN" 0 "rfid handler not running! starting process"
-		python3 "$OPENWBBASEDIR/runs/rfid.py" &
-	fi
-else
-	sudo pkill -f '^python.*/rfid.py'
-fi
+# setup rfid handler if needed
+rfidSetup "$rfidakt" 0 "$rfidlist"
 
 # check if our modbus server is running
 if pgrep -f '^python.*/modbusserver.py' > /dev/null

@@ -1,8 +1,13 @@
+#!/usr/bin/env python3
 import evdev
-import sys
-from evdev import InputDevice, categorize
-devicen = str(sys.argv[1])
-dev = InputDevice('/dev/input/event1')
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--device", type=str, required=True, help="device to bind to")
+parser.add_argument("-v", "--verbose", action="store_true", help="verbose debug output")
+args = parser.parse_args()
+
+input_device = evdev.InputDevice("/dev/input/" + args.device)
 
 scancodes = {
     0: None, 1: u'ESC', 2: u'1', 3: u'2', 4: u'3', 5: u'4', 6: u'5', 7: u'6', 8: u'7', 9: u'8',
@@ -12,15 +17,18 @@ scancodes = {
     40: u'"', 41: u'`', 42: u'LSHFT', 43: u'\\', 44: u'Z', 45: u'X', 46: u'C', 47: u'V', 48: u'B', 49: u'N',
     50: u'M', 51: u',', 52: u'.', 53: u'/', 54: u'RSHFT', 56: u'LALT', 100: u'RALT'
 }
-s = ""
-for event in dev.read_loop():
+
+key_string = ""
+for event in input_device.read_loop():
     if event.type == evdev.ecodes.EV_KEY:
-        data = categorize(event)
+        data = evdev.categorize(event)
         if data.keystate == 1:
             key_lookup = scancodes.get(data.scancode) or u'UNKNOWN:{}'.format(data.scancode)
-            s += str(format(key_lookup))
-            if "CRLF" in s:
-                s = s[:-4]
-                with open('/var/www/html/openWB/ramdisk/readtag', 'w') as f:
-                    f.write(str(s))
-                s = ""
+            key_string += str(format(key_lookup))
+            if "CRLF" in key_string:
+                key_string = key_string[:-4]
+                if(args.verbose):
+                    print(key_string)
+                with open('/var/www/html/openWB/ramdisk/readtag', 'w') as tag_file:
+                    tag_file.write(key_string)
+                key_string = ""

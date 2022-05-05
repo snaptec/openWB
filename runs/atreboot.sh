@@ -10,10 +10,11 @@ at_reboot() {
 	echo "loading config"
 	. "$OPENWBBASEDIR/loadconfig.sh"
 
-	# load functions to init ramdisk and update config
+	# load some helper functions
 	# no code will run here, functions need to be called
 	. "$OPENWBBASEDIR/runs/initRamdisk.sh"
 	. "$OPENWBBASEDIR/runs/updateConfig.sh"
+	. "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
 
 	sleep 5
 	mkdir -p "$OPENWBBASEDIR/web/backup"
@@ -84,24 +85,8 @@ at_reboot() {
 		fi
 	fi
 
-	# rfid handling
-	# daemon for input0
-	pkill -f '^python.*/readrfid.py' > /dev/null
-	# daemon for input1
-	pkill -f '^python.*/readrfid2.py' > /dev/null
-	# daemon for mode 2
-	pkill -f '^python.*/rfid.py' > /dev/null
-	# check if rfid is configured and start daemons to listen on input devices
-	if (( rfidakt > 0 )); then
-		echo "rfid event listener..."
-		python "$OPENWBBASEDIR/runs/readrfid.py" "$displayaktiv" &
-		python "$OPENWBBASEDIR/runs/readrfid2.py" "$displayaktiv" &
-	fi
-	if (( rfidakt == 2 )); then
-		echo "rfid mode 2..."
-		echo "$rfidlist" > "$RAMDISKDIR/rfidlist"
-		python3 "$OPENWBBASEDIR/runs/rfid.py" &
-	fi
+	# setup rfid handler if needed
+	rfidSetup "$rfidakt" 1 "$rfidlist"
 
 	# check if tesla wall connector is configured and start daemon
 	if [[ $evsecon == twcmanager ]]; then
@@ -210,9 +195,14 @@ at_reboot() {
 	# check for needed packages
 	echo "packages 1..."
 	if python -c "import evdev" &> /dev/null; then
-		echo 'evdev installed...'
+		echo 'evdev for python2 installed...'
 	else
 		sudo pip install evdev
+	fi
+	if python3 -c "import evdev" &> /dev/null; then
+		echo 'evdev for python3 installed...'
+	else
+		sudo pip3 install evdev
 	fi
 	if ! [ -x "$(command -v sshpass)" ];then
 		sudo apt-get -qq update
