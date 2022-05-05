@@ -99,6 +99,7 @@ at_reboot() {
 	fi
 	if (( rfidakt == 2 )); then
 		echo "rfid mode 2..."
+		echo "$rfidlist" > "$RAMDISKDIR/rfidlist"
 		python3 "$OPENWBBASEDIR/runs/rfid.py" &
 	fi
 
