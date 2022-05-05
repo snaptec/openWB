@@ -31,7 +31,7 @@ class FroniusInverter:
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self) -> float:
+    def update(self) -> InverterState:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         # Rückgabewert ist die aktuelle Wirkleistung in [W].
@@ -49,7 +49,6 @@ class FroniusInverter:
 
         power2 = self.__get_wr2()
         power += power2
-        power1 = power
         power *= -1
         topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + str(self.component_config["id"])+"/"
         _, counter = self.__sim_count.sim_count(power, topic=topic, data=self.__simulation, prefix="pv")
@@ -58,9 +57,7 @@ class FroniusInverter:
             power=power,
             counter=counter
         )
-        self.__store.set(inverter_state)
-        # Rückgabe der Leistung des ersten WR ohne Vorzeichenumkehr
-        return power1
+        return inverter_state
 
     def __get_wr2(self) -> float:
         ip_address2 = self.component_config["configuration"]["ip_address2"]
@@ -81,3 +78,7 @@ class FroniusInverter:
         else:
             power2 = 0
         return power2
+
+    def set_inverter_state(self, inverter_state: InverterState) -> None:
+        log.MainLogger().debug("Fronius Inverter Leistung[W]: " + str(inverter_state.power))
+        self.__store.set(inverter_state)

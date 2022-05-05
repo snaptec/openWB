@@ -17,8 +17,7 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "counter_sm",
         "configuration": {
-            "variant": 0,
-            "meter_location": MeterLocation.grid.value
+            "variant": 0
         }
     }
 
@@ -27,8 +26,6 @@ class FroniusSmCounter:
     def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
         self.__device_id = device_id
         self.component_config = component_config
-        self.component_config["configuration"]["meter_location"] = MeterLocation(
-            self.component_config["configuration"]["meter_location"])
         self.device_config = device_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
@@ -85,13 +82,13 @@ class FroniusSmCounter:
             timeout=5)
         response_json_id = response.json()["Body"]["Data"]
 
-        meter_location = MeterLocation(response_json_id["Meter_Location_Current"])
+        meter_location = MeterLocation.get(response_json_id["Meter_Location_Current"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
-        if meter_location == MeterLocation.grid:
-            power = response_json_id["PowerReal_P_Sum"]
-        else:
+        if meter_location == MeterLocation.load:
             power = self.__get_flow_power(session)
+        else:
+            power = response_json_id["PowerReal_P_Sum"]
         voltages = [response_json_id["Voltage_AC_Phase_"+str(num)] for num in range(1, 4)]
         powers = [response_json_id["PowerReal_P_Phase_"+str(num)] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
@@ -114,12 +111,14 @@ class FroniusSmCounter:
             params=(('Scope', 'System'),),
             timeout=5)
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
-        meter_location = self.component_config["configuration"]["meter_location"]
 
-        if meter_location == MeterLocation.grid:
-            power = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
-        else:
+        meter_location = MeterLocation.get(response_json_id["SMARTMETER_VALUE_LOCATION_U16"])
+        log.MainLogger().debug("Einbauort: "+str(meter_location))
+
+        if meter_location == MeterLocation.load:
             power = self.__get_flow_power(session)
+        else:
+            power = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
         voltages = [response_json_id["SMARTMETER_VOLTAGE_0"+str(num)+"_F64"] for num in range(1, 4)]
         powers = [response_json_id["SMARTMETER_POWERACTIVE_MEAN_0"+str(num)+"_F64"] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]

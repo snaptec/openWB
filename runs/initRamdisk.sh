@@ -399,7 +399,6 @@ initRamdisk(){
 	echo 1 > $RamdiskPath/bootinprogress
 	echo 1 > $RamdiskPath/execdisplay
 	echo 4 > $RamdiskPath/graphtimer
-	echo 0 > $RamdiskPath/fronius_sm_bezug_meterlocation
 
 
 

@@ -710,19 +710,6 @@
 										</select>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" data-option="0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
-											</label>
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" data-option="1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
-											</label>
-										</div>
-									</div>
-								</div>
 								<hr>
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
@@ -756,8 +743,7 @@
 											// fill listbox, format <manufacturer> <meter model> (<serial>)
 											for(var i in data.Body.Data) {
 												var meter = data.Body.Data[i];
-												var meter_location = meter.hasOwnProperty('1SMARTMETER_VALUE_LOCATION_U16') ? parseInt(meter.SMARTMETER_VALUE_LOCATION_U16) : meter.Meter_Location_Current;
-												options += '<option value="'+i+'" data-meterlocation="'+meter_location+'"'
+												options += '<option value="'+i+'"'
 												if($('#froniuserzeugungselect').attr("data-old") == i) {
 													options += ' selected=true';
 												}
@@ -771,8 +757,6 @@
 
 											// set meter id corresponding to displayed entry in listbox
 											setInputValue('froniuserzeugung', $('#froniuserzeugungselect option:selected').attr('value'));
-											// set meter location corresponding to displayed entry in listbox
-											setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugungselect option:selected').attr('data-meterlocation'));
 
 											hideSection('#wattbezugfroniusload')
 											hideSection('#wattbezugfroniusmeterid');
@@ -790,7 +774,7 @@
 										.always(function() {
 											$('#wattbezugfroniusload').attr("disabled", false);
 										});
-										
+
 									});
 
 									$('#wattbezugfroniusmanual').on("click",function() {

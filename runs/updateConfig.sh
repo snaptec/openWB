@@ -2194,9 +2194,6 @@ updateConfig(){
 	if ! grep -Fq "pingcheckactive=" $ConfigFile; then
 		echo "pingcheckactive=0" >> $ConfigFile
 	fi
-	if ! grep -Fq "froniusmeterlocation=" $ConfigFile; then
-		echo "froniusmeterlocation=0" >> $ConfigFile
-	fi
 	if ! grep -Fq "soc_tronity_client_id_lp1=" $ConfigFile; then
 		{
 			echo "soc_tronity_client_id_lp1=''"
