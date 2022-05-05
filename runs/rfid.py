@@ -5,6 +5,7 @@ import time
 os.chdir('/var/www/html/openWB/')
 loglevel = 1
 counter = 0
+rfidlist = []
 Values = {}
 Values.update({'newplugstatlp1': str(0)})
 Values.update({'newplugstatlp2': str(0)})
@@ -27,40 +28,37 @@ Values.update({'lastscannedtag': str(0)})
 Values.update({'rfidlasttag': str(0)})
 
 
-def logDebug(level, msg):
-    if (int(level) >= int(loglevel)):
-        file = open('ramdisk/rfid.log', 'a')
-        if (int(level) == 0):
-            file.write(time.ctime() + ': ' + str(msg) + '\n')
-        if (int(level) == 1):
-            file.write(time.ctime() + ': ' + str(msg) + '\n')
-        if (int(level) == 2):
-            file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m') + '\n')
-        file.close()
+def log_debug(level: int, msg: str):
+    if level >= loglevel:
+        with open('ramdisk/rfid.log', 'a') as file:
+            file.write(time.ctime() + ': ' + msg + '\n')
 
 
-def readrfidlist():
+def read_rfid_list():
     global rfidlist
-    with open('ramdisk/rfidlist', 'r') as value:
-        rfidstring = str(value.read())
-    rfidlist = rfidstring.rstrip().split(",")
+    try:
+        with open('ramdisk/rfidlist', 'r') as value:
+            rfidlist = str(value.read()).rstrip().split(",")
+            log_debug(0, "Liste gültiger RFIDs aktualisiert: " + str(rfidlist))
+    except FileNotFoundError:
+        log_debug(2, "Konnte Liste gültiger RFIDs nicht lesen!")
+        rfidlist = []
 
 
-def getplugstat():
+def get_plugstat():
     try:
         with open('ramdisk/plugstat', 'r') as value:
             Values.update({'newplugstatlp1': int(value.read())})
         if (Values["oldplugstatlp1"] != Values["newplugstatlp1"]):
             if (Values["newplugstatlp1"] == 1):
                 Values.update({'lastpluggedlp': str(1)})
-                logDebug(1, str("Angesteckt an LP1"))
+                log_debug(1, "Angesteckt an LP1")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP1"))
-                f = open('ramdisk/lp1enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP1")
+                with open('ramdisk/lp1enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp1": Values["newplugstatlp1"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstats1', 'r') as value:
@@ -68,14 +66,13 @@ def getplugstat():
         if (Values["oldplugstatlp2"] != Values["newplugstatlp2"]):
             if (Values["newplugstatlp2"] == 1):
                 Values.update({'lastpluggedlp': str(2)})
-                logDebug(1, str("Angesteckt an LP2"))
+                log_debug(1, "Angesteckt an LP2")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP2"))
-                f = open('ramdisk/lp2enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP2")
+                with open('ramdisk/lp2enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp2": Values["newplugstatlp2"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstatlp3', 'r') as value:
@@ -83,14 +80,13 @@ def getplugstat():
         if (Values["oldplugstatlp3"] != Values["newplugstatlp3"]):
             if (Values["newplugstatlp3"] == 1):
                 Values.update({'lastpluggedlp': str(3)})
-                logDebug(1, str("Angesteckt an LP3"))
+                log_debug(1, "Angesteckt an LP3")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP3"))
-                f = open('ramdisk/lp3enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP3")
+                with open('ramdisk/lp3enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp3": Values["newplugstatlp3"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstatlp4', 'r') as value:
@@ -98,14 +94,13 @@ def getplugstat():
         if (Values["oldplugstatlp4"] != Values["newplugstatlp4"]):
             if (Values["newplugstatlp4"] == 1):
                 Values.update({'lastpluggedlp': str(4)})
-                logDebug(1, str("Angesteckt an LP4"))
+                log_debug(1, "Angesteckt an LP4")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP4"))
-                f = open('ramdisk/lp4enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP4")
+                with open('ramdisk/lp4enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp4": Values["newplugstatlp4"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstatlp5', 'r') as value:
@@ -113,14 +108,13 @@ def getplugstat():
         if (Values["oldplugstatlp5"] != Values["newplugstatlp5"]):
             if (Values["newplugstatlp5"] == 1):
                 Values.update({'lastpluggedlp': str(5)})
-                logDebug(1, str("Angesteckt an LP5"))
+                log_debug(1, "Angesteckt an LP5")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP5"))
-                f = open('ramdisk/lp5enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP5")
+                with open('ramdisk/lp5enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp5": Values["newplugstatlp5"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstatlp6', 'r') as value:
@@ -128,14 +122,13 @@ def getplugstat():
         if (Values["oldplugstatlp6"] != Values["newplugstatlp6"]):
             if (Values["newplugstatlp6"] == 1):
                 Values.update({'lastpluggedlp': str(6)})
-                logDebug(1, str("Angesteckt an LP6"))
+                log_debug(1, "Angesteckt an LP6")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP6"))
-                f = open('ramdisk/lp6enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP6")
+                with open('ramdisk/lp6enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp6": Values["newplugstatlp6"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstatlp7', 'r') as value:
@@ -143,14 +136,13 @@ def getplugstat():
         if (Values["oldplugstatlp7"] != Values["newplugstatlp7"]):
             if (Values["newplugstatlp7"] == 1):
                 Values.update({'lastpluggedlp': str(7)})
-                logDebug(1, str("Angesteckt an LP7"))
+                log_debug(1, "Angesteckt an LP7")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP7"))
-                f = open('ramdisk/lp7enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP7")
+                with open('ramdisk/lp7enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp7": Values["newplugstatlp7"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
     try:
         with open('ramdisk/plugstatlp8', 'r') as value:
@@ -158,74 +150,72 @@ def getplugstat():
         if (Values["oldplugstatlp8"] != Values["newplugstatlp8"]):
             if (Values["newplugstatlp8"] == 1):
                 Values.update({'lastpluggedlp': str(8)})
-                logDebug(1, str("Angesteckt an LP8"))
+                log_debug(1, "Angesteckt an LP8")
             else:
-                logDebug(1, str("Abgesteckt, Sperre LP8"))
-                f = open('ramdisk/lp8enabled', 'w')
-                f.write(str("0"))
-                f.close()
+                log_debug(1, "Abgesteckt, Sperre LP8")
+                with open('ramdisk/lp8enabled', 'w') as file:
+                    file.write(str("0"))
             Values.update({"oldplugstatlp8": Values["newplugstatlp8"]})
-    except:
+    except (FileNotFoundError, ValueError):
         pass
-    # logDebug(1, str("Plugstat: " + str(Values["newplugstatlp1"]) + str(Values["newplugstatlp2"]) + str(Values["newplugstatlp3"]) + str(Values["newplugstatlp4"]) + str(Values["newplugstatlp5"]) + str(Values["newplugstatlp6"]) + str(Values["newplugstatlp7"]) + str(Values["newplugstatlp8"])))
+    log_debug(0, "Plugstat: " + str(Values["newplugstatlp1"]) + str(Values["newplugstatlp2"]) +
+              str(Values["newplugstatlp3"]) + str(Values["newplugstatlp4"]) + str(Values["newplugstatlp5"]) +
+              str(Values["newplugstatlp6"]) + str(Values["newplugstatlp7"]) + str(Values["newplugstatlp8"]))
 
 
 def conditions():
     if (Values["lastpluggedlp"] != "0"):
-        # logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
+        log_debug(0, str(Values["lastpluggedlp"]) + "prüfe auf rfid scan")
         try:
             with open('ramdisk/readtag', 'r') as value:
                 Values.update({'lastscannedtag': str(value.read().rstrip())})
             if (Values["lastscannedtag"] != "0"):
-                for i in rfidlist:
-                    if (str(i) == str(Values["lastscannedtag"])):
-                        logDebug(1, str("Schalte Ladepunkt: ") + str(Values["lastpluggedlp"]) + str(" frei"))
-                        f = open('ramdisk/lp'+str(Values["lastpluggedlp"])+'enabled', 'w')
-                        f.write(str("1"))
-                        f.close()
-                        f = open('ramdisk/rfidlp' + str(Values["lastpluggedlp"]), 'w')
-                        f.write(str(Values["lastscannedtag"]))
-                        f.close()
-                        logDebug(1, str("Schreibe Tag: ")+str(Values["lastscannedtag"])+str(" zu Ladepunkt"))
+                for tag in rfidlist:
+                    if (str(tag) == str(Values["lastscannedtag"])):
+                        log_debug(1, "Schalte Ladepunkt: " + str(Values["lastpluggedlp"]) + " frei")
+                        with open('ramdisk/lp'+str(Values["lastpluggedlp"])+'enabled', 'w') as file:
+                            file.write(str("1"))
+                        with open('ramdisk/rfidlp' + str(Values["lastpluggedlp"]), 'w') as file:
+                            file.write(str(Values["lastscannedtag"]))
+                        log_debug(1, "Schreibe Tag: " + str(Values["lastscannedtag"]) + " zu Ladepunkt")
                         Values.update({'lastpluggedlp': "0"})
-                        f = open('ramdisk/readtag', 'w')
-                        f.write(str(0))
-                        f.close()
+                        with open('ramdisk/readtag', 'w') as file:
+                            file.write("0")
         except Exception as e:
-            logDebug(1, str(e))
+            log_debug(1, str(e))
             pass
 
 
-def savelastrfidtag():
+def save_last_rfidtag():
     with open('ramdisk/readtag', 'r') as readtagfile:
         readtag = str(readtagfile.read().rstrip())
     if ((readtag != Values["rfidlasttag"]) and (readtag != "0")):
-        logDebug(1, str("savelastrfidtag: change detected, updating ramdisk: ") + str(readtag))
-        f = open('ramdisk/rfidlasttag', 'w')
-        f.write(readtag + str(",") + str(os.path.getmtime('ramdisk/readtag')))
-        f.close()
+        log_debug(1, "savelastrfidtag: change detected, updating ramdisk: " + str(readtag))
+        with open('ramdisk/rfidlasttag', 'w') as file:
+            file.write(readtag + "," + str(os.path.getmtime('ramdisk/readtag')))
         Values.update({'rfidlasttag': readtag})
 
 
-def clearoldrfidtag():
-    t = os.path.getmtime('ramdisk/readtag')
-    timediff = time.time() - t
-    if timediff > 300:
-        logDebug(1, str("Verwerfe Tag nach ") + str(timediff) + str(" Sekunden"))
-        f = open('ramdisk/readtag', 'w')
-        f.write(str("0"))
-        f.close()
+def clear_old_rfidtag():
+    null_tag_value = "0"
+    null_tag = False
+    with open('ramdisk/readtag', 'r') as readtagfile:
+        null_tag = bool(str(readtagfile.read().rstrip()) == null_tag_value)
+    if null_tag is False:
+        t = os.path.getmtime('ramdisk/readtag')
+        timediff = time.time() - t
+        if timediff > 300:
+            log_debug(1, "Verwerfe Tag nach " + str(timediff) + " Sekunden")
+            with open('ramdisk/readtag', 'w') as file:
+                file.write(null_tag_value)
 
-
-readrfidlist()
 
 while True:
-    getplugstat()
+    if counter == 0:
+        read_rfid_list()
+    get_plugstat()
     conditions()
-    savelastrfidtag()
-    clearoldrfidtag()
-    counter = counter + 1
-    if (counter > 10):
-        readrfidlist()
-        counter = 0
+    save_last_rfidtag()
+    clear_old_rfidtag()
+    counter = (counter + 1) % 10
     time.sleep(2)
