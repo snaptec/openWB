@@ -18,17 +18,17 @@ def get_default_config() -> dict:
         "type": "sonnenbatterie",
         "id": 0,
         "configuration": {
-            "ip": "",
+            "ip": None,
             "variant": 0
         }
     }
 
 
 sonnenbatterie_component_classes = Union[
-                                         bat.SonnenbatterieBat,
-                                         counter.SonnenbatterieCounter,
-                                         inverter.SonnenbatterieInverter
-                                        ]
+    bat.SonnenbatterieBat,
+    counter.SonnenbatterieCounter,
+    inverter.SonnenbatterieInverter
+]
 
 
 class Device(AbstractDevice):

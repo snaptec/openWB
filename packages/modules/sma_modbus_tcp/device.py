@@ -22,7 +22,7 @@ def get_default_config() -> dict:
         "type": "sma_modbus_tcp",
         "id": 0,
         "configuration": {
-            "ip": ""
+            "ip": None
         }
     }
 

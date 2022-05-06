@@ -17,7 +17,7 @@ def get_default_config() -> dict:
         "type": "sungrow",
         "id": 0,
         "configuration": {
-            "ip_address": "192.168.193.15"
+            "ip_address": None
         }
     }
 

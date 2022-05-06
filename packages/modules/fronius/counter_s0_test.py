@@ -8,6 +8,8 @@ from modules.fronius import counter_s0, device
 from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
 
+SAMPLE_IP = "1.1.1.1"
+
 
 @pytest.fixture
 def mock_ramdisk(monkeypatch):
@@ -18,12 +20,13 @@ def mock_ramdisk(monkeypatch):
 def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
     component_config = counter_s0.get_default_config()
     device_config = device.get_default_config()["configuration"]
+    device_config["ip_address"] = SAMPLE_IP
     assert device_config["meter_id"] == 0
     counter = counter_s0.FroniusS0Counter(0, component_config, device_config)
 
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
-        "http://" + device_config["ip_address"] + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
+        "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
         json=json)
 
     counter_state = counter.update()
