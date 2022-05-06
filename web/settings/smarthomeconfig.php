@@ -153,7 +153,7 @@ $numDevices = 9;
 											Eine negative Ausschaltschwelle bedeutet, dass die Wärmepumpe die fehlende Leistung aus dem Netz bezieht.
 											Die hier hinterlegte Ein- und Ausschaltschwelle sollte dann 1:1 in die openWB übertragen werden.
 										</span>
-										
+
 
 
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
@@ -287,7 +287,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -460,7 +460,7 @@ $numDevices = 9;
 											</div>
 										</div>
 									</div>
-									
+
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
@@ -481,9 +481,9 @@ $numDevices = 9;
 												</span>
 											</div>
 										</div>
-									</div>									
-									
-									
+									</div>
+
+
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
