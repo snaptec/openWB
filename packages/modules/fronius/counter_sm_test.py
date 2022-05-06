@@ -9,6 +9,8 @@ from modules.fronius.meter import MeterLocation
 from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
 
+SAMPLE_IP = "1.1.1.1"
+
 
 @pytest.fixture
 def mock_ramdisk(monkeypatch):
@@ -20,12 +22,13 @@ def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
     component_config = counter_sm.get_default_config()
     assert component_config["configuration"]["variant"] == 0
     device_config = device.get_default_config()["configuration"]
+    device_config["ip_address"] = SAMPLE_IP
     assert device_config["meter_id"] == 0
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
-        "http://" + device_config["ip_address"] + "/solar_api/v1/GetMeterRealtimeData.cgi",
+        "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_grid)
 
     counter_state, meter_location = counter.update()
@@ -46,12 +49,13 @@ def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock
     component_config = counter_sm.get_default_config()
     component_config["configuration"]["variant"] = 2
     device_config = device.get_default_config()["configuration"]
+    device_config["ip_address"] = SAMPLE_IP
     assert device_config["meter_id"] == 0
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
-        "http://" + device_config["ip_address"] + "/solar_api/v1/GetMeterRealtimeData.cgi",
+        "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_grid_var2)
 
     counter_state, meter_location = counter.update()
@@ -72,12 +76,13 @@ def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, 
     component_config = counter_sm.get_default_config()
     component_config["configuration"]["variant"] = 2
     device_config = device.get_default_config()["configuration"]
+    device_config["ip_address"] = SAMPLE_IP
     device_config["meter_id"] = 1
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
-        "http://" + device_config["ip_address"] + "/solar_api/v1/GetMeterRealtimeData.cgi",
+        "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_ext_var2)
 
     counter_state, meter_location = counter.update()
@@ -98,16 +103,17 @@ def test_update_load(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
     component_config = counter_sm.get_default_config()
     assert component_config["configuration"]["variant"] == 0
     device_config = device.get_default_config()["configuration"]
+    device_config["ip_address"] = SAMPLE_IP
     device_config["meter_id"] = 2
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
-        "http://" + device_config["ip_address"] + "/solar_api/v1/GetMeterRealtimeData.cgi",
+        "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_load_meter)
 
     requests_mock.get(
-        "http://" + device_config["ip_address"] + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
+        "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
         json=json_load_power)
 
     counter_state, meter_location = counter.update()

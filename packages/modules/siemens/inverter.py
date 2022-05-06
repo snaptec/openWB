@@ -15,7 +15,7 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "inverter",
         "configuration": {
-            "ip_address": "192.168.0.12"  # ToDo: move IP to device
+            "ip_address": None  # ToDo: move IP to device
         }
     }
 
