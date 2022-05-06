@@ -17,5 +17,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.good_we.device" "counter" 
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
-wattbezug=$(<"${RAMDISKDIR}"/wattbezug)
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"

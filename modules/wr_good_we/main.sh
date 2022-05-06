@@ -23,6 +23,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.good_we.device" "inverter"
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
-watt=$(<"${RAMDISKDIR}"/pvwatt)
-echo "${watt}"
+cat "${RAMDISKDIR}/pvwatt"

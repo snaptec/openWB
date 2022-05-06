@@ -22,6 +22,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.batterx.device" "inverter"
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
-watt=$(<"${RAMDISKDIR}"/pvwatt)
-echo "${watt}"
+cat "${RAMDISKDIR}/pvwatt"
