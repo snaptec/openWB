@@ -4,14 +4,9 @@ if [[ -z "$OPENWBBASEDIR" ]]; then
 	RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 fi
 
-# check if config file is already in env
-if [[ -z "$debug" ]]; then
-	echo "rfidSetup: Seems like openwb.conf is not loaded. Reading file."
-	# try to load config
-	. "$OPENWBBASEDIR/loadconfig.sh"
-	# load helperFunctions
+declare -F openwbDebugLog &> /dev/null || {
 	. "$OPENWBBASEDIR/helperFunctions.sh"
-fi
+}
 
 rfidInputHandlerStart(){
 	# daemon for input0
