@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+
+# !/usr/bin/env python3
 
 from modules.common import modbus
 from modules.common.fault_state import FaultState
@@ -17,7 +18,7 @@ def get_default_config() -> dict:
 
 
 class EvuKit(EvuKitFlex):
-    def __init__(self, device_id: int, component_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         self.data = {"config": component_config}
         version = self.data["config"]["configuration"]["version"]
         if version == 0:
@@ -30,4 +31,4 @@ class EvuKit(EvuKitFlex):
             raise FaultState.error("Version " + str(version) + " unbekannt.")
         self.data["config"]["configuration"]["id"] = id
 
-        super().__init__(device_id, self.data["config"], modbus.ModbusClient("192.168.193.15", 8899))
+        super().__init__(device_id, self.data["config"], tcp_client)

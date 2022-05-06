@@ -42,7 +42,7 @@ class EvuKitFlex:
         log.MainLogger().debug("Start kit reading")
         # TCP-Verbindung schließen möglichst bevor etwas anderes gemacht wird, um im Fehlerfall zu verhindern,
         # dass offene Verbindungen den Modbus-Adapter blockieren.
-        try:
+        with self.__tcp_client:
             voltages = self.__client.get_voltages()
             powers, power = self.__client.get_power()
             frequency = self.__client.get_frequency()
@@ -53,8 +53,7 @@ class EvuKitFlex:
                 exported = self.__client.get_exported()
             else:
                 currents = list(map(abs, self.__client.get_currents()))
-        finally:
-            self.__tcp_client.close_connection()
+
         if isinstance(self.__client, Mpm3pm):
             currents = [powers[i] / voltages[i] for i in range(3)]
         else:
