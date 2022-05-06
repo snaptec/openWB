@@ -69,6 +69,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
+										<option <?php if($speichermodulold == "speicher_batterx") echo "selected" ?> value="speicher_batterx">BatterX</option>
 										<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
 										<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
 										<option <?php if($speichermodulold == "speicher_good_we") echo "selected" ?> value="speicher_good_we">GoodWe</option>
@@ -368,10 +369,15 @@
 							</div>
 						</div>
 
-
 						<div id="divspeichergoodwe" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im Wechselrichter
+							</div>
+						</div>
+						
+						<div id="divspeicherbatterx" class="hide">
+							<div class="alert alert-info">
+								Konfiguration im Bezug BatterX Modul.
 							</div>
 						</div>
 
@@ -732,6 +738,7 @@
 								hideSection('#divspeicheralphaessip');
 								hideSection('#divspeicheralphaess');
 								hideSection('#divspeichergoodwe');
+								hideSection('#divspeicherbatterx');
 								hideSection('#divspeichervictron');
 								hideSection('#divspeicherstuder');
 								hideSection('#divspeicherlgessv1');
@@ -787,6 +794,9 @@
 										showSection('#divspeicheralphaessip');
 										hideSection('#divspeicheralphaessfw');
 									}
+								}
+								if($('#speichermodul').val() == 'speicher_batterx') {
+									showSection('#divspeicherbatterx');
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
 									showSection('#divspeichermqtt');

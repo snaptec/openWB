@@ -1,7 +1,6 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-#DMOD="EVU"
 DMOD="MAIN"
 
 #For development only
@@ -13,8 +12,11 @@ else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.good_we.device" "counter" "${good_we_ip}" "${good_we_id}">>"${MYLOGFILE}" 2>&1
-ret=$?
+# Werte werden im WR ausgelesen, max eine Abfrage pro Sekunde
+if [ ${pvwattmodul} != "wr_batterx" ]; then
+        bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.batterx.device" "counter" "${batterx_ip}" >>"${MYLOGFILE}" 2>&1
+        ret=$?
+fi
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 cat "${RAMDISKDIR}/wattbezug"

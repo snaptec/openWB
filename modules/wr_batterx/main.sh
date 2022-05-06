@@ -16,10 +16,9 @@ fi
 
 
 
-openwbDebugLog ${DMOD} 2 "WR IP: ${good_we_ip}"
-openwbDebugLog ${DMOD} 2 "WR ID: ${good_we_id}"
+openwbDebugLog ${DMOD} 2 "Speicher IP-Adresse: ${batterx_ip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.good_we.device" "inverter" "${good_we_ip}" "${good_we_id}" "1">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.batterx.device" "inverter" "${batterx_ip}" "1" "${wattbezugmodul}" "${speichermodul}">>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

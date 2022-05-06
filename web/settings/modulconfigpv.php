@@ -71,6 +71,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($pvwattmodulold == "wr_alphaess") echo "selected" ?> value="wr_alphaess">AlphaESS-Speicher</option>
+										<option <?php if($pvwattmodulold == "wr_batterx") echo "selected" ?> value="wr_batterx">BatterX</option>
 										<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
 										<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
 										<option <?php if($pvwattmodulold == "wr_good_we") echo "selected" ?> value="wr_good_we">GoodWe</option>
@@ -150,7 +151,12 @@
 										<input class="form-control" type="number" min="1" max="247" step="1" name="good_we_id" id="good_we_id" value="<?php echo $good_we_idold ?>">
 										<span class="form-text small">Gültige Werte 1-247. Standard-ID ist 247. Modbus ID des Gerätes.</span>
 									</div>
+								</div>
 							</div>
+						</div>
+						<div id="pvbatterx" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="pvsungrow" class="hide">
@@ -936,6 +942,7 @@
 								hideSection('#pvsungrow');
 								hideSection('#pvalphaess');
 								hideSection('#pvgoodwe');
+								hideSection('#pvbatterx');
 								hideSection('#pvsonneneco');
 								hideSection('#pvhuawei');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
@@ -1059,6 +1066,9 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_good_we') {
 									showSection('#pvgoodwe');
+								}
+								if($('#pvwattmodul').val() == 'wr_batterx') {
+									showSection('#pvbatterx');
 								}
 								if($('#pvwattmodul').val() == 'wr_sungrow') {
 									showSection('#pvsungrow');
