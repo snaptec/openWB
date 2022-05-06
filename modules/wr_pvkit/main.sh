@@ -14,6 +14,4 @@ fi
 
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_pv_kit.device" "inverter" "${pvkitversion}" "1">>"${MYLOGFILE}" 2>&1
-
-pvwatt=$(<"${RAMDISKDIR}"/pvwatt)
-echo "$pvwatt"
+cat "$RAMDISKDIR/pvwatt"

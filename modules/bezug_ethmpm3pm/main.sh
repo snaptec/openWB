@@ -17,5 +17,4 @@ if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]]; then
 
         openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 fi
-wattbezug=$(<"${RAMDISKDIR}"/wattbezug)
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"
