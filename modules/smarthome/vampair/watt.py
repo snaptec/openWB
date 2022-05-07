@@ -88,7 +88,7 @@ if count5 == 0:
                      modbuswrite), file=f)
     # modbus write
     if modbuswrite == 1:
-        client.write_register(33409, neupower, unit=1)
+        client.write_registers(33409, [neupower], unit=1)
         if count1 < 3:
             with open(file_string, 'a') as f:
                 print('%s devicenr %s ipadr %s device written by modbus ' %
