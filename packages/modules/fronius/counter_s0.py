@@ -26,7 +26,7 @@ class FroniusS0Counter:
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self) -> CounterState:
+    def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         session = req.get_http_session()
@@ -51,8 +51,6 @@ class FroniusS0Counter:
             exported=exported,
             power=power
         )
-        log.MainLogger().debug("Fronius S0 Leistung[W]: " + str(counter_state.power))
-        return counter_state
 
-    def set_counter_state(self, counter_state: CounterState) -> None:
+        log.MainLogger().debug("Fronius S0 Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

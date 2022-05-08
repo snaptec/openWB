@@ -26,7 +26,7 @@ class FroniusBat:
         self.__store = get_bat_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self) -> BatState:
+    def update(self) -> None:
         log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         meter_id = str(self.device_config["meter_id"])
 
@@ -61,8 +61,6 @@ class FroniusBat:
             imported=imported,
             exported=exported
         )
-        return bat_state
 
-    def set_bat_state(self, bat_state: BatState) -> None:
         log.MainLogger().debug("Fronius Battery Leistung[W]: " + str(bat_state.power))
         self.__store.set(bat_state)
