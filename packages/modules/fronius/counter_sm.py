@@ -118,6 +118,7 @@ class FroniusSmCounter:
         meter_location = MeterLocation.get(response_json_id["SMARTMETER_VALUE_LOCATION_U16"])
         log.MainLogger().debug("Einbauort: "+str(meter_location))
 
+        powers = [response_json_id["SMARTMETER_POWERACTIVE_MEAN_0"+str(num)+"_F64"] for num in range(1, 4)]
         if meter_location == MeterLocation.load:
             power, power_inverter = self.__get_flow_power(session)
             # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
@@ -129,7 +130,6 @@ class FroniusSmCounter:
         else:
             power = response_json_id["SMARTMETER_POWERACTIVE_MEAN_SUM_F64"]
         voltages = [response_json_id["SMARTMETER_VOLTAGE_0"+str(num)+"_F64"] for num in range(1, 4)]
-        powers = [response_json_id["SMARTMETER_POWERACTIVE_MEAN_0"+str(num)+"_F64"] for num in range(1, 4)]
         currents = [powers[i] / voltages[i] for i in range(0, 3)]
         power_factors = [response_json_id["SMARTMETER_FACTOR_POWER_0"+str(num)+"_F64"] for num in range(1, 4)]
         frequency = response_json_id["GRID_FREQUENCY_MEAN_F32"]
