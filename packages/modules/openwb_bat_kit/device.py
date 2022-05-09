@@ -6,7 +6,6 @@ from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.openwb_bat_kit import bat
 from modules.common import modbus
-from modules.common.fault_state import FaultState
 
 log = logging.getLogger(__name__)
 
@@ -16,9 +15,7 @@ def get_default_config() -> dict:
         "name": "OpenWB Speicher-Kit",
         "type": "openwb_bat_kit",
         "id": 0,
-        "configuration": {
-            "version": 2
-        }
+        "configuration": {}
     }
 
 
@@ -26,20 +23,13 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.device_config = device_config
         self._components = {}  # type: Dict[str, bat.BatKit]
-        version = self.device_config["configuration"]["version"]
-        if version == 0 or version == 1:
-            ip_address = '192.168.193.19'
-        elif version == 2:
-            ip_address = '192.168.193.15'
-        else:
-            raise FaultState.error("Version " + str(version) + " unbekannt.")
-        self.client = modbus.ModbusClient(ip_address, 8899)
+        self.client = modbus.ModbusClient("192.168.193.19", 8899)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type == "bat":
             self._components["component"+str(component_config["id"])] = bat.BatKit(
-                self.device_config, component_config, self.client)
+                self.device_config["id"], component_config, self.client)
         else:
             raise Exception(
                 "illegal component type " + component_type)

@@ -10,5 +10,5 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" "1" "${pvwattmodul}" "${pvkitversion}">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" "${speichermodul}" "${speicherkitversion}" "1" "${pvwattmodul}" "${pvkitversion}">>"$MYLOGFILE" 2>&1
 cat "$RAMDISKDIR/pvwatt"

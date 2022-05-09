@@ -66,6 +66,7 @@
 									<option <?php if($speichermodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
 									<optgroup label="openWB">
 										<option <?php if($speichermodulold == "speicher_mpm3pm") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
+										<option <?php if($speichermodulold == "speicher_sdmaevu") echo "selected" ?> value="speicher_sdmaevu">Zähler an openWB EVU Kit</option>
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
@@ -146,7 +147,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
-											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">SDM630 an EVU Kit angeschlossen</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">Dreiphasig (SDM630/72)</option>
 										</select>
 									</div>
 								</div>
@@ -812,6 +813,9 @@
 									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
+									showSection('#divspeicherkit');
+								}
+								if($('#speichermodul').val() == 'speicher_sdmaevu') {
 									showSection('#divspeicherkit');
 								}
 								if($('#speichermodul').val() == 'speicher_sonneneco') {

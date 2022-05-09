@@ -11,7 +11,7 @@ if [ ${DMOD} == "MAIN" ]; then
 else
         MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
-if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]]; then
+if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]] && [[ $speichermodul != "speicher_sdmaevu" ]]; then
         bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" >>"${MYLOGFILE}" 2>&1
         ret=$?
 
