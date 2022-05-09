@@ -11,14 +11,16 @@ def get_default_config() -> dict:
         "name": "Speicher-Kit",
         "type": "bat",
         "id": 0,
-        "configuration": {}
+        "configuration": {
+            "version": 2
+        }
     }
 
 
 class BatKit(BatKitFlex):
-    def __init__(self, device: Dict, component_config: Dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: Dict, tcp_client: modbus.ModbusClient) -> None:
         self.data = {"config": component_config}
-        version = device["configuration"]["version"]
+        version = self.data["config"]["configuration"]["version"]
         if version == 0:
             id = 1
         elif version == 1:
@@ -29,4 +31,4 @@ class BatKit(BatKitFlex):
             raise FaultState.error("Version " + str(version) + " unbekannt.")
         self.data["config"]["configuration"]["id"] = id
 
-        super().__init__(device["id"], self.data["config"], tcp_client)
+        super().__init__(device_id, self.data["config"], tcp_client)
