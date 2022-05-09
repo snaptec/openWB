@@ -25,8 +25,8 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
     assert device_config["meter_id"] == 0
     battery = bat.FroniusBat(0, component_config, device_config)
 
-    mock = Mock(return_value=None)
-    monkeypatch.setattr(LoggingValueStore, "set", mock)
+    mock_valuestore = Mock(return_value=None)
+    monkeypatch.setattr(LoggingValueStore, "set", mock_valuestore)
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
@@ -34,8 +34,8 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
 
     battery.update()
 
-    mock.assert_called_once()
-    battery_state = mock.call_args[0][0]
+    mock_valuestore.assert_called_once()
+    battery_state = mock_valuestore.call_args[0][0]
     assert battery_state.exported == 0
     assert battery_state.imported == 0
     assert battery_state.power == -2288
