@@ -115,7 +115,7 @@ rfid() {
 					for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
 						if [[ "${lpsPlugStat[$currentCp]}" -ne "1" ]]; then
 							openwbDebugLog "MAIN" 0 "Disabling CP #${currentCp} as it's still unplugged after timeout of RFID tag scan has been exceeded"
-							mosquitto_pub -r -q 2 -t "openWB/set/lp${currentCp}/ChargePointEnabled" -m "0"
+							mosquitto_pub -r -q 2 -t "openWB/set/lp/${currentCp}/ChargePointEnabled" -m "0"
 							eval lp${currentCp}enabled=0
 						fi
 					done
@@ -339,7 +339,7 @@ checkTagValidAndSetStartScanData() {
 			local tagScanInfo="$NowItIs,$lasttag,1"
 			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp${chargePoint}"
 			mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/tagScanInfo" -m "$tagScanInfo"
-			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
+			mosquitto_pub -r -q 2 -t "openWB/set/lp/${chargePoint}/ChargePointEnabled" -m "1"
 
 			eval lp${chargePoint}enabled=1
 			openwbDebugLog "MAIN" 0 "Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for CP #${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh (justPlugged == ${pluggedLps[$chargePoint]})"
