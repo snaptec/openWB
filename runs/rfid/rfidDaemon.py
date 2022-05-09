@@ -103,7 +103,7 @@ def conditions():
                     if (str(tag) == str(Values["lastscannedtag"])):
                         log_debug(1, "Schalte Ladepunkt: " + str(Values["lastpluggedlp"]) + " frei")
                         write_to_ramdisk("lp" + str(Values["lastpluggedlp"]) + "enabled", "1")
-                        write_to_ramdisk("rfidlp" + str(Values["lastpluggedlp"]), "1")
+                        write_to_ramdisk("rfidlp" + str(Values["lastpluggedlp"]), str(Values["lastscannedtag"]))
                         log_debug(1, "Schreibe Tag: " + str(Values["lastscannedtag"]) + " zu Ladepunkt")
                         Values.update({'lastpluggedlp': "0"})
                         write_to_ramdisk("readtag", "0")
