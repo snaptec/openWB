@@ -9,6 +9,7 @@ logFilename = ramdiskPath + "/rfid.log"
 
 loglevel = 1
 counter = 0
+null_tag_value = "0"
 rfid_list = []
 Values = {
     'newplugstatlp1': str(0),
@@ -98,15 +99,15 @@ def conditions():
         log_debug(0, str(Values["lastpluggedlp"]) + "prüfe auf rfid scan")
         try:
             Values.update({'lastscannedtag': str(read_from_ramdisk("readtag").rstrip())})
-            if (Values["lastscannedtag"] != "0"):
+            if (Values["lastscannedtag"] != null_tag_value):
                 for tag in rfid_list:
                     if (str(tag) == str(Values["lastscannedtag"])):
                         log_debug(1, "Schalte Ladepunkt: " + str(Values["lastpluggedlp"]) + " frei")
                         write_to_ramdisk("lp" + str(Values["lastpluggedlp"]) + "enabled", "1")
-                        write_to_ramdisk("rfidlp" + str(Values["lastpluggedlp"]), "1")
+                        write_to_ramdisk("rfidlp" + str(Values["lastpluggedlp"]), str(Values["lastscannedtag"]))
                         log_debug(1, "Schreibe Tag: " + str(Values["lastscannedtag"]) + " zu Ladepunkt")
                         Values.update({'lastpluggedlp': "0"})
-                        write_to_ramdisk("readtag", "0")
+                        write_to_ramdisk("readtag", null_tag_value)
         except Exception as e:
             log_debug(1, str(e))
             pass
@@ -121,7 +122,6 @@ def save_last_rfidtag():
 
 
 def clear_old_rfidtag():
-    null_tag_value = "0"
     null_tag = False
     null_tag = bool(str(read_from_ramdisk("readtag").rstrip()) == null_tag_value)
     if null_tag is False:
