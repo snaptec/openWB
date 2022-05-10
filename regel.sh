@@ -23,10 +23,11 @@
 #     along with openWB.  If not, see <https://www.gnu.org/licenses/>.
 #
 #####
-OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 
 set -o pipefail
-cd "$OPENWBBASEDIR"
+
+OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 
 source helperFunctions.sh
 
@@ -36,9 +37,9 @@ then
 	exit
 fi
 
-if [ -e ramdisk/updateinprogress ] && [ -e ramdisk/bootinprogress ]; then
-	updateinprogress=$(<ramdisk/updateinprogress)
-	bootinprogress=$(<ramdisk/bootinprogress)
+if [ -e "${RAMDISKDIR}/updateinprogress" ] && [ -e "${RAMDISKDIR}/bootinprogress" ]; then
+	updateinprogress=$(<"${RAMDISKDIR}/updateinprogress")
+	bootinprogress=$(<"${RAMDISKDIR}/bootinprogress")
 	if (( updateinprogress == "1" )); then
 		openwbDebugLog "MAIN" 0 "Update in progress"
 		exit 0
@@ -55,7 +56,8 @@ fi
 startregel=$(date +%s)
 function cleanup()
 {
-	local endregel=$(date +%s)
+	local endregel
+	endregel=$(date +%s)
 	local t=$((endregel-startregel))
 
 	if [ "$t" -le "7" ] ; then   # 1..7 Ok
@@ -71,19 +73,19 @@ function cleanup()
 trap cleanup EXIT
 ########### End Laufzeit protokolieren
 
-#config file einlesen
-. /var/www/html/openWB/loadconfig.sh
+# config file einlesen
+source loadconfig.sh
 
 openwbDebugLog "MAIN" 1 "**** Regulation loop start ****"
 
 declare -r IsFloatingNumberRegex='^-?[0-9.]+$'
 
 if (( slavemode == 1)); then
-	randomSleep=$(<ramdisk/randomSleepValue)
+	randomSleep=$(<"${RAMDISKDIR}/randomSleepValue")
 	if [[ -z $randomSleep ]] || [[ "${randomSleep}" == "0" ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
-		randomSleep=`shuf --random-source=/dev/urandom -i 0-3 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
-		openwbDebugLog "MAIN" 0 "slavemode=$slavemode: ramdisk/randomSleepValue missing or 0 - creating new one containing $randomSleep"
-		echo "$randomSleep" > ramdisk/randomSleepValue
+		randomSleep=$(shuf --random-source=/dev/urandom -i 0-3 -n 1).$(shuf --random-source=/dev/urandom -i 0-9 -n 1)
+		openwbDebugLog "MAIN" 0 "slavemode=$slavemode: ${RAMDISKDIR}/randomSleepValue missing or 0 - creating new one containing $randomSleep"
+		echo "$randomSleep" > "${RAMDISKDIR}/randomSleepValue"
 	fi
 
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Waiting ${randomSleep}s"
@@ -116,9 +118,9 @@ source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
 if [[ $isss == "1" ]]; then
-	heartbeat=$(<ramdisk/heartbeat)
+	heartbeat=$(<"${RAMDISKDIR}/heartbeat")
 	heartbeat=$((heartbeat+10))
-	echo $heartbeat > ramdisk/heartbeat
+	echo $heartbeat > "${RAMDISKDIR}/heartbeat"
 	mosquitto_pub -r -t "openWB/system/Uptime" -m "$(uptime)"
 	mosquitto_pub -r -t "openWB/system/Timestamp" -m "$(date +%s)"
 	mosquitto_pub -r -t "openWB/system/Date" -m "$(date)"
@@ -127,20 +129,19 @@ fi
 
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
-	if [ -e ramdisk/5sec ]; then
+	if [ -e "${RAMDISKDIR}/5sec" ]; then
 		sleep 5 && ./regel.sh >> /var/log/openWB.log 2>&1 &
-		rm ramdisk/5sec
+		rm "${RAMDISKDIR}/5sec"
 	else
-		echo 0 > ramdisk/5sec
+		echo 0 > "${RAMDISKDIR}/5sec"
 	fi
 fi
 if [[ $dspeed == "2" ]]; then
-
-	if [ -e ramdisk/5sec ]; then
-		rm ramdisk/5sec
+	if [ -e "${RAMDISKDIR}/5sec" ]; then
+		rm "${RAMDISKDIR}/5sec"
 		exit 0
 	else
-		echo 0 > ramdisk/5sec
+		echo 0 > "${RAMDISKDIR}/5sec"
 	fi
 fi
 
@@ -149,28 +150,23 @@ fi
 
 #ladelog ausfuehren
 ./ladelog.sh &
-graphtimer=$(<ramdisk/graphtimer)
+graphtimer=$(<"${RAMDISKDIR}/graphtimer")
 if (( graphtimer < 5 )); then
 	graphtimer=$((graphtimer+1))
-	echo $graphtimer > ramdisk/graphtimer
+	echo $graphtimer > "${RAMDISKDIR}/graphtimer"
 else
 	graphtimer=0
-	echo $graphtimer > ramdisk/graphtimer
+	echo $graphtimer > "${RAMDISKDIR}/graphtimer"
 fi
 #######################################
 
 if (( displayaktiv == 1 )); then
-	execdisplay=$(<ramdisk/execdisplay)
+	execdisplay=$(<"${RAMDISKDIR}/execdisplay")
 	if (( execdisplay == 1 )); then
 		export DISPLAY=:0 && xset s "$displaysleep" && xset dpms "$displaysleep" "$displaysleep" "$displaysleep"
-		echo 0 > ramdisk/execdisplay
+		echo 0 > "${RAMDISKDIR}/execdisplay"
 	fi
 fi
-
-
-#######################################
-# check rfid
-#moved in loadvars
 
 #goe mobility check
 goecheck
@@ -186,7 +182,7 @@ timeloadvars=$((endloadvars-startloadvars))
 openwbDebugLog "MAIN" 1 "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
 
 if (( u1p3paktiv == 1 )); then
-	blockall=$(<ramdisk/blockall)
+	blockall=$(<"${RAMDISKDIR}/blockall")
 	if (( blockall == 1 )); then
 		openwbDebugLog "MAIN" 1 "Phasen Umschaltung noch aktiv... beende"
 		exit 0
@@ -249,8 +245,8 @@ if (( cpunterbrechunglp1 == 1 )); then
 	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
 		if (( llalt > 5 )); then
 			if (( ladeleistung < 100 )); then
-				cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
-				cpulp1counter=$(<ramdisk/cpulp1counter)
+				cpulp1waraktiv=$(<"${RAMDISKDIR}/cpulp1waraktiv")
+				cpulp1counter=$(<"${RAMDISKDIR}/cpulp1counter")
 				if (( cpulp1counter > 5 )); then
 					if (( cpulp1waraktiv == 0 )); then
 						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP1 wird durchgeführt"
@@ -260,26 +256,26 @@ if (( cpunterbrechunglp1 == 1 )); then
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
 							python runs/cpuremote.py -a "$evseiplp1" -i 4 -d "$cpunterbrechungdauerlp1"
 						elif [[ $evsecon == "extopenwb" ]]; then
-							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep1ip -m "1"
+							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h "$chargep1ip" -m "1"
 						else
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
 							sudo python runs/cpulp1.py -d "$cpunterbrechungdauerlp1"
 						fi
-						echo 1 > ramdisk/cpulp1waraktiv
-						date +%s > ramdisk/cpulp1timestamp # Timestamp in epoch der CP Unterbrechung
+						echo 1 > "${RAMDISKDIR}/cpulp1waraktiv"
+						date +%s > "${RAMDISKDIR}/cpulp1timestamp" # Timestamp in epoch der CP Unterbrechung
 					fi
 				else
 					cpulp1counter=$((cpulp1counter+1))
-					echo $cpulp1counter > ramdisk/cpulp1counter
+					echo $cpulp1counter > "${RAMDISKDIR}/cpulp1counter"
 				fi
 			else
-				echo 0 > ramdisk/cpulp1waraktiv
-				echo 0 > ramdisk/cpulp1counter
+				echo 0 > "${RAMDISKDIR}/cpulp1waraktiv"
+				echo 0 > "${RAMDISKDIR}/cpulp1counter"
 			fi
 		fi
 	else
-		echo 0 > ramdisk/cpulp1waraktiv
-		echo 0 > ramdisk/cpulp1counter
+		echo 0 > "${RAMDISKDIR}/cpulp1waraktiv"
+		echo 0 > "${RAMDISKDIR}/cpulp1counter"
 	fi
 fi
 
@@ -287,8 +283,8 @@ if (( cpunterbrechunglp2 == 1 )); then
 	if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
 		if (( llalts1 > 5 )); then
 			if (( ladeleistunglp2 < 100 )); then
-				cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
-				cpulp2counter=$(<ramdisk/cpulp2counter)
+				cpulp2waraktiv=$(<"${RAMDISKDIR}/cpulp2waraktiv")
+				cpulp2counter=$(<"${RAMDISKDIR}/cpulp2counter")
 				if (( cpulp2counter > 5 )); then
 					if (( cpulp2waraktiv == 0 )); then
 						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
@@ -298,42 +294,42 @@ if (( cpunterbrechunglp2 == 1 )); then
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
 							python runs/cpuremote.py -a "$evseiplp2" -i 7 -d "$cpunterbrechungdauerlp2"
 						elif [[ $evsecons1 == "extopenwb" ]]; then
-							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
+							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h "$chargep2ip" -m "1"
 						else
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
 							sudo python runs/cpulp2.py -d "$cpunterbrechungdauerlp2"
 						fi
-						echo 1 > ramdisk/cpulp2waraktiv
-						date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
+						echo 1 > "${RAMDISKDIR}/cpulp2waraktiv"
+						date +%s > "${RAMDISKDIR}/cpulp2timestamp" # Timestamp in epoch der CP Unterbrechung
 					fi
 				else
 					cpulp2counter=$((cpulp2counter+1))
-					echo $cpulp2counter > ramdisk/cpulp2counter
+					echo $cpulp2counter > "${RAMDISKDIR}/cpulp2counter"
 				fi
 			else
-				echo 0 > ramdisk/cpulp2waraktiv
-				echo 0 > ramdisk/cpulp2counter
+				echo 0 > "${RAMDISKDIR}/cpulp2waraktiv"
+				echo 0 > "${RAMDISKDIR}/cpulp2counter"
 			fi
 		fi
 	else
-		echo 0 > ramdisk/cpulp2waraktiv
-		echo 0 > ramdisk/cpulp2counter
+		echo 0 > "${RAMDISKDIR}/cpulp2waraktiv"
+		echo 0 > "${RAMDISKDIR}/cpulp2counter"
 	fi
 fi
 
 if [[ $dspeed == "3" ]]; then
-	if [ -e ramdisk/5sec ]; then
-		regeltimer=$(<ramdisk/5sec)
+	if [ -e "${RAMDISKDIR}/5sec" ]; then
+		regeltimer=$(<"${RAMDISKDIR}/5sec")
 		if (( regeltimer < 5 )); then
 			regeltimer=$((regeltimer+1))
-			echo $regeltimer > ramdisk/5sec
+			echo $regeltimer > "${RAMDISKDIR}/5sec"
 			exit 0
 		else
 			regeltimer=0
-			echo $regeltimer > ramdisk/5sec
+			echo $regeltimer > "${RAMDISKDIR}/5sec"
 		fi
 	else
-		echo 0 > ramdisk/5sec
+		echo 0 > "${RAMDISKDIR}/5sec"
 	fi
 fi
 
@@ -343,36 +339,36 @@ fi
 
 #Prüft ob der RSE (Rundsteuerempfängerkontakt) geschlossen ist, wenn ja wird die Ladung pausiert.
 if (( rseenabled == 1 )); then
-	rsestatus=$(<ramdisk/rsestatus)
-	rseaktiv=$(<ramdisk/rseaktiv)
+	rsestatus=$(<"${RAMDISKDIR}/rsestatus")
+	rseaktiv=$(<"${RAMDISKDIR}/rseaktiv")
 	if (( rsestatus == 1 )); then
-		echo "RSE Kontakt aktiv, pausiere Ladung" > ramdisk/lastregelungaktiv
+		echo "RSE Kontakt aktiv, pausiere Ladung" > "${RAMDISKDIR}/lastregelungaktiv"
 		if (( rseaktiv == 0 )); then
 			openwbDebugLog "CHARGESTAT" 0 "RSE Kontakt aktiviert, ändere Lademodus auf Stop"
-			echo "$lademodus" > ramdisk/rseoldlademodus
-			echo 3 > ramdisk/lademodus
+			echo "$lademodus" > "${RAMDISKDIR}/rseoldlademodus"
+			echo 3 > "${RAMDISKDIR}/lademodus"
 			mosquitto_pub -r -t openWB/global/ChargeMode -m "3"
-			echo 1 > ramdisk/rseaktiv
+			echo 1 > "${RAMDISKDIR}/rseaktiv"
 		fi
 	else
 		if (( rseaktiv == 1 )); then
 			openwbDebugLog "CHARGESTAT" 0 "RSE Kontakt deaktiviert, setze auf alten Lademodus zurück"
-			rselademodus=$(<ramdisk/rseoldlademodus)
-			echo "$rselademodus" > ramdisk/lademodus
+			rselademodus=$(<"${RAMDISKDIR}/rseoldlademodus")
+			echo "$rselademodus" > "${RAMDISKDIR}/lademodus"
 			mosquitto_pub -r -t openWB/global/ChargeMode -m "$rselademodus"
-			echo 0 > ramdisk/rseaktiv
+			echo 0 > "${RAMDISKDIR}/rseaktiv"
 		fi
 	fi
 fi
 
 #evse modbus check
-evsemodbustimer=$(<ramdisk/evsemodbustimer)
+evsemodbustimer=$(<"${RAMDISKDIR}/evsemodbustimer")
 if (( evsemodbustimer < 30 )); then
 	evsemodbustimer=$((evsemodbustimer+1))
-	echo $evsemodbustimer > ramdisk/evsemodbustimer
+	echo $evsemodbustimer > "${RAMDISKDIR}/evsemodbustimer"
 else
 	evsemodbustimer=0
-	echo $evsemodbustimer > ramdisk/evsemodbustimer
+	echo $evsemodbustimer > "${RAMDISKDIR}/evsemodbustimer"
 	evsemodbuscheck
 fi
 
@@ -441,7 +437,7 @@ prenachtlademodus
 
 #######################
 #Ladestromstarke berechnen
-anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
+anzahlphasen=$(<"${RAMDISKDIR}/anzahlphasen")
 if ((anzahlphasen > 9)); then
 	anzahlphasen=1
 fi
@@ -459,21 +455,21 @@ if ((llalt > 3)); then
 	if ((lla3 >= llphasentest)); then
 		anzahlphasen=$((anzahlphasen + 1))
 	fi
-	echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
-	echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/lp1anzahlphasen
+	echo "$anzahlphasen" >"${RAMDISKDIR}/anzahlphasen"
+	echo "$anzahlphasen" >"${RAMDISKDIR}/lp1anzahlphasen"
 	openwbDebugLog "PV" 0 "LP1 Anzahl Phasen während Ladung= $anzahlphasen"
 else
 	if ((plugstat == 1)) && ((lp1enabled == 1)); then
-		if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-			echo 1 >/var/www/html/openWB/ramdisk/anzahlphasen
+		if [ ! -f "${RAMDISKDIR}/anzahlphasen" ]; then
+			echo 1 >"${RAMDISKDIR}/anzahlphasen"
 		fi
 		if ((u1p3paktiv == 1)); then
-			anzahlphasen=$(</var/www/html/openWB/ramdisk/u1p3pstat)
+			anzahlphasen=$(<"${RAMDISKDIR}/u1p3pstat")
 		else
 			if [ -f /var/www/html/openWB/ramdisk/lp1anzahlphasen ]; then
-				anzahlphasen=$(</var/www/html/openWB/ramdisk/lp1anzahlphasen)
+				anzahlphasen=$(<"${RAMDISKDIR}/lp1anzahlphasen")
 			else
-				anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
+				anzahlphasen=$(<"${RAMDISKDIR}/anzahlphasen")
 			fi
 		fi
 	else
@@ -496,23 +492,23 @@ if ((lastmanagement == 1)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
 		fi
-		echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
-		echo "$lp2anzahlphasen" >/var/www/html/openWB/ramdisk/lp2anzahlphasen
+		echo "$anzahlphasen" >"${RAMDISKDIR}/anzahlphasen"
+		echo "$lp2anzahlphasen" >"${RAMDISKDIR}/lp2anzahlphasen"
 		openwbDebugLog "PV" 0 "LP2 Anzahl Phasen während Ladung= $lp2anzahlphasen"
 	else
 		if ((plugstatlp2 == 1)) && ((lp2enabled == 1)); then
-			if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-				echo 1 >/var/www/html/openWB/ramdisk/anzahlphasen
+			if [ ! -f "${RAMDISKDIR}/anzahlphasen" ]; then
+				echo 1 >"${RAMDISKDIR}/anzahlphasen"
 			fi
 			if ((u1p3plp2aktiv == 1)); then
-				lp2anzahlphasen=$(</var/www/html/openWB/ramdisk/u1p3pstat)
+				lp2anzahlphasen=$(<"${RAMDISKDIR}/u1p3pstat")
 				anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
 			else
-				if [ ! -f /var/www/html/openWB/ramdisk/lp2anzahlphasen ]; then
-					echo 1 >/var/www/html/openWB/ramdisk/lp2anzahlphasen
+				if [ ! -f "${RAMDISKDIR}/lp2anzahlphasen" ]; then
+					echo 1 >"${RAMDISKDIR}/lp2anzahlphasen"
 					anzahlphasen=$((anzahlphasen + 1 ))
 				else
-					lp2anzahlphasen=$(</var/www/html/openWB/ramdisk/lp2anzahlphasen)
+					lp2anzahlphasen=$(<"${RAMDISKDIR}/lp2anzahlphasen")
 					anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
 				fi
 			fi
@@ -533,13 +529,13 @@ if ((lastmanagements2 == 1)); then
 		if ((llas23 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 		fi
-		echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
+		echo "$anzahlphasen" > "${RAMDISKDIR}/anzahlphasen"
 	fi
 fi
 if ((anzahlphasen < 1)) || ((anzahlphasen > 24)); then
 	openwbDebugLog "PV" 1 "Ungueltige Anzahl Phasen: $anzahlphasen, setze auf '1'"
 	anzahlphasen=1
-	echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
+	echo "$anzahlphasen" >"${RAMDISKDIR}/anzahlphasen"
 fi
 openwbDebugLog "PV" 0 "Gesamt Anzahl Phasen= $anzahlphasen"
 
@@ -552,7 +548,7 @@ fi
 ########################
 # Berechnung für PV Regelung
 if [[ $nurpv70dynact == "1" ]]; then
-	nurpv70status=$(<ramdisk/nurpv70dynstatus)
+	nurpv70status=$(<"${RAMDISKDIR}/nurpv70dynstatus")
 	if [[ $nurpv70status == "1" ]]; then
 		uberschuss=$((uberschuss - nurpv70dynw))
 		# Schwelle zum Beginn der Ladung
