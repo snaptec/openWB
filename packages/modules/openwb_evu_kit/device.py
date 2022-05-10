@@ -80,7 +80,7 @@ def read_legacy(component_type: str,
     dev.add_component(component_config)
     log.debug('openWB Version: ' + str(evu_version))
 
-    if inverter_module == "wr_ethmpm3pmaevu":
+    if inverter_module == "wr_ethmpm3pmaevu" or inverter_module == "wr2_ethlovatoaevu":
         component_config = get_component_config("inverter", inverter_version, num)
         dev.add_component(component_config)
         log.debug('openWB Inverter-Version: ' + str(inverter_version))
