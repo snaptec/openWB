@@ -12,7 +12,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]] ; then
+if [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]] || [[ $pv2wattmodul != "wr2_ethlovatoaevu" ]] ; then
         bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" "${speichermodul}" "${speicherkitversion}">>"${MYLOGFILE}" 2>&1
         ret=$?
 fi
