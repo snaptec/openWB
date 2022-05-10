@@ -233,13 +233,23 @@ fi
 evsedintest
 
 #u1p3p switch
-u1p3pswitch
+u1p3pswitch &
 
 #hooks - externe geraete
 hook
 
 #Graphing
 graphing
+
+# second check for blockall
+# may be set from our call to u1p3pswitch
+if (( u1p3paktiv == 1 )); then
+	blockall=$(<"${RAMDISKDIR}/blockall")
+	if (( blockall == 1 )); then
+		openwbDebugLog "MAIN" 1 "Phasen Umschaltung aktiv... beende"
+		exit 0
+	fi
+fi
 
 if (( cpunterbrechunglp1 == 1 )); then
 	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
