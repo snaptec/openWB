@@ -19,22 +19,26 @@ u1p3pswitch() {
 			if ((nachtladenstate == 1)) || ((nachtladen2state == 1)) || ((nachtladenstates1 == 1)) || ((nachtladen2states1 == 1)); then
 				if ((u1p3pstat != u1p3pnl)); then
 					openwbDebugLog "MAIN" 1 "Nachtladen derzeit $u1p3pstat Phasen, auf $u1p3pnl konfiguriert, aendere..."
+					echo 1 >"${RAMDISKDIR}/blockall"
 					if ((u1p3pnl == 3)); then
 						runs/u1p3pcheck.sh 3
 					else
 						runs/u1p3pcheck.sh 1
 					fi
+					echo 0 > "${RAMDISKDIR}/blockall"
 					openwbDebugLog "MAIN" 1 "auf $u1p3pnl Phasen geaendert"
 				fi
 			else
 				if ((lademodus == 0)); then
 					if ((u1p3pstat != u1p3psofort)); then
 						openwbDebugLog "MAIN" 1 "Sofortladen derzeit $u1p3pstat Phasen, auf $u1p3psofort konfiguriert, aendere..."
+						echo 1 >"${RAMDISKDIR}/blockall"
 						if ((u1p3psofort == 3)); then
 							runs/u1p3pcheck.sh 3
 						else
 							runs/u1p3pcheck.sh 1
 						fi
+						echo 0 > "${RAMDISKDIR}/blockall"
 						openwbDebugLog "MAIN" 1 "auf $u1p3psofort Phasen geaendert"
 					fi
 				fi
@@ -42,7 +46,9 @@ u1p3pswitch() {
 					if ((u1p3pstat != u1p3pminundpv)); then
 						if ((u1p3pminundpv == 4)); then
 							if ((u1p3pstat == 0)); then
+								echo 1 >"${RAMDISKDIR}/blockall"
 								runs/u1p3pcheck.sh 1
+								echo 0 >"${RAMDISKDIR}/blockall"
 							fi
 							if ((u1p3pstat == 3)); then
 								urcounter=$(<"${RAMDISKDIR}/urcounter")
@@ -53,18 +59,22 @@ u1p3pswitch() {
 									urcounter=$((urcounter + 10))
 									echo $urcounter >"${RAMDISKDIR}/urcounter"
 								else
-									runs/u1p3pcheck.sh 1
 									openwbDebugLog "MAIN" 1 "Min PV Laden derzeit $u1p3pstat Phasen, auf 1 Nur PV konfiguriert, aendere..."
-									echo 0 >/var/www/html/openWB/ramdisk/urcounter
+									echo 1 >"${RAMDISKDIR}/blockall"
+									runs/u1p3pcheck.sh 1
+									echo 0 >"${RAMDISKDIR}/blockall"
+									echo 0 >"${RAMDISKDIR}/urcounter"
 								fi
 							fi
 						else
 							openwbDebugLog "MAIN" 1 "Min PV Laden derzeit $u1p3pstat Phasen, auf $u1p3pminundpv konfiguriert, aendere..."
+							echo 1 > "${RAMDISKDIR}/blockall"
 							if ((u1p3pnurpv == 3)); then
 								runs/u1p3pcheck.sh 3
 							else
 								runs/u1p3pcheck.sh 1
 							fi
+							echo 0 >"${RAMDISKDIR}/blockall"
 							openwbDebugLog "MAIN" 1 "auf $u1p3pminundpv Phasen geaendert"
 						fi
 					fi
@@ -73,7 +83,9 @@ u1p3pswitch() {
 					if ((u1p3pstat != u1p3pnurpv)); then
 						if ((u1p3pnurpv == 4)); then
 							if ((u1p3pstat == 0)); then
+								echo 1 >"${RAMDISKDIR}/blockall"
 								runs/u1p3pcheck.sh 1
+								echo 0 >"${RAMDISKDIR}/blockall"
 							fi
 							if ((u1p3pstat == 3)); then
 								urcounter=$(<"${RAMDISKDIR}/urcounter")
@@ -84,18 +96,22 @@ u1p3pswitch() {
 									urcounter=$((urcounter + 10))
 									echo $urcounter >"${RAMDISKDIR}/urcounter"
 								else
-									runs/u1p3pcheck.sh 1
 									openwbDebugLog "MAIN" 1 "Nur PV Laden derzeit $u1p3pstat Phasen, auf 1 Nur PV konfiguriert, aendere..."
-									echo 0 >/var/www/html/openWB/ramdisk/urcounter
+									echo 1 >"${RAMDISKDIR}/blockall"
+									runs/u1p3pcheck.sh 1
+									echo 0 >"${RAMDISKDIR}/blockall"
+									echo 0 >"${RAMDISKDIR}/urcounter"
 								fi
 							fi
 						else
 							openwbDebugLog "MAIN" 1 "Nur PV Laden derzeit $u1p3pstat Phasen, auf $u1p3pnurpv konfiguriert, aendere..."
+							echo 1 >"${RAMDISKDIR}/blockall"
 							if ((u1p3pnurpv == 3)); then
 								runs/u1p3pcheck.sh 3
 							else
 								runs/u1p3pcheck.sh 1
 							fi
+							echo 0 >"${RAMDISKDIR}/blockall"
 							openwbDebugLog "MAIN" 1 "auf $u1p3pnurpv Phasen geaendert"
 						fi
 					fi
@@ -103,22 +119,26 @@ u1p3pswitch() {
 				if ((lademodus == 4)); then
 					if ((u1p3pstat != u1p3pstandby)); then
 						openwbDebugLog "MAIN" 1 "Standby Laden derzeit $u1p3pstat Phasen, auf $u1p3pstandby konfiguriert, aendere..."
+						echo 1 >"${RAMDISKDIR}/blockall"
 						if ((u1p3pstandby == 3)); then
 							runs/u1p3pcheck.sh 3
 						else
 							runs/u1p3pcheck.sh 1
 						fi
+						echo 0 >"${RAMDISKDIR}/blockall"
 						openwbDebugLog "MAIN" 1 "auf $u1p3pstandby Phasen geaendert"
 					fi
 				fi
 				if ((lademodus == 3)); then
 					if ((u1p3pstat != u1p3pstandby)); then
 						openwbDebugLog "MAIN" 1 "Stop Laden derzeit $u1p3pstat Phasen, auf $u1p3pstandby konfiguriert, aendere..."
+						echo 1 >"${RAMDISKDIR}/blockall"
 						if ((u1p3pstandby == 3)); then
 							runs/u1p3pcheck.sh 3
 						else
 							runs/u1p3pcheck.sh 1
 						fi
+						echo 0 >"${RAMDISKDIR}/blockall"
 						openwbDebugLog "MAIN" 1 "auf $u1p3pstandby Phasen geaendert"
 					fi
 				fi
