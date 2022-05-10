@@ -18,7 +18,11 @@ def get_default_config() -> dict:
         "name": "Alpha ESS",
         "type": "alpha_ess",
         "id": 0,
-        "configuration": {}
+        "configuration": {
+            "source": 0,  # 0: AlphaEss-Kit, 1: Hi5/10 mit variabler IP
+            "version": 1,  # 0: <V1.23, 1: >= V1.23
+            "ip_address": None
+        }
     }
 
 
@@ -36,7 +40,10 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self._components = {}  # type: Dict[str, alpha_ess_component_classes]
         try:
-            self.client = modbus.ModbusClient("192.168.193.125", 8899)
+            if device_config["configuration"]["source"] == 0:
+                self.client = modbus.ModbusClient("192.168.193.125", 8899)
+            else:
+                self.client = modbus.ModbusClient(device_config["configuration"]["ip_address"], 502)
             self.device_config = device_config
         except Exception:
             log.MainLogger().exception("Fehler im Modul "+device_config["name"])
@@ -45,7 +52,10 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.client))
+                self.device_config["id"],
+                component_config,
+                self.client,
+                self.device_config["configuration"]))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -66,14 +76,18 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, version: int, num: Optional[int] = None) -> None:
+def read_legacy(component_type: str, source: int, version: int, ip_address: str, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
         "counter": counter,
         "inverter": inverter
     }
     device_config = get_default_config()
+    device_config["configuration"]["source"] = source
+    device_config["configuration"]["version"] = version
+    device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)
+
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
     else:
@@ -82,10 +96,10 @@ def read_legacy(component_type: str, version: int, num: Optional[int] = None) ->
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config["id"] = num
-    component_config["configuration"]["version"] = version
     dev.add_component(component_config)
 
     log.MainLogger().debug('alpha_ess Version: ' + str(version))
+    log.MainLogger().debug('alpha_ess IP-Adresse: ' + str(ip_address))
 
     dev.update()
 

@@ -18,7 +18,7 @@ def get_default_config() -> dict:
         "type": "huawei",
         "id": 0,
         "configuration": {
-            "ip_address": "192.168.193.15",
+            "ip_address": None,
             "modbus_id": 1
         }
     }

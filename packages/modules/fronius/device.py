@@ -19,7 +19,7 @@ def get_default_config() -> dict:
         "id": 0,
         "configuration": {
             "meter_id": 0,  # ToDo: move to counter_*
-            "ip_address": "192.168.193.15"
+            "ip_address": None
         }
     }
 
@@ -61,7 +61,10 @@ class Device(AbstractDevice):
                 # zuerst den WR auslesen
                 for component in self._components:
                     if isinstance(self._components[component], inverter.FroniusInverter):
-                        power_inverter = self._components[component].update()
+                        inverter_state = self._components[component].update()
+                        self._components[component].set_inverter_state(inverter_state)
+                        # Rückgabe der Leistung des ersten WR mit zurückgesetzter Vorzeichenumkehr
+                        power_inverter = -1 * inverter_state.power
                         break
                 else:
                     power_inverter = 0
@@ -89,7 +92,8 @@ class Device(AbstractDevice):
                         break
                 for component in self._components:
                     if isinstance(self._components[component], bat.FroniusBat):
-                        self._components[component].update()
+                        bat_state = self._components[component].update()
+                        self._components[component].set_bat_state(bat_state)
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
@@ -102,7 +106,6 @@ def read_legacy(
         ip_address: str,
         meter_id: int,
         variant: int,
-        meter_location: int = meter.MeterLocation.grid.value,
         ip_address2: str = "none",
         bat_module: str = "none",
         num: Optional[int] = None) -> None:
@@ -121,7 +124,6 @@ def read_legacy(
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
         if component_type == "counter_sm":
             component_config["configuration"]["variant"] = variant
-            component_config["configuration"]["meter_location"] = meter_location
         elif component_type == "inverter":
             component_config["configuration"]["ip_address2"] = ip_address2
     else:

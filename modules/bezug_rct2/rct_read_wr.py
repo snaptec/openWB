@@ -1,57 +1,74 @@
 #!/usr/bin/python3
-from bezug_rct2 import rct_lib
 from typing import List
-
-
-def writeRam(fn, val, rctname):
-    fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-    if rct_lib.bVerbose:
-        rct_lib.dbglog("val for " + str(fnn) + " is " + str(val) + " " + str(rctname))
-        with open(fnn, 'r') as f:
-            oldv = f.read()
-        rct_lib.dbglog("field " + str(fnn) + " val is " + str(val) + " oldval:" + str(oldv) + " " + str(rctname))
-
-    with open(fnn, 'w') as f:
-        f.write(str(val))
-
+import os, sys, traceback, time
+try: # make script callable from command line and LRS
+    from bezug_rct2 import rct_lib
+except:
+    import rct_lib
 
 # Entry point with parameter check
 def main(argv: List[str]):
-    rct_lib.init(argv[0])
+    start_time =  time.time()
+    rct = rct_lib.RCT(argv)
 
-    clientsocket = rct_lib.connect_to_server()
-    if clientsocket is not None:
+    if rct.connect_to_server() == True:
+        try:
+            MyTab = []
+            pv1watt  = rct.add_by_name(MyTab, 'dc_conv.dc_conv_struct[0].p_dc')
+            pv2watt  = rct.add_by_name(MyTab, 'dc_conv.dc_conv_struct[1].p_dc')
+            pv3watt  = rct.add_by_name(MyTab, 'io_board.s0_external_power')
+            pLimit   = rct.add_by_name(MyTab, 'p_rec_lim[2]')   # max. AC power according to RCT Power
+            dA       = rct.add_by_name(MyTab, 'energy.e_dc_day[0]')
+            dB       = rct.add_by_name(MyTab, 'energy.e_dc_day[1]')
+            dE       = rct.add_by_name(MyTab, 'energy.e_ext_day')
+            mA       = rct.add_by_name(MyTab, 'energy.e_dc_month[0]')
+            mB       = rct.add_by_name(MyTab, 'energy.e_dc_month[1]')
+            mE       = rct.add_by_name(MyTab, 'energy.e_ext_month')
+            yA       = rct.add_by_name(MyTab, 'energy.e_dc_year[0]')
+            yB       = rct.add_by_name(MyTab, 'energy.e_dc_year[1]')
+            yE       = rct.add_by_name(MyTab, 'energy.e_ext_year')
+            pv1total = rct.add_by_name(MyTab, 'energy.e_dc_total[0]')
+            pv2total = rct.add_by_name(MyTab, 'energy.e_dc_total[1]')
+            pv3total = rct.add_by_name(MyTab, 'energy.e_ext_total')
 
-        # aktuell
-        pv1watt = int(rct_lib.read(clientsocket, 0xB5317B78))
-        pv2watt = int(rct_lib.read(clientsocket, 0xAA9AA253))
-        pv3watt = int(rct_lib.read(clientsocket, 0xE96F1844))
-        rct_lib.dbglog("pvwatt A:" + str(pv1watt) + "  B:" + str(pv2watt) + " G:" + str(pv3watt))
-        writeRam('pv1wattString1', int(pv1watt), 'pv1watt')
-        writeRam('pv1wattString2', int(pv2watt), 'pv2watt')
-        pvwatt = ((pv1watt+pv2watt+pv3watt) * -1)
-        writeRam('pvwatt', int(pvwatt), 'negative Summe von pv1watt + pv2watt + pv3watt')
+            # read all parameters
+            response = rct.read(MyTab)
+            rct.close()
 
-        # monthly
-        mA = int(rct_lib.read(clientsocket, 0x81AE960B))  # energy.e_dc_month[0]  WH
-        mB = int(rct_lib.read(clientsocket, 0x7AB9B045))  # energy.e_dc_month[1]  WH
-        mE = int(rct_lib.read(clientsocket, 0x031A6110))  # energy.e_ext_month    WH
-        monthly_pvkwhk = (mA + mB + mE) / 1000.0   # -> KW
-        writeRam('monthly_pvkwhk', monthly_pvkwhk, 'monthly_pvkwhk')
+            # actual DC power
+            rct.write_ramdisk('pv1wattString1', pv1watt.value, 'pv1watt')
+            rct.write_ramdisk('pv1wattString2', pv2watt.value, 'pv2watt')
+            pvwatt = pv1watt.value + pv2watt.value + pv3watt.value
+            rct.write_ramdisk('pvwatt', int(pvwatt) * -1, 'negative Summe von pv1watt + pv2watt + pv3watt')
 
-        # yearly
-        yA = int(rct_lib.read(clientsocket, 0xAF64D0FE))  # energy.e_dc_total[0]  WH
-        yB = int(rct_lib.read(clientsocket, 0xBD55D796))  # energy.e_dc_total[1]  WH
-        yE = int(rct_lib.read(clientsocket, 0xA59C8428))  # energy.e_ext_total    WH
-        yearly_pvkwhk = (yA + yB + yE) / 1000.0   # -> KW
-        writeRam('yearly_pvkwhk', yearly_pvkwhk, 'yearly_pvkwhk')
+            # max. possible AC power (might be used by the control loop to limit PV charging power)
+            rct.write_ramdisk('maxACkW', int(pLimit.value), 'Maximale zur Ladung verwendete AC-Leistung des Wechselrichters')
 
-        # total
-        pv1total = int(rct_lib.read(clientsocket, 0xFC724A9E))    # energy.e_dc_total[0]
-        pv2total = int(rct_lib.read(clientsocket, 0x68EEFD3D))    # energy.e_dc_total[1]
-        pv3total = int(rct_lib.read(clientsocket, 0xA59C8428))    # energy.e_ext_total
-        rct_lib.dbglog("pvtotal  A:" + str(pv1total) + "  B:" + str(pv2total) + " G:" + str(pv3total))
-        pvkwh = (pv1total + pv2total + pv3total)
-        writeRam('pvkwh', pvkwh, 'Summe von pv1total pv1total pv1total')
+            # daily
+            daily_pvkwhk = (dA.value + dB.value + dE.value) / 1000.0   # -> KW
+            rct.write_ramdisk('daily_pvkwhk', daily_pvkwhk, 'daily_pvkwhk')
 
-        rct_lib.close(clientsocket)
+            # monthly
+            monthly_pvkwhk = (mA.value + mB.value + mE.value) / 1000.0   # -> KW
+            rct.write_ramdisk('monthly_pvkwhk', monthly_pvkwhk, 'monthly_pvkwhk')
+
+            # yearly
+            yearly_pvkwhk = (yA.value + yB.value + yE.value) / 1000.0   # -> KW
+            rct.write_ramdisk('yearly_pvkwhk', yearly_pvkwhk, 'yearly_pvkwhk')
+
+            # total
+            pvkwh = (pv1total.value + pv2total.value + pv3total.value)
+            rct.write_ramdisk('pvkwh', pvkwh, 'Summe von pv1total pv1total pv1total')
+
+            # debug output of processing time and all response elements
+            rct.dbglog(response.format_list(time.time() - start_time))
+        except:
+            print("-"*100)
+            traceback.print_exc(file=sys.stdout)
+            rct.close()
+
+    rct = None
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

@@ -85,6 +85,7 @@ $numDevices = 9;
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
+											<option value="vampair" data-option="vampair">Vampair</option>
 											<option value="http" data-option="http">Http</option>
 											<option value="avm" data-option="avm">AVM</option>
 											<option value="mystrom" data-option="mystrom">MyStrom</option>
@@ -145,6 +146,16 @@ $numDevices = 9;
 											Wenn die Einschaltbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 2 auf Betriebszustand 3 geschaltet.
 											Wenn die Ausbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 3 auf Betriebszustand 2 geschaltet.
 										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-vampair hide">
+											Wärmepumpe der Firma Solarfocus. Der aktuelle Überschuss wird übertragen.
+											Im Servicemenü muss (durch eine Fachkraft) die Überstromnutzung aktiviert und auf Modbus TCP gestellt werden.
+											Danach muss lediglich eine Ein- und Ausschaltschwelle für die Überstromnutzung eingestellt werden.
+											Eine negative Ausschaltschwelle bedeutet, dass die Wärmepumpe die fehlende Leistung aus dem Netz bezieht.
+											Die hier hinterlegte Ein- und Ausschaltschwelle sollte dann 1:1 in die openWB übertragen werden.
+										</span>
+
+
+
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
 											Mit diesem Typ werden alle Geräte unterstützt, welche sich durch einfache Http-Aufrufe schalten lassen.
 										</span>
@@ -157,7 +168,33 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-none hide">
+								<hr class="border-secondary">
+								<div class="form-row mb-1">
+									<label for="device_nonewattDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Separate Leistungsaufnahme in Watt</label>
+									<div class="col">
+										<input id="device_nonewattDevices<?php echo $devicenum; ?>" name="device_nonewatt" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Wenn separate Leistungsaufnahme in Watt kleiner/gleich ist, wird das Gerät als ausgeschaltet (rot) gezeigt, anderenfalls grün .</span>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
+								<hr class="border-secondary">
+								<div class="form-row mb-1">
+									<label for="device_idmnavDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Navigator Version</label>
+									<div class="col">
+										<input id="device_idmnavDevices<?php echo $devicenum; ?>" name="device_idmnav" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="2" data-default="2" value="2" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Hauptversion vom Navigator 1 oder 2</span>
+									</div>
+								</div>
+							</div>
+
+
+
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -215,7 +252,7 @@ $numDevices = 9;
 											<input id="device_stateurlDevices<?php echo $devicenum; ?>" name="device_stateurl" class="form-control" type="text" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<span class="form-text small">
 												Die hier angegebene URL wird aufgerufen, um den aktuellen Status (1 = an, 0 = aus) des Geräts zu erhalten. <br>
-												Der Parameter ist optional und kann somit auch leer gelassen werden. In diesem Fall wird der Parameter mit "none" vorbelegt und 
+												Der Parameter ist optional und kann somit auch leer gelassen werden. In diesem Fall wird der Parameter mit "none" vorbelegt und
                                                                                                 die Erkennung, ob das Gerät angeschaltet ist, wird weiterhin über die Leistung ermittelt. <br>
 											</span>
 										</div>
@@ -232,7 +269,7 @@ $numDevices = 9;
 												<option value="M1" data-option="M1">Acthor M1</option>
 												<option value="M3" data-option="M3">Acthor M3</option>
 												<option value="9s" data-option="9s">Acthor 9s</option>
-												<option value="9s18" data-option="9s18">Acthor 9s Dual 18k</option>												
+												<option value="9s18" data-option="9s18">Acthor 9s Dual 18k</option>
 											</select>
 											<span class="form-text small">
 												Hier ist das installierte Modell auszuwählen.
@@ -250,7 +287,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -423,6 +460,30 @@ $numDevices = 9;
 											</div>
 										</div>
 									</div>
+
+									<hr class="border-secondary">
+									<div class="form-group">
+										<div class="form-row mb-1">
+											<label class="col-md-4 col-form-label">Periodisch ausschalten...</label>
+											<div class="col">
+												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateperDevices<?php echo $devicenum; ?>" name="device_deactivateper" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">nie
+													</label>
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>1" data-option="1" value="1">jede volle Stunde
+													</label>
+												 	<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde
+													</label>
+												</div>
+												<span class="form-text small">Diese Option (bei jeder vollen Stunde / jede halbe Stunde) sorgt dafür, dass dieses Gerät periodisch ausgestellt wird ohne Ausschaltschwelle / Ausschaltverzögerung zu berücksichtigen. Dann können andere Geräte mit dem freiwerden Überschuss eingeschaltet werden.
+												</span>
+											</div>
+										</div>
+									</div>
+
+
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
