@@ -525,10 +525,9 @@ def read_meter():
                     DeviceValues.update({'rfidtag': str(rfidtag)})
                 if parentWB != "0":
                     if rfidtag == '0\n':
-                        rfidtag = json.dumps(None)
-                        # default value for 2.0 is None, not 0
-                    remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/rfid", payload=str(rfidtag),
-                                         qos=0, retain=True)
+                        rfidtag = None  # default value for 2.0 is None, not "0"
+                    remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/rfid",
+                                         payload=json.dumps(rfidtag), qos=0, retain=True)
                     remoteclient.loop(timeout=2.0)
             if lp2installed:
                 if "lp2countphasesinuse" in key:
@@ -663,10 +662,9 @@ def read_meter():
                         DeviceValues.update({'rfidtag': str(rfidtag)})
                     if parentWB != "0":
                         if rfidtag == '0\n':
-                            rfidtag = json.dumps(None)
-                            # default value for 2.0 is None, not 0
-                        remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/rfid", payload=str(rfidtag),
-                                             qos=0, retain=True)
+                            rfidtag = None  # default value for 2.0 is None, not "0"
+                        remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/rfid",
+                                             payload=json.dumps(rfidtag), qos=0, retain=True)
                         remoteclient.loop(timeout=2.0)
         mclient.disconnect()
         if parentWB != "0":
