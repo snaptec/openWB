@@ -9,7 +9,6 @@ from modules.fronius import bat
 from modules.fronius import counter_s0
 from modules.fronius import counter_sm
 from modules.fronius import inverter
-from modules.fronius import meter
 
 
 def get_default_config() -> dict:
@@ -58,42 +57,8 @@ class Device(AbstractDevice):
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
             with MultiComponentUpdateContext(self._components):
-                # zuerst den WR auslesen
                 for component in self._components:
-                    if isinstance(self._components[component], inverter.FroniusInverter):
-                        inverter_state = self._components[component].update()
-                        self._components[component].set_inverter_state(inverter_state)
-                        # Rückgabe der Leistung des ersten WR mit zurückgesetzter Vorzeichenumkehr
-                        power_inverter = -1 * inverter_state.power
-                        break
-                else:
-                    power_inverter = 0
-                # dann Zähler auslesen und Werte verrechnen
-                for component in self._components:
-                    if isinstance(self._components[component], counter_sm.FroniusSmCounter):
-                        counter_state, meter_location = self._components[component].update()
-                        if meter_location == meter.MeterLocation.load:
-                            # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
-                            # PV Leistung wird gleichmäßig auf alle Phasen verteilt
-                            # Spannungen und Leistungsfaktoren sind am Verbrauchszweig == Einspeisepunkt
-                            # Hier gehen wir mal davon aus, dass der Wechselrichter seine PV-Leistung gleichmäßig
-                            # auf alle Phasen aufteilt.
-                            powers = [-1 * power - power_inverter/3 for power in counter_state.powers]
-                            # Wegen der geänderten Leistungen sind die Ströme erneut zu berechnen
-                            currents = [powers[i] / counter_state.voltages[i] for i in range(0, 3)]
-                            counter_state.powers = powers
-                            counter_state.currents = currents
-                        self._components[component].set_counter_state(counter_state)
-                        break
-                    elif isinstance(self._components[component], counter_s0.FroniusS0Counter):
-                        counter_state = self._components[component].update()
-                        counter_state.power += power_inverter
-                        self._components[component].set_counter_state(counter_state)
-                        break
-                for component in self._components:
-                    if isinstance(self._components[component], bat.FroniusBat):
-                        bat_state = self._components[component].update()
-                        self._components[component].set_bat_state(bat_state)
+                    self._components[component].update()
         else:
             log.MainLogger().warning(
                 self.device_config["name"] +
