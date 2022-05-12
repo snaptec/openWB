@@ -152,7 +152,7 @@ class Device(AbstractDevice):
         """
         response = session.post(
             "https://" + url + "/api/login/Basic",
-            json={"username": "customer", "email": email, "password": password},
+            json={"username": "customer", "email": email, "password": password, "force_sm_off": False},
             verify=False,
             timeout=5
         )
