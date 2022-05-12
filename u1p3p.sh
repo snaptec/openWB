@@ -281,7 +281,7 @@ u1p3pswitch(){
 										openwbDebugLog "MAIN" 1 "auf 3 Phasen NurPV Automatik geaendert"
 									fi
 								fi
-								if (( oldll == maximalstromstaerke )) && (( ladeleistung > 100 )); then
+								if (( oldll == maximalstromstaerke )); then
 									uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
 									if (( uhcounter < uhwaittime )); then
 										uhcounter=$((uhcounter + 10))
