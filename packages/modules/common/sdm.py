@@ -38,12 +38,6 @@ class Sdm:
         except Exception as e:
             self.process_error(e)
 
-    def get_counter(self) -> float:
-        try:
-            return self.client.read_input_registers(0x0156, ModbusDataType.FLOAT_32, unit=self.id) * 1000
-        except Exception as e:
-            self.process_error(e)
-
 
 class Sdm630(Sdm):
     def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
@@ -82,6 +76,7 @@ class Sdm120(Sdm):
 
     def get_power(self) -> Tuple[float, float]:
         try:
-            return self.client.read_input_registers(0x0C, ModbusDataType.FLOAT_32, unit=self.id)
+            power = self.client.read_input_registers(0x0C, ModbusDataType.FLOAT_32, unit=self.id)
+            return power, power
         except Exception as e:
             self.process_error(e)
