@@ -17,7 +17,7 @@ def get_default_config() -> dict:
         "type": "siemens",
         "id": 0,
         "configuration": {
-            "ip_address": "192.168.0.12"
+            "ip_address": None
         }
     }
 

@@ -37,7 +37,8 @@ class FroniusInverter:
                 ('Scope', 'System'),
             )
             response = req.get_http_session().get(
-                'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi', params=params,
+                'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                params=params,
                 timeout=3)
             try:
                 power = float(response.json()["Body"]["Data"]["Site"]["P_PV"]) * -1

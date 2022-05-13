@@ -20,7 +20,7 @@ def get_default_config() -> dict:
         "id": 0,
         "configuration": {
             "protocol": "http",
-            "domain": "1.1.1.1",
+            "domain": None,
             "port": ""
         }
     }
