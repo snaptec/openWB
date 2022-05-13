@@ -22,7 +22,7 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
     component_config = bat.get_default_config()
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    assert device_config["meter_id"] == 0
+    assert component_config["configuration"]["meter_id"] == 0
     battery = bat.FroniusBat(0, component_config, device_config)
 
     mock = Mock(return_value=None)

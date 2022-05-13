@@ -23,7 +23,7 @@ def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
     assert component_config["configuration"]["variant"] == 0
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    assert device_config["meter_id"] == 0
+    assert component_config["configuration"]["meter_id"] == 0
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     mock = Mock(return_value=None)
@@ -53,7 +53,7 @@ def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock
     component_config["configuration"]["variant"] = 2
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    assert device_config["meter_id"] == 0
+    assert component_config["configuration"]["meter_id"] == 0
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     mock = Mock(return_value=None)
@@ -82,7 +82,7 @@ def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, 
     component_config["configuration"]["variant"] = 2
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    device_config["meter_id"] = 1
+    component_config["configuration"]["meter_id"] = 1
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     mock = Mock(return_value=None)
@@ -111,7 +111,7 @@ def test_update_load(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
     assert component_config["configuration"]["variant"] == 0
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    device_config["meter_id"] = 2
+    component_config["configuration"]["meter_id"] = 2
     counter = counter_sm.FroniusSmCounter(0, component_config, device_config)
 
     mock = Mock(return_value=None)
