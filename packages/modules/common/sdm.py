@@ -74,9 +74,9 @@ class Sdm120(Sdm):
     def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
         super().__init__(modbus_id, client)
 
-    def get_power(self) -> Tuple[float, float]:
+    def get_power(self) -> Tuple[List[float], float]:
         try:
             power = self.client.read_input_registers(0x0C, ModbusDataType.FLOAT_32, unit=self.id)
-            return power, power
+            return [power, 0, 0], power
         except Exception as e:
             self.process_error(e)
