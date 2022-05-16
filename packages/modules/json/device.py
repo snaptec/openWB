@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from typing import Dict, List, Union, Optional
+from urllib3.util import parse_url
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
@@ -17,9 +18,9 @@ def get_default_config() -> dict:
         "type": "json",
         "id": 0,
         "configuration": {
-            "ip_address": None
-            # ToDo: add protocol
-            # ToDo: add port
+            "protocol": "http",
+            "domain": None,
+            "port": 80
         }
     }
 
@@ -38,6 +39,10 @@ class Device(AbstractDevice):
         self._components = {}  # type: Dict[str, json_component_classes]
         try:
             self.device_config = device_config
+            port = self.device_config["configuration"]["port"]
+            self.domain = self.device_config["configuration"]["protocol"] + \
+                "://" + self.device_config["configuration"]["domain"] + \
+                ":" + port if port else ""
         except Exception:
             log.MainLogger().exception("Fehler im Modul "+device_config["name"])
 
@@ -56,7 +61,7 @@ class Device(AbstractDevice):
         log.MainLogger().debug("Start device reading " + str(self._components))
         if self._components:
             with MultiComponentUpdateContext(self._components):
-                response = req.get_http_session().get(self.device_config["configuration"]["ip_address"], timeout=5)
+                response = req.get_http_session().get(self.domain, timeout=5)
                 for component in self._components:
                     self._components[component].update(response.json())
         else:
@@ -70,8 +75,11 @@ def read_legacy(ip_address: str, component_config: dict, num: Optional[int] = No
     component_config["configuration"].update(kwargs)
     component_config["id"] = num
 
+    parsed_url = parse_url(ip_address)
     device_config = get_default_config()
-    device_config["configuration"]["ip_address"] = ip_address
+    device_config["configuration"]["protocol"] = parsed_url.scheme
+    device_config["configuration"]["domain"] = parsed_url.hostname
+    device_config["configuration"]["port"] = str(parsed_url.port)
 
     dev = Device(device_config)
     dev.add_component(component_config)

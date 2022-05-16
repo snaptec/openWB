@@ -55,7 +55,7 @@ class PvKitFlex:
             _, counter = self.__sim_count.sim_count(
                 power, topic=topic_str, data=self.__simulation, prefix="pv")
         else:
-            counter = self.__client.get_counter()
+            counter = self.__client.get_exported()
 
         log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power))
         inverter_state = InverterState(

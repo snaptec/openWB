@@ -4,6 +4,7 @@ import requests_mock
 from unittest.mock import Mock
 
 from modules.common.simcount import SimCountLegacy
+from modules.common.store._api import LoggingValueStore
 from modules.fronius import counter_s0, device
 from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
@@ -21,16 +22,19 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
     component_config = counter_s0.get_default_config()
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    assert device_config["meter_id"] == 0
     counter = counter_s0.FroniusS0Counter(0, component_config, device_config)
 
+    mock = Mock(return_value=None)
+    monkeypatch.setattr(LoggingValueStore, "set", mock)
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
         json=json)
 
-    counter_state = counter.update()
+    counter.update()
 
+    # mock.assert_called_once()
+    counter_state = mock.call_args[0][0]
     assert counter_state.exported == 0
     assert counter_state.imported == 0
     assert counter_state.currents == [0.0, 0.0, 0.0]

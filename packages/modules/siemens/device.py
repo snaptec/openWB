@@ -3,6 +3,7 @@ from typing import Dict, Union, Optional, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.siemens import bat
@@ -16,7 +17,7 @@ def get_default_config() -> dict:
         "type": "siemens",
         "id": 0,
         "configuration": {
-            # ToDo: add IP
+            "ip_address": None
         }
     }
 
@@ -34,6 +35,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self._components = {}  # type: Dict[str, siemens_component_classes]
         try:
+            self.client = modbus.ModbusClient(device_config["configuration"]["ip_address"], 502)
             self.device_config = device_config
         except Exception:
             log.MainLogger().exception("Fehler im Modul "+device_config["name"])
@@ -42,7 +44,7 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config))
+                self.device_config["id"], component_config, self.client))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -70,6 +72,7 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None)
         "inverter": inverter
     }
     device_config = get_default_config()
+    device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
@@ -79,7 +82,6 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None)
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config["id"] = num
-    component_config["configuration"]["ip_address"] = ip_address
     dev.add_component(component_config)
 
     log.MainLogger().debug('Siemens IP-Adresse: ' + str(ip_address))

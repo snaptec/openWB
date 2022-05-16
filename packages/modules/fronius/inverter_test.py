@@ -4,6 +4,7 @@ import requests_mock
 from unittest.mock import Mock
 
 from modules.common.simcount import SimCountLegacy
+from modules.common.store._api import LoggingValueStore
 from modules.fronius import inverter, device
 from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
@@ -19,43 +20,24 @@ def mock_ramdisk(monkeypatch):
 
 def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
     component_config = inverter.get_default_config()
-    assert component_config["configuration"]["ip_address2"] == "none"
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
     wr = inverter.FroniusInverter(0, component_config, device_config)
 
+    mock = Mock(return_value=None)
+    monkeypatch.setattr(LoggingValueStore, "set", mock)
     monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
         json=json_wr1)
 
-    inverter_state = wr.update()
+    wr.update()
 
+    # mock.assert_called_once()
+    inverter_state = mock.call_args[0][0]
     assert inverter_state.counter == 0
     assert inverter_state.currents == [0, 0, 0]
     assert inverter_state.power == -196.08712768554688
-
-
-def test_update_wr2(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
-    component_config = inverter.get_default_config()
-    component_config["configuration"]["ip_address2"] = "ip-address-wr2"
-    device_config = device.get_default_config()["configuration"]
-    device_config["ip_address"] = SAMPLE_IP
-    wr = inverter.FroniusInverter(0, component_config, device_config)
-
-    monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
-    requests_mock.get(
-        "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
-        json=json_wr1)
-    requests_mock.get(
-        "http://" + component_config["configuration"]["ip_address2"] + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
-        json=json_wr2)
-
-    inverter_state = wr.update()
-
-    assert inverter_state.counter == 0
-    assert inverter_state.currents == [0, 0, 0]
-    assert inverter_state.power == -304.08712768554688
 
 
 json_wr1 = {
