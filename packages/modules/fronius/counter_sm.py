@@ -17,7 +17,8 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "counter_sm",
         "configuration": {
-            "variant": 0
+            "variant": 0,
+            "meter_id": 0
         }
     }
 
@@ -59,7 +60,7 @@ class FroniusSmCounter:
 
     def __update_variant_0_1(self, session: Session) -> CounterState:
         variant = self.component_config["configuration"]["variant"]
-        meter_id = self.device_config["meter_id"]
+        meter_id = self.component_config["configuration"]["meter_id"]
         if variant == 0:
             params = (
                 ('Scope', 'Device'),
@@ -108,7 +109,7 @@ class FroniusSmCounter:
         )
 
     def __update_variant_2(self, session: Session) -> CounterState:
-        meter_id = str(self.device_config["meter_id"])
+        meter_id = str(self.component_config["configuration"]["meter_id"])
         response = session.get(
             'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),

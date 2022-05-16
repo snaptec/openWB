@@ -15,7 +15,9 @@ def get_default_config() -> dict:
         "type": "bat",
         "configuration": {
             "jq_power": ".power | .[1]",
-            "jq_soc": ".soc"
+            "jq_soc": ".soc",
+            "jq_imported": ".imported",
+            "iq_exported": ".exported"
         }
     }
 
@@ -25,7 +27,7 @@ class JsonBat:
         self.__device_id = device_id
         self.component_config = component_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
+        self.simulation = {}
         self.__store = get_bat_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
@@ -39,11 +41,15 @@ class JsonBat:
         else:
             soc = 0
 
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
-        imported, exported = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.__simulation, prefix="speicher"
-        )
+        if config["jq_imported"] != "" and config["jq_exported"] != "":
+            imported = jq.compile(config["jq_imported"]).input(response).first()
+            exported = jq.compile(config["jq_exported"]).input(response).first()
+        else:
+            topic_str = "openWB/set/system/device/" + str(
+                self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
+            imported, exported = self.__sim_count.sim_count(
+                power, topic=topic_str, data=self.simulation, prefix="speicher"
+            )
 
         bat_state = BatState(
             power=power,

@@ -3,8 +3,9 @@ from typing import Dict, Optional, Union, List
 
 from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common.store import get_inverter_value_store
 from modules.common.abstract_device import AbstractDevice
-from modules.common.component_context import MultiComponentUpdateContext
+from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
 from modules.fronius import bat
 from modules.fronius import counter_s0
 from modules.fronius import counter_sm
@@ -17,7 +18,6 @@ def get_default_config() -> dict:
         "type": "fronius",
         "id": 0,
         "configuration": {
-            "meter_id": 0,  # ToDo: move to counter_*
             "ip_address": None
         }
     }
@@ -72,7 +72,6 @@ def read_legacy(
         meter_id: int,
         variant: int,
         ip_address2: str = "none",
-        bat_module: str = "none",
         num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
         "bat": bat,
@@ -83,14 +82,14 @@ def read_legacy(
 
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
-    device_config["configuration"]["meter_id"] = meter_id
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "counter_sm":
+        if component_type == "bat":
+            component_config["configuration"]["meter_id"] = meter_id
+        elif component_type == "counter_sm":
             component_config["configuration"]["variant"] = variant
-        elif component_type == "inverter":
-            component_config["configuration"]["ip_address2"] = ip_address2
+            component_config["configuration"]["meter_id"] = meter_id
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
@@ -101,7 +100,20 @@ def read_legacy(
 
     log.MainLogger().debug('Fronius IP-Adresse: ' + str(ip_address))
 
-    dev.update()
+    if component_type == "bat" and component_type == "counter":
+        dev.update()
+    elif component_type == "inverter" and num:
+        inverter1 = inverter.FroniusInverter(num, component_config, device_config)
+        if ip_address2 != "none":
+            device_config["configuration"]["ip_address"] = ip_address2
+            inverter2 = inverter.FroniusInverter(num, component_config, device_config)
+        with SingleComponentUpdateContext(inverter1.component_info):
+            total_power = inverter1.read_power()
+            if ip_address2 != "none":
+                total_power += inverter2.read_power()
+            get_inverter_value_store(num).set(inverter1.fill_inverter_state(total_power))
+    else:
+        raise Exception("illegal component num " + str(num) + ". Should be an int if it is an inverter.")
 
 
 def main(argv: List[str]) -> None:
