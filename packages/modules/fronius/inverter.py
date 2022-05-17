@@ -8,6 +8,7 @@ from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
+from modules.fronius.abstract_config import FroniusConfiguration
 
 
 def get_default_config() -> dict:
@@ -20,7 +21,7 @@ def get_default_config() -> dict:
 
 
 class FroniusInverter:
-    def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, device_config: FroniusConfiguration) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.device_config = device_config
@@ -37,7 +38,7 @@ class FroniusInverter:
                 ('Scope', 'System'),
             )
             response = req.get_http_session().get(
-                'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+                'http://' + self.device_config.ip_address + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
                 params=params,
                 timeout=3)
             try:
