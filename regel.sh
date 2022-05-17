@@ -76,12 +76,12 @@ if (( slavemode == 1)); then
 	if [[ -z $randomSleep ]] || [[ "${randomSleep}" == "0" ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
 		randomSleep=`shuf --random-source=/dev/urandom -i 0-8 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
 		openwbDebugLog "MAIN" 0 "slavemode=$slavemode: ramdisk/randomSleepValue missing or 0 - creating new one containing $randomSleep"
-		echo $randomSleep > ramdisk/randomSleepValue
+		echo "$randomSleep" > ramdisk/randomSleepValue
 	fi
 
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Waiting ${randomSleep}s"
 
-	sleep $randomSleep
+	sleep "$randomSleep"
 
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Wait end"
 fi
@@ -152,7 +152,7 @@ fi
 if (( displayaktiv == 1 )); then
 	execdisplay=$(<ramdisk/execdisplay)
 	if (( execdisplay == 1 )); then
-		export DISPLAY=:0 && xset s $displaysleep && xset dpms $displaysleep $displaysleep $displaysleep
+		export DISPLAY=:0 && xset s "$displaysleep" && xset dpms "$displaysleep" "$displaysleep" "$displaysleep"
 		echo 0 > ramdisk/execdisplay
 	fi
 fi
@@ -245,15 +245,15 @@ if (( cpunterbrechunglp1 == 1 )); then
 					if (( cpulp1waraktiv == 0 )); then
 						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP1 wird durchgeführt"
 						if [[ $evsecon == "simpleevsewifi" ]]; then
-							curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
+							curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/interruptCp" > /dev/null
 						elif [[ $evsecon == "ipevse" ]]; then
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
-							python runs/cpuremote.py -a $evseiplp1 -i 4 -d $cpunterbrechungdauerlp1
+							python runs/cpuremote.py -a "$evseiplp1" -i 4 -d "$cpunterbrechungdauerlp1"
 						elif [[ $evsecon == "extopenwb" ]]; then
 							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep1ip -m "1"
 						else
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp1}s"
-							sudo python runs/cpulp1.py -d $cpunterbrechungdauerlp1
+							sudo python runs/cpulp1.py -d "$cpunterbrechungdauerlp1"
 						fi
 						echo 1 > ramdisk/cpulp1waraktiv
 						date +%s > ramdisk/cpulp1timestamp # Timestamp in epoch der CP Unterbrechung
@@ -283,15 +283,15 @@ if (( cpunterbrechunglp2 == 1 )); then
 					if (( cpulp2waraktiv == 0 )); then
 						openwbDebugLog "MAIN" 0 "CP Unterbrechung an LP2 wird durchgeführt"
 						if [[ $evsecons1 == "simpleevsewifi" ]]; then
-							curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
+							curl --silent --connect-timeout "$evsewifitimeoutlp2" -s "http://$evsewifiiplp2/interruptCp" > /dev/null
 						elif [[ $evsecons1 == "ipevse" ]]; then
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
-							python runs/cpuremote.py -a $evseiplp2 -i 7 -d $cpunterbrechungdauerlp2
+							python runs/cpuremote.py -a "$evseiplp2" -i 7 -d "$cpunterbrechungdauerlp2"
 						elif [[ $evsecons1 == "extopenwb" ]]; then
 							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
 						else
 							openwbDebugLog "MAIN" 0 "Dauer der Unterbrechung: ${cpunterbrechungdauerlp2}s"
-							sudo python runs/cpulp2.py -d $cpunterbrechungdauerlp2
+							sudo python runs/cpulp2.py -d "$cpunterbrechungdauerlp2"
 						fi
 						echo 1 > ramdisk/cpulp2waraktiv
 						date +%s > ramdisk/cpulp2timestamp # Timestamp in epoch der CP Unterbrechung
@@ -339,7 +339,7 @@ if (( rseenabled == 1 )); then
 		echo "RSE Kontakt aktiv, pausiere Ladung" > ramdisk/lastregelungaktiv
 		if (( rseaktiv == 0 )); then
 			openwbDebugLog "CHARGESTAT" 0 "RSE Kontakt aktiviert, ändere Lademodus auf Stop"
-			echo $lademodus > ramdisk/rseoldlademodus
+			echo "$lademodus" > ramdisk/rseoldlademodus
 			echo 3 > ramdisk/lademodus
 			mosquitto_pub -r -t openWB/global/ChargeMode -m "3"
 			echo 1 > ramdisk/rseaktiv
@@ -348,7 +348,7 @@ if (( rseenabled == 1 )); then
 		if (( rseaktiv == 1 )); then
 			openwbDebugLog "CHARGESTAT" 0 "RSE Kontakt deaktiviert, setze auf alten Lademodus zurück"
 			rselademodus=$(<ramdisk/rseoldlademodus)
-			echo $rselademodus > ramdisk/lademodus
+			echo "$rselademodus" > ramdisk/lademodus
 			mosquitto_pub -r -t openWB/global/ChargeMode -m "$rselademodus"
 			echo 0 > ramdisk/rseaktiv
 		fi
@@ -473,9 +473,10 @@ else
 fi
 if (( lastmanagement == 1 )); then
 	if (( llas11 > 3 )); then
+		lp2anzahlphasen=0
 		if [ "$llas11" -ge $llphasentest ]; then
 			anzahlphasen=$((anzahlphasen + 1 ))
-			lp2anzahlphasen=1
+			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
 		fi
 		if [ "$llas12" -ge $llphasentest ]; then
 			anzahlphasen=$((anzahlphasen + 1 ))
