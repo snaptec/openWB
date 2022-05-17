@@ -363,7 +363,7 @@
 								<div class="form-row mb-1">
 									<label for="alphaip" class="col-md-4 col-form-label">IP-Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="alphaip" id="alphaip" value="<?php echo $alphaessipold ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="alphaip" id="alphaip" value="<?php echo $alphaipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12. Die Abfrage erfolgt an Port 502.</span>
 									</div>
 								</div>
@@ -525,10 +525,11 @@
 								<div class="form-row mb-1">
 									<label for="solaredgespeicherip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo $solaredgespeicheripold ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo $solaredgespeicheripold ?>">
 										<span class="form-text small">
-											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
-											IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br />
+											IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.<br />
+											Optional kann ein benutzerdefinierter Port angegeben werden: <span class="text-danger">IP:Port</span>. Ohne eine Angabe wird Port 502 genutzt. Häufig sind Geräte von Solaredge jedoch mit dem Port 1502 vorkonfiguriert!
 										</span>
 									</div>
 								</div>

@@ -1522,9 +1522,6 @@ updateConfig(){
 	if ! grep -Fq "soc_zeronglp2_intervall=" $ConfigFile; then
 		echo "soc_zeronglp2_intervall=20" >> $ConfigFile
 	fi
-	if ! grep -Fq "alphaessip=" $ConfigFile; then
-		echo "alphaessip=192.168.193.31" >> $ConfigFile
-	fi
 	if ! grep -Fq "solarview_hostname=" $ConfigFile; then
 		echo "solarview_hostname=192.168.0.31" >> $ConfigFile
 	fi
