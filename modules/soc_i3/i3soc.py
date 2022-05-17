@@ -8,7 +8,6 @@ import time
 import urllib
 
 # ---------------Constants-------------------------------------------
-
 auth_server = 'customer.bmwgroup.com'
 api_server = 'cocoapi.bmwgroup.com'
 
@@ -68,117 +67,158 @@ def postHTTP(url: str = '', data: str = '', headers: str = '', cookies: str = ''
         print('Request failed, StatusCode: ' + str(response.status_code))
         raise RuntimeError
 
-    return
-
 
 # ---------------Authentication Function-------------------------------------------
 def authStage1(username: str, password: str, code_challenge: str, state: str) -> str:
-    url = 'https://' + auth_server + '/gcdm/oauth/authenticate'
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Mobile/15E148 Safari/604.1'}
-    data = {
-        'client_id': client_id,
-        'response_type': 'code',
-        'scope': 'openid profile email offline_access smacc vehicle_data perseus dlm svds cesim vsapi remote_services fupo authenticate_user',
-        'redirect_uri': 'com.bmw.connected://oauth',
-        'state': state,
-        'nonce': 'login_nonce',
-        'code_challenge': code_challenge,
-        'code_challenge_method': 'plain',
-        'username': username,
-        'password': password,
-        'grant_type': 'authorization_code'}
-
-    response = json.loads(postHTTP(url, data, headers))
-    authcode = dict(urllib.parse.parse_qsl(response["redirect_to"]))["authorization"]
-
+    try:
+        url = 'https://' + auth_server + '/gcdm/oauth/authenticate'
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Mobile/15E148 Safari/604.1'}
+        data = {
+            'client_id': client_id,
+            'response_type': 'code',
+            'scope': 'openid profile email offline_access smacc vehicle_data perseus dlm svds cesim vsapi remote_services fupo authenticate_user',
+            'redirect_uri': 'com.bmw.connected://oauth',
+            'state': state,
+            'nonce': 'login_nonce',
+            'code_challenge': code_challenge,
+            'code_challenge_method': 'plain',
+            'username': username,
+            'password': password,
+            'grant_type': 'authorization_code'}
+      
+        response = json.loads(postHTTP(url, data, headers))
+        authcode = dict(urllib.parse.parse_qsl(response["redirect_to"]))["authorization"]
+    except:
+        print("Authentication stage 1 failed")
+        raise
+        
     return authcode
 
 
 def authStage2(authcode1: str, code_challenge: str, state: str) -> str:
-    url = 'https://' + auth_server + '/gcdm/oauth/authenticate'
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Mobile/15E148 Safari/604.1'}
-    data = {
-        'client_id': client_id,
-        'response_type': 'code',
-        'scope': 'openid profile email offline_access smacc vehicle_data perseus dlm svds cesim vsapi remote_services fupo authenticate_user',
-        'redirect_uri': 'com.bmw.connected://oauth',
-        'state': state,
-        'nonce': 'login_nonce',
-        'code_challenge': code_challenge,
-        'code_challenge_method': 'plain',
-        'authorization': authcode1}
-    cookies = {
-        'GCDMSSO': authcode1}
-
-    response = postHTTP(url, data, headers, cookies, allow_redirects=False)
-    authcode = dict(urllib.parse.parse_qsl(response.split("?", 1)[1]))["code"]
-
+    try:
+        url = 'https://' + auth_server + '/gcdm/oauth/authenticate'
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Mobile/15E148 Safari/604.1'}
+        data = {
+            'client_id': client_id,
+            'response_type': 'code',
+            'scope': 'openid profile email offline_access smacc vehicle_data perseus dlm svds cesim vsapi remote_services fupo authenticate_user',
+            'redirect_uri': 'com.bmw.connected://oauth',
+            'state': state,
+            'nonce': 'login_nonce',
+            'code_challenge': code_challenge,
+            'code_challenge_method': 'plain',
+            'authorization': authcode1}
+        cookies = {
+            'GCDMSSO': authcode1}
+      
+        response = postHTTP(url, data, headers, cookies, allow_redirects=False)
+        authcode = dict(urllib.parse.parse_qsl(response.split("?",1)[1]))["code"]
+    except:
+        print("Authentication stage 2 failed")
+        raise
+        
     return authcode
 
 
 def authStage3(authcode2: str, code_challenge: str) -> dict:
-    url = 'https://' + auth_server + '/gcdm/oauth/token'
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Authorization': create_auth_string(client_id, client_password)}
-    data = {
-        'code': authcode2,
-        'code_verifier': code_challenge,
-        'redirect_uri': 'com.bmw.connected://oauth',
-        'grant_type': 'authorization_code'}
-
-    response = postHTTP(url, data, headers, allow_redirects=False)
-    token = json.loads(response)
-
+    try:
+        url = 'https://' + auth_server + '/gcdm/oauth/token'
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Authorization': create_auth_string(client_id, client_password)}
+        data = {
+            'code': authcode2,
+            'code_verifier': code_challenge,
+            'redirect_uri': 'com.bmw.connected://oauth',
+            'grant_type': 'authorization_code'}
+      
+        response = postHTTP(url, data, headers, allow_redirects=False)
+        token = json.loads(response)
+    except:
+        print("Authentication stage 3 failed")
+        raise
+        
     return token
 
 
 def requestToken(username: str, password: str) -> dict:
-    code_challenge = get_random_string(86)
-    state = get_random_string(22)
-
-    authcode1 = authStage1(username, password, code_challenge, state)
-    authcode2 = authStage2(authcode1, code_challenge, state)
-    token = authStage3(authcode2, code_challenge)
-
+    try:
+        code_challenge = get_random_string(86)
+        state = get_random_string(22)
+    
+        authcode1 = authStage1(username, password, code_challenge, state)
+        authcode2 = authStage2(authcode1, code_challenge, state)
+        token = authStage3(authcode2, code_challenge)
+    except:
+        print("Login failed")
+        raise
+        
     return token
 
 
 # ---------------Interface Function-------------------------------------------
-def requestData(token: str, vin: str) -> dict or None:
-    url = 'https://' + api_server + '/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=' + str(int(time.time())) + '&tireGuardMode=ENABLED'
-    headers = {
-          'x-user-agent': 'android(v1.07_20200330);bmw;1.7.0(11152)',
-          'Authorization': (token["token_type"] + " " + token["access_token"])}
-    response = json.loads(getHTTP(url, headers))
-
-    for data in response:
+def requestData(token: str, vin: str) -> dict:
+    try:
+        if vin[:2] == 'WB':
+            brand = 'bmw'
+        elif vin[:2] == 'WM':
+            brand = 'mini'
+        else:
+            print("Unknown VIN")
+            raise RuntimeError
+            
+        url = 'https://' + api_server + '/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=' + str(int(time.time())) + '&tireGuardMode=ENABLED'
+        headers = {
+            'x-user-agent': 'android(v1.07_20200330);' + brand + ';1.7.0(11152)',
+            'Authorization': (token["token_type"] + " " + token["access_token"])}
+        body = getHTTP(url, headers)       
+        response = json.loads(body)
+    except:
+        print("Data-Request failed")
+        raise  
+    
+    for data in response:    
         if data["vin"] == vin:
             return data
-
-    return None
+    
+    print("VIN not found")
+    raise RuntimeError
 
 
 # ---------------Main Function-------------------------------------------
 def main():
-    argsStr = base64.b64decode(str(sys.argv[1])).decode('utf-8')
-    argsDict = json.loads(argsStr)
-
-    username = str(argsDict["user"])
-    password = str(argsDict["pass"])
-    vin = str(argsDict["vin"])
-    socfile = str(argsDict["socfile"])
-
-    token = requestToken(username, password)
-    data = requestData(token, vin)
-    soc = data["properties"]["electricRangeAndStatus"]["chargePercentage"]
-
-    with open(socfile, 'w') as f:
-        f.write(str(int(soc)))
+    try:
+        argsStr = base64.b64decode(str(sys.argv[1])).decode('utf-8')
+        argsDict = json.loads(argsStr)
+        
+        username = str(argsDict["user"])
+        password = str(argsDict["pass"])
+        vin = str(argsDict["vin"]).upper()
+        socfile = str(argsDict["socfile"])
+    except:
+        print("Parameters could not be processed")
+        raise
+        
+    try:
+        token = requestToken(username, password)
+        data = requestData(token, vin)
+        soc = int(data["properties"]["electricRangeAndStatus"]["chargePercentage"])
+        print("Download sucessful - SoC: " + str(soc) + "%")
+    except:
+        print("Request failed")
+        raise 
+        
+    try:     
+        with open(socfile, 'w') as f:
+            f.write(str(int(soc)))
+    except:
+        print("Saving SoC failed")
+        raise 
 
 
 if __name__ == '__main__':
