@@ -12,7 +12,7 @@ def mock_ramdisk(monkeypatch):
 
 
 @pytest.fixture
-def dev():
+def dev() -> device.Device:
     device_config = device.get_default_config()
     device_config["configuration"]["ip_address"] = API_URL
     device_config["configuration"]["password"] = "some password"
@@ -24,17 +24,22 @@ def dev():
 def assert_battery_state_correct(state: BatState):
     assert state.soc == 14.58333
     assert state.power == -372
+    assert state.imported == 100
+    assert state.exported == 200
 
 
 def assert_counter_state_correct(state: CounterState):
     assert state.power == 11
+    assert state.imported == 100
+    assert state.exported == 200
 
 
 def assert_inverter_state_correct(state: InverterState):
     assert state.power == 0
+    assert state.counter == 200
 
 
-def test_valid_login(monkeypatch, dev):
+def test_valid_login(monkeypatch, dev: device.Device):
     # setup
     mock_bat_value_store = Mock()
     monkeypatch.setattr(bat, "get_bat_value_store", Mock(return_value=mock_bat_value_store))
@@ -62,7 +67,7 @@ def test_valid_login(monkeypatch, dev):
     assert_inverter_state_correct(mock_inverter_value_store.set.call_args[0][0])
 
 
-def test_update_session_key(monkeypatch, dev):
+def test_update_session_key(monkeypatch, dev: device.Device):
     # setup
     mock_bat_value_store = Mock()
     monkeypatch.setattr(bat, "get_bat_value_store", Mock(return_value=mock_bat_value_store))
