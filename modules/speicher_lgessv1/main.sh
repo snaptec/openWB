@@ -21,6 +21,6 @@ ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-speicherleistung=$(<"${RAMDISKDIR}"/speicherleistung)
+speicherleistung=$(<"${RAMDISKDIR}/speicherleistung")
 
 openwbDebugLog ${DMOD} 1 "BattLeistung: ${speicherleistung}"
