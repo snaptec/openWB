@@ -42,7 +42,7 @@ class Device(AbstractDevice):
             port = self.device_config["configuration"]["port"]
             self.domain = self.device_config["configuration"]["protocol"] + \
                 "://" + self.device_config["configuration"]["domain"] + \
-                ":" + port if port else ""
+                ":" + str(port) if port else ""
         except Exception:
             log.MainLogger().exception("Fehler im Modul "+device_config["name"])
 
