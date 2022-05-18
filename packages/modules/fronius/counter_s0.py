@@ -4,6 +4,7 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.component_state import CounterState
 from modules.common import req
 from modules.common import simcount
+from modules.fronius.abstract_config import FroniusConfiguration
 from helpermodules import log
 
 
@@ -17,7 +18,7 @@ def get_default_config() -> dict:
 
 
 class FroniusS0Counter:
-    def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, device_config: FroniusConfiguration) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.device_config = device_config
@@ -31,7 +32,7 @@ class FroniusS0Counter:
 
         session = req.get_http_session()
         response = session.get(
-            'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+            'http://'+self.device_config.ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             timeout=5)
         # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
         power = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
