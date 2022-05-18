@@ -105,7 +105,7 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None)
         inverter_config["id"] = 1
         dev.add_component(inverter_config)
 
-    log.MainLogger().debug('Powerdog IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Powerdog IP-Adresse: ' + ip_address)
 
     dev.update()
 

@@ -197,9 +197,9 @@ def read_legacy(component_type: str,
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Tesla Powerwall IP-Adresse: ' + str(address))
-    log.MainLogger().debug('Tesla Powerwall Mail-Adresse: ' + str(email))
-    log.MainLogger().debug('Tesla Powerwall Passwort: ' + str(password))
+    log.MainLogger().debug('Tesla Powerwall IP-Adresse: ' + address)
+    log.MainLogger().debug('Tesla Powerwall Mail-Adresse: ' + email)
+    log.MainLogger().debug('Tesla Powerwall Passwort: ' + password)
 
     dev.update()
 

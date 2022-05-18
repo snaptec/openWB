@@ -14,10 +14,10 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "bat",
         "configuration": {
-            "jq_power": ".power | .[1]",
-            "jq_soc": ".soc",
-            "jq_imported": ".imported",
-            "iq_exported": ".exported"
+            "jq_power": None,
+            "jq_soc": None,
+            "jq_imported": None,
+            "iq_exported": None
         }
     }
 
