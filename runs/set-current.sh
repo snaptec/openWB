@@ -355,14 +355,14 @@ function setChargingCurrent () {
 let current=$1
 if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then
 	if [[ $debug == "2" ]]; then
-		echo "set-currents: ungültiger Wert für Ladestrom: $current" > /var/www/html/openWB/ramdisk/openWB.log
+		echo "set-currents: ungültiger Wert für Ladestrom: $current" >> /var/www/html/openWB/ramdisk/openWB.log
 	fi
 	exit 1
 fi
 
 if ! ([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]] || [[ $2 == "lp4" ]] || [[ $2 == "lp5" ]] || [[ $2 == "lp6" ]] || [[ $2 == "lp7" ]] || [[ $2 == "lp8" ]]) ; then
 	if [[ $debug == "2" ]]; then
-		echo "set-currents: ungültiger Wert für Ziel: $2" > /var/www/html/openWB/ramdisk/openWB.log
+		echo "set-currents: ungültiger Wert für Ziel: $2" >> /var/www/html/openWB/ramdisk/openWB.log
 	fi
 	exit 1
 fi
