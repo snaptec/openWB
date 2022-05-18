@@ -8,6 +8,7 @@ class Selwa(Sbase):
     def __init__(self):
         # setting
         super().__init__()
+        self._dynregel = 1
         print('__init__ Selwa executed')
 
     def getwatt(self, uberschuss, uberschussoffset):
