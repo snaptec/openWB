@@ -16,7 +16,7 @@ from modules.sma_shm.utils import SpeedwireComponent
 
 def get_default_config() -> dict:
     return {
-        "name": "SMA Smarthome Manager",
+        "name": "SMA Home Manager",
         "type": "sma_shm",
         "id": 0,
         "configuration": {}

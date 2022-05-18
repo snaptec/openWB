@@ -14,9 +14,9 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "counter",
         "configuration": {
-            "jq_power": ".power | .[1]",
-            "jq_imported": ".imported",
-            "jq_exported": ".exported"
+            "jq_power": None,
+            "jq_imported": None,
+            "jq_exported": None
         }
     }
 

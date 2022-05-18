@@ -18,7 +18,7 @@ def get_default_config() -> dict:
         "id": 0,
         "configuration": {
             "ip_address": None,
-            "modbus_id": 0
+            "modbus_id": 1
         }
     }
 
@@ -84,7 +84,7 @@ def read_legacy(component_type: str, ip_address: str, modbus_id: int, num: Optio
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Solax IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Solax IP-Adresse: ' + ip_address)
     log.MainLogger().debug('Solax ID: ' + str(modbus_id))
 
     dev.update()

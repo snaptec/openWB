@@ -14,7 +14,11 @@ def get_default_config(id: int = 0, **configuration) -> dict:
         "name": "Discovergy",
         "type": "discovergy",
         "id": id,
-        "configuration": configuration
+        "configuration": {
+            "user": None,
+            "password": None,
+            **configuration
+        }
     }
 
 

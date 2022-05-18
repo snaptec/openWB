@@ -98,7 +98,7 @@ def read_legacy(
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Fronius IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Fronius IP-Adresse: ' + ip_address)
 
     if component_type == "bat" and component_type == "counter":
         dev.update()

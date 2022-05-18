@@ -8,7 +8,10 @@ def get_default_config(id: int = 0, **configuration) -> dict:
         "name": "Discovergy Wechselrichter",
         "id": id,
         "type": "inverter",
-        "configuration": configuration
+        "configuration": {
+            "meter_id": None,
+            **configuration
+        }
     }
 
 

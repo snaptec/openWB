@@ -105,7 +105,7 @@ def read_legacy(ip_address: str, modbus_id: int, read_counter: str = "False", re
         component_config["id"] = num
         dev.add_component(component_config)
 
-    log.MainLogger().debug('Huawei IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Huawei IP-Adresse: ' + ip_address)
     log.MainLogger().debug('Huawei Modbus-ID: ' + str(modbus_id))
 
     dev.update()
