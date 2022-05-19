@@ -8,7 +8,7 @@ from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.store import get_counter_value_store
-from modules.fronius.meter import MeterLocation
+from modules.fronius.abstract_config import FroniusConfiguration, MeterLocation
 
 
 def get_default_config() -> dict:
@@ -24,7 +24,7 @@ def get_default_config() -> dict:
 
 
 class FroniusSmCounter:
-    def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, device_config: FroniusConfiguration) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.device_config = device_config
@@ -75,7 +75,7 @@ class FroniusSmCounter:
         else:
             raise FaultState.error("Unbekannte Generation: "+str(variant))
         response = session.get(
-            'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
+            'http://' + self.device_config.ip_address + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=params,
             timeout=5)
         response_json_id = response.json()["Body"]["Data"]
@@ -111,7 +111,7 @@ class FroniusSmCounter:
     def __update_variant_2(self, session: Session) -> CounterState:
         meter_id = str(self.component_config["configuration"]["meter_id"])
         response = session.get(
-            'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetMeterRealtimeData.cgi',
+            'http://' + self.device_config.ip_address + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
             timeout=5)
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
@@ -149,7 +149,7 @@ class FroniusSmCounter:
         # dem Wechselrichter kam.
         # Beim Energieexport ist nicht klar, wie hoch der Eigenverbrauch während der Produktion war.
         response = session.get(
-            'http://' + self.device_config["ip_address"] + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+            'http://' + self.device_config.ip_address + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             params=(('Scope', 'System'),),
             timeout=5)
         power_load = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])

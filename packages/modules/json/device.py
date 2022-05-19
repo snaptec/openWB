@@ -42,7 +42,7 @@ class Device(AbstractDevice):
             port = self.device_config["configuration"]["port"]
             self.domain = self.device_config["configuration"]["protocol"] + \
                 "://" + self.device_config["configuration"]["domain"] + \
-                ":" + port if port else ""
+                ":" + str(port) if port else ""
         except Exception:
             log.MainLogger().exception("Fehler im Modul "+device_config["name"])
 
@@ -79,7 +79,7 @@ def read_legacy(ip_address: str, component_config: dict, num: Optional[int] = No
     device_config = get_default_config()
     device_config["configuration"]["protocol"] = parsed_url.scheme
     device_config["configuration"]["domain"] = parsed_url.hostname
-    device_config["configuration"]["port"] = str(parsed_url.port)
+    device_config["configuration"]["port"] = int(parsed_url.port)
 
     dev = Device(device_config)
     dev.add_component(component_config)

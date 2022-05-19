@@ -76,7 +76,7 @@ def read_legacy(component_type: str, ip_address: str) -> None:
     component_config["id"] = None
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Saxpower IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Saxpower IP-Adresse: ' + ip_address)
 
     dev.update()
 

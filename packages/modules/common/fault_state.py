@@ -74,7 +74,7 @@ class FaultState(Exception):
         elif "vehicle" in component_type:
             return "lp"
         else:
-            raise Exception("Unbekannter Komponententyp: "+str(component_type))
+            raise Exception("Unbekannter Komponenten-Typ: " + component_type)
 
     @staticmethod
     def error(message: str) -> "FaultState":

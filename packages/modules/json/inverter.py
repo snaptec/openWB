@@ -14,8 +14,8 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "inverter",
         "configuration": {
-            "jq_power": ".power | .[1]",
-            "jq_counter": ".counter"
+            "jq_power": None,
+            "jq_counter": None
         }
     }
 

@@ -108,7 +108,7 @@ def create_legacy_device_config(url: str):
     device_config["configuration"]["protocol"] = parsed_url.scheme
     device_config["configuration"]["domain"] = parsed_url.hostname
     if parsed_url.port is not None:
-        device_config["configuration"]["port"] = str(parsed_url.port)
+        device_config["configuration"]["port"] = int(parsed_url.port)
     else:
         device_config["configuration"]["port"] = None
     return device_config

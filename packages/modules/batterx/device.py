@@ -17,7 +17,7 @@ def get_default_config() -> dict:
         "type": "batterx",
         "id": 0,
         "configuration": {
-            "ip_address": "192.168.193.15"
+            "ip_address": None
         }
     }
 
@@ -83,7 +83,7 @@ def read_legacy(
     if bat == "speicher_batterx":
         dev = _add_component(dev, "bat", None)
 
-    log.MainLogger().debug('BatterX IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('BatterX IP-Adresse: ' + ip_address)
 
     dev.update()
 

@@ -95,7 +95,7 @@ def read_legacy(
     component_config["configuration"]["modbus_id"] = modbus_id
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Victron IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Victron IP-Adresse: ' + ip_address)
     log.MainLogger().debug('Victron Energy Meter: ' + str(bool(energy_meter)))
     log.MainLogger().debug('Victron Modbus-ID: ' + str(modbus_id))
     log.MainLogger().debug('Victron MPPT: ' + str(mppt))

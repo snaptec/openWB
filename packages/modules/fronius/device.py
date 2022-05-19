@@ -10,6 +10,7 @@ from modules.fronius import bat
 from modules.fronius import counter_s0
 from modules.fronius import counter_sm
 from modules.fronius import inverter
+from modules.fronius.abstract_config import Fronius
 
 
 def get_default_config() -> dict:
@@ -38,7 +39,9 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self._components = {}  # type: Dict[str, fronius_component_classes]
         try:
-            self.device_config = device_config
+            self.config = device_config \
+                if isinstance(device_config, Fronius) \
+                else Fronius.from_dict(device_config)
         except Exception:
             log.MainLogger().exception("Fehler im Modul "+device_config["name"])
 
@@ -46,7 +49,7 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.device_config["configuration"])
+                self.config.id, component_config, self.config.configuration)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -61,7 +64,7 @@ class Device(AbstractDevice):
                     self._components[component].update()
         else:
             log.MainLogger().warning(
-                self.device_config["name"] +
+                self.config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
@@ -98,15 +101,15 @@ def read_legacy(
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Fronius IP-Adresse: ' + str(ip_address))
+    log.MainLogger().debug('Fronius IP-Adresse: ' + ip_address)
 
-    if component_type == "bat" and component_type == "counter":
+    if component_type == "bat" or "counter" in component_type:
         dev.update()
     elif component_type == "inverter" and num:
-        inverter1 = inverter.FroniusInverter(num, component_config, device_config)
+        inverter1 = inverter.FroniusInverter(num, component_config, dev.config.configuration)
         if ip_address2 != "none":
             device_config["configuration"]["ip_address"] = ip_address2
-            inverter2 = inverter.FroniusInverter(num, component_config, device_config)
+            inverter2 = inverter.FroniusInverter(num, component_config, dev.config.configuration)
         with SingleComponentUpdateContext(inverter1.component_info):
             total_power = inverter1.read_power()
             if ip_address2 != "none":
