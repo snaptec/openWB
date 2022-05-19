@@ -201,7 +201,6 @@ function setChargingCurrenthttp () {
 # 3: goeiplp1
 function setChargingCurrentgoe () {
 	if [[ $evsecon == "goe" ]]; then
-<<<<<<< HEAD
 		output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
 		#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 		digit='^[0-9]$'
