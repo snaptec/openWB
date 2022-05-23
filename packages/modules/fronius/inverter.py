@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
 import requests
 
-from helpermodules import log
 from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import InverterState
@@ -31,7 +29,6 @@ class FroniusInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def read_power(self) -> float:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         # Rückgabewert ist die aktuelle Wirkleistung in [W].
         try:
             params = (

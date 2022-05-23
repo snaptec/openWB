@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import time
 
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
@@ -31,7 +30,6 @@ class HuaweiCounter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         time.sleep(0.1)
         power = self.__tcp_client.read_holding_registers(37113, ModbusDataType.INT_32, unit=self.__modbus_id) * -1
         time.sleep(0.1)

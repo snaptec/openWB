@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
@@ -31,7 +30,6 @@ class VictronCounter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         unit = self.component_config["configuration"]["modbus_id"]
         energy_meter = self.component_config["configuration"]["energy_meter"]
         with self.__tcp_client:
@@ -74,5 +72,4 @@ class VictronCounter:
                 exported=exported,
                 power=power
             )
-        log.MainLogger().debug("Victron Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
+import logging
 from typing import Dict, Optional, List
 
-from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.sunways import inverter
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -26,16 +28,16 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, inverter.SunwaysInverter]
+        self.components = {}  # type: Dict[str, inverter.SunwaysInverter]
         try:
             self.device_config = device_config
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+device_config["name"])
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
                 component_config,
                 self.device_config["configuration"]["ip_address"],
                 self.device_config["configuration"]["password"])
@@ -46,14 +48,14 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading " + str(self._components))
-        if self._components:
-            for component in self._components:
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            for component in self.components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                with SingleComponentUpdateContext(self.components[component].component_info):
+                    self.components[component].update()
         else:
-            log.MainLogger().warning(
+            log.warning(
                 self.device_config["name"] +
                 ": Es konnten keine Werte gelesen werden, da noch keine oder zu viele Komponenten konfiguriert wurden."
             )
@@ -78,8 +80,8 @@ def read_legacy(component_type: str, ip_address: str, password: str, num: Option
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Sunways IP-Adresse: ' + ip_address)
-    log.MainLogger().debug('Sunways Passwort: ' + password)
+    log.debug('Sunways IP-Adresse: ' + ip_address)
+    log.debug('Sunways Passwort: ' + password)
 
     dev.update()
 

@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
+import logging
 from typing import Dict, List
+
 from modules.common.store import get_counter_value_store
 from modules.common.fault_state import ComponentInfo
 from modules.common.component_state import CounterState
 from modules.common import simcount
-from helpermodules import log
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -26,7 +29,6 @@ class BatterXCounter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self, resp: Dict) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         power = resp["2913"]["0"]
         frequency = resp["2914"]["0"] / 100
         powers = self.__parse_list_values(resp, 2897)
@@ -35,7 +37,7 @@ class BatterXCounter:
         try:
             power_factors = self.__parse_list_values(resp, 2881)
         except KeyError:
-            log.MainLogger().debug(
+            log.debug(
                 "Powerfaktor sollte laut Doku enthalten sein, ID 2881 kann aber nicht ermittelt werden.")
             power_factors = None
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
