@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+import logging
 import requests
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
 from modules.common.fault_state import FaultState
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -74,12 +76,12 @@ class SonnenbatterieCounter:
         '''
         counter_state = self.__read_variant_1()
         grid_power = -counter_state["GridFeedIn_W"]
-        log.MainLogger().debug('EVU Leistung: ' + str(grid_power))
+        log.debug('EVU Leistung: ' + str(grid_power))
         # Es wird nur eine Spannung ausgegeben
         grid_voltage = counter_state["Uac"]
-        log.MainLogger().debug('EVU Spannung: ' + str(grid_voltage))
+        log.debug('EVU Spannung: ' + str(grid_voltage))
         grid_frequency = counter_state["Fac"]
-        log.MainLogger().debug('EVU Netzfrequenz: ' + str(grid_frequency))
+        log.debug('EVU Netzfrequenz: ' + str(grid_frequency))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         imported, exported = self.__sim_count.sim_count(
@@ -116,11 +118,9 @@ class SonnenbatterieCounter:
         )
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente '" + str(self.component_config["id"]) + "' "
-                               + self.component_config["name"] + " wird auslesen.")
-        log.MainLogger().debug("Variante: " + str(self.__device_variant))
+        log.debug("Variante: " + str(self.__device_variant))
         if self.__device_variant == 0:
-            log.MainLogger().debug("Die Variante '0' bietet keine EVU Daten!")
+            log.debug("Die Variante '0' bietet keine EVU Daten!")
         elif self.__device_variant == 1:
             state = self.__update_variant_1()
         elif self.__device_variant == 2:
@@ -128,4 +128,3 @@ class SonnenbatterieCounter:
         else:
             raise FaultState.error("Unbekannte Variante: " + str(self.__device_variant))
         self.__store.set(state)
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" wurde erfolgreich auslesen.")

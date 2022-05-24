@@ -17,7 +17,7 @@ class CounterValueStoreRamdisk(ValueStore[CounterState]):
             files.evu.power_factors.write(counter_state.power_factors)
             files.evu.energy_import.write(counter_state.imported)
             files.evu.energy_export.write(counter_state.exported)
-            files.evu.power_import.write(counter_state.power)
+            files.evu.power_import.write(int(counter_state.power))
             files.evu.frequency.write(counter_state.frequency)
         except Exception as e:
             process_error(e)
