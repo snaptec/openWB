@@ -20,7 +20,7 @@ def get_default_config() -> dict:
     }
 
 
-log = logging.getLogger("SMA ModbusTCP")
+log = logging.getLogger(__name__)
 
 
 class SmaModbusTcpInverter:
@@ -38,14 +38,13 @@ class SmaModbusTcpInverter:
         self.__store.set(self.read_inverter_state())
 
     def read_inverter_state(self) -> InverterState:
-        log.debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
-            if self.component_config["configuration"]["version"] == SmaInverterVersion.default:
+            if self.component_config["configuration"]["version"] == SmaInverterVersion.default.value:
                 # AC Wirkleistung über alle Phasen (W) [Pac]
                 power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
                 # Gesamtertrag (Wh) [E-Total]
                 energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
-            elif self.component_config["configuration"]["version"] == SmaInverterVersion.core2:
+            elif self.component_config["configuration"]["version"] == SmaInverterVersion.core2.value:
                 # AC Wirkleistung über alle Phasen (W) [Pac]
                 power = self.__tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
                 # Gesamtertrag (Wh) [E-Total] SF=2!

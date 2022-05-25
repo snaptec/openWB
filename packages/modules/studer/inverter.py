@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from helpermodules import log
 from modules.common import modbus
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo, FaultState
@@ -28,7 +27,6 @@ class StuderInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         vc_count = self.component_config["configuration"]["vc_count"]
         vc_type = self.component_config["configuration"]["vc_type"]

@@ -3,7 +3,7 @@ from abc import abstractmethod
 from typing import Generic, TypeVar
 
 T = TypeVar("T")
-log = logging.getLogger("ValueStore")
+log = logging.getLogger("soc."+__name__)
 
 
 class ValueStore(Generic[T]):

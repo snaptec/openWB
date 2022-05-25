@@ -1,8 +1,10 @@
 import functools
+import logging
 from typing import Callable, Optional
 
-from helpermodules import log
 from modules.common import req
+
+log = logging.getLogger(__name__)
 
 
 def request_value(url: str) -> Optional[float]:
@@ -11,7 +13,7 @@ def request_value(url: str) -> Optional[float]:
     else:
         response = req.get_http_session().get(url, timeout=5)
         response.encoding = 'utf-8'
-        log.MainLogger().debug("Antwort auf "+str(url)+" "+str(response.text))
+        log.debug("Antwort auf "+str(url)+" "+str(response.text))
         return float(response.text.replace("\n", ""))
 
 

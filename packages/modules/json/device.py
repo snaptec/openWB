@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+import logging
 from typing import Dict, List, Union, Optional
 from urllib3.util import parse_url
 
-from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
 from modules.common.abstract_device import AbstractDevice
@@ -10,6 +10,8 @@ from modules.common.component_context import MultiComponentUpdateContext
 from modules.json import bat
 from modules.json import counter
 from modules.json import inverter
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -36,7 +38,7 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, json_component_classes]
+        self.components = {}  # type: Dict[str, json_component_classes]
         try:
             self.device_config = device_config
             port = self.device_config["configuration"]["port"]
@@ -44,12 +46,12 @@ class Device(AbstractDevice):
                 "://" + self.device_config["configuration"]["domain"] + \
                 ":" + str(port) if port else ""
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+device_config["name"])
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"], component_config)
         else:
             raise Exception(
@@ -58,14 +60,14 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading " + str(self._components))
-        if self._components:
-            with MultiComponentUpdateContext(self._components):
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            with MultiComponentUpdateContext(self.components):
                 response = req.get_http_session().get(self.domain, timeout=5)
-                for component in self._components:
-                    self._components[component].update(response.json())
+                for component in self.components:
+                    self.components[component].update(response.json())
         else:
-            log.MainLogger().warning(
+            log.warning(
                 self.device_config["name"] +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )

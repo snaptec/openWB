@@ -2,7 +2,6 @@
 
 from typing import Dict
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -28,8 +27,6 @@ class BatterXInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self, resp: Dict) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
         power = resp["1634"]["0"] * -1
 
         topic = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + str(self.component_config["id"])+"/"

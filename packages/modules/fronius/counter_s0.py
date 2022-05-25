@@ -5,7 +5,6 @@ from modules.common.component_state import CounterState
 from modules.common import req
 from modules.common import simcount
 from modules.fronius.abstract_config import FroniusConfiguration
-from helpermodules import log
 
 
 def get_default_config() -> dict:
@@ -28,8 +27,6 @@ class FroniusS0Counter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
         session = req.get_http_session()
         response = session.get(
             'http://'+self.device_config.ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
@@ -52,6 +49,4 @@ class FroniusS0Counter:
             exported=exported,
             power=power
         )
-
-        log.MainLogger().debug("Fronius S0 Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+import logging
 
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -32,7 +34,6 @@ class VictronInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         modbus_id = self.component_config["configuration"]["modbus_id"]
         with self.__tcp_client:
             if self.component_config["configuration"]["mppt"]:
@@ -41,8 +42,8 @@ class VictronInverter:
                 except Exception as e:
                     if "GatewayPathUnavailable" in str(e):
                         power = 0
-                        log.MainLogger().debug(self.component_config["name"] +
-                                               ": Reg 789 konnte nicht gelesen werden, Power auf 0 gesetzt.")
+                        log.debug(self.component_config["name"] +
+                                  ": Reg 789 konnte nicht gelesen werden, Power auf 0 gesetzt.")
                     else:
                         raise
             else:

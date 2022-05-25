@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
+import logging
 import re
 from typing import Dict, Union, List
 
 from urllib3.util import parse_url
 
-from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.http import bat
 from modules.http import counter
 from modules.http import inverter
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -37,22 +39,21 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, http_component_classes]
+        self.components = {}  # type: Dict[str, http_component_classes]
         try:
             self.device_config = device_config
             port = self.device_config["configuration"]["port"]
             self.domain = self.device_config["configuration"]["protocol"] + \
                 "://" + self.device_config["configuration"]["domain"]
             if port is not None:
-                self.domain = self.domain + ":" + port
+                self.domain = self.domain + ":" + str(port)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+device_config["name"])
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-
-            self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"], component_config, self.domain)
         else:
             raise Exception(
@@ -61,14 +62,14 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading " + str(self._components))
-        if self._components:
-            for component in self._components:
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            for component in self.components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                with SingleComponentUpdateContext(self.components[component].component_info):
+                    self.components[component].update()
         else:
-            log.MainLogger().warning(
+            log.warning(
                 self.device_config["name"] +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
@@ -96,7 +97,7 @@ def create_paths_dict(**kwargs):
 def run_device_legacy(device_config: dict, component_config: dict):
     device = Device(device_config)
     device.add_component(component_config)
-    log.MainLogger().debug(
+    log.debug(
         'Http Konfiguration: ' + str(device_config["configuration"]) + str(component_config["configuration"])
     )
     device.update()
