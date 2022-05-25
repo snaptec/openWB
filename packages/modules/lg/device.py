@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import json
+import logging
 import os
 from typing import Dict, Union, Optional, List
 from requests import HTTPError, Session
-from helpermodules import log
+
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
 from modules.lg import bat
@@ -13,6 +14,8 @@ from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext
 from modules.common.fault_state import FaultState
 
+log = logging.getLogger(__name__)
+
 
 def get_default_config() -> dict:
     return {
@@ -20,8 +23,8 @@ def get_default_config() -> dict:
         "type": "lg",
         "id": 0,
         "configuration": {
-            "ip": "",
-            "password": "abc"
+            "ip": None,
+            "password": None
         }
     }
 
@@ -96,7 +99,7 @@ class Device(AbstractDevice):
                 if isinstance(device_config, LG) \
                 else LG.from_dict(device_config)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+self.config.name)
+            log.exception("Fehler im Modul "+self.config.name)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
@@ -111,7 +114,7 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading " + str(self._components))
+        log.debug("Start device reading " + str(self._components))
         if self._components:
             with MultiComponentUpdateContext(self._components):
                 session = req.get_http_session()
@@ -126,7 +129,7 @@ class Device(AbstractDevice):
                 for component in self._components:
                     self._components[component].update(response)
         else:
-            log.MainLogger().warning(
+            log.warning(
                 self.config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
@@ -179,8 +182,8 @@ def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] 
         )
     component_config["id"] = num
     dev.add_component(component_config)
-    log.MainLogger().debug('LG ESS V1.0 IP: ' + ip)
-    log.MainLogger().debug('LG ESS V1.0 password: ' + password)
+    log.debug('LG ESS V1.0 IP: ' + ip)
+    log.debug('LG ESS V1.0 password: ' + password)
     dev.update()
 
     if dev.session_key != old_session_key:
