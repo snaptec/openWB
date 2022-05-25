@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
+import logging
 from requests import HTTPError
 
-from helpermodules import log
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
 from modules.tesla.http_client import PowerwallHttpClient
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -26,7 +28,7 @@ class TeslaCounter:
     def update(self, client: PowerwallHttpClient, aggregate):
         # read firmware version
         status = client.get_json("/api/status")
-        log.MainLogger().debug('Firmware: ' + status["version"])
+        log.debug('Firmware: ' + status["version"])
         try:
             # read additional info if firmware supports
             meters_site = client.get_json("/api/meters/site")
@@ -39,7 +41,7 @@ class TeslaCounter:
                 powers=[meters_site[0]["Cached_readings"]["real_power_" + phase] for phase in ["a", "b", "c"]]
             )
         except (KeyError, HTTPError):
-            log.MainLogger().debug(
+            log.debug(
                 "Firmware seems not to provide detailed phase measurements. Fallback to total power only.")
             powerwall_state = CounterState(
                 imported=aggregate["site"]["energy_imported"],

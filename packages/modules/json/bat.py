@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import jq
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.fault_state import ComponentInfo
@@ -32,7 +31,6 @@ class JsonBat:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self, response) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         config = self.component_config["configuration"]
 
         power = jq.compile(config["jq_power"]).input(response).first()

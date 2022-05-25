@@ -10,7 +10,7 @@ from modules.common.req import get_http_session
 from modules.common.store import RAMDISK_PATH
 
 COOKIE_FILE = RAMDISK_PATH / "powerwall_cookie.txt"
-log = logging.getLogger("Powerwall")
+log = logging.getLogger(__name__)
 
 
 class PowerwallHttpClient:

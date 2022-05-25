@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import json
+import logging
 import requests
 from json import JSONDecodeError
 from requests import HTTPError
 from typing import Callable, Dict, Union, Optional, List
 
-from helpermodules import log
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext
@@ -15,6 +15,8 @@ from modules.tesla import bat
 from modules.tesla import counter
 from modules.tesla import inverter
 from modules.tesla.http_client import PowerwallHttpClient
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -92,7 +94,7 @@ class Device(AbstractDevice):
                 if isinstance(device_config, Tesla) \
                 else Tesla.from_dict(device_config)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+device_config["name"])
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
@@ -106,7 +108,7 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Beginning update")
+        log.debug("Beginning update")
         cookies = None
         address = self.config.configuration.ip_address
         email = self.config.configuration.email
@@ -115,9 +117,9 @@ class Device(AbstractDevice):
             try:
                 cookies = json.loads(COOKIE_FILE.read_text())
             except FileNotFoundError:
-                log.MainLogger().debug("Cookie-File <%s> does not exist. It will be created.", COOKIE_FILE)
-            except JSONDecodeError as e:
-                log.MainLogger().warning("Could not parse Cookie-File "+str(COOKIE_FILE)+". It will be re-created.", e)
+                log.debug("Cookie-File <%s> does not exist. It will be created.", COOKIE_FILE)
+            except JSONDecodeError:
+                log.warning("Could not parse Cookie-File "+str(COOKIE_FILE)+". It will be re-created.", exc_info=True)
 
             session = get_http_session()
             if cookies is None:
@@ -129,10 +131,10 @@ class Device(AbstractDevice):
             except HTTPError as e:
                 if e.response.status_code != 401 and e.response.status_code != 403:
                     raise e
-                log.MainLogger().warning(
+                log.warning(
                     "Login to powerwall with existing cookie failed. Will retry with new cookie...")
             self.__authenticate_and_update(session, address, email, password, self.__update_components)
-            log.MainLogger().debug("Update completed successfully")
+            log.debug("Update completed successfully")
 
     def __update_components(self, client: PowerwallHttpClient):
         if self._components:
@@ -141,7 +143,7 @@ class Device(AbstractDevice):
                 aggregate = client.get_json("/api/meters/aggregates")
                 self._components[component].update(client, aggregate)
         else:
-            log.MainLogger().warning(
+            log.warning(
                 self.config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
@@ -156,7 +158,7 @@ class Device(AbstractDevice):
             verify=False,
             timeout=5
         )
-        log.MainLogger().debug("Authentication endpoint send cookies %s", str(response.cookies))
+        log.debug("Authentication endpoint send cookies %s", str(response.cookies))
         return {"AuthCookie": response.cookies["AuthCookie"], "UserRecord": response.cookies["UserRecord"]}
 
     def __authenticate_and_update(self,
@@ -197,9 +199,9 @@ def read_legacy(component_type: str,
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Tesla Powerwall IP-Adresse: ' + address)
-    log.MainLogger().debug('Tesla Powerwall Mail-Adresse: ' + email)
-    log.MainLogger().debug('Tesla Powerwall Passwort: ' + password)
+    log.debug('Tesla Powerwall IP-Adresse: ' + address)
+    log.debug('Tesla Powerwall Mail-Adresse: ' + email)
+    log.debug('Tesla Powerwall Passwort: ' + password)
 
     dev.update()
 

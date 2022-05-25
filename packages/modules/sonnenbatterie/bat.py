@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+import logging
 import requests
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
 from modules.common.fault_state import FaultState
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -91,9 +93,9 @@ class SonnenbatterieBat:
         '''
         battery_state = self.__read_variant_1()
         battery_power = -battery_state["Pac_total_W"]
-        log.MainLogger().debug('Speicher Leistung: ' + str(battery_power))
+        log.debug('Speicher Leistung: ' + str(battery_power))
         battery_soc = battery_state["USOC"]
-        log.MainLogger().debug('Speicher SoC: ' + str(battery_soc))
+        log.debug('Speicher SoC: ' + str(battery_soc))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         imported, exported = self.__sim_count.sim_count(
@@ -124,9 +126,7 @@ class SonnenbatterieBat:
         )
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente '" + str(self.component_config["id"]) + "' "
-                               + self.component_config["name"] + " wird auslesen.")
-        log.MainLogger().debug("Variante: " + str(self.__device_variant))
+        log.debug("Variante: " + str(self.__device_variant))
         if self.__device_variant == 0:
             state = self.__update_variant_0()
         elif self.__device_variant == 1:
@@ -136,4 +136,3 @@ class SonnenbatterieBat:
         else:
             raise FaultState.error("Unbekannte Variante: " + str(self.__device_variant))
         self.__store.set(state)
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" wurde erfolgreich auslesen.")

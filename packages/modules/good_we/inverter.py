@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-from helpermodules.log import MainLogger
 from modules.common import modbus
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -26,7 +24,6 @@ class GoodWeInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
             power = sum([self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_32,
                         unit=self.__modbus_id) for reg in [35105, 35109, 35113, 35117]]) * -1

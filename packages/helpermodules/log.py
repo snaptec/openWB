@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from pathlib import Path
 
 
 def get_log_level_from_environment():
@@ -13,7 +14,20 @@ def get_log_level_from_environment():
         return logging.DEBUG
 
 
+def filter_soc_neg(record) -> bool:
+    if "soc" in record.threadName:
+        return False
+    return True
+
+
+def filter_soc_pos(record) -> bool:
+    if "soc" in record.threadName:
+        return True
+    return False
+
+
 def setup_logging_stdout():
+    format_str_short = '%(asctime)s - %(message)s'
     root_logger = logging.getLogger()
     # Only do something if logging is not yet initialized.
     # It may not be initialized if this function is called multiple times or of logging is set up while unit testing
@@ -24,6 +38,31 @@ def setup_logging_stdout():
         )
         root_logger.addHandler(handler)
         root_logger.setLevel(get_log_level_from_environment())
+        logging.getLogger().handlers[0].addFilter(filter_soc_neg)
+
+    mqtt_log = logging.getLogger("mqtt")
+    mqtt_log.propagate = False
+    mqtt_file_handler = logging.FileHandler(str(Path(__file__).resolve().parents[2] / 'ramdisk' / ('mqtt.log')))
+    mqtt_file_handler.setFormatter(logging.Formatter(format_str_short))
+    mqtt_log.addHandler(mqtt_file_handler)
+
+    soc_log = logging.getLogger("soc")
+    soc_log.propagate = True
+    soc_file_handler = logging.FileHandler(str(Path(__file__).resolve().parents[2] / 'ramdisk' / ('soc.log')))
+    soc_file_handler.setFormatter(logging.Formatter(
+        u"%(asctime)s: PID: %(process)d: %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"))
+    soc_file_handler.addFilter(filter_soc_pos)
+    soc_log.addHandler(soc_file_handler)
+
+    urllib3_log = logging.getLogger("urllib3.connectionpool")
+    urllib3_log.propagate = True
+    urllib3_file_handler = logging.FileHandler(str(Path(__file__).resolve().parents[2] / 'ramdisk' / ('soc.log')))
+    urllib3_file_handler.setFormatter(logging.Formatter(
+        u"%(asctime)s: PID: %(process)d: %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"))
+    urllib3_file_handler.addFilter(filter_soc_pos)
+    urllib3_log.addHandler(urllib3_file_handler)
+
+    logging.getLogger("pymodbus").setLevel(logging.WARNING)
 
 
 class MainLogger:

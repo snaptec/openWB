@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
@@ -42,8 +41,6 @@ class HttpCounter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
         imported = self.__get_imported()
         exported = self.__get_exported()
         power = self.__get_power()

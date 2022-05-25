@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from helpermodules import log, compatibility
+from helpermodules import compatibility
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -33,8 +33,6 @@ class HttpInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
         power = (-self.__get_power() if compatibility.is_ramdisk_in_use() else self.__get_power())
         counter = self.__get_counter()
         if counter is None:

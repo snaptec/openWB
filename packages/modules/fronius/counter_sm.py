@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
+import logging
 from requests import Session
 from typing import Tuple
 
-from helpermodules import log
 from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.store import get_counter_value_store
 from modules.fronius.abstract_config import FroniusConfiguration, MeterLocation
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -34,7 +36,6 @@ class FroniusSmCounter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
 
         session = req.get_http_session()
         variant = self.component_config["configuration"]["variant"]
@@ -54,8 +55,6 @@ class FroniusSmCounter:
             data=self.simulation,
             prefix="bezug"
         )
-
-        log.MainLogger().debug("Fronius SM Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)
 
     def __update_variant_0_1(self, session: Session) -> CounterState:
@@ -81,7 +80,7 @@ class FroniusSmCounter:
         response_json_id = response.json()["Body"]["Data"]
 
         meter_location = MeterLocation.get(response_json_id["Meter_Location_Current"])
-        log.MainLogger().debug("Einbauort: "+str(meter_location))
+        log.debug("Einbauort: "+str(meter_location))
 
         powers = [response_json_id["PowerReal_P_Phase_"+str(num)] for num in range(1, 4)]
         if meter_location == MeterLocation.load:
@@ -117,7 +116,7 @@ class FroniusSmCounter:
         response_json_id = dict(response.json()["Body"]["Data"]).get(meter_id)
 
         meter_location = MeterLocation.get(response_json_id["SMARTMETER_VALUE_LOCATION_U16"])
-        log.MainLogger().debug("Einbauort: "+str(meter_location))
+        log.debug("Einbauort: "+str(meter_location))
 
         powers = [response_json_id["SMARTMETER_POWERACTIVE_MEAN_0"+str(num)+"_F64"] for num in range(1, 4)]
         if meter_location == MeterLocation.load:
