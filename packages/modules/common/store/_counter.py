@@ -11,12 +11,13 @@ class CounterValueStoreRamdisk(ValueStore[CounterState]):
     def set(self, counter_state: CounterState):
         try:
             files.evu.voltages.write(counter_state.voltages)
-            files.evu.currents.write(counter_state.currents)
+            if counter_state.currents:
+                files.evu.currents.write(counter_state.currents)
             files.evu.powers_import.write(counter_state.powers)
             files.evu.power_factors.write(counter_state.power_factors)
             files.evu.energy_import.write(counter_state.imported)
             files.evu.energy_export.write(counter_state.exported)
-            files.evu.power_import.write(counter_state.power)
+            files.evu.power_import.write(int(counter_state.power))
             files.evu.frequency.write(counter_state.frequency)
         except Exception as e:
             process_error(e)
@@ -29,7 +30,8 @@ class CounterValueStoreBroker(ValueStore[CounterState]):
     def set(self, counter_state: CounterState):
         try:
             pub_to_broker("openWB/set/counter/" + str(self.num) + "/get/voltages", counter_state.voltages, 2)
-            pub_to_broker("openWB/set/counter/" + str(self.num) + "/get/currents", counter_state.currents, 2)
+            if counter_state.currents:
+                pub_to_broker("openWB/set/counter/" + str(self.num) + "/get/currents", counter_state.currents, 2)
             pub_to_broker("openWB/set/counter/" + str(self.num) + "/get/powers", counter_state.powers, 2)
             pub_to_broker("openWB/set/counter/" + str(self.num) + "/get/power_factors", counter_state.power_factors, 2)
             pub_to_broker("openWB/set/counter/" + str(self.num) + "/get/imported", counter_state.imported)

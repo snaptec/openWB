@@ -60,8 +60,6 @@ case $CHARGEPOINT in
 		;;
 esac
 
-ARGSFILE="$RAMDISKDIR/soc_${SOCMODULE}_lp${CHARGEPOINT}_args"
-
 ARGS='{'
 ARGS+='"moduleName": "'"$SOCMODULE"'", '
 ARGS+='"chargePoint": "'"$CHARGEPOINT"'", '
@@ -84,6 +82,6 @@ ARGS+='"ramDiskDir": "'"$RAMDISKDIR"'", '
 ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 ARGS+='}'
 
-echo $ARGS > "$ARGSFILE"
+ARGSB64=`echo -n $ARGS | base64 --wrap=0`
 
-sudo python3 "$MODULEDIR/main.py" "$ARGSFILE" &>> $LOGFILE &
+sudo python3 "$MODULEDIR/main.py" "$ARGSB64" &>> $LOGFILE &

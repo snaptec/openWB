@@ -94,6 +94,23 @@
 										</select>
 									</div>
 								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">RFID</label>
+									<div class="col">
+										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+											<label class="btn btn btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
+												<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
+											</label>
+											<label class="btn btn btn-outline-info<?php if($rfidaktold != 0) echo " active" ?>">
+												<input type="radio" name="rfidakt" id="rfidaktOn1" value="1"<?php if($rfidaktold != 0) echo " checked=\"checked\"" ?>>An
+											</label>
+										</div>
+										<span class="form-text small">
+											Wenn die openWB nur ein Ladepunkt ist, werden gescannte RFID Tags oder Eingaben am Display an die Haupt openWB weitergegeben.
+											Dort muss der entsprechende Modus konfiguriert und gültige Tags hinterlegt werden.
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

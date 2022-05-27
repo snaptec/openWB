@@ -4,6 +4,7 @@
 Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu
 formatieren.
 """
+import logging
 import struct
 from enum import Enum
 from typing import Callable, Iterable, Union, overload, List
@@ -14,8 +15,9 @@ from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 from urllib3.util import parse_url
 
-from helpermodules import log
 from modules.common.fault_state import FaultState
+
+log = logging.getLogger(__name__)
 
 
 class ModbusDataType(Enum):
@@ -59,7 +61,7 @@ class ModbusClient:
 
     def close_connection(self) -> None:
         try:
-            log.MainLogger().debug("Close Modbus TCP connection")
+            log.debug("Close Modbus TCP connection")
             self.delegate.close()
         except Exception as e:
             raise FaultState.error(__name__+" "+str(type(e))+" " +

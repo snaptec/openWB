@@ -4,7 +4,7 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.component_state import CounterState
 from modules.common import req
 from modules.common import simcount
-from helpermodules import log
+from modules.fronius.abstract_config import FroniusConfiguration
 
 
 def get_default_config() -> dict:
@@ -17,7 +17,7 @@ def get_default_config() -> dict:
 
 
 class FroniusS0Counter:
-    def __init__(self, device_id: int, component_config: dict, device_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, device_config: FroniusConfiguration) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.device_config = device_config
@@ -26,12 +26,10 @@ class FroniusS0Counter:
         self.__store = get_counter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self) -> CounterState:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
-
+    def update(self) -> None:
         session = req.get_http_session()
         response = session.get(
-            'http://'+self.device_config["ip_address"]+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
+            'http://'+self.device_config.ip_address+'/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
             timeout=5)
         # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
         power = float(response.json()["Body"]["Data"]["Site"]["P_Grid"]) or 0
@@ -51,8 +49,4 @@ class FroniusS0Counter:
             exported=exported,
             power=power
         )
-        log.MainLogger().debug("Fronius S0 Leistung[W]: " + str(counter_state.power))
-        return counter_state
-
-    def set_counter_state(self, counter_state: CounterState) -> None:
         self.__store.set(counter_state)

@@ -71,8 +71,10 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($pvwattmodulold == "wr_alphaess") echo "selected" ?> value="wr_alphaess">AlphaESS-Speicher</option>
+										<option <?php if($pvwattmodulold == "wr_batterx") echo "selected" ?> value="wr_batterx">BatterX</option>
 										<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
 										<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
+										<option <?php if($pvwattmodulold == "wr_good_we") echo "selected" ?> value="wr_good_we">GoodWe</option>
 										<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
 										<option <?php if($pvwattmodulold == "wr_kostalpiko") echo "selected" ?> value="wr_kostalpiko">Kostal Piko</option>
 										<option <?php if($pvwattmodulold == "wr_kostalpikovar2") echo "selected" ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
@@ -134,6 +136,29 @@
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
+						<div id="pvgoodwe" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="good_we_ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="good_we_ip" id="good_we_ip" value="<?php echo $good_we_ipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.1.1</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="good_we_id" class="col-md-4 col-form-label">Unit ID</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" max="247" step="1" name="good_we_id" id="good_we_id" value="<?php echo $good_we_idold ?>">
+										<span class="form-text small">Gültige Werte 1-247. Standard-ID ist 247. Modbus ID des Gerätes.</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="pvbatterx" class="hide">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.
+							</div>
+						</div>
 						<div id="pvsungrow" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
@@ -182,11 +207,6 @@
 						<div id="pvpowerdog" class="hide">
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen EVU Modul.
-							</div>
-						</div>
-						<div id="pvrct2" class="hide">
-							<div class="alert alert-warning">
-								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
 							</div>
 						</div>
 						<div id="pvrct" class="hide">
@@ -603,7 +623,7 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option nur aktivieren, wenn ein weiteres Solaredge SmartMeter verbaut ist, welches z.B. die Leistung einer vorhandenen Bestands-PV-Anlage erfasst, 
+										Diese Option nur aktivieren, wenn ein weiteres Solaredge SmartMeter verbaut ist, welches z.B. die Leistung einer vorhandenen Bestands-PV-Anlage erfasst,
 										so dass diese dem WR hinzuaddiert wird.
 										Dieses zusätzliche SmartMeter muss dann als "Zähler 2" / "Position 2" im WR-Konfiguratioonsmenü konfiguriert sein.
 									</span>
@@ -690,11 +710,11 @@
 								<label class="col-md-4 col-form-label">Typ des MPPT Solarladeregler</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VT) echo " active" ?>">
-											<input type="radio" name="studer_vc_type" id="studer_vc_typeNo" value="VT"<?php if($studer_vc_typeold == VT) echo " checked=\"checked\"" ?>>VT
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == 'VT') echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeNo" value="VT"<?php if($studer_vc_typeold == 'VT') echo " checked=\"checked\"" ?>>VT
 										</label>
-										<label class="btn btn-outline-info<?php if($studer_vc_typeold == VS) echo " active" ?>">
-											<input type="radio" name="studer_vc_type" id="studer_vc_typeYes" value="VS"<?php if($studer_vc_typeold == VS) echo " checked=\"checked\"" ?>>VS
+										<label class="btn btn-outline-info<?php if($studer_vc_typeold == 'VS') echo " active" ?>">
+											<input type="radio" name="studer_vc_type" id="studer_vc_typeYes" value="VS"<?php if($studer_vc_typeold == 'VS') echo " checked=\"checked\"" ?>>VS
 										</label>
 									</div>
 									<span class="form-text small">
@@ -716,7 +736,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaxip" id="solaxip" value="<?php echo $solaxipold ?>">
 									<span class="form-text small">
-										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters.
+										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters. Für Gen3 0 bei ID eintragen für Gen4 ID vom WR eintragen (meistens > 2)
 									</span>
 								</div>
 							</div>
@@ -921,6 +941,8 @@
 								hideSection('#pvwrstuder');
 								hideSection('#pvsungrow');
 								hideSection('#pvalphaess');
+								hideSection('#pvgoodwe');
+								hideSection('#pvbatterx');
 								hideSection('#pvsonneneco');
 								hideSection('#pvhuawei');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
@@ -1013,6 +1035,7 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_solax') {
 									showSection('#pvwrsolax');
+									showSection('#pvid');									
 								}
 								if($('#pvwattmodul').val() == 'wr_smartme') {
 									showSection('#pvsmartme');
@@ -1040,6 +1063,12 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_alphaess') {
 									showSection('#pvalphaess');
+								}
+								if($('#pvwattmodul').val() == 'wr_good_we') {
+									showSection('#pvgoodwe');
+								}
+								if($('#pvwattmodul').val() == 'wr_batterx') {
+									showSection('#pvbatterx');
 								}
 								if($('#pvwattmodul').val() == 'wr_sungrow') {
 									showSection('#pvsungrow');
@@ -1346,7 +1375,7 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_shelly') {
 									showSection('#pv2ipdiv');
-								}								
+								}
 							}
 							$(function() {
 								display_pv2wattmodul();

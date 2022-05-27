@@ -89,14 +89,14 @@ getAndWriteSoc(){
 soctimer=$(<$soctimerfile)
 if (( ladeleistung > 500 )); then
 	if (( soctimer < intervallladen )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
 		getAndWriteSoc
 	fi
 else
 	if (( soctimer < intervall )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 		incrementTimer
 
 	else

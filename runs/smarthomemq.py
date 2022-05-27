@@ -14,6 +14,7 @@ from usmarthome.smartmqtt import Smqtt
 from usmarthome.smartmystrom import Smystrom
 from usmarthome.smartshelly import Sshelly
 from usmarthome.smartstiebel import Sstiebel
+from usmarthome.smartvampair import Svampair
 from usmarthome.smarttasmota import Stasmota
 from usmarthome.smartviessmann import Sviessmann
 
@@ -226,6 +227,8 @@ def getdevicevalues():
     mqtt_all['openWB/SmartHome/Status/wattschalt'] = totalwatt
     mqtt_all['openWB/SmartHome/Status/wattnichtschalt'] = totalwattot
     mqtt_all['openWB/SmartHome/Status/wattnichtHaus'] = totalminhaus
+    mqtt_all['openWB/SmartHome/Status/uberschuss'] = uberschuss
+    mqtt_all['openWB/SmartHome/Status/uberschussoffset'] = uberschussoffset
     sendmq(mqtt_all)
 
 
@@ -301,6 +304,8 @@ def update_devices():
                     mydevice = Sshelly()
                 elif (device_type == 'stiebel'):
                     mydevice = Sstiebel()
+                elif (device_type == 'vampair'):
+                    mydevice = Svampair()
                 elif (device_type == 'tasmota'):
                     mydevice = Stasmota()
                 elif (device_type == 'avm'):

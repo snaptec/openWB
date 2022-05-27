@@ -1,3 +1,4 @@
+import base64
 import json
 import soclogging
 
@@ -23,15 +24,13 @@ def setParameter(key, value):
     return
 
 
-def loadParameters(argsFile):
+def loadParameters(args):
     setParameter('reqTimeout', 60)
     setParameter('statusTimeout', 150)
 
     try:
-        f = open(argsFile, 'r')
-        argsStr = f.read()
+        argsStr = base64.b64decode(args).decode('utf-8')
         argsDict = json.loads(argsStr)
-        f.close()
 
         setParameter('moduleName', str(argsDict['moduleName']))
         setParameter('chargePoint', str(argsDict['chargePoint']))

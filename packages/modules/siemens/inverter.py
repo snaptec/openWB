@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import InverterState
@@ -14,25 +13,21 @@ def get_default_config() -> dict:
         "name": "Siemens Wechselrichter",
         "id": 0,
         "type": "inverter",
-        "configuration": {
-            "ip_address": "192.168.0.12"  # ToDo: move IP to device
-        }
+        "configuration": {}
     }
 
 
 class SiemensInverter:
-    def __init__(self, device_id: int, component_config: dict) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
         self.__device_id = device_id
         self.component_config = component_config
-        ip_address = component_config["configuration"]["ip_address"]
-        self.__tcp_client = modbus.ModbusClient(ip_address, 502)
+        self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
+        self.simulation = {}
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
             power = self.__tcp_client.read_holding_registers(16, ModbusDataType.INT_32, unit=1) * -1
 
@@ -40,7 +35,7 @@ class SiemensInverter:
             str(self.__device_id)+"/component/" + \
             str(self.component_config["id"])+"/"
         _, counter = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.__simulation, prefix="pv")
+            power, topic=topic_str, data=self.simulation, prefix="pv")
         inverter_state = InverterState(
             power=power,
             counter=counter

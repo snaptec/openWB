@@ -1,14 +1,17 @@
+import logging
 import threading
 from typing import Optional, List, Union, Any, Dict
 
 from modules.common.fault_state import ComponentInfo, FaultState
+
+log = logging.getLogger("soc."+__name__)
 
 
 class SingleComponentUpdateContext:
     """ Wenn die Werte der Komponenten nicht miteinander verrechnet werden, sollen, auch wenn bei einer Komponente ein
     Fehler auftritt, alle anderen dennnoch ausgelesen werden. WR-Werte dienen nur statistischen Zwecken, ohne
     EVU-Werte ist aber keine Regelung möglich. Ein nicht antwortender WR soll dann nicht die Regelung verhindern.
-        for component in self._components:
+        for component in self.components:
             with SingleComponentUpdateContext(component):
                 component.update()
     """
@@ -17,6 +20,7 @@ class SingleComponentUpdateContext:
         self.__component_info = component_info
 
     def __enter__(self):
+        log.debug("Update Komponente ['"+self.__component_info.name+"']")
         return None
 
     def __exit__(self, exception_type, exception, exception_traceback) -> bool:
@@ -28,8 +32,8 @@ class MultiComponentUpdateContext:
     """ Wenn die Werte der Komponenten miteinander verrechnet werden, muss, wenn bei einer Komponente ein Fehler
     auftritt, für alle Komponenten der Fehlerzustand gesetzt werden, da aufgrund der Abhängigkeiten für alle Module
     keine Werte ermittelt werden können.
-        with MultiComponentUpdateContext(self._components):
-            for component in self._components:
+        with MultiComponentUpdateContext(self.components):
+            for component in self.components:
                 component.update()
     """
     __thread_local = threading.local()
@@ -43,6 +47,8 @@ class MultiComponentUpdateContext:
         if hasattr(self.__thread_local, "active_context"):
             raise Exception("Nesting MultiComponentUpdateContext is not supported")
         MultiComponentUpdateContext.__thread_local.active_context = self
+        log.debug("Update Komponenten " +
+                  str([component.component_info.name for component in self.__device_components]))
         return None
 
     def __exit__(self, exception_type, exception, exception_traceback) -> bool:

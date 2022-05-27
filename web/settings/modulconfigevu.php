@@ -69,11 +69,13 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+										<option <?php if($wattbezugmodulold == "bezug_batterx") echo "selected" ?> value="bezug_batterx">BatterX</option>
 										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_good_we") echo "selected" ?> value="bezug_good_we">GoodWe</option>
 										<option <?php if($wattbezugmodulold == "bezug_huawei") echo "selected" ?> value="bezug_huawei">Huawei mit SmartMeter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
@@ -117,6 +119,22 @@
 						<div id="wattbezugalphaess" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
+							</div>
+						</div>
+						<div id="wattbezuggoodwe" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im Wechselrichter
+							</div>
+						</div>
+						<div id="wattbezugbatterx" class="hide">
+							<div class="form-row mb-1">
+								<label for="batterx_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="batterx_ip" id="batterx_ip" value="<?php echo $batterx_ipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
@@ -195,11 +213,6 @@
 						<div id="wattbezugsiemens" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
-							</div>
-						</div>
-						<div id="wattbezugrct2" class="hide">
-							<div class="alert alert-warning">
-								Dieses Modul befindet sich noch in der Entwicklung. Bei Problemen bitte RCT (ohne V.2) nutzen!
 							</div>
 						</div>
 						<div id="wattbezugrct" class="hide">
@@ -709,19 +722,6 @@
 										</select>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" data-option="0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
-											</label>
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" data-option="1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
-											</label>
-										</div>
-									</div>
-								</div>
 								<hr>
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Kompatibilitätsmodus für Gen24 / neuere Symo</label>
@@ -755,8 +755,7 @@
 											// fill listbox, format <manufacturer> <meter model> (<serial>)
 											for(var i in data.Body.Data) {
 												var meter = data.Body.Data[i];
-												var meter_location = meter.hasOwnProperty('1SMARTMETER_VALUE_LOCATION_U16') ? parseInt(meter.SMARTMETER_VALUE_LOCATION_U16) : meter.Meter_Location_Current;
-												options += '<option value="'+i+'" data-meterlocation="'+meter_location+'"'
+												options += '<option value="'+i+'"'
 												if($('#froniuserzeugungselect').attr("data-old") == i) {
 													options += ' selected=true';
 												}
@@ -770,8 +769,6 @@
 
 											// set meter id corresponding to displayed entry in listbox
 											setInputValue('froniuserzeugung', $('#froniuserzeugungselect option:selected').attr('value'));
-											// set meter location corresponding to displayed entry in listbox
-											setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugungselect option:selected').attr('data-meterlocation'));
 
 											hideSection('#wattbezugfroniusload')
 											hideSection('#wattbezugfroniusmeterid');
@@ -789,7 +786,7 @@
 										.always(function() {
 											$('#wattbezugfroniusload').attr("disabled", false);
 										});
-										
+
 									});
 
 									$('#wattbezugfroniusmanual').on("click",function() {
@@ -999,6 +996,8 @@
 								hideSection('#wattbezughuawei');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
+								hideSection('#wattbezuggoodwe');
+								hideSection('#wattbezugbatterx');
 								hideSection('#wattbezugsungrow');
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
@@ -1013,6 +1012,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_alphaess') {
 									showSection('#wattbezugalphaess');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_batterx') {
+									showSection('#wattbezugbatterx');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_sungrow') {
 									showSection('#wattbezugsungrow');
@@ -1037,6 +1039,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_good_we') {
+									showSection('#wattbezuggoodwe');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_huawei') {
 									showSection('#wattbezughuawei');

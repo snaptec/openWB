@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+import logging
 import requests
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
 from modules.common.fault_state import FaultState
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -25,7 +27,7 @@ class SonnenbatterieInverter:
         self.__device_variant = device_variant
         self.component_config = component_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
+        self.simulation = {}
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
@@ -74,11 +76,11 @@ class SonnenbatterieInverter:
         '''
         inverter_state = self.__read_variant_1()
         pv_power = -inverter_state["Production_W"]
-        log.MainLogger().debug('Speicher PV Leistung: ' + str(pv_power))
+        log.debug('Speicher PV Leistung: ' + str(pv_power))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         _, exported = self.__sim_count.sim_count(
-            pv_power, topic=topic_str, data=self.__simulation, prefix="pv"
+            pv_power, topic=topic_str, data=self.simulation, prefix="pv"
         )
         return InverterState(
             counter=exported,
@@ -94,11 +96,11 @@ class SonnenbatterieInverter:
     def __update_variant_2(self) -> InverterState:
         # Auslesen einer Sonnenbatterie Eco 6 über die integrierte REST-API des Batteriesystems
         pv_power = -int(float(self.__read_variant_2_element("M03")))
-        log.MainLogger().debug('Speicher PV Leistung: ' + str(pv_power))
+        log.debug('Speicher PV Leistung: ' + str(pv_power))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
         _, exported = self.__sim_count.sim_count(
-            pv_power, topic=topic_str, data=self.__simulation, prefix="pv"
+            pv_power, topic=topic_str, data=self.simulation, prefix="pv"
         )
         return InverterState(
             counter=exported,
@@ -106,11 +108,9 @@ class SonnenbatterieInverter:
         )
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente '" + str(self.component_config["id"]) + "' "
-                               + self.component_config["name"] + " wird auslesen.")
-        log.MainLogger().debug("Variante: " + str(self.__device_variant))
+        log.debug("Variante: " + str(self.__device_variant))
         if self.__device_variant == 0:
-            log.MainLogger().debug("Die Variante '0' bietet keine PV Daten!")
+            log.debug("Die Variante '0' bietet keine PV Daten!")
         elif self.__device_variant == 1:
             state = self.__update_variant_1()
         elif self.__device_variant == 2:
@@ -118,4 +118,3 @@ class SonnenbatterieInverter:
         else:
             raise FaultState.error("Unbekannte Variante: " + str(self.__device_variant))
         self.__store.set(state)
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" wurde erfolgreich auslesen.")

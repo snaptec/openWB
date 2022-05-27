@@ -1,16 +1,18 @@
 """ Sim Count
 Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul / Speicher diese nicht liefert.
 """
+import logging
 import os
 import paho.mqtt.client as mqtt
 import time
 import typing
 
 from helpermodules import compatibility
-from helpermodules import log
 from helpermodules import pub
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.fault_state import FaultState
+
+log = logging.getLogger(__name__)
 
 
 def process_error(e):
@@ -97,15 +99,15 @@ class SimCountLegacy:
                     # runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab.
                     counter_export_present = counter_export_present * -1
                 counter_export_previous = counter_export_present
-                log.MainLogger().debug("simcount Zwischenergebnisse letzte Berechnung: Import: " +
-                                       str(counter_import_previous) + " Export: " + str(counter_export_previous) +
-                                       " Leistung: " + str(power_previous))
+                log.debug("simcount Zwischenergebnisse letzte Berechnung: Import: " +
+                          str(counter_import_previous) + " Export: " + str(counter_export_previous) +
+                          " Leistung: " + str(power_previous))
                 start_new = False
             write_ramdisk_file(prefix+'sec0', "%22.6f" % timestamp_present)
             write_ramdisk_file(prefix+'wh0', int(power_present))
 
             if start_new:
-                log.MainLogger().debug("Neue Simulation starten.")
+                log.debug("Neue Simulation starten.")
                 if prefix == "bezug":
                     imported = get_existing_imports_exports('bezugkwh')
                     exported = get_existing_imports_exports('einspeisungkwh')
@@ -123,19 +125,19 @@ class SimCountLegacy:
                     seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
-                log.MainLogger().debug(
+                log.debug(
                     "simcount aufsummierte Energie: Bezug[Ws]: " + str(counter_import_present) + ", Einspeisung[Ws]: " +
                     str(counter_export_present)
                 )
                 energy_positive_kWh = counter_import_present / 3600
                 energy_negative_kWh = counter_export_present / 3600
-                log.MainLogger().info(
+                log.info(
                     "simcount Ergebnis: Bezug[Wh]: " + str(energy_positive_kWh) +
                     ", Einspeisung[Wh]: " + str(energy_negative_kWh)
                 )
 
                 topic = get_topic(prefix)
-                log.MainLogger().debug(
+                log.debug(
                     "simcount Zwischenergebnisse aktuelle Berechnung: Import: " + str(counter_import_present) +
                     " Export: " + str(counter_export_present) + " Leistung: " + str(power_present)
                 )
@@ -154,7 +156,7 @@ class SimCountLegacy:
 def get_existing_imports_exports(file: str) -> float:
     if os.path.isfile('/var/www/html/openWB/ramdisk/'+file):
         value = float(read_ramdisk_file(file))
-        log.MainLogger().info("Es wurde ein vorhandener Zählerstand in "+file+" gefunden: "+str(value)+"Wh")
+        log.info("Es wurde ein vorhandener Zählerstand in "+file+" gefunden: "+str(value)+"Wh")
     else:
         value = 0
     return value
@@ -179,13 +181,13 @@ class Restore():
             try:
                 result = float(self.temp)
                 if value == "watt0pos":
-                    log.MainLogger().info(
+                    log.info(
                         "loadvars read openWB/"+get_topic(self.prefix)+"/WHImported_temp from mosquito "+str(self.temp))
                 else:
-                    log.MainLogger().info(
+                    log.info(
                         "loadvars read openWB/"+get_topic(self.prefix)+"/WHExport_temp from mosquito "+str(self.temp))
             except ValueError:
-                log.MainLogger().info("Keine Werte auf dem Broker gefunden.")
+                log.info("Keine Werte auf dem Broker gefunden.")
                 if prefix == "bezug":
                     file = "bezugkwh" if value == "watt0pos" else "einspeisungkwh"
                 elif prefix == "pv":
@@ -197,7 +199,7 @@ class Restore():
                     self.temp = str(result)
             write_ramdisk_file(prefix+value, self.temp)
         except Exception:
-            log.MainLogger().exception("Fehler in der Restore-Klasse")
+            log.exception("Fehler in der Restore-Klasse")
         finally:
             return result
 
@@ -211,7 +213,7 @@ class Restore():
             else:
                 client.subscribe("openWB/"+topic+"/WHExport_temp", 2)
         except Exception:
-            log.MainLogger().exception("Fehler in der Restore-Klasse")
+            log.exception("Fehler in der Restore-Klasse")
 
     def __on_message(self, client, userdata, msg):
         """ wartet auf eingehende Topics.
@@ -228,7 +230,7 @@ class Restore():
                         return line[10:26]
                 return "0000000000000000"
         except Exception:
-            log.MainLogger().exception("Fehler in der Restore-Klasse")
+            log.exception("Fehler in der Restore-Klasse")
 
 
 class SimCount:
@@ -263,7 +265,7 @@ class SimCount:
                     counter_export_present = int(data["present_exported"])
                 else:
                     counter_export_present = 0
-                log.MainLogger().debug(
+                log.debug(
                     "Fortsetzen der Simulation: Importzähler: " + str(counter_import_present)+"Ws, Export-Zähler: " +
                     str(counter_export_present) + "Ws"
                 )
@@ -272,28 +274,29 @@ class SimCount:
             pub.Pub().pub(topic+"simulation/power_present", power_present)
 
             if start_new:
-                log.MainLogger().debug("Neue Simulation")
+                log.debug("Neue Simulation")
                 pub.Pub().pub(topic+"simulation/present_imported", 0)
                 pub.Pub().pub(topic+"simulation/present_exported", 0)
                 return 0, 0
             else:
                 # timestamp_previous = timestamp_previous + 1  # do not increment time if calculating areas!
                 seconds_since_previous = timestamp_present - timestamp_previous
-                imp_exp = calculate_import_export(seconds_since_previous, power_previous, power_present)
+                imp_exp = calculate_import_export(
+                    seconds_since_previous, power_previous, power_present)
                 counter_export_present = counter_export_present + imp_exp[1]
                 counter_import_present = counter_import_present + imp_exp[0]
-                log.MainLogger().debug(
+                log.debug(
                     "simcount aufsummierte Energie: Bezug[Ws]: " + str(counter_import_present) +
                     ", Einspeisung[Ws]: " +
                     str(counter_export_present)
                 )
                 energy_positive_kWh = counter_import_present / 3600
                 energy_negative_kWh = counter_export_present / 3600
-                log.MainLogger().info(
+                log.info(
                     "simcount Ergebnis: Bezug[Wh]: " + str(energy_positive_kWh) +
                     ", Einspeisung[Wh]: " + str(energy_negative_kWh)
                 )
-                log.MainLogger().debug(
+                log.debug(
                     "simcount Zwischenergebnisse aktuelle Berechnung: Import: " + str(counter_import_present) +
                     " Export: " + str(counter_export_present) + " Power: " + str(power_present)
                 )
@@ -311,7 +314,7 @@ def calculate_import_export(
     seconds_since_previous: Number, power1: Number, power2: Number
 ) -> typing.Tuple[Number, Number]:
     try:
-        log.MainLogger().debug(
+        log.debug(
             "simcount Berechnungsgrundlage: vergangene Zeit [s]" + str(seconds_since_previous) +
             ", vorherige Leistung[W]: " + str(power1) + ", aktuelle Leistung[W]: " + str(power2)
         )
@@ -323,12 +326,13 @@ def calculate_import_export(
         def energy_function(seconds): return .5 * gradient * seconds ** 2 + power_low * seconds
 
         energy_total = energy_function(seconds_since_previous)
-        log.MainLogger().debug("simcount Gesamtenergie im Zeitintervall: "+str(energy_total))
+        log.debug("simcount Gesamtenergie im Zeitintervall: "+str(energy_total))
         if power_low < 0 < power_high:
             # Berechnung der Fläche im vierten Quadranten -> Export
             power_zero_seconds = -power_low / gradient
             energy_exported = energy_function(power_zero_seconds)
-            log.MainLogger().debug("simcount exportierte Energie im Zeitintervall: "+str(energy_exported))
+            log.debug(
+                "simcount exportierte Energie im Zeitintervall: "+str(energy_exported))
             # Betragsmäßige Gesamtfläche: oberhalb der x-Achse = Import, unterhalb der x-Achse: Export
             return energy_total - energy_exported, energy_exported * -1
         return (energy_total, 0) if energy_total >= 0 else (0, -energy_total)

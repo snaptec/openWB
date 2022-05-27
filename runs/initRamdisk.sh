@@ -399,7 +399,6 @@ initRamdisk(){
 	echo 1 > $RamdiskPath/bootinprogress
 	echo 1 > $RamdiskPath/execdisplay
 	echo 4 > $RamdiskPath/graphtimer
-	echo 0 > $RamdiskPath/fronius_sm_bezug_meterlocation
 
 
 
@@ -612,7 +611,7 @@ initRamdisk(){
 	ra='^-?[0-9]+$'
 	smartmqtemp=$(timeout 1 mosquitto_sub -t openWB/config/get/SmartHome/smartmq)
 	if ! [[ $smartmqtemp =~ $ra ]] ; then
-		smartmqtemp="0"
+		smartmqtemp="1"
 	fi
 	echo $smartmqtemp > $RamdiskPath/smartmq
 
