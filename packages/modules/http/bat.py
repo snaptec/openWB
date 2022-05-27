@@ -12,20 +12,20 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "bat",
         "configuration": {
-            "power_path": "",
-            "imported_path": "none",
-            "exported_path": "none",
-            "soc_path": ""
+            "power_path": None,
+            "imported_path": None,
+            "exported_path": None,
+            "soc_path": None
         }
     }
 
 
 class HttpBat:
-    def __init__(self, device_id: int, component_config: dict, domain: str) -> None:
-        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
-        self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
-        self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
-        self.__get_soc = create_request_function(domain, component_config["configuration"]["soc_path"])
+    def __init__(self, device_id: int, component_config: dict, url: str) -> None:
+        self.__get_power = create_request_function(url, component_config["configuration"]["power_path"])
+        self.__get_imported = create_request_function(url, component_config["configuration"]["imported_path"])
+        self.__get_exported = create_request_function(url, component_config["configuration"]["exported_path"])
+        self.__get_soc = create_request_function(url, component_config["configuration"]["soc_path"])
 
         self.__device_id = device_id
         self.component_config = component_config
