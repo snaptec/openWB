@@ -14,16 +14,16 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "inverter",
         "configuration": {
-            "power_path": "",
-            "counter_path": "none",
+            "power_path": None,
+            "counter_path": None
         }
     }
 
 
 class HttpInverter:
-    def __init__(self, device_id: int, component_config: dict, domain: str) -> None:
-        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
-        self.__get_counter = create_request_function(domain, component_config["configuration"]["counter_path"])
+    def __init__(self, device_id: int, component_config: dict, url: str) -> None:
+        self.__get_power = create_request_function(url, component_config["configuration"]["power_path"])
+        self.__get_counter = create_request_function(url, component_config["configuration"]["counter_path"])
 
         self.__device_id = device_id
         self.component_config = component_config

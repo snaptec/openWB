@@ -12,23 +12,23 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "counter",
         "configuration": {
-            "power_path": "",
-            "imported_path": "none",
-            "exported_path": "none",
-            "current_l1_path": "none",
-            "current_l2_path": "none",
-            "current_l3_path": "none",
+            "power_path": None,
+            "imported_path": None,
+            "exported_path": None,
+            "current_l1_path": None,
+            "current_l2_path": None,
+            "current_l3_path": None,
         }
     }
 
 
 class HttpCounter:
-    def __init__(self, device_id: int, component_config: dict, domain: str) -> None:
-        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
-        self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
-        self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
+    def __init__(self, device_id: int, component_config: dict, url: str) -> None:
+        self.__get_power = create_request_function(url, component_config["configuration"]["power_path"])
+        self.__get_imported = create_request_function(url, component_config["configuration"]["imported_path"])
+        self.__get_exported = create_request_function(url, component_config["configuration"]["exported_path"])
         self.__get_currents = [
-            create_request_function(domain,
+            create_request_function(url,
                                     component_config["configuration"]["current_l" + str(i) + "_path"])
             for i in range(1, 4)
         ]

@@ -3,8 +3,6 @@ import logging
 import re
 from typing import Dict, Union, List
 
-from urllib3.util import parse_url
-
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -21,11 +19,50 @@ def get_default_config() -> dict:
         "type": "http",
         "id": 0,
         "configuration": {
-            "protocol": "http",
-            "domain": None,
-            "port": 80
+            "url": None
         }
     }
+
+
+class HttpConfiguration:
+    def __init__(self, url: str):
+        self.url = url
+
+    @staticmethod
+    def from_dict(device_config: dict):
+        keys = ["url"]
+        try:
+            values = [device_config[key] for key in keys]
+        except KeyError as e:
+            raise Exception(
+                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
+            ) from e
+        return HttpConfiguration(*values)
+
+
+class Http:
+    def __init__(self, name: str, type: str, id: int, configuration: HttpConfiguration) -> None:
+        self.name = name
+        self.type = type
+        self.id = id
+        self.configuration = configuration
+
+    @staticmethod
+    def from_dict(device_config: dict):
+        keys = ["name", "type", "id", "configuration"]
+        try:
+            values = [device_config[key] for key in keys]
+            values = []
+            for key in keys:
+                if isinstance(device_config[key], Dict):
+                    values.append(HttpConfiguration.from_dict(device_config[key]))
+                else:
+                    values.append(device_config[key])
+        except KeyError as e:
+            raise Exception(
+                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
+            ) from e
+        return Http(*values)
 
 
 http_component_classes = Union[bat.HttpBat, counter.HttpCounter, inverter.HttpInverter]
@@ -41,12 +78,9 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, http_component_classes]
         try:
-            self.device_config = device_config
-            port = self.device_config["configuration"]["port"]
-            self.domain = self.device_config["configuration"]["protocol"] + \
-                "://" + self.device_config["configuration"]["domain"]
-            if port is not None:
-                self.domain = self.domain + ":" + str(port)
+            self.device_config = device_config \
+                if isinstance(device_config, Http) \
+                else Http.from_dict(device_config)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 
@@ -54,7 +88,7 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self.components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.domain)
+                self.device_config.id, component_config, self.device_config.configuration.url)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -70,7 +104,7 @@ class Device(AbstractDevice):
                     self.components[component].update()
         else:
             log.warning(
-                self.device_config["name"] +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
@@ -104,14 +138,13 @@ def run_device_legacy(device_config: dict, component_config: dict):
 
 
 def create_legacy_device_config(url: str):
-    parsed_url = parse_url(url)
+    regex = re.compile("^(https?://[^/]+)(.*)")
+    match = regex.search(url)
+    if match is None:
+        raise Exception("Invalid URL <" + url + ">: Absolute HTTP or HTTPS URL required")
+    host_scheme = match.group(1)
     device_config = get_default_config()
-    device_config["configuration"]["protocol"] = parsed_url.scheme
-    device_config["configuration"]["domain"] = parsed_url.hostname
-    if parsed_url.port is not None:
-        device_config["configuration"]["port"] = int(parsed_url.port)
-    else:
-        device_config["configuration"]["port"] = None
+    device_config["configuration"]["url"] = host_scheme
     return device_config
 
 

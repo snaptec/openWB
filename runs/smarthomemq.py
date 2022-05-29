@@ -227,6 +227,8 @@ def getdevicevalues():
     mqtt_all['openWB/SmartHome/Status/wattschalt'] = totalwatt
     mqtt_all['openWB/SmartHome/Status/wattnichtschalt'] = totalwattot
     mqtt_all['openWB/SmartHome/Status/wattnichtHaus'] = totalminhaus
+    mqtt_all['openWB/SmartHome/Status/uberschuss'] = uberschuss
+    mqtt_all['openWB/SmartHome/Status/uberschussoffset'] = uberschussoffset
     sendmq(mqtt_all)
 
 

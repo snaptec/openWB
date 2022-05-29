@@ -174,7 +174,8 @@ def requestData(token: str, vin: str) -> dict:
             
         url = 'https://' + api_server + '/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=' + str(int(time.time())) + '&tireGuardMode=ENABLED'
         headers = {
-            'x-user-agent': 'android(v1.07_20200330);' + brand + ';1.7.0(11152)',
+            'User-Agent': 'Dart/2.14 (dart:io)',
+            'x-user-agent': 'android(SP1A.210812.016.C1);' + brand + ';2.5.2(14945);row',
             'Authorization': (token["token_type"] + " " + token["access_token"])}
         body = getHTTP(url, headers)       
         response = json.loads(body)

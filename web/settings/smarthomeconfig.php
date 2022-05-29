@@ -794,13 +794,14 @@ $numDevices = 9;
 
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="smartmq" class="col-md-4 col-form-label">Smartmq handler verwenden (ohne Config file, noch in Entwicklung)</label>
+								<label for="smartmq" class="col-md-4 col-form-label">Smartmq handler verwenden (ohne Config file)</label>
 								<div class="col">
 									<select name="smartmq" id="smartmq" class="form-control" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
 										<option value="0" data-option="0">Nein</option>
 										<option value="1" data-option="1">Ja</option>
 									</select>
 								</div>
+								<span class="text-danger">Smartmq bietet derweilen die gleichen und mehr Funktionen wie der Smarthomehandler an. Smartmq wird Mitte Juni 2022 den Smarthomehandler komplett ersetzen. Dann wird der obige Parameter fix auf Ja gesetzt und kann nicht mehr geändert werden.</span>
 							</div>
 						</div>
 

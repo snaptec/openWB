@@ -7,7 +7,7 @@ minundpvlademodus(){
 		if [[ $u1p3paktiv == "1" ]]; then
 			u1p3pstat=$(<ramdisk/u1p3pstat)
 			if [[ $u1p3pstat == "1" ]]; then
-				if (( schieflastmax < maximalstromstaerke )); then
+				if (( schieflastmaxa < maximalstromstaerke )); then
 					maximalstromstaerke=$schieflastmaxa
 					openwbDebugLog "PV" 0 "Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert"
 				fi

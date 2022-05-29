@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import logging
 from typing import Dict, List, Union, Optional
-from urllib3.util import parse_url
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
@@ -20,11 +19,50 @@ def get_default_config() -> dict:
         "type": "json",
         "id": 0,
         "configuration": {
-            "protocol": "http",
-            "domain": None,
-            "port": 80
+            "url": None
         }
     }
+
+
+class JsonConfiguration:
+    def __init__(self, url: str):
+        self.url = url
+
+    @staticmethod
+    def from_dict(device_config: dict):
+        keys = ["url"]
+        try:
+            values = [device_config[key] for key in keys]
+        except KeyError as e:
+            raise Exception(
+                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
+            ) from e
+        return JsonConfiguration(*values)
+
+
+class Json:
+    def __init__(self, name: str, type: str, id: int, configuration: JsonConfiguration) -> None:
+        self.name = name
+        self.type = type
+        self.id = id
+        self.configuration = configuration
+
+    @staticmethod
+    def from_dict(device_config: dict):
+        keys = ["name", "type", "id", "configuration"]
+        try:
+            values = [device_config[key] for key in keys]
+            values = []
+            for key in keys:
+                if isinstance(device_config[key], Dict):
+                    values.append(JsonConfiguration.from_dict(device_config[key]))
+                else:
+                    values.append(device_config[key])
+        except KeyError as e:
+            raise Exception(
+                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
+            ) from e
+        return Json(*values)
 
 
 json_component_classes = Union[bat.JsonBat, counter.JsonCounter, inverter.JsonInverter]
@@ -40,11 +78,9 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, json_component_classes]
         try:
-            self.device_config = device_config
-            port = self.device_config["configuration"]["port"]
-            self.domain = self.device_config["configuration"]["protocol"] + \
-                "://" + self.device_config["configuration"]["domain"] + \
-                ":" + str(port) if port else ""
+            self.device_config = device_config \
+                if isinstance(device_config, Json) \
+                else Json.from_dict(device_config)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 
@@ -52,7 +88,7 @@ class Device(AbstractDevice):
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self.components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config)
+                self.device_config.id, component_config)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -63,26 +99,22 @@ class Device(AbstractDevice):
         log.debug("Start device reading " + str(self.components))
         if self.components:
             with MultiComponentUpdateContext(self.components):
-                response = req.get_http_session().get(self.domain, timeout=5)
+                response = req.get_http_session().get(self.device_config.configuration.url, timeout=5)
                 for component in self.components:
                     self.components[component].update(response.json())
         else:
             log.warning(
-                self.device_config["name"] +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
 
-def read_legacy(ip_address: str, component_config: dict, num: Optional[int] = None, **kwargs) -> None:
+def read_legacy(url: str, component_config: dict, num: Optional[int] = None, **kwargs) -> None:
     component_config["configuration"].update(kwargs)
     component_config["id"] = num
 
-    parsed_url = parse_url(ip_address)
     device_config = get_default_config()
-    device_config["configuration"]["protocol"] = parsed_url.scheme
-    device_config["configuration"]["domain"] = parsed_url.hostname
-    device_config["configuration"]["port"] = int(parsed_url.port)
-
+    device_config["configuration"]["url"] = url
     dev = Device(device_config)
     dev.add_component(component_config)
     dev.update()

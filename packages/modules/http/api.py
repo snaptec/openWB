@@ -17,8 +17,8 @@ def request_value(url: str) -> Optional[float]:
         return float(response.text.replace("\n", ""))
 
 
-def create_request_function(domain: str, path: str) -> Callable[[], Optional[float]]:
-    if path == "none":
+def create_request_function(url: str, path: str) -> Callable[[], Optional[float]]:
+    if path == "none" or path is None:
         return lambda: 0
     else:
-        return functools.partial(request_value, domain + path)
+        return functools.partial(request_value, url + path)
