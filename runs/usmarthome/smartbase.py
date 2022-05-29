@@ -1001,9 +1001,13 @@ class Sbase(Sbase0):
         localinsec = int((localhour * 60 * 60) + (localminute * 60))
         if (localinsec < Sbase.nureinschaltinsec) and (Sbase.eindevices > 0):
             self.logClass(2, "(" + str(self.device_nummer) + ") " +
-                          self.device_name + " Prüfe nur Einschaltgruppe " +
-                          "keine Regelung")
-            return
+                          self.device_name + " Prüfe nur Einschaltgruppe ")
+            if (self.gruppe == 'E'):
+                pass
+            else:
+                self.logClass(2, "(" + str(self.device_nummer) + ") " +
+                              self.device_name + " kein Regelung")
+                return
         # onnow = 0 -> normale Regelung
         # onnow = 1 -> Zeitpunkt erreciht, immer ein ohne Ueberschuss regelung
         onnow = 0
