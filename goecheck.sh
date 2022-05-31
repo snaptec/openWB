@@ -73,7 +73,6 @@ goecheck(){
 							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=0 > /dev/null
 						fi
 					fi
-<<<<<<< HEAD
 					fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
 					oldcurrent=$(echo $output | jq -r '.amp')
 					current=$(</var/www/html/openWB/ramdisk/llsolls1)
@@ -102,17 +101,6 @@ goecheck(){
 					current=$(</var/www/html/openWB/ramdisk/llsolls1)
 					if (( oldcurrent != $current )) && (( $current != 0 )) ; then
 						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?amp=$current > /dev/null
-=======
-				fi
-				fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
-				oldcurrent=$(echo $output | jq -r '.amp')
-				current=$(</var/www/html/openWB/ramdisk/llsolls1)
-				if (( oldcurrent != $current )) && (( $current != 0 )); then
-					if (($fwv >= 40)) ; then
-						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amx=$current > /dev/null
-					else
-						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amp=$current > /dev/null
->>>>>>> snaptec-master
 					fi
 				fi
 			fi
