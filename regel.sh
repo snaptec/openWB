@@ -140,7 +140,7 @@ fi
 #ladelog ausfuehren
 ./ladelog.sh &
 graphtimer=$(<ramdisk/graphtimer)
-if (( graphtimer < 4 )); then
+if (( graphtimer < 5 )); then
 	graphtimer=$((graphtimer+1))
 	echo $graphtimer > ramdisk/graphtimer
 else
