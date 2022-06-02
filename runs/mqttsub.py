@@ -655,12 +655,12 @@ def on_message(client, userdata, msg):
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/u1p3p/nachtPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/u1p3p/minundpvPhases"):
-                if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+                if (int(msg.payload) >= 1 and int(msg.payload) <= 4):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pminundpv=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/u1p3p/minundpvPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/u1p3p/nurpvPhases"):
-                if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+                if (int(msg.payload) >= 1 and int(msg.payload) <= 4):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pnurpv=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/u1p3p/nurpvPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
