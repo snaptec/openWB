@@ -464,21 +464,28 @@ $numDevices = 9;
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
-											<label class="col-md-4 col-form-label">Periodisch ausschalten...</label>
+											<label class="col-md-4 col-form-label">Einschalt/Ausschaltgruppe...</label>
 											<div class="col">
 												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateperDevices<?php echo $devicenum; ?>" name="device_deactivateper" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">nie
 													</label>
 													<label class="btn btn-outline-info">
-														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>1" data-option="1" value="1">jede volle Stunde
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>1" data-option="1" value="1">jede volle Stunde prüfen oder ausschalten
 													</label>
 												 	<label class="btn btn-outline-info">
-														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde prüfen oder ausschalten
 													</label>
+												 	<label class="btn btn-outline-info">
+														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="100" value="100">gehört zu Einschaltgruppe
+													</label>
+
+
+
 												</div>
-												<span class="form-text small">Diese Option (bei jeder vollen Stunde / jede halbe Stunde) sorgt dafür, dass dieses Gerät periodisch ausgestellt wird ohne Ausschaltschwelle / Ausschaltverzögerung zu berücksichtigen. Dann können andere Geräte mit dem freiwerden Überschuss eingeschaltet werden.
+												<span class="form-text small">Diese Option (bei jeder vollen Stunde / jede halbe Stunde) sorgt dafür, dass dieses Gerät periodisch ausgestellt wird ohne Ausschaltschwelle / Ausschaltverzögerung zu berücksichtigen (=Auschaltgruppe). Dann können andere Geräte mit dem freiwerden Überschuss eingeschaltet werden. Sofern andere Geräte zuätzlich in der Einschaltgrupppe definiert werden, werden die Geräte in der Auschaltgruppe nur dann abgestellt wenn genug Überschuss dann da ist um die ganze Einschaltgrupppe anzustellen.
 												</span>
+												<span class="text-danger">Diese Funktion ist in der Entwicklung.</span>
 											</div>
 										</div>
 									</div>
