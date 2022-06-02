@@ -1135,8 +1135,9 @@
 								<label for="pv2kitversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
 								<div class="col">
 									<select name="pv2kitversion" id="pv2kitversion" class="form-control">
-										<option <?php if($pv2kitversionold == 0) echo "selected" ?> value="0">Lovato Zähler</option>
-										<option <?php if($pv2kitversionold == 1) echo "selected" ?> value="1">Eastron SDM630 Zähler</option>
+										<option <?php if($pv2kitversionold == 0) echo "selected" ?> value="0">PV Kit mit MPM3PM Zähler</option>
+										<option <?php if($pv2kitversionold == 1) echo "selected" ?> value="1">PV Kit mit Lovato Zähler</option>
+										<option <?php if($pv2kitversionold == 2) echo "selected" ?> value="2">PV Kit mit Eastron SDM630 Zähler</option>
 									</select>
 								</div>
 							</div>
