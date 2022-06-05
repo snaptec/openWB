@@ -4,6 +4,7 @@ import subprocess
 import json
 import time
 import os
+import urllib.request
 from datetime import datetime, timezone
 
 
@@ -510,6 +511,132 @@ class Slsdm120(Slbase):
         return self.newwatt, self.newwattk
 
 
+class Spbase(Sbase0):
+    def __init__(self):
+        #
+        # setting
+        print('__init__ Spbase executed')
+        self._device_pbip = 'none'
+        self.device_nummer = 0
+
+    def updatepar(self, input_param):
+        self._smart_param = input_param.copy()
+        self.device_nummer = int(self._smart_param.get('device_nummer', '0'))
+        for key, value in self._smart_param.items():
+            if (key == 'device_pbip'):
+                self._device_pbip = value
+            else:
+                self.logClass(2, "(" + str(self.device_nummer) + ") "
+                              + __class__.__name__ + " überlesen " + key +
+                              " " + value)
+
+    def showstat(self, manual, relais):
+        pass
+
+
+class Sbshelly(Spbase):
+    def __init__(self):
+        # setting
+        super().__init__()
+        print('__init__ Sbshelly excuted')
+        self.counter = 0
+        self.led = 9
+        self.event_cnt = 0
+        self.event = 'none'
+        self.oldevent_cnt = 0
+        self.oldevent = 'none'
+
+    def showstat(self, manual, relais):
+        if (manual == 0):  # automatic mode
+            self.pboff()
+        else:   # manual mode
+            if (relais == 0):
+                self.pbon()
+            else:
+                self.pbblink()
+
+    def checkbut(self, manual, relais, manual_control):
+        newmanual = manual
+        newmanual_control = manual_control
+        at = str(urllib.request.urlopen("http://" +
+                                        str(self._device_pbip)
+                                        + "/status",
+                                        timeout=3).read().decode("utf-8"))
+        a = json.loads(at)
+        with open(self._basePath+'/ramdisk/smarthome_device_ret' +
+                  str(self.device_nummer) + '_shelly_bp', 'w') as f:
+            f.write(str(a))
+        self.oldevent_cnt = self.event_cnt
+        self.oldevent = self.event
+        self.event_cnt = int(a['inputs'][0]['event_cnt'])
+        self.event = str(a['inputs'][0]['event'])
+        if (self.oldevent == 'none'):
+            return newmanual, newmanual_control
+        if ((self.event == self.oldevent) and
+           (self.event_cnt == self.oldevent_cnt)):
+            return newmanual, newmanual_control
+        self.logClass(2, "Shelly button pressed (%d) %s %s"
+                      % (self.device_nummer,
+                         self._device_pbip, self.event))
+        # im automatic modus -> ein mal Drücken wechselen auf manual
+        if (manual == 0):
+            newmanual = 1
+            return newmanual, newmanual_control
+        # im manual modus  -> ein mal Drücken wechselen  zwischen on und off
+        if (self.event == 'S'):
+            if (manual_control == 1):
+                newmanual_control = 0
+            else:
+                newmanual_control = 1
+            return newmanual, newmanual_control
+        # im manual modus  -> mehrmals drücken wechselen auf automat
+        newmanual = 0
+        return newmanual, newmanual_control
+
+    def pboff(self):
+        if (self.led == 0):
+            return
+        try:
+            urllib.request.urlopen("http://" + str(self._device_pbip) +
+                                   "/settings?led_status_disable=true",
+                                   timeout=3)
+            self.logClass(2, "Shelly button led off (%d) %s"
+                          % (self.device_nummer,
+                             self._device_pbip))
+
+        except Exception as e1:
+            self.logClass(2, "Shelly button off (%d) %s Fehlermeldung: %s "
+                          % (self.device_nummer,
+                             self._device_pbip, str(e1)))
+        self.led = 0
+
+    def pbon(self):
+        if (self.led == 1):
+            return
+        try:
+            urllib.request.urlopen("http://" + str(self._device_pbip) +
+                                   "/settings?led_status_disable=false",
+                                   timeout=3)
+            self.logClass(2, "Shelly button led on (%d) %s"
+                          % (self.device_nummer,
+                             self._device_pbip))
+        except Exception as e1:
+            self.logClass(2, "Shelly button on (%d) %s Fehlermeldung: %s "
+                          % (self.device_nummer,
+                             self._device_pbip, str(e1)))
+        self.led = 1
+
+    def pbblink(self):
+        self.counter = self.counter + 1
+        if (self.counter < 1):
+            return
+        self.counter = 0
+        if (self.led == 0):
+            self.pbon()
+        else:
+            self.pboff()
+
+
 class Sbase(Sbase0):
     # Instance variablen für ein und Auschaltgruppe
     einschwelle = 0
@@ -520,6 +647,7 @@ class Sbase(Sbase0):
     ausschaltwatt = 0
     einrelais = 0
     nureinschaltinsec = 0
+    eindevstatus = 0
 
     def __init__(self):
         # setting
@@ -547,6 +675,9 @@ class Sbase(Sbase0):
         self.abschalt = 0
         self.device_homeconsumtion = 0
         self.device_manual = 0
+        self.device_manual_control = 0
+        self.newdevice_manual = 0
+        self.newdevice_manual_control = 0
         self.device_type = 'none'
         self._smart_param = {}
         self._uberschussoffset = 0
@@ -578,9 +709,10 @@ class Sbase(Sbase0):
         self._device_ontime = '00:00'
         self._device_onuntiltime = '00:00'
         self._device_nonewatt = 0
-        self.device_manual_control = 0
         self._device_deactivateper = 0
-
+        self._device_pbtype = 'none'
+        self._old_pbtype = 'none'
+        self._mydevicepb = 'none'
         self._oldrelais = '2'
         self._oldwatt = 0
         # mqtt per
@@ -608,6 +740,7 @@ class Sbase(Sbase0):
         self._c_einverz_f = 'N'
         self._dynregel = 0
         self.gruppe = 'none'
+        self.btchange = 0
 
     def __del__(self):
 
@@ -745,6 +878,7 @@ class Sbase(Sbase0):
         elif (self.gruppe == 'E'):
             if (self.relais == 1):
                 Sbase.einrelais = 1
+            Sbase.eindevstatus = max(Sbase.eindevstatus, self.devstatus)
 
     def updatepar(self, input_param):
         self._smart_param = input_param.copy()
@@ -828,6 +962,10 @@ class Sbase(Sbase0):
                 self.device_manual_control = valueint
             elif (key == 'device_deactivateper'):
                 self._device_deactivateper = valueint
+            elif (key == 'device_pbtype'):
+                self._device_pbtype = value
+
+
 # openWB/config/set/SmartHome/Devices/<ID>/mode auf 1 setzen -> Gerät wird
 # als 'Manuell' in der Geräteliste geführt
 # openWB/config/set/SmartHome/Devices/<ID>/device_manual_control -> 0
@@ -887,6 +1025,24 @@ class Sbase(Sbase0):
             self.gruppe = 'none'
         if (self.device_type == 'none'):
             self.device_canswitch = 0
+        if (self._device_pbtype == 'shellypb'):
+            if (self._old_pbtype == 'none'):
+                self._mydevicepb = Sbshelly()
+                self._old_pbtype = 'shelly'
+                self.logClass(2, "(" + str(self.device_nummer) +
+                              ") control Button. Neues Button" +
+                              " device erzeugt Shelly")
+            else:
+                self.logClass(2, "(" + str(self.device_nummer) +
+                              ") Control Button. Nur Parameter " +
+                              " update ")
+            self._mydevicepb.updatepar(input_param)
+        if ((self._device_pbtype == 'none') and
+           (self._old_pbtype == 'shelly')):
+            del self._mydevicepb
+            self._old_pbtype = 'none'
+            self.logClass(2, "(" + str(self.device_nummer) +
+                          ") Control Button gelöscht")
         if (self._device_differentmeasurement == 1):
             if (self._oldmeasuretype1 == self._device_measuretype):
                 self.logClass(2, "(" + str(self.device_nummer) +
@@ -1382,7 +1538,8 @@ class Sbase(Sbase0):
                               str(Sbase.einschwelle) + " Überschuss " +
                               str(self._uberschuss))
                 if (((Sbase.ausschaltwatt + self._uberschuss) >
-                   Sbase.einschwelle) and Sbase.einrelais == 0):
+                   Sbase.einschwelle) and Sbase.einrelais == 0 and
+                   Sbase.eindevstatus == 10):
                     self.logClass(2, "(" + str(self.device_nummer) +
                                   ") " + self.device_name +
                                   " erfolgreich, schalte aus ")
@@ -1643,3 +1800,32 @@ class Sbase(Sbase0):
 
     def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
         pass
+
+    def updatebutton(self):
+        self.newdevice_manual = self.device_manual
+        self.newdevice_manual_control = self.device_manual_control
+        if (self._old_pbtype == 'none'):
+            return
+        self._mydevicepb.showstat(self.device_manual, self.relais)
+        (newmanual, newmanual_control) = self._mydevicepb.checkbut(
+                                         self.device_manual, self.relais,
+                                         self.device_manual_control)
+        if ((self.newdevice_manual == newmanual) and
+           self.newdevice_manual_control == newmanual_control):
+            self.btchange = 0   # keine Änderung
+            return
+        self.newdevice_manual = newmanual
+        self.newdevice_manual_control = newmanual_control
+        self.logClass(2, "(" + str(self.device_nummer) + ") " +
+                      self.device_name +
+                      " Umschaltung manual modus alt/neu " +
+                      str(self.device_manual) + "/" +
+                      str(self.newdevice_manual) +
+                      " on off alt/neu " + str(self.device_manual_control) +
+                      "/" + str(self.newdevice_manual_control))
+        if (self.newdevice_manual == self.device_manual):
+            #  Änderung bezüglich on off
+            self.btchange = 2
+        else:
+            #  Änderung bezüglich mode
+            self.btchange = 1
