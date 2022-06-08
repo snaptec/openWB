@@ -201,6 +201,8 @@ def main():
         password = str(argsDict["pass"])
         vin = str(argsDict["vin"]).upper()
         socfile = str(argsDict["socfile"])
+        meterfile = str(argsDict["meterfile"])
+        statefile = str(argsDict["statefile"])
     except:
         print("Parameters could not be processed")
         raise
@@ -213,10 +215,16 @@ def main():
     except:
         print("Request failed")
         raise 
-        
+    
     try:     
         with open(socfile, 'w') as f:
             f.write(str(int(soc)))
+        state = {}
+        state["soc"] = int(soc)
+        with open(meterfile, 'r') as f:
+            state["meter"] = float(f.read())
+        with open(statefile, 'w') as f:
+            f.write(json.dumps(state))    
     except:
         print("Saving SoC failed")
         raise 
