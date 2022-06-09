@@ -44,5 +44,6 @@ def update(powerfoxid: str, powerfoxuser: str, powerfoxpass: str):
         exit(1)
     log.debug('Watt: ' + str(watt))
 
+
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)

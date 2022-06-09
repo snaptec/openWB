@@ -33,6 +33,7 @@ class JsonCounter:
         config = self.component_config["configuration"]
 
         power = jq.compile(config["jq_power"]).input(response).first()
+        # ToDo: add current or power per phase
         if config["jq_imported"] == "" or config["jq_exported"] == "":
             topic_str = "openWB/set/system/device/{}/component/{}/".format(
                 self.__device_id, self.component_config["id"]

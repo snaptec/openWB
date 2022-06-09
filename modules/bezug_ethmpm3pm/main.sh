@@ -7,14 +7,14 @@ DMOD="MAIN"
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/evu.log"
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 if { [[ $pvwattmodul != "wr_ethmpm3pmaevu" ]] || [[ $pv2wattmodul != "wr2_ethlovatoaevu" ]]; } && [[ $speichermodul != "speicher_sdmaevu" ]]; then
-        bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" >>"${MYLOGFILE}" 2>&1
-        ret=$?
-
-        openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_evu_kit.device" "counter" "${evukitversion}" >>"${MYLOGFILE}" 2>&1
+	ret=$?
+	openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 fi
+
 cat "${RAMDISKDIR}/wattbezug"
