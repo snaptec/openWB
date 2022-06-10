@@ -1,10 +1,8 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="EVU"
 DMOD="MAIN"
-Debug=$debug
 
 #For development only
 #Debug=1
@@ -19,6 +17,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "counter" 
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
-
-wattbezug=$(<${RAMDISKDIR}/wattbezug)
-echo $wattbezug
+cat "${RAMDISKDIR}/wattbezug"

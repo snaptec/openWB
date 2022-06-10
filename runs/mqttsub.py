@@ -188,7 +188,7 @@ def on_message(client, userdata, msg):
                     
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_deactivateper" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 2):
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 100):
                     writetoconfig(shconfigfile,'smarthomedevices','device_deactivateper_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_deactivateper", msg.payload.decode("utf-8"), qos=0, retain=True)
                                         
@@ -655,12 +655,12 @@ def on_message(client, userdata, msg):
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/u1p3p/nachtPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/u1p3p/minundpvPhases"):
-                if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+                if (int(msg.payload) >= 1 and int(msg.payload) <= 4):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pminundpv=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/u1p3p/minundpvPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/u1p3p/nurpvPhases"):
-                if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+                if (int(msg.payload) >= 1 and int(msg.payload) <= 4):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pnurpv=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/u1p3p/nurpvPhases", msg.payload.decode("utf-8"), qos=0, retain=True)

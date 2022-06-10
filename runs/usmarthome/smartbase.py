@@ -511,6 +511,16 @@ class Slsdm120(Slbase):
 
 
 class Sbase(Sbase0):
+    # Instance variablen für ein und Auschaltgruppe
+    einschwelle = 0
+    einverz = 0
+    eindevices = 0
+    #
+    ausdevices = 0
+    ausschaltwatt = 0
+    einrelais = 0
+    nureinschaltinsec = 0
+
     def __init__(self):
         # setting
         print('__init__ Sbase executed')
@@ -597,6 +607,7 @@ class Sbase(Sbase0):
         self._c_einverz = 0
         self._c_einverz_f = 'N'
         self._dynregel = 0
+        self.gruppe = 'none'
 
     def __del__(self):
 
@@ -729,6 +740,11 @@ class Sbase(Sbase0):
         else:
             sendstatus = self.devstatus
         self.mqtt_param[pref + 'Status'] = sendstatus
+        if (self.gruppe == 'A'):
+            Sbase.ausschaltwatt = Sbase.ausschaltwatt + self._oldwatt
+        elif (self.gruppe == 'E'):
+            if (self.relais == 1):
+                Sbase.einrelais = 1
 
     def updatepar(self, input_param):
         self._smart_param = input_param.copy()
@@ -857,6 +873,18 @@ class Sbase(Sbase0):
         self.mqtt_param_del[pref + 'TemperatureSensor1'] = '300'
         self.mqtt_param_del[pref + 'TemperatureSensor2'] = '300'
         self.mqtt_param_del[pref + 'RunningTimeToday'] = '0'
+        if (self._device_deactivateper == 100):
+            self.gruppe = 'E'
+            Sbase.eindevices = Sbase.eindevices + 1
+            workein = self._device_einschaltschwelle
+            Sbase.einschwelle = Sbase.einschwelle + workein
+            workeinverz = self._device_einschaltverzoegerung + 30
+            Sbase.einverz = max(Sbase.einverz, workeinverz)
+        elif (self._device_deactivateper > 0):
+            self.gruppe = 'A'
+            Sbase.ausdevices = Sbase.ausdevices + 1
+        else:
+            self.gruppe = 'none'
         if (self.device_type == 'none'):
             self.device_canswitch = 0
         if (self._device_differentmeasurement == 1):
@@ -971,6 +999,15 @@ class Sbase(Sbase0):
         localhour = int(local_time.strftime(format="%H"))
         localminute = int(local_time.strftime(format="%M"))
         localinsec = int((localhour * 60 * 60) + (localminute * 60))
+        if (localinsec < Sbase.nureinschaltinsec) and (Sbase.eindevices > 0):
+            self.logClass(2, "(" + str(self.device_nummer) + ") " +
+                          self.device_name + " Prüfe nur Einschaltgruppe ")
+            if (self.gruppe == 'E'):
+                pass
+            else:
+                self.logClass(2, "(" + str(self.device_nummer) + ") " +
+                              self.device_name + " kein Regelung")
+                return
         # onnow = 0 -> normale Regelung
         # onnow = 1 -> Zeitpunkt erreciht, immer ein ohne Ueberschuss regelung
         onnow = 0
@@ -1309,8 +1346,9 @@ class Sbase(Sbase0):
                               " Anlauferkennung nun aktiv, eingeschaltet ")
                 self.turndevicerelais(1, 0, 0)
                 return
-        # periodisch ausschalten
-        if (self.relais == 1) and (self._device_deactivateper > 0):
+        # periodisch hart ausschalten
+        if ((self.relais == 1) and (self.gruppe == 'A') and
+           (Sbase.eindevices == 0)):
             self.logClass(2, "(" + str(self.device_nummer) + ") " +
                           self.device_name +
                           " Soll periodisch ausgeschaltet werden " +
@@ -1325,6 +1363,39 @@ class Sbase(Sbase0):
                 self.turndevicerelais(0, 0, 1)
                 self._c_ausverz_f = 'N'
                 return
+        # periodisch prüfen ob ausschalten
+        if ((self.relais == 1) and (self.gruppe == 'A') and
+           (Sbase.eindevices > 0)):
+            self.logClass(2, "(" + str(self.device_nummer) + ") " +
+                          self.device_name +
+                          " Soll periodisch geprüft werden " +
+                          " (1 = volle Stunde / " +
+                          " 2 = volle Stunde + halbe Stunde) " +
+                          str(self._device_deactivateper))
+            if (((self._device_deactivateper == 2) and (localminute == 30)) or
+               (localminute == 00)):
+                self.logClass(2, "(" + str(self.device_nummer) +
+                              ") " + self.device_name +
+                              " akt Leistungsaufnahme Abschaltgruppe " +
+                              str(Sbase.ausschaltwatt) +
+                              " Summe benötigte Einschaltschwelle: " +
+                              str(Sbase.einschwelle) + " Überschuss " +
+                              str(self._uberschuss))
+                if (((Sbase.ausschaltwatt + self._uberschuss) >
+                   Sbase.einschwelle) and Sbase.einrelais == 0):
+                    self.logClass(2, "(" + str(self.device_nummer) +
+                                  ") " + self.device_name +
+                                  " erfolgreich, schalte aus ")
+                    self.turndevicerelais(0, 0, 1)
+                    self._c_ausverz_f = 'N'
+                    # rechne Zeit exclusive einschaltgruppe
+                    local_time = datetime.now(timezone.utc).astimezone()
+                    localh = int(local_time.strftime(format="%H"))
+                    localminute = int(local_time.strftime(format="%M"))
+                    localinsec = int((localh * 60 * 60) + (localminute * 60))
+                    Sbase.nureinschaltinsec = localinsec + Sbase.einverz
+                    return
+
         if ((self.devuberschuss > self._device_einschaltschwelle)
            or (onnow == 1)):
             self._c_ausverz_f = 'N'

@@ -7,11 +7,10 @@ DMOD="PV"
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/nurpv.log"
+	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
-
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_pv_kit.device" "inverter" "${pvkitversion}" "1">>"${MYLOGFILE}" 2>&1
 cat "$RAMDISKDIR/pvwatt"
