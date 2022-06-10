@@ -470,6 +470,9 @@ class Sbase(Sbase0):
                           "device gelöscht " + self._oldmeasuretype1)
             del self._mydevicemeasure
             self._oldmeasuretype1 = 'empty'
+        with open(self._basePath+'/ramdisk/smarthome_device_minhaus_' +
+                  str(self.device_nummer), 'w') as f:
+            f.write(str(self.device_homeconsumtion))
 
     def getueb(self):
         #    (1 = mit Speicher, 2 = mit offset , 0 = manual eingeschaltet)

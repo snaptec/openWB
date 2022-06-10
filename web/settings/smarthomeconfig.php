@@ -622,21 +622,32 @@ $numDevices = 9;
 							</div>
 							<hr class="border-secondary">
 							<div class="form-group">
-							<div class="form-row mb-1">
-							  <label class="col-md-4 col-form-label">Steuerung über Smart Button</label>
-							  <div class="col">
-							    <select class="form-control" name="device_pbtype" id="device_pbtypeDevices<?php echo $devicenum; ?>" data-default="none" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-							      <option value="none" data-option="none" selected="selected">Kein Button</option>
-							      <option value="shellypb" data-option="shellypb">Shelly Button 1</option>
-							    </select>
-							  </div>
-							</div>
-							  <div class="form-row mb-1">
-							    <label for="device_pbipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse vom Button</label>
-							    <div class="col">
-							      <input id="device_pbipDevices<?php echo $devicenum; ?>" name="device_pbip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-							    </div>
-							  </div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Steuerung über Smart Button</label>
+									<div class="col">
+										<select class="form-control" name="device_pbtype" id="device_pbtypeDevices<?php echo $devicenum; ?>" data-default="none" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<option value="none" data-option="none" selected="selected">Kein Button</option>
+											<option value="shellypb" data-option="shellypb">Shelly Button 1</option>
+										</select>
+										<span class="form-text small">
+											Wenn Shelly Button gewählt wird, zeigt Shelly button den Modus (automatisch / manuell) und den an / aus Status vom Gerät an.
+											 Shelly Button nur mit Netzteil betreiben.<br>
+											Wenn Gerät im automatische Modus ist der Leuchtring aus.<br>
+											Wenn Gerät im manuellem Modus ist:<br>
+												- Ist das Gerät aus ist der Leuchtring an.<br>
+												- Ist das Gerät an blinked der Leuchtring langsam.<br>
+											<br>Einmal drücken schaltet das Gerät von dem automatischen Modus in den manuellen Modus.<br>
+											Einmal drücken im manuellen Modus schaltet das Gerät zwischen an und aus hin und her.<br>
+											Zweimal drücken im manuellen Modus schaltet das Gerät in den automatischen Modus.<br>
+										</span>
+									</div>
+								</div>
+								<div class="device_pbtypeDevices<?php echo $devicenum; ?>-option device_pbtypeDevices<?php echo $devicenum; ?>-option-shellypb hide">
+									<label for="device_pbipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse vom Button</label>
+									<div class="col">
+										<input id="device_pbipDevices<?php echo $devicenum; ?>" name="device_pbip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									</div>
+								</div>
 							</div>
 							<hr class="border-secondary">
 							<div class="form-group">
@@ -953,6 +964,14 @@ $numDevices = 9;
 					showSection(".device<?php echo $devicenum; ?>-option-"+data);
 				}
 
+				function visibility_device_pbtypeDevices<?php echo $devicenum; ?>( data ){
+					if( typeof data == 'undefined' ){
+						data = $('#device_pbtypeDevices<?php echo $devicenum; ?>').val();
+					}
+					hideSection(".device_pbtypeDevices<?php echo $devicenum; ?>-option");
+					showSection(".device_pbtypeDevices<?php echo $devicenum; ?>-option-"+data);
+				}
+
 				function visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( data ){
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_differentMeasurementDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
@@ -1026,6 +1045,10 @@ $numDevices = 9;
 						visibility_device_typeDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
 
+					if ( elementId == 'device_pbtypeDevices<?php echo $devicenum; ?>') {
+						visibility_device_pbtypeDevices<?php echo $devicenum; ?>( mqttpayload );
+					}
+
 					if ( elementId == 'device_differentMeasurementDevices<?php echo $devicenum; ?>') {
 						visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
@@ -1060,6 +1083,10 @@ $numDevices = 9;
 
 					$('#device_typeDevices<?php echo $devicenum; ?>').change(function(){
 						visibility_device_typeDevices<?php echo $devicenum; ?>();
+					});
+
+					$('#device_pbtypeDevices<?php echo $devicenum; ?>').change(function(){
+						visibility_device_pbtypeDevices<?php echo $devicenum; ?>();
 					});
 
 					$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
@@ -1108,6 +1135,7 @@ $numDevices = 9;
 				<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
 					visibility_device_configuredDevices<?php echo $devicenum; ?>();
 					visibility_device_typeDevices<?php echo $devicenum; ?>();
+					visibility_device_pbtypeDevices<?php echo $devicenum; ?>();
 					visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
 					visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
 					visibility_device_canSwitchDevices<?php echo $devicenum; ?>();
