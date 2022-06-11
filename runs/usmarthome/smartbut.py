@@ -50,10 +50,16 @@ class Sbshelly(Spbase):
     def checkbut(self, manual, relais, manual_control):
         newmanual = manual
         newmanual_control = manual_control
-        at = str(urllib.request.urlopen("http://" +
-                                        str(self._device_pbip)
-                                        + "/status",
-                                        timeout=3).read().decode("utf-8"))
+        try:
+            at = str(urllib.request.urlopen("http://" +
+                                            str(self._device_pbip)
+                                            + "/status",
+                                            timeout=3).read().decode("utf-8"))
+        except Exception as e1:
+            self.logClass(2, "Shelly button ch (%d) %s Fehlermeldung: %s "
+                          % (self.device_nummer,
+                             self._device_pbip, str(e1)))   
+            return newmanual, newmanual_control                         
         a = json.loads(at)
         with open(self._basePath+'/ramdisk/smarthome_device_ret' +
                   str(self.device_nummer) + '_shelly_bp', 'w') as f:

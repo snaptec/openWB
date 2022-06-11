@@ -1179,6 +1179,7 @@ class Sbase(Sbase0):
     def updatebutton(self):
         self.newdevice_manual = self.device_manual
         self.newdevice_manual_control = self.device_manual_control
+        self.btchange = 0
         if (self._old_pbtype == 'none'):
             return
         self._mydevicepb.showstat(self.device_manual, self.relais)
@@ -1187,7 +1188,7 @@ class Sbase(Sbase0):
                                          self.device_manual_control)
         if ((self.newdevice_manual == newmanual) and
            self.newdevice_manual_control == newmanual_control):
-            self.btchange = 0   # keine Änderung
+            #   keine Änderung
             return
         self.newdevice_manual = newmanual
         self.newdevice_manual_control = newmanual_control
