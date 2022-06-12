@@ -49,6 +49,26 @@ class SmaModbusTcpInverter:
                 power = self.__tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
                 # Gesamtertrag (Wh) [E-Total] SF=2!
                 energy = self.__tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
+            elif self.component_config["configuration"]["version"] == SmaInverterVersion.hybrid:
+                # Leistung des Wechselrichters (inkl Batterie-ladung/-entladung) (W) [Pac]
+                power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
+                if power != self.SMA_INT32_NAN:
+                    # Bei Hybrid Wechselrichter muss man hier die Batterie Lade und Entladeleistung abziehen um auf die echte Generator Leistung zu kommen 
+                    batteriecharge = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
+                    batteriedischarge = self.__tcp_client.read_holding_registers(31395, ModbusDataType.UINT_32, unit=3)
+                    power -= batteriecharge
+                    power -= batteriedischarge
+                
+                # Gesamtertrag (Wh) [E-Total]
+                energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
+                # Batterieladung (Wh) 
+                batteriechargeenergy = self.__tcp_client.read_holding_registers(31397, ModbusDataType.UINT_64, unit=3)
+                # Batterieentladung (Wh) 
+                batteriedischargeenergy = self.__tcp_client.read_holding_registers(31401, ModbusDataType.UINT_64, unit=3)
+                # Bei Hybrid Wechselrichter muss man hier die Batterie Ladung und Entladung abziehen um auf die echte Erzeugte Energie zu kommen 
+                energy -= batteriechargeenergy
+                energy -= batteriedischargeenergy
+                
             else:
                 raise FaultState.error("Unbekannte Version: "+str(self.component_config["configuration"]["version"]))
 

@@ -554,6 +554,7 @@
 									<select name="wrsmaversion" id="wrsmaversion" class="form-control">
 										<option <?php if($wrsmaversionold == 0) echo "selected" ?> value="0">Standard</option>
 										<option <?php if($wrsmaversionold == 1) echo "selected" ?> value="1">Core-2</option>
+										<option <?php if($wrsmaversionold == 2) echo "selected" ?> value="2">TriPower Hybrid</option>
 									</select>
 								</div>
 							</div>
