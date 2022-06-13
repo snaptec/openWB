@@ -186,6 +186,7 @@ def getdevicevalues():
     # dyn daten einschaltgruppe
     Sbase.ausschaltwatt = 0
     Sbase.einrelais = 0
+    Sbase.eindevstatus = 0
     mqtt_all = {}
     for mydevice in mydevices:
         mydevice.getwatt(uberschuss, uberschussoffset)
@@ -429,6 +430,8 @@ if __name__ == "__main__":
     readmq()
     while True:
         #        update_devices()
+        mqtt_man = {}
+        sendmess = 0
         loadregelvars()
         resetmaxeinschaltdauerfunc()
         getdevicevalues()
@@ -449,4 +452,18 @@ if __name__ == "__main__":
                         logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
                                  mydevice.device_name +
                                  " manueller Modus aktiviert, keine Regelung")
+        for i in range(1, (numberOfSupportedDevices+1)):
+            pref = 'openWB/config/set/SmartHome/Devices/' + str(i) + '/'
+            for mydevice in mydevices:
+                if (str(i) == str(mydevice.device_nummer)):
+                    mydevice.updatebutton()
+                    if (mydevice.btchange == 1):
+                        sendmess = 1
+                        mqtt_man[pref + 'mode'] = mydevice.newdevice_manual
+                    if (mydevice.btchange == 2):
+                        sendmess = 1
+                        workman = mydevice.newdevice_manual_control
+                        mqtt_man[pref + 'device_manual_control'] = workman
+        if (sendmess == 1):
+            sendmq(mqtt_man)
         time.sleep(5)
