@@ -54,10 +54,20 @@ class SmaModbusTcpInverter:
                 power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
                 if power != self.SMA_INT32_NAN:
                     # Bei Hybrid Wechselrichter muss man hier die Batterie Lade und Entladeleistung abziehen um auf die echte Generator Leistung zu kommen 
-                    batteriecharge = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
-                    batteriedischarge = self.__tcp_client.read_holding_registers(31395, ModbusDataType.UINT_32, unit=3)
-                    power -= batteriecharge
-                    power -= batteriedischarge
+
+                    # Leider treten hierbei Abweichungen auf die in der Nacht immer wieder Generatorleistung anzeigen (0-50 Watt)
+                    # Um dies zu verhindern schauen wir uns zunächst an ob vom DC Teil überhaupt Leistung kommt.
+                    # ist dies nicht der Fall können wir den power gleich auf 0 setzen. Ansonsten rechnen wir die Batterieladung raus
+                    dcPower = self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3)
+                    if dcPower == 0:
+                        dcPower = self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3)
+                    if dcPower == 0:
+                        power = 0
+                    else:
+                        batteriedischarge = self.__tcp_client.read_holding_registers(31395, ModbusDataType.UINT_32, unit=3)
+                        power -= batteriedischarge
+                        # batteriecharge = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
+                        # power -= batteriecharge
                 
                 # Gesamtertrag (Wh) [E-Total]
                 energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
