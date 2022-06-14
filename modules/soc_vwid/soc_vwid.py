@@ -8,6 +8,7 @@ import asyncio
 import logging
 import time
 import json
+import os
 
 async def main():
 #    logging.basicConfig(level=logging.DEBUG)
@@ -38,7 +39,11 @@ async def main():
         data = await w.get_status()
         if (data):
             print (data['data']['batteryStatus']['currentSOC_pct'])
-            f = open(replyFile, 'w', encoding='utf-8')
+            try:
+                f = open(replyFile, 'w', encoding='utf-8')
+            except:
+                os.system("sudo rm "+replyFile)
+                f = open(replyFile, 'w', encoding='utf-8')
             json.dump(data, f, ensure_ascii=False, indent=4)
             f.close()
 
