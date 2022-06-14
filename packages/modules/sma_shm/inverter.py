@@ -7,7 +7,7 @@ from modules.sma_shm.utils import SpeedwireComponent
 
 def get_default_config() -> dict:
     return {
-        "name": "SMA Smarthome Manager Wechselrichter",
+        "name": "SMA Home Manager Wechselrichter",
         "id": 0,
         "type": "inverter",
         "configuration": {

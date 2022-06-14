@@ -62,6 +62,10 @@ function getXLabels(timestampLabels){
 }
 
 function loadElectricityPriceChart() {
+	if (typeof electricityPriceTimeline === 'undefined') {
+		console.debug("'electricityPriceTimeline' not defined. Skipping chart update.");
+		return
+	}
 	var xLabels = getXLabels(electricityPriceTimeline);
 
 	var electricityPriceChartData = {

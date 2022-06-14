@@ -15,7 +15,7 @@ else
         MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "bat" "${solaxip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "bat" "${solaxip}" "${pv1_ida}" >>${MYLOGFILE} 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"

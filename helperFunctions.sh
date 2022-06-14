@@ -101,6 +101,15 @@ openwbDebugLog() {
 }
 export -f openwbDebugLog
 
+openwbRunLoggingOutput() {
+	$1 2>&1 | while read -r line
+	do
+		# use path to /var/log as link in ramdisk may not be set up yet!
+		echo "$(date +"%Y-%m-%d %H:%M:%S"): $1: $line" >> "/var/log/openWB.log"
+	done
+}
+export -f openwbRunLoggingOutput
+
 # Enable all python scripts to import from the "package"-directory without fiddling with sys.path individually
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 export PYTHONPATH="$SCRIPT_DIR/packages"

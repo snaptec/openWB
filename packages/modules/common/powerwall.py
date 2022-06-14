@@ -10,7 +10,7 @@ from modules.common.req import get_http_session
 from modules.common.store import RAMDISK_PATH
 
 COOKIE_FILE = RAMDISK_PATH / "powerwall_cookie.txt"
-log = logging.getLogger("Powerwall")
+log = logging.getLogger(__name__)
 
 
 class PowerwallHttpClient:
@@ -33,7 +33,7 @@ def _authenticate(session: requests.Session, url: str, email: str, password: str
     """
     response = session.post(
         "https://" + url + "/api/login/Basic",
-        json={"username": "customer", "email": email, "password": password},
+        json={"username": "customer", "email": email, "password": password, "force_sm_off": False},
         verify=False,
         timeout=5
     )

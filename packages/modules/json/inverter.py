@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import jq
 
-from helpermodules import log
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
@@ -14,8 +13,8 @@ def get_default_config() -> dict:
         "id": 0,
         "type": "inverter",
         "configuration": {
-            "jq_power": ".power | .[1]",
-            "jq_counter": ".counter"
+            "jq_power": None,
+            "jq_counter": None
         }
     }
 
@@ -30,7 +29,6 @@ class JsonInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self, response) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         config = self.component_config["configuration"]
 
         power = float(jq.compile(config["jq_power"]).input(response).first())

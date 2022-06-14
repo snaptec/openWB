@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import InverterState
@@ -55,9 +54,8 @@ class PvKitFlex:
             _, counter = self.__sim_count.sim_count(
                 power, topic=topic_str, data=self.__simulation, prefix="pv")
         else:
-            counter = self.__client.get_counter()
+            counter = self.__client.get_exported()
 
-        log.MainLogger().debug("PV-Kit Leistung[W]: "+str(power))
         inverter_state = InverterState(
             power=power,
             counter=counter,

@@ -7,7 +7,10 @@ def get_default_config(**configuration) -> dict:
         "name": "Discovergy Zähler",
         "id": 0,
         "type": "counter",
-        "configuration": configuration
+        "configuration": {
+            "meter_id": None,
+            **configuration
+        }
     }
 
 
