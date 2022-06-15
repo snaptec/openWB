@@ -33,7 +33,7 @@ def get_topic(prefix: str) -> str:
     try:
         if prefix == "bezug":
             topic = "evu"
-        elif prefix == "pv":
+        elif prefix == "pv" or prefix == "pv2":
             topic = prefix
         elif prefix == "speicher":
             topic = "housebattery"
@@ -111,6 +111,9 @@ class SimCountLegacy:
                 if prefix == "bezug":
                     imported = get_existing_imports_exports('bezugkwh')
                     exported = get_existing_imports_exports('einspeisungkwh')
+                elif prefix == "pv2":
+                    imported = 0
+                    exported = get_existing_imports_exports('pv2kwh')
                 elif prefix == "pv":
                     imported = 0
                     exported = get_existing_imports_exports('pvkwh')
@@ -190,6 +193,8 @@ class Restore():
                 log.info("Keine Werte auf dem Broker gefunden.")
                 if prefix == "bezug":
                     file = "bezugkwh" if value == "watt0pos" else "einspeisungkwh"
+                elif prefix == "pv2":
+                    file = "pv2kwh"
                 elif prefix == "pv":
                     file = "pvkwh"
                 else:
