@@ -53,7 +53,7 @@ class SmaModbusTcpInverter:
                 # Leistung des Wechselrichters (inkl Batterie-ladung/-entladung) (W) [Pac]
                 power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
                 if power != self.SMA_INT32_NAN:
-                    # Bei Hybrid Wechselrichter muss man hier die Batterie Lade und Entladeleistung abziehen um auf die echte Generator Leistung zu kommen 
+                    # Bei Hybrid Wechselrichter muss man hier die Batterie Lade und Entladeleistung abziehen um auf die echte Generator Leistung zu kommen
 
                     # Leider treten hierbei Abweichungen auf die in der Nacht immer wieder Generatorleistung anzeigen (0-50 Watt)
                     # Um dies zu verhindern schauen wir uns zunächst an ob vom DC Teil überhaupt Leistung kommt.
@@ -66,19 +66,19 @@ class SmaModbusTcpInverter:
                     else:
                         batteriedischarge = self.__tcp_client.read_holding_registers(31395, ModbusDataType.UINT_32, unit=3)
                         power -= batteriedischarge
-                        # batteriecharge = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
-                        # power -= batteriecharge
-                
+                        batteriecharge = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
+                        power += batteriecharge
+
                 # Gesamtertrag (Wh) [E-Total]
                 energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
-                # Batterieladung (Wh) 
+                # Batterieladung (Wh)
                 batteriechargeenergy = self.__tcp_client.read_holding_registers(31397, ModbusDataType.UINT_64, unit=3)
-                # Batterieentladung (Wh) 
+                # Batterieentladung (Wh)
                 batteriedischargeenergy = self.__tcp_client.read_holding_registers(31401, ModbusDataType.UINT_64, unit=3)
-                # Bei Hybrid Wechselrichter muss man hier die Batterie Ladung und Entladung abziehen um auf die echte Erzeugte Energie zu kommen 
+                # Bei Hybrid Wechselrichter muss man hier die Batterie Ladung und Entladung abziehen um auf die echte Erzeugte Energie zu kommen
                 energy -= batteriechargeenergy
                 energy -= batteriedischargeenergy
-                
+
             else:
                 raise FaultState.error("Unbekannte Version: "+str(self.component_config["configuration"]["version"]))
 
