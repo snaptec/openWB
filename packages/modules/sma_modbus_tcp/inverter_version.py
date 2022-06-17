@@ -5,4 +5,4 @@ from enum import IntEnum
 class SmaInverterVersion(IntEnum):
     default = 0
     core2 = 1
-    hybrid = 2
+    tripower_smart_energy = 2

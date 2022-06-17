@@ -49,7 +49,7 @@ class SmaModbusTcpInverter:
                 power = self.__tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
                 # Gesamtertrag (Wh) [E-Total] SF=2!
                 energy = self.__tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
-            elif self.component_config["configuration"]["version"] == SmaInverterVersion.hybrid:
+            elif self.component_config["configuration"]["version"] == SmaInverterVersion.tripower_smart_energy:
                 # Leistung des Wechselrichters (inkl Batterie-ladung/-entladung) (W) [Pac]
                 power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
                 if power != self.SMA_INT32_NAN:
