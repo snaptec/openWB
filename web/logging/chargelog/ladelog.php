@@ -182,7 +182,10 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Lade-Log - <a href="logging/chargelog/ladelogexport.php">Lade-Log Export</a></small>
+				<small>Sie befinden sich hier: Lade-Log - 
+				  <a href="logging/chargelog/ladelogexport.php">Lade-Log Export</a>
+				  <a href="logging/chargelog/ladelogexportexcel.php">Excel Export</a>
+				</small>
 			</div>
 		</footer>
 
