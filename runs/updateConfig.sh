@@ -2005,36 +2005,6 @@ updateConfig(){
 	if ! grep -Fq "displaylp8max=" $ConfigFile; then
 		echo "displaylp8max=22000" >> $ConfigFile
 	fi
-	if ! grep -Fq "mypeugeot_userlp1=" $ConfigFile; then
-		{
-			echo "mypeugeot_userlp1=User"
-			echo "mypeugeot_passlp1=''"
-			echo "mypeugeot_clientidlp1=ID"
-			echo "mypeugeot_clientsecretlp1=Secret"
-			echo "mypeugeot_userlp2=User"
-			echo "mypeugeot_passlp2=''"
-			echo "mypeugeot_clientidlp2=ID"
-			echo "mypeugeot_clientsecretlp2=Secret"
-		} >> $ConfigFile
-	else
-		sed -i "/mypeugeot_passlp1='/b; s/^mypeugeot_passlp1=\(.*\)/mypeugeot_passlp1=\'\1\'/g" $ConfigFile
-		sed -i "/mypeugeot_passlp2='/b; s/^mypeugeot_passlp2=\(.*\)/mypeugeot_passlp2=\'\1\'/g" $ConfigFile
-	fi
-	if ! grep -Fq "myopel_userlp1=" $ConfigFile; then
-		{
-			echo "myopel_userlp1=User"
-			echo "myopel_passlp1=''"
-			echo "myopel_clientidlp1=ID"
-			echo "myopel_clientsecretlp1=Secret"
-			echo "myopel_userlp2=User"
-			echo "myopel_passlp2=''"
-			echo "myopel_clientidlp2=ID"
-			echo "myopel_clientsecretlp2=Secret"
-		} >> $ConfigFile
-	else
-		sed -i "/myopel_passlp1='/b; s/^myopel_passlp1=\(.*\)/myopel_passlp1=\'\1\'/g" $ConfigFile
-		sed -i "/myopel_passlp2='/b; s/^myopel_passlp2=\(.*\)/myopel_passlp2=\'\1\'/g" $ConfigFile
-	fi
 	if ! grep -Fq "psa_userlp1=" $ConfigFile; then
 		{
 			echo "psa_userlp1=User"
@@ -2103,18 +2073,6 @@ updateConfig(){
 	fi
 	if ! grep -Fq "solaxip=" $ConfigFile; then
 		echo "solaxip=192.168.1.1" >> $ConfigFile
-	fi
-	if ! grep -Fq "mypeugeot_soccalclp1=" $ConfigFile; then
-		echo "mypeugeot_soccalclp1=0" >> $ConfigFile
-	fi
-	if ! grep -Fq "mypeugeot_soccalclp2=" $ConfigFile; then
-		echo "mypeugeot_soccalclp2=0" >> $ConfigFile
-	fi
-	if ! grep -Fq "myopel_soccalclp1=" $ConfigFile; then
-		echo "myopel_soccalclp1=0" >> $ConfigFile;
-	fi
-	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
-		echo "myopel_soccalclp2=0" >> $ConfigFile;
 	fi
 	if ! grep -Fq "psa_soccalclp1=" $ConfigFile; then
 		echo "psa_soccalclp1=0" >> $ConfigFile;

@@ -208,6 +208,15 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/device7_wh
 	echo 0 > $RamdiskPath/device8_wh
 	echo 0 > $RamdiskPath/device9_wh
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_1
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_2
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_3
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_4
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_5
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_6
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_7
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_8
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_9
 	echo 0 > $RamdiskPath/smarthome_device_manual_1
 	echo 0 > $RamdiskPath/smarthome_device_manual_2
 	echo 0 > $RamdiskPath/smarthome_device_manual_3

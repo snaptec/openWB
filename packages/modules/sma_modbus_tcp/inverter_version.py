@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from enum import Enum
+from enum import IntEnum
 
 
-class SmaInverterVersion(Enum):
+class SmaInverterVersion(IntEnum):
     default = 0
     core2 = 1

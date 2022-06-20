@@ -79,9 +79,10 @@ class SonnenbatterieInverter:
         log.debug('Speicher PV Leistung: ' + str(pv_power))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
-        _, exported = self.__sim_count.sim_count(
-            pv_power, topic=topic_str, data=self.simulation, prefix="pv"
-        )
+        _, exported = self.__sim_count.sim_count(pv_power,
+                                                 topic=topic_str,
+                                                 data=self.simulation,
+                                                 prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         return InverterState(
             counter=exported,
             power=pv_power
@@ -99,9 +100,10 @@ class SonnenbatterieInverter:
         log.debug('Speicher PV Leistung: ' + str(pv_power))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
-        _, exported = self.__sim_count.sim_count(
-            pv_power, topic=topic_str, data=self.simulation, prefix="pv"
-        )
+        _, exported = self.__sim_count.sim_count(pv_power,
+                                                 topic=topic_str,
+                                                 data=self.simulation,
+                                                 prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         return InverterState(
             counter=exported,
             power=pv_power

@@ -734,8 +734,6 @@
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
 										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
-										<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
-										<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 										<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">MyRenault</option>
 										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
@@ -1776,195 +1774,6 @@
 									</div>
 								</div>
 							</div>
-							<div id="socmypeugeot" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_userlp1" id="mypeugeot_userlp1" value="<?php echo $mypeugeot_userlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_passlp1" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="mypeugeot_passlp1" id="mypeugeot_passlp1" value="<?php echo $mypeugeot_passlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientidlp1" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientidlp1" id="mypeugeot_clientidlp1" value="<?php echo $mypeugeot_clientidlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientsecretlp1" id="mypeugeot_clientsecretlp1" value="<?php echo $mypeugeot_clientsecretlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Peugeot SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp1old == 0) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp1" id="mypeugeot_soccalclp1Off" value="0"<?php if($mypeugeot_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp1old == 1) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp1" id="mypeugeot_soccalclp1On" value="1"<?php if($mypeugeot_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="peugeotmanualcalcdiv" class="hide">
-											<div class="form-row mb-1">
-												<label for="peugeot_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="peugeot_akkuglp1" value="<?php echo $akkuglp1old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 45-46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="peugeot_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="peugeot_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Peugeot e208 und e2008: 96-98 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_mypeugeot_soccalclp1() {
-										if($('#mypeugeot_soccalclp1Off').prop("checked")) {
-											hideSection('#peugeotmanualcalcdiv');
-										} else {
-											showSection('#peugeotmanualcalcdiv');
-										}
-									}
-
-									$('input[type=radio][name=mypeugeot_soccalclp1]').change(function(){
-										visibility_mypeugeot_soccalclp1();
-									});
-
-									visibility_mypeugeot_soccalclp1();
-								});
-								</script>
-							</div>
-							<div id="socmyopel" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_userlp1" id="myopel_userlp1" value="<?php echo $myopel_userlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_passlp1" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="myopel_passlp1" id="myopel_passlp1" value="<?php echo $myopel_passlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientidlp1" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientidlp1" id="myopel_clientidlp1" value="<?php echo $myopel_clientidlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientsecretlp1" id="myopel_clientsecretlp1" value="<?php echo $myopel_clientsecretlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere MyOpel SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp1old == 0) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp1" id="myopel_soccalclp1Off" value="0"<?php if($myopel_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp1old == 1) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp1" id="myopel_soccalclp1On" value="1"<?php if($myopel_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="opelmanualcalclp1div" class="hide">
-											<div class="form-row mb-1">
-												<label for="opel_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="opel_akkuglp1" value="<?php echo $akkuglp1old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Corsa-e: 45-46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="opel_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="opel_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Corsa-e: 96-98 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_myopel_soccalclp1() {
-										if($('#myopel_soccalclp1Off').prop("checked")) {
-											hideSection('#opelmanualcalclp1div');
-										} else {
-											showSection('#opelmanualcalclp1div');
-										}
-									}
-
-									$('input[type=radio][name=myopel_soccalclp1]').change(function(){
-										visibility_myopel_soccalclp1();
-									});
-
-									visibility_myopel_soccalclp1();
-								});
-								</script>
-							</div>
 							<div id="socpsa" class="hide">
 								<div class="form-group">
 									<div class="card-text alert alert-info">
@@ -2427,8 +2236,6 @@
 							hideSection('#socmuser');
 							hideSection('#socmpass');
 							hideSection('#socmyrenault');
-							hideSection('#socmypeugeot');
-							hideSection('#socmyopel');
 							hideSection('#socpsa');
 							hideSection('#socmanual');
 							hideSection('#soctronity');
@@ -2518,12 +2325,6 @@
 							}
 							if($('#socmodul').val() == 'soc_carnet') {
 								showSection('#soccarnet');
-							}
-							if($('#socmodul').val() == 'soc_mypeugeot') {
-								showSection('#socmypeugeot');
-							}
-							if($('#socmodul').val() == 'soc_myopel') {
-								showSection('#socmyopel');
 							}
 							if($('#socmodul').val() == 'soc_psa') {
 								showSection('#socpsa');
@@ -3111,8 +2912,6 @@
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
 										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
-										<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
-										<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 										<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
 										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
@@ -3612,196 +3411,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
-							<div id="socmypeugeotlp2" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_userlp2" id="mypeugeot_userlp2" value="<?php echo $mypeugeot_userlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_passlp2" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="mypeugeot_passlp2" id="mypeugeot_passlp2" value="<?php echo $mypeugeot_passlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientidlp2" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientidlp2" id="mypeugeot_clientidlp2" value="<?php echo $mypeugeot_clientidlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientsecretlp2" id="mypeugeot_clientsecretlp2" value="<?php echo $mypeugeot_clientsecretlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Peugeot SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp2old == 0) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp2" id="mypeugeot_soccalclp2Off" value="0"<?php if($mypeugeot_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp2old == 1) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp2" id="mypeugeot_soccalclp2On" value="1"<?php if($mypeugeot_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="peugeotmanualcalclp2div" class="hide">
-											<div class="form-row mb-1">
-												<label for="peugeot_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="peugeot_akkuglp2" value="<?php echo $akkuglp2old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Peugeot e208 und e2008: 46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="peugeot_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="peugeot_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Peugeot e208 und e2008: 94-96 Prozent
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_mypeugeot_soccalclp2() {
-										if($('#mypeugeot_soccalclp2Off').prop("checked")) {
-											hideSection('#peugeotmanualcalclp2div');
-										} else {
-											showSection('#peugeotmanualcalclp2div');
-										}
-									}
-
-									$('input[type=radio][name=mypeugeot_soccalclp2]').change(function(){
-										visibility_mypeugeot_soccalclp2();
-									});
-
-									visibility_mypeugeot_soccalclp2();
-								});
-								</script>
-							</div>
-							<div id="socmyopellp2" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_userlp2" id="myopel_userlp2" value="<?php echo $myopel_userlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_passlp2" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="myopel_passlp2" id="myopel_passlp2" value="<?php echo $myopel_passlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientidlp2" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientidlp2" id="myopel_clientidlp2" value="<?php echo $myopel_clientidlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientsecretlp2" id="myopel_clientsecretlp2" value="<?php echo $myopel_clientsecretlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere MyOpel SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp2old == 0) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp2" id="myopel_soccalclp2Off" value="0"<?php if($myopel_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp2old == 1) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp2" id="myopel_soccalclp2On" value="1"<?php if($myopel_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="opelmanualcalclp2div" class="hide">
-											<div class="form-row mb-1">
-												<label for="opel_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="opel_akkuglp2" value="<?php echo $akkuglp2old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Corsa-e: 46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="opel_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="opel_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Corsa-e: 94-96 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_myopel_soccalclp2() {
-										if($('#myopel_soccalclp2Off').prop("checked")) {
-											hideSection('#opelmanualcalclp2div');
-										} else {
-											showSection('#opelmanualcalclp2div');
-										}
-									}
-
-									$('input[type=radio][name=myopel_soccalclp2]').change(function(){
-										visibility_myopel_soccalclp2();
-									});
-
-									visibility_myopel_soccalclp2();
-								});
-								</script>
 							</div>
 							<div id="socpsalp2" class="hide">
 								<div class="form-group">
@@ -4510,8 +4119,6 @@
 							hideSection('#socmyrenaultlp2');
 							hideSection('#soccarnetlp2');
 							hideSection('#socmzeronglp2');
-							hideSection('#socmypeugeotlp2');
-							hideSection('#socmyopellp2');
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
 							hideSection('#socmintervall2');
@@ -4625,12 +4232,6 @@
 							}
 							if($('#socmodul1').val() == 'soc_zeronglp2') {
 								showSection('#socmzeronglp2');
-							}
-							if($('#socmodul1').val() == 'soc_mypeugeotlp2') {
-								showSection('#socmypeugeotlp2');
-							}
-							if($('#socmodul1').val() == 'soc_myopellp2') {
-								showSection('#socmyopellp2');
 							}
 							if($('#socmodul1').val() == 'soc_psalp2') {
 								showSection('#socpsalp2');

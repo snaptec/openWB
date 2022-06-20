@@ -183,6 +183,10 @@ def getdevicevalues():
     totalwatt = 0
     totalwattot = 0
     totalminhaus = 0
+    # dyn daten einschaltgruppe
+    Sbase.ausschaltwatt = 0
+    Sbase.einrelais = 0
+    Sbase.eindevstatus = 0
     mqtt_all = {}
     for mydevice in mydevices:
         mydevice.getwatt(uberschuss, uberschussoffset)
@@ -223,6 +227,16 @@ def getdevicevalues():
              + str(totalwattot))
     logDebug(LOGLEVELDEBUG, "Total Watt nicht im Hausverbrauch: " +
              str(totalminhaus))
+    logDebug(LOGLEVELDEBUG, "Anzahl devices in Auschaltgruppe: " +
+             str(Sbase.ausdevices) + " akt: " + str(Sbase.ausschaltwatt) +
+             " Anzahl devices in Einschaltgruppe: " + str(Sbase.eindevices)
+             )
+    logDebug(LOGLEVELDEBUG, "Einschaltgruppe rel: " + str(Sbase.einrelais) +
+             " Summe Einschaltschwelle: " +
+             str(Sbase.einschwelle) + " max Einschaltverzögerung " +
+             str(Sbase.einverz) + " nur Einschaltgruppe prüfen bis: " +
+             str(Sbase.nureinschaltinsec)
+             )
     mqtt_all['openWB/SmartHome/Status/maxspeicherladung'] = maxspeicher
     mqtt_all['openWB/SmartHome/Status/wattschalt'] = totalwatt
     mqtt_all['openWB/SmartHome/Status/wattnichtschalt'] = totalwattot
@@ -263,6 +277,13 @@ def update_devices():
     global mqtt_cache
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
+    # statische daten einschaltgruppe
+    Sbase.ausdevices = 0
+    Sbase.eindevices = 0
+    Sbase.einverz = 0
+    Sbase.einschwelle = 0
+    # Nur einschaltgruppe in Sekunden
+    Sbase.nureinschaltinsec = 0
     for i in range(1, numberOfSupportedDevices+1):
         device_configured = 0
         device_type = 'none'
@@ -393,6 +414,8 @@ def resetmaxeinschaltdauerfunc():
                         mydevice.c_oldstampeinschaltdauer = 0
                         mydevice.c_oldstampeinschaltdauer_f = 'N'
             resetmaxeinschaltdauer = 1
+            # Nur einschaltgruppe in Sekunden für neuen Tag zurücksetzten
+            Sbase.nureinschaltinsec = 0
             sendmq(mqtt_reset)
     if (int(hour) == 1):
         resetmaxeinschaltdauer = 0
@@ -407,6 +430,8 @@ if __name__ == "__main__":
     readmq()
     while True:
         #        update_devices()
+        mqtt_man = {}
+        sendmess = 0
         loadregelvars()
         resetmaxeinschaltdauerfunc()
         getdevicevalues()
@@ -427,4 +452,18 @@ if __name__ == "__main__":
                         logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
                                  mydevice.device_name +
                                  " manueller Modus aktiviert, keine Regelung")
+        for i in range(1, (numberOfSupportedDevices+1)):
+            pref = 'openWB/config/set/SmartHome/Devices/' + str(i) + '/'
+            for mydevice in mydevices:
+                if (str(i) == str(mydevice.device_nummer)):
+                    mydevice.updatebutton()
+                    if (mydevice.btchange == 1):
+                        sendmess = 1
+                        mqtt_man[pref + 'mode'] = mydevice.newdevice_manual
+                    if (mydevice.btchange == 2):
+                        sendmess = 1
+                        workman = mydevice.newdevice_manual_control
+                        mqtt_man[pref + 'device_manual_control'] = workman
+        if (sendmess == 1):
+            sendmq(mqtt_man)
         time.sleep(5)
