@@ -3,7 +3,7 @@ import logging
 
 from modules.common import modbus
 from modules.common.component_state import InverterState
-from modules.common.fault_state import ComponentInfo
+from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
 from modules.sma_modbus_tcp.inverter_version import SmaInverterVersion
@@ -20,7 +20,7 @@ def get_default_config() -> dict:
     }
 
 
-log = logging.getLogger("SMA ModbusTCP")
+log = logging.getLogger(__name__)
 
 
 class SmaModbusTcpInverter:
@@ -38,7 +38,6 @@ class SmaModbusTcpInverter:
         self.__store.set(self.read_inverter_state())
 
     def read_inverter_state(self) -> InverterState:
-        log.debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
             if self.component_config["configuration"]["version"] == SmaInverterVersion.default:
                 # AC Wirkleistung über alle Phasen (W) [Pac]
@@ -51,7 +50,7 @@ class SmaModbusTcpInverter:
                 # Gesamtertrag (Wh) [E-Total] SF=2!
                 energy = self.__tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
             else:
-                log.error("Unbekannte Version: "+self.component_config["configuration"]["version"])
+                raise FaultState.error("Unbekannte Version: "+str(self.component_config["configuration"]["version"]))
 
             if power == self.SMA_INT32_NAN:
                 power = 0

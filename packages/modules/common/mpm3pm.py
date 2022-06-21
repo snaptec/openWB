@@ -67,6 +67,3 @@ class Mpm3pm:
                 0x0E, [ModbusDataType.UINT_32]*3, unit=self.id)]
         except Exception as e:
             self.__process_error(e)
-
-    def get_counter(self) -> float:
-        return self.get_exported()

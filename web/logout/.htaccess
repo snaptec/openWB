@@ -1,5 +1,5 @@
 AuthType Basic
-AuthUserFile /var/www/html/openWB/web/settings/logout/.passwd
+AuthUserFile /var/www/html/openWB/web/logout/.passwd
 AuthName "openWB Einstellungen"
 require valid-user
 

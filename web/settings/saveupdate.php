@@ -1,3 +1,9 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+	error_log('Diese Seite muss als HTTP-POST aufgerufen werden.');
+	exit('Diese Seite muss als HTTP-POST aufgerufen werden.');
+}
+?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -79,14 +85,16 @@
 			fwrite($fp, $key.'='.$value."\n");
 		}
 		fclose($fp);
+		?>
+		<form action="settings/executeupdate.php" method="post" id="execute_update_form"></form>
+		<script>$('#execute_update_form').submit()</script>
+		<?php
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
 		echo "<script>alert('$msg');</script>";
 		// return to theme on error
 		echo "<script>window.location.href='index.php';</script>";
 	}
-	// if successfully saved to config, start update
-	echo "<script>window.location.href='settings/executeupdate.php';</script>";
 ?>
 	</body>
 </html>

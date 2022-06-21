@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-from helpermodules import log
+import logging
+
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_counter_value_store
+
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -28,10 +31,9 @@ class PowerdogCounter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         with self.__tcp_client:
             home_consumption = self.__tcp_client.read_input_registers(40026, ModbusDataType.INT_32, unit=1)
-        log.MainLogger().debug("Powerdog Hausverbrauch[W]: " + str(home_consumption))
+        log.debug("Powerdog Hausverbrauch[W]: " + str(home_consumption))
         return home_consumption
 
     def set_counter_state(self, power: float) -> None:
@@ -49,5 +51,4 @@ class PowerdogCounter:
             exported=exported,
             power=power
         )
-        log.MainLogger().debug("Powerdog Leistung[W]: " + str(counter_state.power))
         self.__store.set(counter_state)

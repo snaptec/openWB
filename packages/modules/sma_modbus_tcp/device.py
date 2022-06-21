@@ -13,7 +13,7 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.store import get_inverter_value_store
 
 
-log = logging.getLogger("SMA Inverter")
+log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
@@ -40,7 +40,7 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, sma_modbus_tcp_component_classes]
+        self.components = {}  # type: Dict[str, sma_modbus_tcp_component_classes]
         try:
             self.device_config = device_config
         except Exception:
@@ -49,7 +49,7 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"],
                 self.device_config["configuration"]["ip"],
                 component_config))
@@ -60,9 +60,9 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.debug("Start device reading " + str(self._components))
-        if self._components:
-            for component in self._components.values():
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            for component in self.components.values():
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
                 with SingleComponentUpdateContext(component.component_info):
                     component.update()

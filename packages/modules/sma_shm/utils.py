@@ -6,7 +6,7 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.store import ValueStore
 
 T = TypeVar("T")
-log = logging.getLogger("SMA Speedwire")
+log = logging.getLogger(__name__)
 
 
 def _create_serial_matcher(serial: Optional[int]) -> Callable[[dict], bool]:

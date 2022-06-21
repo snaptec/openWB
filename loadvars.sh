@@ -1322,7 +1322,7 @@ loadvars(){
 		echo $ladeleistunglp1 > ramdisk/mqttladeleistunglp1
 	fi
 	if [[ "$oladestatus" != "$ladestatus" ]]; then
-		tempPubList="${tempPubList}\nopenWB/ChargeStatus=${ladelestatus}"
+		tempPubList="${tempPubList}\nopenWB/ChargeStatus=${ladestatus}"
 		echo $ladestatus > ramdisk/mqttlastladestatus
 	fi
 	# TODO: wann wird der Lademodus geändert?

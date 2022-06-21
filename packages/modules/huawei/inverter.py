@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import time
 
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import InverterState
@@ -26,20 +25,21 @@ class HuaweiInverter:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
+        self.simulation = {}
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         time.sleep(0.1)
         power = self.__tcp_client.read_holding_registers(32064, ModbusDataType.INT_32, unit=self.__modbus_id) * -1
 
         topic_str = "openWB/set/system/device/" + \
             str(self.__device_id)+"/component/" + \
             str(self.component_config["id"])+"/"
-        _, counter = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.__simulation, prefix="pv")
+        _, counter = self.__sim_count.sim_count(power,
+                                                topic=topic_str,
+                                                data=self.simulation,
+                                                prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         inverter_state = InverterState(
             power=power,
             counter=counter

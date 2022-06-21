@@ -8,7 +8,7 @@ from modules.sma_shm.utils import SpeedwireComponent
 
 def get_default_config() -> dict:
     return {
-        "name": "SMA Smarthome Manager Zähler",
+        "name": "SMA Home Manager Zähler",
         "id": None,
         "type": "counter",
         "configuration": {

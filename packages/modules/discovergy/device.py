@@ -14,7 +14,11 @@ def get_default_config(id: int = 0, **configuration) -> dict:
         "name": "Discovergy",
         "type": "discovergy",
         "id": id,
-        "configuration": configuration
+        "configuration": {
+            "user": None,
+            "password": None,
+            **configuration
+        }
     }
 
 
@@ -23,7 +27,7 @@ component_registry = {
     "inverter": inverter.create_component
 }
 
-log = logging.getLogger("Discovergy")
+log = logging.getLogger(__name__)
 
 
 class Device(AbstractDevice):
@@ -31,7 +35,7 @@ class Device(AbstractDevice):
         settings = device_config["configuration"]
         self.__session = get_http_session()
         self.__session.auth = (settings["user"], settings["password"])
-        self._components = []  # type: List[DiscovergyComponent]
+        self.components = []  # type: List[DiscovergyComponent]
 
     def add_component(self, component_config: dict) -> None:
         try:
@@ -40,10 +44,10 @@ class Device(AbstractDevice):
             raise Exception(
                 "Unknown component type <%s>, known types are: <%s>", e, ','.join(component_registry.keys())
             )
-        self._components.append(factory(component_config))
+        self.components.append(factory(component_config))
 
     def update(self) -> None:
-        for component in self._components:
+        for component in self.components:
             with SingleComponentUpdateContext(component.component_info):
                 component.update(self.__session)
 

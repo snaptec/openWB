@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-
 from typing import Dict
-from helpermodules import log
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import InverterState
@@ -28,21 +26,22 @@ class AlphaEssInverter:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
+        self.simulation = {}
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
         self.__device_config = device_config
 
     def update(self, unit_id: int) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
         reg_p = self.__version_factory()
         power = self.__get_power(unit_id, reg_p)
 
         topic_str = "openWB/set/system/device/" + \
             str(self.__device_id)+"/component/" + \
             str(self.component_config["id"])+"/"
-        _, counter = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.__simulation, prefix="pv")
+        _, counter = self.__sim_count.sim_count(power,
+                                                topic=topic_str,
+                                                data=self.simulation,
+                                                prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         inverter_state = InverterState(
             power=power,
             counter=counter
@@ -63,5 +62,4 @@ class AlphaEssInverter:
             ]
         powers[0] = abs(powers[0])
         power = sum(powers) * -1
-        log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: " + str(powers))
         return power
