@@ -56,7 +56,7 @@ SAMPLE_COUNTER_STATE = CounterState(
 )
 SAMPLE_INVERTER_STATE = InverterState(
     power=-5786,
-    counter=200
+    exported=200
 )
 
 SAMPLE = {'1042': {'1': 5320},

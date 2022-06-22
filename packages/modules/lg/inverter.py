@@ -30,10 +30,10 @@ class LgInverter:
         topic_str = "openWB/set/system/device/" + \
             str(self.__device_id)+"/component/" + \
             str(self.component_config["id"])+"/"
-        _, counter = self.__sim_count.sim_count(
+        _, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.__simulation, prefix="pv")
         inverter_state = InverterState(
-            counter=counter,
+            exported=exported,
             power=power
         )
         self.__store.set(inverter_state)

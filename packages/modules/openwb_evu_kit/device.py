@@ -34,13 +34,13 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.device_config = device_config
         # type: Dict[str, Union[bat.BatKit, counter.EvuKit, inverter.PvKit]]
-        self._components = {}
+        self.components = {}
         self.client = modbus.ModbusClient("192.168.193.15", 8899)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["type"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["type"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"], component_config, self.client))
         else:
             raise Exception(
@@ -49,12 +49,12 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.debug("Start device reading " + str(self._components))
-        if self._components:
-            for component in self._components:
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            for component in self.components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                with SingleComponentUpdateContext(self.components[component].component_info):
+                    self.components[component].update()
                     time.sleep(0.2)
         else:
             log.warning(

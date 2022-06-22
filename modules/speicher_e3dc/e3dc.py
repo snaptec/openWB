@@ -60,7 +60,7 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
                 pass
         log.debug("wr update pv_other %s pv_total %d", pv_other, pv_total)
         _, counter_pv = SimCountFactory().get_sim_counter()().sim_count(pv_total, prefix="pv")
-        get_inverter_value_store(1).set(InverterState(counter=counter_pv, power=pv_total))
+        get_inverter_value_store(1).set(InverterState(exported=counter_pv, power=pv_total))
 
 
 def update(address1: str, address2: str, read_external: int, pvmodul: str):

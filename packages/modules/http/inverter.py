@@ -15,7 +15,7 @@ def get_default_config() -> dict:
         "type": "inverter",
         "configuration": {
             "power_path": None,
-            "counter_path": None
+            "exported_path": None
         }
     }
 
@@ -23,7 +23,7 @@ def get_default_config() -> dict:
 class HttpInverter:
     def __init__(self, device_id: int, component_config: dict, url: str) -> None:
         self.__get_power = create_request_function(url, component_config["configuration"]["power_path"])
-        self.__get_counter = create_request_function(url, component_config["configuration"]["counter_path"])
+        self.__get_exported = create_request_function(url, component_config["configuration"]["exported_path"])
 
         self.__device_id = device_id
         self.component_config = component_config
@@ -34,19 +34,19 @@ class HttpInverter:
 
     def update(self) -> None:
         power = (-self.__get_power() if compatibility.is_ramdisk_in_use() else self.__get_power())
-        counter = self.__get_counter()
-        if counter is None:
+        exported = self.__get_exported()
+        if exported is None:
             topic_str = "openWB/set/system/device/" + \
                 str(self.__device_id)+"/component/" + \
                 str(self.component_config["id"])+"/"
-            _, counter = self.__sim_count.sim_count(power,
-                                                    topic=topic_str,
-                                                    data=self.simulation,
-                                                    prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
+            _, exported = self.__sim_count.sim_count(power,
+                                                     topic=topic_str,
+                                                     data=self.simulation,
+                                                     prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
 
         inverter_state = InverterState(
             # for compatibility: in 1.x power URL values are positive!
             power=power,
-            counter=counter
+            exported=exported
         )
         self.__store.set(inverter_state)

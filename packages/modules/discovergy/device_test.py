@@ -15,6 +15,11 @@ SAMPLE_COUNTER_STATE = CounterState(
     currents=[7, 8, 9],
     powers=[10, 11, 12],
 )
+SAMPLE_INVERTER_STATE = InverterState(
+    exported=2,
+    power=3,
+    currents=[-7, -8, -9],
+)
 SAMPLE_USER = "some username"
 SAMPLE_PASSWORD = "some password"
 SAMPLE_COUNTER_METER_ID = "some counter meter id"
@@ -69,6 +74,6 @@ class TestDiscovergyDevice:
     def assert_inverter_state_set(self):
         assert self.mock_inverter_value_store.set.call_count == 1
         inverter_state = self.mock_inverter_value_store.set.call_args[0][0]  # type: InverterState
-        assert inverter_state.power == SAMPLE_COUNTER_STATE.power
-        assert inverter_state.currents == SAMPLE_COUNTER_STATE.currents
-        assert inverter_state.counter == SAMPLE_COUNTER_STATE.exported
+        assert inverter_state.power == SAMPLE_INVERTER_STATE.power
+        assert inverter_state.currents == SAMPLE_INVERTER_STATE.currents
+        assert inverter_state.exported == SAMPLE_INVERTER_STATE.exported

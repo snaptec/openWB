@@ -36,7 +36,7 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
 
     # mock.assert_called_once()
     inverter_state = mock.call_args[0][0]
-    assert inverter_state.counter == 0
+    assert inverter_state.exported == 0
     assert inverter_state.currents == [0, 0, 0]
     assert inverter_state.power == -196.08712768554688
 

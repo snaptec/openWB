@@ -20,7 +20,7 @@ def create_component(component_config: dict):
 
     def persister(reading: CounterState):
         store.set(InverterState(
-            counter=reading.exported,
+            exported=reading.exported,
             power=reading.power,
             currents=reading.currents
         ))
