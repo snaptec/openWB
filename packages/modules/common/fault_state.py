@@ -40,7 +40,7 @@ class FaultState(Exception):
                           traceback.format_exc())
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
-                topic = component_type.type_to_topic_mapping(component_info.type)
+                topic = component_type.type_topic_mapping_compatibility(component_info.type)
                 prefix = "openWB/set/" + topic + "/"
                 if component_info.id is not None:
                     if topic == "lp":
@@ -59,18 +59,6 @@ class FaultState(Exception):
                     "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_state", self.fault_state.value)
         except Exception:
             log.exception("Fehler im Modul fault_state")
-
-    def __type_topic_mapping_comp(self, component_type: str) -> str:
-        if "bat" in component_type:
-            return "houseBattery"
-        elif "counter" in component_type:
-            return "evu"
-        elif "inverter" in component_type:
-            return "pv"
-        elif "vehicle" in component_type:
-            return "lp"
-        else:
-            raise Exception("Unbekannter Komponenten-Typ: " + component_type)
 
     @staticmethod
     def error(message: str) -> "FaultState":
