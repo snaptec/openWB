@@ -58,27 +58,25 @@ class SmaModbusTcpInverter:
                     # Leider treten hierbei Abweichungen auf die in der Nacht immer wieder Generatorleistung anzeigen (0-50 Watt)
                     # Um dies zu verhindern schauen wir uns zunächst an ob vom DC Teil überhaupt Leistung kommt.
                     # ist dies nicht der Fall können wir den power gleich auf 0 setzen. Ansonsten rechnen wir die Batterieladung raus
-                    dcPower = self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3)
-                    if dcPower == 0:
-                        dcPower = self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3)
-                    if dcPower == 0:
+                    dc_power = self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3)
+                    if dc_power == 0:
+                        dc_power = self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3)
+                    if dc_power == 0:
                         power = 0
                     else:
-                        batteriedischarge = self.__tcp_client.read_holding_registers(31395, ModbusDataType.UINT_32, unit=3)
-                        power -= batteriedischarge
-                        batteriecharge = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
-                        power += batteriecharge
+                        battery_discharge_power = self.__tcp_client.read_holding_registers(31395, ModbusDataType.UINT_32, unit=3)
+                        power -= battery_discharge_power
+                        battery_charge_power = self.__tcp_client.read_holding_registers(31393, ModbusDataType.UINT_32, unit=3)
+                        power += battery_charge_power
 
                 # Gesamtertrag (Wh) [E-Total]
                 energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
-                # Batterieladung (Wh)
-                batteriechargeenergy = self.__tcp_client.read_holding_registers(31397, ModbusDataType.UINT_64, unit=3)
-                # Batterieentladung (Wh)
-                batteriedischargeenergy = self.__tcp_client.read_holding_registers(31401, ModbusDataType.UINT_64, unit=3)
-                # Bei Hybrid Wechselrichter muss man hier die Batterie Ladung und Entladung abziehen um auf die echte Erzeugte Energie zu kommen
-                energy -= batteriechargeenergy
-                energy -= batteriedischargeenergy
-
+                # Batterieentladung (Wh) (Diese hat einen negativen Einfluss auf die Gesamtenergie)
+                battery_discharge_energy = self.__tcp_client.read_holding_registers(31401, ModbusDataType.UINT_64, unit=3)
+                energy -= battery_discharge_energy
+                # Batterieladung (Wh) (Diese hat einen positiven Einfluss auf die Gesamtenergie)
+                battery_charge_enegery = self.__tcp_client.read_holding_registers(31397, ModbusDataType.UINT_64, unit=3)
+                energy += battery_charge_enegery
             else:
                 raise FaultState.error("Unbekannte Version: "+str(self.component_config["configuration"]["version"]))
 
