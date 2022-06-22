@@ -30,6 +30,6 @@ class SmaWebboxInverter:
             'http://' + self.__device_address + '/rpc', data=data, timeout=3).json()
 
         return InverterState(
-            counter=float(response["result"]["overview"][2]["value"]) * 1000,
+            exported=float(response["result"]["overview"][2]["value"]) * 1000,
             power=-int(response["result"]["overview"][0]["value"])
         )

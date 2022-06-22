@@ -88,9 +88,9 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, tesla_component_classes]
+        self.components = {}  # type: Dict[str, tesla_component_classes]
         try:
-            self.config = device_config \
+            self.device_config = device_config \
                 if isinstance(device_config, Tesla) \
                 else Tesla.from_dict(device_config)
         except Exception:
@@ -99,7 +99,7 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 component_config))
         else:
             raise Exception(
@@ -110,10 +110,10 @@ class Device(AbstractDevice):
     def update(self) -> None:
         log.debug("Beginning update")
         cookies = None
-        address = self.config.configuration.ip_address
-        email = self.config.configuration.email
-        password = self.config.configuration.password
-        with MultiComponentUpdateContext(self._components):
+        address = self.device_config.configuration.ip_address
+        email = self.device_config.configuration.email
+        password = self.device_config.configuration.password
+        with MultiComponentUpdateContext(self.components):
             try:
                 cookies = json.loads(COOKIE_FILE.read_text())
             except FileNotFoundError:
@@ -137,14 +137,14 @@ class Device(AbstractDevice):
             log.debug("Update completed successfully")
 
     def __update_components(self, client: PowerwallHttpClient):
-        if self._components:
-            for component in self._components:
+        if self.components:
+            for component in self.components:
                 # read aggregate
                 aggregate = client.get_json("/api/meters/aggregates")
-                self._components[component].update(client, aggregate)
+                self.components[component].update(client, aggregate)
         else:
             log.warning(
-                self.config.name +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 

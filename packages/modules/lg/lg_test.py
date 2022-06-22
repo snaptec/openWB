@@ -36,7 +36,7 @@ def assert_counter_state_correct(state: CounterState):
 
 def assert_inverter_state_correct(state: InverterState):
     assert state.power == 0
-    assert state.counter == 200
+    assert state.exported == 200
 
 
 def test_valid_login(monkeypatch, dev: device.Device):

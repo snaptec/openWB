@@ -32,14 +32,14 @@ def type_to_topic_mapping(component_type: str) -> str:
         return component_type
 
 
-def type_topic_mapping_compatibility(component_type: str) -> str:
+def type_topic_mapping_comp(component_type: str) -> str:
     if "bat" in component_type:
         return "houseBattery"
     elif "counter" in component_type:
         return "evu"
     elif "inverter" in component_type:
         return "pv"
-    elif "vehicle" in component_type:
+    elif "vehicle" in component_type or "chargepoint" in component_type:
         return "lp"
     else:
         raise Exception("Unbekannter Komponenten-Typ: " + component_type)
