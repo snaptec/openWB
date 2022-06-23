@@ -47,16 +47,14 @@ class PvKitFlex:
                 power = power*-1
             currents = self.__client.get_currents()
 
-        if isinstance(self.__client, Lovato):
-            topic_str = "openWB/set/system/device/" + \
-                str(self.__device_id)+"/component/" + \
-                str(self.component_config["id"])+"/"
-            _, exported = self.__sim_count.sim_count(power,
-                                                     topic=topic_str,
-                                                     data=self.simulation,
-                                                     prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
-        else:
-            exported = self.__client.get_exported()
+            if isinstance(self.__client, Lovato):
+                topic_str = "openWB/set/system/device/" + \
+                    str(self.__device_id)+"/component/" + \
+                    str(self.component_config["id"])+"/"
+                prefix = "pv%s" % ("" if self.component_config["id"] == 1 else "2")
+                _, exported = self.__sim_count.sim_count(power, topic=topic_str, data=self.simulation, prefix=prefix)
+            else:
+                exported = self.__client.get_exported()
 
         inverter_state = InverterState(
             power=power,
