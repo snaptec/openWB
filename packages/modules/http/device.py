@@ -173,12 +173,12 @@ def read_legacy_counter(power_path: str, imported_path: str, exported_path: str,
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
-def read_legacy_inverter(power_path: str, counter_path: str, num: int):
+def read_legacy_inverter(power_path: str, exported_path: str, num: int):
     component_config = inverter.get_default_config()
     component_config["id"] = num
     component_config["configuration"] = create_paths_dict(
         power_path=power_path,
-        counter_path=counter_path,
+        exported_path=exported_path,
     )
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
