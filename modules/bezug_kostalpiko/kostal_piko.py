@@ -31,6 +31,13 @@ def update(wrkostalpikoip: str, speichermodul: str):
     if pvwatt > 5:
         pvwatt = pvwatt*-1
 
+    # Bereinigen der WR-Leistung, um die Batterieentladeleistung, falls ein Hybrid-System vorhanden ist.
+    if speichermodul == "speicher_bydhv":
+        with open("/var/www/html/openWB/ramdisk/speicherleistung", "r") as f:
+            speicherleistung = float(f.read())
+        if speicherleistung < 0:
+            pvwatt -= speicherleistung
+
     # zur weiteren Verwendung im Webinterface
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
         f.write(str(pvwatt))
