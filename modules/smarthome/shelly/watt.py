@@ -6,8 +6,8 @@ import json
 import urllib.request
 
 
-def totalPowerFromShellyJson(answer, chan):
-    if (chan == 0):
+def totalPowerFromShellyJson(answer, workchan):
+    if (workchan == 0):
         if 'meters' in answer:
             meters = answer['meters']   # shelly
         else:
@@ -17,11 +17,11 @@ def totalPowerFromShellyJson(answer, chan):
         for meter in meters:
             total = total + meter['power']
         return int(total)
-    chan = chan - 1
+    workchan = workchan - 1
     try:
-        total = int(answer['meters'][chan]['power'])   # Abfrage shelly
+        total = int(answer['meters'][workchan]['power'])   # Abfrage shelly
     except Exception:
-        total = int(answer['emeters'][chan]['power'])  # Abfrage shellyEM
+        total = int(answer['emeters'][workchan]['power'])  # Abfrage shellyEM
     return int(total)
 
 
@@ -102,21 +102,23 @@ try:
         aktpower = totalPowerFromShellyJson(answer, chan)
     else:
         if (chan > 0):
-            chan = chan - 1
-        sw = 'switch:' + str(chan)
+            workchan = chan - 1
+        else:
+            workchan = chan
+        sw = 'switch:' + str(workchan)
         aktpower = int(answer[sw]['apower'])
 except Exception:
     pass
 
 try:
-    if (gen == "1"):
-        if (chan > 0):
-            chan = chan - 1
-        relais = int(answer['relays'][chan]['ison'])
+    if (chan > 0):
+        workchan = chan - 1
     else:
-        if (chan > 0):
-            chan = chan - 1
-        sw = 'switch:' + str(chan)
+        workchan = chan
+    if (gen == "1"):
+        relais = int(answer['relays'][workchan]['ison'])
+    else:
+        sw = 'switch:' + str(workchan)
         relais = int(answer[sw]['output'])
 except Exception:
     pass
