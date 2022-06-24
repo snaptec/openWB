@@ -40,6 +40,8 @@ class Slbase(Sbase0):
         self._device_actor = 'none'
         self._device_username = 'none'
         self._device_password = 'none'
+        self._device_measchan = 0
+        self._device_chan = 0
 
     def updatepar(self, input_param):
         self._smart_param = input_param.copy()
@@ -87,6 +89,10 @@ class Slbase(Sbase0):
                 self._device_measureportsdm = value
             elif (key == 'device_measuresmaage'):
                 self._device_measuresmaage = valueint
+            elif (key == 'device_measchan'):
+                self._device_measchan = valueint
+            elif (key == 'device_chan'):
+                self._device_chan = valueint                
             elif (key == 'device_measuresmaser'):
                 self._device_measuresmaser = value
             elif (key == 'device_measureid'):
@@ -162,15 +168,16 @@ class Slshelly(Slbase):
         print('__init__ Slshelly excuted')
 
     def getwattread(self):
-        self._watt(self._device_ip)
+        self._watt(self._device_ip, self._device_chan)
 
     def sepwattread(self):
-        self._watt(self._device_measureip)
+        self._watt(self._device_measureip, self._device_measchan)
         return self.newwatt, self.newwattk
 
-    def _watt(self, ip):
+    def _watt(self, ip, chan):
         argumentList = ['python3', self._prefixpy + 'shelly/watt.py',
-                        str(self.device_nummer), str(ip), '0']
+                        str(self.device_nummer), str(ip), '0',
+                        str(chan)]
         try:
             proc = subprocess.Popen(argumentList)
             proc.communicate()
