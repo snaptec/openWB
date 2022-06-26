@@ -87,5 +87,5 @@ class SmaModbusTcpInverter:
 
             return InverterState(
                 power=-max(power_total, 0),
-                counter=energy
+                exported=energy
             )

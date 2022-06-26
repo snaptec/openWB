@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import logging
-import requests
 
 from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
 from modules.common.fault_state import FaultState
+from modules.common import req
 
 log = logging.getLogger(__name__)
 
@@ -32,9 +32,7 @@ class SonnenbatterieInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def __read_variant_1(self):
-        response = requests.get("http://" + self.__device_address + "/api/v1/status", timeout=5)
-        response.raise_for_status()
-        return response.json()
+        return req.get_http_session().get("http://" + self.__device_address + "/api/v1/status", timeout=5).json()
 
     def __update_variant_1(self) -> InverterState:
         # Auslesen einer Sonnenbatterie 8 oder 10 über die integrierte JSON-API v1 des Batteriesystems
@@ -79,17 +77,18 @@ class SonnenbatterieInverter:
         log.debug('Speicher PV Leistung: ' + str(pv_power))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
-        _, exported = self.__sim_count.sim_count(
-            pv_power, topic=topic_str, data=self.simulation, prefix="pv"
-        )
+        _, exported = self.__sim_count.sim_count(pv_power,
+                                                 topic=topic_str,
+                                                 data=self.simulation,
+                                                 prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         return InverterState(
-            counter=exported,
+            exported=exported,
             power=pv_power
         )
 
     def __read_variant_2_element(self, element: str) -> str:
-        response = requests.get('http://' + self.__device_address + ':7979/rest/devices/battery/' + element, timeout=5)
-        response.raise_for_status()
+        response = req.get_http_session().get('http://' + self.__device_address +
+                                              ':7979/rest/devices/battery/' + element, timeout=5)
         response.encoding = 'utf-8'
         return response.text.strip(" \n\r")
 
@@ -99,11 +98,12 @@ class SonnenbatterieInverter:
         log.debug('Speicher PV Leistung: ' + str(pv_power))
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
-        _, exported = self.__sim_count.sim_count(
-            pv_power, topic=topic_str, data=self.simulation, prefix="pv"
-        )
+        _, exported = self.__sim_count.sim_count(pv_power,
+                                                 topic=topic_str,
+                                                 data=self.simulation,
+                                                 prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         return InverterState(
-            counter=exported,
+            exported=exported,
             power=pv_power
         )
 

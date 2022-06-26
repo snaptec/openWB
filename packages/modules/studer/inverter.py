@@ -50,15 +50,15 @@ class StuderInverter:
                 mb_register = 46  # MB:46; ID: 15023; Desc: Total PV produced energy MWh
             elif vc_type == 'VT':
                 mb_register = 18  # MB:18; ID: 11009; Desc: Total produced energy MWh
-            counter = 0
+            exported = 0
             for i in range(1, vc_count + 1):
                 mb_unit_dev = mb_unit + i
-                counter += self.__tcp_client.read_input_registers(mb_register, ModbusDataType.FLOAT_32,
-                                                                  unit=mb_unit_dev)
-            counter = counter * 1000000
+                exported += self.__tcp_client.read_input_registers(mb_register, ModbusDataType.FLOAT_32,
+                                                                   unit=mb_unit_dev)
+            exported = exported * 1000000
 
         inverter_state = InverterState(
             power=power,
-            counter=counter
+            exported=exported
         )
         self.__store.set(inverter_state)

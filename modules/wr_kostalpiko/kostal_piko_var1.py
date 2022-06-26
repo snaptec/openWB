@@ -34,7 +34,7 @@ def update(num: int, speichermodul: str, wrkostalpikoip: str):
     # Gesamtzählerstand am WR [kWh]
     pvkwh = int(pvwatttmp['dxsEntries'][1]['value'])
 
-    get_inverter_value_store(num).set(InverterState(counter=pvkwh*1000, power=pvwatt))
+    get_inverter_value_store(num).set(InverterState(exported=pvkwh*1000, power=pvwatt))
 
 
 def main(argv: List[str]):

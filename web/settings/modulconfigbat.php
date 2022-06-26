@@ -124,18 +124,6 @@
 										</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<label for="ess_api_ver" class="col-md-4 col-form-label">API-Version</label>
-									<div class="col">
-										<select name="ess_api_ver" id="ess_api_ver" class="form-control">
-											<option <?php if($ess_api_verold == "10.2019") echo "selected" ?> value="10.2019">API-Version Oktober 2019</option>
-											<option <?php if($ess_api_verold == "01.2020") echo "selected" ?> value="01.2020">API-Version Januar 2020</option>
-										</select>
-										<span class="form-text small">
-											Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version.
-										</span>
-									</div>
-								</div>
 							</div>
 						</div>
 

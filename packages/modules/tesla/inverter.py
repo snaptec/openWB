@@ -25,6 +25,6 @@ class TeslaInverter:
         if pv_watt > 5:
             pv_watt = pv_watt*-1
         self.__store.set(InverterState(
-            counter=aggregate["solar"]["energy_exported"],
+            exported=aggregate["solar"]["energy_exported"],
             power=pv_watt
         ))

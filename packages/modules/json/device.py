@@ -134,8 +134,8 @@ def read_legacy_counter(ip_address: str, jq_power: str, jq_imported: str, jq_exp
     )
 
 
-def read_legacy_inverter(ip_address: str, jq_power: str, jq_counter: str, num: int):
-    read_legacy(ip_address, inverter.get_default_config(), num, jq_power=jq_power, jq_counter=jq_counter)
+def read_legacy_inverter(ip_address: str, jq_power: str, jq_exported: str, num: int):
+    read_legacy(ip_address, inverter.get_default_config(), num, jq_power=jq_power, jq_exported=jq_exported)
 
 
 def main(argv: List[str]):

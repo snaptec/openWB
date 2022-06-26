@@ -22,7 +22,7 @@ def get_default_config() -> dict:
         "type": "sma_modbus_tcp",
         "id": 0,
         "configuration": {
-            "ip": None
+            "ip_address": None
         }
     }
 
@@ -51,7 +51,7 @@ class Device(AbstractDevice):
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"],
-                self.device_config["configuration"]["ip"],
+                self.device_config["configuration"]["ip_address"],
                 component_config))
         else:
             raise Exception(
@@ -99,8 +99,8 @@ def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: in
         for inverter in itertools.chain((inverter1,), inverters_additional):
             state = inverter.read_inverter_state()
             total_power += state.power
-            total_energy += state.counter
-        get_inverter_value_store(num).set(InverterState(counter=total_energy, power=total_power))
+            total_energy += state.exported
+        get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
 
 def main(argv: List[str]):

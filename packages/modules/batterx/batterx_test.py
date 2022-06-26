@@ -5,7 +5,6 @@ import requests_mock
 
 
 from modules.common.component_state import BatState, CounterState, InverterState
-from modules.common import simcount
 from modules.batterx import bat, counter, device, inverter
 
 
@@ -19,8 +18,6 @@ class TestBatterXDevice:
         monkeypatch.setattr(bat, 'get_bat_value_store', Mock(return_value=self.mock_bat_value_store))
         monkeypatch.setattr(counter, 'get_counter_value_store', Mock(return_value=self.mock_counter_value_store))
         monkeypatch.setattr(inverter, 'get_inverter_value_store', Mock(return_value=self.mock_inverter_value_store))
-        monkeypatch.setattr(simcount.SimCount, 'sim_count', Mock(return_value=(100, 200)))
-        monkeypatch.setattr(simcount.SimCountLegacy, 'sim_count', Mock(return_value=(100, 200)))
         requests_mock.get("http://1.1.1.1/api.php?get=currentstate", json=SAMPLE)
 
     def test_read(self):
@@ -59,7 +56,7 @@ SAMPLE_COUNTER_STATE = CounterState(
 )
 SAMPLE_INVERTER_STATE = InverterState(
     power=-5786,
-    counter=200
+    exported=200
 )
 
 SAMPLE = {'1042': {'1': 5320},
