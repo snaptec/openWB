@@ -90,9 +90,11 @@ function makedatetime($start,$f)
                                 break;
                         case 2: echo "Nur PV;";
                                 break;
+                        case 4: echo "Standby;";
+                                break;
                         case 7: echo "Nachtladen;";
                                 break;
-                        default:
+                       default:
                                echo str_replace('.',',',$f).";";
                       }
                       break;
@@ -171,7 +173,7 @@ function makedatetime($start,$f)
 	<body>
 		<div id="nav"></div> <!-- placeholder for navbar -->
 		<div role="main" class="container">
-			<h1>Lade-Log Export</h1>
+			<h1>Lade-Log Excel Export</h1>
 			<div class="card border-secondary">
 				<div class="card-header bg-secondary">
 					Aufgezeichnete Logdateien
@@ -225,7 +227,7 @@ function makedatetime($start,$f)
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: <a href="logging/chargelog/ladelog.php">Lade-Log</a> - Lade-Log Export</small>
+				<small>Sie befinden sich hier: <a href="logging/chargelog/ladelog.php">Lade-Log</a> - Lade-Log Excel-Export</small>
 			</div>
 		</footer>
 
