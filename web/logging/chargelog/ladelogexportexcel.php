@@ -199,7 +199,7 @@ function makedatetime($start,$f)
 							</label>
 							<div class="col-6 text-right">
 								<a class="btn downloadBtn btn-info" style="margin-bottom:12px" 
-								 href="logging/chargelog/ladelogexport.php<?php
+								 href="logging/chargelog/ladelogexportexcel.php<?php
 									echo "?date=" . pathinfo($current)['filename'] ."&do=export\">";
 									?><i class="fas fa-download"></i> Download</a>
 							</div>
@@ -214,7 +214,7 @@ function makedatetime($start,$f)
 							echo "<label class=\"col-6 col-form-label\">Ganzes Jahr $e</label>";
 							echo "<div class=\"col-6 text-right\">";
 							echo " <a class=\"btn downloadBtn btn-info\" style=\"margin-bottom:12px;\" "; 
-							echo "       href=\"logging/chargelog/ladelogexport.php?year=$e&do=export\">";
+							echo "       href=\"logging/chargelog/ladelogexportexcel.php?year=$e&do=export\">";
 							echo " <i class=\"fas fa-download\"></i> Download</a>";
 							echo "</div>";
 							echo "</div>";
