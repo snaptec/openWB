@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding: utf8
+# coding: utf8
 
 import time
 import RPi.GPIO as GPIO
@@ -11,7 +11,7 @@ parser.add_argument("-v", "--verbose", action="store_true", help="verbose debug 
 args = parser.parse_args()
 
 if(args.verbose):
-    print("CP-Unterbrechung LP1: %ds"%(args.duration))
+    print("CP-Unterbrechung LP1: %ds" % (args.duration))
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)

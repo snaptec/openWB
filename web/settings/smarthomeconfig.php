@@ -164,16 +164,18 @@ $numDevices = 9;
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
-									<label for="device_chanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Kanal/Meter Auswahl</label>
-									<select class="form-control" name="device_chan" id="device_chanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<option value="0" data-option="0" selected="selected">Kanal 0 / alle Meter summiert</option>
-										<option value="1" data-option="1">Kanal 0 / Meter 1</option>
-										<option value="2" data-option="2">Kanal 1 / Meter 2</option>
-										<option value="3" data-option="3">Kanal 2 / Meter 3</option>
-										<option value="4" data-option="4">Kanal 3 / Meter 4</option>
-										<option value="5" data-option="5">Kanal 4 / Meter 5</option>
-										<option value="6" data-option="6">Kanal 5 / Meter 6</option>
-									</select>
+									<label for="device_chanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Kanal- / Meter-Auswahl</label>
+									<div class="col">
+										<select class="form-control" name="device_chan" id="device_chanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<option value="0" data-option="0" selected="selected">Kanal 0 / alle Meter summiert</option>
+											<option value="1" data-option="1">Kanal 0 / Meter 1</option>
+											<option value="2" data-option="2">Kanal 1 / Meter 2</option>
+											<option value="3" data-option="3">Kanal 2 / Meter 3</option>
+											<option value="4" data-option="4">Kanal 3 / Meter 4</option>
+											<option value="5" data-option="5">Kanal 4 / Meter 5</option>
+											<option value="6" data-option="6">Kanal 5 / Meter 6</option>
+										</select>
+									</div>
 								</div>
 							</div>
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-none hide">
