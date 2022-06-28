@@ -124,7 +124,7 @@ fi
 
 curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable17/web/version > /var/www/html/openWB/ramdisk/vstable
 
 if [[ -s /var/www/html/openWB/ramdisk/randomSleepValue ]]; then
 	randomSleep=$(</var/www/html/openWB/ramdisk/randomSleepValue)
