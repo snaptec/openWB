@@ -2,10 +2,11 @@
 import logging
 from typing import Dict, Optional, Union, List
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.store import get_inverter_value_store
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
+from modules.common.store import get_inverter_value_store
 from modules.fronius import bat
 from modules.fronius import counter_s0
 from modules.fronius import counter_sm
@@ -41,9 +42,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, fronius_component_classes]
         try:
-            self.device_config = device_config \
-                if isinstance(device_config, Fronius) \
-                else Fronius.from_dict(device_config)
+            self.device_config = dataclass_from_dict(Fronius, device_config)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 

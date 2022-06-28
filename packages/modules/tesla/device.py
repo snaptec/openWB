@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import json
 import logging
-import requests
 from json import JSONDecodeError
-from requests import HTTPError
 from typing import Callable, Dict, Union, Optional, List
 
+import requests
+from requests import HTTPError
+
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext
@@ -38,17 +40,6 @@ class TeslaConfiguration:
         self.email = email
         self.password = password
 
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["ip_address", "email", "password"]
-        try:
-            values = [device_config[key] for key in keys]
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return TeslaConfiguration(*values)
-
 
 class Tesla:
     def __init__(self, name: str, type: str, id: int, configuration: TeslaConfiguration) -> None:
@@ -56,23 +47,6 @@ class Tesla:
         self.type = type
         self.id = id
         self.configuration = configuration
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["name", "type", "id", "configuration"]
-        try:
-            values = [device_config[key] for key in keys]
-            values = []
-            for key in keys:
-                if isinstance(device_config[key], Dict):
-                    values.append(TeslaConfiguration.from_dict(device_config[key]))
-                else:
-                    values.append(device_config[key])
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return Tesla(*values)
 
 
 UpdateFunction = Callable[[PowerwallHttpClient], None]
@@ -90,9 +64,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, tesla_component_classes]
         try:
-            self.device_config = device_config \
-                if isinstance(device_config, Tesla) \
-                else Tesla.from_dict(device_config)
+            self.device_config = dataclass_from_dict(Tesla, device_config)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 
