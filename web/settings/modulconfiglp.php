@@ -1741,7 +1741,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 												<label class="btn btn-outline-info<?php if($i3_soccalclp1old == 0) echo " active" ?>">
@@ -3645,7 +3645,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+									        <label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
 										<div class="col">
 											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 												<label class="btn btn-outline-info<?php if($i3_soccalclp2old == 0) echo " active" ?>">
