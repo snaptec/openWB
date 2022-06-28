@@ -22,6 +22,11 @@ case $CHARGEPOINT in
 		# second charge point
 		soctimerfile="$RAMDISKDIR/soctimer1"
 		socfile="$RAMDISKDIR/soc1"
+		meterfile="$RAMDISKDIR/llkwhs1"
+		statefile="$RAMDISKDIR/soc_i3_lp2_state"
+		soccalc=$i3_soccalclp2
+		batterysize=$akkuglp2
+		efficiency=$wirkungsgradlp2
 		intervall=$soci3intervall1
 		user=$i3usernames1
 		pass=$i3passworts1
@@ -33,6 +38,11 @@ case $CHARGEPOINT in
 		CHARGEPOINT=1
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
+		meterfile="$RAMDISKDIR/llkwh"
+		statefile="$RAMDISKDIR/soc_i3_lp1_state"
+		soccalc=$i3_soccalclp1
+		batterysize=$akkuglp1
+		efficiency=$wirkungsgradlp2
 		intervall=$soci3intervall
 		user=$i3username
 		pass=$i3passwort
@@ -67,7 +77,25 @@ soctimer=$(<"$soctimerfile")
 openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 cd $MODULEDIR
 if (( soctimer < (6 * intervall) )); then
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	if(( soccalc < 1 )); then
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	else
+		ARGS='{'
+		ARGS+='"socfile": "'"$socfile"'", '
+		ARGS+='"meterfile": "'"$meterfile"'", '
+		ARGS+='"statefile": "'"$statefile"'", '
+		ARGS+='"batterysize": "'"$batterysize"'", '
+		ARGS+='"efficiency": "'"$efficiency"'", '
+		ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
+		ARGS+='}'
+
+		ARGSB64=$(echo -n $ARGS | base64 --wrap=0)
+
+		sudo python3 "$MODULEDIR/manual.py" "$ARGSB64" &>> $LOGFILE &
+
+		soclevel=$(<"$socfile")
+		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"
+	fi
 	incrementTimer
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
@@ -78,6 +106,8 @@ else
 	ARGS+='"pass": "'"$pass"'", '
 	ARGS+='"vin": "'"$vin"'", '
 	ARGS+='"socfile": "'"$socfile"'", '
+	ARGS+='"meterfile": "'"$meterfile"'", '
+	ARGS+='"statefile": "'"$statefile"'", '
 	ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 	ARGS+='}'
 
