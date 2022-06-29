@@ -32,10 +32,7 @@ class JsonBat:
 
     def update(self, response) -> None:
         config = self.component_config["configuration"]
-        if config["jq_power"] is not None:
-            power = jq.compile(config["jq_power"]).input(response).first()
-        else:
-            power = 0
+        power = jq.compile(config["jq_power"]).input(response).first()
 
         if config["jq_soc"] is not None:
             soc = jq.compile(config["jq_soc"]).input(response).first()
