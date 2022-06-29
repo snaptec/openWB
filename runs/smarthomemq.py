@@ -43,12 +43,30 @@ def logDebug(level, msg):
                         + '-: ' + str(msg) + '\n')
 
 
+def logCon(level, msg):
+    if (int(level) >= LOGLEVELDEBUG):
+        local_time = datetime.now(timezone.utc).astimezone()
+        with open(bp+'/ramdisk/smartcon.log', 'a', encoding='utf8',
+                  buffering=1) as f:
+            if (int(level) == 0):
+                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
+                        + '-: ' + str(msg) + '\n')
+            if (int(level) == 1):
+                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
+                        + '-: ' + str(msg) + '\n')
+            if (int(level) == 2):
+                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
+                        + '-: ' + str(msg) + '\n')
+
+
 def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/config/get/SmartHome/Devices/#", 2)
     client.subscribe("openWB/SmartHome/Devices/#", 2)
 
 
 def on_message(client, userdata, msg):
+    # wenn exception hier wird mit nächster msg weitergemacht
+    # macht paho unter phyton 3 immer so
     global parammqtt
     devicenumb = re.sub(r'\D', '', msg.topic)
     input = msg.payload.decode("utf-8")
@@ -59,7 +77,17 @@ def on_message(client, userdata, msg):
         keyword = re.sub('openWB/SmartHome/Devices/'
                          + str(devicenumb) + '/', '', msg.topic)
     value = str(input)
-    parammqtt.append([devicenumb, keyword, value])
+    if (("/" in keyword) or (int(devicenumb) < 1) or
+       (int(devicenumb) > numberOfSupportedDevices)):
+        # falsches topic
+        logCon(2, "skip " + str(devicenumb) + " Key " +
+               str(keyword) + " Msg " + str(msg.topic) +
+               " Value " + str(value))
+    else:
+        # richtig  topic
+        logCon(2, "okay " + str(devicenumb) + " Key " +
+               str(keyword) + " Value " + str(value))
+        parammqtt.append([devicenumb, keyword, value])
 
 
 def checkbootdone():
@@ -371,6 +399,9 @@ def update_devices():
 
 
 def readmq():
+    logCon(2, "Config reRead start")
+    logCon(2, "Config reRead start")
+    logCon(2, "Config reRead start")
     global parammqtt
     global mydevices
     parammqtt = []
@@ -386,6 +417,9 @@ def readmq():
         if elapsedTime > waitTime:
             client.disconnect()
             break
+    logCon(2, "Config reRead done")
+    logCon(2, "Config reRead done")
+    logCon(2, "Config reRead done")
     update_devices()
 
 
@@ -424,10 +458,11 @@ def resetmaxeinschaltdauerfunc():
 if __name__ == "__main__":
     logDebug(LOGLEVELDEBUG, "*** Smarthome mq Start ***")
     while True:
-        time.sleep(5)
         if (checkbootdone() == 1):
             break
+        time.sleep(5)
     readmq()
+    time.sleep(5)
     while True:
         #        update_devices()
         mqtt_man = {}
