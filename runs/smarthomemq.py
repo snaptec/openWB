@@ -3,7 +3,7 @@ import paho.mqtt.client as mqtt
 import time
 import re
 import os
-from datetime import datetime, timezone
+import logging
 from usmarthome.smartbase import Sbase
 from usmarthome.smartavm import Savm
 from usmarthome.smartacthor import Sacthor
@@ -22,41 +22,24 @@ mqtt_cache = {}
 mydevices = []
 bp = '/var/www/html/openWB'
 numberOfSupportedDevices = 9  # limit number of smarthome devices
-LOGLEVELDEBUG = 0
-LOGLEVELINFO = 1
-LOGLEVELERROR = 2
 
 
-def logDebug(level, msg):
-    if (int(level) >= LOGLEVELDEBUG):
-        local_time = datetime.now(timezone.utc).astimezone()
-        with open(bp+'/ramdisk/smarthome.log', 'a', encoding='utf8',
-                  buffering=1) as f:
-            if (int(level) == 0):
-                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
-                        + '-: ' + str(msg) + '\n')
-            if (int(level) == 1):
-                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
-                        + '-: ' + str(msg) + '\n')
-            if (int(level) == 2):
-                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
-                        + '-: ' + str(msg) + '\n')
-
-
-def logCon(level, msg):
-    if (int(level) >= LOGLEVELDEBUG):
-        local_time = datetime.now(timezone.utc).astimezone()
-        with open(bp+'/ramdisk/smartcon.log', 'a', encoding='utf8',
-                  buffering=1) as f:
-            if (int(level) == 0):
-                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
-                        + '-: ' + str(msg) + '\n')
-            if (int(level) == 1):
-                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
-                        + '-: ' + str(msg) + '\n')
-            if (int(level) == 2):
-                f.write(local_time.strftime(format="%Y-%m-%d %H:%M:%S")
-                        + '-: ' + str(msg) + '\n')
+def initlog():
+    global log_config
+    global log
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    log_config = logging.getLogger("smartcon")
+    log_config.setLevel(logging.DEBUG)
+    fh = logging.FileHandler(bp+'/ramdisk/smartcon.log', encoding='utf8')
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(formatter)
+    log_config.addHandler(fh)
+    log = logging.getLogger("smarthome")
+    log.setLevel(logging.DEBUG)
+    fh = logging.FileHandler(bp+'/ramdisk/smarthome.log', encoding='utf8')
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
 
 
 def on_connect(client, userdata, flags, rc):
@@ -65,6 +48,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
+    global log_config
     # wenn exception hier wird mit nächster msg weitergemacht
     # macht paho unter phyton 3 immer so
     global parammqtt
@@ -80,26 +64,27 @@ def on_message(client, userdata, msg):
     if (("/" in keyword) or (int(devicenumb) < 1) or
        (int(devicenumb) > numberOfSupportedDevices)):
         # falsches topic
-        logCon(2, "skip " + str(devicenumb) + " Key " +
-               str(keyword) + " Msg " + str(msg.topic) +
-               " Value " + str(value))
+        log_config.warning("(" + str(devicenumb) + ") skipped Key " +
+                           str(keyword) + " Msg " + str(msg.topic) +
+                           " Value " + str(value))
     else:
         # richtig  topic
-        logCon(2, "okay " + str(devicenumb) + " Key " +
-               str(keyword) + " Value " + str(value))
+        log_config.info("(" + str(devicenumb) + ") Key " +
+                        str(keyword) + " Value " + str(value))
         parammqtt.append([devicenumb, keyword, value])
 
 
 def checkbootdone():
     global resetmaxeinschaltdauer
+    global log
     resetmaxeinschaltdauer = 0
     try:
         with open(bp+'/ramdisk/bootinprogress', 'r') as value:
             bootinprogress = int(value.read())
     except Exception as e:
         bootinprogress = 1
-        logDebug(LOGLEVELERROR, "Ramdisk not set up. Maybe we are still" +
-                 "booting (bootinprogress)." + str(e))
+        log.warning("Ramdisk not set up. Maybe we are still" +
+                    "booting (bootinprogress)." + str(e))
         time.sleep(30)
         return 0
     try:
@@ -107,16 +92,16 @@ def checkbootdone():
             updateinprogress = int(value.read())
     except Exception as e:
         updateinprogress = 1
-        logDebug(LOGLEVELERROR, "Ramdisk not set up. Maybe we are still" +
-                 " booting (updateinprogress)." + str(e))
+        log.warning("Ramdisk not set up. Maybe we are still" +
+                    " booting (updateinprogress)." + str(e))
         time.sleep(30)
         return 0
     if (updateinprogress == 1):
-        logDebug(LOGLEVELERROR, "Update in progress.")
+        log.warning("Update in progress.")
         time.sleep(30)
         return 0
     if (bootinprogress == 1):
-        logDebug(LOGLEVELERROR, "Boot in progress.")
+        log.warning("Boot in progress.")
         time.sleep(30)
         return 0
     return 1
@@ -133,6 +118,7 @@ def loadregelvars():
     global numberOfSupportedDevices
     global maxspeicher
     global mydevices
+    global log
     try:
         with open(bp+'/ramdisk/speichervorhanden', 'r') as value:
             speichervorhanden = int(value.read())
@@ -145,8 +131,9 @@ def loadregelvars():
             speicherleistung = 0
             speichersoc = 100
     except Exception as e:
-        logDebug(LOGLEVELERROR, "Fehler beim Auslesen der Ramdisk " +
-                 "(speichervorhanden,speicherleistung,speichersoc): " + str(e))
+        log.warning("Fehler beim Auslesen der Ramdisk " +
+                    "(speichervorhanden,speicherleistung,speichersoc): " +
+                    str(e))
         speichervorhanden = 0
         speicherleistung = 0
         speichersoc = 100
@@ -154,23 +141,23 @@ def loadregelvars():
         with open(bp+'/ramdisk/wattbezug', 'r') as value:
             wattbezug = int(float(value.read())) * -1
     except Exception as e:
-        logDebug(LOGLEVELERROR, "Fehler beim Auslesen der Ramdisk (wattbezug):"
-                 + str(e))
+        log.warning("Fehler beim Auslesen der Ramdisk (wattbezug):"
+                    + str(e))
         wattbezug = 0
     uberschuss = wattbezug + speicherleistung
     try:
         with open(bp+'/ramdisk/smarthomehandlermaxbatterypower', 'r') as value:
             maxspeicher = int(value.read())
     except Exception as e:
-        logDebug(LOGLEVELERROR, "Fehler beim Auslesen der Ramdisk " +
-                 "(smarthomehandlermaxbatterypower): " + str(e))
+        log.warning("Fehler beim Auslesen der Ramdisk " +
+                    "(smarthomehandlermaxbatterypower): " + str(e))
         maxspeicher = 0
     uberschussoffset = wattbezug + speicherleistung - maxspeicher
-    logDebug(LOGLEVELDEBUG, "EVU Bezug(-)/Einspeisung(+): " + str(wattbezug) +
+    log.info("EVU Bezug(-)/Einspeisung(+): " + str(wattbezug) +
              " max Speicherladung: " + str(maxspeicher))
-    logDebug(LOGLEVELDEBUG, "Uberschuss: " + str(uberschuss) +
+    log.info("Uberschuss: " + str(uberschuss) +
              " Uberschuss mit Offset: " + str(uberschussoffset))
-    logDebug(LOGLEVELDEBUG, "Speicher Entladung(-)/Ladung(+): " +
+    log.info("Speicher Entladung(-)/Ladung(+): " +
              str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
     reread = 0
     try:
@@ -181,9 +168,7 @@ def loadregelvars():
     if (reread == 1):
         with open(bp+'/ramdisk/rereadsmarthomedevices', 'w') as f:
             f.write(str(0))
-        logDebug(LOGLEVELERROR, "Config reRead start")
         readmq()
-        logDebug(LOGLEVELERROR, "Config reRead done")
 
     for i in range(1, (numberOfSupportedDevices+1)):
         try:
@@ -208,6 +193,7 @@ def getdevicevalues():
     global mydevices
     global uberschuss
     global uberschussoffset
+    global log
     totalwatt = 0
     totalwattot = 0
     totalminhaus = 0
@@ -231,7 +217,7 @@ def getdevicevalues():
             totalwattot = totalwattot + watt
         if (mydevice.device_homeconsumtion == 0):
             totalminhaus = totalminhaus + watt
-        logDebug(LOGLEVELDEBUG, "(" + str(mydevice.device_nummer) + ") " +
+        log.info("(" + str(mydevice.device_nummer) + ") " +
                  str(mydevice.device_name) + " rel: " + str(relais) +
                  " oncnt/onstandby/time: " + str(mydevice.oncountnor) + "/"
                  + str(mydevice.oncntstandby) + "/" +
@@ -249,17 +235,17 @@ def getdevicevalues():
         f.write(str(totalwattot))
     with open(bp+'/ramdisk/devicetotal_watt_hausmin', 'w') as f:
         f.write(str(totalminhaus))
-    logDebug(LOGLEVELDEBUG, "Total Watt abschaltbarer smarthomedevices: " +
+    log.info("Total Watt abschaltbarer smarthomedevices: " +
              str(totalwatt))
-    logDebug(LOGLEVELDEBUG, "Total Watt nichtabschaltbarer smarthomedevices: "
+    log.info("Total Watt nichtabschaltbarer smarthomedevices: "
              + str(totalwattot))
-    logDebug(LOGLEVELDEBUG, "Total Watt nicht im Hausverbrauch: " +
+    log.info("Total Watt nicht im Hausverbrauch: " +
              str(totalminhaus))
-    logDebug(LOGLEVELDEBUG, "Anzahl devices in Auschaltgruppe: " +
+    log.info("Anzahl devices in Auschaltgruppe: " +
              str(Sbase.ausdevices) + " akt: " + str(Sbase.ausschaltwatt) +
              " Anzahl devices in Einschaltgruppe: " + str(Sbase.eindevices)
              )
-    logDebug(LOGLEVELDEBUG, "Einschaltgruppe rel: " + str(Sbase.einrelais) +
+    log.info("Einschaltgruppe rel: " + str(Sbase.einrelais) +
              " Summe Einschaltschwelle: " +
              str(Sbase.einschwelle) + " max Einschaltverzögerung " +
              str(Sbase.einverz) + " nur Einschaltgruppe prüfen bis: " +
@@ -276,15 +262,15 @@ def getdevicevalues():
 
 def sendmq(mqtt_input):
     global mqtt_cache
+    global log
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key, value in mqtt_input.items():
         valueold = mqtt_cache.get(key, 'not in cache')
         if (valueold == value):
             pass
-        #    logDebug(2, " Mqtt same " + str(key) + " " + str(value))
         else:
-            logDebug(2, "Mq pub " + str(key) + "=" +
+            log.info("Mq pub " + str(key) + "=" +
                      str(value) + " old " + str(valueold))
             mqtt_cache[key] = value
             client.publish(key, payload=value, qos=0, retain=True)
@@ -303,6 +289,7 @@ def update_devices():
     global parammqtt
     global mydevices
     global mqtt_cache
+    global log
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     # statische daten einschaltgruppe
@@ -328,25 +315,25 @@ def update_devices():
             createnew = 1
             for mydevice in mydevices:
                 if (str(i) == str(mydevice.device_nummer)):
-                    logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+                    log.info("(" + str(i) + ") " +
                              "Device bereits erzeugt")
                     if (device_type == mydevice.device_type):
-                        logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+                        log.info("(" + str(i) + ") " +
                                  "Typ gleich, nur Parameter update")
                         createnew = 0
                         mydevice.updatepar(input_param)
                     else:
-                        logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+                        log.info("(" + str(i) + ") " +
                                  "Typ ungleich " + mydevice.device_type)
                         mydevice.device_nummer = 0
                         mydevice._device_configured = '9'
                         # del mydevice
                         mydevices.remove(mydevice)
-                        logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+                        log.info("(" + str(i) + ") " +
                                  "Device gelöscht")
                     break
             if (createnew == 1):
-                logDebug(LOGLEVELDEBUG, "(" + str(i) +
+                log.info("(" + str(i) +
                          ") Neues Devices oder Typänderung: " +
                          str(device_type))
                 if (device_type == 'shelly'):
@@ -378,14 +365,14 @@ def update_devices():
                 mydevice.updatepar(input_param)
                 mydevices.append(mydevice)
         else:
-            logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+            log.info("(" + str(i) + ") " +
                      "Device nicht (länger) definiert")
             for mydevice in mydevices:
                 if (str(i) == str(mydevice.device_nummer)):
                     # cleant up mqtt
                     for key, value in mydevice.mqtt_param_del.items():
                         valueold = mqtt_cache.pop(key, 'not in cache')
-                        logDebug(2, "Mq pub " + str(key) + "=" +
+                        log.info("Mq pub " + str(key) + "=" +
                                  str(value) + " old " + str(valueold))
                         client.publish(key, payload=value, qos=0, retain=True)
                         client.loop(timeout=2.0)
@@ -393,17 +380,18 @@ def update_devices():
                     mydevice._device_configured = '9'
                     # del mydevice
                     mydevices.remove(mydevice)
-                    logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+                    log.info("(" + str(i) + ") " +
                              "Device gelöscht")
     client.disconnect()
 
 
 def readmq():
-    logCon(2, "Config reRead start")
-    logCon(2, "Config reRead start")
-    logCon(2, "Config reRead start")
     global parammqtt
     global mydevices
+    global log_config
+    global log
+    log_config.info("Config reRead start")
+    log.info("Config reRead start")
     parammqtt = []
     client = mqtt.Client("openWB-mqttsmarthome")
     client.on_connect = on_connect
@@ -417,16 +405,16 @@ def readmq():
         if elapsedTime > waitTime:
             client.disconnect()
             break
-    logCon(2, "Config reRead done")
-    logCon(2, "Config reRead done")
-    logCon(2, "Config reRead done")
     update_devices()
+    log_config.info("Config reRead done")
+    log.info("Config reRead done")
 
 
 def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
     global numberOfSupportedDevices
     global mydevices
+    global log
     mqtt_reset = {}
     hour = time.strftime("%H")
     if (int(hour) == 0):
@@ -437,7 +425,7 @@ def resetmaxeinschaltdauerfunc():
                         pref = 'openWB/SmartHome/Devices/' + str(i) + '/'
                         mydevice.runningtime = 0
                         mqtt_reset[pref + 'RunningTimeToday'] = '0'
-                        logDebug(LOGLEVELINFO, "(" + str(i) +
+                        log.info("(" + str(i) +
                                  ") RunningTime auf 0 gesetzt")
                         mydevice.oncountnor = '0'
                         mqtt_reset[pref + 'oncountnor'] = '0'
@@ -456,7 +444,9 @@ def resetmaxeinschaltdauerfunc():
 
 
 if __name__ == "__main__":
-    logDebug(LOGLEVELDEBUG, "*** Smarthome mq Start ***")
+    initlog()
+    log.info("*** Smarthome mq Start ***")
+    log_config.info("*** Smarthome mq Start ***")
     while True:
         if (checkbootdone() == 1):
             break
@@ -484,7 +474,7 @@ if __name__ == "__main__":
                                 mydevice.turndevicerelais(1, 0, 1)
                         mydevice.c_mantime_f = 'Y'
                         mydevice.c_mantime = time.time()
-                        logDebug(LOGLEVELDEBUG, "(" + str(i) + ") " +
+                        log.info("(" + str(i) + ") " +
                                  mydevice.device_name +
                                  " manueller Modus aktiviert, keine Regelung")
         for i in range(1, (numberOfSupportedDevices+1)):

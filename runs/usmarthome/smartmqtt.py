@@ -27,11 +27,11 @@ class Smqtt(Sbase):
         if (self._old_measuretype0 == 'none'):
             self._mydevicemeasure0 = Slmqtt()
             self._old_measuretype0 = 'mqtt'
-            self.logClass(2, "(" + str(self.device_nummer) +
+            self.log.info("(" + str(self.device_nummer) +
                           ") Integrierte Leistungsmessung. Neues Measure" +
                           " device erzeugt " + self.device_type)
         else:
-            self.logClass(2, "(" + str(self.device_nummer) +
+            self.log.info("(" + str(self.device_nummer) +
                           ") Integrierte Leistungsmessung. Nur Parameter" +
                           " update " + self.device_type)
         self._mydevicemeasure0.updatepar(input_param)
@@ -49,7 +49,7 @@ class Smqtt(Sbase):
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") on / off  %s %d %s Fehlermeldung: %s "
-                          % ('mqtt ', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            self.log.warning("(" + str(self.device_nummer) +
+                             ") on / off  %s %d %s Fehlermeldung: %s "
+                             % ('mqtt ', self.device_nummer,
+                                str(self._device_ip), str(e1)))
