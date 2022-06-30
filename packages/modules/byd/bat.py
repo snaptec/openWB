@@ -50,9 +50,9 @@ class BYDBat:
 
     def get_values(self) -> Tuple[float, float]:
         '''BYD Speicher bieten zwei HTML-Seiten, auf denen Informationen abgegriffen werden können:
-    /asp/Home.asp und /asp/RunData.asp. Aktuell (2022-03) ist die Leistungsangabe (Power) auf der
-    RunData.asp auf ganze kW gerundet und somit für openWB nicht brauchbar.
-    '''
+        /asp/Home.asp und /asp/RunData.asp. Aktuell (2022-03) ist die Leistungsangabe (Power) auf der
+        RunData.asp auf ganze kW gerundet und somit für openWB nicht brauchbar.
+        '''
         resp = req.get_http_session().get(
             'http://' + self.__device_config.configuration.ip_address + '/asp/Home.asp',
             auth=(self.__device_config.configuration.username,  self.__device_config.configuration.password))
