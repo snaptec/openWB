@@ -379,12 +379,6 @@ at_reboot() {
 	# get local ip
 	ip route get 1 | awk '{print $7;exit}' > "$OPENWBBASEDIR/ramdisk/ipaddress"
 
-	# update current published versions
-	echo "load versions..."
-	curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > "$OPENWBBASEDIR/ramdisk/vnightly"
-	curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > "$OPENWBBASEDIR/ramdisk/vbeta"
-	curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > "$OPENWBBASEDIR/ramdisk/vstable"
-
 	# update our local version
 	sudo git -C "$OPENWBBASEDIR" show --pretty='format:%ci [%h]' | head -n1 > "$OPENWBBASEDIR/web/lastcommit"
 	# and record the current commit details
