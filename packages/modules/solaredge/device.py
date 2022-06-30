@@ -15,6 +15,7 @@ from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
 from modules.common.component_state import BatState, InverterState
+from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store, get_bat_value_store
 from modules.solaredge import bat
 from modules.solaredge import counter
@@ -282,8 +283,9 @@ def read_legacy(component_type: str,
                 get_inverter_value_store(num).set(InverterState(counter=total_energy, power=total_power))
 
     elif component_type == "bat":
-        power_bat, soc_bat = get_bat_state()
-        get_bat_value_store(1).set(BatState(power=sum(power_bat), soc=mean(soc_bat)))
+        with SingleComponentUpdateContext(ComponentInfo(0, "Solaredge Speicher", "bat")):
+            power_bat, soc_bat = get_bat_state()
+            get_bat_value_store(1).set(BatState(power=sum(power_bat), soc=mean(soc_bat)))
 
 
 def main(argv: List[str]):

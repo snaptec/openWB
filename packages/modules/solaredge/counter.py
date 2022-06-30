@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-import logging
-import math
-from typing import List
-
 from modules.common import modbus
 from modules.common.component_state import CounterState
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusDataType, Number
+from modules.common.modbus import ModbusDataType
 from modules.common.store import get_counter_value_store
-
-log = logging.getLogger(__name__)
+from modules.solaredge.scale import scale_registers
 
 
 def get_default_config() -> dict:
@@ -80,8 +75,3 @@ class SolaredgeCounter:
             frequency=frequency
         )
         self.__store.set(counter_state)
-
-
-def scale_registers(registers: List[Number]) -> List[float]:
-    scale = math.pow(10, registers[-1])
-    return [register * scale for register in registers[:-1]]
