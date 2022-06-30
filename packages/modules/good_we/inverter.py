@@ -27,11 +27,11 @@ class GoodWeInverter:
         with self.__tcp_client:
             power = sum([self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_32,
                         unit=self.__modbus_id) for reg in [35105, 35109, 35113, 35117]]) * -1
-            counter = self.__tcp_client.read_holding_registers(
+            exported = self.__tcp_client.read_holding_registers(
                 35191, ModbusDataType.UINT_32, unit=self.__modbus_id) * 100
 
         inverter_state = InverterState(
             power=power,
-            counter=counter
+            exported=exported
         )
         self.__store.set(inverter_state)

@@ -1738,7 +1738,66 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($i3_soccalclp1old == 0) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp1" id="i3_soccalclp1Off" value="0"<?php if($i3_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($i3_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp1" id="i3_soccalclp1On" value="1"<?php if($i3_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+									</div>
+									<div id="i3manualcalcdiv" class="hide">
+										<div class="form-row mb-1">
+											<label for="i3_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="i3_akkuglp1" value="<?php echo $akkuglp1old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="i3_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="i3_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+									$(function() {
+										function visibility_i3_soccalclp1() {
+											if($('#i3_soccalclp1Off').prop("checked")) {
+												hideSection('#i3manualcalcdiv');
+											} else {
+												showSection('#i3manualcalcdiv');
+											}
+										}
+
+										$('input[type=radio][name=i3_soccalclp1]').change(function(){
+											visibility_i3_soccalclp1();
+										});
+
+										visibility_i3_soccalclp1();
+									});
+								</script>
 							</div>
 							<div id="soccarnet" class="hide">
 								<div class="form-group">
@@ -3384,7 +3443,66 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($i3_soccalclp2old == 0) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp2" id="i3_soccalclp2Off" value="0"<?php if($i3_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($i3_soccalclp2old == 1) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp2" id="i3_soccalclp2On" value="1"<?php if($i3_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+									</div>
+									<div id="i3manualcalclp2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="i3_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="i3_akkuglp2" value="<?php echo $akkuglp2old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="i3_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="i3_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+								$(function() {
+									function visibility_i3_soccalclp2() {
+										if($('#i3_soccalclp2Off').prop("checked")) {
+											hideSection('#i3manualcalclp2div');
+										} else {
+											showSection('#i3manualcalclp2div');
+										}
+									}
+
+									$('input[type=radio][name=i3_soccalclp2]').change(function(){
+										visibility_i3_soccalclp2();
+									});
+
+									visibility_i3_soccalclp2();
+								});
+								</script>
 							</div>
 							<div id="socmpin2" class="hide">
 								<div class="form-group">
@@ -3582,7 +3700,7 @@
 												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 0) echo " active" ?>">
 													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2Off" value="0"<?php if($kia_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
 												</label>
-												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 1) echo " active" ?>">
+												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 1) echo " active" ?>">
 													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2On" value="1"<?php if($kia_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
 												</label>
 											</div>

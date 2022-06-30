@@ -44,7 +44,8 @@ class Sshelly(Sbase):
             pname = "/off.py"
 
         argumentList = ['python3', self._prefixpy + 'shelly' + pname,
-                        str(self.device_nummer), str(self._device_ip), '0']
+                        str(self.device_nummer), str(self._device_ip), '0',
+                        str(self._device_chan)]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()

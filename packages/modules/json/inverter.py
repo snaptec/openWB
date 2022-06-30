@@ -14,7 +14,7 @@ def get_default_config() -> dict:
         "type": "inverter",
         "configuration": {
             "jq_power": None,
-            "jq_counter": None
+            "jq_exported": None
         }
     }
 
@@ -34,19 +34,19 @@ class JsonInverter:
         power = float(jq.compile(config["jq_power"]).input(response).first())
         if power >= 0:
             power = power * -1
-        if config["jq_counter"] == "":
+        if config["jq_exported"] == "":
             topic_str = "openWB/set/system/device/" + \
                 str(self.__device_id)+"/component/" + \
                 str(self.component_config["id"])+"/"
-            _, counter = self.__sim_count.sim_count(power,
-                                                    topic=topic_str,
-                                                    data=self.simulation,
-                                                    prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
+            _, exported = self.__sim_count.sim_count(power,
+                                                     topic=topic_str,
+                                                     data=self.simulation,
+                                                     prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         else:
-            counter = jq.compile(config["jq_counter"]).input(response).first()
+            exported = jq.compile(config["jq_exported"]).input(response).first()
 
         inverter_state = InverterState(
             power=power,
-            counter=counter
+            exported=exported
         )
         self.__store.set(inverter_state)

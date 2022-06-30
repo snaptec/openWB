@@ -74,20 +74,22 @@ class CounterState:
 class InverterState:
     def __init__(
         self,
-        counter: float,
+        exported: float,
         power: float,
         currents: Optional[List[float]] = None,
     ):
         """Args:
-            counter: total energy in Wh
+            exported: total energy in Wh
             power: actual power in W
             currents: actual currents for 3 phases in A
         """
         if currents is None:
             currents = [0.0]*3
+        else:
+            currents = [currents[i]*-1 if currents[i] > 0 else currents[i] for i in range(0, 3)]
         self.currents = currents
         self.power = power
-        self.counter = counter
+        self.exported = exported
 
 
 @auto_str
@@ -105,13 +107,13 @@ class CarState:
 
 class ChargepointState:
     def __init__(self,
+                 phases_in_use: int,
                  imported: float = 0,
                  exported: float = 0,
                  power: float = 0,
                  voltages: Optional[List[float]] = None,
                  currents: Optional[List[float]] = None,
                  power_factors: Optional[List[float]] = None,
-                 phases_in_use: int = 1,
                  charge_state: bool = False,
                  plug_state: bool = False,
                  read_tag: Optional[Dict[str, str]] = None):

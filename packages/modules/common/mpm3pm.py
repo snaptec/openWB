@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-from typing import List, Tuple
-
-from modules.common import modbus
 from modules.common.fault_state import FaultState
+from modules.common import modbus
 from modules.common.modbus import ModbusDataType
+from typing import List, Tuple
 
 
 class Mpm3pm:

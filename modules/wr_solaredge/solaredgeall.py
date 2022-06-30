@@ -81,7 +81,7 @@ def update_solar_edge(client: ModbusClient,
         total_power -= sum(storage_powers)
 
     get_inverter_value_store(1).set(InverterState(
-        counter=total_energy, power=min(0, total_power), currents=total_currents
+        exported=total_energy, power=min(0, total_power), currents=total_currents
     ))
 
 

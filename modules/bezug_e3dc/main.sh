@@ -14,5 +14,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_e3dc.e3dc" "${e3dcip}" >>"${
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
-wattbezug=$(<"${RAMDISKDIR}/wattbezug")
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"

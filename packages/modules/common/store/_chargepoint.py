@@ -17,8 +17,7 @@ class ChargepointValueStoreBroker(ValueStore[ChargepointState]):
         pub_to_broker("openWB/set/chargepoint/" + str(self.num) + "/get/phases_in_use", state.phases_in_use, 2)
         pub_to_broker("openWB/set/chargepoint/" + str(self.num) + "/get/charge_state", state.charge_state, 2)
         pub_to_broker("openWB/set/chargepoint/" + str(self.num) + "/get/plug_state", state.plug_state, 2)
-        if state.read_tag:
-            pub_to_broker("openWB/set/chargepoint/" + str(self.num) + "/get/read_tag", state.read_tag, 2)
+        pub_to_broker("openWB/set/chargepoint/" + str(self.num) + "/get/read_tag", state.read_tag)
 
 
 def get_chargepoint_value_store(id: int) -> ValueStore[ChargepointState]:

@@ -22,24 +22,24 @@ def get_default_config() -> dict:
 class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.device_config = device_config
-        self._components = {}  # type: Dict[str, inverter.PvKit]
+        self.components = {}  # type: Dict[str, inverter.PvKit]
         self.client = modbus.ModbusClient("192.168.193.13", 8899)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type == "inverter":
-            self._components["component"+str(component_config["id"])] = inverter.PvKit(
+            self.components["component"+str(component_config["id"])] = inverter.PvKit(
                 self.device_config["id"], component_config, self.client)
         else:
             raise Exception("illegal component type " + component_type)
 
     def update(self) -> None:
-        log.debug("Start device reading " + str(self._components))
-        if self._components:
-            for component in self._components:
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            for component in self.components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                with SingleComponentUpdateContext(self.components[component].component_info):
+                    self.components[component].update()
         else:
             log.warning(
                 self.device_config["name"] +

@@ -3,33 +3,44 @@ import sys
 import os
 import time
 import json
-import getopt
-import socket
-import struct
-import codecs
-import binascii
 import urllib.request
 
-def totalPowerFromShellyJson(answer):
-    if 'meters' in answer:
-        meters = answer['meters'] # shelly
-    else:
-        meters = answer['emeters'] # shellyEM & shelly3EM
-    total = 0
-    # shellyEM has one meter, shelly3EM has three meters:
-    for meter in meters:
-        total = total + meter['power']
+
+def totalPowerFromShellyJson(answer, workchan):
+    if (workchan == 0):
+        if 'meters' in answer:
+            meters = answer['meters']   # shelly
+        else:
+            meters = answer['emeters']  # shellyEM & shelly3EM
+        total = 0
+        # shellyEM has one meter, shelly3EM has three meters:
+        for meter in meters:
+            total = total + meter['power']
+        return int(total)
+    workchan = workchan - 1
+    try:
+        total = int(answer['meters'][workchan]['power'])   # Abfrage shelly
+    except Exception:
+        total = int(answer['emeters'][workchan]['power'])  # Abfrage shellyEM
     return int(total)
 
 
-named_tuple = time.localtime() # getstruct_time
+named_tuple = time.localtime()   # getstruct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S shelly watty.py", named_tuple)
-devicenumber=str(sys.argv[1])
-ipadr=str(sys.argv[2])
-uberschuss=int(sys.argv[3])
-
-# Setze Default-Werte, andernfalls wird der letzte Wert ewig fortgeschrieben. Insbesondere wichtig für aktuelle Leistung
-powerc = 0 # Zähler wird beim Neustart auf 0 gesetzt, darf daher nicht übergeben werden.
+devicenumber = str(sys.argv[1])
+ipadr = str(sys.argv[2])
+uberschuss = int(sys.argv[3])
+try:
+    chan = int(sys.argv[4])
+except Exception:
+    chan = 0
+# chan = 0 alle Meter, Kan 0
+# chan = 1 meter 1, Kan 0
+# chan = 2 meter 2, kan 1
+# Setze Default-Werte, andernfalls wird der letzte Wert ewig fortgeschrieben.
+# Insbesondere wichtig für aktuelle Leistung
+# Zähler wird beim Neustart auf 0 gesetzt, darf daher nicht übergeben werden.
+powerc = 0
 temp0 = '0.0'
 temp1 = '0.0'
 temp2 = '0.0'
@@ -40,76 +51,95 @@ gen = '1'
 # test dic
 g_dictionary = {"gen": 1}
 
-a_dictionary = {"switch:0":{"id": 0, "source": "init", "output": True, "apower": 55.000, "voltage": 218.794,"aenergy": {"total":4327.45,"minute_ts":1637430901},"temperature":{"tC":49.1, "tF":120.3}}}
+a_dictionary = {"switch:1": {"id": 0, "source": "init", "output": True,
+                             "apower": 93.000, "voltage": 218.794,
+                "aenergy": {"total": 4327.45, "minute_ts": 1637430901},
+                "temperature": {"tC": 49.1, "tF": 120.3}}}
 
 # test dic ende
 # lesen endpoint, gen bestimmem. gen 1 hat unter Umstaenden keinen Eintrag
-fname =   '/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber) + '_shelly_info'
-fnameg =   '/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber) + '_shelly_infog'
+fbase = '/var/www/html/openWB/ramdisk/smarthome_device_ret'
+fname = fbase + str(devicenumber) + '_shelly_info'
+fnameg = fbase + str(devicenumber) + '_shelly_infog'
 if os.path.isfile(fnameg):
-    f = open(fnameg, 'r')
-    gen=str(f.read())
-    f.close()
-else:   
-    answergen= json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/shelly", timeout=3).read().decode("utf-8")))
-    #answergen.update(g_dictionary)
-    f = open(fname, 'w')
-    json.dump(answergen,f)
-    f.close()
-    if 'gen' in answergen:
-        gen = str(int(answergen['gen']))
-    f = open(fnameg, 'w')
-    f.write(str(gen))
-    f.close()
+    with open(fnameg, 'r') as f:
+        gen = str(f.read())
+else:
+    aread = urllib.request.urlopen("http://" + str(ipadr) + "/shelly",
+                                   timeout=3).read().decode("utf-8")
+    agen = json.loads(str(aread))
+    # agen.update(g_dictionary)
+    with open(fname, 'w') as f:
+        json.dump(agen, f)
+    if 'gen' in agen:
+        gen = str(int(agen['gen']))
+    with open(fnameg, 'w') as f:
+        f.write(str(gen))
 # Versuche Daten von Shelly abzurufen.
 try:
     if (gen == "1"):
-        answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
-        #answer.update(a_dictionary)  
+        aread = urllib.request.urlopen("http://"+str(ipadr)+"/status",
+                                       timeout=3).read().decode("utf-8")
+        answer = json.loads(str(aread))
+        # answer.update(a_dictionary)
         # fake new gen
-        #gen = '2'
+        # gen = '2'
     else:
-        answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/rpc/Shelly.GetStatus", timeout=3).read().decode("utf-8")))
-    f = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber) + '_shelly', 'w')
-    f.write(str(answer))
-    f.close()
-except:
-    print("failed to connect to device on " +  ipadr + ", setting all values to 0")
-#answer.update(a_dictionary)
-# Versuche Werte aus der Antwort zu extrahieren.
+        aread = urllib.request.urlopen("http://"+str(ipadr) +
+                                       "/rpc/Shelly.GetStatus",
+                                       timeout=3).read().decode("utf-8")
+        answer = json.loads(str(aread))
+    with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
+              str(devicenumber) + '_shelly', 'w') as f:
+        f.write(str(answer))
+except Exception:
+    print("failed to connect to device on " +
+          ipadr + ", setting all values to 0")
+#  answer.update(a_dictionary)
+#  Versuche Werte aus der Antwort zu extrahieren.
 try:
     if (gen == "1"):
-        aktpower = totalPowerFromShellyJson(answer)
+        aktpower = totalPowerFromShellyJson(answer, chan)
     else:
-        aktpower = int(answer['switch:0'] ['apower'])
-except:
+        if (chan > 0):
+            workchan = chan - 1
+        else:
+            workchan = chan
+        sw = 'switch:' + str(workchan)
+        aktpower = int(answer[sw]['apower'])
+except Exception:
     pass
 
 try:
-    if (gen == "1"):
-        relais = int(answer['relays'][0]['ison'])
+    if (chan > 0):
+        workchan = chan - 1
     else:
-        relais = int(answer['switch:0'] ['output'])
-except:
+        workchan = chan
+    if (gen == "1"):
+        relais = int(answer['relays'][workchan]['ison'])
+    else:
+        sw = 'switch:' + str(workchan)
+        relais = int(answer[sw]['output'])
+except Exception:
     pass
 
 try:
     temp0 = str(answer['ext_temperature']['0']['tC'])
-except:
+except Exception:
     pass
 
 try:
     temp1 = str(answer['ext_temperature']['1']['tC'])
-except:
+except Exception:
     pass
 
 try:
     temp2 = str(answer['ext_temperature']['2']['tC'])
-except:
+except Exception:
     pass
-
-answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + ',"temp0":' + str(temp0) + ',"temp1":' + str(temp1) + ',"temp2":' + str(temp2) + '} '
-
-f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
-json.dump(answer,f1)
-f1.close()
+answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)
+answer += ',"on":' + str(relais) + ',"temp0":' + str(temp0)
+answer += ',"temp1":' + str(temp1) + ',"temp2":' + str(temp2) + '}'
+with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
+          str(devicenumber), 'w') as f1:
+    json.dump(answer, f1)

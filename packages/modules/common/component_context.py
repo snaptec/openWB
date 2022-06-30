@@ -16,15 +16,16 @@ class SingleComponentUpdateContext:
                 component.update()
     """
 
-    def __init__(self, component_info: ComponentInfo):
+    def __init__(self, component_info: ComponentInfo, update_always: bool = True):
         self.__component_info = component_info
+        self.update_always = update_always
 
     def __enter__(self):
         log.debug("Update Komponente ['"+self.__component_info.name+"']")
         return None
 
     def __exit__(self, exception_type, exception, exception_traceback) -> bool:
-        MultiComponentUpdateContext.override_subcomponent_state(self.__component_info, exception)
+        MultiComponentUpdateContext.override_subcomponent_state(self.__component_info, exception, self.update_always)
         return True
 
 
@@ -64,7 +65,7 @@ class MultiComponentUpdateContext:
         self.__ignored_components.append(component)
 
     @staticmethod
-    def override_subcomponent_state(component_info: ComponentInfo, exception):
+    def override_subcomponent_state(component_info: ComponentInfo, exception, update_always: bool):
         active_context = getattr(
             MultiComponentUpdateContext.__thread_local, "active_context", None
         )  # type: Optional[MultiComponentUpdateContext]
@@ -73,5 +74,37 @@ class MultiComponentUpdateContext:
             # the value for the individual component
             active_context.ignore_subcomponent_state(component_info)
 
-        fault_state = FaultState.from_exception(exception)
+        if exception:
+            fault_state = FaultState.from_exception(exception)
+        else:
+            # Fehlerstatus nicht überschreiben
+            if update_always:
+                fault_state = FaultState.no_error()
+            else:
+                return
         fault_state.store_error(component_info)
+
+
+class ErrorCounterContext:
+    def __init__(self, exceeded_msg: str):
+        self.__error_counter = 0
+        self.__exceeded_msg = exceeded_msg
+
+    def __enter__(self):
+        return None
+
+    def __exit__(self, exception_type, exception, exception_traceback) -> bool:
+        if exception:
+            self.__error_counter += 1
+            raise exception
+        return True
+
+    def error_counter_exceeded(self) -> bool:
+        if self.__error_counter > 5:
+            log.error(self.__exceeded_msg)
+            return True
+        else:
+            return False
+
+    def reset_error_counter(self):
+        self.__error_counter = 0

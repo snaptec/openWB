@@ -87,6 +87,7 @@ class Sbase(Sbase0):
         self._mydevicepb = 'none'
         self._oldrelais = '2'
         self._oldwatt = 0
+        self._device_chan = 0
         # mqtt per
         self._whimported_tmp = 0
         self.runningtime = 0
@@ -330,6 +331,8 @@ class Sbase(Sbase0):
                 self._device_onuntiltime = value
             elif (key == 'mode'):
                 self.device_manual = valueint
+            elif (key == 'device_chan'):
+                self._device_chan = valueint
             elif (key == 'device_manual_control'):
                 self.device_manual_control = valueint
             elif (key == 'device_deactivateper'):
