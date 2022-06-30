@@ -554,7 +554,6 @@
 									<select name="wrsmaversion" id="wrsmaversion" class="form-control">
 										<option <?php if($wrsmaversionold == 0) echo "selected" ?> value="0">Standard</option>
 										<option <?php if($wrsmaversionold == 1) echo "selected" ?> value="1">Core-2</option>
-										<option <?php if($wrsmaversionold == 2) echo "selected" ?> value="2">Tripower Smart Energy</option>
 									</select>
 								</div>
 							</div>
@@ -570,7 +569,23 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option aktivieren wenn eine SMA Webbox auszulesen ist.
+										Diese Option aktivieren, wenn eine SMA Webbox auszulesen ist.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Handelt es sich um ein Hybrid-System?</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($wrsmahybridold == 0) echo " active" ?>">
+											<input type="radio" name="wrsmahybrid" id="wrsmahybridNo" value="0"<?php if($wrsmahybridold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($wrsmahybridold == 1) echo " active" ?>">
+											<input type="radio" name="wrsmahybrid" id="wrsmahybridYes" value="1"<?php if($wrsmahybridold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren, wenn ein Tripower Smart Energy oder ein anderes Hybrid-System verbaut ist.
 									</span>
 								</div>
 							</div>
