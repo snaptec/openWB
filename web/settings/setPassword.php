@@ -60,7 +60,7 @@
 							// no need to worry about special characters
 							file_put_contents( $tempfile, $_POST['password'] );
 							// generate password hash
-							exec( 'sudo htpasswd -i -c ' . $passwordfile . ' ' . $_POST['username'] . ' < ' . $tempfile );
+							exec( 'sudo htpasswd -i -c ' . $passwordfile . ' ' . escapeshellarg($_POST['username']) . ' < ' . $tempfile );
 							// remove temp password file
 							exec( 'sudo rm ' . $tempfile );
 							// write .htaccess file
