@@ -29,6 +29,11 @@ class JanitzaCounter:
     def update(self):
         with self.__tcp_client:
             power = self.__tcp_client.read_holding_registers(19026, ModbusDataType.FLOAT_32, unit=1)
+            powers = self.__tcp_client.read_holding_registers(19020, [ModbusDataType.FLOAT_32] * 3, unit=1)
+            currents = self.__tcp_client.read_holding_registers(19012, [ModbusDataType.FLOAT_32] * 3, unit=1)
+            voltages = self.__tcp_client.read_holding_registers(19000, [ModbusDataType.FLOAT_32] * 3, unit=1)
+            power_factors = self.__tcp_client.read_holding_registers(19044, [ModbusDataType.FLOAT_32] * 3, unit=1)
+            frequency = self.__tcp_client.read_holding_registers(19050, ModbusDataType.FLOAT_32, unit=1)
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
             self.__device_id, self.component_config["id"]
@@ -43,6 +48,11 @@ class JanitzaCounter:
         counter_state = CounterState(
             imported=imported,
             exported=exported,
-            power=power
+            power=power,
+            powers=powers,
+            currents=currents,
+            voltages=voltages,
+            frequency=frequency,
+            power_factors=power_factors
         )
         self.__store.set(counter_state)

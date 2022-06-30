@@ -28,7 +28,7 @@ def update(wr_smartme_url: str, wr_smartme_user: str, wr_smartme_pass: str):
     log.debug('WR Leistung: ' + str(wattwr))
     log.debug('WR Energie: ' + str(pvkwh))
 
-    get_inverter_value_store(1).set(InverterState(counter=pvkwh, power=wattwr))
+    get_inverter_value_store(1).set(InverterState(exported=pvkwh, power=wattwr))
 
 
 def main(argv: List[str]):

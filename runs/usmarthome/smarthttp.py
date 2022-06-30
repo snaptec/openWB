@@ -68,7 +68,7 @@ class Shttp(Sbase):
 
         argumentList = ['python3', self._prefixpy + 'http' + pname,
                         str(self.device_nummer), '0',
-                        self.devuberschuss, url]
+                        str(self.devuberschuss), url]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()

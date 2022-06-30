@@ -56,12 +56,12 @@ class VictronInverter:
 
         topic_str = "openWB/set/system/device/" + str(self.__device_id)+"/component/" + \
             str(self.component_config["id"])+"/"
-        _, counter = self.__sim_count.sim_count(power,
-                                                topic=topic_str,
-                                                data=self.simulation,
-                                                prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
+        _, exported = self.__sim_count.sim_count(power,
+                                                 topic=topic_str,
+                                                 data=self.simulation,
+                                                 prefix="pv%s" % ("" if self.component_config["id"] == 1 else "2"))
         inverter_state = InverterState(
             power=power,
-            counter=counter
+            exported=exported
         )
         self.__store.set(inverter_state)

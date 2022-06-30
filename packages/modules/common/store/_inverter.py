@@ -14,8 +14,8 @@ class InverterValueStoreRamdisk(ValueStore[InverterState]):
     def set(self, inverter_state: InverterState):
         try:
             self.__pv.power.write(inverter_state.power)
-            self.__pv.energy.write(inverter_state.counter)
-            self.__pv.energy_k.write(inverter_state.counter / 1000)
+            self.__pv.energy.write(inverter_state.exported)
+            self.__pv.energy_k.write(inverter_state.exported / 1000)
             if inverter_state.currents:
                 self.__pv.currents.write(inverter_state.currents)
         except Exception as e:
@@ -29,7 +29,7 @@ class InverterValueStoreBroker(ValueStore[InverterState]):
     def set(self, inverter_state: InverterState):
         try:
             pub_to_broker("openWB/set/pv/" + str(self.num) + "/get/power", inverter_state.power, 2)
-            pub_to_broker("openWB/set/pv/" + str(self.num) + "/get/counter", inverter_state.counter, 3)
+            pub_to_broker("openWB/set/pv/" + str(self.num) + "/get/exported", inverter_state.exported, 3)
             if inverter_state.currents:
                 pub_to_broker("openWB/set/pv/" + str(self.num) + "/get/currents", inverter_state.currents, 1)
         except Exception as e:

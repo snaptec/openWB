@@ -29,11 +29,11 @@ class SolaxInverter:
         with self.__tcp_client:
             power_temp = self.__tcp_client.read_input_registers(10, [ModbusDataType.UINT_16] * 2, unit=self.__modbus_id)
             power = sum(power_temp) * -1
-            counter = self.__tcp_client.read_input_registers(82, ModbusDataType.UINT_32, wordorder=Endian.Little,
-                                                             unit=self.__modbus_id) * 100
+            exported = self.__tcp_client.read_input_registers(82, ModbusDataType.UINT_32, wordorder=Endian.Little,
+                                                              unit=self.__modbus_id) * 100
 
         inverter_state = InverterState(
             power=power,
-            counter=counter
+            exported=exported
         )
         self.__store.set(inverter_state)

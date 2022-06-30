@@ -1,6 +1,4 @@
 #!/usr/bin/python
-import sys
-import os
 import time
 from pymodbus.client.sync import ModbusTcpClient
 import argparse
@@ -13,7 +11,7 @@ parser.add_argument("-v", "--verbose", action="store_true", help="verbose debug 
 args = parser.parse_args()
 
 if(args.verbose):
-    print("CP-Unterbrechung %s #%d: %ds"%(args.address, args.id, args.duration))
+    print("CP-Unterbrechung %s #%d: %ds" % (args.address, args.id, args.duration))
 
 client = ModbusTcpClient(args.address, port=8899)
 rq = client.write_register(0x0001, 256, unit=args.id)

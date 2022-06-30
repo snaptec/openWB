@@ -10,6 +10,7 @@ from helpermodules.cli import run_using_positional_cli_args
 
 log = logging.getLogger("Smartfox EVU")
 
+
 def get_xml_text(root, tag, attribute_key, attribute_value):
     try:
         value = None
@@ -20,6 +21,7 @@ def get_xml_text(root, tag, attribute_key, attribute_value):
     except:
         traceback.print_exc()
         exit(1)
+
 
 def update(bezug_smartfox_ip: str):
     log.debug('Smartfox IP: ' + bezug_smartfox_ip)
@@ -44,7 +46,6 @@ def update(bezug_smartfox_ip: str):
         versionshort = version[:-6]
     else:
         versionshort = "oldversion"
-
 
     if versionshort != "EM2 00.01":
         newversion = True
@@ -81,7 +82,6 @@ def update(bezug_smartfox_ip: str):
         var_bezuga2 = "u5996-41"
         var_bezuga3 = "u5993-41"
 
-
     # Aktuelle Leistung (kW --> W)
     wattbezug = (get_xml_text(root, "value", "id", var_wattbezug))[:-2]
     wattbezug1 = get_xml_text(root, "value", "id", var_wattbezug1)
@@ -99,8 +99,9 @@ def update(bezug_smartfox_ip: str):
     ekwh = str(ekwh)
 
     # Weitere Zählerdaten für die Statusseite (PowerFaktor, Spannung und Strom)
-    # Powerfaktor ist nach dem Firmwareupgrade auf EM2 00.01.03.06 (04-2021) nicht mehr in der values.xml daher fix auf 1
-    if newversion == False:
+    # Powerfaktor ist nach dem Firmwareupgrade auf EM2 00.01.03.06 (04-2021)
+    # nicht mehr in der values.xml daher fix auf 1
+    if newversion is False:
         evupf1 = 1
         evupf2 = 1
         evupf3 = 1
@@ -116,8 +117,8 @@ def update(bezug_smartfox_ip: str):
     bezuga2 = get_xml_text(root, "value", "id", var_bezuga2)
     bezuga3 = get_xml_text(root, "value", "id", var_bezuga3)
     # Prüfen ob Werte gültig
-    regex = '^[-+]?[0-9]+\.?[0-9]*$'
-    if re.search(regex, wattbezug) == None:
+    regex = r'^[-+]?[0-9]+\.?[0-9]*$'
+    if re.search(regex, wattbezug) is None:
         with open("/var/www/html/openWB/ramdisk/wattbezug", "r") as f:
             wattbezug = int(f.read())
 
@@ -153,7 +154,6 @@ def update(bezug_smartfox_ip: str):
     with open("/var/www/html/openWB/ramdisk/bezuga3", "w") as f:
         f.write(str(bezuga3))
 
-
     log.debug('Watt: ' + str(wattbezug))
     log.debug('Einspeisung: ' + str(ekwh))
     log.debug('Bezug: ' + str(ikwh))
@@ -170,6 +170,6 @@ def update(bezug_smartfox_ip: str):
     log.debug('Strom L2: ' + str(bezuga2))
     log.debug('Strom L3: ' + str(bezuga3))
 
+
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)
-

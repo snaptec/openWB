@@ -329,6 +329,12 @@ updateConfig(){
 	if ! grep -Fq "i3vin=" $ConfigFile; then
 		echo "i3vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "i3_soccalclp1=" $ConfigFile; then
+		echo "i3_soccalclp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "i3_soccalclp2=" $ConfigFile; then
+		echo "i3_soccalclp2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "zoeusername=" $ConfigFile; then
 		echo "zoeusername=username" >> $ConfigFile
 	fi
