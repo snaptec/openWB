@@ -36,7 +36,13 @@ def update(pv2ip: str):
     # call for XML file and parse it for total produced kwh
     yields = requests.get("http://" + pv2ip + "/yields.xml", timeout=2).text
     log.debug("YIELD: " + yields)
-    pvkwh_kostal_piko_MP = int(float(ET.fromstring(yields).find(".//Yield[@Type='Produced']/YieldValue").get("Value")))
+    
+    try:
+        pvkwh_kostal_piko_MP = int(float(ET.fromstring(yields).find(".//Yield[@Type='Produced']/YieldValue").get("Value")))
+    except AttributeError:
+        log.debug("PVkWh: cannot find VieldValue in yields.xml. Returning 0.")
+        pvkwh_kostal_piko_MP = 0
+        
     if re.search(regex, str(pvkwh_kostal_piko_MP)) is None:
         log.debug("PVkWh: NaN get prev. Value")
         with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
