@@ -1,5 +1,4 @@
 import json
-import logging
 
 
 class Sbase0:
@@ -8,7 +7,6 @@ class Sbase0:
 
     def __init__(self):
         print('__init__ Sbase executed')
-        self.log = logging.getLogger("smarthome")
 
     def readret(self):
         with open(self._basePath+'/ramdisk/smarthome_device_ret' +

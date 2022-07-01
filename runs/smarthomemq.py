@@ -4,6 +4,7 @@ import time
 import re
 import os
 import logging
+from usmarthome.global0 import log, log_config
 from usmarthome.smartbase import Sbase
 from usmarthome.smartavm import Savm
 from usmarthome.smartacthor import Sacthor
