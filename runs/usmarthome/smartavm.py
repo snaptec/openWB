@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from usmarthome.smartbase import Sbase, Slavm
+from usmarthome.global0 import log
 import subprocess
 
 
@@ -37,20 +38,20 @@ class Savm(Sbase):
             elif (key == 'device_password'):
                 self._device_password = value
             else:
-                self.logClass(2, "(" + str(self.device_nummer) + ") " +
-                              __class__.__name__ + " überlesen " + key +
-                              " " + value)
+                log.info("(" + str(self.device_nummer) + ") " +
+                         __class__.__name__ + " überlesen " + key +
+                         " " + value)
 
         if (self._old_measuretype0 == 'none'):
             self._mydevicemeasure0 = Slavm()
             self._old_measuretype0 = 'avm'
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") Integrierte Leistungsmessung. Neues Measure" +
-                          " device erzeugt " + self.device_type)
+            log.info("(" + str(self.device_nummer) +
+                     ") Integrierte Leistungsmessung. Neues Measure" +
+                     " device erzeugt " + self.device_type)
         else:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") Integrierte Leistungsmessung. Nur Parameter" +
-                          " update " + self.device_type)
+            log.info("(" + str(self.device_nummer) +
+                     ") Integrierte Leistungsmessung. Nur Parameter" +
+                     " update " + self.device_type)
         self._mydevicemeasure0.updatepar(input_param)
 
     def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
@@ -71,7 +72,7 @@ class Savm(Sbase):
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") on / off %s %d %s Fehlermeldung: %s "
-                          % ('avm', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") on / off %s %d %s Fehlermeldung: %s "
+                        % ('avm', self.device_nummer,
+                           str(self._device_ip), str(e1)))

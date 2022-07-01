@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from usmarthome.smartbase import Sbase
+from usmarthome.global0 import log
 import subprocess
-import json
 
 
 class Sstiebel(Sbase):
@@ -23,10 +23,10 @@ class Sstiebel(Sbase):
             self.newwattk = int(self.answer['powerc'])
             self.relais = int(self.answer['on'])
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Stiebel', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Stiebel', self.device_nummer,
+                           str(self._device_ip), str(e1)))
         self.postwatt()
 
     def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
@@ -42,7 +42,7 @@ class Sstiebel(Sbase):
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") on / off  %s %d %s Fehlermeldung: %s "
-                          % ('Stiebel', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") on / off  %s %d %s Fehlermeldung: %s "
+                        % ('Stiebel', self.device_nummer,
+                           str(self._device_ip), str(e1)))
