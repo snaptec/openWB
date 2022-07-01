@@ -26,16 +26,12 @@ numberOfSupportedDevices = 9  # limit number of smarthome devices
 
 
 def initlog():
-    global log_config
-    global log
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    log_config = logging.getLogger("smartcon")
     log_config.setLevel(logging.DEBUG)
     fh = logging.FileHandler(bp+'/ramdisk/smartcon.log', encoding='utf8')
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log_config.addHandler(fh)
-    log = logging.getLogger("smarthome")
     log.setLevel(logging.DEBUG)
     fh = logging.FileHandler(bp+'/ramdisk/smarthome.log', encoding='utf8')
     fh.setLevel(logging.DEBUG)
@@ -49,7 +45,6 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    global log_config
     # wenn exception hier wird mit nächster msg weitergemacht
     # macht paho unter phyton 3 immer so
     global parammqtt
@@ -77,7 +72,6 @@ def on_message(client, userdata, msg):
 
 def checkbootdone():
     global resetmaxeinschaltdauer
-    global log
     resetmaxeinschaltdauer = 0
     try:
         with open(bp+'/ramdisk/bootinprogress', 'r') as value:
@@ -119,7 +113,6 @@ def loadregelvars():
     global numberOfSupportedDevices
     global maxspeicher
     global mydevices
-    global log
     try:
         with open(bp+'/ramdisk/speichervorhanden', 'r') as value:
             speichervorhanden = int(value.read())
@@ -194,7 +187,6 @@ def getdevicevalues():
     global mydevices
     global uberschuss
     global uberschussoffset
-    global log
     totalwatt = 0
     totalwattot = 0
     totalminhaus = 0
@@ -263,7 +255,6 @@ def getdevicevalues():
 
 def sendmq(mqtt_input):
     global mqtt_cache
-    global log
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key, value in mqtt_input.items():
@@ -290,7 +281,6 @@ def update_devices():
     global parammqtt
     global mydevices
     global mqtt_cache
-    global log
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     # statische daten einschaltgruppe
@@ -389,8 +379,6 @@ def update_devices():
 def readmq():
     global parammqtt
     global mydevices
-    global log_config
-    global log
     log_config.info("Config reRead start")
     log.info("Config reRead start")
     parammqtt = []
@@ -415,7 +403,6 @@ def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
     global numberOfSupportedDevices
     global mydevices
-    global log
     mqtt_reset = {}
     hour = time.strftime("%H")
     if (int(hour) == 0):
