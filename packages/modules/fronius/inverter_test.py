@@ -1,13 +1,14 @@
-import pytest
-
-import requests_mock
 from unittest.mock import Mock
 
+import pytest
+import requests_mock
+
+from dataclass_utils import dataclass_from_dict
+from helpermodules import compatibility
 from modules.common.simcount import SimCountLegacy
 from modules.common.store._api import LoggingValueStore
 from modules.fronius import inverter, device
 from modules.fronius.abstract_config import FroniusConfiguration
-from helpermodules import compatibility
 from test_utils.mock_ramdisk import MockRamdisk
 
 SAMPLE_IP = "1.1.1.1"
@@ -23,7 +24,7 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
     component_config = inverter.get_default_config()
     device_config = device.get_default_config()["configuration"]
     device_config["ip_address"] = SAMPLE_IP
-    wr = inverter.FroniusInverter(0, component_config, FroniusConfiguration.from_dict(device_config))
+    wr = inverter.FroniusInverter(0, component_config, dataclass_from_dict(FroniusConfiguration, device_config))
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
@@ -36,7 +37,7 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
 
     # mock.assert_called_once()
     inverter_state = mock.call_args[0][0]
-    assert inverter_state.counter == 0
+    assert inverter_state.exported == 0
     assert inverter_state.currents == [0, 0, 0]
     assert inverter_state.power == -196.08712768554688
 

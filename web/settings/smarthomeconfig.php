@@ -161,6 +161,23 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly hide">
+								<hr class="border-secondary">
+								<div class="form-row mb-1">
+									<label for="device_chanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Kanal- / Meter-Auswahl</label>
+									<div class="col">
+										<select class="form-control" name="device_chan" id="device_chanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<option value="0" data-option="0" selected="selected">Kanal 0 / alle Meter summiert</option>
+											<option value="1" data-option="1">Kanal 0 / Meter 1</option>
+											<option value="2" data-option="2">Kanal 1 / Meter 2</option>
+											<option value="3" data-option="3">Kanal 2 / Meter 3</option>
+											<option value="4" data-option="4">Kanal 3 / Meter 4</option>
+											<option value="5" data-option="5">Kanal 4 / Meter 5</option>
+											<option value="6" data-option="6">Kanal 5 / Meter 6</option>
+										</select>
+									</div>
+								</div>
+							</div>
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-none hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
@@ -671,6 +688,21 @@ $numDevices = 9;
 									<label for="device_measureipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									</div>
+								</div>
+								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly hide">
+									<div class="form-row mb-1">
+								  <hr class="border-secondary">
+										<label for="device_measchanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Meter Auswahl</label>
+										<select class="form-control" name="device_measchan" id="device_measchanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<option value="0" data-option="0" selected="selected">alle Meter summiert</option>
+											<option value="1" data-option="1">Meter 1</option>
+											<option value="2" data-option="2">Meter 2</option>
+											<option value="3" data-option="3">Meter 3</option>
+											<option value="4" data-option="4">Meter 4</option>
+											<option value="5" data-option="5">Meter 5</option>
+											<option value="6" data-option="6">Meter 6</option>
+										</select>
 									</div>
 								</div>
 								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm120 hide; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-we514 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-fronius hide">

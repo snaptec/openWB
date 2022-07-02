@@ -17,7 +17,7 @@ def update(wrkostalpikoip: str, speichermodul: str):
     # Auslesen eines Kostal Piko WR über die integrierte API des WR mit angeschlossenem Eigenverbrauchssensor.
 
     params = (
-        ('dxsEntries', ['33556736', '251658753', '83887106', '83887362', '83887618']),
+        ('dxsEntries', ['67109120', '251658753', '83887106', '83887362', '83887618']),
     )
     pvwatttmp = requests.get('http://'+wrkostalpikoip+'/api/dxs.json', params=params, timeout=3).json()
     # aktuelle Ausgangsleistung am WR [W]
@@ -30,6 +30,13 @@ def update(wrkostalpikoip: str, speichermodul: str):
 
     if pvwatt > 5:
         pvwatt = pvwatt*-1
+
+    # Bereinigen der WR-Leistung, um die Batterieentladeleistung, falls ein Hybrid-System vorhanden ist.
+    if speichermodul == "speicher_bydhv":
+        with open("/var/www/html/openWB/ramdisk/speicherleistung", "r") as f:
+            speicherleistung = float(f.read())
+        if speicherleistung < 0:
+            pvwatt -= speicherleistung
 
     # zur weiteren Verwendung im Webinterface
     with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:

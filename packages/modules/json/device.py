@@ -2,6 +2,7 @@
 import logging
 from typing import Dict, List, Union, Optional
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
 from modules.common.abstract_device import AbstractDevice
@@ -28,17 +29,6 @@ class JsonConfiguration:
     def __init__(self, url: str):
         self.url = url
 
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["url"]
-        try:
-            values = [device_config[key] for key in keys]
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return JsonConfiguration(*values)
-
 
 class Json:
     def __init__(self, name: str, type: str, id: int, configuration: JsonConfiguration) -> None:
@@ -46,23 +36,6 @@ class Json:
         self.type = type
         self.id = id
         self.configuration = configuration
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["name", "type", "id", "configuration"]
-        try:
-            values = [device_config[key] for key in keys]
-            values = []
-            for key in keys:
-                if isinstance(device_config[key], Dict):
-                    values.append(JsonConfiguration.from_dict(device_config[key]))
-                else:
-                    values.append(device_config[key])
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return Json(*values)
 
 
 json_component_classes = Union[bat.JsonBat, counter.JsonCounter, inverter.JsonInverter]
@@ -78,9 +51,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, json_component_classes]
         try:
-            self.device_config = device_config \
-                if isinstance(device_config, Json) \
-                else Json.from_dict(device_config)
+            self.device_config = dataclass_from_dict(Json, device_config)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 
@@ -134,8 +105,8 @@ def read_legacy_counter(ip_address: str, jq_power: str, jq_imported: str, jq_exp
     )
 
 
-def read_legacy_inverter(ip_address: str, jq_power: str, jq_counter: str, num: int):
-    read_legacy(ip_address, inverter.get_default_config(), num, jq_power=jq_power, jq_counter=jq_counter)
+def read_legacy_inverter(ip_address: str, jq_power: str, jq_exported: str, num: int):
+    read_legacy(ip_address, inverter.get_default_config(), num, jq_power=jq_power, jq_exported=jq_exported)
 
 
 def main(argv: List[str]):

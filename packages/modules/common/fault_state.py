@@ -16,14 +16,15 @@ class FaultStateLevel(IntEnum):
 
 
 class ComponentInfo:
-    def __init__(self, id: int, name: str, type: str) -> None:
+    def __init__(self, id: int, name: str, type: str, hostname: str = "localhost") -> None:
         self.id = id
         self.name = name
         self.type = type
+        self.hostname = hostname
 
     @staticmethod
-    def from_component_config(component_config: dict):
-        return ComponentInfo(component_config["id"], component_config["name"], component_config["type"])
+    def from_component_config(component_config: dict, hostname: str = "localhost"):
+        return ComponentInfo(component_config["id"], component_config["name"], component_config["type"], hostname)
 
 
 class FaultState(Exception):
@@ -40,37 +41,29 @@ class FaultState(Exception):
                           traceback.format_exc())
             ramdisk = compatibility.is_ramdisk_in_use()
             if ramdisk:
-                topic = component_type.type_to_topic_mapping(component_info.type)
+                topic = component_type.type_topic_mapping_comp(component_info.type)
                 prefix = "openWB/set/" + topic + "/"
                 if component_info.id is not None:
-                    if topic == "lp":
+                    if component_type == "vehicle":
                         prefix += str(component_info.id) + "/socF"
                     else:
                         prefix += str(component_info.id) + "/f"
                 else:
                     prefix += "f"
-                pub.pub_single(prefix + "aultStr", self.fault_str)
-                pub.pub_single(prefix + "aultState", self.fault_state.value)
+                pub.pub_single(prefix + "aultStr", self.fault_str, hostname=component_info.hostname)
+                pub.pub_single(prefix + "aultState", self.fault_state.value, hostname=component_info.hostname)
+                if "chargepoint" in component_info.type:
+                    pub.pub_single("openWB/set/" + topic + "/" + str(component_info.id) +
+                                   "/get/fault_str", self.fault_str, hostname=component_info.hostname)
+                    pub.pub_single("openWB/set/" + topic + "/" + str(component_info.id) +
+                                   "/get/fault_state", self.fault_state.value, hostname=component_info.hostname)
             else:
                 topic = component_type.type_to_topic_mapping(component_info.type)
-                pub.Pub().pub(
-                    "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_str", self.fault_str)
+                pub.Pub().pub("openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_str", self.fault_str)
                 pub.Pub().pub(
                     "openWB/set/" + topic + "/" + str(component_info.id) + "/get/fault_state", self.fault_state.value)
         except Exception:
             log.exception("Fehler im Modul fault_state")
-
-    def __type_topic_mapping_comp(self, component_type: str) -> str:
-        if "bat" in component_type:
-            return "houseBattery"
-        elif "counter" in component_type:
-            return "evu"
-        elif "inverter" in component_type:
-            return "pv"
-        elif "vehicle" in component_type:
-            return "lp"
-        else:
-            raise Exception("Unbekannter Komponenten-Typ: " + component_type)
 
     @staticmethod
     def error(message: str) -> "FaultState":

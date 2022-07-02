@@ -12,7 +12,7 @@ log = logging.getLogger("Solarworld EVU")
 def update(solarworld_emanagerip: str):
     log.debug('Solarworld IP: ' + solarworld_emanagerip)
 
-    # Auslesen eines Solarworl eManagers über die integrierte JSON-API
+    # Auslesen eines Solarworld eManagers über die integrierte JSON-API
     emanagerantwort = requests.get(
         'http://'+solarworld_emanagerip+'/rest/solarworld/lpvm/powerAndBatteryData', timeout=3).json()
     try:
@@ -28,9 +28,6 @@ def update(solarworld_emanagerip: str):
 
     # Bezug ist entweder -Out oder In; bei Einspeisung ist 'em_in_watt' immer 0
     bezug_watt = int(em_in_watt - em_out_watt)
-
-    # wenn eManager aus bzw. keine Antwort ersetze leeren Wert durch eine 0
-    ra = '^-?[0-9]+$'
 
     log.debug('Leistung: ' + str(bezug_watt))
     with open("/var/www/html/openWB/ramdisk/wattbezug", "w") as f:

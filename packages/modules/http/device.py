@@ -3,6 +3,7 @@ import logging
 import re
 from typing import Dict, Union, List
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
@@ -28,17 +29,6 @@ class HttpConfiguration:
     def __init__(self, url: str):
         self.url = url
 
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["url"]
-        try:
-            values = [device_config[key] for key in keys]
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return HttpConfiguration(*values)
-
 
 class Http:
     def __init__(self, name: str, type: str, id: int, configuration: HttpConfiguration) -> None:
@@ -46,23 +36,6 @@ class Http:
         self.type = type
         self.id = id
         self.configuration = configuration
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["name", "type", "id", "configuration"]
-        try:
-            values = [device_config[key] for key in keys]
-            values = []
-            for key in keys:
-                if isinstance(device_config[key], Dict):
-                    values.append(HttpConfiguration.from_dict(device_config[key]))
-                else:
-                    values.append(device_config[key])
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return Http(*values)
 
 
 http_component_classes = Union[bat.HttpBat, counter.HttpCounter, inverter.HttpInverter]
@@ -78,9 +51,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, http_component_classes]
         try:
-            self.device_config = device_config \
-                if isinstance(device_config, Http) \
-                else Http.from_dict(device_config)
+            self.device_config = dataclass_from_dict(Http, device_config)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 
@@ -173,12 +144,12 @@ def read_legacy_counter(power_path: str, imported_path: str, exported_path: str,
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
-def read_legacy_inverter(power_path: str, counter_path: str, num: int):
+def read_legacy_inverter(power_path: str, exported_path: str, num: int):
     component_config = inverter.get_default_config()
     component_config["id"] = num
     component_config["configuration"] = create_paths_dict(
         power_path=power_path,
-        counter_path=counter_path,
+        exported_path=exported_path,
     )
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 

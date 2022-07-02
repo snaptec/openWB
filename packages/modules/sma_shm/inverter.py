@@ -19,7 +19,7 @@ def get_default_config() -> dict:
 def parse_datagram(sma_data: dict):
     return InverterState(
         power=-int(sma_data['psupply']),
-        counter=sma_data['psupplycounter'] * 1000
+        exported=sma_data['psupplycounter'] * 1000
     )
 
 

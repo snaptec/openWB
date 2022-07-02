@@ -36,7 +36,7 @@ class Device(AbstractDevice):
     }
 
     def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, batterx_component_classes]
+        self.components = {}  # type: Dict[str, batterx_component_classes]
         try:
             self.device_config = device_config
         except Exception:
@@ -45,7 +45,7 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["type"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config["type"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config["id"], component_config))
         else:
             raise Exception(
@@ -54,14 +54,14 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.debug("Start device reading " + str(self._components))
-        if self._components:
-            with MultiComponentUpdateContext(self._components):
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            with MultiComponentUpdateContext(self.components):
                 resp_json = req.get_http_session().get(
                     'http://' + self.device_config["configuration"]["ip_address"] + '/api.php?get=currentstate',
                     timeout=5).json()
-                for component in self._components:
-                    self._components[component].update(resp_json)
+                for component in self.components:
+                    self.components[component].update(resp_json)
         else:
             log.warning(
                 self.device_config["name"] +

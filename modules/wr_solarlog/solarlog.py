@@ -23,11 +23,11 @@ def update(bezug_solarlog_ip: str):
     if pv_watt > 5:
         pv_watt = pv_watt*-1
 
-
     log.debug('WR Leistung: ' + str(pv_watt))
     log.debug('WR Energie: ' + str(pv_kwh))
 
-    get_inverter_value_store(1).set(InverterState(counter=pv_kwh, power=pv_watt))
+    get_inverter_value_store(1).set(InverterState(exported=pv_kwh, power=pv_watt))
+
 
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)
