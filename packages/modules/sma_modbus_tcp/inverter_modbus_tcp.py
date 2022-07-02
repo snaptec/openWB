@@ -83,8 +83,6 @@ class SmaModbusTcpInverter:
                 # Batterieladung (Wh) (Diese hat einen positiven Einfluss auf die Gesamtenergie)
                 battery_charge_enegery = self.__tcp_client.read_holding_registers(31397, ModbusDataType.UINT_64, unit=3)
                 energy += battery_charge_enegery
-            else:
-                raise FaultState.error("Unbekannte Version: "+str(self.component_config["configuration"]["version"]))
 
             if power_total == self.SMA_INT32_NAN:
                 power_total = 0
