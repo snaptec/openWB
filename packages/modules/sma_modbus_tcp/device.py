@@ -73,7 +73,7 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: int, num: int) -> None:
+def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: int, hybrid: int, num: int) -> None:
     def create_webbox_inverter(address: str):
         config = inverter_webbox.get_default_config()
         config["id"] = num
@@ -83,6 +83,7 @@ def read_legacy(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: in
         config = inverter_modbus_tcp.get_default_config()
         config["id"] = num
         config["configuration"]["version"] = SmaInverterVersion(version)
+        config["configuration"]["hybrid"] = bool(hybrid)
         return inverter_modbus_tcp.SmaModbusTcpInverter(0, address, config)
 
     inverter1 = (create_webbox_inverter if webbox else create_modbus_inverter)(ip1)

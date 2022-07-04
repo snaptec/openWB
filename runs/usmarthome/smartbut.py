@@ -1,4 +1,5 @@
 from usmarthome.smartbase0 import Sbase0
+from usmarthome.global0 import log
 import urllib.request
 import json
 
@@ -7,6 +8,7 @@ class Spbase(Sbase0):
     def __init__(self):
         #
         # setting
+        super().__init__()
         print('__init__ Spbase executed')
         self._device_pbip = 'none'
         self.device_nummer = 0
@@ -18,9 +20,9 @@ class Spbase(Sbase0):
             if (key == 'device_pbip'):
                 self._device_pbip = value
             else:
-                self.logClass(2, "(" + str(self.device_nummer) + ") "
-                              + __class__.__name__ + " überlesen " + key +
-                              " " + value)
+                log.info("(" + str(self.device_nummer) + ") "
+                         + __class__.__name__ + " überlesen " + key +
+                         " " + value)
 
     def showstat(self, manual, relais):
         pass
@@ -56,10 +58,9 @@ class Sbshelly(Spbase):
                                             + "/status",
                                             timeout=3).read().decode("utf-8"))
         except Exception as e1:
-            self.logClass(2, "Shelly button ch (%d) %s Fehlermeldung: %s "
-                          % (self.device_nummer,
-                             self._device_pbip, str(e1)))   
-            return newmanual, newmanual_control                         
+            log.warning("Shelly button ch (%d) %s Fehlermeldung: %s "
+                        % (self.device_nummer, self._device_pbip, str(e1)))
+            return newmanual, newmanual_control
         a = json.loads(at)
         with open(self._basePath+'/ramdisk/smarthome_device_ret' +
                   str(self.device_nummer) + '_shelly_bp', 'w') as f:
@@ -73,9 +74,8 @@ class Sbshelly(Spbase):
         if ((self.event == self.oldevent) and
            (self.event_cnt == self.oldevent_cnt)):
             return newmanual, newmanual_control
-        self.logClass(2, "Shelly button pressed (%d) %s %s"
-                      % (self.device_nummer,
-                         self._device_pbip, self.event))
+        log.info("Shelly button pressed (%d) %s %s"
+                 % (self.device_nummer, self._device_pbip, self.event))
         # im automatic modus -> ein mal Drücken wechselen auf manual
         if (manual == 0):
             newmanual = 1
@@ -98,14 +98,12 @@ class Sbshelly(Spbase):
             urllib.request.urlopen("http://" + str(self._device_pbip) +
                                    "/settings?led_status_disable=true",
                                    timeout=3)
-            self.logClass(2, "Shelly button led off (%d) %s"
-                          % (self.device_nummer,
-                             self._device_pbip))
+            log.info("Shelly button led off (%d) %s"
+                     % (self.device_nummer, self._device_pbip))
 
         except Exception as e1:
-            self.logClass(2, "Shelly button off (%d) %s Fehlermeldung: %s "
-                          % (self.device_nummer,
-                             self._device_pbip, str(e1)))
+            log.warning("Shelly button off (%d) %s Fehlermeldung: %s "
+                        % (self.device_nummer, self._device_pbip, str(e1)))
         self.led = 0
 
     def pbon(self):
@@ -115,13 +113,11 @@ class Sbshelly(Spbase):
             urllib.request.urlopen("http://" + str(self._device_pbip) +
                                    "/settings?led_status_disable=false",
                                    timeout=3)
-            self.logClass(2, "Shelly button led on (%d) %s"
-                          % (self.device_nummer,
-                             self._device_pbip))
+            log.info("Shelly button led on (%d) %s"
+                     % (self.device_nummer, self._device_pbip))
         except Exception as e1:
-            self.logClass(2, "Shelly button on (%d) %s Fehlermeldung: %s "
-                          % (self.device_nummer,
-                             self._device_pbip, str(e1)))
+            log.warning("Shelly button on (%d) %s Fehlermeldung: %s "
+                        % (self.device_nummer, self._device_pbip, str(e1)))
         self.led = 1
 
     def pbblink(self):

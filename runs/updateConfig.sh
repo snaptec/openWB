@@ -1281,6 +1281,9 @@ updateConfig(){
 	if ! grep -Fq "wrsmawebbox=" $ConfigFile; then
 		echo "wrsmawebbox=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "wrsmahybrid=" $ConfigFile; then
+		echo "wrsmahybrid=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "bootmodus=" $ConfigFile; then
 		echo "bootmodus=3" >> $ConfigFile
 	fi

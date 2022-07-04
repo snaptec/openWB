@@ -1,4 +1,5 @@
 from usmarthome.smartbase0 import Sbase0
+from usmarthome.global0 import log
 import subprocess
 
 
@@ -6,6 +7,7 @@ class Slbase(Sbase0):
     def __init__(self):
         #
         # setting
+        super().__init__()
         print('__init__ Slbase executed')
         self.device_nummer = 0
         self.device_name = 'none'
@@ -92,7 +94,7 @@ class Slbase(Sbase0):
             elif (key == 'device_measchan'):
                 self._device_measchan = valueint
             elif (key == 'device_chan'):
-                self._device_chan = valueint                
+                self._device_chan = valueint
             elif (key == 'device_measuresmaser'):
                 self._device_measuresmaser = value
             elif (key == 'device_measureid'):
@@ -124,9 +126,9 @@ class Slbase(Sbase0):
             elif (key == 'device_stateurl'):
                 self._device_stateurl = value
             else:
-                self.logClass(2, "(" + str(self.device_nummer) + ") "
-                              + __class__.__name__ + " überlesen " + key +
-                              " " + value)
+                log.info("(" + str(self.device_nummer) + ") "
+                         + __class__.__name__ + " überlesen " + key +
+                         " " + value)
 
     def __del__(self):
         print('__del__ Slbase executed ')
@@ -157,8 +159,8 @@ class Slmqtt(Slbase):
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('mqtt', self.device_nummer, ip, str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('mqtt', self.device_nummer, ip, str(e1)))
 
 
 class Slshelly(Slbase):
@@ -207,8 +209,8 @@ class Slshelly(Slbase):
             else:
                 self.temp2 = '300'
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Shelly', self.device_nummer, ip, str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Shelly', self.device_nummer, ip, str(e1)))
 
 
 class Slavm(Slbase):
@@ -243,8 +245,8 @@ class Slavm(Slbase):
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Avm ', self.device_nummer, ip, str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Avm ', self.device_nummer, ip, str(e1)))
 
 
 class Sltasmota(Slbase):
@@ -271,8 +273,8 @@ class Sltasmota(Slbase):
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Tasmota', self.device_nummer, ip, str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Tasmota', self.device_nummer, ip, str(e1)))
 
 
 class Slhttp(Slbase):
@@ -305,8 +307,8 @@ class Slhttp(Slbase):
             self.newwattk = int(answer['powerc'])
             self.relais = int(answer['on'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d Fehlermeldung: %s "
-                          % ('http', self.device_nummer, str(e1)))
+            log.warning("Leistungsmessung %s %d Fehlermeldung: %s "
+                        % ('http', self.device_nummer, str(e1)))
 
 
 class Slmystrom(Slbase):
@@ -340,8 +342,8 @@ class Slmystrom(Slbase):
             else:
                 self.temp0 = '300'
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Mystrom', self.device_nummer, ip, str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Mystrom', self.device_nummer, ip, str(e1)))
 
 
 class Slsmaem(Slbase):
@@ -362,9 +364,9 @@ class Slsmaem(Slbase):
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('smaem ', self.device_nummer,
-                             str(self._device_measureip), str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('smaem ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
         return self.newwatt, self.newwattk
 
 
@@ -385,9 +387,9 @@ class Slwe514(Slbase):
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('we514 ', self.device_nummer,
-                             str(self._device_measureip), str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('we514 ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
         return self.newwatt, self.newwattk
 
 
@@ -410,8 +412,8 @@ class Sljson(Slbase):
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %s Fehlermeldung: %s "
-                          % ('json ', self.device_nummer, str(e1)))
+            log.warning("Leistungsmessung %s %s Fehlermeldung: %s "
+                        % ('json ', self.device_nummer, str(e1)))
         return self.newwatt, self.newwattk
 
 
@@ -432,9 +434,9 @@ class Slfronius(Slbase):
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('fronius ', self.device_nummer,
-                             str(self._device_measureip), str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('fronius ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
         return self.newwatt, self.newwattk
 
 
@@ -456,9 +458,9 @@ class Slsdm630(Slbase):
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Sdm630 ', self.device_nummer,
-                             str(self._device_measureip), str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Sdm630 ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
         return self.newwatt, self.newwattk
 
 
@@ -480,7 +482,7 @@ class Slsdm120(Slbase):
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
         except Exception as e1:
-            self.logClass(2, "Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('Sdm120 ', self.device_nummer,
-                             str(self._device_measureip), str(e1)))
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('Sdm120 ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
         return self.newwatt, self.newwattk
