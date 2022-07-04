@@ -50,7 +50,7 @@ class SolaredgeCounter:
 
             # 40204: AC Frequency
             # 40205: AC Frequency Scale Factor
-            frequency, = read_scaled_int16(40204, 1)
+            frequency = read_scaled_int16(40204, 1)[0]
 
             # 40222/40223/40224: Power factor by phase (unit=%)
             # 40225: AC Power Factor Scale Factor
