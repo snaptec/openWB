@@ -257,7 +257,7 @@ def read_legacy(component_type: str,
                         total_power -= sum(bat_power)
                     get_bat_value_store(1).set(BatState(power=total_power, soc=mean(soc_bat)))
                 get_inverter_value_store(num).set(InverterState(exported=total_energy,
-                                                                power=min(0, total_power), currents=total_currents))
+                                                                power=total_power, currents=total_currents))
         else:
             inv = create_inverter(int(slave_id0))
             with SingleComponentUpdateContext(inv.component_info):
