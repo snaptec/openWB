@@ -42,7 +42,7 @@ goecheck(){
 					fi
 				fi
 				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					if ((state == "0")) ; then
+					if (( state == "0" )) || (( state == "2" )) ; then
 						curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/api/set?frc=1 > /dev/null
 					fi
 				fi
@@ -93,7 +93,7 @@ goecheck(){
 						fi
 					fi
 					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-						if ((state == "0")) ; then
+						if (( state == "0" )) || (( state == "2" )) ; then
 							curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/api/set?frc=1 > /dev/null
 						fi
 					fi
@@ -139,12 +139,12 @@ goecheck(){
 					state=$(echo $output | jq -r '.frc')
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
 						lp3enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
-						if ((state == "1"))  && (( lp3enabled == "1" )) ; then
+						if (( state == "1" ))  && (( lp3enabled == "1" )) ; then
 							curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/api/set?frc=0 > /dev/null
 						fi
 					fi
 					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-						if ((state == "0")) ; then
+						if (( state == "0" )) || (( state == "2" )) ; then
 							curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/api/set?frc=1 > /dev/null
 						fi
 					fi
