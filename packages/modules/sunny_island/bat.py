@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import BatState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.modbus import ModbusDataType
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Sunny Island Speicher",
-        "id": 0,
-        "type": "bat",
-        "configuration": {}
-    }
+from modules.sunny_island.config import SunnyIslandBatSetup
 
 
 class SunnyIslandBat:
-    def __init__(self, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 component_config: Union[Dict, SunnyIslandBatSetup],
+                 tcp_client: modbus.ModbusClient) -> None:
+        self.component_config = dataclass_from_dict(SunnyIslandBatSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__store = get_bat_value_store(component_config["id"])
+        self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
@@ -36,3 +34,6 @@ class SunnyIslandBat:
             exported=exported
         )
         self.__store.set(bat_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SunnyIslandBatSetup)

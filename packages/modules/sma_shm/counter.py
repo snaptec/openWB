@@ -3,18 +3,9 @@ from math import copysign
 
 from modules.common.component_state import CounterState
 from modules.common.store import get_counter_value_store
+from modules.common.component_type import ComponentDescriptor
+from modules.sma_shm.config import SmaHomeManagerCounterSetup
 from modules.sma_shm.utils import SpeedwireComponent
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Home Manager Zähler",
-        "id": None,
-        "type": "counter",
-        "configuration": {
-            "serials": None
-        }
-    }
 
 
 def parse_datagram(sma_data: dict):
@@ -38,5 +29,8 @@ def parse_datagram(sma_data: dict):
     )
 
 
-def create_component(component_config: dict):
+def create_component(component_config: SmaHomeManagerCounterSetup):
     return SpeedwireComponent(get_counter_value_store, parse_datagram, component_config)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SmaHomeManagerCounterSetup)

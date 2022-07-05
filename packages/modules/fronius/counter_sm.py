@@ -1,44 +1,38 @@
 #!/usr/bin/env python3
 import logging
 from requests import Session
-from typing import Tuple
+from typing import Dict, Tuple, Union
 
+from dataclass_utils import dataclass_from_dict
+from modules.fronius.config import FroniusSmCounterSetup
 from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.store import get_counter_value_store
-from modules.fronius.abstract_config import FroniusConfiguration, MeterLocation
+from modules.fronius.config import FroniusConfiguration, MeterLocation
 
 log = logging.getLogger(__name__)
 
 
-def get_default_config() -> dict:
-    return {
-        "name": "Fronius SM Zähler",
-        "id": 0,
-        "type": "counter_sm",
-        "configuration": {
-            "variant": 0,
-            "meter_id": 0
-        }
-    }
-
-
 class FroniusSmCounter:
-    def __init__(self, device_id: int, component_config: dict, device_config: FroniusConfiguration) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, FroniusSmCounterSetup],
+                 device_config: FroniusConfiguration) -> None:
         self.__device_id = device_id
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(FroniusSmCounterSetup, component_config)
         self.device_config = device_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
-        self.__store = get_counter_value_store(component_config["id"])
+        self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
 
         session = req.get_http_session()
-        variant = self.component_config["configuration"]["variant"]
+        variant = self.component_config.configuration.variant
         if variant == 0 or variant == 1:
             counter_state = self.__update_variant_0_1(session)
         elif variant == 2:
@@ -47,7 +41,7 @@ class FroniusSmCounter:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
         topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config["id"]
+            self.__device_id, self.component_config.id
         )
         counter_state.imported, counter_state.exported = self.__sim_count.sim_count(
             counter_state.power,
@@ -58,8 +52,8 @@ class FroniusSmCounter:
         self.__store.set(counter_state)
 
     def __update_variant_0_1(self, session: Session) -> CounterState:
-        variant = self.component_config["configuration"]["variant"]
-        meter_id = self.component_config["configuration"]["meter_id"]
+        variant = self.component_config.configuration.variant
+        meter_id = self.component_config.configuration.meter_id
         if variant == 0:
             params = (
                 ('Scope', 'Device'),
@@ -108,7 +102,7 @@ class FroniusSmCounter:
         )
 
     def __update_variant_2(self, session: Session) -> CounterState:
-        meter_id = str(self.component_config["configuration"]["meter_id"])
+        meter_id = str(self.component_config.configuration.meter_id)
         response = session.get(
             'http://' + self.device_config.ip_address + '/solar_api/v1/GetMeterRealtimeData.cgi',
             params=(('Scope', 'System'),),
@@ -154,3 +148,6 @@ class FroniusSmCounter:
         power_load = float(response.json()["Body"]["Data"]["Site"]["P_Grid"])
         power_inverter = float(response.json()["Body"]["Data"]["Site"]["P_PV"] or 0)
         return power_load, power_inverter
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=FroniusSmCounterSetup)
