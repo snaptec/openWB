@@ -241,8 +241,8 @@ def read_legacy(component_type: str,
                 total_currents = [0.0]*3
                 for inv in inverters:
                     state = inv.read_state()
-                    total_power -= state.power
-                    total_energy += state.counter
+                    total_power += state.power
+                    total_energy += state.exported
                     total_currents = list(map(add, total_currents, state.currents))
 
                 if extprodakt:
@@ -255,15 +255,15 @@ def read_legacy(component_type: str,
                         total_power -= sum(min(p, 0) for p in bat_power)
                     else:
                         total_power -= sum(bat_power)
-                    get_bat_value_store(1).set(BatState(power=sum(total_power), soc=mean(soc_bat)))
-                get_inverter_value_store(num).set(InverterState(counter=total_energy,
+                    get_bat_value_store(1).set(BatState(power=total_power, soc=mean(soc_bat)))
+                get_inverter_value_store(num).set(InverterState(exported=total_energy,
                                                                 power=min(0, total_power), currents=total_currents))
         else:
             inv = create_inverter(int(slave_id0))
             with SingleComponentUpdateContext(inv.component_info):
                 state = inv.read_state()
                 total_power = state.power * -1
-                total_energy = state.counter
+                total_energy = state.exported
 
                 if batwrsame == 1:
                     zweiterspeicher = 0
@@ -276,11 +276,11 @@ def read_legacy(component_type: str,
                 inv = create_inverter(int(slave_id0))
                 state = inv.read_state()
                 total_power -= state.power
-                total_energy += state.counter
+                total_energy += state.exported
                 if extprodakt:
                     state = get_external_inverter_state(dev, int(slave_id0))
                     total_power -= state.power
-                get_inverter_value_store(num).set(InverterState(counter=total_energy, power=total_power))
+                get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
     elif component_type == "bat":
         with SingleComponentUpdateContext(ComponentInfo(0, "Solaredge Speicher", "bat")):

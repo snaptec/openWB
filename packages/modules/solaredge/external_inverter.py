@@ -7,6 +7,7 @@ from modules.common.component_state import InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
+from modules.solaredge.scale import scale_registers
 
 log = logging.getLogger(__name__)
 
@@ -36,11 +37,19 @@ class SolaredgeExternalInverter:
         self.__store.set(state)
 
     def read_state(self) -> InverterState:
-        unit = self.component_config["configuration"]["modbus_id"]
+        def read_scaled_int16(address: int, count: int):
+            return scale_registers(
+                self.__tcp_client.read_holding_registers(
+                    address,
+                    [ModbusDataType.INT_16] * (count+1),
+                    unit=self.component_config["configuration"]["modbus_id"])
+            )
+
         with self.__tcp_client:
             # 40380 = "Meter 2/Total Real Power (sum of active phases)" (Watt)
-            power = self.__tcp_client.read_holding_registers(
-                40380, ModbusDataType.INT_16, unit=unit)
+            # 40381/40382/40383: Real Power per Phase (not used)
+            # 40384 = Power Scale Factor
+            power = read_scaled_int16(40380, 4)[0]
         topic_str = "openWB/set/system/device/" + str(self.__device_id) + \
             "/component/" + str(self.component_config["id"])+"/"
         _, exported = self.__sim_count.sim_count(power, topic=topic_str, data=self.simulation, prefix="pv")

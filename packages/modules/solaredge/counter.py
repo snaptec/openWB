@@ -35,8 +35,16 @@ class SolaredgeCounter:
                         unit=self.component_config["configuration"]["modbus_id"])
                 )
 
+            def read_scaled_uint32(address: int, count: int):
+                return scale_registers(
+                    self.__tcp_client.read_holding_registers(
+                        address,
+                        [ModbusDataType.UINT_32] * (count)+[ModbusDataType.INT_16],
+                        unit=self.component_config["configuration"]["modbus_id"])
+                )
+
             # 40206: Total Real Power (sum of active phases)
-            # 40206/40207/40208: Real Power by phase
+            # 40207/40208/40209: Real Power by phase
             # 40210: AC Real Power Scale Factor
             powers = [-power for power in read_scaled_int16(40206, 4)]
 
@@ -56,13 +64,13 @@ class SolaredgeCounter:
             # 40225: AC Power Factor Scale Factor
             power_factors = [power_factor / 100 for power_factor in read_scaled_int16(40222, 3)]
 
-            # 40234: Total Imported Real Energy
-            counter_imported = self.__tcp_client.read_holding_registers(
-                40234, ModbusDataType.UINT_32, unit=self.component_config["configuration"]["modbus_id"])
-
             # 40226: Total Exported Real Energy
-            counter_exported = self.__tcp_client.read_holding_registers(
-                40226, ModbusDataType.UINT_32, unit=self.component_config["configuration"]["modbus_id"])
+            # 40228/40230/40232: Total Exported Real Energy Phase (not used)
+            # 40234: Total Imported Real Energy
+            # 40236/40238/40240: Total Imported Real Energy Phase (not used)
+            # 40242: Real Energy Scale Factor
+            counter_values = read_scaled_uint32(40226, 8)
+            counter_exported, counter_imported = [counter_values[i] for i in [0, 4]]
 
         counter_state = CounterState(
             imported=counter_imported,
