@@ -25,6 +25,8 @@ def update(ipaddress: str):
     with open('/var/www/html/openWB/ramdisk/wattbezug', 'w') as file:
         file.write(str(final))
 
+# test
+
 
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)
