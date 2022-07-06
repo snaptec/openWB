@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
+import logging
 from modules.common import modbus
 from modules.common.component_state import BatState
-from modules.common.modbus import ModbusDataType
 from modules.common.fault_state import ComponentInfo
+from modules.common.modbus import ModbusDataType
 from modules.common.store import get_bat_value_store
 
 
 def get_default_config() -> dict:
     return {
-        "name": "Sunny Island Speicher",
+        "name": "SMA Sunny Island Speicher",
         "id": 0,
         "type": "bat",
         "configuration": {}
     }
+
+
+log = logging.getLogger(__name__)
 
 
 class SunnyIslandBat:
@@ -22,17 +26,20 @@ class SunnyIslandBat:
         self.__store = get_bat_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
-    def update(self) -> None:
+    def read(self) -> BatState:
         unit = 3
         with self.__tcp_client:
             soc = self.__tcp_client.read_holding_registers(30845, ModbusDataType.INT_32, unit=unit)
-            power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=unit) * -1
-            [imported, exported] = self.__tcp_client.read_holding_registers(30595, [ModbusDataType.INT_32]*2, unit=unit)
 
-        bat_state = BatState(
+            power = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=unit) * -1
+            imported, exported = self.__tcp_client.read_holding_registers(30595, [ModbusDataType.INT_32]*2, unit=unit)
+
+        return BatState(
             power=power,
             soc=soc,
             imported=imported,
             exported=exported
         )
-        self.__store.set(bat_state)
+
+    def update(self) -> None:
+        self.__store.set(self.read())
