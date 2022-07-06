@@ -8,9 +8,9 @@ DMOD="MAIN"
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/evu.log"
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_boy.device" "counter" "${sbs25ip}">>"${MYLOGFILE}" 2>&1
