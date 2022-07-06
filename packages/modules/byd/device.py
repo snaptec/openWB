@@ -1,69 +1,15 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
+from modules.byd.config import BYD, BYDBatSetup, BYDConfiguration
 from modules.byd import bat
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
 
 log = logging.getLogger(__name__)
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "BYD",
-        "type": "byd",
-        "id": 0,
-        "configuration": {
-            "ip_address": None,
-            "username": None,
-            "password": None
-        }
-    }
-
-
-class BYDConfiguration:
-    def __init__(self, ip_address: str, username: str, password: str):
-        self.ip_address = ip_address
-        self.username = username
-        self.password = password
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["ip_address", "username", "password"]
-        try:
-            values = [device_config[key] for key in keys]
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return BYDConfiguration(*values)
-
-
-class BYD:
-    def __init__(self, name: str, type: str, id: int, configuration: BYDConfiguration) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["name", "type", "id", "configuration"]
-        try:
-            values = [device_config[key] for key in keys]
-            values = []
-            for key in keys:
-                if isinstance(device_config[key], Dict):
-                    values.append(BYDConfiguration.from_dict(device_config[key]))
-                else:
-                    values.append(device_config[key])
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return BYD(*values)
 
 
 class Device(AbstractDevice):
@@ -71,19 +17,22 @@ class Device(AbstractDevice):
         "bat": bat.BYDBat
     }
 
-    def __init__(self, device_config: dict) -> None:
+    def __init__(self, device_config:  Union[Dict, BYD]) -> None:
         self.components = {}  # type: Dict[str, bat.BYDBat]
         try:
-            self.device_config = device_config \
-                if isinstance(device_config, BYD) \
-                else BYD.from_dict(device_config)
+            self.device_config = dataclass_from_dict(BYD, device_config)
         except Exception:
-            log.exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict, BYDBatSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 component_config,
                 self.device_config))
         else:
@@ -106,24 +55,25 @@ class Device(AbstractDevice):
             )
 
 
-def read_legacy(component_type: str, ip_address: str, username: str, password: str,  num: Optional[int] = None) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat
-    }
-    device_config = get_default_config()
-    device_config["configuration"]["username"] = username
-    device_config["configuration"]["password"] = password
-    device_config["configuration"]["ip_address"] = ip_address
-    dev = Device(device_config)
+COMPONENT_TYPE_TO_MODULE = {
+    "bat": bat
+}
 
+
+def read_legacy(component_type: str,
+                ip_address: str,
+                username: str,
+                password: str,
+                num: Optional[int] = None) -> None:
+    dev = Device(BYD(configuration=BYDConfiguration(username=username, password=password, ip_address=ip_address)))
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    component_config.id = num
     dev.add_component(component_config)
 
     log.debug('byd IP-Adresse: ' + ip_address)
@@ -135,3 +85,6 @@ def read_legacy(component_type: str, ip_address: str, username: str, password: s
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=BYDConfiguration)
