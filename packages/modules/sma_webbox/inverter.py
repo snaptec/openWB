@@ -15,16 +15,16 @@ def get_default_config() -> dict:
 
 
 class SmaWebboxInverter:
-    def __init__(self, device_id: int, device_address: str, component_config: dict) -> None:
+    def __init__(self, device_address: str, component_config: dict) -> None:
         self.__device_address = device_address
         self.component_config = component_config
         self.__store = get_inverter_value_store(component_config["id"])
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        self.__store.set(self.read_inverter_state())
+        self.__store.set(self.read())
 
-    def read_inverter_state(self) -> InverterState:
+    def read(self) -> InverterState:
         data = {'RPC': '{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}'}
         response = req.get_http_session().post(
             'http://' + self.__device_address + '/rpc', data=data, timeout=3).json()
