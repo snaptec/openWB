@@ -10,7 +10,7 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
 from modules.sma_webbox import inverter as webbox_inverter
-from modules.sma_sunny_boy import bat, counter, inverter
+from modules.sma_sunny_boy import bat, bat_smart_energy, counter, inverter
 from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
 
 log = logging.getLogger(__name__)
@@ -29,6 +29,7 @@ def get_default_config() -> dict:
 
 sma_modbus_tcp_component_classes = Union[
     bat.SunnyBoyBat,
+    bat_smart_energy.SunnyBoySmartEnergyBat,
     counter.SmaSunnyBoyCounter,
     inverter.SmaModbusTcpInverter
 ]
@@ -37,6 +38,7 @@ sma_modbus_tcp_component_classes = Union[
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
         "bat": bat.SunnyBoyBat,
+        "bat_smart_energy": bat_smart_energy.SunnyBoySmartEnergyBat,
         "counter": counter.SmaSunnyBoyCounter,
         "inverter": inverter.SmaModbusTcpInverter
     }
@@ -79,6 +81,7 @@ class Device(AbstractDevice):
 
 COMPONENT_TYPE_TO_MODULE = {
     "bat": bat,
+    "bat_smart_energy": bat_smart_energy,
     "counter": counter,
     "inverter": inverter
 }

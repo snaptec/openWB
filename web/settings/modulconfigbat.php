@@ -494,6 +494,22 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Sunny Boy Smart Energy</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($sbs25seold == 0) echo " active" ?>">
+											<input type="radio" name="sbs25se" id="sbs25seNo" value="0"<?php if($sbs25seold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($sbs25seold == 1) echo " active" ?>">
+											<input type="radio" name="sbs25se" id="sbs25seYes" value="1"<?php if($sbs25seold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren, wenn ein Sunny Boy Smart Energy verbaut ist.
+									</span>
+								</div>
+							</div>
 						</div>
 
 						<div id="divspeichersunnyisland" class="hide">
