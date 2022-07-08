@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Type
 
 
 class ComponentType(Enum):
@@ -43,3 +44,8 @@ def type_topic_mapping_comp(component_type: str) -> str:
         return "lp"
     else:
         raise Exception("Unbekannter Komponenten-Typ: " + component_type)
+
+
+class ComponentDescriptor:
+    def __init__(self, configuration_factory: Type):
+        self.configuration_factory = configuration_factory
