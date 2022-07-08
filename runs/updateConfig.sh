@@ -853,6 +853,9 @@ updateConfig(){
 	if ! grep -Fq "sbs25ip=" $ConfigFile; then
 		echo "sbs25ip=192.168.10.12" >> $ConfigFile
 	fi
+	if ! grep -Fq "sbs25se=" $ConfigFile; then
+		echo "sbs25se=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "tri9000ip=" $ConfigFile; then
 		echo "tri9000ip=192.168.10.12" >> $ConfigFile
 	fi
