@@ -14,7 +14,11 @@ else
 	MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_boy.device" "bat" "${sbs25ip}">>"$MYLOGFILE" 2>&1
+if [[ "$sbs25se" == "1" ]]  ; then
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_boy.device" "bat_smart_energy" "${sbs25ip}">>"$MYLOGFILE" 2>&1
+else
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_boy.device" "bat" "${sbs25ip}">>"$MYLOGFILE" 2>&1
+fi
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
