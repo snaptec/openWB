@@ -28,8 +28,8 @@ class SolarmaxInverter:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        power = self.__tcp_client.read_holding_registers(4152, ModbusDataType.INT_16, unit=self.__modbus_id) * -1
-        # power = 7500 * -1
+        with self.__tcp_client:
+             power = self.__tcp_client.read_holding_registers(4152, ModbusDataType.INT_16, unit=self.__modbus_id) * -1
         power = power / 10
         topic_str = "openWB/set/system/device/" + \
             str(self.__device_id)+"/component/" + \
