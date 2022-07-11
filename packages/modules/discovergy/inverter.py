@@ -1,22 +1,12 @@
 from modules.common.component_state import InverterState, CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.store import get_inverter_value_store
 from modules.discovergy.utils import DiscovergyComponent
+from modules.discovergy.config import DiscovergyInverterSetup
 
 
-def get_default_config(id: int = 0, **configuration) -> dict:
-    return {
-        "name": "Discovergy Wechselrichter",
-        "id": id,
-        "type": "inverter",
-        "configuration": {
-            "meter_id": None,
-            **configuration
-        }
-    }
-
-
-def create_component(component_config: dict):
-    store = get_inverter_value_store(component_config["id"])
+def create_component(component_config: DiscovergyInverterSetup):
+    store = get_inverter_value_store(component_config.id)
 
     def persister(reading: CounterState):
         store.set(InverterState(
@@ -26,3 +16,6 @@ def create_component(component_config: dict):
         ))
 
     return DiscovergyComponent(component_config, persister)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=DiscovergyInverterSetup)
