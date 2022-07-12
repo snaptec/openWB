@@ -1,42 +1,36 @@
 #!/usr/bin/env python3
+from typing import Dict, List, Union, Tuple
 from html.parser import HTMLParser
 import logging
-from typing import List, Tuple
 
+from dataclass_utils import dataclass_from_dict
+from modules.byd.config import BYDBatSetup
 from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import BatState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
 
 log = logging.getLogger(__name__)
 
 
-def get_default_config() -> dict:
-    return {
-        "name": "BYD Speicher",
-        "id": 0,
-        "type": "bat",
-        "configuration": {}
-    }
-
-
 class BYDBat:
     def __init__(self,
-                 component_config: dict,
+                 component_config: Union[Dict, BYDBatSetup],
                  device_config) -> None:
         self.__device_config = device_config
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(BYDBatSetup, component_config)
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
-        self.__store = get_bat_value_store(component_config["id"])
+        self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
         power, soc = self.get_values()
 
         topic_str = "openWB/set/system/device/" + str(
-            self.__device_config.id)+"/component/"+str(self.component_config["id"])+"/"
+            self.__device_config.id)+"/component/"+str(self.component_config.id)+"/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.simulation, prefix="speicher"
         )
@@ -63,7 +57,7 @@ class BydParser(HTMLParser):
     values = {"SOC:": 0, "Power:": 0}
     armed = None
 
-    @staticmethod
+    @ staticmethod
     def parse(html: str):
         parser = BydParser()
         parser.feed(html)
@@ -83,3 +77,6 @@ class BydParser(HTMLParser):
 
     def get_bat_state(self) -> Tuple[float, float]:
         return float(self.values["Power:"]) * 1000, float(self.values["SOC:"][:-1])
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=BYDBatSetup)

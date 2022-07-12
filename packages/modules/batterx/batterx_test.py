@@ -22,8 +22,8 @@ class TestBatterXDevice:
 
     def test_read(self):
         # setup
-        device_config = device.get_default_config()
-        device_config["configuration"]["ip_address"] = "1.1.1.1"
+        device_config = device.BatterX()
+        device_config.configuration.ip_address = "1.1.1.1"
         dev = device.Device(device_config)
         dev = device._add_component(dev, "inverter", 1)
         dev = device._add_component(dev, "counter", None)

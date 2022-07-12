@@ -1,34 +1,35 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Optional, List
+from typing import Optional, List
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import modbus
 from modules.common.abstract_device import AbstractDevice
 from modules.common.component_context import SingleComponentUpdateContext
-from modules.sunny_island import bat
+from modules.solarmax import inverter
 
 log = logging.getLogger(__name__)
 
 
 def get_default_config() -> dict:
     return {
-        "name": "Sunny Island",
-        "type": "sunny_island",
+        "name": "Solarmax",
+        "type": "solarmax",
         "id": 0,
         "configuration": {
-            "ip_address": None
+            "ip_address": None,
+            "modbus_id": 1
         }
     }
 
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.SunnyIslandBat
+        "inverter": inverter.SolarmaxInverter
     }
 
     def __init__(self, device_config: dict) -> None:
-        self.components = {}  # type: Dict[str, bat.SunnyIslandBat]
+        self.components = {}
         try:
             ip_address = device_config["configuration"]["ip_address"]
             self.client = modbus.ModbusClient(ip_address, 502)
@@ -39,8 +40,10 @@ class Device(AbstractDevice):
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                component_config, self.client))
+            self.components["component"+component_type] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config["id"],
+                component_config, self.client,
+                self.device_config["configuration"]["modbus_id"]))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -57,14 +60,15 @@ class Device(AbstractDevice):
         else:
             log.warning(
                 self.device_config["name"] +
-                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
+                ": Es konnten keine Werte gelesen werden, da noch keine oder zu viele Komponenten konfiguriert wurden."
             )
 
 
 def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None) -> None:
     COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat
+        "inverter": inverter
     }
+
     device_config = get_default_config()
     device_config["configuration"]["ip_address"] = ip_address
     dev = Device(device_config)
@@ -78,7 +82,8 @@ def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None)
     component_config["id"] = num
     dev.add_component(component_config)
 
-    log.debug('Sunny Island IP-Adresse: ' + ip_address)
+    log.debug('Solarmax IP-Adresse: ' + ip_address)
+
     dev.update()
 
 
