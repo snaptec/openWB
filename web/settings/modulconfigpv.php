@@ -586,7 +586,7 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option aktivieren, wenn ein Tripower Smart Energy oder ein anderes Hybrid-System verbaut ist. Diese Option darf NICHT akitviert werden, wenn ein Sunny Boy Smart Energy verbaut ist. Dieses System liefert alle Werte korrekt. Im Speichermodul muss die Option Sunny Boy Smart Energy aktiviert werden.
+										Diese Option aktivieren, wenn ein Tripower Smart Energy, Sunny Boy Smart Energy oder ein anderes Hybrid-System verbaut ist.
 									</span>
 								</div>
 							</div>

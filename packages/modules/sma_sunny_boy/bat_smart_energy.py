@@ -26,6 +26,9 @@ class SunnyBoySmartEnergyBat:
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
+        self.__store.set(self.read())
+
+    def read(self) -> BatState:
         unit = 3
         with self.__tcp_client:
             soc = self.__tcp_client.read_holding_registers(30845, ModbusDataType.UINT_32, unit=unit)
@@ -39,10 +42,9 @@ class SunnyBoySmartEnergyBat:
             power, topic=topic_str, data=self.simulation, prefix="speicher"
         )
 
-        bat_state = BatState(
+        return BatState(
             power=power,
             soc=soc,
             imported=imported,
             exported=exported
         )
-        self.__store.set(bat_state)
