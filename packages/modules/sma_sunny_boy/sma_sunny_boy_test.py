@@ -42,7 +42,7 @@ def test_sma_modbus_hybrid(monkeypatch, params: Params):
 
     # execution
     device.read_legacy("inverter", SAMPLE_IP, 0, params.ip2, params.ip3,
-                       params.ip4, 0, params.hybrid, 0)
+                       params.ip4, 0, params.hybrid, 0, 0)
     # evaluation
     assert mock_inverter_value_store.set.call_args[0][0].power == params.expected_inverter_power
 
