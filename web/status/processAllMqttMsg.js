@@ -210,7 +210,7 @@ function processBatMsg (mqttmsg, mqttpayload) {
 			kShow(mqttpayload, '#speicherekwhdiv');
 			break;
 		case "openWB/housebattery/W":
-			directShow(mqttpayload, '#wBatDiv');
+			BatShow(mqttpayload, '#wBatDiv');
 			break;
 		case "openWB/housebattery/%Soc":
 			directShow(mqttpayload, '#socBatDiv');
@@ -386,6 +386,18 @@ function absShow(mqttpayload, variable) {
 	var valueStr = value.toLocaleString(undefined) ;
 	$(variable).text(valueStr);
 }
+
+function BatShow(mqttpayload, variable) {
+	var value = parseFloat(mqttpayload);
+	value = (value / 1000);
+	var valueStr = value.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3}) ;
+	if ( value < 0 )
+	    valueStr = '<small>(Entladen)</small> ' + valueStr;
+	else
+	    valueStr = '<small>(Laden)</small> ' + valueStr;
+	$(variable).html(valueStr );
+}
+
 
 //show kilo-payloads with 3 fraction digits
 function fractionDigitsShow(mqttpayload, variable) {
