@@ -24,7 +24,7 @@ def get_default_config() -> dict:
 
 class BatKitFlex:
     def __init__(self, device_id: int, component_config: dict,
-                 tcp_client: modbus.ModbusClient) -> None:
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         factory = kit_bat_version_factory(

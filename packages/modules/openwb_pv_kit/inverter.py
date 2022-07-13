@@ -17,7 +17,7 @@ def get_default_config() -> dict:
 
 
 class PvKit(PvKitFlex):
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusTcpClient_) -> None:
         self.data = {"config": component_config}
         version = self.data["config"]["configuration"]["version"]
         if version == 0 or version == 1:

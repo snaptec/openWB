@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 class AlphaEssBat:
     def __init__(self, device_id: int,
                  component_config: Dict,
-                 tcp_client: modbus.ModbusClient,
+                 tcp_client: modbus.ModbusTcpClient_,
                  device_config: AlphaEssConfiguration) -> None:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(AlphaEssBatSetup, component_config)

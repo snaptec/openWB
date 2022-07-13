@@ -17,7 +17,7 @@ class CarloGavazziCounter:
     def __init__(self,
                  device_id: int,
                  component_config: Union[Dict, CarloGavazziCounterSetup],
-                 tcp_client: modbus.ModbusClient) -> None:
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(CarloGavazziCounterSetup, component_config)
         self.__tcp_client = tcp_client

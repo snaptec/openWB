@@ -35,7 +35,7 @@ class Device(AbstractDevice):
         self.components = {}  # type: Dict[str, Union[bat.VictronBat, counter.VictronCounter]]
         try:
             ip_address = device_config["configuration"]["ip_address"]
-            self.client = modbus.ModbusClient(ip_address, 502)
+            self.client = modbus.ModbusTcpClient_(ip_address, 502)
             self.device_config = device_config
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])

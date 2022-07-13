@@ -37,7 +37,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.components = {}  # type: Dict[str, siemens_component_classes]
         try:
-            self.client = modbus.ModbusClient(device_config["configuration"]["ip_address"], 502)
+            self.client = modbus.ModbusTcpClient_(device_config["configuration"]["ip_address"], 502)
             self.device_config = device_config
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])

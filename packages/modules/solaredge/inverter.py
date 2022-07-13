@@ -19,7 +19,7 @@ def get_default_config() -> dict:
 
 
 class SolaredgeInverter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusTcpClient_) -> None:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__store = get_inverter_value_store(component_config["id"])

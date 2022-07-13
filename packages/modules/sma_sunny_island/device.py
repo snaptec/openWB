@@ -32,7 +32,7 @@ class Device(AbstractDevice):
         try:
             self.device_config = device_config
             ip_address = device_config["configuration"]["ip_address"]
-            self.client = modbus.ModbusClient(ip_address, 502)
+            self.client = modbus.ModbusTcpClient_(ip_address, 502)
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])
 
