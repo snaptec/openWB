@@ -2,7 +2,7 @@
 from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.modbus import ModbusTcpClient_, ModbusDataType
 from modules.common.store import get_bat_value_store
 
 
@@ -16,7 +16,7 @@ def get_default_config() -> dict:
 
 
 class SunnyBoySmartEnergyBat:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: ModbusTcpClient_) -> None:
         self.__device_id = device_id
         self.component_config = component_config
         self.__tcp_client = tcp_client

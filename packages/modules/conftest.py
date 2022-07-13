@@ -7,6 +7,7 @@ from modules.common import simcount
 sys.modules['pymodbus'] = type(sys)('pymodbus')
 
 module = type(sys)('pymodbus.client.sync')
+module.ModbusSerialClient = Mock()
 module.ModbusTcpClient = Mock()
 sys.modules['pymodbus.client.sync'] = module
 

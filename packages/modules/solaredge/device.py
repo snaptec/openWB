@@ -101,8 +101,8 @@ class Device(AbstractDevice):
             self.device_config = device_config \
                 if isinstance(device_config, Solaredge) \
                 else Solaredge.from_dict(device_config)
-            self.client = modbus.ModbusClient(self.device_config.configuration.ip_address,
-                                              self.device_config.configuration.port)
+            self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
+                                                  self.device_config.configuration.port)
             self.inverter_counter = 0
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)

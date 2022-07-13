@@ -23,7 +23,7 @@ class Device(AbstractDevice):
         try:
             self.device_config = dataclass_from_dict(CarloGavazzi, device_config)
             ip_address = self.device_config.configuration.ip_address
-            self.client = modbus.ModbusClient(ip_address, 502)
+            self.client = modbus.ModbusTcpClient_(ip_address, 502)
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
 

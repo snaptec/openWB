@@ -16,7 +16,7 @@ def get_default_config() -> dict:
 
 
 class GoodWeInverter:
-    def __init__(self, modbus_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, modbus_id: int, component_config: dict, tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__modbus_id = modbus_id
         self.component_config = component_config
         self.__tcp_client = tcp_client

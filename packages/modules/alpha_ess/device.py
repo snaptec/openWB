@@ -31,9 +31,9 @@ class Device(AbstractDevice):
         try:
             self.device_config = dataclass_from_dict(AlphaEss, device_config)
             if self.device_config.configuration.source == 0:
-                self.client = modbus.ModbusClient("192.168.193.125", 8899)
+                self.client = modbus.ModbusTcpClient_("192.168.193.125", 8899)
             else:
-                self.client = modbus.ModbusClient(self.device_config.configuration.ip_address, 502)
+                self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address, 502)
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
 

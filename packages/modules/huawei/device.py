@@ -40,7 +40,7 @@ class Device(AbstractDevice):
         self.components = {}  # type: Dict[str, huawei_component_classes]
         try:
             ip_address = device_config["configuration"]["ip_address"]
-            self.client = modbus.ModbusClient(ip_address, 502)
+            self.client = modbus.ModbusTcpClient_(ip_address, 502)
             self.client.delegate.connect()
             time.sleep(7)
             self.device_config = device_config

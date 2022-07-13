@@ -15,7 +15,7 @@ from modules.common.store import get_counter_value_store
 class AlphaEssCounter:
     def __init__(self, device_id: int,
                  component_config: Dict,
-                 tcp_client: modbus.ModbusClient,
+                 tcp_client: modbus.ModbusTcpClient_,
                  device_config: AlphaEssConfiguration) -> None:
         self.component_config = dataclass_from_dict(AlphaEssCounterSetup, component_config)
         self.__tcp_client = tcp_client

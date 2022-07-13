@@ -35,7 +35,7 @@ class Device(AbstractDevice):
         self.device_config = device_config
         # type: Dict[str, Union[bat.BatKit, counter.EvuKit, inverter.PvKit]]
         self.components = {}
-        self.client = modbus.ModbusClient("192.168.193.15", 8899)
+        self.client = modbus.ModbusTcpClient_("192.168.193.15", 8899)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]
