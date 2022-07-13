@@ -18,7 +18,11 @@ def get_default_config() -> dict:
 
 
 class SolaxInverter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient, modbus_id: int) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: dict,
+                 tcp_client: modbus.ModbusTcpClient_,
+                 modbus_id: int) -> None:
         self.component_config = component_config
         self.__modbus_id = modbus_id
         self.__tcp_client = tcp_client

@@ -4,6 +4,7 @@ import time
 import re
 import os
 import logging
+import math
 from usmarthome.global0 import log, log_config
 from usmarthome.smartbase import Sbase
 from usmarthome.smartavm import Savm
@@ -238,11 +239,16 @@ def getdevicevalues():
              str(Sbase.ausdevices) + " akt: " + str(Sbase.ausschaltwatt) +
              " Anzahl devices in Einschaltgruppe: " + str(Sbase.eindevices)
              )
+    nurhh = math.floor(Sbase.nureinschaltinsec / 3600)
+    nurmm = math.floor((Sbase.nureinschaltinsec - (nurhh * 3600)) / 60)
+    nurss = (Sbase.nureinschaltinsec - (nurhh * 3600) - (nurmm * 60))
     log.info("Einschaltgruppe rel: " + str(Sbase.einrelais) +
              " Summe Einschaltschwelle: " +
              str(Sbase.einschwelle) + " max Einschaltverzögerung " +
              str(Sbase.einverz) + " nur Einschaltgruppe prüfen bis: " +
-             str(Sbase.nureinschaltinsec)
+             str('%.2d' % nurhh) + ":" + str('%.2d' % nurmm) + ":" +
+             str('%.2d' % nurss) +
+             " in Total sec " + str(Sbase.nureinschaltinsec)
              )
     mqtt_all['openWB/SmartHome/Status/maxspeicherladung'] = maxspeicher
     mqtt_all['openWB/SmartHome/Status/wattschalt'] = totalwatt

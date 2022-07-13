@@ -16,7 +16,7 @@ def get_default_config() -> dict:
 
 
 class StuderBat:
-    def __init__(self, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, component_config: dict, tcp_client: modbus.ModbusTcpClient_) -> None:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__store = get_bat_value_store(component_config["id"])

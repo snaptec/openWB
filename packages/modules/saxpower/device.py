@@ -31,7 +31,7 @@ class Device(AbstractDevice):
         self.components = {}  # type: Dict[str, bat.SaxpowerBat]
         try:
             ip_address = device_config["configuration"]["ip_address"]
-            self.client = modbus.ModbusClient(ip_address, 3600)
+            self.client = modbus.ModbusTcpClient_(ip_address, 3600)
             self.device_config = device_config
         except Exception:
             log.exception("Fehler im Modul "+device_config["name"])

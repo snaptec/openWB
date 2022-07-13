@@ -19,7 +19,7 @@ def get_default_config() -> dict:
 
 
 class SolaredgeInverter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusTcpClient_) -> None:
         self.component_config = component_config
         self.__tcp_client = tcp_client
         self.__store = get_inverter_value_store(component_config["id"])
@@ -53,10 +53,13 @@ class SolaredgeInverter:
                     unit=self.component_config["configuration"]["modbus_id"])
             )
         with self.__tcp_client:
-            # 40083 = AC Power value (Watt), 40084 = AC Power scale factor
-            power = read_scaled_int16(40083, 1) * -1
+            # 40083 = AC Power value (Watt)
+            # 40084 = AC Power scale factor
+            power = read_scaled_int16(40083, 1)[0] * -1
+
             # 40093 = AC Lifetime Energy production (Watt hours)
-            exported = read_scaled_uint32(40093, 1)
+            # 40095 = AC Lifetime scale factor
+            exported = read_scaled_uint32(40093, 1)[0]
             # 40072/40073/40074 = AC Phase A/B/C Current value (Amps)
             # 40075 = AC Current scale factor
             currents = read_scaled_uint16(40072, 3)

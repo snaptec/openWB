@@ -23,7 +23,7 @@ class Device(AbstractDevice):
     def __init__(self, device_config: dict) -> None:
         self.device_config = device_config
         self.components = {}  # type: Dict[str, inverter.PvKit]
-        self.client = modbus.ModbusClient("192.168.193.13", 8899)
+        self.client = modbus.ModbusTcpClient_("192.168.193.13", 8899)
 
     def add_component(self, component_config: dict) -> None:
         component_type = component_config["type"]

@@ -16,7 +16,7 @@ def get_default_config() -> dict:
             "jq_power": None,
             "jq_soc": None,
             "jq_imported": None,
-            "iq_exported": None
+            "jq_exported": None
         }
     }
 
@@ -32,14 +32,14 @@ class JsonBat:
 
     def update(self, response) -> None:
         config = self.component_config["configuration"]
-
         power = jq.compile(config["jq_power"]).input(response).first()
-        if config["jq_soc"] != "":
+
+        if config["jq_soc"] is not None:
             soc = jq.compile(config["jq_soc"]).input(response).first()
         else:
             soc = 0
 
-        if config["jq_imported"] != "" and config["jq_exported"] != "":
+        if config["jq_imported"] is not None and config["jq_exported"] is not None:
             imported = jq.compile(config["jq_imported"]).input(response).first()
             exported = jq.compile(config["jq_exported"]).input(response).first()
         else:

@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import Type
 
 
 class AbstractDevice:
@@ -13,3 +14,8 @@ class AbstractDevice:
     @abstractmethod
     def update(self) -> None:
         pass
+
+
+class DeviceDescriptor:
+    def __init__(self, configuration_factory: Type):
+        self.configuration_factory = configuration_factory
