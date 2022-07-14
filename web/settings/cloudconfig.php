@@ -33,7 +33,7 @@
 		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
+		<script src = "settings/helperFunctions.js?ver=20220714" ></script>
 	</head>
 
 	<body>
@@ -143,11 +143,24 @@
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
-												<div class="input-group-text">
-													<i class="fa fa-lock"></i>
+												<div class="input-group-text" onclick="togglePasswordInput('#cloudpass, #cloudpass_confirm', '#cloudpass-lock, #cloudpass_confirm-lock')">
+													<i id="cloudpass-lock" class="fa fa-lock"></i>
 												</div>
 											</div> 
-											<input type="password" name="cloudpass" id="cloudpass" value="" class="form-control" required="required">
+											<input type="password" name="cloudpass" id="cloudpass" value="" class="form-control" required="required" oninput="checkPasswordMatch('#cloudpass, #cloudpass_confirm')">
+										</div>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="cloudpass" class="col-md-4 col-form-label">Passwort wiederholen</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text" onclick="togglePasswordInput('#cloudpass, #cloudpass_confirm', '#cloudpass-lock, #cloudpass_confirm-lock')">
+													<i id="cloudpass_confirm-lock" class="fa fa-lock"></i>
+												</div>
+											</div> 
+											<input type="password" id="cloudpass_confirm" value="" class="form-control" required="required" oninput="checkPasswordMatch('#cloudpass, #cloudpass_confirm')">
 										</div>
 									</div>
 								</div>
