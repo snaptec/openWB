@@ -2,6 +2,7 @@
 import logging
 from operator import add
 from statistics import mean
+import time
 from typing import Dict, Tuple, Union, Optional, List
 from urllib3.util import parse_url
 
@@ -125,29 +126,34 @@ class Device(AbstractDevice):
         if self.components:
             total_power = 0
             with MultiComponentUpdateContext(self.components):
-                for component in self.components.values():
-                    if isinstance(component, bat.SolaredgeBat):
-                        parent = data.data.counter_data["all"].get_entry_of_parent(component.component_config["id"])
-                        if parent.get("type") != "inverter":
-                            log.warning("Solaredge-Speicher sollten als Hybrid-System konfiguriert werden, d.h. die " +
-                                        "Speicher sind in der Hierarchie unter den Wechselrichtern anzuordnen.")
-                        state = component.read_state()
-                        component.update(state)
-                        if self.device_config.configuration.fix_only_bat_discharging:
-                            total_power -= min(state.power, 0)
-                        else:
-                            total_power -= state.power
-                for component in self.components.values():
-                    if (isinstance(component, inverter.SolaredgeInverter) or
-                            isinstance(component, external_inverter.SolaredgeExternalInverter)):
-                        state = component.read_state()
-                        # In 1.9 wurde bisher die Summe der WR-Leistung um die Summe der Batterie-Leistung bereinigt.
-                        # Zähler und Ströme wurden nicht bereinigt.
-                        state.power = state.power - total_power/self.inverter_counter
-                        component.update(state)
-                for component in self.components.values():
-                    if isinstance(component, counter.SolaredgeCounter):
-                        component.update()
+                with self.client:
+                    # Wird der Kontexthandler in den Modulen verwendet, erfolgt das Öffnen und Schließen der
+                    # Modbus-Verbidnung zu schnell nacheinander und die nachfolgende Abfrage schlägt fehl.
+                    for component in self.components.values():
+                        if isinstance(component, bat.SolaredgeBat):
+                            parent = data.data.counter_data["all"].get_entry_of_parent(
+                                component.component_config["id"])
+                            if parent.get("type") != "inverter":
+                                log.warning("Solaredge-Speicher sollten als Hybrid-System konfiguriert werden, d.h. " +
+                                            "die Speicher sind in der Hierarchie unter den Wechselrichtern " +
+                                            "anzuordnen.")
+                            state = component.read_state()
+                            component.update(state)
+                            if self.device_config.configuration.fix_only_bat_discharging:
+                                total_power -= min(state.power, 0)
+                            else:
+                                total_power -= state.power
+                    for component in self.components.values():
+                        if (isinstance(component, inverter.SolaredgeInverter) or
+                                isinstance(component, external_inverter.SolaredgeExternalInverter)):
+                            state = component.read_state()
+                            # In 1.9 wurde bisher die Summe der WR-Leistung um die Summe der Batterie-Leistung
+                            # bereinigt. Zähler und Ströme wurden nicht bereinigt.
+                            state.power = state.power - total_power/self.inverter_counter
+                            component.update(state)
+                    for component in self.components.values():
+                        if isinstance(component, counter.SolaredgeCounter):
+                            component.update()
         else:
             log.warning(
                 self.device_config.name +
@@ -239,47 +245,53 @@ def read_legacy(component_type: str,
                 total_power = 0
                 total_energy = 0
                 total_currents = [0.0]*3
-                for inv in inverters:
-                    state = inv.read_state()
-                    total_power += state.power
-                    total_energy += state.exported
-                    total_currents = list(map(add, total_currents, state.currents))
+                with dev.client:
+                    for inv in inverters:
+                        state = inv.read_state()
+                        total_power += state.power
+                        total_energy += state.exported
+                        total_currents = list(map(add, total_currents, state.currents))
 
-                if extprodakt:
-                    state = get_external_inverter_state(dev, int(slave_id0))
-                    total_power -= state.power
+                    if extprodakt:
+                        state = get_external_inverter_state(dev, int(slave_id0))
+                        total_power -= state.power
 
+                    if batwrsame == 1:
+                        bat_power, soc_bat = get_bat_state()
+                        if subbat == 1:
+                            total_power -= sum(min(p, 0) for p in bat_power)
+                        else:
+                            total_power -= sum(bat_power)
                 if batwrsame == 1:
-                    bat_power, soc_bat = get_bat_state()
-                    if subbat == 1:
-                        total_power -= sum(min(p, 0) for p in bat_power)
-                    else:
-                        total_power -= sum(bat_power)
-                    get_bat_value_store(1).set(BatState(power=total_power, soc=mean(soc_bat)))
+                    get_bat_value_store(1).set(BatState(power=sum(bat_power), soc=mean(soc_bat)))
                 get_inverter_value_store(num).set(InverterState(exported=total_energy,
                                                                 power=min(0, total_power), currents=total_currents))
         else:
             inv = create_inverter(int(slave_id0))
             with SingleComponentUpdateContext(inv.component_info):
-                state = inv.read_state()
-                total_power = state.power * -1
-                total_energy = state.exported
+                with dev.client:
+                    state = inv.read_state()
+                    total_power = state.power * -1
+                    total_energy = state.exported
 
-                if batwrsame == 1:
-                    zweiterspeicher = 0
-                    bat_power, _ = get_bat_state()
-                    total_power -= sum(bat_power)
+                    if batwrsame == 1:
+                        time.sleep(0.2)
+                        zweiterspeicher = 0
+                        bat_power, soc_bat = get_bat_state()
+                        total_power -= sum(bat_power)
+                        get_bat_value_store(1).set(BatState(power=sum(bat_power), soc=mean(soc_bat)))
 
                 device_config = get_default_config()
                 device_config["ip_address"] = ip2address
                 dev = Device(device_config)
                 inv = create_inverter(int(slave_id0))
-                state = inv.read_state()
-                total_power -= state.power
-                total_energy += state.exported
-                if extprodakt:
-                    state = get_external_inverter_state(dev, int(slave_id0))
+                with dev.client:
+                    state = inv.read_state()
                     total_power -= state.power
+                    total_energy += state.exported
+                    if extprodakt:
+                        state = get_external_inverter_state(dev, int(slave_id0))
+                        total_power -= state.power
                 get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
     elif component_type == "bat":

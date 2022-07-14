@@ -52,17 +52,16 @@ class SolaredgeInverter:
                     [ModbusDataType.UINT_32] * (count)+[ModbusDataType.INT_16],
                     unit=self.component_config["configuration"]["modbus_id"])
             )
-        with self.__tcp_client:
-            # 40083 = AC Power value (Watt)
-            # 40084 = AC Power scale factor
-            power = read_scaled_int16(40083, 1)[0] * -1
+        # 40083 = AC Power value (Watt)
+        # 40084 = AC Power scale factor
+        power = read_scaled_int16(40083, 1)[0] * -1
 
-            # 40093 = AC Lifetime Energy production (Watt hours)
-            # 40095 = AC Lifetime scale factor
-            exported = read_scaled_uint32(40093, 1)[0]
-            # 40072/40073/40074 = AC Phase A/B/C Current value (Amps)
-            # 40075 = AC Current scale factor
-            currents = read_scaled_uint16(40072, 3)
+        # 40093 = AC Lifetime Energy production (Watt hours)
+        # 40095 = AC Lifetime scale factor
+        exported = read_scaled_uint32(40093, 1)[0]
+        # 40072/40073/40074 = AC Phase A/B/C Current value (Amps)
+        # 40075 = AC Current scale factor
+        currents = read_scaled_uint16(40072, 3)
 
         return InverterState(
             power=power,
