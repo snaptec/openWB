@@ -1,34 +1,33 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 import logging
 
+from dataclass_utils import dataclass_from_dict
 from modules.common import simcount
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
 from modules.common.fault_state import FaultState
 from modules.common import req
+from modules.sonnenbatterie.config import SonnenbatterieCounterSetup
 
 log = logging.getLogger(__name__)
 
 
-def get_default_config() -> dict:
-    return {
-        "name": "SonnenBatterie Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration": {}
-    }
-
-
 class SonnenbatterieCounter:
-    def __init__(self, device_id: int, device_address: str, device_variant: int, component_config: dict) -> None:
+    def __init__(self,
+                 device_id: int,
+                 device_address: str,
+                 device_variant: int,
+                 component_config: Union[Dict, SonnenbatterieCounterSetup]) -> None:
         self.__device_id = device_id
         self.__device_address = device_address
         self.__device_variant = device_variant
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(SonnenbatterieCounterSetup, component_config)
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
-        self.__store = get_counter_value_store(component_config["id"])
+        self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def __read_variant_1(self):
@@ -81,7 +80,7 @@ class SonnenbatterieCounter:
         grid_frequency = counter_state["Fac"]
         log.debug('EVU Netzfrequenz: ' + str(grid_frequency))
         topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
+            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
         imported, exported = self.__sim_count.sim_count(
             grid_power, topic=topic_str, data=self.simulation, prefix="bezug"
         )
@@ -106,7 +105,7 @@ class SonnenbatterieCounter:
         grid_export_power = int(float(self.__read_variant_2_element("M38")))
         grid_power = grid_import_power - grid_export_power
         topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
+            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
         imported, exported = self.__sim_count.sim_count(
             grid_power, topic=topic_str, data=self.simulation, prefix="bezug"
         )
@@ -127,3 +126,6 @@ class SonnenbatterieCounter:
         else:
             raise FaultState.error("Unbekannte Variante: " + str(self.__device_variant))
         self.__store.set(state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SonnenbatterieCounterSetup)

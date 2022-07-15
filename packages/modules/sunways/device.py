@@ -1,25 +1,15 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.sunways import inverter
+from modules.sunways.config import Sunways, SunwaysInverterSetup
 
 log = logging.getLogger(__name__)
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Sunways",
-        "type": "sunways",
-        "id": 0,
-        "configuration": {
-            "ip_address": None,
-            "password": None
-        }
-    }
 
 
 class Device(AbstractDevice):
@@ -27,20 +17,25 @@ class Device(AbstractDevice):
         "inverter": inverter.SunwaysInverter
     }
 
-    def __init__(self, device_config: dict) -> None:
+    def __init__(self, device_config: Union[Dict, Sunways]) -> None:
         self.components = {}  # type: Dict[str, inverter.SunwaysInverter]
         try:
-            self.device_config = device_config
+            self.device_config = dataclass_from_dict(Sunways, device_config)
         except Exception:
-            log.exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict, SunwaysInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config.id)] = self.COMPONENT_TYPE_TO_CLASS[component_type](
                 component_config,
-                self.device_config["configuration"]["ip_address"],
-                self.device_config["configuration"]["password"])
+                self.device_config.configuration.ip_address,
+                self.device_config.configuration.password)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -56,28 +51,30 @@ class Device(AbstractDevice):
                     self.components[component].update()
         else:
             log.warning(
-                self.device_config["name"] +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine oder zu viele Komponenten konfiguriert wurden."
             )
 
 
-def read_legacy(component_type: str, ip_address: str, password: str, num: Optional[int] = None) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "inverter": inverter
-    }
+COMPONENT_TYPE_TO_MODULE = {
+    "inverter": inverter
+}
 
-    device_config = get_default_config()
-    device_config["configuration"]["ip_address"] = ip_address
-    device_config["configuration"]["password"] = password
+
+def read_legacy(component_type: str, ip_address: str, password: str, num: Optional[int] = None) -> None:
+
+    device_config = Sunways()
+    device_config.configuration.ip_address = ip_address
+    device_config.configuration.password = password
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    component_config.id = num
     dev.add_component(component_config)
 
     log.debug('Sunways IP-Adresse: ' + ip_address)
@@ -88,3 +85,6 @@ def read_legacy(component_type: str, ip_address: str, password: str, num: Option
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=Sunways)
