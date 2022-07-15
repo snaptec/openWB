@@ -1,35 +1,32 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common import req
 from modules.common import simcount
 from modules.common.component_state import BatState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
-from modules.fronius.abstract_config import FroniusConfiguration
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Fronius Speicher",
-        "id": 0,
-        "type": "bat",
-        "configuration": {
-            "meter_id": 0
-        }
-    }
+from modules.fronius.config import FroniusConfiguration
+from modules.fronius.config import FroniusBatSetup
 
 
 class FroniusBat:
-    def __init__(self, device_id: int, component_config: dict, device_config: FroniusConfiguration) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, FroniusBatSetup],
+                 device_config: FroniusConfiguration) -> None:
         self.__device_id = device_id
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(FroniusBatSetup, component_config)
         self.device_config = device_config
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
-        self.__store = get_bat_value_store(component_config["id"])
+        self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-        meter_id = str(self.component_config["configuration"]["meter_id"])
+        meter_id = str(self.component_config.configuration.meter_id)
 
         resp_json = req.get_http_session().get(
             'http://' + self.device_config.ip_address + '/solar_api/v1/GetPowerFlowRealtimeData.fcgi',
@@ -52,7 +49,7 @@ class FroniusBat:
             soc = 0
 
         topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config["id"])+"/"
+            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
         imported, exported = self.__sim_count.sim_count(
             power, topic=topic_str, data=self.simulation, prefix="speicher"
         )
@@ -63,3 +60,6 @@ class FroniusBat:
             exported=exported
         )
         self.__store.set(bat_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=FroniusBatSetup)

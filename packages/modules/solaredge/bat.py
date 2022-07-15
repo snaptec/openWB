@@ -38,11 +38,10 @@ class SolaredgeBat:
 
     def read_state(self):
         unit = self.component_config["configuration"]["modbus_id"]
-        with self.__tcp_client:
-            soc = self.__tcp_client.read_holding_registers(
-                62852, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
-            power = self.__tcp_client.read_holding_registers(
-                62836, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
+        soc = self.__tcp_client.read_holding_registers(
+            62852, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
+        power = self.__tcp_client.read_holding_registers(
+            62836, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config["id"])+"/"

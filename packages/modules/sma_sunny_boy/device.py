@@ -95,15 +95,17 @@ def read_legacy(component_type: str,
                 ip4: Optional[str] = None,
                 version: Optional[int] = None,
                 hybrid: Optional[int] = None,
+                sunny_boy_smart_energy: Optional[int] = None,
                 num: Optional[int] = None) -> None:
 
     log.debug("SMA Modbus Ip-Adresse: "+ip1)
     log.debug("SMA Modbus Webbox: "+str(webbox))
     log.debug("SMA Modbus weitere IPs: "+str(ip2)+", "+str(ip3)+", "+str(ip4))
     log.debug("SMA Modbus Version: "+str(version))
+    log.debug("SMA Modbus Hybrid: "+str(hybrid))
     if component_type in COMPONENT_TYPE_TO_MODULE:
         if component_type == "inverter":
-            read_inverter(ip1, webbox, ip2, ip3, ip4, version, hybrid, num)
+            read_inverter(ip1, webbox, ip2, ip3, ip4, version, hybrid, num, sunny_boy_smart_energy)
             return
         else:
             component_config = COMPONENT_TYPE_TO_MODULE[
@@ -120,7 +122,15 @@ def read_legacy(component_type: str,
                         ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
 
 
-def read_inverter(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: int, hybrid: int, num: int):
+def read_inverter(ip1: str,
+                  webbox: int,
+                  ip2: str,
+                  ip3: str,
+                  ip4: str,
+                  version: int,
+                  hybrid: int,
+                  num: int,
+                  sunny_boy_smart_energy: int):
     def create_webbox_inverter(address: str):
         config = webbox_inverter.get_default_config()
         config["id"] = num
@@ -149,8 +159,12 @@ def read_inverter(ip1: str, webbox: int, ip2: str, ip3: str, ip4: str, version: 
             total_power += state.power
             total_energy += state.exported
         if hybrid == 1:
-            bat_default = bat.get_default_config()
-            bat_comp = bat.SunnyBoyBat(0, bat_default, modbus.ModbusTcpClient_(ip1, 502))
+            if sunny_boy_smart_energy == 0:
+                bat_default = bat.get_default_config()
+                bat_comp = bat.SunnyBoyBat(0, bat_default, modbus.ModbusTcpClient_(ip1, 502))
+            else:
+                bat_default = bat_smart_energy.get_default_config()
+                bat_comp = bat_smart_energy.SunnyBoySmartEnergyBat(0, bat_default, modbus.ModbusTcpClient_(ip1, 502))
             bat_state = bat_comp.read()
             total_power -= bat_state.power
             total_energy = total_energy+bat_state.imported-bat_state.exported
