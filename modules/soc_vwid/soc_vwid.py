@@ -9,6 +9,7 @@ import logging
 import time
 import json
 import os
+import pickle
 
 async def main():
 #    logging.basicConfig(level=logging.DEBUG)
@@ -30,11 +31,21 @@ async def main():
     pw=args['password']
     chargepoint=args['chargepoint']
     replyFile= '/var/www/html/openWB/ramdisk/soc_vwid_replylp'+chargepoint
+    tokensFile= '/var/www/html/openWB/ramdisk/soc_vwid_tokens'+chargepoint
 
     async with aiohttp.ClientSession() as session:
         w = libvwid.vwid(session)
         w.set_vin(vin)
         w.set_credentials(id, pw)
+
+        try:
+            tf = open(tokensFile, "rb")     # try to open tokens file
+            w.tokens = pickle.load(tf)      # initialize tokens in vwid
+            tokens_old = pickle.dumps(w.tokens) # remember current tokens
+            w.headers[Authorization] = Bearer %s % w.tokens["accessToken"]
+            tf.close()
+        except Exception as e:
+            tokens_old = bytearray(1)   # if no old token found set tokens_old to dummy value
 
         data = await w.get_status()
         if (data):
@@ -46,6 +57,11 @@ async def main():
                 f = open(replyFile, 'w', encoding='utf-8')
             json.dump(data, f, ensure_ascii=False, indent=4)
             f.close()
+            tokens_new = pickle.dumps(w.tokens)
+            if ( tokens_new != tokens_old ):    # check for modified tokens
+                tf = open(tokensFile, "wb") 
+                pickle.dump(w.tokens, tf) # write tokens file
+                tf.close()
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
