@@ -59,7 +59,11 @@ async def main():
             f.close()
             tokens_new = pickle.dumps(w.tokens)
             if ( tokens_new != tokens_old ):    # check for modified tokens
-                tf = open(tokensFile, "wb") 
+                try:
+                    tf = open(tokensFile, "wb") 
+                except:
+                    os.system("sudo rm "+tokensFile)
+                    tf = open(tokensFile, "wb") 
                 pickle.dump(w.tokens, tf) # write tokens file
                 tf.close()
 
