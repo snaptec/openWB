@@ -59,13 +59,11 @@ async def main():
             f.close()
             tokens_new = pickle.dumps(w.tokens)
             if ( tokens_new != tokens_old ):    # check for modified tokens
-                try:
-                    tf = open(tokensFile, "wb") 
-                except:
-                    os.system("sudo rm "+tokensFile)
-                    tf = open(tokensFile, "wb") 
+                tf = open(tokensFile, "wb") 
                 pickle.dump(w.tokens, tf) # write tokens file
                 tf.close()
+                os.system("sudo chown pi "+tokensFile)
+                os.system("sudo chgrp pi "+tokensFile)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
