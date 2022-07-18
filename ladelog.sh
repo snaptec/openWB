@@ -158,7 +158,7 @@ processChargepoint(){
 				if (( pushbenachrichtigung == 1 )) ; then
 					if (( pushbstartl == 1 )) ; then
 						chargePointNameVariableName="${chargePointKey}name"
-						./runs/pushover.sh "${!chargePointNameVariableName} Ladung gestartet$soctext"
+						"${OPENWBBASEDIR}/runs/pushover.sh" "${!chargePointNameVariableName} Ladung gestartet$soctext"
 					fi
 				fi
 				openwbDebugLog "CHARGESTAT" 0 "LP${chargePointNumber}, Ladung gestartet"
@@ -216,7 +216,7 @@ processChargepoint(){
 					if (( pushbenachrichtigung == 1 )) ; then
 						if (( pushbstopl == 1 )) ; then
 							chargePointNameVariableName="${chargePointKey}name"
-							./runs/pushover.sh "${!chargePointNameVariableName} Ladung gestoppt. $bishergeladen kWh in $ladedauertext mit durchschnittlich $ladegeschw kW geladen$soctext"
+							"${OPENWBBASEDIR}/runs/pushover.sh" "${!chargePointNameVariableName} Ladung gestoppt. $bishergeladen kWh in $ladedauertext mit durchschnittlich $ladegeschw kW geladen$soctext"
 						fi
 					fi
 					# clear detected charge start
