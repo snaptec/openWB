@@ -158,6 +158,9 @@ updateConfig(){
 	if ! grep -Fq "speicherwattnurpv=" $ConfigFile; then
 		echo "speicherwattnurpv=1500" >> $ConfigFile
 	fi
+	if ! grep -Fq "speicherwattnurpvhybrid=" $ConfigFile; then
+		echo "speicherwattnurpvhybrid=100000" >> $ConfigFile
+	fi
 	if ! grep -Fq "nurpvslowup=" $ConfigFile; then
 		echo "nurpvslowup=0" >> $ConfigFile
 	fi

@@ -576,6 +576,7 @@ initRamdisk(){
 		"mqttspeichersocminpv:-1" \
 		"mqttspeichersocnurpv:-1" \
 		"mqttspeicherwattnurpv:-1" \
+		"mqttspeicherwattnurpvhybrid:-1" \
 		"mqttstopchargepvatpercentlp1:-1" \
 		"mqttstopchargepvatpercentlp2:-1" \
 		"mqttstopchargepvpercentagelp1:-1" \

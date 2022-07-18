@@ -950,19 +950,7 @@ loadvars(){
 		fi
 		#uberschuss zur berechnung
 		uberschuss=$(printf "%.0f\n" $((-wattbezug)))
-		if [[ $speichervorhanden == "1" ]]; then
-			if [[ $speicherpveinbeziehen == "1" ]]; then
-				if (( speicherleistung > 0 )); then
-					if (( speichersoc > speichersocnurpv )); then
-						speicherww=$((speicherleistung + speicherwattnurpv))
-						uberschuss=$((uberschuss + speicherww))
-					else
-						speicherww=$((speicherleistung - speichermaxwatt))
-						uberschuss=$((uberschuss + speicherww))
-					fi
-				fi
-			fi
-		fi
+
 		evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
 		evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
 		evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
@@ -1837,6 +1825,7 @@ loadvars(){
 	mqttconfvar["config/get/pv/minBatteryChargePowerAtEvPriority"]=speichermaxwatt
 	mqttconfvar["config/get/pv/minBatteryDischargeSocAtBattPriority"]=speichersocnurpv
 	mqttconfvar["config/get/pv/batteryDischargePowerAtBattPriority"]=speicherwattnurpv
+	mqttconfvar["config/get/pv/batteryDischargePowerAtBattPriorityHybrid"]=speicherwattnurpvhybrid
 	mqttconfvar["config/get/pv/socStartChargeAtMinPv"]=speichersocminpv
 	mqttconfvar["config/get/pv/socStopChargeAtMinPv"]=speichersochystminpv
 	mqttconfvar["config/get/pv/boolAdaptiveCharging"]=adaptpv
