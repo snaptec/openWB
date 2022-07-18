@@ -1126,6 +1126,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($pv2wattmodulold == "wr2_kostalpiko") echo "selected" ?> value="wr2_kostalpiko">Kostal Piko</option>
+										<option <?php if($pv2wattmodulold == "wr2_solarmax") echo "selected" ?> value="wr2_solarmax">Solarmax</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalpikovar2") echo "selected" ?> value="wr2_kostalpikovar2">Kostal Piko alt</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
@@ -1365,6 +1366,9 @@
 									showSection('#pv2ipdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solax') {
+									showSection('#pv2ipdiv');
+								}
+								if($('#pv2wattmodul').val() == 'wr2_solarmax') {
 									showSection('#pv2ipdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {

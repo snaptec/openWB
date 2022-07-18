@@ -8,7 +8,7 @@ from helpermodules.cli import run_using_positional_cli_args
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import InverterState, BatState
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.modbus import ModbusTcpClient_, ModbusDataType
 from modules.common.store import get_inverter_value_store, get_bat_value_store
 from modules.common.simcount import SimCountFactory
 from modules.common.store.ramdisk import files
@@ -28,7 +28,7 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
     for address in addresses:
         log.debug("Battery Ip: %s, read_external %d pv_other %s", address, read_external, pv_other)
         count += 1
-        with ModbusClient(address, port=502) as client:
+        with ModbusTcpClient_(address, port=502) as client:
             # 40082 SoC
             soc += client.read_holding_registers(40082, ModbusDataType.INT_16, unit=1)
             # 40069 Speicherleistung
