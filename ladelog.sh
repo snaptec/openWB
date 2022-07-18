@@ -52,7 +52,8 @@ processChargepoint(){
 			chargePointKey="lp$1"
 			chargePointKey2=$chargePointKey
 			chargePointKey3=$chargePointKey
-			chargePointActivated=${!lastmanagement$chargePointKey}
+			chargePointActivatedVariableName="lastmanagement$chargePointKey"
+			chargePointActivated=${!chargePointActivatedVariableName}
 			;;
 	esac
 
@@ -82,7 +83,7 @@ processChargepoint(){
 				# note ourself about tracking this charge
 				echo 1 > "${RAMDISKDIR}/pluggedladungakt${chargePointKey}"
 			fi
-			if (( ${!stopchargeafterdisc$chargePointKey} == 1 )); then
+			if (( "stopchargeafterdisc$chargePointKey" == 1 )); then
 				boolstopchargeafterdisc=$(<"${RAMDISKDIR}/boolstopchargeafterdisc${chargePointKey}")
 				if (( boolstopchargeafterdisc == 0 )); then
 					# note ourself to lock this charge point after disconnect
@@ -108,7 +109,7 @@ processChargepoint(){
 				# stop actual tracked charge
 				echo 0 > "${RAMDISKDIR}/pluggedladungakt${chargePointKey}"
 				# lock this charge point if configured
-				if (( ${!stopchargeafterdisc$chargePointKey} == 1 )); then
+				if (( "stopchargeafterdisc$chargePointKey" == 1 )); then
 					boolstopchargeafterdisc=$(<"${RAMDISKDIR}/boolstopchargeafterdisc${chargePointKey}")
 					if (( boolstopchargeafterdisc == 1 )); then
 						echo 0 > "${RAMDISKDIR}/boolstopchargeafterdisc${chargePointKey}"
@@ -126,11 +127,13 @@ processChargepoint(){
 				bishergeladen=$(echo "scale=2;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 				echo "$bishergeladen" > "${RAMDISKDIR}/aktgeladen${chargePointKey2}"
 				# calculate range charged
-				gelr=$(echo "scale=2;$bishergeladen / ${!durchs$chargePointKey} * 100" |bc)
+				averageConsumptionVariableName="durchs$chargePointKey"
+				gelr=$(echo "scale=2;$bishergeladen / ${!averageConsumptionVariableName} * 100" |bc)
 				gelr=${gelr%.*}
 				echo "$gelr" > "${RAMDISKDIR}/gelr${chargePointKey}"
 				# calculate time remaining if energy limit is set
-				restzeit=$(echo "scale=6;(${!lademkwh${chargePointKey}} - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
+				energyChargeLimitVariableName="lademkwh$chargePointKey"
+				restzeit=$(echo "scale=6;(${!energyChargeLimitVariableName} - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
 				restzeit=${restzeit%.*}
 				echo "$restzeit" > "${RAMDISKDIR}/restzeit${chargePointKey}m"
 				if (( restzeit > 60 )); then
@@ -154,7 +157,8 @@ processChargepoint(){
 				# send push message if configured
 				if (( pushbenachrichtigung == 1 )) ; then
 					if (( pushbstartl == 1 )) ; then
-						./runs/pushover.sh "${!${chargePointKey}name} Ladung gestartet$soctext"
+						chargePointNameVariableName="${chargePointKey}name"
+						./runs/pushover.sh "${!chargePointNameVariableName} Ladung gestartet$soctext"
 					fi
 				fi
 				openwbDebugLog "CHARGESTAT" 0 "LP${chargePointNumber}, Ladung gestartet"
@@ -180,7 +184,8 @@ processChargepoint(){
 					ladelstart=$(<"${RAMDISKDIR}/ladelstart${chargePointKey2}")
 					bishergeladen=$(echo "scale=2;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 					# calculate range charged
-					gelr=$(echo "scale=2;$bishergeladen / ${!durchs$chargePointKey} * 100" |bc)
+					averageConsumptionVariableName="durchs$chargePointKey"
+					gelr=$(echo "scale=2;$bishergeladen / ${!averageConsumptionVariableName} * 100" |bc)
 					gelr=${gelr%.*}
 					# calculate time charged
 					start=$(<"${RAMDISKDIR}/ladeustart${chargePointKey2}")
@@ -210,7 +215,8 @@ processChargepoint(){
 					# send push message if configured
 					if (( pushbenachrichtigung == 1 )) ; then
 						if (( pushbstopl == 1 )) ; then
-							./runs/pushover.sh "${!${chargePointKey}name} Ladung gestoppt. $bishergeladen kWh in $ladedauertext mit durchschnittlich $ladegeschw kW geladen$soctext"
+							chargePointNameVariableName="${chargePointKey}name"
+							./runs/pushover.sh "${!chargePointNameVariableName} Ladung gestoppt. $bishergeladen kWh in $ladedauertext mit durchschnittlich $ladegeschw kW geladen$soctext"
 						fi
 					fi
 					# clear detected charge start
