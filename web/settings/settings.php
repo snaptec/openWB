@@ -604,28 +604,38 @@
 							}
 							if(lp4akt == '0') {
 								hideSection('#lp4aktdiv');
+								hideSection('#durchslp4div');
 							} else {
 								showSection('#lp4aktdiv');
+								showSection('#durchslp4div');
 							}
 							if(lp5akt == '0') {
 								hideSection('#lp5aktdiv');
+								hideSection('#durchslp5div');
 							} else {
 								showSection('#lp5aktdiv');
+								showSection('#durchslp5div');
 							}
 							if(lp6akt == '0') {
 								hideSection('#lp6aktdiv');
+								hideSection('#durchslp6div');
 							} else {
 								showSection('#lp6aktdiv');
+								showSection('#durchslp6div');
 							}
 							if(lp7akt == '0') {
 								hideSection('#lp7aktdiv');
+								hideSection('#durchslp7div');
 							} else {
 								showSection('#lp7aktdiv');
+								showSection('#durchslp7div');
 							}
 							if(lp8akt == '0') {
 								hideSection('#lp8aktdiv');
+								hideSection('#durchslp8div');
 							} else {
 								showSection('#lp8aktdiv');
+								showSection('#durchslp8div');
 							}
 						});
 					</script>
@@ -793,23 +803,25 @@
 								</div>
 							</div>
 						</div>
-						<div id="durchslp3div" class="hide">
-							<hr class="border-primary">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<div class="col">
-										Ladepunkt 3
+						<?php for ($chargepoint = 3; $chargepoint <=8; $chargepoint++) { ?>
+							<div id="durchslp<?php echo $chargepoint ?>div" class="hide">
+								<hr class="border-primary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="col">
+											Ladepunkt <?php echo $chargepoint ?>
+										</div>
 									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="durchslp3" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
-									<div class="col">
-										<input class="form-control" type="number" min="1" step=".1" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>">
-										<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
+									<div class="form-row mb-1">
+										<label for="durchslp<?php echo $chargepoint ?>" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
+										<div class="col">
+											<input class="form-control" type="number" min="1" step=".1" name="durchslp<?php echo $chargepoint ?>" id="durchslp<?php echo $chargepoint ?>" value="<?php echo ${'durchslp' . $chargepoint . 'old'} ?>">
+											<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						<?php } ?>
 					</div>
 				</div>
 
