@@ -1,6 +1,6 @@
 import pytest
 
-from modules.fronius.abstract_config import MeterLocation
+from modules.fronius.config import MeterLocation
 
 
 def test_meter_enum():

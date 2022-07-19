@@ -2,25 +2,18 @@
 import logging
 import socket
 import time
-from typing import Dict, List, Callable, Iterator
+from typing import Dict, List, Callable, Iterator, Optional, Union
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import MultiComponentUpdateContext
 from modules.common.fault_state import FaultState
 from modules.sma_shm import counter
 from modules.sma_shm import inverter
+from modules.sma_shm.config import SmaHomeManagerCounterSetup, SmaHomeManagerInverterSetup, Speedwire
 from modules.sma_shm.speedwire_listener import SpeedwireListener
 from modules.sma_shm.utils import SpeedwireComponent
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Home Manager",
-        "type": "sma_shm",
-        "id": 0,
-        "configuration": {}
-    }
 
 
 log = logging.getLogger(__name__)
@@ -33,18 +26,25 @@ class Device(AbstractDevice):
         "inverter": inverter.create_component
     }
 
-    def __init__(self, device_config: dict) -> None:
+    def __init__(self, device_config: Union[Dict, Speedwire]) -> None:
         self.components = {}  # type: Dict[str, SpeedwireComponent]
-        self.device_config = device_config
+        self.device_config = dataclass_from_dict(Speedwire, device_config)
 
-    def add_component(self, component_config: dict) -> None:
+    def add_component(self,
+                      component_config: Union[Dict, SmaHomeManagerCounterSetup, SmaHomeManagerInverterSetup]) -> None:
         try:
-            factory = self.COMPONENT_FACTORIES[component_config["type"]]
+            if isinstance(component_config, Dict):
+                component_type = component_config["type"]
+            else:
+                component_type = component_config.type
+            component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+                component_type].component_descriptor.configuration_factory, component_config)
+            factory = self.COMPONENT_FACTORIES[component_config.type]
         except KeyError as e:
             raise Exception(
                 "Unknown component type <%s>, known types are: <%s>", e, ','.join(self.COMPONENT_FACTORIES.keys())
             )
-        self.components["component"+str(component_config["id"])] = factory(component_config)
+        self.components["component"+str(component_config.id)] = factory(component_config)
 
     def update(self) -> None:
         log.debug("Beginning update")
@@ -70,25 +70,37 @@ class Device(AbstractDevice):
                     break
         except socket.timeout:
             pass
-        raise FaultState.error("Kein passendes Datagramm innerhalb des %ds timeout empfangen" % timeout_seconds)
+        raise FaultState.error("Kein passendes Datagramm innerhalb des %ds timeout empfangen." % timeout_seconds)
 
 
-def read_legacy(configuration_factory: Callable[[], dict], serial: str, **kwargs):
-    device = Device(get_default_config())
+COMPONENT_TYPE_TO_MODULE = {
+    "counter": counter,
+    "inverter": inverter
+}
+
+
+def read_legacy(configuration_factory: Callable[[],
+                                                Union[SmaHomeManagerCounterSetup, SmaHomeManagerInverterSetup]],
+                serial: str,
+                num: Optional[int] = None):
+    device = Device(Speedwire())
     component_config = configuration_factory()
-    component_config["configuration"]["serials"] = int(serial) if serial.isnumeric() else None
-    component_config.update(kwargs)
+    component_config.configuration.serials = int(serial) if serial.isnumeric() else None
+    component_config.id = num
     device.add_component(component_config)
     device.update()
 
 
 def read_legacy_counter(serial: str):
-    read_legacy(counter.get_default_config, serial)
+    read_legacy(counter.component_descriptor.configuration_factory, serial)
 
 
 def read_legacy_inverter(serial: str, num: int):
-    read_legacy(inverter.get_default_config, serial, id=num)
+    read_legacy(inverter.component_descriptor.configuration_factory, serial, num)
 
 
 def main(argv: List[str]):
     run_using_positional_cli_args({"counter": read_legacy_counter, "inverter": read_legacy_inverter}, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=Speedwire)

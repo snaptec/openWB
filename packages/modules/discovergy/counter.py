@@ -1,18 +1,11 @@
 from modules.common.store import get_counter_value_store
+from modules.common.component_type import ComponentDescriptor
+from modules.discovergy.config import DiscovergyCounterSetup
 from modules.discovergy.utils import DiscovergyComponent
 
 
-def get_default_config(**configuration) -> dict:
-    return {
-        "name": "Discovergy Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration": {
-            "meter_id": None,
-            **configuration
-        }
-    }
+def create_component(component_config: DiscovergyCounterSetup):
+    return DiscovergyComponent(component_config, get_counter_value_store(component_config.id).set)
 
 
-def create_component(component_config: dict):
-    return DiscovergyComponent(component_config, get_counter_value_store(component_config["id"]).set)
+component_descriptor = ComponentDescriptor(configuration_factory=DiscovergyCounterSetup)
