@@ -7,6 +7,7 @@ monthlyfile="${OPENWBBASEDIR}/web/logging/data/ladelog/$(date +%Y%m).csv"
 if [ ! -f "$monthlyfile" ]; then
 	echo "$monthlyfile"
 fi
+openwbDebugLog "CHARGESTAT" 1 "### start (->$monthlyfile)"
 
 # check for special charge modes
 nachtladenstate=$(<"${RAMDISKDIR}/nachtladenstate")  # "Nachtladen"
@@ -16,10 +17,12 @@ if (( nachtladenstate == 0 )) && (( nachtladen2state == 0 )); then
 else
 	# "Nachtladen" or "Morgensladen" is configured, set charge mode to "7"
 	lmodus=7
+	openwbDebugLog "CHARGESTAT" 2 "\"Nachtladen\" or \"Morgensladen\" active. \"lmodus=7\""
 fi
 if [ -e "${RAMDISKDIR}/loglademodus" ]; then
 	lademodus=$(<"${RAMDISKDIR}/loglademodus")
 	loglademodus=$lademodus
+	openwbDebugLog "CHARGESTAT" 2 "\"loglademodus\"=$loglademodus"
 fi
 
 getTimeDiffString(){
@@ -70,11 +73,15 @@ processChargepoint(){
 			;;
 	esac
 
+	chargePointNameVariableName="${chargePointKey}name"
 	if (( chargePointNumber == 1 || chargePointActivated == 1)); then
+		openwbDebugLog "CHARGESTAT" 1 "# processing charge point $chargePointNumber (${!chargePointNameVariableName})"
 		# get soc
 		if (( soc > 0 )); then
+			openwbDebugLog "CHARGESTAT" 1 "soc detected: $soc%"
 			soctext=", bei $soc %SoC."
 		else
+			openwbDebugLog "CHARGESTAT" 2 "soc not configured or zero"
 			soctext="."
 		fi
 		# get rfid tag
@@ -84,19 +91,23 @@ processChargepoint(){
 		ladeleistung=$(<"${RAMDISKDIR}/llaktuell${chargePointKey2}")
 		# get actual meter value
 		llkwh=$(<"${RAMDISKDIR}/llkwh${chargePointKey2}")
+		openwbDebugLog "CHARGESTAT" 1 "rfid=$rfid; power=$ladeleistung; meter=$llkwh"
 		# get plug state
 		plugstat=$(<"${RAMDISKDIR}/plugstat${chargePointKey3}")
 		if (( plugstat == 1 )); then
 			# a car is connected
+			openwbDebugLog "CHARGESTAT" 1 "car connected: plugstat=$plugstat"
 			pluggedladungakt=$(<"${RAMDISKDIR}/pluggedladungakt${chargePointKey}")
 			if (( pluggedladungakt == 0 )); then
 				# new charge detected
+				openwbDebugLog "CHARGESTAT" 1 "new charge detected; meter=$llkwh"
 				# write actual meter value as start value since plugged in
 				echo "$llkwh" > "${RAMDISKDIR}/pluggedladung${chargePointKey}startkwh"
 				# note ourself about tracking this charge
 				echo 1 > "${RAMDISKDIR}/pluggedladungakt${chargePointKey}"
 			fi
 			if (( "stopchargeafterdisc$chargePointKey" == 1 )); then
+				openwbDebugLog "CHARGESTAT" 2 "\"stopchargeafterdisc\" set, charge point will be locked after unplug is detected"
 				boolstopchargeafterdisc=$(<"${RAMDISKDIR}/boolstopchargeafterdisc${chargePointKey}")
 				if (( boolstopchargeafterdisc == 0 )); then
 					# note ourself to lock this charge point after disconnect
@@ -108,21 +119,26 @@ processChargepoint(){
 			# calculate actual meter value difference since plugged
 			pluggedladungbishergeladen=$(echo "scale=2;($llkwh - $pluggedladungstartkwh)/1" |bc | sed 's/^\./0./')
 			echo "$pluggedladungbishergeladen" > "${RAMDISKDIR}/pluggedladungbishergeladen${chargePointKey}"
+			openwbDebugLog "CHARGESTAT" 1 "charged since plugged: $pluggedladungstartkwh - $llkwh = $pluggedladungbishergeladen"
 			# reset unplug timer
 			echo 0 > "${RAMDISKDIR}/pluggedtimer${chargePointKey}"
 		else
 			# no car connected
+			openwbDebugLog "CHARGESTAT" 1 "car not connected: plugstat=$plugstat"
 			pluggedtimer=$(<"${RAMDISKDIR}/pluggedtimer${chargePointKey}")
 			if (( pluggedtimer < 5 )); then
 				# increment unplug timer
 				pluggedtimer=$(( pluggedtimer + 1 ))
 				echo "$pluggedtimer" > "${RAMDISKDIR}/pluggedtimer${chargePointKey}"
+				openwbDebugLog "CHARGESTAT" 2 "pluggedtimer=$pluggedtimer"
 			else
 				# unplug timer reached 60s (in normal control loop speed)
 				# stop actual tracked charge
 				echo 0 > "${RAMDISKDIR}/pluggedladungakt${chargePointKey}"
+				openwbDebugLog "CHARGESTAT" 2 "unplug detected"
 				# lock this charge point if configured
 				if (( "stopchargeafterdisc$chargePointKey" == 1 )); then
+					openwbDebugLog "CHARGESTAT" 2 "locking charge point"
 					boolstopchargeafterdisc=$(<"${RAMDISKDIR}/boolstopchargeafterdisc${chargePointKey}")
 					if (( boolstopchargeafterdisc == 1 )); then
 						echo 0 > "${RAMDISKDIR}/boolstopchargeafterdisc${chargePointKey}"
@@ -133,8 +149,10 @@ processChargepoint(){
 		fi
 		if (( ladeleistung > 100 )); then
 			# charge point is charging
+			openwbDebugLog "CHARGESTAT" 1 "car is charging"
 			if [ -e "${RAMDISKDIR}/ladeustart${chargePointKey2}" ]; then
 				# charge already running
+				openwbDebugLog "CHARGESTAT" 2 "this charge was already detected"
 				# calculate actual energy charged
 				ladelstart=$(<"${RAMDISKDIR}/ladelstart${chargePointKey2}")
 				bishergeladen=$(echo "scale=2;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
@@ -150,8 +168,10 @@ processChargepoint(){
 				# format time charged
 				restzeittext=$(getTimeDiffString "$restzeit")
 				echo "$restzeittext" > "${RAMDISKDIR}/restzeit${chargePointKey}"
+				openwbDebugLog "CHARGESTAT" 1 "energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; timeRemaining=${restzeit}m ($restzeittext)"
 			else
 				# new charge detected
+				openwbDebugLog "CHARGESTAT" 1 "new charge detected"
 				echo 1 > "${RAMDISKDIR}/ladungaktiv${chargePointKey}"
 				# save actual timestamp for this charge
 				touch "${RAMDISKDIR}/ladeustart${chargePointKey2}"
@@ -164,7 +184,7 @@ processChargepoint(){
 				# send push message if configured
 				if (( pushbenachrichtigung == 1 )) ; then
 					if (( pushbstartl == 1 )) ; then
-						chargePointNameVariableName="${chargePointKey}name"
+						openwbDebugLog "CHARGESTAT" 2 "sending push notification for charge point \"${!chargePointNameVariableName}\""
 						"${OPENWBBASEDIR}/runs/pushover.sh" "${!chargePointNameVariableName} Ladung gestartet$soctext"
 					fi
 				fi
@@ -174,15 +194,18 @@ processChargepoint(){
 			echo 0 > "${RAMDISKDIR}/llog${chargePointKey2}"
 		else
 			# charge point is not charging
+			openwbDebugLog "CHARGESTAT" 1 "car is not charging"
 			llog=$(<"${RAMDISKDIR}/llog${chargePointKey2}")
 			if (( llog < 5 )); then
 				# increment charge stop timer
 				llog=$(( llog + 1 ))
 				echo "$llog" > "${RAMDISKDIR}/llog${chargePointKey2}"
+				openwbDebugLog "CHARGESTAT" 2 "llog=$llog"
 			else
 				# charge stop timer reached 60s (in normal control loop speed)
 				if [ -e "${RAMDISKDIR}/ladeustart${chargePointKey2}" ]; then
 					# a charge just finished
+					openwbDebugLog "CHARGESTAT" 1 "end of charge detected"
 					# reset detected charge
 					echo 0 > "${RAMDISKDIR}/ladungaktiv${chargePointKey}"
 					# clear time remaining
@@ -210,11 +233,12 @@ processChargepoint(){
 					else
 						lademoduslogvalue=$lademodus
 					fi
+					openwbDebugLog "CHARGESTAT" 1 "start=$start; end=$jetzt; timeCharged=${ladedauer}m ($ladedauertext); energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; averagePower=${ladegeschw}kW"
 					sed -i "1i$start,$jetzt,$gelr,$bishergeladen,$ladegeschw,$ladedauertext,$chargePointNumber,$lademoduslogvalue,$rfid" "$monthlyfile"
 					# send push message if configured
 					if (( pushbenachrichtigung == 1 )) ; then
 						if (( pushbstopl == 1 )) ; then
-							chargePointNameVariableName="${chargePointKey}name"
+							openwbDebugLog "CHARGESTAT" 2 "sending push notification for charge point \"${!chargePointNameVariableName}\""
 							"${OPENWBBASEDIR}/runs/pushover.sh" "${!chargePointNameVariableName} Ladung gestoppt. $bishergeladen kWh in $ladedauertext mit durchschnittlich $ladegeschw kW geladen$soctext"
 						fi
 					fi
@@ -224,6 +248,8 @@ processChargepoint(){
 				fi
 			fi
 		fi
+	else
+		openwbDebugLog "CHARGESTAT" 2 "# skipping charge point $chargePointNumber (not configured)"
 	fi
 }
 
