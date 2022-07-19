@@ -4,6 +4,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="EVSOC"
 CHARGEPOINT=$1
+export OPENWBBASEDIR RAMDISKDIR MODULEDIR
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
