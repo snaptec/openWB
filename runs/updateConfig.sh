@@ -781,6 +781,9 @@ updateConfig(){
 	if ! grep -Fq "wr2_piko2_url=" $ConfigFile; then
 		echo "wr2_piko2_url='https://url'" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2_kostal_steca_variant=" $ConfigFile; then
+		echo "wr2_kostal_steca_variant=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "carnetuser=" $ConfigFile; then
 		echo "carnetuser='user'" >> $ConfigFile
 	fi
