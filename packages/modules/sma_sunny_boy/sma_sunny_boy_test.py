@@ -4,7 +4,7 @@ import pytest
 from modules.common.component_state import BatState, InverterState
 from modules.sma_sunny_boy import device
 from modules.sma_sunny_boy.bat import SunnyBoyBat
-from modules.sma_sunny_boy.inverter import SmaModbusTcpInverter
+from modules.sma_sunny_boy.inverter import SmaSunnyBoyInverter
 
 
 class Params:
@@ -37,12 +37,12 @@ def test_sma_modbus_hybrid(monkeypatch, params: Params):
     # setup
     mock_inverter_value_store = Mock()
     monkeypatch.setattr(device, "get_inverter_value_store", Mock(return_value=mock_inverter_value_store))
-    monkeypatch.setattr(SmaModbusTcpInverter, "read", Mock(return_value=SAMPLE_INVERTER_STATE))
+    monkeypatch.setattr(SmaSunnyBoyInverter, "read", Mock(return_value=SAMPLE_INVERTER_STATE))
     monkeypatch.setattr(SunnyBoyBat, "read", Mock(return_value=SAMPLE_BAT_STATE))
 
     # execution
     device.read_legacy("inverter", SAMPLE_IP, 0, params.ip2, params.ip3,
-                       params.ip4, 0, params.hybrid, 0)
+                       params.ip4, 0, params.hybrid, 0, 0)
     # evaluation
     assert mock_inverter_value_store.set.call_args[0][0].power == params.expected_inverter_power
 

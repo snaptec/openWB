@@ -1,52 +1,22 @@
 #!/usr/bin/env python3
 import json
 import logging
-from json import JSONDecodeError
-from typing import Callable, Dict, Union, Optional, List
-
 import requests
+from json import JSONDecodeError
 from requests import HTTPError
+from typing import Callable, Dict, Union, Optional, List
 
 from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import MultiComponentUpdateContext
 from modules.common.req import get_http_session
 from modules.common.store import RAMDISK_PATH
-from modules.tesla import bat
-from modules.tesla import counter
-from modules.tesla import inverter
+from modules.tesla import bat, counter, inverter
+from modules.tesla.config import Tesla, TeslaBatSetup, TeslaCounterSetup, TeslaInverterSetup
 from modules.tesla.http_client import PowerwallHttpClient
 
 log = logging.getLogger(__name__)
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Tesla",
-        "type": "tesla",
-        "id": 0,
-        "configuration": {
-            "ip_address": None,
-            "email": None,
-            "password": None
-        }
-    }
-
-
-class TeslaConfiguration:
-    def __init__(self, ip_address: str, email: str, password: str):
-        self.ip_address = ip_address
-        self.email = email
-        self.password = password
-
-
-class Tesla:
-    def __init__(self, name: str, type: str, id: int, configuration: TeslaConfiguration) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration
 
 
 UpdateFunction = Callable[[PowerwallHttpClient], None]
@@ -61,17 +31,25 @@ class Device(AbstractDevice):
         "inverter": inverter.TeslaInverter
     }
 
-    def __init__(self, device_config: dict) -> None:
+    def __init__(self, device_config: Union[Dict, Tesla]) -> None:
         self.components = {}  # type: Dict[str, tesla_component_classes]
         try:
             self.device_config = dataclass_from_dict(Tesla, device_config)
         except Exception:
-            log.exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict,
+                                                    TeslaBatSetup,
+                                                    TeslaCounterSetup,
+                                                    TeslaInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 component_config))
         else:
             raise Exception(
@@ -144,31 +122,32 @@ class Device(AbstractDevice):
         update_function(PowerwallHttpClient(address, session, cookie))
 
 
+COMPONENT_TYPE_TO_MODULE = {
+    "bat": bat,
+    "counter": counter,
+    "inverter": inverter
+}
+
+
 def read_legacy(component_type: str,
                 address: str,
                 email: str,
                 password: str,
                 num: Optional[int] = None) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
-    device_config = get_default_config()
-    device_config.update({"configuration": {
-        "ip_address": address,
-        "email": email,
-        "password": password
-    }})
+    device_config = Tesla()
+    device_config.configuration.ip_address = address
+    device_config.configuration.email = email
+    device_config.configuration.password = password
+
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    component_config.id = num
     dev.add_component(component_config)
 
     log.debug('Tesla Powerwall IP-Adresse: ' + address)
@@ -180,3 +159,6 @@ def read_legacy(component_type: str,
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=Tesla)

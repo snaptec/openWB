@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
-import logging
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import BatState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_bat_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Sunny Island Speicher",
-        "id": 0,
-        "type": "bat",
-        "configuration": {}
-    }
-
-
-log = logging.getLogger(__name__)
+from modules.sma_sunny_island.config import SmaSunnyIslandBatSetup
 
 
 class SunnyIslandBat:
-    def __init__(self, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 component_config: Union[Dict, SmaSunnyIslandBatSetup],
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
+        self.component_config = dataclass_from_dict(SmaSunnyIslandBatSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__store = get_bat_value_store(component_config["id"])
+        self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def read(self) -> BatState:
@@ -43,3 +37,6 @@ class SunnyIslandBat:
 
     def update(self) -> None:
         self.__store.set(self.read())
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SmaSunnyIslandBatSetup)

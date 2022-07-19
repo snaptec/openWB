@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Callable, Iterable, Union, overload, List
 
 import pymodbus
-from pymodbus.client.sync import ModbusTcpClient
+from pymodbus.client.sync import ModbusTcpClient, ModbusSerialClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 from urllib3.util import parse_url
@@ -43,13 +43,9 @@ Number = Union[int, float]
 
 
 class ModbusClient:
-    def __init__(self, address: str, port: int = 502):
-        parsed_url = parse_url(address)
-        host = parsed_url.host
-        if parsed_url.port is not None:
-            port = parsed_url.port
-        self.delegate = ModbusTcpClient(host, port)
-        self.address = host
+    def __init__(self, delegate, address: str, port: int = 502):
+        self.delegate = delegate
+        self.address = address
         self.port = port
 
     def __enter__(self):
@@ -140,3 +136,19 @@ class ModbusClient:
                              wordorder: Endian = Endian.Big,
                              **kwargs):
         return self.__read_registers(self.delegate.read_input_registers, address, types, byteorder, wordorder, **kwargs)
+
+
+class ModbusTcpClient_(ModbusClient):
+    def __init__(self, address: str, port: int = 502):
+        parsed_url = parse_url(address)
+        host = parsed_url.host
+        if parsed_url.port is not None:
+            port = parsed_url.port
+        super().__init__(ModbusTcpClient(host, port), address, port)
+
+
+class ModbusSerialClient_(ModbusClient):
+    def __init__(self, port: int):
+        super().__init__(ModbusSerialClient(method="rtu", port=port, baudrate=9600, stopbits=1, bytesize=8, timeout=1),
+                         "Serial",
+                         port)

@@ -1,35 +1,28 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import InverterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Studer Wechselrichter",
-        "id": 0,
-        "type": "inverter",
-        "configuration": {
-            "vc_count": 1,  # studer_vc (count MPPT Devices)
-            "vc_type": "VS"  # studer_vc_type (MPPT type VS or VT)
-        }
-    }
+from modules.studer.config import StuderInverterSetup
 
 
 class StuderInverter:
-    def __init__(self, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 component_config: Union[Dict, StuderInverterSetup],
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
+        self.component_config = dataclass_from_dict(StuderInverterSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__store = get_inverter_value_store(component_config["id"])
+        self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
-
-        vc_count = self.component_config["configuration"]["vc_count"]
-        vc_type = self.component_config["configuration"]["vc_type"]
+        vc_count = self.component_config.configuration.vc_count
+        vc_type = self.component_config.configuration.vc_type
 
         with self.__tcp_client:
             if vc_type == 'VS':
@@ -62,3 +55,6 @@ class StuderInverter:
             exported=exported
         )
         self.__store.set(inverter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=StuderInverterSetup)

@@ -1,29 +1,28 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_counter_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Sunny Boy Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration": {}
-    }
+from modules.sma_sunny_boy.config import SmaSunnyBoyCounterSetup
 
 
 class SmaSunnyBoyCounter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, SmaSunnyBoyCounterSetup],
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(SmaSunnyBoyCounterSetup, component_config)
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
-        self.__store = get_counter_value_store(component_config["id"])
+        self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
@@ -35,7 +34,7 @@ class SmaSunnyBoyCounter:
             else:
                 power = exp * -1
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config["id"])
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
         imported, exported = self.__sim_count.sim_count(power, topic=topic_str, data=self.simulation, prefix="bezug")
 
         counter_state = CounterState(
@@ -44,3 +43,6 @@ class SmaSunnyBoyCounter:
             power=power
         )
         self.__store.set(counter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SmaSunnyBoyCounterSetup)

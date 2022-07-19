@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common.component_state import BatState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusClient, ModbusDataType
+from modules.common.modbus import ModbusTcpClient_, ModbusDataType
 from modules.common.store import get_bat_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Sunny Boy Speicher",
-        "id": 0,
-        "type": "bat",
-        "configuration": {}
-    }
+from modules.sma_sunny_boy.config import SmaSunnyBoyBatSetup
 
 
 class SunnyBoyBat:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: ModbusClient) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, SmaSunnyBoyBatSetup],
+                 tcp_client: ModbusTcpClient_) -> None:
+        self.component_config = dataclass_from_dict(SmaSunnyBoyBatSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__store = get_bat_value_store(component_config["id"])
+        self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def read(self) -> BatState:
@@ -44,3 +43,6 @@ class SunnyBoyBat:
 
     def update(self) -> None:
         self.__store.set(self.read())
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SmaSunnyBoyBatSetup)

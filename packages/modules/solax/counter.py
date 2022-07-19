@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 from pymodbus.constants import Endian
 
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_counter_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Solax Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration": {}
-    }
+from modules.solax.config import SolaxCounterSetup
 
 
 class SolaxCounter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient, modbus_id: int) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, SolaxCounterSetup],
+                 tcp_client: modbus.ModbusTcpClient_,
+                 modbus_id: int) -> None:
+
+        self.component_config = dataclass_from_dict(SolaxCounterSetup, component_config)
         self.__modbus_id = modbus_id
         self.__tcp_client = tcp_client
-        self.__store = get_counter_value_store(component_config["id"])
+        self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
@@ -49,3 +49,6 @@ class SolaxCounter:
             frequency=frequency
         )
         self.__store.set(counter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SolaxCounterSetup)

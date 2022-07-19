@@ -5,70 +5,16 @@ import os
 from typing import Dict, Union, Optional, List
 from requests import HTTPError, Session
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
-from modules.lg import bat
-from modules.lg import counter
-from modules.lg import inverter
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import MultiComponentUpdateContext
 from modules.common.fault_state import FaultState
+from modules.lg.config import LG, LgBatSetup, LgConfiguration, LgCounterSetup, LgInverterSetup
+from modules.lg import bat, counter, inverter
 
 log = logging.getLogger(__name__)
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "LG ESS V1.0",
-        "type": "lg",
-        "id": 0,
-        "configuration": {
-            "ip": None,
-            "password": None
-        }
-    }
-
-
-class DeviceConfiguration:
-    def __init__(self, ip_address: str, password: str):
-        self.ip_address = ip_address
-        self.password = password
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["ip_address", "password"]
-        try:
-            values = [device_config[key] for key in keys]
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return DeviceConfiguration(*values)
-
-
-class LG:
-    def __init__(self, name: str, type: str, id: int, configuration: DeviceConfiguration) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration
-
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["name", "type", "id", "configuration"]
-        try:
-            values = [device_config[key] for key in keys]
-            values = []
-            for key in keys:
-                if isinstance(device_config[key], Dict):
-                    values.append(DeviceConfiguration.from_dict(device_config[key]))
-                else:
-                    values.append(device_config[key])
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return LG(*values)
 
 
 lg_component_classes = Union[bat.LgBat, counter.LgCounter, inverter.LgInverter]
@@ -91,21 +37,24 @@ class Device(AbstractDevice):
         "inverter": inverter.LgInverter
     }
 
-    def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, lg_component_classes]
+    def __init__(self, device_config: Union[Dict, LG]) -> None:
+        self.components = {}  # type: Dict[str, lg_component_classes]
         self.session_key = " "
         try:
-            self.config = device_config \
-                if isinstance(device_config, LG) \
-                else LG.from_dict(device_config)
+            self.device_config = dataclass_from_dict(LG, device_config)
         except Exception:
-            log.exception("Fehler im Modul "+self.config.name)
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict, LgBatSetup, LgCounterSetup, LgInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.config.id,
+            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config.id,
                 component_config))
         else:
             raise Exception(
@@ -114,9 +63,9 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.debug("Start device reading " + str(self._components))
-        if self._components:
-            with MultiComponentUpdateContext(self._components):
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            with MultiComponentUpdateContext(self.components):
                 session = req.get_http_session()
                 response = self._request_data(session)
                 # missing "auth" in response indicates success
@@ -126,19 +75,19 @@ class Device(AbstractDevice):
                     self._update_session_key(session)
                     response = self._request_data(session)
 
-                for component in self._components:
-                    self._components[component].update(response)
+                for component in self.components:
+                    self.components[component].update(response)
         else:
             log.warning(
-                self.config.name +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
     def _update_session_key(self, session: Session):
         try:
             headers = {'Content-Type': 'application/json', }
-            data = json.dumps({"password": self.config.configuration.password})
-            response = session.put("https://"+self.config.configuration.ip_address+'/v1/login', headers=headers,
+            data = json.dumps({"password": self.device_config.configuration.password})
+            response = session.put("https://"+self.device_config.configuration.ip_address+'/v1/login', headers=headers,
                                    data=data, verify=False, timeout=5).json()
             self.session_key = response["auth_key"]
         except (HTTPError, KeyError):
@@ -147,23 +96,22 @@ class Device(AbstractDevice):
     def _request_data(self, session: Session) -> Dict:
         headers = {'Content-Type': 'application/json', }
         data = json.dumps({"auth_key": self.session_key})
-        return session.post("https://"+self.config.configuration.ip_address + "/v1/user/essinfo/home",
+        return session.post("https://"+self.device_config.configuration.ip_address + "/v1/user/essinfo/home",
                             headers=headers,
                             data=data,
                             verify=False,
                             timeout=5).json()
 
 
+COMPONENT_TYPE_TO_MODULE = {
+    "bat": bat,
+    "counter": counter,
+    "inverter": inverter
+}
+
+
 def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] = None) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
-    device_config = get_default_config()
-    device_config["configuration"]["ip_address"] = ip
-    device_config["configuration"]["password"] = password
-    dev = Device(device_config)
+    dev = Device(LG(configuration=LgConfiguration(ip_address=ip, password=password)))
 
     if os.path.isfile("/var/www/html/openWB/ramdisk/ess_session_key"):
         with open("/var/www/html/openWB/ramdisk/ess_session_key", "r") as f:
@@ -174,13 +122,15 @@ def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] 
         old_session_key = dev.session_key
 
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    if component_type == "bat" or component_type == "counter":
+        num = None
+    component_config.id = num
     dev.add_component(component_config)
     log.debug('LG ESS V1.0 IP: ' + ip)
     log.debug('LG ESS V1.0 password: ' + password)
@@ -193,3 +143,6 @@ def read_legacy(component_type: str, ip: str, password: str, num: Optional[int] 
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=LG)

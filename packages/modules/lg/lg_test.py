@@ -1,8 +1,9 @@
 import pytest
 from unittest.mock import Mock
 
-from modules.lg import bat, counter, device, inverter
 from modules.common.component_state import BatState, CounterState, InverterState
+from modules.lg import bat, counter, device, inverter
+from modules.lg.config import LG, LgConfiguration
 from test_utils.mock_ramdisk import MockRamdisk
 
 
@@ -13,10 +14,7 @@ def mock_ramdisk(monkeypatch):
 
 @pytest.fixture
 def dev() -> device.Device:
-    device_config = device.get_default_config()
-    device_config["configuration"]["ip_address"] = API_URL
-    device_config["configuration"]["password"] = "some password"
-    dev = device.Device(device_config)
+    dev = device.Device(LG(configuration=LgConfiguration(ip_address=API_URL, password="some password")))
     dev.session_key = "67567d76-0c83-11ea-8a59-d84fb802005a"
     return dev
 
@@ -48,14 +46,14 @@ def test_valid_login(monkeypatch, dev: device.Device):
     mock_inverter_value_store = Mock()
     monkeypatch.setattr(inverter, "get_inverter_value_store", Mock(return_value=mock_inverter_value_store))
     monkeypatch.setattr(device.Device, "_request_data", Mock(return_value=sample_auth_key_valid))
-    component_config = bat.get_default_config()
-    component_config["id"] = None
+    component_config = bat.component_descriptor.configuration_factory()
+    component_config.id = None
     dev.add_component(component_config)
-    component_config = counter.get_default_config()
-    component_config["id"] = 1
+    component_config = counter.component_descriptor.configuration_factory()
+    component_config.id = 1
     dev.add_component(component_config)
-    component_config = inverter.get_default_config()
-    component_config["id"] = 2
+    component_config = inverter.component_descriptor.configuration_factory()
+    component_config.id = 2
     dev.add_component(component_config)
 
     # execution
@@ -78,14 +76,14 @@ def test_update_session_key(monkeypatch, dev: device.Device):
     monkeypatch.setattr(device.Device, "_update_session_key", Mock())
     monkeypatch.setattr(device.Device, "_request_data", Mock(
         side_effect=[sample_auth_key_invalid, sample_auth_key_valid]))
-    component_config = bat.get_default_config()
-    component_config["id"] = None
+    component_config = bat.component_descriptor.configuration_factory()
+    component_config.id = None
     dev.add_component(component_config)
-    component_config = counter.get_default_config()
-    component_config["id"] = 1
+    component_config = counter.component_descriptor.configuration_factory()
+    component_config.id = 1
     dev.add_component(component_config)
-    component_config = inverter.get_default_config()
-    component_config["id"] = 2
+    component_config = inverter.component_descriptor.configuration_factory()
+    component_config.id = 2
     dev.add_component(component_config)
 
     # execution

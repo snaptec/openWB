@@ -1,28 +1,27 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 from pymodbus.constants import Endian
 
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import InverterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Solax Wechselrichter",
-        "id": 0,
-        "type": "inverter",
-        "configuration": {}
-    }
+from modules.solax.config import SolaxInverterSetup
 
 
 class SolaxInverter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient, modbus_id: int) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, SolaxInverterSetup],
+                 tcp_client: modbus.ModbusTcpClient_,
+                 modbus_id: int) -> None:
+        self.component_config = dataclass_from_dict(SolaxInverterSetup, component_config)
         self.__modbus_id = modbus_id
         self.__tcp_client = tcp_client
-        self.__store = get_inverter_value_store(component_config["id"])
+        self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self) -> None:
@@ -37,3 +36,6 @@ class SolaxInverter:
             exported=exported
         )
         self.__store.set(inverter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SolaxInverterSetup)

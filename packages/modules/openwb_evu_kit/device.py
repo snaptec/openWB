@@ -2,26 +2,19 @@ import logging
 import time
 from typing import Dict, Union, Optional, List
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
+from modules.common import modbus
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
+from modules.openwb_bat_kit.bat import BatKit
 from modules.openwb_evu_kit import bat
 from modules.openwb_evu_kit import counter
 from modules.openwb_evu_kit import inverter
-from modules.openwb_bat_kit.bat import BatKit
 from modules.openwb_pv_kit.inverter import PvKit
-from modules.common import modbus
+from modules.openwb_evu_kit.config import EvuKit, EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup
 
 log = logging.getLogger(__name__)
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "OpenWB EVU-Kit",
-        "type": "openwb_evu_kit",
-        "id": 0,
-        "configuration": {}
-    }
 
 
 class Device(AbstractDevice):
@@ -31,17 +24,23 @@ class Device(AbstractDevice):
         "inverter": PvKit
     }
 
-    def __init__(self, device_config: dict) -> None:
-        self.device_config = device_config
+    def __init__(self, device_config: Union[Dict, EvuKit]) -> None:
+        self.device_config = dataclass_from_dict(EvuKit, device_config)
         # type: Dict[str, Union[bat.BatKit, counter.EvuKit, inverter.PvKit]]
         self.components = {}
-        self.client = modbus.ModbusClient("192.168.193.15", 8899)
+        self.client = modbus.ModbusTcpClient_("192.168.193.15", 8899)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self,
+                      component_config: Union[Dict, EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config["type"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.client))
+            self.components["component"+str(component_config.type)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config.id, component_config, self.client))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -58,9 +57,16 @@ class Device(AbstractDevice):
                     time.sleep(0.2)
         else:
             log.warning(
-                self.device_config["name"] +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
+
+
+COMPONENT_TYPE_TO_MODULE = {
+    "bat": bat,
+    "counter": counter,
+    "inverter": inverter
+}
 
 
 def read_legacy(component_type: str,
@@ -72,9 +78,7 @@ def read_legacy(component_type: str,
                 inverter_version: Optional[int] = 0):
     """ Ausführung des Moduls als Python-Skript
     """
-
-    device_config = get_default_config()
-    dev = Device(device_config)
+    dev = Device(EvuKit())
 
     component_config = get_component_config(component_type, evu_version, None)
     dev.add_component(component_config)
@@ -93,21 +97,19 @@ def read_legacy(component_type: str,
 
 
 def get_component_config(component_type: str, version: Optional[int], num: Optional[int] = None) -> Dict:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
         raise Exception("illegal component type " + component_type +
                         ". Allowed values: " +
                         ','.join(COMPONENT_TYPE_TO_MODULE.keys()))
-    component_config["id"] = num
-    component_config["configuration"]["version"] = version
+    component_config.id = num
+    component_config.configuration.version = version
     return component_config
 
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=EvuKit)

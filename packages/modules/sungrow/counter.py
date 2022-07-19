@@ -1,37 +1,34 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType, Endian
 from modules.common.store import get_counter_value_store
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "Sungrow Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration": {
-            "version": 1
-        }
-    }
+from modules.sungrow.config import SungrowCounterSetup
 
 
 class SungrowCounter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, SungrowCounterSetup],
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(SungrowCounterSetup, component_config)
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
-        self.__store = get_counter_value_store(component_config["id"])
+        self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(component_config)
 
     def update(self):
         unit = 1
         with self.__tcp_client:
-            if self.component_config["configuration"]["version"] == 1:
+            if self.component_config.configuration.version == 1:
                 power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
                                                                wordorder=Endian.Little, unit=unit)
                 frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
@@ -56,7 +53,7 @@ class SungrowCounter:
                 # powers = [power / 10 for power in powers]
                 # log.info("power: " + str(power) + " powers?: " + str(powers))
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config["id"])
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
         imported, exported = self.__sim_count.sim_count(
             power,
             topic=topic_str,
@@ -72,3 +69,6 @@ class SungrowCounter:
             frequency=frequency
         )
         self.__store.set(counter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SungrowCounterSetup)

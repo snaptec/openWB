@@ -7,7 +7,7 @@ from modules.common.modbus import ModbusDataType
 
 
 class Lovato:
-    def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
+    def __init__(self, modbus_id: int, client: modbus.ModbusTcpClient_) -> None:
         self.client = client
         self.id = modbus_id
 
