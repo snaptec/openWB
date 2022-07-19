@@ -1328,6 +1328,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2kostalstecavariant" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2_kostal_steca_variant" class="col-md-4 col-form-label">Variante</label>
+								<div class="col">
+									<select name="wr2_kostal_steca_variant" id="wr2_kostal_steca_variant" class="form-control">
+										<option <?php if($wr2_kostal_steca_variantold == 0) echo "selected" ?> value="0">Kostal Piko MP oder Steca Grid Coolcept</option>
+										<option <?php if($wr2_kostal_steca_variantold == 1) echo "selected" ?> value="1">Kostal Piko MP (non-plus)</option>
+									</select>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
@@ -1342,6 +1353,7 @@
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
 								hideSection('#pv2smamodbus');
+								hideSection('#pv2kostalstecavariant');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1380,6 +1392,7 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_kostalsteca') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2kostalstecavariant');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_victron') {
 									showSection('#pv2ipdiv');
