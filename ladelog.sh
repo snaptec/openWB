@@ -113,12 +113,12 @@ processChargepoint(){
 		else
 			# no car connected
 			pluggedtimer=$(<"${RAMDISKDIR}/pluggedtimer${chargePointKey}")
-			if (( pluggedtimer < 6 )); then
+			if (( pluggedtimer < 5 )); then
 				# increment unplug timer
 				pluggedtimer=$(( pluggedtimer + 1 ))
 				echo "$pluggedtimer" > "${RAMDISKDIR}/pluggedtimer${chargePointKey}"
 			else
-				# unplug timer reached 30s (in normal control loop speed)
+				# unplug timer reached 60s (in normal control loop speed)
 				# stop actual tracked charge
 				echo 0 > "${RAMDISKDIR}/pluggedladungakt${chargePointKey}"
 				# lock this charge point if configured
@@ -141,13 +141,11 @@ processChargepoint(){
 				echo "$bishergeladen" > "${RAMDISKDIR}/aktgeladen${chargePointKey2}"
 				# calculate range charged
 				averageConsumptionVariableName="durchs$chargePointKey"
-				gelr=$(echo "scale=2;$bishergeladen / ${!averageConsumptionVariableName} * 100" |bc)
-				gelr=${gelr%.*}
+				gelr=$(echo "scale=0;$bishergeladen * 100 / ${!averageConsumptionVariableName}" |bc)
 				echo "$gelr" > "${RAMDISKDIR}/gelr${chargePointKey}"
 				# calculate time remaining if energy limit is set
 				energyChargeLimitVariableName="lademkwh$chargePointKey"
-				restzeit=$(echo "scale=6;(${!energyChargeLimitVariableName} - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
-				restzeit=${restzeit%.*}
+				restzeit=$(echo "scale=0;(${!energyChargeLimitVariableName} - $bishergeladen) * 1000 * 60 / $ladeleistung" |bc)
 				echo "$restzeit" > "${RAMDISKDIR}/restzeit${chargePointKey}m"
 				# format time charged
 				restzeittext=$(getTimeDiffString "$restzeit")
@@ -182,7 +180,7 @@ processChargepoint(){
 				llog=$(( llog + 1 ))
 				echo "$llog" > "${RAMDISKDIR}/llog${chargePointKey2}"
 			else
-				# charge stop timer reached 50s (in normal control loop speed)
+				# charge stop timer reached 60s (in normal control loop speed)
 				if [ -e "${RAMDISKDIR}/ladeustart${chargePointKey2}" ]; then
 					# a charge just finished
 					# reset detected charge
@@ -194,8 +192,7 @@ processChargepoint(){
 					bishergeladen=$(echo "scale=2;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 					# calculate range charged
 					averageConsumptionVariableName="durchs$chargePointKey"
-					gelr=$(echo "scale=2;$bishergeladen / ${!averageConsumptionVariableName} * 100" |bc)
-					gelr=${gelr%.*}
+					gelr=$(echo "scale=0;$bishergeladen * 100 / ${!averageConsumptionVariableName}" |bc)
 					# calculate time charged
 					start=$(<"${RAMDISKDIR}/ladeustart${chargePointKey2}")
 					ladeustarts=$(<"${RAMDISKDIR}/ladeustarts${chargePointKey2}")
