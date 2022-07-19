@@ -6,8 +6,9 @@ import requests
 import requests_mock
 
 from modules.tesla import bat
-from modules.tesla.device import Device, get_default_config
+from modules.tesla.device import Device, Tesla
 from modules.common.component_state import BatState
+from modules.tesla.config import TeslaConfiguration
 from test_utils.mock_ramdisk import MockRamdisk
 
 sample_soe_json = """{"percentage":69.16}"""
@@ -116,14 +117,12 @@ sample_aggregates_json = """
 
 
 def setup_battery_component() -> Device:
-    device_config = get_default_config()
-    device_config.update({"configuration": {
-        "ip_address": "sample-address",
-        "email": "sample@mail.com",
-        "password": "some password"
-    }})
+    device_config = Tesla(configuration=TeslaConfiguration(
+        ip_address="sample-address",
+        email="sample@mail.com",
+        password="some password"))
     dev = Device(device_config)
-    dev.add_component(bat.get_default_config())
+    dev.add_component(bat.component_descriptor.configuration_factory())
     return dev
 
 

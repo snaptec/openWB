@@ -3,35 +3,29 @@ import itertools
 import logging
 from typing import Dict, Optional, Union, List
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import modbus
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
-from modules.sma_webbox import inverter as webbox_inverter
 from modules.sma_sunny_boy import bat, bat_smart_energy, counter, inverter
+from modules.sma_sunny_boy.config import (SmaSunnyBoy, SmaSunnyBoyBatSetup, SmaSunnyBoyConfiguration,
+                                          SmaSunnyBoyCounterSetup, SmaSunnyBoyInverterConfiguration,
+                                          SmaSunnyBoyInverterSetup, SmaSunnyBoySmartEnergyBatSetup)
 from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
+from modules.sma_webbox.config import SmaWebboxInverterSetup
+from modules.sma_webbox.inverter import SmaWebboxInverter
 
 log = logging.getLogger(__name__)
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Sunny Boy",
-        "type": "sma_sunny_boy",
-        "id": 0,
-        "configuration": {
-            "ip_address": None
-        }
-    }
 
 
 sma_modbus_tcp_component_classes = Union[
     bat.SunnyBoyBat,
     bat_smart_energy.SunnyBoySmartEnergyBat,
     counter.SmaSunnyBoyCounter,
-    inverter.SmaModbusTcpInverter
+    inverter.SmaSunnyBoyInverter
 ]
 
 
@@ -40,23 +34,32 @@ class Device(AbstractDevice):
         "bat": bat.SunnyBoyBat,
         "bat_smart_energy": bat_smart_energy.SunnyBoySmartEnergyBat,
         "counter": counter.SmaSunnyBoyCounter,
-        "inverter": inverter.SmaModbusTcpInverter
+        "inverter": inverter.SmaSunnyBoyInverter
     }
 
-    def __init__(self, device_config: dict) -> None:
+    def __init__(self, device_config: Union[Dict, SmaSunnyBoy]) -> None:
         self.components = {}  # type: Dict[str, sma_modbus_tcp_component_classes]
         try:
-            self.device_config = device_config
-            ip_address = device_config["configuration"]["ip_address"]
+            self.device_config = dataclass_from_dict(SmaSunnyBoy, device_config)
+            ip_address = self.device_config.configuration.ip_address
             self.client = modbus.ModbusTcpClient_(ip_address, 502)
         except Exception:
-            log.exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict,
+                                                    SmaSunnyBoyBatSetup,
+                                                    SmaSunnyBoySmartEnergyBatSetup,
+                                                    SmaSunnyBoyCounterSetup,
+                                                    SmaSunnyBoyInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"],
+            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config.id,
                 component_config,
                 self.client))
         else:
@@ -74,7 +77,7 @@ class Device(AbstractDevice):
                     component.update()
         else:
             log.warning(
-                self.device_config["name"] +
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
@@ -108,12 +111,9 @@ def read_legacy(component_type: str,
             read_inverter(ip1, webbox, ip2, ip3, ip4, version, hybrid, num, sunny_boy_smart_energy)
             return
         else:
-            component_config = COMPONENT_TYPE_TO_MODULE[
-                component_type].get_default_config()
-            component_config["id"] = None
-            device_config = get_default_config()
-            device_config["configuration"]["ip_address"] = ip1
-            dev = Device(device_config)
+            component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
+            component_config.id = None
+            dev = Device(SmaSunnyBoy(configuration=SmaSunnyBoyConfiguration(ip_address=ip1)))
             dev.add_component(component_config)
             dev.update()
     else:
@@ -132,16 +132,14 @@ def read_inverter(ip1: str,
                   num: int,
                   sunny_boy_smart_energy: int):
     def create_webbox_inverter(address: str):
-        config = webbox_inverter.get_default_config()
-        config["id"] = num
-        return webbox_inverter.SmaWebboxInverter(0, address, config)
+        return SmaWebboxInverter(address, SmaWebboxInverterSetup(id=num))
 
     def create_modbus_inverter(address: str):
-        config = inverter.get_default_config()
-        config["id"] = num
-        config["configuration"]["version"] = SmaInverterVersion(version)
-        config["configuration"]["hybrid"] = bool(hybrid)
-        return inverter.SmaModbusTcpInverter(0, config, modbus.ModbusTcpClient_(address, 502))
+        config = SmaSunnyBoyInverterSetup(
+            id=num,
+            configuration=SmaSunnyBoyInverterConfiguration(hybrid=bool(hybrid),
+                                                           version=SmaInverterVersion(version)))
+        return inverter.SmaSunnyBoyInverter(0, config, modbus.ModbusTcpClient_(address, 502))
 
     inverter1 = (create_webbox_inverter if webbox else create_modbus_inverter)(ip1)
     inverters_additional = (create_modbus_inverter(address) for address in [ip2, ip3, ip4] if address != "none")
@@ -160,11 +158,11 @@ def read_inverter(ip1: str,
             total_energy += state.exported
         if hybrid == 1:
             if sunny_boy_smart_energy == 0:
-                bat_default = bat.get_default_config()
-                bat_comp = bat.SunnyBoyBat(0, bat_default, modbus.ModbusTcpClient_(ip1, 502))
+                bat_comp = bat.SunnyBoyBat(0, SmaSunnyBoyBatSetup(), modbus.ModbusTcpClient_(ip1, 502))
             else:
-                bat_default = bat_smart_energy.get_default_config()
-                bat_comp = bat_smart_energy.SunnyBoySmartEnergyBat(0, bat_default, modbus.ModbusTcpClient_(ip1, 502))
+                bat_comp = bat_smart_energy.SunnyBoySmartEnergyBat(0,
+                                                                   SmaSunnyBoySmartEnergyBatSetup(),
+                                                                   modbus.ModbusTcpClient_(ip1, 502))
             bat_state = bat_comp.read()
             total_power -= bat_state.power
             total_energy = total_energy+bat_state.imported-bat_state.exported
@@ -173,3 +171,6 @@ def read_inverter(ip1: str,
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=SmaSunnyBoy)
