@@ -22,6 +22,19 @@ if [ -e "${RAMDISKDIR}/loglademodus" ]; then
 	loglademodus=$lademodus
 fi
 
+getTimeDiffString(){
+	minutes=$1
+
+	if (( minutes > 60 )); then
+		text="$(( minutes / 60 )) H $(( minutes % 60 )) Min"
+	elif (( minutes >= 0 )); then
+		text="$minutes Min"
+	else
+		text="--"
+	fi
+	echo "$text"
+}
+
 # function for charge points 1 to 8
 processChargepoint(){
 	chargePointNumber=$1
@@ -136,13 +149,9 @@ processChargepoint(){
 				restzeit=$(echo "scale=6;(${!energyChargeLimitVariableName} - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
 				restzeit=${restzeit%.*}
 				echo "$restzeit" > "${RAMDISKDIR}/restzeit${chargePointKey}m"
-				if (( restzeit > 60 )); then
-					restzeith=$(( restzeit / 60 ))
-					restzeitr=$(( restzeit % 60 ))
-					echo "$restzeith H $restzeitr Min" > "${RAMDISKDIR}/restzeit${chargePointKey}"
-				else
-					echo "$restzeit Min" > "${RAMDISKDIR}/restzeit${chargePointKey}"
-				fi
+				# format time charged
+				restzeittext=$(getTimeDiffString "$restzeit")
+				echo "$restzeittext" > "${RAMDISKDIR}/restzeit${chargePointKey}"
 			else
 				# new charge detected
 				echo 1 > "${RAMDISKDIR}/ladungaktiv${chargePointKey}"
@@ -197,14 +206,7 @@ processChargepoint(){
 					# calculate average power
 					ladegeschw=$(echo "scale=2;$bishergeladen * 60 * 60 / $ladedauers" |bc)
 					# format time charged
-					if (( ladedauer > 60 )); then
-						# split time charged in hours and minutes
-						ladedauerh=$(( ladedauer / 60 ))
-						laderest=$(( ladedauer % 60 ))
-						ladedauertext="$ladedauerh H $laderest Min"
-					else
-						ladedauertext="$ladedauer Min"
-					fi
+					ladedauertext=$(getTimeDiffString "$ladedauer")
 					# add charge log entry
 					if (( chargePointNumber < 3 )); then
 						lademoduslogvalue=$loglademodus
