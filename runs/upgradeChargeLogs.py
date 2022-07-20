@@ -1,54 +1,55 @@
 #!/usr/bin/env python3
 import csv
 import argparse
-from glob import glob
-import os
+import logging
 from pathlib import Path
-from typing import Iterable
+import sys
+
+CHARGE_LOG_PATH = Path(__file__).resolve().parents[1] / "web" / "logging" / "data" / "ladelog"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--price", type=float, default=0.3, help="price per kWh, defaults to 0.30")
 parser.add_argument("-v", "--verbose", action="store_true", help="verbose debug output")
 args = parser.parse_args()
 
+log = logging.getLogger("upgradeChargeLogs")
+log_handler = logging.StreamHandler(sys.stdout)
+log_handler.setFormatter(
+    logging.Formatter(u"%(asctime)s: PID: %(process)d: %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+)
+log.addHandler(log_handler)
 
-def debugPrint(text: str):
-    if(args.verbose):
-        print(text)
+if(args.verbose):
+    log.setLevel(logging.DEBUG)
+else:
+    log.setLevel(logging.INFO)
 
+log.info("upgrading charge logs with a price of " + str(args.price) + "€/kWh")
+csv_files = CHARGE_LOG_PATH.glob("*.csv")
 
-CHARGE_LOG_PATH = Path(__file__).resolve().parents[1] / "web" / "logging" / "data" / "ladelog"
-
-print("upgrading charge logs with a price of " + str(args.price) + "€/kWh")
-
-csv_files = glob(str(CHARGE_LOG_PATH) + '/*.csv')
-print(csv_files)
-
-for current_filename in csv_files:
-    print("checking file \"" + current_filename + "\"")
-    current_file = (CHARGE_LOG_PATH / current_filename)
-    new_file = (CHARGE_LOG_PATH / (current_filename + '.new'))
+for current_file in csv_files:
+    log.debug("checking file \"" + current_file.name + "\"")
+    new_file = current_file.with_name(current_file.name + ".new")
     data_modified = False
     with current_file.open("r") as log_file:
         data = list(csv.reader(log_file, delimiter=","))
         for row in data:
             if len(row) == 10:
-                debugPrint("file already upgraded")
+                log.debug("file \"" + current_file.name + "\" already upgraded")
                 break
             if len(row) == 9:
                 costs = round(float(row[3]) * args.price, 2)
-                debugPrint("costs missing! adding calculated costs: " + str(costs))
+                log.debug("costs missing! adding calculated costs: " + str(costs))
                 row.append(costs)
-                debugPrint(row)
+                log.debug(row)
                 data_modified = True
             else:
-                print("unexpected row format")
-                print(row)
+                if len(row) != 0:
+                    log.error("file \"" + current_file.name + "\": unexpected row format: " + str(row))
         if data_modified:
-            debugPrint("file was modified")
+            log.debug("file was modified")
             with new_file.open("w") as new_log_file:
                 writer = csv.writer(new_log_file, delimiter=",", lineterminator="\n")
                 writer.writerows(data)
-            os.remove(str(current_file))
-            os.rename(str(new_file), str(current_file))
-print("upgrading charge logs done")
+            new_file.replace(current_file)
+log.info("upgrading charge logs done")
