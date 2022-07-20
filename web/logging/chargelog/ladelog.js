@@ -178,8 +178,8 @@ function putladelogtogether() {
 		}
 
 		parsedlog = parseResult(ladelogdata);
-		var totalkwh = "0";
-		var totalkm = "0";
+		var totalkwh = 0;
+		var totalkm = 0;
 		var filterrfid = 0;
 		var rfidtag = "";
 
@@ -248,8 +248,8 @@ function putladelogtogether() {
 		if ( testout.length >= 1 ) {
 			var content = '<table class="table"> <thead><tr><th scope="col">Startzeit</th><th scope="col">Endzeit</th><th scope="col" class="text-right">geladene km</th><th scope="col" class="text-right">kWh</th><th scope="col" class="text-right">mit kW</th><th scope="col" class="text-right">Ladedauer</th><th scope="col">Ladepunkt</th><th scope="col">Lademodus</th><th scope="col">RFID Tag</th><th scope="col" class="text-right">Kosten</th></tr></thead> <tbody>';
 			var rowcount=0;
-			var avgkw="0";
-			var totalprice="0";
+			var avgkw=0;
+			var totalprice=0;
 
 			testout.forEach(function(row) {
 				var price = "0"
@@ -257,7 +257,6 @@ function putladelogtogether() {
 				content += "<tr>";
 				var cellcount=0;
 				row.forEach(function(cell) {
-
 					cellcount+=1;
 					switch (cellcount){
 						case 1: // Startzeit
@@ -266,8 +265,9 @@ function putladelogtogether() {
 							content += "<td>" + dateString + "</td>";
 							break;
 						case 3: // geladene km
-							totalkm = parseFloat(totalkm) + parseFloat(cell);
-							content += "<td class=\"text-right\">" + cell + "</td>";
+							var km = parseFloat(cell);
+							totalkm += km
+							content += "<td class=\"text-right\">" + km.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) + "</td>";
 							break;
 						case 4: // geladene kWh
 							totalkwh = parseFloat(totalkwh) + parseFloat(cell);
@@ -276,8 +276,9 @@ function putladelogtogether() {
 							content += "<td class=\"text-right\">" + parseFloat(cell).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "</td>";
 							break;
 						case 5: // Ladeleistung kW
-							avgkw = parseFloat(avgkw) + parseFloat(cell);
-							content += "<td class=\"text-right\">" + parseFloat(cell).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "</td>";
+							var kW = parseFloat(cell);
+							avgkw += kW
+							content += "<td class=\"text-right\">" + kW.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "</td>";
 							break;
 						case 6: // Ladedauer
 							timeArray = cell.split(" ");
@@ -293,22 +294,30 @@ function putladelogtogether() {
 							}
 							content += "<td class=\"text-right\">" + hourString + ":" + minuteString + "</td>";
 							break;
+						// 7: Ladepunkt-Nummer
 						case 8: // Lademodus
-							if (cell == 2) {
-								content += "<td>" + "Nur PV" + "</td>" ;
-							} else if (cell == 0) {
-								content += "<td>" + "Sofort" + "</td>" ;
-							} else if (cell == 1) {
-								content += "<td>" + "Min+PV" + "</td>" ;
-							} else if (cell == 4) {
-								content += "<td>" + "Standby" + "</td>" ;
-							} else if (cell == 3) {
-								content += "<td>" + "Standby" + "</td>" ;
-							} else if (cell == 7) {
-								content += "<td>" + "Nachtladen" + "</td>" ;
-							} else {
-								content += "<td>" + cell + "</td>" ;
+							content += "<td>";
+							switch (cell) {
+								case 0:
+									content += "Sofort";
+									break;
+								case 1:
+									content += "Min+PV";
+									break;
+								case 2:
+									content += "Nur PV";
+									break;
+								case 3:
+								case 4:
+									content += "Standby";
+									break;
+								case 7:
+									content += "Nachtladen";
+									break;
+								default:
+									content += cell;
 							}
+							content += "</td>";
 							break;
 						default:
 							content += "<td>" + cell + "</td>";
