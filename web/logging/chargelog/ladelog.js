@@ -1,7 +1,5 @@
 var initialladelogread = 1;
 var ConfiguredChargePoints = 0;
-var PriceForKWh = 0.30;
-var gotprice = 0;
 var retries = 0;
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
@@ -46,7 +44,6 @@ var thevalues = [
 	["openWB/system/MonthLadelogData11"],
 	["openWB/system/MonthLadelogData12"],
 	["openWB/system/ConfiguredChargePoints"],
-	["openWB/system/priceForKWh"],
 	["openWB/global/rfidConfigured"],
 	["openWB/lp/1/boolChargePointConfigured"],
 	["openWB/lp/2/boolChargePointConfigured"],
@@ -84,12 +81,6 @@ function handlevar(mqttmsg, mqttpayload) {
 				showSection('#chargep' + index, false);
 				break;
 		}
-	}
-	else if ( mqttmsg == "openWB/system/priceForKWh" ) {
-		PriceForKWh = mqttpayload;
-		gotprice = 1;
-		putladelogtogether();
-
 	}
 	else if( mqttmsg.match( /^openwb\/system\/MonthLadelogData[1-9][0-9]*$/i )){
 		// respective month index
@@ -158,7 +149,7 @@ function selectladelogclick(newdate){
 }
 
 function putladelogtogether() {
-	if ( (ladelog1 == 1) && (ladelog2 == 1) && (ladelog3 == 1) && (ladelog4 == 1) && (ladelog5 == 1) && (ladelog6 == 1) && (ladelog7 == 1) && (ladelog8 == 1) && (ladelog9 == 1) && (ladelog10 == 1) && (ladelog11 == 1) && (ladelog12 == 1) && (gotprice == 1) ){
+	if ( (ladelog1 == 1) && (ladelog2 == 1) && (ladelog3 == 1) && (ladelog4 == 1) && (ladelog5 == 1) && (ladelog6 == 1) && (ladelog7 == 1) && (ladelog8 == 1) && (ladelog9 == 1) && (ladelog10 == 1) && (ladelog11 == 1) && (ladelog12 == 1) ){
 		var ladelogdata = ladelog1p + "\n" + ladelog2p + "\n" + ladelog3p + "\n" + ladelog4p + "\n" + ladelog5p + "\n" + ladelog6p + "\n" + ladelog7p + "\n" + ladelog8p + "\n" + ladelog9p + "\n" + ladelog10p + "\n" + ladelog11p + "\n" + ladelog12p;
 		ladelogdata = ladelogdata.replace(/^\s*[\n]/gm, '');
 		initialladelogread = 1 ;
