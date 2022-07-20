@@ -233,8 +233,10 @@ processChargepoint(){
 					else
 						lademoduslogvalue=$lademodus
 					fi
-					openwbDebugLog "CHARGESTAT" 1 "start=$start; end=$jetzt; timeCharged=${ladedauer}m ($ladedauertext); energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; averagePower=${ladegeschw}kW"
-					sed -i "1i$start,$jetzt,$gelr,$bishergeladen,$ladegeschw,$ladedauertext,$chargePointNumber,$lademoduslogvalue,$rfid" "$monthlyfile"
+					# calculate costs
+					kosten=$(echo "scale=2;$bishergeladen * $preisjekwh" |bc)
+					openwbDebugLog "CHARGESTAT" 1 "start=$start; end=$jetzt; timeCharged=${ladedauer}m ($ladedauertext); energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; averagePower=${ladegeschw}kW; costs=${kosten}"
+					sed -i "1i$start,$jetzt,$gelr,$bishergeladen,$ladegeschw,$ladedauertext,$chargePointNumber,$lademoduslogvalue,$rfid,$kosten" "$monthlyfile"
 					# send push message if configured
 					if (( pushbenachrichtigung == 1 )) ; then
 						if (( pushbstopl == 1 )) ; then

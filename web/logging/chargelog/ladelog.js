@@ -252,7 +252,6 @@ function putladelogtogether() {
 			var totalprice=0;
 
 			testout.forEach(function(row) {
-				var price = "0"
 				rowcount+=1;
 				content += "<tr>";
 				var cellcount=0;
@@ -270,10 +269,9 @@ function putladelogtogether() {
 							content += "<td class=\"text-right\">" + km.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) + "</td>";
 							break;
 						case 4: // geladene kWh
-							totalkwh = parseFloat(totalkwh) + parseFloat(cell);
-							price = parseFloat(cell) * PriceForKWh;
-							totalprice = parseFloat(totalprice) + parseFloat(price);
-							content += "<td class=\"text-right\">" + parseFloat(cell).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "</td>";
+							var kWh = parseFloat(cell);
+							totalkwh += kWh;
+							content += "<td class=\"text-right\">" + kWh.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "</td>";
 							break;
 						case 5: // Ladeleistung kW
 							var kW = parseFloat(cell);
@@ -319,11 +317,16 @@ function putladelogtogether() {
 							}
 							content += "</td>";
 							break;
+						// 9: RFID-Tag
+						case 10:
+							var price = parseFloat(cell);
+							totalprice += price;
+							content += "<td class=\"text-right\">" + price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "€</td>" ;
+							break;
 						default:
 							content += "<td>" + cell + "</td>";
 					}
 				});
-				content += "<td class=\"text-right\">" + price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "€</td>" ;
 				content += "</tr>";
 			});
 

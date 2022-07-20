@@ -39,7 +39,7 @@
 		<script src="js/bootstrap4-toggle/bootstrap4-toggle.min.js"></script>
 		<script src="js/mqttws31.js"></script>
 		<script src="logging/chargelog/helperFunctions.js?ver=20210202"></script>
-		<script src="logging/chargelog/ladelog.js?ver=20210202"></script>
+		<script src="logging/chargelog/ladelog.js?ver=20220720"></script>
 		<script>
 			function getCookie(cname) {
 				var name = cname + '=';
