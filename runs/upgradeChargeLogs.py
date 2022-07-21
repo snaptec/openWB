@@ -35,16 +35,19 @@ for current_file in csv_files:
         data = list(csv.reader(log_file, delimiter=","))
         for row in data:
             if len(row) == 10:
-                log.debug("file \"" + current_file.name + "\" already upgraded")
-                break
-            if len(row) == 9:
+                log.debug("file \"" + current_file.name + "\" row already upgraded")
+            if len(row) == 8:  # format until 2020/02 without rfid tag
+                log.debug("rfid tag missing! adding \"0\" as default tag")
+                row.append(0)
+                data_modified = True
+            if len(row) == 9:  # format until 2022/07 without costs
                 costs = round(float(row[3]) * args.price, 2)
                 log.debug("costs missing! adding calculated costs: " + str(costs))
                 row.append(costs)
                 log.debug(row)
                 data_modified = True
             else:
-                if len(row) != 0:
+                if len(row) not in [0, 10]:
                     log.error("file \"" + current_file.name + "\": unexpected row format: " + str(row))
         if data_modified:
             log.debug("file was modified")
