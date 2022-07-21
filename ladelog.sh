@@ -48,6 +48,7 @@ processChargepoint(){
 			chargePointKey="lp1"
 			chargePointKey2=""
 			chargePointKey3=$chargePointKey2
+			chargePointActivated=1  # charge point 1 is always activated
 			;;
 		2)
 			soc=$(<"${RAMDISKDIR}/soc1")
@@ -74,7 +75,7 @@ processChargepoint(){
 	esac
 
 	chargePointNameVariableName="${chargePointKey}name"
-	if (( chargePointNumber == 1 || chargePointActivated == 1)); then
+	if (( chargePointActivated == 1)); then
 		openwbDebugLog "CHARGESTAT" 1 "# processing charge point $chargePointNumber (${!chargePointNameVariableName})"
 		# get soc
 		if (( soc > 0 )); then
@@ -233,8 +234,10 @@ processChargepoint(){
 					else
 						lademoduslogvalue=$lademodus
 					fi
-					openwbDebugLog "CHARGESTAT" 1 "start=$start; end=$jetzt; timeCharged=${ladedauer}m ($ladedauertext); energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; averagePower=${ladegeschw}kW"
-					sed -i "1i$start,$jetzt,$gelr,$bishergeladen,$ladegeschw,$ladedauertext,$chargePointNumber,$lademoduslogvalue,$rfid" "$monthlyfile"
+					# calculate costs
+					kosten=$(echo "scale=2;$bishergeladen * $preisjekwh" |bc)
+					# save final values
+					sed -i "1i$start,$jetzt,$gelr,$bishergeladen,$ladegeschw,$ladedauertext,$chargePointNumber,$lademoduslogvalue,$rfid,$kosten" "$monthlyfile"
 					# send push message if configured
 					if (( pushbenachrichtigung == 1 )) ; then
 						if (( pushbstopl == 1 )) ; then
@@ -245,6 +248,7 @@ processChargepoint(){
 					# clear detected charge start
 					rm "${RAMDISKDIR}/ladeustart${chargePointKey2}"
 					openwbDebugLog "CHARGESTAT" 0 "LP$chargePointNumber, Ladung gestoppt"
+					openwbDebugLog "CHARGESTAT" 1 "Ladelogeintrag: start=$start; end=$jetzt; timeCharged=${ladedauer}m ($ladedauertext); energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; averagePower=${ladegeschw}kW; costs=${kosten}"
 				fi
 			fi
 		fi
