@@ -19,4 +19,4 @@ if [ -e "$OPENWBBASEDIR/web/ladelog" ]; then
 fi
 
 # upgrade charge log data with costs
-python3 "${OPENWBBASEDIR}/runs/upgradeChargeLogs.py" "$preisjekwh"
+python3 "${OPENWBBASEDIR}/runs/upgradeChargeLogs.py" --price "$preisjekwh"
