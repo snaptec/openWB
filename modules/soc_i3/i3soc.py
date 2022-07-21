@@ -172,7 +172,7 @@ def requestData(token: str, vin: str) -> dict:
             print("Unknown VIN")
             raise RuntimeError
             
-        url = 'https://' + api_server + '/eadrax-vcs/v1/vehicles?apptimezone=0&appDateTime=' + str(int(time.time())) + '&tireGuardMode=ENABLED'
+        url = 'https://' + api_server + '/eadrax-vcs/v2/vehicles/' + vin + '/state'
         headers = {
             'User-Agent': 'Dart/2.14 (dart:io)',
             'x-user-agent': 'android(SP1A.210812.016.C1);' + brand + ';2.5.2(14945);row',
@@ -183,12 +183,7 @@ def requestData(token: str, vin: str) -> dict:
         print("Data-Request failed")
         raise  
     
-    for data in response:    
-        if data["vin"] == vin:
-            return data
-    
-    print("VIN not found")
-    raise RuntimeError
+    return response
 
 
 # ---------------Main Function-------------------------------------------
@@ -210,7 +205,7 @@ def main():
     try:
         token = requestToken(username, password)
         data = requestData(token, vin)
-        soc = int(data["properties"]["electricRangeAndStatus"]["chargePercentage"])
+        soc = int(data["state"]["electricChargingState"]["chargingLevelPercent"])
         print("Download sucessful - SoC: " + str(soc) + "%")
     except:
         print("Request failed")
