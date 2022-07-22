@@ -18,7 +18,7 @@ class TeslaCounter:
     def __init__(self, component_config: Union[Dict, TeslaCounterSetup]) -> None:
         self.component_config = dataclass_from_dict(TeslaCounterSetup, component_config)
         self.__store = get_counter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, client: PowerwallHttpClient, aggregate):
         # read firmware version

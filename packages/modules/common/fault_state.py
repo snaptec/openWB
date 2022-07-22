@@ -1,7 +1,7 @@
 from enum import IntEnum
 import logging
 import traceback
-from typing import Dict, Optional, Type, Union
+from typing import Optional, Type
 
 from helpermodules import compatibility, exceptions, pub
 from modules.common import component_type
@@ -23,11 +23,8 @@ class ComponentInfo:
         self.hostname = hostname
 
     @staticmethod
-    def from_component_config(component_config: Union[Dict, Type], hostname: str = "localhost"):
-        if isinstance(component_config, Dict):
-            return ComponentInfo(component_config["id"], component_config["name"], component_config["type"], hostname)
-        else:
-            return ComponentInfo(component_config.id, component_config.name, component_config.type, hostname)
+    def from_component_config(component_config: Type, hostname: str = "localhost"):
+        return ComponentInfo(component_config.id, component_config.name, component_config.type, hostname)
 
 
 class FaultState(Exception):

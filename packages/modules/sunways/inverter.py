@@ -27,7 +27,7 @@ class SunwaysInverter:
         self.ip_address = ip_address
         self.password = password
         self.__store = get_inverter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
         params = (

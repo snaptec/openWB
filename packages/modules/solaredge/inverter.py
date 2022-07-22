@@ -20,7 +20,7 @@ class SolaredgeInverter:
         self.component_config = dataclass_from_dict(SolaredgeInverterSetup, component_config)
         self.__tcp_client = tcp_client
         self.__store = get_inverter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, state: InverterState) -> None:
         self.__store.set(state)

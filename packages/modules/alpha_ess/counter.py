@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import time
-from typing import Callable, Dict
+from typing import Callable, Dict, Union
 
-from modules.alpha_ess.config import AlphaEssConfiguration, AlphaEssCounterSetup
 from dataclass_utils import dataclass_from_dict
+from modules.alpha_ess.config import AlphaEssConfiguration, AlphaEssCounterSetup
 from modules.common import modbus
 from modules.common.component_state import CounterState
 from modules.common.component_type import ComponentDescriptor
@@ -13,14 +13,15 @@ from modules.common.store import get_counter_value_store
 
 
 class AlphaEssCounter:
-    def __init__(self, device_id: int,
-                 component_config: Dict,
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, AlphaEssCounterSetup],
                  tcp_client: modbus.ModbusTcpClient_,
                  device_config: AlphaEssConfiguration) -> None:
         self.component_config = dataclass_from_dict(AlphaEssCounterSetup, component_config)
         self.__tcp_client = tcp_client
         self.__store = get_counter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
         self.__device_config = device_config
 
     def update(self, unit_id: int):
