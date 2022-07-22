@@ -163,7 +163,7 @@ processChargepoint(){
 				gelr=$(echo "scale=0;$bishergeladen * 100 / ${!averageConsumptionVariableName}" |bc)
 				echo "$gelr" > "${RAMDISKDIR}/gelr${chargePointKey}"
 				# calculate time remaining if energy limit is set
-				energyChargeLimitVariableName="lademkwh$chargePointKey"
+				energyChargeLimitVariableName="lademkwh$chargePointKey2"
 				restzeit=$(echo "scale=0;(${!energyChargeLimitVariableName} - $bishergeladen) * 1000 * 60 / $ladeleistung" |bc)
 				echo "$restzeit" > "${RAMDISKDIR}/restzeit${chargePointKey}m"
 				# format time charged

@@ -132,7 +132,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/llv3lp6
 	echo 0 > $RamdiskPath/llv3lp7
 	echo 0 > $RamdiskPath/llv3lp8
-	echo 0 > $RamdiskPath/pluggedladungbishergeladen
+	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp1
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp2
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp3
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp4

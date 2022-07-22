@@ -291,7 +291,7 @@ function endChargeAndAbortOnChargeLimits() {
 	local energyChargedSincePlugin=0
 
 	if (( chargePoint == 1 )); then
-		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladen")
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp1")
 	elif (( chargePoint == 2 )); then
 		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp2")
 	elif (( chargePoint == 3 )); then
