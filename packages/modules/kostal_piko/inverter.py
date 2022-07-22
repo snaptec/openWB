@@ -18,7 +18,7 @@ class KostalPikoInverter:
         self.component_config = dataclass_from_dict(KostalPikoInverterSetup, component_config)
         self.ip_address = ip_address
         self.__store = get_inverter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def get_values(self) -> Tuple[float, float]:
         params = (('dxsEntries', ['67109120', '251658753']),)

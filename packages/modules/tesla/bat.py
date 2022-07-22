@@ -14,7 +14,7 @@ class TeslaBat:
     def __init__(self, component_config: Union[Dict, TeslaBatSetup]) -> None:
         self.component_config = dataclass_from_dict(TeslaBatSetup, component_config)
         self.__store = get_bat_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, client: PowerwallHttpClient, aggregate) -> None:
         self.__store.set(BatState(

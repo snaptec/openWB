@@ -22,7 +22,7 @@ class KostalPikoCounter:
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_counter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def get_values(self) -> Tuple[float, List[float]]:
         params = (('dxsEntries', ['83887106', '83887362', '83887618']),)

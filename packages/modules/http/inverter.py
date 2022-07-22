@@ -20,7 +20,7 @@ class HttpInverter:
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_inverter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
         self.__get_power = create_request_function(url, self.component_config.configuration.power_path)
         self.__get_exported = create_request_function(url, self.component_config.configuration.exported_path)
 
