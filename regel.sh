@@ -341,7 +341,7 @@ if (( rseenabled == 1 )); then
 			openwbDebugLog "CHARGESTAT" 0 "RSE Kontakt aktiviert, ändere Lademodus auf Stop"
 			echo "$lademodus" > ramdisk/rseoldlademodus
 			echo 3 > ramdisk/lademodus
-			mosquitto_pub -r -t openWB/global/ChargeMode -m "3"
+			mosquitto_pub -r -t openWB/set/ChargeMode -m "3"
 			echo 1 > ramdisk/rseaktiv
 		fi
 	else
@@ -349,7 +349,7 @@ if (( rseenabled == 1 )); then
 			openwbDebugLog "CHARGESTAT" 0 "RSE Kontakt deaktiviert, setze auf alten Lademodus zurück"
 			rselademodus=$(<ramdisk/rseoldlademodus)
 			echo "$rselademodus" > ramdisk/lademodus
-			mosquitto_pub -r -t openWB/global/ChargeMode -m "$rselademodus"
+			mosquitto_pub -r -t openWB/set/ChargeMode -m "$rselademodus"
 			echo 0 > ramdisk/rseaktiv
 		fi
 	fi
