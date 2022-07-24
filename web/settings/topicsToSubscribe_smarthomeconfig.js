@@ -62,6 +62,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_homeConsumtion", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaser", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_onTime", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_offTime", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_onuntilTime", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_nonewatt", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_idmnav", 0],

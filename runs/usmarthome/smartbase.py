@@ -81,6 +81,7 @@ class Sbase(Sbase0):
         self._device_starttime = '00:00'
         self._device_endtime = '00:00'
         self._device_ontime = '00:00'
+        self._device_offtime = '00:00'
         self._device_onuntiltime = '00:00'
         self._device_nonewatt = 0
         self._device_deactivateper = 0
@@ -327,6 +328,8 @@ class Sbase(Sbase0):
                 self._device_endtime = value
             elif (key == 'device_onTime'):
                 self._device_ontime = value
+            elif (key == 'device_offTime'):
+                self._device_offtime = value
             elif (key == 'device_onuntilTime'):
                 self._device_onuntiltime = value
             elif (key == 'mode'):
@@ -545,6 +548,9 @@ class Sbase(Sbase0):
         # onnow = 0 -> normale Regelung
         # onnow = 1 -> Zeitpunkt erreciht, immer ein ohne Ueberschuss regelung
         onnow = 0
+        # offnow = 0 -> normale Regelung
+        # offnow = 1 -> Zeitpunkt erreicht, immer aus ohne Ueberschuss regelung
+        offnow = 0
         if (self._device_ontime != '00:00'):
             onhour = int(str("0") + str(self._device_ontime).partition(':')[0])
             onminute = int(str(self._device_ontime)[-2:])
@@ -561,6 +567,24 @@ class Sbase(Sbase0):
                          self.device_name +
                          " schalte ein wegen Immer an nach")
                 onnow = 1
+
+        if (self._device_offtime != '00:00'):
+            offh = int(str("0") + str(self._device_offtime).partition(':')[0])
+            offminute = int(str(self._device_offtime)[-2:])
+            log.info("(" + str(self.device_nummer) + ") " +
+                     self.device_name + " Immer aus nach definiert " +
+                     str(offh) + ":" + str('%.2d' % offminute) +
+                     " aktuelle Zeit " + str(localhour) + ":" +
+                     str('%.2d' % localminute))
+            if ((offh > localhour) or ((offh == localhour)
+               and (offminute >= localminute))):
+                pass
+            else:
+                log.info("(" + str(self.device_nummer) + ") " +
+                         self.device_name +
+                         " schalte aus wegen Immer aus nach")
+                offnow = 1
+
         if (self._device_onuntiltime != '00:00'):
             onuntilh = int(str("0")
                            + str(self._device_onuntiltime).partition(':')[0])
@@ -930,9 +954,8 @@ class Sbase(Sbase0):
                     localinsec = int((localh * 60 * 60) + (localminute * 60))
                     Sbase.nureinschaltinsec = localinsec + Sbase.einverz
                     return
-
-        if ((self.devuberschuss > self._device_einschaltschwelle)
-           or (onnow == 1)):
+        if (((self.devuberschuss > self._device_einschaltschwelle)
+           or (onnow == 1)) and (offnow == 0)):
             self._c_ausverz_f = 'N'
             log.info("(" + str(self.device_nummer) + ") " +
                      str(self.device_name) + " Überschuss " +
@@ -1014,7 +1037,7 @@ class Sbase(Sbase0):
                 self._c_einverz_f = 'N'
         else:
             self._c_einverz_f = 'N'
-            if (self.devuberschuss < work_ausschaltschwelle):
+            if (self.devuberschuss < work_ausschaltschwelle) or (offnow == 1):
                 if (speichersoc > self._device_speichersocbeforestop):
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
@@ -1029,8 +1052,9 @@ class Sbase(Sbase0):
                 log.info("(" + str(self.device_nummer) + ") " +
                          self.device_name + " Überschuss " +
                          str(self.devuberschuss) +
-                         " kleiner Ausschaltschwelle " +
-                         str(work_ausschaltschwelle))
+                         " kleiner Ausschaltschwelle  " +
+                         str(work_ausschaltschwelle) +
+                         " oder immer aus erreicht ")
                 if (self.relais == 1):
                     if (self._c_ausverz_f == 'Y'):
                         timesince = int(time.time()) - int(self._c_ausverz)
