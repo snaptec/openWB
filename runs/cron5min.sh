@@ -5,6 +5,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 . "$OPENWBBASEDIR/loadconfig.sh"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 . "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
+. "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
 
 if [ -e "$OPENWBBASEDIR/ramdisk/updateinprogress" ] && [ -e "$OPENWBBASEDIR/ramdisk/bootinprogress" ]; then
 	updateinprogress=$(<"$OPENWBBASEDIR/ramdisk/updateinprogress")
@@ -402,26 +403,8 @@ else
 	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
 fi
 
-# check if buttons are configured and restart daemon
-if (( ladetaster == 1 )); then
-	if ! [ -x "$(command -v nmcli)" ]; then  # hack to prevent running the daemon on openwb standalone
-		if pgrep -f '^python.*/ladetaster.py' > /dev/null
-		then
-			openwbDebugLog "MAIN" 1 "push buttons configured and daemon already running"
-		else
-			openwbDebugLog "MAIN" 1 "push buttons daemon configured. starting daemon"
-			python3 "$OPENWBBASEDIR/runs/ladetaster.py" >> "$RAMDISKDIR/openWB.log" 2>&1 &
-		fi
-	fi
-else
-	if pgrep -f '^python.*/ladetaster.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "push buttons not configured but daemon running. killing daemon"
-		pkill -f '^python.*/ladetaster.py'
-	else
-		openwbDebugLog "MAIN" 1 "push buttons not configured and daemon not running"
-	fi
-fi
+# setup push buttons handler if needed
+pushButtonsSetup "$ladetaster" 0
 
 #Pingchecker
 if (( pingcheckactive == 1 )); then
