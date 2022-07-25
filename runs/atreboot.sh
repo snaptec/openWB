@@ -66,12 +66,13 @@ at_reboot() {
 	pkill -f '^python.*/ladetaster.py'
 	if (( ladetaster == 1 )); then
 		echo "pushbuttons..."
-		if ! [ -x "$(command -v nmcli)" ]; then
+		if ! [ -x "$(command -v nmcli)" ]; then  # hack to prevent running the daemon on openwb standalone
 			if pgrep -f '^python.*/ladetaster.py' > /dev/null
 			then
-				echo "test" > /dev/null
+				openwbDebugLog "MAIN" 1 "push buttons configured and daemon already running"
 			else
-				sudo python "$OPENWBBASEDIR/runs/ladetaster.py" &
+				openwbDebugLog "MAIN" 1 "push buttons daemon configured. starting daemon"
+				python3 "$OPENWBBASEDIR/runs/ladetaster.py" >> "$RAMDISKDIR/openWB.log" 2>&1 &
 			fi
 		fi
 	fi
@@ -80,7 +81,7 @@ at_reboot() {
 	pkill -f '^python.*/rse.py'
 	if (( rseenabled == 1 )); then
 		echo "rse..."
-		if ! [ -x "$(command -v nmcli)" ]; then
+		if ! [ -x "$(command -v nmcli)" ]; then  # hack to prevent running the daemon on openwb standalone
 			sudo python "$OPENWBBASEDIR/runs/rse.py" &
 		fi
 	fi

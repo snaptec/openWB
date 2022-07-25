@@ -1,60 +1,60 @@
+#!/usr/bin/env python3
+from typing import List
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BCM)
+buttons = [
+    {"gpio":  6, "mode": 2, "text": "NurPV"},
+    {"gpio": 12, "mode": 0, "text": "SofortLaden"},
+    {"gpio": 13, "mode": 3, "text": "Stop"},
+    {"gpio": 16, "mode": 1, "text": "Min und PV"},
+    {"gpio": 21, "mode": 4, "text": "Standby"},
+]
 
-GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Sofortladen
-GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Min+PV
-GPIO.setup(6, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # NURPV
-GPIO.setup(13, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # AUS
-GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # STANDBY
+
+def init():
+    GPIO.setmode(GPIO.BCM)
+    for button in buttons:
+        GPIO.setup(button["gpio"], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
+def button_count(buttons: List):
+    count = 0
+    for button in buttons:
+        if button:
+            count += 1
+    return count
+
+
+def get_buttons_state():
+    return [GPIO.input(buttons[button]["gpio"]) == GPIO.LOW for button in range(len(buttons))]
+
+
+print("push button daemon starting")
 try:
+    init()
+    print("push button daemon initialized, running loop")
+    last_buttons_state = get_buttons_state()
     while True:
-        button1_state = GPIO.input(12)
-        button2_state = GPIO.input(16)
-        button3_state = GPIO.input(6)
-        button4_state = GPIO.input(13)
-        button5_state = GPIO.input(21)
+        buttons_state = get_buttons_state()
+        # print(str(buttons_state))
+        if buttons_state != last_buttons_state:
+            num_buttons = button_count(buttons_state)
+            if num_buttons > 1:
+                print("multiple buttons pressed! doing nothing. " + str(buttons_state))
+            elif num_buttons == 1:
+                for button in range(len(buttons)):
+                    if buttons_state[button]:
+                        # print("push button " + str(button) + " pressed: " + buttons[button]["text"] + "(" + str(buttons[button]["mode"]) + ")")
+                        with open("/var/www/html/openWB/ramdisk/lademodus", "w") as file:
+                            file.write(str(buttons[button]["mode"]))
+                        with open("/var/www/html/openWB/ramdisk/ladestatus.log", "a") as file:
+                            file.write("Lademodus geaendert durch Ladetaster " + str(button) + " auf " + buttons[button]["text"] + "(" + str(buttons[button]["mode"]) + ")\n")
+                        break
         time.sleep(0.2)
-        if button1_state is False:
-            file = open("/var/www/html/openWB/ramdisk/lademodus", "w")
-            file.write("0")
-            file.close()
-            file = open("/var/www/html/openWB/ramdisk/ladestatus.log", "a")
-            file.write("Lademodus geaendert durch Ladetaster auf SofortLaden")
-            file.close()
-            time.sleep(0.2)
-        if button2_state is False:
-            file = open("/var/www/html/openWB/ramdisk/lademodus", "w")
-            file.write("1")
-            file.close()
-            file = open("/var/www/html/openWB/ramdisk/ladestatus.log", "a")
-            file.write("Lademodus geaendert durch Ladetaster auf Min und PV")
-            file.close()
-            time.sleep(0.2)
-        if button3_state is False:
-            file = open("/var/www/html/openWB/ramdisk/lademodus", "w")
-            file.write("2")
-            file.close()
-            file = open("/var/www/html/openWB/ramdisk/ladestatus.log", "a")
-            file.write("Lademodus geaendert durch Ladetaster auf NurPV")
-            file.close()
-            time.sleep(0.2)
-        if button4_state is False:
-            file = open("/var/www/html/openWB/ramdisk/lademodus", "w")
-            file.write("3")
-            file.close()
-            file = open("/var/www/html/openWB/ramdisk/ladestatus.log", "a")
-            file.write("Lademodus geaendert durch Ladetaster auf Stop")
-            file.close()
-            time.sleep(0.2)
-        if button5_state is False:
-            file = open("/var/www/html/openWB/ramdisk/lademodus", "w")
-            file.write("4")
-            file.close()
-            file = open("/var/www/html/openWB/ramdisk/ladestatus.log", "a")
-            file.write("Lademodus geaendert durch Ladetaster auf Standby")
-            file.close()
-            time.sleep(0.2)
-except:
+        last_buttons_state = buttons_state
+except Exception as e:
+    print(str(e))
     GPIO.cleanup()
+
+print("push button daemon stoped")
