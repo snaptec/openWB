@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from typing import Dict, Union
 import logging
+from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
@@ -11,7 +11,6 @@ from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
 from modules.sma_sunny_boy.config import SmaSunnyBoyInverterSetup
 from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
-
 
 log = logging.getLogger(__name__)
 
@@ -58,9 +57,6 @@ class SmaSunnyBoyInverter:
                     power_total = 0
             else:
                 power_total = 0
-
-            # Gesamtertrag (Wh) [E-Total]
-            energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
 
             return InverterState(
                 power=-max(power_total, 0),
