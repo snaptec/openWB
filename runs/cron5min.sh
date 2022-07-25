@@ -27,8 +27,7 @@ dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d).csv"
 monthlyladelogfile="$OPENWBBASEDIR/web/logging/data/ladelog/$(date +%Y%m).csv"
 
 # check if a monthly logfile exists and create a new one if not
-linesladelog=$(cat "$monthlyladelogfile" | wc -l)
-if [[ "$linesladelog" == 0 ]]; then
+if [[ ! -f "$monthlyladelogfile" ]]; then
 	openwbDebugLog "MAIN" 1 "creating new monthly chargelog: $monthlyladelogfile"
 	echo > "$monthlyladelogfile"
 fi
@@ -401,6 +400,27 @@ then
 else
 	openwbDebugLog "MAIN" 0 "modbus tcp server not running! restarting process"
 	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
+fi
+
+# check if buttons are configured and restart daemon
+if (( ladetaster == 1 )); then
+	if ! [ -x "$(command -v nmcli)" ]; then  # hack to prevent running the daemon on openwb standalone
+		if pgrep -f '^python.*/ladetaster.py' > /dev/null
+		then
+			openwbDebugLog "MAIN" 1 "push buttons configured and daemon already running"
+		else
+			openwbDebugLog "MAIN" 1 "push buttons daemon configured. starting daemon"
+			python3 "$OPENWBBASEDIR/runs/ladetaster.py" >> "$RAMDISKDIR/openWB.log" 2>&1 &
+		fi
+	fi
+else
+	if pgrep -f '^python.*/ladetaster.py' > /dev/null
+	then
+		openwbDebugLog "MAIN" 1 "push buttons not configured but daemon running. killing daemon"
+		pkill -f '^python.*/ladetaster.py'
+	else
+		openwbDebugLog "MAIN" 1 "push buttons not configured and daemon not running"
+	fi
 fi
 
 #Pingchecker
