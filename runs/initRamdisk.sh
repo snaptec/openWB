@@ -132,7 +132,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/llv3lp6
 	echo 0 > $RamdiskPath/llv3lp7
 	echo 0 > $RamdiskPath/llv3lp8
-	echo 0 > $RamdiskPath/pluggedladungbishergeladen
+	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp1
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp2
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp3
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp4
@@ -167,8 +167,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/nachtladen2states1
 	echo 0 > $RamdiskPath/nachtladenstate
 	echo 0 > $RamdiskPath/nachtladenstates1
-	echo 0 > $RamdiskPath/pluggedtimer1
-	echo 0 > $RamdiskPath/pluggedtimer2
+	echo 0 > $RamdiskPath/pluggedtimerlp1
+	echo 0 > $RamdiskPath/pluggedtimerlp2
 	echo 0 > $RamdiskPath/progevsedinlp1
 	echo 0 > $RamdiskPath/progevsedinlp12000
 	echo 0 > $RamdiskPath/progevsedinlp12007
@@ -188,7 +188,7 @@ initRamdisk(){
 	echo 20000 > $RamdiskPath/soctimer
 	echo 20000 > $RamdiskPath/soctimer1
 	echo 28 > $RamdiskPath/evsemodbustimer
-	touch $RamdiskPath/llog1
+	touch $RamdiskPath/llog
 	touch $RamdiskPath/llogs1
 	touch $RamdiskPath/llogs2
 

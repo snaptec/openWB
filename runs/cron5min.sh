@@ -5,6 +5,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 . "$OPENWBBASEDIR/loadconfig.sh"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 . "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
+. "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
 
 if [ -e "$OPENWBBASEDIR/ramdisk/updateinprogress" ] && [ -e "$OPENWBBASEDIR/ramdisk/bootinprogress" ]; then
 	updateinprogress=$(<"$OPENWBBASEDIR/ramdisk/updateinprogress")
@@ -27,8 +28,7 @@ dailyfile="$OPENWBBASEDIR/web/logging/data/daily/$(date +%Y%m%d).csv"
 monthlyladelogfile="$OPENWBBASEDIR/web/logging/data/ladelog/$(date +%Y%m).csv"
 
 # check if a monthly logfile exists and create a new one if not
-linesladelog=$(cat "$monthlyladelogfile" | wc -l)
-if [[ "$linesladelog" == 0 ]]; then
+if [[ ! -f "$monthlyladelogfile" ]]; then
 	openwbDebugLog "MAIN" 1 "creating new monthly chargelog: $monthlyladelogfile"
 	echo > "$monthlyladelogfile"
 fi
@@ -402,6 +402,9 @@ else
 	openwbDebugLog "MAIN" 0 "modbus tcp server not running! restarting process"
 	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
 fi
+
+# setup push buttons handler if needed
+pushButtonsSetup "$ladetaster" 0
 
 #Pingchecker
 if (( pingcheckactive == 1 )); then

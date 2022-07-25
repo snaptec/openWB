@@ -58,9 +58,9 @@ a_dictionary = {"switch:1": {"id": 0, "source": "init", "output": True,
 
 # test dic ende
 # lesen endpoint, gen bestimmem. gen 1 hat unter Umstaenden keinen Eintrag
-fbase = '/var/www/html/openWB/ramdisk/smarthome_device_ret'
-fname = fbase + str(devicenumber) + '_shelly_info'
-fnameg = fbase + str(devicenumber) + '_shelly_infog'
+fbase = '/var/www/html/openWB/ramdisk/smarthome_device_ret.'
+fname = fbase + str(ipadr) + '_shelly_info'
+fnameg = fbase + str(ipadr) + '_shelly_infog'
 if os.path.isfile(fnameg):
     with open(fnameg, 'r') as f:
         gen = str(f.read())
@@ -89,8 +89,8 @@ try:
                                        "/rpc/Shelly.GetStatus",
                                        timeout=3).read().decode("utf-8")
         answer = json.loads(str(aread))
-    with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
-              str(devicenumber) + '_shelly', 'w') as f:
+    with open('/var/www/html/openWB/ramdisk/smarthome_device_ret.' +
+              str(ipadr) + '_shelly', 'w') as f:
         f.write(str(answer))
 except Exception:
     print("failed to connect to device on " +

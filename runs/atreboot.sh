@@ -15,6 +15,7 @@ at_reboot() {
 	. "$OPENWBBASEDIR/runs/initRamdisk.sh"
 	. "$OPENWBBASEDIR/runs/updateConfig.sh"
 	. "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
+	. "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
 
 	sleep 5
 	mkdir -p "$OPENWBBASEDIR/web/backup"
@@ -62,25 +63,14 @@ at_reboot() {
 		sudo python "$OPENWBBASEDIR/runs/triginit.py"
 	fi
 
-	# check if buttons are configured and restart daemon
-	pkill -f '^python.*/ladetaster.py'
-	if (( ladetaster == 1 )); then
-		echo "pushbuttons..."
-		if ! [ -x "$(command -v nmcli)" ]; then
-			if pgrep -f '^python.*/ladetaster.py' > /dev/null
-			then
-				echo "test" > /dev/null
-			else
-				sudo python "$OPENWBBASEDIR/runs/ladetaster.py" &
-			fi
-		fi
-	fi
+	# setup push buttons handler if needed
+	pushButtonsSetup "$ladetaster" 1
 
 	# check for rse and restart daemon
 	pkill -f '^python.*/rse.py'
 	if (( rseenabled == 1 )); then
 		echo "rse..."
-		if ! [ -x "$(command -v nmcli)" ]; then
+		if ! [ -x "$(command -v nmcli)" ]; then  # hack to prevent running the daemon on openwb standalone
 			sudo python "$OPENWBBASEDIR/runs/rse.py" &
 		fi
 	fi

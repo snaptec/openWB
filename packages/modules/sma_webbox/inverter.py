@@ -15,7 +15,7 @@ class SmaWebboxInverter:
         self.__device_address = device_address
         self.component_config = dataclass_from_dict(SmaWebboxInverterSetup, component_config)
         self.__store = get_inverter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
         self.__store.set(self.read())

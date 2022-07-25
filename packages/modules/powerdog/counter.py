@@ -26,7 +26,7 @@ class PowerdogCounter:
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_counter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self):
         with self.__tcp_client:

@@ -14,7 +14,7 @@ class TeslaInverter:
     def __init__(self, component_config: Union[Dict, TeslaInverterSetup]) -> None:
         self.component_config = dataclass_from_dict(TeslaInverterSetup, component_config)
         self.__store = get_inverter_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, client: PowerwallHttpClient, aggregate) -> None:
         pv_watt = aggregate["solar"]["instant_power"]
