@@ -87,8 +87,8 @@ at_reboot() {
 	fi
 
 	# restart our modbus server
-	pkill -f '^python.*/modbusserver.py' > /dev/null
 	echo "modbus server..."
+	sudo pkill -f '^python.*/modbusserver.py' > /dev/null
 	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
 
 	# check if display is configured and setup timeout
