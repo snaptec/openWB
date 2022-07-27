@@ -11,34 +11,34 @@ from helpermodules.cli import run_using_positional_cli_args
 log = logging.getLogger("Solarlog EVU")
 
 
-def update(bezug_solarlog_ip: str, bezug_solarlog_speicherv: str):
+def update(bezug_solarlog_ip: str, bezug_solarlog_speicherv: int):
     log.debug('Solarlog IP: ' + bezug_solarlog_ip)
-    log.debug('Solarlog Speicher: ' + bezug_solarlog_speicherv)
+    log.debug('Solarlog Speicher: ' + str(bezug_solarlog_speicherv))
 
     data = {"801": {"170": None}}
     data = json.dumps(data)
     response = requests.post('http://'+bezug_solarlog_ip+'/getjp', data=data, timeout=3).json()
 
     try:
-        pvwatt = response["801"]["170"]["101"]
+        pvwatt = float(response["801"]["170"]["101"])
     except:
         traceback.print_exc()
         exit(1)
     try:
-        hausverbrauch = response["801"]["170"]["110"]
+        hausverbrauch = float(response["801"]["170"]["110"])
     except:
         traceback.print_exc()
         exit(1)
     bezugwatt = hausverbrauch - pvwatt
     try:
-        pvkwh = response["801"]["170"]["109"]
+        pvkwh = float(response["801"]["170"]["109"])
     except:
         traceback.print_exc()
         exit(1)
 
     if bezug_solarlog_speicherv == 1:
         with open("ramdisk/speicherleistung", "r") as f:
-            speicherleistung = f.read()
+            speicherleistung = float(f.read())
         bezugwatt = bezugwatt + speicherleistung
     if pvwatt > 5:
         pvwatt = pvwatt*-1
