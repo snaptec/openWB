@@ -24,7 +24,7 @@ if(args.verbose):
 else:
     log.setLevel(logging.INFO)
 
-log.info("upgrading charge logs with a price of " + str(args.price) + "€/kWh")
+log.info("upgrading charge logs with a price of " + str(args.price) + " per kWh")
 csv_files = CHARGE_LOG_PATH.glob("*.csv")
 
 for current_file in csv_files:
