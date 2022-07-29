@@ -1,10 +1,11 @@
-from enum import IntEnum
 import logging
 import traceback
-from typing import Optional, Type
+from enum import IntEnum
+from typing import Optional
 
 from helpermodules import compatibility, exceptions, pub
 from modules.common import component_type
+from modules.common.component_setup import ComponentSetup
 
 log = logging.getLogger("soc."+__name__)
 
@@ -23,7 +24,7 @@ class ComponentInfo:
         self.hostname = hostname
 
     @staticmethod
-    def from_component_config(component_config: Type, hostname: str = "localhost"):
+    def from_component_config(component_config: ComponentSetup, hostname: str = "localhost"):
         return ComponentInfo(component_config.id, component_config.name, component_config.type, hostname)
 
 

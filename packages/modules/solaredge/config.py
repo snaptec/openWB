@@ -1,3 +1,6 @@
+from modules.common.component_setup import ComponentSetup
+
+
 class SolaredgeConfiguration:
     def __init__(self,
                  port: int = 502,
@@ -25,16 +28,13 @@ class SolaredgeBatConfiguration:
         self.modbus_id = modbus_id
 
 
-class SolaredgeBatSetup:
+class SolaredgeBatSetup(ComponentSetup[SolaredgeBatConfiguration]):
     def __init__(self,
                  name: str = "SolarEdge Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: SolaredgeBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SolaredgeBatConfiguration()
+        super().__init__(name, type, id, configuration or SolaredgeBatConfiguration())
 
 
 class SolaredgeCounterConfiguration:
@@ -42,16 +42,13 @@ class SolaredgeCounterConfiguration:
         self.modbus_id = modbus_id
 
 
-class SolaredgeCounterSetup:
+class SolaredgeCounterSetup(ComponentSetup[SolaredgeCounterConfiguration]):
     def __init__(self,
                  name: str = "SolarEdge Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: SolaredgeCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SolaredgeCounterConfiguration()
+        super().__init__(name, type, id, configuration or SolaredgeCounterConfiguration())
 
 
 class SolaredgeExternalInverterConfiguration:
@@ -59,16 +56,13 @@ class SolaredgeExternalInverterConfiguration:
         self.modbus_id = modbus_id
 
 
-class SolaredgeExternalInverterSetup:
+class SolaredgeExternalInverterSetup(ComponentSetup[SolaredgeExternalInverterConfiguration]):
     def __init__(self,
                  name: str = "SolarEdge externer Wechselrichter",
                  type: str = "external_inverter",
                  id: int = 0,
                  configuration: SolaredgeExternalInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SolaredgeExternalInverterConfiguration()
+        super().__init__(name, type, id, configuration or SolaredgeExternalInverterConfiguration())
 
 
 class SolaredgeInverterConfiguration:
@@ -76,13 +70,10 @@ class SolaredgeInverterConfiguration:
         self.modbus_id = modbus_id
 
 
-class SolaredgeInverterSetup:
+class SolaredgeInverterSetup(ComponentSetup[SolaredgeInverterConfiguration]):
     def __init__(self,
                  name: str = "Solaredge Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SolaredgeInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SolaredgeInverterConfiguration()
+        super().__init__(name, type, id, configuration or SolaredgeInverterConfiguration())

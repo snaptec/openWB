@@ -1,3 +1,6 @@
+from modules.common.component_setup import ComponentSetup
+
+
 class EvuKitConfiguration:
     def __init__(self):
         pass
@@ -20,16 +23,13 @@ class EvuKitBatConfiguration:
         self.version = version
 
 
-class EvuKitBatSetup:
+class EvuKitBatSetup(ComponentSetup[EvuKitBatConfiguration]):
     def __init__(self,
                  name: str = "Speicher-Zähler an EVU-Kit",
                  type: str = "bat",
                  id: int = 0,
                  configuration: EvuKitBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or EvuKitBatConfiguration()
+        super().__init__(name, type, id, configuration or EvuKitBatConfiguration())
 
 
 class EvuKitCounterConfiguration:
@@ -37,16 +37,13 @@ class EvuKitCounterConfiguration:
         self.version = version
 
 
-class EvuKitCounterSetup:
+class EvuKitCounterSetup(ComponentSetup[EvuKitCounterConfiguration]):
     def __init__(self,
                  name: str = "EVU-Kit",
                  type: str = "counter",
                  id: int = 0,
                  configuration: EvuKitCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or EvuKitCounterConfiguration()
+        super().__init__(name, type, id, configuration or EvuKitCounterConfiguration())
 
 
 class EvuKitInverterConfiguration:
@@ -54,13 +51,10 @@ class EvuKitInverterConfiguration:
         self.version = version
 
 
-class EvuKitInverterSetup:
+class EvuKitInverterSetup(ComponentSetup[EvuKitInverterConfiguration]):
     def __init__(self,
                  name: str = "PV-Zähler an EVU-Kit",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: EvuKitInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or EvuKitInverterConfiguration()
+        super().__init__(name, type, id, configuration or EvuKitInverterConfiguration())
