@@ -4,7 +4,7 @@ OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 
 at_reboot() {
 	echo "atreboot.sh started"
-	(sleep 600; sudo kill "$$"; echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"; echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress") &
+	(sleep 600; echo "checking for stalled atreboot after 10 minutes"; echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"; echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress"; sudo kill "$$") &
 
 	# read openwb.conf
 	echo "loading config"
