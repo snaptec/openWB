@@ -1,7 +1,3 @@
-from modules.openwb_bat_kit.config import BatKitBatSetup
-from modules.openwb_pv_kit.config import PvKitInverterSetup
-
-
 class EvuKitConfiguration:
     def __init__(self):
         pass
@@ -24,7 +20,7 @@ class EvuKitBatConfiguration:
         self.version = version
 
 
-class EvuKitBatSetup(BatKitBatSetup):
+class EvuKitBatSetup:
     def __init__(self,
                  name: str = "Speicher-Zähler an EVU-Kit",
                  type: str = "bat",
@@ -58,7 +54,7 @@ class EvuKitInverterConfiguration:
         self.version = version
 
 
-class EvuKitInverterSetup(PvKitInverterSetup):
+class EvuKitInverterSetup:
     def __init__(self,
                  name: str = "PV-Zähler an EVU-Kit",
                  type: str = "inverter",
