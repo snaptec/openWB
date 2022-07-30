@@ -3,9 +3,10 @@ Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul 
 """
 import logging
 import os
-import paho.mqtt.client as mqtt
 import time
 import typing
+
+import paho.mqtt.client as mqtt
 
 from helpermodules import compatibility
 from helpermodules import pub
@@ -15,7 +16,7 @@ from modules.common.fault_state import FaultState
 log = logging.getLogger(__name__)
 
 
-def process_error(e):
+def process_error(e) -> typing.NoReturn:
     raise FaultState.error(__name__+" "+str(type(e))+" "+str(e)) from e
 
 

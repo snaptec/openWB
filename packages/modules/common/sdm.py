@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+from typing import List, Tuple, NoReturn
+
 from modules.common import modbus
 from modules.common.fault_state import FaultState
 from modules.common.modbus import ModbusDataType
-from typing import List, Tuple
 
 
 class Sdm:
@@ -10,7 +11,7 @@ class Sdm:
         self.client = client
         self.id = modbus_id
 
-    def process_error(self, e):
+    def process_error(self, e) -> NoReturn:
         if isinstance(e, FaultState):
             raise
         else:
