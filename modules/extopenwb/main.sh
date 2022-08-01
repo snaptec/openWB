@@ -5,23 +5,23 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 chargep=$1
 ip=$2
 chargepcp=$3
-outputname="extopenwb${chargep}temp"
-timeout 1 mosquitto_sub -v -h "$ip" -t "openWB/lp/$chargepcp/#" > "$RAMDISKDIR/$outputname"
+outputname="$RAMDISKDIR/extopenwb${chargep}temp"
+timeout 1 mosquitto_sub -v -h "$ip" -t "openWB/lp/$chargepcp/#" > "$outputname"
 myipaddress=$(<"$RAMDISKDIR/ipaddress")
 
-if [[ $(wc -l <"$RAMDISKDIR/$outputname") -ge 5 ]]; then
+if [[ $(wc -l <"$outputname") -ge 5 ]]; then
 
-	watt=$(grep "\/W" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	VPhase1=$(grep "VPhase1" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	VPhase2=$(grep "VPhase2" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	VPhase3=$(grep "VPhase3" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	APhase1=$(grep "APhase1 ""$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	APhase2=$(grep "APhase2" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	APhase3=$(grep "APhase3" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}')
-	boolChargeStat=$(grep "boolChargeStat" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	boolPlugStat=$(grep "boolPlugStat" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}') 
-	kWhCounter=$(grep "kWhCounter" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}')
-	LastScannedRfidTag=$(grep "LastScannedRfidTag" "$RAMDISKDIR/$outputname" |head -1 | awk '{print $2}')
+	watt=$(grep "\/W" "$outputname" |head -1 | awk '{print $2}') 
+	VPhase1=$(grep "VPhase1" "$outputname" |head -1 | awk '{print $2}') 
+	VPhase2=$(grep "VPhase2" "$outputname" |head -1 | awk '{print $2}') 
+	VPhase3=$(grep "VPhase3" "$outputname" |head -1 | awk '{print $2}') 
+	APhase1=$(grep "APhase1 ""$outputname" |head -1 | awk '{print $2}') 
+	APhase2=$(grep "APhase2" "$outputname" |head -1 | awk '{print $2}') 
+	APhase3=$(grep "APhase3" "$outputname" |head -1 | awk '{print $2}')
+	boolChargeStat=$(grep "boolChargeStat" "$outputname" |head -1 | awk '{print $2}') 
+	boolPlugStat=$(grep "boolPlugStat" "$outputname" |head -1 | awk '{print $2}') 
+	kWhCounter=$(grep "kWhCounter" "$outputname" |head -1 | awk '{print $2}')
+	LastScannedRfidTag=$(grep "LastScannedRfidTag" "$outputname" |head -1 | awk '{print $2}')
 
 	if (( chargep == "1" ));then
 		echo "$VPhase1" > "$RAMDISKDIR/llv1"
