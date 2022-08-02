@@ -2939,7 +2939,6 @@
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID-alt</option>
 										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
@@ -4245,12 +4244,6 @@
 								showSection('#socmvin2');
 								showSection('#socmintervall2');
 								showSection('#socmkialp2');
-							}
-							if($('#socmodul1').val() == 'soc_idlp2') {
-								showSection('#socoldevccwarninglp2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
