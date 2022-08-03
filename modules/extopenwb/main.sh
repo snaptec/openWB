@@ -15,7 +15,7 @@ if [[ $(wc -l <"$outputname") -ge 5 ]]; then
 	VPhase1=$(grep "VPhase1" "$outputname" |head -1 | awk '{print $2}') 
 	VPhase2=$(grep "VPhase2" "$outputname" |head -1 | awk '{print $2}') 
 	VPhase3=$(grep "VPhase3" "$outputname" |head -1 | awk '{print $2}') 
-	APhase1=$(grep "APhase1 ""$outputname" |head -1 | awk '{print $2}') 
+	APhase1=$(grep "APhase1" "$outputname" |head -1 | awk '{print $2}')
 	APhase2=$(grep "APhase2" "$outputname" |head -1 | awk '{print $2}') 
 	APhase3=$(grep "APhase3" "$outputname" |head -1 | awk '{print $2}')
 	boolChargeStat=$(grep "boolChargeStat" "$outputname" |head -1 | awk '{print $2}') 
