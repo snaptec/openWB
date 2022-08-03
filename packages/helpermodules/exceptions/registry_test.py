@@ -32,7 +32,7 @@ class ErrorF(ErrorD):
 
 
 @pytest.mark.parametrize("exception,expected_message", [
-    [ErrorRoot, "<class 'packages.helpermodules.exceptions.registry_test.ErrorRoot'> ErrorRoot"],
+    [ErrorRoot, "<class 'helpermodules.exceptions.registry_test.ErrorRoot'> ErrorRoot"],
     [ErrorB, "B"],
     [ErrorC, "A"],
     [ErrorD, "B"],

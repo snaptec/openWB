@@ -524,7 +524,7 @@ def read_meter():
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'rfidtag': str(rfidtag)})
                 if parentWB != "0":
-                    if rfidtag == '0\n':
+                    if rfidtag.rstrip() == "0":
                         rfidtag = None  # default value for 2.0 is None, not "0"
                     remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/rfid",
                                          payload=json.dumps(rfidtag), qos=0, retain=True)
@@ -661,7 +661,7 @@ def read_meter():
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'rfidtag': str(rfidtag)})
                     if parentWB != "0":
-                        if rfidtag == '0\n':
+                        if rfidtag.rstrip() == "0":
                             rfidtag = None  # default value for 2.0 is None, not "0"
                         remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/rfid",
                                              payload=json.dumps(rfidtag), qos=0, retain=True)
