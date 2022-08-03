@@ -16,3 +16,5 @@ modules/soc_eq/soc_eq_acc_*
 .vscode/settings.json
 .pytest_cache
 __pycache__
+openwb.conf.*
+web/backup/*.tar.gz

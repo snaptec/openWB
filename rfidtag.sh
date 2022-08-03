@@ -13,6 +13,8 @@ fi
 
 declare -r StartScanDataLocation="web/logging/data/startRfidScanData"
 
+ValidEvTagFound=0
+
 #
 # the main script that is called from outside world
 rfid() {
@@ -79,7 +81,7 @@ rfid() {
 	#
 	if (( slavemode == 1 )); then
 
-		if (( standardSocketInstalled > 0 )); then
+		if (( ValidEvTagFound == 0 )) && (( standardSocketInstalled > 0 )); then
 			checkTagValidForSocket
 		fi
 
@@ -329,6 +331,8 @@ checkTagValidAndSetStartScanData() {
 	for i in ${rfidlist//,/ }
 	do
 		if [ "$lasttag" == "$i" ] ; then
+
+			ValidEvTagFound=1
 
 			# found valid RFID tag for the charge point
 			# write at-scan accounting info
