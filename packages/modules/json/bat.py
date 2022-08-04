@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-import jq
 from typing import Dict, Union
 
+import jq
+
 from dataclass_utils import dataclass_from_dict
-from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
+from modules.common.simcount import SimCounter
 from modules.common.store import get_bat_value_store
 from modules.json.config import JsonBatSetup
 
@@ -15,8 +16,9 @@ class JsonBat:
     def __init__(self, device_id: int, component_config: Union[Dict, JsonBatSetup]) -> None:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(JsonBatSetup, component_config)
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.simulation = {}
+        topic_str = "openWB/set/system/device/" + str(
+            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
+        self.__sim_counter = SimCounter(topic=topic_str, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
@@ -33,11 +35,7 @@ class JsonBat:
             imported = jq.compile(config.jq_imported).input(response).first()
             exported = jq.compile(config.jq_exported).input(response).first()
         else:
-            topic_str = "openWB/set/system/device/" + str(
-                self.__device_id)+"/component/"+str(self.component_config.id)+"/"
-            imported, exported = self.__sim_count.sim_count(
-                power, topic=topic_str, data=self.simulation, prefix="speicher"
-            )
+            imported, exported = self.__sim_counter.sim_count(power)
 
         bat_state = BatState(
             power=power,
