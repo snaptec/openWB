@@ -24,9 +24,7 @@ class PvKitFlex:
             self.component_config.configuration.version)
         self.__client = factory(self.component_config.configuration.id, tcp_client)
         self.__tcp_client = tcp_client
-        topic_str = "openWB/set/system/device/" + \
-            str(self.__device_id)+"/component/" + \
-            str(self.component_config.id)+"/"
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
         self.__sim_counter = SimCounter(topic=topic_str, prefix="pv%s" % ("" if self.component_config.id == 1 else "2"))
         self.simulation = {}
         self.__store = get_inverter_value_store(self.component_config.id)
