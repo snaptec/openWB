@@ -16,7 +16,7 @@ class HttpInverter:
     def __init__(self, device_id: int, component_config: Union[Dict, HttpInverterSetup], url: str) -> None:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(HttpInverterSetup, component_config)
-        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv%s" % ("" if self.component_config.id == 1 else "2"))
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
         self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
         self.__get_power = create_request_function(url, self.component_config.configuration.power_path)

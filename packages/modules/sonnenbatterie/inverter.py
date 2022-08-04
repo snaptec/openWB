@@ -25,7 +25,7 @@ class SonnenbatterieInverter:
         self.__device_address = device_address
         self.__device_variant = device_variant
         self.component_config = dataclass_from_dict(SonnenbatterieInverterSetup, component_config)
-        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv%s" % ("" if self.component_config.id == 1 else "2"))
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
         self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
