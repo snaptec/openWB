@@ -19,10 +19,7 @@ class KostalPikoCounter:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(KostalPikoCounterSetup, component_config)
         self.ip_address = ip_address
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config.id
-        )
-        self.__sim_counter = SimCounter(topic=topic_str, prefix="bezug")
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
         self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 

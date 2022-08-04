@@ -22,8 +22,7 @@ class SungrowCounter:
         self.__device_modbus_id = device_modbus_id
         self.component_config = dataclass_from_dict(SungrowCounterSetup, component_config)
         self.__tcp_client = tcp_client
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
-        self.__sim_counter = SimCounter(topic=topic_str, prefix="bezug")
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
         self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 

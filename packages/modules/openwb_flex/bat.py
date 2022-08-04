@@ -26,8 +26,7 @@ class BatKitFlex:
         self.__client = factory(self.component_config.configuration.id,
                                 tcp_client)
         self.__tcp_client = tcp_client
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
-        self.__sim_counter = SimCounter(topic=topic_str, prefix="speicher")
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 

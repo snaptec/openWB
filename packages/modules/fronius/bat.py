@@ -20,8 +20,7 @@ class FroniusBat:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(FroniusBatSetup, component_config)
         self.device_config = device_config
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
-        self.__sim_counter = SimCounter(topic=topic_str, prefix="speicher")
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 

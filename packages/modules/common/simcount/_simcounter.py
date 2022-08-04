@@ -4,8 +4,8 @@ from modules.common.simcount import SimCountFactory
 
 
 class SimCounter:
-    def __init__(self, topic: str, prefix: str):
-        self.topic = topic
+    def __init__(self, device_id: int, component_id: int, prefix: str):
+        self.topic = "openWB/set/system/device/{}/component/{}/".format(device_id, component_id)
         self.prefix = prefix
         self.data = {}  # type: dict[str, Any]
 
