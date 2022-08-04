@@ -2,7 +2,7 @@ from typing import Tuple
 
 import pytest as pytest
 
-from modules.common.simcount._simcount import Number, calculate_import_export
+from modules.common.simcount._calculate import Number, calculate_import_export
 
 
 class Params:
