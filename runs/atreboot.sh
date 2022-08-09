@@ -20,8 +20,11 @@ at_reboot() {
 	sleep 5
 	mkdir -p "$OPENWBBASEDIR/web/backup"
 	touch "$OPENWBBASEDIR/web/backup/.donotdelete"
-	sudo chown -R www-data:www-data "$OPENWBBASEDIR/web/backup"
-	sudo chown -R www-data:www-data "$OPENWBBASEDIR/web/tools/upload"
+	# web/backup and web/tools/upload are used to (temporarily) store backup files for download and for restoring.
+	# files are created from PHP as user www-data, thus www-data needs write permissions.
+	sudo chown -R pi:www-data "$OPENWBBASEDIR/"{web/backup,web/tools/upload}
+	sudo chmod -R g+w "$OPENWBBASEDIR/"{web/backup,web/tools/upload}
+
 	sudo chmod 777 "$OPENWBBASEDIR/openwb.conf"
 	sudo chmod 777 "$OPENWBBASEDIR/smarthome.ini"
 	sudo chmod 777 "$OPENWBBASEDIR/ramdisk"
