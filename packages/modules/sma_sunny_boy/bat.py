@@ -22,14 +22,13 @@ class SunnyBoyBat:
 
     def read(self) -> BatState:
         unit = 3
-        with self.__tcp_client:
-            soc = self.__tcp_client.read_holding_registers(30845, ModbusDataType.UINT_32, unit=unit)
-            imp = self.__tcp_client.read_holding_registers(31393, ModbusDataType.INT_32, unit=unit)
-            exp = self.__tcp_client.read_holding_registers(31395, ModbusDataType.INT_32, unit=unit)
-            if imp > 5:
-                power = imp
-            else:
-                power = exp * -1
+        soc = self.__tcp_client.read_holding_registers(30845, ModbusDataType.UINT_32, unit=unit)
+        imp = self.__tcp_client.read_holding_registers(31393, ModbusDataType.INT_32, unit=unit)
+        exp = self.__tcp_client.read_holding_registers(31395, ModbusDataType.INT_32, unit=unit)
+        if imp > 5:
+            power = imp
+        else:
+            power = exp * -1
 
         exported = self.__tcp_client.read_holding_registers(31401, ModbusDataType.UINT_64, unit=3)
         imported = self.__tcp_client.read_holding_registers(31397, ModbusDataType.UINT_64, unit=3)

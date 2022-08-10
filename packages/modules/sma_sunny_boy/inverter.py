@@ -33,35 +33,34 @@ class SmaSunnyBoyInverter:
         self.__store.set(self.read())
 
     def read(self) -> InverterState:
-        with self.__tcp_client:
-            if self.component_config.configuration.version == SmaInverterVersion.default:
-                # AC Wirkleistung über alle Phasen (W) [Pac]
-                power_total = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
-                # Gesamtertrag (Wh) [E-Total]
-                energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
-            elif self.component_config.configuration.version == SmaInverterVersion.core2:
-                # AC Wirkleistung über alle Phasen (W) [Pac]
-                power_total = self.__tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
-                # Gesamtertrag (Wh) [E-Total] SF=2!
-                energy = self.__tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
-            else:
-                raise FaultState.error("Unbekannte Version "+str(self.component_config.configuration.version))
-            if power_total != self.SMA_INT32_NAN:
-                # Bei Hybrid Wechselrichtern treten Abweichungen auf, die in der Nacht
-                # immer wieder Generatorleistung anzeigen (0-50 Watt). Um dies zu verhindern, schauen wir uns
-                # zunächst an, ob vom DC Teil überhaupt Leistung kommt. Ist dies nicht der Fall, können wir power
-                # gleich auf 0 setzen.
-                # Leistung DC an Eingang 1 und 2
-                if (self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3) == 0
-                        and self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3) == 0):
-                    power_total = 0
-            else:
+        if self.component_config.configuration.version == SmaInverterVersion.default:
+            # AC Wirkleistung über alle Phasen (W) [Pac]
+            power_total = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
+            # Gesamtertrag (Wh) [E-Total]
+            energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
+        elif self.component_config.configuration.version == SmaInverterVersion.core2:
+            # AC Wirkleistung über alle Phasen (W) [Pac]
+            power_total = self.__tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
+            # Gesamtertrag (Wh) [E-Total] SF=2!
+            energy = self.__tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
+        else:
+            raise FaultState.error("Unbekannte Version "+str(self.component_config.configuration.version))
+        if power_total != self.SMA_INT32_NAN:
+            # Bei Hybrid Wechselrichtern treten Abweichungen auf, die in der Nacht
+            # immer wieder Generatorleistung anzeigen (0-50 Watt). Um dies zu verhindern, schauen wir uns
+            # zunächst an, ob vom DC Teil überhaupt Leistung kommt. Ist dies nicht der Fall, können wir power
+            # gleich auf 0 setzen.
+            # Leistung DC an Eingang 1 und 2
+            if (self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3) == 0
+                    and self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3) == 0):
                 power_total = 0
+        else:
+            power_total = 0
 
-            return InverterState(
-                power=-max(power_total, 0),
-                exported=energy
-            )
+        return InverterState(
+            power=-max(power_total, 0),
+            exported=energy
+        )
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=SmaSunnyBoyInverterSetup)
