@@ -20,12 +20,12 @@ def update(bezug_solarlog_ip: str, bezug_solarlog_speicherv: int):
     response = requests.post('http://'+bezug_solarlog_ip+'/getjp', data=data, timeout=3).json()
 
     try:
-        pvwatt = float(response["801"]["170"]["101"])
+        pvwatt = int(float(response["801"]["170"]["101"]))
     except:
         traceback.print_exc()
         exit(1)
     try:
-        hausverbrauch = float(response["801"]["170"]["110"])
+        hausverbrauch = int(float(response["801"]["170"]["110"]))
     except:
         traceback.print_exc()
         exit(1)
@@ -38,7 +38,7 @@ def update(bezug_solarlog_ip: str, bezug_solarlog_speicherv: int):
 
     if bezug_solarlog_speicherv == 1:
         with open("ramdisk/speicherleistung", "r") as f:
-            speicherleistung = float(f.read())
+            speicherleistung = int(float(f.read()))
         bezugwatt = bezugwatt + speicherleistung
     if pvwatt > 5:
         pvwatt = pvwatt*-1
