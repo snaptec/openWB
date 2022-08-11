@@ -67,7 +67,8 @@ try:
                 for button in range(len(buttons)):
                     if buttons_state[button]:
                         write_to_ramdisk("lademodus", str(buttons[button]["mode"]))
-                        log_debug(2, "Lademodus geändert durch Ladetaster " + str(button) + " auf " + buttons[button]["text"] + "(" + str(buttons[button]["mode"]) + ")")
+                        log_debug(2, "Lademodus geändert durch Ladetaster " + str(button) + " auf " +
+                                  buttons[button]["text"] + "(" + str(buttons[button]["mode"]) + ")")
                         break
         time.sleep(0.2)
         last_buttons_state = buttons_state
