@@ -74,12 +74,12 @@ cd /var/www/html/
 sudo chown -R pi:pi openWB 
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
-sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
+sudo cp -p /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 
 # restore saved files after fetching new release
 # module soc_eq
-sudo cp /tmp/soc_eq_acc_lp1 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp1
-sudo cp /tmp/soc_eq_acc_lp2 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp2
+sudo cp -p /tmp/soc_eq_acc_lp1 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp1
+sudo cp -p /tmp/soc_eq_acc_lp2 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp2
 
 # set permissions
 sudo chmod 777 /var/www/html/openWB/openwb.conf
