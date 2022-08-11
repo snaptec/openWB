@@ -11,8 +11,8 @@ from modules.openwb_bat_kit.bat import BatKit
 from modules.openwb_evu_kit import bat
 from modules.openwb_evu_kit import counter
 from modules.openwb_evu_kit import inverter
-from modules.openwb_pv_kit.inverter import PvKit
 from modules.openwb_evu_kit.config import EvuKit, EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup
+from modules.openwb_pv_kit.inverter import PvKit
 
 log = logging.getLogger(__name__)
 
@@ -26,8 +26,7 @@ class Device(AbstractDevice):
 
     def __init__(self, device_config: Union[Dict, EvuKit]) -> None:
         self.device_config = dataclass_from_dict(EvuKit, device_config)
-        # type: Dict[str, Union[bat.BatKit, counter.EvuKit, inverter.PvKit]]
-        self.components = {}
+        self.components = {}  # type: Dict[str, Union[BatKit, counter.EvuKit, PvKit]]
         self.client = modbus.ModbusTcpClient_("192.168.193.15", 8899)
 
     def add_component(self,

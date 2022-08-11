@@ -57,17 +57,6 @@ else
 	echo "...created"
 fi
 
-echo "check for crontab"
-if grep -Fxq "@reboot /var/www/html/openWB/runs/atreboot.sh &" /var/spool/cron/crontabs/root
-then
-	echo "...ok"
-else
-	echo "@reboot /var/www/html/openWB/runs/atreboot.sh &" >> /tmp/tocrontab
-	crontab -l -u root | cat - /tmp/tocrontab | crontab -u root -
-	rm /tmp/tocrontab
-	echo "...added"
-fi
-
 # start mosquitto
 sudo service mosquitto start
 
@@ -124,4 +113,4 @@ chmod +x /var/www/html/openWB/runs/*
 chmod +x /var/www/html/openWB/*.sh
 touch /var/log/openWB.log
 chmod 777 /var/log/openWB.log
-/var/www/html/openWB/runs/atreboot.sh
+sudo -u pi /var/www/html/openWB/runs/atreboot.sh

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import logging
 import time
-from typing import Dict
+from typing import Dict, Union
 
-from modules.alpha_ess.config import AlphaEssBatSetup, AlphaEssConfiguration
 from dataclass_utils import dataclass_from_dict
+from modules.alpha_ess.config import AlphaEssBatSetup, AlphaEssConfiguration
 from modules.common import modbus
 from modules.common import simcount
 from modules.common.component_state import BatState
@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 
 class AlphaEssBat:
     def __init__(self, device_id: int,
-                 component_config: Dict,
+                 component_config: Union[Dict, AlphaEssBatSetup],
                  tcp_client: modbus.ModbusTcpClient_,
                  device_config: AlphaEssConfiguration) -> None:
         self.__device_id = device_id
@@ -27,7 +27,7 @@ class AlphaEssBat:
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
         self.simulation = {}
         self.__store = get_bat_value_store(self.component_config.id)
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, unit_id: int) -> None:
         # keine Unterschiede zwischen den Versionen

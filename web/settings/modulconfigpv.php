@@ -622,7 +622,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
 										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
@@ -1174,6 +1174,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2ipportdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
+									<span class="form-text small">
+										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
+									</span>
+								</div>
+							</div>
+						</div>
 
 
 						<div id="pv2iddiv" class="hide">
@@ -1328,10 +1339,22 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2kostalstecavariant" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2_kostal_steca_variant" class="col-md-4 col-form-label">Variante</label>
+								<div class="col">
+									<select name="wr2_kostal_steca_variant" id="wr2_kostal_steca_variant" class="form-control">
+										<option <?php if($wr2_kostal_steca_variantold == 0) echo "selected" ?> value="0">Kostal Piko MP oder Steca Grid Coolcept</option>
+										<option <?php if($wr2_kostal_steca_variantold == 1) echo "selected" ?> value="1">Kostal Piko MP (non-plus)</option>
+									</select>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
+								hideSection('#pv2ipportdiv');
 								hideSection('#pv2iddiv');
 								hideSection('#pv2ip2div');
 								hideSection('#pv2id2div');
@@ -1342,6 +1365,7 @@
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
 								hideSection('#pv2smamodbus');
+								hideSection('#pv2kostalstecavariant');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1380,13 +1404,14 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_kostalsteca') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2kostalstecavariant');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_victron') {
 									showSection('#pv2ipdiv');
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solaredge') {
-									showSection('#pv2ipdiv');
+									showSection('#pv2ipportdiv');
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {

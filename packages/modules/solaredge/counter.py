@@ -1,29 +1,26 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_counter_value_store
+from modules.solaredge.config import SolaredgeCounterSetup
 from modules.solaredge.scale import scale_registers
 
 
-def get_default_config() -> dict:
-    return {
-        "name": "SolarEdge Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration": {
-            "modbus_id": 1
-        }
-    }
-
-
 class SolaredgeCounter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusTcpClient_) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, SolaredgeCounterSetup],
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
+        self.component_config = dataclass_from_dict(SolaredgeCounterSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__store = get_counter_value_store(component_config["id"])
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.__store = get_counter_value_store(self.component_config.id)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self):
         def read_scaled_int16(address: int, count: int):
@@ -31,7 +28,7 @@ class SolaredgeCounter:
                 self.__tcp_client.read_holding_registers(
                     address,
                     [ModbusDataType.INT_16] * (count+1),
-                    unit=self.component_config["configuration"]["modbus_id"])
+                    unit=self.component_config.configuration.modbus_id)
             )
 
         def read_scaled_uint32(address: int, count: int):
@@ -39,7 +36,7 @@ class SolaredgeCounter:
                 self.__tcp_client.read_holding_registers(
                     address,
                     [ModbusDataType.UINT_32] * (count)+[ModbusDataType.INT_16],
-                    unit=self.component_config["configuration"]["modbus_id"])
+                    unit=self.component_config.configuration.modbus_id)
             )
 
         # 40206: Total Real Power (sum of active phases)
@@ -82,3 +79,6 @@ class SolaredgeCounter:
             frequency=frequency
         )
         self.__store.set(counter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SolaredgeCounterSetup)

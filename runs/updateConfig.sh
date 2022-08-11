@@ -781,6 +781,9 @@ updateConfig(){
 	if ! grep -Fq "wr2_piko2_url=" $ConfigFile; then
 		echo "wr2_piko2_url='https://url'" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2_kostal_steca_variant=" $ConfigFile; then
+		echo "wr2_kostal_steca_variant=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "carnetuser=" $ConfigFile; then
 		echo "carnetuser='user'" >> $ConfigFile
 	fi
@@ -2272,6 +2275,14 @@ updateConfig(){
 			echo "wrsmaversion=0"
 			echo "wr2smaversion=0"
 		} >> $ConfigFile
+	fi
+
+	# replace obsolete soc_id configuration by soc_vwid
+	if grep -Fq "socmodul=soc_id" $ConfigFile; then
+		sed -i "s/^socmodul=soc_id/socmodul=soc_vwid/g" $ConfigFile
+	fi
+	if grep -Fq "socmodul1=soc_idlp2" $ConfigFile; then
+		sed -i "s/^socmodul1=soc_idlp2/socmodul=soc_vwidlp2/g" $ConfigFile
 	fi
 
 	echo "Config file Update done."
