@@ -100,7 +100,7 @@ loadvars(){
 	# EVSE DIN Plug State
 	declare -r IsNumberRegex='^[0-9]+$'
 	if [[ $evsecon == "modbusevse" ]]; then
-		if [[ "$modbusevseid" == 0 ]]; then
+		if ((modbusevseid == 0)); then
 			if [ -f /var/www/html/openWB/ramdisk/evsemodulconfig ]; then
 				modbusevsesource=$(<ramdisk/evsemodulconfig)
 				modbusevseid=1
@@ -124,15 +124,15 @@ loadvars(){
 			echo $evseplugstate > /var/www/html/openWB/ramdisk/evseplugstate
 		fi
 		ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
-		if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
-			if [[ $evseplugstate > "1" ]]; then
+		if ((evseplugstate >= 0)) && ((evseplugstate <= 10)); then
+			if ((evseplugstate > 1)); then
 				plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
-				if [[ $plugstat == "0" ]] ; then
-					if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+				if ((plugstat == 0)) ; then
+					if ((pushbplug == 1)) && ((ladestatuslp1 == 0)) && ((pushbenachrichtigung == 1)) ; then
 						message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 						/var/www/html/openWB/runs/pushover.sh "$message"
 					fi
-					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+					if ((displayconfigured == 1)) && ((displayEinBeimAnstecken == 1)) ; then
 						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 					fi
 					echo 20000 > /var/www/html/openWB/ramdisk/soctimer
@@ -143,7 +143,7 @@ loadvars(){
 				echo 0 > /var/www/html/openWB/ramdisk/plugstat
 				plugstat=0
 			fi
-			if [[ $evseplugstate > "2" ]] && [[ $ladestatuslp1 == "1" ]] && [[ $lp1enabled == "1" ]]; then
+			if ((evseplugstate > 2)) && ((ladestatuslp1 == 1)) && ((lp1enabled == 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestat
 				chargestat=1
 			else
@@ -153,12 +153,12 @@ loadvars(){
 		fi
 	else
 		pluggedin=$(</var/www/html/openWB/ramdisk/pluggedin)
-		if [ "$pluggedin" -gt "0" ]; then
-			if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+		if ((pluggedin >= 0)); then
+			if ((pushbplug == 1)) && ((ladestatuslp1 == 0)) && ((pushbenachrichtigung == 1)) ; then
 				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 				/var/www/html/openWB/runs/pushover.sh "$message"
 			fi
-			if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+			if ((displayconfigured == 1)) && ((displayEinBeimAnstecken == 1)) ; then
 				export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 			fi
 			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
@@ -177,19 +177,19 @@ loadvars(){
 			echo $evseplugstate > /var/www/html/openWB/ramdisk/evseplugstate
 		fi
 		ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
-		if [[ $evseplugstatelp1 > "1" ]]; then
+		if ((evseplugstatelp1 > 1)); then
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 		else
 			echo 0 > /var/www/html/openWB/ramdisk/plugstat
 		fi
-		if [[ $evseplugstatelp1 > "2" ]] && [[ $ladestatuslp1 == "1" ]] && [[ $lp1enabled == "1" ]]; then
+		if ((evseplugstatelp1 > 2)) && ((ladestatuslp1 == 1)) && ((lp1enabled == 1)); then
 			echo 1 > /var/www/html/openWB/ramdisk/chargestat
 		else
 			echo 0 > /var/www/html/openWB/ramdisk/chargestat
 		fi
 	fi
 
-	if [[ $lastmanagement == "1" ]]; then
+	if ((lastmanagement == 1)); then
 		ConfiguredChargePoints=2
 		if [[ $evsecons1 == "modbusevse" ]]; then
 			evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
@@ -200,12 +200,12 @@ loadvars(){
 				echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
 			fi
 			ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
-			if [[ $evseplugstatelp2 > "0" ]] && [[ $evseplugstatelp2 < "7" ]] ; then
-				if [[ $evseplugstatelp2 > "1" ]]; then
+			if ((evseplugstatelp2 > 0)) && ((evseplugstatelp2 < 7)); then
+				if ((evseplugstatelp2 > 1)); then
 					plugstat2=$(</var/www/html/openWB/ramdisk/plugstats1)
 
-					if [[ $plugstat2 == "0" ]] ; then
-						if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+					if ((plugstat2 == 0)) ; then
+						if ((displayconfigured == 1)) && ((displayEinBeimAnstecken == 1)) ; then
 							export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 						fi
 						echo 20000 > /var/www/html/openWB/ramdisk/soctimer1
@@ -218,7 +218,7 @@ loadvars(){
 					plugstat2=0
 					plugstats1=$plugstat2
 				fi
-				if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
+				if ((evseplugstatelp2 > 2)) && ((ladestatuss1 == 1)); then
 					echo 1 > /var/www/html/openWB/ramdisk/chargestats1
 				else
 					echo 0 > /var/www/html/openWB/ramdisk/chargestats1
@@ -236,12 +236,12 @@ loadvars(){
 			fi
 			ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
-			if [[ $evseplugstatelp2 > "1" ]]; then
+			if ((evseplugstatelp2 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstats1
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 			fi
-			if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
+			if ((evseplugstatelp2 > 2)) && ((ladestatuss1 == 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestats1
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestats1
@@ -257,12 +257,12 @@ loadvars(){
 			fi
 			ladestatuslp2=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
-			if [[ $evseplugstatelp2 > "1" ]]; then
+			if ((evseplugstatelp2 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstats1
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 			fi
-			if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuslp2 == "1" ]] && [[ $lp2enabled == "1" ]]; then
+			if ((evseplugstatelp2 > 2)) && ((ladestatuslp2 == 1)) && ((lp2enabled == 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestats1
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestats1
@@ -276,7 +276,7 @@ loadvars(){
 		ConfiguredChargePoints=1
 	fi
 
-	if [[ $lastmanagements2 == "1" ]]; then
+	if ((lastmanagements2 == 1)); then
 		ConfiguredChargePoints=3
 		if [[ $evsecons2 == "ipevse" ]]; then
 			evseplugstatelp3=$(sudo python runs/readipmodbus.py $evseiplp3 $evseidlp3 1002 1)
@@ -288,12 +288,12 @@ loadvars(){
 			fi
 			ladestatuslp3=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 
-			if [[ $evseplugstatelp3 > "1" ]]; then
+			if ((evseplugstatelp3 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
 			fi
-			if [[ $evseplugstatelp3 > "2" ]] && [[ $ladestatuslp3 == "1" ]] && [[ $lp3enabled == "1" ]]; then
+			if ((evseplugstatelp3 > 2)) && ((ladestatuslp3 == 1)) && ((lp3enabled == 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp3
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
@@ -310,12 +310,12 @@ loadvars(){
 				echo $evseplugstatelp3 > /var/www/html/openWB/ramdisk/evseplugstatelp3
 			fi
 			ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
-			if [[ $evseplugstatelp3 > "1" ]]; then
+			if ((evseplugstatelp3 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
 			fi
-			if [[ $evseplugstatelp3 > "2" ]] && [[ $ladestatuss2 == "1" ]] ; then
+			if ((evseplugstatelp3 > 2)) && ((ladestatuss2 == 1)) ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp3
 			else
 					echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
@@ -328,7 +328,7 @@ loadvars(){
 		chargestatlp3=$(<ramdisk/chargestatlp3)
 	fi
 
-	if [[ $lastmanagementlp4 == "1" ]]; then
+	if ((lastmanagementlp4 == 1)); then
 		ConfiguredChargePoints=4
 		if [[ $evseconlp4 == "ipevse" ]]; then
 			evseplugstatelp4=$(sudo python runs/readipmodbus.py $evseiplp4 $evseidlp4 1002 1)
@@ -341,12 +341,12 @@ loadvars(){
 			fi
 			ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
 
-			if [[ $evseplugstatelp4 > "1" ]]; then
+			if ((evseplugstatelp4 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp4
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp4
 			fi
-			if [[ $evseplugstatelp4 > "2" ]] && [[ $ladestatuslp4 == "1" ]] && [[ $lp4enabled == "1" ]]; then
+			if ((evseplugstatelp4 > 2)) && ((ladestatuslp4 == 1)) && ((lp4enabled == 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp4
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp4
@@ -354,7 +354,7 @@ loadvars(){
 		fi
 	fi
 
-	if [[ $lastmanagementlp5 == "1" ]]; then
+	if ((lastmanagementlp5 == 1)); then
 		ConfiguredChargePoints=5
 		if [[ $evseconlp5 == "ipevse" ]]; then
 			evseplugstatelp5=$(sudo python runs/readipmodbus.py $evseiplp5 $evseidlp5 1002 1)
@@ -367,12 +367,12 @@ loadvars(){
 			fi
 			ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
 
-			if [[ $evseplugstatelp5 > "1" ]]; then
+			if ((evseplugstatelp5 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp5
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp5
 			fi
-			if [[ $evseplugstatelp5 > "2" ]] && [[ $ladestatuslp5 == "1" ]] && [[ $lp5enabled == "1" ]] ; then
+			if ((evseplugstatelp5 > 2)) && ((ladestatuslp5 == 1)) && ((lp5enabled == 1)) ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp5
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp5
@@ -380,7 +380,7 @@ loadvars(){
 		fi
 	fi
 
-	if [[ $lastmanagementlp6 == "1" ]]; then
+	if ((lastmanagementlp6 == 1)); then
 		ConfiguredChargePoints=6
 		if [[ $evseconlp6 == "ipevse" ]]; then
 			evseplugstatelp6=$(sudo python runs/readipmodbus.py $evseiplp6 $evseidlp6 1002 1)
@@ -393,12 +393,12 @@ loadvars(){
 			fi
 			ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
 
-			if [[ $evseplugstatelp6 > "1" ]]; then
+			if ((evseplugstatelp6 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp6
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp6
 			fi
-			if [[ $evseplugstatelp6 > "2" ]] && [[ $ladestatuslp6 == "1" ]] && [[ $lp6enabled == "1" ]] ; then
+			if ((evseplugstatelp6 > 2)) && ((ladestatuslp6 == 1)) && ((lp6enabled == 1)) ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp6
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp6
@@ -406,7 +406,7 @@ loadvars(){
 		fi
 	fi
 
-	if [[ $lastmanagementlp7 == "1" ]]; then
+	if ((lastmanagementlp7 == 1)); then
 		ConfiguredChargePoints=7
 		if [[ $evseconlp7 == "ipevse" ]]; then
 			evseplugstatelp7=$(sudo python runs/readipmodbus.py $evseiplp7 $evseidlp7 1002 1)
@@ -419,12 +419,12 @@ loadvars(){
 			fi
 			ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
 
-			if [[ $evseplugstatelp7 > "1" ]]; then
+			if ((evseplugstatelp7 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp7
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp7
 			fi
-			if [[ $evseplugstatelp7 > "2" ]] && [[ $ladestatuslp7 == "1" ]] && [[ $lp7enabled == "1" ]] ; then
+			if ((evseplugstatelp7 > 2)) && ((ladestatuslp7 == 1)) && ((lp7enabled == 1)) ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp7
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp7
@@ -432,7 +432,7 @@ loadvars(){
 		fi
 	fi
 
-	if [[ $lastmanagementlp8 == "1" ]]; then
+	if ((lastmanagementlp8 == 1)); then
 		ConfiguredChargePoints=8
 		if [[ $evseconlp8 == "ipevse" ]]; then
 			evseplugstatelp8=$(sudo python runs/readipmodbus.py $evseiplp8 $evseidlp8 1002 1)
@@ -445,12 +445,12 @@ loadvars(){
 			fi
 			ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
 
-			if [[ $evseplugstatelp8 > "1" ]]; then
+			if ((evseplugstatelp8 > 1)); then
 				echo 1 > /var/www/html/openWB/ramdisk/plugstatlp8
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstatlp8
 			fi
-			if [[ $evseplugstatelp8 > "2" ]] && [[ $ladestatuslp8 == "1" ]] && [[ $lp8enabled == "1" ]] ; then
+			if ((evseplugstatelp8 > 2)) && ((ladestatuslp8 == 1)) && ((lp8enabled == 1)) ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestatlp8
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp8
@@ -549,14 +549,14 @@ loadvars(){
 		echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 	fi
 	#addition pv nach Speicherauslesung
-	if [[ $pv2vorhanden == "1" ]]; then
+	if ((pv2vorhanden == 1)); then
 		pv1watt=$(</var/www/html/openWB/ramdisk/pv1watt)
 		pv2watt=$(</var/www/html/openWB/ramdisk/pv2watt)
 		pvwatt=$(( pv1watt + pv2watt ))
 		echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
 		echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 	else
-		if [[ $pv1vorhanden == "1" ]]; then
+		if ((pv1vorhanden == 1)); then
 			pv1watt=$(</var/www/html/openWB/ramdisk/pv1watt)
 			pvwatt=$pv1watt
 			echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
@@ -597,14 +597,14 @@ loadvars(){
 		fi
 
 		lp1phasen=0
-		if [ $lla1 -ge $llphaset ]; then
-			lp1phasen=$((lp1phasen + 1 ))
+		if ((lla1 >= llphaset)); then
+			((lp1phasen++))
 		fi
-		if [ $lla2 -ge $llphaset ]; then
-			lp1phasen=$((lp1phasen + 1 ))
+		if ((lla2 >= llphaset)); then
+			((lp1phasen++))
 		fi
-		if [ $lla3 -ge $llphaset ]; then
-			lp1phasen=$((lp1phasen + 1 ))
+		if ((lla3 >= llphaset)); then
+			((lp1phasen++))
 		fi
 		echo $lp1phasen > /var/www/html/openWB/ramdisk/lp1phasen
 		if ! [[ $ladeleistung =~ $re ]] ; then
@@ -623,7 +623,7 @@ loadvars(){
 	fi
 
 	#zweiter ladepunkt
-	if [[ $lastmanagement == "1" ]]; then
+	if ((lastmanagement == 1)); then
 		if [[ $socmodul1 != "none" ]]; then
 			run_soc_module "$socmodul1"
 			soc1=$(</var/www/html/openWB/ramdisk/soc1)
@@ -660,14 +660,14 @@ loadvars(){
 		ladeleistung=$(( ladeleistung + ladeleistungs1 ))
 		echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 		lp2phasen=0
-		if [ $llas11 -ge $llphaset ]; then
-			lp2phasen=$((lp2phasen + 1 ))
+		if ((llas11 >= llphaset)); then
+			((lp2phasen++))
 		fi
-		if [ $llas12 -ge $llphaset ]; then
-			lp2phasen=$((lp2phasen + 1 ))
+		if ((llas12 >= llphaset)); then
+			((lp2phasen++))
 		fi
-		if [ $llas13 -ge $llphaset ]; then
-			lp2phasen=$((lp2phasen + 1 ))
+		if ((llas13 >= llphaset)); then
+			((lp2phasen++))
 		fi
 		echo $lp2phasen > /var/www/html/openWB/ramdisk/lp2phasen
 	else
@@ -677,7 +677,7 @@ loadvars(){
 	fi
 
 	#dritter ladepunkt
-	if [[ $lastmanagements2 == "1" ]]; then
+	if ((lastmanagements2 == 1)); then
 		timeout 10 modules/$ladeleistungs2modul/main.sh || true
 		llkwhs2=$(</var/www/html/openWB/ramdisk/llkwhs2)
 		llkwhges=$(echo "$llkwhges + $llkwhs2" |bc)
@@ -691,14 +691,14 @@ loadvars(){
 		llas22=$(echo $llas22 | sed 's/\..*$//')
 		llas23=$(echo $llas23 | sed 's/\..*$//')
 		lp3phasen=0
-		if [ $llas21 -ge $llphaset ]; then
-			lp3phasen=$((lp3phasen + 1 ))
+		if ((llas21 >= llphaset)); then
+			((lp3phasen++))
 		fi
-		if [ $llas22 -ge $llphaset ]; then
-			lp3phasen=$((lp3phasen + 1 ))
+		if ((llas22 >= llphaset)); then
+			((lp3phasen++))
 		fi
-		if [ $llas23 -ge $llphaset ]; then
-			lp3phasen=$((lp3phasen + 1 ))
+		if ((llas23 >= llphaset)); then
+			((lp3phasen++))
 		fi
 		echo $lp3phasen > /var/www/html/openWB/ramdisk/lp3phasen
 		ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
@@ -715,7 +715,7 @@ loadvars(){
 	fi
 
 	#vierter ladepunkt
-	if [[ $lastmanagementlp4 == "1" ]]; then
+	if ((lastmanagementlp4 == 1)); then
 		if [[ "$evseconlp4" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 4 $chargep4ip $chargep4cp || true
 		else
@@ -732,14 +732,14 @@ loadvars(){
 		lla2lp4=$(echo $lla2lp4 | sed 's/\..*$//')
 		lla3lp4=$(echo $lla3lp4 | sed 's/\..*$//')
 		lp4phasen=0
-		if [ $lla1lp4 -ge $llphaset ]; then
-			lp4phasen=$((lp4phasen + 1 ))
+		if ((lla1lp4 >= llphaset)); then
+			((lp4phasen++))
 		fi
-		if [ $lla2lp4 -ge $llphaset ]; then
-			lp4phasen=$((lp4phasen + 1 ))
+		if ((lla2lp4 >= llphaset)); then
+			((lp4phasen++))
 		fi
-		if [ $lla3lp4 -ge $llphaset ]; then
-			lp4phasen=$((lp4phasen + 1 ))
+		if ((lla3lp4 >= llphaset)); then
+			((lp4phasen++))
 		fi
 		echo $lp4phasen > /var/www/html/openWB/ramdisk/lp4phasen
 		ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
@@ -753,7 +753,7 @@ loadvars(){
 	fi
 
 	#fünfter ladepunkt
-	if [[ $lastmanagementlp5 == "1" ]]; then
+	if ((lastmanagementlp5 == 1)); then
 		if [[ "$evseconlp5" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 5 $chargep5ip $chargep5cp || true
 		else
@@ -770,14 +770,14 @@ loadvars(){
 		lla2lp5=$(echo $lla2lp5 | sed 's/\..*$//')
 		lla3lp5=$(echo $lla3lp5 | sed 's/\..*$//')
 		lp5phasen=0
-		if [ $lla1lp5 -ge $llphaset ]; then
-			lp5phasen=$((lp5phasen + 1 ))
+		if ((lla1lp5 >= llphaset)); then
+			((lp5phasen++))
 		fi
-		if [ $lla2lp5 -ge $llphaset ]; then
-			lp5phasen=$((lp5phasen + 1 ))
+		if ((lla2lp5 >= llphaset)); then
+			((lp5phasen++))
 		fi
-		if [ $lla3lp5 -ge $llphaset ]; then
-			lp5phasen=$((lp5phasen + 1 ))
+		if ((lla3lp5 >= llphaset)); then
+			((lp5phasen++))
 		fi
 		echo $lp5phasen > /var/www/html/openWB/ramdisk/lp5phasen
 		ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
@@ -791,7 +791,7 @@ loadvars(){
 	fi
 
 	#sechster ladepunkt
-	if [[ $lastmanagementlp6 == "1" ]]; then
+	if ((lastmanagementlp6 == 1)); then
 		if [[ "$evseconlp6" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 6 $chargep6ip $chargep6cp || true
 		else
@@ -808,14 +808,14 @@ loadvars(){
 		lla2lp6=$(echo $lla2lp6 | sed 's/\..*$//')
 		lla3lp6=$(echo $lla3lp6 | sed 's/\..*$//')
 		lp6phasen=0
-		if [ $lla1lp6 -ge $llphaset ]; then
-			lp6phasen=$((lp6phasen + 1 ))
+		if ((lla1lp6 >= llphaset)); then
+			((lp6phasen++))
 		fi
-		if [ $lla2lp6 -ge $llphaset ]; then
-			lp6phasen=$((lp6phasen + 1 ))
+		if ((lla2lp6 >= llphaset)); then
+			((lp6phasen++))
 		fi
-		if [ $lla3lp6 -ge $llphaset ]; then
-			lp6phasen=$((lp6phasen + 1 ))
+		if ((lla3lp6 >= llphaset)); then
+			((lp6phasen++))
 		fi
 		echo $lp6phasen > /var/www/html/openWB/ramdisk/lp6phasen
 		ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
@@ -829,7 +829,7 @@ loadvars(){
 	fi
 
 	#siebter ladepunkt
-	if [[ $lastmanagementlp7 == "1" ]]; then
+	if ((lastmanagementlp7 == 1)); then
 		if [[ "$evseconlp7" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 7 $chargep7ip $chargep7cp || true
 		else
@@ -852,21 +852,21 @@ loadvars(){
 		fi
 		ladeleistung=$(( ladeleistung + ladeleistunglp7 ))
 		lp7phasen=0
-		if [ $lla1lp7 -ge $llphaset ]; then
-			lp7phasen=$((lp7phasen + 1 ))
+		if ((lla1lp7 >= llphaset)); then
+			((lp7phasen++))
 		fi
-		if [ $lla2lp7 -ge $llphaset ]; then
-			lp7phasen=$((lp7phasen + 1 ))
+		if ((lla2lp7 >= llphaset)); then
+			((lp7phasen++))
 		fi
-		if [ $lla3lp7 -ge $llphaset ]; then
-			lp7phasen=$((lp7phasen + 1 ))
+		if ((lla3lp7 >= llphaset)); then
+			((lp7phasen++))
 		fi
 		echo $lp7phasen > /var/www/html/openWB/ramdisk/lp7phasen
 	else
 		ladeleistunglp7=0
 	fi
 	#achter ladepunkt
-	if [[ $lastmanagementlp8 == "1" ]]; then
+	if ((lastmanagementlp8 == 1)); then
 		if [[ "$evseconlp8" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 8 $chargep8ip $chargep8cp || true
 		else
@@ -884,14 +884,14 @@ loadvars(){
 		lla2lp8=$(echo $lla2lp8 | sed 's/\..*$//')
 		lla3lp8=$(echo $lla3lp8 | sed 's/\..*$//')
 		lp8phasen=0
-		if [ $lla1lp8 -ge $llphaset ]; then
-			lp8phasen=$((lp8phasen + 1 ))
+		if ((lla1lp8 >= llphaset)); then
+			((lp8phasen++))
 		fi
-		if [ $lla2lp8 -ge $llphaset ]; then
-			lp8phasen=$((lp8phasen + 1 ))
+		if ((lla2lp8 >= llphaset)); then
+			((lp8phasen++))
 		fi
-		if [ $lla3lp8 -ge $llphaset ]; then
-			lp8phasen=$((lp8phasen + 1 ))
+		if ((lla3lp8 >= llphaset)); then
+			((lp8phasen++))
 		fi
 		echo $lp8phasen > /var/www/html/openWB/ramdisk/lp8phasen
 		ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
@@ -908,7 +908,7 @@ loadvars(){
 	echo $llkwhges > ramdisk/llkwhges
 
 	#Schuko-Steckdose an openWB
-	if [[ $standardSocketInstalled == "1" ]]; then
+	if ((standardSocketInstalled == 1)); then
 
 		timeout 10 modules/sdm120modbusSocket/main.sh || true
 		socketkwh=$(</var/www/html/openWB/ramdisk/socketkwh)
@@ -950,8 +950,8 @@ loadvars(){
 		fi
 		#uberschuss zur berechnung
 		uberschuss=$(printf "%.0f\n" $((-wattbezug)))
-		if [[ $speichervorhanden == "1" ]]; then
-			if [[ $speicherpveinbeziehen == "1" ]]; then
+		if ((speichervorhanden == 1)); then
+			if ((speicherpveinbeziehen == 1)); then
 				if (( speicherleistung > 0 )); then
 					if (( speichersoc > speichersocnurpv )); then
 						speicherww=$((speicherleistung + speicherwattnurpv))
@@ -1009,8 +1009,7 @@ loadvars(){
 		echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 		if (( stopsocnotpluggedlp1 == 1 )); then
 			soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
-			# if (( plugstat == 1 )); then
-			if [[ "$plugstat" == "1" || "$soctimer" == "20005" ]]; then # force soc update button sends 20005
+			if ((plugstat == 1)) || ((soctimer == 20005)); then # force soc update button sends 20005
 				"modules/$socmodul/main.sh" &
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 				tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
@@ -1066,7 +1065,7 @@ loadvars(){
 	if (( hausverbrauch < 0 )); then
 		if [ -f /var/www/html/openWB/ramdisk/hausverbrauch.invalid ]; then
 			hausverbrauchinvalid=$(</var/www/html/openWB/ramdisk/hausverbrauch.invalid)
-			let hausverbrauchinvalid+=1
+			((hausverbrauchinvalid++))
 		else
 			hausverbrauchinvalid=1
 		fi
@@ -1084,7 +1083,7 @@ loadvars(){
 	if [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] ; then
 		usesimbezug=1
 	fi
-	if [[ $usesimbezug == "1" ]]; then
+	if ((usesimbezug == 1)); then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/wattbezug)
 		if [[ -e /var/www/html/openWB/ramdisk/bezugwatt0pos ]]; then
@@ -1129,7 +1128,7 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
-	if [[ $usesimpv == "1" ]]; then
+	if ((usesimpv == 1)); then
 		ra='^-?[0-9]+$'
 		#rechnen nur auf wr1
 		watt3=$(</var/www/html/openWB/ramdisk/pv1watt)
@@ -1169,7 +1168,7 @@ loadvars(){
 	if [[ $pv2wattmodul == "wr2_shelly" ]]; then
 		usesimpv2=1
 	fi
-	if [[ $usesimpv2 == "1" ]]; then
+	if ((usesimpv2 == 1)); then
 		ra='^-?[0-9]+$'
 		#rechnen auf wr2
 		watt4=$(</var/www/html/openWB/ramdisk/pv2watt)
@@ -1205,7 +1204,7 @@ loadvars(){
 		# sim pv2 end
 	fi
 	#addition Zaehler pv1 und pv2 nach Simcount
-	if [[ $pv2vorhanden == "1" ]]; then
+	if ((pv2vorhanden == 1)); then
 		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
 		pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
@@ -1247,7 +1246,7 @@ loadvars(){
 		# sim speicher end
 	fi
 
-	if [[ $verbraucher1_aktiv == "1" ]] && [[ $verbraucher1_typ == "shelly" ]]; then
+	if ((verbraucher1_aktiv == 1)) && [[ $verbraucher1_typ == "shelly" ]]; then
 		ra='^-?[0-9]+$'
 		watt3=$(</var/www/html/openWB/ramdisk/verbraucher1_watt)
 		if [[ -e /var/www/html/openWB/ramdisk/verbraucher1watt0pos ]]; then
@@ -1285,7 +1284,7 @@ loadvars(){
 	#Uhrzeit
 	date=$(date)
 	H=$(date +%H)
-	if [[ $debug == "1" ]]; then
+	if ((debug == 1)); then
 		echo "$(tail -1500 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
 	fi
 	if [[ $speichermodul != "none" ]] ; then
@@ -1302,7 +1301,7 @@ loadvars(){
 	openwbDebugLog "MAIN" 1 "$(echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled")"
 	openwbDebugLog "MAIN" 1 "$(echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3")"
 	openwbDebugLog "MAIN" 1 "$(echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3")"
-	if [[ $standardSocketInstalled == "1" ]]; then
+	if ((standardSocketInstalled == 1)); then
 		openwbDebugLog "MAIN" 1 "socketa $socketa socketp $socketp socketkwh $socketkwh socketv $socketv"
 	fi
 
@@ -1393,7 +1392,7 @@ loadvars(){
 		tempPubList="${tempPubList}\nopenWB/config/get/lp/8/stopchargeafterdisc=${stopchargeafterdisclp8}"
 		echo $stopchargeafterdisclp8 > ramdisk/mqttstopchargeafterdisclp8
 	fi
-	if [[ $rfidakt == "1" ]]; then
+	if ((rfidakt == 1)); then
 		rfid
 	fi
 
@@ -1486,7 +1485,7 @@ loadvars(){
 	fi
 
 	ocp1config=$(<ramdisk/mqttCp1Configured)
-	if [[ "$ocp1config" != "1" ]]; then
+	if ((ocp1config != 1)); then
 		tempPubList="${tempPubList}\nopenWB/lp/1/boolChargePointConfigured=1"
 		echo 1 > ramdisk/mqttCp1Configured
 	fi
