@@ -533,9 +533,9 @@ loadvars(){
 			openwbModulePublishState "BAT" 0 ""
 		fi
 		speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
-		speicherleistung=$(echo "$speicherleistung" | sed 's/\..*$//')
+		speicherleistung=${speicherleistung//.*/}
 		speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
-		speichersoc=$(echo "$speichersoc" | sed 's/\..*$//')
+		speichersoc=${speichersoc//.*/}
 		speichervorhanden="1"
 		echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 		if [[ $speichermodul == "speicher_e3dc" ]] ; then
@@ -574,9 +574,9 @@ loadvars(){
 		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
 		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
-		lla1=$(echo "$lla1" | sed 's/\..*$//')
-		lla2=$(echo "$lla2" | sed 's/\..*$//')
-		lla3=$(echo "$lla3" | sed 's/\..*$//')
+		lla1=${lla1//.*/}
+		lla2=${lla2//.*/}
+		lla3=${lla3//.*/}
 		llv1=$(cat /var/www/html/openWB/ramdisk/llv1)
 		llv2=$(cat /var/www/html/openWB/ramdisk/llv2)
 		llv3=$(cat /var/www/html/openWB/ramdisk/llv3)
@@ -650,9 +650,9 @@ loadvars(){
 		llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
 		llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
 		llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
-		llas11=$(echo "$llas11" | sed 's/\..*$//')
-		llas12=$(echo "$llas12" | sed 's/\..*$//')
-		llas13=$(echo "$llas13" | sed 's/\..*$//')
+		llas11=${llas11//.*/}
+		llas12=${llas12//.*/}
+		llas13=${llas13//.*/}
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 		if ! [[ $ladeleistungs1 =~ $re ]] ; then
 			ladeleistungs1="0"
@@ -687,9 +687,9 @@ loadvars(){
 		llas21=$(cat /var/www/html/openWB/ramdisk/llas21)
 		llas22=$(cat /var/www/html/openWB/ramdisk/llas22)
 		llas23=$(cat /var/www/html/openWB/ramdisk/llas23)
-		llas21=$(echo "$llas21" | sed 's/\..*$//')
-		llas22=$(echo "$llas22" | sed 's/\..*$//')
-		llas23=$(echo "$llas23" | sed 's/\..*$//')
+		llas21=${llas21//.*/}
+		llas22=${llas22//.*/}
+		llas23=${llas23//.*/}
 		lp3phasen=0
 		if ((llas21 >= llphaset)); then
 			((lp3phasen++))
@@ -728,9 +728,9 @@ loadvars(){
 		lla1lp4=$(cat /var/www/html/openWB/ramdisk/lla1lp4)
 		lla2lp4=$(cat /var/www/html/openWB/ramdisk/lla2lp4)
 		lla3lp4=$(cat /var/www/html/openWB/ramdisk/lla3lp4)
-		lla1lp4=$(echo "$lla1lp4" | sed 's/\..*$//')
-		lla2lp4=$(echo "$lla2lp4" | sed 's/\..*$//')
-		lla3lp4=$(echo "$lla3lp4" | sed 's/\..*$//')
+		lla1lp4=${lla1lp4//.*/}
+		lla2lp4=${lla2lp4//.*/}
+		lla3lp4=${lla3lp4//.*/}
 		lp4phasen=0
 		if ((lla1lp4 >= llphaset)); then
 			((lp4phasen++))
@@ -766,9 +766,9 @@ loadvars(){
 		lla1lp5=$(cat /var/www/html/openWB/ramdisk/lla1lp5)
 		lla2lp5=$(cat /var/www/html/openWB/ramdisk/lla2lp5)
 		lla3lp5=$(cat /var/www/html/openWB/ramdisk/lla3lp5)
-		lla1lp5=$(echo "$lla1lp5" | sed 's/\..*$//')
-		lla2lp5=$(echo "$lla2lp5" | sed 's/\..*$//')
-		lla3lp5=$(echo "$lla3lp5" | sed 's/\..*$//')
+		lla1lp5=${lla1lp5//.*/}
+		lla2lp5=${lla2lp5//.*/}
+		lla3lp5=${lla3lp5//.*/}
 		lp5phasen=0
 		if ((lla1lp5 >= llphaset)); then
 			((lp5phasen++))
@@ -804,9 +804,9 @@ loadvars(){
 		lla1lp6=$(cat /var/www/html/openWB/ramdisk/lla1lp6)
 		lla2lp6=$(cat /var/www/html/openWB/ramdisk/lla2lp6)
 		lla3lp6=$(cat /var/www/html/openWB/ramdisk/lla3lp6)
-		lla1lp6=$(echo "$lla1lp6" | sed 's/\..*$//')
-		lla2lp6=$(echo "$lla2lp6" | sed 's/\..*$//')
-		lla3lp6=$(echo "$lla3lp6" | sed 's/\..*$//')
+		lla1lp6=${lla1lp6//.*/}
+		lla2lp6=${lla2lp6//.*/}
+		lla3lp6=${lla3lp6//.*/}
 		lp6phasen=0
 		if ((lla1lp6 >= llphaset)); then
 			((lp6phasen++))
@@ -842,9 +842,9 @@ loadvars(){
 		lla1lp7=$(cat /var/www/html/openWB/ramdisk/lla1lp7)
 		lla2lp7=$(cat /var/www/html/openWB/ramdisk/lla2lp7)
 		lla3lp7=$(cat /var/www/html/openWB/ramdisk/lla3lp7)
-		lla1lp7=$(echo "$lla1lp7" | sed 's/\..*$//')
-		lla2lp7=$(echo "$lla2lp7" | sed 's/\..*$//')
-		lla3lp7=$(echo "$lla3lp7" | sed 's/\..*$//')
+		lla1lp7=${lla1lp7//.*/}
+		lla2lp7=${lla2lp7//.*/}
+		lla3lp7=${lla3lp7//.*/}
 		ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
 		if ! [[ $ladeleistunglp7 =~ $re ]] ; then
 			openwbDebugLog "MAIN" 0 "ungültiger Wert für ladeleistunglp7: $ladeleistunglp7"
@@ -880,9 +880,9 @@ loadvars(){
 		lla1lp8=$(cat /var/www/html/openWB/ramdisk/lla1lp8)
 		lla2lp8=$(cat /var/www/html/openWB/ramdisk/lla2lp8)
 		lla3lp8=$(cat /var/www/html/openWB/ramdisk/lla3lp8)
-		lla1lp8=$(echo "$lla1lp8" | sed 's/\..*$//')
-		lla2lp8=$(echo "$lla2lp8" | sed 's/\..*$//')
-		lla3lp8=$(echo "$lla3lp8" | sed 's/\..*$//')
+		lla1lp8=${lla1lp8//.*/}
+		lla2lp8=${lla2lp8//.*/}
+		lla3lp8=${lla3lp8//.*/}
 		lp8phasen=0
 		if ((lla1lp8 >= llphaset)); then
 			((lp8phasen++))
@@ -914,7 +914,7 @@ loadvars(){
 		socketkwh=$(</var/www/html/openWB/ramdisk/socketkwh)
 		socketp=$(cat /var/www/html/openWB/ramdisk/socketp)
 		socketa=$(cat /var/www/html/openWB/ramdisk/socketa)
-		socketa=$(echo "$socketa" | sed 's/\..*$//')
+		socketa=${socketa//.*/}
 		socketv=$(cat /var/www/html/openWB/ramdisk/socketv)
 		if ! [[ $socketa =~ $re ]] ; then
 			openwbDebugLog "MAIN" 0 "ungültiger Wert für socketa: $socketa"
@@ -966,9 +966,9 @@ loadvars(){
 		evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
 		evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
 		evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
-		evua1=$(echo "$evua1" | sed 's/\..*$//')
-		evua2=$(echo "$evua2" | sed 's/\..*$//')
-		evua3=$(echo "$evua3" | sed 's/\..*$//')
+		evua1=${evua1//.*/}
+		evua2=${evua2//.*/}
+		evua3=${evua3//.*/}
 		if ! [[ $evua1 =~ $re ]]; then
 			openwbDebugLog "MAIN" 0 "ungültiger Wert für evua1: $evua1"
 			evua1="0"
