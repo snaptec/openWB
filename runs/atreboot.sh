@@ -1,5 +1,6 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+LOGFILE="/var/log/openWB.log"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 at_reboot() {
@@ -74,7 +75,7 @@ at_reboot() {
 	if (( rseenabled == 1 )); then
 		echo "rse..."
 		if ! [ -x "$(command -v nmcli)" ]; then  # hack to prevent running the daemon on openwb standalone
-			sudo python "$OPENWBBASEDIR/runs/rse.py" &
+			nohup python "$OPENWBBASEDIR/runs/rse.py" >>"$LOGFILE" 2>&1 &
 		fi
 	fi
 
@@ -92,7 +93,7 @@ at_reboot() {
 	# restart our modbus server
 	echo "modbus server..."
 	sudo pkill -f '^python.*/modbusserver.py' > /dev/null
-	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
+	sudo nohup python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" >>"$LOGFILE" 2>&1 &
 
 	# check if display is configured and setup timeout
 	if (( displayaktiv == 1 )); then
@@ -117,17 +118,17 @@ at_reboot() {
 	smartmq=$(<"$OPENWBBASEDIR/ramdisk/smartmq")
 	if (( smartmq == 0 )); then
 		echo "starting legacy smarthome handler"
-		python3 "$OPENWBBASEDIR/runs/smarthomehandler.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
+		nohup python3 "$OPENWBBASEDIR/runs/smarthomehandler.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
 	else
 		echo "starting smarthomemq handler"
-		python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$RAMDISKDIR/smarthome.log" 2>&1 &
+		nohup python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
 	fi
 
 	# restart mqttsub handler
 	echo "mqtt handler..."
 	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
 	sudo pkill -f '^python.*/mqttsub.py'
-	python3 "$OPENWBBASEDIR/runs/mqttsub.py" &
+	nohup python3 "$OPENWBBASEDIR/runs/mqttsub.py" >>"$LOGFILE" 2>&1 &
 
 	# restart legacy run server
 	echo "legacy run server..."
@@ -344,7 +345,7 @@ at_reboot() {
 	if (( isss == 1 )); then
 		echo "isss..."
 		echo "$lastmanagement" > "$OPENWBBASEDIR/ramdisk/issslp2act"
-		python3 "$OPENWBBASEDIR/runs/isss.py" &
+		nohup python3 "$OPENWBBASEDIR/runs/isss.py" >>"$OPENWBBASEDIR/ramdisk/isss.log" 2>&1 &
 		# second IP already set up !
 		ethstate=$(</sys/class/net/eth0/carrier)
 		if (( ethstate == 1 )); then
@@ -363,7 +364,7 @@ at_reboot() {
 		if [ ! -f /home/pi/ppbuchse ]; then
 			echo "32" > /home/pi/ppbuchse
 		fi
-		python3 "$OPENWBBASEDIR/runs/buchse.py" &
+		nohup python3 "$OPENWBBASEDIR/runs/buchse.py" >>"$LOGFILE" 2>&1 &
 	fi
 
 	# update display configuration
@@ -420,7 +421,7 @@ at_reboot() {
 		echo "update electricity pricelist..."
 		echo "" > "$OPENWBBASEDIR/ramdisk/etprovidergraphlist"
 		mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
-		"$OPENWBBASEDIR/modules/$etprovider/main.sh" > /var/log/openWB.log 2>&1 &
+		nohup "$OPENWBBASEDIR/modules/$etprovider/main.sh" >>"$LOGFILE" 2>&1 &
 	else
 		echo "not activated, skipping"
 		mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
