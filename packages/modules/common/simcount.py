@@ -172,7 +172,7 @@ class Restore():
         try:
             self.value = value
             self.prefix = prefix
-            client = mqtt.Client("openWB-simcount_restore-" + str(self.__getserial()))
+            client = mqtt.Client("openWB-simcount_restore-" + str(self.__get_serial()))
 
             client.on_connect = self.__on_connect
             client.on_message = self.__on_message
@@ -208,7 +208,7 @@ class Restore():
         finally:
             return result
 
-    def __on_connect(self, client, userdata, flags, rc):
+    def __on_connect(self, client, user_data, flags, rc):
         """ connect to broker and subscribe to set topics
         """
         try:
@@ -220,12 +220,12 @@ class Restore():
         except Exception:
             log.exception("Fehler in der Restore-Klasse")
 
-    def __on_message(self, client, userdata, msg):
+    def __on_message(self, client, user_data, msg):
         """ wartet auf eingehende Topics.
         """
         self.temp = msg.payload
 
-    def __getserial(self):
+    def __get_serial(self):
         """ Extract serial from cpuinfo file
         """
         try:

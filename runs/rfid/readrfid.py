@@ -9,7 +9,7 @@ args = parser.parse_args()
 
 input_device = evdev.InputDevice("/dev/input/" + args.device)
 
-scancodes = {
+scan_codes = {
     0: None, 1: u'ESC', 2: u'1', 3: u'2', 4: u'3', 5: u'4', 6: u'5', 7: u'6', 8: u'7', 9: u'8',
     10: u'9', 11: u'0', 12: u'-', 13: u'=', 14: u'BKSP', 15: u'TAB', 16: u'Q', 17: u'W', 18: u'E', 19: u'R',
     20: u'T', 21: u'Y', 22: u'U', 23: u'I', 24: u'O', 25: u'P', 26: u'[', 27: u']', 28: u'CRLF', 29: u'LCTRL',
@@ -23,7 +23,7 @@ for event in input_device.read_loop():
     if event.type == evdev.ecodes.EV_KEY:
         data = evdev.categorize(event)
         if data.keystate == 1:
-            key_lookup = scancodes.get(data.scancode) or u'UNKNOWN:{}'.format(data.scancode)
+            key_lookup = scan_codes.get(data.scancode) or u'UNKNOWN:{}'.format(data.scancode)
             key_string += str(format(key_lookup))
             if "CRLF" in key_string:
                 key_string = key_string[:-4]

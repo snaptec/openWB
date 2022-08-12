@@ -45,13 +45,13 @@ class FaultState(Exception):
                 prefix = "openWB/set/" + topic + "/"
                 if component_info.id is not None:
                     if component_type == "vehicle":
-                        prefix += str(component_info.id) + "/socF"
+                        prefix += str(component_info.id) + "/socFault"
                     else:
-                        prefix += str(component_info.id) + "/f"
+                        prefix += str(component_info.id) + "/fault"
                 else:
                     prefix += "f"
-                pub.pub_single(prefix + "aultStr", self.fault_str, hostname=component_info.hostname)
-                pub.pub_single(prefix + "aultState", self.fault_state.value, hostname=component_info.hostname)
+                pub.pub_single(prefix + "Str", self.fault_str, hostname=component_info.hostname)
+                pub.pub_single(prefix + "State", self.fault_state.value, hostname=component_info.hostname)
                 if "chargepoint" in component_info.type:
                     pub.pub_single("openWB/set/" + topic + "/" + str(component_info.id) +
                                    "/get/fault_str", self.fault_str, hostname=component_info.hostname)
