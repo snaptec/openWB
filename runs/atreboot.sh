@@ -190,11 +190,6 @@ at_reboot() {
 	else
 		sudo pip install evdev
 	fi
-	if python3 -c "import evdev" &> /dev/null; then
-		echo 'evdev for python3 installed...'
-	else
-		sudo pip3 install evdev
-	fi
 	if ! [ -x "$(command -v sshpass)" ];then
 		sudo apt-get -qq update
 		sleep 1
@@ -255,56 +250,9 @@ at_reboot() {
 	fi
 
 	# check for other dependencies
-	echo "packages 2..."
-	if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
-		echo 'mqtt installed...'
-	else
-		sudo apt-get -qq install -y python3-pip
-		sudo pip3 install paho-mqtt
-	fi
-	if python3 -c "import docopt" &> /dev/null; then
-		echo 'docopt installed...'
-	else
-		sudo pip3 install docopt
-	fi
-	if python3 -c "import certifi" &> /dev/null; then
-		echo 'certifi installed...'
-	else
-		sudo pip3 install certifi
-	fi
-	if python3 -c "import aiohttp" &> /dev/null; then
-		echo 'aiohttp installed...'
-	else
-		sudo pip3 install aiohttp
-	fi
-	if python3 -c "import pymodbus" &> /dev/null; then
-		echo 'pymodbus installed...'
-	else
-		sudo pip3 install pymodbus
-	fi
-	if python3 -c "import requests" &> /dev/null; then
-		echo 'python requests installed...'
-	else
-		sudo pip3 install requests
-	fi
-	#Prepare for jq in Python
-	if python3 -c "import jq" &> /dev/null; then
-		echo 'jq installed...'
-	else
-		sudo pip3 install jq
-	fi
-	#Prepare for ipparser in Python
-	if python3 -c "import ipparser" &> /dev/null; then
-		echo 'ipparser installed...'
-	else
-		sudo pip3 install ipparser
-	fi
-	#Prepare for lxml used in soc module libvwid in Python
-	if python3 -c "import lxml" &> /dev/null; then
-		echo 'lxml installed...'
-	else
-		sudo pip3 install lxml
-	fi
+	echo "python3 packages..."
+	python3 -u "$OPENWBBASEDIR/runs/installPythonPackages.py"
+
 	#Prepare for secrets used in soc module libvwid in Python
 	VWIDMODULEDIR="$OPENWBBASEDIR/modules/soc_vwid"
 	if python3 -c "import secrets" &> /dev/null; then
@@ -332,18 +280,6 @@ at_reboot() {
 			echo 'soc_smarteq: enable local python3 secrets.py...'
 			ln -s "$SMARTEQMODULEDIR/_secrets.py" "$SMARTEQMODULEDIR/secrets.py"
 		fi
-	fi
-	#Prepare for bs4 used in soc module smarteq in Python
-	if python3 -c "import bs4" &> /dev/null; then
-		echo 'bs4 installed...'
-	else
-		sudo pip3 install bs4
-	fi
-	#Prepare for pkce used in soc module smarteq in Python
-	if python3 -c "import pkce" &> /dev/null; then
-		echo 'pkce installed...'
-	else
-		sudo pip3 install pkce
 	fi
 	# update outdated urllib3 for Tesla Powerwall
 	pip3 install --upgrade urllib3
