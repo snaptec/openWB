@@ -6,6 +6,7 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 . "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
 . "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
+. "$OPENWBBASEDIR/runs/rse/rseHelper.sh"
 
 if [ -e "$OPENWBBASEDIR/ramdisk/updateinprogress" ] && [ -e "$OPENWBBASEDIR/ramdisk/bootinprogress" ]; then
 	updateinprogress=$(<"$OPENWBBASEDIR/ramdisk/updateinprogress")
@@ -405,6 +406,9 @@ fi
 
 # setup push buttons handler if needed
 pushButtonsSetup "$ladetaster" 0
+
+# setup rse handler if needed
+rseSetup "$rseenabled" 0
 
 #Pingchecker
 if (( pingcheckactive == 1 )); then

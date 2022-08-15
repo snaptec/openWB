@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from typing import List
-import RPi.GPIO as GPIO
 import time
 import traceback
 
@@ -50,6 +49,11 @@ def button_count(buttons: List):
 def get_buttons_state():
     return [GPIO.input(buttons[button]["gpio"]) == GPIO.LOW for button in range(len(buttons))]
 
+
+try:
+    import RPi.GPIO as GPIO
+except ModuleNotFoundError:
+    exit("Module RPi.GPIO missing! Maybe we are not running on supported hardware?")
 
 log_debug(2, "push button daemon starting")
 try:
