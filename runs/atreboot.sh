@@ -4,6 +4,19 @@ LOGFILE="/var/log/openWB.log"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 at_reboot() {
+
+	versionMatch() {
+		file=$1
+		target=$2
+		currentVersion=$(grep -o "openwb-version:[0-9]\+" "$file" | grep -o "[0-9]\+$")
+		installedVersion=$(grep -o "openwb-version:[0-9]\+" "$target" | grep -o "[0-9]\+$")
+		if (( currentVersion == installedVersion )); then
+			return 0
+		else
+			return 1
+		fi
+	}
+
 	echo "atreboot.sh started"
 	(sleep 600; echo "checking for stalled atreboot after 10 minutes"; echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"; echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress"; sudo kill "$$") &
 
@@ -95,19 +108,24 @@ at_reboot() {
 	sudo pkill -f '^python.*/modbusserver.py' > /dev/null
 	sudo nohup python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" >>"$LOGFILE" 2>&1 &
 
+	# display setup
+	echo "display..."
+	# remove old display config file
+	if [[ -f "/home/pi/.config/lxsession/LXDE-pi/lxdeyeah" ]]; then
+		rm "/home/pi/.config/lxsession/LXDE-pi/lxdeyeah"
+	fi
 	# check if display is configured and setup timeout
 	if (( displayaktiv == 1 )); then
-		echo "display..."
-		if ! grep -Fq "pinch" /home/pi/.config/lxsession/LXDE-pi/autostart
-		then
-			echo "not found"
-			echo "@xscreensaver -no-splash" > /home/pi/.config/lxsession/LXDE-pi/autostart
-			echo "@point-rpi" >> /home/pi/.config/lxsession/LXDE-pi/autostart
-			echo "@xset s 600" >> /home/pi/.config/lxsession/LXDE-pi/autostart
-			echo "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+		if versionMatch "$OPENWBBASEDIR/web/files/lxdeautostart" /home/pi/.config/lxsession/LXDE-pi/autostart; then
+			echo "already up to date"
+		else
+			echo "not found or outdated"
+			cp "$OPENWBBASEDIR/web/files/lxdeautostart" /home/pi/.config/lxsession/LXDE-pi/autostart
 		fi
 		echo "deleting browser cache"
 		rm -rf /home/pi/.cache/chromium
+	else
+		echo "not configured"
 	fi
 
 	# restart smarthomehandler
@@ -365,13 +383,6 @@ at_reboot() {
 			echo "32" > /home/pi/ppbuchse
 		fi
 		nohup python3 "$OPENWBBASEDIR/runs/buchse.py" >>"$LOGFILE" 2>&1 &
-	fi
-
-	# update display configuration
-	echo "display update..."
-	if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" /home/pi/.config/lxsession/LXDE-pi/autostart
-	then
-		sed -i "s,@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php,@chromium-browser --incognito --disable-pinch --overscroll-history-navigation=0 --kiosk http://localhost/openWB/web/display.php,g" /home/pi/.config/lxsession/LXDE-pi/autostart
 	fi
 
 	# get local ip
