@@ -1,5 +1,8 @@
+from typing import Optional
+
+
 class KostalPikoConfiguration:
-    def __init__(self, ip_address: str):
+    def __init__(self, ip_address: Optional[str] = None):
         self.ip_address = ip_address
 
 

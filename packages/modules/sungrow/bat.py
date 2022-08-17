@@ -26,7 +26,7 @@ class SungrowBat:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
-        unit = 1
+        unit = self.component_config.configuration.id
         with self.__tcp_client:
             soc = int(self.__tcp_client.read_input_registers(13022, ModbusDataType.INT_16, unit=unit) / 10)
             resp = self.__tcp_client.delegate.read_input_registers(13000, 1, unit=unit)

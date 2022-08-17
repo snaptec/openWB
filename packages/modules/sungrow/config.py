@@ -2,8 +2,9 @@ from typing import Optional
 
 
 class SungrowConfiguration:
-    def __init__(self, ip_address: Optional[str] = None):
+    def __init__(self, ip_address: Optional[str] = None, port: int = 502):
         self.ip_address = ip_address
+        self.port = port
 
 
 class Sungrow:
@@ -19,8 +20,8 @@ class Sungrow:
 
 
 class SungrowBatConfiguration:
-    def __init__(self):
-        pass
+    def __init__(self, id: int = 1):
+        self.id = id
 
 
 class SungrowBatSetup:
@@ -36,8 +37,9 @@ class SungrowBatSetup:
 
 
 class SungrowCounterConfiguration:
-    def __init__(self, version=1):
+    def __init__(self, version=1, id: int = 1):
         self.version = version
+        self.id = id
 
 
 class SungrowCounterSetup:
@@ -53,8 +55,8 @@ class SungrowCounterSetup:
 
 
 class SungrowInverterConfiguration:
-    def __init__(self):
-        pass
+    def __init__(self, id: int = 1):
+        self.id = id
 
 
 class SungrowInverterSetup:
