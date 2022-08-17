@@ -10,9 +10,11 @@ fi
 openwbDebugLog "CHARGESTAT" 1 "### start (->$monthlyfile)"
 
 # check for special charge modes
-nachtladenstate=$(<"${RAMDISKDIR}/nachtladenstate")  # "Nachtladen"
-nachtladen2state=$(<"${RAMDISKDIR}/nachtladen2state")  # "Morgensladen"
-if (( nachtladenstate == 0 )) && (( nachtladen2state == 0 )); then
+nachtladenstate=$(<"${RAMDISKDIR}/nachtladenstate")  # "Nachtladen" LP1
+nachtladen2state=$(<"${RAMDISKDIR}/nachtladen2state")  # "Morgensladen" LP1
+nachtladenstates1=$(<"${RAMDISKDIR}/nachtladenstates1")  # "Nachtladen" LP2
+nachtladen2states1=$(<"${RAMDISKDIR}/nachtladen2states1")  # "Morgensladen" LP2
+if (( nachtladenstate == 0 )) && (( nachtladen2state == 0 )) && (( nachtladenstates1 == 0 )) && (( nachtladen2states1 == 0 )); then
 	lmodus=$(<"${RAMDISKDIR}/lademodus")
 else
 	# "Nachtladen" or "Morgensladen" is configured, set charge mode to "7"
