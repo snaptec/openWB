@@ -132,10 +132,10 @@ def read_inverter(ip1: str,
                   hybrid: int,
                   num: int,
                   sunny_boy_smart_energy: int):
-    def create_webbox_inverter(address: str):
+    def create_webbox_inverter(address: str) -> SmaWebboxInverter:
         return SmaWebboxInverter(address, SmaWebboxInverterSetup(id=num))
 
-    def create_modbus_inverter(address: str):
+    def create_modbus_inverter(address: str) -> inverter.SmaSunnyBoyInverter:
         config = SmaSunnyBoyInverterSetup(
             id=num,
             configuration=SmaSunnyBoyInverterConfiguration(hybrid=bool(hybrid),
@@ -151,12 +151,7 @@ def read_inverter(ip1: str,
     # we still need to implement this for the read_legacy-bridge.
     # Here we act like we only update the first inverter, while we actually query all inverters and sum them up:
     with SingleComponentUpdateContext(inverter1.component_info):
-        total_power = 0
         total_energy = 0
-        for inv in itertools.chain((inverter1,), inverters_additional):
-            state = inv.read()
-            total_power += state.power
-            total_energy += state.exported
         if hybrid == 1:
             if sunny_boy_smart_energy == 0:
                 bat_comp = bat.SunnyBoyBat(0, SmaSunnyBoyBatSetup(), modbus.ModbusTcpClient_(ip1, 502))
@@ -165,8 +160,24 @@ def read_inverter(ip1: str,
                                                                    SmaSunnyBoySmartEnergyBatSetup(),
                                                                    modbus.ModbusTcpClient_(ip1, 502))
             bat_state = bat_comp.read()
-            total_power -= bat_state.power
             total_energy = total_energy+bat_state.imported-bat_state.exported
+        if isinstance(inverter1, SmaWebboxInverter):
+            state = inverter1.read()
+            total_power = state.power
+            total_energy = state.exported
+        else:
+            state, produces_dc_power = inverter1.read()
+            total_power = state.power
+            total_energy = state.exported
+            if produces_dc_power:
+                if hybrid == 1:
+                    total_power -= bat_state.power
+            else:
+                total_power = 0
+        for inv in itertools.chain(inverters_additional):
+            state = inv.read()[0]
+            total_power += state.power
+            total_energy += state.exported
         get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
 

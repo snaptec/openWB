@@ -37,7 +37,7 @@ def test_sma_modbus_hybrid(monkeypatch, params: Params):
     # setup
     mock_inverter_value_store = Mock()
     monkeypatch.setattr(device, "get_inverter_value_store", Mock(return_value=mock_inverter_value_store))
-    monkeypatch.setattr(SmaSunnyBoyInverter, "read", Mock(return_value=SAMPLE_INVERTER_STATE))
+    monkeypatch.setattr(SmaSunnyBoyInverter, "read", Mock(return_value=(SAMPLE_INVERTER_STATE, True)))
     monkeypatch.setattr(SunnyBoyBat, "read", Mock(return_value=SAMPLE_BAT_STATE))
 
     # execution
