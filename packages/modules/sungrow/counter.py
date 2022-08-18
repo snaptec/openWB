@@ -26,7 +26,7 @@ class SungrowCounter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self):
-        unit = 1
+        unit = self.component_config.configuration.id
         with self.__tcp_client:
             if self.component_config.configuration.version == 1:
                 power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,

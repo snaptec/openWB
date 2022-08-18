@@ -2,7 +2,7 @@ import logging
 from typing import Dict, List, Union
 
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.req import get_http_session
 from modules.discovergy import counter, inverter
@@ -77,3 +77,6 @@ def read_legacy(user: str, password: str, meter_id_counter: str, meter_id_invert
 
 def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=Discovergy)

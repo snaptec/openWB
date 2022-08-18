@@ -14,7 +14,7 @@ from modules.sma_sunny_boy import bat, bat_smart_energy, counter, inverter
 from modules.sma_sunny_boy.config import (SmaSunnyBoy, SmaSunnyBoyBatSetup, SmaSunnyBoyConfiguration,
                                           SmaSunnyBoyCounterSetup, SmaSunnyBoyInverterConfiguration,
                                           SmaSunnyBoyInverterSetup, SmaSunnyBoySmartEnergyBatSetup)
-from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
+from modules.sma_sunny_boy.inv_version import SmaInverterVersion
 from modules.sma_webbox.config import SmaWebboxInverterSetup
 from modules.sma_webbox.inverter import SmaWebboxInverter
 

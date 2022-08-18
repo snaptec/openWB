@@ -10,7 +10,7 @@ from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.modbus import ModbusDataType
 from modules.common.store import get_inverter_value_store
 from modules.sma_sunny_boy.config import SmaSunnyBoyInverterSetup
-from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
+from modules.sma_sunny_boy.inv_version import SmaInverterVersion
 
 log = logging.getLogger(__name__)
 
