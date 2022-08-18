@@ -10,10 +10,9 @@ else
 	MYLOGFILE="$RAMDISKDIR/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_kostalpiko.kostal_piko" "${wrkostalpikoip}" "${speichermodul}" >>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.kostal_piko.device" "counter" "${wrkostalpikoip}" "${speichermodul}" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" >>"${MYLOGFILE}" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-wattbezug=$(<"$RAMDISKDIR/wattbezug")
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"

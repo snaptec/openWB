@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB Ladelog</title>
+		<title>OpenWB Ladeprotokoll</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -39,7 +39,7 @@
 		<script src="js/bootstrap4-toggle/bootstrap4-toggle.min.js"></script>
 		<script src="js/mqttws31.js"></script>
 		<script src="logging/chargelog/helperFunctions.js?ver=20210202"></script>
-		<script src="logging/chargelog/ladelog.js?ver=20210202"></script>
+		<script src="logging/chargelog/ladelog.js?ver=20220721"></script>
 		<script>
 			function getCookie(cname) {
 				var name = cname + '=';
@@ -70,7 +70,7 @@
 
  		<div role="main" class="container">
 
-			<h1>Lade-Log Monatsansicht</h1>
+			<h1>Ladeprotokoll Monatsansicht</h1>
 
 			<div class="row justify-content-center">
 				<div class="col-8 col-sm-6 col-md-5 col-lg-4">
@@ -171,7 +171,7 @@
 
 			<div class="card border-secondary">
 				<div class="card-header bg-secondary">
-					<i class="fas fa-clipboard-list"></i> Ladelog
+					<i class="fas fa-clipboard-list"></i> Ladeprotokoll
 					<i class="loading fas fa-cog fa-spin"></i>
 				</div>
 				<div id="ladelogtablediv" class="card-body text-monospace">
@@ -182,7 +182,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Lade-Log - <a href="logging/chargelog/ladelogexport.php">Lade-Log Export</a></small>
+				<small>Sie befinden sich hier: Lade-Log - <a href="logging/chargelog/ladelogexport.php">Ladeprotokoll Export</a></small>
 			</div>
 		</footer>
 
@@ -218,14 +218,14 @@
 				var mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); // January is 0!, string with leading zeros
 				if ( reloadNeeded ) {
 					// date parsed was too early so reload with today
-					selectladelogclick(parsedDate.getFullYear()+mm);
+					selectChargeLogClick(parsedDate.getFullYear()+mm);
 				}
 				var month = parsedDate.toLocaleDateString('de-DE', { month: 'long'});
 				dateToParseStr = parsedDate.getFullYear() + '-' + mm;
 				var theDate = month + ' ' + parsedDate.getFullYear();
 				setTimeout(
 					function() {
-						selectladelogclick(dateToParseStr);
+						selectChargeLogClick(dateToParseStr);
 					}, 1000);
 				
 				$('#theDate').val(theDate);  // set value of input field
@@ -247,7 +247,7 @@
 					dateToParseStr = e.date.getFullYear() + '-' + mm;
 					//window.location.href = "monthly.php?date=" + dateToParseStr;
 					parsedDate = e.date;
-					selectladelogclick(dateToParseStr);
+					selectChargeLogClick(dateToParseStr);
 				});
 
 			});
@@ -266,8 +266,8 @@
 			});
 
 			$('.filterSetting').change(function() {
-				// refresh ladelo
-				selectladelogclick(dateToParseStr);
+				// refresh charge log
+				selectChargeLogClick(dateToParseStr);
 			});
 
 			$('#prevmonth').click(function(e) {
@@ -280,7 +280,7 @@
 					var month = dateToParse.toLocaleDateString('de-DE', { month: 'long'});
 					parsedDate = dateToParse;
 					$('#theDate').val(month + ' ' + dateToParse.getFullYear());
-					selectladelogclick(dateToParseStr);
+					selectChargeLogClick(dateToParseStr);
 				}
 			});
 
@@ -296,7 +296,7 @@
 					var month = dateToParse.toLocaleDateString('de-DE', { month: 'long'});
 					parsedDate = dateToParse;
 					$('#theDate').val(month + ' ' + dateToParse.getFullYear());
-					selectladelogclick(dateToParseStr);
+					selectChargeLogClick(dateToParseStr);
 				}
 			});
 

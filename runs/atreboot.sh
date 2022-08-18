@@ -1,10 +1,24 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+LOGFILE="/var/log/openWB.log"
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 at_reboot() {
+
+	versionMatch() {
+		file=$1
+		target=$2
+		currentVersion=$(grep -o "openwb-version:[0-9]\+" "$file" | grep -o "[0-9]\+$")
+		installedVersion=$(grep -o "openwb-version:[0-9]\+" "$target" | grep -o "[0-9]\+$")
+		if (( currentVersion == installedVersion )); then
+			return 0
+		else
+			return 1
+		fi
+	}
+
 	echo "atreboot.sh started"
-	(sleep 600; sudo kill "$$"; echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"; echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress") &
+	(sleep 600; echo "checking for stalled atreboot after 10 minutes"; echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"; echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress"; sudo kill "$$") &
 
 	# read openwb.conf
 	echo "loading config"
@@ -15,12 +29,17 @@ at_reboot() {
 	. "$OPENWBBASEDIR/runs/initRamdisk.sh"
 	. "$OPENWBBASEDIR/runs/updateConfig.sh"
 	. "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
+	. "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
+	. "$OPENWBBASEDIR/runs/rse/rseHelper.sh"
 
 	sleep 5
 	mkdir -p "$OPENWBBASEDIR/web/backup"
 	touch "$OPENWBBASEDIR/web/backup/.donotdelete"
-	sudo chown -R www-data:www-data "$OPENWBBASEDIR/web/backup"
-	sudo chown -R www-data:www-data "$OPENWBBASEDIR/web/tools/upload"
+	# web/backup and web/tools/upload are used to (temporarily) store backup files for download and for restoring.
+	# files are created from PHP as user www-data, thus www-data needs write permissions.
+	sudo chown -R pi:www-data "$OPENWBBASEDIR/"{web/backup,web/tools/upload}
+	sudo chmod -R g+w "$OPENWBBASEDIR/"{web/backup,web/tools/upload}
+
 	sudo chmod 777 "$OPENWBBASEDIR/openwb.conf"
 	sudo chmod 777 "$OPENWBBASEDIR/smarthome.ini"
 	sudo chmod 777 "$OPENWBBASEDIR/ramdisk"
@@ -62,28 +81,11 @@ at_reboot() {
 		sudo python "$OPENWBBASEDIR/runs/triginit.py"
 	fi
 
-	# check if buttons are configured and restart daemon
-	pkill -f '^python.*/ladetaster.py'
-	if (( ladetaster == 1 )); then
-		echo "pushbuttons..."
-		if ! [ -x "$(command -v nmcli)" ]; then
-			if pgrep -f '^python.*/ladetaster.py' > /dev/null
-			then
-				echo "test" > /dev/null
-			else
-				sudo python "$OPENWBBASEDIR/runs/ladetaster.py" &
-			fi
-		fi
-	fi
+	# setup push buttons handler if needed
+	pushButtonsSetup "$ladetaster" 1
 
-	# check for rse and restart daemon
-	pkill -f '^python.*/rse.py'
-	if (( rseenabled == 1 )); then
-		echo "rse..."
-		if ! [ -x "$(command -v nmcli)" ]; then
-			sudo python "$OPENWBBASEDIR/runs/rse.py" &
-		fi
-	fi
+	# setup rse handler if needed
+	rseSetup "$rseenabled" 1
 
 	# setup rfid handler if needed
 	rfidSetup "$rfidakt" 1 "$rfidlist"
@@ -97,42 +99,49 @@ at_reboot() {
 	fi
 
 	# restart our modbus server
-	pkill -f '^python.*/modbusserver.py' > /dev/null
 	echo "modbus server..."
-	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
+	sudo pkill -f '^python.*/modbusserver.py' > /dev/null
+	sudo nohup python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" >>"$LOGFILE" 2>&1 &
 
+	# display setup
+	echo "display..."
+	# remove old display config file
+	if [[ -f "/home/pi/.config/lxsession/LXDE-pi/lxdeyeah" ]]; then
+		rm "/home/pi/.config/lxsession/LXDE-pi/lxdeyeah"
+	fi
 	# check if display is configured and setup timeout
 	if (( displayaktiv == 1 )); then
-		echo "display..."
-		if ! grep -Fq "pinch" /home/pi/.config/lxsession/LXDE-pi/autostart
-		then
-			echo "not found"
-			echo "@xscreensaver -no-splash" > /home/pi/.config/lxsession/LXDE-pi/autostart
-			echo "@point-rpi" >> /home/pi/.config/lxsession/LXDE-pi/autostart
-			echo "@xset s 600" >> /home/pi/.config/lxsession/LXDE-pi/autostart
-			echo "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+		if versionMatch "$OPENWBBASEDIR/web/files/lxdeautostart" /home/pi/.config/lxsession/LXDE-pi/autostart; then
+			echo "already up to date"
+		else
+			echo "not found or outdated"
+			cp "$OPENWBBASEDIR/web/files/lxdeautostart" /home/pi/.config/lxsession/LXDE-pi/autostart
 		fi
 		echo "deleting browser cache"
 		rm -rf /home/pi/.cache/chromium
+	else
+		echo "not configured"
 	fi
 
 	# restart smarthomehandler
 	echo "smarthome handler..."
-	pkill -f '^python.*/smarthomehandler.py'
-	pkill -f '^python.*/smarthomemq.py'
+	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
+	sudo pkill -f '^python.*/smarthomehandler.py'
+	sudo pkill -f '^python.*/smarthomemq.py'
 	smartmq=$(<"$OPENWBBASEDIR/ramdisk/smartmq")
 	if (( smartmq == 0 )); then
 		echo "starting legacy smarthome handler"
-		python3 "$OPENWBBASEDIR/runs/smarthomehandler.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
+		nohup python3 "$OPENWBBASEDIR/runs/smarthomehandler.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
 	else
 		echo "starting smarthomemq handler"
-		python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$RAMDISKDIR/smarthome.log" 2>&1 &
+		nohup python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
 	fi
 
 	# restart mqttsub handler
 	echo "mqtt handler..."
-	pkill -f '^python.*/mqttsub.py'
-	python3 "$OPENWBBASEDIR/runs/mqttsub.py" &
+	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
+	sudo pkill -f '^python.*/mqttsub.py'
+	nohup python3 "$OPENWBBASEDIR/runs/mqttsub.py" >>"$LOGFILE" 2>&1 &
 
 	# restart legacy run server
 	echo "legacy run server..."
@@ -344,11 +353,12 @@ at_reboot() {
 	chmod 777 "$OPENWBBASEDIR/ramdisk/mqttlastregelungaktiv"
 
 	# check for slave config and restart handler
-	pkill -f '^python.*/isss.py'
+	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
+	sudo pkill -f '^python.*/isss.py'
 	if (( isss == 1 )); then
 		echo "isss..."
 		echo "$lastmanagement" > "$OPENWBBASEDIR/ramdisk/issslp2act"
-		python3 "$OPENWBBASEDIR/runs/isss.py" &
+		nohup python3 "$OPENWBBASEDIR/runs/isss.py" >>"$OPENWBBASEDIR/ramdisk/isss.log" 2>&1 &
 		# second IP already set up !
 		ethstate=$(</sys/class/net/eth0/carrier)
 		if (( ethstate == 1 )); then
@@ -359,31 +369,19 @@ at_reboot() {
 	fi
 
 	# check for socket system and start handler
-	pkill -f '^python.*/buchse.py'
+	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
+	sudo pkill -f '^python.*/buchse.py'
 	if [[ "$evsecon" == "buchse" ]]  && [[ "$isss" == "0" ]]; then
 		echo "socket..."
 		# ppbuchse is used in issss.py to detect "openWB Buchse"
 		if [ ! -f /home/pi/ppbuchse ]; then
 			echo "32" > /home/pi/ppbuchse
 		fi
-		python3 "$OPENWBBASEDIR/runs/buchse.py" &
-	fi
-
-	# update display configuration
-	echo "display update..."
-	if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" /home/pi/.config/lxsession/LXDE-pi/autostart
-	then
-		sed -i "s,@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php,@chromium-browser --incognito --disable-pinch --overscroll-history-navigation=0 --kiosk http://localhost/openWB/web/display.php,g" /home/pi/.config/lxsession/LXDE-pi/autostart
+		nohup python3 "$OPENWBBASEDIR/runs/buchse.py" >>"$LOGFILE" 2>&1 &
 	fi
 
 	# get local ip
 	ip route get 1 | awk '{print $7;exit}' > "$OPENWBBASEDIR/ramdisk/ipaddress"
-
-	# update current published versions
-	echo "load versions..."
-	curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > "$OPENWBBASEDIR/ramdisk/vnightly"
-	curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > "$OPENWBBASEDIR/ramdisk/vbeta"
-	curl --connect-timeout 10 -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > "$OPENWBBASEDIR/ramdisk/vstable"
 
 	# update our local version
 	sudo git -C "$OPENWBBASEDIR" show --pretty='format:%ci [%h]' | head -n1 > "$OPENWBBASEDIR/web/lastcommit"
@@ -429,7 +427,7 @@ at_reboot() {
 		echo "update electricity pricelist..."
 		echo "" > "$OPENWBBASEDIR/ramdisk/etprovidergraphlist"
 		mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
-		"$OPENWBBASEDIR/modules/$etprovider/main.sh" > /var/log/openWB.log 2>&1 &
+		nohup "$OPENWBBASEDIR/modules/$etprovider/main.sh" >>"$LOGFILE" 2>&1 &
 	else
 		echo "not activated, skipping"
 		mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""

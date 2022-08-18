@@ -2,26 +2,20 @@
 
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
+from modules.common.component_type import ComponentDescriptor
+from modules.sma_shm.config import SmaHomeManagerInverterSetup
 from modules.sma_shm.utils import SpeedwireComponent
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "SMA Home Manager Wechselrichter",
-        "id": 0,
-        "type": "inverter",
-        "configuration": {
-            "serials": None
-        }
-    }
 
 
 def parse_datagram(sma_data: dict):
     return InverterState(
         power=-int(sma_data['psupply']),
-        counter=sma_data['psupplycounter'] * 1000
+        exported=sma_data['psupplycounter'] * 1000
     )
 
 
-def create_component(component_config: dict):
+def create_component(component_config: SmaHomeManagerInverterSetup):
     return SpeedwireComponent(get_inverter_value_store, parse_datagram, component_config)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=SmaHomeManagerInverterSetup)

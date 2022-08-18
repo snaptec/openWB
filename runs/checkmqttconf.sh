@@ -33,7 +33,7 @@ function TriggerMosquittoConfigRead {
 	fi
 
 	# $TEST $sudo service mosquitto restart
-	# sometimes the ports where still blocked on restart causing mosquitto to fail!
+	# sometimes the ports were still blocked on restart causing mosquitto to fail!
 	# so we explicitly stop and start with a short delay
 	$TEST $sudo service mosquitto stop
 	sleep 3

@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from dataclass_utils import dataclass_from_dict
 from modules.common import store
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.evnotify import api
@@ -15,7 +16,7 @@ def create_evnotify_configuration_dict() -> dict:
 class TestEVNotifyConfiguration:
     def test_from_dict_initializes_correctly(self):
         # execution
-        actual = EVNotifyConfiguration.from_dict({"akey": "someKey", "token": "someToken", "id": 42})
+        actual = dataclass_from_dict(EVNotifyConfiguration, {"akey": "someKey", "token": "someToken", "id": 42})
 
         # evaluation
         assert actual.id == 42
@@ -29,8 +30,8 @@ class TestEVNotifyConfiguration:
         del dict[property]
 
         # execution & evaluation
-        with pytest.raises(Exception, match="^Illegal configuration"):
-            EVNotifyConfiguration.from_dict(dict)
+        with pytest.raises(Exception, match="^Cannot determine value for parameter " + property):
+            dataclass_from_dict(EVNotifyConfiguration, dict)
 
 
 class TestEVNotify:

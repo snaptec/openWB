@@ -329,6 +329,12 @@ updateConfig(){
 	if ! grep -Fq "i3vin=" $ConfigFile; then
 		echo "i3vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "i3_soccalclp1=" $ConfigFile; then
+		echo "i3_soccalclp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "i3_soccalclp2=" $ConfigFile; then
+		echo "i3_soccalclp2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "zoeusername=" $ConfigFile; then
 		echo "zoeusername=username" >> $ConfigFile
 	fi
@@ -775,6 +781,9 @@ updateConfig(){
 	if ! grep -Fq "wr2_piko2_url=" $ConfigFile; then
 		echo "wr2_piko2_url='https://url'" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2_kostal_steca_variant=" $ConfigFile; then
+		echo "wr2_kostal_steca_variant=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "carnetuser=" $ConfigFile; then
 		echo "carnetuser='user'" >> $ConfigFile
 	fi
@@ -846,6 +855,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sbs25ip=" $ConfigFile; then
 		echo "sbs25ip=192.168.10.12" >> $ConfigFile
+	fi
+	if ! grep -Fq "sbs25se=" $ConfigFile; then
+		echo "sbs25se=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "tri9000ip=" $ConfigFile; then
 		echo "tri9000ip=192.168.10.12" >> $ConfigFile
@@ -1274,6 +1286,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wrsmawebbox=" $ConfigFile; then
 		echo "wrsmawebbox=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "wrsmahybrid=" $ConfigFile; then
+		echo "wrsmahybrid=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "bootmodus=" $ConfigFile; then
 		echo "bootmodus=3" >> $ConfigFile
@@ -2005,36 +2020,6 @@ updateConfig(){
 	if ! grep -Fq "displaylp8max=" $ConfigFile; then
 		echo "displaylp8max=22000" >> $ConfigFile
 	fi
-	if ! grep -Fq "mypeugeot_userlp1=" $ConfigFile; then
-		{
-			echo "mypeugeot_userlp1=User"
-			echo "mypeugeot_passlp1=''"
-			echo "mypeugeot_clientidlp1=ID"
-			echo "mypeugeot_clientsecretlp1=Secret"
-			echo "mypeugeot_userlp2=User"
-			echo "mypeugeot_passlp2=''"
-			echo "mypeugeot_clientidlp2=ID"
-			echo "mypeugeot_clientsecretlp2=Secret"
-		} >> $ConfigFile
-	else
-		sed -i "/mypeugeot_passlp1='/b; s/^mypeugeot_passlp1=\(.*\)/mypeugeot_passlp1=\'\1\'/g" $ConfigFile
-		sed -i "/mypeugeot_passlp2='/b; s/^mypeugeot_passlp2=\(.*\)/mypeugeot_passlp2=\'\1\'/g" $ConfigFile
-	fi
-	if ! grep -Fq "myopel_userlp1=" $ConfigFile; then
-		{
-			echo "myopel_userlp1=User"
-			echo "myopel_passlp1=''"
-			echo "myopel_clientidlp1=ID"
-			echo "myopel_clientsecretlp1=Secret"
-			echo "myopel_userlp2=User"
-			echo "myopel_passlp2=''"
-			echo "myopel_clientidlp2=ID"
-			echo "myopel_clientsecretlp2=Secret"
-		} >> $ConfigFile
-	else
-		sed -i "/myopel_passlp1='/b; s/^myopel_passlp1=\(.*\)/myopel_passlp1=\'\1\'/g" $ConfigFile
-		sed -i "/myopel_passlp2='/b; s/^myopel_passlp2=\(.*\)/myopel_passlp2=\'\1\'/g" $ConfigFile
-	fi
 	if ! grep -Fq "psa_userlp1=" $ConfigFile; then
 		{
 			echo "psa_userlp1=User"
@@ -2103,18 +2088,6 @@ updateConfig(){
 	fi
 	if ! grep -Fq "solaxip=" $ConfigFile; then
 		echo "solaxip=192.168.1.1" >> $ConfigFile
-	fi
-	if ! grep -Fq "mypeugeot_soccalclp1=" $ConfigFile; then
-		echo "mypeugeot_soccalclp1=0" >> $ConfigFile
-	fi
-	if ! grep -Fq "mypeugeot_soccalclp2=" $ConfigFile; then
-		echo "mypeugeot_soccalclp2=0" >> $ConfigFile
-	fi
-	if ! grep -Fq "myopel_soccalclp1=" $ConfigFile; then
-		echo "myopel_soccalclp1=0" >> $ConfigFile;
-	fi
-	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
-		echo "myopel_soccalclp2=0" >> $ConfigFile;
 	fi
 	if ! grep -Fq "psa_soccalclp1=" $ConfigFile; then
 		echo "psa_soccalclp1=0" >> $ConfigFile;
@@ -2302,6 +2275,14 @@ updateConfig(){
 			echo "wrsmaversion=0"
 			echo "wr2smaversion=0"
 		} >> $ConfigFile
+	fi
+
+	# replace obsolete soc_id configuration by soc_vwid
+	if grep -Fq "socmodul=soc_id" $ConfigFile; then
+		sed -i "s/^socmodul=soc_id/socmodul=soc_vwid/g" $ConfigFile
+	fi
+	if grep -Fq "socmodul1=soc_idlp2" $ConfigFile; then
+		sed -i "s/^socmodul1=soc_idlp2/socmodul=soc_vwidlp2/g" $ConfigFile
 	fi
 
 	echo "Config file Update done."
