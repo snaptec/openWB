@@ -92,7 +92,7 @@
 				if ( $ext != "gz" ) {
 			?>
 					<div class="alert alert-danger">
-						Die Datei ist keine Zip-Datei, die Wiederherstellung wurde abgebrochen.
+						Die Datei ist keine Tar-GZip-Datei, die Wiederherstellung wurde abgebrochen.
 					</div>
 			<?php
 				} elseif ( $_FILES["fileToUpload"]["size"] > file_upload_max_size() ) {
@@ -139,8 +139,7 @@
 		</script>
 		<?php
 			if($uploadOk === true) {
-				sleep(5);
-				exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/restore.sh >> ".$_SERVER['DOCUMENT_ROOT']."/openWB/web/tools/upload/restore.log");
+				exec("sudo -u pi " . $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/restore.sh");
 				?>
 					<script>
 						setTimeout(function() { window.location = "index.php"; }, 15000);

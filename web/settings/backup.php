@@ -1,22 +1,12 @@
 <?php
 	// if parameter extendedFilename is passed with value 1 the filename changes
 	// from backup.tar.gz to openWB_backup_YYYY-MM-DD_HH-MM-SS.tar.gz
-	$useExtendedFilename = false;
+	$useExtendedFilename = 0;
 	if( isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1") {
-		$useExtendedFilename = true;
+		$useExtendedFilename = 1;
 	}
-	$backupPath = "/var/www/html/openWB/web/backup/";
-	$timestamp = date("Y-m-d") . "_" . date("H-i-s");
-	if ( $useExtendedFilename ) {
-		$filename = "openWB_backup_" . $timestamp . ".tar.gz" ;
-	} else {
-		$filename = "backup.tar.gz" ;
-	}
-
-	// first empty backup-directory
-	array_map( "unlink", array_filter((array) glob($backupPath . "*") ) );
-	// then create new backup-file
-	exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf ". $backupPath . $filename . " /var/www/html/");
+	// execute backup script
+	$filename = exec("sudo -u pi " . $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/backup.sh " . $useExtendedFilename, $output, $result);
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -62,16 +52,21 @@
 		<div role="main" class="container" style="margin-top:20px">
 
 			<h1>Backup erstellen</h1>
-			<div class="alert alert-success">
-				Backup-Datei <?php echo $filename; ?> erfolgreich erstellt.
-			</div>
-
-			<div class="row">
-				<div class="col text-center">
-					<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>" target="_blank"><i class="fas fa-download"></i> Backup herunterladen</a>
+			<?php if ($filename !== false && $result == 0) { ?>
+				<div class="alert alert-success">
+					Backup-Datei <?php echo $filename; ?> erfolgreich erstellt.
 				</div>
-			</div>
 
+				<div class="row">
+					<div class="col text-center">
+						<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>" target="_blank"><i class="fas fa-download"></i> Backup herunterladen</a>
+					</div>
+				</div>
+			<?php } else { ?>
+				<div class="alert alert-danger">
+					Es gab einen Fehler beim Erstellen der Backup-Datei. Bitte die Logmeldungen prüfen!
+				</div>
+			<?php } ?>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
