@@ -10,7 +10,7 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.sungrow import bat
 from modules.sungrow import counter
 from modules.sungrow import inverter
-from modules.sungrow.config import (Sungrow, SungrowBatConfiguration, SungrowBatSetup, SungrowCounterConfiguration, SungrowCounterSetup, SungrowInverterConfiguration,
+from modules.sungrow.config import (Sungrow, SungrowBatSetup, SungrowCounterConfiguration, SungrowCounterSetup,
                                     SungrowInverterSetup)
 
 log = logging.getLogger(__name__)
@@ -30,7 +30,8 @@ class Device(AbstractDevice):
         self.components = {}  # type: Dict[str, sungrow_component_classes]
         try:
             self.device_config = dataclass_from_dict(Sungrow, device_config)
-            self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address, self.device_config.configuration.port)
+            self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
+                                                  self.device_config.configuration.port)
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
 
