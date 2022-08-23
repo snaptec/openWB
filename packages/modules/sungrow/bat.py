@@ -15,9 +15,11 @@ from modules.sungrow.config import SungrowBatSetup
 class SungrowBat:
     def __init__(self,
                  device_id: int,
+                 device_modbus_id: int,
                  component_config: Union[Dict, SungrowBatSetup],
                  tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
+        self.__device_modbus_id = device_modbus_id
         self.component_config = dataclass_from_dict(SungrowBatSetup, component_config)
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
@@ -26,14 +28,13 @@ class SungrowBat:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
-        unit = self.component_config.configuration.id
-        with self.__tcp_client:
-            soc = int(self.__tcp_client.read_input_registers(13022, ModbusDataType.INT_16, unit=unit) / 10)
-            resp = self.__tcp_client.delegate.read_input_registers(13000, 1, unit=unit)
-            binary = bin(resp.registers[0])[2:].zfill(8)
-            power = self.__tcp_client.read_input_registers(13021, ModbusDataType.INT_16, unit=unit)
-            if binary[5] == "1":
-                power = power * -1
+        unit = self.__device_modbus_id
+        soc = int(self.__tcp_client.read_input_registers(13022, ModbusDataType.INT_16, unit=unit) / 10)
+        resp = self.__tcp_client.delegate.read_input_registers(13000, 1, unit=unit)
+        binary = bin(resp.registers[0])[2:].zfill(8)
+        power = self.__tcp_client.read_input_registers(13021, ModbusDataType.INT_16, unit=unit)
+        if binary[5] == "1":
+            power = power * -1
 
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config.id)+"/"
