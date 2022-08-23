@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Fix undef varis
+nachtladenstate=$(<ramdisk/nachtladenstate)       # "Nachtladen" LP1
+nachtladen2state=$(<ramdisk/nachtladen2state)     # "Morgensladen" LP1
+nachtladenstates1=$(<ramdisk/nachtladenstates1)   # "Nachtladen" LP2
+nachtladen2states1=$(<ramdisk/nachtladen2states1) # "Morgensladen" LP2
+
+
 u1p3pswitch() {
 
 	if ((u1p3paktiv == 1)); then
