@@ -29,11 +29,10 @@ class SungrowInverter:
 
     def update(self) -> None:
         unit = self.__device_modbus_id
-        with self.__tcp_client:
-            power = self.__tcp_client.read_input_registers(5016,
-                                                           ModbusDataType.UINT_32,
-                                                           wordorder=Endian.Little,
-                                                           unit=unit) * -1
+        power = self.__tcp_client.read_input_registers(5016,
+                                                        ModbusDataType.UINT_32,
+                                                        wordorder=Endian.Little,
+                                                        unit=unit) * -1
 
         topic_str = "openWB/set/system/device/" + \
             str(self.__device_id)+"/component/" + \
