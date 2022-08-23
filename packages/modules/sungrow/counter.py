@@ -15,9 +15,11 @@ from modules.sungrow.config import SungrowCounterSetup
 class SungrowCounter:
     def __init__(self,
                  device_id: int,
+                 device_modbus_id: int,
                  component_config: Union[Dict, SungrowCounterSetup],
                  tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
+        self.__device_modbus_id = device_modbus_id
         self.component_config = dataclass_from_dict(SungrowCounterSetup, component_config)
         self.__tcp_client = tcp_client
         self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
@@ -26,7 +28,7 @@ class SungrowCounter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self):
-        unit = self.component_config.configuration.id
+        unit = self.__device_modbus_id
         with self.__tcp_client:
             if self.component_config.configuration.version == 1:
                 power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
