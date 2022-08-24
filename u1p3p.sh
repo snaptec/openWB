@@ -4,8 +4,10 @@ u1p3pswitch() {
 
 	if ((u1p3paktiv == 1)); then
 		u1p3pstat=$(<ramdisk/u1p3pstat)
-		nachtladenstate=$(<ramdisk/nachtladenstate)
-		nachtladen2state=$(<ramdisk/nachtladen2state)
+		nachtladenstate=$(<ramdisk/nachtladenstate)       # "Nachtladen" LP1
+		nachtladen2state=$(<ramdisk/nachtladen2state)     # "Morgensladen" LP1
+		nachtladenstates1=$(<ramdisk/nachtladenstates1)   # "Nachtladen" LP2
+		nachtladen2states1=$(<ramdisk/nachtladen2states1) # "Morgensladen" LP2
 		if [ -z "$u1p3schaltparam" ]; then
 			u1p3schaltparam=8
 		fi
