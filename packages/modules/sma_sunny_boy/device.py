@@ -174,6 +174,7 @@ def read_inverter(ip1: str,
                     total_power -= bat_state.power
             else:
                 total_power = 0
+            print("WR 1 nach Korrektur: {}".format(state))
         for inv in itertools.chain(inverters_additional):
             state = inv.read()[0]
             total_power += state.power
