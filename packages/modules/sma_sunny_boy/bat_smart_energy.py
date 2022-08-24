@@ -12,6 +12,8 @@ from modules.sma_sunny_boy.config import SmaSunnyBoySmartEnergyBatSetup
 
 
 class SunnyBoySmartEnergyBat:
+    SMA_INT32_NAN = 0xFFFFFFFF  # SMA uses this value to represent NaN
+
     def __init__(self,
                  device_id: int,
                  component_config: Union[Dict, SmaSunnyBoySmartEnergyBatSetup],
@@ -33,7 +35,12 @@ class SunnyBoySmartEnergyBat:
         current = self.__tcp_client.read_holding_registers(30843, ModbusDataType.INT_32, unit=unit)/-1000
         voltage = self.__tcp_client.read_holding_registers(30851, ModbusDataType.INT_32, unit=unit)/100
 
-        power = current*voltage
+        if soc == self.SMA_INT32_NAN:
+            # If the storage is empty and nothing is produced on the DC side, the inverter does not supply any values.
+            soc = 0
+            power = 0
+        else:
+            power = current*voltage
         topic_str = "openWB/set/system/device/" + str(
             self.__device_id)+"/component/"+str(self.component_config.id)+"/"
         imported, exported = self.__sim_count.sim_count(
