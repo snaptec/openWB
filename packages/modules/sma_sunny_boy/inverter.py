@@ -37,27 +37,30 @@ class SmaSunnyBoyInverter:
             power_total = self.__tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
             # Gesamtertrag (Wh) [E-Total]
             energy = self.__tcp_client.read_holding_registers(30529, ModbusDataType.UINT_32, unit=3)
+            # Bei Hybrid Wechselrichtern treten Abweichungen auf, die in der Nacht
+            # immer wieder Generatorleistung anzeigen (0-50 Watt). Um dies zu verhindern, schauen wir uns
+            # zunächst an, ob vom DC Teil überhaupt Leistung kommt. Ist dies nicht der Fall, können wir power
+            # gleich auf 0 setzen.
+            # Leistung DC an Eingang 1 und 2
+            produces_dc_power = (self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3) != 0
+                                 or self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3) != 0)
         elif self.component_config.configuration.version == SmaInverterVersion.core2:
             # AC Wirkleistung über alle Phasen (W) [Pac]
             power_total = self.__tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
             # Gesamtertrag (Wh) [E-Total] SF=2!
             energy = self.__tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
+            produces_dc_power = True
         else:
             raise FaultState.error("Unbekannte Version "+str(self.component_config.configuration.version))
         if power_total == self.SMA_INT32_NAN:
             power_total = 0
-        # Bei Hybrid Wechselrichtern treten Abweichungen auf, die in der Nacht
-        # immer wieder Generatorleistung anzeigen (0-50 Watt). Um dies zu verhindern, schauen wir uns
-        # zunächst an, ob vom DC Teil überhaupt Leistung kommt. Ist dies nicht der Fall, können wir power
-        # gleich auf 0 setzen.
-        # Leistung DC an Eingang 1 und 2
-        produces_dc_power = (self.__tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3) != 0
-                             or self.__tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3) != 0)
 
-        return InverterState(
+        inverter_state = InverterState(
             power=-max(power_total, 0),
             exported=energy
-        ), produces_dc_power
+        )
+        log.debug("WR {}: {}".format(inverter_state, self.__tcp_client.address))
+        return inverter_state, produces_dc_power
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=SmaSunnyBoyInverterSetup)
