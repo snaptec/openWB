@@ -10,16 +10,16 @@ declare -F openwbDebugLog &>/dev/null || {
 
 pushButtonsStart() {
 	if pgrep -f '^python.*/pushButtonsDaemon.py' >/dev/null; then
-		openwbDebugLog "MAIN" 0 "push buttons handler already running"
+		openwbDebugLog "MAIN" 2 "push buttons handler already running"
 	else
-		openwbDebugLog "MAIN" 0 "push buttons handler not running! starting process"
+		openwbDebugLog "MAIN" 1 "push buttons handler not running! starting process"
 		python3 "$OPENWBBASEDIR/runs/pushButtons/pushButtonsDaemon.py" >>"$RAMDISKDIR/openWB.log" 2>&1 &
 	fi
 }
 
 pushButtonsStop() {
 	if pgrep -f '^python.*/pushButtonsDaemon.py' >/dev/null; then
-		openwbDebugLog "MAIN" 0 "push buttons handler running but not configured. killing handler"
+		openwbDebugLog "MAIN" 1 "push buttons handler running but not configured. killing handler"
 		sudo pkill -f '^python.*/pushButtonsDaemon.py'
 	fi
 }
@@ -29,14 +29,14 @@ pushButtonsSetup() {
 	local forceRestart=$2
 
 	if ((forceRestart == 1)); then
-		openwbDebugLog "MAIN" 0 "push buttons handler restart forced! killing handler"
+		openwbDebugLog "MAIN" 2 "push buttons handler restart forced! killing handler"
 		pushButtonsStop
 	fi
 	if ((enabled == 1)); then
-		openwbDebugLog "MAIN" 0 "push buttons enabled"
+		openwbDebugLog "MAIN" 1 "push buttons enabled"
 		pushButtonsStart
 	else
-		openwbDebugLog "MAIN" 0 "push buttons disabled"
+		openwbDebugLog "MAIN" 1 "push buttons disabled"
 		pushButtonsStop
 	fi
 }

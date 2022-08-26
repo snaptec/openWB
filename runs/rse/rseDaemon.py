@@ -9,7 +9,7 @@ rse_inputs = [
     {"gpio": 9, "file": "rse2status"}
 ]
 
-loglevel = 0
+loglevel = 1
 
 
 # handling of all logging statements
