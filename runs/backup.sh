@@ -11,10 +11,8 @@ backup() {
 	BACKUPFILE="$BACKUPDIR/$FILENAME"
 
 	# tell mosquitto to store all retained topics in db now
-	for pid in $(pidof "mosquitto"); do
-		openwbDebugLog MAIN 1 "sending 'SIGUSR1' to mosquitto on pid '$pid'"
-		sudo kill -s SIGUSR1 "$pid"
-	done
+	openwbDebugLog MAIN 1 "sending 'SIGUSR1' to mosquitto"
+	sudo pkill -SIGUSR1 mosquitto
 	# give mosquitto some time to finish
 	sleep 0.2
 
