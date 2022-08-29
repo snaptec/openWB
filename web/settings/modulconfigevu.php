@@ -251,6 +251,7 @@
 									<input class="form-control" type="text" name="powerfoxid" id="powerfoxid" value="<?php echo $powerfoxidold ?>">
 									<span class="form-text small">
 										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.
+										Die Device ID ist exakt so einzutragen, wie in der Antwort des Servers. Das bedeutet insbesondere auch die Groß-/KLeinschreibung ist zu beachten!
 									</span>
 								</div>
 							</div>
