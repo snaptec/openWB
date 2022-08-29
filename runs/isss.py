@@ -239,14 +239,15 @@ def read_meter():
             lp1llg = 0
 
         try:
+            lp1countphasesinuse = 0
             if lp1lla1 > 3:
-                lp1countphasesinuse = 1
+                lp1countphasesinuse += 1
             if lp1lla2 > 3:
-                lp1countphasesinuse = 2
+                lp1countphasesinuse += 1
             if lp1lla3 > 3:
-                lp1countphasesinuse = 3
+                lp1countphasesinuse += 1
         except Exception:
-            lp1countphasesinuse = 1
+            lp1countphasesinuse = 0
 
         if lp2installed:
             try:
@@ -293,14 +294,15 @@ def read_meter():
                 lp2llkwh = float("%.3f" % lp2llkwh)
                 write_to_ramdisk("llkwhs1", str(lp2llkwh))
                 try:
+                    lp2countphasesinuse = 0
                     if lp2lla1 > 3:
-                        lp2countphasesinuse = 1
+                        lp2countphasesinuse += 1
                     if lp2lla2 > 3:
-                        lp2countphasesinuse = 2
+                        lp2countphasesinuse += 1
                     if lp2lla3 > 3:
-                        lp2countphasesinuse = 3
+                        lp2countphasesinuse += 1
                 except Exception:
-                    lp2countphasesinuse = 1
+                    lp2countphasesinuse = 0
                 try:
                     time.sleep(0.1)
                     rq = client.read_holding_registers(1000, 1, unit=2)
@@ -924,8 +926,8 @@ u1p3plp2stat = None
 u1p3ptmpstat = 3
 u1p3plp2tmpstat = 3
 rfidtag = 0
-lp1countphasesinuse = 1
-lp2countphasesinuse = 2
+lp1countphasesinuse = 0
+lp2countphasesinuse = 0
 heartbeat = 0
 metercounter = 0
 actcooldown = 0
