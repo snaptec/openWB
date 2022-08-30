@@ -1851,6 +1851,9 @@ updateConfig(){
 			echo "pv2id2=0"
 		} >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2port=" $ConfigFile; then
+		echo "pv2port=502" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		{
 			echo "pv2ip=none"

@@ -85,7 +85,7 @@ def read_legacy(ip_address: str, port: int, modbus_id: int, component_config: di
     dev.update()
 
 
-def read_legacy_bat(ip_address: str, port, modbus_id: int, num: Optional[int] = None):
+def read_legacy_bat(ip_address: str, port: int, modbus_id: int, num: Optional[int] = None):
     read_legacy(ip_address, port, modbus_id, bat.component_descriptor.configuration_factory(id=None))
 
 
