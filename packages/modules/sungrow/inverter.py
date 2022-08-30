@@ -34,9 +34,7 @@ class SungrowInverter:
                                                        wordorder=Endian.Little,
                                                        unit=unit) * -1
 
-        topic_str = "openWB/set/system/device/" + \
-            str(self.__device_id)+"/component/" + \
-            str(self.component_config.id)+"/"
+        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
         _, exported = self.__sim_count.sim_count(power,
                                                  topic=topic_str,
                                                  data=self.simulation,

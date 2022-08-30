@@ -162,7 +162,7 @@
 						</div>
 						<div id="pvsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">

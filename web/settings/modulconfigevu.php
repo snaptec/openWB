@@ -138,6 +138,9 @@
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
+							</div>
 							<div class="form-row mb-1">
 								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
 								<div class="col">
