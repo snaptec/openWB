@@ -18,7 +18,7 @@ backup() {
 
 	# create backup file
 	openwbDebugLog MAIN 1 "creating new backup file: $BACKUPFILE"
-	sudo tar --exclude="$OPENWBBASEDIR/web/backup" --exclude="$OPENWBBASEDIR/.git" -czf "$BACKUPFILE" "$OPENWBBASEDIR/" "/var/lib/mosquitto/"
+	sudo tar --exclude="$BACKUPDIR" --exclude="$OPENWBBASEDIR/.git" -czf "$BACKUPFILE" "$OPENWBBASEDIR/" "/var/lib/mosquitto/"
 	openwbDebugLog MAIN 1 "setting permissions of new backup file"
 	sudo chown pi:www-data "$BACKUPFILE"
 	sudo chmod 664 "$BACKUPFILE"
