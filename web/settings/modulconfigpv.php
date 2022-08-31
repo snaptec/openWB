@@ -85,6 +85,7 @@
 										<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
 										<option <?php if($pvwattmodulold == "wr_rct2") echo "selected" ?> value="wr_rct2">RCT V.2</option>
 										<option <?php if($pvwattmodulold == "wr_siemens") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
+										<option <?php if($pvwattmodulold == "wr_solarmax") echo "selected" ?> value="wr_solarmax">Solarmax</option>
 										<option <?php if($pvwattmodulold == "wr_smashm") echo "selected" ?> value="wr_smashm">SMA Energy Meter</option>
 										<option <?php if($pvwattmodulold == "wr_tripower9000") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 										<option <?php if($pvwattmodulold == "wr_smartme") echo "selected" ?> value="wr_smartme">SmartMe</option>
@@ -161,7 +162,7 @@
 						</div>
 						<div id="pvsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
@@ -569,7 +570,23 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Diese Option aktivieren wenn eine SMA Webbox auszulesen ist.
+										Diese Option aktivieren, wenn eine SMA Webbox auszulesen ist.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Handelt es sich um ein Hybrid-System?</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($wrsmahybridold == 0) echo " active" ?>">
+											<input type="radio" name="wrsmahybrid" id="wrsmahybridNo" value="0"<?php if($wrsmahybridold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($wrsmahybridold == 1) echo " active" ?>">
+											<input type="radio" name="wrsmahybrid" id="wrsmahybridYes" value="1"<?php if($wrsmahybridold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren, wenn ein Tripower Smart Energy, Sunny Boy Smart Energy oder ein anderes Hybrid-System verbaut ist.
 									</span>
 								</div>
 							</div>
@@ -605,7 +622,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
 										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
@@ -949,6 +966,9 @@
 									showSection('#pvip');
 									showSection('#pvsiemens');
 								}
+								if($('#pvwattmodul').val() == 'wr_solarmax') {
+									showSection('#pvip');
+								}
 								if($('#pvwattmodul').val() == 'wr_victron') {
 									showSection('#pvip');
 								}
@@ -1035,7 +1055,7 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_solax') {
 									showSection('#pvwrsolax');
-									showSection('#pvid');									
+									showSection('#pvid');
 								}
 								if($('#pvwattmodul').val() == 'wr_smartme') {
 									showSection('#pvsmartme');
@@ -1106,6 +1126,7 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($pv2wattmodulold == "wr2_kostalpiko") echo "selected" ?> value="wr2_kostalpiko">Kostal Piko</option>
+										<option <?php if($pv2wattmodulold == "wr2_solarmax") echo "selected" ?> value="wr2_solarmax">Solarmax</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalpikovar2") echo "selected" ?> value="wr2_kostalpikovar2">Kostal Piko alt</option>
 										<option <?php if($pv2wattmodulold == "wr2_kostalsteca") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 										<option <?php if($pv2wattmodulold == "wr2_smamodbus") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
@@ -1149,6 +1170,28 @@
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2portdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2port" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="pv2port" id="pv2port" value="<?php echo (empty($pv2portold)?'502':$pv2portold) ?>">
+									<span class="form-text small">
+										TCP Port<br>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2ipportdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
+									<span class="form-text small">
+										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
 								</div>
 							</div>
@@ -1307,10 +1350,23 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2kostalstecavariant" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2_kostal_steca_variant" class="col-md-4 col-form-label">Variante</label>
+								<div class="col">
+									<select name="wr2_kostal_steca_variant" id="wr2_kostal_steca_variant" class="form-control">
+										<option <?php if($wr2_kostal_steca_variantold == 0) echo "selected" ?> value="0">Kostal Piko MP oder Steca Grid Coolcept</option>
+										<option <?php if($wr2_kostal_steca_variantold == 1) echo "selected" ?> value="1">Kostal Piko MP (non-plus)</option>
+									</select>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
+								hideSection('#pv2portdiv');
+								hideSection('#pv2ipportdiv');
 								hideSection('#pv2iddiv');
 								hideSection('#pv2ip2div');
 								hideSection('#pv2id2div');
@@ -1321,6 +1377,7 @@
 								hideSection('#pv2piko2');
 								hideSection('#pv2solarlogdiv');
 								hideSection('#pv2smamodbus');
+								hideSection('#pv2kostalstecavariant');
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpikovar2') {
 									showSection('#pv2piko2');
@@ -1347,8 +1404,13 @@
 								if($('#pv2wattmodul').val() == 'wr2_solax') {
 									showSection('#pv2ipdiv');
 								}
+								if($('#pv2wattmodul').val() == 'wr2_solarmax') {
+									showSection('#pv2ipdiv');
+								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2portdiv');
+									showSection('#pv2iddiv');
 								}
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
@@ -1356,13 +1418,14 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_kostalsteca') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2kostalstecavariant');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_victron') {
 									showSection('#pv2ipdiv');
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solaredge') {
-									showSection('#pv2ipdiv');
+									showSection('#pv2ipportdiv');
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {

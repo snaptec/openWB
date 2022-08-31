@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-from typing import List, Tuple
-
-from modules.common import modbus
 from modules.common.fault_state import FaultState
+from modules.common import modbus
+from typing import List, Tuple
 from modules.common.modbus import ModbusDataType
 
 
 class Lovato:
-    def __init__(self, modbus_id: int, client: modbus.ModbusClient) -> None:
+    def __init__(self, modbus_id: int, client: modbus.ModbusTcpClient_) -> None:
         self.client = client
         self.id = modbus_id
 

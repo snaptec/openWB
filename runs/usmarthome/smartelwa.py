@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from usmarthome.smartbase import Sbase
+from usmarthome.global0 import log
 import subprocess
-import json
 
 
 class Selwa(Sbase):
@@ -19,19 +19,15 @@ class Selwa(Sbase):
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
-            self.f1 = open(self._basePath+'/ramdisk/smarthome_device_ret' +
-                           str(self.device_nummer), 'r')
-            self.answerj = json.load(self.f1)
-            self.f1.close()
-            self.answer = json.loads(self.answerj)
+            self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
             self.relais = int(self.answer['on'])
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('elwa ', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('elwa ', self.device_nummer,
+                           str(self._device_ip), str(e1)))
         self.postwatt()
 
     def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
@@ -47,7 +43,7 @@ class Selwa(Sbase):
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") on / off  %s %d %s Fehlermeldung: %s "
-                          % ('elwa ', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") on / off  %s %d %s Fehlermeldung: %s "
+                        % ('elwa ', self.device_nummer,
+                           str(self._device_ip), str(e1)))

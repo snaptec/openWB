@@ -17,5 +17,4 @@ bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_fems.fems" "$femskacopw" "$f
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
-wattbezug=$(<"${RAMDISKDIR}/wattbezug")
-echo "$wattbezug"
+cat "${RAMDISKDIR}/wattbezug"

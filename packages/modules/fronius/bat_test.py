@@ -1,13 +1,14 @@
-import pytest
-
-import requests_mock
 from unittest.mock import Mock
 
+import pytest
+import requests_mock
+
+from dataclass_utils import dataclass_from_dict
+from helpermodules import compatibility
 from modules.common.simcount import SimCountLegacy
 from modules.common.store._api import LoggingValueStore
-from modules.fronius import bat, device
-from modules.fronius.abstract_config import FroniusConfiguration
-from helpermodules import compatibility
+from modules.fronius import bat
+from modules.fronius.config import FroniusBatSetup, FroniusConfiguration
 from test_utils.mock_ramdisk import MockRamdisk
 
 SAMPLE_IP = "1.1.1.1"
@@ -20,11 +21,11 @@ def mock_ramdisk(monkeypatch):
 
 
 def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
-    component_config = bat.get_default_config()
-    device_config = device.get_default_config()["configuration"]
-    device_config["ip_address"] = SAMPLE_IP
-    assert component_config["configuration"]["meter_id"] == 0
-    battery = bat.FroniusBat(0, component_config, FroniusConfiguration.from_dict(device_config))
+    component_config = FroniusBatSetup()
+    device_config = FroniusConfiguration()
+    device_config.ip_address = SAMPLE_IP
+    assert component_config.configuration.meter_id == 0
+    battery = bat.FroniusBat(0, component_config, dataclass_from_dict(FroniusConfiguration, device_config))
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)

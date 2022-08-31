@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 from usmarthome.smartbase import Sbase
+from usmarthome.global0 import log
 import subprocess
-import json
 
 
 class Sidm(Sbase):
     def __init__(self):
         # setting
-        super().__init__()       
-        self._smart_paramadd = {}        
+        super().__init__()
+        self._smart_paramadd = {}
         self._device_idmnav = '2'
         self.device_nummer = 0
         print('__init__ Sidm executed')
@@ -24,9 +24,9 @@ class Sidm(Sbase):
             elif (key == 'device_idmnav'):
                 self._device_idmnav = value
             else:
-                self.logClass(2, "(" + str(self.device_nummer) + ") " +
-                              __class__.__name__ + " überlesen " + key +
-                              " " + value)
+                log.info("(" + str(self.device_nummer) + ") " +
+                         __class__.__name__ + " überlesen " + key +
+                         " " + value)
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)
@@ -36,15 +36,15 @@ class Sidm(Sbase):
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
-            self.answer = self.readret()   
+            self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
             self.relais = int(self.answer['on'])
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") Leistungsmessung %s %d %s Fehlermeldung: %s "
-                          % ('idm ', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('idm ', self.device_nummer,
+                           str(self._device_ip), str(e1)))
         self.postwatt()
 
     def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
@@ -60,7 +60,7 @@ class Sidm(Sbase):
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
         except Exception as e1:
-            self.logClass(2, "(" + str(self.device_nummer) +
-                          ") on / off  %s %d %s Fehlermeldung: %s "
-                          % ('idm ', self.device_nummer,
-                             str(self._device_ip), str(e1)))
+            log.warning("(" + str(self.device_nummer) +
+                        ") on / off  %s %d %s Fehlermeldung: %s "
+                        % ('idm ', self.device_nummer,
+                           str(self._device_ip), str(e1)))

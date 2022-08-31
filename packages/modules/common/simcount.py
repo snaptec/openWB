@@ -33,7 +33,7 @@ def get_topic(prefix: str) -> str:
     try:
         if prefix == "bezug":
             topic = "evu"
-        elif prefix == "pv":
+        elif prefix == "pv" or prefix == "pv2":
             topic = prefix
         elif prefix == "speicher":
             topic = "housebattery"
@@ -111,6 +111,9 @@ class SimCountLegacy:
                 if prefix == "bezug":
                     imported = get_existing_imports_exports('bezugkwh')
                     exported = get_existing_imports_exports('einspeisungkwh')
+                elif prefix == "pv2":
+                    imported = 0
+                    exported = get_existing_imports_exports('pv2kwh')
                 elif prefix == "pv":
                     imported = 0
                     exported = get_existing_imports_exports('pvkwh')
@@ -169,7 +172,7 @@ class Restore():
         try:
             self.value = value
             self.prefix = prefix
-            client = mqtt.Client("openWB-simcount_restore-" + str(self.__getserial()))
+            client = mqtt.Client("openWB-simcount_restore-" + str(self.__get_serial()))
 
             client.on_connect = self.__on_connect
             client.on_message = self.__on_message
@@ -190,6 +193,8 @@ class Restore():
                 log.info("Keine Werte auf dem Broker gefunden.")
                 if prefix == "bezug":
                     file = "bezugkwh" if value == "watt0pos" else "einspeisungkwh"
+                elif prefix == "pv2":
+                    file = "pv2kwh"
                 elif prefix == "pv":
                     file = "pvkwh"
                 else:
@@ -203,7 +208,7 @@ class Restore():
         finally:
             return result
 
-    def __on_connect(self, client, userdata, flags, rc):
+    def __on_connect(self, client, user_data, flags, rc):
         """ connect to broker and subscribe to set topics
         """
         try:
@@ -215,12 +220,12 @@ class Restore():
         except Exception:
             log.exception("Fehler in der Restore-Klasse")
 
-    def __on_message(self, client, userdata, msg):
+    def __on_message(self, client, user_data, msg):
         """ wartet auf eingehende Topics.
         """
         self.temp = msg.payload
 
-    def __getserial(self):
+    def __get_serial(self):
         """ Extract serial from cpuinfo file
         """
         try:

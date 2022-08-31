@@ -398,7 +398,8 @@ def reyeardet(calcyear):
         f1.close()
         os.chmod(file_stringo, 0o777)
         f1 = open(file_stringos, 'w')
-        line = 'Anzahl Spalten,' + str(startspalten) + ',Letzes Datum,' + complastdate + ',Letzte Zeit,' + complastzeit + ', \n'
+        line = 'Anzahl Spalten,' + str(startspalten) + ',Letzes Datum,' + complastdate + \
+            ',Letzte Zeit,' + complastzeit + ', \n'
         f1.write(str(line))
         f1.write(str(headerline))
         f1.close()
@@ -662,23 +663,23 @@ if __name__ == "__main__":
     aktjjjjmm = time.strftime("%Y%m")
     aktjjjj = int(int(aktjjjjmm) / 100)
     header = [
-            'Datum', 'Bezug', 'Einspeisung', 'Pv',
-            'Lp1', 'Lp2', 'Lp3', 'Lpalle',
-            'Verbraucher1imp', 'Verbraucher1exp', 'Verbraucher2imp', 'Verbraucher2exp',
-            'Lp4', 'Lp5', 'Lp6', 'Lp7', 'Lp8', 'Speicherimp', 'Speicherexpt',
-            'Device1', 'Device2', 'Device3', 'Device4', 'Device5',
-            'Device6', 'Device7', 'Device8', 'Device9', 'Device10',
-            'Lpalle Pv', 'Lpalle Speicher', 'Lpalle EVU',
-            'Device1 Pv', 'Device1 Speicher', 'Device1 EVU',
-            'Device2 Pv', 'Device2 Speicher', 'Device2 EVU',
-            'Device3 Pv', 'Device3 Speicher', 'Device3 EVU',
-            'Device4 Pv', 'Device4 Speicher', 'Device4 EVU',
-            'Device5 Pv', 'Device5 Speicher', 'Device5 EVU',
-            'Device6 Pv', 'Device6 Speicher', 'Device6 EVU',
-            'Device7 Pv', 'Device7 Speicher', 'Device7 EVU',
-            'Device8 Pv', 'Device8 Speicher', 'Device8 EVU',
-            'Device9 Pv', 'Device9 Speicher', 'Device9 EVU'
-        ]
+        'Datum', 'Bezug', 'Einspeisung', 'Pv',
+        'Lp1', 'Lp2', 'Lp3', 'Lpalle',
+        'Verbraucher1imp', 'Verbraucher1exp', 'Verbraucher2imp', 'Verbraucher2exp',
+        'Lp4', 'Lp5', 'Lp6', 'Lp7', 'Lp8', 'Speicherimp', 'Speicherexpt',
+        'Device1', 'Device2', 'Device3', 'Device4', 'Device5',
+        'Device6', 'Device7', 'Device8', 'Device9', 'Device10',
+        'Lpalle Pv', 'Lpalle Speicher', 'Lpalle EVU',
+        'Device1 Pv', 'Device1 Speicher', 'Device1 EVU',
+        'Device2 Pv', 'Device2 Speicher', 'Device2 EVU',
+        'Device3 Pv', 'Device3 Speicher', 'Device3 EVU',
+        'Device4 Pv', 'Device4 Speicher', 'Device4 EVU',
+        'Device5 Pv', 'Device5 Speicher', 'Device5 EVU',
+        'Device6 Pv', 'Device6 Speicher', 'Device6 EVU',
+        'Device7 Pv', 'Device7 Speicher', 'Device7 EVU',
+        'Device8 Pv', 'Device8 Speicher', 'Device8 EVU',
+        'Device9 Pv', 'Device9 Speicher', 'Device9 EVU'
+    ]
     # not smaller than 40
     SUMCOLUMNSTART = 60
     startjjjj = 2018

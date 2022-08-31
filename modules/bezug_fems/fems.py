@@ -13,9 +13,8 @@ log = logging.getLogger("FEMS")
 
 def write_ramdisk(val, file):
     try:
-        f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
-        f.write(str(val))
-        f.close()
+        with open('/var/www/html/openWB/ramdisk/'+file, 'w') as f:
+            f.write(str(val))
     except:
         traceback.print_exc()
 
@@ -24,9 +23,8 @@ def get_value(url, file):
     try:
         response = requests.get(url, timeout=2).json()
         val = response["value"]
-        f = open('/var/www/html/openWB/ramdisk/'+file, 'w')
-        f.write(str(val))
-        f.close()
+        with open('/var/www/html/openWB/ramdisk/'+file, 'w') as f:
+            f.write(str(val))
     except:
         traceback.print_exc()
 

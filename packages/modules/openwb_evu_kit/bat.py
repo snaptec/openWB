@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
+from modules.common.component_type import ComponentDescriptor
+from modules.openwb_evu_kit.config import EvuKitBatSetup
 
-def get_default_config() -> dict:
-    return {
-        "name": "Speicher-Zähler an EVU-Kit",
-        "type": "bat",
-        "id": 0,
-        "configuration": {
-            "version": 2
-        }
-    }
+
+component_descriptor = ComponentDescriptor(configuration_factory=EvuKitBatSetup)

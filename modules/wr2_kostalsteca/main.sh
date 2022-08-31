@@ -13,7 +13,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${pv2ip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr2_kostalsteca.kostal_steca" "${pv2ip}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr2_kostalsteca.kostal_steca" "${pv2ip}" "${wr2_kostal_steca_variant}">>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

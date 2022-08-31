@@ -17,17 +17,17 @@ def update(bezug_solarlog_ip: str):
     data = {"801": {"170": None}}
     data = json.dumps(data)
     response = requests.post("http://"+bezug_solarlog_ip+'/getjp', data=data, timeout=3).json()
-    pv_watt = response["801"]["170"]["101"]
-    pv_kwh = response["801"]["170"]["109"]
+    pv_watt = int(float(response["801"]["170"]["101"]))
+    pv_kwh = float(response["801"]["170"]["109"])
 
     if pv_watt > 5:
         pv_watt = pv_watt*-1
 
-
     log.debug('WR Leistung: ' + str(pv_watt))
     log.debug('WR Energie: ' + str(pv_kwh))
 
-    get_inverter_value_store(1).set(InverterState(counter=pv_kwh, power=pv_watt))
+    get_inverter_value_store(1).set(InverterState(exported=pv_kwh, power=pv_watt))
+
 
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)

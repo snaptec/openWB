@@ -329,6 +329,12 @@ updateConfig(){
 	if ! grep -Fq "i3vin=" $ConfigFile; then
 		echo "i3vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "i3_soccalclp1=" $ConfigFile; then
+		echo "i3_soccalclp1=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "i3_soccalclp2=" $ConfigFile; then
+		echo "i3_soccalclp2=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "zoeusername=" $ConfigFile; then
 		echo "zoeusername=username" >> $ConfigFile
 	fi
@@ -775,6 +781,9 @@ updateConfig(){
 	if ! grep -Fq "wr2_piko2_url=" $ConfigFile; then
 		echo "wr2_piko2_url='https://url'" >> $ConfigFile
 	fi
+	if ! grep -Fq "wr2_kostal_steca_variant=" $ConfigFile; then
+		echo "wr2_kostal_steca_variant=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "carnetuser=" $ConfigFile; then
 		echo "carnetuser='user'" >> $ConfigFile
 	fi
@@ -846,6 +855,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sbs25ip=" $ConfigFile; then
 		echo "sbs25ip=192.168.10.12" >> $ConfigFile
+	fi
+	if ! grep -Fq "sbs25se=" $ConfigFile; then
+		echo "sbs25se=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "tri9000ip=" $ConfigFile; then
 		echo "tri9000ip=192.168.10.12" >> $ConfigFile
@@ -1274,6 +1286,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "wrsmawebbox=" $ConfigFile; then
 		echo "wrsmawebbox=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "wrsmahybrid=" $ConfigFile; then
+		echo "wrsmahybrid=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "bootmodus=" $ConfigFile; then
 		echo "bootmodus=3" >> $ConfigFile
@@ -1836,6 +1851,9 @@ updateConfig(){
 			echo "pv2id2=0"
 		} >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2port=" $ConfigFile; then
+		echo "pv2port=502" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		{
 			echo "pv2ip=none"
@@ -2189,6 +2207,10 @@ updateConfig(){
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
+		echo "sungrowspeicherport=502" >> $ConfigFile
+		echo "sungrowspeicherid=1" >> $ConfigFile
+	fi
 	if ! grep -Fq "alphasource=" $ConfigFile; then
 		echo "alphasource=0" >> $ConfigFile
 	fi
@@ -2260,6 +2282,14 @@ updateConfig(){
 			echo "wrsmaversion=0"
 			echo "wr2smaversion=0"
 		} >> $ConfigFile
+	fi
+
+	# replace obsolete soc_id configuration by soc_vwid
+	if grep -Fq "socmodul=soc_id" $ConfigFile; then
+		sed -i "s/^socmodul=soc_id/socmodul=soc_vwid/g" $ConfigFile
+	fi
+	if grep -Fq "socmodul1=soc_idlp2" $ConfigFile; then
+		sed -i "s/^socmodul1=soc_idlp2/socmodul=soc_vwidlp2/g" $ConfigFile
 	fi
 
 	echo "Config file Update done."

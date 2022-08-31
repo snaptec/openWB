@@ -124,18 +124,6 @@
 										</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<label for="ess_api_ver" class="col-md-4 col-form-label">API-Version</label>
-									<div class="col">
-										<select name="ess_api_ver" id="ess_api_ver" class="form-control">
-											<option <?php if($ess_api_verold == "10.2019") echo "selected" ?> value="10.2019">API-Version Oktober 2019</option>
-											<option <?php if($ess_api_verold == "01.2020") echo "selected" ?> value="01.2020">API-Version Januar 2020</option>
-										</select>
-										<span class="form-text small">
-											Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version.
-										</span>
-									</div>
-								</div>
 							</div>
 						</div>
 
@@ -273,6 +261,20 @@
 						</div>
 
 						<div id="divspeichersungrow" class="hide">
+							<div class="form-row mb-1">
+								<label for="sungrowspeicherport" class="col-md-4 col-form-label">Netzwerk-Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="sungrowspeicherport" id="sungrowspeicherport" value="<?php echo $sungrowspeicherportold ?>">
+									<span class="form-text small">Hier kann ein abweichender Netzwerk-Port angegeben werden, auf dem die Modbus/TCP Verbindung aufgebaut wird.Standard ist 502.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="sungrowspeicherid" class="col-md-4 col-form-label">Geräteadresse</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" max="254" step="1" name="sungrowspeicherid" id="sungrowspeicherid" value="<?php echo $sungrowspeicheridold ?>">
+									<span class="form-text small">Gültige Werte 1-254. Standard ist 1.</span>
+								</div>
+							</div>
 							<div class="alert alert-info">
 								Es muss Sungrow als PV und EVU Modul gewählt werden.
 							</div>
@@ -504,6 +506,22 @@
 										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Sunny Boy Smart Energy</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($sbs25seold == 0) echo " active" ?>">
+											<input type="radio" name="sbs25se" id="sbs25seNo" value="0"<?php if($sbs25seold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($sbs25seold == 1) echo " active" ?>">
+											<input type="radio" name="sbs25se" id="sbs25seYes" value="1"<?php if($sbs25seold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren, wenn ein Sunny Boy Smart Energy verbaut ist.
+									</span>
 								</div>
 							</div>
 						</div>

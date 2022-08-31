@@ -13,6 +13,10 @@ web/lastcommit
 modules/soc_tesla/tokens.*
 modules/soc_i3/token*
 modules/soc_eq/soc_eq_acc_*
+modules/soc_vwid/secrets.py
 .vscode/settings.json
 .pytest_cache
 __pycache__
+openwb.conf.*
+smarthome.ini
+web/backup/*.tar.gz

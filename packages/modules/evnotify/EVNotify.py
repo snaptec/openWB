@@ -1,5 +1,6 @@
 from typing import Union, List
 
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import store
 from modules.common.abstract_device import AbstractDevice
@@ -15,23 +16,10 @@ class EVNotifyConfiguration:
         self.akey = akey
         self.token = token
 
-    @staticmethod
-    def from_dict(device_config: dict):
-        keys = ["id", "akey", "token"]
-        try:
-            values = [device_config[key] for key in keys]
-        except KeyError as e:
-            raise Exception(
-                "Illegal configuration <{}>: Expected object with properties: {}".format(device_config, keys)
-            ) from e
-        return EVNotifyConfiguration(*values)
-
 
 class EVNotify(AbstractDevice):
     def __init__(self, device_config: Union[dict, EVNotifyConfiguration]):
-        self.config = device_config \
-            if isinstance(device_config, EVNotifyConfiguration) \
-            else EVNotifyConfiguration.from_dict(device_config)
+        self.config = dataclass_from_dict(EVNotifyConfiguration, device_config)
         self.value_store = store.get_car_value_store(self.config.id)
         self.component_info = ComponentInfo(self.config.id, "EVNotify", "vehicle")
 

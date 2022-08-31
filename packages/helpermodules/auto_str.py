@@ -4,7 +4,7 @@ T = TypeVar('T')
 
 
 def auto_str(cls: T) -> T:
-    def __str__(self):
+    def __str__(self) -> str:
         return '%s(%s)' % (
             type(self).__name__,
             ', '.join('%s=%s' % item for item in vars(self).items())

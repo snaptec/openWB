@@ -1,5 +1,4 @@
 import base64
-
 import pytest
 
 from helpermodules import compatibility
@@ -32,7 +31,7 @@ def test_process_datagram_energy_meter(mock_ramdisk):
     # setup
     data = base64.b64decode(SAMPLE_SMA_ENERGY_EM)
     sma_data = speedwiredecoder.decode_speedwire(data)
-    sma_counter = counter.create_component(counter.get_default_config())
+    sma_counter = counter.create_component(counter.component_descriptor.configuration_factory())
 
     # execution
     sma_counter.read_datagram(sma_data)

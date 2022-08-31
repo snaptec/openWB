@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
+from modules.common.component_type import ComponentDescriptor
+from modules.openwb_evu_kit.config import EvuKitInverterSetup
 
-def get_default_config() -> dict:
-    return {
-        "name": "PV-Zähler an EVU-Kit",
-        "type": "inverter",
-        "id": 0,
-        "configuration": {
-            "version": 2
-        }
-    }
+
+component_descriptor = ComponentDescriptor(configuration_factory=EvuKitInverterSetup)

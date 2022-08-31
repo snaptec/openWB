@@ -1,5 +1,14 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="EVU"
+DMOD="MAIN"
+
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
+else
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
+fi
 
 # If both wr_discovergy and bezug_discovergy are activated, then runs/loadvars.sh will run `wr_discovergy` first.
 # In this case that wr_discovergy will fetch data for both inverter end counter and there is nothing left for us to do
@@ -9,9 +18,8 @@ OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 #
 # The usage of wr_discovergy without bezug_discovergy is not intended and thus not handled.
 
-if [[ "$pvwattmodul" != "wr_discovergy" ]]
-then
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.discovergy.device" "$discovergyuser" "$discovergypass" "$discovergyevuid" "" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1
+if [[ "$pvwattmodul" != "wr_discovergy" ]]; then
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.discovergy.device" "$discovergyuser" "$discovergypass" "$discovergyevuid" "" >> "$MYLOGFILE" 2>&1
 fi
 
-cat /var/www/html/openWB/ramdisk/wattbezug
+cat "${RAMDISKDIR}/wattbezug"

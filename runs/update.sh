@@ -16,8 +16,7 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 # The update might replace a number of files which might currently be in use by the continuously running legacy-run
 # server. If we replace the source files while the process is running, funny things might happen.
 # Thus we shut-down the legacy run server before performing the update.
-# We need sudo, because this script may run as user www-data when executed from PHP:
-sudo pkill -f "$OPENWBBASEDIR/packages/legacy_run_server.py"
+pkill -u pi -f "$OPENWBBASEDIR/packages/legacy_run_server.py"
 
 if [[ "$releasetrain" == "stable" ]]; then
 	train=stable17
@@ -67,15 +66,13 @@ cp modules/soc_eq/soc_eq_acc_lp2 /tmp/soc_eq_acc_lp2
 cp openwb.conf /tmp/openwb.conf
 
 # fetch new release from GitHub
-sudo git fetch origin
-sudo git reset --hard origin/$train
+git fetch origin
+git reset --hard origin/$train
 
 # set permissions
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
-sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
-sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
-sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
+cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 
 # restore saved files after fetching new release
 # module soc_eq
@@ -92,4 +89,4 @@ sudo chmod 777 /var/www/html/openWB/web/lade.log
 sleep 2
 
 # now treat system as in booting state
-nohup sudo /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1 &
+nohup /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1 &
