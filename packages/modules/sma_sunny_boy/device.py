@@ -98,8 +98,8 @@ def read_legacy(component_type: str,
                 ip3: Optional[str] = None,
                 ip4: Optional[str] = None,
                 version: Optional[int] = None,
-                hybrid: Optional[int] = None,
-                sunny_boy_smart_energy: Optional[int] = None,
+                hybrid: Optional[int] = 0,
+                sunny_boy_smart_energy: Optional[int] = 0,
                 num: Optional[int] = None) -> None:
 
     log.debug("SMA Modbus Ip-Adresse: "+ip1)
