@@ -59,7 +59,7 @@ class SmaSunnyBoyInverter:
             power=-max(power_total, 0),
             exported=energy
         )
-        log.debug("WR {}: {}".format(inverter_state, self.__tcp_client.address))
+        log.debug("WR {}: {}, DC Power {}".format(self.__tcp_client.address, inverter_state, produces_dc_power))
         return inverter_state, produces_dc_power
 
 
