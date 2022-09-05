@@ -63,6 +63,7 @@ def init_values() -> None:
     global Values
     # global values
     DeviceValues.update({'rfidtag': str(5)})
+    DeviceValues.update({'rfidtag2': str(5)})
     # values LP1
     DeviceValues.update({'lp1voltage1': str(5)})
     DeviceValues.update({'lp1voltage2': str(5)})
@@ -111,6 +112,7 @@ def read_meter():
     global lp1evsehres
     global lp2evsehres
     global rfidtag
+    global rfidtag2
 
     if metercounter > 0:
         metercounter = metercounter - 0.5
@@ -386,6 +388,7 @@ def read_meter():
         log_debug(0, "EVSE lp1plugstat: " + str(lp1var) + " EVSE lp1LL: " + str(lp1ll))
         try:
             rfidtag = read_from_ramdisk("readtag")
+            rfidtag2 = rfidtag
         except Exception:
             pass
         # check for parent openWB
@@ -657,16 +660,16 @@ def read_meter():
                                              payload=Values["lp2chargestat"], qos=0, retain=True)
                         remoteclient.loop(timeout=2.0)
 
-                if "rfidtag" in key:
-                    if DeviceValues[str(key)] != str(rfidtag):
-                        mclient.publish("openWB/lp/2/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
+                if "rfidtag2" in key:
+                    if DeviceValues[str(key)] != str(rfidtag2):
+                        mclient.publish("openWB/lp/2/LastScannedRfidTag", payload=str(rfidtag2), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
-                        DeviceValues.update({'rfidtag': str(rfidtag)})
+                        DeviceValues.update({'rfidtag2': str(rfidtag2)})
                     if parentWB != "0":
                         if rfidtag.rstrip() == "0":
-                            rfidtag = None  # default value for 2.0 is None, not "0"
+                            rfidtag2 = None  # default value for 2.0 is None, not "0"
                         remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/rfid",
-                                             payload=json.dumps(rfidtag), qos=0, retain=True)
+                                             payload=json.dumps(rfidtag2), qos=0, retain=True)
                         remoteclient.loop(timeout=2.0)
         mclient.disconnect()
         if parentWB != "0":
