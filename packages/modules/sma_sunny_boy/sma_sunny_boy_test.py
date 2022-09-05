@@ -2,9 +2,16 @@ from unittest.mock import Mock
 import pytest
 
 from modules.common.component_state import BatState, InverterState
+from modules.common.modbus import ModbusClient
 from modules.sma_sunny_boy import device
 from modules.sma_sunny_boy.bat import SunnyBoyBat
 from modules.sma_sunny_boy.inverter import SmaSunnyBoyInverter
+
+
+@pytest.fixture(autouse=True)
+def mock_modbus_client(monkeypatch):
+    monkeypatch.setattr(ModbusClient, '__enter__',  Mock())
+    monkeypatch.setattr(ModbusClient, '__exit__',  Mock())
 
 
 class Params:
