@@ -1,6 +1,0 @@
-#@lxpanel --profile LXDE-pi
-#@pcmanfm --desktop --profile LXDE-pi
-@xscreensaver -no-splash
-@point-rpi
-@xset s 600
-@chromium-browser --incognito --kiosk http://localhost/openWB/web/display.php

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from typing import List
-import RPi.GPIO as GPIO
 import time
 import traceback
 
@@ -51,6 +50,11 @@ def get_buttons_state():
     return [GPIO.input(buttons[button]["gpio"]) == GPIO.LOW for button in range(len(buttons))]
 
 
+try:
+    import RPi.GPIO as GPIO
+except ModuleNotFoundError:
+    exit("Module RPi.GPIO missing! Maybe we are not running on supported hardware?")
+
 log_debug(2, "push button daemon starting")
 try:
     init()
@@ -67,7 +71,8 @@ try:
                 for button in range(len(buttons)):
                     if buttons_state[button]:
                         write_to_ramdisk("lademodus", str(buttons[button]["mode"]))
-                        log_debug(2, "Lademodus geändert durch Ladetaster " + str(button) + " auf " + buttons[button]["text"] + "(" + str(buttons[button]["mode"]) + ")")
+                        log_debug(2, "Lademodus geändert durch Ladetaster " + str(button) + " auf " +
+                                  buttons[button]["text"] + "(" + str(buttons[button]["mode"]) + ")")
                         break
         time.sleep(0.2)
         last_buttons_state = buttons_state

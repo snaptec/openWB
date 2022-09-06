@@ -162,7 +162,7 @@
 						</div>
 						<div id="pvsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
@@ -622,7 +622,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
 										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
@@ -1174,6 +1174,28 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2portdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2port" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="pv2port" id="pv2port" value="<?php echo (empty($pv2portold)?'502':$pv2portold) ?>">
+									<span class="form-text small">
+										TCP Port<br>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2ipportdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
+									<span class="form-text small">
+										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
+									</span>
+								</div>
+							</div>
+						</div>
 
 
 						<div id="pv2iddiv" class="hide">
@@ -1343,6 +1365,8 @@
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
+								hideSection('#pv2portdiv');
+								hideSection('#pv2ipportdiv');
 								hideSection('#pv2iddiv');
 								hideSection('#pv2ip2div');
 								hideSection('#pv2id2div');
@@ -1385,6 +1409,8 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2portdiv');
+									showSection('#pv2iddiv');
 								}
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
@@ -1399,7 +1425,7 @@
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solaredge') {
-									showSection('#pv2ipdiv');
+									showSection('#pv2ipportdiv');
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {

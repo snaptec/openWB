@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Union
+from typing import Dict, Tuple, Union
 import logging
 from pymodbus.constants import Endian
 
@@ -33,22 +33,28 @@ class SolaredgeBat:
         self.__store.set(state)
 
     def read_state(self):
-        unit = self.component_config.configuration.modbus_id
-        soc = self.__tcp_client.read_holding_registers(
-            62852, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
-        power = self.__tcp_client.read_holding_registers(
-            62836, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
-
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
-        imported, exported = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.simulation, prefix="speicher"
-        )
+        power, soc = self.get_values()
+        imported, exported = self.get_imported_exported(power)
         return BatState(
             power=power,
             soc=soc,
             imported=imported,
             exported=exported
+        )
+
+    def get_values(self) -> Tuple[float, float]:
+        unit = self.component_config.configuration.modbus_id
+        soc = self.__tcp_client.read_holding_registers(
+            62852, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
+        power = self.__tcp_client.read_holding_registers(
+            62836, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
+        return power, soc
+
+    def get_imported_exported(self, power: float) -> Tuple[float, float]:
+        topic_str = "openWB/set/system/device/" + str(
+            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
+        return self.__sim_count.sim_count(
+            power, topic=topic_str, data=self.simulation, prefix="speicher"
         )
 
 

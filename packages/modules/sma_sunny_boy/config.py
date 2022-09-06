@@ -1,6 +1,6 @@
 from typing import Optional
 
-from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
+from modules.sma_sunny_boy.inv_version import SmaInverterVersion
 
 
 class SmaSunnyBoyConfiguration:
@@ -10,7 +10,7 @@ class SmaSunnyBoyConfiguration:
 
 class SmaSunnyBoy:
     def __init__(self,
-                 name: str = "Sma Sunny Boy",
+                 name: str = "SMA Sunny Boy",
                  type: str = "sma_sunny_boy",
                  id: int = 0,
                  configuration: SmaSunnyBoyConfiguration = None) -> None:

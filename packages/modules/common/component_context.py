@@ -9,7 +9,7 @@ log = logging.getLogger("soc."+__name__)
 
 class SingleComponentUpdateContext:
     """ Wenn die Werte der Komponenten nicht miteinander verrechnet werden, sollen, auch wenn bei einer Komponente ein
-    Fehler auftritt, alle anderen dennnoch ausgelesen werden. WR-Werte dienen nur statistischen Zwecken, ohne
+    Fehler auftritt, alle anderen dennoch ausgelesen werden. WR-Werte dienen nur statistischen Zwecken, ohne
     EVU-Werte ist aber keine Regelung möglich. Ein nicht antwortender WR soll dann nicht die Regelung verhindern.
         for component in self.components:
             with SingleComponentUpdateContext(component):
