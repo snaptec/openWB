@@ -122,10 +122,10 @@ COMPONENT_TYPE_TO_MODULE = {
 def read_legacy(component_type: str,
                 ip_address: str,
                 port: str,
-                slave_id0: int,
-                slave_id1: Optional[int] = None,
-                slave_id2: Optional[int] = None,
-                slave_id3: Optional[int] = None,
+                slave_id0: str,
+                slave_id1: Optional[str] = None,
+                slave_id2: Optional[str] = None,
+                slave_id3: Optional[str] = None,
                 batwrsame: Optional[int] = None,
                 extprodakt: Optional[int] = None,
                 zweiterspeicher: Optional[int] = None,
@@ -137,9 +137,9 @@ def read_legacy(component_type: str,
             component_config = SolaredgeBatSetup(id=num,
                                                  configuration=SolaredgeBatConfiguration(modbus_id=modbus_id))
             return bat.SolaredgeBat(dev.device_config.id, component_config, dev.client)
-        bats = [create_bat(slave_id0)]
+        bats = [create_bat(int(slave_id0))]
         if zweiterspeicher == 1:
-            bats.append(create_bat(slave_id1))
+            bats.append(create_bat(int(slave_id1)))
         soc_bat, power_bat = [], []
         for battery in bats:
             power, soc = battery.get_values()
@@ -180,10 +180,11 @@ def read_legacy(component_type: str,
         dev.add_component(SolaredgeCounterSetup(
             id=num, configuration=SolaredgeCounterConfiguration(modbus_id=int(slave_id0))))
         log.debug('Solaredge ModbusID: ' + str(slave_id0))
+        dev.update()
     elif component_type == "inverter":
         if ip2address == "none":
             modbus_ids = list(map(int,
-                                  filter(lambda id: id is not None,
+                                  filter(lambda id: id.isnumeric(),
                                          [slave_id0, slave_id1, slave_id2, slave_id3])))
             inverters = [create_inverter(modbus_id) for modbus_id in modbus_ids]
             with SingleComponentUpdateContext(inverters[0].component_info):
@@ -198,7 +199,7 @@ def read_legacy(component_type: str,
                         total_currents = list(map(add, total_currents, state.currents))
 
                     if extprodakt:
-                        state = get_external_inverter_state(dev, slave_id0)
+                        state = get_external_inverter_state(dev, int(slave_id0))
                         total_power -= state.power
 
                     if batwrsame == 1:
@@ -212,27 +213,27 @@ def read_legacy(component_type: str,
                 get_inverter_value_store(num).set(InverterState(exported=total_energy,
                                                                 power=min(0, total_power), currents=total_currents))
         else:
-            inv = create_inverter(slave_id0)
+            inv = create_inverter(int(slave_id0))
             with SingleComponentUpdateContext(inv.component_info):
                 with dev.client:
                     state = inv.read_state()
                     total_power = state.power * -1
                     total_energy = state.exported
 
-                    if batwrsame == 1:
-                        zweiterspeicher = 0
-                        bat_power, state = get_bat_state()
-                        total_power -= sum(bat_power)
-                        get_bat_value_store(1).set(state)
+                if batwrsame == 1:
+                    zweiterspeicher = 0
+                    bat_power, state = get_bat_state()
+                    total_power -= sum(bat_power)
+                    get_bat_value_store(1).set(state)
                 device_config = Solaredge(configuration=SolaredgeConfiguration(ip_address=ip2address))
                 dev = Device(device_config)
-                inv = create_inverter(slave_id0)
+                inv = create_inverter(int(slave_id0))
                 with dev.client:
                     state = inv.read_state()
                     total_power -= state.power
                     total_energy += state.exported
                     if extprodakt:
-                        state = get_external_inverter_state(dev, slave_id0)
+                        state = get_external_inverter_state(dev, int(slave_id0))
                         total_power -= state.power
                 get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
