@@ -37,8 +37,8 @@ class EnphaseCounter:
 
         
         counter_state = CounterState(
-            imported=meter['actEnergyRcvd'],
-            exported=meter['actEnergyDlvd'],
+            imported=meter['actEnergyDlvd'],
+            exported=meter['actEnergyRcvd'],
             power=meter['activePower'],
             powers=[meter['channels'][0]['activePower'],meter['channels'][1]['activePower'],meter['channels'][2]['activePower']],
             voltages=[meter['channels'][0]['voltage'],meter['channels'][1]['voltage'],meter['channels'][2]['voltage']],
