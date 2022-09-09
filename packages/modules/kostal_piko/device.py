@@ -105,11 +105,11 @@ def read_legacy(component_type: str,
         with SingleComponentUpdateContext(dev.components["componentNone"].component_info):
             home_consumption, powers = dev.components["componentNone"].get_values()
             if bat_module == "speicher_bydhv":
-                bat_power = _get_byd_bat_power(bat_ip, bat_username, bat_password, num)
+                bat_power = _get_byd_bat_power(bat_ip, bat_username, bat_password, 1)
                 home_consumption += bat_power
 
-            dev.add_component(KostalPikoInverterSetup(id=num))
-            inverter_power, _ = dev.components["component"+str(num)].get_values()
+            dev.add_component(KostalPikoInverterSetup(id=1))
+            inverter_power, _ = dev.components["component"+str(1)].get_values()
 
             power = home_consumption + inverter_power
             imported, exported = simcount.SimCountFactory().get_sim_counter(
@@ -128,7 +128,7 @@ def _get_byd_bat_power(bat_ip: str, bat_username: str, bat_password: str, num: i
                                                            password=bat_password,
                                                            ip_address=bat_ip)))
     bat_dev.add_component(BYDBatSetup(id=num))
-    bat_power, _ = bat_dev.components["component0"].get_values()
+    bat_power, _ = bat_dev.components["component"+str(num)].get_values()
     return bat_power
 
 
