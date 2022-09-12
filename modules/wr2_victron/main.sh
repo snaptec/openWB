@@ -10,6 +10,6 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "inverter" "${pv2ip}" "${pv2id}" "1" "2">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "inverter" "${pv2ip}" "${pv2id}" "1" "1" "2">>"$MYLOGFILE" 2>&1
 
 cat "$RAMDISKDIR/pv2watt"

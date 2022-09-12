@@ -132,20 +132,21 @@ def read_legacy(component_type: str,
                 subbat: Optional[int] = None,
                 ip2address: Optional[str] = None,
                 num: Optional[int] = None) -> None:
-    def get_bat_state() -> Tuple[List, List]:
+    def get_bat_state() -> Tuple[List, BatState]:
         def create_bat(modbus_id: int) -> bat.SolaredgeBat:
             component_config = SolaredgeBatSetup(id=num,
                                                  configuration=SolaredgeBatConfiguration(modbus_id=modbus_id))
             return bat.SolaredgeBat(dev.device_config.id, component_config, dev.client)
-        bats = [create_bat(1)]
+        bats = [create_bat(int(slave_id0))]
         if zweiterspeicher == 1:
-            bats.append(create_bat(2))
+            bats.append(create_bat(int(slave_id1)))
         soc_bat, power_bat = [], []
         for battery in bats:
-            state = battery.read_state()
-            power_bat.append(state.power)
-            soc_bat.append(state.soc)
-        return power_bat, soc_bat
+            power, soc = battery.get_values()
+            power_bat.append(power)
+            soc_bat.append(soc)
+        imported, exported = bats[0].get_imported_exported(sum(power_bat))
+        return power_bat, BatState(power=sum(power_bat), soc=mean(soc_bat), imported=imported, exported=exported)
 
     def get_external_inverter_state(dev: Device, id: int) -> InverterState:
         component_config = SolaredgeExternalInverterSetup(id=num,
@@ -202,13 +203,13 @@ def read_legacy(component_type: str,
                         total_power -= state.power
 
                     if batwrsame == 1:
-                        bat_power, soc_bat = get_bat_state()
+                        bat_power, state = get_bat_state()
                         if subbat == 1:
                             total_power -= sum(min(p, 0) for p in bat_power)
                         else:
                             total_power -= sum(bat_power)
                 if batwrsame == 1:
-                    get_bat_value_store(1).set(BatState(power=sum(bat_power), soc=mean(soc_bat)))
+                    get_bat_value_store(1).set(state)
                 get_inverter_value_store(num).set(InverterState(exported=total_energy,
                                                                 power=min(0, total_power), currents=total_currents))
         else:
@@ -221,9 +222,9 @@ def read_legacy(component_type: str,
 
                 if batwrsame == 1:
                     zweiterspeicher = 0
-                    bat_power, _ = get_bat_state()
+                    bat_power, state = get_bat_state()
                     total_power -= sum(bat_power)
-                    get_bat_value_store(1).set(BatState(power=sum(bat_power), soc=mean(soc_bat)))
+                    get_bat_value_store(1).set(state)
                 device_config = Solaredge(configuration=SolaredgeConfiguration(ip_address=ip2address))
                 dev = Device(device_config)
                 inv = create_inverter(int(slave_id0))
@@ -238,8 +239,7 @@ def read_legacy(component_type: str,
 
     elif component_type == "bat":
         with SingleComponentUpdateContext(ComponentInfo(0, "Solaredge Speicher", "bat")):
-            power_bat, soc_bat = get_bat_state()
-            get_bat_value_store(1).set(BatState(power=sum(power_bat), soc=mean(soc_bat)))
+            get_bat_value_store(1).set(get_bat_state()[1])
 
 
 def main(argv: List[str]):
