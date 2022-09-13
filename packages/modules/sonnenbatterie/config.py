@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class SonnenBatterieConfiguration:
     def __init__(self, variant: int = 0, ip_address: Optional[str] = None):
@@ -24,16 +26,13 @@ class SonnenbatterieBatConfiguration:
         pass
 
 
-class SonnenbatterieBatSetup:
+class SonnenbatterieBatSetup(ComponentSetup[SonnenbatterieBatConfiguration]):
     def __init__(self,
                  name: str = "SonnenBatterie Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: SonnenbatterieBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SonnenbatterieBatConfiguration()
+        super().__init__(name, type, id, configuration or SonnenbatterieBatConfiguration())
 
 
 class SonnenbatterieCounterConfiguration:
@@ -41,16 +40,13 @@ class SonnenbatterieCounterConfiguration:
         pass
 
 
-class SonnenbatterieCounterSetup:
+class SonnenbatterieCounterSetup(ComponentSetup[SonnenbatterieCounterConfiguration]):
     def __init__(self,
                  name: str = "SonnenBatterie Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: SonnenbatterieCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SonnenbatterieCounterConfiguration()
+        super().__init__(name, type, id, configuration or SonnenbatterieCounterConfiguration())
 
 
 class SonnenbatterieInverterConfiguration:
@@ -58,13 +54,10 @@ class SonnenbatterieInverterConfiguration:
         pass
 
 
-class SonnenbatterieInverterSetup:
+class SonnenbatterieInverterSetup(ComponentSetup[SonnenbatterieInverterConfiguration]):
     def __init__(self,
                  name: str = "SonnenBatterie Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SonnenbatterieInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SonnenbatterieInverterConfiguration()
+        super().__init__(name, type, id, configuration or SonnenbatterieInverterConfiguration())

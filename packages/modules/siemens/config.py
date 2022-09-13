@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class SiemensConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,16 +25,13 @@ class SiemensBatConfiguration:
         pass
 
 
-class SiemensBatSetup:
+class SiemensBatSetup(ComponentSetup[SiemensBatConfiguration]):
     def __init__(self,
                  name: str = "Siemens Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: SiemensBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SiemensBatConfiguration()
+        super().__init__(name, type, id, configuration or SiemensBatConfiguration())
 
 
 class SiemensCounterConfiguration:
@@ -40,16 +39,13 @@ class SiemensCounterConfiguration:
         pass
 
 
-class SiemensCounterSetup:
+class SiemensCounterSetup(ComponentSetup[SiemensCounterConfiguration]):
     def __init__(self,
                  name: str = "Siemens Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: SiemensCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SiemensCounterConfiguration()
+        super().__init__(name, type, id, configuration or SiemensCounterConfiguration())
 
 
 class SiemensInverterConfiguration:
@@ -57,13 +53,10 @@ class SiemensInverterConfiguration:
         pass
 
 
-class SiemensInverterSetup:
+class SiemensInverterSetup(ComponentSetup[SiemensInverterConfiguration]):
     def __init__(self,
                  name: str = "Siemens Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SiemensInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SiemensInverterConfiguration()
+        super().__init__(name, type, id, configuration or SiemensInverterConfiguration())

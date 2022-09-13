@@ -1,3 +1,6 @@
+from modules.common.component_setup import ComponentSetup
+
+
 class SpeedwireComponentConfiguration:
     def __init__(self):
         pass
@@ -20,16 +23,13 @@ class SmaHomeManagerCounterConfiguration:
         self.serials = serials
 
 
-class SmaHomeManagerCounterSetup:
+class SmaHomeManagerCounterSetup(ComponentSetup[SmaHomeManagerCounterConfiguration]):
     def __init__(self,
                  name: str = "SMA Home Manager Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: SmaHomeManagerCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SmaHomeManagerCounterConfiguration()
+        super().__init__(name, type, id, configuration or SmaHomeManagerCounterConfiguration())
 
 
 class SmaHomeManagerInverterConfiguration:
@@ -37,13 +37,10 @@ class SmaHomeManagerInverterConfiguration:
         self.serials = serials
 
 
-class SmaHomeManagerInverterSetup:
+class SmaHomeManagerInverterSetup(ComponentSetup[SmaHomeManagerInverterConfiguration]):
     def __init__(self,
                  name: str = "SMA Home Manager Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SmaHomeManagerInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SmaHomeManagerInverterConfiguration()
+        super().__init__(name, type, id, configuration or SmaHomeManagerInverterConfiguration())

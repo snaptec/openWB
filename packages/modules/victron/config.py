@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class VictronConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,16 +25,13 @@ class VictronBatConfiguration:
         self.modbus_id = modbus_id
 
 
-class VictronBatSetup:
+class VictronBatSetup(ComponentSetup[VictronBatConfiguration]):
     def __init__(self,
                  name: str = "Victron Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: VictronBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or VictronBatConfiguration()
+        super().__init__(name, type, id, configuration or VictronBatConfiguration())
 
 
 class VictronCounterConfiguration:
@@ -41,16 +40,13 @@ class VictronCounterConfiguration:
         self.modbus_id = modbus_id
 
 
-class VictronCounterSetup:
+class VictronCounterSetup(ComponentSetup[VictronCounterConfiguration]):
     def __init__(self,
                  name: str = "Victron Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: VictronCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or VictronCounterConfiguration()
+        super().__init__(name, type, id, configuration or VictronCounterConfiguration())
 
 
 class VictronInverterConfiguration:
@@ -59,13 +55,10 @@ class VictronInverterConfiguration:
         self.modbus_id = modbus_id
 
 
-class VictronInverterSetup:
+class VictronInverterSetup(ComponentSetup[VictronInverterConfiguration]):
     def __init__(self,
                  name: str = "Victron Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: VictronInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or VictronInverterConfiguration()
+        super().__init__(name, type, id, configuration or VictronInverterConfiguration())

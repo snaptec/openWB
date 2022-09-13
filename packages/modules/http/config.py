@@ -1,3 +1,6 @@
+from modules.common.component_setup import ComponentSetup
+
+
 class HTTPConfiguration:
     def __init__(self, url=None):
         self.url = url
@@ -23,16 +26,13 @@ class HttpBatConfiguration:
         self.exported_path = exported_path
 
 
-class HttpBatSetup:
+class HttpBatSetup(ComponentSetup[HttpBatConfiguration]):
     def __init__(self,
                  name: str = "HTTP Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: HttpBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or HttpBatConfiguration()
+        super().__init__(name, type, id, configuration or HttpBatConfiguration())
 
 
 class HttpCounterConfiguration:
@@ -51,16 +51,13 @@ class HttpCounterConfiguration:
         self.power_path = power_path
 
 
-class HttpCounterSetup:
+class HttpCounterSetup(ComponentSetup[HttpCounterConfiguration]):
     def __init__(self,
                  name: str = "HTTP Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: HttpCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or HttpCounterConfiguration()
+        super().__init__(name, type, id, configuration or HttpCounterConfiguration())
 
 
 class HttpInverterConfiguration:
@@ -69,13 +66,10 @@ class HttpInverterConfiguration:
         self.exported_path = exported_path
 
 
-class HttpInverterSetup:
+class HttpInverterSetup(ComponentSetup[HttpInverterConfiguration]):
     def __init__(self,
                  name: str = "HTTP Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: HttpInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or HttpInverterConfiguration()
+        super().__init__(name, type, id, configuration or HttpInverterConfiguration())

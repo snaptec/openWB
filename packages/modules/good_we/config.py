@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class GoodWeConfiguration:
     def __init__(self, ip_address: Optional[str] = None, id: int = 247):
@@ -24,16 +26,13 @@ class GoodWeBatConfiguration:
         pass
 
 
-class GoodWeBatSetup:
+class GoodWeBatSetup(ComponentSetup[GoodWeBatConfiguration]):
     def __init__(self,
                  name: str = "GoodWe Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: GoodWeBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or GoodWeBatConfiguration()
+        super().__init__(name, type, id, configuration or GoodWeBatConfiguration())
 
 
 class GoodWeCounterConfiguration:
@@ -41,16 +40,13 @@ class GoodWeCounterConfiguration:
         pass
 
 
-class GoodWeCounterSetup:
+class GoodWeCounterSetup(ComponentSetup[GoodWeCounterConfiguration]):
     def __init__(self,
                  name: str = "GoodWe Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: GoodWeCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or GoodWeCounterConfiguration()
+        super().__init__(name, type, id, configuration or GoodWeCounterConfiguration())
 
 
 class GoodWeInverterConfiguration:
@@ -58,13 +54,10 @@ class GoodWeInverterConfiguration:
         pass
 
 
-class GoodWeInverterSetup:
+class GoodWeInverterSetup(ComponentSetup[GoodWeInverterConfiguration]):
     def __init__(self,
                  name: str = "GoodWe Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: GoodWeInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or GoodWeInverterConfiguration()
+        super().__init__(name, type, id, configuration or GoodWeInverterConfiguration())
