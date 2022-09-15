@@ -35,8 +35,8 @@ class KostalPikoCounterSetup(ComponentSetup[KostalPikoCounterConfiguration]):
 
 
 class KostalPikoInverterConfiguration:
-    def __init__(self):
-        pass
+    def __init__(self, bat_configured: bool = False):
+        self.bat_configured = bat_configured
 
 
 class KostalPikoInverterSetup(ComponentSetup[KostalPikoInverterConfiguration]):
