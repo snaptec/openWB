@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-from typing import Dict, Tuple, Union
 import logging
+from typing import Dict, Tuple, Union
+
 from pymodbus.constants import Endian
 
 from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
-from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
-from modules.common.modbus import ModbusDataType
 from modules.common.fault_state import ComponentInfo
+from modules.common.modbus import ModbusDataType
+from modules.common.simcount import SimCounter
 from modules.common.store import get_bat_value_store
 from modules.solaredge.config import SolaredgeBatSetup
 
@@ -24,8 +25,7 @@ class SolaredgeBat:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(SolaredgeBatSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.simulation = {}
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
@@ -51,11 +51,7 @@ class SolaredgeBat:
         return power, soc
 
     def get_imported_exported(self, power: float) -> Tuple[float, float]:
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
-        return self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.simulation, prefix="speicher"
-        )
+        return self.__sim_counter.sim_count(power)
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=SolaredgeBatSetup)

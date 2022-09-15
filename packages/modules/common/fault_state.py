@@ -1,7 +1,8 @@
+import functools
 import logging
 import traceback
 from enum import IntEnum
-from typing import Optional
+from typing import Optional, Callable, TypeVar
 
 from helpermodules import compatibility, exceptions, pub
 from modules.common import component_type
@@ -85,3 +86,21 @@ class FaultState(Exception):
         if isinstance(exception, FaultState):
             return exception
         return exceptions.get_default_exception_registry().translate_exception(exception)
+
+
+T_C = TypeVar("T_C", bound=Callable)
+
+
+def exceptions_to_fault_state(module_name: str) -> Callable[[T_C], T_C]:
+    def decorate(delegate: T_C) -> T_C:
+        @functools.wraps(delegate)
+        def wrapper(*args, **kwargs):
+            try:
+                return delegate(*args, **kwargs)
+            except Exception as e:
+                if isinstance(e, FaultState):
+                    raise
+                else:
+                    raise FaultState.error(module_name + " " + str(type(e)) + " " + str(e)) from e
+        return wrapper
+    return decorate
