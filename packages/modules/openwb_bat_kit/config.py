@@ -1,3 +1,6 @@
+from modules.common.component_setup import ComponentSetup
+
+
 class BatKitConfiguration:
     def __init__(self):
         pass
@@ -20,13 +23,10 @@ class BatKitBatConfiguration:
         self.version = version
 
 
-class BatKitBatSetup:
+class BatKitBatSetup(ComponentSetup[BatKitBatConfiguration]):
     def __init__(self,
                  name: str = "Speicher-Kit",
                  type: str = "bat",
                  id: int = 0,
                  configuration: BatKitBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or BatKitBatConfiguration()
+        super().__init__(name, type, id, configuration or BatKitBatConfiguration())

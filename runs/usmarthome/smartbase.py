@@ -86,6 +86,7 @@ class Sbase(Sbase0):
         self._device_nonewatt = 0
         self._device_deactivateper = 0
         self._device_pbtype = 'none'
+        self._device_lambdaueb = 'UP'
         self._old_pbtype = 'none'
         self._mydevicepb = 'none'
         self._oldrelais = '2'
@@ -115,6 +116,7 @@ class Sbase(Sbase0):
         self._c_einverz = 0
         self._c_einverz_f = 'N'
         self._dynregel = 0
+        self.device_setauto = 0
         self.gruppe = 'none'
         self.btchange = 0
 
@@ -274,6 +276,8 @@ class Sbase(Sbase0):
                 self._device_maxeinschaltdauer = valueint * 60
             elif (key == 'device_homeConsumtion'):
                 self.device_homeconsumtion = valueint
+            elif (key == 'device_setauto'):
+                self.device_setauto = valueint
             elif (key == 'device_differentMeasurement'):
                 self._device_differentmeasurement = valueint
             elif (key == 'device_temperatur_configured'):
@@ -306,6 +310,8 @@ class Sbase(Sbase0):
                 self._device_nonewatt = valueint
             elif (key == 'device_type'):
                 self.device_type = value
+            elif (key == 'device_lambdaueb'):
+                self.device_lambdaueb = value
             elif (key == 'device_configured'):
                 self._device_configured = value
             elif (key == 'device_name'):

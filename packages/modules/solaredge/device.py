@@ -137,9 +137,9 @@ def read_legacy(component_type: str,
             component_config = SolaredgeBatSetup(id=num,
                                                  configuration=SolaredgeBatConfiguration(modbus_id=modbus_id))
             return bat.SolaredgeBat(dev.device_config.id, component_config, dev.client)
-        bats = [create_bat(1)]
+        bats = [create_bat(int(slave_id0))]
         if zweiterspeicher == 1:
-            bats.append(create_bat(2))
+            bats.append(create_bat(int(slave_id1)))
         soc_bat, power_bat = [], []
         for battery in bats:
             power, soc = battery.get_values()
