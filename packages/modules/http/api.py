@@ -15,6 +15,6 @@ def _request_value(url: str) -> float:
 
 def create_request_function(url: str, path: Optional[str]) -> Callable[[], float]:
     if path == "none" or path is None:
-        return lambda: 0.0
+        return lambda: None
     else:
         return functools.partial(_request_value, url + path)
