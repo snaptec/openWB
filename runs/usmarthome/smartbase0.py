@@ -2,6 +2,7 @@ import json
 import time
 from usmarthome.global0 import log
 
+
 class Sbase0:
     _basePath = '/var/www/html/openWB'
     _prefixpy = _basePath+'/modules/smarthome/'
@@ -14,12 +15,12 @@ class Sbase0:
                   str(self.device_nummer), 'r') as f1:
             answer = json.loads(json.load(f1))
         return answer
-    
+
     def checkbefsend(self):
-        newtime = int(time.time())   
+        newtime = int(time.time())
         if (self._c_updatetime == 0):
             self._c_updatetime = newtime - 180
-        self._seclastup = newtime - int(self._c_updatetime)       
+        self._seclastup = newtime - int(self._c_updatetime)
         # forcesend = 0 default acthor time period applies
         # forcesend = 1 default overwritten send now
         # forcesend = 9 default overwritten no send
@@ -30,13 +31,19 @@ class Sbase0:
                 forcesend = 1
             else:
                 forcesend = 9
-        return forcesend       
-        
+        return forcesend
+
     def checksend(self, answer):
-        send = int(answer['send'])
-        sendpower = int(answer['sendpower'])
-        if (send == 1):
-            self._c_updatetime = int(time.time())
-            log.info("(" + str(self.device_nummer) +
-                     ") Gerät wurde upgedatet, neue Vorgabe %s Periode %s"
-                     % (str(sendpower), str(self._seclastup)))
+        try:
+            send = int(answer['send'])
+            sendpower = int(answer['sendpower'])
+            if (send == 1):
+                self._c_updatetime = int(time.time())
+                log.info("(" + str(self.device_nummer) +
+                         ") Gerät wurde upgedatet, " +
+                         "neue Vorgabe %s Periode %s"
+                         % (str(sendpower), str(self._seclastup)))
+        except Exception as e1:
+            log.warning("(" + str(self.device_nummer) +
+                        ") checksend Fehlermeldung: %s "
+                        % (str(e1)))
