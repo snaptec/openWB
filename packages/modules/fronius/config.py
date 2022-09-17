@@ -2,6 +2,8 @@
 from enum import Enum
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class MeterLocation(Enum):
     # 0...grid interconnection point (primary meter)
@@ -40,16 +42,13 @@ class FroniusBatConfiguration:
         self.meter_id = meter_id
 
 
-class FroniusBatSetup:
+class FroniusBatSetup(ComponentSetup[FroniusBatConfiguration]):
     def __init__(self,
                  name: str = "Fronius Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: FroniusBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or FroniusBatConfiguration()
+        super().__init__(name, type, id, configuration or FroniusBatConfiguration())
 
 
 class FroniusS0CounterConfiguration:
@@ -57,16 +56,13 @@ class FroniusS0CounterConfiguration:
         pass
 
 
-class FroniusS0CounterSetup:
+class FroniusS0CounterSetup(ComponentSetup[FroniusS0CounterConfiguration]):
     def __init__(self,
                  name: str = "Fronius S0 Zähler",
                  type: str = "counter_s0",
                  id: int = 0,
                  configuration: FroniusS0CounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or FroniusS0CounterConfiguration()
+        super().__init__(name, type, id, configuration or FroniusS0CounterConfiguration())
 
 
 class FroniusSmCounterConfiguration:
@@ -75,16 +71,13 @@ class FroniusSmCounterConfiguration:
         self.variant = variant
 
 
-class FroniusSmCounterSetup:
+class FroniusSmCounterSetup(ComponentSetup[FroniusSmCounterConfiguration]):
     def __init__(self,
                  name: str = "Fronius SM Zähler",
                  type: str = "counter_sm",
                  id: int = 0,
                  configuration: FroniusSmCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or FroniusSmCounterConfiguration()
+        super().__init__(name, type, id, configuration or FroniusSmCounterConfiguration())
 
 
 class FroniusInverterConfiguration:
@@ -92,13 +85,10 @@ class FroniusInverterConfiguration:
         pass
 
 
-class FroniusInverterSetup:
+class FroniusInverterSetup(ComponentSetup[FroniusInverterConfiguration]):
     def __init__(self,
                  name: str = "Fronius Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: FroniusInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or FroniusInverterConfiguration()
+        super().__init__(name, type, id, configuration or FroniusInverterConfiguration())

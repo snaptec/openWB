@@ -3,11 +3,11 @@ from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
-from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.lovato import Lovato
+from modules.common.simcount import SimCounter
 from modules.common.store import get_inverter_value_store
 from modules.openwb_flex.config import PvKitFlexSetup
 from modules.openwb_flex.versions import kit_counter_inverter_version_factory
@@ -24,7 +24,7 @@ class PvKitFlex:
             self.component_config.configuration.version)
         self.__client = factory(self.component_config.configuration.id, tcp_client)
         self.__tcp_client = tcp_client
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
         self.simulation = {}
         self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
@@ -43,11 +43,7 @@ class PvKitFlex:
             currents = self.__client.get_currents()
 
             if isinstance(self.__client, Lovato):
-                topic_str = "openWB/set/system/device/" + \
-                    str(self.__device_id)+"/component/" + \
-                    str(self.component_config.id)+"/"
-                prefix = "pv%s" % ("" if self.component_config.id == 1 else "2")
-                _, exported = self.__sim_count.sim_count(power, topic=topic_str, data=self.simulation, prefix=prefix)
+                _, exported = self.__sim_counter.sim_count(power)
             else:
                 exported = self.__client.get_exported()
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Modul für einfache Modbusoperationen.
+"""Modul für einfache Modbus-Operationen.
 
 Das Modul baut eine Modbus-TCP-Verbindung auf. Es gibt verschiedene Funktionen, um die gelesenen Register zu
 formatieren.
@@ -52,8 +52,8 @@ class ModbusClient:
         self.delegate.__enter__()
         return self
 
-    def __exit__(self, klass, value, traceback):
-        self.delegate.__exit__(klass, value, traceback)
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.delegate.__exit__(exc_type, exc_value, exc_traceback)
 
     def close_connection(self) -> None:
         try:
@@ -95,7 +95,7 @@ class ModbusClient:
             raise FaultState.warning(
                 "TCP-Client " + str(self.address) + ":" + str(self.port) +
                 " konnte keinen Wert abfragen. Falls vorhanden, parallele Verbindungen, zB. node red," +
-                "beenden und bei anhaltender Fehlermeldung Zähler neustarten.") from e
+                "beenden und bei anhaltender Fehlermeldung Zähler neu starten.") from e
         except Exception as e:
             raise FaultState.error(__name__+" "+str(type(e))+" " +
                                    str(e)) from e

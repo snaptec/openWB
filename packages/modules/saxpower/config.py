@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class SaxpowerConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,13 +25,10 @@ class SaxpowerBatConfiguration:
         pass
 
 
-class SaxpowerBatSetup:
+class SaxpowerBatSetup(ComponentSetup[SaxpowerBatConfiguration]):
     def __init__(self,
                  name: str = "Saxpower Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: SaxpowerBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SaxpowerBatConfiguration()
+        super().__init__(name, type, id, configuration or SaxpowerBatConfiguration())

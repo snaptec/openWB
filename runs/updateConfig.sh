@@ -1851,6 +1851,9 @@ updateConfig(){
 			echo "pv2id2=0"
 		} >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2port=" $ConfigFile; then
+		echo "pv2port=502" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		{
 			echo "pv2ip=none"
@@ -2203,6 +2206,10 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
+		echo "sungrowspeicherport=502" >> $ConfigFile
+		echo "sungrowspeicherid=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "alphasource=" $ConfigFile; then
 		echo "alphasource=0" >> $ConfigFile

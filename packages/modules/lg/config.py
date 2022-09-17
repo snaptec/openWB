@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class LgConfiguration:
     def __init__(self, ip_address: Optional[str] = None, password: Optional[str] = None):
@@ -24,16 +26,13 @@ class LgBatConfiguration:
         pass
 
 
-class LgBatSetup:
+class LgBatSetup(ComponentSetup[LgBatConfiguration]):
     def __init__(self,
                  name: str = "LG ESS V1.0 Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: LgBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or LgBatConfiguration()
+        super().__init__(name, type, id, configuration or LgBatConfiguration())
 
 
 class LgCounterConfiguration:
@@ -41,16 +40,13 @@ class LgCounterConfiguration:
         pass
 
 
-class LgCounterSetup:
+class LgCounterSetup(ComponentSetup[LgCounterConfiguration]):
     def __init__(self,
                  name: str = "LG ESS V1.0 Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: LgCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or LgCounterConfiguration()
+        super().__init__(name, type, id, configuration or LgCounterConfiguration())
 
 
 class LgInverterConfiguration:
@@ -58,13 +54,10 @@ class LgInverterConfiguration:
         pass
 
 
-class LgInverterSetup:
+class LgInverterSetup(ComponentSetup[LgInverterConfiguration]):
     def __init__(self,
                  name: str = "LG ESS V1.0 Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: LgInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or LgInverterConfiguration()
+        super().__init__(name, type, id, configuration or LgInverterConfiguration())

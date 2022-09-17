@@ -3,14 +3,16 @@ Berechnet die importierte und exportierte Leistung, wenn der Zähler / PV-Modul 
 """
 import logging
 import os
-import paho.mqtt.client as mqtt
 import time
 import typing
+
+import paho.mqtt.client as mqtt
 
 from helpermodules import compatibility
 from helpermodules import pub
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.fault_state import FaultState
+from modules.common.simcount._calculate import calculate_import_export
 
 log = logging.getLogger(__name__)
 
@@ -172,7 +174,7 @@ class Restore():
         try:
             self.value = value
             self.prefix = prefix
-            client = mqtt.Client("openWB-simcount_restore-" + str(self.__getserial()))
+            client = mqtt.Client("openWB-simcount_restore-" + str(self.__get_serial()))
 
             client.on_connect = self.__on_connect
             client.on_message = self.__on_message
@@ -208,7 +210,7 @@ class Restore():
         finally:
             return result
 
-    def __on_connect(self, client, userdata, flags, rc):
+    def __on_connect(self, client, user_data, flags, rc):
         """ connect to broker and subscribe to set topics
         """
         try:
@@ -220,12 +222,12 @@ class Restore():
         except Exception:
             log.exception("Fehler in der Restore-Klasse")
 
-    def __on_message(self, client, userdata, msg):
+    def __on_message(self, client, user_data, msg):
         """ wartet auf eingehende Topics.
         """
         self.temp = msg.payload
 
-    def __getserial(self):
+    def __get_serial(self):
         """ Extract serial from cpuinfo file
         """
         try:
@@ -310,39 +312,6 @@ class SimCount:
                 return energy_positive_kWh, energy_negative_kWh
         except Exception as e:
             process_error(e)
-
-
-Number = typing.Union[int, float]
-
-
-def calculate_import_export(
-    seconds_since_previous: Number, power1: Number, power2: Number
-) -> typing.Tuple[Number, Number]:
-    try:
-        log.debug(
-            "simcount Berechnungsgrundlage: vergangene Zeit [s]" + str(seconds_since_previous) +
-            ", vorherige Leistung[W]: " + str(power1) + ", aktuelle Leistung[W]: " + str(power2)
-        )
-        power_low = min(power1, power2)
-        power_high = max(power1, power2)
-        gradient = (power_high - power_low) / seconds_since_previous
-        # Berechnung der Gesamtfläche (ohne Beträge, Fläche unterhalb der x-Achse reduziert die Fläche oberhalb der
-        # x-Achse)
-        def energy_function(seconds): return .5 * gradient * seconds ** 2 + power_low * seconds
-
-        energy_total = energy_function(seconds_since_previous)
-        log.debug("simcount Gesamtenergie im Zeitintervall: "+str(energy_total))
-        if power_low < 0 < power_high:
-            # Berechnung der Fläche im vierten Quadranten -> Export
-            power_zero_seconds = -power_low / gradient
-            energy_exported = energy_function(power_zero_seconds)
-            log.debug(
-                "simcount exportierte Energie im Zeitintervall: "+str(energy_exported))
-            # Betragsmäßige Gesamtfläche: oberhalb der x-Achse = Import, unterhalb der x-Achse: Export
-            return energy_total - energy_exported, energy_exported * -1
-        return (energy_total, 0) if energy_total >= 0 else (0, -energy_total)
-    except Exception as e:
-        process_error(e)
 
 
 def run_cli(power_present: int, prefix: str):

@@ -63,10 +63,11 @@ class Device(AbstractDevice):
     def update(self) -> None:
         log.debug("Start device reading " + str(self.components))
         if self.components:
-            for component in self.components:
-                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self.components[component].component_info):
-                    self.components[component].update(unit_id=default_unit_id)
+            with self.client:
+                for component in self.components:
+                    # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
+                    with SingleComponentUpdateContext(self.components[component].component_info):
+                        self.components[component].update(unit_id=default_unit_id)
         else:
             log.warning(
                 self.device_config.name +

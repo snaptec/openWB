@@ -17,6 +17,7 @@ from usmarthome.smartmystrom import Smystrom
 from usmarthome.smartshelly import Sshelly
 from usmarthome.smartstiebel import Sstiebel
 from usmarthome.smartvampair import Svampair
+from usmarthome.smartlambda import Slambda
 from usmarthome.smarttasmota import Stasmota
 from usmarthome.smartviessmann import Sviessmann
 
@@ -339,6 +340,8 @@ def update_devices():
                     mydevice = Sstiebel()
                 elif (device_type == 'vampair'):
                     mydevice = Svampair()
+                elif (device_type == 'lambda'):
+                    mydevice = Slambda()
                 elif (device_type == 'tasmota'):
                     mydevice = Stasmota()
                 elif (device_type == 'avm'):
@@ -429,6 +432,11 @@ def resetmaxeinschaltdauerfunc():
                             mqtt_reset[pref + 'OnCntStandby'] = '0'
                         mydevice.c_oldstampeinschaltdauer = 0
                         mydevice.c_oldstampeinschaltdauer_f = 'N'
+                        if ((mydevice.device_setauto == 1) and
+                           (mydevice.device_manual == 1)):
+                            log.info("(" + str(i) +
+                                     ") Umschaltung auf automatisch Modus ")
+                            mqtt_reset[pref + 'mode'] = '0'
             resetmaxeinschaltdauer = 1
             # Nur einschaltgruppe in Sekunden für neuen Tag zurücksetzten
             Sbase.nureinschaltinsec = 0

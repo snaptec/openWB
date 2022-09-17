@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-from typing import Dict, List, Union, Tuple
-from html.parser import HTMLParser
 import logging
+from html.parser import HTMLParser
+from typing import Dict, List, Union, Tuple
 
 from dataclass_utils import dataclass_from_dict
 from modules.byd.config import BYDBatSetup
 from modules.common import req
-from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
+from modules.common.simcount import SimCounter
 from modules.common.store import get_bat_value_store
 
 log = logging.getLogger(__name__)
@@ -21,19 +21,14 @@ class BYDBat:
                  device_config) -> None:
         self.__device_config = device_config
         self.component_config = dataclass_from_dict(BYDBatSetup, component_config)
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.simulation = {}
+        self.__sim_counter = SimCounter(self.__device_config.id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
         power, soc = self.get_values()
 
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_config.id)+"/component/"+str(self.component_config.id)+"/"
-        imported, exported = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.simulation, prefix="speicher"
-        )
+        imported, exported = self.__sim_counter.sim_count(power)
         bat_state = BatState(
             power=power,
             soc=soc,

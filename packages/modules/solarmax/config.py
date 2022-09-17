@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class SolarmaxConfiguration:
     def __init__(self, ip_address: Optional[str] = None, modbus_id: int = 1):
@@ -24,13 +26,10 @@ class SolarmaxInverterConfiguration:
         pass
 
 
-class SolarmaxInverterSetup:
+class SolarmaxInverterSetup(ComponentSetup[SolarmaxInverterConfiguration]):
     def __init__(self,
                  name: str = "Solarmax Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SolarmaxInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SolarmaxInverterConfiguration()
+        super().__init__(name, type, id, configuration or SolarmaxInverterConfiguration())

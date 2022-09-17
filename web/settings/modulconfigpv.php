@@ -162,7 +162,7 @@
 						</div>
 						<div id="pvsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
@@ -1174,6 +1174,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2portdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2port" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="pv2port" id="pv2port" value="<?php echo (empty($pv2portold)?'502':$pv2portold) ?>">
+									<span class="form-text small">
+										TCP Port<br>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="pv2ipportdiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="pv2ip" class="col-md-4 col-form-label">IP Adresse</label>
@@ -1354,6 +1365,7 @@
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
+								hideSection('#pv2portdiv');
 								hideSection('#pv2ipportdiv');
 								hideSection('#pv2iddiv');
 								hideSection('#pv2ip2div');
@@ -1397,6 +1409,8 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2portdiv');
+									showSection('#pv2iddiv');
 								}
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {

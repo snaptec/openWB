@@ -21,3 +21,7 @@ class AbstractChargepoint:
     @abstractmethod
     def interrupt_cp(self, duration: int) -> None:
         pass
+
+    @abstractmethod
+    def clear_rfid(self) -> None:
+        pass

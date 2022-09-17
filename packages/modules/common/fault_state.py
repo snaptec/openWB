@@ -1,10 +1,12 @@
-from enum import IntEnum
+import functools
 import logging
 import traceback
-from typing import Optional, Type
+from enum import IntEnum
+from typing import Optional, Callable, TypeVar
 
 from helpermodules import compatibility, exceptions, pub
 from modules.common import component_type
+from modules.common.component_setup import ComponentSetup
 
 log = logging.getLogger("soc."+__name__)
 
@@ -23,7 +25,7 @@ class ComponentInfo:
         self.hostname = hostname
 
     @staticmethod
-    def from_component_config(component_config: Type, hostname: str = "localhost"):
+    def from_component_config(component_config: ComponentSetup, hostname: str = "localhost"):
         return ComponentInfo(component_config.id, component_config.name, component_config.type, hostname)
 
 
@@ -45,13 +47,13 @@ class FaultState(Exception):
                 prefix = "openWB/set/" + topic + "/"
                 if component_info.id is not None:
                     if component_type == "vehicle":
-                        prefix += str(component_info.id) + "/socF"
+                        prefix += str(component_info.id) + "/socFault"
                     else:
-                        prefix += str(component_info.id) + "/f"
+                        prefix += str(component_info.id) + "/fault"
                 else:
                     prefix += "f"
-                pub.pub_single(prefix + "aultStr", self.fault_str, hostname=component_info.hostname)
-                pub.pub_single(prefix + "aultState", self.fault_state.value, hostname=component_info.hostname)
+                pub.pub_single(prefix + "Str", self.fault_str, hostname=component_info.hostname)
+                pub.pub_single(prefix + "State", self.fault_state.value, hostname=component_info.hostname)
                 if "chargepoint" in component_info.type:
                     pub.pub_single("openWB/set/" + topic + "/" + str(component_info.id) +
                                    "/get/fault_str", self.fault_str, hostname=component_info.hostname)
@@ -84,3 +86,21 @@ class FaultState(Exception):
         if isinstance(exception, FaultState):
             return exception
         return exceptions.get_default_exception_registry().translate_exception(exception)
+
+
+T_C = TypeVar("T_C", bound=Callable)
+
+
+def exceptions_to_fault_state(module_name: str) -> Callable[[T_C], T_C]:
+    def decorate(delegate: T_C) -> T_C:
+        @functools.wraps(delegate)
+        def wrapper(*args, **kwargs):
+            try:
+                return delegate(*args, **kwargs)
+            except Exception as e:
+                if isinstance(e, FaultState):
+                    raise
+                else:
+                    raise FaultState.error(module_name + " " + str(type(e)) + " " + str(e)) from e
+        return wrapper
+    return decorate

@@ -1,3 +1,6 @@
+from modules.common.component_setup import ComponentSetup
+
+
 class PvKitConfiguration:
     def __init__(self):
         pass
@@ -20,13 +23,10 @@ class PvKitInverterConfiguration:
         self.version = version
 
 
-class PvKitInverterSetup:
+class PvKitInverterSetup(ComponentSetup[PvKitInverterConfiguration]):
     def __init__(self,
                  name: str = "PV-Kit",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: PvKitInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or PvKitInverterConfiguration()
+        super().__init__(name, type, id, configuration or PvKitInverterConfiguration())
