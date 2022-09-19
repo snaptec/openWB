@@ -1,12 +1,10 @@
-from typing import List, NamedTuple, Tuple, Type
+from typing import List, NamedTuple, Type
 from unittest.mock import Mock
 
 import pytest
 
 from modules.solaredge import device
 from modules.solaredge.bat import SolaredgeBat
-from modules.solaredge.config import (SolaredgeCounterConfiguration, SolaredgeCounterSetup,
-                                      SolaredgeExternalInverterConfiguration, SolaredgeExternalInverterSetup)
 from modules.solaredge.counter import SolaredgeCounter
 from modules.solaredge.external_inverter import SolaredgeExternalInverter
 from modules.solaredge.inverter import SolaredgeInverter
