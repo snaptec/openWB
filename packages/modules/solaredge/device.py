@@ -2,7 +2,7 @@
 import logging
 from operator import add
 from statistics import mean
-from typing import Dict, Tuple, Union, Optional, List
+from typing import Dict, Iterable, Tuple, Union, Optional, List
 from urllib3.util import parse_url
 
 try:
@@ -77,7 +77,7 @@ class Device(AbstractDevice):
                 unit=component_config.configuration.modbus_id)) or 1
             log.debug("Synergy Units: %s", self.synergy_units)
             if component_type == "external_inverter" or component_type == "counter" or component_type == "inverter":
-                self.set_component_registers(self.components, self.synergy_units)
+                self.set_component_registers(self.components.values(), self.synergy_units)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -85,9 +85,9 @@ class Device(AbstractDevice):
             )
 
     @staticmethod
-    def set_component_registers(components: Dict[str, solaredge_component_classes], synergy_units: int) -> None:
+    def set_component_registers(components: Iterable[solaredge_component_classes], synergy_units: int) -> None:
         meters = [None]*3  # type: List[Union[SolaredgeExternalInverter, SolaredgeCounter, None]]
-        for component in components.values():
+        for component in components:
             if isinstance(component, (SolaredgeExternalInverter, SolaredgeCounter)):
                 meters[component.component_config.configuration.meter_id-1] = component
 
