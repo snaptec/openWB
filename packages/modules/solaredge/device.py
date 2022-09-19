@@ -94,7 +94,7 @@ class Device(AbstractDevice):
         # https://www.solaredge.com/sites/default/files/sunspec-implementation-technical-note.pdf:
         # Only enabled meters are readable, i.e. if meter 1 and 3 are enabled, they are readable as 1st meter and 2nd
         # meter (and the 3rd meter isn't readable).
-        for meter_id, meter in enumerate(list(filter(None, meters)), start=1):
+        for meter_id, meter in enumerate(filter(None, meters), start=1):
             log.debug(
                 "%s: internal meter id: %d, synergy units: %s", meter.component_config.name, meter_id, synergy_units
             )
