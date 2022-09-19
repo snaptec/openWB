@@ -43,6 +43,7 @@
 			<h1>openWB aus Backup wiederherstellen</h1>
 			<div class="alert alert-warning">
 				Wiederherstellen der openWB-Einstellungen und Log-Daten aus einer Backup-Datei (Dateiendung gz).<br>
+				Die openWB wird nach dem Wiederherstellen des Backups direkt neu gestartet! Bitte vorher alle Ladevorgänge beenden und Fahrzeuge zur Sicherheit abstecken.<br>
 				Sollte die Wiederherstellung fehlschlagen, bitte ein Update der openWB auf die gewünschte Version durchführen. Im Anschluss die openWB neu starten und das Wiederherstellen erneut versuchen.
 			</div>
 
