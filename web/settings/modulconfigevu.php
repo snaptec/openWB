@@ -88,6 +88,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens_sentron") echo "selected" ?> value="bezug_siemens_sentron">Siemens SENTRON</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
@@ -216,6 +217,11 @@
 						<div id="wattbezugsiemens" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
+							</div>
+						</div>
+						<div id="wattbezugsiemenssentron" class="hide">
+							<div class="card-text alert alert-info">
+								Derzeit werden nur Messgeräte vom Typ "7KM PAC2200" mit Ethernet-Schnittstelle unterstützt.
 							</div>
 						</div>
 						<div id="wattbezugrct" class="hide">
@@ -993,6 +999,7 @@
 								hideSection('#wattbezugvarta');
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
+								hideSection('#wattbezugsiemenssentron');
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
@@ -1032,6 +1039,10 @@
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_siemens_sentron') {
+									showSection('#wattbezugip');
+									showSection('#wattbezugsiemenssentron');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_janitza') {
 									showSection('#wattbezugjanitza');
