@@ -13,7 +13,7 @@ UINT16_UNSUPPORTED = 0xFFFF
 
 
 def scale_registers(registers: List[Number]) -> List[float]:
-    log.debug("Registers %s, Scale %s", (registers[:-1],  registers[-1]))
+    log.debug("Registers %s, Scale %s", registers[:-1],  registers[-1])
     scale = math.pow(10, registers[-1])
     return [register * scale if register != UINT16_UNSUPPORTED else 0 for register in registers[:-1]]
 
