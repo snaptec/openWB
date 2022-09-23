@@ -1,11 +1,11 @@
 import configparser
 import fileinput
+import logging
 import re
 import subprocess
 import sys
 import threading
 import time
-from datetime import datetime
 from json import loads as json_loads
 from json.decoder import JSONDecodeError
 from pathlib import Path
@@ -23,6 +23,9 @@ config.read(shconfigfile)
 numberOfSupportedDevices=9 # limit number of smarthome devices
 lock=threading.Lock()
 RAMDISK_PATH = Path(__file__).resolve().parents[1] / "ramdisk"
+
+logging.basicConfig(filename=str(RAMDISK_PATH / "mqtt.log"), level=logging.DEBUG, format='%(asctime)s: %(message)s')
+log = logging.getLogger("MQTT")
 
 for i in range(1,(numberOfSupportedDevices+1)):
     try:
@@ -86,8 +89,7 @@ emailallowed = '^([\w\.]+)([\w]+)@(\w{2,})\.(\w{2,})$'
 
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
-    #subscribe to all set topics
-    #client.subscribe("openWB/#", 2)
+    log.info("Connected")
     client.subscribe("openWB/set/#", 2)
     client.subscribe("openWB/config/set/#", 2)
 
@@ -99,11 +101,7 @@ def on_message(client, userdata, msg):
         lock.acquire()
         try:
             setTopicCleared = False
-            theTime = datetime.now()
-            timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
-            file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
-            file.write( "%s Topic: %s Message: %s\n" % (timestamp, msg.topic, str(msg.payload.decode("utf-8"))) )
-            file.close()
+            log.debug("Topic: %s, Message: %s", msg.topic, msg.payload.decode("utf-8"))
 
             if (( "openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
