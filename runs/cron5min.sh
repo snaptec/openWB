@@ -4,9 +4,6 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 
 . "$OPENWBBASEDIR/loadconfig.sh"
 . "$OPENWBBASEDIR/helperFunctions.sh"
-. "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
-. "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
-. "$OPENWBBASEDIR/runs/rse/rseHelper.sh"
 
 if [ -e "$OPENWBBASEDIR/ramdisk/updateinprogress" ] && [ -e "$OPENWBBASEDIR/ramdisk/bootinprogress" ]; then
 	updateinprogress=$(<"$OPENWBBASEDIR/ramdisk/updateinprogress")
@@ -296,119 +293,8 @@ echo "$hausdailyyield" > "$RAMDISKDIR/daily_hausverbrauchkwh"
 ip route get 1 |  awk '{print $7;exit}' > "$RAMDISKDIR/ipaddress"
 openwbDebugLog "MAIN" 1 "current ip: $(<"$RAMDISKDIR/ipaddress")"
 
-# check if our mqtt handler is running
-if pgrep -f '^python.*/mqttsub.py' > /dev/null
-then
-	openwbDebugLog "MAIN" 1 "mqtt handler is already running"
-else
-	openwbDebugLog "MAIN" 0 "mqtt handler not running! restarting process"
-	python3 "$OPENWBBASEDIR/runs/mqttsub.py" &
-fi
-
-# check if our legacy run server is running
-pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" > /dev/null
-if [ $? == 1 ]
-then
-	openwbDebugLog "MAIN" 0 "legacy_run_server is not running. Restarting process"
-	bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
-else
-	openwbDebugLog "MAIN" 1 "legacy_run_server is already running"
-fi
-
-# check if our smarthome handler is running
-smartmq=$(<"$OPENWBBASEDIR/ramdisk/smartmq")
-if (( smartmq == 0 )); then
-	if pgrep -f '^python.*/smarthomemq.py' > /dev/null
-	then
-		sudo pkill -f '^python.*/smarthomemq.py'
-		openwbDebugLog "MAIN" 1 "smarthomemq handler stoped"
-	fi
-	if pgrep -f '^python.*/smarthomehandler.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "legacy smarthome handler is already running"
-	else
-		openwbDebugLog "MAIN" 0 "legacy smarthome handler not running! restarting process"
-		python3 "$OPENWBBASEDIR/runs/smarthomehandler.py" >> "$RAMDISKDIR/smarthome.log" 2>&1 &
-	fi
-else
-	if pgrep -f '^python.*/smarthomehandler.py' > /dev/null
-	then
-		sudo pkill -f '^python.*/smarthomehandler.py'
-		openwbDebugLog "MAIN" 1 "legacy smarthomehandler handler stoped"
-	fi
-	if pgrep -f '^python.*/smarthomemq.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "smarthomemq handler is already running"
-	else
-		openwbDebugLog "MAIN" 0 "smarthomemq handler not running! restarting process"
-		python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$RAMDISKDIR/smarthome.log" 2>&1 &
-	fi
-fi
-
-# if this is a remote controlled system check if our isss handler is running
-if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]]; then
-	openwbDebugLog "MAIN" 1 "external openWB or daemon mode configured"
-	if pgrep -f '^python.*/isss.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "isss handler already running"
-	else
-		openwbDebugLog "MAIN" 0 "isss handler not running! restarting process"
-		python3 "$OPENWBBASEDIR/runs/isss.py" &
-	fi
-else
-	openwbDebugLog "MAIN" 1 "external openWB or daemon mode not configured; checking network setup"
-	ethstate=$(</sys/class/net/eth0/carrier)
-	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 "$virtual_ip_eth0" netmask 255.255.255.0 up
-		if [ -d /sys/class/net/wlan0 ]; then
-			sudo ifconfig wlan0:0 "$virtual_ip_wlan0" netmask 255.255.255.0 down
-			wlanstate=$(</sys/class/net/wlan0/carrier)
-			if (( wlanstate == 1 )); then
-				sudo systemctl stop hostapd
-				sudo systemctl stop dnsmasq
-			fi
-		fi
-	else
-		if [ -d /sys/class/net/wlan0 ]; then
-			sudo ifconfig wlan0:0 "$virtual_ip_wlan0" netmask 255.255.255.0 up
-		fi
-		sudo ifconfig eth0:0 "$virtual_ip_eth0" netmask 255.255.255.0 down
-	fi
-	# kill obsolete isss handler
-	sudo pkill -f '^python.*/isss.py'
-fi
-
-# if this is a socket system check for our handler to control the socket lock
-if [[ "$evsecon" == "buchse" ]] && [[ "$isss" == "0" ]]; then
-	openwbDebugLog "MAIN" 1 "openWB socket configured"
-	if pgrep -f '^python.*/buchse.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "socket handler already running"
-	else
-		openwbDebugLog "MAIN" 0 "socket handler not running! restarting process"
-		python3 "$OPENWBBASEDIR/runs/buchse.py" &
-	fi
-else
-	sudo pkill -f '^python.*/buchse.py'
-fi
-
-# setup rfid handler if needed
-rfidSetup "$rfidakt" 0 "$rfidlist"
-
-# check if our modbus server is running
-if pgrep -f '^python.*/modbusserver.py' > /dev/null
-then
-	openwbDebugLog "MAIN" 1 "modbus tcp server already running"
-else
-	openwbDebugLog "MAIN" 0 "modbus tcp server not running! restarting process"
-	sudo python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" &
-fi
-
-# setup push buttons handler if needed
-pushButtonsSetup "$ladetaster" 0
-
-# setup rse handler if needed
-rseSetup "$rseenabled" 0
+# Make sure all services are running (restart crashed services etc.):
+"$OPENWBBASEDIR/runs/services.sh" start
 
 #Pingchecker
 if (( pingcheckactive == 1 )); then
