@@ -16,7 +16,7 @@ def dataclass_from_dict(cls: Type[T], args: Union[dict, T]) -> T:
     """
     if isinstance(args, cls):
         return args
-    arg_spec = inspect.getfullargspec(cls)
+    arg_spec = inspect.getfullargspec(cls.__init__)
     return cls(*[_get_argument_value(arg_spec, index, args) for index in range(1, len(arg_spec.args))])
 
 
