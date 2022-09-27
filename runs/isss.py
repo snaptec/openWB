@@ -63,6 +63,7 @@ def init_values() -> None:
     global Values
     # global values
     DeviceValues.update({'rfidtag': str(5)})
+    DeviceValues.update({'rfidtag2': str(5)})
     # values LP1
     DeviceValues.update({'lp1voltage1': str(5)})
     DeviceValues.update({'lp1voltage2': str(5)})
@@ -111,6 +112,7 @@ def read_meter():
     global lp1evsehres
     global lp2evsehres
     global rfidtag
+    global rfidtag2
 
     if metercounter > 0:
         metercounter = metercounter - 0.5
@@ -239,14 +241,15 @@ def read_meter():
             lp1llg = 0
 
         try:
+            lp1countphasesinuse = 0
             if lp1lla1 > 3:
-                lp1countphasesinuse = 1
+                lp1countphasesinuse += 1
             if lp1lla2 > 3:
-                lp1countphasesinuse = 2
+                lp1countphasesinuse += 1
             if lp1lla3 > 3:
-                lp1countphasesinuse = 3
+                lp1countphasesinuse += 1
         except Exception:
-            lp1countphasesinuse = 1
+            lp1countphasesinuse = 0
 
         if lp2installed:
             try:
@@ -293,14 +296,15 @@ def read_meter():
                 lp2llkwh = float("%.3f" % lp2llkwh)
                 write_to_ramdisk("llkwhs1", str(lp2llkwh))
                 try:
+                    lp2countphasesinuse = 0
                     if lp2lla1 > 3:
-                        lp2countphasesinuse = 1
+                        lp2countphasesinuse += 1
                     if lp2lla2 > 3:
-                        lp2countphasesinuse = 2
+                        lp2countphasesinuse += 1
                     if lp2lla3 > 3:
-                        lp2countphasesinuse = 3
+                        lp2countphasesinuse += 1
                 except Exception:
-                    lp2countphasesinuse = 1
+                    lp2countphasesinuse = 0
                 try:
                     time.sleep(0.1)
                     rq = client.read_holding_registers(1000, 1, unit=2)
@@ -384,6 +388,7 @@ def read_meter():
         log_debug(0, "EVSE lp1plugstat: " + str(lp1var) + " EVSE lp1LL: " + str(lp1ll))
         try:
             rfidtag = read_from_ramdisk("readtag")
+            rfidtag2 = rfidtag
         except Exception:
             pass
         # check for parent openWB
@@ -524,10 +529,11 @@ def read_meter():
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'rfidtag': str(rfidtag)})
                 if parentWB != "0":
+                    rfidtag_temp = rfidtag
                     if rfidtag.rstrip() == "0":
-                        rfidtag = None  # default value for 2.0 is None, not "0"
+                        rfidtag_temp = None  # default value for 2.0 is None, not "0"
                     remoteclient.publish("openWB/set/chargepoint/"+parentCPlp1+"/get/rfid",
-                                         payload=json.dumps(rfidtag), qos=0, retain=True)
+                                         payload=json.dumps(rfidtag_temp), qos=0, retain=True)
                     remoteclient.loop(timeout=2.0)
             if lp2installed:
                 if "lp2countphasesinuse" in key:
@@ -655,16 +661,17 @@ def read_meter():
                                              payload=Values["lp2chargestat"], qos=0, retain=True)
                         remoteclient.loop(timeout=2.0)
 
-                if "rfidtag" in key:
-                    if DeviceValues[str(key)] != str(rfidtag):
-                        mclient.publish("openWB/lp/2/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
+                if "rfidtag2" in key:
+                    if DeviceValues[str(key)] != str(rfidtag2):
+                        mclient.publish("openWB/lp/2/LastScannedRfidTag", payload=str(rfidtag2), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
-                        DeviceValues.update({'rfidtag': str(rfidtag)})
+                        DeviceValues.update({'rfidtag2': str(rfidtag2)})
                     if parentWB != "0":
-                        if rfidtag.rstrip() == "0":
-                            rfidtag = None  # default value for 2.0 is None, not "0"
+                        rfidtag2_temp = rfidtag2
+                        if rfidtag2.rstrip() == "0":
+                            rfidtag2_temp = None  # default value for 2.0 is None, not "0"
                         remoteclient.publish("openWB/set/chargepoint/"+parentCPlp2+"/get/rfid",
-                                             payload=json.dumps(rfidtag), qos=0, retain=True)
+                                             payload=json.dumps(rfidtag2_temp), qos=0, retain=True)
                         remoteclient.loop(timeout=2.0)
         mclient.disconnect()
         if parentWB != "0":
@@ -924,8 +931,8 @@ u1p3plp2stat = None
 u1p3ptmpstat = 3
 u1p3plp2tmpstat = 3
 rfidtag = 0
-lp1countphasesinuse = 1
-lp2countphasesinuse = 2
+lp1countphasesinuse = 0
+lp2countphasesinuse = 0
 heartbeat = 0
 metercounter = 0
 actcooldown = 0

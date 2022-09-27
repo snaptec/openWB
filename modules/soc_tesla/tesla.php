@@ -144,9 +144,8 @@
 				{
 					global $tesla_api_redirect, $user_agent, $tesla_api_oauth2, $cid, $cs, $tesla_api_owners;
 
-
-					$code = explode('https://auth.tesla.com/void/callback?code=', $weburl);
-					$code = explode("&", $code[1])[0];
+					parse_str(parse_url($weburl, PHP_URL_QUERY), $query);
+					$code = $query["code"];
 
 
 					if(empty($code)) { return return_msg(0, "Something is wrong ... Code not exists"); }

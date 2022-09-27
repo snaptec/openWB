@@ -82,6 +82,7 @@ $numDevices = 9;
 											<option value="shelly" data-option="shelly">Shelly oder Shelly plus</option>
 											<option value="tasmota" data-option="tasmota">Tasmota</option>
 											<option value="acthor" data-option="acthor">Acthor</option>
+											<option value="lambda" data-option="lambda">Lambda</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
@@ -102,6 +103,15 @@ $numDevices = 9;
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen (in 1000 Watt Schritten)
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
 											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
+										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-lambda hide">
+											Wp der Firma lambda<br>
+											Im Web Frontend der WP muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP" und "Zeitablauf Ansteuerung = ??? Sek" gesetzt werden.
+											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen
+											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.<br>
+											Als Parameter muss in Lambda für die Modbusadresse 102 als übertragener Wert<br>
+											 "Actual excess power INT16, min = - 32768W, max = - 32768W" parametrisiet sein.<br>
+											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Lambda nicht zu stören.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mqtt hide">
 											Generisches MQTT modul<br>
@@ -198,7 +208,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -291,7 +301,24 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-lambda hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_lambdauebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Überschuss...</label>
+										<div class="col">
+											<select class="form-control" name="device_lambdaueb" id="device_lambdauebDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<option value="UP" data-option="UP">Überschuss als positive Zahl übertragen</option>
+												<option value="UN" data-option="UN">Überschuss als negative Zahl übertragen</option>
+											</select>
+											<span class="form-text small">
+												Bezieht sich nur auf die Modbusadresse 102, wie ist Überschuss zu übertragen. Muss in der WP genau gleich eingestellt sein.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -385,17 +412,17 @@ $numDevices = 9;
 												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Das Gerät wird ab dieser Uhrzeit eingeschaltet, unabhängig vom Überschuss unter Berücksichtigung der maximalen Einschaltdauer.</span>
 											</div>
 										</div>
-										
+
 										<div class="form-row mb-1">
 											<label for="device_offTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Immer aus nach</label>
 											<div class="col">
 												<input id="device_offTimeDevices<?php echo $devicenum; ?>" name="device_offTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Das Gerät wird ab dieser Uhrzeit ausgeschaltet, und für den laufenden Tag nicht mehr eingeschaltet.</span>
 											</div>
-										</div>										
-										
-										
-										
+										</div>
+
+
+
 									</div>
 									<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom hide">
 										<hr class="border-secondary">
@@ -477,6 +504,24 @@ $numDevices = 9;
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
+											<label class="col-md-4 col-form-label">Um 23:59...</label>
+											<div class="col">
+												<div class="btn-group btn-group-toggle btn-block" id="device_setautoDevices<?php echo $devicenum; ?>" name="device_setauto" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_setautoDevices<?php echo $devicenum; ?>" id="device_setauto<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">nichts tun
+													</label>
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_setautoDevices<?php echo $devicenum; ?>" id="device_setauto<?php echo $devicenum; ?>1" data-option="1" value="1">in den automatischen Modus stellen
+													</label>
+												</div>
+												<span class="form-text small">Diese Option bewirkt, dass ein Gerät um 23:59 immer in den automaischen Modus geschaltet wird.
+												</span>
+											</div>
+										</div>
+									</div>
+									<hr class="border-secondary">
+									<div class="form-group">
+										<div class="form-row mb-1">
 											<label class="col-md-4 col-form-label">Einschalt/Ausschaltgruppe...</label>
 											<div class="col">
 												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateperDevices<?php echo $devicenum; ?>" name="device_deactivateper" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -525,6 +570,13 @@ $numDevices = 9;
 											<div class="col">
 												<input id="device_einschaltverzoegerungDevices<?php echo $devicenum; ?>" name="device_einschaltverzoegerung" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<span class="form-text small">Parameter in Minuten, der bestimmt, wie lange die Einschaltschwelle <b>am Stück</b> überschritten werden muss, bevor das Gerät eingeschaltet wird.</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="device_updatesecDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Updategerät</label>
+											<div class="col">
+												<input id="device_updatesecDevices<?php echo $devicenum; ?>" name="device_updatesec" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="180" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<span class="form-text small">Parameter in Sekunden (von 0 bis 180), in was für einen Abstand openWB das Gerät updatet. 0 Sekunden bedeutet Defaultverhalten. Das Defaultverhalten ist pro Typ definiert und eher konservativ (langsam).</span>
 											</div>
 										</div>
 										<div class="form-row mb-1">

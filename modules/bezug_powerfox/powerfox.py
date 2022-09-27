@@ -2,11 +2,10 @@
 import logging
 from typing import List
 
-import requests
 import traceback
 
 from helpermodules.cli import run_using_positional_cli_args
-
+from modules.common import req
 log = logging.getLogger("PowerFox")
 
 
@@ -15,8 +14,8 @@ def update(powerfoxid: str, powerfoxuser: str, powerfoxpass: str):
     log.debug('Powerfox User: ' + powerfoxuser)
     log.debug('Powerfox Passwort: ' + powerfoxpass)
 
-    response = requests.get('https://backend.powerfox.energy/api/2.0/my/'+powerfoxid +
-                            '/current', auth=(powerfoxuser, powerfoxpass), timeout=3).json()
+    response = req.get_http_session().get('https://backend.powerfox.energy/api/2.0/my/'+powerfoxid +
+                                          '/current', auth=(powerfoxuser, powerfoxpass), timeout=3).json()
     try:
         einspeisungwh = int(response['A_Minus'])
         with open("/var/www/html/openWB/ramdisk/einspeisungkwh", "w") as f:

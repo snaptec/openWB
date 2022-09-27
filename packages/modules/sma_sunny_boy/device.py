@@ -14,7 +14,7 @@ from modules.sma_sunny_boy import bat, bat_smart_energy, counter, inverter
 from modules.sma_sunny_boy.config import (SmaSunnyBoy, SmaSunnyBoyBatSetup, SmaSunnyBoyConfiguration,
                                           SmaSunnyBoyCounterSetup, SmaSunnyBoyInverterConfiguration,
                                           SmaSunnyBoyInverterSetup, SmaSunnyBoySmartEnergyBatSetup)
-from modules.sma_sunny_boy.inverter_version import SmaInverterVersion
+from modules.sma_sunny_boy.inv_version import SmaInverterVersion
 from modules.sma_webbox.config import SmaWebboxInverterSetup
 from modules.sma_webbox.inverter import SmaWebboxInverter
 
@@ -98,8 +98,8 @@ def read_legacy(component_type: str,
                 ip3: Optional[str] = None,
                 ip4: Optional[str] = None,
                 version: Optional[int] = None,
-                hybrid: Optional[int] = None,
-                sunny_boy_smart_energy: Optional[int] = None,
+                hybrid: Optional[int] = 0,
+                sunny_boy_smart_energy: Optional[int] = 0,
                 num: Optional[int] = None) -> None:
 
     log.debug("SMA Modbus Ip-Adresse: "+ip1)
@@ -132,10 +132,10 @@ def read_inverter(ip1: str,
                   hybrid: int,
                   num: int,
                   sunny_boy_smart_energy: int):
-    def create_webbox_inverter(address: str):
+    def create_webbox_inverter(address: str) -> SmaWebboxInverter:
         return SmaWebboxInverter(address, SmaWebboxInverterSetup(id=num))
 
-    def create_modbus_inverter(address: str):
+    def create_modbus_inverter(address: str) -> inverter.SmaSunnyBoyInverter:
         config = SmaSunnyBoyInverterSetup(
             id=num,
             configuration=SmaSunnyBoyInverterConfiguration(hybrid=bool(hybrid),
@@ -151,22 +151,36 @@ def read_inverter(ip1: str,
     # we still need to implement this for the read_legacy-bridge.
     # Here we act like we only update the first inverter, while we actually query all inverters and sum them up:
     with SingleComponentUpdateContext(inverter1.component_info):
-        total_power = 0
-        total_energy = 0
-        for inv in itertools.chain((inverter1,), inverters_additional):
-            state = inv.read()
+        if isinstance(inverter1, SmaWebboxInverter):
+            state = inverter1.read()
+            total_power = state.power
+            total_energy = state.exported
+        else:
+            total_energy = 0
+            with inverter1.tcp_client:
+                if hybrid == 1:
+                    if sunny_boy_smart_energy == 0:
+                        bat_comp = bat.SunnyBoyBat(0, SmaSunnyBoyBatSetup(), inverter1.tcp_client)
+                    else:
+                        bat_comp = bat_smart_energy.SunnyBoySmartEnergyBat(0,
+                                                                           SmaSunnyBoySmartEnergyBatSetup(),
+                                                                           inverter1.tcp_client)
+                    bat_state = bat_comp.read()
+                    total_energy = bat_state.imported-bat_state.exported
+                state, produces_dc_power = inverter1.read()
+            total_power = state.power
+            total_energy += state.exported
+            if produces_dc_power:
+                if hybrid == 1:
+                    total_power -= bat_state.power
+            else:
+                total_power = 0
+            print("WR 1 nach Korrektur: {}".format(state))
+        for inv in itertools.chain(inverters_additional):
+            with inv.tcp_client:
+                state = inv.read()[0]
             total_power += state.power
             total_energy += state.exported
-        if hybrid == 1:
-            if sunny_boy_smart_energy == 0:
-                bat_comp = bat.SunnyBoyBat(0, SmaSunnyBoyBatSetup(), modbus.ModbusTcpClient_(ip1, 502))
-            else:
-                bat_comp = bat_smart_energy.SunnyBoySmartEnergyBat(0,
-                                                                   SmaSunnyBoySmartEnergyBatSetup(),
-                                                                   modbus.ModbusTcpClient_(ip1, 502))
-            bat_state = bat_comp.read()
-            total_power -= bat_state.power
-            total_energy = total_energy+bat_state.imported-bat_state.exported
         get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
 

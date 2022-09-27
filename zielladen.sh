@@ -15,7 +15,7 @@ ziellademodus(){
 	soc=$(</var/www/html/openWB/ramdisk/soc)
 	zuladendersoc=$(( zielladensoclp1 - soc ))
 	akkuglp1wh=$(( akkuglp1 * 1000 ))
-	zuladendewh=$(( akkuglp1wh / 100 * zuladendersoc ))
+	zuladendewh=$(( akkuglp1wh * zuladendersoc / 100))
 
 	#ladeleistung ermitteln
 	lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 230 ))
@@ -25,7 +25,7 @@ ziellademodus(){
 	if (( llalt > 5 )); then
 		wunschawh=$(( llalt * zielladenphasenlp1 * 230 ))
 	fi
-	moeglichewh=$(( wunschawh / 60 * minzeitdiff ))
+	moeglichewh=$(( wunschawh * minzeitdiff / 60 ))
 
 	openwbDebugLog "MAIN" 1 "Zielladen aktiv: $wunschawh gewünschte Lade Wh, $lademaxwh maximal mögliche Wh, $zuladendewh zu ladende Wh, $moeglichewh mögliche ladbare Wh bis Zieluhrzeit"
 	diffwh=$(( zuladendewh - moeglichewh ))
@@ -42,7 +42,7 @@ ziellademodus(){
 	else
 		if (( zuladendewh > moeglichewh )); then
 			if (( ladestatus == 0 )); then
-				runs/set-current.sh $zielladenalp1 m
+				runs/set-current.sh "$zielladenalp1" m
 				openwbDebugLog "MAIN" 1 "setzte Soctimer hoch zum Abfragen des aktuellen SoC"
 				echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 				echo 1 > ramdisk/ladungdurchziel
@@ -56,7 +56,7 @@ ziellademodus(){
 						if (( zielneu > zielladenmaxalp1)); then
 							zielneu=$zielladenmaxalp1
 						fi
-						runs/set-current.sh $zielneu m
+						runs/set-current.sh "$zielneu" m
 						exit 0
 					fi
 				fi
@@ -71,7 +71,7 @@ ziellademodus(){
 						if (( zielneu < minimalstromstaerke )); then
 							zielneu=$minimalstromstaerke
 						fi
-						runs/set-current.sh $zielneu m
+						runs/set-current.sh "$zielneu" m
 						exit 0
 					fi
 				fi

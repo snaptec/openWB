@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class TeslaConfiguration:
     def __init__(self, password: Optional[str] = None, email: Optional[str] = None, ip_address: Optional[str] = None):
@@ -25,16 +27,13 @@ class TeslaBatConfiguration:
         pass
 
 
-class TeslaBatSetup:
+class TeslaBatSetup(ComponentSetup[TeslaBatConfiguration]):
     def __init__(self,
                  name: str = "Tesla Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: TeslaBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or TeslaBatConfiguration()
+        super().__init__(name, type, id, configuration or TeslaBatConfiguration())
 
 
 class TeslaCounterConfiguration:
@@ -42,16 +41,13 @@ class TeslaCounterConfiguration:
         pass
 
 
-class TeslaCounterSetup:
+class TeslaCounterSetup(ComponentSetup[TeslaCounterConfiguration]):
     def __init__(self,
                  name: str = "Tesla Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: TeslaCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or TeslaCounterConfiguration()
+        super().__init__(name, type, id, configuration or TeslaCounterConfiguration())
 
 
 class TeslaInverterConfiguration:
@@ -59,13 +55,10 @@ class TeslaInverterConfiguration:
         pass
 
 
-class TeslaInverterSetup:
+class TeslaInverterSetup(ComponentSetup[TeslaInverterConfiguration]):
     def __init__(self,
                  name: str = "Tesla Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: TeslaInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or TeslaInverterConfiguration()
+        super().__init__(name, type, id, configuration or TeslaInverterConfiguration())

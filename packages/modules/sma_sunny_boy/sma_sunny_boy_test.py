@@ -2,9 +2,16 @@ from unittest.mock import Mock
 import pytest
 
 from modules.common.component_state import BatState, InverterState
+from modules.common.modbus import ModbusClient
 from modules.sma_sunny_boy import device
 from modules.sma_sunny_boy.bat import SunnyBoyBat
 from modules.sma_sunny_boy.inverter import SmaSunnyBoyInverter
+
+
+@pytest.fixture(autouse=True)
+def mock_modbus_client(monkeypatch):
+    monkeypatch.setattr(ModbusClient, '__enter__',  Mock())
+    monkeypatch.setattr(ModbusClient, '__exit__',  Mock())
 
 
 class Params:
@@ -37,7 +44,7 @@ def test_sma_modbus_hybrid(monkeypatch, params: Params):
     # setup
     mock_inverter_value_store = Mock()
     monkeypatch.setattr(device, "get_inverter_value_store", Mock(return_value=mock_inverter_value_store))
-    monkeypatch.setattr(SmaSunnyBoyInverter, "read", Mock(return_value=SAMPLE_INVERTER_STATE))
+    monkeypatch.setattr(SmaSunnyBoyInverter, "read", Mock(return_value=(SAMPLE_INVERTER_STATE, True)))
     monkeypatch.setattr(SunnyBoyBat, "read", Mock(return_value=SAMPLE_BAT_STATE))
 
     # execution

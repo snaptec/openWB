@@ -8,12 +8,12 @@ from modules.byd.config import BYD, BYDBatSetup, BYDConfiguration
 from modules.byd.device import Device as BYDDevice
 from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
-from modules.common.store import get_counter_value_store, get_inverter_value_store
+from modules.common.store import get_counter_value_store
 from modules.common import simcount
-from modules.common.component_state import CounterState, InverterState
+from modules.common.component_state import CounterState
 from modules.kostal_piko.config import (KostalPiko,
                                         KostalPikoConfiguration,
-                                        KostalPikoCounterSetup,
+                                        KostalPikoCounterSetup, KostalPikoInverterConfiguration,
                                         KostalPikoInverterSetup)
 from modules.kostal_piko import counter
 from modules.kostal_piko import inverter
@@ -89,27 +89,25 @@ def read_legacy(component_type: str,
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config.id = num
+    if isinstance(component_config, KostalPikoInverterSetup) and bat_module != "none":
+        component_config.configuration.bat_configured = True
     dev.add_component(component_config)
 
     log.debug('KostalPiko IP-Adresse: ' + address)
     log.debug('KostalPiko Speicher: ' + bat_module)
 
-    if component_type == "inverter":
-        with SingleComponentUpdateContext(dev.components["component"+str(num)].component_info):
-            power, exported = dev.components["component"+str(num)].get_values()
-            if bat_module == "speicher_bydhv":
-                bat_power = _get_byd_bat_power(bat_ip, bat_username, bat_password, num)
-                power -= bat_power
-            get_inverter_value_store(num).set(InverterState(power=power, exported=exported))
-    elif component_type == "counter":
+    if isinstance(component_config, KostalPikoInverterSetup):
+        dev.update()
+    elif isinstance(component_config, KostalPikoCounterSetup):
         with SingleComponentUpdateContext(dev.components["componentNone"].component_info):
             home_consumption, powers = dev.components["componentNone"].get_values()
             if bat_module == "speicher_bydhv":
-                bat_power = _get_byd_bat_power(bat_ip, bat_username, bat_password, num)
+                bat_power = _get_byd_bat_power(bat_ip, bat_username, bat_password, 1)
                 home_consumption += bat_power
 
-            dev.add_component(KostalPikoInverterSetup(id=num))
-            inverter_power, _ = dev.components["component"+str(num)].get_values()
+            dev.add_component(KostalPikoInverterSetup(
+                id=1, configuration=KostalPikoInverterConfiguration(bat_configured=True)))
+            inverter_power, _ = dev.components["component"+str(1)].get_values()
 
             power = home_consumption + inverter_power
             imported, exported = simcount.SimCountFactory().get_sim_counter(
@@ -128,7 +126,7 @@ def _get_byd_bat_power(bat_ip: str, bat_username: str, bat_password: str, num: i
                                                            password=bat_password,
                                                            ip_address=bat_ip)))
     bat_dev.add_component(BYDBatSetup(id=num))
-    bat_power, _ = bat_dev.components["component0"].get_values()
+    bat_power, _ = bat_dev.components["component"+str(num)].get_values()
     return bat_power
 
 

@@ -123,4 +123,4 @@ def main(argv: List[str]) -> None:
     run_using_positional_cli_args(read_legacy, argv)
 
 
-module_descriptor = DeviceDescriptor(configuration_factory=Fronius)
+device_descriptor = DeviceDescriptor(configuration_factory=Fronius)

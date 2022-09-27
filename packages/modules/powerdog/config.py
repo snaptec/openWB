@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class PowerdogConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,16 +25,13 @@ class PowerdogCounterConfiguration:
         pass
 
 
-class PowerdogCounterSetup:
+class PowerdogCounterSetup(ComponentSetup[PowerdogCounterConfiguration]):
     def __init__(self,
                  name: str = "Powerdog Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: PowerdogCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or PowerdogCounterConfiguration()
+        super().__init__(name, type, id, configuration or PowerdogCounterConfiguration())
 
 
 class PowerdogInverterConfiguration:
@@ -40,13 +39,10 @@ class PowerdogInverterConfiguration:
         pass
 
 
-class PowerdogInverterSetup:
+class PowerdogInverterSetup(ComponentSetup[PowerdogInverterConfiguration]):
     def __init__(self,
                  name: str = "Powerdog Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: PowerdogInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or PowerdogInverterConfiguration()
+        super().__init__(name, type, id, configuration or PowerdogInverterConfiguration())

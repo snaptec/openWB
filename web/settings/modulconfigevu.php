@@ -88,6 +88,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens_sentron") echo "selected" ?> value="bezug_siemens_sentron">Siemens SENTRON</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
@@ -138,6 +139,9 @@
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
+							</div>
 							<div class="form-row mb-1">
 								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
 								<div class="col">
@@ -215,6 +219,11 @@
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
 							</div>
 						</div>
+						<div id="wattbezugsiemenssentron" class="hide">
+							<div class="card-text alert alert-info">
+								Derzeit werden nur Messgeräte vom Typ "7KM PAC2200" mit Ethernet-Schnittstelle unterstützt.
+							</div>
+						</div>
 						<div id="wattbezugrct" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des RCT Speichers eingeben.
@@ -251,6 +260,7 @@
 									<input class="form-control" type="text" name="powerfoxid" id="powerfoxid" value="<?php echo $powerfoxidold ?>">
 									<span class="form-text small">
 										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.
+										Die Device ID ist exakt so einzutragen, wie in der Antwort des Servers. Das bedeutet insbesondere auch die Groß-/KLeinschreibung ist zu beachten!
 									</span>
 								</div>
 							</div>
@@ -989,6 +999,7 @@
 								hideSection('#wattbezugvarta');
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
+								hideSection('#wattbezugsiemenssentron');
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
@@ -1028,6 +1039,10 @@
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_siemens_sentron') {
+									showSection('#wattbezugip');
+									showSection('#wattbezugsiemenssentron');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_janitza') {
 									showSection('#wattbezugjanitza');

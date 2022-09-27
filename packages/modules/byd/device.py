@@ -87,4 +87,4 @@ def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
 
 
-device_descriptor = DeviceDescriptor(configuration_factory=BYDConfiguration)
+device_descriptor = DeviceDescriptor(configuration_factory=BYD)
