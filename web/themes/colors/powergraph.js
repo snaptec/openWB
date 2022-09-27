@@ -293,6 +293,7 @@ class PowerGraph {
       let deviceIndex = (wbdata.graphMode == 'day') ? 26 : 19;
       for (var i = 0; i < 9; i++) {
         deviceEnergy = (endValues[deviceIndex + i] - startValues[deviceIndex + i]) / 1000;
+        if (deviceEnergy < 0) {deviceEnergy = 0}
         deviceEnergySum = deviceEnergySum + deviceEnergy
         wbdata.historicSummary['sh' + i].energy = deviceEnergy
       }
