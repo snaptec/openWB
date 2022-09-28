@@ -12,7 +12,7 @@ backup() {
 
 	# tell mosquitto to store all retained topics in db now
 	openwbDebugLog MAIN 1 "sending 'SIGUSR1' to mosquitto"
-	sudo pkill -SIGUSR1 mosquitto
+	sudo pkill -e -SIGUSR1 mosquitto
 	# give mosquitto some time to finish
 	sleep 0.2
 
