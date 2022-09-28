@@ -1419,9 +1419,39 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/evu/HzFrequenz"):
+            if ((msg.topic == "openWB/set/evu/HzFrequenz") or (msg.topic == "openWB/set/evu/Hz")):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 80):
                     f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/evu/WPhase1"):
+                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+                    f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/evu/WPhase2"):
+                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+                    f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/evu/WPhase3"):
+                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+                    f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/evu/PfPhase1"):
+                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+                    f = open('/var/www/html/openWB/ramdisk/evupf1', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/evu/PfPhase2"):
+                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+                    f = open('/var/www/html/openWB/ramdisk/evupf2', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+            if (msg.topic == "openWB/set/evu/PfPhase3"):
+                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+                    f = open('/var/www/html/openWB/ramdisk/evupf3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/evu/WhImported"):
