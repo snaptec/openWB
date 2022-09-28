@@ -1419,51 +1419,31 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if ((msg.topic == "openWB/set/evu/HzFrequenz") or (msg.topic == "openWB/set/evu/Hz")):
+            if msg.topic == "openWB/set/evu/HzFrequenz" or msg.topic == "openWB/set/evu/Hz":
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 80):
                     f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/evu/WPhase1"):
-                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
-                    f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/evu/WPhase2"):
-                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
-                    f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/evu/WPhase3"):
-                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
-                    f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/evu/PfPhase1"):
-                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
-                    f = open('/var/www/html/openWB/ramdisk/evupf1', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/evu/PfPhase2"):
-                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
-                    f = open('/var/www/html/openWB/ramdisk/evupf2', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-            if (msg.topic == "openWB/set/evu/PfPhase3"):
-                if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
-                    f = open('/var/www/html/openWB/ramdisk/evupf3', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
+            wphase_match = re.match("openWB/set/evu/WPhase([123])$", msg.topic)
+            if wphase_match is not None:
+                files.evu.powers_import[int(wphase_match.group(1)) - 1].write(float(msg.payload.decode("utf-8")))
+            pfphase_match = re.match("openWB/set/evu/PfPhase([123])$", msg.topic)
+            if pfphase_match is not None:
+                files.evu.power_factors[int(pfphase_match.group(1)) - 1].write(float(msg.payload.decode("utf-8")))
             if (msg.topic == "openWB/set/evu/WhImported"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
                     f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+                else:
+                    log.warning("Ignoring value %s for topic %s (out of range)", msg.payload, msg.topic)
             if (msg.topic == "openWB/set/evu/WhExported"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
                     f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+                else:
+                    log.warning("Ignoring value %s for topic %s (out of range)", msg.payload, msg.topic)
             if (msg.topic == "openWB/set/evu/faultState"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                     client.publish("openWB/evu/faultState", msg.payload.decode("utf-8"), qos=0, retain=True)
