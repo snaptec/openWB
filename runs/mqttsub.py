@@ -1435,15 +1435,11 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-                else:
-                    log.warning("Ignoring value %s for topic %s (out of range)", msg.payload, msg.topic)
             if (msg.topic == "openWB/set/evu/WhExported"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
                     f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-                else:
-                    log.warning("Ignoring value %s for topic %s (out of range)", msg.payload, msg.topic)
             if (msg.topic == "openWB/set/evu/faultState"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                     client.publish("openWB/evu/faultState", msg.payload.decode("utf-8"), qos=0, retain=True)
