@@ -65,7 +65,6 @@ if __name__ == "__main__":
         "apptimezone": apptimezone,
         "apptimezoneid": apptimezoneid,
         "content-type": "application/json; charset=utf-8",
-        "content-length": "65",
         "accept-encoding": "gzip",
         "user-agent": "okhttp/4.3.1"
     }
@@ -101,7 +100,6 @@ if __name__ == "__main__":
         "apptimezone": apptimezone,
         "apptimezoneid": apptimezoneid,
         "content-type": "application/json; charset=utf-8",
-        "content-length": "54",
         "accept-encoding": "gzip",
         "user-agent": "okhttp/4.3.1"
     }
