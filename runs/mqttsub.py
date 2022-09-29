@@ -1060,10 +1060,12 @@ def on_message(client, userdata, msg):
             if (msg.topic == "openWB/set/system/reloadDisplay"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
                     client.publish("openWB/system/reloadDisplay", msg.payload.decode("utf-8"), qos=0, retain=True)
-            if (msg.topic == "openWB/config/set/releaseTrain"):
-                if ( msg.payload.decode("utf-8") == "stable17" or msg.payload.decode("utf-8") == "master" or msg.payload.decode("utf-8") == "beta" or msg.payload.decode("utf-8").startswith("yc/")):
-                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "releasetrain=", msg.payload.decode("utf-8")]
+            if (msg.topic == "openWB/set/system/releaseTrain"):
+                releaseTrain = msg.payload.decode("utf-8")
+                if ( releaseTrain == "stable17" or releaseTrain == "master" or releaseTrain == "beta" or releaseTrain.startswith("yc/")):
+                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "releasetrain=", releaseTrain]
                     subprocess.run(sendcommand)
+                    client.publish("openWB/system/releaseTrain", releaseTrain, qos=0, retain=True)
             if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
                 if (int(msg.payload) == 1):
                     subprocess.run("/var/www/html/openWB/runs/sendlivegraphdata.sh")
