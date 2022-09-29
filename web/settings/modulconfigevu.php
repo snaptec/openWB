@@ -195,7 +195,13 @@
 								<span class="text-info">openWB/set/evu/VPhase1</span> Spannung in Volt für Phase 1, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase2</span> Spannung in Volt für Phase 2, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase3</span> Spannung in Volt für Phase 3, float, Punkt als Trenner<br>
-								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner
+								<span class="text-info">openWB/set/evu/HzFrequenz</span> oder <span class="text-info">openWB/set/evu/Hz</span> Netzfrequenz in Hz, float, Punkt als Trenner<br>
+								<span class="text-info">openWB/set/evu/WPhase1</span> Leistung in Watt für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase2</span> Leistung in Watt für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase3</span> Leistung in Watt für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase1</span> Powerfaktor für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase2</span> Powerfaktor für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase3</span> Powerfaktor für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung
 							</div>
 						</div>
 						<div id="wattbezuglgessv1" class="hide">

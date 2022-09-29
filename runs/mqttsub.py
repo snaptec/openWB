@@ -1421,11 +1421,17 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/evu/HzFrequenz"):
+            if msg.topic == "openWB/set/evu/HzFrequenz" or msg.topic == "openWB/set/evu/Hz":
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 80):
                     f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+            wphase_match = re.match("openWB/set/evu/WPhase([123])$", msg.topic)
+            if wphase_match is not None:
+                files.evu.powers_import[int(wphase_match.group(1)) - 1].write(float(msg.payload.decode("utf-8")))
+            pfphase_match = re.match("openWB/set/evu/PfPhase([123])$", msg.topic)
+            if pfphase_match is not None:
+                files.evu.power_factors[int(pfphase_match.group(1)) - 1].write(float(msg.payload.decode("utf-8")))
             if (msg.topic == "openWB/set/evu/WhImported"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
                     f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
