@@ -9,6 +9,7 @@ from usmarthome.global0 import log, log_config
 from usmarthome.smartbase import Sbase
 from usmarthome.smartavm import Savm
 from usmarthome.smartacthor import Sacthor
+from usmarthome.smartnxdacxx import Snxdacxx
 from usmarthome.smartelwa import Selwa
 from usmarthome.smartidm import Sidm
 from usmarthome.smarthttp import Shttp
@@ -350,6 +351,8 @@ def update_devices():
                     mydevice = Sviessmann()
                 elif (device_type == 'acthor'):
                     mydevice = Sacthor()
+                elif (device_type == 'NXDACXX'):
+                    mydevice = Snxdacxx()
                 elif (device_type == 'elwa'):
                     mydevice = Selwa()
                 elif (device_type == 'idm'):
