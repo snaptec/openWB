@@ -719,7 +719,7 @@
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Fronius WR.
 										</span>
-										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php if(isset($wrfroniusip)) echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
 										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>

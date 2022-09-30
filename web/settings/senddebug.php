@@ -60,7 +60,7 @@
 				</div>
 				<?php
 					$result = '';
-					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>20) {
+					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>=20) {
 						$result = $_POST['debugMessage'] . "\n";
 						$result .= "E-Mail: " . $_POST['emailAddress'] . "\n";
 						$result .= "Seriennummer: " . $_POST['serialNumber'] . "\n";
