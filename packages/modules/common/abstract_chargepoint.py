@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 class AbstractChargepoint:
     @abstractmethod
-    def __init__(self, config: dict) -> None:
+    def __init__(self, id: int, connection_module: dict, power_module: dict) -> None:
         pass
 
     @abstractmethod
