@@ -499,6 +499,9 @@
 							</div>
 						</div>
 						<div id="pvenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Geräte mit Firmware-Versionen 7.0 oder neuer werden derzeit nicht unterstützt.
+							</div>
 							<div class="form-row mb-1">
 								<label for="wrenphasehostname" class="col-md-4 col-form-label">Envoy / IQ-Gateway IP/Hostname</label>
 								<div class="col">
