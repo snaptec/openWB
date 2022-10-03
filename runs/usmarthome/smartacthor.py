@@ -13,6 +13,7 @@ class Sacthor(Sbase):
         self._device_acthortype = 'none'
         self._device_acthorpower = 'none'
         self.device_nummer = 0
+        self._dynregel = 1
 
     def updatepar(self, input_param):
         super().updatepar(input_param)
@@ -33,10 +34,11 @@ class Sacthor(Sbase):
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)
+        forcesend = self.checkbefsend()
         argumentList = ['python3', self._prefixpy + 'acthor/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), self._device_acthortype,
-                        self._device_acthorpower]
+                        self._device_acthorpower, str(forcesend)]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
@@ -44,6 +46,7 @@ class Sacthor(Sbase):
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
             self.relais = int(self.answer['on'])
+            self.checksend(self.answer)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") Leistungsmessung %s %d %s Fehlermeldung: %s "

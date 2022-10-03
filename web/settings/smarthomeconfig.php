@@ -573,6 +573,13 @@ $numDevices = 9;
 											</div>
 										</div>
 										<div class="form-row mb-1">
+											<label for="device_updatesecDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Updategerät</label>
+											<div class="col">
+												<input id="device_updatesecDevices<?php echo $devicenum; ?>" name="device_updatesec" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="180" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<span class="form-text small">Parameter in Sekunden (von 0 bis 180), in was für einen Abstand openWB das Gerät updatet. 0 Sekunden bedeutet Defaultverhalten. Das Defaultverhalten ist pro Typ definiert und eher konservativ (langsam).</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
 											<label for="device_ausschaltschwelleDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Ausschaltschwelle</label>
 											<div class="col">
 												<div class="form-row vaRow">

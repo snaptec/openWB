@@ -18,7 +18,7 @@ class PvKit(PvKitFlex):
         self.component_config = dataclass_from_dict(PvKitInverterSetup, component_config)
         version = self.component_config.configuration.version
         if version == 0 or version == 1:
-            id = 0x08
+            id = 8
         elif version == 2:
             id = 116
         else:

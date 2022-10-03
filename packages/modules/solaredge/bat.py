@@ -16,6 +16,8 @@ from modules.solaredge.config import SolaredgeBatSetup
 
 log = logging.getLogger(__name__)
 
+FLOAT32_UNSUPPORTED = -0xffffff00000000000000000000000000
+
 
 class SolaredgeBat:
     def __init__(self,
@@ -48,6 +50,8 @@ class SolaredgeBat:
             62852, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
         power = self.__tcp_client.read_holding_registers(
             62836, ModbusDataType.FLOAT_32, wordorder=Endian.Little, unit=unit)
+        if power == FLOAT32_UNSUPPORTED:
+            power = 0
         return power, soc
 
     def get_imported_exported(self, power: float) -> Tuple[float, float]:

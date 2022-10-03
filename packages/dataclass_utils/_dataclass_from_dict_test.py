@@ -1,4 +1,4 @@
-from typing import Type, TypeVar
+from typing import Type, TypeVar, Generic
 
 import pytest
 
@@ -13,10 +13,20 @@ class SimpleSample:
         self.b = b
 
 
-class NestedSample():
+class NestedSample:
     def __init__(self, normal: str, nested: SimpleSample):
         self.normal = normal
         self.nested = nested
+
+
+class Base(Generic[T]):
+    def __init__(self, a: T):
+        self.a = a
+
+
+class Extends(Base[str]):
+    def __init__(self, a: str):
+        super().__init__(a)
 
 
 def test_from_dict_simple():
@@ -56,6 +66,14 @@ def test_from_dict_returns_args_if_type_correct():
 
     # evaluation
     assert actual is sample
+
+
+def test_from_dict_extends_generic():
+    # execution
+    actual = dataclass_from_dict(Extends, {"a": "aValue"})
+
+    # evaluation
+    assert actual.a == "aValue"
 
 
 @pytest.mark.parametrize(["type", "invalid_parameter"], [

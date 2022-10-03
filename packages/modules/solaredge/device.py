@@ -2,7 +2,7 @@
 import logging
 from operator import add
 from statistics import mean
-from typing import Dict, Tuple, Union, Optional, List
+from typing import Dict, Iterable, Tuple, Union, Optional, List
 from urllib3.util import parse_url
 
 try:
@@ -18,28 +18,30 @@ from modules.common.component_context import MultiComponentUpdateContext, Single
 from modules.common.component_state import BatState, InverterState
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store, get_bat_value_store
-from modules.solaredge import bat
-from modules.solaredge import counter
-from modules.solaredge import external_inverter
-from modules.solaredge import inverter
+from modules.solaredge import bat, counter, external_inverter, inverter
+from modules.solaredge.bat import SolaredgeBat
+from modules.solaredge.counter import SolaredgeCounter
+from modules.solaredge.external_inverter import SolaredgeExternalInverter
+from modules.solaredge.inverter import SolaredgeInverter
 from modules.solaredge.config import (Solaredge, SolaredgeBatConfiguration, SolaredgeBatSetup, SolaredgeConfiguration,
                                       SolaredgeCounterConfiguration, SolaredgeCounterSetup,
                                       SolaredgeExternalInverterConfiguration, SolaredgeExternalInverterSetup,
                                       SolaredgeInverterConfiguration, SolaredgeInverterSetup)
+from modules.solaredge.meter import SolaredgeMeterRegisters
 
 log = logging.getLogger(__name__)
 
-solaredge_component_classes = Union[bat.SolaredgeBat, counter.SolaredgeCounter,
-                                    external_inverter.SolaredgeExternalInverter, inverter.SolaredgeInverter]
+solaredge_component_classes = Union[SolaredgeBat, SolaredgeCounter,
+                                    SolaredgeExternalInverter, SolaredgeInverter]
 default_unit_id = 85
 
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.SolaredgeBat,
-        "counter": counter.SolaredgeCounter,
-        "inverter": inverter.SolaredgeInverter,
-        "external_inverter": external_inverter.SolaredgeExternalInverter
+        "bat": SolaredgeBat,
+        "counter": SolaredgeCounter,
+        "inverter": SolaredgeInverter,
+        "external_inverter": SolaredgeExternalInverter
     }
 
     def __init__(self, device_config: Union[Dict, Solaredge]) -> None:
@@ -49,6 +51,7 @@ class Device(AbstractDevice):
             self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
                                                   self.device_config.configuration.port)
             self.inverter_counter = 0
+            self.synergy_units = 1
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
 
@@ -69,11 +72,33 @@ class Device(AbstractDevice):
                 self.device_config.id, component_config, self.client))
             if component_type == "inverter" or component_type == "external_inverter":
                 self.inverter_counter += 1
+            self.synergy_units = int(self.client.read_holding_registers(
+                40129, modbus.ModbusDataType.UINT_16,
+                unit=component_config.configuration.modbus_id)) or 1
+            log.debug("Synergy Units: %s", self.synergy_units)
+            if component_type == "external_inverter" or component_type == "counter" or component_type == "inverter":
+                self.set_component_registers(self.components.values(), self.synergy_units)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
                 ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
             )
+
+    @staticmethod
+    def set_component_registers(components: Iterable[solaredge_component_classes], synergy_units: int) -> None:
+        meters = [None]*3  # type: List[Union[SolaredgeExternalInverter, SolaredgeCounter, None]]
+        for component in components:
+            if isinstance(component, (SolaredgeExternalInverter, SolaredgeCounter)):
+                meters[component.component_config.configuration.meter_id-1] = component
+
+        # https://www.solaredge.com/sites/default/files/sunspec-implementation-technical-note.pdf:
+        # Only enabled meters are readable, i.e. if meter 1 and 3 are enabled, they are readable as 1st meter and 2nd
+        # meter (and the 3rd meter isn't readable).
+        for meter_id, meter in enumerate(filter(None, meters), start=1):
+            log.debug(
+                "%s: internal meter id: %d, synergy units: %s", meter.component_config.name, meter_id, synergy_units
+            )
+            meter.registers = SolaredgeMeterRegisters(meter_id, synergy_units)
 
     def update(self) -> None:
         log.debug("Start device reading " + str(self.components))
@@ -95,15 +120,14 @@ class Device(AbstractDevice):
                             else:
                                 total_power -= state.power
                     for component in self.components.values():
-                        if (isinstance(component, inverter.SolaredgeInverter) or
-                                isinstance(component, external_inverter.SolaredgeExternalInverter)):
+                        if isinstance(component, (SolaredgeInverter, SolaredgeExternalInverter)):
                             state = component.read_state()
                             # In 1.9 wurde bisher die Summe der WR-Leistung um die Summe der Batterie-Leistung
                             # bereinigt. Zähler und Ströme wurden nicht bereinigt.
                             state.power = state.power - total_power/self.inverter_counter
                             component.update(state)
                     for component in self.components.values():
-                        if isinstance(component, counter.SolaredgeCounter):
+                        if isinstance(component, SolaredgeCounter):
                             component.update()
         else:
             log.warning(
@@ -115,6 +139,7 @@ class Device(AbstractDevice):
 COMPONENT_TYPE_TO_MODULE = {
     "bat": bat,
     "counter": counter,
+    "external_inverter": external_inverter,
     "inverter": inverter
 }
 
@@ -153,14 +178,14 @@ def read_legacy(component_type: str,
                                                           configuration=SolaredgeExternalInverterConfiguration(
                                                               modbus_id=id))
 
-        ext_inverter = external_inverter.SolaredgeExternalInverter(
+        ext_inverter = SolaredgeExternalInverter(
             dev.device_config.id, component_config, dev.client)
         return ext_inverter.read_state()
 
-    def create_inverter(modbus_id: int) -> inverter.SolaredgeInverter:
+    def create_inverter(modbus_id: int) -> SolaredgeInverter:
         component_config = SolaredgeInverterSetup(id=num,
                                                   configuration=SolaredgeInverterConfiguration(modbus_id=modbus_id))
-        return inverter.SolaredgeInverter(dev.device_config.id, component_config, dev.client)
+        return SolaredgeInverter(dev.device_config.id, component_config, dev.client)
 
     log.debug("Solaredge IP: "+ip_address+":"+str(port))
     log.debug("Solaredge Slave-IDs: ["+str(slave_id0)+", "+str(slave_id1)+", "+str(slave_id2)+", "+str(slave_id3)+"]")

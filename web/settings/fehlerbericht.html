@@ -41,7 +41,7 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<h1>Fehlermeldungen</h1>
+			<h1>Systembericht</h1>
 
 			<div class="alert alert-danger datenschutznotack hide">
 				Sie müssen der <a href="settings/datenschutz.html">Datenschutzerklärung</a> zustimmen, um eine Fehlermeldung senden zu können.
@@ -53,22 +53,71 @@
 			<div class="card border-secondary">
 				<form class="form" id="sendDebugMessageForm" action="./settings/senddebug.php" method="POST">
 					<div class="card-header bg-secondary">
-						Debug-Meldung
+						Daten zum Systembericht
 					</div>
 					<div class="card-body">
-						<div class="form-group">
-							<span id="textareaHelpBlock" class="form-text">Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen. Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen! Der Debug Modus muss nicht verstellt werden.</span>
-							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" minlength="20" maxlength="500" required="required"></textarea>
-							<small id="textareaTextLength" class="form-text text-muted text-right">500/500</small>
-						</div>
 						<div class="form-group mb-0">
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<div class="input-group-text">
-										<i class="fa fa-envelope"></i>
-									</div>
+							<div id="textareaHelpBlock" class="alert alert-warning">
+								<ul>
+									<li>
+										Vergewissern Sie sich, dass mindestens die aktuelle "Stable" Version installiert ist.
+									</li>
+									<li>
+										Stellen Sie beim Absenden des Berichtes die Fehlerkonditionen her. Lädt ein Fahrzeug nicht, sollte es angeschlossen und nicht voll geladen sein.
+										Ist PV laden betroffen, sollte die Sonne auch scheinen. Der Systembericht muss dann versendet werden, wenn der Fehler aktuell vorliegt.
+									</li>
+									<li>
+										Stellen Sie sicher, dass der Lademodus korrekt gewählt ist und im Falle von nicht ladenden Fahrzeugen, dass der Ladepunkt auch entsperrt wurde.
+									</li>
+									<li>
+										Das Auslesen der Systemkonfiguration erfolgt direkt nach den Klick auf Absenden und kann einige Zeit in Anspruch nehmen.
+										Sie erhalten ca. 15 bis 30 Minuten nach Versand des Systemberichtes von uns automatisch eine E-Mail mit der Ticketnummer unter der die Anfrage bei uns registriert wurde.
+										Wir melden uns bei ihnen. Bitte kontrollieren Sie daher immer auch den Spam Ordner auf eingehende Nachrichten.
+										Erhalten Sie trotzdem keine Ticketnummer, ist das Versenden des Systemberichtes fehlgeschlagen.
+									</li>
+								</ul>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Problembeschreibung</label>
+								<div class="col">
+									<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" minlength="20" maxlength="500" required="required"></textarea>
+									<small id="textareaTextLength" class="form-text text-muted text-right">500/500</small>
 								</div>
-								<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required="required">
+							</div>
+							<div class="form-row mb-1">
+								<label for="emailAddress" class="col-md-4 col-form-label">E-Mail</label>
+								<div class="col">
+									<div class="input-group mb-1">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												<i class="fa fa-envelope"></i>
+											</div>
+										</div>
+										<input type="email" class="form-control" id="emailAddress" name="emailAddress" required="required">
+									</div>
+									<span class="form-text small">Ihre Email-Adresse. Notwendig für Rückfragen.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="serialNumber" class="col-md-4 col-form-label">OpenWB Seriennummer</label>
+								<div class="col">
+									<input type="text" class="form-control" id="serialNumber" name="serialNumber" required="required">
+									<span class="form-text small">Die Seriennummer der openWB finden Sie außen am Gehäuse - bei  Älteren innen im Gehäuse. Sie können uns aber auch eine Bestellnummer oder Rechnungsnummer übermitteln. Das Gehäuse muss nicht extra geöffnet werden!</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="installedComponents" class="col-md-4 col-form-label">Verwendete Komponenten</label>
+								<div class="col">
+									<textarea class="form-control" id="installedComponents" name="installedComponents" minlength="3" maxlength="500" required="required"></textarea>
+									<span class="form-text small">Geben Sie hier möglichst detailliert an, welche Anlagenkomponenten (EVU, PV, Speicher) angebunden sind.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="vehicles" class="col-md-4 col-form-label">Fahrzeuge</label>
+								<div class="col">
+									<textarea class="form-control" id="vehicles" name="vehicles" minlength="3" maxlength="500" required="required"></textarea>
+									<span class="form-text small">Geben Sie hier an, welche Fahrzeuge geladen werden (Hersteller, Modell, Baujahr).</span>
+								</div>
 							</div>
 						</div>
 					</div>
