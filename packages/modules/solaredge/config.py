@@ -38,8 +38,9 @@ class SolaredgeBatSetup(ComponentSetup[SolaredgeBatConfiguration]):
 
 
 class SolaredgeCounterConfiguration:
-    def __init__(self, modbus_id: int = 1):
+    def __init__(self, modbus_id: int = 1, meter_id: int = 1):
         self.modbus_id = modbus_id
+        self.meter_id = meter_id
 
 
 class SolaredgeCounterSetup(ComponentSetup[SolaredgeCounterConfiguration]):
@@ -52,8 +53,9 @@ class SolaredgeCounterSetup(ComponentSetup[SolaredgeCounterConfiguration]):
 
 
 class SolaredgeExternalInverterConfiguration:
-    def __init__(self, modbus_id: int = 1):
+    def __init__(self, modbus_id: int = 1, meter_id: int = 2):
         self.modbus_id = modbus_id
+        self.meter_id = meter_id
 
 
 class SolaredgeExternalInverterSetup(ComponentSetup[SolaredgeExternalInverterConfiguration]):
