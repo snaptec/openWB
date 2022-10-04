@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
+import logging
 from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
-from modules.common import simcount
 from modules.common.component_state import InverterState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
 from modules.enphase.config import EnphaseInverterSetup
+
+log = logging.getLogger(__name__)
 
 
 class EnphaseInverter:
@@ -25,8 +27,8 @@ class EnphaseInverter:
             if m['eid'] == int(config.eid):
                 meter = m
                 break
-        
-        if meter == None:
+
+        if meter is None:
             # configuration wrong or error
             log.warning(
                 self.device_config.name +

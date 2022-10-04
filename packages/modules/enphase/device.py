@@ -7,26 +7,21 @@ from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
 from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import MultiComponentUpdateContext
-# bat, 
 from modules.enphase import counter, inverter
 from modules.enphase.config import (Enphase,
-#                                 EnphaseBatConfiguration,
-#                                 EnphaseBatSetup,
-                                 EnphaseConfiguration,
-                                 EnphaseCounterConfiguration,
-                                 EnphaseCounterSetup,
-                                 EnphaseInverterConfiguration,
-                                 EnphaseInverterSetup)
+                                    EnphaseConfiguration,
+                                    EnphaseCounterConfiguration,
+                                    EnphaseCounterSetup,
+                                    EnphaseInverterConfiguration,
+                                    EnphaseInverterSetup)
 
 log = logging.getLogger(__name__)
 
-#bat.EnphaseBat, 
 enphase_component_classes = Union[counter.EnphaseCounter, inverter.EnphaseInverter]
 
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-#        "bat": bat.EnphaseBat,
         "counter": counter.EnphaseCounter,
         "inverter": inverter.EnphaseInverter
     }
@@ -37,7 +32,7 @@ class Device(AbstractDevice):
             self.device_config = dataclass_from_dict(Enphase, device_config)
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
-# EnphaseBatSetup, 
+
     def add_component(self, component_config: Union[Dict, EnphaseCounterSetup, EnphaseInverterSetup]) -> None:
         if isinstance(component_config, Dict):
             component_type = component_config["type"]
@@ -58,7 +53,8 @@ class Device(AbstractDevice):
         log.debug("Start device reading " + str(self.components))
         if self.components:
             with MultiComponentUpdateContext(self.components):
-                response = req.get_http_session().get('http://'+self.device_config.configuration.hostname+'/ivp/meters/readings', timeout=5)
+                response = req.get_http_session().get(
+                           'http://'+self.device_config.configuration.hostname+'/ivp/meters/readings', timeout=5)
                 for component in self.components:
                     self.components[component].update(response.json())
         else:
@@ -69,21 +65,15 @@ class Device(AbstractDevice):
 
 
 COMPONENT_TYPE_TO_MODULE = {
-#    "bat": bat,
     "counter": counter,
     "inverter": inverter
 }
 
-# EnphaseBatSetup, 
+
 def read_legacy(hostname: str, component_config: Union[EnphaseCounterSetup, EnphaseInverterSetup]) -> None:
     dev = Device(Enphase(configuration=EnphaseConfiguration(hostname=hostname)))
     dev.add_component(component_config)
     dev.update()
-
-
-#def read_legacy_bat(ip_address: str, jq_power: str, jq_soc: str):
-#    config = EnphaseBatConfiguration(jq_power=jq_power, jq_soc=jq_soc)
-#    read_legacy(ip_address, bat.component_descriptor.configuration_factory(id=None, configuration=config))
 
 
 def read_legacy_counter(ip_address: str, eid: str):

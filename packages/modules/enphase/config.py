@@ -5,27 +5,17 @@ class EnphaseConfiguration:
     def __init__(self, hostname=None):
         self.hostname = hostname
 
-class Enphase(ComponentSetup[EnphaseConfiguration]):
+
+class Enphase:
     def __init__(self,
                  name: str = "Enphase",
                  type: str = "enphase",
                  id: int = 0,
                  configuration: EnphaseConfiguration = None) -> None:
-        super().__init__(name, type, id, configuration or EnphaseConfiguration())
-
-
-#class EnphaseBatConfiguration:
-#    def __init__(self):
-#        pass
-
-
-#class EnphaseBatSetup(ComponentSetup[EnphaseBatConfiguration]):
-#    def __init__(self,
-#                 name: str = "Enphase Speicher",
-#                 type: str = "bat",
-#                 id: int = 0,
-#                 configuration: EnphaseBatConfiguration = None) -> None:
-#        super().__init__(name, type, id, configuration or EnphaseBatConfiguration())
+        self.name = name
+        self.type = type,
+        self.id = id,
+        self.configuration = configuration or EnphaseConfiguration()
 
 
 class EnphaseCounterConfiguration:
@@ -53,4 +43,4 @@ class EnphaseInverterSetup(ComponentSetup[EnphaseInverterConfiguration]):
                  type: str = "inverter",
                  id: int = 0,
                  configuration: EnphaseInverterConfiguration = None) -> None:
-        super().__init__(name, type, id, configuration or  or EnphaseInverterConfiguration())
+        super().__init__(name, type, id, configuration or EnphaseInverterConfiguration())
