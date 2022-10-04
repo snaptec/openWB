@@ -48,7 +48,8 @@ class UpdateValues:
     }
 
     def __init__(self, local_charge_point_num: int) -> None:
-        self.cp_num = str(Isss.get_cp_num(local_charge_point_num))
+        self.local_charge_point_num_str = str(local_charge_point_num)
+        self.cp_num_str = str(Isss.get_cp_num(local_charge_point_num))
         self.old_counter_state = None
 
     def update_values(self, counter_state: ChargepointState) -> None:
@@ -70,8 +71,9 @@ class UpdateValues:
 
     def _pub_values_to_1_9(self, key: str, value) -> None:
         def pub_value(topic: str, value):
-            pub_single("openWB/lp/"+self.cp_num+"/"+topic, payload=str(value), no_json=True)
-            pub_single("openWB/lp/"+self.cp_num+"/"+topic, payload=str(value), hostname=self.parent_wb, no_json=True)
+            pub_single("openWB/lp/"+self.local_charge_point_num_str+"/"+topic, payload=str(value), no_json=True)
+            pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
+                       payload=str(value), hostname=self.parent_wb, no_json=True)
         topic = self.MAP_KEY_TO_OLD_TOPIC[key]
         rounding = get_rounding_function_by_digits(2)
         if topic is not None:
@@ -94,13 +96,14 @@ class UpdateValues:
         if topic == "rfid" and value == "0":
             value = None
         if isinstance(value, (str, bool, type(None))):
-            pub_single("openWB/set/chargepoint/" + self.cp_num+"/get/"+topic, payload=value, hostname=self.parent_wb)
+            pub_single("openWB/set/chargepoint/" + self.cp_num_str +
+                       "/get/"+topic, payload=value, hostname=self.parent_wb)
         else:
             if isinstance(value, list):
-                pub_single("openWB/set/chargepoint/" + self.cp_num+"/get/"+topic,
+                pub_single("openWB/set/chargepoint/" + self.cp_num_str+"/get/"+topic,
                            payload=[rounding(v) for v in value], hostname=self.parent_wb)
             else:
-                pub_single("openWB/set/chargepoint/" + self.cp_num+"/get/"+topic,
+                pub_single("openWB/set/chargepoint/" + self.cp_num_str+"/get/"+topic,
                            payload=rounding(value), hostname=self.parent_wb)
 
 
