@@ -88,6 +88,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens_sentron") echo "selected" ?> value="bezug_siemens_sentron">Siemens SENTRON</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
@@ -194,7 +195,13 @@
 								<span class="text-info">openWB/set/evu/VPhase1</span> Spannung in Volt für Phase 1, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase2</span> Spannung in Volt für Phase 2, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase3</span> Spannung in Volt für Phase 3, float, Punkt als Trenner<br>
-								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner
+								<span class="text-info">openWB/set/evu/HzFrequenz</span> oder <span class="text-info">openWB/set/evu/Hz</span> Netzfrequenz in Hz, float, Punkt als Trenner<br>
+								<span class="text-info">openWB/set/evu/WPhase1</span> Leistung in Watt für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase2</span> Leistung in Watt für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase3</span> Leistung in Watt für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase1</span> Powerfaktor für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase2</span> Powerfaktor für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase3</span> Powerfaktor für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung
 							</div>
 						</div>
 						<div id="wattbezuglgessv1" class="hide">
@@ -216,6 +223,11 @@
 						<div id="wattbezugsiemens" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
+							</div>
+						</div>
+						<div id="wattbezugsiemenssentron" class="hide">
+							<div class="card-text alert alert-info">
+								Derzeit werden nur Messgeräte vom Typ "7KM PAC2200" mit Ethernet-Schnittstelle unterstützt.
 							</div>
 						</div>
 						<div id="wattbezugrct" class="hide">
@@ -707,7 +719,7 @@
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Fronius WR.
 										</span>
-										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php if(isset($wrfroniusip)) echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
 										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>
@@ -993,6 +1005,7 @@
 								hideSection('#wattbezugvarta');
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
+								hideSection('#wattbezugsiemenssentron');
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
@@ -1032,6 +1045,10 @@
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_siemens_sentron') {
+									showSection('#wattbezugip');
+									showSection('#wattbezugsiemenssentron');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_janitza') {
 									showSection('#wattbezugjanitza');

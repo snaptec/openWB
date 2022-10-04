@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class CarloGavazziConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,13 +25,10 @@ class CarloGavazziCounterConfiguration:
         pass
 
 
-class CarloGavazziCounterSetup:
+class CarloGavazziCounterSetup(ComponentSetup[CarloGavazziCounterConfiguration]):
     def __init__(self,
                  name: str = "Carlo Gavazzi Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: CarloGavazziCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or CarloGavazziCounterConfiguration()
+        super().__init__(name, type, id, configuration or CarloGavazziCounterConfiguration())

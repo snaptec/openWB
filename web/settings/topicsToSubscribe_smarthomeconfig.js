@@ -27,6 +27,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_einschaltschwelle", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_ausschaltschwelle", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_einschaltverzoegerung", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_updatesec", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_maxeinschaltdauer", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_mineinschaltdauer", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_deactivateWhileEvCharging", 0],
@@ -71,6 +72,8 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_pbip", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measchan", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_chan", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_setauto", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_lambdaueb", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaage", 0]
 
 ];

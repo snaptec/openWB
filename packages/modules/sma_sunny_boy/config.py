@@ -1,5 +1,6 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
 from modules.sma_sunny_boy.inv_version import SmaInverterVersion
 
 
@@ -25,16 +26,13 @@ class SmaSunnyBoyBatConfiguration:
         pass
 
 
-class SmaSunnyBoyBatSetup:
+class SmaSunnyBoyBatSetup(ComponentSetup[SmaSunnyBoyBatConfiguration]):
     def __init__(self,
                  name: str = "Sma Sunny Boy Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: SmaSunnyBoyBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SmaSunnyBoyBatConfiguration()
+        super().__init__(name, type, id, configuration or SmaSunnyBoyBatConfiguration())
 
 
 class SmaSunnyBoySmartEnergyBatConfiguration:
@@ -42,16 +40,13 @@ class SmaSunnyBoySmartEnergyBatConfiguration:
         pass
 
 
-class SmaSunnyBoySmartEnergyBatSetup:
+class SmaSunnyBoySmartEnergyBatSetup(ComponentSetup[SmaSunnyBoySmartEnergyBatConfiguration]):
     def __init__(self,
                  name: str = "Sma Sunny Boy Smart Energy Speicher",
                  type: str = "bat_smart_energy",
                  id: int = 0,
                  configuration: SmaSunnyBoySmartEnergyBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SmaSunnyBoySmartEnergyBatConfiguration()
+        super().__init__(name, type, id, configuration or SmaSunnyBoySmartEnergyBatConfiguration())
 
 
 class SmaSunnyBoyCounterConfiguration:
@@ -59,16 +54,13 @@ class SmaSunnyBoyCounterConfiguration:
         pass
 
 
-class SmaSunnyBoyCounterSetup:
+class SmaSunnyBoyCounterSetup(ComponentSetup[SmaSunnyBoyCounterConfiguration]):
     def __init__(self,
                  name: str = "Sma Sunny Boy Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: SmaSunnyBoyCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SmaSunnyBoyCounterConfiguration()
+        super().__init__(name, type, id, configuration or SmaSunnyBoyCounterConfiguration())
 
 
 class SmaSunnyBoyInverterConfiguration:
@@ -77,13 +69,10 @@ class SmaSunnyBoyInverterConfiguration:
         self.version = version
 
 
-class SmaSunnyBoyInverterSetup:
+class SmaSunnyBoyInverterSetup(ComponentSetup[SmaSunnyBoyInverterConfiguration]):
     def __init__(self,
                  name: str = "Sma Sunny Boy/Tripower Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SmaSunnyBoyInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SmaSunnyBoyInverterConfiguration()
+        super().__init__(name, type, id, configuration or SmaSunnyBoyInverterConfiguration())

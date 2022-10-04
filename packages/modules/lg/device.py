@@ -67,11 +67,9 @@ class Device(AbstractDevice):
         if self.components:
             with MultiComponentUpdateContext(self.components):
                 session = req.get_http_session()
-                response = self._request_data(session)
-                # missing "auth" in response indicates success
-                if (response.get('auth') == "auth_key failed" or
-                        response.get('auth') == "auth timeout" or
-                        response.get('auth') == "not done"):
+                try:
+                    response = self._request_data(session)
+                except HTTPError:
                     self._update_session_key(session)
                     response = self._request_data(session)
 

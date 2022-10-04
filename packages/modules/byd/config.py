@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class BYDConfiguration:
     def __init__(self,
@@ -28,13 +30,10 @@ class BYDBatConfiguration:
         pass
 
 
-class BYDBatSetup:
+class BYDBatSetup(ComponentSetup[BYDBatConfiguration]):
     def __init__(self,
                  name: str = "BYD Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: BYDBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or BYDBatConfiguration()
+        super().__init__(name, type, id, configuration or BYDBatConfiguration())

@@ -1,4 +1,5 @@
 import pytest
+from requests import HTTPError
 from unittest.mock import Mock
 
 from modules.common.component_state import BatState, CounterState, InverterState
@@ -75,7 +76,7 @@ def test_update_session_key(monkeypatch, dev: device.Device):
     monkeypatch.setattr(inverter, "get_inverter_value_store", Mock(return_value=mock_inverter_value_store))
     monkeypatch.setattr(device.Device, "_update_session_key", Mock())
     monkeypatch.setattr(device.Device, "_request_data", Mock(
-        side_effect=[sample_auth_key_invalid, sample_auth_key_valid]))
+        side_effect=[HTTPError, sample_auth_key_valid]))
     component_config = bat.component_descriptor.configuration_factory()
     component_config.id = None
     dev.add_component(component_config)

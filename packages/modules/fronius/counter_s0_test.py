@@ -5,7 +5,6 @@ import requests_mock
 
 from dataclass_utils import dataclass_from_dict
 from helpermodules import compatibility
-from modules.common.simcount import SimCountLegacy
 from modules.common.store._api import LoggingValueStore
 from modules.fronius import counter_s0
 from modules.fronius.config import FroniusConfiguration, FroniusS0CounterSetup
@@ -20,7 +19,7 @@ def mock_ramdisk(monkeypatch):
     return MockRamdisk(monkeypatch)
 
 
-def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
+def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk, mock_simcount):
     component_config = FroniusS0CounterSetup()
     device_config = FroniusConfiguration()
     device_config.ip_address = SAMPLE_IP
@@ -29,7 +28,7 @@ def test_update(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
+    mock_simcount.sim_count.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
         json=json)
