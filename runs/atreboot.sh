@@ -433,18 +433,15 @@ at_reboot() {
 		mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 	fi
 
-	# set upload limit in php
-	#prepare for Buster
-	echo -n "fix upload limit..."
-	if [ -d "/etc/php/7.0/" ]; then
-		echo "OS Stretch"
-		sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-		sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-	elif [ -d "/etc/php/7.3/" ]; then
-		echo "OS Buster"
-		sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
-		sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
-	fi
+	# Check upload Limit in ALL installed php Version. 
+	echo  "check php upload limit..."
+	for d in /etc/php/*/apache2/conf.d ; do
+		fn="$d/20-uploadlimit.ini"
+		if [ ! -f "$fn" ]; then
+			sudo /bin/su -c "(echo 'upload_max_filesize = 300M';echo 'post_max_size = 300M')>$fn"
+			echo "Fix upload limit in $d"
+		fi
+	done
 	sudo /usr/sbin/apachectl -k graceful
 
 	# all done, remove boot and update status
