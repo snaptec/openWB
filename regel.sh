@@ -23,11 +23,18 @@
 #     along with openWB.  If not, see <https://www.gnu.org/licenses/>.
 #
 #####
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 
 set -o pipefail
-cd /var/www/html/openWB/
+cd "$OPENWBBASEDIR"
 
 source helperFunctions.sh
+
+if pidof -x -o $$ "${BASH_SOURCE[0]}"
+then
+	openwbDebugLog "MAIN" 0 "Previous regulation loop still running. Skipping."
+	exit
+fi
 
 if [ -e ramdisk/updateinprogress ] && [ -e ramdisk/bootinprogress ]; then
 	updateinprogress=$(<ramdisk/updateinprogress)
