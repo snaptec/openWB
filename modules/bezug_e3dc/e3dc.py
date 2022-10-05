@@ -1,13 +1,14 @@
 #!/usr/bin/python
-from pymodbus.constants import Endian
 import logging
 from typing import List
+
+from pymodbus.constants import Endian
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.component_state import CounterState
 from modules.common.modbus import ModbusTcpClient_, ModbusDataType
+from modules.common.simcount import sim_count
 from modules.common.store import get_counter_value_store
-from modules.common.simcount import SimCountFactory
 
 log = logging.getLogger("E3DC EVU")
 
@@ -29,7 +30,7 @@ def update(ipaddress: str):
             if powers[0] == 1:
                 log.debug("Evu Leistungsmessung gefunden")
                 break
-    counter_import, counter_export = SimCountFactory().get_sim_counter()().sim_count(power_all, prefix="bezug")
+    counter_import, counter_export = sim_count(power_all, prefix="bezug")
     get_counter_value_store(1).set(CounterState(
         imported=counter_import,
         exported=counter_export,
