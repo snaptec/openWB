@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class SunwaysConfiguration:
     def __init__(self, password: Optional[str] = None, ip_address: Optional[str] = None):
@@ -24,13 +26,10 @@ class SunwaysInverterConfiguration:
         pass
 
 
-class SunwaysInverterSetup:
+class SunwaysInverterSetup(ComponentSetup[SunwaysInverterConfiguration]):
     def __init__(self,
                  name: str = "Sunways Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: SunwaysInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or SunwaysInverterConfiguration()
+        super().__init__(name, type, id, configuration or SunwaysInverterConfiguration())

@@ -3,11 +3,11 @@ from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
-from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
-from modules.common.modbus import ModbusDataType
 from modules.common.fault_state import ComponentInfo
+from modules.common.modbus import ModbusDataType
+from modules.common.simcount import SimCounter
 from modules.common.store import get_bat_value_store
 from modules.sungrow.config import SungrowBatSetup
 
@@ -22,8 +22,7 @@ class SungrowBat:
         self.__device_modbus_id = device_modbus_id
         self.component_config = dataclass_from_dict(SungrowBatSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.simulation = {}
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
@@ -36,10 +35,7 @@ class SungrowBat:
         if binary[5] == "1":
             power = power * -1
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(self.__device_id, self.component_config.id)
-        imported, exported = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.simulation, prefix="speicher"
-        )
+        imported, exported = self.__sim_counter.sim_count(power)
         bat_state = BatState(
             power=power,
             soc=soc,

@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 import logging
-from requests import Session
 from typing import Dict, Tuple, Union
 
+from requests import Session
+
 from dataclass_utils import dataclass_from_dict
-from modules.fronius.config import FroniusSmCounterSetup
 from modules.common import req
-from modules.common import simcount
 from modules.common.component_state import CounterState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo, FaultState
+from modules.common.simcount import SimCounter
 from modules.common.store import get_counter_value_store
 from modules.fronius.config import FroniusConfiguration, MeterLocation
+from modules.fronius.config import FroniusSmCounterSetup
 
 log = logging.getLogger(__name__)
 
@@ -24,8 +25,7 @@ class FroniusSmCounter:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(FroniusSmCounterSetup, component_config)
         self.device_config = device_config
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.simulation = {}
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
         self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
@@ -40,15 +40,7 @@ class FroniusSmCounter:
         else:
             raise FaultState.error("Unbekannte Variante: "+str(variant))
 
-        topic_str = "openWB/set/system/device/{}/component/{}/".format(
-            self.__device_id, self.component_config.id
-        )
-        counter_state.imported, counter_state.exported = self.__sim_count.sim_count(
-            counter_state.power,
-            topic=topic_str,
-            data=self.simulation,
-            prefix="bezug"
-        )
+        counter_state.imported, counter_state.exported = self.__sim_counter.sim_count(counter_state.power)
         self.__store.set(counter_state)
 
     def __update_variant_0_1(self, session: Session) -> CounterState:

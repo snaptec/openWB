@@ -2,11 +2,11 @@
 from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
-from modules.common import simcount
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusTcpClient_, ModbusDataType
+from modules.common.simcount import SimCounter
 from modules.common.store import get_bat_value_store
 from modules.sma_sunny_boy.config import SmaSunnyBoySmartEnergyBatSetup
 
@@ -21,8 +21,7 @@ class SunnyBoySmartEnergyBat:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(SmaSunnyBoySmartEnergyBatSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.simulation = {}
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
@@ -41,11 +40,7 @@ class SunnyBoySmartEnergyBat:
             power = 0
         else:
             power = current*voltage
-        topic_str = "openWB/set/system/device/" + str(
-            self.__device_id)+"/component/"+str(self.component_config.id)+"/"
-        imported, exported = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.simulation, prefix="speicher"
-        )
+        imported, exported = self.__sim_counter.sim_count(power)
 
         return BatState(
             power=power,

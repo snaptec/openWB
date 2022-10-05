@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class BatterXConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,16 +25,13 @@ class BatterXBatConfiguration:
         pass
 
 
-class BatterXBatSetup:
+class BatterXBatSetup(ComponentSetup[BatterXBatConfiguration]):
     def __init__(self,
                  name: str = "BatterX Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: BatterXBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or BatterXBatConfiguration()
+        super().__init__(name, type, id, configuration or BatterXBatConfiguration())
 
 
 class BatterXCounterConfiguration:
@@ -40,16 +39,13 @@ class BatterXCounterConfiguration:
         pass
 
 
-class BatterXCounterSetup:
+class BatterXCounterSetup(ComponentSetup[BatterXCounterConfiguration]):
     def __init__(self,
                  name: str = "BatterX Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: BatterXCounterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or BatterXCounterConfiguration()
+        super().__init__(name, type, id, configuration or BatterXCounterConfiguration())
 
 
 class BatterXInverterConfiguration:
@@ -57,13 +53,10 @@ class BatterXInverterConfiguration:
         pass
 
 
-class BatterXInverterSetup:
+class BatterXInverterSetup(ComponentSetup[BatterXInverterConfiguration]):
     def __init__(self,
                  name: str = "BatterX Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: BatterXInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or BatterXInverterConfiguration()
+        super().__init__(name, type, id, configuration or BatterXInverterConfiguration())

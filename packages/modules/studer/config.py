@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class StuderConfiguration:
     def __init__(self, ip_address: Optional[str] = None):
@@ -23,16 +25,13 @@ class StuderBatConfiguration:
         pass
 
 
-class StuderBatSetup:
+class StuderBatSetup(ComponentSetup[StuderBatConfiguration]):
     def __init__(self,
                  name: str = "Studer Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: StuderBatConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or StuderBatConfiguration()
+        super().__init__(name, type, id, configuration or StuderBatConfiguration())
 
 
 class StuderInverterConfiguration:
@@ -41,13 +40,10 @@ class StuderInverterConfiguration:
         self.vc_type = vc_type  # studer_vc_type (MPPT type VS or VT))
 
 
-class StuderInverterSetup:
+class StuderInverterSetup(ComponentSetup[StuderInverterConfiguration]):
     def __init__(self,
                  name: str = "Studer Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: StuderInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or StuderInverterConfiguration()
+        super().__init__(name, type, id, configuration or StuderInverterConfiguration())

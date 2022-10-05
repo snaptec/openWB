@@ -5,7 +5,6 @@ import requests_mock
 
 from dataclass_utils import dataclass_from_dict
 from helpermodules import compatibility
-from modules.common.simcount import SimCountLegacy
 from modules.common.store._api import LoggingValueStore
 from modules.fronius import counter_sm
 from modules.fronius.config import FroniusConfiguration, FroniusSmCounterSetup
@@ -20,7 +19,7 @@ def mock_ramdisk(monkeypatch):
     return MockRamdisk(monkeypatch)
 
 
-def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
+def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk, mock_simcount):
     component_config = FroniusSmCounterSetup()
     assert component_config.configuration.variant == 0
     device_config = FroniusConfiguration()
@@ -30,7 +29,7 @@ def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
+    mock_simcount.sim_count.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_grid)
@@ -50,7 +49,7 @@ def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
     assert counter_state.power == sum(counter_state.powers)
 
 
-def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
+def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk, mock_simcount):
     component_config = FroniusSmCounterSetup()
     component_config.configuration.variant = 2
     device_config = FroniusConfiguration()
@@ -60,7 +59,7 @@ def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
+    mock_simcount.sim_count.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_grid_var2)
@@ -79,7 +78,7 @@ def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock
     assert counter_state.voltages == [232.3, 231.5, 233.4]
 
 
-def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
+def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk, mock_simcount):
     component_config = FroniusSmCounterSetup()
     component_config.configuration.variant = 2
     device_config = FroniusConfiguration()
@@ -89,7 +88,7 @@ def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, 
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
+    mock_simcount.sim_count.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_ext_var2)
@@ -108,7 +107,7 @@ def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, 
     assert counter_state.voltages == [229.3, 228.8, 229.4]
 
 
-def test_update_load(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk):
+def test_update_load(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramdisk, mock_simcount):
     component_config = FroniusSmCounterSetup()
     assert component_config.configuration.variant == 0
     device_config = FroniusConfiguration()
@@ -118,7 +117,7 @@ def test_update_load(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    monkeypatch.setattr(SimCountLegacy, "sim_count", Mock(return_value=[0, 0]))
+    mock_simcount.sim_count.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_load_meter)
