@@ -1682,8 +1682,8 @@ def on_message(client, userdata, msg):
                     f.close()
 
             # clear all set topics if not already done
-            if ( not(setTopicCleared) ):
-                client.publish(msg.topic, "", qos=0, retain=True)
+            if not setTopicCleared:
+                client.publish(msg.topic, "", qos=2, retain=True)
 
         finally:
             lock.release()
