@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from helpermodules.auto_str import auto_str
 
@@ -105,6 +105,7 @@ class CarState:
         self.soc_timestamp = soc_timestamp
 
 
+@auto_str
 class ChargepointState:
     def __init__(self,
                  phases_in_use: int,
@@ -116,7 +117,7 @@ class ChargepointState:
                  power_factors: Optional[List[float]] = None,
                  charge_state: bool = False,
                  plug_state: bool = False,
-                 read_tag: Optional[Dict[str, str]] = None):
+                 rfid: Optional[str] = None):
         if voltages is None:
             voltages = [0.0]*3
         self.voltages = voltages
@@ -132,4 +133,4 @@ class ChargepointState:
         self.phases_in_use = phases_in_use
         self.charge_state = charge_state
         self.plug_state = plug_state
-        self.read_tag = read_tag
+        self.rfid = rfid

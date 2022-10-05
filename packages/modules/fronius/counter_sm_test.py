@@ -29,7 +29,7 @@ def test_update_grid(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    mock_simcount.sim_count.return_value = 0, 0
+    mock_simcount.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_grid)
@@ -59,7 +59,7 @@ def test_update_grid_var2(monkeypatch, requests_mock: requests_mock.Mocker, mock
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    mock_simcount.sim_count.return_value = 0, 0
+    mock_simcount.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_grid_var2)
@@ -88,7 +88,7 @@ def test_update_external_var2(monkeypatch, requests_mock: requests_mock.Mocker, 
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    mock_simcount.sim_count.return_value = 0, 0
+    mock_simcount.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_ext_var2)
@@ -117,7 +117,7 @@ def test_update_load(monkeypatch, requests_mock: requests_mock.Mocker, mock_ramd
 
     mock = Mock(return_value=None)
     monkeypatch.setattr(LoggingValueStore, "set", mock)
-    mock_simcount.sim_count.return_value = 0, 0
+    mock_simcount.return_value = 0, 0
     requests_mock.get(
         "http://" + SAMPLE_IP + "/solar_api/v1/GetMeterRealtimeData.cgi",
         json=json_load_meter)

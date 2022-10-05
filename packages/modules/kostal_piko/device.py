@@ -8,15 +8,15 @@ from modules.byd.config import BYD, BYDBatSetup, BYDConfiguration
 from modules.byd.device import Device as BYDDevice
 from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
-from modules.common.store import get_counter_value_store
-from modules.common import simcount
 from modules.common.component_state import CounterState
+from modules.common.simcount import sim_count
+from modules.common.store import get_counter_value_store
+from modules.kostal_piko import counter
+from modules.kostal_piko import inverter
 from modules.kostal_piko.config import (KostalPiko,
                                         KostalPikoConfiguration,
                                         KostalPikoCounterSetup, KostalPikoInverterConfiguration,
                                         KostalPikoInverterSetup)
-from modules.kostal_piko import counter
-from modules.kostal_piko import inverter
 
 log = logging.getLogger(__name__)
 
@@ -110,8 +110,7 @@ def read_legacy(component_type: str,
             inverter_power, _ = dev.components["component"+str(1)].get_values()
 
             power = home_consumption + inverter_power
-            imported, exported = simcount.SimCountFactory().get_sim_counter(
-            )().sim_count(power, topic="topic_str", data={}, prefix="bezug")
+            imported, exported = sim_count(power, prefix="bezug")
             counter_state = CounterState(
                 imported=imported,
                 exported=exported,

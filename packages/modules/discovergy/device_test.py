@@ -63,9 +63,11 @@ class TestDiscovergyDevice:
 
     def assert_get_last_reading_called(self, *meter_ids):
         assert self.mock_get_last_reading.call_count == len(meter_ids)
-        for call_args, expected_meter_ids in zip(self.mock_get_last_reading.call_args_list, meter_ids):
-            assert call_args[0][0].auth == ("some username", "some password")
-            assert call_args[0][1] == expected_meter_ids
+        # Check that one call was made for each meter_id, ignoring order:
+        assert sorted(call_args[0][1] for call_args in self.mock_get_last_reading.call_args_list) == sorted(meter_ids)
+        # Check that credentials were passed along each call:
+        for call_args in self.mock_get_last_reading.call_args_list:
+            assert call_args[0][0].auth == (SAMPLE_USER, SAMPLE_PASSWORD)
 
     def assert_counter_state_set(self):
         assert self.mock_counter_value_store.set.call_count == 1
