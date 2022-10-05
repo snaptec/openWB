@@ -186,6 +186,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/tmpsoc1
 	echo 0 > $RamdiskPath/zielladenkorrektura
 	echo 0 > $RamdiskPath/ladungdurchziel
+	echo 0 > $RamdiskPath/extcpulp1
 	echo 20000 > $RamdiskPath/soctimer
 	echo 20000 > $RamdiskPath/soctimer1
 	echo 28 > $RamdiskPath/evsemodbustimer
