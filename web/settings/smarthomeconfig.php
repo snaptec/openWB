@@ -322,8 +322,9 @@ $numDevices = 9;
 										<label for="device_lambdauebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Überschuss...</label>
 										<div class="col">
 											<select class="form-control" name="device_lambdaueb" id="device_lambdauebDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<option value="UP" data-option="UP">Überschuss als positive Zahl übertragen</option>
-												<option value="UN" data-option="UN">Überschuss als negative Zahl übertragen</option>
+												<option value="UP" data-option="UP">Überschuss als positive Zahl übertragen, Bezug negativ</option>
+												<option value="UN" data-option="UN">Überschuss als negative Zahl übertragen, Bezug positiv</option>
+												<option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>	
 											</select>
 											<span class="form-text small">
 												Bezieht sich nur auf die Modbusadresse 102, wie ist Überschuss zu übertragen. Muss in der WP genau gleich eingestellt sein.

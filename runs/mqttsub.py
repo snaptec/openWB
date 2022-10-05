@@ -374,7 +374,7 @@ def on_message(client, userdata, msg):
                         client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_acthortype", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_lambdaueb" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validTypes = ['UP','UN']
+                validTypes = ['UP','UN','UZ']
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices) :
                     try:
                         # just check for payload in list, TypeIndex is not used
