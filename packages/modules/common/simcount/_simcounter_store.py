@@ -73,6 +73,7 @@ def read_mqtt_topic(topic: str) -> Optional[str]:
 
 
 def restore_value(name: str, prefix: str) -> float:
+    """Returns value in Watt-seconds for historic reasons"""
     topic = "openWB/" + get_topic(prefix) + ("/WHImported_temp" if name == "watt0pos" else "/WHExport_temp")
     mqtt_value = read_mqtt_topic(topic)
     log.info("read from broker: %s=%s", topic, mqtt_value)
@@ -135,11 +136,12 @@ class SimCounterStoreRamdisk(SimCounterStore):
         except FileNotFoundError:
             return None
 
-        def read_or_restore(name: str) -> int:
+        def read_or_restore(name: str) -> float:
+            # For historic reasons, the SimCount stored state uses Watt-seconds instead of Watt-hours -> / 3600:
             try:
-                return int(ramdisk_read_float(prefix + name))
+                return ramdisk_read_float(prefix + name) / 3600
             except Exception:
-                return int(restore_value(name, prefix))
+                return restore_value(name, prefix) / 3600
 
         return SimCounterState(
             timestamp=timestamp,
@@ -150,13 +152,15 @@ class SimCounterStoreRamdisk(SimCounterStore):
         )
 
     def save(self, prefix: str, topic: str, state: SimCounterState):
+        topic = get_topic(prefix)
         ramdisk_write(prefix + "sec0", state.timestamp)
         ramdisk_write(prefix + "wh0", state.power)
-        ramdisk_write(prefix + "watt0pos", state.imported)
-        ramdisk_write(prefix + "watt0neg", state.exported)
-        topic = get_topic(prefix)
-        pub.pub_single("openWB/" + topic + "/WHImported_temp", state.imported, no_json=True)
-        pub.pub_single("openWB/" + topic + "/WHExport_temp", state.exported, no_json=True)
+
+        # For historic reasons, the SimCount stored state uses Watt-seconds instead of Watt-hours -> * 3600:
+        ramdisk_write(prefix + "watt0pos", state.imported * 3600)
+        ramdisk_write(prefix + "watt0neg", state.exported * 3600)
+        pub.pub_single("openWB/" + topic + "/WHImported_temp", state.imported * 3600, no_json=True)
+        pub.pub_single("openWB/" + topic + "/WHExport_temp", state.exported * 3600, no_json=True)
 
 
 class SimCounterStoreBroker(SimCounterStore):

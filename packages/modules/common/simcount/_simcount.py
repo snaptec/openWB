@@ -44,6 +44,6 @@ def sim_count(power_present: float, topic: str = "", data: SimCounterState = Non
             previous_state.imported + imported,
             previous_state.exported + exported
         )
-        log.debug("imported: %g kWh, exported: %g kWh, new state: %s", imported, exported, current_state)
+        log.debug("imported: %g Wh, exported: %g Wh, new state: %s", imported, exported, current_state)
         store.save(prefix, topic, current_state)
         return current_state
