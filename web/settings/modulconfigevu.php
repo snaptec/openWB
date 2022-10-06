@@ -73,6 +73,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_enphase") echo "selected" ?> value="bezug_enphase">Enphase Envoy / IQ Gateway</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_good_we") echo "selected" ?> value="bezug_good_we">GoodWe</option>
@@ -926,7 +927,20 @@
 								Die IP des Speichers wird im dazugehörigen SMA SBS Speicher-Modul eingestellt.
 							</div>
 						</div>
-
+						<div id="wattbezugenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Die IP des Envoy / IQ Gateway wird im dazugehörigen Envoy PV-Modul eingestellt.
+							</div>
+							<div class="form-row mb-1">
+								<label for="bezugenphaseeid" class="col-md-4 col-form-label">Zähler EID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="bezugenphaseeid" id="bezugenphaseeid" value="<?php echo (empty($bezugenphaseeidold)?'':$bezugenphaseeidold) ?>">
+									<span class="form-text small">
+										EID des EVU-Zählers (<i>net-consumption</i>).<br>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="evuglaettungdiv" class="hide">
 							<hr class="border-danger">
 							<div class="form-group">
@@ -1019,6 +1033,7 @@
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
 								hideSection('#wattbezugcarlogavazzilan');
+								hideSection('#wattbezugenphase');
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
 								if($('#wattbezugmodul').val() != 'none') {
@@ -1177,6 +1192,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
 									showSection('#wattbezugsolarwatt');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_enphase')   {
+									showSection('#wattbezugenphase');
 								}
 							}
 

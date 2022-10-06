@@ -73,6 +73,7 @@
 										<option <?php if($pvwattmodulold == "wr_alphaess") echo "selected" ?> value="wr_alphaess">AlphaESS-Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_batterx") echo "selected" ?> value="wr_batterx">BatterX</option>
 										<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
+										<option <?php if($pvwattmodulold == "wr_enphase") echo "selected" ?> value="wr_enphase">Enphase Envoy / IQ Gateway</option>
 										<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
 										<option <?php if($pvwattmodulold == "wr_good_we") echo "selected" ?> value="wr_good_we">GoodWe</option>
 										<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
@@ -493,6 +494,26 @@
 									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo $wr_piko2_urlold ?>">
 									<span class="form-text small">
 										Es wird eine komplette URL inklusive Protokoll erwartet. Normalerweise ist der WR über "http://IP" zu erreichen. Wird kein Protokoll angegeben, so wird eine Verbindung über Http versucht.
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pvenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Geräte mit Firmware-Versionen 7.0 oder neuer werden derzeit nicht unterstützt.
+							</div>
+							<div class="form-row mb-1">
+								<label for="wrenphasehostname" class="col-md-4 col-form-label">Envoy / IQ-Gateway IP/Hostname</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wrenphasehostname" id="wrenphasehostname" value="<?php echo (empty($wrenphasehostnameold)?'envoy.local':$wrenphasehostnameold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wrenphaseeid" class="col-md-4 col-form-label">Zähler EID</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wrenphaseeid" id="wrenphaseeid" value="<?php echo $wrenphaseeidold ?>">
+									<span class="form-text small">
+										EID des PV-Zählers (<i>production</i>).<br>
 									</span>
 								</div>
 							</div>
@@ -962,6 +983,7 @@
 								hideSection('#pvbatterx');
 								hideSection('#pvsonneneco');
 								hideSection('#pvhuawei');
+								hideSection('#pvenphase');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -1095,6 +1117,9 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_sonneneco') {
 									showSection('#pvsonneneco');
+								}
+								if($('#pvwattmodul').val() == 'wr_enphase') {
+									showSection('#pvenphase');
 								}
 							}
 
