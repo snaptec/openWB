@@ -58,6 +58,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_standbyDuration", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_startupMulDetection", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measurePortSdm", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_dacport", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_startTime", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_endTime", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_homeConsumtion", 0],
@@ -74,7 +75,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_chan", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_setauto", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_lambdaueb", 0],
-	["openWB/config/get/SmartHome/Devices/+/device_nxdacxxueb", 0],	
+	["openWB/config/get/SmartHome/Devices/+/device_nxdacxxueb", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaage", 0]
 
 ];
