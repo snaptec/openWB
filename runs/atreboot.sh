@@ -436,9 +436,11 @@ at_reboot() {
 	# Check upload Limit in ALL installed php Version. 
 	echo  "check php upload limit..."
 	for d in /etc/php/*/apache2/conf.d ; do
-		fn="$d/20-uploadlimit.ini"
+		fn="$d/20-uploadlimit_1.ini"
+		fnold="$d/20-uploadlimit.ini"
+		[ -f "$fnold" ] && sudo rm "$fnold"
 		if [ ! -f "$fn" ]; then
-			sudo /bin/su -c "(echo 'upload_max_filesize = 300M';echo 'post_max_size = 300M')>$fn"
+			sudo /bin/su -c " echo -e 'upload_max_filesize = 300M\npost_max_size = 300M' >\"$fn\" "
 			echo "Fix upload limit in $d"
 		fi
 	done
