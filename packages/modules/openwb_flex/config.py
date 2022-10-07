@@ -2,7 +2,7 @@ from typing import Optional, Union, overload
 
 from modules.common.component_setup import ComponentSetup
 from modules.openwb_bat_kit.config import BatKitBatSetup
-from modules.openwb_evu_kit.config import EvuKitCounterSetup
+from modules.openwb_evu_kit.config import EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup
 from modules.openwb_pv_kit.config import PvKitInverterSetup
 
 
@@ -70,7 +70,7 @@ class PvKitFlexSetup(ComponentSetup[PvKitFlexConfiguration]):
 
 
 @overload
-def convert_to_flex_setup(kit: BatKitBatSetup, id) -> BatKitFlexSetup:
+def convert_to_flex_setup(kit: Union[BatKitBatSetup, EvuKitBatSetup], id) -> BatKitFlexSetup:
     pass
 
 
@@ -80,12 +80,13 @@ def convert_to_flex_setup(kit: EvuKitCounterSetup, id) -> EvuKitFlexSetup:
 
 
 @overload
-def convert_to_flex_setup(kit: PvKitInverterSetup, id) -> PvKitFlexSetup:
+def convert_to_flex_setup(kit: Union[EvuKitInverterSetup, PvKitInverterSetup], id) -> PvKitFlexSetup:
     pass
 
 
-def convert_to_flex_setup(kit: Union[BatKitBatSetup, EvuKitCounterSetup, PvKitInverterSetup], id):
-    if isinstance(kit, BatKitBatSetup):
+def convert_to_flex_setup(kit: Union[
+        BatKitBatSetup, EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup, PvKitInverterSetup], id):
+    if isinstance(kit, (BatKitBatSetup, EvuKitBatSetup)):
         return BatKitFlexSetup(name=kit.name,
                                type=kit.type,
                                id=kit.id,
