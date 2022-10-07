@@ -233,7 +233,7 @@ def read_legacy(component_type: str,
                             total_power -= sum(min(p, 0) for p in bat_power)
                         else:
                             total_power -= sum(bat_power)
-                        total_energy = total_energy - state.imported + state.exported
+                        total_energy = total_energy + state.imported - state.exported
                 if batwrsame == 1:
                     get_bat_value_store(1).set(state)
                 get_inverter_value_store(num).set(InverterState(exported=total_energy,
