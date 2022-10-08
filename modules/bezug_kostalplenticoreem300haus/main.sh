@@ -10,9 +10,6 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_kostalplenticoreem300haus.kostal_plenticore" "${kostalplenticorehaus}" >>"${MYLOGFILE}" 2>&1
-ret=$?
-
-openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.kostal_plenticore.device" "counter" "${kostalplenticorehaus}" >> "$MYLOGFILE" 2>&1
 
 cat "${RAMDISKDIR}/wattbezug"
