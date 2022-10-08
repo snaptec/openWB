@@ -43,17 +43,9 @@ start() {
 
 
 	openwbDebugLog "MAIN" 1 "Starting smart home handler..."
-	local smartmq=$(<"$OPENWBBASEDIR/ramdisk/smartmq")
-	if (( smartmq == 0 ))
-	then
-		openwbDebugLog "MAIN" 2 "Using legacy smarthomehandler"
-		local smarthomehandler_enabled='smarthomehandler'
-		local smarthomehandler_disabled='smarthomemq'
-	else
-		openwbDebugLog "MAIN" 2 "Using smarthomemq"
-		local smarthomehandler_enabled='smarthomemq'
-		local smarthomehandler_disabled='smarthomehandler'
-	fi
+	openwbDebugLog "MAIN" 2 "Using smarthomemq"
+	local smarthomehandler_enabled='smarthomemq'
+	local smarthomehandler_disabled='smarthomehandler'
 	if pgrep -f "^python.*/$smarthomehandler_disabled.py" > /dev/null
 	then
 		sudo pkill -f "^python.*/$smarthomehandler_disabled.py"
