@@ -37,7 +37,7 @@ class HttpCounter:
             imported, exported = self.__sim_counter.sim_count(power)
 
         counter_state = CounterState(
-            currents=None if all(c is None for c in currents) else currents,
+            currents=None if any(c is None for c in currents) else currents,
             imported=imported,
             exported=exported,
             power=power
