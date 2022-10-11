@@ -43,7 +43,7 @@ class KostalPlenticoreCounterSetup(ComponentSetup[KostalPlenticoreCounterConfigu
     def __init__(self,
                  name: str = "Kostal Plenticore Zähler",
                  type: str = "counter",
-                 id: int = 0,
+                 id: Optional[int] = 0,
                  configuration: KostalPlenticoreCounterConfiguration = None) -> None:
         super().__init__(name, type, id, configuration or KostalPlenticoreCounterConfiguration())
 

@@ -2,7 +2,7 @@
 import logging
 from ipparser import ipparser
 from pymodbus.constants import Endian
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Iterable, List, Union
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import modbus
@@ -18,23 +18,20 @@ from modules.kostal_plenticore.inverter import KostalPlenticoreInverter
 log = logging.getLogger(__name__)
 
 
-def update_components(components_todo, tcp_client: modbus.ModbusTcpClient_):
-    def little_endian_wordorder_reader(register: int, data_type: modbus.ModbusDataType):
-        return tcp_client.read_holding_registers(
-            register, data_type, unit=71, wordorder=Endian.Little)
-    reader = little_endian_wordorder_reader
+def update_components(
+        components: Iterable[Union[KostalPlenticoreBat, KostalPlenticoreCounter, KostalPlenticoreInverter]]):
     with tcp_client:
-        for component in components_todo:
+        for component in components:
             if isinstance(component, KostalPlenticoreBat):
-                bat_state = component.update(reader)
+                bat_state = component.update()
         else:
             bat_state = None
-        for component in components_todo:
+        for component in components:
             if isinstance(component, KostalPlenticoreInverter):
-                inverter_state = component.update(reader)
+                inverter_state = component.update()
                 if bat_state:
-                    dc_in = component.dc_in_string_1_2(reader)
-                    home_consumption = component.home_consumption(reader)
+                    dc_in = component.dc_in_string_1_2()
+                    home_consumption = component.home_consumption()
                     if dc_in >= 0:
                         if bat_state.power > 0:
                             raw_inv_power = inverter_state.power
@@ -44,21 +41,34 @@ def update_components(components_todo, tcp_client: modbus.ModbusTcpClient_):
                             inverter_state.power -= bat_state.power
                 component.set(inverter_state)
             else:
-                component.update(reader)
+                component.update()
         if bat_state:
-            for component in components_todo:
+            for component in components:
                 if isinstance(component, KostalPlenticoreBat):
                     component.set(bat_state)
 
 
 def create_device(device_config: KostalPlenticore):
+    def create_bat_component(component_config):
+        return KostalPlenticoreBat(device_config.id, component_config, reader)
+
+    def create_counter_component(component_config):
+        return KostalPlenticoreCounter(device_config.id, component_config, reader)
+
+    def create_inverter_component(component_config):
+        return KostalPlenticoreInverter(component_config, reader)
+
+    def little_endian_wordorder_reader(register: int, data_type: modbus.ModbusDataType):
+        return tcp_client.read_holding_registers(
+            register, data_type, unit=71, wordorder=Endian.Little)
+    reader = little_endian_wordorder_reader
+
     tcp_client = modbus.ModbusTcpClient_(device_config.configuration.ip_address, 1502)
     return ConfigurableDevice(
         device_config=device_config,
         component_factory=ComponentFactoryByType(
-            bat=bat.create_component, counter=counter.create_component, inverter=inverter.create_component),
-        component_updater=MultiComponentUpdater(
-            lambda update_components: update_components(components_todo, tcp_client)),
+            bat=create_bat_component, counter=create_counter_component, inverter=create_inverter_component),
+        component_updater=MultiComponentUpdater(update_components),
     )
 
 
