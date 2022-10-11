@@ -31,12 +31,13 @@ class HttpCounter:
     def update(self):
         imported = self.__get_imported()
         exported = self.__get_exported()
+        currents = [getter() for getter in self.__get_currents]
         power = self.__get_power()
         if imported is None or exported is None:
             imported, exported = self.__sim_counter.sim_count(power)
 
         counter_state = CounterState(
-            currents=[getter() for getter in self.__get_currents],
+            currents=None if any(c is None for c in currents) else currents,
             imported=imported,
             exported=exported,
             power=power

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from typing import Dict, Union
+from typing import Union
 
-from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import FaultState
 from modules.openwb_bat_kit.config import BatKitBatSetup
+from modules.openwb_evu_kit.config import EvuKitBatSetup
 from modules.openwb_flex.bat import BatKitFlex
 from modules.openwb_flex.config import convert_to_flex_setup
 
@@ -13,9 +13,9 @@ from modules.openwb_flex.config import convert_to_flex_setup
 class BatKit(BatKitFlex):
     def __init__(self,
                  device_id: int,
-                 component_config: Union[Dict, BatKitBatSetup],
+                 component_config: Union[BatKitBatSetup, EvuKitBatSetup],
                  tcp_client: modbus.ModbusTcpClient_) -> None:
-        self.component_config = dataclass_from_dict(BatKitBatSetup, component_config)
+        self.component_config = component_config
         version = self.component_config.configuration.version
         if version == 0:
             id = 1

@@ -39,7 +39,8 @@ class Snxdacxx(Sbase):
         argumentList = ['python3', self._prefixpy + 'nxdacxx/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss),
-                        str(self._device_nxdacxxueb), str(forcesend)]
+                        str(self._device_nxdacxxueb), str(forcesend),
+                        str(self._device_dacport)]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()

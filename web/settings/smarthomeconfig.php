@@ -85,7 +85,7 @@ $numDevices = 9;
 											<option value="lambda" data-option="lambda">Lambda</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
-											<option value="NXDACXX" data-option="NXDACXX">N4DAC02 V0.01 bis v10.0</option>
+											<option value="NXDACXX" data-option="NXDACXX">N4DAC02 0.01V bis 10.0V</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
 											<option value="vampair" data-option="vampair">Vampair</option>
 											<option value="http" data-option="http">Http</option>
@@ -201,7 +201,6 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
@@ -218,7 +217,16 @@ $numDevices = 9;
 									<label for="device_nxdacxxuebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Maximaler Überschuss</label>
 									<div class="col">
 										<input id="device_nxdacxxuebDevices<?php echo $devicenum; ?>" name="device_nxdacxxueb" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="32000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Maximaler Überschuss = v10.0. Es wird kein grösserer Wert übertragen.</span>
+										<span class="form-text small">Maximaler Überschuss in Watt = v10.0. Es wird kein grösserer Wert übertragen.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="device_dacportDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modbusport des Dac</label>
+									<div class="col">
+									  <input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									  <span class="form-text small">
+									    Standardeinstellungen:8899 <br />
+									  </span>
 									</div>
 								</div>
 							</div>
@@ -324,7 +332,7 @@ $numDevices = 9;
 											<select class="form-control" name="device_lambdaueb" id="device_lambdauebDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<option value="UP" data-option="UP">Überschuss als positive Zahl übertragen, Bezug negativ</option>
 												<option value="UN" data-option="UN">Überschuss als negative Zahl übertragen, Bezug positiv</option>
-												<option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>	
+												<option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>
 											</select>
 											<span class="form-text small">
 												Bezieht sich nur auf die Modbusadresse 102, wie ist Überschuss zu übertragen. Muss in der WP genau gleich eingestellt sein.

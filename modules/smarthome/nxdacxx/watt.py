@@ -11,6 +11,7 @@ ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 maxpower = int(sys.argv[4])
 forcesend = int(sys.argv[5])
+port = int(sys.argv[6])
 # forcesend = 0 default acthor time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -75,17 +76,15 @@ if count5 == 0:
             with open(file_string, 'w') as f:
                 print('N4DAC02 start log', file=f)
         with open(file_string, 'a') as f:
-            helpstr = '%s devicenr %s ipadr %s ueberschuss %6d '
+            helpstr = '%s devicenr %s ipadr %s ueberschuss %6d port %4d'
             helpstr += ' maxueberschuss %6d pvmodus %1d modbuswrite %1d'
             print(helpstr % (time_string, devicenumber, ipadr, uberschuss,
-                             maxpower, pvmodus, modbuswrite), file=f)
+                             port, maxpower, pvmodus, modbuswrite), file=f)
     # modbus write
     if modbuswrite == 1:
-        client = ModbusTcpClient(ipadr, port=502)
+        client = ModbusTcpClient(ipadr, port=port)
         volt = int((neupower * 1000) / maxpower)
-        rq = client.write_register(1, volt)
-        # oder
-        # rq = client.write_register(1, volt, unit = 1)
+        rq = client.write_register(1, volt, unit=1)
         if count1 < 3:
             with open(file_string, 'a') as f:
                 print('%s devicenr %s ipadr %s Volt %6d written by modbus ' %
