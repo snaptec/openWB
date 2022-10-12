@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import functools
 import logging
 from ipparser import ipparser
 from pymodbus.constants import Endian
@@ -18,52 +19,47 @@ from modules.kostal_plenticore.inverter import KostalPlenticoreInverter
 log = logging.getLogger(__name__)
 
 
-def update_components(
+def update(
         components: Iterable[Union[KostalPlenticoreBat, KostalPlenticoreCounter, KostalPlenticoreInverter]]):
-    with tcp_client:
+    for component in components:
+        if isinstance(component, KostalPlenticoreBat):
+            bat_state = component.update()
+    else:
+        bat_state = None
+    for component in components:
+        if isinstance(component, KostalPlenticoreInverter):
+            inverter_state = component.update()
+            if bat_state:
+                dc_in = component.dc_in_string_1_2()
+                home_consumption = component.home_consumption()
+                if dc_in >= 0:
+                    if bat_state.power > 0:
+                        raw_inv_power = inverter_state.power
+                        inverter_state.power = dc_in / (dc_in + bat_state.power) * raw_inv_power
+                        bat_state.power = raw_inv_power - inverter_state.power - home_consumption
+                    else:
+                        inverter_state.power -= bat_state.power
+            component.set(inverter_state)
+        else:
+            component.update()
+    if bat_state:
         for component in components:
             if isinstance(component, KostalPlenticoreBat):
-                bat_state = component.update()
-        else:
-            bat_state = None
-        for component in components:
-            if isinstance(component, KostalPlenticoreInverter):
-                inverter_state = component.update()
-                if bat_state:
-                    dc_in = component.dc_in_string_1_2()
-                    home_consumption = component.home_consumption()
-                    if dc_in >= 0:
-                        if bat_state.power > 0:
-                            raw_inv_power = inverter_state.power
-                            inverter_state.power = dc_in / (dc_in + bat_state.power) * raw_inv_power
-                            bat_state.power = raw_inv_power - inverter_state.power - home_consumption
-                        else:
-                            inverter_state.power -= bat_state.power
-                component.set(inverter_state)
-            else:
-                component.update()
-        if bat_state:
-            for component in components:
-                if isinstance(component, KostalPlenticoreBat):
-                    component.set(bat_state)
+                component.set(bat_state)
 
 
 def create_device(device_config: KostalPlenticore):
-    def create_bat_component(component_config):
-        return KostalPlenticoreBat(device_config.id, component_config, reader)
-
-    def create_counter_component(component_config):
-        return KostalPlenticoreCounter(device_config.id, component_config, reader)
-
-    def create_inverter_component(component_config):
-        return KostalPlenticoreInverter(component_config, reader)
-
-    def little_endian_wordorder_reader(register: int, data_type: modbus.ModbusDataType):
-        return tcp_client.read_holding_registers(
-            register, data_type, unit=71, wordorder=Endian.Little)
-    reader = little_endian_wordorder_reader
+    def update_components(
+        components: Iterable[Union[KostalPlenticoreBat, KostalPlenticoreCounter, KostalPlenticoreInverter]]
+    ):
+        with tcp_client:
+            update(components)
 
     tcp_client = modbus.ModbusTcpClient_(device_config.configuration.ip_address, 1502)
+    reader = functools.partial(tcp_client.read_holding_registers, unit=71, wordorder=Endian.Little)
+    create_bat_component = functools.partial(KostalPlenticoreBat, device_id=device_config.id, reader=reader)
+    create_counter_component = functools.partial(KostalPlenticoreCounter, device_id=device_config.id, reader=reader)
+    create_inverter_component = functools.partial(KostalPlenticoreInverter, reader=reader)
     return ConfigurableDevice(
         device_config=device_config,
         component_factory=ComponentFactoryByType(
@@ -97,13 +93,13 @@ def read_legacy(component_type: str, ip1: str, ip2: str, battery: int, ip3: str)
     reader_1 = create_reader(client_1)
     if component_type == "inverter":
         with client_1:
-            inv_component = KostalPlenticoreInverter(KostalPlenticoreInverterSetup(id=1))
-            inverter_state = inv_component.update(reader_1)
+            inv_component = KostalPlenticoreInverter(KostalPlenticoreInverterSetup(id=1), reader_1)
+            inverter_state = inv_component.update()
             if battery:
-                bat_component = KostalPlenticoreBat(KostalPlenticoreBatSetup())
-                dc_in = inv_component.dc_in_string_1_2(reader_1)
-                home_consumption = inv_component.home_consumption(reader_1)
-                bat_state = bat_component.update(reader_1)
+                bat_component = KostalPlenticoreBat(None, KostalPlenticoreBatSetup(), reader_1)
+                dc_in = inv_component.dc_in_string_1_2()
+                home_consumption = inv_component.home_consumption()
+                bat_state = bat_component.update()
                 if dc_in >= 0:
                     if bat_state.power > 0:
                         raw_inv_power = inverter_state.power
@@ -119,13 +115,14 @@ def read_legacy(component_type: str, ip1: str, ip2: str, battery: int, ip3: str)
         for ip in inverter_ips:
             client = modbus.ModbusTcpClient_(ip, 1502)
             with client:
-                inverter_state_temp = inv_component.update(create_reader(client))
+                inverter_state_temp = KostalPlenticoreInverter(
+                    KostalPlenticoreInverterSetup(id=1), create_reader(client)).update()
             inverter_state.power += inverter_state_temp.power
             inverter_state.exported += inverter_state_temp.exported
         inv_component.set(inverter_state)
     elif component_type == "counter":
         with client_1:
-            KostalPlenticoreCounter(KostalPlenticoreCounterSetup(id=None)).update(reader_1)
+            KostalPlenticoreCounter(None, KostalPlenticoreCounterSetup(id=None), reader_1).update()
 
     log.debug("Kostal Plenticore: WR1: {}, WR2: {}, Battery: {}, WR3: {}, WR4:, {}, WR5: {}".format(
         ip1, ip2, battery, ip3, ip4, ip5))
