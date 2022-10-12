@@ -43,28 +43,12 @@ start() {
 
 
 	openwbDebugLog "MAIN" 1 "Starting smart home handler..."
-	local smartmq=$(<"$OPENWBBASEDIR/ramdisk/smartmq")
-	if (( smartmq == 0 ))
+	if pgrep -f '^python.*/smarthomemq.py' > /dev/null
 	then
-		openwbDebugLog "MAIN" 2 "Using legacy smarthomehandler"
-		local smarthomehandler_enabled='smarthomehandler'
-		local smarthomehandler_disabled='smarthomemq'
+		openwbDebugLog "MAIN" 1 "smart home handler is already running"
 	else
-		openwbDebugLog "MAIN" 2 "Using smarthomemq"
-		local smarthomehandler_enabled='smarthomemq'
-		local smarthomehandler_disabled='smarthomehandler'
-	fi
-	if pgrep -f "^python.*/$smarthomehandler_disabled.py" > /dev/null
-	then
-		sudo pkill -f "^python.*/$smarthomehandler_disabled.py"
-		openwbDebugLog "MAIN" 1 "$smarthomehandler_disabled handler stopped"
-	fi
-	if pgrep -f "^python.*/$smarthomehandler_enabled.py" > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "$smarthomehandler_enabled is already running"
-	else
-		openwbDebugLog "MAIN" 0 "$smarthomehandler_enabled not running! restarting process"
-		nohup python3 "$OPENWBBASEDIR/runs/$smarthomehandler_enabled.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
+		openwbDebugLog "MAIN" 0 "smart home handler not running! restarting process"
+		nohup python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
 	fi
 
 

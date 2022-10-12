@@ -13,7 +13,6 @@ var topicsToSubscribe = [
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/config/get/SmartHome/logLevel", 0],
 	["openWB/config/get/SmartHome/maxBatteryPower", 0],
-	["openWB/config/get/SmartHome/smartmq", 0],
 	// SmartHome configuration
 	["openWB/config/get/SmartHome/Devices/+/device_configured", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_canSwitch", 0],

@@ -618,13 +618,6 @@ initRamdisk(){
 	fi
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
 
-	ra='^-?[0-9]+$'
-	smartmqtemp=$(timeout 1 mosquitto_sub -t openWB/config/get/SmartHome/smartmq)
-	if ! [[ $smartmqtemp =~ $ra ]] ; then
-		smartmqtemp="1"
-	fi
-	echo $smartmqtemp > $RamdiskPath/smartmq
-
 	sudo chmod 777 $RamdiskPath/*
 
 	echo "Trigger update of logfiles..."
