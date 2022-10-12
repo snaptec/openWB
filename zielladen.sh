@@ -12,12 +12,13 @@ ziellademodus(){
 	epochdateziel=$(date -d "$zielladenuhrzeitlp1" +"%s")
 	zeitdiff=$(( epochdateziel - epochdateaktuell ))
 	minzeitdiff=$(( zeitdiff / 60 ))
+	wirkungsgrad=${wirkungsgradlp1:-100}
 
 	# zu ladende Menge ermitteln
 	soc=$(<"$RAMDISKDIR/soc")
 	zuladendersoc=$(( zielladensoclp1 - soc ))
 	akkuglp1wh=$(( akkuglp1 * 1000 ))
-	zuladendewh=$(( akkuglp1wh * zuladendersoc / 100))
+	zuladendewh=$(( akkuglp1wh * zuladendersoc / wirkungsgrad ))
 
 	#ladeleistung ermitteln
 	lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 230 ))
