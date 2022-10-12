@@ -27,7 +27,9 @@ LOGFILE="$OPENWBBASEDIR/web/tools/upload/restore.log"
 	fi
 	echo "****************************************"
 	echo "Step 4: replacing old files..."
-	mv -v -f "${WORKINGDIR}${OPENWBBASEDIR}/." "${OPENWBBASEDIR}/"
+	# we use cp not mv because of not empty directories in destination
+	# dotglob is needed to include files and directories beginning with a dot
+	(shopt -s dotglob; sudo cp -v -p -r "${WORKINGDIR}${OPENWBBASEDIR}/"* "${OPENWBBASEDIR}/")
 	echo "****************************************"
 	echo "Step 5: restoring mosquitto db..."
 	if [[ -f "${WORKINGDIR}${MOSQUITTODIR}/mosquitto.db" ]]; then
