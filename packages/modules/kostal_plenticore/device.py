@@ -49,6 +49,15 @@ def update(
 
 
 def create_device(device_config: KostalPlenticore):
+    def create_bat_component(component_config):
+        return KostalPlenticoreBat(device_config.id, component_config, reader)
+
+    def create_counter_component(component_config):
+        return KostalPlenticoreCounter(device_config.id, component_config, reader)
+
+    def create_inverter_component(component_config):
+        return KostalPlenticoreInverter(component_config, reader)
+
     def update_components(
         components: Iterable[Union[KostalPlenticoreBat, KostalPlenticoreCounter, KostalPlenticoreInverter]]
     ):
@@ -57,9 +66,6 @@ def create_device(device_config: KostalPlenticore):
 
     tcp_client = modbus.ModbusTcpClient_(device_config.configuration.ip_address, 1502)
     reader = functools.partial(tcp_client.read_holding_registers, unit=71, wordorder=Endian.Little)
-    create_bat_component = functools.partial(KostalPlenticoreBat, device_id=device_config.id, reader=reader)
-    create_counter_component = functools.partial(KostalPlenticoreCounter, device_id=device_config.id, reader=reader)
-    create_inverter_component = functools.partial(KostalPlenticoreInverter, reader=reader)
     return ConfigurableDevice(
         device_config=device_config,
         component_factory=ComponentFactoryByType(
