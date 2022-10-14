@@ -1,70 +1,39 @@
 #!/usr/bin/env python3
 import logging
 import re
-from typing import Dict, Union, List
+from typing import Union, List
 
-from dataclass_utils import asdict, dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
-from modules.common.component_context import SingleComponentUpdateContext
-from modules.http import bat
-from modules.http import counter
-from modules.http import inverter
-from modules.http.config import HTTP, HTTPConfiguration, HttpBatSetup, HttpCounterSetup, HttpInverterSetup
+from modules.common.abstract_device import DeviceDescriptor
+from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, IndependentComponentUpdater
+from modules.http.bat import HttpBat
+from modules.http.config import HTTP, HTTPConfiguration, HttpBatSetup, HttpCounterSetup, HttpInverterSetup, \
+    HttpBatConfiguration, HttpCounterConfiguration, HttpInverterConfiguration
+from modules.http.counter import HttpCounter
+from modules.http.inverter import HttpInverter
 
 log = logging.getLogger(__name__)
 
 
-http_component_classes = Union[bat.HttpBat, counter.HttpCounter, inverter.HttpInverter]
+def create_device(device_config: HTTP):
+    def create_bat_component(component_config: HttpBatSetup):
+        return HttpBat(device_config.id, component_config, device_config.configuration.url)
 
+    def create_counter_component(component_config: HttpCounterSetup):
+        return HttpCounter(device_config.id, component_config, device_config.configuration.url)
 
-class Device(AbstractDevice):
-    COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.HttpBat,
-        "counter": counter.HttpCounter,
-        "inverter": inverter.HttpInverter
-    }
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
+    def create_inverter_component(component_config: HttpInverterSetup):
+        return HttpInverter(device_config.id, component_config, device_config.configuration.url)
 
-    def __init__(self, device_config: Union[Dict, HTTP]) -> None:
-        self.components = {}  # type: Dict[str, http_component_classes]
-        try:
-            self.device_config = dataclass_from_dict(HTTP, device_config)
-        except Exception:
-            log.exception("Fehler im Modul "+self.device_config.name)
-
-    def add_component(self, component_config: Union[Dict, HttpBatSetup, HttpCounterSetup, HttpInverterSetup]) -> None:
-        if isinstance(component_config, Dict):
-            component_type = component_config["type"]
-        else:
-            component_type = component_config.type
-        component_config = dataclass_from_dict(self.COMPONENT_TYPE_TO_MODULE[
-            component_type].component_descriptor.configuration_factory, component_config)
-        if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config.id)] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config.id, component_config, self.device_config.configuration.url)
-        else:
-            raise Exception(
-                "illegal component type " + component_type + ". Allowed values: " +
-                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
-            )
-
-    def update(self) -> None:
-        log.debug("Start device reading " + str(self.components))
-        if self.components:
-            for component in self.components:
-                # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self.components[component].component_info):
-                    self.components[component].update()
-        else:
-            log.warning(
-                self.device_config.name +
-                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
-            )
+    return ConfigurableDevice(
+        device_config=device_config,
+        component_factory=ComponentFactoryByType(
+            bat=create_bat_component,
+            counter=create_counter_component,
+            inverter=create_inverter_component,
+        ),
+        component_updater=IndependentComponentUpdater(lambda component: component.update())
+    )
 
 
 def create_paths_dict(**kwargs):
@@ -86,12 +55,10 @@ def create_paths_dict(**kwargs):
     return result
 
 
-def run_device_legacy(device_config: HTTP, component_config: dict):
-    device = Device(device_config)
+def run_device_legacy(device_config: HTTP, component_config: Union[HttpBatSetup, HttpCounterSetup, HttpInverterSetup]):
+    device = create_device(device_config)
     device.add_component(component_config)
-    log.debug(
-        'Http Konfiguration: ' + str(device_config.configuration) + str(component_config["configuration"])
-    )
+    log.debug("HTTP Configuration: %s, Component Configuration: %s", device_config, component_config)
     device.update()
 
 
@@ -106,38 +73,33 @@ def create_legacy_device_config(url: str):
 
 
 def read_legacy_bat(power_path: str, imported_path: str, exported_path: str, soc_path: str) -> None:
-    component_config = asdict(bat.component_descriptor.configuration_factory())
-    component_config["configuration"] = create_paths_dict(
+    component_config = HttpBatSetup(configuration=HttpBatConfiguration(**create_paths_dict(
         power_path=power_path,
         imported_path=imported_path,
         exported_path=exported_path,
         soc_path=soc_path,
-    )
+    )))
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
 def read_legacy_counter(power_path: str, imported_path: str, exported_path: str, current_l1_path: str,
                         current_l2_path: str, current_l3_path: str):
-    component_config = asdict(counter.component_descriptor.configuration_factory())
-    component_config["configuration"] = create_paths_dict(
+    component_config = HttpCounterSetup(configuration=HttpCounterConfiguration(**create_paths_dict(
         power_path=power_path,
         imported_path=imported_path,
         exported_path=exported_path,
         current_l1_path=current_l1_path,
         current_l2_path=current_l2_path,
         current_l3_path=current_l3_path,
-    )
-    component_config["id"] = None
+    )))
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
 def read_legacy_inverter(power_path: str, exported_path: str, num: int):
-    component_config = asdict(inverter.component_descriptor.configuration_factory())
-    component_config["id"] = num
-    component_config["configuration"] = create_paths_dict(
+    component_config = HttpInverterSetup(id=num, configuration=HttpInverterConfiguration(**create_paths_dict(
         power_path=power_path,
         exported_path=exported_path,
-    )
+    )))
     run_device_legacy(create_legacy_device_config(power_path), component_config)
 
 
