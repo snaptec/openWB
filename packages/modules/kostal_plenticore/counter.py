@@ -12,24 +12,22 @@ from modules.kostal_plenticore.config import KostalPlenticoreCounterSetup
 class KostalPlenticoreCounter:
     def __init__(self,
                  device_id: int,
-                 component_config: KostalPlenticoreCounterSetup,
-                 reader: Callable[[int, ModbusDataType], Any]) -> None:
+                 component_config: KostalPlenticoreCounterSetup) -> None:
         self.component_config = component_config
-        self.__reader = reader
         self.store = get_counter_value_store(self.component_config.id)
         self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="bezug")
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self) -> None:
-        power_factor = self.__reader(150, ModbusDataType.FLOAT_32)
-        currents = [self.__reader(register, ModbusDataType.FLOAT_32) for register in [222, 232, 242]]
-        voltages = [self.__reader(register, ModbusDataType.FLOAT_32) for register in [230, 240, 250]]
-        powers = [self.__reader(register, ModbusDataType.FLOAT_32) for register in [224, 234, 244]]
-        power = self.__reader(252, ModbusDataType.FLOAT_32)
-        frequency = self.__reader(220, ModbusDataType.FLOAT_32)
+    def get_values(self, reader: Callable[[int, ModbusDataType], Any]) -> CounterState:
+        power_factor = reader(150, ModbusDataType.FLOAT_32)
+        currents = [reader(register, ModbusDataType.FLOAT_32) for register in [222, 232, 242]]
+        voltages = [reader(register, ModbusDataType.FLOAT_32) for register in [230, 240, 250]]
+        powers = [reader(register, ModbusDataType.FLOAT_32) for register in [224, 234, 244]]
+        power = reader(252, ModbusDataType.FLOAT_32)
+        frequency = reader(220, ModbusDataType.FLOAT_32)
         imported, exported = self.sim_counter.sim_count(power)
 
-        counter_state = CounterState(
+        return CounterState(
             powers=powers,
             currents=currents,
             voltages=voltages,
@@ -39,11 +37,13 @@ class KostalPlenticoreCounter:
             power_factors=[power_factor]*3,
             frequency=frequency
         )
-        self.store.set(counter_state)
 
+    def get_imported_exported(self, state):
+        state.imported, state.exported = self.sim_counter.sim_count(state.power)
+        return state
 
-def create_component(component_config: KostalPlenticoreCounterSetup):
-    return KostalPlenticoreCounter(component_config)
+    def update(self, reader: Callable[[int, ModbusDataType], Any]):
+        self.store.set(self.get_imported_exported(self.get_values(reader)))
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=KostalPlenticoreCounterSetup)

@@ -12,17 +12,15 @@ from modules.kostal_plenticore.config import KostalPlenticoreBatSetup
 class KostalPlenticoreBat:
     def __init__(self,
                  device_id: int,
-                 component_config: KostalPlenticoreBatSetup,
-                 reader: Callable[[int, ModbusDataType], Any]) -> None:
+                 component_config: KostalPlenticoreBatSetup) -> None:
         self.component_config = component_config
-        self.__reader = reader
         self.store = get_bat_value_store(self.component_config.id)
         self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="speicher")
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self) -> BatState:
-        power = self.__reader(582, ModbusDataType.INT_16)
-        soc = self.__reader(514, ModbusDataType.INT_16)
+    def update(self, reader: Callable[[int, ModbusDataType], Any]) -> BatState:
+        power = reader(582, ModbusDataType.INT_16)
+        soc = reader(514, ModbusDataType.INT_16)
         imported, exported = self.sim_counter.sim_count(power)
 
         return BatState(
