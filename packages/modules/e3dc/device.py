@@ -8,31 +8,31 @@ from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.e3dc import bat
 from modules.e3dc import counter
-from modules.e3dc.config import e3dc, e3dcBatSetup, e3dcConfiguration
-from modules.e3dc.config import e3dcCounterSetup
+from modules.e3dc.config import E3dc, E3dcBatSetup, E3dcConfiguration
+from modules.e3dc.config import E3dcCounterSetup
 
 log = logging.getLogger(__name__)
 
 
-e3dc_component_classes = Union[bat.e3dcBat, counter.e3dcCounter]
+e3dc_component_classes = Union[bat.E3dcBat, counter.E3dcCounter]
 
 
 class Device(AbstractDevice):
     COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.e3dcBat,
-        "counter": counter.e3dcCounter}
+        "bat": bat.E3dcBat,
+        "counter": counter.E3dcCounter}
 
-    def __init__(self, device_config: Union[Dict, e3dc]) -> None:
+    def __init__(self, device_config: Union[Dict, E3dc]) -> None:
         self.components = {}  # type: Dict[str, e3dc_component_classes]
         try:
-            self.device_config = dataclass_from_dict(e3dc, device_config)
+            self.device_config = dataclass_from_dict(E3dc, device_config)
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
 
     def add_component(self,
                       component_config: Union[Dict,
-                                              e3dcBatSetup,
-                                              e3dcCounterSetup]) -> None:
+                                              E3dcBatSetup,
+                                              E3dcCounterSetup]) -> None:
         if isinstance(component_config, Dict):
             component_type = component_config["type"]
         else:
@@ -81,7 +81,7 @@ def read_legacy(component_type: str, address1: str,
                 address2: str, read_ext: int,
                 pvmodul: str,
                 num: Optional[int]) -> None:
-    device_config = e3dc(configuration=e3dcConfiguration(ip_address1=address1,
+    device_config = E3dc(configuration=E3dcConfiguration(ip_address1=address1,
                                                          ip_address2=address2,
                                                          read_ext=read_ext,
                                                          pvmodul=pvmodul))
@@ -111,4 +111,4 @@ def main(argv: List[str]):
     run_using_positional_cli_args(read_legacy, argv)
 
 
-device_descriptor = DeviceDescriptor(configuration_factory=e3dc)
+device_descriptor = DeviceDescriptor(configuration_factory=E3dc)

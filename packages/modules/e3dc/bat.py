@@ -12,23 +12,23 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
 from modules.common.store import get_inverter_value_store
 from modules.common.simcount._simcounter import SimCounter
-from modules.e3dc.config import e3dcBatSetup
+from modules.e3dc.config import E3dcBatSetup
 from modules.common.store.ramdisk import files
 
 
 log = logging.getLogger(__name__)
 
 
-class e3dcBat:
+class E3dcBat:
     def __init__(self,
                  device_id: int,
                  ip_address1: str,
                  ip_address2: str,
                  read_ext: int,
                  pvmodul: str,
-                 component_config: Union[Dict, e3dcBatSetup]) -> None:
+                 component_config: Union[Dict, E3dcBatSetup]) -> None:
         self.__device_id = device_id
-        self.component_config = dataclass_from_dict(e3dcBatSetup, component_config)
+        self.component_config = dataclass_from_dict(E3dcBatSetup, component_config)
         # bat
         self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
@@ -106,4 +106,4 @@ class e3dcBat:
             self.__storepv.set(inverter_state)
 
 
-component_descriptor = ComponentDescriptor(configuration_factory=e3dcBatSetup)
+component_descriptor = ComponentDescriptor(configuration_factory=E3dcBatSetup)
