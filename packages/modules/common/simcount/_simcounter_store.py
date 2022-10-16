@@ -1,38 +1,20 @@
 import logging
 from abc import abstractmethod
+from enum import Enum
 from queue import Queue, Empty
 from typing import Optional
 
 from paho.mqtt.client import Client as MqttClient, MQTTMessage
 
 from helpermodules import pub, compatibility
-from modules.common.fault_state import FaultState
 from modules.common.simcount._simcounter_state import SimCounterState
 from modules.common.store import ramdisk_write, ramdisk_read_float
+from modules.common.store.ramdisk.io import RamdiskReadError
+
+POSTFIX_EXPORT = "watt0neg"
+POSTFIX_IMPORT = "watt0pos"
 
 log = logging.getLogger(__name__)
-
-
-def get_topic(prefix: str) -> str:
-    """ ermittelt das zum Präfix gehörende Topic."""
-    if prefix == "bezug":
-        topic = "evu"
-    elif prefix == "pv" or prefix == "pv2":
-        topic = prefix
-    elif prefix == "speicher":
-        topic = "housebattery"
-    else:
-        raise FaultState.error("Fehler im Modul simcount: Unbekannter Präfix: " + prefix)
-    return topic
-
-
-def get_existing_imports_exports(file: str) -> float:
-    try:
-        result = ramdisk_read_float(file)
-        log.info("Found counter reading <%g Wh> in file <%s>", result, file)
-        return result
-    except FileNotFoundError:
-        return 0
 
 
 def get_serial():
@@ -72,32 +54,54 @@ def read_mqtt_topic(topic: str) -> Optional[str]:
         client.disconnect()
 
 
-def restore_value(name: str, prefix: str) -> float:
-    """Returns value in Watt-seconds for historic reasons"""
-    topic = "openWB/" + get_topic(prefix) + ("/WHImported_temp" if name == "watt0pos" else "/WHExport_temp")
+class SimCountPrefix(Enum):
+    PV = ("pv", None, "pvkwh")
+    PV2 = ("pv2", None, "pvkwh2")
+    BEZUG = ("evu", "bezugkwh", "einspeisungkwh")
+    SPEICHER = ("housebattery", "speicherikwh", "speicherekwh")
+
+    def __init__(self, topic: str, import_file: Optional[str], export_file: str):
+        self.topic = topic
+        self.import_file = import_file
+        self.export_file = export_file
+
+    def read_import(self) -> float:
+        return self.__read_file(self.import_file)
+
+    def read_export(self) -> float:
+        return self.__read_file(self.export_file)
+
+    @staticmethod
+    def __read_file(file: str) -> float:
+        if file is None:
+            return 0.0
+        try:
+            result = ramdisk_read_float(file)
+            log.info("Found counter reading <%g Wh> in file <%s>", result, file)
+            return result
+        except FileNotFoundError:
+            return 0.0
+
+
+def restore_value(prefix_str: str, postfix: str) -> float:
+    prefix = SimCountPrefix[prefix_str.upper()]
+    topic = "openWB/" + prefix.topic + ("/WHImported_temp" if postfix == POSTFIX_IMPORT else "/WHExport_temp")
     mqtt_value = read_mqtt_topic(topic)
     log.info("read from broker: %s=%s", topic, mqtt_value)
     if mqtt_value is None:
         result = None
     else:
         try:
-            result = float(mqtt_value)
+            # MQTT-Value is in Watt-seconds for historic reasons -> / 3600
+            result = float(mqtt_value) / 3600
         except ValueError:
             log.warning("Value <%s> from topic <%s> is not a valid number", mqtt_value, topic)
             result = None
 
     if result is None:
-        if prefix == "bezug":
-            file = "bezugkwh" if name == "watt0pos" else "einspeisungkwh"
-        elif prefix == "pv2":
-            file = "pv2kwh"
-        elif prefix == "pv":
-            file = "pvkwh"
-        else:
-            file = "speicherikwh" if name == "watt0pos" else "speicherekwh"
-        result = get_existing_imports_exports(file) * 3600
+        result = (prefix.read_import if postfix == POSTFIX_IMPORT else prefix.read_export)()
 
-    ramdisk_write(prefix + name, result)
+    ramdisk_write(prefix_str + postfix, result)
     return result
 
 
@@ -117,16 +121,9 @@ class SimCounterStore:
 
 class SimCounterStoreRamdisk(SimCounterStore):
     def initialize(self, prefix: str, topic: str, power: float, timestamp: float) -> SimCounterState:
-        if prefix == "bezug":
-            imported = get_existing_imports_exports("bezugkwh")
-            exported = get_existing_imports_exports("einspeisungkwh")
-        elif prefix == "pv" or prefix == "pv2":
-            imported = 0
-            exported = get_existing_imports_exports(prefix + "kwh")
-        else:
-            imported = get_existing_imports_exports("speicherikwh")
-            exported = get_existing_imports_exports("speicherekwh")
-        result = SimCounterState(timestamp, power, imported, exported)
+        result = SimCounterState(
+            timestamp, power, restore_value(prefix, POSTFIX_IMPORT), restore_value(prefix, POSTFIX_EXPORT)
+        )
         self.save(prefix, topic, result)
         return result
 
@@ -136,29 +133,30 @@ class SimCounterStoreRamdisk(SimCounterStore):
         except FileNotFoundError:
             return None
 
-        def read_or_restore(name: str) -> float:
-            # For historic reasons, the SimCount stored state uses Watt-seconds instead of Watt-hours -> / 3600:
+        def read_or_restore(postfix: str) -> float:
             try:
-                return ramdisk_read_float(prefix + name) / 3600
-            except Exception:
-                return restore_value(name, prefix) / 3600
+                # ramdisk value is in watt-seconds for historic reasons -> / 3600
+                return ramdisk_read_float(prefix + postfix) / 3600
+            except (FileNotFoundError, RamdiskReadError) as e:
+                log.warning("Read from ramdisk failed: %s. Attempting restore from broker", e)
+            return restore_value(prefix, postfix)
 
         return SimCounterState(
             timestamp=timestamp,
             power=ramdisk_read_float(prefix + "wh0"),
-            imported=read_or_restore("watt0pos"),
+            imported=read_or_restore(POSTFIX_IMPORT),
             # abs() weil runs/simcount.py speichert das Zwischenergebnis des Exports negativ ab:
-            exported=abs(read_or_restore("watt0neg")),
+            exported=abs(read_or_restore(POSTFIX_EXPORT)),
         )
 
     def save(self, prefix: str, topic: str, state: SimCounterState):
-        topic = get_topic(prefix)
+        topic = SimCountPrefix[prefix.upper()].topic
         ramdisk_write(prefix + "sec0", state.timestamp)
         ramdisk_write(prefix + "wh0", state.power)
 
         # For historic reasons, the SimCount stored state uses Watt-seconds instead of Watt-hours -> * 3600:
-        ramdisk_write(prefix + "watt0pos", state.imported * 3600)
-        ramdisk_write(prefix + "watt0neg", state.exported * 3600)
+        ramdisk_write(prefix + POSTFIX_IMPORT, state.imported * 3600)
+        ramdisk_write(prefix + POSTFIX_EXPORT, state.exported * 3600)
         pub.pub_single("openWB/" + topic + "/WHImported_temp", state.imported * 3600, no_json=True)
         pub.pub_single("openWB/" + topic + "/WHExport_temp", state.exported * 3600, no_json=True)
 
