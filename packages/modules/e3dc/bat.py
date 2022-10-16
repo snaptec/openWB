@@ -64,7 +64,8 @@ class e3dcBat:
                        unit=1) * -1)
                 if self.__read_ext == 1:
                     # 40075 externe PV Leistung
-                    pv_external += client.read_holding_registers(40075, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
+                    pv_external += client.read_holding_registers(40075, ModbusDataType.INT_32,
+                                                                 wordorder=Endian.Little, unit=1)
         soc = soc / count
         log.debug("soc %d power %d pv %d pv_external %d c ip %d",
                   soc, power, pv, pv_external, count)
