@@ -57,16 +57,14 @@ class e3dcBat:
                 # 40082 SoC
                 soc += client.read_holding_registers(40082, ModbusDataType.INT_16, unit=1)
                 # 40069 Speicherleistung
-                power += client.read_holding_registers(40069,
-                    ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
+                power += client.read_holding_registers(40069, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
                 # 40067 PV Leistung
                 pv += (client.read_holding_registers(40067,
                        ModbusDataType.INT_32, wordorder=Endian.Little,
                        unit=1) * -1)
                 if self.__read_ext == 1:
                     # 40075 externe PV Leistung
-                    pv_external += client.read_holding_registers(40075,
-                        ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
+                    pv_external += client.read_holding_registers(40075, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
         soc = soc / count
         log.debug("soc %d power %d pv %d pv_external %d c ip %d",
                   soc, power, pv, pv_external, count)
@@ -97,8 +95,7 @@ class e3dcBat:
             log.debug("wr update pv_other %s pv_total %d",
                       self.__pvother, pv_total)
             # pv
-            self.__sim_counterpv = SimCounter(self.__device_id,
-                self.component_config.id, prefix="pv")
+            self.__sim_counterpv = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
             self.__storepv = get_inverter_value_store(self.component_config.id)
             _, exportedpv = self.__sim_counterpv.sim_count(pv_total)
             inverter_state = InverterState(

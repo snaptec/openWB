@@ -25,10 +25,8 @@ class e3dcCounter:
                  pvmodul: str,
                  component_config: Union[Dict, e3dcCounterSetup]) -> None:
         self.__device_id = device_id
-        self.component_config = dataclass_from_dict(e3dcCounterSetup,
-            component_config)
-        self.__sim_counter = SimCounter(self.__device_id,
-            self.component_config.id, prefix="bezug")
+        self.component_config = dataclass_from_dict(e3dcCounterSetup, component_config)
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
         self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
         self.__ip_address1 = ip_address1
@@ -43,16 +41,14 @@ class e3dcCounter:
                 adr = int(f.read())
         with modbus.ModbusTcpClient_(self.__ip_address1, 502) as client:
             # 40074 EVU Punkt negativ -> Einspeisung in Watt
-            power = client.read_holding_registers(40073,
-                  ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
+            power = client.read_holding_registers(40073, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
             # 40130 Phasenleistung in Watt
             # max 6 Leistungsmesser verbaut ab 410105, typ 1 ist evu
             # bei den meisten e3dc auf 40128
             # for i in range (40104,40132,4):
             if (adr == 0):
                 for i in range(40128, 40103, -4):
-                    powers = client.read_holding_registers(i,
-                             [ModbusDataType.INT_16] * 4, unit=1)
+                    powers = client.read_holding_registers(i, [ModbusDataType.INT_16] * 4, unit=1)
                     log.debug("I: %d, p0 %d p1 a1 %d p2 a2 %d p3 a3 %d",
                               i, powers[0], powers[1], powers[2], powers[3])
                     if powers[0] == 1:
@@ -61,8 +57,7 @@ class e3dcCounter:
                             f.write(str(i))
                         break
             else:
-                powers = client.read_holding_registers(adr,
-                         [ModbusDataType.INT_16] * 4, unit=1)
+                powers = client.read_holding_registers(adr, [ModbusDataType.INT_16] * 4, unit=1)
                 log.debug("adr: %d, p0 %d p1 a1 %d p2 a2 %d p3 a3 %d",
                           adr, powers[0], powers[1], powers[2], powers[3])
         imported, exported = self.__sim_counter.sim_count(power)
