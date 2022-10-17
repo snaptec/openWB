@@ -70,6 +70,7 @@ start() {
 			openwbDebugLog "MAIN" 1 "isss handler already running"
 		else
 			openwbDebugLog "MAIN" 0 "isss handler not running! restarting process"
+			echo "$lastmanagement" > "$OPENWBBASEDIR/ramdisk/issslp2act"
 			nohup python3 "$OPENWBBASEDIR/runs/isss.py" >>"$OPENWBBASEDIR/ramdisk/isss.log" 2>&1 &
 		fi
 	else
