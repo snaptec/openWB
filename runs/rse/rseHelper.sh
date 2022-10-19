@@ -1,6 +1,8 @@
 #!/bin/bash
 if [[ -z "$OPENWBBASEDIR" ]]; then
 	OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+fi
+if [[ -z "$RAMDISKDIR" ]]; then
 	RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 fi
 
