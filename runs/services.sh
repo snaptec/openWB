@@ -114,7 +114,7 @@ start() {
 		sudo pkill -f '^python.*/buchse.py'
 	fi
 
-  rseSetup "$rseenabled" 0
+	rseSetup "$rseenabled" 0
 
 	pushButtonsSetup "$ladetaster" 0
 
