@@ -1,8 +1,6 @@
 #!/bin/bash
-if [[ -z "$OPENWBBASEDIR" ]]; then
-	OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
-	RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-fi
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 
 declare -F openwbDebugLog &>/dev/null || {
 	. "$OPENWBBASEDIR/helperFunctions.sh"
