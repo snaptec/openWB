@@ -115,6 +115,7 @@ class UpdateState:
         self.cp_interruption_thread = None  # type: Optional[threading.Thread]
         self.actor_cooldown_thread = None  # type: Optional[threading.Thread]
         self.cp_module = cp_module
+        self.__set_current_error = 0
 
     def update_state(self) -> None:
         if self.cp_module.config.id == 1:
@@ -122,27 +123,41 @@ class UpdateState:
         else:
             suffix = "s1"
         try:
-            set_current = int(float(ramdisk_read("llsoll"+suffix)))
-        except (FileNotFoundError, ValueError):
-            set_current = 0
-        try:
             heartbeat = int(ramdisk_read("heartbeat"))
         except (FileNotFoundError, ValueError):
+            log.error("Error reading heartbeat. Setting to default 0.")
             heartbeat = 0
+        if heartbeat > 80:
+            set_current = 0
+            log.error("Heartbeat Fehler seit " + str(heartbeat) + "Sekunden keine Verbindung, Stoppe Ladung.")
+        else:
+            try:
+                set_current = int(float(ramdisk_read("llsoll"+suffix)))
+                self.__set_current_error = 0
+            except (FileNotFoundError, ValueError) as e:
+                if isinstance(e, FileNotFoundError):
+                    log.error("Didn't find llsoll"+suffix+".")
+                else:
+                    log.error("Couldn't convert "+str(ramdisk_read("llsoll"+suffix))+" in llsoll"+suffix+" to number.")
+                self.__set_current_error += 1
+                if self.__set_current_error > 3:
+                    log.error("Error reading llsoll. Error counter exceed, setting to default 0.")
+                    set_current = 0
+                else:
+                    log.error("Error reading llsoll. Error counter not exceed, leaving set current unchanged.")
+                    return
         try:
             cp_interruption_duration = int(float(ramdisk_read("extcpulp1")))
         except (FileNotFoundError, ValueError):
+            log.error("Error reading extcpulp1. Setting to default 3.")
             cp_interruption_duration = 3
         try:
             phases_to_use = int(float(ramdisk_read("u1p3pstat")))
         except (FileNotFoundError, ValueError):
+            log.error("Error reading u1p3pstat. Setting to default 3.")
             phases_to_use = 3
         log.debug("Values from ramdisk: set_current"+str(set_current) +
                   " heartbeat "+str(heartbeat) + " phases_to_use "+str(phases_to_use) + "cp_interruption_duration" + str(cp_interruption_duration))
-
-        if heartbeat > 80:
-            set_current = 0
-            log.error("Heartbeat Fehler seit " + str(heartbeat) + "Sekunden keine Verbindung, Stoppe Ladung.")
 
         if self.phase_switch_thread:
             if self.phase_switch_thread.is_alive():
