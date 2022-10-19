@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from pymodbus.constants import Endian
 from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
@@ -27,7 +28,9 @@ class SaxpowerBat:
     def update(self) -> None:
         with self.__tcp_client:
             # Die beiden Register müssen zwingend zusammen ausgelesen werden, sonst scheitert die zweite Abfrage.
-            soc, power = self.__tcp_client.read_holding_registers(46, [ModbusDataType.INT_16]*2, unit=64)
+            # Byteorder nicht dokumentiert und mittels Test bestimmt.
+            soc, power = self.__tcp_client.read_holding_registers(
+                46, [ModbusDataType.INT_16]*2, unit=64, byteorder=Endian.Little)
             power = power * -1
 
         imported, exported = self.__sim_counter.sim_count(power)
