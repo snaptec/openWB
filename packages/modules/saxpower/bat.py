@@ -28,7 +28,7 @@ class SaxpowerBat:
         with self.__tcp_client:
             # Die beiden Register müssen zwingend zusammen ausgelesen werden, sonst scheitert die zweite Abfrage.
             soc, power = self.__tcp_client.read_holding_registers(46, [ModbusDataType.INT_16]*2, unit=64)
-            power = power * -1
+            power = power * -1 + 16384
 
         imported, exported = self.__sim_counter.sim_count(power)
         bat_state = BatState(
