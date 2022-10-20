@@ -18,8 +18,8 @@ class KostalPlenticoreBat:
         self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="speicher")
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self, reader: Callable[[int, ModbusDataType], Any]) -> BatState:
-        power = reader(582, ModbusDataType.INT_16)
+    def read_state(self, reader: Callable[[int, ModbusDataType], Any]) -> BatState:
+        power = reader(582, ModbusDataType.INT_16) * -1
         soc = reader(514, ModbusDataType.INT_16)
         imported, exported = self.sim_counter.sim_count(power)
 
@@ -30,7 +30,7 @@ class KostalPlenticoreBat:
             exported=exported,
         )
 
-    def set(self, state):
+    def update(self, state):
         self.store.set(state)
 
 

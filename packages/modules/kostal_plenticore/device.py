@@ -1,23 +1,23 @@
 # !/usr/bin/env python3
 from enum import IntEnum
+from ipparser import ipparser
 from itertools import chain
 from typing import Any, Callable, Iterable, List, Union
 from pymodbus.constants import Endian
-from ipparser import ipparser
-import logging
 import functools
-from modules.common.component_state import BatState, InverterState
+import logging
 
+from helpermodules.cli import run_using_positional_cli_args
+from modules.common import modbus
+from modules.common.abstract_device import DeviceDescriptor
+from modules.common.component_state import BatState, InverterState
+from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, MultiComponentUpdater
+from modules.common.store import get_counter_value_store
+from modules.kostal_plenticore.bat import KostalPlenticoreBat
 from modules.kostal_plenticore.inverter import KostalPlenticoreInverter
-from modules.kostal_plenticore.counter import KostalPlenticoreCounter
 from modules.kostal_plenticore.config import (KostalPlenticore, KostalPlenticoreBatSetup, KostalPlenticoreCounterSetup,
                                               KostalPlenticoreInverterSetup)
-from modules.kostal_plenticore.bat import KostalPlenticoreBat
-from modules.common.store import get_counter_value_store
-from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, MultiComponentUpdater
-from modules.common.abstract_device import DeviceDescriptor
-from modules.common import modbus
-from helpermodules.cli import run_using_positional_cli_args
+from modules.kostal_plenticore.counter import KostalPlenticoreCounter
 
 
 log = logging.getLogger(__name__)
@@ -33,21 +33,21 @@ def update(
         reader: Callable[[int, modbus.ModbusDataType], Any],
         set_inverter_state: bool = True):
     battery = next((component for component in components if isinstance(component, KostalPlenticoreBat)), None)
-    bat_state_net = battery.update(reader) if battery else None
+    bat_state_net = battery.read_state(reader) if battery else None
     for component in components:
         if isinstance(component, KostalPlenticoreInverter):
-            inverter_state = component.update(reader)
+            inverter_state = component.read_state(reader)
             if bat_state_net:
                 dc_in = component.dc_in_string_1_2(reader)
                 home_consumption = component.home_consumption(reader)
                 if dc_in >= 0:
                     # Wird PV-DC-Leistung erzeugt, müssen die Wandlungsverluste betrachtet werden.
                     # Kostal liefert nur DC-seitige Werte.
-                    if bat_state_net.power > 0:
+                    if bat_state_net.power < 0:
                         # Wird die Batterie entladen, werden die Wandlungsverluste anteilig an der DC-Leistung auf PV
                         # und Batterie verteilt. Dazu muss der Divisor Total_DC_power != 0 sein.
-                        power_gross = bat_state_net.power + dc_in
-                        pv_state = InverterState(power=bat_state_net.power / power_gross * inverter_state.power,
+                        power_gross = dc_in - bat_state_net.power
+                        pv_state = InverterState(power=dc_in / power_gross * inverter_state.power,
                                                  exported=inverter_state.exported)
                         # Speicherladung muss durch Wandlungsverluste und internen Verbrauch korrigiert werden, sonst
                         # wird ein falscher Hausverbrauch berechnet. Die Verluste fallen hier unter den Tisch.
@@ -59,7 +59,7 @@ def update(
                         # Ladeleistung der Batterie. Die PV-Leistung ist die Summe aus verlustbehafteter
                         # AC-Leistungsabgabe des WR und der DC-Ladeleistung. Die Wandlungsverluste werden also nur
                         # in der PV-Leistung ersichtlich.
-                        pv_state = InverterState(power=inverter_state.power + bat_state_net.power,
+                        pv_state = InverterState(power=inverter_state.power - bat_state_net.power,
                                                  exported=inverter_state.exported)
                         bat_state_gross = bat_state_net
                     # https://github.com/snaptec/openWB/pull/2440#discussion_r996275286
@@ -67,16 +67,17 @@ def update(
                     # bat_state_gross = BatteryState(power=bat_state_net.power / power_gross * inverter_state.power)
                     # pv_state = InverterState(power=inverter_state.power - bat_state_gross.power)
                 else:
+                    inverter_state.power = 0
                     pv_state = inverter_state
                     bat_state_gross = bat_state_net
             else:
                 pv_state = inverter_state
             if set_inverter_state:
-                component.set(pv_state)
+                component.update(pv_state)
         elif isinstance(component, KostalPlenticoreCounter):
             component.update(reader)
     if bat_state_net:
-        battery.set(bat_state_gross)
+        battery.update(bat_state_gross)
     if set_inverter_state is False:
         return pv_state
 
@@ -118,14 +119,14 @@ def read_legacy_inverter(ip1: str, ip2: str, battery: int, ip3: str) -> Inverter
 
     def get_hybrid_inverter_state(ip: str) -> InverterState:
         battery_component = KostalPlenticoreBat(1, KostalPlenticoreBatSetup())
-        with modbus.ModbusTcpClient_(ip) as client:
+        with modbus.ModbusTcpClient_(ip, 1502) as client:
             return update(
                 [inverter_component, battery_component], _create_reader(client), set_inverter_state=False
             )
 
     def get_standard_inverter_state(ip: str) -> InverterState:
-        with modbus.ModbusTcpClient_(ip) as client:
-            return inverter_component.update(_create_reader(client))
+        with modbus.ModbusTcpClient_(ip, 1502) as client:
+            return inverter_component.read_state(_create_reader(client))
 
     def inverter_state_sum(a: InverterState, b: InverterState) -> InverterState:
         return InverterState(exported=a.exported + b.exported, power=a.power + b.power)
@@ -135,7 +136,7 @@ def read_legacy_inverter(ip1: str, ip2: str, battery: int, ip3: str) -> Inverter
         map(get_standard_inverter_state, filter("none".__ne__, chain([ip2], ipparser(ip3)))),
         get_hybrid_inverter_state(ip1) if battery else get_standard_inverter_state(ip1)
     )
-    inverter_component.set(inverter_state)
+    inverter_component.update(inverter_state)
     return inverter_state
 
 
@@ -150,10 +151,10 @@ def read_legacy_counter(ip1: str, ip2: str, battery: int, ip3: str, position: in
     else:
         with client:
             counter_state = counter_component.get_values(reader)
-            bat_power = KostalPlenticoreBat(None, KostalPlenticoreBatSetup()).update(reader).power
+            bat_power = KostalPlenticoreBat(None, KostalPlenticoreBatSetup()).read_state(reader).power
         inverter_power = read_legacy_inverter(ip1, ip2, battery, ip3).power
         counter_state.power += inverter_power + bat_power
-        counter_state = counter_component.get_imported_exported(counter_state)
+        counter_state = counter_component.update_imported_exported(counter_state)
         get_counter_value_store(None).set(counter_state)
 
 

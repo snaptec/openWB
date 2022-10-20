@@ -15,9 +15,9 @@ class KostalPlenticoreInverter:
         self.store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self, reader: Callable[[int, ModbusDataType], Any]) -> InverterState:
+    def read_state(self, reader: Callable[[int, ModbusDataType], Any]) -> InverterState:
         # PV-Anlage kann nichts verbrauchen, also ggf. Register-/Rundungsfehler korrigieren.
-        power = min(0, reader(575, ModbusDataType.INT_16)) * -1
+        power = reader(575, ModbusDataType.INT_16) * -1
         exported = reader(320, ModbusDataType.FLOAT_32)
 
         return InverterState(
@@ -31,7 +31,7 @@ class KostalPlenticoreInverter:
     def home_consumption(self, reader: Callable[[int, ModbusDataType], Any]):
         return reader(106, ModbusDataType.FLOAT_32)
 
-    def set(self, state):
+    def update(self, state):
         self.store.set(state)
 
 
