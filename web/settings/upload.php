@@ -139,7 +139,7 @@
 		</script>
 		<?php
 			if($uploadOk === true) {
-				exec("sudo -u pi " . $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/restore.sh");
+				exec("sudo -u pi " . escapeshellarg($_SERVER['DOCUMENT_ROOT']) . "/openWB/runs/restore.sh");
 				?>
 					<script>
 						setTimeout(function() { window.location = "index.php"; }, 15000);

@@ -1,10 +1,8 @@
 <?php
 	// if parameter extendedFilename is passed with value 1 the filename changes
 	// from backup.tar.gz to openWB_backup_YYYY-MM-DD_HH-MM-SS.tar.gz
-	$useExtendedFilename = 0;
-	if( isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1") {
-		$useExtendedFilename = 1;
-	}
+	$useExtendedFilename = isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1" ? 1 : 0;
+
 	// execute backup script
 	$filename = exec("sudo -u pi " . $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/backup.sh " . $useExtendedFilename, $output, $result);
 ?>
