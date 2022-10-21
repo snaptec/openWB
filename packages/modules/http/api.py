@@ -1,22 +1,20 @@
 import functools
-from typing import Callable, Union
+import logging
+from typing import Callable, Optional
 
-from helpermodules import log
 from modules.common import req
 
+log = logging.getLogger(__name__)
 
-def request_value(url: str) -> float:
-    if "none" == url:
-        return 0
+
+def _request_value(url: str) -> float:
+    response_text = req.get_http_session().get(url, timeout=5).text
+    log.debug("Antwort auf %s: %s", url, response_text)
+    return float(response_text.replace("\n", ""))
+
+
+def create_request_function(url: str, path: Optional[str]) -> Callable[[], float]:
+    if path == "none" or path is None:
+        return lambda: None
     else:
-        response = req.get_http_session().get(url, timeout=5)
-        response.encoding = 'utf-8'
-        log.MainLogger().debug("Antwort auf "+str(url)+" "+str(response.text))
-        return float(response.text.replace("\n", ""))
-
-
-def create_request_function(domain: str, path: str) -> Callable[[], Union[int, float]]:
-    if path == "none":
-        return lambda: 0
-    else:
-        return functools.partial(request_value, domain + path)
+        return functools.partial(_request_value, url + path)

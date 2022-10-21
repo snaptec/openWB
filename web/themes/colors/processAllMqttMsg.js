@@ -410,7 +410,6 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
 	processPreloader(mqttmsg);
-
 	// color theme
 	if (mqttmsg == 'openWB/global/WHouseConsumption') {
 		wbdata.updateGlobal("housePower", makeInt(mqttpayload));
@@ -428,6 +427,9 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// '2': mode pv
 		// '3': mode stop
 		// '4': mode standby
+	}
+	else if ( mqttmsg == 'openWB/global/rfidConfigured' ) {
+		wbdata.updateGlobal("rfidConfigured", (mqttpayload == 1))
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
 		wbdata.updateGlobal("chargeEnergy", makeFloat(mqttpayload));

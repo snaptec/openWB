@@ -1,29 +1,20 @@
 #!/usr/bin/env python3
+import logging
 from typing import Dict, Optional, Union, List
 
-from helpermodules import log
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
-from modules.common.component_context import MultiComponentUpdateContext
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
+from modules.common.component_context import MultiComponentUpdateContext, SingleComponentUpdateContext
+from modules.common.store import get_inverter_value_store
 from modules.fronius import bat
-from modules.fronius import counter_sm
 from modules.fronius import counter_s0
+from modules.fronius import counter_sm
 from modules.fronius import inverter
-from modules.fronius import meter
+from modules.fronius.config import (Fronius, FroniusBatSetup, FroniusSmCounterSetup, FroniusS0CounterSetup,
+                                    FroniusInverterSetup)
 
-
-def get_default_config() -> dict:
-    return {
-        "name": "Fronius",
-        "type": "fronius",
-        "id": 0,
-        "configuration":
-        {
-            "meter_id": 0,
-            "ip_address": "192.168.193.15"
-        }
-    }
-
+log = logging.getLogger(__name__)
 
 fronius_component_classes = Union[bat.FroniusBat, counter_sm.FroniusSmCounter,
                                   counter_s0.FroniusS0Counter, inverter.FroniusInverter]
@@ -37,21 +28,27 @@ class Device(AbstractDevice):
         "inverter": inverter.FroniusInverter,
     }
 
-    def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, fronius_component_classes]
+    def __init__(self, device_config: Union[Dict, Fronius]) -> None:
+        self.components = {}  # type: Dict[str, fronius_component_classes]
         try:
-            self.device_config = device_config
-            self.bat_configured = False
+            self.device_config = dataclass_from_dict(Fronius, device_config)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict,
+                                                    FroniusBatSetup,
+                                                    FroniusSmCounterSetup,
+                                                    FroniusS0CounterSetup,
+                                                    FroniusInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config, self.device_config["configuration"])
-            if component_type == "bat":
-                self.bat_configured = True
+            self.components["component"+str(component_config.id)] = self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config.id, component_config, self.device_config.configuration)
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -59,98 +56,71 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading " + str(self._components))
-        if self._components:
-            with MultiComponentUpdateContext(self._components):
-                # zuerst den WR auslesen
-                for component in self._components:
-                    if isinstance(self._components[component], inverter.FroniusInverter):
-                        power_inverter = self._components[component].update(self.bat_configured)
-                        break
-                else:
-                    power_inverter = 0
-                # dann Zähler auslesen und Werte verrechnen
-                for component in self._components:
-                    if isinstance(self._components[component], counter_sm.FroniusSmCounter):
-                        counter_state, meter_location = self._components[component].update(self.bat_configured)
-                        if meter_location == meter.MeterLocation.load:
-                            # wenn SmartMeter im Verbrauchszweig sitzt sind folgende Annahmen getroffen:
-                            # PV Leistung wird gleichmäßig auf alle Phasen verteilt
-                            # Spannungen und Leistungsfaktoren sind am Verbrauchszweig == Einspeisepunkt
-                            # Hier gehen wir mal davon aus, dass der Wechselrichter seine PV-Leistung gleichmäßig
-                            # auf alle Phasen aufteilt.
-                            powers = [-1 * power - power_inverter/3 for power in counter_state.powers]
-                            # Wegen der geänderten Leistungen sind die Ströme erneut zu berechnen
-                            currents = [powers[i] / counter_state.voltages[i] for i in range(0, 3)]
-                            counter_state.powers = powers
-                            counter_state.currents = currents
-                        self._components[component].set_counter_state(counter_state)
-                        break
-                    elif isinstance(self._components[component], counter_s0.FroniusS0Counter):
-                        counter_state = self._components[component].update(self.bat_configured)
-                        counter_state.power += power_inverter
-                        self._components[component].set_counter_state(counter_state)
-                        break
-                for component in self._components:
-                    if isinstance(self._components[component], bat.FroniusBat):
-                        self._components[component].update(self.bat_configured)
+        log.debug("Start device reading " + str(self.components))
+        if self.components:
+            with MultiComponentUpdateContext(self.components):
+                for component in self.components:
+                    self.components[component].update()
         else:
-            log.MainLogger().warning(
-                self.device_config["name"] +
+            log.warning(
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
+
+
+COMPONENT_TYPE_TO_MODULE = {
+    "bat": bat,
+    "counter_sm": counter_sm,
+    "counter_s0": counter_s0,
+    "inverter": inverter,
+}
 
 
 def read_legacy(
         component_type: str,
         ip_address: str,
         meter_id: int,
-        gen24: int,
         variant: int,
-        meter_location: int = meter.MeterLocation.grid.value,
         ip_address2: str = "none",
-        bat_module: str = "none",
         num: Optional[int] = None) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter_sm": counter_sm,
-        "counter_s0": counter_s0,
-        "inverter": inverter,
-    }
 
-    device_config = get_default_config()
-    device_config["configuration"]["ip_address"] = ip_address
-    device_config["configuration"]["meter_id"] = meter_id
+    device_config = Fronius()
+    device_config.configuration.ip_address = ip_address
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
-        if component_type == "counter_sm":
-            component_config["configuration"]["variant"] = variant
-            component_config["configuration"]["meter_location"] = meter.MeterLocation(meter_location)
-        elif component_type == "inverter":
-            component_config["configuration"]["ip_address2"] = ip_address2
-            component_config["configuration"]["gen24"] = bool(gen24)
-            if bat_module == "speicher_fronius":
-                dev.bat_configured = True
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
+        if component_type == "bat":
+            component_config.configuration.meter_id = meter_id
+        elif component_type == "counter_sm":
+            component_config.configuration.variant = variant
+            component_config.configuration.meter_id = meter_id
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
+    component_config.id = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Fronius IP-Adresse: ' + str(ip_address))
+    log.debug('Fronius IP-Adresse: ' + ip_address)
 
-    dev.update()
+    if component_type == "bat" or "counter" in component_type:
+        dev.update()
+    elif component_type == "inverter" and num:
+        inverter1 = inverter.FroniusInverter(num, component_config, dev.device_config.configuration)
+        with SingleComponentUpdateContext(inverter1.component_info):
+            total_power = inverter1.read_power()
+            if ip_address2 != "none":
+                dev.device_config.configuration.ip_address = ip_address2
+                inverter2 = inverter.FroniusInverter(num, component_config, dev.device_config.configuration)
+                total_power += inverter2.read_power()
+            get_inverter_value_store(num).set(inverter1.fill_inverter_state(total_power))
+    else:
+        raise Exception("illegal component num " + str(num) + ". Should be an int if it is an inverter.")
 
 
 def main(argv: List[str]) -> None:
     run_using_positional_cli_args(read_legacy, argv)
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Fronius Skript")
+device_descriptor = DeviceDescriptor(configuration_factory=Fronius)

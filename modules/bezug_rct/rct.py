@@ -11,8 +11,8 @@ import socket
 import select
 import struct
 import binascii
-# import time
 import operator
+
 
 class rct_id():
     # data types
@@ -27,23 +27,23 @@ class rct_id():
     t_enum = 8
     t_float = 9
     t_string = 10
-    
+
     def __init__(self, msgid, idx, name, data_type, desc=''):
         self.id = msgid
         self.idx = idx
         self.data_type = data_type
         self.name = name
         self.desc = desc
-        
+
     def get_idx(entry):
         return entry.idx
-        
+
     def get_id(entry):
         return entry.id
-        
+
     def get_name(entry):
         return entry.name
-        
+
 
 # local variables
 id_tab = []
@@ -54,28 +54,32 @@ receive_timeout = 2.0
 search_id = 0
 search_name = None
 
+
 def sort_by_id():
     id_tab.sort(key=operator.attrgetter('id'))
 
+
 def sort_by_name():
     id_tab.sort(key=operator.attrgetter('name'))
+
 
 # find a table entry by using the 32 bit ID
 def find_by_id(id):
     for l in id_tab:
         if l.id == id:
             return l
-    
+
     return None
+
 
 # find a table entry by using the 32 bit ID and return the data type
 def get_type_by_id(id):
     obj = find_by_id(id)
     if obj is None:
         return rct_id.t_unknown
-    
+
     return obj.data_type
-    
+
 
 # decode a value according to the id data type
 def decode_value(id, data):
@@ -109,6 +113,7 @@ def decode_value(id, data):
             return 0
     except:
         return 0
+
 
 # encode a value according to the id data type
 def encode_value(id, value):
@@ -151,7 +156,7 @@ def encode_by_type(data_type, value):
         return None
 
 
-########################################## FRAME
+# -------------- FRAME ---------------
 start_token = '+'
 escape_token = '-'
 
@@ -170,7 +175,9 @@ FRAME_CRC16_LENGTH = 2              # nr of bytes for CRC16 field
 
 
 # frame class
-default_frame_type=FRAME_TYPE_STANDARD
+default_frame_type = FRAME_TYPE_STANDARD
+
+
 class Frame:
     def __init__(self, frame_type=default_frame_type):
         self.FrameComplete = False
@@ -184,20 +191,19 @@ class Frame:
         self.bEscapeMode = False
         self.EscapeCount = 0
 
-
     # consume a data fragment until frame is complete
     # The function returns the number of consumed bytes in data
     def consume(self, data):
-        i = 0;
+        i = 0
         for c in data:
             i += 1
-            
+
             # sync to start_token
             if len(self.stream) == 0:
                 if c == start_token:
                     self.stream += c
                 continue
-                
+
             if self.bEscapeMode:
                 self.bEscapeMode = False
             else:
@@ -208,7 +214,7 @@ class Frame:
 
             # add byte to receive stream
             self.stream += c
-            
+
             # when minimum frame size is received, decode the length and check completness of frame
             if len(self.stream) >= HEADER_WITH_LENGTH:
                 if len(self.stream) == HEADER_WITH_LENGTH:
@@ -217,7 +223,7 @@ class Frame:
                         self.FrameLength = struct.unpack(">H", self.stream[2:4])[0] + 2     # 2 byte length MSBF
                     else:
                         self.FrameLength = struct.unpack(">B", self.stream[2])[0] + 1       # 1 byte length
-                        
+
                     self.FrameLength += 2                                                   # 2 bytes header
                 else:
                     if len(self.stream) == self.FrameLength + FRAME_CRC16_LENGTH:
@@ -225,8 +231,7 @@ class Frame:
                         self.decode()
                         return i
         return i
-    
-    
+
     # decode a stream and store the values in the frame
     def decode(self):
         crc16_pos = len(self.stream)-2
@@ -235,14 +240,14 @@ class Frame:
             self.CRCOk = True
             self.command = struct.unpack(">B", self.stream[1])[0]
             if self.command == cmd_long_response or self.command == cmd_long_write:
-                data_length = struct.unpack(">H", self.stream[2:4])[0] # 2 byte length MSBF
+                data_length = struct.unpack(">H", self.stream[2:4])[0]  # 2 byte length MSBF
                 idx = 4
             else:
                 data_length = struct.unpack(">B", self.stream[2])[0]   # 1 byte length
                 idx = 3
-    
+
             data_length -= self.frame_type                             # substract frame type specific length
-    
+
             self.id = struct.unpack(">I", self.stream[idx:idx+4])[0]
             self.id_obj = find_by_id(self.id)
             idx += 4
@@ -254,17 +259,18 @@ class Frame:
             idx += data_length
 
             # decode data using id and id data type
-            if data_length > 0 and (self.command == cmd_response or self.command == cmd_long_response or self.command == cmd_write or self.command == cmd_long_write):
-                self.value = decode_value(self.id, self.data) 
-        
-    # encode a transmit stream using the frame values    
+            if data_length > 0 and (self.command == cmd_response or self.command == cmd_long_response or
+                                    self.command == cmd_write or self.command == cmd_long_write):
+                self.value = decode_value(self.id, self.data)
+
+    # encode a transmit stream using the frame values
     def encode(self):
         self.id_obj = find_by_id(self.id)
 
         # build a byte stream
         buf = b""
         buf += struct.pack('B', self.command)
-        
+
         if self.command == cmd_long_write or self.command == cmd_long_response:
             buf += struct.pack('>H', self.frame_type+len(self.data))  # 2 bytes
         else:
@@ -272,7 +278,7 @@ class Frame:
 
         if self.frame_type == FRAME_TYPE_PLANT:
             buf += struct.pack('>I', self.address)                    # 4 bytes
-            
+
         buf += struct.pack('>I', self.id)                             # 4 bytes
         buf += self.data                                              # N byte
         crc16 = self.CRC16(buf)
@@ -286,8 +292,8 @@ class Frame:
 
     # add a byte array to the stream and consider adding escape token in case of start or escape/stop token
     def response(self, rsp):
-        self.data = encode_value(self.id, rsp) 
-            
+        self.data = encode_value(self.id, rsp)
+
     # add a byte array to the stream and consider adding escape token in case of start or escape/stop token
     def addToStream(self, data):
         for c in data:
@@ -295,31 +301,31 @@ class Frame:
                 if len(self.stream) > 0:
                     self.EscapeCount += 1                    # just for debugging
                     self.stream += escape_token
-            
+
             self.stream += c
 
     # calculate the CRC16 for the passed data stream
     def CRC16(self, data):
-        bitrange = xrange(8) # 8 Bits
+        bitrange = xrange(8)  # 8 Bits
         crcsum = 0xFFFF
-        polynom  = 0x1021 #CCITT Polynom
+        polynom = 0x1021  # CCITT Polynom
 
         # skip start token
         Buffer = bytearray(data)
         if len(data) & 0x01:
             Buffer.append(0)
-            
+
         for byte in Buffer:
             crcsum ^= byte << 8
-            for bit in bitrange: # Loop for 8 bits 
+            for bit in bitrange:  # Loop for 8 bits
                 crcsum <<= 1
                 if crcsum & 0x7FFF0000:
-                    #~~ overflow in bit 16
+                    # ~~ overflow in bit 16
                     crcsum = (crcsum & 0x0000FFFF) ^ polynom
         return crcsum
 
-    # prepare a frame and set alle class compontents
-    def prepare(self, command, id, address, value = None):
+    # prepare a frame and set alle class components
+    def prepare(self, command, id, address, value=None):
         obj = find_by_id(id)
         if obj is None:
             self.FrameComplete = False
@@ -337,15 +343,17 @@ class Frame:
 
 # helper function to print and error
 def errlog(*args):
-    sys.stderr.write(' '.join(map(str,args)) + '\n')
-    
+    sys.stderr.write(' '.join(map(str, args)) + '\n')
+
+
 # helper function to print debug messages
 def dbglog(*args):
-    if bVerbose == True:
-        sys.stdout.write(' '.join(map(str,args)) + '\n')
-        
+    if bVerbose is True:
+        sys.stdout.write(' '.join(map(str, args)) + '\n')
+
     return bVerbose
-        
+
+
 # helper function to connect to the server (e.g. the RCT power device)
 def connect_to_server():
     try:
@@ -357,6 +365,7 @@ def connect_to_server():
         errlog('unable to connect to', host, 'port', port)
         return None
 
+
 # send a frame to RCT
 def send(clientsocket, cmd, id, address=0, value=0):
     frame = Frame()
@@ -365,51 +374,55 @@ def send(clientsocket, cmd, id, address=0, value=0):
     clientsocket.send(frame.stream)
     return frame
 
+
 # this function reads from the socket.
-# Note: unexpected bytes within buf are discarded. 
+# Note: unexpected bytes within buf are discarded.
 #       According to the spec it should not happen and should not be a problem
-def receive(sock, id = 0, timeout = receive_timeout):
+def receive(sock, id=0, timeout=receive_timeout):
     response = Frame()
     while True:
         try:
-            ready_to_read, ready_to_write, err_detect = select.select([sock,], [], [sock,], timeout)
+            ready_to_read, ready_to_write, err_detect = select.select([sock, ], [], [sock, ], timeout)
         except select.error:
             return None
 
-        if ready_to_read:    
+        if ready_to_read:
             buf = sock.recv(512)
             if len(buf) > 0:
                 i = response.consume(buf)
-                if response.FrameComplete and response.CRCOk == True:
+                if response.FrameComplete and response.CRCOk is True:
                     if id > 0 and id != response.id:
-                        #errlog('response id', id, 'doesn\'t fit to the requested id ', response.id)
-                        #errlog(hexdump(buf))
+                        # errlog('response id', id, 'doesn\'t fit to the requested id ', response.id)
+                        # errlog(hexdump(buf))
                         return None
                     else:
                         return response
                 else:
                     # frame incomplete or CRC error
-                    #errlog(hexdump(buf))
+                    # errlog(hexdump(buf))
                     return None
 
         else:
             # timeout
             return None
 
+
 # send a read request and wait for the response
-def read(clientsocket, id, address = 0, timeout = receive_timeout):
+def read(clientsocket, id, address=0, timeout=receive_timeout):
     if clientsocket is not None:
         # repeat until the correct response has been received
         while(True):
             frame = send(clientsocket, cmd_read, id, address)
-        
+
             response = receive(clientsocket, id, timeout)
             if response is not None:
                 return response.value
-    
+
+
 def close(clientsocket):
     clientsocket.close()
-        
+
+
 def hexdump(src, length=16):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     lines = []
@@ -421,17 +434,18 @@ def hexdump(src, length=16):
         chars = src[c:c+length]
         hex = ' '.join(["%02x" % ord(x) for x in chars])
         printable = ''.join(["%s" % ((ord(x) <= 127 and FILTER[ord(x)]) or '.') for x in chars])
-        if addr == True:
+        if addr is True:
             lines.append("%04x  %-*s  %s" % (c, length*3, hex, printable))
         else:
             lines.append("%-*s  %s" % (length*3, hex, printable))
-            
+
         if c + length < len(src):
             lines.append("\n")
 
     return ''.join(lines)
-    
-# setup the rct_id table with id and expected data type          
+
+
+# setup the rct_id table with id and expected data type
 def init(argv):
     global bVerbose
     global host
@@ -446,10 +460,10 @@ def init(argv):
         options, remainder = getopt.getopt(argv[1:], 'p:i:v', ['port=', 'ip=', 'verbose', 'id=', 'name='])
     except getopt.GetoptError as err:
         # print help information and exit:
-        errlog(err) # will print something like "option -a not recognized"
+        errlog(err)  # will print something like "option -a not recognized"
         errlog('usage: ', argv[0], '[--ip_addr=<host>] [--verbose] [--port=<portnr>] [--id=0xXXXXXXXX|--name=<string>] ')
         sys.exit(-1)
-    
+
     for opt, arg in options:
         if opt in ('-p', '--port'):
             port = int(arg, base=10)
@@ -473,13 +487,14 @@ def init(argv):
 
     sort_by_name()
 
+
 def id_tab_setup():
     # add all known id's with name, data type, description and unit to the id table
     id_tab.append(rct_id(0x0104EB6A,   0, 'rb485.f_grid[2]',                                  rct_id.t_float,   'Grid phase 3 frequency [Hz]'))
     id_tab.append(rct_id(0x011F41DB,   1, 'power_mng.schedule[0]',                            rct_id.t_string,  'power_mng.schedule[0]'))
     id_tab.append(rct_id(0x016109E1,   2, 'grid_mon[0].u_over.time',                          rct_id.t_float,   'Max. voltage switch-off time level 1 [s]'))
     id_tab.append(rct_id(0x01676FA6,   3, 'battery.cells_stat[3]',                            rct_id.t_string,  'battery.cells_stat[3]'))
-    id_tab.append(rct_id(0x019C0B60,   4, 'cs_neg[2]',                                        rct_id.t_float,   'Miltiply value of the current sensor 2 by'))
+    id_tab.append(rct_id(0x019C0B60,   4, 'cs_neg[2]',                                        rct_id.t_float,   'Multiply value of the current sensor 2 by'))
     id_tab.append(rct_id(0x02247588,   5, 'battery_placeholder[0].cells_stat[2].u_min.value', rct_id.t_float,   'battery_placeholder[0].cells_stat[2].u_min.value'))
     id_tab.append(rct_id(0x031A6110,   6, 'energy.e_ext_month',                               rct_id.t_float,   'External month energy [Wh]'))
     id_tab.append(rct_id(0x035E64EA,   7, 'battery_placeholder[0].module_sn[5]',              rct_id.t_string,  'Module 5 Serial Number'))
@@ -941,7 +956,7 @@ def id_tab_setup():
     id_tab.append(rct_id(0x8160539D, 464, 'battery.cells_stat[4].t_max.value',                rct_id.t_float,   'battery.cells_stat[4].t_max.value'))
     id_tab.append(rct_id(0x81AE960B, 465, 'energy.e_dc_month[0]',                             rct_id.t_float,   'Solar generator A month energy [Wh]'))
     id_tab.append(rct_id(0x81AF854E, 466, 'nsm.pu_use',                                       rct_id.t_bool,    'P(U) active'))
-    id_tab.append(rct_id(0x82258C01, 467, 'cs_neg[0]',                                        rct_id.t_float,   'Miltiply value of the current sensor 0 by'))
+    id_tab.append(rct_id(0x82258C01, 467, 'cs_neg[0]',                                        rct_id.t_float,   'Multiply value of the current sensor 0 by'))
     id_tab.append(rct_id(0x82CD1525, 468, 'grid_mon[1].u_under.threshold',                    rct_id.t_float,   'Min. voltage level 2 [V]'))
     id_tab.append(rct_id(0x82E3C121, 469, 'g_sync.q_ac[1]',                                   rct_id.t_float,   ''))
     id_tab.append(rct_id(0x8320B84C, 470, 'io_board.rse_data_delay',                          rct_id.t_float,   'Delay for new K4..K1 data [s]'))

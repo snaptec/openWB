@@ -18,4 +18,4 @@ do
     ((counter++))
 done
 template=${template/%,}"]"
-jq -cn "${args[@]}" "$template" | socat - "unix-client:$SCRIPT_DIR/legacy_run_server.sock"
+jq -cn "${args[@]}" "$template" | socat -t300 - "unix-client:$SCRIPT_DIR/legacy_run_server.sock"

@@ -1,40 +1,24 @@
 #!/usr/bin/env python3
 
-from datetime import datetime, timezone
-import os
+from typing import List
+import logging
 import requests
 import sys
 import traceback
 
-from requests.api import get
+from helpermodules.cli import run_using_positional_cli_args
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
-
-solarwattmethod = str(sys.argv[1])
-speicher1_ip = str(sys.argv[2])
-speicher1_ip2 = str(sys.argv[3])
+log = logging.getLogger("Solarwatt Speicher")
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
-
-
-if Debug >= 2:
-    DebugLog('Speicher Methode: ' + solarwattmethod)
-    DebugLog('Speicher IP1: ' + speicher1_ip)
-    DebugLog('Speicher IP2: ' + speicher1_ip2)
-
-
-def get_value(key, sresponse):
+def get_value(key: str, json_response):
     value = 0
     try:
-        for item in sresponse["result"]["items"]:
-            if "tagValues" in sresponse["result"]["items"][item]:
-                if key in sresponse["result"]["items"][item]["tagValues"]:
-                    if "value" in sresponse["result"]["items"][item]["tagValues"][key]:
-                        value = int(sresponse["result"]["items"][item]["tagValues"][key]["value"])
+        for item in json_response["result"]["items"]:
+            if "tagValues" in item:
+                if key in item["tagValues"]:
+                    if "value" in item["tagValues"][key]:
+                        value = int(item["tagValues"][key]["value"])
                         break
     except:
         traceback.print_exc()
@@ -42,41 +26,45 @@ def get_value(key, sresponse):
     return value
 
 
-if solarwattmethod == 0:  # Abruf über Energy Manager
-    sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=5).json()
-    if len(str(sresponse)) < 10:
-        sys.exit(1)
+def update(solarwattmethod: int, speicher1_ip: str, speicher1_ip2: str):
+    log.debug('Speicher Methode: ' + str(solarwattmethod))
+    log.debug('Speicher IP1: ' + speicher1_ip)
+    log.debug('Speicher IP2: ' + speicher1_ip2)
 
-    speichere = get_value("PowerConsumedFromStorage", sresponse)
-    speicherein = get_value("PowerOutFromStorage", sresponse)
-    speicheri = get_value("PowerBuffered", sresponse)
-    speicherleistung = int((speichere + speicherein - speicheri) * -1)
-    speichersoc = get_value("StateOfCharge", sresponse)
+    if solarwattmethod == 0:  # Abruf über Energy Manager
+        json_response = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=5).json()
+        if len(str(json_response)) < 10:
+            sys.exit(1)
+
+        speicher_e = get_value("PowerConsumedFromStorage", json_response)
+        speicher_ein = get_value("PowerOutFromStorage", json_response)
+        speicher_i = get_value("PowerBuffered", json_response)
+        speicher_leistung = int((speicher_e + speicher_ein - speicher_i) * -1)
+        speicher_soc = get_value("StateOfCharge", json_response)
+
+    elif solarwattmethod == 1:  # Abruf über Gateway
+        json_response = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
+        if len(str(json_response)) < 10:
+            sys.exit(1)
+        speicher_strom = json_response["FData"]["IBat"]
+        speicher_spannung = json_response["FData"]["VBat"]
+
+        speicher_leistung = int(speicher_strom * speicher_spannung * -1)
+        speicher_soc = int(json_response["SData"]["SoC"])
+        log.debug('SpeicherSoC: ' + str(speicher_soc))
+        if not str(speicher_soc).isnumeric():
+            log.debug('SpeicherSoc nicht numerisch. -->0')
+            speicher_soc = 0
+    else:
+        raise Exception("Unbekannte Abrufmethode für Solarwatt")
+
+    log.debug("Speicherleistung: "+str(speicher_leistung)+" W")
+    with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
+        f.write(str(speicher_leistung))
+    log.debug("SpeicherSoC: "+str(speicher_soc)+" %")
+    with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
+        f.write(str(speicher_soc))
 
 
-elif solarwattmethod == 1:  # Abruf über Gateway
-    sresponse = requests.get('http://'+speicher1_ip2+':8080/', timeout=3).json()
-    if len(str(sresponse)) < 10:
-        sys.exit(1)
-    ibat = sresponse["FData"]["IBat"]
-    vbat = sresponse["FData"]["VBat"]
-
-    speicherleistung = ibat * vbat
-    speicherleistung = int(speicherleistung / (-1))
-    speichersoc = int(sresponse["SData"]["SoC"])
-    if Debug >= 1:
-        DebugLog('SpeicherSoC: ' + str(speichersoc))
-    if not str(speichersoc).isnumeric():
-        DebugLog('SpeicherSoc nicht numerisch. -->0')
-        speichersoc = 0
-else:
-    raise Exception("Unbekannte Abrufmethode fuer Solarwatt")
-
-DebugLog("Speicherleistung: "+str(speicherleistung)+" W")
-with open("/var/www/html/openWB/ramdisk/speicherleistung", "w") as f:
-    f.write(str(speicherleistung))
-DebugLog("SpeicherSoC: "+str(speichersoc)+" %")
-with open("/var/www/html/openWB/ramdisk/speichersoc", "w") as f:
-    f.write(str(speichersoc))
-
-exit(0)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

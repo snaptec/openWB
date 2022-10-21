@@ -6,3 +6,88 @@ body {
   justify-content: center;
   font-family: Open Sans;
 }
+
+#codeModal {
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 0px;
+}
+
+#PINbox {
+  background: #242222!important;
+  color: #ffffff!important;
+  width: 90%;
+  font-size: 4rem;
+  text-align: center;
+  border: 1px solid #d5d5d5;
+}
+
+.PINbutton {
+  background: #ededed;
+  color: #7e7e7e;
+  border: none;
+  border-radius: 3px;
+  font-size: 36px;
+  text-align: center;
+  width: 90px;
+  height: 65px;
+  margin: 5px 10px;
+  padding: 0;
+  box-shadow: #506CE8 0 0 1px 1px;
+}
+
+.PINbutton.clear {
+  background-color: orange;
+}
+
+.PINbutton.enter {
+  background-color: green;
+}
+
+.PINbutton:hover {
+  box-shadow: #506CE8 0 0 1px 1px;
+}
+
+.PINbutton:active {
+  background: #506CE8;
+  color: #fff;
+}
+
+.clear:hover {
+  box-shadow: #ff3c41 0 0 1px 1px;
+}
+
+.clear:active {
+  background: #ff3c41;
+  color: #fff;
+}
+
+.enter:hover {
+  box-shadow: #47cf73 0 0 1px 1px;
+}
+
+.enter:active {
+  background: #47cf73;
+  color: #fff;
+}
+
+.shadow{
+  -webkit-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+  box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+}
+
+.modal-dialog {
+  max-width: 600px;
+}
+
+.modal-content,
+.modal-header,
+.modal-footer {
+  border-color: dimgrey;
+  font-size: 2rem;
+}
+
+.modal-content label {
+  font-weight: normal;
+}

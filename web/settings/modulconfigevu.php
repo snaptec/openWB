@@ -69,11 +69,14 @@
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($wattbezugmodulold == "bezug_alphaess") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+										<option <?php if($wattbezugmodulold == "bezug_batterx") echo "selected" ?> value="bezug_batterx">BatterX</option>
 										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_enphase") echo "selected" ?> value="bezug_enphase">Enphase Envoy / IQ Gateway</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+										<option <?php if($wattbezugmodulold == "bezug_good_we") echo "selected" ?> value="bezug_good_we">GoodWe</option>
 										<option <?php if($wattbezugmodulold == "bezug_huawei") echo "selected" ?> value="bezug_huawei">Huawei mit SmartMeter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalpiko") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
@@ -86,6 +89,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens_sentron") echo "selected" ?> value="bezug_siemens_sentron">Siemens SENTRON</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
@@ -119,7 +123,26 @@
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
+						<div id="wattbezuggoodwe" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im Wechselrichter
+							</div>
+						</div>
+						<div id="wattbezugbatterx" class="hide">
+							<div class="form-row mb-1">
+								<label for="batterx_ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="batterx_ip" id="batterx_ip" value="<?php echo $batterx_ipold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="wattbezugsungrow" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
+							</div>
 							<div class="form-row mb-1">
 								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
 								<div class="col">
@@ -132,7 +155,11 @@
 						</div>
 						<div id="wattbezugsonneneco" class="hide">
 							<div class="card-text alert alert-info">
-								Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
+								Keine Konfiguration erforderlich. Alle Einstellungen werden in dem Speicher-Modul vorgenommen.
+							</div>
+							<div class="card-text alert alert-warning">
+								Die EVU-Leistung steht nur in den Varianten "Rest-API 2" und "JSON-API" zur Verfügung!<br />
+								Mit diesem Modul ist kein Lastmanagement möglich, da keine Ströme der einzelnen Phasen gemessen werden!
 							</div>
 						</div>
 						<div id="wattbezugvarta" class="hide">
@@ -169,7 +196,13 @@
 								<span class="text-info">openWB/set/evu/VPhase1</span> Spannung in Volt für Phase 1, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase2</span> Spannung in Volt für Phase 2, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase3</span> Spannung in Volt für Phase 3, float, Punkt als Trenner<br>
-								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner
+								<span class="text-info">openWB/set/evu/HzFrequenz</span> oder <span class="text-info">openWB/set/evu/Hz</span> Netzfrequenz in Hz, float, Punkt als Trenner<br>
+								<span class="text-info">openWB/set/evu/WPhase1</span> Leistung in Watt für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase2</span> Leistung in Watt für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase3</span> Leistung in Watt für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase1</span> Powerfaktor für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase2</span> Powerfaktor für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase3</span> Powerfaktor für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung
 							</div>
 						</div>
 						<div id="wattbezuglgessv1" class="hide">
@@ -193,14 +226,19 @@
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
 							</div>
 						</div>
+						<div id="wattbezugsiemenssentron" class="hide">
+							<div class="card-text alert alert-info">
+								Derzeit werden nur Messgeräte vom Typ "7KM PAC2200" mit Ethernet-Schnittstelle unterstützt.
+							</div>
+						</div>
 						<div id="wattbezugrct" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des RCT Speichers eingeben.
 							</div>
 						</div>
 						<div id="wattbezughuawei" class="hide">
-							<div class="card-text alert alert-info">
-								Konfiguration erfolgt im zugehörigen PV Modul.
+							<div class="card-text alert alert-danger">
+								Es muss zwingend auch das Huawei PV Modul konfiguriert werden, da alle Daten dort abgerufen werden!
 							</div>
 						</div>
 
@@ -229,6 +267,7 @@
 									<input class="form-control" type="text" name="powerfoxid" id="powerfoxid" value="<?php echo $powerfoxidold ?>">
 									<span class="form-text small">
 										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.
+										Die Device ID ist exakt so einzutragen, wie in der Antwort des Servers. Das bedeutet insbesondere auch die Groß-/KLeinschreibung ist zu beachten!
 									</span>
 								</div>
 							</div>
@@ -304,11 +343,26 @@
 									</span>
 								</div>
 							</div>
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">Messgerät</label>
+									<div class="col">
+										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($victron_energy_meterold == 1) echo " active" ?>">
+												<input type="radio" name="victron_energy_meter" id="victron_energy_meterOn" value="1"<?php if($victron_energy_meterold == 1) echo " checked=\"checked\"" ?>>Energy Meter
+											</label>
+											<label class="btn btn-outline-info<?php if($victron_energy_meterold == 0) echo " active" ?>">
+												<input type="radio" name="victron_energy_meter" id="victron_energy_meterOff" value="0"<?php if($victron_energy_meterold == 0) echo " checked=\"checked\"" ?>>AC-In Victron GX
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="form-row mb-1">
 								<label for="bezug_id" class="col-md-4 col-form-label">ID</label>
 								<div class="col">
 									<input class="form-control" type="text" name="bezug_id" id="bezug_id" value="<?php echo $bezug_idold ?>">
-									<span class="form-text small">Gültige Werte ID. ID Adresse</span>
+									<span class="form-text small">Gültige Werte ID. Modbus-ID</span>
 								</div>
 							</div>
 						</div>
@@ -666,7 +720,7 @@
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Fronius WR.
 										</span>
-										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php if(isset($wrfroniusip)) echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
 										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>
@@ -674,35 +728,15 @@
 								<div id="wattbezugfroniusmeterid" class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Energymeter ID</label>
 									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniuserzeugungold == 0) echo " active" ?>">
-												<input type="radio" name="froniuserzeugung" id="froniuserzeugung0" value="0"<?php if($froniuserzeugungold == 0) echo " checked=\"checked\"" ?>>0
-											</label>
-											<label class="btn btn-outline-info<?php if($froniuserzeugungold == 1) echo " active" ?>">
-												<input type="radio" name="froniuserzeugung" id="froniuserzeugung1" value="1"<?php if($froniuserzeugungold == 1) echo " checked=\"checked\"" ?>>1
-											</label>
-										</div>
+										<input class="form-control" type="number" min="0" max="65535" step="1" name="froniuserzeugung" id="froniuserzeugung"value="<?php echo $froniuserzeugungold ?>">
 									</div>
 								</div>
 								<div id="wattbezugfroniusmeterlist" class="form-row mb-1 hide">
 									<label class="col-md-4 col-form-label">Energymeter</label>
 									<div class="col">
-										<select name="froniuserzeugung" id="froniuserzeugung" class="form-control"<?php if (isset($froniuserzeugungold)) echo " data-old=\"$froniuserzeugungold\"" ?>>
+										<select name="froniuserzeugung" id="froniuserzeugungselect" class="form-control"<?php if (isset($froniuserzeugungold)) echo " data-old=\"$froniuserzeugungold\"" ?>>
 											<option>Nicht ermittelbar</option>
 										</select>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Energymeter Installationsort</label>
-									<div class="col">
-										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 0) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation0" data-option="0" value="0"<?php if($froniusmeterlocationold == 0) echo " checked=\"checked\"" ?>>EVU Zweig
-											</label>
-											<label class="btn btn-outline-info<?php if($froniusmeterlocationold == 1) echo " active" ?>">
-												<input type="radio" name="froniusmeterlocation" id="froniusmeterlocation1" data-option="1" value="1"<?php if($froniusmeterlocationold == 1) echo " checked=\"checked\"" ?>>Hausverbrauchszweig
-											</label>
-										</div>
 									</div>
 								</div>
 								<hr>
@@ -727,6 +761,67 @@
 									</div>
 								</div>
 							</div>
+							<script>
+								// load meter data from Fronius inverter
+								$(document).ready(function(){
+									$('#wattbezugfroniusload').on("click",function() {
+										$('#wattbezugfroniusload').attr("disabled", true);
+										$('#wattbezugfroniusloadmessage').text("Lade Daten...");
+										$.getJSON('/openWB/modules/bezug_fronius_sm/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
+											var options = '';
+											// fill listbox, format <manufacturer> <meter model> (<serial>)
+											for(var i in data.Body.Data) {
+												var meter = data.Body.Data[i];
+												options += '<option value="'+i+'"'
+												if($('#froniuserzeugungselect').attr("data-old") == i) {
+													options += ' selected=true';
+												}
+												options += '>';
+												options += meter.Details.Manufacturer+' '+meter.Details.Model;
+												options += ' ('+meter.Details.Serial+')';
+												options += '</option>';
+											}
+											$('#froniuserzeugungselect').html(options);
+											$('#wattbezugfroniusloadmessage').text("");
+
+											// set meter id corresponding to displayed entry in listbox
+											setInputValue('froniuserzeugung', $('#froniuserzeugungselect option:selected').attr('value'));
+
+											hideSection('#wattbezugfroniusload')
+											hideSection('#wattbezugfroniusmeterid');
+											showSection('#wattbezugfroniusmanual')
+											showSection('#wattbezugfroniusmeterlist');
+										})
+										.fail(function(jqXHR, textStatus, errorThrown) {
+											var errorMsg = 'Die Daten konnten nicht abgerufen werden. Eingabe pr&uuml;fen oder Daten manuell eingeben.';
+											if(jqXHR.responseText !== "") {
+												errorMsg += '<br>';
+												errorMsg += jqXHR.responseText;
+											}
+											$('#wattbezugfroniusloadmessage').html(errorMsg);
+										})
+										.always(function() {
+											$('#wattbezugfroniusload').attr("disabled", false);
+										});
+
+									});
+
+									$('#wattbezugfroniusmanual').on("click",function() {
+										// switch back to default configuration form
+										hideSection('#wattbezugfroniusmanual')
+										hideSection('#wattbezugfroniusmeterlist');
+										showSection('#wattbezugfroniusload')
+										showSection('#wattbezugfroniusmeterid');
+									});
+
+									$('#froniuserzeugungselect').change(function() {
+										// on change entry of listbox, set corresponding meter id
+										setInputValue('froniuserzeugung', $('#froniuserzeugungselect option:selected').attr('value'));
+										// on change entry of listbox, set corresponding meter location
+										setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugungselect option:selected').attr('data-meterlocation'));
+									});
+								});
+							</script>
 						</div>
 						<div id="wattbezugjson" class="hide">
 							<div class="form-group">
@@ -832,7 +927,20 @@
 								Die IP des Speichers wird im dazugehörigen SMA SBS Speicher-Modul eingestellt.
 							</div>
 						</div>
-
+						<div id="wattbezugenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Die IP des Envoy / IQ Gateway wird im dazugehörigen Envoy PV-Modul eingestellt.
+							</div>
+							<div class="form-row mb-1">
+								<label for="bezugenphaseeid" class="col-md-4 col-form-label">Zähler EID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="bezugenphaseeid" id="bezugenphaseeid" value="<?php echo (empty($bezugenphaseeidold)?'':$bezugenphaseeidold) ?>">
+									<span class="form-text small">
+										EID des EVU-Zählers (<i>net-consumption</i>).<br>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="evuglaettungdiv" class="hide">
 							<hr class="border-danger">
 							<div class="form-group">
@@ -911,16 +1019,21 @@
 								hideSection('#wattbezugvarta');
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
+								hideSection('#wattbezugsiemenssentron');
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
+								hideSection('#wattbezugrct2');
 								hideSection('#wattbezughuawei');
 								hideSection('#wattbezugip');
 								hideSection('#wattbezugalphaess');
+								hideSection('#wattbezuggoodwe');
+								hideSection('#wattbezugbatterx');
 								hideSection('#wattbezugsungrow');
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
 								hideSection('#wattbezugcarlogavazzilan');
+								hideSection('#wattbezugenphase');
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
 								if($('#wattbezugmodul').val() != 'none') {
@@ -931,6 +1044,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_alphaess') {
 									showSection('#wattbezugalphaess');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_batterx') {
+									showSection('#wattbezugbatterx');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_sungrow') {
 									showSection('#wattbezugsungrow');
@@ -945,6 +1061,10 @@
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
 								}
+								if($('#wattbezugmodul').val() == 'bezug_siemens_sentron') {
+									showSection('#wattbezugip');
+									showSection('#wattbezugsiemenssentron');
+								}
 								if($('#wattbezugmodul').val() == 'bezug_janitza') {
 									showSection('#wattbezugjanitza');
 									showSection('#wattbezugip');
@@ -956,6 +1076,9 @@
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('#wattbezugsolax');
 								}
+								if($('#wattbezugmodul').val() == 'bezug_good_we') {
+									showSection('#wattbezuggoodwe');
+								}
 								if($('#wattbezugmodul').val() == 'bezug_huawei') {
 									showSection('#wattbezughuawei');
 								}
@@ -965,6 +1088,7 @@
 									showSection('#wattbezugip');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_rct2') {
+									showSection('#wattbezugrct2');
 									showSection('#wattbezugrct');
 									showSection('#wattbezugip');
 								}
@@ -1001,9 +1125,6 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_http')   {
 									showSection('#wattbezughttp');
-								}
-								if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
-									showSection('#wattbezugsma');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 									showSection('#wattbezugfronius');
@@ -1071,6 +1192,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
 									showSection('#wattbezugsolarwatt');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_enphase')   {
+									showSection('#wattbezugenphase');
 								}
 							}
 
@@ -1165,62 +1289,6 @@
 					$('#wizzarddoneForm').submit();
 				});
 
-				// load meter data from Fronius inverter
-				$('#wattbezugfroniusload').on("click",function() {
-					$('#wattbezugfroniusload').attr("disabled", true);
-					$('#wattbezugfroniusloadmessage').text("Lade Daten...");
-					$.getJSON('/openWB/modules/bezug_fronius_sm/froniusloadmeterdata.php?ip=' + $('#wrfroniusip').val(), function(data) {
-						var options = '';
-						// fill listbox, format <manufacturer> <meter model> (<serial>)
-						for(var i in data.Body.Data) {
-							var meter = data.Body.Data[i];
-							var meter_location = meter.hasOwnProperty('1SMARTMETER_VALUE_LOCATION_U16') ? parseInt(meter.SMARTMETER_VALUE_LOCATION_U16) : meter.Meter_Location_Current;
-							options += '<option value="'+i+'" data-meterlocation="'+meter_location+'"'
-							if($('#froniuserzeugung').attr("data-old") == i) {
-								options += ' selected=true';
-							}
-							options += '>';
-							options += meter.Details.Manufacturer+' '+meter.Details.Model;
-							options += ' ('+meter.Details.Serial+')';
-							options += '</option>';
-						}
-						$('#froniuserzeugung').html(options);
-						$('#wattbezugfroniusloadmessage').text("");
-
-						// set meter location corresponding to displayed entry in listbox
-						setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
-
-						hideSection('#wattbezugfroniusload')
-						hideSection('#wattbezugfroniusmeterid');
-						showSection('#wattbezugfroniusmanual')
-						showSection('#wattbezugfroniusmeterlist');
-					})
-					.fail(function(jqXHR, textStatus, errorThrown) {
-						var errorMsg = 'Die Daten konnten nicht abgerufen werden. Eingabe pr&uuml;fen oder Daten manuell eingeben.';
-						if(jqXHR.responseText !== "") {
-							errorMsg += '<br>';
-							errorMsg += jqXHR.responseText;
-						}
-						$('#wattbezugfroniusloadmessage').html(errorMsg);
-					})
-					.always(function() {
-						$('#wattbezugfroniusload').attr("disabled", false);
-					});
-					
-				});
-				
-				$('#wattbezugfroniusmanual').on("click",function() {
-					// switch back to default configuration form
-					hideSection('#wattbezugfroniusmanual')
-					hideSection('#wattbezugfroniusmeterlist');
-					showSection('#wattbezugfroniusload')
-					showSection('#wattbezugfroniusmeterid');
-				});
-				
-				$('#froniuserzeugung').change(function() {
-					// on change entry of listbox, set corresponding meter location
-					setToggleBtnGroup('froniusmeterlocation', $('#froniuserzeugung option:selected').attr('data-meterlocation'));
-				});
 			});
 
 			var wizzarddone = <?php if(isset($wizzarddoneold)){ echo $wizzarddoneold; } else { echo 100; } ?>

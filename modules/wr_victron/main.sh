@@ -1,10 +1,8 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="PV"
 #DMOD="MAIN"
-Debug=$debug
 
 #For development only
 #Debug=1
@@ -16,7 +14,5 @@ else
 fi
 
 
-python3 ${OPENWBBASEDIR}/packages/modules/victron/device.py "inverter" "${pv1_ipa}" "100" "0" "1">>${MYLOGFILE} 2>&1
-
-pvwatt=$(<${RAMDISKDIR}/pvwatt)
-echo $pvwatt
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "inverter" "${pv1_ipa}" "100" "${victron_energy_meter}" "0" "1">>${MYLOGFILE} 2>&1
+cat "${RAMDISKDIR}/pvwatt"

@@ -19,7 +19,7 @@ fi
 openwbDebugLog ${DMOD} 2 "PV IP: ${wrsunwaysip}"
 openwbDebugLog ${DMOD} 2 "PV Passwort: ${wrsunwayspw}"
 
-python3 /var/www/html/openWB/packages/modules/sunways/device.py "inverter" "${wrsunwaysip}" "${wrsunwayspw}" "1">>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sunways.device" "inverter" "${wrsunwaysip}" "${wrsunwayspw}" "1">>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

@@ -1,39 +1,30 @@
 #!/usr/bin/env python3
-from datetime import datetime, timezone
-import os
+from typing import List
+import logging
 import requests
-import sys
-import traceback
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
+from helpermodules.cli import run_using_positional_cli_args
 
-speicher1_ip = str(sys.argv[1])
+log = logging.getLogger("Solarwatt WR")
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+def update(speicher1_ip: str):
+    log.debug('PV Solarwatt IP:' + speicher1_ip)
+    json_response = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
+
+    for item in json_response["result"]["items"]:
+        try:
+            pvwatt = int(item["tagValues"]["PowerProduced"]["value"])
+            break
+        except KeyError:
+            pass
+    else:
+        raise Exception("Solarwatt konnte keine WR-Leistung ermitteln.")
+    pvwatt = pvwatt * -1
+    log.debug("PV-Leistung: "+str(pvwatt)+" W")
+    with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
+        f.write(str(pvwatt))
 
 
-if Debug >= 2:
-    DebugLog('PV Solarwatt IP:' + speicher1_ip)
-
-
-sresponse = requests.get('http://'+speicher1_ip+'/rest/kiwigrid/wizard/devices', timeout=3).json()
-
-for item in sresponse["result"]["items"].values():
-    try:
-        pvwatt = int(item["tagValues"]["PowerProduced"]["value"])
-        break
-    except KeyError:
-        pass
-else:
-    raise Exception("Solarwatt konnte keine WR-Leistung ermitteln.")
-pvwatt = pvwatt * -1
-if Debug >= 1:
-    DebugLog("PV-Leistung: "+str(pvwatt)+" W")
-with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-    f.write(str(pvwatt))
-
-exit(0)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

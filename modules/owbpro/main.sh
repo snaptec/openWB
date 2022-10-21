@@ -66,9 +66,9 @@ if [[ $answer == *"vehicle_id"* ]]; then
 else
 	openwbModulePublishState "LP" 1 "Keine Daten vom LP erhalten, IP Korrekt?" $chargep
 	openwbDebugLog "MAIN" 0 "Keine Daten von openWB Pro LP $chargep empfangen"
-	errcounter=$(</var/www/html/openWB/ramdisk/errcounterextopenwb)
+	errcounter=$(</var/www/html/openWB/ramdisk/errcounterowbpro)
 	errcounter=$((errcounter+1))
-	echo $errcounter > /var/www/html/openWB/ramdisk/errcounterextopenwb
+	echo $errcounter > /var/www/html/openWB/ramdisk/errcounterowbpro
 	if (( errcounter > 5 )); then
 		echo "Fehler bei Auslesung openWB Pro LP $chargep, Netzwerk oder Konfiguration prüfen" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 	fi

@@ -1,18 +1,17 @@
 #!/bin/bash
-
-OPENWBBASEDIR=$(cd "$(dirname $0)"/../../ && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd "$(dirname $0)" && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #DMOD="EVU"
 DMOD="MAIN"
 
-if [ $DMOD == "MAIN" ]; then
-    MYLOGFILE="$RAMDISKDIR/openWB.log"
+if [ ${DMOD} == "MAIN" ]; then
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-    MYLOGFILE="$RAMDISKDIR/evu_json.log"
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-python3 "$MODULEDIR/powerwall.py" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.device" "counter" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>"${MYLOGFILE}" 2>&1
+ret=$?
 
-wattbezug=$(<${RAMDISKDIR}/wattbezug)
-echo $wattbezug
+openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
+cat "${RAMDISKDIR}/wattbezug"

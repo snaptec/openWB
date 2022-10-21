@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import logging
 import re
+from typing import List
 
 import requests
 
 from helpermodules.cli import run_using_positional_cli_args
-from helpermodules.log import setup_logging_stdout
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
 
@@ -17,7 +17,7 @@ def parse_kostal_piko_var2_html(html: str):
     if result is None:
         raise Exception("Given HTML does not match the expected regular expression. Ignoring.")
     return InverterState(
-        counter=int(result.group(2)) * 1000,
+        exported=int(result.group(2)) * 1000,
         power=-int(result.group(1))
     )
 
@@ -30,6 +30,5 @@ def update(num: int, wr_piko2_url: str, wr_piko2_user: str, wr_piko2_pass: str):
     log.debug("Update completed successfully")
 
 
-if __name__ == '__main__':
-    setup_logging_stdout()
-    run_using_positional_cli_args(update)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

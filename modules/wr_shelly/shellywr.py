@@ -1,15 +1,9 @@
 #!/usr/bin/python3
-import sys
-import os
-import time
 import json
-import getopt
-import socket
-import struct
-import codecs
-import binascii
 import urllib.request
-
+import os
+from typing import List
+from helpermodules.cli import run_using_positional_cli_args
 
 def totalPowerFromShellyJson(answer):
     if 'meters' in answer:
@@ -22,23 +16,46 @@ def totalPowerFromShellyJson(answer):
         total = total + meter['power']
     return int(total)
 
-
-ipadr = str(sys.argv[1])
-fname = str(sys.argv[2])
-
-aktpower = 0
-
-# Versuche Daten von Shelly abzurufen.
-answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
-f = open('/var/www/html/openWB/ramdisk/shelly_wr_ret.' + str(ipadr), 'w')
-f.write(str(answer))
-f.close()
-# Versuche Werte aus der Antwort zu extrahieren.
-try:
-    aktpower = totalPowerFromShellyJson(answer) * -1
-except:
+def update(ipadr: str, fname: str):
     aktpower = 0
+    gen = '1'
+    fnprefix = '/var/www/html/openWB/ramdisk/shelly_wr_ret.' + str(ipadr)
+    fnameinf = fnprefix + '_shelly_info'
+    fnameg = fnprefix + '_shelly_infog'
+    if os.path.isfile(fnameg):
+        f = open(fnameg, 'r')
+        gen=str(f.read())
+        f.close()
+    else:
+        answergen= json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/shelly", timeout=3).read().decode("utf-8")))
+        f = open(fnameinf, 'w')
+        json.dump(answergen,f)
+        f.close()
+        if 'gen' in answergen:
+            gen = str(int(answergen['gen']))
+        f = open(fnameg, 'w')
+        f.write(str(gen))
+        f.close()
+    if (gen == "1"):
+        answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
+    else:
+        answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/rpc/Shelly.GetStatus",timeout=3).read().decode("utf-8")))
+    f = open('/var/www/html/openWB/ramdisk/shelly_wr_ret.' + str(ipadr), 'w')
+    f.write(str(answer))
+    f.close()
 
-f1 = open('/var/www/html/openWB/ramdisk/' + str(fname), 'w')
-f1.write(str(aktpower))
-f1.close()
+    # Versuche Werte aus der Antwort zu extrahieren.
+    try:
+        if (gen == "1"):
+            aktpower = totalPowerFromShellyJson(answer) * -1
+        else:
+            aktpower = int(answer['switch:0'] ['apower']) * -1
+    except:
+        aktpower = 0
+    f1 = open('/var/www/html/openWB/ramdisk/' + str(fname), 'w')
+    f1.write(str(aktpower))
+    f1.close()
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

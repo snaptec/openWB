@@ -1,21 +1,16 @@
 #!/usr/bin/env python3
-from typing import Dict, Union, Optional
+import logging
+from typing import Dict, Union, Optional, List
 
-from helpermodules import log
+from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice
+from modules.common import modbus
+from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import SingleComponentUpdateContext
-from modules.siemens import bat
-from modules.siemens import counter
-from modules.siemens import inverter
+from modules.siemens import bat, counter, inverter
+from modules.siemens.config import Siemens, SiemensBatSetup, SiemensCounterSetup, SiemensInverterSetup
 
-
-def get_default_config() -> dict:
-    return {
-        "name": "Siemens",
-        "type": "siemens",
-        "id": 0
-    }
+log = logging.getLogger(__name__)
 
 
 siemens_component_classes = Union[bat.SiemensBat, counter.SiemensCounter, inverter.SiemensInverter]
@@ -28,18 +23,27 @@ class Device(AbstractDevice):
         "inverter": inverter.SiemensInverter
     }
 
-    def __init__(self, device_config: dict) -> None:
-        self._components = {}  # type: Dict[str, siemens_component_classes]
+    def __init__(self, device_config: Union[Dict, Siemens]) -> None:
+        self.components = {}  # type: Dict[str, siemens_component_classes]
         try:
-            self.device_config = device_config
+            self.device_config = dataclass_from_dict(Siemens, device_config)
+            self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address, 502)
         except Exception:
-            log.MainLogger().exception("Fehler im Modul "+device_config["name"])
+            log.exception("Fehler im Modul "+self.device_config.name)
 
-    def add_component(self, component_config: dict) -> None:
-        component_type = component_config["type"]
+    def add_component(self, component_config: Union[Dict,
+                                                    SiemensBatSetup,
+                                                    SiemensCounterSetup,
+                                                    SiemensInverterSetup]) -> None:
+        if isinstance(component_config, Dict):
+            component_type = component_config["type"]
+        else:
+            component_type = component_config.type
+        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
+            component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self._components["component"+str(component_config["id"])] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config["id"], component_config))
+            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+                self.device_config.id, component_config, self.client))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -47,45 +51,47 @@ class Device(AbstractDevice):
             )
 
     def update(self) -> None:
-        log.MainLogger().debug("Start device reading" + str(self._components))
-        if self._components:
-            for component in self._components:
+        log.debug("Start device reading" + str(self.components))
+        if self.components:
+            for component in self.components:
                 # Auch wenn bei einer Komponente ein Fehler auftritt, sollen alle anderen noch ausgelesen werden.
-                with SingleComponentUpdateContext(self._components[component].component_info):
-                    self._components[component].update()
+                with SingleComponentUpdateContext(self.components[component].component_info):
+                    self.components[component].update()
         else:
-            log.MainLogger().warning(
-                self.device_config["name"] +
+            log.warning(
+                self.device_config.name +
                 ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
             )
 
 
-def read_legacy(component_type: str, ip_address: str, num: Optional[int]) -> None:
-    COMPONENT_TYPE_TO_MODULE = {
-        "bat": bat,
-        "counter": counter,
-        "inverter": inverter
-    }
-    device_config = get_default_config()
+COMPONENT_TYPE_TO_MODULE = {
+    "bat": bat,
+    "counter": counter,
+    "inverter": inverter
+}
+
+
+def read_legacy(component_type: str, ip_address: str, num: Optional[int] = None) -> None:
+    device_config = Siemens()
+    device_config.configuration.ip_address = ip_address
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
-        component_config = COMPONENT_TYPE_TO_MODULE[component_type].get_default_config()
+        component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
         raise Exception(
             "illegal component type " + component_type + ". Allowed values: " +
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
-    component_config["id"] = num
-    component_config["configuration"]["ip_address"] = ip_address
+    component_config.id = num
     dev.add_component(component_config)
 
-    log.MainLogger().debug('Siemens IP-Adresse: ' + str(ip_address))
+    log.debug('Siemens IP-Adresse: ' + ip_address)
 
     dev.update()
 
 
-if __name__ == "__main__":
-    try:
-        run_using_positional_cli_args(read_legacy)
-    except Exception:
-        log.MainLogger().exception("Fehler im Siemens Skript")
+def main(argv: List[str]):
+    run_using_positional_cli_args(read_legacy, argv)
+
+
+device_descriptor = DeviceDescriptor(configuration_factory=Siemens)

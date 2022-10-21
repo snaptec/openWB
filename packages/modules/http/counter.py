@@ -1,50 +1,48 @@
 #!/usr/bin/env python3
-from helpermodules import log
+from typing import Dict, Union
+
+from dataclass_utils import dataclass_from_dict
 from modules.common.component_state import CounterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
+from modules.common.simcount import SimCounter
 from modules.common.store import get_counter_value_store
 from modules.http.api import create_request_function
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "HTTP Zähler",
-        "id": 0,
-        "type": "counter",
-        "configuration":
-        {
-            "power_path": "/power.txt",
-            "imported_path": "/imported.txt",
-            "exported_path": "/exported.txt",
-            "power_l1_path": "/power_l1.txt",
-            "power_l2_path": "/power_l2.txt",
-            "power_l3_path": "/power_l3.txt",
-        }
-    }
+from modules.http.config import HttpCounterSetup
 
 
 class HttpCounter:
-    def __init__(self, component_config: dict, domain: str) -> None:
-        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
-        self.__get_imported = create_request_function(domain, component_config["configuration"]["imported_path"])
-        self.__get_exported = create_request_function(domain, component_config["configuration"]["exported_path"])
-        self.__get_powers = [
-            create_request_function(domain,
-                                    component_config["configuration"]["power_l" + str(i) + "_path"])
+    def __init__(self, device_id: int, component_config: Union[Dict, HttpCounterSetup], url: str) -> None:
+        self.__device_id = device_id
+        self.component_config = dataclass_from_dict(HttpCounterSetup, component_config)
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
+        self.__store = get_counter_value_store(self.component_config.id)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
+
+        self.__get_power = create_request_function(url, self.component_config.configuration.power_path)
+        self.__get_imported = create_request_function(url, self.component_config.configuration.imported_path)
+        self.__get_exported = create_request_function(url, self.component_config.configuration.exported_path)
+        self.__get_currents = [
+            create_request_function(url,
+                                    getattr(self.component_config.configuration, "current_l" + str(i) + "_path"))
             for i in range(1, 4)
         ]
 
-        self.component_config = component_config
-        self.__store = get_counter_value_store(component_config["id"])
-        self.component_info = ComponentInfo.from_component_config(component_config)
-
     def update(self):
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
+        imported = self.__get_imported()
+        exported = self.__get_exported()
+        currents = [getter() for getter in self.__get_currents]
+        power = self.__get_power()
+        if imported is None or exported is None:
+            imported, exported = self.__sim_counter.sim_count(power)
 
         counter_state = CounterState(
-            powers=[getter() for getter in self.__get_powers],
-            imported=self.__get_imported(),
-            exported=self.__get_exported(),
-            power=self.__get_power()
+            currents=None if any(c is None for c in currents) else currents,
+            imported=imported,
+            exported=exported,
+            power=power
         )
         self.__store.set(counter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=HttpCounterSetup)

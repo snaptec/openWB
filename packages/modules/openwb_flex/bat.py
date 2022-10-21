@@ -1,56 +1,56 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 
-from helpermodules import log
+from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import BatState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
+from modules.common.lovato import Lovato
+from modules.common.sdm import Sdm630
+from modules.common.simcount import SimCounter
 from modules.common.store import get_bat_value_store
+from modules.openwb_flex.config import BatKitFlexSetup
 from modules.openwb_flex.versions import kit_bat_version_factory
 
 
-def get_default_config() -> dict:
-    return {
-        "name": "Speicher-Kit flex",
-        "type": "bat",
-        "id": None,
-        "configuration":
-            {
-                "version": 2,
-                "id": 117
-            }
-    }
-
-
 class BatKitFlex:
-    def __init__(self, device_id: int, component_config: dict,
-                 tcp_client: modbus.ModbusClient) -> None:
-        self.component_config = component_config
+    def __init__(self,
+                 device_id: int,
+                 component_config: Union[Dict, BatKitFlexSetup],
+                 tcp_client: modbus.ModbusTcpClient_) -> None:
+        self.__device_id = device_id
+        self.component_config = dataclass_from_dict(BatKitFlexSetup, component_config)
         factory = kit_bat_version_factory(
-            component_config["configuration"]["version"])
-        self.__client = factory(component_config["configuration"]["id"],
+            self.component_config.configuration.version)
+        self.__client = factory(self.component_config.configuration.id,
                                 tcp_client)
         self.__tcp_client = tcp_client
-        self.__store = get_bat_value_store(component_config["id"])
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
+        self.__store = get_bat_value_store(self.component_config.id)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self):
-        log.MainLogger().debug("Start kit reading")
         # TCP-Verbindung schließen möglichst bevor etwas anderes gemacht wird, um im Fehlerfall zu verhindern,
-        # dass ungeschlossene Verbindungen den Modbus-Adapter blockieren.
-        try:
-            imported = self.__client.get_imported()
-            exported = self.__client.get_exported()
-            if self.component_config["configuration"]["version"] == 2:
+        # dass offene Verbindungen den Modbus-Adapter blockieren.
+        with self.__tcp_client:
+            if isinstance(self.__client, Sdm630):
                 _, power = self.__client.get_power()
                 power = power * -1
             else:
                 _, power = self.__client.get_power()
-        finally:
-            self.__tcp_client.close_connection()
+            if isinstance(self.__client, Lovato):
+                imported, exported = self.__sim_counter.sim_count(power)
+            else:
+                imported = self.__client.get_imported()
+                exported = self.__client.get_exported()
+
         bat_state = BatState(
             imported=imported,
             exported=exported,
             power=power
         )
-        log.MainLogger().debug("Speicher-Kit Leistung[W]: " + str(bat_state.power))
         self.__store.set(bat_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=BatKitFlexSetup)

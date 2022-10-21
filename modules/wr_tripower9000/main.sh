@@ -1,5 +1,14 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
+#DMOD="PV"
+DMOD="MAIN"
 
-python3 /var/www/html/openWB/modules/wr_tripower9000/tripower.py "${wrsmawebbox}" "${tri9000ip}" "${wrsma2ip}" "${wrsma3ip}" "${wrsma4ip}" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1
-cat /var/www/html/openWB/ramdisk/pvwatt
+MYLOGFILE="${RAMDISKDIR}/openWB.log"
+
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_boy.device" "inverter" "${tri9000ip}" "${wrsmawebbox}" "${wrsma2ip}" "${wrsma3ip}" "${wrsma4ip}" "${wrsmaversion}" "${wrsmahybrid}" "${sbs25se}" "1" >>"$MYLOGFILE" 2>&1
+ret=$?
+
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+
+cat "$RAMDISKDIR/pvwatt"

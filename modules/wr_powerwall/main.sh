@@ -1,9 +1,7 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd "$(dirname $0)/../../" && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd "$(dirname $0)" && pwd)
-#DMOD="PV"
 DMOD="MAIN"
 
 if [ $DMOD == "MAIN" ]; then
@@ -12,7 +10,8 @@ else
 	MYLOGFILE="${RAMDISKDIR}/wr_powerwall.log"
 fi
 
-python3 "${MODULEDIR}/powerwall.py" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.device" "inverter" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" "1">>"$MYLOGFILE" 2>&1
+ret=$?
 
-pvwatt=$(<${RAMDISKDIR}/pvwatt) 
-echo $pvwatt
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+cat "${RAMDISKDIR}/pvwatt"

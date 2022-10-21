@@ -1,38 +1,39 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 
-from helpermodules import log
+from dataclass_utils import dataclass_from_dict
+from helpermodules import compatibility
 from modules.common.component_state import InverterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
+from modules.common.simcount import SimCounter
 from modules.common.store import get_inverter_value_store
 from modules.http.api import create_request_function
-
-
-def get_default_config() -> dict:
-    return {
-        "name": "HTTP Wechselrichter",
-        "id": 0,
-        "type": "inverter",
-        "configuration":
-        {
-            "power_path": "/power.txt",
-            "counter_path": "/counter.txt",
-        }
-    }
+from modules.http.config import HttpInverterSetup
 
 
 class HttpInverter:
-    def __init__(self, component_config: dict, domain: str) -> None:
-        self.__get_power = create_request_function(domain, component_config["configuration"]["power_path"])
-        self.__get_counter = create_request_function(domain, component_config["configuration"]["counter_path"])
-        self.component_config = component_config
-        self.__store = get_inverter_value_store(component_config["id"])
-        self.component_info = ComponentInfo.from_component_config(component_config)
+    def __init__(self, device_id: int, component_config: Union[Dict, HttpInverterSetup], url: str) -> None:
+        self.__device_id = device_id
+        self.component_config = dataclass_from_dict(HttpInverterSetup, component_config)
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
+        self.__store = get_inverter_value_store(self.component_config.id)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
+        self.__get_power = create_request_function(url, self.component_config.configuration.power_path)
+        self.__get_exported = create_request_function(url, self.component_config.configuration.exported_path)
 
     def update(self) -> None:
-        log.MainLogger().debug("Komponente "+self.component_config["name"]+" auslesen.")
+        power = (-self.__get_power() if compatibility.is_ramdisk_in_use() else self.__get_power())
+        exported = self.__get_exported()
+        if exported is None:
+            _, exported = self.__sim_counter.sim_count(power)
 
         inverter_state = InverterState(
-            power=self.__get_power(),
-            counter=self.__get_counter()
+            # for compatibility: in 1.x power URL values are positive!
+            power=power,
+            exported=exported
         )
         self.__store.set(inverter_state)
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=HttpInverterSetup)

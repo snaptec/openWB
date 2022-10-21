@@ -79,8 +79,11 @@
 					<div class="card-body">
 						<div class="card-text alert alert-info">
 							Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
-							Hier ist Ja zu wählen wenn, bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
-							<span class="text-danger">Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
+							Hier ist Ja zu wählen wenn, bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.<br />
+							Es ist sicherzustellen, dass auf dieser openWB die Modulkonfiguration des <span class="text-danger">ersten Ladepunktes</span>
+							korrekt ist und alle weiteren Ladepunkte <span class="text-danger">deaktiviert</span> sind. Handels es sich hier um eine
+							<span class="text-danger">DUO</span>, so ist auch der <span class="text-danger">zweite Ladepunkt</span> zu aktivieren.<br />
+							<span class="text-danger">Alle weiteren in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
 							An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
 						</div>
 						<div id="isssdiv" class="hide">
@@ -92,6 +95,23 @@
 											<option <?php if($ssdisplayold == 0) echo "selected" ?> value="0">Normal</option>
 											<option <?php if($ssdisplayold == 1) echo "selected" ?> value="1">Display der übergeordneten openWB</option>
 										</select>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">RFID</label>
+									<div class="col">
+										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+											<label class="btn btn btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
+												<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
+											</label>
+											<label class="btn btn btn-outline-info<?php if($rfidaktold != 0) echo " active" ?>">
+												<input type="radio" name="rfidakt" id="rfidaktOn1" value="1"<?php if($rfidaktold != 0) echo " checked=\"checked\"" ?>>An
+											</label>
+										</div>
+										<span class="form-text small">
+											Wenn die openWB nur ein Ladepunkt ist, werden gescannte RFID Tags oder Eingaben am Display an die Haupt openWB weitergegeben.
+											Dort muss der entsprechende Modus konfiguriert und gültige Tags hinterlegt werden.
+										</span>
 									</div>
 								</div>
 							</div>
@@ -587,28 +607,38 @@
 							}
 							if(lp4akt == '0') {
 								hideSection('#lp4aktdiv');
+								hideSection('#durchslp4div');
 							} else {
 								showSection('#lp4aktdiv');
+								showSection('#durchslp4div');
 							}
 							if(lp5akt == '0') {
 								hideSection('#lp5aktdiv');
+								hideSection('#durchslp5div');
 							} else {
 								showSection('#lp5aktdiv');
+								showSection('#durchslp5div');
 							}
 							if(lp6akt == '0') {
 								hideSection('#lp6aktdiv');
+								hideSection('#durchslp6div');
 							} else {
 								showSection('#lp6aktdiv');
+								showSection('#durchslp6div');
 							}
 							if(lp7akt == '0') {
 								hideSection('#lp7aktdiv');
+								hideSection('#durchslp7div');
 							} else {
 								showSection('#lp7aktdiv');
+								showSection('#durchslp7div');
 							}
 							if(lp8akt == '0') {
 								hideSection('#lp8aktdiv');
+								hideSection('#durchslp8div');
 							} else {
 								showSection('#lp8aktdiv');
+								showSection('#durchslp8div');
 							}
 						});
 					</script>
@@ -776,23 +806,25 @@
 								</div>
 							</div>
 						</div>
-						<div id="durchslp3div" class="hide">
-							<hr class="border-primary">
-							<div class="form-group">
-								<div class="form-row mb-1">
-									<div class="col">
-										Ladepunkt 3
+						<?php for ($chargepoint = 3; $chargepoint <=8; $chargepoint++) { ?>
+							<div id="durchslp<?php echo $chargepoint ?>div" class="hide">
+								<hr class="border-primary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<div class="col">
+											Ladepunkt <?php echo $chargepoint ?>
+										</div>
 									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="durchslp3" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
-									<div class="col">
-										<input class="form-control" type="number" min="1" step=".1" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>">
-										<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
+									<div class="form-row mb-1">
+										<label for="durchslp<?php echo $chargepoint ?>" class="col-md-4 col-form-label">Durchschnittsverbrauch in kWh/100km</label>
+										<div class="col">
+											<input class="form-control" type="number" min="1" step=".1" name="durchslp<?php echo $chargepoint ?>" id="durchslp<?php echo $chargepoint ?>" value="<?php echo ${'durchslp' . $chargepoint . 'old'} ?>">
+											<span class="form-text small">Gültige Werte xx.xx, z.B. 14.5. Dient zur Berechnung der geladenen Strecke.</span>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						<?php } ?>
 					</div>
 				</div>
 

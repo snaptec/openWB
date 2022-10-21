@@ -13,6 +13,8 @@ fi
 
 declare -r StartScanDataLocation="web/logging/data/startRfidScanData"
 
+ValidEvTagFound=0
+
 #
 # the main script that is called from outside world
 rfid() {
@@ -66,7 +68,7 @@ rfid() {
 
 		# check all CPs that we support for whether the tag is valid for that CP
 		for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
-			checkTagValidAndSetStartScanData $currentCp
+			checkTagValidAndSetStartScanData "$currentCp"
 		done
 
 		echo "${lasttag},${NowItIs}" > "ramdisk/rfidlasttag"
@@ -79,7 +81,7 @@ rfid() {
 	#
 	if (( slavemode == 1 )); then
 
-		if (( standardSocketInstalled > 0 )); then
+		if (( ValidEvTagFound == 0 )) && (( standardSocketInstalled > 0 )); then
 			checkTagValidForSocket
 		fi
 
@@ -115,7 +117,7 @@ rfid() {
 					for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
 						if [[ "${lpsPlugStat[$currentCp]}" -ne "1" ]]; then
 							openwbDebugLog "MAIN" 0 "Disabling CP #${currentCp} as it's still unplugged after timeout of RFID tag scan has been exceeded"
-							mosquitto_pub -r -q 2 -t "openWB/set/lp${currentCp}/ChargePointEnabled" -m "0"
+							mosquitto_pub -r -q 2 -t "openWB/set/lp/${currentCp}/ChargePointEnabled" -m "0"
 							eval lp${currentCp}enabled=0
 						fi
 					done
@@ -127,22 +129,21 @@ rfid() {
 
 		# handle un-plug
 		for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
-			if (( unpluggedLps[$currentCp] > 0 )); then
+			if (( unpluggedLps[currentCp] > 0 )); then
 				openwbDebugLog "MAIN" 0 "Charge point #${currentCp} has been UNplugged - if running, stop sending accounting data (after one final transmission)"
 
 				# one final transmission of accounting data ...
-				sendAccounting $currentCp
+				sendAccounting "$currentCp"
 
 				# ... before we disabled it by removing the start info
 				rm -f "${StartScanDataLocation}Lp${currentCp}"
 			fi
 
 			# finally actually transmit the accounting data
-			sendAccounting $currentCp
+			sendAccounting "$currentCp"
 		done
 	fi
 }
-
 
 # sends the accounting data via MQTT if start data for given charge point is available
 sendAccounting() {
@@ -151,12 +152,12 @@ sendAccounting() {
 
 	if [ -f "${StartScanDataLocation}Lp${chargePoint}" ]; then
 
-		if (( lpsPlugStat[$chargePoint] == 255 )); then
+		if (( lpsPlugStat[chargePoint] == 255 )); then
 			openwbDebugLog "MAIN" 0 "Plug state for CP ${chargePoint} contains garbage. Not sending accounting data"
 			return
 		fi
 
-		getCpChargestat $chargePoint
+		getCpChargestat "$chargePoint"
 		local chargestatToUse=$?
 		if (( chargestatToUse == 255 )); then
 			openwbDebugLog "MAIN" 0 "Charge state for CP ${chargePoint} contains garbage. Not sending accounting data"
@@ -169,7 +170,6 @@ sendAccounting() {
 	fi
 }
 
-
 # determine if any of LP1 or LP2 has just been plugged in
 # if it has, pluggedLp will be set to the CP number (1 or 2).
 # if it has NOT, pluggedLp will be set to 0
@@ -178,12 +178,14 @@ setLpPlugChangeState() {
 	if [ ! -f "ramdisk/accPlugstatChangeDetectLp1" ]; then
 		echo "$plugstat" > "ramdisk/accPlugstatChangeDetectLp1"
 	fi
-	local oplugstat=$(<"ramdisk/accPlugstatChangeDetectLp1")
+	local oplugstat
+	oplugstat=$(<"ramdisk/accPlugstatChangeDetectLp1")
 
 	if [ ! -f "ramdisk/accPlugstatChangeDetectLp2" ]; then
 		echo "$plugstats1" > "ramdisk/accPlugstatChangeDetectLp2"
 	fi
-	local oplugstats1=$(<"ramdisk/accPlugstatChangeDetectLp2")
+	local oplugstats1
+	oplugstats1=$(<"ramdisk/accPlugstatChangeDetectLp2")
 
 	pluggedLp=0
 
@@ -192,7 +194,7 @@ setLpPlugChangeState() {
 	getCpPlugstat 2
 	local plugstatToUse2=$?
 
-	lpsPlugStat=(0 $plugstatToUse1 $plugstatToUse2)
+	lpsPlugStat=(0 "$plugstatToUse1" "$plugstatToUse2")
 	unpluggedLps=(0 0 0)
 	pluggedLps=(0 0 0)
 
@@ -211,7 +213,7 @@ setLpPlugChangeState() {
 			openwbDebugLog "MAIN" 0 "LP 2 unkown plug state '${lpsPlugStat[2]}'"
 		fi
 
-		echo ${lpsPlugStat[2]} > "ramdisk/accPlugstatChangeDetectLp2"
+		echo "${lpsPlugStat[2]}" > "ramdisk/accPlugstatChangeDetectLp2"
 	fi
 
 	# finally check LP1 so it wins
@@ -229,7 +231,7 @@ setLpPlugChangeState() {
 			openwbDebugLog "MAIN" 0 "LP 1 unkown plug state '${lpsPlugStat[1]}'"
 		fi
 
-		echo ${lpsPlugStat[1]} > "ramdisk/accPlugstatChangeDetectLp1"
+		echo "${lpsPlugStat[1]}" > "ramdisk/accPlugstatChangeDetectLp1"
 	fi
 }
 
@@ -245,7 +247,8 @@ checkTagValidForSocket() {
 		return 1
 	fi
 
-	local rfidlist=$(<"$ramdiskFileForSocket")
+	local rfidlist
+	rfidlist=$(<"$ramdiskFileForSocket")
 	openwbDebugLog "MAIN" 0 "rfidlist(Socket)='${rfidlist}'"
 
 	# leave right away if we have no list of valid RFID tags for the charge point
@@ -254,17 +257,19 @@ checkTagValidForSocket() {
 		return 1
 	fi
 
-	for i in $(echo $rfidlist | sed "s/,/ /g")
+	for i in ${rfidlist//,/ }
 	do
 		if [ "$lasttag" == "$i" ] ; then
 
 			# and the ramdisk file for legacy ladelog
-			echo $lasttag > "ramdisk/rfidSocket"
+			echo "$lasttag" > "ramdisk/rfidSocket"
 
 			if [ -f $SocketActivationFile ]; then
 				# we have activate status ...
-				local requested=$(<$SocketActivationFile)
-				local active=$(<ramdisk/socketActivated)
+				local requested
+				requested=$(<$SocketActivationFile)
+				local active
+				active=$(<ramdisk/socketActivated)
 				if (( requested > 0 )) || (( active > 0 )); then
 					# ... and it's already requested or active --> request DEactivation
 					echo 2 > $SocketActivationFile
@@ -303,7 +308,7 @@ checkTagValidAndSetStartScanData() {
 
 	# if we're in slave mode on an openWB dual and the LP has not just been plugged in (in same control interval as the RFID scan)
 	# we completely ignore the scan as we cannot associate it with a plugin operation
-	if (( slavemode == 1 )) && (( lpsPlugStat[$chargePoint] > 0 )) && (( pluggedLps[$chargePoint] != 1 )) && ( (( lastmanagement != 0 )) || (( chargePoint > 1 )) ); then
+	if (( slavemode == 1 )) && (( lpsPlugStat[chargePoint] > 0 )) && (( pluggedLps[chargePoint] != 1 )) && ( (( lastmanagement != 0 )) || (( chargePoint > 1 )) ); then
 		openwbDebugLog "MAIN" 0 "Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is not in 'unplugged' state (plugstatToUse == ${lpsPlugStat[$chargePoint]}, justPlugged == ${pluggedLps[$chargePoint]}, lastmanagement=${lastmanagement})"
 		return 0
 	fi
@@ -313,7 +318,8 @@ checkTagValidAndSetStartScanData() {
 		return 1
 	fi
 
-	local rfidlist=$(<"$ramdiskFileForCp")
+	local rfidlist
+	rfidlist=$(<"$ramdiskFileForCp")
 	openwbDebugLog "MAIN" 2 "rfidlist(LP${chargePoint})='${rfidlist}'"
 
 	# leave right away if we have no list of valid RFID tags for the charge point
@@ -322,20 +328,22 @@ checkTagValidAndSetStartScanData() {
 		return 1
 	fi
 
-	for i in $(echo $rfidlist | sed "s/,/ /g")
+	for i in ${rfidlist//,/ }
 	do
 		if [ "$lasttag" == "$i" ] ; then
+
+			ValidEvTagFound=1
 
 			# found valid RFID tag for the charge point
 			# write at-scan accounting info
 			echo "$NowItIs,$lasttag,$llkwh" > "${StartScanDataLocation}"
 
 			# and the ramdisk file for legacy ladelog
-			echo $lasttag > "ramdisk/rfidlp${chargePoint}"
+			echo "$lasttag" > "ramdisk/rfidlp${chargePoint}"
 			local tagScanInfo="$NowItIs,$lasttag,1"
 			echo "$tagScanInfo" > "ramdisk/tagScanInfoLp${chargePoint}"
 			mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/tagScanInfo" -m "$tagScanInfo"
-			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
+			mosquitto_pub -r -q 2 -t "openWB/set/lp/${chargePoint}/ChargePointEnabled" -m "1"
 
 			eval lp${chargePoint}enabled=1
 			openwbDebugLog "MAIN" 0 "Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for CP #${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh (justPlugged == ${pluggedLps[$chargePoint]})"
@@ -362,9 +370,9 @@ getCpPlugstat() {
 	local chargePoint=$1
 	local returnstat=255
 
-	if (( $chargePoint == 1 )); then
+	if (( chargePoint == 1 )); then
 		returnstat=$plugstat
-	elif (( $chargePoint == 2 )); then
+	elif (( chargePoint == 2 )); then
 		returnstat=$plugstats1
 	else
 		openwbDebugLog "MAIN" 0 "Don't know how to get plugged status of CP #${chargePoint}. Returning 255"
@@ -379,16 +387,15 @@ getCpPlugstat() {
 	return $returnstat
 }
 
-
 # returns the chargestat value for the given CP as exit code
 getCpChargestat() {
 
 	local chargePoint=$1
 	local returnstat=255
 
-	if (( $chargePoint == 1 )); then
+	if (( chargePoint == 1 )); then
 		returnstat=$chargestat
-	elif (( $chargePoint == 2 )); then
+	elif (( chargePoint == 2 )); then
 		returnstat=$chargestats1
 	else
 		openwbDebugLog "MAIN" 0 "Don't know how to get chage status of CP #${chargePoint}. Returning 255"

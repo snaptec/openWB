@@ -1,64 +1,55 @@
 #!/usr/bin/env python3
+from typing import Dict, Union
 
-from helpermodules import log
+from dataclass_utils import dataclass_from_dict
+from modules.alpha_ess.config import AlphaEssConfiguration, AlphaEssInverterSetup
 from modules.common import modbus
-from modules.common import simcount
 from modules.common.component_state import InverterState
+from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
-from modules.common.modbus import ModbusDataType
+from modules.common.modbus import ModbusDataType, Number
+from modules.common.simcount._simcounter import SimCounter
 from modules.common.store import get_inverter_value_store
 
 
-def get_default_config() -> dict:
-    return {
-        "name": "Alpha ESS Wechselrichter",
-        "id": 0,
-        "type": "inverter",
-        "configuration":
-        {
-            "version": 1
-        }
-    }
-
-
 class AlphaEssInverter:
-    def __init__(self, device_id: int, component_config: dict, tcp_client: modbus.ModbusClient) -> None:
+    def __init__(self, device_id: int,
+                 component_config: Union[Dict, AlphaEssInverterSetup],
+                 tcp_client: modbus.ModbusTcpClient_,
+                 device_config: AlphaEssConfiguration) -> None:
         self.__device_id = device_id
-        self.component_config = component_config
+        self.component_config = dataclass_from_dict(AlphaEssInverterSetup, component_config)
         self.__tcp_client = tcp_client
-        self.__sim_count = simcount.SimCountFactory().get_sim_counter()()
-        self.__simulation = {}
-        self.__store = get_inverter_value_store(component_config["id"])
-        self.component_info = ComponentInfo.from_component_config(component_config)
+        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
+        self.__store = get_inverter_value_store(self.component_config.id)
+        self.component_info = ComponentInfo.from_component_config(self.component_config)
+        self.__device_config = device_config
 
-    def update(self) -> None:
-        log.MainLogger().debug(
-            "Komponente "+self.component_config["name"]+" auslesen.")
-        reg_p = self.__version_factory(
-            self.component_config["configuration"]["version"])
-        power = self.__get_power(85, reg_p)
+    def update(self, unit_id: int) -> None:
+        reg_p = self.__version_factory()
+        power = self.__get_power(unit_id, reg_p)
 
-        topic_str = "openWB/set/system/device/" + \
-            str(self.__device_id)+"/component/" + \
-            str(self.component_config["id"])+"/"
-        _, counter = self.__sim_count.sim_count(
-            power, topic=topic_str, data=self.__simulation, prefix="pv")
+        _, exported = self.__sim_counter.sim_count(power)
         inverter_state = InverterState(
             power=power,
-            counter=counter,
-            currents=[0, 0, 0]
+            exported=exported
         )
         self.__store.set(inverter_state)
 
-    def __version_factory(self, version: int) -> int:
-        return 0x0012 if version == 0 else 0x00A1
+    def __version_factory(self) -> int:
+        if self.__device_config.source == 0 and self.__device_config.version == 0:
+            return 0x0012
+        else:
+            return 0x00A1
 
-    def __get_power(self, unit: int, reg_p: int) -> int:
+    def __get_power(self, unit: int, reg_p: int) -> Number:
         powers = [
             self.__tcp_client.read_holding_registers(address, ModbusDataType.INT_32, unit=unit)
             for address in [reg_p, 0x041F, 0x0423, 0x0427]
         ]
         powers[0] = abs(powers[0])
         power = sum(powers) * -1
-        log.MainLogger().debug("Alpha Ess Leistung: "+str(power)+", WR-Register: " + str(powers))
         return power
+
+
+component_descriptor = ComponentDescriptor(configuration_factory=AlphaEssInverterSetup)

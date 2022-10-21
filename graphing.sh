@@ -13,7 +13,7 @@ graphing(){
 		echo $speicherleistung >> /var/www/html/openWB/ramdisk/speicher-live.graph
 		echo $speichersoc >> /var/www/html/openWB/ramdisk/speichersoc-live.graph
 	fi
-	if [[ socmodul1 != "none" ]]; then
+	if [[ $socmodul1 != "none" ]]; then
 		echo $soc1 >> /var/www/html/openWB/ramdisk/soc1-live.graph
 	fi
 	echo $ladeleistunglp1 >> /var/www/html/openWB/ramdisk/ev1-live.graph
@@ -102,7 +102,7 @@ graphing(){
 
 	#Long Time Graphing
 	if (( graphtimer == 1 )); then
-		if (( dpseed == "3" )); then
+		if (( dspeed == "3" )); then
 			livegraphtime="240"
 		else
 			livegraphtime="720"

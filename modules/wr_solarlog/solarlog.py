@@ -1,38 +1,33 @@
 #!/usr/bin/env python3
-
-from datetime import datetime, timezone
-import os
+from typing import List
 import json
+import logging
 import requests
-import sys
 
+from helpermodules.cli import run_using_positional_cli_args
 from modules.common.component_state import InverterState
 from modules.common.store import get_inverter_value_store
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
-
-bezug_solarlog_ip = str(sys.argv[1])
-
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ": PID: "+ myPid +": " + message)
+log = logging.getLogger("Solarlog WR")
 
 
-if Debug >= 2:
-    DebugLog('Wechselrichter Solarlog IP: ' + bezug_solarlog_ip)
+def update(bezug_solarlog_ip: str):
+    log.debug('Wechselrichter Solarlog IP: ' + bezug_solarlog_ip)
 
-data = {"801": {"170": None}}
-data = json.dumps(data)
-response = requests.post("http://"+bezug_solarlog_ip+'/getjp', data=data, timeout=5).json()
-pvwatt = response["801"]["170"]["101"]
-pvkwh = response["801"]["170"]["109"]
+    data = {"801": {"170": None}}
+    data = json.dumps(data)
+    response = requests.post("http://"+bezug_solarlog_ip+'/getjp', data=data, timeout=3).json()
+    pv_watt = int(float(response["801"]["170"]["101"]))
+    pv_kwh = float(response["801"]["170"]["109"])
 
-if pvwatt > 5:
-    pvwatt = pvwatt*-1
+    if pv_watt > 5:
+        pv_watt = pv_watt*-1
 
-if Debug >= 1:
-    DebugLog('WR Leistung: ' + str(pvwatt))
-    DebugLog('WR Energie: ' + str(pvkwh))
+    log.debug('WR Leistung: ' + str(pv_watt))
+    log.debug('WR Energie: ' + str(pv_kwh))
 
-get_inverter_value_store(1).set(InverterState(counter=pvkwh, power=pvwatt))
+    get_inverter_value_store(1).set(InverterState(exported=pv_kwh, power=pv_watt))
+
+
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)
