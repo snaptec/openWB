@@ -49,7 +49,7 @@ def create_device(device_config: E3dc):
             inverter=create_inverter_component,
         ),
         component_updater=IndependentComponentUpdater(
-                                                      lambda component: component.update(device_config.configuration.client))
+                          lambda component: component.update(device_config.configuration.client))
     )
 
 
