@@ -48,7 +48,8 @@ def create_device(device_config: E3dc):
             counter=create_counter_component,
             inverter=create_inverter_component,
         ),
-        component_updater=IndependentComponentUpdater(lambda component: component.update(device_config.configuration.client))
+        component_updater=IndependentComponentUpdater(
+                                                      lambda component: component.update(device_config.configuration.client))
     )
 
 
@@ -172,7 +173,8 @@ def read_legacy_batv19(address1: str,
 
 def main(argv: List[str]):
     run_using_positional_cli_args(
-        {"bat": read_legacy_bat, "batv19": read_legacy_batv19, "counter": read_legacy_counter, "inverter": read_legacy_inverter}, argv
+        {"bat": read_legacy_bat, "batv19": read_legacy_batv19, "counter": read_legacy_counter,
+         "inverter": read_legacy_inverter}, argv
     )
 
 

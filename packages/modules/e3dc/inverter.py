@@ -11,7 +11,6 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
 from modules.common.simcount._simcounter import SimCounter
 from modules.e3dc.config import E3dcInverterSetup
-from modules.common.store.ramdisk import files
 
 
 log = logging.getLogger(__name__)
