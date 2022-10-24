@@ -6,7 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Set up Python 3.5
         uses: actions/setup-python@v2
         with:
@@ -22,3 +24,29 @@ jobs:
       - name: Test with pytest
         run: |
           PYTHONPATH=packages python -m pytest packages modules
+      - name: Check EditorConfig
+        run: |
+          curl --silent --location --output ec https://github.com/editorconfig-checker/editorconfig-checker/releases/download/2.6.0/ec-linux-amd64
+          chmod 700 ec
+          # Credits: awk-Script is based on: https://github.com/wow-rp-addons/actions-editorconfig-check/blob/5655d399e0bd89b5dbd705762265046d830d4377/action.yml#L56-L77
+          git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} HEAD | xargs ./ec -no-color -exclude '\.py$' -- | awk -F':' '
+            # Matches "path/to/file:" lines; each one will set a variable for
+            # the annotations we emit.
+            /^[a-zA-Z0-9_.\\/-]+:$/ {
+                file=substr($0, 1, length($0) - 1)
+                has_error=1
+            }
+            # Matches "<line number>: <message>" lines and annotates them with
+            # the last-found file path.
+            /^\t[0-9]+: .+$/ {
+                sub(/^\s+|\s+$/, "")
+                printf "::error file=%s,line=%s,title=.editorconfig check::%s\n", file, $1, substr($2, 2)
+            }
+            # As above but this is for diagnostics that do not have line numbers,
+            # such as "Wrong line endings or new final newline".
+            /^\t.+$/ {
+                sub(/^\s+|\s+$/, "")
+                printf "::error file=%s,title=.editorconfig check::%s\n", file, $1
+            }
+          
+            END {exit has_error}'
