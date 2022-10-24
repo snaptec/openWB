@@ -77,6 +77,7 @@ class InverterState:
         exported: float,
         power: float,
         currents: Optional[List[float]] = None,
+        dc_power: Optional[float] = None
     ):
         """Args:
             exported: total energy in Wh
@@ -90,6 +91,7 @@ class InverterState:
         self.currents = currents
         self.power = power
         self.exported = exported
+        self.dc_power = dc_power
 
 
 @auto_str
