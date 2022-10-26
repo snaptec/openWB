@@ -45,11 +45,15 @@ class SolaredgeInverter:
         # 40072/40073/40074 = AC Phase A/B/C Current value (Amps)
         # 40075 = AC Current scale factor
         currents = self._read_scaled_uint16(40072, 3)
+        # 40100 = DC Power value (Watt)
+        # 40101 = DC Power scale factor
+        dc_power = self._read_scaled_int16(40100, 1)[0] * -1
 
         return InverterState(
             power=power,
             exported=exported,
-            currents=currents
+            currents=currents,
+            dc_power=dc_power
         )
 
 

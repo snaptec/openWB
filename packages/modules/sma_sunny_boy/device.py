@@ -167,10 +167,10 @@ def read_inverter(ip1: str,
                                                                            inverter1.tcp_client)
                     bat_state = bat_comp.read()
                     total_energy = bat_state.imported-bat_state.exported
-                state, produces_dc_power = inverter1.read()
+                state = inverter1.read()
             total_power = state.power
             total_energy += state.exported
-            if produces_dc_power:
+            if state.dc_power != 0:
                 if hybrid == 1:
                     total_power -= bat_state.power
             else:
@@ -178,7 +178,7 @@ def read_inverter(ip1: str,
             print("WR 1 nach Korrektur: {}".format(state))
         for inv in itertools.chain(inverters_additional):
             with inv.tcp_client:
-                state = inv.read()[0]
+                state = inv.read()
             total_power += state.power
             total_energy += state.exported
         get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))

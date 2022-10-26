@@ -224,18 +224,22 @@ def read_legacy(component_type: str,
                         total_currents = list(map(add, total_currents, state.currents))
 
                     if extprodakt:
-                        state = get_external_inverter_state(dev, int(slave_id0))
-                        total_power -= state.power
+                        external_inv_state = get_external_inverter_state(dev, int(slave_id0))
+                        total_power -= external_inv_state.power
 
                     if batwrsame == 1:
-                        bat_power, state = get_bat_state()
-                        if subbat == 1:
-                            total_power -= sum(min(p, 0) for p in bat_power)
-                        else:
-                            total_power -= sum(bat_power)
-                        total_energy = total_energy + state.imported - state.exported
+                        bat_power, bat_state = get_bat_state()
+                        # WR-Leistung nur anpassen, wenn die Ladeleistung des Speichers PV-Leistung ist, dh am WR muss
+                        # DC-seitig Leistung anliegen. Der Speicher wird auch aus dem Netz geladen, um einen
+                        # Mindest-SoC zu halten.
+                        if state.dc_power is None or state.dc_power != 0:
+                            if subbat == 1:
+                                total_power -= sum(min(p, 0) for p in bat_power)
+                            else:
+                                total_power -= sum(bat_power)
+                        total_energy = total_energy + bat_state.imported - bat_state.exported
                 if batwrsame == 1:
-                    get_bat_value_store(1).set(state)
+                    get_bat_value_store(1).set(bat_state)
                 get_inverter_value_store(num).set(InverterState(exported=total_energy,
                                                                 power=min(0, total_power), currents=total_currents))
         else:
