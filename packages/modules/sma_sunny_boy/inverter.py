@@ -49,7 +49,7 @@ class SmaSunnyBoyInverter:
             power_total = self.tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
             # Gesamtertrag (Wh) [E-Total] SF=2!
             energy = self.tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
-            dc_power = 1
+            dc_power = self.tcp_client.read_holding_registers(40101, ModbusDataType.UINT_32, unit=1) * 100
         else:
             raise FaultState.error("Unbekannte Version "+str(self.component_config.configuration.version))
         if power_total == self.SMA_INT32_NAN:
