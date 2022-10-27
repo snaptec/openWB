@@ -26,7 +26,7 @@ class JsonInverter:
         power = float(jq.compile(config.jq_power).input(response).first())
         if power >= 0:
             power = power * -1
-        if config.jq_exported == "":
+        if config.jq_exported is None:
             _, exported = self.__sim_counter.sim_count(power)
         else:
             exported = jq.compile(config.jq_exported).input(response).first()

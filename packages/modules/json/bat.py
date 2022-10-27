@@ -29,7 +29,7 @@ class JsonBat:
         else:
             soc = 0
 
-        if config.jq_imported != "" and config.jq_exported != "":
+        if config.jq_imported is not None and config.jq_exported is not None:
             imported = jq.compile(config.jq_imported).input(response).first()
             exported = jq.compile(config.jq_exported).input(response).first()
         else:
