@@ -86,14 +86,16 @@ def read_legacy_bat(ip_address: str, jq_power: str, jq_soc: str):
 
 
 def read_legacy_counter(ip_address: str, jq_power: str, jq_imported: str, jq_exported: str):
-    config = JsonCounterConfiguration(jq_power=jq_power, jq_imported=jq_imported, jq_exported=jq_exported)
+    config = JsonCounterConfiguration(jq_power=jq_power,
+                                      jq_imported=None if jq_imported == "" else jq_imported,
+                                      jq_exported=None if jq_exported == "" else jq_exported)
     read_legacy(
         ip_address,
         counter.component_descriptor.configuration_factory(id=None, configuration=config))
 
 
 def read_legacy_inverter(ip_address: str, jq_power: str, jq_exported: str, num: int):
-    config = JsonInverterConfiguration(jq_power=jq_power, jq_exported=jq_exported)
+    config = JsonInverterConfiguration(jq_power=jq_power, jq_exported=None if jq_exported == "" else jq_exported)
     read_legacy(ip_address, inverter.component_descriptor.configuration_factory(id=num, configuration=config))
 
 
