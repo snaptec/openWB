@@ -3,25 +3,25 @@ import sys
 import os
 import time
 import json
+from pymodbus.payload import BinaryPayloadBuilder, Endian
 from pymodbus.client.sync import ModbusTcpClient
-named_tuple = time.localtime()   # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S N4DAC02 watty.py", named_tuple)
+named_tuple = time.localtime()  # getstruct_time
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S ratiotherm watty.py", named_tuple)
 devicenumber = str(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
-maxpower = int(sys.argv[4])
-forcesend = int(sys.argv[5])
-port = int(sys.argv[6])
-dactyp = int(sys.argv[7])
+forcesend = int(sys.argv[4])
 # forcesend = 0 default acthor time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
 bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
-file_string = bp + str(devicenumber) + '_N4DAC02.log'
+file_string = bp + str(devicenumber) + '_ratiotherm.log'
 file_stringpv = bp + str(devicenumber) + '_pv'
 file_stringcount = bp + str(devicenumber) + '_count'
 file_stringcount5 = bp + str(devicenumber) + '_count5'
 count5 = 999
+modbuswrite = 0
+neupower = 0
 if os.path.isfile(file_stringcount5):
     with open(file_stringcount5, 'r') as f:
         count5 = int(f.read())
@@ -35,74 +35,72 @@ if count5 > 3:
     count5 = 0
 with open(file_stringcount5, 'w') as f:
     f.write(str(count5))
-modbuswrite = 0
-neupower = uberschuss
-if neupower < 0:
-    neupower = 0
-if neupower > maxpower:
-    neupower = maxpower
-volt = 0
+# pv modus
 pvmodus = 0
 if os.path.isfile(file_stringpv):
     with open(file_stringpv, 'r') as f:
         pvmodus = int(f.read())
-powerc = 0
 aktpower = 0
 if count5 == 0:
+    # log counter
     count1 = 999
     if os.path.isfile(file_stringcount):
         with open(file_stringcount, 'r') as f:
             count1 = int(f.read())
     count1 = count1+1
-    # wurde  gerade ausgeschaltet ?    (pvmodus == 99 ?)
+    if count1 > 80:
+        count1 = 0
+    with open(file_stringcount, 'w') as f:
+        f.write(str(count1))
+    # logik nur schicken bei pvmodus
+    if pvmodus == 1:
+        modbuswrite = 1
+    neupower = uberschuss
+    if neupower < 0:
+        neupower = 0
+    if neupower > 32767:
+        neupower = 32767
+    # wurde ratiotherm gerade ausgeschaltet ?    (pvmodus == 99 ?)
     # dann 0 schicken wenn kein pvmodus mehr
     # und pv modus ausschalten
     if pvmodus == 99:
         modbuswrite = 1
-        pvmodus = 0
         neupower = 0
+        pvmodus = 0
         with open(file_stringpv, 'w') as f:
             f.write(str(pvmodus))
-    # sonst wenn pv modus lauft , ueberschuss schicken
-    else:
-        if pvmodus == 1:
-            modbuswrite = 1
-    # logschreiben
-    if count1 > 80:
-        count1 = 0
     if count1 < 3:
         if os.path.isfile(file_string):
             pass
         else:
             with open(file_string, 'w') as f:
-                print('N4DAC02 start log', file=f)
+                print('ratiotherm start log', file=f)
         with open(file_string, 'a') as f:
-            helpstr = '%s devicenr %s ipadr %s ueberschuss %6d port %4d'
-            helpstr += ' maxueberschuss %6d pvmodus %1d modbuswrite %1d'
-            print(helpstr % (time_string, devicenumber, ipadr, uberschuss,
-                             port, maxpower, pvmodus, modbuswrite), file=f)
+            print('%s Nr %s ipadr %s ueberschuss %6d Akt Leistung %6d'
+                  % (time_string, devicenumber, ipadr, uberschuss, aktpower),
+                  file=f)
+            print('%s Nr %s ipadr %s neupower %6d pvmodus %1d modbusw %1d'
+                  % (time_string, devicenumber, ipadr, neupower, pvmodus,
+                     modbuswrite), file=f)
     # modbus write
     if modbuswrite == 1:
-        client = ModbusTcpClient(ipadr, port=port)
-        if dactyp == 0:
-            # 10 Volts are 1000
-            volt = int((neupower * 1000) / maxpower)
-            rq = client.write_register(1, volt, unit=1)
-        else:
-            # 10 volts are 4000
-            volt = int((neupower * 4000) / maxpower)
-            rq = client.write_register(0x01f4, volt, unit=1)
+        # andernfalls absturz bei negativen Zahlen
+        builder = BinaryPayloadBuilder(byteorder=Endian.Big)
+        builder.reset()
+        builder.add_16bit_int(neupower)
+        pay = builder.to_registers()
+        client = ModbusTcpClient(ipadr, port=502)
+        client.write_register(100, pay[0], unit=1)
         if count1 < 3:
             with open(file_string, 'a') as f:
-                print('%s devicenr %s ipadr %s Volt %6d dactyp %d written by modbus ' %
-                      (time_string, devicenumber, ipadr, volt, dactyp), file=f)
-    with open(file_stringcount, 'w') as f:
-        f.write(str(count1))
+                print('%s devicenr %s ipadr %s written %6d %#4X' %
+                      (time_string, devicenumber, ipadr, pay[0], pay[0]),
+                      file=f)
 else:
     if pvmodus == 99:
         pvmodus = 0
-answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)
-answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(volt)
+answer = '{"power":' + str(aktpower) + ',"powerc":0'
+answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(neupower)
 answer += ',"on":' + str(pvmodus) + '}'
 with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
           str(devicenumber), 'w') as f1:
