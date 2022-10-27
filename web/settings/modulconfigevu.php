@@ -149,6 +149,7 @@
 									<select name="sungrowsr" id="sungrowsr" class="form-control">
 										<option <?php if($sungrowsrold == 0) echo "selected" ?> value="0">SH (Hybrid)</option>
 										<option <?php if($sungrowsrold == 1) echo "selected" ?> value="1">SG (kein Hybrid)</option>
+										<option <?php if($sungrowsrold == 2) echo "selected" ?> value="2">SG mit WiNet-Dongle (kein Hybrid)</option>
 									</select>
 								</div>
 							</div>

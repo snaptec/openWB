@@ -10,6 +10,7 @@ from modules.common.modbus import ModbusDataType, Endian
 from modules.common.simcount import SimCounter
 from modules.common.store import get_counter_value_store
 from modules.sungrow.config import SungrowCounterSetup
+from modules.sungrow.version import Version
 
 
 class SungrowCounter:
@@ -28,30 +29,28 @@ class SungrowCounter:
 
     def update(self):
         unit = self.__device_modbus_id
-        if self.component_config.configuration.version == 1:
-            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
-                                                           wordorder=Endian.Little, unit=unit)
-            frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
-            voltages = self.__tcp_client.read_input_registers(5018, [ModbusDataType.UINT_16] * 3,
-                                                              wordorder=Endian.Little, unit=unit)
-            voltages = [voltage / 10 for voltage in voltages]
-            # no valid data for powers per phase
-            # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.UINT_16] * 3,
-            #                                                 wordorder=Endian.Little, unit=unit)
-            # powers = [power / 10 for power in powers]
-            # log.info("power: " + str(power) + " powers?: " + str(powers))
-        else:
+        if self.component_config.configuration.version == Version.SH:
             power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32,
                                                            wordorder=Endian.Little, unit=unit) * -1
-            frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
-            voltages = self.__tcp_client.read_input_registers(5018, [ModbusDataType.UINT_16] * 3,
-                                                              wordorder=Endian.Little, unit=unit)
-            voltages = [voltage / 10 for voltage in voltages]
             # no valid data for powers per phase
             # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.INT_16] * 3,
             #                                                 wordorder=Endian.Little, unit=unit)
             # powers = [power / 10 for power in powers]
             # log.info("power: " + str(power) + " powers?: " + str(powers))
+        else:
+            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
+                                                           wordorder=Endian.Little, unit=unit)
+            if self.component_config.configuration.version == Version.SG_winet_dongle:
+                power = power * -1
+            # no valid data for powers per phase
+            # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.UINT_16] * 3,
+            #                                                 wordorder=Endian.Little, unit=unit)
+            # powers = [power / 10 for power in powers]
+            # log.info("power: " + str(power) + " powers?: " + str(powers))
+        frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
+        voltages = self.__tcp_client.read_input_registers(5018, [ModbusDataType.UINT_16] * 3,
+                                                          wordorder=Endian.Little, unit=unit)
+        voltages = [voltage / 10 for voltage in voltages]
 
         imported, exported = self.__sim_counter.sim_count(power)
 

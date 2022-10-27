@@ -12,6 +12,8 @@ from modules.sungrow import counter
 from modules.sungrow import inverter
 from modules.sungrow.config import (Sungrow, SungrowBatSetup, SungrowCounterConfiguration, SungrowCounterSetup,
                                     SungrowInverterSetup)
+from modules.sungrow.version import Version
+
 
 log = logging.getLogger(__name__)
 
@@ -91,7 +93,7 @@ def read_legacy_bat(ip_address: str, port: int, modbus_id: int, num: Optional[in
 
 def read_legacy_counter(ip_address: str, port: int, modbus_id: int, version: int):
     read_legacy(ip_address, port, modbus_id, counter.component_descriptor.configuration_factory(
-        id=None, configuration=SungrowCounterConfiguration(version=version)))
+        id=None, configuration=SungrowCounterConfiguration(version=Version(version))))
 
 
 def read_legacy_inverter(ip_address: str, port: int, modbus_id: int, num: int):
