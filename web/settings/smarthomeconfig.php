@@ -245,10 +245,10 @@ $numDevices = 9;
 								<div class="form-row mb-1">
 									<label for="device_dacportDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modbusport des Dac</label>
 									<div class="col">
-									  <input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-									  <span class="form-text small">
-									    Standardeinstellungen:8899 <br>
-									  </span>
+										<input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">
+											Standardeinstellungen:8899 <br>
+										</span>
 									</div>
 								</div>
 							</div>
