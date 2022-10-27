@@ -535,7 +535,7 @@ $numDevices = 9;
 													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ausschaltschwelle anpassen
 													</label>
-												 	<label class="btn btn-outline-info">
+													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>2" data-option="2" value="2">ausschalten/nicht einschalten
 													</label>
 												</div>
@@ -577,7 +577,7 @@ $numDevices = 9;
 													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>1" data-option="1" value="1">jede volle Stunde prüfen oder ausschalten
 													</label>
-												 	<label class="btn btn-outline-info">
+													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde prüfen oder ausschalten
 													</label>
 												 	<label class="btn btn-outline-info">
@@ -737,7 +737,7 @@ $numDevices = 9;
 										</select>
 										<span class="form-text small">
 											Wenn Shelly Button gewählt wird, zeigt Shelly button den Modus (automatisch / manuell) und den an / aus Status vom Gerät an.
-											 Shelly Button nur mit Netzteil betreiben.<br>
+											Shelly Button nur mit Netzteil betreiben.<br>
 											Wenn Gerät im automatische Modus ist der Leuchtring aus.<br>
 											Wenn Gerät im manuellem Modus ist:<br>
 												- Ist das Gerät aus ist der Leuchtring an.<br>
@@ -801,7 +801,7 @@ $numDevices = 9;
 								</div>
 								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly hide">
 									<div class="form-row mb-1">
-								  <hr class="border-secondary">
+									<hr class="border-secondary">
 										<label for="device_measchanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Meter Auswahl</label>
 										<select class="form-control" name="device_measchan" id="device_measchanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value="0" data-option="0" selected="selected">alle Meter summiert</option>
