@@ -580,7 +580,7 @@ $numDevices = 9;
 													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde prüfen oder ausschalten
 													</label>
-												 	<label class="btn btn-outline-info">
+													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>100" data-option="100" value="100">gehört zu Einschaltgruppe
 													</label>
 												</div>
