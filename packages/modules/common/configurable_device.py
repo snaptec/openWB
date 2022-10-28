@@ -48,7 +48,13 @@ class ComponentFactoryByType(Generic[T_COMPONENT, T_COMPONENT_CONFIG]):
             raise Exception(
                 "Unknown component type <%s>, known types are: <%s>", e, ','.join(self.__type_to_factory.keys())
             )
-        required_type, = inspect.getfullargspec(factory).annotations.values()
+        arg_spec = inspect.getfullargspec(factory)
+        if len(arg_spec.args) != 1:
+            raise Exception(
+                "Expected function with single argument, however factory for %s has args: %s" %
+                (component_type, arg_spec.args)
+            )
+        required_type = arg_spec.annotations[arg_spec.args[0]]
         return factory(dataclass_from_dict(required_type, component_config))
 
 
