@@ -16,7 +16,7 @@ from modules.e3dc.config import E3dcInverterSetup
 log = logging.getLogger(__name__)
 
 
-def read_inverter(client: modbus.ModbusTcpClient_, read_ext):
+def read_inverter(client: modbus.ModbusTcpClient_, read_ext) -> [int, int]:
     # 40067 PV Leistung
     pv = client.read_holding_registers(40067, ModbusDataType.INT_32,
                                        wordorder=Endian.Little, unit=1) * -1
@@ -24,13 +24,15 @@ def read_inverter(client: modbus.ModbusTcpClient_, read_ext):
         # 40075 externe PV Leistung
         pv_external = client.read_holding_registers(40075, ModbusDataType.INT_32,
                                                     wordorder=Endian.Little, unit=1)
+    else:
+        pv_external = 0
     return pv, pv_external
 
 
 class E3dcInverter:
     def __init__(self,
                  device_id: int,
-                 ip_address: str,
+                 address: str,
                  read_ext: int,
                  pvmodul: str,
                  component_config: Union[Dict, E3dcInverterSetup]) -> None:
@@ -40,7 +42,7 @@ class E3dcInverter:
         self.__storepv = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
         self.__read_ext = read_ext
-        self.__ip_address = ip_address
+        self.__address = address
         self.__pvmodul = pvmodul
         self.__pvother = pvmodul != "none"
 
@@ -52,7 +54,7 @@ class E3dcInverter:
         # nur auslesen wenn als relevant parametrisiert
         # (read_external = 1) , sonst doppelte Auslesung
         # pv -> pv Leistung die direkt an e3dc angeschlossen ist
-        log.debug("Ip: %s, read_ext %d pv_other %s", self.__ip_address,
+        log.debug("Ip: %s, read_ext %d pv_other %s", self.__address,
                   self.__read_ext, self.__pvother)
         log.debug("pv %d pv_external %d",
                   pv, pv_external)

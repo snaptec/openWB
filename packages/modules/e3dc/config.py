@@ -1,21 +1,19 @@
 from modules.common.component_setup import ComponentSetup
-from modules.common import modbus
+from helpermodules.auto_str import auto_str
 
 
+@auto_str
 class E3dcConfiguration:
-    def __init__(self, ip_address1: str = None,
-                 ip_address2: str = None,
+    def __init__(self, address: str = None,
                  read_ext: int = 0,
                  pvmodul: str = None
                  ):
-        self.ip_address1 = ip_address1
-        self.ip_address2 = ip_address2
+        self.address = address
         self.read_ext = read_ext
         self.pvmodul = pvmodul
-        # nur init hier
-        self.client = modbus.ModbusTcpClient_('127.0.0.1', 502)
 
 
+@auto_str
 class E3dc:
     def __init__(self,
                  name: str = "e3dc",
@@ -28,11 +26,13 @@ class E3dc:
         self.configuration = configuration or E3dcConfiguration()
 
 
+@auto_str
 class E3dcBatConfiguration:
     def __init__(self):
         pass
 
 
+@auto_str
 class E3dcBatSetup(ComponentSetup[E3dcBatConfiguration]):
     def __init__(self,
                  name: str = "e3dc Speicher",
@@ -43,11 +43,13 @@ class E3dcBatSetup(ComponentSetup[E3dcBatConfiguration]):
                          or E3dcBatConfiguration())
 
 
+@auto_str
 class E3dcCounterConfiguration:
     def __init__(self):
         pass
 
 
+@auto_str
 class E3dcCounterSetup(ComponentSetup[E3dcCounterConfiguration]):
     def __init__(self,
                  name: str = "e3dc Zähler",
@@ -58,11 +60,13 @@ class E3dcCounterSetup(ComponentSetup[E3dcCounterConfiguration]):
                          E3dcCounterConfiguration())
 
 
+@auto_str
 class E3dcInverterConfiguration:
     def __init__(self):
         pass
 
 
+@auto_str
 class E3dcInverterSetup(ComponentSetup[E3dcInverterConfiguration]):
     def __init__(self,
                  name: str = "E3dc Wechselrichter",
