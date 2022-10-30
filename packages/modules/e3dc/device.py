@@ -10,9 +10,9 @@ from modules.e3dc.bat import E3dcBat, read_bat
 from modules.e3dc.inverter import E3dcInverter, read_inverter
 from modules.e3dc.counter import E3dcCounter
 from modules.e3dc.config import E3dc, E3dcConfiguration
-from modules.e3dc.config import E3dcBatSetup, E3dcBatConfiguration
+from modules.e3dc.config import E3dcBatSetup
 from modules.e3dc.config import E3dcCounterSetup, E3dcCounterConfiguration
-from modules.e3dc.config import E3dcInverterSetup, E3dcInverterConfiguration
+from modules.e3dc.config import E3dcInverterSetup
 from modules.common.store.ramdisk import files
 from modules.common.simcount import sim_count
 from modules.common.store import get_inverter_value_store, get_bat_value_store
