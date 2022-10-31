@@ -1,21 +1,21 @@
 #!/usr/bin/python3
 import sys
 import os
-import time
 import json
 from pymodbus.payload import BinaryPayloadBuilder, Endian
 from pymodbus.client.sync import ModbusTcpClient
-named_tuple = time.localtime()  # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S ratiotherm watty.py", named_tuple)
+import logging
+from modules.common.smartutils import initlog
 devicenumber = str(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 forcesend = int(sys.argv[4])
+initlog("ratiotherm", devicenumber)
+log = logging.getLogger("ratiotherm")
 # forcesend = 0 default acthor time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
 bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
-file_string = bp + str(devicenumber) + '_ratiotherm.log'
 file_stringpv = bp + str(devicenumber) + '_pv'
 file_stringcount = bp + str(devicenumber) + '_count'
 file_stringcount5 = bp + str(devicenumber) + '_count5'
@@ -70,18 +70,10 @@ if count5 == 0:
         with open(file_stringpv, 'w') as f:
             f.write(str(pvmodus))
     if count1 < 3:
-        if os.path.isfile(file_string):
-            pass
-        else:
-            with open(file_string, 'w') as f:
-                print('ratiotherm start log', file=f)
-        with open(file_string, 'a') as f:
-            print('%s Nr %s ipadr %s ueberschuss %6d Akt Leistung %6d'
-                  % (time_string, devicenumber, ipadr, uberschuss, aktpower),
-                  file=f)
-            print('%s Nr %s ipadr %s neupower %6d pvmodus %1d modbusw %1d'
-                  % (time_string, devicenumber, ipadr, neupower, pvmodus,
-                     modbuswrite), file=f)
+        log.info(" watt devicenr %s ipadr %s ueberschuss %6d Akt Leistung  %6d"
+                 % (devicenumber, ipadr, uberschuss, aktpower))
+        log.info(" watt devicenr %s ipadr %s neupower %6d pvmodus %1d modbusw %1d"
+                 % (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
         # andernfalls absturz bei negativen Zahlen
@@ -92,10 +84,8 @@ if count5 == 0:
         client = ModbusTcpClient(ipadr, port=502)
         client.write_register(100, pay[0], unit=1)
         if count1 < 3:
-            with open(file_string, 'a') as f:
-                print('%s devicenr %s ipadr %s written %6d %#4X' %
-                      (time_string, devicenumber, ipadr, pay[0], pay[0]),
-                      file=f)
+            log.info(" watt devicenr %s ipadr %s written %6d %#4X"
+                     % (devicenumber, ipadr, pay[0], pay[0]))
 else:
     if pvmodus == 99:
         pvmodus = 0
