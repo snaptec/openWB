@@ -29,7 +29,7 @@ class JsonInverter:
         if config.jq_exported is None:
             _, exported = self.__sim_counter.sim_count(power)
         else:
-            exported = jq.compile(config.jq_exported).input(response).first()
+            exported = float(jq.compile(config.jq_exported).input(response).first())
 
         inverter_state = InverterState(
             power=power,
