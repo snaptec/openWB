@@ -219,7 +219,10 @@ def read_legacy(component_type: str,
                 with dev.client:
                     for inv in inverters:
                         state = inv.read_state()
-                        total_power += state.power
+                        if state.dc_power == 0:
+                            total_power += 0
+                        else:
+                            total_power += state.power
                         total_energy += state.exported
                         total_currents = list(map(add, total_currents, state.currents))
 
