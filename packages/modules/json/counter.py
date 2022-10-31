@@ -23,13 +23,13 @@ class JsonCounter:
     def update(self, response):
         config = self.component_config.configuration
 
-        power = jq.compile(config.jq_power).input(response).first()
+        power = float(jq.compile(config.jq_power).input(response).first())
         # ToDo: add current or power per phase
         if config.jq_exported is None or config.jq_exported is None:
             imported, exported = self.__sim_counter.sim_count(power)
         else:
-            imported = jq.compile(config.jq_imported).input(response).first()
-            exported = jq.compile(config.jq_exported).input(response).first()
+            imported = float(jq.compile(config.jq_imported).input(response).first())
+            exported = float(jq.compile(config.jq_exported).input(response).first())
 
         counter_state = CounterState(
             imported=imported,
