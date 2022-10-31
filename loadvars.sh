@@ -719,7 +719,7 @@ loadvars(){
 		if [[ "$evseconlp4" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 4 "$chargep4ip" "$chargep4cp" || true
 		elif [[ "$evseconlp4" == "owbpro" ]]; then
-			timeout 3 modules/owbpro/main.sh 4 "$chargep4ip" || true
+			timeout 3 modules/owbpro/main.sh 4 "$owbpro4ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp4/main.sh || true
 		fi
@@ -759,7 +759,7 @@ loadvars(){
 		if [[ "$evseconlp5" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 5 "$chargep5ip" "$chargep5cp" || true
 		elif [[ "$evseconlp5" == "owbpro" ]]; then
-			timeout 3 modules/owbpro/main.sh 5 "$chargep5ip" || true
+			timeout 3 modules/owbpro/main.sh 5 "$owbpro5ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp5/main.sh || true
 		fi
@@ -799,7 +799,7 @@ loadvars(){
 		if [[ "$evseconlp6" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 6 "$chargep6ip" "$chargep6cp" || true
 		elif [[ "$evseconlp6" == "owbpro" ]]; then
-			timeout 3 modules/owbpro/main.sh 6 "$chargep6ip" || true
+			timeout 3 modules/owbpro/main.sh 6 "$owbpro6ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp6/main.sh || true
 		fi
@@ -839,7 +839,7 @@ loadvars(){
 		if [[ "$evseconlp7" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 7 "$chargep7ip" "$chargep7cp" || true
 		elif [[ "$evseconlp7" == "owbpro" ]]; then
-			timeout 3 modules/owbpro/main.sh 7 "$chargep7ip" || true
+			timeout 3 modules/owbpro/main.sh 7 "$owbpro7ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp7/main.sh || true
 		fi
@@ -878,7 +878,7 @@ loadvars(){
 		if [[ "$evseconlp8" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 8 "$chargep8ip" "$chargep8cp" || true
 		elif [[ "$evseconlp8" == "owbpro" ]]; then
-			timeout 3 modules/owbpro/main.sh 8 "$chargep8ip" || true
+			timeout 3 modules/owbpro/main.sh 8 "$owbpro8ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp8/main.sh || true
 		fi
