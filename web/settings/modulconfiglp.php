@@ -388,7 +388,7 @@
 									visibility_twcmanagerlp1_connection();
 								});
 
-	       							visibility_twcmanagerlp1_connection();
+									visibility_twcmanagerlp1_connection();
 							});
 						</script>
 
@@ -1142,28 +1142,28 @@
 								</div>
 							</div>
 							<div id="socaiways" class="hide">
-                                <div class="form-group">
-                                    <div class="alert alert-info">
-                                        Anmeldedaten fuer den Aiways U5
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
-                                            <span class="form-text small">
-                                                Aiways Account Name (nicht die E-Mail-Adresse)
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
-                                        <div class="col">
+								<div class="form-group">
+									<div class="alert alert-info">
+										Anmeldedaten fuer den Aiways U5
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
+											<span class="form-text small">
+												Aiways Account Name (nicht die E-Mail-Adresse)
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
 											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
-                                            <span class="form-text small">
-                                                Aiways Passwort
-                                            </span>
-                                        </div>
-                                    </div>
+											<span class="form-text small">
+												Aiways Passwort
+											</span>
+										</div>
+									</div>
 									<div class="form-row mb-1">
                                         <label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
                                         <div class="col">
