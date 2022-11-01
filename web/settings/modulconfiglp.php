@@ -2301,8 +2301,8 @@
 								showSection('#socmkia');
 							}
 							if($('#socmodul').val() == 'soc_aiways') {
-                                showSection('#socaiways');
-                            }
+								showSection('#socaiways');
+							}
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
@@ -3172,7 +3172,7 @@
 										</div>
 									</div>
 								</div>
-                            </div>
+							</div>
 							<div id="soccarnetlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -4090,7 +4090,7 @@
 									case "openwb series1/2 duo v2":
 										showSection('#openwb12s1v2');
 									break;
-						       			default:
+										default:
 										showSection('#evseconmbs1');
 										showSection('#llmodullp2');
 										display_llmp2();
@@ -5030,7 +5030,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
 
