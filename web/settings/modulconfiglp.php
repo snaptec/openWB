@@ -1165,25 +1165,25 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-                                        <label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
-                                            <span class="form-text small">
-                                                 VIN des Fahrzeugs
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
-                                        <div class="col">
+										<label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<div class="col">
 											<input class="form-control" type="text" name="soc_aiways_intervall" id="soc_aiways_intervall" value="<?php echo $soc_aiways_intervallold ?>">
-                                            <span class="form-text small">
-                                                Verkürzt das Abfrageintervall beim Laden auf xx Minuten
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>						
+											<span class="form-text small">
+												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>						
 							<div id="socmaudi" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3134,16 +3134,16 @@
 								</div>
 							</div>
 							<div id="socaiwayslp2" class="hide">
-                                <div class="form-group">
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
-                                            <span class="form-text small">
-                                                Aiways Account Name (nicht die E-Mail-Adresse)
-                                            </span>
-                                        </div>
-                                    </div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
+											<span class="form-text small">
+												Aiways Account Name (nicht die E-Mail-Adresse)
+											</span>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_aiwayslp2_pass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
