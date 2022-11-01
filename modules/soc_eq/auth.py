@@ -54,7 +54,8 @@ for line in fd:
 
 fd.close()
 
-tok_url  = "https://id.mercedes-benz.com/as/token.oauth2"
+#tok_url  = "https://id.mercedes-benz.com/as/token.oauth2"
+tok_url  = "https://ssoalpha.dvb.corpinter.net/v1/token"
 
 data = {'grant_type': 'authorization_code', 'code': str(code), 'redirect_uri': callback}
 #call API to get Access/Refresh tokens

@@ -19,7 +19,7 @@ ChargePoint   = str(sys.argv[5])
 Debug         = int(os.environ.get('debug'))
 myPid         = str(os.getpid())
 
-tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
+tok_url   = "https://ssoalpha.dvb.corpinter.net/v1/token"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
 
 
@@ -94,7 +94,7 @@ refresh_token = tok['refresh_token']
 expires_in = tok['expires_in']
 fd.close()
 
-#socDebugLog("Expire in: " str((int(expires_in)-int(time.time())))
+socDebugLog("Token expires in: " +str((int(expires_in)-int(time.time())))+"s")
 
 if int(expires_in) < int(time.time()):
 	#Access Token is exired
@@ -125,11 +125,13 @@ if int(expires_in) < int(time.time()):
 		access_token = tok['access_token']
 		refresh_token = tok['refresh_token']
 		expires_in = tok['expires_in'] - 60 + int(time.time())
+		id_token = tok['id_token']
+		token_type = tok['token_type']
 
 		#write new tokens
     
 		fd = open(moduledir + 'soc_eq_acc_lp' + str(ChargePoint),'w')
-		json.dump({'expires_in' : expires_in, 'refresh_token' : refresh_token, 'access_token' : access_token}, fd)
+		json.dump({'expires_in' : expires_in, 'refresh_token' : refresh_token, 'access_token' : access_token, 'id_token' : id_token, 'token_type' : token_type}, fd)
 		fd.close()
 	else:
 		handleResponse("Refresh",ref.status_code,ref.text)
