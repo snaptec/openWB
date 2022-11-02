@@ -49,11 +49,11 @@ class UpdateValues:
 
     def __init__(self, local_charge_point_num: int) -> None:
         self.local_charge_point_num_str = str(local_charge_point_num)
-        self.cp_num_str = str(Isss.get_cp_num(local_charge_point_num))
         self.old_counter_state = None
 
     def update_values(self, counter_state: ChargepointState) -> None:
         self.parent_wb = Isss.get_parent_wb()
+        self.cp_num_str = str(Isss.get_cp_num(int(self.local_charge_point_num_str)))
         if self.old_counter_state:
             # iterate over counterstate
             vars_old_counter_state = vars(self.old_counter_state)
@@ -242,7 +242,7 @@ class Isss:
             return "/dev/serial0"
 
     @staticmethod
-    def get_cp_num(local_charge_point_num) -> int:
+    def get_cp_num(local_charge_point_num: int) -> int:
         try:
             if local_charge_point_num == 1:
                 return int(re.sub(r'\D', '', ramdisk_read("parentCPlp1")))
@@ -263,7 +263,7 @@ class Isss:
 
 
 class IsssChargepoint:
-    def __init__(self, serial_client, local_charge_point_num) -> None:
+    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int) -> None:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 1:
             try:
@@ -278,7 +278,7 @@ class IsssChargepoint:
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False
 
-    def update(self):
+    def update(self) -> None:
         def __thread_active(thread: Optional[threading.Thread]) -> bool:
             if thread:
                 return thread.is_alive()
