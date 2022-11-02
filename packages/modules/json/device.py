@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, List, Union
+from typing import List, Union, Iterable
 
-from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common import req
-from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
-from modules.common.component_context import MultiComponentUpdateContext
+from modules.common.abstract_device import DeviceDescriptor
+from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, MultiComponentUpdater
 from modules.json import bat, counter, inverter
+from modules.json.bat import JsonBat
 from modules.json.config import (Json,
                                  JsonBatConfiguration,
                                  JsonBatSetup,
@@ -16,66 +16,37 @@ from modules.json.config import (Json,
                                  JsonCounterSetup,
                                  JsonInverterConfiguration,
                                  JsonInverterSetup)
+from modules.json.counter import JsonCounter
+from modules.json.inverter import JsonInverter
 
 log = logging.getLogger(__name__)
+JsonComponent = Union[JsonBat, JsonCounter, JsonInverter]
 
 
-json_component_classes = Union[bat.JsonBat, counter.JsonCounter, inverter.JsonInverter]
+def create_device(device_config: Json):
+    def create_bat(component_config: JsonBatSetup) -> JsonBat:
+        return JsonBat(device_config.id, component_config)
 
+    def create_counter(component_config: JsonCounterSetup) -> JsonCounter:
+        return JsonCounter(device_config.id, component_config)
 
-class Device(AbstractDevice):
-    COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.JsonBat,
-        "counter": counter.JsonCounter,
-        "inverter": inverter.JsonInverter
-    }
+    def create_inverter(component_config: JsonInverterSetup) -> JsonInverter:
+        return JsonInverter(device_config.id, component_config)
 
-    def __init__(self, device_config: Union[Dict, Json]) -> None:
-        self.components = {}  # type: Dict[str, json_component_classes]
-        try:
-            self.device_config = dataclass_from_dict(Json, device_config)
-        except Exception:
-            log.exception("Fehler im Modul "+self.device_config.name)
+    def update_components(components: Iterable[JsonComponent]):
+        response = req.get_http_session().get(device_config.configuration.url, timeout=5).json()
+        for component in components:
+            component.update(response)
 
-    def add_component(self, component_config: Union[Dict, JsonBatSetup, JsonCounterSetup, JsonInverterSetup]) -> None:
-        if isinstance(component_config, Dict):
-            component_type = component_config["type"]
-        else:
-            component_type = component_config.type
-        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
-            component_type].component_descriptor.configuration_factory, component_config)
-        if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config.id)] = self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config.id, component_config)
-        else:
-            raise Exception(
-                "illegal component type " + component_type + ". Allowed values: " +
-                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
-            )
-
-    def update(self) -> None:
-        log.debug("Start device reading " + str(self.components))
-        if self.components:
-            with MultiComponentUpdateContext(self.components):
-                response = req.get_http_session().get(self.device_config.configuration.url, timeout=5)
-                for component in self.components:
-                    self.components[component].update(response.json())
-        else:
-            log.warning(
-                self.device_config.name +
-                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
-            )
-
-
-COMPONENT_TYPE_TO_MODULE = {
-    "bat": bat,
-    "counter": counter,
-    "inverter": inverter
-}
+    return ConfigurableDevice(
+        device_config,
+        component_factory=ComponentFactoryByType(bat=create_bat, counter=create_counter, inverter=create_inverter),
+        component_updater=MultiComponentUpdater(update_components)
+    )
 
 
 def read_legacy(url: str, component_config: Union[JsonBatSetup, JsonCounterSetup, JsonInverterSetup]) -> None:
-    dev = Device(Json(configuration=JsonConfiguration(url=url)))
+    dev = create_device(Json(configuration=JsonConfiguration(url=url)))
     dev.add_component(component_config)
     dev.update()
 
@@ -86,14 +57,16 @@ def read_legacy_bat(ip_address: str, jq_power: str, jq_soc: str):
 
 
 def read_legacy_counter(ip_address: str, jq_power: str, jq_imported: str, jq_exported: str):
-    config = JsonCounterConfiguration(jq_power=jq_power, jq_imported=jq_imported, jq_exported=jq_exported)
+    config = JsonCounterConfiguration(jq_power=jq_power,
+                                      jq_imported=None if jq_imported == "" else jq_imported,
+                                      jq_exported=None if jq_exported == "" else jq_exported)
     read_legacy(
         ip_address,
         counter.component_descriptor.configuration_factory(id=None, configuration=config))
 
 
 def read_legacy_inverter(ip_address: str, jq_power: str, jq_exported: str, num: int):
-    config = JsonInverterConfiguration(jq_power=jq_power, jq_exported=jq_exported)
+    config = JsonInverterConfiguration(jq_power=jq_power, jq_exported=None if jq_exported == "" else jq_exported)
     read_legacy(ip_address, inverter.component_descriptor.configuration_factory(id=num, configuration=config))
 
 

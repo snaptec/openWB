@@ -1,3 +1,4 @@
+from typing import Optional
 from modules.common.component_setup import ComponentSetup
 
 
@@ -19,7 +20,11 @@ class Json:
 
 
 class JsonBatConfiguration:
-    def __init__(self, jq_imported=None, jq_exported=None, jq_soc=None, jq_power=None,):
+    def __init__(self,
+                 jq_imported: Optional[str] = None,
+                 jq_exported: Optional[str] = None,
+                 jq_soc: str = "",
+                 jq_power: str = ""):
         self.jq_imported = jq_imported
         self.jq_exported = jq_exported
         self.jq_soc = jq_soc
@@ -36,7 +41,7 @@ class JsonBatSetup(ComponentSetup[JsonBatConfiguration]):
 
 
 class JsonCounterConfiguration:
-    def __init__(self, jq_power=None, jq_exported=None, jq_imported=None,):
+    def __init__(self, jq_power: str = "", jq_exported: Optional[str] = None, jq_imported: Optional[str] = None):
         self.jq_power = jq_power
         self.jq_exported = jq_exported
         self.jq_imported = jq_imported
@@ -52,7 +57,7 @@ class JsonCounterSetup(ComponentSetup[JsonCounterConfiguration]):
 
 
 class JsonInverterConfiguration:
-    def __init__(self, jq_power=None, jq_exported=None):
+    def __init__(self, jq_power: str = "", jq_exported: Optional[str] = None):
         self.jq_power = jq_power
         self.jq_exported = jq_exported
 

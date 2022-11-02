@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Tuple, Union
+from typing import Dict, Union
 
 from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
@@ -25,13 +25,13 @@ class SmaSunnyBoyInverter:
                  tcp_client: modbus.ModbusTcpClient_) -> None:
         self.component_config = dataclass_from_dict(SmaSunnyBoyInverterSetup, component_config)
         self.tcp_client = tcp_client
-        self.__store = get_inverter_value_store(self.component_config.id)
+        self.store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
-        self.__store.set(self.read()[0])
+        self.store.set(self.read())
 
-    def read(self) -> Tuple[InverterState, bool]:
+    def read(self) -> InverterState:
         if self.component_config.configuration.version == SmaInverterVersion.default:
             # AC Wirkleistung über alle Phasen (W) [Pac]
             power_total = self.tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=3)
@@ -42,14 +42,14 @@ class SmaSunnyBoyInverter:
             # zunächst an, ob vom DC Teil überhaupt Leistung kommt. Ist dies nicht der Fall, können wir power
             # gleich auf 0 setzen.
             # Leistung DC an Eingang 1 und 2
-            produces_dc_power = (self.tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3) != 0
-                                 or self.tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3) != 0)
+            dc_power = (self.tcp_client.read_holding_registers(30773, ModbusDataType.INT_32, unit=3) +
+                        self.tcp_client.read_holding_registers(30961, ModbusDataType.INT_32, unit=3))
         elif self.component_config.configuration.version == SmaInverterVersion.core2:
             # AC Wirkleistung über alle Phasen (W) [Pac]
             power_total = self.tcp_client.read_holding_registers(40084, ModbusDataType.INT_16, unit=1) * 10
             # Gesamtertrag (Wh) [E-Total] SF=2!
             energy = self.tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
-            produces_dc_power = True
+            dc_power = self.tcp_client.read_holding_registers(40101, ModbusDataType.UINT_32, unit=1) * 100
         else:
             raise FaultState.error("Unbekannte Version "+str(self.component_config.configuration.version))
         if power_total == self.SMA_INT32_NAN:
@@ -57,10 +57,11 @@ class SmaSunnyBoyInverter:
 
         inverter_state = InverterState(
             power=power_total * -1,
+            dc_power=dc_power * -1,
             exported=energy
         )
-        log.debug("WR {}: {}, DC Power {}".format(self.tcp_client.address, inverter_state, produces_dc_power))
-        return inverter_state, produces_dc_power
+        log.debug("WR {}: {}".format(self.tcp_client.address, inverter_state))
+        return inverter_state
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=SmaSunnyBoyInverterSetup)

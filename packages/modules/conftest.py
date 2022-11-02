@@ -5,7 +5,6 @@ import pytest
 
 from modules.common import simcount
 
-sys.modules['jq'] = type(sys)('jq')
 sys.modules['pymodbus'] = type(sys)('pymodbus')
 
 module = type(sys)('pymodbus.client.sync')
