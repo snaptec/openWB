@@ -388,7 +388,7 @@
 									visibility_twcmanagerlp1_connection();
 								});
 
-	       							visibility_twcmanagerlp1_connection();
+									visibility_twcmanagerlp1_connection();
 							});
 						</script>
 
@@ -1142,48 +1142,48 @@
 								</div>
 							</div>
 							<div id="socaiways" class="hide">
-                                <div class="form-group">
-                                    <div class="alert alert-info">
-                                        Anmeldedaten fuer den Aiways U5
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
-                                            <span class="form-text small">
-                                                Aiways Account Name (nicht die E-Mail-Adresse)
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
-                                        <div class="col">
-											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
-                                            <span class="form-text small">
-                                                Aiways Passwort
-                                            </span>
-                                        </div>
-                                    </div>
+								<div class="form-group">
+									<div class="alert alert-info">
+										Anmeldedaten fuer den Aiways U5
+									</div>
 									<div class="form-row mb-1">
-                                        <label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
-                                            <span class="form-text small">
-                                                 VIN des Fahrzeugs
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
-                                        <div class="col">
+										<label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
+											<span class="form-text small">
+												Aiways Account Name (nicht die E-Mail-Adresse)
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
+											<span class="form-text small">
+												Aiways Passwort
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<div class="col">
 											<input class="form-control" type="text" name="soc_aiways_intervall" id="soc_aiways_intervall" value="<?php echo $soc_aiways_intervallold ?>">
-                                            <span class="form-text small">
-                                                Verkürzt das Abfrageintervall beim Laden auf xx Minuten
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>						
+											<span class="form-text small">
+												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>						
 							<div id="socmaudi" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -1953,7 +1953,7 @@
 										<div class="col">
 											<span class="form-text small">
 												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
-												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
+												<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/auth?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -2301,8 +2301,8 @@
 								showSection('#socmkia');
 							}
 							if($('#socmodul').val() == 'soc_aiways') {
-                                showSection('#socaiways');
-                            }
+								showSection('#socaiways');
+							}
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
@@ -3134,16 +3134,16 @@
 								</div>
 							</div>
 							<div id="socaiwayslp2" class="hide">
-                                <div class="form-group">
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
-                                            <span class="form-text small">
-                                                Aiways Account Name (nicht die E-Mail-Adresse)
-                                            </span>
-                                        </div>
-                                    </div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
+											<span class="form-text small">
+												Aiways Account Name (nicht die E-Mail-Adresse)
+											</span>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_aiwayslp2_pass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
@@ -3172,7 +3172,7 @@
 										</div>
 									</div>
 								</div>
-                            </div>
+							</div>
 							<div id="soccarnetlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3644,7 +3644,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
+											<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/token2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -4090,7 +4090,7 @@
 									case "openwb series1/2 duo v2":
 										showSection('#openwb12s1v2');
 									break;
-						       			default:
+										default:
 										showSection('#evseconmbs1');
 										showSection('#llmodullp2');
 										display_llmp2();
@@ -5030,7 +5030,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
 
