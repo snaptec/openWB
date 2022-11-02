@@ -334,7 +334,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 			unit = ' kW';
 		}
 		$('#bezug').text(prefix + powerEvu + unit);
-	 }
+	}
 	else if ( mqttmsg == 'openWB/evu/DailyYieldImportKwh') {
 		var evuiDailyYield = parseFloat(mqttpayload);
 		if ( isNaN(evuiDailyYield) ) {
