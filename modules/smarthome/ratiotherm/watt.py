@@ -5,7 +5,7 @@ import json
 from pymodbus.payload import BinaryPayloadBuilder, Endian
 from pymodbus.client.sync import ModbusTcpClient
 import logging
-from modules.common.smartutils import initlog
+from smarthome.smartlog import initlog
 devicenumber = str(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])

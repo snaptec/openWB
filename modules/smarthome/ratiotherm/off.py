@@ -2,8 +2,7 @@
 import os
 import sys
 import logging
-from modules.common.smartutils import initlog
-
+from smarthome.smartlog import initlog
 devicenumber = str(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
