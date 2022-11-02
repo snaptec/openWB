@@ -256,6 +256,8 @@ var topicsToSubscribe = [
 	["openWB/lp/8/ADirectModeAmps", 1],
 	// Zielladen
 	["openWB/lp/1/boolFinishAtTimeChargeActive", 1],
+	// FaultState
+	["openWB/lp/+/faultState", 1],
 	// housebattery values
 	["openWB/housebattery/W", 1],
 	["openWB/housebattery/%Soc", 1],

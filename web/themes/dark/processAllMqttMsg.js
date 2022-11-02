@@ -942,6 +942,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			element.addClass('hide');
 		}
 	}
+	else if (lpSubTopic === "faultState") {
+		$('[data-lp="' + index + '"] .socHasError')[mqttpayload === "0" ? "addClass" : "removeClass"]("hide");
+	}
 }
 
 function processHookMessages(mqttmsg, mqttpayload) {
