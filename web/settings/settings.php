@@ -262,7 +262,7 @@
 														}
 														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
 														$('#tibberHomesDropdown').append('<option value="' + homeID + '">' + addressStr + '</option>');
-    												});
+													});
 													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-danger');
 													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-success');
 													$('#tibberhomeIdModalOkBtn').show();
@@ -287,7 +287,7 @@
 													$('#tibberModalSelectHomeIdDiv').hide();
 													$('#tibberhomeid').val('');
 													$('#tibberhomeIdModal').modal("show");
-								  				})
+												})
 										});
 
 										$('#verifyTibberBtn').click(function(){
@@ -344,10 +344,10 @@
 												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
 													<div class="col">
 														<div class="form-group">
-														<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
-														<select class="form-control selectpicker" id="tibberHomesDropdown">
-														</select>
-													  </div>
+															<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
+															<select class="form-control selectpicker" id="tibberHomesDropdown">
+															</select>
+														</div>
 													</div>
 												</div>
 
