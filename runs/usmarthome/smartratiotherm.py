@@ -4,47 +4,19 @@ from usmarthome.global0 import log
 import subprocess
 
 
-class Snxdacxx(Sbase):
+class Sratiotherm(Sbase):
     def __init__(self):
         # setting
         super().__init__()
-        print('__init__ Snxdacxx executed')
-        self._smart_paramadd = {}
-        self._device_nxdacxxueb = 0
-        self._device_nxdacxxtype = 0
-        self.device_nummer = 0
-        self._dynregel = 1
-
-    def updatepar(self, input_param):
-        super().updatepar(input_param)
-        self._smart_paramadd = input_param.copy()
-        self.device_nummer = int(self._smart_paramadd.get('device_nummer',
-                                                          '0'))
-        for key, value in self._smart_paramadd.items():
-            try:
-                valueint = int(value)
-            except Exception:
-                valueint = 0
-            if (key == 'device_nummer'):
-                pass
-            elif (key == 'device_nxdacxxueb'):
-                self._device_nxdacxxueb = valueint
-            elif (key == 'device_nxdacxxtype'):
-                self._device_nxdacxxtype = valueint
-            else:
-                log.warning("(" + str(self.device_nummer) + ") " +
-                            __class__.__name__ + " überlesen " + key +
-                            " " + value)
+        print('__init__ Sratiotherm executed')
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)
         forcesend = self.checkbefsend()
-        argumentList = ['python3', self._prefixpy + 'nxdacxx/watt.py',
+        argumentList = ['python3', self._prefixpy + 'ratiotherm/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss),
-                        str(self._device_nxdacxxueb), str(forcesend),
-                        str(self._device_dacport),
-                        str(self._device_nxdacxxtype)]
+                        str(forcesend)]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
@@ -56,7 +28,7 @@ class Snxdacxx(Sbase):
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") Leistungsmessung %s %d %s Fehlermeldung: %s "
-                        % (' Dac ', self.device_nummer,
+                        % ('ratiotherm', self.device_nummer,
                            str(self._device_ip), str(e1)))
         self.postwatt()
 
@@ -66,7 +38,7 @@ class Snxdacxx(Sbase):
             pname = "/on.py"
         else:
             pname = "/off.py"
-        argumentList = ['python3', self._prefixpy + 'nxdacxx' + pname,
+        argumentList = ['python3', self._prefixpy + 'ratiotherm' + pname,
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss)]
         try:
@@ -75,5 +47,5 @@ class Snxdacxx(Sbase):
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off  %s %d %s Fehlermeldung: %s "
-                        % ('Dac ', self.device_nummer,
+                        % ('ratiotherm', self.device_nummer,
                            str(self._device_ip), str(e1)))

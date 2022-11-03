@@ -140,6 +140,11 @@ def on_message(client, userdata, msg):
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 6):
                     writetoconfig(shconfigfile,'smarthomedevices','device_chan_'+str(devicenumb),msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_chan", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_nxdacxxtype" in msg.topic)):
+                devicenumb=re.sub(r'\D', '', msg.topic)
+                if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 2):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_nxdacxxtype_'+str(devicenumb),msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_nxdacxxtype", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measchan" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and 0 <= int(msg.payload) <= 6):
@@ -179,7 +184,8 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_name", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceTypes = ['none','shelly','tasmota','acthor','lambda','elwa','idm','vampair','stiebel','http','avm','mystrom','viessmann','mqtt','NXDACXX','pyt'] # 'pyt' is deprecated and will be removed!
+                validDeviceTypes = ['none','shelly','tasmota','acthor','lambda','elwa','idm','vampair','stiebel','http','avm','mystrom','viessmann','mqtt','NXDACXX',
+                                    'ratiotherm','pyt'] # 'pyt' is deprecated and will be removed!
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                     try:
                         # just check vor payload in list, deviceTypeIndex is not used

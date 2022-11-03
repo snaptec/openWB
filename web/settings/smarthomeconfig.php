@@ -85,8 +85,9 @@ $numDevices = 9;
 											<option value="lambda" data-option="lambda">Lambda</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
-											<option value="NXDACXX" data-option="NXDACXX">N4DAC02 0.01V bis 10.0V</option>
+											<option value="NXDACXX" data-option="NXDACXX"> DAC 0.01V bis 10.0V</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
+											<option value="ratiotherm" data-option="ratiotherm">Ratiotherm</option>
 											<option value="vampair" data-option="vampair">Vampair</option>
 											<option value="http" data-option="http">Http</option>
 											<option value="avm" data-option="avm">AVM</option>
@@ -131,9 +132,14 @@ $numDevices = 9;
 											openWB/SmartHome/set/Devices/4/Ueberschuss = in Watt<br>
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-NXDACXX hide">
-											N4DAC02 angesteuert über Lan. Der anliegende Überschuss wird in eine Voltzahl zwischen 0.01V und 10.0V umgewandelt. Bezug wird als 0 Volt übertragen.
+											DAC angesteuert über Lan. Der anliegende Überschuss wird in eine Voltzahl zwischen 0.01V und 10.0V umgewandelt. Bezug wird als 0 Volt übertragen.
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.<br>
+											Der konkrete Dac Typ wird im Type definiert<br>
 											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
+											</span>
+											<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-ratiotherm hide">
+											Ratiothem Wärmepumpe. Anschluss via Modbus RTU (Elfin-EE11) auf CAN-EZ3.
+											<span class="form-text small text-danger">Das Feature befindet sich noch in der Entwicklung!</span>
 											</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-viessmann hide">
 											Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wp kann eingestellt werden, ob für diese Funktion  die Elektroheizung (Heizstab) benutzt werden soll.
@@ -154,7 +160,7 @@ $numDevices = 9;
 											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von IDM nicht zu stören.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-stiebel hide">
-											Wärmepumpe der Firma Stiebel mit ISG Plus (Servicewelt über Modbus) und SG Ready Eingang.<br>
+											Wärmepumpe der Firma Stiebel mit ISG (Servicewelt über Modbus) und SG Ready Eingang.<br>
 											Im ISG web muss unter "Einstellungen / Energiemanagement" der Parameter "SGREADY = Ein" gesetzt werden.
 											Wenn die Einschaltbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 2 auf Betriebszustand 3 geschaltet.
 											Wenn die Ausbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 3 auf Betriebszustand 2 geschaltet.
@@ -224,17 +230,29 @@ $numDevices = 9;
 										<span class="form-text small">Maximaler Überschuss in Watt = v10.0. Es wird kein grösserer Wert übertragen.</span>
 									</div>
 								</div>
+									<div class="form-row mb-1">
+										<label for="device_nxdacxxtypeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Dac Typ</label>
+										<div class="col">
+											<select class="form-control" name="device_nxdacxxtype" id="device_nxdacxxtypeDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<option value="0" data-option="0">N4Dac02</option>
+												<option value="1" data-option="1">DA02</option>
+											</select>
+											<span class="form-text small">
+												Hier ist das installierte Modell auszuwählen.
+											</span>
+										</div>
+									</div>
 								<div class="form-row mb-1">
 									<label for="device_dacportDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modbusport des Dac</label>
 									<div class="col">
-									  <input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-									  <span class="form-text small">
-									    Standardeinstellungen:8899 <br>
-									  </span>
+										<input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">
+											Standardeinstellungen:8899 <br>
+										</span>
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum;  ?>-option-ratiotherm device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -349,7 +367,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum;  ?>-option-ratiotherm device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -517,7 +535,7 @@ $numDevices = 9;
 													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ausschaltschwelle anpassen
 													</label>
-												 	<label class="btn btn-outline-info">
+													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>2" data-option="2" value="2">ausschalten/nicht einschalten
 													</label>
 												</div>
@@ -559,10 +577,10 @@ $numDevices = 9;
 													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>1" data-option="1" value="1">jede volle Stunde prüfen oder ausschalten
 													</label>
-												 	<label class="btn btn-outline-info">
+													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>2" data-option="2" value="2">jede volle Stunde / jede halbe Stunde prüfen oder ausschalten
 													</label>
-												 	<label class="btn btn-outline-info">
+													<label class="btn btn-outline-info">
 														<input type="radio" name="device_deactivateperDevices<?php echo $devicenum; ?>" id="device_deactivateper<?php echo $devicenum; ?>100" data-option="100" value="100">gehört zu Einschaltgruppe
 													</label>
 												</div>
@@ -719,7 +737,7 @@ $numDevices = 9;
 										</select>
 										<span class="form-text small">
 											Wenn Shelly Button gewählt wird, zeigt Shelly button den Modus (automatisch / manuell) und den an / aus Status vom Gerät an.
-											 Shelly Button nur mit Netzteil betreiben.<br>
+											Shelly Button nur mit Netzteil betreiben.<br>
 											Wenn Gerät im automatische Modus ist der Leuchtring aus.<br>
 											Wenn Gerät im manuellem Modus ist:<br>
 												- Ist das Gerät aus ist der Leuchtring an.<br>
@@ -783,7 +801,7 @@ $numDevices = 9;
 								</div>
 								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly hide">
 									<div class="form-row mb-1">
-								  <hr class="border-secondary">
+									<hr class="border-secondary">
 										<label for="device_measchanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Meter Auswahl</label>
 										<select class="form-control" name="device_measchan" id="device_measchanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value="0" data-option="0" selected="selected">alle Meter summiert</option>

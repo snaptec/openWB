@@ -12,6 +12,7 @@ uberschuss = int(sys.argv[3])
 maxpower = int(sys.argv[4])
 forcesend = int(sys.argv[5])
 port = int(sys.argv[6])
+dactyp = int(sys.argv[7])
 # forcesend = 0 default acthor time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -83,12 +84,18 @@ if count5 == 0:
     # modbus write
     if modbuswrite == 1:
         client = ModbusTcpClient(ipadr, port=port)
-        volt = int((neupower * 1000) / maxpower)
-        rq = client.write_register(1, volt, unit=1)
+        if dactyp == 0:
+            # 10 Volts are 1000
+            volt = int((neupower * 1000) / maxpower)
+            rq = client.write_register(1, volt, unit=1)
+        else:
+            # 10 volts are 4000
+            volt = int((neupower * 4000) / maxpower)
+            rq = client.write_register(0x01f4, volt, unit=1)
         if count1 < 3:
             with open(file_string, 'a') as f:
-                print('%s devicenr %s ipadr %s Volt %6d written by modbus ' %
-                      (time_string, devicenumber, ipadr, volt), file=f)
+                print('%s devicenr %s ipadr %s Volt %6d dactyp %d written by modbus ' %
+                      (time_string, devicenumber, ipadr, volt, dactyp), file=f)
     with open(file_stringcount, 'w') as f:
         f.write(str(count1))
 else:

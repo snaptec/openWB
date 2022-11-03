@@ -21,6 +21,7 @@ from usmarthome.smartvampair import Svampair
 from usmarthome.smartlambda import Slambda
 from usmarthome.smarttasmota import Stasmota
 from usmarthome.smartviessmann import Sviessmann
+from usmarthome.smartratiotherm import Sratiotherm
 
 mqtt_cache = {}
 mydevices = []
@@ -343,6 +344,8 @@ def update_devices():
                     mydevice = Svampair()
                 elif (device_type == 'lambda'):
                     mydevice = Slambda()
+                elif (device_type == 'ratiotherm'):
+                    mydevice = Sratiotherm()
                 elif (device_type == 'tasmota'):
                     mydevice = Stasmota()
                 elif (device_type == 'avm'):
