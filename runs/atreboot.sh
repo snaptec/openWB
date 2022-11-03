@@ -1,6 +1,12 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 LOGFILE="/var/log/openWB.log"
+# always check for existing log file!
+if [[ ! -f $LOGFILE ]]; then
+	sudo touch $LOGFILE
+	sudo chmod 777 $LOGFILE
+fi
+
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 at_reboot() {
