@@ -29,16 +29,14 @@ class E3dcBat:
         self.component_config = component_config
         self.__device_id = device_id
         # bat
-        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
+        self.sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, client: modbus.ModbusTcpClient_) -> None:
 
         soc, power = read_bat(client)
-        log.debug("soc %d power %d",
-                  soc, power)
-        imported, exported = self.__sim_counter.sim_count(power)
+        imported, exported = self.sim_counter.sim_count(power)
         bat_state = BatState(
             power=power,
             soc=soc,

@@ -4,11 +4,8 @@ from helpermodules.auto_str import auto_str
 
 @auto_str
 class E3dcConfiguration:
-    def __init__(self, address: str = None,
-                 read_ext: int = 0
-                 ):
+    def __init__(self, address: str = None):
         self.address = address
-        self.read_ext = read_ext
 
 
 @auto_str
@@ -60,8 +57,8 @@ class E3dcCounterSetup(ComponentSetup[E3dcCounterConfiguration]):
 
 @auto_str
 class E3dcInverterConfiguration:
-    def __init__(self):
-        pass
+    def __init__(self, read_ext: int = 0):
+        self.read_ext = read_ext
 
 
 @auto_str

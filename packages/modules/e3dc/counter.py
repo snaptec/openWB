@@ -35,14 +35,13 @@ class E3dcCounter:
                  component_config: Union[Dict, E3dcCounterSetup]) -> None:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(E3dcCounterSetup, component_config)
-        self.__sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
+        self.sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")
         self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, client: modbus.ModbusTcpClient_):
         power, powers = read_counter(client)
-        log.debug("power %d", power)
-        imported, exported = self.__sim_counter.sim_count(power)
+        imported, exported = self.sim_counter.sim_count(power)
         counter_state = CounterState(
             imported=imported,
             exported=exported,

@@ -61,30 +61,24 @@ def run_device_legacy(device_config: E3dc, component_config: Union[E3dcBatSetup,
 
 
 def create_legacy_device_config(address: str,
-                                read_ext: int,
                                 num: int) -> None:
-    device_config = E3dc(configuration=E3dcConfiguration(address=address,
-                                                         read_ext=read_ext),
+    device_config = E3dc(configuration=E3dcConfiguration(address=address),
                          id=num)
-    log.debug("Konfig: %s", device_config)
+    log.debug("Config: %s", device_config)
     return device_config
 
 
 def read_legacy_counter(address1: str,
-                        address2: str,
-                        read_ext: int,
-                        pvinv: str,
                         num: int):
     component_config = E3dcCounterSetup(configuration=E3dcCounterConfiguration())
     component_config.id = num
     run_device_legacy(create_legacy_device_config(address1,
-                                                  read_ext,
                                                   num), component_config)
 
 
 def read_legacy_bat(address1: str,
                     address2: str, read_ext: int,
-                    pvinv: str,
+                    pv_module: str,
                     num: int) -> None:
     # für openwbv19 können mit der bisherigen parametrisierung zwei ip_addressen
     # ausgelesen werden
@@ -92,16 +86,16 @@ def read_legacy_bat(address1: str,
     # in openwb v2.0 geht nur noch eine IP adresse und die Pv muss
     # separate ausgelesen werden
     addresses = [address for address in [address1, address2] if address != "none"]
-    log.debug('e3dc IP-Adresse1: ' + address1)
-    log.debug('e3dc IP-Adresse2: ' + address2)
-    log.debug('e3dc read_ext: ' + str(read_ext))
-    log.debug('e3dc pvinv: ' + pvinv)
-    log.debug('e3dc id: ' + str(num))
+    log.debug('e3dc IP-Adresse1: %s', address1)
+    log.debug('e3dc IP-Adresse2: %s', address2)
+    log.debug('e3dc read_ext: %d', read_ext)
+    log.debug('e3dc pv_module: %s', pv_module)
+    log.debug('e3dc id: %d', num)
     soc = 0
     power = 0
     pv_external = 0
     pv = 0
-    pv_other = pvinv != "none"
+    pv_other = pv_module != "none"
     for address in addresses:
         log.debug("Ip: %s, read_external %d pv_other %s", address, read_ext, pv_other)
         with modbus.ModbusTcpClient_(address, port=502) as client:
@@ -115,7 +109,7 @@ def read_legacy_bat(address1: str,
     log.debug("Soc %d power %d pv %d pv_external %d",
               soc, power, pv, pv_external)
     counter_import, counter_export = sim_count(power, prefix="speicher")
-    get_bat_value_store(1).set(BatState(power=power, soc=soc, imported=counter_import, exported=counter_export))
+    get_bat_value_store(num).set(BatState(power=power, soc=soc, imported=counter_import, exported=counter_export))
     # pv_other sagt aus, ob WR definiert ist, und dessen PV Leistung auch gilt
     # wenn 0 gilt nur PV und pv_external aus e3dc
     pv_total = pv + pv_external
