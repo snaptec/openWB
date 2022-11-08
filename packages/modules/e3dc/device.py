@@ -109,7 +109,7 @@ def read_legacy_bat(address1: str,
     log.debug("Soc %d power %d pv %d pv_external %d",
               soc, power, pv, pv_external)
     counter_import, counter_export = sim_count(power, prefix="speicher")
-    get_bat_value_store(num).set(BatState(power=power, soc=soc, imported=counter_import, exported=counter_export))
+    get_bat_value_store(1).set(BatState(power=power, soc=soc, imported=counter_import, exported=counter_export))
     # pv_other sagt aus, ob WR definiert ist, und dessen PV Leistung auch gilt
     # wenn 0 gilt nur PV und pv_external aus e3dc
     pv_total = pv + pv_external
@@ -121,7 +121,7 @@ def read_legacy_bat(address1: str,
         pv_total = pv_total + files.pv[0].power.read()
     log.debug("wr update pv_other %s pv_total %d", pv_other, pv_total)
     _, exported_pv = sim_count(pv_total, prefix="pv")
-    get_inverter_value_store(1).set(InverterState(exported=exported_pv, power=pv_total))
+    get_inverter_value_store(num).set(InverterState(exported=exported_pv, power=pv_total))
 
 
 def main(argv: List[str]):

@@ -33,9 +33,8 @@ class E3dcInverter:
     def __init__(self,
                  device_id: int,
                  component_config: Union[Dict, E3dcInverterSetup]) -> None:
-        self.__device_id = device_id
         self.component_config = dataclass_from_dict(E3dcInverterSetup, component_config)
-        self.sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="pv")
+        self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="pv")
         self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
@@ -58,10 +57,10 @@ class E3dcInverter:
         # als gesamte PV Leistung für wr1
         # Im gegensatz zu v1.9 implementierung wird nicht mehr die PV
         # leistung vom WR1 gelesen, da die durch v2.0 separat gehandelt wird
-        _, exportedpv = self.sim_counter.sim_count(pv_total)
+        _, pv_exported = self.sim_counter.sim_count(pv_total)
         inverter_state = InverterState(
             power=pv_total,
-            exported=exportedpv
+            exported=pv_exported
         )
         self.__store.set(inverter_state)
 

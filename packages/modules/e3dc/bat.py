@@ -27,9 +27,8 @@ class E3dcBat:
                  device_id: int,
                  component_config: E3dcBatSetup) -> None:
         self.component_config = component_config
-        self.__device_id = device_id
         # bat
-        self.sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="speicher")
+        self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="speicher")
         self.__store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
