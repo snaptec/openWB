@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Dict, Union
+from typing import Dict, Union, Tuple
 import logging
 
 from dataclass_utils import dataclass_from_dict
@@ -16,7 +16,7 @@ from modules.e3dc.config import E3dcInverterSetup
 log = logging.getLogger(__name__)
 
 
-def read_inverter(client: modbus.ModbusTcpClient_, read_ext) -> [int, int]:
+def read_inverter(client: modbus.ModbusTcpClient_, read_ext) -> Tuple[int, int]:
     # 40067 PV Leistung
     pv = client.read_holding_registers(40067, ModbusDataType.INT_32,
                                        wordorder=Endian.Little, unit=1) * -1
