@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Union
+from typing import Dict, Union, Tuple, List
 
 from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
@@ -15,7 +15,7 @@ from modules.e3dc.config import E3dcCounterSetup
 log = logging.getLogger(__name__)
 
 
-def read_counter(client: modbus.ModbusTcpClient_) -> [int, [int]]:
+def read_counter(client: modbus.ModbusTcpClient_) -> Tuple[int, List[int]]:
     log.debug("Beginning EVU update")
     power = client.read_holding_registers(40073, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)
     # 40130,40131, 40132 je Phasenleistung in Watt

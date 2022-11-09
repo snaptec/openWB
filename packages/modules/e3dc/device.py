@@ -61,7 +61,7 @@ def run_device_legacy(device_config: E3dc, component_config: Union[E3dcBatSetup,
 
 
 def create_legacy_device_config(address: str,
-                                num: int) -> None:
+                                num: int) -> E3dc:
     device_config = E3dc(configuration=E3dcConfiguration(address=address),
                          id=num)
     log.debug("Config: %s", device_config)
@@ -91,7 +91,7 @@ def read_legacy_bat(address1: str,
     log.debug('e3dc read_ext: %d', read_ext)
     log.debug('e3dc pv_module: %s', pv_module)
     log.debug('e3dc id: %d', num)
-    soc = 0
+    soc = 0 # type: Union[int, float]
     power = 0
     pv_external = 0
     pv = 0

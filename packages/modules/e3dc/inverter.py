@@ -40,13 +40,13 @@ class E3dcInverter:
 
     def update(self, client: modbus.ModbusTcpClient_) -> None:
 
-        pv, pv_external = read_inverter(client, self.component_config.read_ext)
+        pv, pv_external = read_inverter(client, self.component_config.configuration.read_ext)
         # pv_external - > pv Leistung
         # die als externe Produktion an e3dc angeschlossen ist
         # nur auslesen wenn als relevant parametrisiert
         # (read_external = 1) , sonst doppelte Auslesung
         # pv -> pv Leistung die direkt an e3dc angeschlossen ist
-        log.debug("read_ext %d", self.component_config.read_ext)
+        log.debug("read_ext %d", self.component_config.configuration.read_ext)
         log.debug("pv %d pv_external %d", pv, pv_external)
         # pv_other sagt aus, ob WR definiert ist,
         # und dessen PV Leistung auch gilt

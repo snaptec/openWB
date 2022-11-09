@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import logging
-
+from typing import Tuple
 from modules.common import modbus
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
@@ -14,7 +14,7 @@ from modules.e3dc.config import E3dcBatSetup
 log = logging.getLogger(__name__)
 
 
-def read_bat(client: modbus.ModbusTcpClient_) -> [int, int]:
+def read_bat(client: modbus.ModbusTcpClient_) -> Tuple[int, int]:
     # 40082 SoC
     soc = client.read_holding_registers(40082, ModbusDataType.INT_16, unit=1)
     # 40069 Speicherleistung
