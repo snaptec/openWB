@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Union, Tuple, List
+from typing import Tuple, List
 
-from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import CounterState
 from modules.common.component_type import ComponentDescriptor
@@ -32,8 +31,8 @@ def read_counter(client: modbus.ModbusTcpClient_) -> Tuple[int, List[int]]:
 class E3dcCounter:
     def __init__(self,
                  device_id: int,
-                 component_config: Union[Dict, E3dcCounterSetup]) -> None:
-        self.component_config = dataclass_from_dict(E3dcCounterSetup, component_config)
+                 component_config: E3dcCounterSetup) -> None:
+        self.component_config = component_config
         self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="bezug")
         self.__store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-from typing import Dict, Union, Tuple
+from typing import Tuple
 import logging
 
-from dataclass_utils import dataclass_from_dict
 from modules.common import modbus
 from modules.common.component_state import InverterState
 from modules.common.component_type import ComponentDescriptor
@@ -32,8 +31,8 @@ def read_inverter(client: modbus.ModbusTcpClient_, read_ext) -> Tuple[int, int]:
 class E3dcInverter:
     def __init__(self,
                  device_id: int,
-                 component_config: Union[Dict, E3dcInverterSetup]) -> None:
-        self.component_config = dataclass_from_dict(E3dcInverterSetup, component_config)
+                 component_config: E3dcInverterSetup) -> None:
+        self.component_config = component_config
         self.sim_counter = SimCounter(device_id, self.component_config.id, prefix="pv")
         self.__store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
