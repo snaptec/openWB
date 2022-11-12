@@ -37,7 +37,7 @@ function getIndex(topic) {
 
 function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
-	
+
 	if (mqttmsg.match(/^openwb\/graph\//i)) { processGraphMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/evu\//i)) { processEvuMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/global\/awattar\//i)) { processETProviderMessages(mqttmsg, mqttpayload); }
@@ -54,27 +54,27 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Status\//i)) { processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/sofort\/lp\//i)) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/pv\//i)) { processPvConfigMessages(mqttmsg, mqttpayload); }
-	}  // end handlevar
+}  // end handlevar
 
 function processETProviderMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
 	processPreloader(mqttmsg);
 
-// colors theme
-if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
-	wbdata.updateET ('etProviderName', mqttpayload);
-} else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
-	wbdata.updateET ('etModulePath', mqttpayload);
-} else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
-	wbdata.updateET('isEtEnabled' ,(mqttpayload == '1'))
-} else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-	wbdata.updateET('etPriceList',mqttpayload);
-} else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
-	wbdata.updateET ('etMaxPrice', parseFloat(mqttpayload));
-} else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-	wbdata.updateET ('etPrice', parseFloat(mqttpayload));
-}
+	// colors theme
+	if (mqttmsg == 'openWB/global/ETProvider/providerName') {
+		wbdata.updateET('etProviderName', mqttpayload);
+	} else if (mqttmsg == 'openWB/global/ETProvider/modulePath') {
+		wbdata.updateET('etModulePath', mqttpayload);
+	} else if (mqttmsg == 'openWB/global/awattar/boolAwattarEnabled') {
+		wbdata.updateET('isEtEnabled', (mqttpayload == '1'))
+	} else if (mqttmsg == 'openWB/global/awattar/pricelist') {
+		wbdata.updateET('etPriceList', mqttpayload);
+	} else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
+		wbdata.updateET('etMaxPrice', parseFloat(mqttpayload));
+	} else if (mqttmsg == 'openWB/global/awattar/ActualPriceForCharging') {
+		wbdata.updateET('etPrice', parseFloat(mqttpayload));
+	}
 
 
 	// end color theme
@@ -99,7 +99,7 @@ if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
 			$('#navStromtarifInfo').addClass('hide');
 		}
 	}
-	
+
 }
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
@@ -429,7 +429,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// '3': mode stop
 		// '4': mode standby
 	}
-	else if ( mqttmsg == 'openWB/global/rfidConfigured' ) {
+	else if (mqttmsg == 'openWB/global/rfidConfigured') {
 		wbdata.updateGlobal("rfidConfigured", (mqttpayload == 1))
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
