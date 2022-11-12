@@ -46,7 +46,8 @@ class WbData {
 			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
 			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
 			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
+			"house": { name: "Haus", power: 0, energy: 0, color: "white" },
+			"chargingPv": { name: "PVCharge", power: 0, energy: 0, color: "white"}
 		};
 
 		this.historicSummary = {
@@ -58,6 +59,7 @@ class WbData {
 			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
 			"house": { name: "Haus", power: 0, energy: 0, color: "white" },
 			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
+			"chargingPv": {name: "PVCharge", power: 0, energy: 0, color: "white"}
 		};
 
 		this.usageDetails = [this.usageSummary.evuOut];
@@ -82,6 +84,8 @@ class WbData {
 		this.usageSummary.devices.color = 'var(--color-devices)';
 		this.usageSummary.batIn.color = 'var(--color-battery)';
 		this.usageSummary.house.color = 'var(--color-house)';
+		this.usageSummary.chargingPv.color = 'var(--color-charging)';
+		
 		var i;
 		for (i = 0; i < 8; i++) {
 			this.chargePoint[i].color = 'var(--color-lp' + (i + 1) + ')';
@@ -102,6 +106,7 @@ class WbData {
 		this.historicSummary.devices.color = 'var(--color-devices)';
 		this.historicSummary.batIn.color = 'var(--color-battery)';
 		this.historicSummary.house.color = 'var(--color-house)';
+		this.historicSummary.chargingPv.color = 'var(--color-charging)';
 		evuCol = style.getPropertyValue('--evuCol');
 		xgridCol = style.getPropertyValue('--xgridCol');
 		tickCol = style.getPropertyValue('--tickCol');
@@ -338,7 +343,8 @@ class WbData {
 		this.usageSummary.charging]
 			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
 			.concat(this.consumer.filter(row => (row.configured)))
-			.concat([this.usageSummary.batIn, this.usageSummary.house]);
+			.concat([this.usageSummary.batIn, this.usageSummary.house])
+			.concat([this.usageSummary.chargingPv]);
 	}
 
 	updateConsumerSummary(cat) {
@@ -551,6 +557,7 @@ function shiftRight() {
 				wbdata.persistGraphPreferences();
 				d3.select("button#graphLeftButton").classed("disabled", false)
 				d3.select("button#graphRightButton").classed("disabled", true)
+				yieldMeter.update()
 			} else { // currently looking at a previous day
 				wbdata.graphDate.setTime(wbdata.graphDate.getTime() + 86400000);
 				const nd = wbdata.graphDate;

@@ -5,222 +5,268 @@
  */
 
 class YieldMeter {
-	bardata;
-	xScale;
-	yScale;
-	svg;
+  bardata;
+  xScale;
+  yScale;
+  svg;
 
-	constructor() {
-		this.width = 500;
-		this.height = 500;
-		this.margin = {
-			top: 25, bottom: 30, left: 25, right: 0
-		};
-		this.labelfontsize = 16;
-		this.axisFontSize = 12;
-		this.textLength = 12;
-	}
+  constructor() {
+    this.width = 500;
+    this.height = 500;
+    this.margin = {
+      top: 25, bottom: 30, left: 25, right: 0
+    };
+    this.labelfontsize = 16;
+    this.axisFontSize = 12;
+    this.textLength = 12;
+  }
 
-	// to be called when the document is loaded
-	init() {
-		const figure = d3.select("figure#energymeter");
-		this.svg = figure.append("svg")
-			.attr("viewBox", `0 0 500 500`);
-		const style = getComputedStyle(document.body);
-		this.houseColor = 'var(--color-house)';
-		this.pvColor = 'var(--color-pv)';
-		this.exportColor = 'var(--color-export)';
-		this.evuColor = 'var(--color-evu)';
-		this.bgColor = 'var(--color-bg)';
-		this.chargeColor = 'var(--color-charging)';
-		this.axisColor = 'var(--color-axis)';
-		this.gridColor = 'var(--color-grid)';
-		d3.select("button#energyLeftButton")
-			.on("click", shiftLeft)
-		d3.select("button#energyRightButton")
-			.on("click", shiftRight)
-		d3.select("button#calendarButton")
-			.on("click", toggleMonthView)
-	}
+  // to be called when the document is loaded
+  init() {
+    const figure = d3.select("figure#energymeter");
+    this.svg = figure.append("svg")
+      .attr("viewBox", `0 0 500 500`);
+    const style = getComputedStyle(document.body);
+    this.houseColor = 'var(--color-house)';
+    this.pvColor = 'var(--color-pv)';
+    this.exportColor = 'var(--color-export)';
+    this.evuColor = 'var(--color-evu)';
+    this.bgColor = 'var(--color-bg)';
+    this.chargeColor = 'var(--color-charging)';
+    this.axisColor = 'var(--color-axis)';
+    this.gridColor = 'var(--color-grid)';
+    d3.select("button#energyLeftButton")
+      .on("click", shiftLeft)
+    d3.select("button#energyRightButton")
+      .on("click", shiftRight)
+    d3.select("button#calendarButton")
+      .on("click", toggleMonthView)
+  }
 
-	// to be called when values have changed
-	update() {
-		switch (wbdata.graphMode) {
-			case 'live':
-				this.plotdata = Object.values(wbdata.sourceSummary)
-					.filter((row) => (row.energy > 0))
-					.concat(wbdata.usageDetails
-						.filter((row) => (row.energy > 0)));
-				break;
-			case 'day':
-				if (wbdata.showTodayGraph) {
-					this.plotdata = Object.values(wbdata.sourceSummary)
-						.filter((row) => (row.energy > 0))
-						.concat(wbdata.usageDetails
-							.filter((row) => (row.energy > 0)));
-				} else {
-					this.plotdata = Object.values(wbdata.historicSummary)
-						.filter((row) => (row.energy > 0));
-				}
-				break;
-			case 'month':
-				this.plotdata = Object.values(wbdata.historicSummary)
-					.filter((row) => (row.energy > 0));
-				break;
-			default: break;
-		}
-		this.adjustLabelSize()
-		const svg = this.createOrUpdateSvg();
-		this.drawChart(svg);
-		this.updateHeading();
-	};
+  // to be called when values have changed
+  update() {
+    switch (wbdata.graphMode) {
+      case 'live':
+        this.plotdata = Object.values(wbdata.sourceSummary)
+          .filter((row) => (row.energy > 0))
+          .concat(wbdata.usageDetails
+            .filter((row) => (row.energy > 0)));
+        break;
+      case 'day':
+        if (wbdata.showTodayGraph) {
+          this.plotdata = Object.values(wbdata.sourceSummary)
+            .filter((row) => (row.energy > 0))
+            .concat(wbdata.usageDetails
+              .filter((row) => (row.energy > 0)));
+        } else {
+          this.plotdata = Object.values(wbdata.historicSummary)
+            .filter((row) => (row.energy > 0));
+        }
+        break;
+      case 'month':
+        this.plotdata = Object.values(wbdata.historicSummary)
+          .filter((row) => (row.energy > 0));
+        break;
+      default: break;
+    }
+    this.adjustLabelSize()
+    const svg = this.createOrUpdateSvg();
+    this.drawChart(svg);
+    this.updateHeading();
+  };
 
-	createOrUpdateSvg() {
-		this.svg.selectAll("*").remove();
-		const g = this.svg.append("g")
-			.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-		this.xScale = d3.scaleBand()
-			.range([0, this.width - this.margin.left - this.margin.right])
-			.padding(0.4);
-		this.yScale = d3.scaleLinear()
-			.range([this.height - this.margin.bottom - this.margin.top, 0]);
-		return g;
-	}
+  createOrUpdateSvg() {
+    this.svg.selectAll("*").remove();
+    const g = this.svg.append("g")
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+    this.xScale = d3.scaleBand()
+      .range([0, this.width - this.margin.left - this.margin.right])
+      .padding(0.4);
+    this.yScale = d3.scaleLinear()
+      .range([this.height - this.margin.bottom - this.margin.top, 10]);
+    return g;
+  }
 
-	drawChart(svg) {
-		const ymax = d3.max(this.plotdata, (d) => d.energy);
-		this.xScale.domain(this.plotdata.map((d) => d.name));
-		this.yScale.domain([0, Math.ceil(ymax)]);
-		const bargroups = svg
-			.selectAll(".bar")
-			.data(this.plotdata)
-			.enter()
-			.append("g");
-		bargroups
-			.append("rect")
-			.attr("class", "bar")
-			.attr("x", (d) => this.xScale(d.name))
-			.attr("y", (d) => this.yScale(d.energy))
-			.attr("width", this.xScale.bandwidth())
-			.attr("height", (d) => this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom)
-			.attr("fill", (d) => d.color);
+  drawChart(svg) {
+    let pvcdata = this.plotdata.filter(d => (d.name == "PVCharge"))
+    let chargedata = this.plotdata.filter(d => d.name == "Laden")
+    this.plotdata = this.plotdata.filter(d => (d.name != "PVCharge"))
+    const ymax = d3.max(this.plotdata, (d) => d.energy);
+    this.xScale.domain(this.plotdata.map((d) => d.name));
+    this.yScale.domain([0, Math.ceil(ymax)]);
 
-		const yAxisGenerator = d3.axisLeft(this.yScale)
-			.tickFormat(function (d) {
-				return ((d > 0) ? d : "");
-			})
-			.ticks(8)
-			.tickSizeInner(-this.width);
+    // Draw the bars
+    const bargroups = svg
+      .selectAll(".bar")
+      .data(this.plotdata)
+      .enter()
+      .append("g");
+    bargroups
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", (d) => this.xScale(d.name))
+      .attr("y", (d) => this.yScale(d.energy))
+      .attr("width", this.xScale.bandwidth())
+      .attr("height", (d) => (this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom))
+      .attr("fill", (d) => d.color);
 
-		const yAxis = svg.append("g")
-			.attr("class", "axis")
-			.attr("transform", "translate(0," + 0 + ")")
-			.call(yAxisGenerator);
+    // Display the PV Charging inner bar
+    if ((pvcdata.length > 0) && (chargedata.length > 0) && (chargedata[0].energy > 0)) {
+      const pvcBargroup = svg
+        .selectAll(".pvcBar")
+        .data(pvcdata)
+        .enter()
+        .append("g")
+      pvcBargroup
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", (d) => this.xScale("Laden") + this.xScale.bandwidth() / 6)
+        .attr("y", (d) => this.yScale(d.energy))
+        .attr("width", this.xScale.bandwidth() * 2 / 3)
+        .attr("height", (d) => (this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom))
+        .attr("fill", this.pvColor)
+        .attr("fill-opacity", "66%");
+    }
+    const yAxisGenerator = d3.axisLeft(this.yScale)
+      .tickFormat(function (d) {
+        return ((d > 0) ? d : "");
+      })
+      .ticks(8)
+      .tickSizeInner(-this.width);
 
-		yAxis.append("text")
-			.attr("y", 6)
-			.attr("dy", "0.71em")
-			.attr("text-anchor", "end")
-			.text("energy");
+    const yAxis = svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + 0 + ")")
+      .call(yAxisGenerator);
 
-		yAxis.selectAll(".tick").attr("font-size", this.axisFontSize);
-		if (wbdata.showGrid) {
-			yAxis.selectAll(".tick line")
-				.attr("stroke", this.gridColor)
-				.attr("stroke-width", "0.5");
-		} else {
-			yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
-		}
-		yAxis.select(".domain")
-			.attr("stroke", this.bgcolor);
+    yAxis.append("text")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("energy");
 
-		svg.append("text")
-			.attr("x", -this.margin.left)
-			.attr("y", -15)
-			.style("fill", this.axisColor)
-			.attr("font-size", this.axisFontSize)
-			.text("kWh")
-			;
-		const labels = svg.selectAll(".label")
-			.data(this.plotdata)
-			.enter()
-			.append("g");
-		labels
-			.append("text")
-			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
-			.attr("y", (d) => this.yScale(d.energy) - 10)
-			.attr("font-size", this.labelfontsize)
-			.attr("text-anchor", "middle")
-			.attr("fill", (d) => d.color)
-			.text((d) => (formatWattH(d.energy * 1000)));
+    yAxis.selectAll(".tick").attr("font-size", this.axisFontSize);
+    if (wbdata.showGrid) {
+      yAxis.selectAll(".tick line")
+        .attr("stroke", this.gridColor)
+        .attr("stroke-width", "0.5");
+    } else {
+      yAxis.selectAll(".tick line").attr("stroke", this.bgColor);
+    }
+    yAxis.select(".domain")
+      .attr("stroke", this.bgcolor);
 
-		const categories = svg.selectAll(".category")
-			.data(this.plotdata)
-			.enter()
-			.append("g");
-		labels
-			.append("text")
-			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
-			.attr("y", this.height - this.margin.bottom - 5)
-			.attr("font-size", this.labelfontsize)
-			.attr("text-anchor", "middle")
-			.attr("fill", (d) => d.color)
-			.text((d) => (this.truncateCategory(d.name)));
-	}
+    svg.append("text")
+      .attr("x", -this.margin.left)
+      .attr("y", -15)
+      .style("fill", this.axisColor)
+      .attr("font-size", this.axisFontSize)
+      .text("kWh")
+      ;
 
-	updateHeading() {
-		var heading = "Energie ";
+    // add value labels to the bars
+    const labels = svg.selectAll(".label")
+      .data(this.plotdata)
+      .enter()
+      .append("g");
+    labels
+      .append("text")
+      .attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+      .attr("y", (d) => {
+        if (d.name == "Laden" && pvcdata.length > 0) {
+          return this.yScale(d.energy) - 25
+        } else {
+          return this.yScale(d.energy) - 10
+        }  
+      })
+      .attr("font-size", this.labelfontsize)
+      .attr("text-anchor", "middle")
+      .attr("fill", (d) => d.color)
+      .text((d) => (formatWattH(d.energy * 1000)));
 
-		switch (wbdata.graphMode) {
-			case 'live':
-				heading = heading + " heute";
-				break;
-			case 'day':
-				if (wbdata.showTodayGraph) {
-					heading = heading + " heute";
-				} else {
-					heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
-				}
-				break;
-			case 'month':
-				heading = "Monatswerte " + formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
-				break;
-			default: break;
-		}
-		d3.select("h3#energyheading").text(heading);
-	}
+    // add a PV percentage tag to the charging bar
+    if ((pvcdata.length > 0) && (chargedata.length > 0) && (chargedata[0].energy > 0)) {
+      let pvRatio = Math.round (pvcdata[0].energy / chargedata[0].energy * 100)
 
-	adjustLabelSize() {
-		let xCount = this.plotdata.length
-		if (xCount <= 5) {
-			this.maxTextLength = 12;
-			this.labelfontsize = 16
-		} else if (xCount == 6) {
-			this.maxTextLength = 11;
-			this.labelfontsize = 14
-		} else if (xCount > 6 && xCount <= 8) {
-			this.maxTextLength = 8;
-			this.labelfontsize = 13
-		} else if (xCount == 9) {
-			this.maxTextLength = 8;
-			this.labelfontsize = 11;
-		} else if (xCount == 10) {
-			this.maxTextLength = 7;
-			this.labelfontsize = 10;
-		}
-		else {
-			this.maxTextLength = 6;
-			this.labelfontsize = 9
-		}
-	}
+      const pvtags = svg.selectAll(".pvtag")
+        .data(chargedata)
+        .enter()
+        .append("g");
+      pvtags
+        .append("text")
+        .attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+        .attr("y", (d) => this.yScale(d.energy) - 10)
+        .attr("font-size", this.labelfontsize - 2)
+        .attr("text-anchor", "middle")
+        .attr("fill", (d) => this.pvColor)
+        .text((d) => ("(PV: " + pvRatio.toLocaleString(undefined) + " %)"));
+    }
 
-	truncateCategory(name) {
-		if (name.length > this.maxTextLength) {
-			return name.substr(0, this.maxTextLength) + "."
-		} else {
-			return name
-		}
-	}
+    // Add category labels
+    labels
+      .append("text")
+      .attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+      .attr("y", this.height - this.margin.bottom - 5)
+      .attr("font-size", this.labelfontsize)
+      .attr("text-anchor", "middle")
+      .attr("fill", (d) => d.color)
+      .text((d) => (this.truncateCategory(d.name)));
+
+  }
+
+  updateHeading() {
+    var heading = "Energie ";
+
+    switch (wbdata.graphMode) {
+      case 'live':
+        heading = heading + " heute";
+        break;
+      case 'day':
+        if (wbdata.showTodayGraph) {
+          heading = heading + " heute";
+        } else {
+          heading = heading + wbdata.graphDate.getDate() + "." + (wbdata.graphDate.getMonth() + 1) + ".";
+        }
+        break;
+      case 'month':
+        heading = "Monatswerte " + formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
+        break;
+      default: break;
+    }
+    d3.select("h3#energyheading").text(heading);
+  }
+
+  adjustLabelSize() {
+    let xCount = this.plotdata.length
+    if (xCount <= 5) {
+      this.maxTextLength = 12;
+      this.labelfontsize = 16
+    } else if (xCount == 6) {
+      this.maxTextLength = 11;
+      this.labelfontsize = 14
+    } else if (xCount > 6 && xCount <= 8) {
+      this.maxTextLength = 8;
+      this.labelfontsize = 13
+    } else if (xCount == 9) {
+      this.maxTextLength = 8;
+      this.labelfontsize = 11;
+    } else if (xCount == 10) {
+      this.maxTextLength = 7;
+      this.labelfontsize = 10;
+    }
+    else {
+      this.maxTextLength = 6;
+      this.labelfontsize = 9
+    }
+  }
+
+  truncateCategory(name) {
+    if (name.length > this.maxTextLength) {
+      return name.substr(0, this.maxTextLength) + "."
+    } else {
+      return name
+    }
+  }
 }
 
 

@@ -37,6 +37,7 @@ function getIndex(topic) {
 
 function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
+	
 	if (mqttmsg.match(/^openwb\/graph\//i)) { processGraphMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/evu\//i)) { processEvuMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/global\/awattar\//i)) { processETProviderMessages(mqttmsg, mqttpayload); }
@@ -53,7 +54,7 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Status\//i)) { processSmartHomeDevicesStatusMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/sofort\/lp\//i)) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/config\/get\/pv\//i)) { processPvConfigMessages(mqttmsg, mqttpayload); }
-}  // end handlevar
+	}  // end handlevar
 
 function processETProviderMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
@@ -647,7 +648,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/system\/daygraphdata[1-9][0-9]*$/i)) {
 		powerGraph.updateDay(mqttmsg, mqttpayload);
 	}
-	else if (mqttmsg.match(/^openwb\/system\/monthgraphdata[1-9][0-9]*$/i)) {
+	else if (mqttmsg.match(/^openwb\/system\/monthgraphdatan[1-9][0-9]*$/i)) {
 		powerGraph.updateMonth(mqttmsg, mqttpayload);
 	}
 }
@@ -1288,19 +1289,22 @@ function unsubscribeDayGraph() {
 }
 
 function subscribeMonthGraph(date) {
-	// var today = new Date();
 	var mm = String(date.month + 1).padStart(2, '0'); //January is 0!
 	var yyyy = date.year;
 	graphdate = yyyy + mm;
 	for (var segment = 1; segment < 13; segment++) {
-		var topic = "openWB/system/MonthGraphData" + segment;
+		var topic = "openWB/system/MonthGraphDatan" + segment;
 		client.subscribe(topic, { qos: 0 });
 	}
-	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
+	publish(graphdate, "openWB/set/graph/RequestMonthGraphv1");
 }
 
 function unsubscribeMonthGraph() {
-	publish("0", "openWB/set/graph/RequestMonthGraph");
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/MonthGraphDatan" + segment;
+		client.unsubscribe(topic);
+	}
+	publish("0", "openWB/set/graph/RequestMonthGraphv1");
 }
 
 function makeInt(message) {
