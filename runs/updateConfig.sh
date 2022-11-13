@@ -2063,6 +2063,12 @@ updateConfig(){
 	if ! grep -Fq "psa_manufacturerlp2=" $ConfigFile; then
 		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
 	fi
+	if ! grep -Fq "psa_vinlp1=" $ConfigFile; then
+		echo "psa_vinlp1=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "psa_vinlp2=" $ConfigFile; then
+		echo "psa_vinlp2=''" >> $ConfigFile
+	fi  
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		{
 			echo "soc_eq_client_id_lp1=ID"
