@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 from smarthome.smartlog import initlog
-devicenumber = str(sys.argv[1])
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
@@ -13,7 +13,7 @@ file_stringcount = bp + str(devicenumber) + '_count'
 initlog("ratiotherm", devicenumber)
 log = logging.getLogger("ratiotherm")
 aktpower = 0
-log.info(" off devicenr %s ipadr %s ueberschuss %6d Akt Leistung  %6d"
+log.info(" off devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d"
          % (devicenumber, ipadr, uberschuss, aktpower))
 pvmodus = 0
 if os.path.isfile(file_stringpv):

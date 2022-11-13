@@ -1,7 +1,7 @@
 import logging
 
 
-def initlog(name, devicenumber):
+def initlog(name: str, devicenumber: int) -> None:
     log = logging.getLogger(name)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     log.setLevel(logging.DEBUG)

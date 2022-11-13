@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 import sys
 import os
-import json
 from pymodbus.payload import BinaryPayloadBuilder, Endian
 from pymodbus.client.sync import ModbusTcpClient
 import logging
 from smarthome.smartlog import initlog
-devicenumber = str(sys.argv[1])
+from smarthome.smartret import writeret
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 forcesend = int(sys.argv[4])
@@ -70,9 +70,9 @@ if count5 == 0:
         with open(file_stringpv, 'w') as f:
             f.write(str(pvmodus))
     if count1 < 3:
-        log.info(" watt devicenr %s ipadr %s ueberschuss %6d Akt Leistung  %6d"
+        log.info(" watt devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d"
                  % (devicenumber, ipadr, uberschuss, aktpower))
-        log.info(" watt devicenr %s ipadr %s neupower %6d pvmodus %1d modbusw %1d"
+        log.info(" watt devicenr %d ipadr %s neupower %6d pvmodus %1d modbusw %1d"
                  % (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
@@ -84,7 +84,7 @@ if count5 == 0:
         client = ModbusTcpClient(ipadr, port=502)
         client.write_register(100, pay[0], unit=1)
         if count1 < 3:
-            log.info(" watt devicenr %s ipadr %s written %6d %#4X"
+            log.info(" watt devicenr %d ipadr %s written %6d %#4X"
                      % (devicenumber, ipadr, pay[0], pay[0]))
 else:
     if pvmodus == 99:
@@ -92,6 +92,4 @@ else:
 answer = '{"power":' + str(aktpower) + ',"powerc":0'
 answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(neupower)
 answer += ',"on":' + str(pvmodus) + '}'
-with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
-          str(devicenumber), 'w') as f1:
-    json.dump(answer, f1)
+writeret(answer, devicenumber)

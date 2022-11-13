@@ -1,25 +1,24 @@
 #!/usr/bin/python3
 import sys
-import os
-import time
-named_tuple = time.localtime()   # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S N4DAC02 on.py", named_tuple)
-devicenumber = str(sys.argv[1])
+import logging
+from smarthome.smartlog import initlog
+from pymodbus.client.sync import ModbusTcpClient
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
+port = int(sys.argv[4])
+dactyp = int(sys.argv[5])
+initlog("DAC", devicenumber)
+log = logging.getLogger("DAC")
 bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
-file_string = bp + str(devicenumber) + '_N4DAC02.log'
 file_stringpv = bp + str(devicenumber) + '_pv'
 file_stringcount = bp + str(devicenumber) + '_count'
 file_stringcount5 = bp + str(devicenumber) + '_count5'
-if os.path.isfile(file_string):
-    pass
-else:
-    with open(file_string, 'w') as f:
-        print('N4DAC02 start log', file=f)
-with open(file_string, 'a') as f:
-    print('%s devicenr %s ipadr %s' %
-          (time_string, devicenumber, ipadr), file=f)
+log.info('on devicenr %d ipadr %s dactyp %d' % (devicenumber, ipadr, dactyp))
+if dactyp == 2:
+    client = ModbusTcpClient(ipadr, port=port)
+    # DO1 einschalten um SGready zu aktivieren
+    rq = client.write_coil(0, True)
 pvmodus = 1
 with open(file_stringpv, 'w') as f:
     f.write(str(pvmodus))

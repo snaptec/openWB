@@ -85,7 +85,7 @@ $numDevices = 9;
 											<option value="lambda" data-option="lambda">Lambda</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
-											<option value="NXDACXX" data-option="NXDACXX"> DAC 0.01V bis 10.0V</option>
+											<option value="NXDACXX" data-option="NXDACXX">DAC 0.01V bis 10.0V</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
 											<option value="ratiotherm" data-option="ratiotherm">Ratiotherm</option>
 											<option value="vampair" data-option="vampair">Vampair</option>
@@ -133,8 +133,8 @@ $numDevices = 9;
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-NXDACXX hide">
 											DAC angesteuert über Lan. Der anliegende Überschuss wird in eine Voltzahl zwischen 0.01V und 10.0V umgewandelt. Bezug wird als 0 Volt übertragen.
-											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.<br>
-											Der konkrete Dac Typ wird im Type definiert<br>
+											Wenn die Einschaltbedingung erreicht ist, wird alle 30 Sekunden der gerechnete Überschuss übertragen.<br>
+											Der konkrete DAC Typ wird im Type definiert.<br>
 											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
 											</span>
 											<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-ratiotherm hide">
@@ -227,15 +227,16 @@ $numDevices = 9;
 									<label for="device_nxdacxxuebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Maximaler Überschuss</label>
 									<div class="col">
 										<input id="device_nxdacxxuebDevices<?php echo $devicenum; ?>" name="device_nxdacxxueb" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="32000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Maximaler Überschuss in Watt = v10.0. Es wird kein grösserer Wert übertragen.</span>
+										<span class="form-text small">Maximal verwertbarer Überschuss des hier gewählten Gerät in Watt = v10.0. Es wird kein grösserer Wert übertragen.</span>
 									</div>
 								</div>
 									<div class="form-row mb-1">
-										<label for="device_nxdacxxtypeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Dac Typ</label>
+										<label for="device_nxdacxxtypeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">DAC Typ</label>
 										<div class="col">
 											<select class="form-control" name="device_nxdacxxtype" id="device_nxdacxxtypeDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<option value="0" data-option="0">N4Dac02</option>
 												<option value="1" data-option="1">DA02</option>
+												<option value="2" data-option="2">M120T von Pigeon</option>
 											</select>
 											<span class="form-text small">
 												Hier ist das installierte Modell auszuwählen.
@@ -243,7 +244,7 @@ $numDevices = 9;
 										</div>
 									</div>
 								<div class="form-row mb-1">
-									<label for="device_dacportDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modbusport des Dac</label>
+									<label for="device_dacportDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modbusport des DAC</label>
 									<div class="col">
 										<input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">
@@ -722,7 +723,7 @@ $numDevices = 9;
 												<input type="radio" name="device_homeConsumtionDevices<?php echo $devicenum; ?>" id="device_homeConsumtion<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 											</label>
 										</div>
-										<span class="form-text small">Diese Option sorgt dafür, dass das Gerät zusätzlich in den Hausverbrauch eingerechnet wird (Startseite, neues logging).</span>
+										<span class="form-text small">Bei Nein wird dass das Gerät vom Hausverbrauch abgezogen, bei Ja ist es im Hausverbrauch eingerechnet. (Startseite, neues logging).</span>
 									</div>
 								</div>
 							</div>
@@ -926,7 +927,7 @@ $numDevices = 9;
 								<div class="form-row mb-1">
 									<label for="maxBatteryPower" class="col-md-4 col-form-label">maximale Speicherladung in W</label>
 									<div class="col">
-										<input id="maxBatteryPower" name="maxBatteryPower" class="form-control naturalNumber" type="number" required="required" min="0" max="10000" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
+										<input id="maxBatteryPower" name="maxBatteryPower" class="form-control naturalNumber" type="number" required="required" min="0" max="30000" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
 									</div>
 								</div>
 							</div>
