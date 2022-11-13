@@ -34,7 +34,11 @@ client_id=str(sys.argv[4])
 client_secret=str(sys.argv[5])
 manufacturer=str(sys.argv[6])
 soccalc=str(sys.argv[7])
-vehicleId=str(sys.argv[8])
+
+# VehicleId is optional
+vehicleId = False
+if (len(sys.argv) > 8 ):
+	vehicleId=str(sys.argv[8])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S psasoc lp"+chargepoint, named_tuple)
@@ -95,10 +99,16 @@ f.write(str(responestatus))
 f.close()
 vin_list = json.loads(responsetext)
 
-# search for entry of entered VIN
-vin_selected = filter(lambda x: x['vin'] == vehicleId, vin_list['_embedded']['vehicles'])
-vin_id = vin_selected [0]['id']
-vin_vin = vin_selected [0]['vin']
+# if VIN is not given, first car will be selected:
+if not vehicleId:
+    vin_id = vin_list ['_embedded']['vehicles'][0]['id']
+    vin_vin = vin_list ['_embedded']['vehicles'][0]['vin']
+
+else:
+    # search for entry of given VIN
+    vin_selected = filter(lambda x: x['vin'] == vehicleId, vin_list['_embedded']['vehicles'])
+    vin_id = vin_selected [0]['id']
+    vin_vin = vin_selected [0]['vin']
 
 f = open('/var/www/html/openWB/ramdisk/psareply2filterVINlp'+chargepoint, 'w')
 f.write('VIN: ' + str(vin_vin))

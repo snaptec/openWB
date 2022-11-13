@@ -1844,6 +1844,9 @@
 										<label for="psa_vinlp1" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
 											<input class="form-control" type="text" name="psa_vinlp1" id="psa_vinlp1" value="<?php echo $psa_vinlp1old ?>">
+											<span class="form-text small">
+												VIN des gewünschten Fahrzeugs. Wird keine VIN angegeben, wird das erste Fahrzeug aus dem Account verwendet.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -3542,6 +3545,9 @@
 										<label for="psa_vinlp2" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
 											<input class="form-control" type="text" name="psa_vinlp2" id="psa_vinlp2" value="<?php echo $psa_vinlp2old ?>">
+											<span class="form-text small">
+												VIN des gewünschten Fahrzeugs. Wird keine VIN angegeben, wird das erste Fahrzeug aus dem Account verwendet.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
