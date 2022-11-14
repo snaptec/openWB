@@ -105,6 +105,7 @@ class Device(AbstractDevice):
         response = session.post(
             "https://" + url + "/api/login/Basic",
             json={"username": "customer", "email": email, "password": password, "force_sm_off": False},
+            headers={'Content-Type': 'application/json', },
             verify=False,
             timeout=5
         )
