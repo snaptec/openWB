@@ -539,7 +539,7 @@ def on_message(client, userdata, msg):
                 else:
                     print( "invalid payload for topic '" + msg.topic + "': " + msg.payload.decode("utf-8"))
             if (msg.topic == "openWB/config/set/SmartHome/maxBatteryPower"):
-                if (0 <= int(msg.payload) <= 10000):
+                if (0 <= int(msg.payload) <= 30000):
                     f = open('/var/www/html/openWB/ramdisk/smarthomehandlermaxbatterypower', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()

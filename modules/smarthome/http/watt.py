@@ -1,57 +1,47 @@
 #!/usr/bin/python3
 import sys
-import os
-import time
-import json
-import getopt
-import socket
-import struct
-import codecs
-import binascii
+import logging
+from smarthome.smartlog import initlog
+from smarthome.smartret import writeret
 import urllib.request
 from urllib.parse import urlparse
-named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S http watt.py", named_tuple)
-devicenumber=str(sys.argv[1])
-uberschuss=int(sys.argv[3])
-url=str(sys.argv[4])
+devicenumber = int(sys.argv[1])
+uberschuss = int(sys.argv[3])
+url = str(sys.argv[4])
 try:
-    urlc=str(sys.argv[5])
-except:
+    urlc = str(sys.argv[5])
+except Exception:
     urlc = "none"
 try:
-    urlstate=str(sys.argv[8])
-except:
+    urlstate = str(sys.argv[8])
+except Exception:
     urlstate = "none"
+initlog("http", devicenumber)
+log = logging.getLogger("http")
 if not urlparse(url).scheme:
-   url = 'http://' + url
+    url = 'http://' + url
 if not urlparse(urlstate).scheme and not urlstate.startswith("none"):
-   urlstate = 'http://' + urlstate
+    urlstate = 'http://' + urlstate
 if uberschuss < 0:
-   uberschuss = 0
-urlrep= url.replace("<openwb-ueberschuss>", str(uberschuss))
-file_string= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_http.log'
-if os.path.isfile(file_string):
-   f = open( file_string , 'a')
-else:
-   f = open( file_string , 'w')
-print ('%s devicenr %s orig url %s replaced url %s urlc %s urlstate %s'% (time_string,devicenumber,url,urlrep,urlc,urlstate),file=f)
+    uberschuss = 0
+urlrep = url.replace("<openwb-ueberschuss>", str(uberschuss))
+log.info('watt devicenr %d orig url %s replaced url %s urlc %s urlstate %s' %
+         (devicenumber, url, urlrep, urlc, urlstate))
 if not urlstate.startswith("none"):
     stateurl_response = 0
     try:
         stateurl_response = urllib.request.urlopen(urlstate, timeout=5).read().decode("utf-8")
     except urllib.error.HTTPError as e:
-        print('%s StateURL HTTP Error: %d'%(time_string,e.code),file=f)
+        log.info('watt StateURL HTTP Error: %d' % (e.code))
     except urllib.error.URLError as e:
-        print('%s StateURL URL Error: %s'%(time_string,e.reason),file=f)
+        log.info('watt StateURL URL Error: %s' % (e.reason))
     try:
         state = int(stateurl_response)
     except ValueError:
-        print ('%s StateURL delivered no integer but: %s'%(time_string,stateurl_response),file=f)
+        log.info('watt StateURL delivered no integer but: %s' % (stateurl_response))
         state = 0
 else:
     state = 0
-f.close()
 aktpowerfl = float(urllib.request.urlopen(urlrep, timeout=5).read().decode("utf-8"))
 aktpower = int(aktpowerfl)
 if state == 1 or aktpower > 50:
@@ -65,7 +55,5 @@ else:
         urlc = 'http://' + urlc
     powercfl = float(urllib.request.urlopen(urlc, timeout=5).read().decode("utf-8"))
     powerc = int(powercfl)
-answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
-f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
-json.dump(answer,f1)
-f1.close()
+answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '}'
+writeret(answer, devicenumber)
