@@ -1834,7 +1834,7 @@ updateConfig(){
 		echo "slaveModeSlowRamping=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "slaveModeMinimumAdjustmentInterval=" $ConfigFile; then
-    	echo "slaveModeMinimumAdjustmentInterval=15" >> $ConfigFile
+		echo "slaveModeMinimumAdjustmentInterval=15" >> $ConfigFile
 	fi
 	if ! grep -Fq "standardSocketInstalled=" /var/www/html/openWB/openwb.conf
 	then
