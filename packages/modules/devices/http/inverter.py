@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from typing import Dict, Union
 
+from requests import Session
+
 from dataclass_utils import dataclass_from_dict
 from helpermodules import compatibility
 from modules.common.component_state import InverterState
@@ -22,14 +24,16 @@ class HttpInverter:
         self.__get_power = create_request_function(url, self.component_config.configuration.power_path)
         self.__get_exported = create_request_function(url, self.component_config.configuration.exported_path)
 
-    def update(self) -> None:
-        power = (-self.__get_power() if compatibility.is_ramdisk_in_use() else self.__get_power())
-        exported = self.__get_exported()
+    def update(self, session: Session) -> None:
+        power = self.__get_power(session)
+        if compatibility.is_ramdisk_in_use():
+            # for compatibility: in 1.x power URL values are positive!
+            power *= -1
+        exported = self.__get_exported(session)
         if exported is None:
             _, exported = self.sim_counter.sim_count(power)
 
         inverter_state = InverterState(
-            # for compatibility: in 1.x power URL values are positive!
             power=power,
             exported=exported
         )

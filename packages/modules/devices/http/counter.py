@@ -28,15 +28,15 @@ class HttpCounter:
             component_config.configuration.current_l3_path,
         ])
 
-    def update(self):
-        imported = self.__get_imported()
-        exported = self.__get_exported()
-        power = self.__get_power()
+    def update(self, session):
+        imported = self.__get_imported(session)
+        exported = self.__get_exported(session)
+        power = self.__get_power(session)
         if imported is None or exported is None:
             imported, exported = self.sim_counter.sim_count(power)
 
         counter_state = CounterState(
-            currents=self.__get_currents(),
+            currents=self.__get_currents(session),
             imported=imported,
             exported=exported,
             power=power
