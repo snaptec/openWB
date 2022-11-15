@@ -42,12 +42,12 @@ class WbData {
 		};
 
 		this.usageSummary = {
-			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" },
-			"chargingPv": { name: "PVCharge", power: 0, energy: 0, color: "white"}
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"chargingPv": { name: "PVCharge", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white"}
 		};
 
 		this.historicSummary = {
@@ -55,11 +55,11 @@ class WbData {
 			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
 			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" },
 			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
-			"chargingPv": {name: "PVCharge", power: 0, energy: 0, color: "white"}
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white" },
+			"chargingPv": {name: "PVCharge", power: 0, energy: 0, energyPv: 0, energyBat: 0, color: "white"}
 		};
 
 		this.usageDetails = [this.usageSummary.evuOut];

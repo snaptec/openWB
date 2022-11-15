@@ -452,6 +452,7 @@ class PowerGraph {
 			
 		} else {
 			values.chargingPv = 0;
+			values.chargingBat = 0;
 		}
 		return values;
 	}

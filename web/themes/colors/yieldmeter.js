@@ -35,6 +35,7 @@ class YieldMeter {
 		this.chargeColor = 'var(--color-charging)';
 		this.axisColor = 'var(--color-axis)';
 		this.gridColor = 'var(--color-grid)';
+		this.batColor = 'var(--color-battery)';
 		d3.select("button#energyLeftButton")
 			.on("click", shiftLeft)
 		d3.select("button#energyRightButton")
@@ -88,9 +89,7 @@ class YieldMeter {
 	}
 
 	drawChart(svg) {
-		let pvcdata = this.plotdata.filter(d => (d.name == "PVCharge"))
 		let chargedata = this.plotdata.filter(d => d.name == "Laden")
-		this.plotdata = this.plotdata.filter(d => (d.name != "PVCharge"))
 		const ymax = d3.max(this.plotdata, (d) => d.energy);
 		this.xScale.domain(this.plotdata.map((d) => d.name));
 		this.yScale.domain([0, Math.ceil(ymax)]);
@@ -111,20 +110,37 @@ class YieldMeter {
 			.attr("fill", (d) => d.color);
 
 		// Display the PV Charging inner bar
-		if ((pvcdata.length > 0) && (chargedata.length > 0) && (chargedata[0].energy > 0)) {
+		if ((chargedata.length > 0) && (chargedata[0].energyPv > 0)) {
 			const pvcBargroup = svg
 				.selectAll(".pvcBar")
-				.data(pvcdata)
+				.data(chargedata)
 				.enter()
 				.append("g")
 			pvcBargroup
 				.append("rect")
 				.attr("class", "bar")
 				.attr("x", (d) => this.xScale("Laden") + this.xScale.bandwidth() / 6)
-				.attr("y", (d) => this.yScale(d.energy))
+				.attr("y", (d) => this.yScale(d.energyPv))
 				.attr("width", this.xScale.bandwidth() * 2 / 3)
-				.attr("height", (d) => (this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom))
+				.attr("height", (d) => (this.height - this.yScale(d.energyPv) - this.margin.top - this.margin.bottom))
 				.attr("fill", this.pvColor)
+				.attr("fill-opacity", "66%");
+		}
+		// Display the Bat Charging inner bar
+		if ((chargedata.length > 0) && (chargedata[0].energyBat > 0)) {
+			const pvcBargroup = svg
+				.selectAll(".batcBar")
+				.data(chargedata)
+				.enter()
+				.append("g")
+			pvcBargroup
+				.append("rect")
+				.attr("class", "bar")
+				.attr("x", (d) => this.xScale("Laden") + this.xScale.bandwidth() / 6)
+				.attr("y", (d) => this.yScale(d.energyBat+d.energyPv))
+				.attr("width", this.xScale.bandwidth() * 2 / 3)
+				.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
+				.attr("fill", this.batColor)
 				.attr("fill-opacity", "66%");
 		}
 		const yAxisGenerator = d3.axisLeft(this.yScale)
@@ -173,7 +189,7 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => {
-				if (d.name == "Laden" && pvcdata.length > 0) {
+				if (d.energyPv > 0) {
 					return this.yScale(d.energy) - 25
 				} else {
 					return this.yScale(d.energy) - 10
@@ -185,22 +201,18 @@ class YieldMeter {
 			.text((d) => (formatWattH(d.energy * 1000)));
 
 		// add a PV percentage tag to the charging bar
-		if ((pvcdata.length > 0) && (chargedata.length > 0) && (chargedata[0].energy > 0)) {
-			let pvRatio = Math.round(pvcdata[0].energy / chargedata[0].energy * 100)
-
-			const pvtags = svg.selectAll(".pvtag")
-				.data(chargedata)
-				.enter()
-				.append("g");
-			pvtags
-				.append("text")
-				.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
-				.attr("y", (d) => this.yScale(d.energy) - 10)
-				.attr("font-size", this.labelfontsize - 2)
-				.attr("text-anchor", "middle")
-				.attr("fill", (d) => this.pvColor)
-				.text((d) => ("(PV: " + pvRatio.toLocaleString(undefined) + " %)"));
-		}
+		const pvtags = svg.selectAll(".pvtag")
+			.data(this.plotdata)
+			.enter()
+			.append("g");
+		pvtags
+			.append("text")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+			.attr("y", (d) => this.yScale(d.energy) - 10)
+			.attr("font-size", this.labelfontsize - 2)
+			.attr("text-anchor", "middle")
+			.attr("fill", (d) => this.pvColor)
+			.text((d) => this.pvString(d));
 
 		// Add category labels
 		labels
@@ -214,6 +226,13 @@ class YieldMeter {
 
 	}
 
+	pvString( item ) {
+		if (item.energyPv > 0 || item.energyBat > 0) {
+			return ("(PV: " + (Math.round((item.energyPv + item.energyBat)/ item.energy *100)).toLocaleString(undefined) + " %)");
+		} else {
+			return "";
+		}
+	}
 	updateHeading() {
 		var heading = "Energie ";
 
