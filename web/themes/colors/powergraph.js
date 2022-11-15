@@ -262,7 +262,7 @@ class PowerGraph {
 				unsubscribeMonthGraph();
 				this.initCounter = 0;
 				this.staging.map((segment, i) => {
-					if (i == 3) {
+					if ((i == 3) || (i == 6)) {
 						segment.map((line, i) => {
 							if (line.length > 1) { this.rawData.push(line) }
 						})
@@ -289,6 +289,7 @@ class PowerGraph {
 			}
 		}
 	}
+
 	updateEnergyValues() {
 		if (this.rawData.length) {
 			const startValues = this.rawData[0].split(',');
@@ -317,10 +318,17 @@ class PowerGraph {
 			let pvCharged = this.graphData.reduce((prev, cur) => {
 				return prev + (cur.chargingPv / 12);
 			}, 0)
-			wbdata.historicSummary.chargingPv.energy = pvCharged / 1000;
-			wbdata.usageSummary.chargingPv.energy = pvCharged / 1000;
+			wbdata.historicSummary.charging.energyPv = pvCharged / 1000;
+			wbdata.usageSummary.charging.energyPv = pvCharged / 1000;
+			let batCharged = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.chargingBat / 12);
+			}, 0)
+			wbdata.historicSummary.charging.energyBat = batCharged / 1000;
+			wbdata.usageSummary.charging.energyBat = batCharged / 1000;
+		
 		}
 	}
+
 	extractLiveValues(payload) {
 		const elements = payload.split(",");
 		const now = new Date(Date.now());
@@ -440,6 +448,8 @@ class PowerGraph {
 		if (values.selfUsage < 0) { values.selfUsage = 0; };
 		if ((values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn) > 0) {
 			values.chargingPv = values.charging * values.solarPower / (values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn)
+			values.chargingBat = values.charging * values.batOut / (values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn)
+			
 		} else {
 			values.chargingPv = 0;
 		}
