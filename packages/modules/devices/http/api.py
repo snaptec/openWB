@@ -13,7 +13,7 @@ def _request_value(url: str) -> float:
     return float(response_text.replace("\n", ""))
 
 
-def create_request_function(url: str, path: Optional[str]) -> Callable[[], float]:
+def create_request_function(url: str, path: Optional[str]) -> Callable[[], Optional[float]]:
     if path == "none" or path is None:
         return lambda: None
     else:
