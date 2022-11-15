@@ -274,7 +274,7 @@ class PowerGraph {
 							const values = this.extractMonthValues(line, a[i - 1]);
 							if ((values.date.getFullYear() == wbdata.graphMonth.year)
 								&& ((values.date.getMonth() == wbdata.graphMonth.month)
-									|| ((values.date.getMonth() == (wbdata.graphMonth.month + 1)) && (values.date.getDate == 1))
+									|| ((values.date.getMonth() == (wbdata.graphMonth.month + 1)) && (values.date.getDate() == 1))
 								)
 							) { this.graphData.push(values); }
 						}
@@ -447,8 +447,8 @@ class PowerGraph {
 		values.selfUsage = values.solarPower - values.gridPush;
 		if (values.selfUsage < 0) { values.selfUsage = 0; };
 		if ((values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn) > 0) {
-			values.chargingPv = values.charging * values.solarPower / (values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn)
-			values.chargingBat = values.charging * values.batOut / (values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn)
+			values.chargingPv = Math.floor ((values.charging * values.solarPower / (values.solarPower + values.gridPull + values.batOut)))
+			values.chargingBat = Math.floor ((values.charging * values.batOut / (values.solarPower + values.gridPull + values.batOut)))
 			
 		} else {
 			values.chargingPv = 0;
@@ -509,6 +509,7 @@ class PowerGraph {
 
 	resetLiveGraph() {
 		// fresh reload of the graph
+		console.log ("resetlivegraph")
 		this.initialized = false;
 		this.initCounter = 0;
 		this.initialGraphData = [];
