@@ -472,6 +472,7 @@ class PowerGraph {
 			// charge points
 			values.charging = this.calcMonthlyValue(7, elements, oldElements);
 			values.chargingPv = this.calcMonthlyValue(29, elements, oldElements);
+			values.chargingBat = this.calcMonthlyValue(30, elements, oldElements);
 			var i;
 			for (i = 0; i < 3; i++) {
 				values["lp" + i] = this.calcMonthlyValue(4 + i, elements, oldElements);
@@ -515,6 +516,9 @@ class PowerGraph {
 		this.graphRefreshCounter = 0;
 		wbdata.historicSummary.chargingPv.energy = 0;
 		wbdata.usageSummary.chargingPv.energy = 0;
+		wbdata.historicSummary.chargingBat.energy = 0;
+		wbdata.usageSummary.chargingBat.energy = 0;
+		
 	}
 
 	resetDayGraph() {
