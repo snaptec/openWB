@@ -41,9 +41,7 @@ def create_paths_dict(**kwargs):
     result = {}
     host_scheme = None
     for key, path in kwargs.items():
-        if path == "none":
-            result[key] = "none"
-        else:
+        if path != "none" and path != "":
             match = regex.search(path)
             if match is None:
                 raise Exception("Invalid URL <" + path + ">: Absolute HTTP or HTTPS URL required")
