@@ -57,8 +57,12 @@ class YieldMeter {
 				if (wbdata.showTodayGraph) {
 					this.plotdata = Object.values(wbdata.sourceSummary)
 						.filter((row) => (row.energy > 0))
-						.concat(wbdata.usageDetails
+					
+					this.plotdata = this.plotdata.concat(wbdata.usageDetails
 							.filter((row) => (row.energy > 0)));
+							if (wbdata.usageSummary.devices.energy > 0) {
+								this.plotdata.push (wbdata.usageSummary.devices)
+							}
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
 						.filter((row) => (row.energy > 0));
@@ -108,42 +112,27 @@ class YieldMeter {
 			.attr("width", this.xScale.bandwidth())
 			.attr("height", (d) => (this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom))
 			.attr("fill", (d) => d.color);
-
 		// Display the PV Charging inner bar
-		if ((chargedata.length > 0) && (chargedata[0].energyPv > 0)) {
-			const pvcBargroup = svg
-				.selectAll(".pvcBar")
-				.data(chargedata)
-				.enter()
-				.append("g")
-			pvcBargroup
-				.append("rect")
-				.attr("class", "bar")
-				.attr("x", (d) => this.xScale("Laden") + this.xScale.bandwidth() / 6)
-				.attr("y", (d) => this.yScale(d.energyPv))
-				.attr("width", this.xScale.bandwidth() * 2 / 3)
-				.attr("height", (d) => (this.height - this.yScale(d.energyPv) - this.margin.top - this.margin.bottom))
-				.attr("fill", this.pvColor)
-				.attr("fill-opacity", "66%");
-		}
+		bargroups
+			.append("rect")
+			.attr("class", "bar")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
+			.attr("y", (d) => this.yScale(d.energyPv))
+			.attr("width", this.xScale.bandwidth() * 2 / 3)
+			.attr("height", (d) => (this.height - this.yScale(d.energyPv) - this.margin.top - this.margin.bottom))
+			.attr("fill", this.pvColor)
+			.attr("fill-opacity", "66%");
 		// Display the Bat Charging inner bar
-		if ((chargedata.length > 0) && (chargedata[0].energyBat > 0)) {
-			const pvcBargroup = svg
-				.selectAll(".batcBar")
-				.data(chargedata)
-				.enter()
-				.append("g")
-			pvcBargroup
-				.append("rect")
-				.attr("class", "bar")
-				.attr("x", (d) => this.xScale("Laden") + this.xScale.bandwidth() / 6)
-				.attr("y", (d) => this.yScale(d.energyBat+d.energyPv))
-				.attr("width", this.xScale.bandwidth() * 2 / 3)
-				.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
-				.attr("fill", this.batColor)
-				.attr("fill-opacity", "66%");
-		}
-		const yAxisGenerator = d3.axisLeft(this.yScale)
+		bargroups.append("rect")
+			.attr("class", "bar")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
+			.attr("y", (d) => this.yScale(d.energyBat + d.energyPv))
+			.attr("width", this.xScale.bandwidth() * 2 / 3)
+			.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
+			.attr("fill", this.batColor)
+			.attr("fill-opacity", "66%");
+	
+			const yAxisGenerator = d3.axisLeft(this.yScale)
 			.tickFormat(function (d) {
 				return ((d > 0) ? d : "");
 			})
@@ -189,7 +178,7 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => {
-				if (d.energyPv > 0) {
+				if (d.pvPercentage > 0) {
 					return this.yScale(d.energy) - 25
 				} else {
 					return this.yScale(d.energy) - 10
@@ -201,12 +190,7 @@ class YieldMeter {
 			.text((d) => (formatWattH(d.energy * 1000)));
 
 		// add a PV percentage tag to the charging bar
-		const pvtags = svg.selectAll(".pvtag")
-			.data(this.plotdata)
-			.enter()
-			.append("g");
-		pvtags
-			.append("text")
+		labels.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => this.yScale(d.energy) - 10)
 			.attr("font-size", this.labelfontsize - 2)
@@ -226,9 +210,9 @@ class YieldMeter {
 
 	}
 
-	pvString( item ) {
-		if (item.energyPv > 0 || item.energyBat > 0) {
-			return ("(PV: " + (Math.round((item.energyPv + item.energyBat)/ item.energy *100)).toLocaleString(undefined) + " %)");
+	pvString(item) {
+		if (item.pvPercentage > 0) {
+			return ("(PV: " + item.pvPercentage.toLocaleString(undefined) + " %)");
 		} else {
 			return "";
 		}

@@ -325,6 +325,21 @@ class PowerGraph {
 			}, 0)
 			wbdata.historicSummary.charging.energyBat = batCharged / 1000;
 			wbdata.usageSummary.charging.energyBat = batCharged / 1000;
+			wbdata.usageSummary.charging.pvPercentage = Math.round((wbdata.usageSummary.charging.energyPv + wbdata.usageSummary.charging.energyBat) / (wbdata.usageSummary.charging.energy) * 100)
+			wbdata.historicSummary.charging.pvPercentage = Math.round((wbdata.historicSummary.charging.energyPv + wbdata.historicSummary.charging.energyBat) / (wbdata.historicSummary.charging.energy) * 100)
+
+			let pvDevices = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.shPv / 12);
+			}, 0)
+			wbdata.historicSummary.devices.energyPv = pvDevices / 1000;
+			wbdata.usageSummary.devices.energyPv = pvDevices / 1000;
+			let batDevices = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.shBat / 12);
+			}, 0)
+			wbdata.historicSummary.devices.energyBat = batDevices / 1000;
+			wbdata.usageSummary.devices.energyBat = batDevices / 1000;
+			wbdata.usageSummary.devices.pvPercentage = Math.round((wbdata.usageSummary.devices.energyPv + wbdata.usageSummary.devices.energyBat) / (wbdata.usageSummary.devices.energy) * 100)
+			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / (wbdata.historicSummary.devices.energy) * 100)
 		}
 	}
 	updateMonthlyEnergyValues() {
@@ -335,13 +350,18 @@ class PowerGraph {
 			wbdata.historicSummary.evuOut.energy = +this.monthlyAmounts[2];;
 			wbdata.historicSummary.charging.energy = +this.monthlyAmounts[7];
 			var deviceEnergySum = 0;
+			var deviceEnergyPvSum = 0;
+			var deviceEnergyBatSum = 0;
 			var deviceEnergy = 0;
-			let deviceIndex = 32;
+			let deviceIndex = 19;
+			let devicePvIndex = 32;
 			for (var i = 0; i < 9; i++) {
-				deviceEnergy = +this.monthlyAmounts[deviceIndex + 3 * i];
+				deviceEnergy = +this.monthlyAmounts[deviceIndex + i];
 				if (deviceEnergy < 0) { deviceEnergy = 0 }
 				deviceEnergySum = deviceEnergySum + deviceEnergy
 				wbdata.historicSummary['sh' + i].energy = deviceEnergy
+				deviceEnergyPvSum += +this.monthlyAmounts[devicePvIndex + 3 * i];
+				deviceEnergyBatSum += +this.monthlyAmounts[devicePvIndex + 1 + 3 * i];
 			}
 			wbdata.historicSummary.devices.energy = deviceEnergySum;
 			wbdata.historicSummary.batIn.energy = +this.monthlyAmounts[12];
@@ -349,6 +369,10 @@ class PowerGraph {
 				- wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
 			wbdata.historicSummary.charging.energyPv = +this.monthlyAmounts[29];
 			wbdata.historicSummary.charging.energyBat = +this.monthlyAmounts[30];
+			wbdata.historicSummary.charging.pvPercentage = Math.round((wbdata.historicSummary.charging.energyPv + wbdata.historicSummary.charging.energyBat) / (wbdata.historicSummary.charging.energy) * 100)
+			wbdata.historicSummary.devices.energyPv = deviceEnergyPvSum;
+			wbdata.historicSummary.devices.energyBat = deviceEnergyBatSum;
+			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / wbdata.historicSummary.devices.energy * 100)
 		}
 	}
 	extractLiveValues(payload) {
@@ -447,9 +471,11 @@ class PowerGraph {
 		values.soc1 = +elements[21];
 		values.soc2 = +elements[22];
 		// smart home
+		values.devices = 0;
 		for (i = 0; i < 9; i++) {
 			if (!(wbdata.shDevice[i].countAsHouse)) {
 				values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
+				values.devices += values["sh" + i]
 			} else {
 				values["sh" + i] = +0;
 			}
@@ -468,15 +494,25 @@ class PowerGraph {
 		if (values.housePower < 0) { values.housePower = 0; };
 		values.selfUsage = values.solarPower - values.gridPush;
 		if (values.selfUsage < 0) { values.selfUsage = 0; };
-		if ((values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn) > 0) {
-			values.chargingPv = Math.floor((values.charging * values.solarPower / (values.solarPower + values.gridPull + values.batOut)))
-			values.chargingBat = Math.floor((values.charging * values.batOut / (values.solarPower + values.gridPull + values.batOut)))
-
+		if ((values.solarPower + values.gridPull + values.batOut) > 0) {
+			values.chargingPv = this.calcPvFraction(values.charging, values)
+			values.chargingBat = this.calcBatFraction(values.charging, values)
+			values.shPv = this.calcPvFraction(values.devices, values)
+			values.shBat = this.calcBatFraction(values.devices, values)
 		} else {
 			values.chargingPv = 0;
 			values.chargingBat = 0;
+			values.shPv = 0;
+			values.shBat = 0;
 		}
 		return values;
+	}
+
+	calcPvFraction(energy, values) {
+		return Math.floor((energy * values.solarPower / (values.solarPower + values.gridPull + values.batOut)))
+	}
+	calcBatFraction(energy, values) {
+		return Math.floor((energy * values.batOut / (values.solarPower + values.gridPull + values.batOut)))
 	}
 
 	extractMonthValues(payload) {
