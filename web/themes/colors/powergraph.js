@@ -247,43 +247,43 @@ class PowerGraph {
 
 	updateMonth(topic, payload) {
 		if (payload != 'empty') {
+			const serialNo = topic.substring(29, topic.length);
+
 			var segment = payload.toString().split("\n");
 			if (segment[0] == "") {
 				segment = [];
 			}
-			const serialNo = topic.substring(29, topic.length);
 			if (serialNo != "") {
 				if (typeof (this.staging[+serialNo - 1]) === 'undefined') {
 					this.staging[+serialNo - 1] = segment;
 					this.initCounter++;
 				}
 			}
+
 			if (this.initCounter == 12) {// Initialization complete
 				unsubscribeMonthGraph();
 				this.initCounter = 0;
 				this.staging.map((segment, i) => {
-					if ((i == 3) || (i == 6)) {
+					if ((i == 4) || (i == 5)) {
 						segment.map((line, i) => {
 							if (line.length > 1) { this.rawData.push(line) }
 						})
 					}
+					if (i == 2) {
+						this.monthlyAmounts = segment[0].split(',');
+					}
 				})
 				this.rawData.map((line, i, a) => {
-					if (i > 0) {
-						if (line != "0" && line != "") {
-							const values = this.extractMonthValues(line, a[i - 1]);
-							if ((values.date.getFullYear() == wbdata.graphMonth.year)
-								&& ((values.date.getMonth() == wbdata.graphMonth.month)
-									|| ((values.date.getMonth() == (wbdata.graphMonth.month + 1)) && (values.date.getDate() == 1))
-								)
-							) { this.graphData.push(values); }
+					if (line != "0" && line != "") {
+						const values = this.extractMonthValues(line, a[i - 1]);
+						if (values.date.getFullYear() == wbdata.graphMonth.year && values.date.getMonth() == wbdata.graphMonth.month) {
+							this.graphData.push(values);
 						}
-					} else {
-						// const values = this.extractValues(line, []);                
 					}
 				});
+
 				this.updateGraph();
-				this.updateEnergyValues();
+				this.updateMonthlyEnergyValues();
 				wbdata.monthGraphUpdated();
 				// setTimeout(() => this.activateDay(), 300000)
 			}
@@ -325,10 +325,32 @@ class PowerGraph {
 			}, 0)
 			wbdata.historicSummary.charging.energyBat = batCharged / 1000;
 			wbdata.usageSummary.charging.energyBat = batCharged / 1000;
-		
 		}
 	}
-
+	updateMonthlyEnergyValues() {
+		if (this.rawData.length) {
+			wbdata.historicSummary.pv.energy = +this.monthlyAmounts[3];
+			wbdata.historicSummary.evuIn.energy = +this.monthlyAmounts[1];
+			wbdata.historicSummary.batOut.energy = +this.monthlyAmounts[9];
+			wbdata.historicSummary.evuOut.energy = +this.monthlyAmounts[2];;
+			wbdata.historicSummary.charging.energy = +this.monthlyAmounts[7];
+			var deviceEnergySum = 0;
+			var deviceEnergy = 0;
+			let deviceIndex = 32;
+			for (var i = 0; i < 9; i++) {
+				deviceEnergy = +this.monthlyAmounts[deviceIndex + 3 * i];
+				if (deviceEnergy < 0) { deviceEnergy = 0 }
+				deviceEnergySum = deviceEnergySum + deviceEnergy
+				wbdata.historicSummary['sh' + i].energy = deviceEnergy
+			}
+			wbdata.historicSummary.devices.energy = deviceEnergySum;
+			wbdata.historicSummary.batIn.energy = +this.monthlyAmounts[12];
+			wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
+				- wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
+			wbdata.historicSummary.charging.energyPv = +this.monthlyAmounts[29];
+			wbdata.historicSummary.charging.energyBat = +this.monthlyAmounts[30];
+		}
+	}
 	extractLiveValues(payload) {
 		const elements = payload.split(",");
 		const now = new Date(Date.now());
@@ -447,9 +469,9 @@ class PowerGraph {
 		values.selfUsage = values.solarPower - values.gridPush;
 		if (values.selfUsage < 0) { values.selfUsage = 0; };
 		if ((values.solarPower + values.gridPull + values.batOut - values.gridPush - values.batIn) > 0) {
-			values.chargingPv = Math.floor ((values.charging * values.solarPower / (values.solarPower + values.gridPull + values.batOut)))
-			values.chargingBat = Math.floor ((values.charging * values.batOut / (values.solarPower + values.gridPull + values.batOut)))
-			
+			values.chargingPv = Math.floor((values.charging * values.solarPower / (values.solarPower + values.gridPull + values.batOut)))
+			values.chargingBat = Math.floor((values.charging * values.batOut / (values.solarPower + values.gridPull + values.batOut)))
+
 		} else {
 			values.chargingPv = 0;
 			values.chargingBat = 0;
@@ -457,41 +479,40 @@ class PowerGraph {
 		return values;
 	}
 
-	extractMonthValues(payload, oldPayload) {
+	extractMonthValues(payload) {
 		if (payload != "0") {
 			const elements = payload.split(",");
-			const oldElements = oldPayload.split(",");
 			var values = {};
-			values.date = new Date(d3.timeParse("%Y%m%d%H%M")(oldElements[0] + '1200'));
+			values.date = new Date(d3.timeParse("%Y%m%d%H%M")(elements[0] + '1200'));
 			// evu
-			values.gridPull = this.calcMonthlyValue(1, elements, oldElements);
-			values.gridPush = this.calcMonthlyValue(2, elements, oldElements);
+			values.gridPull = this.calcMonthlyValue(1, elements);
+			values.gridPush = this.calcMonthlyValue(2, elements);
 			// pv
-			values.solarPower = this.calcMonthlyValue(3, elements, oldElements);
+			values.solarPower = this.calcMonthlyValue(3, elements);
 			values.inverter = 0;
 			// charge points
-			values.charging = this.calcMonthlyValue(7, elements, oldElements);
-			values.chargingPv = this.calcMonthlyValue(29, elements, oldElements);
-			values.chargingBat = this.calcMonthlyValue(30, elements, oldElements);
+			values.charging = this.calcMonthlyValue(7, elements);
+			values.chargingPv = this.calcMonthlyValue(29, elements);
+			values.chargingBat = this.calcMonthlyValue(30, elements);
 			var i;
 			for (i = 0; i < 3; i++) {
-				values["lp" + i] = this.calcMonthlyValue(4 + i, elements, oldElements);
+				values["lp" + i] = this.calcMonthlyValue(4 + i, elements);
 			}
 			for (i = 3; i < 8; i++) {
-				values["lp" + i] = this.calcMonthlyValue(12 + i - 3, elements, oldElements);
+				values["lp" + i] = this.calcMonthlyValue(12 + i - 3, elements);
 			}
 			values.soc1 = +elements[21];
 			values.soc2 = +elements[22];
 			// smart home
 			for (i = 0; i < 10; i++) {
-				values["sh" + i] = this.calcMonthlyValue(19 + i, elements, oldElements);
+				values["sh" + i] = this.calcMonthlyValue(19 + i, elements);
 			}
 			//consumers
-			values.co0 = this.calcMonthlyValue(10, elements, oldElements);
-			values.co1 = this.calcMonthlyValue(12, elements, oldElements);
+			values.co0 = this.calcMonthlyValue(10, elements);
+			values.co1 = this.calcMonthlyValue(12, elements);
 			//battery
-			values.batIn = this.calcMonthlyValue(17, elements, oldElements);
-			values.batOut = this.calcMonthlyValue(18, elements, oldElements);
+			values.batIn = this.calcMonthlyValue(17, elements);
+			values.batOut = this.calcMonthlyValue(18, elements);
 			values.batterySoc = +elements[20];
 			// calculated values
 			values.housePower = values.gridPull + values.solarPower + values.batOut
@@ -509,7 +530,7 @@ class PowerGraph {
 
 	resetLiveGraph() {
 		// fresh reload of the graph
-		console.log ("resetlivegraph")
+		console.log("resetlivegraph")
 		this.initialized = false;
 		this.initCounter = 0;
 		this.initialGraphData = [];
@@ -519,7 +540,7 @@ class PowerGraph {
 		wbdata.usageSummary.chargingPv.energy = 0;
 		wbdata.historicSummary.chargingBat.energy = 0;
 		wbdata.usageSummary.chargingBat.energy = 0;
-		
+
 	}
 
 	resetDayGraph() {
@@ -545,9 +566,8 @@ class PowerGraph {
 		}
 		return val;
 	}
-	calcMonthlyValue(i, array, oldArray) {
-		var val = (array[i] - oldArray[i]);
-
+	calcMonthlyValue(i, array) {
+		var val = Math.floor(+array[i] * 1000)
 		if (val < 0 || val > 150000) {
 			val = 0;
 		}
