@@ -7,7 +7,7 @@ from typing import Optional
 from paho.mqtt.client import Client as MqttClient, MQTTMessage
 
 from helpermodules import pub, compatibility
-from modules.common.simcount._simcounter_state import SimCounterState
+from modules.common.simcount.simcounter_state import SimCounterState
 from modules.common.store import ramdisk_write, ramdisk_read_float
 from modules.common.store.ramdisk.io import RamdiskReadError
 
