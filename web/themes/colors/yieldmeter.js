@@ -49,28 +49,28 @@ class YieldMeter {
 		switch (wbdata.graphMode) {
 			case 'live':
 				this.plotdata = Object.values(wbdata.sourceSummary)
-					.filter((row) => (row.energy > 0))
+					.filter(row => this.plotfilter(row))
 					.concat(wbdata.usageDetails
-						.filter((row) => (row.energy > 0)));
+						.filter(row => this.plotfilter(row)));
 				break;
 			case 'day':
 				if (wbdata.showTodayGraph) {
 					this.plotdata = Object.values(wbdata.sourceSummary)
-						.filter((row) => (row.energy > 0))
-					
+						.filter(row => this.plotfilter(row));
+
 					this.plotdata = this.plotdata.concat(wbdata.usageDetails
-							.filter((row) => (row.energy > 0)));
-							if (wbdata.usageSummary.devices.energy > 0) {
-								this.plotdata.push (wbdata.usageSummary.devices)
-							}
+						.filter(row => this.plotfilter(row)));
+					if (wbdata.smartHomeSummary && wbdata.usageSummary.devices.energy > 0) {
+						this.plotdata.push(wbdata.usageSummary.devices)
+					}
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
-						.filter((row) => (row.energy > 0));
+						.filter(row => this.plotfilter(row));
 				}
 				break;
 			case 'month':
 				this.plotdata = Object.values(wbdata.historicSummary)
-					.filter((row) => (row.energy > 0));
+					.filter(row => this.plotfilter(row));
 				break;
 			default: break;
 		}
@@ -80,6 +80,21 @@ class YieldMeter {
 		this.updateHeading();
 	};
 
+	plotfilter(row) {
+		if (row.energy > 0) {
+			if (row.name == "Geräte") {
+				if (wbdata.smartHomeSummary) {
+					return true
+				} else {
+					return false
+				}
+			} else {
+				return true
+			}
+		} else {
+			return false
+		}
+	}
 	createOrUpdateSvg() {
 		this.svg.selectAll("*").remove();
 		const g = this.svg.append("g")
@@ -131,8 +146,8 @@ class YieldMeter {
 			.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
 			.attr("fill", this.batColor)
 			.attr("fill-opacity", "66%");
-	
-			const yAxisGenerator = d3.axisLeft(this.yScale)
+
+		const yAxisGenerator = d3.axisLeft(this.yScale)
 			.tickFormat(function (d) {
 				return ((d > 0) ? d : "");
 			})

@@ -346,7 +346,7 @@ class PowerGraph {
 		if (this.rawData.length) {
 			wbdata.historicSummary.pv.energy = +this.monthlyAmounts[3];
 			wbdata.historicSummary.evuIn.energy = +this.monthlyAmounts[1];
-			wbdata.historicSummary.batOut.energy = +this.monthlyAmounts[9];
+			wbdata.historicSummary.batOut.energy = +this.monthlyAmounts[18];
 			wbdata.historicSummary.evuOut.energy = +this.monthlyAmounts[2];;
 			wbdata.historicSummary.charging.energy = +this.monthlyAmounts[7];
 			var deviceEnergySum = 0;
@@ -364,7 +364,7 @@ class PowerGraph {
 				deviceEnergyBatSum += +this.monthlyAmounts[devicePvIndex + 1 + 3 * i];
 			}
 			wbdata.historicSummary.devices.energy = deviceEnergySum;
-			wbdata.historicSummary.batIn.energy = +this.monthlyAmounts[12];
+			wbdata.historicSummary.batIn.energy = +this.monthlyAmounts[17];
 			wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
 				- wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
 			wbdata.historicSummary.charging.energyPv = +this.monthlyAmounts[29];
