@@ -14,8 +14,8 @@ from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
 from modules.common.component_state import ChargepointState
 from modules.common.modbus import ModbusSerialClient_
-from modules.internal_openwb import chargepoint_module, socket
-from modules.internal_openwb.chargepoint_module import InternalOpenWB
+from modules.chargepoints.internal_openwb import chargepoint_module, socket
+from modules.chargepoints.internal_openwb.chargepoint_module import InternalOpenWB
 
 basePath = "/var/www/html/openWB"
 ramdiskPath = basePath + "/ramdisk"

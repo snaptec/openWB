@@ -1,0 +1,69 @@
+Login:
+
+$ curl -k --connect-timeout 5 -d '{"password":"XXXXXXXXXXXX"}' -H "Content-Type: application/json" -X PUT https://192.168.0.248/v1/login
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+								Dload  Upload   Total   Spent    Left  Speed
+100   174    0   143  100    31    143     31  0:00:01 --:--:--  0:00:01   743
+{
+	"status": "success",
+	"auth_key": "67567d76-0c83-11ea-8a59-d84fb802005a",
+	"regnum": "XXXXXXXXXXXX",
+	"role": "installer"
+}
+
+Schlüssel (auth_key) falsch:
+
+$ curl -k -d '{"auth_key":"a7df86bc-092c-11ea-8a59-d84fb802005a"}' -H "Content-Type: application/json" -X POST https://192.168.0.248/v1/user/essinfo/home
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+								Dload  Upload   Total   Spent    Left  Speed
+100    85    0    34  100    51     34     51  0:00:01 --:--:--  0:00:01   454
+{
+	"auth": "auth_key failed"
+}
+
+Schlüssel (auth_key) korrekt:
+
+$ curl -k -d '{"auth_key":"67567d76-0c83-11ea-8a59-d84fb802005a"}' -H "Content-Type: application/json" -X POST https://192.168.0.248/v1/user/essinfo/home
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+								Dload  Upload   Total   Spent    Left  Speed
+100   909    0   858  100    51    858     51  0:00:01 --:--:--  0:00:01  4835
+{
+	"statistics":
+	{
+		"pcs_pv_total_power": "0",
+		"batconv_power": "372",
+		"bat_use": "1",
+		"bat_status": "2",
+		"bat_user_soc": "14.58333",
+		"load_power": "361",
+		"load_today": "0.0",
+		"grid_power": "11",
+		"current_day_self_consumption": "94.8",
+		"current_pv_generation_sum": "7415",
+		"current_grid_feed_in_energy": "385"
+	},
+	"direction":
+	{
+		"is_direct_consuming_": "0",
+		"is_battery_charging_": "0",
+		"is_battery_discharging_": "1",
+		"is_grid_selling_": "0",
+		"is_grid_buying_": "0",
+		"is_charging_from_grid_": "0"
+	},
+	"operation":
+	{
+		"status": "start",
+		"mode": "1"
+	},
+	"wintermode":
+	{
+		"winter_status": "on"
+	},
+	"pcs_fault":
+	{
+		"pcs_status": "pcs_ok"
+	}
+}
+
+

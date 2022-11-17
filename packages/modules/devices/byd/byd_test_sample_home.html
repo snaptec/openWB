@@ -1,0 +1,182 @@
+<html><head>
+	<title>Home</title>
+	<meta http-equiv=Content-Type content=text/html; charset=utf-8 />
+	<meta http-equiv="Pragma" content="no-cache">
+	<link href="../chart/examples.css" rel="stylesheet" type="text/css">
+	<link href="../default.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../chart/excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="../chart/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="../chart/jquery.flot.js"></script>
+	<script type="text/javascript">
+	
+	window.setInterval(loadXMLDoc, 1000); 
+	
+	function loadXMLDoc()
+	{
+		var xmlhttp;
+		var d1 = [];
+		var str = new Array();
+		if (window.XMLHttpRequest)
+		{// code for IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp=new XMLHttpRequest();
+		}
+		else
+		{// code for IE6, IE5
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange=function()
+		{
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+				strs = xmlhttp.responseText.split(",");
+				for (i=0; i<strs.length; i++)
+				{
+					point = parseFloat(strs[i]);
+					if (point != -1)
+						d1.push([i, point]);
+				}
+				$.plot("#placeholder", [{
+					data: d1,
+					lines: { show: true, fill: true },
+					hoverable: true,
+					yaxis: {
+						show: false,
+						min: 0,
+						max: 100,
+						tickDecimals: 10,
+						tickSize: 10,
+						ticks: 10
+					},
+					xaxes: [],
+					yaxes: [],
+				label:"SOC"
+				}]);
+			}
+		}
+
+		xmlhttp.open("POST","/ajaxHome/",true);
+		xmlhttp.send("display_date="+document.getElementById('display_date').value);
+	}
+
+	</script>
+</head>
+<body>
+	<center>
+	<br>
+	<h3>Home</h3>
+	</center>
+	<hr>
+	<center>
+	<br>
+	<table border="0" cellspacing="0" cellpadding="0" class="common_table">
+	<tr><td colspan="3" width="100%"><h3>Battery Information :</h3></td></tr>
+<tr>
+<td width="5%"></td>
+<td width="15%">Total Voltage:</td>
+<td width="60%"><input readonly="readonly" type="text" value=374.656>&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>PackVoltage:</td>
+<td><input readonly="readonly" type="text" value=375.248>&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>Current:</td>
+<td><input readonly="readonly" type="text" value=11.022>&nbsp;&nbsp;A</td>
+</tr>
+<tr>
+<td></td>
+<td>SOC:</td>
+<td><input readonly="readonly" type="text" value=34.500%></td>
+</tr>
+<tr>
+<td></td>
+<td>SysTemp:</td>
+<td><input readonly="readonly" type="text" value=25.100>&nbsp;&nbsp;&#8451</td>
+</tr>
+<tr>
+<td></td>
+<td>MaxCellVol:</td>
+<td><input readonly="readonly" type="text" value=3.350>&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>MinCellVol:</td>
+<td><input readonly="readonly" type="text" value=3.341>&nbsp;&nbsp;V</td>
+</tr>
+<tr>
+<td></td>
+<td>MaxCellTemp:</td>
+<td><input readonly="readonly" type="text" value=27.500>&nbsp;&nbsp;&#8451</td>
+</tr>
+<tr>
+<td></td>
+<td>MinCellTemp:</td>
+<td><input readonly="readonly" type="text" value=23.900>&nbsp;&nbsp;&#8451</td>
+</tr>
+<tr>
+<td></td>
+<td>Power:</td>
+<td><input readonly="readonly" type="text" value=4.158>&nbsp;&nbsp;KW</td>
+</tr>
+<tr>
+<td></td>
+<td>System state:</td>
+<td><input readonly="readonly" type="text" value=RUN></td>
+</tr>
+<tr>
+<td></td>
+<td>Date and Time:</td>
+<td><input readonly="readonly" type="text" value="2022-03-25 09:19:14"></td>
+</tr>
+</table><br>
+<table border="0" cellspacing="0" cellpadding="0" class="common_table">
+<tr>
+<td colspan="2" width="40%"><h3>Alarm state:</h3></td>
+<td><font color="#000000">Normal!</font></td>
+</tr>
+<td colspan="2" width="20%"><h3>SOC Date:</h3></td>
+<td width="60%"><select id="display_date" name="display_date" onChange="loadXMLDoc();">
+<option value="3.25.2022" id="29">3.25.2022</option>
+<option value="3.24.2022" id="28">3.24.2022</option>
+<option value="3.23.2022" id="27">3.23.2022</option>
+<option value="3.22.2022" id="26">3.22.2022</option>
+<option value="3.21.2022" id="25">3.21.2022</option>
+<option value="3.20.2022" id="24">3.20.2022</option>
+<option value="3.19.2022" id="23">3.19.2022</option>
+<option value="3.18.2022" id="22">3.18.2022</option>
+<option value="3.17.2022" id="21">3.17.2022</option>
+<option value="3.16.2022" id="20">3.16.2022</option>
+<option value="3.15.2022" id="19">3.15.2022</option>
+<option value="3.14.2022" id="18">3.14.2022</option>
+<option value="3.13.2022" id="17">3.13.2022</option>
+<option value="3.12.2022" id="16">3.12.2022</option>
+<option value="3.11.2022" id="15">3.11.2022</option>
+<option value="3.10.2022" id="14">3.10.2022</option>
+<option value="3.9.2022" id="13">3.9.2022</option>
+<option value="3.8.2022" id="12">3.8.2022</option>
+<option value="3.7.2022" id="11">3.7.2022</option>
+<option value="3.6.2022" id="10">3.6.2022</option>
+<option value="3.5.2022" id="9">3.5.2022</option>
+<option value="3.4.2022" id="8">3.4.2022</option>
+<option value="3.3.2022" id="7">3.3.2022</option>
+<option value="3.2.2022" id="6">3.2.2022</option>
+<option value="3.1.2022" id="5">3.1.2022</option>
+<option value="2.28.2022" id="4">2.28.2022</option>
+<option value="2.27.2022" id="3">2.27.2022</option>
+<option value="2.26.2022" id="2">2.26.2022</option>
+<option value="2.25.2022" id="1">2.25.2022</option>
+<option value="2.24.2022" id="0">2.24.2022</option>
+</select></td>
+
+	</table>
+
+	<div id="content">
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+	</div>
+
+</body>
+</html>
