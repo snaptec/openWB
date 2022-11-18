@@ -1,8 +1,7 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-#MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="PV"
 #DMOD="MAIN"
 Debug=$debug
@@ -16,17 +15,13 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-
-
-
 openwbDebugLog ${DMOD} 2 "PV URL : ${wr2jsonurl}"
 openwbDebugLog ${DMOD} 2 "PV Watt: ${wr2jsonwatt}"
 openwbDebugLog ${DMOD} 2 "PV kWh : ${wr2jsonkwh}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.json.device" "inverter" "${wr2jsonurl}" "${wr2jsonwatt}" "${wr2jsonkwh}" "2" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.json.device" "inverter" "${wr2jsonurl}" "${wr2jsonwatt}" "${wr2jsonkwh}" "2" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-watt=$(<${RAMDISKDIR}/pv2watt)
-echo ${watt}
+cat "${RAMDISKDIR}/pv2watt"

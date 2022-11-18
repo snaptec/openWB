@@ -13,7 +13,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.lg.device" "inverter" "${lgessv1ip}" "${lgessv1pass}" "1">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.lg.device" "inverter" "${lgessv1ip}" "${lgessv1pass}" "1" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
