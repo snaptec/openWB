@@ -79,6 +79,7 @@ class PowerGraph {
 			subscribeGraphUpdates();
 		} catch (err) {
 			// on initial invocation this method is not existing
+			
 		}
 		this.updateHeading();
 	}
@@ -566,16 +567,15 @@ class PowerGraph {
 
 	resetLiveGraph() {
 		// fresh reload of the graph
-		console.log("resetlivegraph")
 		this.initialized = false;
 		this.initCounter = 0;
 		this.initialGraphData = [];
 		this.graphData = [];
 		this.graphRefreshCounter = 0;
-		wbdata.historicSummary.chargingPv.energy = 0;
-		wbdata.usageSummary.chargingPv.energy = 0;
-		wbdata.historicSummary.chargingBat.energy = 0;
-		wbdata.usageSummary.chargingBat.energy = 0;
+		wbdata.historicSummary.charging.energyPv = 0;
+		wbdata.usageSummary.charging.energyPv = 0;
+		wbdata.historicSummary.charging.energyBat = 0;
+		wbdata.usageSummary.charging.energyBat = 0;
 
 	}
 
@@ -639,7 +639,7 @@ class PowerGraph {
 
 	drawSourceGraph(svg, width, height) {
 		var keys = (wbdata.graphMode == 'month') ? ["gridPull", "batOut", "selfUsage", "gridPush"] : ["selfUsage", "gridPush", "batOut", "gridPull"];
-
+		
 		if (wbdata.graphMode == 'month') {
 			const dayRange = d3.extent(this.graphData, d => d.date.getDate())
 			this.xScale = d3.scaleBand()
