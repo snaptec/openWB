@@ -13,7 +13,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.victron.device" "counter" "${bezug_victronip}" "${bezug_id}" "${victron_energy_meter}">>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.victron.device" "counter" "${bezug_victronip}" "${bezug_id}" "${victron_energy_meter}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

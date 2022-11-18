@@ -10,7 +10,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_shm.device" "counter" "${smashmbezugid}" >>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sma_shm.device" "counter" "${smashmbezugid}" >>"$MYLOGFILE" 2>&1
 ret=$?
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"
 

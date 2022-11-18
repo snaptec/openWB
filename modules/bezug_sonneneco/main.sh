@@ -10,7 +10,7 @@ else
 	MYLOGFILE="$RAMDISKDIR/bezug_sonneneco.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sonnenbatterie.device" "counter" "${sonnenecoip}" "${sonnenecoalternativ}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sonnenbatterie.device" "counter" "${sonnenecoip}" "${sonnenecoalternativ}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
