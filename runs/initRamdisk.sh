@@ -186,6 +186,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/tmpsoc1
 	echo 0 > $RamdiskPath/zielladenkorrektura
 	echo 0 > $RamdiskPath/ladungdurchziel
+	echo 0 > $RamdiskPath/extcpulp1
 	echo 20000 > $RamdiskPath/soctimer
 	echo 20000 > $RamdiskPath/soctimer1
 	echo 28 > $RamdiskPath/evsemodbustimer
@@ -616,13 +617,6 @@ initRamdisk(){
 		importtemp="0"
 	fi
 	echo $importtemp > $RamdiskPath/smarthomehandlermaxbatterypower
-
-	ra='^-?[0-9]+$'
-	smartmqtemp=$(timeout 1 mosquitto_sub -t openWB/config/get/SmartHome/smartmq)
-	if ! [[ $smartmqtemp =~ $ra ]] ; then
-		smartmqtemp="1"
-	fi
-	echo $smartmqtemp > $RamdiskPath/smartmq
 
 	sudo chmod 777 $RamdiskPath/*
 

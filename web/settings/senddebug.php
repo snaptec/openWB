@@ -60,7 +60,7 @@
 				</div>
 				<?php
 					$result = '';
-					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>20) {
+					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>=20) {
 						$result = $_POST['debugMessage'] . "\n";
 						$result .= "E-Mail: " . $_POST['emailAddress'] . "\n";
 						$result .= "Seriennummer: " . $_POST['serialNumber'] . "\n";
@@ -97,7 +97,7 @@
 						$result .= "Taster: " . ($ladetasterold == 1 ? "aktiviert" : "deaktiviert") . "\n";
 						$result .= "LEDs: " . ($ledsaktold == 1 ? "aktiviert" : "deaktiviert") . "\n";
 						$result .= "Netzschutz: " . ($netzabschaltunghzold == 1 ? "aktiviert" : "deaktiviert") . "\n";
-						$result .= "RFID: " . ($rfidaktold == 1 ? "aktiviert" : "deaktiviert") . "\n";
+						$result .= "RFID: " . ($rfidaktold > 0 ? "aktiviert (" . $rfidaktold . ")" : "deaktiviert") . "\n";
 						$result .= "Display: " . ($displayaktivold == 1 ? "aktiviert" : "deaktiviert") . "\n";
 						file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/debuguser', $result);
 						file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/debugemail', $_POST['emailAddress'] . "\n");

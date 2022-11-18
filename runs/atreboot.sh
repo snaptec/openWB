@@ -1,6 +1,12 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 LOGFILE="/var/log/openWB.log"
+# always check for existing log file!
+if [[ ! -f $LOGFILE ]]; then
+	sudo touch $LOGFILE
+	sudo chmod 777 $LOGFILE
+fi
+
 . "$OPENWBBASEDIR/helperFunctions.sh"
 
 at_reboot() {
@@ -28,9 +34,6 @@ at_reboot() {
 	# no code will run here, functions need to be called
 	. "$OPENWBBASEDIR/runs/initRamdisk.sh"
 	. "$OPENWBBASEDIR/runs/updateConfig.sh"
-	. "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
-	. "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
-	. "$OPENWBBASEDIR/runs/rse/rseHelper.sh"
 
 	sleep 5
 	mkdir -p "$OPENWBBASEDIR/web/backup"
@@ -81,15 +84,6 @@ at_reboot() {
 		sudo python "$OPENWBBASEDIR/runs/triginit.py"
 	fi
 
-	# setup push buttons handler if needed
-	pushButtonsSetup "$ladetaster" 1
-
-	# setup rse handler if needed
-	rseSetup "$rseenabled" 1
-
-	# setup rfid handler if needed
-	rfidSetup "$rfidakt" 1 "$rfidlist"
-
 	# check if tesla wall connector is configured and start daemon
 	if [[ $evsecon == twcmanager ]]; then
 		echo "twcmanager..."
@@ -98,10 +92,6 @@ at_reboot() {
 		fi
 	fi
 
-	# restart our modbus server
-	echo "modbus server..."
-	sudo pkill -f '^python.*/modbusserver.py' > /dev/null
-	sudo nohup python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" >>"$LOGFILE" 2>&1 &
 
 	# display setup
 	echo "display..."
@@ -122,30 +112,6 @@ at_reboot() {
 	else
 		echo "not configured"
 	fi
-
-	# restart smarthomehandler
-	echo "smarthome handler..."
-	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
-	sudo pkill -f '^python.*/smarthomehandler.py'
-	sudo pkill -f '^python.*/smarthomemq.py'
-	smartmq=$(<"$OPENWBBASEDIR/ramdisk/smartmq")
-	if (( smartmq == 0 )); then
-		echo "starting legacy smarthome handler"
-		nohup python3 "$OPENWBBASEDIR/runs/smarthomehandler.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
-	else
-		echo "starting smarthomemq handler"
-		nohup python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
-	fi
-
-	# restart mqttsub handler
-	echo "mqtt handler..."
-	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
-	sudo pkill -f '^python.*/mqttsub.py'
-	nohup python3 "$OPENWBBASEDIR/runs/mqttsub.py" >>"$LOGFILE" 2>&1 &
-
-	# restart legacy run server
-	echo "legacy run server..."
-	bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
 
 	# check crontab for user pi
 	echo "crontab 1..."
@@ -352,33 +318,7 @@ at_reboot() {
 	echo "" > "$OPENWBBASEDIR/ramdisk/mqttlastregelungaktiv"
 	chmod 777 "$OPENWBBASEDIR/ramdisk/mqttlastregelungaktiv"
 
-	# check for slave config and restart handler
-	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
-	sudo pkill -f '^python.*/isss.py'
-	if (( isss == 1 )); then
-		echo "isss..."
-		echo "$lastmanagement" > "$OPENWBBASEDIR/ramdisk/issslp2act"
-		nohup python3 "$OPENWBBASEDIR/runs/isss.py" >>"$OPENWBBASEDIR/ramdisk/isss.log" 2>&1 &
-		# second IP already set up !
-		ethstate=$(</sys/class/net/eth0/carrier)
-		if (( ethstate == 1 )); then
-			sudo ifconfig eth0:0 "$virtual_ip_eth0" netmask 255.255.255.0 down
-		else
-			sudo ifconfig wlan0:0 "$virtual_ip_wlan0" netmask 255.255.255.0 down
-		fi
-	fi
-
-	# check for socket system and start handler
-	# we need sudo to kill in case of an update from an older version where this script was not run as user `pi`:
-	sudo pkill -f '^python.*/buchse.py'
-	if [[ "$evsecon" == "buchse" ]]  && [[ "$isss" == "0" ]]; then
-		echo "socket..."
-		# ppbuchse is used in issss.py to detect "openWB Buchse"
-		if [ ! -f /home/pi/ppbuchse ]; then
-			echo "32" > /home/pi/ppbuchse
-		fi
-		nohup python3 "$OPENWBBASEDIR/runs/buchse.py" >>"$LOGFILE" 2>&1 &
-	fi
+	"$OPENWBBASEDIR/runs/services.sh" restart
 
 	# get local ip
 	ip route get 1 | awk '{print $7;exit}' > "$OPENWBBASEDIR/ramdisk/ipaddress"

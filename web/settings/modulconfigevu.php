@@ -73,6 +73,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_enphase") echo "selected" ?> value="bezug_enphase">Enphase Envoy / IQ Gateway</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_good_we") echo "selected" ?> value="bezug_good_we">GoodWe</option>
@@ -148,6 +149,7 @@
 									<select name="sungrowsr" id="sungrowsr" class="form-control">
 										<option <?php if($sungrowsrold == 0) echo "selected" ?> value="0">SH (Hybrid)</option>
 										<option <?php if($sungrowsrold == 1) echo "selected" ?> value="1">SG (kein Hybrid)</option>
+										<option <?php if($sungrowsrold == 2) echo "selected" ?> value="2">SG mit WiNet-Dongle (kein Hybrid)</option>
 									</select>
 								</div>
 							</div>
@@ -195,7 +197,13 @@
 								<span class="text-info">openWB/set/evu/VPhase1</span> Spannung in Volt für Phase 1, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase2</span> Spannung in Volt für Phase 2, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase3</span> Spannung in Volt für Phase 3, float, Punkt als Trenner<br>
-								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner
+								<span class="text-info">openWB/set/evu/HzFrequenz</span> oder <span class="text-info">openWB/set/evu/Hz</span> Netzfrequenz in Hz, float, Punkt als Trenner<br>
+								<span class="text-info">openWB/set/evu/WPhase1</span> Leistung in Watt für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase2</span> Leistung in Watt für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase3</span> Leistung in Watt für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase1</span> Powerfaktor für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase2</span> Powerfaktor für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase3</span> Powerfaktor für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung
 							</div>
 						</div>
 						<div id="wattbezuglgessv1" class="hide">
@@ -713,7 +721,7 @@
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Fronius WR.
 										</span>
-										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php if(isset($wrfroniusip)) echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
 										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>
@@ -920,7 +928,20 @@
 								Die IP des Speichers wird im dazugehörigen SMA SBS Speicher-Modul eingestellt.
 							</div>
 						</div>
-
+						<div id="wattbezugenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Die IP des Envoy / IQ Gateway wird im dazugehörigen Envoy PV-Modul eingestellt.
+							</div>
+							<div class="form-row mb-1">
+								<label for="bezugenphaseeid" class="col-md-4 col-form-label">Zähler EID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="bezugenphaseeid" id="bezugenphaseeid" value="<?php echo (empty($bezugenphaseeidold)?'':$bezugenphaseeidold) ?>">
+									<span class="form-text small">
+										EID des EVU-Zählers (<i>net-consumption</i>).<br>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="evuglaettungdiv" class="hide">
 							<hr class="border-danger">
 							<div class="form-group">
@@ -1013,6 +1034,7 @@
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
 								hideSection('#wattbezugcarlogavazzilan');
+								hideSection('#wattbezugenphase');
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
 								if($('#wattbezugmodul').val() != 'none') {
@@ -1171,6 +1193,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
 									showSection('#wattbezugsolarwatt');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_enphase')   {
+									showSection('#wattbezugenphase');
 								}
 							}
 
