@@ -6,9 +6,9 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="MAIN"
 
 if [ ${DMOD} == "MAIN" ]; then
-    MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-    MYLOGFILE="${RAMDISKDIR}/speicher.log"
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sonnenbatterie.device" "bat" "${sonnenecoip}" "${sonnenecoalternativ}" >>"$MYLOGFILE" 2>&1
