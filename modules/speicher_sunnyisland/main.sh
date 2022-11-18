@@ -7,12 +7,12 @@ DMOD="MAIN"
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/bat.log"
+	MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_island.device" "bat" "${sunnyislandip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sma_sunny_island.device" "bat" "${sunnyislandip}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"

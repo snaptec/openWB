@@ -19,7 +19,7 @@ fi
 # The usage of wr_discovergy without bezug_discovergy is not intended and thus not handled.
 
 if [[ "$pvwattmodul" != "wr_discovergy" ]]; then
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.discovergy.device" "$discovergyuser" "$discovergypass" "$discovergyevuid" "" >> "$MYLOGFILE" 2>&1
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.discovergy.device" "$discovergyuser" "$discovergypass" "$discovergyevuid" "" >>"$MYLOGFILE" 2>&1
 fi
 
 cat "${RAMDISKDIR}/wattbezug"

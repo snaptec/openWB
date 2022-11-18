@@ -13,7 +13,7 @@ fi
 openwbDebugLog ${DMOD} 2 "Envoy IP/Hostname: ${wrenphasehostname}"
 openwbDebugLog ${DMOD} 2 "Zaehler EID: ${bezugenphaseeid}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.enphase.device" "counter" "${wrenphasehostname}" "${bezugenphaseeid}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.enphase.device" "counter" "${wrenphasehostname}" "${bezugenphaseeid}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
