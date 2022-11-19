@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import logging
-from typing import List, Union, Iterable
+from typing import List, Union, Iterable, cast
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import DeviceDescriptor
@@ -102,7 +102,7 @@ def read_legacy_bat(address1: str,
             soc_tmp, power_tmp = read_bat(client)
             soc += soc_tmp
             power += power_tmp
-            pv_tmp, pv_external_tmp = read_inverter(client, read_ext)
+            pv_tmp, pv_external_tmp = read_inverter(client, cast(bool, read_ext))
             pv += pv_tmp
             pv_external += pv_external_tmp
     soc /= len(addresses)

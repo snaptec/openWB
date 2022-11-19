@@ -11,8 +11,8 @@ class E3dcConfiguration:
 @auto_str
 class E3dc:
     def __init__(self,
-                 name: str = "e3dc",
-                 type: str = "e3dc",
+                 name: str = "E3DC",
+                 type: str = "E3DC",
                  id: int = 0,
                  configuration: E3dcConfiguration = None) -> None:
         self.name = name
@@ -23,14 +23,14 @@ class E3dc:
 
 @auto_str
 class E3dcBatConfiguration:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
 @auto_str
 class E3dcBatSetup(ComponentSetup[E3dcBatConfiguration]):
     def __init__(self,
-                 name: str = "e3dc Speicher",
+                 name: str = "E3DC Speicher",
                  type: str = "bat",
                  id: int = 0,
                  configuration: E3dcBatConfiguration = None) -> None:
@@ -40,14 +40,14 @@ class E3dcBatSetup(ComponentSetup[E3dcBatConfiguration]):
 
 @auto_str
 class E3dcCounterConfiguration:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
 @auto_str
 class E3dcCounterSetup(ComponentSetup[E3dcCounterConfiguration]):
     def __init__(self,
-                 name: str = "e3dc Zähler",
+                 name: str = "E3DC Zähler",
                  type: str = "counter",
                  id: int = 0,
                  configuration: E3dcCounterConfiguration = None) -> None:
@@ -57,14 +57,14 @@ class E3dcCounterSetup(ComponentSetup[E3dcCounterConfiguration]):
 
 @auto_str
 class E3dcInverterConfiguration:
-    def __init__(self, read_ext: int = 0):
+    def __init__(self, read_ext: bool = False):
         self.read_ext = read_ext
 
 
 @auto_str
 class E3dcInverterSetup(ComponentSetup[E3dcInverterConfiguration]):
     def __init__(self,
-                 name: str = "E3dc Wechselrichter",
+                 name: str = "E3DC Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: E3dcInverterConfiguration = None) -> None:
