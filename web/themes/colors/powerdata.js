@@ -363,7 +363,7 @@ class WbData {
 		this.prefs.decimalP = this.decimalPlaces;
 		this.prefs.smartHomeC = this.smartHomeColors;
 		this.prefs.smartHomeSum = this.smartHomeSummary;
-		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
+		setCookie( "openWBColorTheme",JSON.stringify(this.prefs) )
 	}
 	// read cookies and update settings
 	readGraphPreferences() {

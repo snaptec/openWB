@@ -157,7 +157,9 @@
 				// console.log("selected Theme: " + selectedTheme);
 				$('link[rel="stylesheet"][href^="themes/' + themeCookie + '/settings.css"]').remove();
 				$('head').append('<link rel="stylesheet" href="themes/' + selectedTheme + '/settings.css?v=20200801">');
-				setCookie("openWBTheme", selectedTheme, 365);
+		        document.cookie = "openWBTheme=" + selectedTheme +  "; path=/openWB/" + "; max-age=16000000" +"; SameSite=Lax";
+				
+				
 				themeCookie = selectedTheme;
 				$('#saveButton').removeClass('btn-warning');
 				$('#saveButton').addClass('btn-success');

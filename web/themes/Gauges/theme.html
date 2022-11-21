@@ -90,7 +90,7 @@
 				date.setDate(date.getDate() + days);
 				expires = '; expires=' + date.toUTCString();
 			}
-			document.cookie = name + '=' + (value || '')  + expires;
+		    document.cookie = name + "=" + (value || '')  + expires + "; path=/openWB/;SameSite=Lax";
 		}
 
 		function getCookie(cname) {

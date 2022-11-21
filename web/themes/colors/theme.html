@@ -100,6 +100,20 @@
 			return '';
 		}
 		var themeCookie = getCookie('openWBTheme');
+		
+		
+		function setCookie(name, value, days) {
+			var expires = '';
+			if ( days ) {
+				var date = new Date();
+				date.setDate(date.getDate() + days);
+				expires = '; expires=' + date.toUTCString();
+			}
+		    document.cookie = name + "=" + (value || '')  + expires + "; path=/openWB/;SameSite=Lax";
+			console.log('setCookie '+name+'='+value);
+		}
+		
+				
 		// include special Theme style
 		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
 	</script>
