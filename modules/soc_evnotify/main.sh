@@ -66,5 +66,5 @@ if ((soctimer < 4)); then
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 >"$soctimerfile"
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.vehicles.evnotify.EVNotify" "$akey" "$token" "$CHARGEPOINT" 2>>"$RAMDISKDIR/openWB.log"
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.vehicles.evnotify.soc" "$akey" "$token" "$CHARGEPOINT" 2>>"$RAMDISKDIR/openWB.log"
 fi
