@@ -6,9 +6,9 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 
-[*.{py,yml}]
+[*.{py,yml,lock}]
 indent_style = space
 indent_size = 4
 
-[*.yml]
+[*.{yml,lock}]
 indent_size = 2
