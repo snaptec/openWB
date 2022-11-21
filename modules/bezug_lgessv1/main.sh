@@ -13,7 +13,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.lg.device" "counter" "${lgessv1ip}" "${lgessv1pass}" >>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.lg.device" "counter" "${lgessv1ip}" "${lgessv1pass}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "EVU RET: ${ret}"

@@ -21,7 +21,6 @@ else
 	READ_BATTERY="False"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.huawei.device" "${pv1_ipa}" "${pv1_ida}" "$READ_COUNTER" "$READ_BATTERY">>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.huawei.device" "${pv1_ipa}" "${pv1_ida}" "$READ_COUNTER" "$READ_BATTERY" >>"$MYLOGFILE" 2>&1
 
-pvwatt=$(<"${RAMDISKDIR}/pvwatt")
-echo "$pvwatt"
+cat "${RAMDISKDIR}/pvwatt"

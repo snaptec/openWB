@@ -5,7 +5,7 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 . "$OPENWBBASEDIR/loadconfig.sh"
 # load helperFunctions
 . "$OPENWBBASEDIR/helperFunctions.sh"
-# load rfidHelper
+# load pushButtonsHelper
 . "$OPENWBBASEDIR/runs/pushButtons/pushButtonsHelper.sh"
 
 pushButtonsSetup "$ladetaster" 0

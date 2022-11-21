@@ -10,10 +10,10 @@ else
 	MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-if [[ "$solaredgespeicherip" == "$solaredgepvip" ]]  ; then
-	echo "value read at pv modul" > /dev/null
+if [[ "$solaredgespeicherip" == "$solaredgepvip" ]]; then
+	echo "value read at pv modul" >/dev/null
 else
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solaredge.device" "bat" "$solaredgespeicherip" "" "1" "2" "none" "none" "0" "0" "$solaredgezweiterspeicher" >>"$MYLOGFILE" 2>&1
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.solaredge.device" "bat" "$solaredgespeicherip" "" "1" "2" "none" "none" "0" "0" "$solaredgezweiterspeicher" >>"$MYLOGFILE" 2>&1
 	ret=$?
 fi
 

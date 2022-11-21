@@ -52,7 +52,7 @@
 	<!-- local css due to async loading of theme css -->
 	<style>
 		#preloader {
-			background-color: white;
+			background-color: var(--color-bg);
 			position: fixed;
 			top: 0px;
 			left: 0px;
@@ -68,6 +68,7 @@
 
 		#preloader-image {
 			max-width: 300px;
+			filter:var(--invertLogo)
 		}
 
 		#preloader-info {
@@ -122,7 +123,7 @@
 		<div id="preloader-inner">
 			<div class="row">
 				<div class="mx-auto d-block justify-content-center">
-					<img id="preloader-image" src="img/favicons/preloader-image.png" alt="openWB">
+					<img id="preloader-image" src="img/favicons/preloader-image-transparent.png" alt="openWB">
 				</div>
 			</div>
 			<div id="preloader-info" class="row justify-content-center mt-2">
@@ -189,6 +190,8 @@
 											class="fa fa-sliders-h px-0"></span> Dezimalstellen kW & kWh ändern</a>
 									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span
 											class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
+									<a class="dropdown-item" href="#" onclick="toggleSmartHomeSummary()"><span
+											class="fa fa-palette px-0"></span> Smarthome-Zusammenfassung an/aus </a>
 								</div>
 							</div>
 

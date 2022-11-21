@@ -57,7 +57,9 @@ for i in $(seq 4 8); do
 	fi
 done
 
-sleep 15
+# Wait for regulation loop(s) and cron jobs to end, but with timeout in case a script hangs
+pgrep -f "$OPENWBBASEDIR/(regel\\.sh|runs/cron5min\\.sh|runs/cronnightly\\.sh)$" | \
+	timeout 15 xargs -n1 -I'{}' tail -f --pid="{}" /dev/null
 
 # backup some files before fetching new release
 # module soc_eq

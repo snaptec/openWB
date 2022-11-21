@@ -446,6 +446,7 @@ h4 {
 	--xgridCol: rgba(255, 255, 255, 0.1);
 	--tickCol: rgba(255, 255, 255, 0.82);
 	--evuCol: rgba(255, 0, 0, 0.7);	
+	--invertLogo: invert(0)
 }
 
 .theme-dark {
@@ -474,6 +475,7 @@ h4 {
 	--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 0px;
+	--invertLogo: invert(1);
 }
 
 .theme-gray {
@@ -502,6 +504,7 @@ h4 {
 		--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 0px;
+	--invertLogo: invert(1);
 }
 
 .shcolors-normal {

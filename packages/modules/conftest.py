@@ -5,8 +5,10 @@ import pytest
 
 from modules.common import simcount
 
-sys.modules['jq'] = type(sys)('jq')
 sys.modules['pymodbus'] = type(sys)('pymodbus')
+sys.modules['aiohttp'] = type(sys)('aiohttp')
+sys.modules['lxml'] = type(sys)('lxml')
+sys.modules['lxml.html'] = type(sys)('lxml.html')
 
 module = type(sys)('pymodbus.client.sync')
 module.ModbusSerialClient = Mock()
@@ -22,13 +24,8 @@ module.BinaryPayloadDecoder = Mock()
 sys.modules['pymodbus.payload'] = module
 
 
-class MockSimCount:
-    def __init__(self):
-        self.sim_count = Mock(return_value=(100, 200))
-
-
 @pytest.fixture(autouse=True)
-def mock_simcount(monkeypatch) -> MockSimCount:
-    mock = MockSimCount()
-    monkeypatch.setattr(simcount.SimCountFactory, 'get_sim_counter', Mock(return_value=lambda: mock))
+def mock_simcount(monkeypatch) -> Mock:
+    mock = Mock(return_value=(100, 200))
+    monkeypatch.setattr(simcount.SimCounter, 'sim_count', mock)
     return mock
