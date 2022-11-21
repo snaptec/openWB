@@ -7,7 +7,7 @@ from typing import Callable, Dict, Tuple
 
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import ChargepointState
-from modules.internal_openwb.chargepoint_module import ChargepointModule, InternalOpenWB
+from modules.chargepoints.internal_openwb.chargepoint_module import ChargepointModule, InternalOpenWB
 
 log = logging.getLogger(__name__)
 
