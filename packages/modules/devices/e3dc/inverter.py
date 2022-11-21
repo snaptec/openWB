@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from typing import Tuple, cast
+from typing import Tuple
 import logging
 
 from modules.common import modbus
@@ -15,13 +15,14 @@ from modules.devices.e3dc.config import E3dcInverterSetup
 log = logging.getLogger(__name__)
 
 
-def read_inverter(client: modbus.ModbusTcpClient_, read_ext: bool) -> Tuple[int, int]:
+def read_inverter(client: modbus.ModbusTcpClient_, read_ext) -> Tuple[int, int]:
     # 40067 PV Leistung
-    pv = cast(int, client.read_holding_registers(40067, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1)) * -1
-    if read_ext:
+    pv = client.read_holding_registers(40067, ModbusDataType.INT_32,
+                                       wordorder=Endian.Little, unit=1) * -1
+    if read_ext == 1:
         # 40075 externe PV Leistung
-        pv_external = cast(int, client.read_holding_registers(40075, ModbusDataType.INT_32,
-                           wordorder=Endian.Little, unit=1))
+        pv_external = client.read_holding_registers(40075, ModbusDataType.INT_32,
+                                                    wordorder=Endian.Little, unit=1)
     else:
         pv_external = 0
     return pv, pv_external
