@@ -68,8 +68,7 @@ def create_legacy_device_config(address: str,
     return device_config
 
 
-def read_legacy_counter(address1: str,
-                        num: int):
+def read_legacy_counter(address1: str, num: int):
     component_config = E3dcCounterSetup(configuration=E3dcCounterConfiguration())
     component_config.id = num
     run_device_legacy(create_legacy_device_config(address1,
@@ -77,7 +76,7 @@ def read_legacy_counter(address1: str,
 
 
 def read_legacy_bat(address1: str,
-                    address2: str, read_ext: int,
+                    address2: str, read_extinput: int,
                     pv_module: str,
                     num: int) -> None:
     # für openwbv19 können mit der bisherigen parametrisierung zwei ip_addressen
@@ -86,9 +85,10 @@ def read_legacy_bat(address1: str,
     # in openwb v2.0 geht nur noch eine IP adresse und die Pv muss
     # separate ausgelesen werden
     addresses = [address for address in [address1, address2] if address != "none"]
+    read_ext = (read_extinput == 1)
     log.debug('e3dc IP-Adresse1: %s', address1)
     log.debug('e3dc IP-Adresse2: %s', address2)
-    log.debug('e3dc read_ext: %d', read_ext)
+    log.debug('e3dc read_ext: %s', read_ext)
     log.debug('e3dc pv_module: %s', pv_module)
     log.debug('e3dc id: %d', num)
     soc = 0   # type: Union[int, float]
@@ -97,12 +97,12 @@ def read_legacy_bat(address1: str,
     pv = 0
     pv_other = pv_module != "none"
     for address in addresses:
-        log.debug("Ip: %s, read_external %d pv_other %s", address, read_ext, pv_other)
+        log.debug("Ip: %s, read_external %s pv_other %s", address, read_ext, pv_other)
         with modbus.ModbusTcpClient_(address, port=502) as client:
             soc_tmp, power_tmp = read_bat(client)
             soc += soc_tmp
             power += power_tmp
-            pv_tmp, pv_external_tmp = read_inverter(client, read_ext)
+            pv_tmp, pv_external_tmp = read_inverter(client,  read_ext)
             pv += pv_tmp
             pv_external += pv_external_tmp
     soc /= len(addresses)
