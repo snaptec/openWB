@@ -200,6 +200,7 @@ class PowerGraph {
 						this.liveGraphMinutes = Math.round((endTime - startTime) / 60000);
 						this.updateHeading();
 						this.updateGraph();
+						this.updateEnergyValues();
 						unsubscribeMqttGraphSegments();
 					}
 				}
@@ -341,6 +342,19 @@ class PowerGraph {
 			wbdata.usageSummary.devices.energyBat = batDevices / 1000;
 			wbdata.usageSummary.devices.pvPercentage = Math.round((wbdata.usageSummary.devices.energyPv + wbdata.usageSummary.devices.energyBat) / (wbdata.usageSummary.devices.energy) * 100)
 			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / (wbdata.historicSummary.devices.energy) * 100)
+			
+			let pvHouse = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.housePv / 12);
+			}, 0)
+			wbdata.historicSummary.house.energyPv = pvHouse / 1000;
+			wbdata.usageSummary.house.energyPv = pvHouse / 1000;
+			let batHouse = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.houseBat / 12);
+			}, 0)
+			wbdata.historicSummary.house.energyBat = batHouse / 1000;
+			wbdata.usageSummary.house.energyBat = batHouse / 1000;
+			wbdata.usageSummary.house.pvPercentage = Math.round((wbdata.usageSummary.house.energyPv + wbdata.usageSummary.house.energyBat) / (wbdata.usageSummary.house.energy) * 100)
+			wbdata.historicSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
 		}
 	}
 	updateMonthlyEnergyValues() {
@@ -374,7 +388,18 @@ class PowerGraph {
 			wbdata.historicSummary.devices.energyPv = deviceEnergyPvSum;
 			wbdata.historicSummary.devices.energyBat = deviceEnergyBatSum;
 			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / wbdata.historicSummary.devices.energy * 100)
-		}
+			let pvHouse = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.housePv);
+			}, 0)
+			wbdata.historicSummary.house.energyPv = pvHouse / 1000;
+			wbdata.historicSummary.house.energyPv = pvHouse / 1000;
+			let batHouse = this.graphData.reduce((prev, cur) => {
+				return prev + (cur.houseBat);
+			}, 0)
+			wbdata.historicSummary.house.energyBat = batHouse / 1000;
+			wbdata.usageSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
+			wbdata.historicSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
+	}
 	}
 	extractLiveValues(payload) {
 		const elements = payload.split(",");
@@ -500,11 +525,16 @@ class PowerGraph {
 			values.chargingBat = this.calcBatFraction(values.charging, values)
 			values.shPv = this.calcPvFraction(values.devices, values)
 			values.shBat = this.calcBatFraction(values.devices, values)
+			values.housePv = this.calcPvFraction(values.housePower, values)
+			values.houseBat = this.calcBatFraction(values.housePower, values)
+			
 		} else {
 			values.chargingPv = 0;
 			values.chargingBat = 0;
 			values.shPv = 0;
 			values.shBat = 0;
+			values.housePv = 0;
+			values.houseBat = 0;
 		}
 		return values;
 	}
@@ -557,6 +587,22 @@ class PowerGraph {
 				- values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9; if (values.housePower < 0) { values.housePower = 0; };
 			values.selfUsage = values.solarPower - values.gridPush;
 			if (values.selfUsage < 0) { values.selfUsage = 0; };
+			if ((values.solarPower + values.gridPull + values.batOut) > 0) {
+				values.chargingPv = this.calcPvFraction(values.charging, values)
+				values.chargingBat = this.calcBatFraction(values.charging, values)
+				values.shPv = this.calcPvFraction(values.devices, values)
+				values.shBat = this.calcBatFraction(values.devices, values)
+				values.housePv = this.calcPvFraction(values.housePower, values)
+				values.houseBat = this.calcBatFraction(values.housePower, values)
+				
+			} else {
+				values.chargingPv = 0;
+				values.chargingBat = 0;
+				values.shPv = 0;
+				values.shBat = 0;
+				values.housePv = 0;
+				values.houseBat = 0;
+			}
 			return values;
 		} else return {}
 	}
