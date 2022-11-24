@@ -40,9 +40,13 @@ class vwid:
 				text = text[text.find('\n'):text.rfind('\n')].strip()
 
 				for line in text.split('\n'):
-					(name, val) = line.strip().split(':', 1)
-					val = val.strip('\', ')
-					objects[name] = val
+					try:
+						(name, val) = line.strip().split(':', 1)
+					except Exception:
+						self.log.error("password_form: ignore line: " + line)
+					else:
+						val = val.strip('\', ')
+						objects[name] = val
 
 		json_model = json.loads(objects['templateModel'])
 
