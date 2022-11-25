@@ -388,7 +388,6 @@ h3 {
 	--evuCol: rgba(255, 0, 0, 0.7);
 	--evubgCol: rgba(255, 10, 13, 0.3);
 	--pvCol: rgba(0, 255, 0, 0.7);
-	;
 	--pvbgCol: rgba(10, 255, 13, 0.3);
 	--speicherCol: rgba(255, 153, 13, 0.7);
 	--speicherbgCol: rgba(200, 255, 13, 0.3);
@@ -444,4 +443,20 @@ h3 {
 .openwb-device-2 {
 	color: rgb(255 255 204);
 	background-color: rgb(150 150 0);
+}
+
+@media screen and (max-width: 575px) {
+	#date {
+		padding-right: 0;
+		padding-left: 5px;
+	}
+
+	#time {
+		padding-right: 5px;
+		padding-left: 0;
+	}
+}
+
+.row.middle {
+	align-items: center;
 }

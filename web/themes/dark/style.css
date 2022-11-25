@@ -453,3 +453,27 @@ h3 {
 	color: rgb(255 255 204);
 	background-color: rgb(150 150 0);
 }
+
+@media screen and (max-width: 575px) {
+	#date {
+		padding-right: 0;
+		padding-left: 5px;
+	}
+
+	#time {
+		padding-right: 5px;
+		padding-left: 0;
+	}
+}
+
+.progress {
+	background-color: #424242;
+}
+
+.progress-bar {
+	background-color: #424242;
+}
+
+.row.middle {
+	align-items: center;
+}
