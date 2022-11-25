@@ -52,6 +52,9 @@ class YieldMeter {
 					.filter(row => this.plotfilter(row))
 					.concat(wbdata.usageDetails
 						.filter(row => this.plotfilter(row)));
+				if (wbdata.smartHomeSummary && wbdata.usageSummary.devices.energy > 0) {
+					this.plotdata.push(wbdata.usageSummary.devices)
+				}
 				break;
 			case 'day':
 				if (wbdata.showTodayGraph) {
@@ -65,12 +68,20 @@ class YieldMeter {
 					}
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
-						.filter(row => this.plotfilter(row));
+						.filter(row => row.energy > 0 && row.name != "Geräte");
+					if (wbdata.smartHomeSummary && wbdata.historicSummary.devices.energy > 0) {
+						this.plotdata.push(wbdata.historicSummary.devices)
+					}
 				}
 				break;
 			case 'month':
 				this.plotdata = Object.values(wbdata.historicSummary)
-					.filter(row => this.plotfilter(row));
+					.filter(row => row.energy > 0 && row.name != "Geräte");
+
+				//.filter(row => this.plotfilter(row));
+				if (wbdata.smartHomeSummary && wbdata.historicSummary.devices.energy > 0) {
+					this.plotdata.push(wbdata.historicSummary.devices)
+				}
 				break;
 			default: break;
 		}
@@ -127,26 +138,27 @@ class YieldMeter {
 			.attr("width", this.xScale.bandwidth())
 			.attr("height", (d) => (this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom))
 			.attr("fill", (d) => d.color);
-		// Display the PV Charging inner bar
-		bargroups
-			.append("rect")
-			.attr("class", "bar")
-			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
-			.attr("y", (d) => this.yScale(d.energyPv))
-			.attr("width", this.xScale.bandwidth() * 2 / 3)
-			.attr("height", (d) => (this.height - this.yScale(d.energyPv) - this.margin.top - this.margin.bottom))
-			.attr("fill", this.pvColor)
-			.attr("fill-opacity", "66%");
-		// Display the Bat Charging inner bar
-		bargroups.append("rect")
-			.attr("class", "bar")
-			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
-			.attr("y", (d) => this.yScale(d.energyBat + d.energyPv))
-			.attr("width", this.xScale.bandwidth() * 2 / 3)
-			.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
-			.attr("fill", this.batColor)
-			.attr("fill-opacity", "66%");
-
+		if (wbdata.graphMode != 'live') {
+			// Display the PV Charging inner bar
+			bargroups
+				.append("rect")
+				.attr("class", "bar")
+				.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
+				.attr("y", (d) => this.yScale(d.energyPv))
+				.attr("width", this.xScale.bandwidth() * 2 / 3)
+				.attr("height", (d) => (this.height - this.yScale(d.energyPv) - this.margin.top - this.margin.bottom))
+				.attr("fill", this.pvColor)
+				.attr("fill-opacity", "66%");
+			// Display the Bat Charging inner bar
+			bargroups.append("rect")
+				.attr("class", "bar")
+				.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
+				.attr("y", (d) => this.yScale(d.energyBat + d.energyPv))
+				.attr("width", this.xScale.bandwidth() * 2 / 3)
+				.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
+				.attr("fill", this.batColor)
+				.attr("fill-opacity", "66%");
+		}
 		const yAxisGenerator = d3.axisLeft(this.yScale)
 			.tickFormat(function (d) {
 				return ((d > 0) ? d : "");
@@ -193,7 +205,7 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => {
-				if (d.pvPercentage > 0) {
+				if (wbdata.graphMode != 'live' && d.pvPercentage > 0) {
 					return this.yScale(d.energy) - 25
 				} else {
 					return this.yScale(d.energy) - 10
@@ -203,16 +215,16 @@ class YieldMeter {
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (formatWattH(d.energy * 1000)));
-
-		// add a PV percentage tag to the charging bar
-		labels.append("text")
-			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
-			.attr("y", (d) => this.yScale(d.energy) - 10)
-			.attr("font-size", this.labelfontsize - 2)
-			.attr("text-anchor", "middle")
-			.attr("fill", (d) => this.pvColor)
-			.text((d) => this.pvString(d));
-
+		if (wbdata.graphMode != 'live') {
+			// add a PV percentage tag to the charging bar
+			labels.append("text")
+				.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+				.attr("y", (d) => this.yScale(d.energy) - 10)
+				.attr("font-size", this.labelfontsize - 2)
+				.attr("text-anchor", "middle")
+				.attr("fill", (d) => this.pvColor)
+				.text((d) => this.pvString(d));
+		}
 		// Add category labels
 		labels
 			.append("text")
@@ -222,7 +234,6 @@ class YieldMeter {
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (this.truncateCategory(d.name)));
-
 	}
 
 	pvString(item) {

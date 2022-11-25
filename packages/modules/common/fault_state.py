@@ -45,7 +45,7 @@ class FaultState(Exception):
             if ramdisk:
                 topic = component_type.type_topic_mapping_comp(component_info.type)
                 prefix = "openWB/set/" + topic + "/"
-                if component_info.id is not None:
+                if component_info.type != "counter" and component_info.type != "bat":
                     if component_type == "vehicle":
                         prefix += str(component_info.id) + "/socFault"
                     else:

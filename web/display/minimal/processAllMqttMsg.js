@@ -12,10 +12,10 @@ function reloadDisplay() {
 	 */
 	// wait some seconds to allow other instances receive this message
 	console.log("reloading display...");
-	setTimeout(function(){
-		publish( "0", "openWB/set/system/reloadDisplay" );
+	setTimeout(function () {
+		publish("0", "openWB/set/system/reloadDisplay");
 		// wait again to give the broker some time and avoid a reload loop
-		setTimeout(function(){
+		setTimeout(function () {
 			location.reload();
 		}, 2000);
 	}, 2000);
@@ -24,82 +24,72 @@ function reloadDisplay() {
 function handlevar(mqttmsg, mqttpayload) {
 	// console.log("Topic: "+mqttmsg+" Message: "+mqttpayload);
 	// receives all messages and calls respective function to process them
-	if ( mqttmsg.match( /^openwb\/system\//i) ) { processSystemMessages(mqttmsg, mqttpayload); }
-	else if ( mqttmsg.match( /^openwb\/lp\//i) ) { processChargepointMessages(mqttmsg, mqttpayload); }
+	if (mqttmsg.match(/^openwb\/system\//i)) { processSystemMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/lp\//i)) { processChargepointMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
 function processSystemMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
-	if ( mqttmsg == 'openWB/system/reloadDisplay' ) {
-		if( mqttpayload == '1' ){
+	if (mqttmsg == 'openWB/system/reloadDisplay') {
+		if (mqttpayload == '1') {
 			reloadDisplay();
 		}
 	}
-	// else if ( mqttmsg == 'openWB/system/parentWB' ) {
-	// 	console.log("received parent openwb url: " + mqttpayload);
-	// }
-	// else if ( mqttmsg == 'openWB/system/parentCPlp1' ) {
-	// 	console.log("received index for lp1 on parent openwb: " + mqttpayload);
-	// }
-	// else if ( mqttmsg == 'openWB/system/parentCPlp2' ) {
-	// 	console.log("received index for lp2 on parent openwb: " + mqttpayload);
-	// }
 }
 
 function processChargepointMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
-	if ( mqttmsg == 'openWB/lp/2/boolChargePointConfigured' ) {
-		console.log("received configured for local lp2: " + mqttpayload)
-	}
-	else if ( mqttmsg == 'openWB/lp/1/%Soc' ) {
-		var lp1s = mqttpayload;
-		gaugelp1s.set(lp1s);
-		$("#lp1st").html(mqttpayload + "%");
-	}
-	else if ( mqttmsg == 'openWB/lp/1/W' ) {
-		var lp1w = mqttpayload;
-		gaugelp1.set(lp1w);
-		if ( lp1w > 999 ) {
-			lp1w= lp1w / 1000;
-			$("#lp1t").html(lp1w.toFixed(2) + " kW");
-		} else {
-			$("#lp1t").html(mqttpayload + " W");
-		}
-	}
-	else if (mqttmsg == 'openWB/lp/1/boolSocConfigured' ) {
-		if ( mqttpayload == 1 ) {
-			$("#lp1s").removeClass("hide");
-			$("#lp1st").removeClass("hide");
-		} else {
-			$("#lp1s").addClass("hide");
-			$("#lp1st").addClass("hide");
-		}
-	}
-	else if ( mqttmsg == 'openWB/lp/1/boolPlugStat' ) {
-		if ( mqttpayload == 1 ) {
-			$("#lp1plugstat").removeClass('hide');
-		} else {
-			$("#lp1plugstat").addClass('hide');
-		}
-	}
-	else if ( mqttmsg == 'openWB/lp/1/boolChargeStat' ) {
-		if ( mqttpayload == 1 ) {
-			$("#lp1plugstat").removeClass('text-warning').addClass('text-success');
-		} else {
-			$("#lp1plugstat").removeClass('text-success').addClass('text-warning');
-		}
-	}
-	else if ( mqttmsg == 'openWB/lp/1/ChargePointEnabled' ) {
-		var lp1enabled = mqttpayload;
-		if(lp1enabled == 1){
-			$("#lp1enabled").removeClass("hide");
-			$("#lp1disabled").addClass("hide");
-		} else {
-			$("#lp1enabled").addClass("hide");
-			$("#lp1disabled").removeClass("hide");
-		}
-	}
 
+	// check if topic contains subgroup like /lp/1/
+	// last part of topic after /
+	var topic = mqttmsg.substring(mqttmsg.lastIndexOf('/') + 1);
+	var index = mqttmsg.match(/(\w+)\/(\d\d?)\//)[2];
+	if (index != null) {
+		if (topic == '%Soc') {
+			eval("gaugelp" + index + "s.set(mqttpayload)");
+			$('#lp' + index + 'st').html(mqttpayload + "%");
+		} else if (topic == 'W') {
+			var lpw = mqttpayload / 1000;
+			if (eval("displaylp" + index + "max") > 999) {
+				eval("gaugelp" + index + ".set(lpw)");
+			} else {
+				eval("gaugelp" + index + ".set(mqttpayload)");
+			}
+			if (mqttpayload > 999) {
+				$('#lp' + index + 't').html(lpw.toFixed(2) + " kW");
+			} else {
+				$('#lp' + index + 't').html(mqttpayload + " W");
+			}
+		} else if (topic == 'boolSocConfigured') {
+			if (mqttpayload == 1) {
+				$('#lp' + index + 's').removeClass("hide");
+				$('#lp' + index + 'st').removeClass("hide");
+			} else {
+				$('#lp' + index + 's').addClass("hide");
+				$('#lp' + index + 'st').addClass("hide");
+			}
+		} else if (topic == 'boolPlugStat') {
+			if (mqttpayload == 1) {
+				$('#lp' + index + 'plugstat').removeClass('hide');
+			} else {
+				$('#lp' + index + 'plugstat').addClass('hide');
+			}
+		} else if (topic == 'boolChargeStat') {
+			if (mqttpayload == 1) {
+				$('#lp' + index + 'plugstat').removeClass('text-warning').addClass('text-success');
+			} else {
+				$('#lp' + index + 'plugstat').removeClass('text-success').addClass('text-warning');
+			}
+		} else if (topic == 'ChargePointEnabled') {
+			if (mqttpayload == 1) {
+				$('#lp' + index + 'enabled').removeClass("hide");
+				$('#lp' + index + 'disabled').addClass("hide");
+			} else {
+				$('#lp' + index + 'enabled').addClass("hide");
+				$('#lp' + index + 'disabled').removeClass("hide");
+			}
+		}
+	}
 }

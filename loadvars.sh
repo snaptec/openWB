@@ -1867,6 +1867,14 @@ loadvars(){
 	mqttconfvar["config/get/sofort/lp/6/chargeLimitation"]=msmoduslp6
 	mqttconfvar["config/get/sofort/lp/7/chargeLimitation"]=msmoduslp7
 	mqttconfvar["config/get/sofort/lp/8/chargeLimitation"]=msmoduslp8
+	mqttconfvar["config/get/sofort/lp/1/etBasedCharging"]=lp1etbasedcharging
+	mqttconfvar["config/get/sofort/lp/2/etBasedCharging"]=lp2etbasedcharging
+	mqttconfvar["config/get/sofort/lp/3/etBasedCharging"]=lp3etbasedcharging
+	mqttconfvar["config/get/sofort/lp/4/etBasedCharging"]=lp4etbasedcharging
+	mqttconfvar["config/get/sofort/lp/5/etBasedCharging"]=lp5etbasedcharging
+	mqttconfvar["config/get/sofort/lp/6/etBasedCharging"]=lp6etbasedcharging
+	mqttconfvar["config/get/sofort/lp/7/etBasedCharging"]=lp7etbasedcharging
+	mqttconfvar["config/get/sofort/lp/8/etBasedCharging"]=lp8etbasedcharging
 	mqttconfvar["config/get/pv/lp/1/socLimitation"]=stopchargepvatpercentlp1
 	mqttconfvar["config/get/pv/lp/2/socLimitation"]=stopchargepvatpercentlp2
 	mqttconfvar["config/get/pv/lp/1/maxSoc"]=stopchargepvpercentagelp1

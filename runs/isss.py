@@ -1,26 +1,34 @@
 #!/usr/bin/python
+from enum import Enum
 import logging
 import os
 import re
+import sys
 import threading
 import time
-from typing import Dict, List, Optional
+from typing import List, Optional
 import RPi.GPIO as GPIO
 
 from helpermodules.pub import pub_single
-from helpermodules import compatibility
 from modules.common.store import ramdisk_read, ramdisk_write
 from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
 from modules.common.component_state import ChargepointState
 from modules.common.modbus import ModbusSerialClient_
-from modules.chargepoints.internal_openwb import chargepoint_module, socket
+from modules.chargepoints.internal_openwb import chargepoint_module
+from modules.chargepoints.internal_openwb.socket import Socket
 from modules.chargepoints.internal_openwb.chargepoint_module import InternalOpenWB
 
 basePath = "/var/www/html/openWB"
 ramdiskPath = basePath + "/ramdisk"
 logFilename = ramdiskPath + "/isss.log"
 MAP_LOG_LEVEL = [logging.ERROR, logging.WARNING, logging.DEBUG]
+
+
+class IsssMode(Enum):
+    SOCKET = "socket"
+    DUO = "duo"
+    DAEMON = "daemon"
 
 
 logging.basicConfig(filename=ramdiskPath+'/isss.log',
@@ -118,7 +126,7 @@ class UpdateState:
         self.__set_current_error = 0
 
     def update_state(self) -> None:
-        if self.cp_module.config.id == 1:
+        if self.cp_module.config.id == 0:
             suffix = ""
         else:
             suffix = "s1"
@@ -193,18 +201,15 @@ class UpdateState:
 
 
 class Isss:
-    def __init__(self) -> None:
+    def __init__(self, mode: IsssMode, socket_max_current: int) -> None:
         log.debug("Init isss")
         self.serial_client = ModbusSerialClient_(self.detect_modbus_usb_port())
-        self.cp1 = IsssChargepoint(self.serial_client, 1)
-        try:
-            if int(ramdisk_read("issslp2act")) == 1:
-                self.cp2 = IsssChargepoint(self.serial_client, 2)
-            else:
-                self.cp2 = None
-        except (FileNotFoundError, ValueError) as e:
-            log.error("Error reading issslp2act! Guessing cp2 is not configured.")
-            self.cp2 = None
+        self.cp0 = IsssChargepoint(self.serial_client, 0, mode, socket_max_current)
+        if mode == IsssMode.DUO:
+            log.debug("Zweiter Ladepunkt für Duo konfiguriert.")
+            self.cp1 = IsssChargepoint(self.serial_client, 1, mode, socket_max_current)
+        else:
+            self.cp1 = None
         self.init_gpio()
 
     def init_gpio(self) -> None:
@@ -228,9 +233,9 @@ class Isss:
             while True:
                 log.setLevel(MAP_LOG_LEVEL[int(os.environ.get('debug'))])
                 log.debug("***Start***")
-                self.cp1.update()
-                if self.cp2:
-                    self.cp2.update()
+                self.cp0.update()
+                if self.cp1:
+                    self.cp1.update()
                 time.sleep(1.1)
 
     def detect_modbus_usb_port(self) -> str:
@@ -244,7 +249,7 @@ class Isss:
     @staticmethod
     def get_cp_num(local_charge_point_num: int) -> int:
         try:
-            if local_charge_point_num == 1:
+            if local_charge_point_num == 0:
                 return int(re.sub(r'\D', '', ramdisk_read("parentCPlp1")))
             else:
                 return int(re.sub(r'\D', '', ramdisk_read("parentCPlp2")))
@@ -263,17 +268,15 @@ class Isss:
 
 
 class IsssChargepoint:
-    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int) -> None:
+    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode, socket_max_current: int) -> None:
         self.local_charge_point_num = local_charge_point_num
-        if local_charge_point_num == 1:
-            try:
-                with open('/home/pi/ppbuchse', 'r') as f:
-                    max_current = int(f.read())
-                self.module = socket.Socket(max_current, InternalOpenWB(1, serial_client))
-            except (FileNotFoundError, ValueError):
-                self.module = chargepoint_module.ChargepointModule(InternalOpenWB(1, serial_client))
+        if local_charge_point_num == 0:
+            if mode == IsssMode.SOCKET:
+                self.module = Socket(socket_max_current, InternalOpenWB(0, serial_client))
+            else:
+                self.module = chargepoint_module.ChargepointModule(InternalOpenWB(0, serial_client))
         else:
-            self.module = chargepoint_module.ChargepointModule(InternalOpenWB(2, serial_client))
+            self.module = chargepoint_module.ChargepointModule(InternalOpenWB(1, serial_client))
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False
@@ -285,7 +288,7 @@ class IsssChargepoint:
             else:
                 return False
         try:
-            if self.local_charge_point_num == 2:
+            if self.local_charge_point_num == 1:
                 time.sleep(0.1)
             phase_switch_cp_active = __thread_active(self.update_state.cp_interruption_thread) or __thread_active(
                 self.update_state.phase_switch_thread)
@@ -297,4 +300,4 @@ class IsssChargepoint:
             log.exception("Fehler bei Ladepunkt "+str(self.local_charge_point_num))
 
 
-Isss().loop()
+Isss(IsssMode(sys.argv[1]), int(sys.argv[2])).loop()

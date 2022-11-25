@@ -171,6 +171,7 @@
 						</div>
 					</form>
 				</div> <!-- card 1 -->
+				<!-- temporary disabled! -->
 				<div class="card border-secondary">
 					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="card-header bg-secondary">
@@ -187,7 +188,7 @@
 													<i class="fa fa-user"></i>
 												</div>
 											</div>
-											<input type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]+">
+											<input disabled="disabled" type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]+">
 										</div>
 										<span id="registerUsernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Zahlen, Sonderzeichen oder Leerzeichen</span>
 									</div>
@@ -201,14 +202,15 @@
 													<i class="fa fa-envelope"></i>
 												</div>
 											</div>
-											<input type="email" name="email" id="email" value="" class="form-control" required="required">
+											<input disabled="disabled" type="email" name="email" id="email" value="" class="form-control" required="required">
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Neuen Account erstellen und einrichten</button>
+							<!-- <button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Neuen Account erstellen und einrichten</button> -->
+							<button type="submit" class="btn btn-success" disabled="disabled">Neuen Account erstellen und einrichten</button>
 						</div>
 					</form>
 				</div> <!-- card 2 -->
