@@ -15,14 +15,12 @@ from modules.devices.e3dc.config import E3dcInverterSetup
 log = logging.getLogger(__name__)
 
 
-def read_inverter(client: modbus.ModbusTcpClient_, read_ext) -> Tuple[int, int]:
+def read_inverter(client: modbus.ModbusTcpClient_, read_ext: bool) -> Tuple[int, int]:
     # 40067 PV Leistung
-    pv = client.read_holding_registers(40067, ModbusDataType.INT_32,
-                                       wordorder=Endian.Little, unit=1) * -1
-    if read_ext == 1:
+    pv = int(client.read_holding_registers(40067, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1) * -1)
+    if read_ext:
         # 40075 externe PV Leistung
-        pv_external = client.read_holding_registers(40075, ModbusDataType.INT_32,
-                                                    wordorder=Endian.Little, unit=1)
+        pv_external = int(client.read_holding_registers(40075, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1))
     else:
         pv_external = 0
     return pv, pv_external
@@ -45,7 +43,7 @@ class E3dcInverter:
         # nur auslesen wenn als relevant parametrisiert
         # (read_external = 1) , sonst doppelte Auslesung
         # pv -> pv Leistung die direkt an e3dc angeschlossen ist
-        log.debug("read_ext %d", self.component_config.configuration.read_ext)
+        log.debug("read_ext %s", self.component_config.configuration.read_ext)
         log.debug("pv %d pv_external %d", pv, pv_external)
         # pv_other sagt aus, ob WR definiert ist,
         # und dessen PV Leistung auch gilt

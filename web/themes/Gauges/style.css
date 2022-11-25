@@ -4,342 +4,385 @@ Stylesheet zum openWB Standard-Theme
 2019-2020 Michael Ortenstein
 */
 
-html{
-   min-height: 100%;
-   min-width:100%;
+html {
+	min-height: 100%;
+	min-width: 100%;
 }
 
 body {
-    color: white;
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
-    /* Old browsers */
-    background: rgb(90,90,90);
-    /* FF3.6-15 */
-    background: -moz-linear-gradient(top,  rgba(90,90,90,1) 0%, rgba(14,14,14,1) 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: -webkit-linear-gradient(top,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    background: linear-gradient(to bottom,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
-    /* IE6-9 */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', endColorstr='#0e0e0e',GradientType=0 );
-    background-attachment: fixed;
+	color: white;
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
+	/* Old browsers */
+	background: rgb(90, 90, 90);
+	/* FF3.6-15 */
+	background: -moz-linear-gradient(top, rgba(90, 90, 90, 1) 0%, rgba(14, 14, 14, 1) 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: -webkit-linear-gradient(top, rgba(90, 90, 90, 1) 0%, rgba(14, 14, 14, 1) 100%);
+	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background: linear-gradient(to bottom, rgba(90, 90, 90, 1) 0%, rgba(14, 14, 14, 1) 100%);
+	/* IE6-9 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5a5a5a', endColorstr='#0e0e0e', GradientType=0);
+	background-attachment: fixed;
 }
-body > .container {
-    padding: 55px 15px 0;
+
+body>.container {
+	padding: 55px 15px 25px;
 }
 
 @keyframes alertPulsation {
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-o-keyframes alertPulsation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+
+@-o-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-moz-keyframes alertPulsation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+
+@-moz-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-webkit-keyframes alertPulsation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+
+@-webkit-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
+
 .animate-alertPulsation {
-   -webkit-animation: alertPulsation 1s infinite;
-   -moz-animation: alertPulsation 1s infinite;
-   -o-animation: alertPulsation 1s infinite;
-   animation: alertPulsation 1s infinite;
+	-webkit-animation: alertPulsation 1s infinite;
+	-moz-animation: alertPulsation 1s infinite;
+	-o-animation: alertPulsation 1s infinite;
+	animation: alertPulsation 1s infinite;
 }
 
 .limitation-progress {
-    height: 0.6em !important;
+	height: 0.6em !important;
 }
 
 .pull-right {
-    float:right
+	float: right
 }
 
 .row.no-gutter [class*='col-']:first-child:not(:only-child) {
-    padding-right: 0;
+	padding-right: 0;
 }
+
 .row.no-gutter [class*='col-']:last-child:not(:only-child) {
-    padding-left: 0;
+	padding-left: 0;
 }
+
 .row.no-gutter [class*='col-']:not(:first-child):not(:last-child):not(:only-child) {
-    padding-right: 0;
-    padding-left: 0;
+	padding-right: 0;
+	padding-left: 0;
 }
 
 .gradient {
-    background: -webkit-linear-gradient(black, #f2f2f2, black);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+	background: -webkit-linear-gradient(black, #f2f2f2, black);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 }
 
-.cursor-pointer{
-  cursor: pointer;
+.cursor-pointer {
+	cursor: pointer;
 }
 
 .vaRow {
-    /* vertical alignment of content in rows */
-  display: flex;
-  align-items: center;
+	/* vertical alignment of content in rows */
+	display: flex;
+	align-items: center;
 }
 
 .hide {
-    display: none;
+	display: none;
 }
 
 .lpEnabledStyle {
-    color: #006515;
-    text-decoration: none;
+	color: #006515;
+	text-decoration: none;
 }
+
 .lpWaitingStyle {
-    color: #ffdb00;
-    text-decoration: none;
+	color: #ffdb00;
+	text-decoration: none;
 }
+
 .lpDisabledStyle {
-    color: #A30000;
-    text-decoration: line-through;
+	color: #A30000;
+	text-decoration: line-through;
 }
 
 .text-green {
-    color: #006515;
+	color: #006515;
 }
 
 .text-red {
-    color: #A30000;
+	color: #A30000;
 }
 
 .text-white {
-    color: white;
+	color: white;
 }
 
 .text-orange {
-    color: #ff8c1a;
+	color: #ff8c1a;
 }
 
 .text-black {
-    color: black;
+	color: black;
 }
 
 .text-blue {
-    color: blue;
+	color: blue;
 }
 
 .text-grey {
-    color: #515151;
+	color: #515151;
 }
 
 .text-lightgrey {
-    color: rgba(255, 255, 255, 0.82);
+	color: rgba(255, 255, 255, 0.82);
 }
 
 .bg-darkgrey {
-    background-color: #b6bcc9;
+	background-color: #b6bcc9;
 }
 
 .bg-lightgrey {
-    background-color: #d0d7e6;
+	background-color: #d0d7e6;
 }
+
 .bg-lightblue {
-    background-color: #23ebe1;
+	background-color: #23ebe1;
 }
 
 .bg-lightgreen {
-    background-color: #befebe;
+	background-color: #befebe;
 }
 
 .bg-rose {
-    background-color: #febebe;
+	background-color: #febebe;
 }
 
 .bg-apricot {
-    background-color:#fefedf;
+	background-color: #fefedf;
 }
 
 .bg-orange {
-    background-color:#fcbe1e;
+	background-color: #fcbe1e;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query since this is the default in Bootstrap */
 h1 {
-    font-size: 1.4rem;
+	font-size: 1.4rem;
 }
 
 h2 {
-    font-size: 0.9rem;
+	font-size: 0.9rem;
 }
 
 h3 {
-    font-size: 0.7rem;
+	font-size: 0.7rem;
 }
 
 .verySmallTextSize {
-      font-size: 0.5rem;
+	font-size: 0.5rem;
 }
 
 .smallTextSize {
-      font-size: 0.5rem;
+	font-size: 0.5rem;
 }
 
 .regularTextSize {
-      font-size: 0.7rem;
+	font-size: 0.7rem;
 }
 
 .largeTextSize {
-      font-size: 0.8rem;
+	font-size: 0.8rem;
 }
 
 .buttonTextSize {
-    font-size: 0.9rem;
+	font-size: 0.9rem;
 }
 
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
-    h1 {
-        font-size: 1.7rem;
-    }
+	h1 {
+		font-size: 1.7rem;
+	}
 
-    h2 {
-        font-size: 1.1rem;
-    }
+	h2 {
+		font-size: 1.1rem;
+	}
 
-    h3 {
-        font-size: 0.9rem;
-    }
+	h3 {
+		font-size: 0.9rem;
+	}
 
-    .verySmallTextSize {
-          font-size: 0.6rem;
-    }
+	.verySmallTextSize {
+		font-size: 0.6rem;
+	}
 
-    .smallTextSize {
-          font-size: 0.68rem;
-    }
+	.smallTextSize {
+		font-size: 0.68rem;
+	}
 
-    .regularTextSize {
-          font-size: 0.75rem;
-    }
+	.regularTextSize {
+		font-size: 0.75rem;
+	}
 
-    .largeTextSize {
-          font-size: 0.95rem;
-    }
+	.largeTextSize {
+		font-size: 0.95rem;
+	}
 
-    .buttonTextSize {
-          font-size: 1.0rem;
-    }
+	.buttonTextSize {
+		font-size: 1.0rem;
+	}
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media screen and (min-width: 768px) {
-    h1 {
-        font-size: 2.0rem;
-    }
+	h1 {
+		font-size: 2.0rem;
+	}
 
-    h2 {
-        font-size: 1.4rem;
-    }
+	h2 {
+		font-size: 1.4rem;
+	}
 
-    h3 {
-        font-size: 1.1rem;
-    }
+	h3 {
+		font-size: 1.1rem;
+	}
 
-    .verySmallTextSize {
-          font-size: 0.8rem;
-    }
+	.verySmallTextSize {
+		font-size: 0.8rem;
+	}
 
-    .smallTextSize {
-          font-size: 0.9rem;
-    }
+	.smallTextSize {
+		font-size: 0.9rem;
+	}
 
-    .regularTextSize {
-          font-size: 1.0rem;
-    }
+	.regularTextSize {
+		font-size: 1.0rem;
+	}
 
-    .largeTextSize {
-          font-size: 1.3rem;
-    }
+	.largeTextSize {
+		font-size: 1.3rem;
+	}
 
-    .buttonTextSize {
-          font-size: 1.2rem;
-    }
+	.buttonTextSize {
+		font-size: 1.2rem;
+	}
 }
 
 /* Large devices (desktops, 992px and up) */
 @media screen and (min-width: 992px) {
-    h1 {
-        font-size: 2.6rem;
-    }
+	h1 {
+		font-size: 2.6rem;
+	}
 
-    h2 {
-        font-size: 2.0rem;
-    }
+	h2 {
+		font-size: 2.0rem;
+	}
 
-    h3 {
-        font-size: 1.6rem;
-    }
+	h3 {
+		font-size: 1.6rem;
+	}
 
-    .verySmallTextSize {
-          font-size: 1.1rem;
-    }
+	.verySmallTextSize {
+		font-size: 1.1rem;
+	}
 
-    .smallTextSize {
-          font-size: 1.25rem;
-    }
+	.smallTextSize {
+		font-size: 1.25rem;
+	}
 
-    .regularTextSize {
-          font-size: 1.4rem;
-    }
+	.regularTextSize {
+		font-size: 1.4rem;
+	}
 
-    .largeTextSize {
-          font-size: 1.6rem;
-    }
+	.largeTextSize {
+		font-size: 1.6rem;
+	}
 
-    .buttonTextSize {
-          font-size: 1.6rem;
-    }
+	.buttonTextSize {
+		font-size: 1.6rem;
+	}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    h1 {
-        font-size: 3rem;
-    }
+	h1 {
+		font-size: 3rem;
+	}
 
-    h2 {
-        font-size: 2.4rem;
-    }
+	h2 {
+		font-size: 2.4rem;
+	}
 
-    h3 {
-        font-size: 1.95rem;
-    }
+	h3 {
+		font-size: 1.95rem;
+	}
 
-    .verySmallTextSize {
-          font-size: 1.4rem;
-    }
+	.verySmallTextSize {
+		font-size: 1.4rem;
+	}
 
-    .smallTextSize {
-          font-size: 1.65rem;
-    }
+	.smallTextSize {
+		font-size: 1.65rem;
+	}
 
-    .regularTextSize {
-          font-size: 1.8rem;
-    }
+	.regularTextSize {
+		font-size: 1.8rem;
+	}
 
-    .largeTextSize {
-          font-size: 1.8rem;
-    }
+	.largeTextSize {
+		font-size: 1.8rem;
+	}
 
-    .buttonTextSize {
-          font-size: 2.0rem;
-    }
+	.buttonTextSize {
+		font-size: 2.0rem;
+	}
 }
+
 /* Livechart colors */
 :root {
 	--fontCol: rgba(255, 255, 255, 0.82);
@@ -361,7 +404,7 @@ h3 {
 	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
 	--lp1SocCol: rgba(0, 0, 255, 0.5);
 	--lp2SocCol: rgba(50, 50, 55, 0.5);
-	--hausverbrauchCol: rgba(255,255,255,0.7);
+	--hausverbrauchCol: rgba(255, 255, 255, 0.7);
 	--hausverbrauchbgCol: rgba(200, 255, 13, 0.3);
 	--verbraucher1Col: rgba(0, 150, 150, 0.7);
 	--verbraucher1bgCol: rgba(200, 255, 13, 0.3);
@@ -399,4 +442,28 @@ h3 {
 	--d8bgCol: blue;
 	--d9Col: rgba(230, 50, 220, 0.7);
 	--d9bgCol: blue;
+}
+
+@media screen and (max-width: 575px) {
+	#date {
+		padding-right: 0;
+		padding-left: 5px;
+	}
+
+	#time {
+		padding-right: 5px;
+		padding-left: 0;
+	}
+}
+
+.progress {
+	background-color: #424242;
+}
+
+.progress-bar {
+	background-color: #424242;
+}
+
+.row.middle {
+	align-items: center;
 }

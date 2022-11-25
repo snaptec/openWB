@@ -34,6 +34,7 @@ case $CHARGEPOINT in
 		password=$psa_passlp2
 		clientId=$psa_clientidlp2
 		clientSecret=$psa_clientsecretlp2
+		vehicleId=$psa_vinlp2
 		soccalc=$psa_soccalclp2
 		manufacturer=$psa_manufacturerlp2
 		socOnlineIntervall=$psa_intervallp2
@@ -59,6 +60,7 @@ case $CHARGEPOINT in
 		password=$psa_passlp1
 		clientId=$psa_clientidlp1
 		clientSecret=$psa_clientsecretlp1
+		vehicleId=$psa_vinlp1
 		soccalc=$psa_soccalclp1
 		manufacturer=$psa_manufacturerlp1
 		socOnlineIntervall=$psa_intervallp1
@@ -100,7 +102,7 @@ if (($soccalc == 0)); then #manual calculation not enabled, using existing logic
 		incrementTimer
 	else
 		echo 0 > $soctimerfile
-		sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
+		sudo python "$MODULEDIR/psasoc.py" "$CHARGEPOINT" "$username" "$password" "$clientId" "$clientSecret" "$manufacturer" "$soccalc" "$vehicleId"
 		if [[ $? == 0 ]]; then
 			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetched from $manufacturer: $(<$psaSocFile)%"
 		else
@@ -113,7 +115,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging started. Fetching SoC from $manufacturer out of order."
 		soctimer=0
 		echo 0 > $soctimerfile
-		sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
+		sudo python "$MODULEDIR/psasoc.py" "$CHARGEPOINT" "$username" "$password" "$clientId" "$clientSecret" "$manufacturer" "$soccalc" "$vehicleId"
 		if [[ $? == 0 ]]; then
 			echo $(<$psaSocFile) > $socFile
 			echo $(<$psaSocFile) > $manualSocFile
@@ -132,7 +134,7 @@ else	# manual calculation enabled, combining PSA module with manual calc method
 		else
 			openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Fetching SoC from $manufacturer"
 			echo 0 > $soctimerfile
-			sudo python $MODULEDIR/psasoc.py $CHARGEPOINT $username $password $clientId $clientSecret $manufacturer $soccalc
+			sudo python "$MODULEDIR/psasoc.py" "$CHARGEPOINT" "$username" "$password" "$clientId" "$clientSecret" "$manufacturer" "$soccalc" "$vehicleId"
 			if [[ $? == 0 ]]; then
 				# if fetched SoC is equal from last used fetched SoC and car is plugged in
 				if [[ $(<$psaSocFile) == $(<$psaSocFile_last) ]] && [[ $(($(<$plugstat))) == 1 ]]; then

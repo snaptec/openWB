@@ -36,28 +36,28 @@ class WbData {
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
 		this.sourceSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" }
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" }
 		};
 
 		this.usageSummary = {
-			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 		};
 
 		this.historicSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" },
-			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 		};
 
 		this.usageDetails = [this.usageSummary.evuOut];
@@ -69,6 +69,7 @@ class WbData {
 		this.usageStackOrder = 0;
 		this.decimalPlaces = 1;
 		this.smartHomeColors = "normal";
+		this.smartHomeSummary = true;
 		this.prefs = {};
 	};
 
@@ -82,6 +83,7 @@ class WbData {
 		this.usageSummary.devices.color = 'var(--color-devices)';
 		this.usageSummary.batIn.color = 'var(--color-battery)';
 		this.usageSummary.house.color = 'var(--color-house)';
+		
 		var i;
 		for (i = 0; i < 8; i++) {
 			this.chargePoint[i].color = 'var(--color-lp' + (i + 1) + ')';
@@ -102,6 +104,7 @@ class WbData {
 		this.historicSummary.devices.color = 'var(--color-devices)';
 		this.historicSummary.batIn.color = 'var(--color-battery)';
 		this.historicSummary.house.color = 'var(--color-house)';
+		//this.historicSummary.chargingPv.color = 'var(--color-charging)';
 		evuCol = style.getPropertyValue('--evuCol');
 		xgridCol = style.getPropertyValue('--xgridCol');
 		tickCol = style.getPropertyValue('--tickCol');
@@ -334,11 +337,10 @@ class WbData {
 	}
 
 	updateUsageDetails() {
-		this.usageDetails = [this.usageSummary.evuOut,
+		this.usageDetails = [this.usageSummary.evuOut,this.usageSummary.batIn, this.usageSummary.house,
 		this.usageSummary.charging]
 			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
-			.concat(this.consumer.filter(row => (row.configured)))
-			.concat([this.usageSummary.batIn, this.usageSummary.house]);
+			.concat(this.consumer.filter(row => (row.configured)));
 	}
 
 	updateConsumerSummary(cat) {
@@ -360,6 +362,7 @@ class WbData {
 		this.prefs.showGr = this.showGrid;
 		this.prefs.decimalP = this.decimalPlaces;
 		this.prefs.smartHomeC = this.smartHomeColors;
+		this.prefs.smartHomeSum = this.smartHomeSummary;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 	// read cookies and update settings
@@ -394,6 +397,9 @@ class WbData {
 			}
 			if ('smartHomeC' in this.prefs) {
 				this.smartHomeColors = this.prefs.smartHomeC;
+			}
+			if ('smartHomeSum' in this.prefs) {
+				this.smartHomeSummary = this.prefs.smartHomeSum;
 			}
 		}
 	}
@@ -439,6 +445,9 @@ class SHDevice {
 		this.showInGraph = true;
 		this.color = color;
 		this.countAsHouse = false;
+		this.energyPv = 0;
+		this.energyBat = 0;
+		this.pvPercentage = 0;
 	}
 };
 
@@ -551,6 +560,7 @@ function shiftRight() {
 				wbdata.persistGraphPreferences();
 				d3.select("button#graphLeftButton").classed("disabled", false)
 				d3.select("button#graphRightButton").classed("disabled", true)
+				yieldMeter.update()
 			} else { // currently looking at a previous day
 				wbdata.graphDate.setTime(wbdata.graphDate.getTime() + 86400000);
 				const nd = wbdata.graphDate;
@@ -593,6 +603,7 @@ function switchDecimalPlaces() {
 }
 
 function switchSmartHomeColors() {
+
 	const doc = d3.select("html");
 	switch (wbdata.smartHomeColors) {
 		case 'normal':
@@ -620,6 +631,12 @@ function switchSmartHomeColors() {
 			doc.classed("shcolors-advanced", false);
 			break;
 	}
+	wbdata.persistGraphPreferences();
+}
+
+function toggleSmartHomeSummary() {
+	wbdata.smartHomeSummary = !wbdata.smartHomeSummary
+	yieldMeter.update()
 	wbdata.persistGraphPreferences();
 }
 

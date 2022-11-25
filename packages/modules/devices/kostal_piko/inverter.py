@@ -32,7 +32,10 @@ class KostalPikoInverter:
             power = power*-1
 
         exported = float(resp["dxsEntries"][1]["value"]) * 1000
+        return power, exported
 
+    def update(self) -> None:
+        power, exported = self.get_values()
         self.store.set(InverterState(
             exported=exported,
             power=power
