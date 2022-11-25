@@ -25,7 +25,7 @@ body {
 	background-attachment: fixed;
 }
 body > .container {
-	padding: 55px 15px 0;
+	padding: 55px 15px 25px;
 }
 
 @keyframes alertPulsation {
