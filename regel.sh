@@ -60,7 +60,7 @@ function cleanup()
 
 	if [ "$t" -le "7" ] ; then   # 1..7 Ok
 		openwbDebugLog "MAIN" 2 "**** Regulation loop needs $t seconds"
-	elif [ "$t" -le "8" ] ; then # 8 Warning 
+	elif [ "$t" -le "8" ] ; then # 8 Warning
 		openwbDebugLog "MAIN" 0 "**** WARNING **** Regulation loop needs $t seconds"
 	else                         # 9,10,... Fatal
 		openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
@@ -89,6 +89,9 @@ if (( slavemode == 1)); then
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Waiting ${randomSleep}s"
 
 	sleep "$randomSleep"
+
+	# repeat setting of startregel as we do not want to account for the randomization sleep time
+	startregel=$(date +%s)
 
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Wait end"
 fi
