@@ -67,3 +67,73 @@ gaugelp1s.maxValue = 100; // set max gauge value
 gaugelp1s.setMinValue(0);  // Prefer setter over gauge.minValue = 0
 gaugelp1s.animationSpeed = 5; // set animation speed (32 is default value)
 gaugelp1s.set(70); // set actual value
+
+/***********
+ * LP2 gauge
+ */
+//  var opts = {
+// 	angle: 0, // The span of the gauge arc
+// 	lineWidth: 0.24, // The line thickness
+// 	radiusScale: 0.67, // Relative radius
+// 	pointer: {
+// 		length: 0.6, // // Relative to gauge radius
+// 		strokeWidth: 0, // The thickness
+// 		color: '#000000' // Fill color
+// 	},
+// 	limitMax: false,     // If false, max value increases automatically if value > maxValue
+// 	limitMin: true,     // If true, the min value of the gauge will be fixed
+// 	colorStart: '#6FADCF',   // Colors
+// 	colorStop: '#8FC0DA',    // just experiment with them
+// 	strokeColor: 'grey',  // to see which ones work best for you
+// 	generateGradient: true,
+// 	percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+// 	staticLabels: {
+// 		font: "13px sans-serif",  // Specifies font
+// 		labels: [0, displaylp2max],  // Print labels at these values
+// 		color: "white",  // Optional: Label text color
+// 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+// 	}, 
+// };
+
+// var targetlp2 = document.getElementById('lp2'); // your canvas element
+// var gaugelp2 = new Gauge(targetlp2).setOptions(opts); // create sexy gauge!
+
+// gaugelp2.maxValue = displaylp2max; // set max gauge value
+// gaugelp2.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+// gaugelp2.animationSpeed = 5; // set animation speed (32 is default value)
+// gaugelp2.set(0); // set actual value
+
+/***********
+ * LP2-SoC gauge
+ */
+// var opts = {
+// 	angle: 0, // The span of the gauge arc
+// 	lineWidth: 0.08, // The line thickness
+// 	radiusScale: 0.5, // Relative radius
+// 	pointer: {
+// 		length: 0.6, // // Relative to gauge radius
+// 		strokeWidth: 0, // The thickness
+// 		color: '#000000' // Fill color
+// 	},
+// 	limitMax: false,     // If false, max value increases automatically if value > maxValue
+// 	limitMin: false,     // If true, the min value of the gauge will be fixed
+// 	colorStart: '#6FADCF',   // Colors
+// 	colorStop: '#8FC0DA',    // just experiment with them
+// 	strokeColor: 'grey',  // to see which ones work best for you
+// 	generateGradient: true,
+// 	percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+// 	staticLabels: {
+// 		font: "13px sans-serif",  // Specifies font
+// 		labels: [0, 100],  // Print labels at these values
+// 		color: "white",  // Optional: Label text color
+// 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+// 	}, 
+// };
+
+// var targetlp2s = document.getElementById('lp2s'); // your canvas element
+// var gaugelp2s = new Gauge(targetlp2s).setOptions(opts); // create sexy gauge!
+
+// gaugelp2s.maxValue = 100; // set max gauge value
+// gaugelp2s.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+// gaugelp2s.animationSpeed = 5; // set animation speed (32 is default value)
+// gaugelp2s.set(70); // set actual value

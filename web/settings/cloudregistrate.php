@@ -34,7 +34,7 @@
 		echo "Kein Benutzername angegeben. Weiterleitung erfolgt in 10 Sekunden...";
 		header( "refresh:10;url='../settings/cloudconfig.php" );
 	} elseif ( $response == "exists" ) {
-		echo "Der Benutzername exisitiert bereits. Weiterleitung erfolgt in 10 Sekunden...";
+		echo "Der Benutzername existiert bereits. Weiterleitung erfolgt in 10 Sekunden...";
 		header( "refresh:10;url='../settings/cloudconfig.php" );
 	} else {
 		$upass = explode(',', $response);

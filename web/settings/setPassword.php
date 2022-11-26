@@ -33,7 +33,7 @@
 		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
+		<script src = "settings/helperFunctions.js?ver=20220714" ></script>
 	</head>
 
 	<body>
@@ -60,7 +60,7 @@
 							// no need to worry about special characters
 							file_put_contents( $tempfile, $_POST['password'] );
 							// generate password hash
-							exec( 'sudo htpasswd -i -c ' . $passwordfile . ' ' . $_POST['username'] . ' < ' . $tempfile );
+							exec( 'sudo htpasswd -i -c ' . $passwordfile . ' ' . escapeshellarg($_POST['username']) . ' < ' . $tempfile );
 							// remove temp password file
 							exec( 'sudo rm ' . $tempfile );
 							// write .htaccess file
@@ -126,16 +126,32 @@ AUTHEND
 										<span id="usernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</span>
 									</div>
 								</div>
-								<div class="row form-group mb-0">
+								<div class="row form-group">
 									<label for="password" class="col-md-4 col-form-label">Passwort</label>
 									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
-												<div class="input-group-text">
-													<i class="fa fa-lock"></i>
+												<div class="input-group-text" onclick="togglePasswordInput('#password, #password_confirm', '#password-lock, #password_confirm-lock')">
+													<i id="password-lock" class="fa fa-lock"></i>
 												</div>
 											</div> 
-											<input type="password" name="password" id="password" value="" placeholder="Passwort" class="form-control" required="required">
+											<input type="password" name="password" id="password" value="" placeholder="Passwort" aria-describedby="passwordHelpBlock" class="form-control" required="required"  oninput="checkPasswordMatch('#password, #password_confirm')">
+										</div>
+										<span id="passwordHelpBlock" class="form-text small">
+											Bitte das Passwort sicher verwahren, da ein Zugriff auf die Einstellungen ohne dieses nicht mehr möglich ist.
+										</span>
+									</div>
+								</div>
+								<div class="row form-group mb-0">
+									<label for="password_confirm" class="col-md-4 col-form-label">Passwort wiederholen</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text" onclick="togglePasswordInput('#password, #password_confirm', '#password-lock, #password_confirm-lock')">
+													<i id="password_confirm-lock" class="fa fa-lock"></i>
+												</div>
+											</div> 
+											<input type="password" id="password_confirm" value="" placeholder="Passwort" class="form-control" required="required" oninput="checkPasswordMatch('#password, #password_confirm')">
 										</div>
 									</div>
 								</div>

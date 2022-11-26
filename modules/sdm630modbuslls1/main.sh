@@ -48,6 +48,28 @@ while read -r line; do
 	if (( $n == 6 )); then
 		wl3=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
 	fi
+	if (( $n == 7 )); then
+		llvs11=$(echo "$line" |  cut -c2- )
+		llvs11=${llvs11%??}
+		echo "scale=3; $llvs11/1" | bc -l > /var/www/html/openWB/ramdisk/llvs11
+		# LANG=C printf "%.1f\n" $llvs11 > /var/www/html/openWB/ramdisk/llvs11
+		# echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llvs11
+	fi
+	if (( $n == 8 )); then
+		llvs12=$(echo "$line" |  cut -c2- )
+		llvs12=${llvs12%??}
+		echo "scale=3; $llvs12/1" | bc -l > /var/www/html/openWB/ramdisk/llvs12
+		# LANG=C printf "%.1f\n" $llvs12 > /var/www/html/openWB/ramdisk/llvs12
+		# echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llvs12
+	fi
+	if (( $n == 9 )); then
+		llvs13=$(echo "$line" |  cut -c2- )
+		llvs13=${llvs13%??}
+		echo "scale=3; $llvs13/1" | bc -l > /var/www/html/openWB/ramdisk/llvs13
+		# LANG=C printf "%.1f\n" $llvs13 > /var/www/html/openWB/ramdisk/llvs13
+		# echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llvs13
+	fi
+	
 
 	n=$((n + 1))
 done <<< "$output"

@@ -19,8 +19,7 @@ fi
 openwbDebugLog ${DMOD} 2 "PV IP: ${wrsunwavesip}"
 openwbDebugLog ${DMOD} 2 "PV Passwort: ${wrsunwavespw}"
 
-
-python3 /var/www/html/openWB/modules/wr_sunwaves/sunwaves.py "${wrsunwavesip}" "${wrsunwavespw}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_sunwaves.sunwaves" "${wrsunwavesip}" "${wrsunwavespw}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
