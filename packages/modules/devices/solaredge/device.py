@@ -210,7 +210,7 @@ def read_legacy(component_type: str,
                         # WR-Leistung nur anpassen, wenn die Ladeleistung des Speichers PV-Leistung ist, dh am WR muss
                         # DC-seitig Leistung anliegen. Der Speicher wird auch aus dem Netz geladen, um einen
                         # Mindest-SoC zu halten.
-                        if state.dc_power is None or state.dc_power != 0:
+                        if state.dc_power is None or state.dc_power <= 0:
                             if subbat == 1:
                                 total_power -= sum(min(p, 0) for p in bat_power)
                             else:
