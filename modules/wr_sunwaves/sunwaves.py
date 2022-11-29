@@ -1,48 +1,42 @@
 #!/usr/bin/env python3
-from datetime import datetime, timezone
-import os
+import logging
 import re
 import requests
 from requests.auth import HTTPDigestAuth
-import sys
+from typing import List
 
-Debug = int(os.environ.get('debug'))
-myPid = str(os.getpid())
+from helpermodules.cli import run_using_positional_cli_args
 
-wrsunwavesip = str(sys.argv[1])
-wrsunwavespw = str(sys.argv[2])
+log = logging.getLogger("Sunwaves WR")
 
 
-def DebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": PID: " + myPid + ": " + message)
+def update(wrsunwavesip: str, wrsunwavespw: str):
+    log.debug('PV Sunwaves IP:' + wrsunwavesip)
+    log.debug('PV Sunwaves Passwort:' + wrsunwavespw)
+
+    params = (('CAN', '1'),)
+    variable = requests.get("http://"+wrsunwavesip+"/data/ajax.txt",
+                            params=params,
+                            auth=HTTPDigestAuth("customer", wrsunwavespw),
+                            timeout=3)
+    variable.encoding = 'utf-8'
+    variable = variable.text.replace("\n", "")
+
+    count = 0
+
+    for v in variable:
+        if count == 1:
+            pvwatt = re.search('^[0-9]+$', v).group()
+            pvwatt = pvwatt*-1
+            log.debug('WR Leistung: ' + str(pvwatt))
+            with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
+                f.write(str(pvwatt))
+        if count == 16:
+            log.debug('WR Energie: ' + str(v*1000))
+            with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
+                f.write(str(v*1000))
+        count = count+1
 
 
-if Debug >= 2:
-    DebugLog('PV Sunwaves IP:' + wrsunwavesip)
-    DebugLog('PV Sunwaves Passwort:' + wrsunwavespw)
-
-
-params = (('CAN', '1'),)
-variable = requests.get("http://"+wrsunwavesip+"/data/ajax.txt", params=params, auth=HTTPDigestAuth("customer", wrsunwavespw))
-variable.encoding = 'utf-8'
-variable = variable.text.replace("\n", "")
-
-count = 0
-
-for v in variable:
-    if count == 1:
-        pvwatt = re.search('^[0-9]+$', v).group()
-        pvwatt = pvwatt*-1
-        if Debug >= 1:
-            DebugLog('WR Leistung: ' + str(pvwatt))
-        with open("/var/www/html/openWB/ramdisk/pvwatt", "w") as f:
-            f.write(str(pvwatt))
-    if count == 16:
-        if Debug >= 1:
-            DebugLog('WR Energie: ' + str(v*1000))
-        with open("/var/www/html/openWB/ramdisk/pvkwh", "w") as f:
-            f.write(str(v*1000))
-    count = count+1
-
-exit(0)
+def main(argv: List[str]):
+    run_using_positional_cli_args(update, argv)

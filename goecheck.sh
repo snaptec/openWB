@@ -20,7 +20,7 @@ goecheck(){
 			fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
 			oldcurrent=$(echo $output | jq -r '.amp')
 			current=$(</var/www/html/openWB/ramdisk/llsoll)
-			if (( oldcurrent != $current )) ; then
+			if (( oldcurrent != $current )) && (( $current != 0 )); then
 				if (($fwv >= 40)) ; then
 					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amx=$current > /dev/null
 				else
@@ -48,7 +48,7 @@ goecheck(){
 				fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
 				oldcurrent=$(echo $output | jq -r '.amp')
 				current=$(</var/www/html/openWB/ramdisk/llsolls1)
-				if (( oldcurrent != $current )) ; then
+				if (( oldcurrent != $current )) && (( $current != 0 )); then
 					if (($fwv >= 40)) ; then
 						curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=amx=$current > /dev/null
 					else

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
+MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 DMOD="EVSOC"
 CHARGEPOINT=$1
 
@@ -10,9 +10,9 @@ CHARGEPOINT=$1
 if [[ -z "$debug" ]]; then
 	echo "soc_carnet: Seems like openwb.conf is not loaded. Reading file."
 	# try to load config
-	. $OPENWBBASEDIR/loadconfig.sh
+	. "$OPENWBBASEDIR/loadconfig.sh"
 	# load helperFunctions
-	. $OPENWBBASEDIR/helperFunctions.sh
+	. "$OPENWBBASEDIR/helperFunctions.sh"
 fi
 
 case $CHARGEPOINT in
@@ -57,32 +57,32 @@ incrementTimer(){
 			ticksize=1
 			;;
 	esac
-	soctimer=$((soctimer+$ticksize))
-	echo $soctimer > $soctimerfile
+	soctimer=$((soctimer + ticksize))
+	echo $soctimer > "$soctimerfile"
 }
 
-soctimer=$(<$soctimerfile)
+soctimer=$(<"$soctimerfile")
 openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
 if (( soctimer < 60 )); then
-	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 	incrementTimer
 else
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	#Abfrage Ladung aktiv. Hochsetzen des soctimers, um das Intervall zu verkürzen.
 	if (( ladeleistung > 800 )) ; then
-		soctimer=$((60 * (10 - $intervall) / 10))
-		echo $soctimer > $soctimerfile
+		soctimer=$((60 * (10 - intervall) / 10))
+		echo $soctimer > "$soctimerfile"
 	else
-		echo 0 > $soctimerfile
+		echo 0 > "$soctimerfile"
 	fi
 
-	response=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/we_connect_client.py --user="$username" --password="$password")
+	response=$(sudo PYTHONIOENCODING=UTF-8 python "$MODULEDIR/we_connect_client.py" --user="$username" --password="$password")
 	soclevel=$(echo "$response" | grep batteryPercentage | jq -r .EManager.rbc.status.batteryPercentage)
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Filtered SoC from Server: $soclevel"
 	if  [[ $soclevel =~ $reValidSoc ]] ; then
-		if (( $soclevel != 0 )) ; then
+		if (( soclevel != 0 )) ; then
 			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC is valid"
-			echo $soclevel > $socfile
+			echo "$soclevel" > "$socfile"
 		fi
 	else
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC is not valid."

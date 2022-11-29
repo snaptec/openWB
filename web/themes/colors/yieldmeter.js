@@ -35,6 +35,7 @@ class YieldMeter {
 		this.chargeColor = 'var(--color-charging)';
 		this.axisColor = 'var(--color-axis)';
 		this.gridColor = 'var(--color-grid)';
+		this.batColor = 'var(--color-battery)';
 		d3.select("button#energyLeftButton")
 			.on("click", shiftLeft)
 		d3.select("button#energyRightButton")
@@ -48,24 +49,28 @@ class YieldMeter {
 		switch (wbdata.graphMode) {
 			case 'live':
 				this.plotdata = Object.values(wbdata.sourceSummary)
-					.filter((row) => (row.energy > 0))
+					.filter(row => this.plotfilter(row))
 					.concat(wbdata.usageDetails
-						.filter((row) => (row.energy > 0)));
+						.filter(row => this.plotfilter(row)));
 				break;
 			case 'day':
 				if (wbdata.showTodayGraph) {
 					this.plotdata = Object.values(wbdata.sourceSummary)
-						.filter((row) => (row.energy > 0))
-						.concat(wbdata.usageDetails
-							.filter((row) => (row.energy > 0)));
+						.filter(row => this.plotfilter(row));
+
+					this.plotdata = this.plotdata.concat(wbdata.usageDetails
+						.filter(row => this.plotfilter(row)));
+					if (wbdata.smartHomeSummary && wbdata.usageSummary.devices.energy > 0) {
+						this.plotdata.push(wbdata.usageSummary.devices)
+					}
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
-						.filter((row) => (row.energy > 0));
+						.filter(row => this.plotfilter(row));
 				}
 				break;
 			case 'month':
 				this.plotdata = Object.values(wbdata.historicSummary)
-					.filter((row) => (row.energy > 0));
+					.filter(row => this.plotfilter(row));
 				break;
 			default: break;
 		}
@@ -75,6 +80,21 @@ class YieldMeter {
 		this.updateHeading();
 	};
 
+	plotfilter(row) {
+		if (row.energy > 0) {
+			if (row.name == "Geräte") {
+				if (wbdata.smartHomeSummary) {
+					return true
+				} else {
+					return false
+				}
+			} else {
+				return true
+			}
+		} else {
+			return false
+		}
+	}
 	createOrUpdateSvg() {
 		this.svg.selectAll("*").remove();
 		const g = this.svg.append("g")
@@ -83,14 +103,17 @@ class YieldMeter {
 			.range([0, this.width - this.margin.left - this.margin.right])
 			.padding(0.4);
 		this.yScale = d3.scaleLinear()
-			.range([this.height - this.margin.bottom - this.margin.top, 0]);
+			.range([this.height - this.margin.bottom - this.margin.top, 10]);
 		return g;
 	}
 
 	drawChart(svg) {
+		let chargedata = this.plotdata.filter(d => d.name == "Laden")
 		const ymax = d3.max(this.plotdata, (d) => d.energy);
 		this.xScale.domain(this.plotdata.map((d) => d.name));
 		this.yScale.domain([0, Math.ceil(ymax)]);
+
+		// Draw the bars
 		const bargroups = svg
 			.selectAll(".bar")
 			.data(this.plotdata)
@@ -102,8 +125,27 @@ class YieldMeter {
 			.attr("x", (d) => this.xScale(d.name))
 			.attr("y", (d) => this.yScale(d.energy))
 			.attr("width", this.xScale.bandwidth())
-			.attr("height", (d) => this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom)
+			.attr("height", (d) => (this.height - this.yScale(d.energy) - this.margin.top - this.margin.bottom))
 			.attr("fill", (d) => d.color);
+		// Display the PV Charging inner bar
+		bargroups
+			.append("rect")
+			.attr("class", "bar")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
+			.attr("y", (d) => this.yScale(d.energyPv))
+			.attr("width", this.xScale.bandwidth() * 2 / 3)
+			.attr("height", (d) => (this.height - this.yScale(d.energyPv) - this.margin.top - this.margin.bottom))
+			.attr("fill", this.pvColor)
+			.attr("fill-opacity", "66%");
+		// Display the Bat Charging inner bar
+		bargroups.append("rect")
+			.attr("class", "bar")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 6)
+			.attr("y", (d) => this.yScale(d.energyBat + d.energyPv))
+			.attr("width", this.xScale.bandwidth() * 2 / 3)
+			.attr("height", (d) => (this.height - this.yScale(d.energyBat) - this.margin.top - this.margin.bottom))
+			.attr("fill", this.batColor)
+			.attr("fill-opacity", "66%");
 
 		const yAxisGenerator = d3.axisLeft(this.yScale)
 			.tickFormat(function (d) {
@@ -141,6 +183,8 @@ class YieldMeter {
 			.attr("font-size", this.axisFontSize)
 			.text("kWh")
 			;
+
+		// add value labels to the bars
 		const labels = svg.selectAll(".label")
 			.data(this.plotdata)
 			.enter()
@@ -148,16 +192,28 @@ class YieldMeter {
 		labels
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
-			.attr("y", (d) => this.yScale(d.energy) - 10)
+			.attr("y", (d) => {
+				if (d.pvPercentage > 0) {
+					return this.yScale(d.energy) - 25
+				} else {
+					return this.yScale(d.energy) - 10
+				}
+			})
 			.attr("font-size", this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (formatWattH(d.energy * 1000)));
 
-		const categories = svg.selectAll(".category")
-			.data(this.plotdata)
-			.enter()
-			.append("g");
+		// add a PV percentage tag to the charging bar
+		labels.append("text")
+			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
+			.attr("y", (d) => this.yScale(d.energy) - 10)
+			.attr("font-size", this.labelfontsize - 2)
+			.attr("text-anchor", "middle")
+			.attr("fill", (d) => this.pvColor)
+			.text((d) => this.pvString(d));
+
+		// Add category labels
 		labels
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
@@ -166,8 +222,16 @@ class YieldMeter {
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (this.truncateCategory(d.name)));
+
 	}
 
+	pvString(item) {
+		if (item.pvPercentage > 0) {
+			return ("(PV: " + item.pvPercentage.toLocaleString(undefined) + " %)");
+		} else {
+			return "";
+		}
+	}
 	updateHeading() {
 		var heading = "Energie ";
 

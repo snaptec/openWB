@@ -98,7 +98,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210307">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20221125">');
 	</script>
 </head>
 
@@ -109,7 +109,7 @@
 		<div id="preloader-inner">
 			<div class="row">
 				<div class="mx-auto d-block justify-content-center">
-					<img id="preloader-image" src="img/favicons/preloader-image.png" alt="openWB">
+					<img id="preloader-image" src="img/favicons/preloader-image-transparent.png" alt="openWB">
 				</div>
 			</div>
 			<div id="preloader-info" class="row justify-content-center mt-2">
@@ -1191,6 +1191,11 @@
 		</div>
 
 	</div>  <!-- container -->
+	<footer class="bg-dark fixed-bottom small text-light">
+		<div class="container text-center">
+			openWB - die modulare Wallbox
+		</div>
+	</footer>
 
 	<script>
 
@@ -1230,8 +1235,8 @@
 				countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
 				var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
 				var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
-				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
-				if ( timeBetweenTwoMesagges > 3000 ) {
+				var timeBetweenTwoMessages = Date.now() - timeOfLastMqttMessage;
+				if ( timeBetweenTwoMessages > 3000 ) {
 					// latest after 3 sec without new messages
 					percentageReceived = 100;
 					// debug output
@@ -1458,9 +1463,9 @@
 				label.addClass('text-danger');
 				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
 					// marks times in the price chart where the price is low enough so charging would be allowed
-	 				var priceAnnotations = createPriceAnnotations();
-	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
-	 				electricityPricechart.update();
+					var priceAnnotations = createPriceAnnotations();
+					electricityPricechart.options.annotation.annotations = priceAnnotations;
+					electricityPricechart.update();
 				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change

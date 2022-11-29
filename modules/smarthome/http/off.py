@@ -1,27 +1,17 @@
 #!/usr/bin/python3
 import sys
-import os
-import time
-import json
-import getopt
-import socket
-import struct
-import codecs
-import binascii
-import urllib.request
+import logging
+from smarthome.smartlog import initlog
+from urllib.request import Request, urlopen
 from urllib.parse import urlparse
-named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S http off.py", named_tuple)
-devicenumber=str(sys.argv[1])
-uberschuss=int(sys.argv[3])
-url=str(sys.argv[4])
+devicenumber = int(sys.argv[1])
+uberschuss = int(sys.argv[3])
+url = str(sys.argv[4])
+initlog("http", devicenumber)
+log = logging.getLogger("http")
 if not urlparse(url).scheme:
-   url = 'http://' + url
-file_string= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_http.log'
-if os.path.isfile(file_string):
-   f = open( file_string , 'a')
-else:
-   f = open( file_string , 'w')
-print ('%s devicenr %s url %s)' % (time_string,devicenumber,url),file=f)
-f.close()
-urllib.request.urlopen(url, timeout=5)
+    url = 'http://' + url
+log.info('off devicenr %d url %s' % (devicenumber, url))
+headers = {'User-Agent': 'Mozilla/5.0'}
+request = Request(url, headers=headers)
+urlopen(request, timeout=5).read()

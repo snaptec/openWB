@@ -1,22 +1,22 @@
 #!/bin/bash
 input=$1
-if [[ "$input" == "202012" ]]; then
-	oldmonth="202101"
-elif [[ "$input" == "201912" ]]; then
-	oldmonth="202001"
-elif [[ "$input" == "201812" ]]; then
-	oldmonth="201901"
 
-else
-	month=${input: -2}
-	month=$(( ${month#0} +1))
-	if (( month < 10 )); then
-		month=$(printf "0$month")
-	fi
-	year=$(echo $input |cut -c1-4)
-	oldmonth=$(printf $year$month)
+# Get Data for first Day of next Month
+month=${input: -2}
+year=${input:: 4}
+month=$(( ${month#0} +1))
+if (( month >12 )) ; then
+	month=1
+	year=$(( ${year#0} +1))
 fi
-firstload=$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$oldmonth.csv)
+printf -v nextmonth '%04d%02d' $year $month
+
+if [ -f /var/www/html/openWB/web/logging/data/monthly/$nextmonth.csv ]  ; then
+  firstload=$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$nextmonth.csv)
+else
+  firstload=""
+fi
+
 
 mosquitto_pub -t openWB/system/MonthGraphData1 -r -m "$(</var/www/html/openWB/web/logging/data/monthly/$1.csv tail -n +"0" | head -n "$((24 - 0))")" &
 mosquitto_pub -t openWB/system/MonthGraphData2 -r -m "$(</var/www/html/openWB/web/logging/data/monthly/$1.csv tail -n +"25" | head -n "$((50 - 25))")" &
