@@ -5,10 +5,10 @@ echo "replace libvwid.py by libvwid.mod?(Y)"
 read a
 if [ "$a" == "Y" ]
 then
-   mv libvwid.org libvwid.py
-   echo "libvwid.py is replaced by version from github/skagmo"
-   chmod +x libvwid.py
+	mv libvwid.org libvwid.py
+	echo "libvwid.py is replaced by version from github/skagmo"
+	chmod +x libvwid.py
 else
-   echo "libvwid.py is not replaced"
+	echo "libvwid.py is not replaced"
 fi
 
