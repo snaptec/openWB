@@ -67,7 +67,6 @@ async def main():
 
         data = await w.get_status()
         if (data):
-            print (data['data']['batteryStatus']['currentSOC_pct'])
             try:
                 f = open(replyFile, 'w', encoding='utf-8')
             except Exception as e:
@@ -83,6 +82,13 @@ async def main():
                 logDebug(chargepoint, "chmod replyFile exception, e="+str(e))
                 logDebug(chargepoint, "use sudo, user: "+getpass.getuser())
                 os.system("sudo chmod 0777 "+replyFile)
+
+            try:
+                print (data['data']['batteryStatus']['currentSOC_pct'])
+            except Exception as e:
+                logDebug(chargepoint, "reply Exception: e=" + str(e))
+                logDebug(chargepoint, "data.batteryStatus.currentSOC_pct not found, return 0")
+                print("0")
 
             tokens_new = pickle.dumps(w.tokens)
             if ( tokens_new != tokens_old ):    # check for modified tokens
