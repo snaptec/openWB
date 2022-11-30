@@ -76,6 +76,7 @@ class Sbase(Sbase0):
         self._device_measuretype = 'none'
         self._device_measureip = 'none'
         self._device_measureportsdm = '8899'
+        self._device_dacport = '8899'
         self._device_measureid = '0'
         self._device_finishtime = '00:00'
         self._device_starttime = '00:00'
@@ -327,6 +328,8 @@ class Sbase(Sbase0):
                 self._device_measureip = value
             elif (key == 'device_measurePortSdm'):
                 self._device_measureportsdm = value
+            elif (key == 'device_dacport'):
+                self._device_dacport = value
             elif (key == 'device_measureid'):
                 self._device_measureid = value
             elif (key == 'device_finishTime'):

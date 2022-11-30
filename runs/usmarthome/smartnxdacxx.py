@@ -1,20 +1,22 @@
 #!/usr/bin/python3
 from usmarthome.smartbase import Sbase
 from usmarthome.global0 import log
+from typing import Dict
 import subprocess
 
 
 class Snxdacxx(Sbase):
-    def __init__(self):
+    def __init__(self) -> None:
         # setting
         super().__init__()
         print('__init__ Snxdacxx executed')
-        self._smart_paramadd = {}
+        self._smart_paramadd = {}  # type: dict [str,str]
         self._device_nxdacxxueb = 0
+        self._device_nxdacxxtype = 0
         self.device_nummer = 0
         self._dynregel = 1
 
-    def updatepar(self, input_param):
+    def updatepar(self, input_param: Dict[str, str]) -> None:
         super().updatepar(input_param)
         self._smart_paramadd = input_param.copy()
         self.device_nummer = int(self._smart_paramadd.get('device_nummer',
@@ -28,18 +30,22 @@ class Snxdacxx(Sbase):
                 pass
             elif (key == 'device_nxdacxxueb'):
                 self._device_nxdacxxueb = valueint
+            elif (key == 'device_nxdacxxtype'):
+                self._device_nxdacxxtype = valueint
             else:
                 log.warning("(" + str(self.device_nummer) + ") " +
-                            __class__.__name__ + " überlesen " + key +
+                            "Snxdacxx überlesen " + key +
                             " " + value)
 
-    def getwatt(self, uberschuss, uberschussoffset):
+    def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
         forcesend = self.checkbefsend()
         argumentList = ['python3', self._prefixpy + 'nxdacxx/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss),
-                        str(self._device_nxdacxxueb), str(forcesend)]
+                        str(self._device_nxdacxxueb), str(forcesend),
+                        str(self._device_dacport),
+                        str(self._device_nxdacxxtype)]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
@@ -51,11 +57,11 @@ class Snxdacxx(Sbase):
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") Leistungsmessung %s %d %s Fehlermeldung: %s "
-                        % ('n4dac02 ', self.device_nummer,
+                        % (' Dac ', self.device_nummer,
                            str(self._device_ip), str(e1)))
         self.postwatt()
 
-    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+    def turndevicerelais(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         self.preturn(zustand, ueberschussberechnung, updatecnt)
         if (zustand == 1):
             pname = "/on.py"
@@ -63,12 +69,14 @@ class Snxdacxx(Sbase):
             pname = "/off.py"
         argumentList = ['python3', self._prefixpy + 'nxdacxx' + pname,
                         str(self.device_nummer), str(self._device_ip),
-                        str(self.devuberschuss)]
+                        str(self.devuberschuss),
+                        str(self._device_dacport),
+                        str(self._device_nxdacxxtype)]
         try:
             self.proc = subprocess.Popen(argumentList)
             self.proc.communicate()
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off  %s %d %s Fehlermeldung: %s "
-                        % ('n4dac02 ', self.device_nummer,
+                        % ('Dac ', self.device_nummer,
                            str(self._device_ip), str(e1)))

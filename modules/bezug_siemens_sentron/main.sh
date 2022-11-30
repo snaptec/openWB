@@ -12,7 +12,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "Siemens SENTRON IP: ${bezug1_ip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.siemens_sentron.device" "counter" "${bezug1_ip}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.siemens_sentron.device" "counter" "${bezug1_ip}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

@@ -5,7 +5,7 @@ Based on Theme "dark" by Michael Ortenstein
 2020 Lutz Bender
 */
 
-html{
+html {
 	min-height: 100%;
 	min-width: 100%;
 }
@@ -13,30 +13,67 @@ html{
 body {
 	color: white;
 }
-body > .container {
-	padding: 55px 15px 0;
+
+body>.container {
+	padding: 55px 15px 25px;
 }
 
 @keyframes alertPulsation {
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-o-keyframes alertPulsation{
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+
+@-o-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-moz-keyframes alertPulsation{
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+
+@-moz-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-webkit-keyframes alertPulsation{
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+
+@-webkit-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
+
 .animate-alertPulsation {
 	-webkit-animation: alertPulsation 3s infinite;
 	-moz-animation: alertPulsation 3s infinite;
@@ -49,15 +86,17 @@ body > .container {
 }
 
 .pull-right {
-	float:right
+	float: right
 }
 
 .row.no-gutter [class*='col-']:first-child:not(:only-child) {
 	padding-right: 0;
 }
+
 .row.no-gutter [class*='col-']:last-child:not(:only-child) {
 	padding-left: 0;
 }
+
 .row.no-gutter [class*='col-']:not(:first-child):not(:last-child):not(:only-child) {
 	padding-right: 0;
 	padding-left: 0;
@@ -70,7 +109,7 @@ body > .container {
 	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 }
 
-.cursor-pointer{
+.cursor-pointer {
 	cursor: pointer;
 }
 
@@ -88,10 +127,12 @@ body > .container {
 	color: #00b125;
 	text-decoration: none;
 }
+
 .lpWaitingStyle {
 	color: #ffdb00;
 	text-decoration: none;
 }
+
 .lpDisabledStyle {
 	color: #e21f1f;
 	text-decoration: line-through;
@@ -136,6 +177,7 @@ body > .container {
 .bg-lightgrey {
 	background-color: #565656;
 }
+
 .bg-lightblue {
 	background-color: #23ebe1;
 }
@@ -149,11 +191,11 @@ body > .container {
 }
 
 .bg-apricot {
-	background-color:#fefedf;
+	background-color: #fefedf;
 }
 
 .bg-orange {
-	background-color:#fcbe1e;
+	background-color: #fcbe1e;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
@@ -351,7 +393,7 @@ h3 {
 	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
 	--lp1SocCol: rgba(0, 0, 255, 0.5);
 	--lp2SocCol: rgba(50, 50, 55, 0.5);
-	--hausverbrauchCol: rgba(255,255,255,0.7);
+	--hausverbrauchCol: rgba(255, 255, 255, 0.7);
 	--hausverbrauchbgCol: rgba(200, 255, 13, 0.3);
 	--verbraucher1Col: rgba(0, 150, 150, 0.7);
 	--verbraucher1bgCol: rgba(200, 255, 13, 0.3);
@@ -432,6 +474,7 @@ h3 {
 		padding-right: 0;
 		padding-left: 5px;
 	}
+
 	#time {
 		padding-right: 5px;
 		padding-left: 0;
@@ -458,17 +501,22 @@ h3 {
 	color: #ffffff;
 }
 
-.bg-warning, .bg-info, .bg-success {
+.bg-warning,
+.bg-info,
+.bg-success {
 	color: #212529;
 }
+
 .btn-secondary {
 	color: #ffffff;
 	background-color: #343a40;
 	border-color: #ffffff;
 }
+
 .btn-secondary:hover {
 	border-color: inherit;
 }
+
 .btn-success {
 	color: #fff;
 	background-color: #28a745;
@@ -489,7 +537,14 @@ h3 {
 	color: #ffffff;
 }
 
-.datepicker table tr td span.focused, .datepicker table tr td span:hover, .datepicker .datepicker-switch:hover, .datepicker .next:hover, .datepicker .prev:hover, .datepicker tfoot tr th:hover, .datepicker table tr td.day:hover, .datepicker table tr td.focused {
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover,
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover,
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused {
 	color: #000000;
 }
 
@@ -498,7 +553,9 @@ h3 {
 	color: #ffffff;
 }
 
-.form-control, .form-control[readonly], .form-control:focus {
+.form-control,
+.form-control[readonly],
+.form-control:focus {
 	background-color: #343a40;
 	border: 1px solid #ced4da;
 	color: #ffffff;
@@ -524,11 +581,11 @@ h3 {
 
 body {
 	background: linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
-	linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
-	linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
-	linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
-	linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
-	linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+		linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+		linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+		linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+		linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+		linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
 	background-color: #131313;
 	background-size: 20px 20px;
 }
@@ -541,6 +598,9 @@ hr {
 	border-top-color: #ffffff;
 }
 
-input[type="text"], input[type="password"], input[type="email"], select {
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
 	border: 1px solid #ced4da;
 }
