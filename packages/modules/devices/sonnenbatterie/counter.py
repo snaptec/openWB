@@ -29,11 +29,13 @@ class SonnenbatterieCounter:
         self.store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def __read_variant_1(self):
-        return req.get_http_session().get("http://" + self.__device_address + "/api/v1/status", timeout=5).json()
+    def __read_variant_1(self, api: str = "v1"):
+        return req.get_http_session().get(
+            "http://" + self.__device_address + "/api/" + api + "/status", timeout=5
+        ).json()
 
-    def __update_variant_1(self) -> CounterState:
-        # Auslesen einer Sonnenbatterie 8 oder 10 über die integrierte JSON-API v1 des Batteriesystems
+    def __update_variant_1(self, api: str = "v1") -> CounterState:
+        # Auslesen einer Sonnenbatterie 8 oder 10 über die integrierte JSON-API v1/v2 des Batteriesystems
         '''
         example data:
         {
@@ -70,7 +72,7 @@ class SonnenbatterieCounter:
             "NVM_REINIT_STATUS": 0
         }
         '''
-        counter_state = self.__read_variant_1()
+        counter_state = self.__read_variant_1(api)
         grid_power = -counter_state["GridFeedIn_W"]
         log.debug('EVU Leistung: ' + str(grid_power))
         # Es wird nur eine Spannung ausgegeben
@@ -114,6 +116,8 @@ class SonnenbatterieCounter:
             state = self.__update_variant_1()
         elif self.__device_variant == 2:
             state = self.__update_variant_2()
+        elif self.__device_variant == 3:
+            state = self.__update_variant_1("v2")
         else:
             raise FaultState.error("Unbekannte Variante: " + str(self.__device_variant))
         self.store.set(state)

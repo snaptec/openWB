@@ -45,11 +45,13 @@ class SonnenbatterieBat:
             soc=battery_soc
         )
 
-    def __read_variant_1(self):
-        return req.get_http_session().get("http://" + self.__device_address + "/api/v1/status", timeout=5).json()
+    def __read_variant_1(self, api: str = "v1"):
+        return req.get_http_session().get(
+            "http://" + self.__device_address + "/api/" + api + "/status", timeout=5
+        ).json()
 
-    def __update_variant_1(self) -> BatState:
-        # Auslesen einer Sonnenbatterie 8 oder 10 über die integrierte JSON-API v1 des Batteriesystems
+    def __update_variant_1(self, api: str = "v1") -> BatState:
+        # Auslesen einer Sonnenbatterie 8 oder 10 über die integrierte JSON-API v1/v2 des Batteriesystems
         '''
         example data:
         {
@@ -86,7 +88,7 @@ class SonnenbatterieBat:
             "NVM_REINIT_STATUS": 0
         }
         '''
-        battery_state = self.__read_variant_1()
+        battery_state = self.__read_variant_1(api)
         battery_power = -battery_state["Pac_total_W"]
         log.debug('Speicher Leistung: ' + str(battery_power))
         battery_soc = battery_state["USOC"]
@@ -125,6 +127,8 @@ class SonnenbatterieBat:
             state = self.__update_variant_1()
         elif self.__device_variant == 2:
             state = self.__update_variant_2()
+        elif self.__device_variant == 3:
+            state = self.__update_variant_1("v2")
         else:
             raise FaultState.error("Unbekannte Variante: " + str(self.__device_variant))
         self.store.set(state)
