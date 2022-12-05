@@ -38,15 +38,13 @@ class vwid:
 			if (a.text) and (a.text.find('window._IDK') != -1):
 				text = a.text.strip()
 				text = text[text.find('\n'):text.rfind('\n')].strip()
-
 				for line in text.split('\n'):
 					try:
 						(name, val) = line.strip().split(':', 1)
-					except Exception:
-						self.log.error("password_form: ignore line: " + line)
-					else:
-						val = val.strip('\', ')
-						objects[name] = val
+					except ValueError:
+						continue
+					val = val.strip('\', ')
+					objects[name] = val
 
 		json_model = json.loads(objects['templateModel'])
 
