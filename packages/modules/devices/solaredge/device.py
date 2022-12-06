@@ -203,7 +203,7 @@ def read_legacy(component_type: str,
 
                     if extprodakt:
                         external_inv_state = get_external_inverter_state(dev, int(slave_id0))
-                        total_power -= external_inv_state.power
+                        total_power += external_inv_state.power
 
                     if batwrsame == 1:
                         bat_power, bat_state = get_bat_state()
@@ -225,24 +225,26 @@ def read_legacy(component_type: str,
             with SingleComponentUpdateContext(inv.component_info):
                 with dev.client:
                     state = inv.read_state()
-                    total_power = state.power * -1
+                    total_power = state.power
                     total_energy = state.exported
 
                 if batwrsame == 1:
                     zweiterspeicher = 0
-                    bat_power, state = get_bat_state()
-                    total_power -= sum(bat_power)
-                    get_bat_value_store(1).set(state)
+                    bat_power, bat_state = get_bat_state()
+                    if state.dc_power is None or state.dc_power <= 0:
+                        total_power -= sum(bat_power)
+                    total_energy = total_energy + bat_state.imported - bat_state.exported
+                    get_bat_value_store(1).set(bat_state)
                 device_config = Solaredge(configuration=SolaredgeConfiguration(ip_address=ip2address))
                 dev = Device(device_config)
                 inv = create_inverter(int(slave_id0))
                 with dev.client:
                     state = inv.read_state()
-                    total_power -= state.power
+                    total_power += state.power
                     total_energy += state.exported
                     if extprodakt:
                         state = get_external_inverter_state(dev, int(slave_id0))
-                        total_power -= state.power
+                        total_power += state.power
                 get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
 
     elif component_type == "bat":

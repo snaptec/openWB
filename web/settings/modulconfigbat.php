@@ -303,8 +303,8 @@
 									</div>
 								</div>
 							</div>
-			 			</div>
-						
+						</div>
+
 						<div id="divspeichervarta" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -435,14 +435,16 @@
 										<select name="sonnenecoalternativ" id="sonnenecoalternativ" class="form-control">
 											<option <?php if($sonnenecoalternativold == "0") echo "selected" ?> value="0">Rest-API 1 (z. B. ECO 4)</option>
 											<option <?php if($sonnenecoalternativold == "2") echo "selected" ?> value="2">Rest-API 2 (z. B. ECO 6)</option>
-											<option <?php if($sonnenecoalternativold == "1") echo "selected" ?> value="1">JSON-API (z. B. ECO 8)</option>
+											<option <?php if($sonnenecoalternativold == "1") echo "selected" ?> value="1">JSON-API V1(z. B. ECO 8 und 10)</option>
+											<option <?php if($sonnenecoalternativold == "3") echo "selected" ?> value="3">JSON-API V2(z. B. ECO 8 und 10)</option>
 										</select>
 										<span class="form-text small">
 											Je nach Sonnen Batterie muss die richtige Datenverbindung ausgewählt werden.
 											Folgende URLs werden zum Abruf der Daten genutzt und können auch manuell über einen Browser abgefragt werden, um die richtige Einstellung zu finden:<br>
 											Rest-API 1: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery"></a><br>
 											Rest-API 2: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery/M05"></a><br>
-											JSON-API: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]/api/v1/status"></a>
+											JSON-API V1: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]/api/v1/status"></a><br>
+											JSON-API V2: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]/api/v2/status"></a>
 										</span>
 									</div>
 								</div>
@@ -959,7 +961,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
 

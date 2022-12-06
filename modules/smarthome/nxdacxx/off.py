@@ -19,7 +19,7 @@ log.info('off devicenr %d ipadr %s dactyp %d' % (devicenumber, ipadr, dactyp))
 if dactyp == 2:
     client = ModbusTcpClient(ipadr, port=port)
     # DO1 ausschalten um SGready zu sperren
-    rq = client.write_coil(0, False)
+    rq = client.write_coil(0, False, unit=1)
 pvmodus = 0
 if os.path.isfile(file_stringpv):
     with open(file_stringpv, 'r') as f:
