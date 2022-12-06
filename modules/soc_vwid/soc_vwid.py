@@ -84,7 +84,8 @@ async def main():
                 os.system("sudo chmod 0777 "+replyFile)
 
             try:
-                print (data['data']['batteryStatus']['currentSOC_pct'])
+                # print (data['data']['batteryStatus']['currentSOC_pct'])
+                print (data['charging']['batteryStatus']['value']['currentSOC_pct'])
             except Exception as e:
                 logDebug(chargepoint, "reply Exception: e=" + str(e))
                 logDebug(chargepoint, "data.batteryStatus.currentSOC_pct not found, return 0")
