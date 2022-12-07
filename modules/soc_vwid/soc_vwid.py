@@ -28,7 +28,6 @@ def logDebug(cp,msg):
 async def main():
 #    logging.basicConfig(level=logging.DEBUG)
 
-
     parser = ArgumentParser()
     parser.add_argument("-v", "--vin", 
                         help="VIN of vehicle", metavar="VIN", required=True)
@@ -53,6 +52,7 @@ async def main():
         w = libvwid.vwid(session)
         w.set_vin(vin)
         w.set_credentials(id, pw)
+        w.set_jobs(['charging'])
 
         try:
             tf = open(tokensFile, "rb")     # try to open tokens file
@@ -84,10 +84,11 @@ async def main():
                 os.system("sudo chmod 0777 "+replyFile)
 
             try:
-                print (data['data']['batteryStatus']['currentSOC_pct'])
+                soc = data['charging']['batteryStatus']['value']['currentSOC_pct']
+                print (soc)
             except Exception as e:
                 logDebug(chargepoint, "reply Exception: e=" + str(e))
-                logDebug(chargepoint, "data.batteryStatus.currentSOC_pct not found, return 0")
+                logDebug(chargepoint, "charging.batteryStatus.value.currentSOC_pct not found, return 0")
                 print("0")
 
             tokens_new = pickle.dumps(w.tokens)
@@ -101,7 +102,6 @@ async def main():
                 except Exception as e:
                     logDebug(chargepoint, "chmod tokensFile exception, use sudo, e="+str(e)+"user: "+getpass.getuser())
                     os.system("sudo chmod 0777 "+tokensFile)
-
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
 

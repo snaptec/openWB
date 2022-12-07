@@ -21,6 +21,7 @@ class vwid:
 		self.session = session
 		self.headers = {}
 		self.log = logging.getLogger(__name__)
+		self.jobs_string = 'all'
 
 	def form_from_response(self, text):
 		page = lxml.html.fromstring(text)
@@ -75,6 +76,9 @@ class vwid:
 	def set_credentials(self, username, password):
 		self.username = username
 		self.password = password
+
+	def set_jobs(self, jobs):
+		self.jobs_string = ','.join(jobs)
 		
 	async def connect(self, username, password):
 		self.set_credentials(username, password)
@@ -89,6 +93,7 @@ class vwid:
 
 		response = await self.session.get(LOGIN_BASE + '/authorize', params=payload)
 		if response.status >= 400:
+			self.log.error("Non-2xx response")
 			# Non 2xx response, failed
 			return False
 
@@ -184,22 +189,26 @@ class vwid:
 		return True
 
 	async def get_status(self):
-		response = await self.session.get(API_BASE + "/vehicles/" + self.vin + "/status", headers=self.headers)
+		status_url = f"{API_BASE}/vehicles/{self.vin}/selectivestatus?jobs={self.jobs_string}"
+		response = await self.session.get(status_url, headers=self.headers)
 
 		# If first attempt fails, try to refresh tokens
 		if response.status >= 400:
 			self.log.debug("Refreshing tokens")
 			if await self.refresh_tokens():
-				response = await self.session.get(API_BASE + "/vehicles/" + self.vin + "/status", headers=self.headers)
+				response = await self.session.get(status_url, headers=self.headers)
 			
 		# If refreshing tokens failed, try a full reconnect
 		if response.status >= 400:
 			self.log.info("Reconnecting")
 			if await self.reconnect():
-				response = await self.session.get(API_BASE + "/vehicles/" + self.vin + "/status", headers=self.headers)
+				response = await self.session.get(status_url, headers=self.headers)
+			else:
+				self.log.error("Reconnect failed")
+				return {}
 			
 		if response.status >= 400:
 			self.log.error("Get status failed")
 			return {}
-			
+
 		return (await response.json())
