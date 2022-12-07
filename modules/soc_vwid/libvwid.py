@@ -189,7 +189,7 @@ class vwid:
 		return True
 
 	async def get_status(self):
-		status_url = f"{API_BASE}/vehicles/{self.vin}/selectivestatus?jobs={self.jobs_string}"
+		status_url = API_BASE + "/vehicles/" + self.vin + "/selectivestatus?jobs=" + self.jobs_string
 		response = await self.session.get(status_url, headers=self.headers)
 
 		# If first attempt fails, try to refresh tokens
