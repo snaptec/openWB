@@ -25,9 +25,24 @@ ACCEPT_LANGUAGE = "de-de"
 class smarteq:
     def __init__(self, tokensFile: str):
         self.tokensFile = tokensFile
-        self.log = logging.getLogger(__name__)
-        # LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
-        # logging.basicConfig(level=LOGLEVEL)
+        self.log = logging.getLogger("soc_smarteq")
+        debug = os.environ.get('debug', '0')
+        LOGLEVEL = 'WARN'
+        if debug == '1':
+            LOGLEVEL = 'INFO'
+        if debug == '2':
+            LOGLEVEL = 'DEBUG'
+        RAMDISKDIR = os.environ.get("RAMDISKDIR", "undefined")
+        logFile = RAMDISKDIR+'/soc.log'
+        format = '%(asctime)s %(name)s:%(levelname)s: %(message)s'
+        datefmt = '%Y-%m-%d %H:%M:%S'
+        logging.basicConfig(filename=logFile,
+                            filemode='a',
+                            format=format,
+                            datefmt=datefmt,
+                            level=LOGLEVEL)
+        # self.log.error("init logging: debug=" + debug + ", LOGLEVEL=" + LOGLEVEL)
+
         self.session = requests.session()
         self.Tokens = {}
         self.code_verifier, self.code_challenge = pkce.generate_pkce_pair()
@@ -38,7 +53,7 @@ class smarteq:
             self.Tokens = pickle.load(tf)
             tf.close()
         except Exception as e:
-            self.log.error("Tokens load failed" + str(e))
+            self.log.warn("init: loading tokens failed, file: " + self.tokensFile)
             self.Tokens = {}
 
     def set_credentials(self, username: str, password: str):
@@ -106,14 +121,18 @@ class smarteq:
         try:
             response3 = self.session.post(url3, headers=headers3, data=data3)
             self.log.debug("response3.status_code = " + str(response3.status_code))
-            self.log.debug("response3.text = " + str(response3.text))
-
-            result_json = json.loads(str(bs4.BeautifulSoup(response3.text, 'html.parser')))
-            self.log.debug("Step3 result_json:\n" + json.dumps(result_json))
-            token = result_json['token']
-            self.log.debug("login - step3 - get token = " + token)
+            # self.log.debug("response3.text = " + str(response3.text))
+            if response3.status_code > 400:
+                self.log.error("login: failed, status_code = " + str(response3.status_code) + ", check username/password" )
+                token = ""
+            else:
+                result_json = json.loads(str(bs4.BeautifulSoup(response3.text, 'html.parser')))
+                self.log.debug("login: result_json:\n" + json.dumps(result_json))
+                token = result_json['token']
+                self.log.debug("login: token = " + token)
         except Exception as e:
-            self.log.error('Step3 Exception: ' + str(e))
+            self.log.error('login:  Exception: ' + str(e))
+            token = ""
         return token
 
     # get code
@@ -134,9 +153,9 @@ class smarteq:
         try:
             response4 = self.session.post(url4, headers=headers4, data=data4)
             code = response4.url.split('?')[1].split('=')[1]
-            self.log.debug("login - step4 - get code = " + code)
+            self.log.debug("get_ ode, code=" + code)
         except Exception as e:
-            self.log.error("Step4 Exception: " + str(e))
+            self.log.error("get_code Exception: " + str(e))
         return code
 
     # get Tokens
@@ -153,22 +172,23 @@ class smarteq:
 
         try:
             response5 = self.session.post(url5, headers=headers5, data=data5)
-            self.log.debug("response5.status_code = " + str(response5.status_code))
+            self.log.debug("get_Tokens: response5.status_code = " + str(response5.status_code))
             Tokens = json.loads(response5.text)
             if not Tokens['access_token']:
-                self.log.warn("no access_token found")
-                exit(0)
-            self.log.debug("Tokens=\n" + json.dumps(Tokens, indent=4))
+                self.log.warn("get_Tokens: no access_token found")
+                Tokens = {}
+            else:
+                self.log.debug("Tokens=\n" + json.dumps(Tokens, indent=4))
         except Exception as e:
-            self.log.error("Step5 Exception: " + str(e))
+            self.log.exception("get_Tokens: Exception: " + str(e))
         return Tokens
 
     # reconnect to Server
     def reconnect(self) -> dict:
         token = self.login()
-        if not token:
-            self.log.error("Login failed, token empty - Abort")
-            exit(0)
+        if token == "":
+            self.log.error("reconnect: Login failed")
+            return {}
 
         code = self.get_code(token)
         Tokens = self.get_Tokens(code)
@@ -195,47 +215,54 @@ class smarteq:
 
         try:
             response7 = self.session.get(url7, headers=headers7)
-            self.log.debug("response7.status_code = " + str(response7.status_code))
             res7 = json.loads(response7.text)
-            soc = res7['precond']['data']['soc']['value']
-            self.log.debug("soc=" + str(soc) + '%')
-        except Exception as e:
-            self.log.error("Step7 Exception: " + str(e))
-            soc = -1
             res7s = json.dumps(res7, indent=4)
-            if "Vehicle not found" in res7s:
-                soc = -2
+            res7s = json.dumps(res7['precond']['data']['soc'], indent=4)
+            try:
+                soc = res7['precond']['data']['soc']['value']
+                self.log.info("get_status: result json:\n" + res7s)
+            except:
+                soc = -1
+                pass
+        except Exception as e:
+            self.log.error("get_status: Exception: " + str(e))
+            self.log.error("get_status: result json:\n" + res7s)
+            soc = -1
+        if "Vehicle not found" in res7s:
+            soc = -2
         return soc
 
     def fetch_soc(self) -> int:
-        # self.username = username
-        # self.password = password
-        # self.vin = vin
-        # self.chargepoint = chargepoint
-
+        soc = -1
         try:
             try:
-                soc = -1
                 if self.Tokens['access_token']:
                     soc = self.get_status(self.vin)
-                    self.log.info("get_status success - valid token")
-            except:
+                    self.log.info("fetch_soc: 1st attempt successful - skip reconnect")
+            except Exception as e:
+                soc = -1
                 pass
 
             if soc == -1:
-                self.log.error("get_status failed, soc= " + str(soc))
-                self.log.error("get_status failed, reconnecting ...")
+                self.log.info("fetch_soc: (re)connecting ...")
                 self.resume = self.get_resume()
                 self.Tokens = self.reconnect()
-                soc = self.get_status(self.vin)
+                if self.Tokens:
+                    soc = self.get_status(self.vin)
+                else:
+                    self.log.error("fetch_soc: (re-)connect failed")
+                    soc = 0
             elif soc == -2:
+                self.log.error("fetch_soc: failed, Vehicle not found, check VIN")
+                soc = 0
                 pass
 
         except Exception as e:
-            self.log.error("get_status failed, reconnecting ..." + str(e))
+            self.log.error("fetch_soc: exception, (re-)connecting ..." + str(e))
             self.resume = self.get_resume()
             self.Tokens = self.reconnect()
             soc = self.get_status(self.vin)
+        self.log.info("fetch_soc: result: soc=" + str(soc) + '%')
         return soc
 
 
