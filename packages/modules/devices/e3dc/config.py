@@ -57,8 +57,8 @@ class E3dcCounterSetup(ComponentSetup[E3dcCounterConfiguration]):
 
 @auto_str
 class E3dcInverterConfiguration:
-    def __init__(self, read_ext: bool = False):
-        self.read_ext = read_ext
+    def __init__(self) -> None:
+        pass
 
 
 @auto_str
@@ -69,3 +69,19 @@ class E3dcInverterSetup(ComponentSetup[E3dcInverterConfiguration]):
                  id: int = 0,
                  configuration: E3dcInverterConfiguration = None) -> None:
         super().__init__(name, type, id, configuration or E3dcInverterConfiguration())
+
+
+@auto_str
+class E3dcExternalInverterConfiguration:
+    def __init__(self) -> None:
+        pass
+
+
+@auto_str
+class E3dcExternalInverterSetup(ComponentSetup[E3dcExternalInverterConfiguration]):
+    def __init__(self,
+                 name: str = "E3DC externer Wechselrichter",
+                 type: str = "external_inverter",
+                 id: int = 0,
+                 configuration: E3dcExternalInverterConfiguration = None) -> None:
+        super().__init__(name, type, id, configuration or E3dcExternalInverterConfiguration())
