@@ -319,6 +319,32 @@ at_reboot() {
 			ln -s "$VWIDMODULEDIR/_secrets.py" "$VWIDMODULEDIR/secrets.py"
 		fi
 	fi
+	#Prepare for secrets used in soc module soc_smarteq in Python
+	SMARTEQMODULEDIR="$OPENWBBASEDIR/modules/soc_smarteq"
+	if python3 -c "import secrets" &> /dev/null; then
+		echo 'soc_smarteq: python3 secrets installed...'
+		if [ -L "$SMARTEQMODULEDIR/secrets.py" ]; then
+			echo 'soc_smarteq: remove local python3 secrets.py...'
+			rm "$SMARTEQMODULEDIR/secrets.py"
+		fi
+	else
+		if [ ! -L "$SMARTEQMODULEDIR/secrets.py" ]; then
+			echo 'soc_smarteq: enable local python3 secrets.py...'
+			ln -s "$SMARTEQMODULEDIR/_secrets.py" "$SMARTEQMODULEDIR/secrets.py"
+		fi
+	fi
+	#Prepare for bs4 used in soc module smarteq in Python
+	if python3 -c "import bs4" &> /dev/null; then
+		echo 'bs4 installed...'
+	else
+		sudo pip3 install bs4
+	fi
+	#Prepare for pkce used in soc module smarteq in Python
+	if python3 -c "import pkce" &> /dev/null; then
+		echo 'pkce installed...'
+	else
+		sudo pip3 install pkce
+	fi
 	# update outdated urllib3 for Tesla Powerwall
 	pip3 install --upgrade urllib3
 
