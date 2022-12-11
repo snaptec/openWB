@@ -738,12 +738,12 @@
 										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
+										<option <?php if($socmodulold == "soc_smarteq") echo "selected" ?> value="soc_smarteq">smart EQ</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID</option>
-										<option <?php if($socmodulold == "soc_smarteq") echo "selected" ?> value="soc_smarteq">smart EQ</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
 								</select>
@@ -2345,6 +2345,11 @@
 								showSection('#socsupportinfo');
 								showSection('#socmqtt');
 							}
+							if($('#socmodul').val() == 'soc_vwid') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4803')
+								showSection('#socsupportinfo');
+								showSection('#socmvwid');
+							}
 							if($('#socmodul').val() == 'soc_smarteq') {
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
 								showSection('#socsupportinfo');
@@ -2999,12 +3004,12 @@
 										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
+										<option <?php if($socmodul1old == "soc_smarteqlp2") echo "selected" ?> value="soc_smarteqlp2">Smart EQ</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID</option>
-										<option <?php if($socmodul1old == "soc_smarteqlp2") echo "selected" ?> value="soc_smarteqlp2">smart EQ</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
 								</select>
