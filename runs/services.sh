@@ -63,18 +63,32 @@ start() {
 	fi
 
 
-	if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]]; then
-		openwbDebugLog "MAIN" 1 "external openWB or daemon mode configured"
-		if pgrep -f '^python.*/isss.py' > /dev/null
+	if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]] || [[ "$evsecon" == "buchse" ]]; then
+		if [[ "$evsecon" == "buchse" ]]; then
+			isss_mode="socket"
+		elif [[ $lastmanagement == 1 ]]; then
+			isss_mode="duo"
+		else
+			isss_mode="daemon"
+		fi
+		prev_isss_mode=$(< $OPENWBBASEDIR/ramdisk/isss_mode)
+
+		openwbDebugLog "MAIN" 1 "external openWB, daemon mode or socket mode configured"
+		if pgrep -f '^python.*/isss.py' > /dev/null && [[ $prev_isss_mode == $isss_mode ]];
 		then
 			openwbDebugLog "MAIN" 1 "isss handler already running"
 		else
-			openwbDebugLog "MAIN" 0 "isss handler not running! restarting process"
-			echo "$lastmanagement" > "$OPENWBBASEDIR/ramdisk/issslp2act"
-			nohup python3 "$OPENWBBASEDIR/runs/isss.py" >>"$OPENWBBASEDIR/ramdisk/isss.log" 2>&1 &
+			openwbDebugLog "MAIN" 0 "isss handler not running! restarting process in mode $isss_mode"
+			if [ -f /home/pi/ppbuchse ]; then
+				ppbuchse=$(< /home/pi/ppbuchse)
+			else
+				ppbuchse=32
+			fi
+			nohup python3 "$OPENWBBASEDIR/runs/isss.py" "$isss_mode" "$ppbuchse">>"$OPENWBBASEDIR/ramdisk/isss.log" 2>&1 &
 		fi
+		echo "$isss_mode" > $OPENWBBASEDIR/ramdisk/isss_mode
 	else
-		openwbDebugLog "MAIN" 1 "external openWB or daemon mode not configured; checking network setup"
+		openwbDebugLog "MAIN" 1 "external openWB, daemon mode or socket mode not configured; checking network setup"
 		local ethstate=$(</sys/class/net/eth0/carrier)
 		if (( ethstate == 1 )); then
 			sudo ifconfig eth0:0 "$virtual_ip_eth0" netmask 255.255.255.0 up
@@ -94,24 +108,6 @@ start() {
 		fi
 		# kill obsolete isss handler
 		sudo pkill -f '^python.*/isss.py'
-	fi
-
-
-	# if this is a socket system check for our handler to control the socket lock
-	if [[ "$evsecon" == "buchse" ]] && [[ "$isss" == "0" ]]; then
-		openwbDebugLog "MAIN" 1 "openWB socket configured"
-		# ppbuchse is used in issss.py to detect "openWB Buchse":
-		[ -f /home/pi/ppbuchse ] || echo "32" > /home/pi/ppbuchse
-
-		if pgrep -f '^python.*/buchse.py' > /dev/null
-		then
-			openwbDebugLog "MAIN" 1 "socket handler already running"
-		else
-			openwbDebugLog "MAIN" 0 "socket handler not running! restarting process"
-			nohup python3 "$OPENWBBASEDIR/runs/buchse.py" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1 &
-		fi
-	else
-		sudo pkill -f '^python.*/buchse.py'
 	fi
 
 	rseSetup "$rseenabled" 0

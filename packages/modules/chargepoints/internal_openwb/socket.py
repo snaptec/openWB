@@ -48,8 +48,9 @@ class ActorState(IntEnum):
 
 
 class Socket(ChargepointModule):
-    def __init__(self, max_current: int, config: InternalOpenWB) -> None:
-        self.max_current = max_current
+    def __init__(self, ppbuchse: int, config: InternalOpenWB) -> None:
+        log.debug("Konfiguration als Buchse.")
+        self.ppbuchse = ppbuchse
         super().__init__(config)
 
     def set_current(self, current: float) -> None:
@@ -65,7 +66,7 @@ class Socket(ChargepointModule):
                     return
             else:
                 current = 0
-            super().set_current(min(current, self.max_current))
+            super().set_current(min(current, self.ppbuchse))
 
     def get_values(self, phase_switch_cp_active: bool) -> Tuple[ChargepointState, float]:
         try:
@@ -94,6 +95,6 @@ class Socket(ChargepointModule):
     def __set_actor(self, open: bool):
         GPIO.output(23, GPIO.LOW if open else GPIO.HIGH)
         GPIO.output(26, GPIO.HIGH)
-        time.sleep(2 if open else 3)
+        time.sleep(1)
         GPIO.output(26, GPIO.LOW)
         log.debug("Actor opened" if open else "Actor closed")
