@@ -32,5 +32,3 @@ class SmartfoxCounterSetup(ComponentSetup[SmartfoxCounterConfiguration]):
                  id: int = 0,
                  configuration: SmartfoxCounterConfiguration = None) -> None:
         super().__init__(name, type, id, configuration or SmartfoxCounterConfiguration())
-
-
