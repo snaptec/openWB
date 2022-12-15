@@ -13,7 +13,7 @@ from modules.devices.solar_view.inverter import SolarViewInverter
 log = logging.getLogger(__name__)
 
 
-def create_device(device_config: SolarViewConfiguration):
+def create_device(device_config: SolarView):
     def create_counter_component(component_config: SolarViewCounterSetup):
         return SolarViewCounter(component_config)
 
@@ -27,12 +27,15 @@ def create_device(device_config: SolarViewConfiguration):
             inverter=create_inverter_component,
         ),
         component_updater=IndependentComponentUpdater(lambda component: component.update(
-            device_config.ip_address, device_config.port, device_config.timeout))
+            device_config.configuration.ip_address,
+            device_config.configuration.port,
+            device_config.configuration.timeout))
     )
 
 
 def read_legacy(component_type: str, ip_address: str, port: int, timeout: int, command: Optional[str] = None) -> None:
-    device = create_device(SolarViewConfiguration(ip_address=ip_address, port=port, timeout=timeout))
+    device = create_device(SolarView(configuration=SolarViewConfiguration(
+        ip_address=ip_address, port=port, timeout=timeout)))
     if component_type == "counter":
         device.add_component(SolarViewCounterSetup(id=None))
     else:

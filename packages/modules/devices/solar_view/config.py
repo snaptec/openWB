@@ -4,7 +4,11 @@ from modules.common.component_setup import ComponentSetup
 
 
 class SolarViewConfiguration:
-    def __init__(self, ip_address: Optional[str] = None, port: Optional[int] = None, timeout: int = 3, command: Optional[str] = None):
+    def __init__(self,
+                 ip_address: Optional[str] = None,
+                 port: Optional[int] = None,
+                 timeout: int = 3,
+                 command: Optional[str] = None):
         self.ip_address = ip_address
         self.port = port  # Wertebereich [1, 65535]
         self.timeout = timeout

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import logging
 from typing import Dict, Union
-from requests import Session
 
 
 from dataclass_utils import dataclass_from_dict
