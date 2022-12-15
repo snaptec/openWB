@@ -14,7 +14,7 @@ from modules.devices.powerfox.inverter import PowerfoxInverter
 log = logging.getLogger(__name__)
 
 
-def create_device(device_config: PowerfoxConfiguration):
+def create_device(device_config: Powerfox):
     def create_counter_component(component_config: PowerfoxCounterSetup):
         return PowerfoxCounter(component_config)
 
@@ -22,7 +22,7 @@ def create_device(device_config: PowerfoxConfiguration):
         return PowerfoxInverter(component_config)
 
     session = get_http_session()
-    session.auth = (device_config.user, device_config.password)
+    session.auth = (device_config.configuration.user, device_config.configuration.password)
     return ConfigurableDevice(
         device_config=device_config,
         component_factory=ComponentFactoryByType(
@@ -34,7 +34,7 @@ def create_device(device_config: PowerfoxConfiguration):
 
 
 def read_legacy(component_type: str, user: str, password: str, id: str) -> None:
-    device = create_device(PowerfoxConfiguration(user=user, password=password))
+    device = create_device(Powerfox(configuration=PowerfoxConfiguration(user=user, password=password)))
     if component_type == "counter":
         device.add_component(PowerfoxCounterSetup(id=None, configuration=PowerfoxCounterConfiguration(id=id)))
     else:
