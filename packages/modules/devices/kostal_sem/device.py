@@ -11,12 +11,11 @@ from modules.devices.kostal_sem.config import KostalSem, KostalSemConfiguration,
 log = logging.getLogger(__name__)
 
 
-def create_device(device_config: KostalSemConfiguration):
+def create_device(device_config: KostalSem):
     def create_counter_component(component_config: KostalSemCounterSetup):
         return KostalSemCounter(component_config, client)
 
-    ip_address = device_config.ip_address
-    client = modbus.ModbusTcpClient_(ip_address, 502)
+    client = modbus.ModbusTcpClient_(device_config.configuration.ip_address, 502)
     return ConfigurableDevice(
         device_config=device_config,
         component_factory=ComponentFactoryByType(counter=create_counter_component),
@@ -25,7 +24,7 @@ def create_device(device_config: KostalSemConfiguration):
 
 
 def read_legacy(address: str) -> None:
-    device = create_device(KostalSemConfiguration(ip_address=address))
+    device = create_device(KostalSem(configuration=KostalSemConfiguration(ip_address=address)))
     device.add_component(KostalSemCounterSetup(id=None))
     log.debug('KSEM address: ' + address)
     device.update()
