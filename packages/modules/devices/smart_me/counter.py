@@ -23,7 +23,7 @@ class SmartMeCounter:
 
     def update(self, session: Session) -> None:
         def parse_phase_values(key: str) -> List[float]:
-            return [response[key+str(i)] * 1000 for i in range(0, 3)]
+            return [response[key+str(i)] * 1000 for i in range(1, 4)]
 
         response = session.get('https://smart-me.com:443/api/Devices/' +
                                self.component_config.configuration.id, timeout=3).json()
