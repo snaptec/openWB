@@ -7,12 +7,10 @@ class SolarViewConfiguration:
     def __init__(self,
                  ip_address: Optional[str] = None,
                  port: Optional[int] = None,
-                 timeout: int = 3,
-                 command: Optional[str] = None):
+                 timeout: int = 3):
         self.ip_address = ip_address
         self.port = port  # Wertebereich [1, 65535]
         self.timeout = timeout
-        self.command = command
 
 
 class SolarView:

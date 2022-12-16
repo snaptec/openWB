@@ -25,7 +25,7 @@ class SolarViewCounter:
         exported = 1000 * int(exported_values[9])
 
         values = request(ip_address, port, timeout, '22*')
-        imported = 1000 * int(exported_values[9])
+        imported = 1000 * int(values[9])
         power = -1 * int(values[10])
 
         if len(values) > 20:
