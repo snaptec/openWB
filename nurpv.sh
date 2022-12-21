@@ -97,10 +97,10 @@ nurpvlademodus(){
 		fi
 	fi
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		if (( ladestatuss1 == 1 )) || (( ladestatuss2 == 1 )); then
-			runs/set-current.sh 0 all
-			openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Ladung gestoppt"
-		fi
+		# if (( ladestatuss1 == 1 )) || (( ladestatuss2 == 1 )); then
+		# 	runs/set-current.sh 0 all
+		# 	openwbDebugLog "CHARGESTAT" 0 "alle Ladepunkte, Lademodus NurPV. Ladung gestoppt"
+		# fi
 		openwbDebugLog "MAIN" 1 "Überschuss $uberschuss; mindestens $mindestuberschussphasen"
 		if (( mindestuberschussphasen <= uberschuss )); then
 			openwbDebugLog "PV" 0 "Überschuss $uberschuss ist größer als nötiger Überschuss, Wert: $mindestuberschussphasen"
