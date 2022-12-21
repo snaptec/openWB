@@ -197,7 +197,7 @@ def on_message(client, userdata, msg):
                         client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
                 devicenumb=re.sub(r'\D', '', msg.topic)
-                validDeviceMeasureTypes = ['shelly','tasmota','http','mystrom','sdm630','we514','fronius','json','avm','mqtt','sdm120','smaem'] # 'pyt' is deprecated and will be removed!
+                validDeviceMeasureTypes = ['shelly','tasmota','http','mystrom','sdm630','lovato','we514','fronius','json','avm','mqtt','sdm120','smaem'] # 'pyt' is deprecated and will be removed!
                 if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                     try:
                         deviceMeasureTypeIndex = validDeviceMeasureTypes.index(msg.payload.decode("utf-8"))
