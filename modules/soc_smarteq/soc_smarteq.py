@@ -27,12 +27,12 @@ TOKENS_REFRESH_THRESHOLD = 3600
 
 
 # helper functions
-def keys_exist(element, *keys):
+def nested_keys_exist(element: dict, *keys) -> bool:
     # Check if *keys (nested) exists in `element` (dict).
     if not isinstance(element, dict):
-        raise AttributeError('keys_exist() expects dict as first argument - got type ' + str(type(element)))
+        raise AttributeError('nested_keys_exist() expects dict as first argument - got type ' + str(type(element)))
     if len(keys) == 0:
-        raise AttributeError('keys_exist() expects at least two arguments, one given.')
+        raise AttributeError('nested_keys_exist() expects at least two arguments, one given.')
 
     _element = element
     for key in keys:
@@ -350,7 +350,7 @@ class smarteq:
             response = self.session.get(url, headers=headers)
             res = json.loads(response.text)
             res_json = json.dumps(res, indent=4)
-            if keys_exist(res, 'precond', 'data', 'soc', 'value'):
+            if nested_keys_exist(res, 'precond', 'data', 'soc', 'value'):
                 res_json = json.dumps(res['precond']['data']['soc'], indent=4)
                 try:
                     soc = res['precond']['data']['soc']['value']
@@ -410,7 +410,7 @@ class smarteq:
             if 'access_token' in self.store['Tokens']:
                 soc = self.get_status(self.vin)
         self.log.info("Lp" + self.chargepoint +
-                " SOC: " + str(soc) + '%' +
+                      " SOC: " + str(soc) + '%' +
                       '@' + self.soc_ts +
                       ', Method: ' + self.method)
 
