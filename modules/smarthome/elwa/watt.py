@@ -40,7 +40,8 @@ aktpower = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
 # Wassertemperatur lesen
 value1 = resp.registers[1]
 all = format(value1, '04x')
-temp0 = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+temp0int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+temp0 = temp0int / 10
 count5 = 999
 if os.path.isfile(file_stringcount5):
     with open(file_stringcount5, 'r') as f:
