@@ -306,10 +306,6 @@ commitId=$(git -C "$OPENWBBASEDIR" log --format="%h" -n 1)
 echo "$commitId" >"$RAMDISKDIR/currentCommitHash"
 git -C "$OPENWBBASEDIR" branch -a --contains "$commitId" | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs >"$RAMDISKDIR/currentCommitBranches"
 
-# EVSE Check
-openwbDebugLog "MAIN" 1 "starting evsecheck"
-"$OPENWBBASEDIR/runs/evsecheck"
-
 # truncate all logs in ramdisk
 openwbDebugLog "MAIN" 1 "logfile cleanup triggered"
 "$OPENWBBASEDIR/runs/cleanup.sh" >>"$RAMDISKDIR/cleanup.log" 2>&1
