@@ -1297,6 +1297,11 @@ updateConfig(){
 	if grep -Fq "awattaraktiv=" $ConfigFile; then
 		sed -i '/^awattaraktiv=/d' $ConfigFile
 	fi
+	for i in $(seq 1 8); do
+		if ! grep -Fq "lp${i}etbasedcharging=" $ConfigFile; then
+			echo "lp${i}etbasedcharging=1" >> $ConfigFile
+		fi
+	done
 	if ! grep -Fq "plz=" $ConfigFile; then
 		echo "plz=36124" >> $ConfigFile
 	fi
