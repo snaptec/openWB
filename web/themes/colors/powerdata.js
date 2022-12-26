@@ -24,41 +24,42 @@ class WbData {
 		this.batteryEnergyImport = 0;
 		this.batteryPowerExport = 0;
 		this.batteryPowerImport = 0;
-		this.chargeMode="0"
+		this.chargeMode = "0"
 		this.graphDate = new Date();
 		this.graphMonth = {
 			"month": this.graphDate.getMonth(),
 			"year": this.graphDate.getFullYear()
 		}
+		this.rfidConfigured = false;
 		this.consumer = [new Consumer(), new Consumer()];
 		this.chargePoint = Array.from({ length: 9 }, (v, i) => new ChargePoint(i));
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
 		this.sourceSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, color: "white" },			
-			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" }
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" }
 		};
 
 		this.usageSummary = {
-			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 		};
 
 		this.historicSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, color: "white" },
-			"evuOut": { name: "Export", power: 0, energy: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, color: "white" }
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 		};
-		
+
 		this.usageDetails = [this.usageSummary.evuOut];
 		this.graphPreference = "live";
 		this.graphMode = "live";
@@ -68,6 +69,7 @@ class WbData {
 		this.usageStackOrder = 0;
 		this.decimalPlaces = 1;
 		this.smartHomeColors = "normal";
+		this.smartHomeSummary = true;
 		this.prefs = {};
 	};
 
@@ -81,6 +83,7 @@ class WbData {
 		this.usageSummary.devices.color = 'var(--color-devices)';
 		this.usageSummary.batIn.color = 'var(--color-battery)';
 		this.usageSummary.house.color = 'var(--color-house)';
+		
 		var i;
 		for (i = 0; i < 8; i++) {
 			this.chargePoint[i].color = 'var(--color-lp' + (i + 1) + ')';
@@ -90,7 +93,9 @@ class WbData {
 		}
 		this.consumer[0].color = 'var(--color-co1)';
 		this.consumer[1].color = 'var(--color-co2)';
-
+		for (i = 0; i < 9; i++) {
+			this.historicSummary['sh' + i] = Object.assign(this.shDevice[i])
+		}
 		this.historicSummary.pv.color = 'var(--color-pv)';
 		this.historicSummary.evuIn.color = 'var(--color-evu)';
 		this.historicSummary.batOut.color = 'var(--color-battery)';
@@ -99,6 +104,7 @@ class WbData {
 		this.historicSummary.devices.color = 'var(--color-devices)';
 		this.historicSummary.batIn.color = 'var(--color-battery)';
 		this.historicSummary.house.color = 'var(--color-house)';
+		//this.historicSummary.chargingPv.color = 'var(--color-charging)';
 		evuCol = style.getPropertyValue('--evuCol');
 		xgridCol = style.getPropertyValue('--xgridCol');
 		tickCol = style.getPropertyValue('--tickCol');
@@ -184,9 +190,13 @@ class WbData {
 				powerMeter.update();
 				break;
 			case 'currentPowerPrice':
-				case 'chargeMode':
+			case 'chargeMode':
 				priceChart.update();
 				chargePointList.update();
+				break
+			case 'rfidConfigured':
+				d3.select('#codeEntry').classed("hide", (!value))
+				break
 			default:
 				break;
 		}
@@ -265,7 +275,7 @@ class WbData {
 		this[field] = value;
 		switch (field) {
 			case 'batteryPowerImport':
-				this.updateUsageSummary ("batIn", "power", value);
+				this.updateUsageSummary("batIn", "power", value);
 				powerMeter.update();
 				break;
 			case 'batteryPowerExport':
@@ -273,7 +283,7 @@ class WbData {
 				powerMeter.update();
 				break;
 			case 'batteryEnergyImport':
-				this.updateUsageSummary ("batIn", "energy", value);
+				this.updateUsageSummary("batIn", "energy", value);
 				yieldMeter.update();
 				break;
 			case 'batteryEnergyExport':
@@ -287,13 +297,13 @@ class WbData {
 	}
 
 
-	updateET(field,value) {
-		this[field]=value;
-		
+	updateET(field, value) {
+		this[field] = value;
+
 		switch (field) {
 			case 'etPrice':
 			case 'isEtEnabled': chargePointList.updateValues();
-			break;
+				break;
 			default:
 				break;
 		}
@@ -327,20 +337,19 @@ class WbData {
 	}
 
 	updateUsageDetails() {
-		this.usageDetails = [this.usageSummary.evuOut,
+		this.usageDetails = [this.usageSummary.evuOut,this.usageSummary.batIn, this.usageSummary.house,
 		this.usageSummary.charging]
 			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
-			.concat(this.consumer.filter(row => (row.configured)))
-			.concat([this.usageSummary.batIn, this.usageSummary.house]);
+			.concat(this.consumer.filter(row => (row.configured)));
 	}
 
 	updateConsumerSummary(cat) {
 		if (cat == 'energy') {
-		this.updateUsageSummary("devices", 'energy', this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0)
-			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
+			this.updateUsageSummary("devices", 'energy', this.shDevice.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0)
+				+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.energy, 0));
 		} else {
 			this.updateUsageSummary("devices", 'power', this.smarthomePower
-			+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
+				+ this.consumer.filter(dev => dev.configured).reduce((sum, consumer) => sum + consumer.power, 0));
 		}
 	}
 
@@ -353,6 +362,7 @@ class WbData {
 		this.prefs.showGr = this.showGrid;
 		this.prefs.decimalP = this.decimalPlaces;
 		this.prefs.smartHomeC = this.smartHomeColors;
+		this.prefs.smartHomeSum = this.smartHomeSummary;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 	// read cookies and update settings
@@ -387,6 +397,9 @@ class WbData {
 			}
 			if ('smartHomeC' in this.prefs) {
 				this.smartHomeColors = this.prefs.smartHomeC;
+			}
+			if ('smartHomeSum' in this.prefs) {
+				this.smartHomeSummary = this.prefs.smartHomeSum;
 			}
 		}
 	}
@@ -432,57 +445,60 @@ class SHDevice {
 		this.showInGraph = true;
 		this.color = color;
 		this.countAsHouse = false;
+		this.energyPv = 0;
+		this.energyBat = 0;
+		this.pvPercentage = 0;
 	}
 };
 
 function formatWatt(watt) {
 	let wattResult;
-	if (watt >= 1000) {
+	if (watt >= 1000 && wbdata.decimalPlaces < 4) {
 		switch (wbdata.decimalPlaces) {
 			case 0:
 				wattResult = Math.round(watt / 1000);
 				break;
 			case 1:
-				wattResult = (Math.round(watt / 100) / 10).toFixed(1);
+				wattResult = (Math.round(watt / 100) / 10)
 				break;
 			case 2:
-				wattResult = (Math.round(watt / 10) / 100).toFixed(2);
+				wattResult = (Math.round(watt / 10) / 100)
 				break;
 			case 3:
-				wattResult = (Math.round(watt) / 1000).toFixed(3);
+				wattResult = (Math.round(watt) / 1000)
 				break;
-			default: 
+			default:
 				wattResult = Math.round(watt / 100) / 10;
 				break;
 		}
-		return (wattResult + " kW");
+		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kW");
 	} else {
-		return (watt + " W");
+		return (Math.round(watt).toLocaleString(undefined) + " W");
 	}
 }
 
 function formatWattH(watt) {
-	if (watt >= 1000) {
+	if (watt >= 1000 && wbdata.decimalPlaces < 4) {
 		switch (wbdata.decimalPlaces) {
 			case 0:
 				wattResult = Math.round(watt / 1000);
 				break;
 			case 1:
-				wattResult = (Math.round(watt / 100) / 10).toFixed(1);
+				wattResult = (Math.round(watt / 100) / 10)
 				break;
 			case 2:
-				wattResult = (Math.round(watt / 10) / 100).toFixed(2);
+				wattResult = (Math.round(watt / 10) / 100)
 				break;
 			case 3:
-				wattResult = (Math.round(watt) / 1000).toFixed(3);
+				wattResult = (Math.round(watt) / 1000)
 				break;
-			default: 
+			default:
 				wattResult = Math.round(watt / 100) / 10;
 				break;
 		}
-		return (wattResult + " kWh");
+		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kWh");
 	} else {
-		return (Math.round(watt) + " Wh");
+		return (Math.round(watt).toLocaleString(undefined) + " Wh");
 	}
 }
 function formatTime(seconds) {
@@ -495,26 +511,26 @@ function formatTime(seconds) {
 	}
 }
 
-function formatMonth (month, year) {
+function formatMonth(month, year) {
 	months = ['Jan', 'Feb', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-	return (months[month] + " "+ year);
+	return (months[month] + " " + year);
 }
 function shiftLeft() {
 	switch (wbdata.graphMode) {
 		case 'live':
 			wbdata.graphMode = 'day';
 			wbdata.graphPreference = 'day';
-    	wbdata.showTodayGraph = true;
-    	powerGraph.deactivateLive();
-    	powerGraph.activateDay();
-    	wbdata.prefs.showLG = false;
-    	wbdata.persistGraphPreferences();
-    	d3.select("button#graphRightButton").classed("disabled", false)
+			wbdata.showTodayGraph = true;
+			powerGraph.deactivateLive();
+			powerGraph.activateDay();
+			wbdata.prefs.showLG = false;
+			wbdata.persistGraphPreferences();
+			d3.select("button#graphRightButton").classed("disabled", false)
 			break;
 		case 'day':
 			wbdata.showTodayGraph = false;
 			wbdata.graphDate.setTime(wbdata.graphDate.getTime() - 86400000);
-    	powerGraph.activateDay();
+			powerGraph.activateDay();
 			break;
 		case 'month':
 			wbdata.graphMonth.month = wbdata.graphMonth.month - 1;
@@ -524,13 +540,13 @@ function shiftLeft() {
 			}
 			powerGraph.activateMonth();
 			break;
-		default: break;		
+		default: break;
 	}
 }
 
 function shiftRight() {
-  today = new Date();
-  const d = wbdata.graphDate;
+	today = new Date();
+	const d = wbdata.graphDate;
 	switch (wbdata.graphMode) {
 		case 'live':
 			break;
@@ -544,6 +560,7 @@ function shiftRight() {
 				wbdata.persistGraphPreferences();
 				d3.select("button#graphLeftButton").classed("disabled", false)
 				d3.select("button#graphRightButton").classed("disabled", true)
+				yieldMeter.update()
 			} else { // currently looking at a previous day
 				wbdata.graphDate.setTime(wbdata.graphDate.getTime() + 86400000);
 				const nd = wbdata.graphDate;
@@ -561,9 +578,9 @@ function shiftRight() {
 					wbdata.graphMonth.year = wbdata.graphMonth.year + 1;
 				}
 				powerGraph.activateMonth();
-			} 
-		}
-	
+			}
+	}
+
 }
 
 function toggleGrid() {
@@ -574,8 +591,8 @@ function toggleGrid() {
 }
 
 function switchDecimalPlaces() {
-	if (wbdata.decimalPlaces  < 3) {
-		wbdata.decimalPlaces = wbdata.decimalPlaces+1;
+	if (wbdata.decimalPlaces < 4) {
+		wbdata.decimalPlaces = wbdata.decimalPlaces + 1;
 	} else {
 		wbdata.decimalPlaces = 0;
 	}
@@ -586,6 +603,7 @@ function switchDecimalPlaces() {
 }
 
 function switchSmartHomeColors() {
+
 	const doc = d3.select("html");
 	switch (wbdata.smartHomeColors) {
 		case 'normal':
@@ -616,6 +634,12 @@ function switchSmartHomeColors() {
 	wbdata.persistGraphPreferences();
 }
 
+function toggleSmartHomeSummary() {
+	wbdata.smartHomeSummary = !wbdata.smartHomeSummary
+	yieldMeter.update()
+	wbdata.persistGraphPreferences();
+}
+
 function toggleMonthView() {
 	if (wbdata.graphMode == 'month') {
 		wbdata.graphMode = wbdata.graphPreference;
@@ -630,7 +654,7 @@ function toggleMonthView() {
 		wbdata.graphMode = 'month';
 		powerGraph.activateMonth();
 		powerGraph.deactivateDay();
-		powerGraph.deactivateLive();	
+		powerGraph.deactivateLive();
 	}
 	yieldMeter.update();
 }

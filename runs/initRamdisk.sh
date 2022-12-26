@@ -18,7 +18,7 @@ initRamdisk(){
 	echo "**** REBOOT ****" >> $RamdiskPath/smarthome.log
 	echo "**** REBOOT ****" >> $RamdiskPath/isss.log
 
-	echo $bootmodus > $RamdiskPath/lademodus
+	echo "$bootmodus" > $RamdiskPath/lademodus
 
 	# Ladepunkte
 	# Variablen noch nicht einheitlich benannt, daher individuelle Zeilen
@@ -132,7 +132,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/llv3lp6
 	echo 0 > $RamdiskPath/llv3lp7
 	echo 0 > $RamdiskPath/llv3lp8
-	echo 0 > $RamdiskPath/pluggedladungbishergeladen
+	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp1
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp2
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp3
 	echo 0 > $RamdiskPath/pluggedladungbishergeladenlp4
@@ -167,8 +167,9 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/nachtladen2states1
 	echo 0 > $RamdiskPath/nachtladenstate
 	echo 0 > $RamdiskPath/nachtladenstates1
-	echo 0 > $RamdiskPath/pluggedtimer1
-	echo 0 > $RamdiskPath/pluggedtimer2
+	echo 0 > $RamdiskPath/pluggedtimerlp1
+	echo 0 > $RamdiskPath/pluggedtimerlp2
+	echo 0 > $RamdiskPath/pluggedtimerlp3
 	echo 0 > $RamdiskPath/progevsedinlp1
 	echo 0 > $RamdiskPath/progevsedinlp12000
 	echo 0 > $RamdiskPath/progevsedinlp12007
@@ -185,10 +186,11 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/tmpsoc1
 	echo 0 > $RamdiskPath/zielladenkorrektura
 	echo 0 > $RamdiskPath/ladungdurchziel
+	echo 0 > $RamdiskPath/extcpulp1
 	echo 20000 > $RamdiskPath/soctimer
 	echo 20000 > $RamdiskPath/soctimer1
 	echo 28 > $RamdiskPath/evsemodbustimer
-	touch $RamdiskPath/llog1
+	touch $RamdiskPath/llog
 	touch $RamdiskPath/llogs1
 	touch $RamdiskPath/llogs2
 
@@ -208,6 +210,15 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/device7_wh
 	echo 0 > $RamdiskPath/device8_wh
 	echo 0 > $RamdiskPath/device9_wh
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_1
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_2
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_3
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_4
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_5
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_6
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_7
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_8
+	echo 0 > $RamdiskPath/smarthome_device_minhaus_9
 	echo 0 > $RamdiskPath/smarthome_device_manual_1
 	echo 0 > $RamdiskPath/smarthome_device_manual_2
 	echo 0 > $RamdiskPath/smarthome_device_manual_3
@@ -320,7 +331,7 @@ initRamdisk(){
 	echo -1 > $RamdiskPath/mqttrfidlp2
 
 	# rfid
-	echo $rfidlist > $RamdiskPath/rfidlist
+	echo "$rfidlist" > $RamdiskPath/rfidlist
 	echo 0 > $RamdiskPath/rfidlasttag
 	echo 0 > $RamdiskPath/rfidlp1
 	echo 0 > $RamdiskPath/rfidlp2
@@ -332,8 +343,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/hook2akt
 	echo 0 > $RamdiskPath/hook2einschaltverzcounter
 	echo 0 > $RamdiskPath/hook3akt
-	echo $verbraucher1_name > $RamdiskPath/verbraucher1_name
-	echo $verbraucher2_name > $RamdiskPath/verbraucher2_name
+	echo "$verbraucher1_name" > $RamdiskPath/verbraucher1_name
+	echo "$verbraucher2_name" > $RamdiskPath/verbraucher2_name
 	echo 0 > $RamdiskPath/daily_verbraucher1ekwh
 	echo 0 > $RamdiskPath/daily_verbraucher1ikwh
 	echo 0 > $RamdiskPath/daily_verbraucher2ekwh
@@ -399,7 +410,6 @@ initRamdisk(){
 	echo 1 > $RamdiskPath/bootinprogress
 	echo 1 > $RamdiskPath/execdisplay
 	echo 4 > $RamdiskPath/graphtimer
-	echo 0 > $RamdiskPath/fronius_sm_bezug_meterlocation
 
 
 
@@ -455,6 +465,7 @@ initRamdisk(){
 			"lp${i}sofortll:openWB/config/get/sofort/lp/${i}/current:10" \
 			"rfidlp${i}::0" \
 			"boolstopchargeafterdisclp${i}::0" \
+			"mqttstopchargeafterdisclp${i}::-1" \
 			"mqttzielladenaktivlp${i}::-1" \
 			"mqttmsmoduslp${i}::-1" \
 			"mqttlp${i}name::Lp${i}" \
@@ -463,21 +474,20 @@ initRamdisk(){
 			"mqttautolockconfiguredlp${i}::-1"
 		do
 			IFS=':' read -r -a tuple <<< "$f"
-			currentRamdiskFileVar="\"$RamdiskPath/${tuple[0]}\""
-			eval currentRamdiskFile=\$$currentRamdiskFileVar
-			if ! [ -f $currentRamdiskFile ]; then
-				if [[ ! -z ${tuple[1]} ]]; then
-					mqttValue=$(timeout 1 mosquitto_sub -C 1 -t ${tuple[1]})
-					if [[ ! -z "$mqttValue" ]]; then
+			currentRamdiskFile="$RamdiskPath/${tuple[0]}"
+			if ! [ -f "$currentRamdiskFile" ]; then
+				if [[ -n ${tuple[1]} ]]; then
+					mqttValue=$(timeout 1 mosquitto_sub -C 1 -t "${tuple[1]}")
+					if [[ -n "$mqttValue" ]]; then
 						echo "'$currentRamdiskFile' missing: Setting from MQTT topic '${tuple[0]}' to value '$mqttValue'"
-						echo "$mqttValue" > $currentRamdiskFile
+						echo "$mqttValue" > "$currentRamdiskFile"
 					else
 						echo "'$currentRamdiskFile' missing: MQTT topic '${tuple[0]}' can also not provide any value: Setting to default of '${tuple[2]}'"
-						echo ${tuple[2]} > $currentRamdiskFile
+						echo "${tuple[2]}" > "$currentRamdiskFile"
 					fi
 				else
 					echo "'$currentRamdiskFile' missing: no MQTT topic set: Setting to default of '${tuple[2]}'"
-					echo ${tuple[2]} > $currentRamdiskFile
+					echo "${tuple[2]}" > "$currentRamdiskFile"
 				fi
 			fi
 		done
@@ -588,15 +598,14 @@ initRamdisk(){
 		"mqttwizzarddone:-1"
 	do
 		IFS=':' read -r -a tuple <<< "$f"
-		currentRamdiskFileVar="\"$RamdiskPath/${tuple[0]}\""
-		eval currentRamdiskFile=\$$currentRamdiskFileVar
-		if ! [ -f $currentRamdiskFile ]; then
-			if [[ ! -z "${tuple[1]}" ]]; then
+		currentRamdiskFile="$RamdiskPath/${tuple[0]}"
+		if ! [ -f "$currentRamdiskFile" ]; then
+			if [[ -n "${tuple[1]}" ]]; then
 				echo "'${tuple[0]}' missing: Setting to provided default value '${tuple[1]}'"
-				echo "${tuple[1]}" > $currentRamdiskFile
+				echo "${tuple[1]}" > "$currentRamdiskFile"
 			else
 				echo "'${tuple[0]}' missing: No default value provided. Setting to 0."
-				echo 0 > $currentRamdiskFile
+				echo 0 > "$currentRamdiskFile"
 			fi
 		fi
 	done

@@ -80,7 +80,9 @@
 										</label>
 									</div>
 									<span class="form-text small">
-										Mit dieser Einstellung können zusätzliche Log-Meldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.
+										Mit dieser Einstellung können zusätzliche Log-Meldungen aktiviert werden, um eine Fehlersuche zu vereinfachen.<br />
+										ACHTUNG! In den Modi 1 und 2 können sensible Daten wie Benutzernamen oder Kennwörter enthalten sein. Diese bitte vor der Veröffentlichung z.B.
+										im Forum unkenntlich machen. Private IP-Adressen (z.B. 192.168.x.x) müssen nicht maskiert werden, da diese nicht öffentlich erreichbar sind.
 									</span>
 								</div>
 							</div>

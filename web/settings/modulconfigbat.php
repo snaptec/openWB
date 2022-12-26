@@ -66,11 +66,14 @@
 									<option <?php if($speichermodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
 									<optgroup label="openWB">
 										<option <?php if($speichermodulold == "speicher_mpm3pm") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
+										<option <?php if($speichermodulold == "speicher_sdmaevu") echo "selected" ?> value="speicher_sdmaevu">Zähler an openWB EVU Kit</option>
 									</optgroup>
 									<optgroup label="andere Hersteller">
 										<option <?php if($speichermodulold == "speicher_alphaess") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
+										<option <?php if($speichermodulold == "speicher_batterx") echo "selected" ?> value="speicher_batterx">BatterX</option>
 										<option <?php if($speichermodulold == "speicher_bydhv") echo "selected" ?> value="speicher_bydhv">BYD</option>
 										<option <?php if($speichermodulold == "speicher_e3dc") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+										<option <?php if($speichermodulold == "speicher_good_we") echo "selected" ?> value="speicher_good_we">GoodWe</option>
 										<option <?php if($speichermodulold == "speicher_huawei") echo "selected" ?> value="speicher_huawei">Huawei</option>
 										<option <?php if($speichermodulold == "speicher_fronius") echo "selected" ?> value="speicher_fronius">Fronius Speicher (Solar Battery oder BYD HV/HVS/HVM)</option>
 										<option <?php if($speichermodulold == "speicher_kostalplenticore") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
@@ -121,18 +124,6 @@
 										</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<label for="ess_api_ver" class="col-md-4 col-form-label">API-Version</label>
-									<div class="col">
-										<select name="ess_api_ver" id="ess_api_ver" class="form-control">
-											<option <?php if($ess_api_verold == "10.2019") echo "selected" ?> value="10.2019">API-Version Oktober 2019</option>
-											<option <?php if($ess_api_verold == "01.2020") echo "selected" ?> value="01.2020">API-Version Januar 2020</option>
-										</select>
-										<span class="form-text small">
-											Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version.
-										</span>
-									</div>
-								</div>
 							</div>
 						</div>
 
@@ -144,7 +135,7 @@
 										<select name="speicherkitversion" id="speicherkitversion" class="form-control">
 											<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
 											<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
-											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">SDM630 an EVU Kit angeschlossen</option>
+											<option <?php if($speicherkitversionold == 2) echo "selected" ?> value="2">Dreiphasig (SDM630/72)</option>
 										</select>
 									</div>
 								</div>
@@ -205,8 +196,8 @@
 							</div>
 						</div>
 						<div id="divspeicherhuawei" class="hide">
-							<div class="alert alert-info">
-								Konfiguration im PV Huawei Modul.
+							<div class="alert alert-danger">
+								Es muss zwingend auch das Huawei PV Modul konfiguriert werden, da alle Daten dort abgerufen werden!
 							</div>
 						</div>
 
@@ -270,6 +261,20 @@
 						</div>
 
 						<div id="divspeichersungrow" class="hide">
+							<div class="form-row mb-1">
+								<label for="sungrowspeicherport" class="col-md-4 col-form-label">Netzwerk-Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="sungrowspeicherport" id="sungrowspeicherport" value="<?php echo $sungrowspeicherportold ?>">
+									<span class="form-text small">Hier kann ein abweichender Netzwerk-Port angegeben werden, auf dem die Modbus/TCP Verbindung aufgebaut wird.Standard ist 502.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="sungrowspeicherid" class="col-md-4 col-form-label">Geräteadresse</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" max="254" step="1" name="sungrowspeicherid" id="sungrowspeicherid" value="<?php echo $sungrowspeicheridold ?>">
+									<span class="form-text small">Gültige Werte 1-254. Standard ist 1.</span>
+								</div>
+							</div>
 							<div class="alert alert-info">
 								Es muss Sungrow als PV und EVU Modul gewählt werden.
 							</div>
@@ -332,7 +337,20 @@
 						<div id="divspeicheralphaess" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="vartaspeicherip" class="col-md-4 col-form-label">Firmware Version</label>
+									<label for="alphasource" class="col-md-4 col-form-label">Ausleseart</label>
+									<div class="col">
+										<select name="alphasource" id="alphasource" class="form-control">
+											<option <?php if($alphasourceold == "0") echo "selected" ?> value="0">Alpha ESS-Kit</option>
+											<option <?php if($alphasourceold == "1") echo "selected" ?> value="1">Hi5/10</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="divspeicheralphaessfw" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="alphav123" class="col-md-4 col-form-label">Firmware Version</label>
 									<div class="col">
 										<select name="alphav123" id="alphav123" class="form-control">
 											<option <?php if($alphav123old == "0") echo "selected" ?> value="0">EMS älter als 1.23V</option>
@@ -340,6 +358,29 @@
 										</select>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="divspeicheralphaessip" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="alphaip" class="col-md-4 col-form-label">IP-Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="alphaip" id="alphaip" value="<?php echo $alphaipold ?>">
+										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12. Die Abfrage erfolgt an Port 502.</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="divspeichergoodwe" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im Wechselrichter
+							</div>
+						</div>
+						
+						<div id="divspeicherbatterx" class="hide">
+							<div class="alert alert-info">
+								Konfiguration im Bezug BatterX Modul.
 							</div>
 						</div>
 
@@ -399,13 +440,31 @@
 										<span class="form-text small">
 											Je nach Sonnen Batterie muss die richtige Datenverbindung ausgewählt werden.
 											Folgende URLs werden zum Abruf der Daten genutzt und können auch manuell über einen Browser abgefragt werden, um die richtige Einstellung zu finden:<br>
-											Rest-API 1: [ip]:7979/rest/devices/battery<br>
-											Rest-API 2: [ip]:7979/rest/devices/battery/M05<br>
-											JSON-API: [ip]/api/v1/status
+											Rest-API 1: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery"></a><br>
+											Rest-API 2: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]:7979/rest/devices/battery/M05"></a><br>
+											JSON-API: <a class="api-link" href="" target="_blank" rel="noopener noreferrer" data-template="http://[ip]/api/v1/status"></a>
 										</span>
 									</div>
 								</div>
 							</div>
+							<script>
+								$(function() {
+									function updateSonnenIp() {
+										let myIp = $("#sonnenecoip").val();
+										let myLinks = $("#divspeicherseco a.api-link").each(function() {
+											let myLink = $(this).data("template").replace("[ip]", myIp);
+											$(this).text(myLink);
+											$(this).attr("href", myLink);
+										});;
+									}
+
+									$("#sonnenecoip").keyup(function() {
+										updateSonnenIp();
+									});
+
+									updateSonnenIp();
+								})
+							</script>
 						</div>
 
 						<div id="divspeichere3dc" class="hide">
@@ -449,6 +508,22 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Sunny Boy Smart Energy</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($sbs25seold == 0) echo " active" ?>">
+											<input type="radio" name="sbs25se" id="sbs25seNo" value="0"<?php if($sbs25seold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($sbs25seold == 1) echo " active" ?>">
+											<input type="radio" name="sbs25se" id="sbs25seYes" value="1"<?php if($sbs25seold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+									<span class="form-text small">
+										Diese Option aktivieren, wenn ein Sunny Boy Smart Energy verbaut ist.
+									</span>
+								</div>
+							</div>
 						</div>
 
 						<div id="divspeichersunnyisland" class="hide">
@@ -468,10 +543,11 @@
 								<div class="form-row mb-1">
 									<label for="solaredgespeicherip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo $solaredgespeicheripold ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo $solaredgespeicheripold ?>">
 										<span class="form-text small">
-											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
-											IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br />
+											IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.<br />
+											Optional kann ein benutzerdefinierter Port angegeben werden: <span class="text-danger">IP:Port</span>. Ohne eine Angabe wird Port 502 genutzt. Häufig sind Geräte von Solaredge jedoch mit dem Port 1502 vorkonfiguriert!
 										</span>
 									</div>
 								</div>
@@ -678,7 +754,11 @@
 								hideSection('#divspeicherseco');
 								hideSection('#divspeicherkit');
 								hideSection('#divspeichervarta');
+								hideSection('#divspeicheralphaessfw');
+								hideSection('#divspeicheralphaessip');
 								hideSection('#divspeicheralphaess');
+								hideSection('#divspeichergoodwe');
+								hideSection('#divspeicherbatterx');
 								hideSection('#divspeichervictron');
 								hideSection('#divspeicherstuder');
 								hideSection('#divspeicherlgessv1');
@@ -722,8 +802,21 @@
 									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');
 								}
+								if($('#speichermodul').val() == 'speicher_good_we') {
+									showSection('#divspeichergoodwe');
+								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
 									showSection('#divspeicheralphaess');
+									if ($('#alphasource').val() == 0) {
+										hideSection('#divspeicheralphaessip');
+										showSection('#divspeicheralphaessfw');
+									} else {
+										showSection('#divspeicheralphaessip');
+										hideSection('#divspeicheralphaessfw');
+									}
+								}
+								if($('#speichermodul').val() == 'speicher_batterx') {
+									showSection('#divspeicherbatterx');
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
 									showSection('#divspeichermqtt');
@@ -739,6 +832,9 @@
 									showSection('#divspeicherstuder');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
+									showSection('#divspeicherkit');
+								}
+								if($('#speichermodul').val() == 'speicher_sdmaevu') {
 									showSection('#divspeicherkit');
 								}
 								if($('#speichermodul').val() == 'speicher_sonneneco') {
@@ -790,6 +886,9 @@
 
 							$(function() {
 								$('#speichermodul').change( function(){
+									display_speichermodul();
+								});
+								$('#alphasource').change( function(){
 									display_speichermodul();
 								});
 

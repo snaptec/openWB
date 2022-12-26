@@ -27,6 +27,7 @@
 # 2020-01-13 Kevin Wieland changes to run with openWB
 # 2020-02-03 theHolgi added phase-wise load and power factor
 # 2021-09-01 Markus Giessen adoption for usage as Smart Home Device for energy metering
+# 2021-12-25 Markus Giessen adoption of PR 1845 due to SMA protocol change
 
 import sys
 import os
@@ -87,8 +88,17 @@ else:
 # We also have to take care if there are more than one EnergyMeter in the network sending, that's why we check the modification time in scenario 2.
 # Without this check we would generate a ret-file everytime we receive data from a not desired EnergyMeter.
 emparts={}
-emparts=decode_speedwire(sock.recv(608))
+sock_data = sock.recv(608)
 
+# Ignore data package if the length is smaller 18 - this should not happen. If length is smaller 18, the following check for Protocol ID can't work
+if len(sock_data) < 18:
+     sys.exit("Module SMAEM: Invalid data package received. The length of the received data package is smaller than 18 Byte. This should not happen.")
+
+# Ignore data package if the SMA Protocol ID is not 0x6069 - adoption of PR 1845
+if sock_data[16:18] != b'\x60\x69':
+     sys.exit("Module SMAEM: Invalid data package received. No need to worry, this is a normal situation if a SMA HomeManager (2) is sending in the network.")
+
+emparts=decode_speedwire(sock_data)
 debugfile.write(str(datetime.datetime.now()) + ': smaserial: #' + str(smaserial) + '# - Current SMA serial number:#' + str(emparts['serial']) + '# - watt:#' + str(int(emparts.get("pconsume"))) + '# - wattc:#' + str("{:.3f}".format(int(emparts.get('pconsumecounter')*1000))) + '#\n')
 
 # Remember: We assume that beside of our EnergyMeter there are more SMA devices present (like HomeManager 2.0 or other EnergyMeter) - so must not accept any data or smaserial = None

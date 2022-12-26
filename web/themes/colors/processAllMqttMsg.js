@@ -37,6 +37,7 @@ function getIndex(topic) {
 
 function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
+
 	if (mqttmsg.match(/^openwb\/graph\//i)) { processGraphMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/evu\//i)) { processEvuMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/global\/awattar\//i)) { processETProviderMessages(mqttmsg, mqttpayload); }
@@ -60,20 +61,20 @@ function processETProviderMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 
-// colors theme
-if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
-	wbdata.updateET ('etProviderName', mqttpayload);
-} else if ( mqttmsg == 'openWB/global/ETProvider/modulePath' ) {
-	wbdata.updateET ('etModulePath', mqttpayload);
-} else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
-	wbdata.updateET('isEtEnabled' ,(mqttpayload == '1'))
-} else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
-	wbdata.updateET('etPriceList',mqttpayload);
-} else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
-	wbdata.updateET ('etMaxPrice', parseFloat(mqttpayload));
-} else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-	wbdata.updateET ('etPrice', parseFloat(mqttpayload));
-}
+	// colors theme
+	if (mqttmsg == 'openWB/global/ETProvider/providerName') {
+		wbdata.updateET('etProviderName', mqttpayload);
+	} else if (mqttmsg == 'openWB/global/ETProvider/modulePath') {
+		wbdata.updateET('etModulePath', mqttpayload);
+	} else if (mqttmsg == 'openWB/global/awattar/boolAwattarEnabled') {
+		wbdata.updateET('isEtEnabled', (mqttpayload == '1'))
+	} else if (mqttmsg == 'openWB/global/awattar/pricelist') {
+		wbdata.updateET('etPriceList', mqttpayload);
+	} else if (mqttmsg == 'openWB/global/awattar/MaxPriceForCharging') {
+		wbdata.updateET('etMaxPrice', parseFloat(mqttpayload));
+	} else if (mqttmsg == 'openWB/global/awattar/ActualPriceForCharging') {
+		wbdata.updateET('etPrice', parseFloat(mqttpayload));
+	}
 
 
 	// end color theme
@@ -98,7 +99,7 @@ if ( mqttmsg == 'openWB/global/ETProvider/providerName' ) {
 			$('#navStromtarifInfo').addClass('hide');
 		}
 	}
-	
+
 }
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
@@ -410,7 +411,6 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
 	processPreloader(mqttmsg);
-
 	// color theme
 	if (mqttmsg == 'openWB/global/WHouseConsumption') {
 		wbdata.updateGlobal("housePower", makeInt(mqttpayload));
@@ -428,6 +428,9 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// '2': mode pv
 		// '3': mode stop
 		// '4': mode standby
+	}
+	else if (mqttmsg == 'openWB/global/rfidConfigured') {
+		wbdata.updateGlobal("rfidConfigured", (mqttpayload == 1))
 	}
 	else if (mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
 		wbdata.updateGlobal("chargeEnergy", makeFloat(mqttpayload));
@@ -645,7 +648,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/system\/daygraphdata[1-9][0-9]*$/i)) {
 		powerGraph.updateDay(mqttmsg, mqttpayload);
 	}
-	else if (mqttmsg.match(/^openwb\/system\/monthgraphdata[1-9][0-9]*$/i)) {
+	else if (mqttmsg.match(/^openwb\/system\/monthgraphdatan[1-9][0-9]*$/i)) {
 		powerGraph.updateMonth(mqttmsg, mqttpayload);
 	}
 }
@@ -1286,19 +1289,22 @@ function unsubscribeDayGraph() {
 }
 
 function subscribeMonthGraph(date) {
-	// var today = new Date();
 	var mm = String(date.month + 1).padStart(2, '0'); //January is 0!
 	var yyyy = date.year;
 	graphdate = yyyy + mm;
 	for (var segment = 1; segment < 13; segment++) {
-		var topic = "openWB/system/MonthGraphData" + segment;
+		var topic = "openWB/system/MonthGraphDatan" + segment;
 		client.subscribe(topic, { qos: 0 });
 	}
-	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
+	publish(graphdate, "openWB/set/graph/RequestMonthGraphv1");
 }
 
 function unsubscribeMonthGraph() {
-	publish("0", "openWB/set/graph/RequestMonthGraph");
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/MonthGraphDatan" + segment;
+		client.unsubscribe(topic);
+	}
+	publish("0", "openWB/set/graph/RequestMonthGraphv1");
 }
 
 function makeInt(message) {
