@@ -177,7 +177,7 @@ do
 		elif [ $timeOfDay = "$unlockTime" ] && [ $statusFlag != "3" ]; then
 			# charge point not waiting for lock and not already unlocked
 			# but unlock time is now, so enable charge point
-			mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
+			mqttTopic="openWB/set/lp/$chargePoint/ChargePointEnabled"
 			mosquitto_pub -r -t $mqttTopic -m 1
 			# and set flag "auto-unlock performed"
 			mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"

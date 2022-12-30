@@ -44,6 +44,7 @@ lp8enabled=$(<ramdisk/lp8enabled)
 # functions
 #
 #####
+
 # function for setting the current - dac
 # Parameters:
 # 1: current
@@ -53,7 +54,7 @@ function setChargingCurrentDAC () {
 	dacregister=$2
 	# set desired charging current
 	# INFO: needs new dac.py to accept current and use translation table
-	sudo python /var/www/html/openWB/runs/dac.py $current $dacregister
+	sudo python /var/www/html/openWB/runs/dac.py "$current" "$dacregister"
 }
 
 # function for setting the current - extopenwb
@@ -66,9 +67,9 @@ function setChargingCurrentExtopenwb () {
 	chargep1cp=$3
 	# set desired charging current
 	if [[ "$chargep1cp" == "2" ]]; then
-		mosquitto_pub -r -t openWB/set/isss/Lp2Current -h $chargep1ip -m "$current"
+		mosquitto_pub -r -t openWB/set/isss/Lp2Current -h "$chargep1ip" -m "$current"
 	else
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$current"
+		mosquitto_pub -r -t openWB/set/isss/Current -h "$chargep1ip" -m "$current"
 	fi
 }
 
@@ -76,13 +77,13 @@ function setChargingCurrentExtopenwb () {
 # Parameters:
 # 1: current
 # 2: owbpro1ip
-
 function setChargingCurrentOwbpro () {
 	current=$1
 	owbpro1ip=$2
 	# set desired charging current
-	curl -s -X POST --data "ampere=$current" $owbpro1ip/connect.php > /dev/null
+	curl -s -X POST --data "ampere=$current" "$owbpro1ip"/connect.php > /dev/null
 }
+
 # function for setting the current - modbusevse
 # Parameters:
 # 1: current
@@ -93,7 +94,7 @@ function setChargingCurrentModbus () {
 	modbusevsesource=$2
 	modbusevseid=$3
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
+	sudo python /var/www/html/openWB/runs/evsewritemodbus.py "$modbusevsesource" "$modbusevseid" "$current"
 }
 
 function setChargingCurrentBuchse () {
@@ -102,11 +103,13 @@ function setChargingCurrentBuchse () {
 	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 	# Is handled in buchse.py
 }
+
 function setChargingCurrentDaemon () {
 	current=$1
 	# set desired charging current
 	# Is handled in lldaemon.py
 }
+
 # function for setting the current - IP modbusevse
 # Parameters:
 # 1: current
@@ -117,27 +120,27 @@ function setChargingCurrentIpModbus () {
 	evseip=$2
 	ipevseid=$3
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $ipevseid
+	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py "$current" "$evseip" "$ipevseid"
 }
 
 # function for openwb slave kit
 function setChargingCurrentSlaveeth () {
 	current=$1
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
+	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py "$current"
 }
 
 function setChargingCurrentMasterethframer () {
 	current=$1
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
+	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py "$current"
 }
 
 # function for openwb third kit
 function setChargingCurrentThirdeth () {
 	current=$1
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evsethirdwritemodbus.py $current
+	sudo python /var/www/html/openWB/runs/evsethirdwritemodbus.py "$current"
 }
 
 # function for setting the current - WiFi
@@ -149,24 +152,24 @@ function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
 		if [[ $evsewifitimeoutlp1 -eq 4 ]]; then
 			if [[ $current -eq 0 ]]; then
-				output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
-				state=$(echo $output | jq '.list[] | .evseState')
+				output=$(curl --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/getParameters")
+				state=$(echo "$output" | jq '.list[] | .evseState')
 				if ((state == true)) ; then
-					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=false > /dev/null
+					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setStatus?active=false" > /dev/null
 				fi
 			else
-				output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
-				state=$(echo $output | jq '.list[] | .evseState')
+				output=$(curl --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/getParameters")
+				state=$(echo "$output" | jq '.list[] | .evseState')
 				if ((state == false)) ; then
-					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
+					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setStatus?active=true" > /dev/null
 				fi
-				oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
-				if (( oldcurrent != $current )) ; then
-					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+				oldcurrent=$(echo "$output" | jq '.list[] | .actualCurrent')
+				if (( oldcurrent != current )) ; then
+					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setCurrent?current=$current" > /dev/null
 				fi
 			fi
 		else
-			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+			curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setCurrent?current=$current" > /dev/null
 		fi
 	fi
 }
@@ -175,9 +178,9 @@ function setChargingCurrenttwcmanager () {
 	if [[ $evsecon == "twcmanager" ]]; then
 		if [[ $twcmanagerlp1httpcontrol -eq 1 ]]; then
 			if [[ $current -eq 0 ]]; then
-				curl -s --connect-timeout 3 -X POST -d '' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/cancelChargeNow" > /dev/null
+				curl -s --connect-timeout 3 -X POST -d "" "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/cancelChargeNow" > /dev/null
 			else
-				curl -s --connect-timeout 3 -X POST -d '{ "chargeNowRate": '$current', "chargeNowDuration": 86400 }' "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/chargeNow" > /dev/null
+				curl -s --connect-timeout 3 -X POST -d "{ \"chargeNowRate\": $current, \"chargeNowDuration\": 86400 }" "http://$twcmanagerlp1ip:$twcmanagerlp1port/api/chargeNow" > /dev/null
 			fi
 		else
 			curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
@@ -199,24 +202,24 @@ function setChargingCurrenthttp () {
 function setChargingCurrentgoe () {
 	if [[ $evsecon == "goe" ]]; then
 		if [[ $current -eq 0 ]]; then
-			output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
-			state=$(echo $output | jq -r '.alw')
+			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
+			state=$(echo "$output" | jq -r '.alw')
 			if ((state == "1")) ; then
-				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=0 > /dev/null
+				curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=0" > /dev/null
 			fi
 		else
-			output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
-			fwv=$(echo $output | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
-			state=$(echo $output | jq -r '.alw')
+			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
+			fwv=$(echo "$output" | jq -r '.fwv' | grep -Po "[1-9]\d{1,2}")
+			state=$(echo "$output" | jq -r '.alw')
 			if ((state == "0")) ; then
-				 curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
+				 curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=1" > /dev/null
 			fi
-			oldgoecurrent=$(echo $output | jq -r '.amp')
-			if (( oldgoecurrent != $current )) ; then
-				if (($fwv >= 40)) ; then
-					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amx=$current > /dev/null
+			oldgoecurrent=$(echo "$output" | jq -r '.amp')
+			if (( oldgoecurrent != current )) ; then
+				if ((fwv >= 40)) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amx=$current" > /dev/null
 				else
-					curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amp=$current" > /dev/null
 				fi
 			fi
 		fi
@@ -229,21 +232,21 @@ function setChargingCurrentgoe () {
 # 2: goeiplp1
 function setChargingCurrentkeba () {
 	if [[ $evsecon == "keba" ]]; then
-		sudo python3 /var/www/html/openWB/modules/keballlp1/check502.py $kebaiplp1 >> /var/www/html/openWB/ramdisk/port.log 2>&1
-		modbus=$(</var/www/html/openWB/ramdisk/port_502_$kebaiplp1 )
+		sudo python3 /var/www/html/openWB/modules/keballlp1/check502.py "$kebaiplp1" >> /var/www/html/openWB/ramdisk/port.log 2>&1
+		modbus=$(<"/var/www/html/openWB/ramdisk/port_502_$kebaiplp1" )
 		if [[ $modbus == "0" ]] ; then
 			#modbus 0 means udp interface
 			kebacurr=$(( current * 1000 ))
 			if [[ $current -eq 0 ]]; then
-				echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+				echo -n "ena 0" | socat - UDP-DATAGRAM:"$kebaiplp1":7090
 			else
-				echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-				echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-				echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+				echo -n "ena 1" | socat - UDP-DATAGRAM:"$kebaiplp1":7090
+				echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:"$kebaiplp1":7090
+				echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:"$kebaiplp1":7090
 			fi
 		else
 			#modbus 1 means modbus interface 
-			sudo python3 /var/www/html/openWB/modules/keballlp1/setcurrkeba.py $kebaiplp1 $current >> /var/www/html/openWB/ramdisk/port.log 2>&1
+			sudo python3 /var/www/html/openWB/modules/keballlp1/setcurrkeba.py "$kebaiplp1" "$current" >> /var/www/html/openWB/ramdisk/port.log 2>&1
 		fi
 	fi
 }
@@ -251,21 +254,20 @@ function setChargingCurrentkeba () {
 function setChargingCurrentnrgkick () {
 	if [[ $evsecon == "nrgkick" ]]; then
 		if [[ $current -eq 0 ]]; then
-			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
-			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			output=$(curl --connect-timeout 3 -s "http://$nrgkickiplp1/api/settings/$nrgkickmaclp1")
+			state=$(echo "$output" | jq -r '.Values.ChargingStatus.Charging')
 			if [[ $state == "true" ]] ; then
-				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": false }, "ChargingCurrent": { "Value": "6" }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ \"Values\": {\"ChargingStatus\": { \"Charging\": false }, \"ChargingCurrent\": { \"Value\": 6 }, \"DeviceMetadata\":{\"Password\": \"$nrgkickpwlp1\"}}}" "$nrgkickiplp1/api/settings/$nrgkickmaclp1" > /dev/null
 			fi
 		else
-			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
-			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			output=$(curl --connect-timeout 3 -s "http://$nrgkickiplp1/api/settings/$nrgkickmaclp1")
+			state=$(echo "$output" | jq -r '.Values.ChargingStatus.Charging')
 			if [[ $state == "false" ]] ; then
-				 curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+				 curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ \"Values\": {\"ChargingStatus\": { \"Charging\": true }, \"ChargingCurrent\": { \"Value\": $current }, \"DeviceMetadata\":{\"Password\": \"$nrgkickpwlp1\"}}}" "$nrgkickiplp1/api/settings/$nrgkickmaclp1" > /dev/null
 			fi
-			oldcurrent=$(echo $output | jq -r '.Values.ChargingCurrent.Value')
-			if (( oldcurrent != $current )) ; then
-				curl --silent --connect-timeout $nrgkicktimeoutlp1 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current}, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
- > /dev/null
+			oldcurrent=$(echo "$output" | jq -r '.Values.ChargingCurrent.Value')
+			if (( oldcurrent != current )) ; then
+				curl --silent --connect-timeout "$nrgkicktimeoutlp1" -s -X PUT -H "Content-Type: application/json" --data "{ \"Values\": {\"ChargingStatus\": { \"Charging\": true }, \"ChargingCurrent\": { \"Value\": $current}, \"DeviceMetadata\":{\"Password\": \"$nrgkickpwlp1\"}}}" "$nrgkickiplp1/api/settings/$nrgkickmaclp1" > /dev/null
 			fi
 		fi
 	fi
@@ -275,22 +277,22 @@ function setChargingCurrentnrgkick () {
 # no parameters, variables need to be set before...
 function setChargingCurrent () {
 	if [[ $evsecon == "dac" ]]; then
-		setChargingCurrentDAC $current $dacregister
+		setChargingCurrentDAC "$current" "$dacregister"
 	fi
 	if [[ $evsecon == "buchse" ]]; then
-		setChargingCurrentBuchse $current
+		setChargingCurrentBuchse "$current"
 	fi
 	if [[ $evsecon == "daemon" ]]; then
-		setChargingCurrentDaemon $current
+		setChargingCurrentDaemon "$current"
 	fi
 	if [[ $evsecon == "http" ]]; then
-		setChargingCurrenthttp $current
+		setChargingCurrenthttp "$current"
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
-		setChargingCurrentExtopenwb $current $chargep1ip $chargep1cp
+		setChargingCurrentExtopenwb "$current" "$chargep1ip" "$chargep1cp"
 	fi
 	if [[ $evsecon == "owbpro" ]]; then
-		setChargingCurrentOwbpro $current $owbpro1ip
+		setChargingCurrentOwbpro "$current" "$owbpro1ip"
 	fi
 	if [[ $evsecon == "modbusevse" ]]; then
 		if [[ "$modbusevseid" == 0 ]]; then
@@ -310,36 +312,36 @@ function setChargingCurrent () {
 			fi
 		fi
 
-		setChargingCurrentModbus $current $modbusevsesource $modbusevseid
+		setChargingCurrentModbus "$current" "$modbusevsesource" "$modbusevseid"
 	fi
 
 	if [[ $evsecon == "simpleevsewifi" ]]; then
-		setChargingCurrentWifi $current $evsewifitimeoutlp1 $evsewifiiplp1
+		setChargingCurrentWifi "$current" "$evsewifitimeoutlp1" "$evsewifiiplp1"
 	fi
 	if [[ $evsecon == "goe" ]]; then
-		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
+		setChargingCurrentgoe "$current" "$goetimeoutlp1" "$goeiplp1"
 	fi
 	if [[ $evsecon == "slaveeth" ]]; then
-		setChargingCurrentSlaveeth $current
+		setChargingCurrentSlaveeth "$current"
 	fi
 	if [[ $evsecon == "thirdeth" ]]; then
-		setChargingCurrentThirdeth $current
+		setChargingCurrentThirdeth "$current"
 	fi
 
 	if [[ $evsecon == "masterethframer" ]]; then
-		setChargingCurrentMasterethframer $current
+		setChargingCurrentMasterethframer "$current"
 	fi
 	if [[ $evsecon == "nrgkick" ]]; then
-		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
+		setChargingCurrentnrgkick "$current" "$nrgkicktimeoutlp1" "$nrgkickiplp1" "$nrgkickmaclp1" "$nrgkickpwlp1"
 	fi
 	if [[ $evsecon == "keba" ]]; then
-		setChargingCurrentkeba $current $kebaiplp1
+		setChargingCurrentkeba "$current" "$kebaiplp1"
 	fi
 	if [[ $evsecon == "twcmanager" ]]; then
-		setChargingCurrenttwcmanager $current $twcmanagerlp1ip $twcmanagerlp1port $twcmanagerlp1httpcontrol
+		setChargingCurrenttwcmanager "$current" "$twcmanagerlp1ip" "$twcmanagerlp1port" "$twcmanagerlp1httpcontrol"
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
-		setChargingCurrentIpModbus $current $evseip $ipevseid
+		setChargingCurrentIpModbus "$current" "$evseip" "$ipevseid"
 	fi
 }
 
@@ -353,14 +355,14 @@ function setChargingCurrent () {
 let current=$1
 if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then
 	if [[ $debug == "2" ]]; then
-		echo "ungültiger Wert für Ladestrom" > /var/www/html/openWB/web/lade.log
+		echo "set-currents: ungültiger Wert für Ladestrom: $current" >> /var/www/html/openWB/ramdisk/openWB.log
 	fi
 	exit 1
 fi
 
-if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]] || [[ $2 == "lp4" ]] || [[ $2 == "lp5" ]] || [[ $2 == "lp6" ]] || [[ $2 == "lp7" ]] || [[ $2 == "lp8" ]]) ; then
+if ! ([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]] || [[ $2 == "lp4" ]] || [[ $2 == "lp5" ]] || [[ $2 == "lp6" ]] || [[ $2 == "lp7" ]] || [[ $2 == "lp8" ]]) ; then
 	if [[ $debug == "2" ]]; then
-		echo "ungültiger Wert für Ziel: $2" > /var/www/html/openWB/web/lade.log
+		echo "set-currents: ungültiger Wert für Ziel: $2" >> /var/www/html/openWB/ramdisk/openWB.log
 	fi
 	exit 1
 fi
@@ -379,7 +381,7 @@ fi
 # set desired charging current
 
 if [[ $debug == "2" ]]; then
-	echo "setze ladung auf $current" >> /var/www/html/openWB/web/lade.log
+	echo "set-currents: setze ladung auf ${current}A" >> /var/www/html/openWB/ramdisk/openWB.log
 fi
 
 # Loadsharing LP 1 / 2
@@ -436,7 +438,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 			current=$(( agrenze - 1))
 			new2=all
 			if [[ $debug == "2" ]]; then
-			echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
+			echo "set-currents: setzeladung auf ${current}A durch loadsharing LP12" >> /var/www/html/openWB/ramdisk/openWB.log
 			fi
 		fi
 	fi

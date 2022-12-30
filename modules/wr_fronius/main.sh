@@ -1,28 +1,19 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
-#DMOD="EVU"
+#DMOD="PV"
 DMOD="MAIN"
-Debug=$debug
-
-#For development only
-#Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
 	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-	MYLOGFILE="${RAMDISKDIR}/wr_fronius.log"
+	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
 openwbDebugLog ${DMOD} 2 "WR IP: ${wrfroniusip}"
-openwbDebugLog ${DMOD} 2 "WR Gen 24: ${wrfroniusisgen24}"
 openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
+openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
 
-python3 /var/www/html/openWB/modules/wr_fronius/fronius.py "${wrfroniusip}" "${wrfroniusisgen24}" "${wrfronius2ip}" &>>$MYLOGFILE
-ret=$?
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.fronius.device" "inverter" "${wrfroniusip}" "0" "0" "${wrfronius2ip}" "1" >>"$MYLOGFILE" 2>&1
 
-openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
-echo $pvwatt
+cat "${RAMDISKDIR}/pvwatt"

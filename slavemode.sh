@@ -49,12 +49,12 @@ openwbisslave() {
 		# socket slave mode
 		openwbDebugLog "MAIN" 2 "Slave Socket mode: Checking: SocketActivationRequested == '${SocketActivationRequested}', SocketApproved == '${SocketApproved}', SocketActivated == '${SocketActivated}'"
 
-		callSetCurrent 0 0  $LmStatusDownForSocket
+		callSetCurrent 0 0 $LmStatusDownForSocket
 
 		# handle de-activation request by socket or EV RFID scan
 		if (( SocketActivationRequested >= 2 )); then
 			if (( SocketActivated == 0)) || (( SocketApproved == 0 )); then
-			  echo 0 > $SocketRequestedFile
+				echo 0 > $SocketRequestedFile
 			else
 				openwbDebugLog "MAIN" 0 "Slave Mode Socket: Socket DEactivation requested by socket or EV RFID tag scan. Socket will now be turned off."
 				sudo python runs/standardSocket.py off
@@ -291,7 +291,7 @@ function endChargeAndAbortOnChargeLimits() {
 	local energyChargedSincePlugin=0
 
 	if (( chargePoint == 1 )); then
-		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladen")
+		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp1")
 	elif (( chargePoint == 2 )); then
 		energyChargedSincePlugin=$(<"ramdisk/pluggedladungbishergeladenlp2")
 	elif (( chargePoint == 3 )); then
@@ -308,8 +308,8 @@ function endChargeAndAbortOnChargeLimits() {
 
 	if (( `echo "($energyChargedSincePlugin * 1000) > $energyLimit" | bc` == 1 )); then
 
-		openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit reached: Disabling charge"
-		callSetCurrent 0 0  $LmStatusDownByEnergyLimit
+		openwbDebugLog "MAIN" 2 "Slave Mode: Energy limit reached: Disabling charge of CP $chargePoint"
+		callSetCurrent 0 $chargePoint $LmStatusDownByEnergyLimit
 		return 0
 	fi
 
@@ -644,6 +644,7 @@ function checkControllerHeartbeat() {
 			echo "Slave Mode: Zentralserver Ausfall, Ladung auf allen LP deaktiviert !" > ramdisk/lastregelungaktiv
 			echo "0" > ramdisk/heartbeat
 			callSetCurrent 0 0 $LmStatusDownByError
+
 			if (( standardSocketInstalled > 0 )); then
 				sudo python runs/standardSocket.py off
 			fi
@@ -666,9 +667,35 @@ function checkControllerHeartbeat() {
 }
 
 
+# calls "setCurrent" in loop if called with chargepoint 0
+function callSetCurrent() {
+	local runAggregate=0
+
+	# PreviousExpectedChargeCurrent can be empty in case of "early exit" in case of error (e.g. heartbeat timeout)
+	if [ "$PreviousExpectedChargeCurrent" == "" ]; then
+		runAggregate=1
+		openwbDebugLog "MAIN" 2 "Slave Mode: Running data aggregation before current set"
+	fi
+
+
+	if (( $2 != 0 )); then
+		callSetCurrentSingleCp $1 $2 $3
+	else
+		for j in $(seq 1 $NumberOfSupportedChargePoints);
+		do
+			if (( runAggregate == 1 )); then
+				aggregateDataForChargePoint $j
+			fi
+
+			callSetCurrentSingleCp $1 $j $3
+		done
+	fi
+}
+
+
 # calls "setCurrent" with correct parameters for given charge point
 # needed because the charge point parameter of setCurrent is not a number but a string like m, s1, s2, lp4, lp...
-function callSetCurrent() {
+function callSetCurrentSingleCp() {
 
 	# the new current to set is our first parameter
 	declare -i currentToSet=$1
@@ -681,22 +708,13 @@ function callSetCurrent() {
 	local statusReason=$3
 	local computedReason=$statusReason
 
-	# PreviousExpectedChargeCurrent can be empty in case of "early exit" in case of error (e.g. heartbeat timeout)
-	if [ "$PreviousExpectedChargeCurrent" == "" ]; then
-		if (( chargePoint != 0 )); then
-			aggregateDataForChargePoint $chargePoint
-		else
-			for i in $(seq 1 $NumberOfSupportedChargePoints);
-			do
-				aggregateDataForChargePoint $i
-			done
-		fi
-	fi
+	openwbDebugLog "MAIN" 2 "Slave Mode: callSetCurent $1 $2 $3"
 
 	# we have to do a slightly ugly if-else-cascade to set the charge point selector for set-current.sh
 	# Note: There's currently only one current limit (min/max) per box - so setting same for all CPs
 	if (( chargePoint == 0 )); then
-		local chargePointString="all"
+		openwbDebugLog "MAIN" 0 "Slave Mode: callSetCurrentSingleCp: chargePoint == 0: returning without doing any setting"
+		return 1
 	elif (( chargePoint == 1 )); then
 		local chargePointString="m"
 	elif (( chargePoint == 2 )); then
@@ -713,7 +731,7 @@ function callSetCurrent() {
 	computedReason=$LmStatusInLoop
 
 	# finally limit to the configured min or max values
-	if ( (( currentToSet < MinimumCurrentPossibleForCp )) || ((LpEnabled == 0)) ) && (( currentToSet != 0 )); then
+	if ( (( currentToSet < MinimumCurrentPossibleForCp )) || (( LpEnabled == 0 )) ) && (( currentToSet != 0 )); then
 		if ((LpEnabled != 0)); then
 			openwbDebugLog "MAIN" 2 "Slave Mode: Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < MinimumCurrentPossibleForCp=$MinimumCurrentPossibleForCp --> setze currentToSet=0"
 			computedReason=$LmStatusDownByLm
@@ -737,20 +755,14 @@ function callSetCurrent() {
 		fi
 	fi
 
-	if (( chargePoint != 0 )); then
-		echo "$statusReason" > "${LmStatusFile}${chargePoint}"
-	else
-		for i in $(seq 1 $NumberOfSupportedChargePoints);
-		do
-			echo "$statusReason" > "${LmStatusFile}${i}"
-		done
-	fi
+	echo "$statusReason" > "${LmStatusFile}${chargePoint}"
 
 	if (( PreviousExpectedChargeCurrent != currentToSet )); then
 
 		openwbDebugLog "MAIN" 2 "Slave Mode: Setting current from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}, status reason $statusReason"
 		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
 	else
+		openwbDebugLog "MAIN" 2 "Slave Mode: Skipping current setting from ${PreviousExpectedChargeCurrent} to ${currentToSet} A for CP#${chargePoint}, status reason $statusReason"
 		return 0
 	fi
 

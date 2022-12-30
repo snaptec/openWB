@@ -1,1 +1,175 @@
-/* nothing special here, using default style */
+/* Colors, for dark gray background */
+:root {
+	--fontCol: rgba(160, 160, 160, 0.82);
+	--gridCol: rgba(160,160,160, 0.82);
+	--xgridCol: rgba(160,160,160, 0.82);
+	--tickCol: rgba(160,160,160, 0.82);
+	--evuCol: rgba(178, 34, 34, 1);
+	--color-switchRed: #d12020;
+	--color-switchGreen: #4db662;
+	--color-switchBlue: steelblue;
+	--color-bg: #333333;
+	--color-evu: firebrick;
+	--color-pv: #33a02c;
+	--color-house: #7f7f7f;
+	--color-charging: #1f78b4;
+	--color-export: #b2df8a;
+	--color-axis: #666666;
+	--color-grid: black;
+	--color-frame: #999999;
+	--color-subframe: #333333;
+	--color-fg: white;
+	--color-scale: #999999;
+	--color-title: lightgrey;
+	--invertLogo: invert(1);
+}
+
+
+.openwb-logo {
+	filter: var(--invertLogo);
+}
+
+.bg-warning, .bg-info, .bg-success, .bg-light {
+	color: var(--color-fg);
+}
+
+.btn-outline-secondary,
+.table,
+pre {
+	color: var(--color-fg);
+}
+
+.card {
+	background-color: var(--color-bg);
+	border-color: var(--color-frame);
+}
+
+.card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-primary .btn-outline-info:not(.active):not(:hover) {
+	background-color: var(--color-bg);
+}
+
+.card-header.bg-success .btn-outline-info.focus {
+	box-shadow: 0 0 0 0.2rem var(--color-frame);
+}
+
+.card-header.bg-success .btn-outline-info.active,
+.card-header.bg-success .btn-outline-info:hover {
+	border-color: var(--color-frame);
+}
+
+.form-control,
+.form-control:focus,
+.custom-file-label {
+	background-color: var(--color-bg);
+	border: 1px solid var(--color-frame);
+	color: var(--color-fg);
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+	background-color: var(--color-bg);
+}
+
+.input-group-text {
+	background-color: var(--color-bg);
+	color: var(--color-fg);
+}
+
+.modal-content {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+body {
+	background-color: var(--color-bg);
+	color: var(--color-fg);
+}
+
+input, select {
+	background-color: var(--color-frame);
+	color: var(--color-fg);
+}
+
+input[type="text"], input[type="password"], select {
+	border: 1px solid var(--color-frame);
+}
+
+hr {
+	border-top-color: var(--color-frame);
+}
+
+.modal-content,
+.modal-header,
+.modal-footer {
+	border-color: var(--color-frame);
+}
+
+.clockpicker-popover,
+.datepicker.datepicker-dropdown {
+	background-color: #343a40;
+}
+
+.clockpicker-popover .popover-title,
+.clockpicker-popover .popover-content {
+	background-color: transparent;
+}
+
+.clockpicker-plate {
+	background-color: var(--color-bg);
+}
+
+.datepicker .datepicker-switch,
+.datepicker .prev:not(.disabled),
+.datepicker .next:not(.disabled),
+.datepicker .today,
+.datepicker .month,
+.datepicker .year {
+	color: var(--color-fg);
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover {
+	background: var(--color-fg);
+	color: var(--color-bg);
+}
+
+.datepicker table tr td span.focused,
+.datepicker table tr td span:hover {
+	background: var(--color-fg);
+	color: var(--color-bg);
+}
+
+.carousel-caption,
+.carousel-control-next,
+.carousel-control-prev {
+	color: var(--color-fg);
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+	filter: none;
+}
+
+.carousel-indicators li {
+	background-color: var(--color-fg);
+}
+
+.cssload-inner.cssload-one {
+	border-bottom: 5px solid var(--color-fg);
+}
+
+.cssload-inner.cssload-two {
+	border-right: 5px solid var(--color-fg);
+}
+
+.cssload-inner.cssload-three {
+	border-top: 5px solid var(--color-fg);
+}
+
+canvas.chartjs-render-monitor {
+	background: var(--color-bg);
+}
