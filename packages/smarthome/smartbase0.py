@@ -4,7 +4,7 @@ from smarthome.global0 import log
 
 
 class Sbase0:
-    _basePath = '/var/www/html/openWB'
+    _basePath = '/var/www/html/openWB/packages'
     _prefixpy = _basePath+'/modules/smarthome/'
 
     def __init__(self):
