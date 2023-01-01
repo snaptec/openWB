@@ -10,6 +10,7 @@ import datetime
 import pkce
 import logging
 import pickle
+import copy
 
 # Constants
 BASE_URL = "https://id.mercedes-benz.com"
@@ -70,16 +71,12 @@ class smarteq:
         # currently is contains:
         # Tokens: refresh- and access-tokens of OAUTH
         # refresh_timestamp: epoch of last refresh_tokens.
-        self.store = {}
-        self.store['Tokens'] = {}
-        self.store['refresh_timestamp'] = int(0)
 
         self.session = requests.session()
 
         self.load_store()
-        self.oldTokens = self.store['Tokens']
+        self.oldTokens = copy.deepcopy(self.store['Tokens'])
         self.init = True
-        self.init = False  # test!!
 
     def load_store(self):
         try:
@@ -89,8 +86,14 @@ class smarteq:
                 self.store['Tokens'] = {}
                 self.store['refresh_timestamp'] = int(0)
             tf.close()
+        except FileNotFoundError:
+            self.log.warning("init: no store file found, full reconnect required")
+            self.store = {}
+            self.store['Tokens'] = {}
+            self.store['refresh_timestamp'] = int(0)
         except Exception as e:
             self.log.debug("init: loading stored data failed, file: " + self.storeFile)
+            self.store = {}
             self.store['Tokens'] = {}
             self.store['refresh_timestamp'] = int(0)
 
@@ -416,8 +419,8 @@ class smarteq:
 
         if self.store['Tokens'] != self.oldTokens:
             self.log.debug("reconnect: tokens changed, store token file")
+            self.write_store()
 
-        self.write_store()
         return soc
 
 
