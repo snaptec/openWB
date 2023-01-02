@@ -112,9 +112,6 @@ class ChargepointModule(AbstractChargepoint):
             self.__client.read_error = 0
 
             rfid = ramdisk_read("readtag")
-            # reset tag
-            if rfid != "0" and plug_state is False:
-                ramdisk_write("readtag", "0")
 
             if phase_switch_cp_active:
                 # Während des Threads wird die CP-Leitung unterbrochen, das EV soll aber als angesteckt betrachtet
