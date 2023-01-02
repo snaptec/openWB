@@ -17,7 +17,7 @@ class ChargepointValueStoreRamdisk(ValueStore[ChargepointState]):
         charge_point.currents.write(cp_state.currents)
         charge_point.energy.write(cp_state.imported)
         charge_point.is_plugged.write(cp_state.plug_state)
-        charge_point.power.write(cp_state.power)
+        charge_point.power.write(int(cp_state.power))
 
 
 class ChargepointValueStoreBroker(ValueStore[ChargepointState]):
