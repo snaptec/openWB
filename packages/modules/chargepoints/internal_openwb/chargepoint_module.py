@@ -8,7 +8,7 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import ChargepointState
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.modbus import ModbusSerialClient_
-from modules.common.store import ramdisk_read, ramdisk_write
+from modules.common.store import ramdisk_read
 from modules.common import sdm
 from modules.common import evse
 from modules.common import b32
