@@ -12,7 +12,7 @@ class E3dcConfiguration:
 class E3dc:
     def __init__(self,
                  name: str = "E3DC",
-                 type: str = "E3DC",
+                 type: str = "e3dc",
                  id: int = 0,
                  configuration: E3dcConfiguration = None) -> None:
         self.name = name
