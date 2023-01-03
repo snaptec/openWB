@@ -46,6 +46,10 @@ class YieldMeter {
 
 	// to be called when values have changed
 	update() {
+		let importedEnergy = 0
+		let exportedEnergy = 0
+		let generatedEnergy = 0
+		let batEnergy = 0
 		switch (wbdata.graphMode) {
 			case 'live':
 				this.plotdata = Object.values(wbdata.sourceSummary)
@@ -55,6 +59,10 @@ class YieldMeter {
 				if (wbdata.smartHomeSummary && wbdata.usageSummary.devices.energy > 0) {
 					this.plotdata.push(wbdata.usageSummary.devices)
 				}
+				importedEnergy = wbdata.sourceSummary.evuIn.energy
+				exportedEnergy = wbdata.usageSummary.evuOut.energy
+				generatedEnergy = wbdata.sourceSummary.pv.energy
+				batEnergy = wbdata.sourceSummary.batOut.energy
 				break;
 			case 'day':
 				if (wbdata.showTodayGraph) {
@@ -66,12 +74,22 @@ class YieldMeter {
 					if (wbdata.smartHomeSummary && wbdata.usageSummary.devices.energy > 0) {
 						this.plotdata.push(wbdata.usageSummary.devices)
 					}
+					importedEnergy = wbdata.sourceSummary.evuIn.energy
+					exportedEnergy = wbdata.usageSummary.evuOut.energy
+					generatedEnergy = wbdata.sourceSummary.pv.energy
+					batEnergy = wbdata.sourceSummary.batOut.energy
+
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
 						.filter(row => row.energy > 0 && row.name != "Geräte");
 					if (wbdata.smartHomeSummary && wbdata.historicSummary.devices.energy > 0) {
 						this.plotdata.push(wbdata.historicSummary.devices)
 					}
+					importedEnergy = wbdata.historicSummary.evuIn.energy
+					exportedEnergy = wbdata.historicSummary.evuOut.energy
+					generatedEnergy = wbdata.historicSummary.pv.energy
+					batEnergy = wbdata.historicSummary.batOut.energy
+
 				}
 				break;
 			case 'month':
@@ -82,9 +100,17 @@ class YieldMeter {
 				if (wbdata.smartHomeSummary && wbdata.historicSummary.devices.energy > 0) {
 					this.plotdata.push(wbdata.historicSummary.devices)
 				}
+				importedEnergy = wbdata.historicSummary.evuIn.energy
+				exportedEnergy = wbdata.historicSummary.evuOut.energy
+				generatedEnergy = wbdata.historicSummary.pv.energy
+				batEnergy = wbdata.historicSummary.batOut.energy
+
 				break;
 			default: break;
 		}
+		this.selfUsePercentage = Math.round((generatedEnergy - exportedEnergy) / generatedEnergy *100)
+		this.autarchyPercentage = Math.round ((generatedEnergy + batEnergy - exportedEnergy) / (generatedEnergy + batEnergy + importedEnergy - exportedEnergy) *100)
+		console.log (wbdata.sourceSummary)
 		this.adjustLabelSize()
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
@@ -205,7 +231,7 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => {
-				if (wbdata.graphMode != 'live' && d.pvPercentage > 0) {
+				if ((wbdata.graphMode != 'live' && d.pvPercentage > 0) || (d.name == 'Netz') || (d.name == 'PV')) {
 					return this.yScale(d.energy) - 25
 				} else {
 					return this.yScale(d.energy) - 10
@@ -222,8 +248,8 @@ class YieldMeter {
 				.attr("y", (d) => this.yScale(d.energy) - 10)
 				.attr("font-size", this.labelfontsize - 2)
 				.attr("text-anchor", "middle")
-				.attr("fill", (d) => this.pvColor)
-				.text((d) => this.pvString(d));
+				.attr("fill", (d) => this.subColor(d))
+				.text((d) => this.subString(d));
 		}
 		// Add category labels
 		labels
@@ -236,11 +262,23 @@ class YieldMeter {
 			.text((d) => (this.truncateCategory(d.name)));
 	}
 
-	pvString(item) {
+	subString(item) {
 		if (item.pvPercentage > 0) {
-			return ("(PV: " + item.pvPercentage.toLocaleString(undefined) + " %)");
+			return ("PV: " + item.pvPercentage.toLocaleString(undefined) + " %");
+		} else if (item.name == 'Netz') {
+			return ("Aut: " + this.autarchyPercentage.toLocaleString(undefined) + " %");
+			
+		} else if (item.name == 'PV') {
+			return ("Eigen: " + this.selfUsePercentage.toLocaleString(undefined) + " %")
 		} else {
 			return "";
+		}
+	}
+	subColor(item) {
+		if (item.name == 'Netz' || item.name == 'PV') {
+			return (this.axisColor)
+		} else {
+			return (this.pvColor)
 		}
 	}
 	updateHeading() {
