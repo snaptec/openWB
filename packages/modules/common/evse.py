@@ -28,7 +28,7 @@ class EvseState(IntEnum):
 class Evse:
     def __init__(self, modbus_id: int, client: modbus.ModbusSerialClient_) -> None:
         self.client = client
-        self.id = modbus_id + 1
+        self.id = modbus_id
 
     def get_plug_charge_state(self) -> Tuple[bool, bool, float]:
         set_current, _, state_number = self.client.read_holding_registers(

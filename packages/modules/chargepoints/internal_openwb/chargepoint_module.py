@@ -62,7 +62,7 @@ class ClientFactory:
                 raise Exception("Es konnte keines der Meter in "+str(meters)+" zugeordnet werden.")
 
         meter_client = _check_meter(serial_client, meter_configuration_options[self.local_charge_point_num])
-        evse_client = evse.Evse(self.local_charge_point_num, serial_client)
+        evse_client = evse.Evse(self.local_charge_point_num + 1, serial_client)
         return meter_client, evse_client
 
     def get_pins_phase_switch(self, new_phases: int) -> Tuple[int, int]:
