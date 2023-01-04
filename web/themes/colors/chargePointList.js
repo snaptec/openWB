@@ -10,7 +10,7 @@ class ChargePointList {
   constructor() {
     this.chargepoints = [];
     this.phaseSymbols = ['/', '\u2460', '\u2461', '\u2462']
-    this.headers = ["Ladepunkt", "Ladeparameter", "geladen", "Ladestand"];
+    this.headers = ["Ladepunkt", "Parameter", "geladen", "Stand"];
     this.manualSoc = 0;
   };
 

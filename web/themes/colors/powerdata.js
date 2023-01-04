@@ -505,7 +505,7 @@ function formatTime(seconds) {
 	const hours = Math.floor(seconds / 3600);
 	const minutes = ((seconds % 3600) / 60).toFixed(0);
 	if (hours > 0) {
-		return (hours + "h " + minutes + " min");
+		return (hours + "h " + minutes );
 	} else {
 		return (minutes + " min");
 	}

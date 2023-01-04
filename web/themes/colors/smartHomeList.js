@@ -72,7 +72,7 @@ class SmartHomeList {
         .attr("style", "color:var(--color-fg); text-align:center;")
         .attr("onClick", (row) => "shModeClicked(" + row.id + ")")
         .classed("disabled", false)
-        .text(row => row.isAutomatic ? "Automatik" : "Manuell");
+        .text(row => row.isAutomatic ? "Auto" : "Manuell");
       // select graph display
       rows.append("td")
         .attr("class", "tablecell py-1 px-1")
