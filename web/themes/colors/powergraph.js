@@ -446,7 +446,7 @@ class PowerGraph {
 		values.soc2 = +elements[10];
 
 		// smart home
-		for (i = 0; i < 8; i++) {
+		for (i = 0; i < 10; i++) {
 			if (!(wbdata.shDevice[i].countAsHouse)) {
 				values["sh" + i] = +elements[20 + i];
 			} else {
@@ -498,7 +498,7 @@ class PowerGraph {
 		values.soc2 = +elements[22];
 		// smart home
 		values.devices = 0;
-		for (i = 0; i < 9; i++) {
+		for (i = 0; i < 10; i++) {
 			if (!(wbdata.shDevice[i].countAsHouse)) {
 				values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
 				values.devices += values["sh" + i]
@@ -763,13 +763,13 @@ class PowerGraph {
 		const keys = [["lp0", "lp1", "lp2", "lp3", "lp4",
 			"lp5", "lp6", "lp7",
 			"sh0", "sh1", "sh2", "sh3", "sh4",
-			"sh5", "sh6", "sh7", "co0", "co1", "housePower", "batIn", "inverter"],
+			"sh5", "sh6", "sh7", "sh8","co0", "co1", "housePower", "batIn", "inverter"],
 		["housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
 			"lp5", "lp6", "lp7",
 			"sh0", "sh1", "sh2", "sh3", "sh4",
-			"sh5", "sh6", "sh7", "co0", "co1", "batIn", "inverter"],
+			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "batIn", "inverter"],
 		["sh0", "sh1", "sh2", "sh3", "sh4",
-			"sh5", "sh6", "sh7", "co0", "co1", "housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
 			"lp5", "lp6", "lp7",
 			"batIn", "inverter"]
 		];
