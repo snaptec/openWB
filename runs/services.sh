@@ -78,9 +78,14 @@ start() {
 		then
 			openwbDebugLog "MAIN" 1 "isss handler already running"
 		else
-			openwbDebugLog "MAIN" 0 "isss handler not running! restarting process in mode $isss_mode"
+			openwbDebugLog "MAIN" 0 "Start/restart isss handler in mode $isss_mode."
 			if [ -f /home/pi/ppbuchse ]; then
 				ppbuchse=$(< /home/pi/ppbuchse)
+				re='^[0-9]+$'
+				if ! [[ $ppbuchse =~ $re ]] ; then
+					openwbDebugLog "MAIN" 0 "Invalid value in ppbuchse. Set ppbuchse to 32."
+					ppbuchse=32
+				fi
 			else
 				ppbuchse=32
 			fi

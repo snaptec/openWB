@@ -61,8 +61,8 @@ class Socket(ChargepointModule):
                 log.error("Error getting actor status! Using default 'opened'.")
                 actor = ActorState.OPENED
 
-            if actor == ActorState.CLOSED:
-                if current == self.set_current_evse or self.chargepoint_state.plug_state is False:
+            if actor == ActorState.CLOSED or self.chargepoint_state.plug_state is False:
+                if current == self.set_current_evse:
                     return
             else:
                 current = 0
