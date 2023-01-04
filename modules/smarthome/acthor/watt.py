@@ -1,32 +1,31 @@
 #!/usr/bin/python3
 import sys
 import os
-import time
-import json
 import struct
 import codecs
+import logging
 from pymodbus.client.sync import ModbusTcpClient
-named_tuple = time.localtime()   # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S acthor watty.py", named_tuple)
-devicenumber = str(sys.argv[1])
+from smarthome.smartlog import initlog
+from smarthome.smartret import writeret
+bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 atype = str(sys.argv[4])
 instpower = int(sys.argv[5])
 forcesend = int(sys.argv[6])
-# forcesend = 0 default acthor time period applies
+# forcesend = 0 default time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
-fp = '/var/www/html/openWB/ramdisk/smarthome_device_'
-file_string = fp + str(devicenumber) + '_acthor.log'
-file_stringpv = fp + str(devicenumber) + '_pv'
-file_stringcount = fp + str(devicenumber) + '_count'
-file_stringcount5 = fp + str(devicenumber) + '_count5'
+initlog("acthor", devicenumber)
+log = logging.getLogger("acthor")
+file_stringpv = bp + str(devicenumber) + '_pv'
+file_stringcount = bp + str(devicenumber) + '_count'
+file_stringcount5 = bp + str(devicenumber) + '_count5'
 count5 = 999
 if os.path.isfile(file_stringcount5):
-    f = open(file_stringcount5, 'r')
-    count5 = int(f.read())
-    f.close()
+    with open(file_stringcount5, 'r') as f:
+        count5 = int(f.read())
 if (forcesend == 0):
     count5 = count5 + 1
 elif (forcesend == 1):
@@ -35,9 +34,8 @@ else:
     count5 = 1
 if count5 > 3:
     count5 = 0
-f = open(file_stringcount5, 'w')
-f.write(str(count5))
-f.close()
+with open(file_stringcount5, 'w') as f:
+    f.write(str(count5))
 faktor = 1.0
 modbuswrite = 0
 neupower = 0
@@ -55,27 +53,45 @@ else:
     faktor = 3000/instpower
 pvmodus = 0
 if os.path.isfile(file_stringpv):
-    f = open(file_stringpv, 'r')
-    pvmodus = int(f.read())
-    f.close()
+    with open(file_stringpv, 'r') as f:
+        pvmodus = int(f.read())
 powerc = 0
 # aktuelle Leistung lesen
 client = ModbusTcpClient(ipadr, port=502)
 #
-#
 start = 1000
-resp=client.read_holding_registers(start,10,unit=1)
+resp = client.read_holding_registers(start, 35, unit=1)
+# Test only
 # start = 3524
-# resp = client.read_input_registers(start, 10, unit=1)
+# resp = client.read_input_registers(start, 35, unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 aktpower = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+# Wassertemperatur lesen
+# Temp0 Warmwasser 1001
+# Temp1 1030 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
+# Temp2 1031 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
+value1 = resp.registers[1]
+all = format(value1, '04x')
+temp0int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+temp0 = temp0int / 10
+value1 = resp.registers[30]
+all = format(value1, '04x')
+temp1int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+temp1 = temp1int / 10
+if temp1 == 0:
+    temp1 = 300
+value1 = resp.registers[31]
+all = format(value1, '04x')
+temp2int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+temp2 = temp2int / 10
+if temp2 == 0:
+    temp2 = 300
 if count5 == 0:
     count1 = 999
     if os.path.isfile(file_stringcount):
-        f = open(file_stringcount, 'r')
-        count1 = int(f.read())
-        f.close()
+        with open(file_stringcount, 'r') as f:
+            count1 = int(f.read())
     count1 = count1+1
     value1 = resp.registers[3]
     all = format(value1, '04x')
@@ -101,10 +117,9 @@ if count5 == 0:
     if pvmodus == 99:
         modbuswrite = 1
         neupower = 0
-        f = open(file_stringpv, 'w')
         pvmodus = 0
-        f.write(str(pvmodus))
-        f.close()
+        with open(file_stringpv, 'w') as f:
+            f.write(str(pvmodus))
     # sonst wenn pv modus lauft , ueberschuss schicken
     else:
         if pvmodus == 1:
@@ -112,38 +127,29 @@ if count5 == 0:
     # logschreiben
     if count1 > 80:
         count1 = 0
+    with open(file_stringcount, 'w') as f:
+        f.write(str(count1))
+    # mehr log schreiben
     if count1 < 3:
-        if os.path.isfile(file_string):
-            f = open(file_string, 'a')
-        else:
-            f = open(file_string, 'w')
-        helpstr = '%s devicenr %s ipadr %s ueberschuss %6d Akt Leistung'
-        helpstr += ' %6d Status %2d type %s inst. Leistung %6d Skalierung %.2f'
-        print(helpstr % (time_string, devicenumber, ipadr, uberschuss,
-                         aktpower, status, atype, instpower, faktor), file=f)
-        helpstr = '%s devicenr %s ipadr %s Neu Leistung %6d '
-        helpstr += 'pvmodus %1d modbuswrite %1d'
-        print(helpstr % (time_string, devicenumber, ipadr, neupower,
-                         pvmodus, modbuswrite), file=f)
-        f.close()
+        log.info(" watt devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d Status %2d" %
+                 (devicenumber, ipadr, uberschuss, aktpower, status))
+        log.info(" watt devicenr %d ipadr %s Neu Leistung %6d pvmodus %1d modbuswrite %1d" %
+                 (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
+        log.info(" watt devicenr %d ipadr %s type %s inst. Leistung %6d Skalierung %.2f" %
+                 (devicenumber, ipadr, atype, instpower, faktor))
     # modbus write
     if modbuswrite == 1:
         rq = client.write_register(1000, neupower, unit=1)
         if count1 < 3:
-            f = open(file_string, 'a')
-            print('%s devicenr %s ipadr %s device written by modbus ' %
-                  (time_string, devicenumber, ipadr), file=f)
-            f.close()
-    f = open(file_stringcount, 'w')
-    f.write(str(count1))
-    f.close()
+            log.info("watt devicenr %d ipadr %s device written by modbus " %
+                     (devicenumber, ipadr))
 else:
     if pvmodus == 99:
         pvmodus = 0
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)
 answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(neupower)
+answer += ',"temp0":' + str(temp0)
+answer += ',"temp1":' + str(temp1)
+answer += ',"temp2":' + str(temp2)
 answer += ',"on":' + str(pvmodus) + '}'
-f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
-          str(devicenumber), 'w')
-json.dump(answer, f1)
-f1.close()
+writeret(answer, devicenumber)

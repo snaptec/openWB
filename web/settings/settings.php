@@ -262,7 +262,7 @@
 														}
 														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
 														$('#tibberHomesDropdown').append('<option value="' + homeID + '">' + addressStr + '</option>');
-    												});
+													});
 													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-danger');
 													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-success');
 													$('#tibberhomeIdModalOkBtn').show();
@@ -287,7 +287,7 @@
 													$('#tibberModalSelectHomeIdDiv').hide();
 													$('#tibberhomeid').val('');
 													$('#tibberhomeIdModal').modal("show");
-								  				})
+												})
 										});
 
 										$('#verifyTibberBtn').click(function(){
@@ -344,10 +344,10 @@
 												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
 													<div class="col">
 														<div class="form-group">
-														<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
-														<select class="form-control selectpicker" id="tibberHomesDropdown">
-														</select>
-													  </div>
+															<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
+															<select class="form-control selectpicker" id="tibberHomesDropdown">
+															</select>
+														</div>
 													</div>
 												</div>
 
@@ -700,6 +700,21 @@
 											</div>
 										</div>
 										<span class="form-text small">Ampere mit denen geladen werden soll um den Ziel SoC zu erreichen.</span>
+									</div>
+								</div>
+
+								<div class="form-row mb-1">
+									<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+										<span class="form-text small">
+											Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+											Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+											Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+											Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+											SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+											SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+										</span>
 									</div>
 								</div>
 							</div>
