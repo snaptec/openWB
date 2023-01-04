@@ -757,7 +757,7 @@ class PowerGraph {
 		const extent = d3.extent(this.graphData, (d) =>
 		(d.housePower + d.lp0 + d.lp1 + d.lp2 + d.lp3 + d.lp4
 			+ d.lp5 + d.lp6 + d.lp7 + d.sh0 + d.sh1 + d.sh2 + d.sh3 + d.sh4
-			+ d.sh5 + d.sh6 + d.sh7 + d.co0 + d.co1 + d.batIn + d.inverter)
+			+ d.sh5 + d.sh6 + d.sh7 + d.sh8 + d.co0 + d.co1 + d.batIn + d.inverter)
 		);
 		yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
 		const keys = [["lp0", "lp1", "lp2", "lp3", "lp4",
