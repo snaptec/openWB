@@ -446,7 +446,7 @@ class PowerGraph {
 		values.soc2 = +elements[10];
 
 		// smart home
-		for (i = 0; i < 10; i++) {
+		for (i = 0; i < 9; i++) {
 			if (!(wbdata.shDevice[i].countAsHouse)) {
 				values["sh" + i] = +elements[20 + i];
 			} else {
@@ -498,7 +498,7 @@ class PowerGraph {
 		values.soc2 = +elements[22];
 		// smart home
 		values.devices = 0;
-		for (i = 0; i < 10; i++) {
+		for (i = 0; i < 9; i++) {
 			if (!(wbdata.shDevice[i].countAsHouse)) {
 				values["sh" + i] = this.calcValue(26 + i, elements, oldElements);
 				values.devices += values["sh" + i]
