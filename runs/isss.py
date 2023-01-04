@@ -201,13 +201,13 @@ class UpdateState:
 
 
 class Isss:
-    def __init__(self, mode: IsssMode, ppbuchse: int) -> None:
+    def __init__(self, mode: IsssMode, socket_max_current: int) -> None:
         log.debug("Init isss")
         self.serial_client = ModbusSerialClient_(self.detect_modbus_usb_port())
-        self.cp0 = IsssChargepoint(self.serial_client, 0, mode, ppbuchse)
+        self.cp0 = IsssChargepoint(self.serial_client, 0, mode, socket_max_current)
         if mode == IsssMode.DUO:
             log.debug("Zweiter Ladepunkt für Duo konfiguriert.")
-            self.cp1 = IsssChargepoint(self.serial_client, 1, mode, ppbuchse)
+            self.cp1 = IsssChargepoint(self.serial_client, 1, mode, socket_max_current)
         else:
             self.cp1 = None
         self.init_gpio()
@@ -268,11 +268,11 @@ class Isss:
 
 
 class IsssChargepoint:
-    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode, ppbuchse: int) -> None:
+    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode, socket_max_current: int) -> None:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:
-                self.module = Socket(ppbuchse, InternalOpenWB(0, serial_client))
+                self.module = Socket(socket_max_current, InternalOpenWB(0, serial_client))
             else:
                 self.module = chargepoint_module.ChargepointModule(InternalOpenWB(0, serial_client))
         else:

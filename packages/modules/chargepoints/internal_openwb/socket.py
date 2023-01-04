@@ -48,9 +48,9 @@ class ActorState(IntEnum):
 
 
 class Socket(ChargepointModule):
-    def __init__(self, ppbuchse: int, config: InternalOpenWB) -> None:
+    def __init__(self, socket_max_current: int, config: InternalOpenWB) -> None:
         log.debug("Konfiguration als Buchse.")
-        self.ppbuchse = ppbuchse
+        self.socket_max_current = socket_max_current
         super().__init__(config)
 
     def set_current(self, current: float) -> None:
@@ -66,7 +66,7 @@ class Socket(ChargepointModule):
                     return
             else:
                 current = 0
-            super().set_current(min(current, self.ppbuchse))
+            super().set_current(min(current, self.socket_max_current))
 
     def get_values(self, phase_switch_cp_active: bool) -> Tuple[ChargepointState, float]:
         try:
