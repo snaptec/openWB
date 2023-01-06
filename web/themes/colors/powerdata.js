@@ -36,9 +36,9 @@ class WbData {
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
 		this.sourceSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" }
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" }
 		};
 
 		this.usageSummary = {
@@ -50,10 +50,10 @@ class WbData {
 		};
 
 		this.historicSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
-			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0,color: "white" },
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
 			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
@@ -83,7 +83,7 @@ class WbData {
 		this.usageSummary.devices.color = 'var(--color-devices)';
 		this.usageSummary.batIn.color = 'var(--color-battery)';
 		this.usageSummary.house.color = 'var(--color-house)';
-		
+
 		var i;
 		for (i = 0; i < 8; i++) {
 			this.chargePoint[i].color = 'var(--color-lp' + (i + 1) + ')';
@@ -232,23 +232,31 @@ class WbData {
 	}
 
 	updateSH(index, field, value) {
-		this.shDevice[index - 1][field] = value;
-		switch (field) {
-			case 'power':
-				this.updateConsumerSummary("power");
-				break;
-			case 'energy':
-				this.updateConsumerSummary("energy");
-				break;
-			case 'showInGraph':
-				this.persistGraphPreferences();
-				this.updateUsageDetails();
-				yieldMeter.update();
-				break;
-			case 'countAsHouse':
-				break;
-			default:
-				break;
+		if (field == 'temp1') {
+			this.shDevice[index - 1].temp[0] = value
+		} else if (field == 'temp2') {
+			this.shDevice[index - 1].temp[1] = value
+		} else if (field == 'temp3') {
+			this.shDevice[index - 1].temp[2] = value
+		} else {
+			this.shDevice[index - 1][field] = value;
+			switch (field) {
+				case 'power':
+					this.updateConsumerSummary("power");
+					break;
+				case 'energy':
+					this.updateConsumerSummary("energy");
+					break;
+				case 'showInGraph':
+					this.persistGraphPreferences();
+					this.updateUsageDetails();
+					yieldMeter.update();
+					break;
+				case 'countAsHouse':
+					break;
+				default:
+					break;
+			}
 		}
 		smartHomeList.update();
 	}
@@ -337,7 +345,7 @@ class WbData {
 	}
 
 	updateUsageDetails() {
-		this.usageDetails = [this.usageSummary.evuOut,this.usageSummary.batIn, this.usageSummary.house,
+		this.usageDetails = [this.usageSummary.evuOut, this.usageSummary.batIn, this.usageSummary.house,
 		this.usageSummary.charging]
 			.concat(this.shDevice.filter(row => (row.configured && row.showInGraph)))
 			.concat(this.consumer.filter(row => (row.configured)));
@@ -449,6 +457,7 @@ class SHDevice {
 		this.energyPv = 0;
 		this.energyBat = 0;
 		this.pvPercentage = 0;
+		this.temp = [0.0, 0.0, 0.0];
 	}
 };
 
@@ -472,7 +481,7 @@ function formatWatt(watt) {
 				wattResult = Math.round(watt / 100) / 10;
 				break;
 		}
-		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kW");
+		return (wattResult.toLocaleString(undefined, { minimumFractionDigits: wbdata.decimalPlaces }) + " kW");
 	} else {
 		return (Math.round(watt).toLocaleString(undefined) + " W");
 	}
@@ -497,7 +506,7 @@ function formatWattH(watt) {
 				wattResult = Math.round(watt / 100) / 10;
 				break;
 		}
-		return (wattResult.toLocaleString(undefined, {minimumFractionDigits:wbdata.decimalPlaces}) + " kWh");
+		return (wattResult.toLocaleString(undefined, { minimumFractionDigits: wbdata.decimalPlaces }) + " kWh");
 	} else {
 		return (Math.round(watt).toLocaleString(undefined) + " Wh");
 	}
@@ -506,7 +515,7 @@ function formatTime(seconds) {
 	const hours = Math.floor(seconds / 3600);
 	const minutes = ((seconds % 3600) / 60).toFixed(0);
 	if (hours > 0) {
-		return (hours + "h " + minutes );
+		return (hours + "h " + minutes);
 	} else {
 		return (minutes + " min");
 	}
@@ -515,6 +524,10 @@ function formatTime(seconds) {
 function formatMonth(month, year) {
 	months = ['Jan', 'Feb', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 	return (months[month] + " " + year);
+}
+
+function formatTemp(t) {
+	return ((Math.round(t * 10) / 10).toLocaleString(undefined, { minimumFractionDigits: 1 }) + "°")
 }
 function shiftLeft() {
 	switch (wbdata.graphMode) {

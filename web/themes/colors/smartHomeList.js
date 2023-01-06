@@ -114,8 +114,18 @@ class SmartHomeList {
 						: (row.status == 'on-by-timeout') ? this.switchColorWhite
 							: this.switchColorRed);
 		// name
+		let nameString = row.name;
+		let temps = row.temp.filter (r  => (r > 0.0))
+		if (temps.length > 0) {
+			nameString += " (";
+			temps.map ((t,i) => {
+				nameString += formatTemp(t)
+				if (i +1 < temps.length) {nameString += ', ' }
+			})
+			nameString += ") "	
+		}
 		cell.append("span")
-			.text(row.name);
+			.text(nameString);
 		if (row.countAsHouse) {
 			cell.append("span")
 				.attr("class", "fa fa-xs fa-home pl-1")

@@ -1137,21 +1137,21 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i)) {
 		var actualTemp = parseFloat(mqttpayload);
 		if (isNaN(actualTemp)) {
-			actualTemp = 0;
+			actualTemp = 0.0;
 		}
 		wbdata.updateSH(index, "temp1", actualTemp);
 	}
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i)) {
 		var actualTemp = parseFloat(mqttpayload);
 		if (isNaN(actualTemp)) {
-			actualTemp = 0;
+			actualTemp = 0.0;
 		}
 		wbdata.updateSH(index, "temp2", actualTemp);
 	}
 	else if (mqttmsg.match(/^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i)) {
 		var actualTemp = parseFloat(mqttpayload);
 		if (isNaN(actualTemp)) {
-			actualTemp = 0;
+			actualTemp = 0.0;
 		}
 		wbdata.updateSH(index, "temp3", actualTemp);
 	}
