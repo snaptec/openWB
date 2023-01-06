@@ -53,7 +53,7 @@ class ChargePointList {
 			.style("text-align", "center")
 			.style("vertical-align", "middle");
 
-		rows.append((row, i) => this.cpNameButtonCell(row, i));
+		rows.append((row) => this.cpNameButtonCell(row));
 
 		rows.selectAll("cells")
 			.data(row => [
@@ -65,7 +65,7 @@ class ChargePointList {
 			.attr("class", "tablecell px-1 py-1")
 			.attr("style", "vertical-align:middle;")
 			.text(data => data);
-		rows.append((row, i) => this.cpSocButtonCell(row, i));
+		rows.append((row) => this.cpSocButtonCell(row));
 
 		if (wbdata.isEtEnabled) {
 			this.footer.append('p')
@@ -81,13 +81,13 @@ class ChargePointList {
 		this.chargepoints = wbdata.chargePoint.filter(cp => cp.configured);
 	}
 
-	cpNameButtonCell(row, index) {
+	cpNameButtonCell(row) {
 		const cell = d3.create("td")
 			.attr("class", "tablecell px-1 py-1")
 			.style("color", row.color)
 			.style("vertical-align", "middle")
 			.style("text-align", "left")
-			.attr("onClick", "lpButtonClicked(" + index + ")");
+			.attr("onClick", "lpButtonClicked(" + row.id + ")");
 
 		if (row.isEnabled) {
 			cell.append("span")
@@ -122,10 +122,10 @@ class ChargePointList {
 		return cell.node();
 	}
 
-	cpSocButtonCell(row, index) {
+	cpSocButtonCell(row) {
 		const cell = d3.create("td")
 			.attr("class", "tablecell px-1 py-1")
-			.attr("onClick", (row) => ("socButtonClicked(" + index + ")"))
+			.attr("onClick", ("socButtonClicked(" + row.id + ")"))
 			.style("text-align", "center")
 			.style("vertical-align", "middle");
 		if (row.isSocConfigured) {
@@ -138,7 +138,7 @@ class ChargePointList {
 			} else {
 				cell.append("i")
 					.attr("class", "small fas fa-redo-alt")
-					.attr("id", "soclabel-" + index)
+					.attr("id", "soclabel-" + row.id)
 					.style("color", "var(--color-fg)");
 			}
 		}

@@ -426,6 +426,7 @@ class Consumer {
 
 class ChargePoint {
 	constructor(index, name = "", power = 0, dailyYield = 0, configured = false, isSocConfigured = false, isSocManual = false) {
+		this.id = index;
 		this.name = name;
 		this.power = power;
 		this.energy = dailyYield;

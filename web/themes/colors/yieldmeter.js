@@ -110,7 +110,6 @@ class YieldMeter {
 		}
 		this.selfUsePercentage = Math.round((generatedEnergy - exportedEnergy) / generatedEnergy *100)
 		this.autarchyPercentage = Math.round ((generatedEnergy + batEnergy - exportedEnergy) / (generatedEnergy + batEnergy + importedEnergy - exportedEnergy) *100)
-		console.log (wbdata.sourceSummary)
 		this.adjustLabelSize()
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
