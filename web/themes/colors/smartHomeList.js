@@ -38,8 +38,8 @@ class SmartHomeList {
 				.data(headers).enter()
 				.append("th")
 				.attr("style", (data, i) => (i == 0) ? "text-align:left;"
-					: "text-align:center;")
-				.attr("class", "tablecell ")
+					: "text-align:left;")
+				.attr("class", "tablecell p-1 m-0")
 				.text((data) => data)
 				;
 			thead.append("th")
@@ -54,10 +54,17 @@ class SmartHomeList {
 				.attr("style", row => this.calcColor(row));
 			rows.append((row, i) => this.formatName(row, i));
 			// Power/energy
-			rows.append("td")
+			let cell = rows.append("td")
 				.attr("class", "tablecell py-1 px-1")
 				.attr("style", "vertical-align: middle;color:var(--color-fg)")
-				.text(row => formatWatt(row.power) + " (" + formatWattH(row.energy * 1000) + ")");
+				.append("span")
+				.attr("class", "d-flex align-items-center flex-wrap");
+			cell
+				.append("span")
+				.text(row => formatWatt(row.power));
+			cell
+				.append("span")
+				.text(row => " (" + formatWattH(row.energy * 1000) + ")");
 			// Running time
 			rows.append("td")
 				.attr("class", "tablecell py-1 px-1")
@@ -115,14 +122,14 @@ class SmartHomeList {
 							: this.switchColorRed);
 		// name
 		let nameString = row.name;
-		let temps = row.temp.filter (r  => (r > 0.0))
+		let temps = row.temp.filter(r => (r > 0.0))
 		if (temps.length > 0) {
 			nameString += " (";
-			temps.map ((t,i) => {
+			temps.map((t, i) => {
 				nameString += formatTemp(t)
-				if (i +1 < temps.length) {nameString += ', ' }
+				if (i + 1 < temps.length) { nameString += ', ' }
 			})
-			nameString += ") "	
+			nameString += ") "
 		}
 		cell.append("span")
 			.text(nameString);
