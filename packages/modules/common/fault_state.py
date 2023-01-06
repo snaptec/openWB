@@ -52,7 +52,6 @@ class FaultState(Exception):
                         prefix += str(component_info.id) + "/fault"
                 else:
                     prefix += "fault"
-                log.debug(prefix + "Str")
                 pub.pub_single(prefix + "Str", self.fault_str, hostname=component_info.hostname)
                 pub.pub_single(prefix + "State", self.fault_state.value, hostname=component_info.hostname)
                 if "chargepoint" in component_info.type:
