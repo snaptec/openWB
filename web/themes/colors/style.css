@@ -263,9 +263,9 @@ h4 {
 	line-height: 1.1rem;
 	vertical-align: middle;
 	padding: 0;
-	
-	
-	
+
+
+
 }
 
 @media (min-width: 400px) {
@@ -304,10 +304,11 @@ h4 {
 
 /* Extra extra extra large devices (very large desktops, 2000px and up) */
 @media (min-width: 1700px) {
-  html {
-    font-size: 22px;
-  }
+	html {
+		font-size: 22px;
+	}
 }
+
 .maxPrice {
 	text-align: center;
 }
