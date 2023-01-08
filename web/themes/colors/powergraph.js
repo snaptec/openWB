@@ -227,7 +227,12 @@ class PowerGraph {
 		}
 		if (this.initCounter == 12) {// Initialization complete
 			unsubscribeDayGraph();
-
+			let chargingPv = 0
+			let chargingBat = 0
+			let shPv = 0
+			let shBat = 0
+			let housePv = 0
+			let houseBat = 0
 			this.initCounter = 0;
 			this.staging.map(segment =>
 				segment.map(line => this.rawData.push(line))
@@ -236,12 +241,18 @@ class PowerGraph {
 				if (i > 0) {
 					const values = this.extractDayValues(line, a[i - 1]);
 					this.graphData.push(values);
+					chargingPv += (values.chargingPv / 12)
+					chargingBat += (values.chargingBat / 12)
+					shPv += (values.shPv / 12)
+					shBat += (values.shBat / 12)
+					housePv += (values.housePv / 12)
+					houseBat += (values.houseBat / 12)
 				} else {
 					// const values = this.extractValues(line, []);                
 				}
 			});
 			this.updateGraph();
-			this.updateEnergyValues();
+			this.updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat);
 			wbdata.dayGraphUpdated();
 			setTimeout(() => this.activateDay(), 300000)
 		}
@@ -292,7 +303,7 @@ class PowerGraph {
 		}
 	}
 
-	updateEnergyValues() {
+	updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat) {
 		if (this.rawData.length) {
 			const startValues = this.rawData[0].split(',');
 			const endValues = this.rawData[this.rawData.length - 1].split(',');
@@ -316,43 +327,22 @@ class PowerGraph {
 			wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
 			wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
 				- wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
-
-			let pvCharged = this.graphData.reduce((prev, cur) => {
-				return prev + (cur.chargingPv / 12);
-			}, 0)
-			wbdata.historicSummary.charging.energyPv = pvCharged / 1000;
-			wbdata.usageSummary.charging.energyPv = pvCharged / 1000;
-			let batCharged = this.graphData.reduce((prev, cur) => {
-				return prev + (cur.chargingBat / 12);
-			}, 0)
-			wbdata.historicSummary.charging.energyBat = batCharged / 1000;
-			wbdata.usageSummary.charging.energyBat = batCharged / 1000;
+			wbdata.historicSummary.charging.energyPv = chargingPv / 1000;
+			wbdata.historicSummary.charging.energyBat = chargingBat / 1000;
+			wbdata.usageSummary.charging.energyPv = chargingPv / 1000;
+			wbdata.usageSummary.charging.energyBat = chargingBat / 1000;
 			wbdata.usageSummary.charging.pvPercentage = Math.round((wbdata.usageSummary.charging.energyPv + wbdata.usageSummary.charging.energyBat) / (wbdata.usageSummary.charging.energy) * 100)
 			wbdata.historicSummary.charging.pvPercentage = Math.round((wbdata.historicSummary.charging.energyPv + wbdata.historicSummary.charging.energyBat) / (wbdata.historicSummary.charging.energy) * 100)
-
-			let pvDevices = this.graphData.reduce((prev, cur) => {
-				return prev + (cur.shPv / 12);
-			}, 0)
-			wbdata.historicSummary.devices.energyPv = pvDevices / 1000;
-			wbdata.usageSummary.devices.energyPv = pvDevices / 1000;
-			let batDevices = this.graphData.reduce((prev, cur) => {
-				return prev + (cur.shBat / 12);
-			}, 0)
-			wbdata.historicSummary.devices.energyBat = batDevices / 1000;
-			wbdata.usageSummary.devices.energyBat = batDevices / 1000;
+			wbdata.historicSummary.devices.energyPv = shPv / 1000;
+			wbdata.usageSummary.devices.energyPv = shPv / 1000;
+			wbdata.historicSummary.devices.energyBat = shBat / 1000;
+			wbdata.usageSummary.devices.energyBat = shBat / 1000;
 			wbdata.usageSummary.devices.pvPercentage = Math.round((wbdata.usageSummary.devices.energyPv + wbdata.usageSummary.devices.energyBat) / (wbdata.usageSummary.devices.energy) * 100)
 			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / (wbdata.historicSummary.devices.energy) * 100)
-			
-			let pvHouse = this.graphData.reduce((prev, cur) => {
-				return prev + (cur.housePv / 12);
-			}, 0)
-			wbdata.historicSummary.house.energyPv = pvHouse / 1000;
-			wbdata.usageSummary.house.energyPv = pvHouse / 1000;
-			let batHouse = this.graphData.reduce((prev, cur) => {
-				return prev + (cur.houseBat / 12);
-			}, 0)
-			wbdata.historicSummary.house.energyBat = batHouse / 1000;
-			wbdata.usageSummary.house.energyBat = batHouse / 1000;
+			wbdata.historicSummary.house.energyPv = housePv / 1000;
+			wbdata.usageSummary.house.energyPv = housePv / 1000;
+			wbdata.historicSummary.house.energyBat = houseBat / 1000;
+			wbdata.usageSummary.house.energyBat = houseBat / 1000;
 			wbdata.usageSummary.house.pvPercentage = Math.round((wbdata.usageSummary.house.energyPv + wbdata.usageSummary.house.energyBat) / (wbdata.usageSummary.house.energy) * 100)
 			wbdata.historicSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
 		}

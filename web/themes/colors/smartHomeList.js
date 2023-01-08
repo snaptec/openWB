@@ -55,10 +55,8 @@ class SmartHomeList {
 			rows.append((row, i) => this.formatName(row, i));
 			// Power/energy
 			let cell = rows.append("td")
-				.attr("class", "tablecell py-1 px-1")
+				.attr("class", "tablecell py-1 px-1 d-flex align-items-center flex-wrap")
 				.attr("style", "vertical-align: middle;color:var(--color-fg)")
-				.append("span")
-				.attr("class", "d-flex align-items-center flex-wrap");
 			cell
 				.append("span")
 				.text(row => formatWatt(row.power));
@@ -98,7 +96,6 @@ class SmartHomeList {
 				.on("change", function () {
 					wbdata.updateSH(+this.id + 1, "showInGraph", this.checked);
 				})
-
 		}
 		else {
 			d3.select("div#smartHomeWidget").classed("hide", true);
@@ -121,18 +118,22 @@ class SmartHomeList {
 						: (row.status == 'on-by-timeout') ? this.switchColorWhite
 							: this.switchColorRed);
 		// name
-		let nameString = row.name;
+		cell.append("span")
+			.text(row.name);
 		let temps = row.temp.filter(r => (r > 0.0))
+		let tempString = "";
 		if (temps.length > 0) {
-			nameString += " (";
+			tempString += " (";
 			temps.map((t, i) => {
-				nameString += formatTemp(t)
-				if (i + 1 < temps.length) { nameString += ', ' }
+				tempString += formatTemp(t);
+				if (i + 1 < temps.length) { 
+					tempString += ', '; 
+				}
 			})
-			nameString += ") "
+			tempString += ") ";
 		}
 		cell.append("span")
-			.text(nameString);
+			.text(tempString);
 		if (row.countAsHouse) {
 			cell.append("span")
 				.attr("class", "fa fa-xs fa-home pl-1")
