@@ -396,9 +396,8 @@
 							<input type="hidden" name="ladeleistungmodul" value="goelp1">
 							<div class="form-group">
 								<div class="alert alert-info">
-									Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
 									<span class="text-danger">
-										Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+									Es werden nur noch go-eCharger mit Firmware ab Version 040.0 unterstützt. Bei go-e V3 und höher aktivieren Sie bitte in der go-e-Box die (API v 1)
 									</span>
 								</div>
 								<div class="form-row mb-1">
@@ -2797,9 +2796,8 @@
 							<input type="hidden" name="ladeleistungs1modul" value="goelp2">
 							<div class="form-group">
 								<div class="alert alert-info">
-									Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
 									<span class="text-danger">
-										Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+									Es werden nur noch go-eCharger mit Firmware ab Version 040.0 unterstützt. Bei go-e V3 und höher aktivieren Sie bitte in der go-e-Box die (API v 1)
 									</span>
 								</div>
 								<div class="form-row mb-1">
@@ -4650,9 +4648,8 @@
 							<input type="hidden" name="ladeleistungs2modul" value="goelp3">
 							<div class="form-group">
 								<div class="alert alert-info">
-									Seit Firmware Version 0.40 wird PV-Laden besser unterstützt. 
 									<span class="text-danger">
-										Bitte halten Sie die go-e Firmware auf einem aktuellen Stand.
+									Es werden nur noch go-eCharger mit Firmware ab Version 040.0 unterstützt. Bei go-e V3 und höher aktivieren Sie bitte in der go-e-Box die (API v 1)
 									</span>
 								</div>
 								<div class="form-row mb-1">
