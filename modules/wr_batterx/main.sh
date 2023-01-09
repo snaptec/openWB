@@ -15,7 +15,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "Speicher IP-Adresse: ${batterx_ip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.batterx.device" "inverter" "${batterx_ip}" "1" "${wattbezugmodul}" "${speichermodul}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.batterx.device" "inverter" "${batterx_ip}" "1" "${wattbezugmodul}" "${speichermodul}" "${pvbatterxextinverter}">>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
