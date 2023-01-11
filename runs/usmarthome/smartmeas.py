@@ -20,6 +20,7 @@ class Slbase(Sbase0):
         self.temp0 = '300'
         self.temp1 = '300'
         self.temp2 = '300'
+        self.device_temperatur_configured = 0
         self.devuberschuss = 0
         self.newwatt = 0
         self.newwattk = 0
