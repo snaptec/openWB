@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 	<head>
 		<base href="/openWB/web/">
 		<meta charset="UTF-8">
@@ -19,13 +20,13 @@
 		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script>
-			$(document).ready(function(){
+			$(document).ready(function() {
 				/**
 				 * detect touch devices and map contextmenu (long press) to normal click
 				 */
-				$('body').on("contextmenu", function(event){
+				$('body').on("contextmenu", function(event) {
 					console.log("Contextmenu triggered");
-					if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+					if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) {
 						console.log("Click event generated");
 						$(event.target).trigger("click"); // fire a click event
 						event.preventDefault();
@@ -34,25 +35,61 @@
 			});
 		</script>
 	</head>
+
 	<body>
 
 		<!-- minimal.html -->
-		<?php include ("gaugevalues.php"); ?>
-		<script src="display/minimal/gauge.min.js?ver=20220510"></script>
+		<?php
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+		?>
+
+		<script src="display/minimal/gauge.js?ver=20230106"></script>
 		<link rel="stylesheet" href="display/minimal/minimal.css?ver=20220510">
 
 		<div id="main">
-			<div id="gaugedivlp1" style="position: absolute; top: 10px; left: 10px; bottom: 10px; right: 50%;">
-				<canvas id="lp1" style="height: 600px; top: -150px; left: 20px; position: absolute; width: 760px;"></canvas>
-				<div id="lp1t" style="font-size: 35px; top: 290px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
-				<canvas id="lp1s" style="height: 520px; top: -80px; left: 30px; position: absolute; width: 740px;"></canvas>
-				<div id="lp1st" style="font-size: 35px; top: 230px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
-				<div style="top: 350px; left: 265px; text-align: center; position: absolute; width: 265px; font-size: 32px;">
-					<i id="lp1plugstat" class="fas fa-plug"></i>
-					<i id="lp1disabled" class="fas fa-lock" style="color: red"></i>
-					<i id="lp1enabled" class="fas fa-unlock hide" style="color: green"></i>
+			<!-- <div id="800x480_Frame" style="position: absolute; top: 0px; left: 0px; height: 480px; width: 800px; border:1px solid white;"> </div> -->
+			<?php if ($lastmanagementold == "1") { ?>
+				<div id="gaugedivlp1" style="position: absolute; top: 10px; left: 10px; height: 460px; width: 380px;">
+					<canvas id="lp1" style="height: 400px; top: 30px; left: 0px; position: absolute; width: 740px;"></canvas>
+					<canvas id="lp1s" style="height: 400px; top: 30px; left: 0px; position: absolute; width: 740px;"></canvas>
+					<div id="lp1l" style="font-size: 35px; top: 405px; left: 0px; text-align:center; position: absolute; width: 380px; color: white;">LP1</div>
+					<div id="lp1st" style="font-size: 35px; top: 245px; right: 10px; text-align:right; position: absolute; width: 135px; color: white;">0</div>
+					<div id="lp1t" style="font-size: 35px; top: 295px; right: 10px; text-align:right; position: absolute; width: 140px; color: white;">0</div>
+					<div id="lp1symbol" style="top: 350px; right: 10px; text-align: right; position: absolute; width: 150px; font-size: 32px;">
+						<i id="lp1plugstat" class="fas fa-plug" style="font-size: 32px"></i>
+						<i id="lp1disabled" class="fas fa-lock text-danger"></i>
+						<i id="lp1enabled" class="fas fa-unlock text-success hide"></i>
+					</div>
 				</div>
-			</div>
+				<div id="gaugedivlp2" style="position: absolute; top: 10px; left: 410px; height: 460px; width: 380px;">
+					<canvas id="lp2" style="height: 400px; top: 30px; left: -360px; position: absolute; width: 740px;"></canvas>
+					<canvas id="lp2s" style="height: 400px; top: 30px; left: -360px; position: absolute; width: 740px;"></canvas>
+					<div id="lp2l" style="font-size: 35px; top: 405px; right: 30px; text-align:center; position: absolute; width: 380px; color: white;">LP2</div>
+					<div id="lp2st" style="font-size: 35px; top: 245px; left: 10px; text-align:left; position: absolute; width: 135px; color: white;">0</div>
+					<div id="lp2t" style="font-size: 35px; top: 295px; left: 10px; text-align:left; position: absolute; width: 140px; color: white;">0</div>
+					<div id="lp2symbol" style="top: 350px; left: 10px; text-align: left; position: absolute; width: 135px; font-size: 32px;">
+						<i id="lp2disabled" class="fas fa-lock text-danger"></i>
+						<i id="lp2enabled" class="fas fa-unlock text-success hide"></i>
+						<i id="lp2plugstat" class="fas fa-plug"></i>
+					</div>
+				</div>
+			<?php } else { ?>
+				<div id="gaugedivlp1" style="position: absolute; top: 10px; left: 10px; height: 460px; width: 780px;">
+					<canvas id="lp1" style="height: 400px; top: 30px; left: 0px; position: absolute; width: 780px;"></canvas>
+					<canvas id="lp1s" style="height: 400px; top: 30px; left: 0px; position: absolute; width: 780px;"></canvas>
+					<div id="lp1st" style="font-size: 35px; top: 230px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
+					<div id="lp1t" style="font-size: 35px; top: 290px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
+					<div id="lp1symbol" style="top: 350px; left: 265px; text-align: center; position: absolute; width: 265px; font-size: 32px;">
+						<i id="lp1plugstat" class="fas fa-plug"></i>
+						<i id="lp1disabled" class="fas fa-lock text-danger"></i>
+						<i id="lp1enabled" class="fas fa-unlock text-success hide"></i>
+					</div>
+				</div>
+			<?php } ?>
 			<div style="font-size: 18px; top: 0px; right: 10px; text-align: right; position: absolute; color: white;" id="theclock"></div>
 			<?php if ($rfidaktold > 0) { ?>
 				<div class="btn-lg btn-dark" style="top: 50px; right: 10px; position: absolute; cursor: pointer; font-size: 32px;" id="code1">
@@ -100,18 +137,18 @@
 				</div>
 			</div>
 			<script>
-				function addNumber(e){
-					var v = $( "#PINbox" ).val();
-					$( "#PINbox" ).val( v + e.value );
+				function addNumber(e) {
+					var v = $("#PINbox").val();
+					$("#PINbox").val(v + e.value);
 				}
 
-				function clearForm(e){
-					$( "#PINbox" ).val( "" );
+				function clearForm(e) {
+					$("#PINbox").val("");
 				}
 
 				function submitForm(e) {
-					publish( e.value, "openWB/set/system/SimulateRFID" );
-					$( "#PINbox" ).val( "" );
+					publish(e.value, "openWB/set/system/SimulateRFID");
+					$("#PINbox").val("");
 					$("#codeModal").modal("hide");
 				};
 			</script>
@@ -123,40 +160,37 @@
 				var h = today.getHours();
 				var m = today.getMinutes();
 				m = checkTime(m);
-				document.getElementById('theclock').innerHTML =
-				h + ":" + m;
+				document.getElementById('theclock').innerHTML =	h + ":" + m;
 				var t = setTimeout(startTime, 5000);
 			}
 
 			function checkTime(i) {
 				if (i < 10) {
 					i = "0" + i
-				};  // add zero in front of numbers < 10
+				}; // add zero in front of numbers < 10
 				return i;
 			}
 
 			startTime();
 
 			var displaylp1max = <?php echo trim($displaylp1maxold); ?>;
-			// var displaylp2max = <?php echo trim($displaylp2maxold); ?>;
-			var displaypincode = <?php echo trim($displaypincodeold); ?>;
-			var displaypinaktiv = <?php echo trim($displaypinaktivold); ?>;
+			var displaylp2max = <?php echo trim($displaylp2maxold); ?>;
 			var rfidakt = <?php echo trim($rfidaktold); ?>;
-			var isssakt = <?php echo trim($isssold); ?>;
+			var lastmanagementold = <?php echo trim($lastmanagementold); ?>;
 		</script>
-		<script src="display/minimal/minimalgauge.js?ver=20220510"></script>
+		<script src="display/minimal/minimalgauge.js?ver=20230106"></script>
 		<script>
 			// ************** beginning of MQTT code *************
-			$(document).ready(function(){
+			$(document).ready(function() {
 
 				// load scripts synchronously in order specified
 				var scriptsToLoad = [
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'display/minimal/processAllMqttMsg.js?ver=20220510',
+					'display/minimal/processAllMqttMsg.js?ver=20230106',
 					// functions performing mqtt and start mqtt-service
-					'display/minimal/setupMqttServices.js?ver=20220510',
+					'display/minimal/setupMqttServices.js?ver=20221229',
 				];
 
 				scriptsToLoad.forEach(function(src) {
@@ -166,11 +200,12 @@
 					document.body.appendChild(script);
 				});
 
-				$('#code1').on("click", function(event){
+				$('#code1').on("click", function(event) {
 					console.log("code button clicked");
 					$("#codeModal").modal("show");
 				});
 			});
 		</script>
 	</body>
+
 </html>

@@ -17,15 +17,12 @@ var topicsToSubscribe = [
 	["openWB/lp/1/boolPlugStat", 1],
 	["openWB/lp/1/boolChargeStat", 1],
 	["openWB/lp/1/ChargePointEnabled", 1],
-	// ["openWB/lp/2/W", 1],
-	// ["openWB/lp/2/%Soc", 1],
-	// ["openWB/lp/2/boolSocConfigured"],
-	// ["openWB/lp/2/boolPlugStat", 1],
-	// ["openWB/lp/2/ChargePointEnabled", 1],
-	// ["openWB/system/parentWB", 1],
-	// ["openWB/system/parentCPlp1", 1],
-	// ["openWB/system/parentCPlp2", 1],
-	// ["openWB/lp/2/boolChargePointConfigured", 1]
+	["openWB/lp/2/W", 1],
+	["openWB/lp/2/%Soc", 1],
+	["openWB/lp/2/boolSocConfigured"],
+	["openWB/lp/2/boolPlugStat", 1],
+	["openWB/lp/2/ChargePointEnabled", 1],
+	["openWB/lp/2/boolChargeStat", 1],
 ];
 
 // holds number of topics flagged 1 initially
