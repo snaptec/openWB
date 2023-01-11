@@ -173,10 +173,10 @@
 
 			startTime();
 
-			var displaylp1max = <?php echo trim($displaylp1maxold); ?>;
-			var displaylp2max = <?php echo trim($displaylp2maxold); ?>;
-			var rfidakt = <?php echo trim($rfidaktold); ?>;
-			var lastmanagementold = <?php echo trim($lastmanagementold); ?>;
+			var displaylp1max = <?php echo $displaylp1maxold; ?>;
+			var displaylp2max = <?php echo $displaylp2maxold; ?>;
+			var rfidakt = <?php echo $rfidaktold; ?>;
+			var lastmanagementold = <?php echo $lastmanagementold; ?>;
 		</script>
 		<script src="display/minimal/minimalgauge.js?ver=20230106"></script>
 		<script>
