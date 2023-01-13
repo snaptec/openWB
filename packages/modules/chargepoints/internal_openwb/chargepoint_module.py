@@ -46,8 +46,10 @@ class ClientFactory:
     def __factory(self, serial_client: ModbusSerialClient_) -> Tuple[CONNECTION_MODULES, evse.Evse]:
         meter_config = NamedTuple("MeterConfig", [('type', CONNECTION_MODULES), ('modbus_id', int)])
         meter_configuration_options = [
-            [meter_config(sdm.Sdm630, modbus_id=105), meter_config(b32.B32, modbus_id=201)],
-            [meter_config(sdm.Sdm630, modbus_id=106)]
+            [meter_config(sdm.Sdm630, modbus_id=5),
+             meter_config(sdm.Sdm630, modbus_id=105),
+             meter_config(b32.B32, modbus_id=201)],
+            [meter_config(sdm.Sdm630, modbus_id=6), meter_config(sdm.Sdm630, modbus_id=106)]
         ]
 
         def _check_meter(serial_client: ModbusSerialClient_, meters: List[meter_config]):
