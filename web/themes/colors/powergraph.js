@@ -52,7 +52,7 @@ class PowerGraph {
 		for (i = 0; i < 8; i++) {
 			this.colors["lp" + i] = wbdata.chargePoint[i].color;
 		}
-		for (i = 0; i < 8; i++) {
+		for (i = 0; i < 9; i++) {
 			this.colors["sh" + i] = wbdata.shDevice[i].color;
 		}
 		this.colors.co0 = 'var(--color-co1)';

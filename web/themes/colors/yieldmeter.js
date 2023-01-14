@@ -230,7 +230,7 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", (d) => {
-				if ((wbdata.graphMode != 'live' && d.pvPercentage > 0) || (d.name == 'Netz') || (d.name == 'PV')) {
+				if (wbdata.graphMode != 'live' && ((d.pvPercentage > 0) || (d.name == 'Netz') || (d.name == 'PV'))) {
 					return this.yScale(d.energy) - 25
 				} else {
 					return this.yScale(d.energy) - 10

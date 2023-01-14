@@ -54,17 +54,8 @@ class ChargePointList {
 			.style("vertical-align", "middle");
 
 		rows.append((row) => this.cpNameButtonCell(row));
-
-		rows.selectAll("cells")
-			.data(row => [
-				formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A",
-				formatWattH(row.energy * 1000) + " / " + Math.round(row.energy / row.energyPer100km * 100) + " km"
-
-			]).enter()
-			.append("td")
-			.attr("class", "tablecell px-1 py-1")
-			.attr("style", "vertical-align:middle;")
-			.text(data => data);
+		rows.append((row) => this.cpChargeParamCell(row));
+		rows.append((row) => this.cpChargeDataCell(row));
 		rows.append((row) => this.cpSocButtonCell(row));
 
 		if (wbdata.isEtEnabled) {
@@ -122,6 +113,29 @@ class ChargePointList {
 		return cell.node();
 	}
 
+	cpChargeParamCell(row) {
+		const cell = d3.create("td")
+			.attr("class", "tablecell px-1 py-1")
+			.style("vertical-align", "middle")
+			.style("text-align", "center");
+
+		cell.append("span").text(
+			formatWatt(row.power) + " " + this.phaseSymbols[row.phasesInUse] + " " + row.targetCurrent + " A"
+		)
+		return cell.node()
+	}
+	cpChargeDataCell(row) {
+		const cell = d3.create("td")
+			.attr("class", "tablecell px-1 py-1 d-flex align-items-center flex-wrap")
+			.style("vertical-align", "middle")
+			.style("text-align", "center");
+		cell.append("span").text(
+			formatWattH(row.energy * 1000))
+		cell.append("span")
+			.classed("px-1", true).text("/")
+		cell.append("span").text(" " + Math.round(row.energy / row.energyPer100km * 100) + " km")
+		return cell.node()
+	}
 	cpSocButtonCell(row) {
 		const cell = d3.create("td")
 			.attr("class", "tablecell px-1 py-1")
