@@ -679,7 +679,8 @@ function toggleMonthView() {
 
 function toggleWideBoxes() {
 	wbdata.preferWideBoxes = !wbdata.preferWideBoxes
-	setWidgetWidth()	
+	setWidgetWidth();
+	wbdata.persistGraphPreferences();
 }
 
 function setWidgetWidth() {

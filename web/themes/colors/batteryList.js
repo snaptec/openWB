@@ -37,11 +37,13 @@ class BatteryList {
 
       // current power
       const cell = row.append("td")
-        .attr("class", "tablecell py-1 px-1");
+        .attr("class", "tablecell py-1 px-1 d-flex align-items-center justify-content-center flex-wrap");
       if (wbdata.batteryPowerImport > 0) {
-        cell.text("Ladung: " + formatWatt(wbdata.batteryPowerImport))
+        cell.append("span").attr("class","pr-1").text("Ladung: ");
+        cell.append("span").text(formatWatt(wbdata.batteryPowerImport));
       } else if (wbdata.batteryPowerExport > 0) {
-        cell.text("Lieferung: " + formatWatt(wbdata.batteryPowerExport))
+        cell.append("span").attr("class","pr-1").text("Lieferung: ");
+        cell.append("span").text(formatWatt(wbdata.batteryPowerExport));
       } else {
         cell.text("0 W")
       }

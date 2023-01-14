@@ -55,7 +55,7 @@ class SmartHomeList {
 			rows.append((row, i) => this.formatName(row, i));
 			// Power/energy
 			let cell = rows.append("td")
-				.attr("class", "tablecell py-1 px-1 d-flex align-items-center flex-wrap")
+				.attr("class", "tablecell py-1 px-1 d-flex align-items-center justify-content-center flex-wrap")
 				.attr("style", "vertical-align: middle;color:var(--color-fg)")
 			cell
 				.append("span")
