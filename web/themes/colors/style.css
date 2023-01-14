@@ -281,6 +281,12 @@ h4 {
 	}
 }
 
+@media (min-width: 672px) {
+	html {
+		font-size: 21px;
+	}
+}
+
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 	html {
@@ -295,13 +301,48 @@ h4 {
 	}
 }
 
+@media (min-width: 1061px) {
+	html {
+		font-size: 14px;
+	}
+}
+@media (min-width: 1130px) {
+	html {
+		font-size: 15px;
+	}
+}
+
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
 	html {
 		font-size: 16px;
 	}
 }
-
+@media (min-width: 1283px) {
+	html {
+		font-size: 17px;
+	}
+}
+@media (min-width: 1366px) {
+	html {
+		font-size: 18px;
+	}
+}
+@media (min-width: 1449px) {
+	html {
+		font-size: 19px;
+	}
+}
+@media (min-width: 1532px) {
+	html {
+		font-size: 20px;
+	}
+}
+@media (min-width: 1615px) {
+	html {
+		font-size: 21px;
+	}
+}
 /* Extra extra extra large devices (very large desktops, 2000px and up) */
 @media (min-width: 1700px) {
 	html {
