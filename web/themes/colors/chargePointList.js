@@ -126,7 +126,7 @@ class ChargePointList {
 	}
 	cpChargeDataCell(row) {
 		const cell = d3.create("td")
-			.attr("class", "tablecell px-1 py-1 d-flex align-items-center flex-wrap")
+			.attr("class", "tablecell px-1 py-1 d-flex align-items-center justify-content-center flex-wrap")
 			.style("vertical-align", "middle")
 			.style("text-align", "center");
 		cell.append("span").text(
