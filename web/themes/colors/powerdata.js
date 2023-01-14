@@ -70,6 +70,7 @@ class WbData {
 		this.decimalPlaces = 1;
 		this.smartHomeColors = "normal";
 		this.smartHomeSummary = true;
+		this.preferWideBoxes = false;
 		this.prefs = {};
 	};
 
@@ -148,6 +149,7 @@ class WbData {
 				this.persistGraphPreferences();
 				break;
 		}
+		setWidgetWidth()
 	}
 
 	updateEvu(field, value) {
@@ -371,6 +373,7 @@ class WbData {
 		this.prefs.decimalP = this.decimalPlaces;
 		this.prefs.smartHomeC = this.smartHomeColors;
 		this.prefs.smartHomeSum = this.smartHomeSummary;
+		this.prefs.wideBoxes = this.preferWideBoxes;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 	// read cookies and update settings
@@ -654,6 +657,7 @@ function toggleSmartHomeSummary() {
 	wbdata.persistGraphPreferences();
 }
 
+
 function toggleMonthView() {
 	if (wbdata.graphMode == 'month') {
 		wbdata.graphMode = wbdata.graphPreference;
@@ -672,6 +676,18 @@ function toggleMonthView() {
 	}
 	yieldMeter.update();
 }
+
+function toggleWideBoxes() {
+	wbdata.preferWideBoxes = !wbdata.preferWideBoxes
+	setWidgetWidth()	
+}
+
+function setWidgetWidth() {
+	const widgets = d3.selectAll(".var-width")
+	widgets.classed("col-lg-4", !wbdata.preferWideBoxes)
+	widgets.classed("col-lg-6", wbdata.preferWideBoxes)
+}
+
 // required for price chart to work
 var evuCol;
 var xgridCol;
