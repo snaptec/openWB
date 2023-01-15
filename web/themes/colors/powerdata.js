@@ -412,6 +412,9 @@ class WbData {
 			if ('smartHomeSum' in this.prefs) {
 				this.smartHomeSummary = this.prefs.smartHomeSum;
 			}
+			if ('wideBoxes' in this.prefs) {
+> 				this.preferWideBoxes = this.prefs.wideBoxes;
+> 			}
 		}
 	}
 	dayGraphUpdated() {
