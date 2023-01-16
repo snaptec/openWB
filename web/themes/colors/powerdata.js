@@ -72,6 +72,7 @@ class WbData {
 		this.smartHomeColors = "normal";
 		this.smartHomeSummary = true;
 		this.preferWideBoxes = false;
+		this.preferredLayout = 'dynamic';
 		this.prefs = {};
 	};
 
@@ -375,6 +376,7 @@ class WbData {
 		this.prefs.smartHomeC = this.smartHomeColors;
 		this.prefs.smartHomeSum = this.smartHomeSummary;
 		this.prefs.wideBoxes = this.preferWideBoxes;
+		this.prefs.layout = this.preferredLayout;
 		document.cookie = "openWBColorTheme=" + JSON.stringify(this.prefs) + "; max-age=16000000";
 	}
 	// read cookies and update settings
@@ -415,6 +417,9 @@ class WbData {
 			}
 			if ('wideBoxes' in this.prefs) {
 				this.preferWideBoxes = this.prefs.wideBoxes;
+			}
+			if ('layout' in this.prefs) {
+				this.preferredLayout = this.prefs.layout;
 			}
 		}
 	}
@@ -716,11 +721,31 @@ function toggleWideBoxes() {
 	setWidgetWidth();
 	wbdata.persistGraphPreferences();
 }
-
+function toggleLandscape() {
+	switch (wbdata.preferredLayout) {
+		case 'dynamic': wbdata.preferredLayout = 'portrait';
+			break;
+		case 'portrait': wbdata.preferredLayout = 'landscape';
+			break;
+		case 'landscape': wbdata.preferredLayout = 'dynamic';
+			break;
+		default: wbdata.preferredLayout = 'dynamic';
+	}
+	setWidgetWidth();
+	wbdata.persistGraphPreferences();
+}
 function setWidgetWidth() {
 	const widgets = d3.selectAll(".var-width")
-	widgets.classed("col-lg-4", !wbdata.preferWideBoxes)
-	widgets.classed("col-lg-6", wbdata.preferWideBoxes)
+	const mainWindows = d3.selectAll(".main-window")
+	widgets.classed("col-lg-4", (!wbdata.preferWideBoxes && wbdata.preferredLayout == 'dynamic'))
+	widgets.classed("col-lg-6", wbdata.preferWideBoxes && wbdata.preferredLayout == 'dynamic')
+	widgets.classed("col-12", wbdata.preferredLayout == 'portrait')
+	widgets.classed("col-4", !wbdata.preferWideBoxes && wbdata.preferredLayout == 'landscape')
+	widgets.classed("col-6", wbdata.preferWideBoxes && wbdata.preferredLayout == 'landscape')
+
+	mainWindows.classed("col-lg-4", wbdata.preferredLayout == 'dynamic')
+	mainWindows.classed("col-12", wbdata.preferredLayout == 'portrait')
+	mainWindows.classed("col-4", wbdata.preferredLayout == 'landscape')
 }
 
 // required for price chart to work

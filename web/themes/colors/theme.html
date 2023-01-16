@@ -165,7 +165,7 @@
 		</div>
 		<div class="row p-0 mt-2 mx-0 mb-0 d-flex justify-content-center">
 			<!-- Aktuelle Leistung (powermeter) -->
-			<div class="col-lg-4 p-1 m-0">
+			<div class="col-lg-4 p-1 m-0 main-window">
 				<div class="rounded shadow wb-widget m-0 p-2">
 					<div class="d-flex justify-content-between">
 						<h3 class="mt-0">Aktuelle Leistung</h3>
@@ -189,9 +189,11 @@
 									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span
 											class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
 									<a class="dropdown-item" href="#" onclick="toggleSmartHomeSummary()"><span
-											class="fa fa-palette px-0"></span> Smarthome-Zusammenfassung an/aus </a>
+											class="fa fa-object-group px-0"></span> Smarthome-Zusammenfassung an/aus </a>
 									<a class="dropdown-item" href="#" onclick="toggleWideBoxes()"><span
-											class="fa fa-palette px-0"></span> Breite Widgets an/aus </a>
+											class="fa fa-window-restore px-0"></span> Breite Widgets an/aus </a>
+									<a class="dropdown-item" href="#" onclick="toggleLandscape()"><span
+											class="fa fa-desktop px-0"></span> Hochformat/Breitformat/dynamisch </a>
 								</div>
 							</div>
 						</div>
@@ -202,7 +204,7 @@
 				</div>
 			</div>
 			<!-- Graph - Live, Tag (powergraph) -->
-			<div class="col-lg-4 m-0 p-1">
+			<div class="col-lg-4 m-0 p-1 main-window">
 				<div class="rounded shadow wb-widget m-0 p-2">
 					<div class="d-flex justify-content-between">
 						<h3 class="mt-0" id="graphheading">Leistung / Ladestand</h3>
@@ -221,7 +223,7 @@
 				</div>
 			</div>
 			<!-- Energie heute (yieldmeter) -->
-			<div class="col-lg-4 p-1 m-0">
+			<div class="col-lg-4 p-1 m-0 main-window">
 				<div class="wb-widget p-2 m-0 rounded shadow">
 					<div class="d-flex justify-content-between">
 						<h3 id="energyheading" class="mt-0">Energie heute</h3>
