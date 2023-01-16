@@ -651,6 +651,10 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 	else if (mqttmsg.match(/^openwb\/system\/monthgraphdatan[1-9][0-9]*$/i)) {
 		powerGraph.updateMonth(mqttmsg, mqttpayload);
 	}
+	else if (mqttmsg.match(/^openwb\/system\/yeargraphdatan[1-9][0-9]*$/i)) {
+		powerGraph.updateYear(mqttmsg, mqttpayload);
+	}
+	
 }
 
 function processPvMessages(mqttmsg, mqttpayload) {
@@ -1306,7 +1310,21 @@ function unsubscribeMonthGraph() {
 	}
 	publish("0", "openWB/set/graph/RequestMonthGraphv1");
 }
+function subscribeYearGraph(year) {
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/YearGraphDatan" + segment;
+		client.subscribe(topic, { qos: 0 });
+	}
+	publish(String(year), "openWB/set/graph/RequestYearGraphv1");
+}
 
+function unsubscribeYearGraph() {
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/YearGraphDatan" + segment;
+		client.unsubscribe(topic);
+	}
+	publish("0", "openWB/set/graph/RequestYearGraphv1");
+}
 function makeInt(message) {
 	var number = parseInt(message, 10);
 	if (isNaN(number)) {

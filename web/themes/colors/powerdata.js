@@ -26,6 +26,7 @@ class WbData {
 		this.batteryPowerImport = 0;
 		this.chargeMode = "0"
 		this.graphDate = new Date();
+		this.graphYear = this.graphDate.getFullYear();
 		this.graphMonth = {
 			"month": this.graphDate.getMonth(),
 			"year": this.graphDate.getFullYear()
@@ -423,10 +424,10 @@ class WbData {
 	monthGraphUpdated() {
 		yieldMeter.update();
 	}
-
-
+	yearGraphUpdated() {
+		yieldMeter.update();
+	}
 }
-
 
 class Consumer {
 	constructor(name = "", power = 0, dailyYield = 0, configured = false, color = "white") {
@@ -469,7 +470,10 @@ class SHDevice {
 
 function formatWatt(watt) {
 	let wattResult;
-	if (watt >= 1000 && wbdata.decimalPlaces < 4) {
+	if (watt > 1000000) {
+		wattResult = (Math.round(watt / 10000) / 100)
+		return (wattResult.toLocaleString(undefined, { minimumFractionDigits: 2 }) + " MW");
+	} else if (watt >= 1000 && wbdata.decimalPlaces < 4) {
 		switch (wbdata.decimalPlaces) {
 			case 0:
 				wattResult = Math.round(watt / 1000);
@@ -494,7 +498,11 @@ function formatWatt(watt) {
 }
 
 function formatWattH(watt) {
-	if (watt >= 1000 && wbdata.decimalPlaces < 4) {
+	let wattResult = 0;
+	if (watt > 1000000) {
+		wattResult = (Math.round(watt / 10000) / 100)
+		return (wattResult.toLocaleString(undefined, { minimumFractionDigits: 2 }) + " MWh");
+	} else if (watt >= 1000 && wbdata.decimalPlaces < 4) {
 		switch (wbdata.decimalPlaces) {
 			case 0:
 				wattResult = Math.round(watt / 1000);
@@ -560,6 +568,10 @@ function shiftLeft() {
 			}
 			powerGraph.activateMonth();
 			break;
+		case 'year':
+			wbdata.graphYear = wbdata.graphYear - 1;
+			powerGraph.activateYear();
+			break;
 		default: break;
 	}
 }
@@ -599,6 +611,15 @@ function shiftRight() {
 				}
 				powerGraph.activateMonth();
 			}
+			break;
+		case 'year':
+			if (today.getFullYear() != wbdata.graphYear) { // we are looking at a previous year
+				wbdata.graphYear++;
+				powerGraph.activateYear();
+			}
+			break;
+		default:
+			break;
 	}
 
 }
@@ -662,20 +683,30 @@ function toggleSmartHomeSummary() {
 
 
 function toggleMonthView() {
-	if (wbdata.graphMode == 'month') {
-		wbdata.graphMode = wbdata.graphPreference;
-		if (wbdata.graphPreference == 'live') {
-			powerGraph.activateLive();
+	switch (wbdata.graphMode) {
+		case 'year':
+			wbdata.graphMode = wbdata.graphPreference;
+			if (wbdata.graphPreference == 'live') {
+				powerGraph.activateLive();
+				powerGraph.deactivateMonth();
+			} else {
+				powerGraph.activateDay();
+				powerGraph.deactivateMonth();
+			}
+			break;
+		case 'day':
+		case 'live':
+			wbdata.graphMode = 'month';
+			powerGraph.activateMonth();
+			powerGraph.deactivateDay();
+			powerGraph.deactivateLive();
+			break;
+		case 'month':
+			wbdata.graphMode = 'year';
+			powerGraph.activateYear();
 			powerGraph.deactivateMonth();
-		} else {
-			powerGraph.activateDay();
-			powerGraph.deactivateMonth();
-		}
-	} else {
-		wbdata.graphMode = 'month';
-		powerGraph.activateMonth();
-		powerGraph.deactivateDay();
-		powerGraph.deactivateLive();
+			break;
+		default: break;
 	}
 	yieldMeter.update();
 }

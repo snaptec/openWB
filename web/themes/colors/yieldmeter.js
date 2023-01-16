@@ -93,6 +93,7 @@ class YieldMeter {
 				}
 				break;
 			case 'month':
+			case 'year':
 				this.plotdata = Object.values(wbdata.historicSummary)
 					.filter(row => row.energy > 0 && row.name != "Geräte");
 
@@ -185,9 +186,13 @@ class YieldMeter {
 				.attr("fill-opacity", "66%");
 		}
 		const yAxisGenerator = d3.axisLeft(this.yScale)
-			.tickFormat(function (d) {
-				return ((d > 0) ? d : "");
-			})
+		.tickFormat((d, i) => {
+			if (wbdata.graphMode == 'year' || wbdata.graphMode == 'month') {
+				return ((d == 0) ? "" : (Math.round(d / 100)/10))
+			} else {
+				return ((d == 0) ? "" : d)	
+			}
+		})
 			.ticks(8)
 			.tickSizeInner(-this.width);
 
@@ -218,7 +223,7 @@ class YieldMeter {
 			.attr("y", -15)
 			.style("fill", this.axisColor)
 			.attr("font-size", this.axisFontSize)
-			.text("kWh")
+			.text((wbdata.graphMode == 'month' || wbdata.graphMode == 'year') ? "MWh" : "kWh")
 			;
 
 		// add value labels to the bars
@@ -295,8 +300,10 @@ class YieldMeter {
 				}
 				break;
 			case 'month':
-				heading = "Monatswerte " + formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
+				heading = heading + formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
 				break;
+			case 'year':
+				heading = heading + " " + wbdata.graphYear;
 			default: break;
 		}
 		d3.select("h3#energyheading").text(heading);
