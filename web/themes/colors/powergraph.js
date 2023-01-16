@@ -797,7 +797,7 @@ class PowerGraph {
 
 	drawSourceGraph(svg, width, height) {
 		var keys = (wbdata.graphMode == 'month' || wbdata.graphMode == 'year') ? ["gridPull", "batOut", "selfUsage", "gridPush"] : ["selfUsage", "gridPush", "batOut", "gridPull"];
-		var months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez']
+		const months = ['Jan', 'Feb', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 		switch (wbdata.graphMode) {
 			case 'month':
 				const dayRange = d3.extent(this.graphData, d => d.date.getDate())
@@ -897,8 +897,8 @@ class PowerGraph {
 	}
 
 	drawUsageGraph(svg, width, height) {
+		const months = ['Jan', 'Feb', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 		const yScale = d3.scaleLinear().range([height + 10, 2 * height]);
-
 		const extent = d3.extent(this.graphData, (d) =>
 		(d.housePower + d.lp0 + d.lp1 + d.lp2 + d.lp3 + d.lp4
 			+ d.lp5 + d.lp6 + d.lp7 + d.sh0 + d.sh1 + d.sh2 + d.sh3 + d.sh4
