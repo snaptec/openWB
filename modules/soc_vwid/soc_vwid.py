@@ -41,7 +41,7 @@ async def main():
     chargepoint = args['chargepoint']
 
     # logging setup
-    log = logging.getLogger("soc_smarteq")
+    log = logging.getLogger("soc_vwid")
     debug = os.environ.get('debug', '0')
     LOGLEVEL = 'WARN'
     if debug == '1':
