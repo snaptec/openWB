@@ -222,7 +222,6 @@ class PowerGraph {
 						this.liveGraphMinutes = Math.round((endTime - startTime) / 60000);
 						this.updateHeading();
 						this.updateGraph();
-						this.updateEnergyValues();
 						unsubscribeMqttGraphSegments();
 					}
 				}
