@@ -18,7 +18,7 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${solarworld_emanagerip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh"  "modules.devices.solar_world.device" "inverter" "${solarworld_emanagerip}" "1" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh"  "modules.devices.solar_world.device" "inverter" "${solarworld_emanagerip}" "1" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
