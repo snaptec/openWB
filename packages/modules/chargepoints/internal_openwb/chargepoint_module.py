@@ -11,7 +11,7 @@ from modules.common.modbus import ModbusSerialClient_
 from modules.common.store import ramdisk_read
 from modules.common import sdm
 from modules.common import evse
-from modules.common import b32
+from modules.common import b23
 from modules.common.store import get_chargepoint_value_store
 
 log = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def get_default_config() -> Dict:
             }}
 
 
-CONNECTION_MODULES = Union[sdm.Sdm630, b32.B32]
+CONNECTION_MODULES = Union[sdm.Sdm630, b23.B23]
 
 
 class InternalOpenWB:
@@ -46,8 +46,10 @@ class ClientFactory:
     def __factory(self, serial_client: ModbusSerialClient_) -> Tuple[CONNECTION_MODULES, evse.Evse]:
         meter_config = NamedTuple("MeterConfig", [('type', CONNECTION_MODULES), ('modbus_id', int)])
         meter_configuration_options = [
-            [meter_config(sdm.Sdm630, modbus_id=105), meter_config(b32.B32, modbus_id=201)],
-            [meter_config(sdm.Sdm630, modbus_id=106)]
+            [meter_config(sdm.Sdm630, modbus_id=5),
+             meter_config(sdm.Sdm630, modbus_id=105),
+             meter_config(b23.B23, modbus_id=201)],
+            [meter_config(sdm.Sdm630, modbus_id=6), meter_config(sdm.Sdm630, modbus_id=106)]
         ]
 
         def _check_meter(serial_client: ModbusSerialClient_, meters: List[meter_config]):
