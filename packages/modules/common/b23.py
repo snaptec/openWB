@@ -5,7 +5,7 @@ from modules.common import modbus
 from modules.common.modbus import ModbusDataType
 
 
-class B32:
+class B23:
     def __init__(self, modbus_id: int, client: modbus.ModbusTcpClient_) -> None:
         self.client = client
         self.id = modbus_id
