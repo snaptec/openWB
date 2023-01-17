@@ -645,10 +645,10 @@ class PowerGraph {
 	}
 
 	calcPvFraction(energy, values) {
-		return Math.floor((energy * values.solarPower / (values.solarPower + values.gridPull + values.batOut)))
+		return Math.floor((energy * (values.solarPower - values.gridPush) / (values.solarPower -values.gridPush + values.gridPull + values.batOut)))
 	}
 	calcBatFraction(energy, values) {
-		return Math.floor((energy * values.batOut / (values.solarPower + values.gridPull + values.batOut)))
+		return Math.floor((energy * values.batOut / (values.solarPower -values.gridPush + values.gridPull + values.batOut)))
 	}
 
 	extractMonthValues(payload) {
