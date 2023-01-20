@@ -217,7 +217,7 @@ function setChargingCurrentgoe () {
 
 			state=$(echo "$output" | jq -r '.alw')
 			if ((state == "0")) ; then
-				 curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=1" > /dev/null
+				curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=1" > /dev/null
 			fi
 			oldgoecurrent=$(echo "$output" | jq -r '.amp')
 			if (( oldgoecurrent != current )) ; then
@@ -268,7 +268,7 @@ function setChargingCurrentnrgkick () {
 			output=$(curl --connect-timeout 3 -s "http://$nrgkickiplp1/api/settings/$nrgkickmaclp1")
 			state=$(echo "$output" | jq -r '.Values.ChargingStatus.Charging')
 			if [[ $state == "false" ]] ; then
-				 curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ \"Values\": {\"ChargingStatus\": { \"Charging\": true }, \"ChargingCurrent\": { \"Value\": $current }, \"DeviceMetadata\":{\"Password\": \"$nrgkickpwlp1\"}}}" "$nrgkickiplp1/api/settings/$nrgkickmaclp1" > /dev/null
+				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ \"Values\": {\"ChargingStatus\": { \"Charging\": true }, \"ChargingCurrent\": { \"Value\": $current }, \"DeviceMetadata\":{\"Password\": \"$nrgkickpwlp1\"}}}" "$nrgkickiplp1/api/settings/$nrgkickmaclp1" > /dev/null
 			fi
 			oldcurrent=$(echo "$output" | jq -r '.Values.ChargingCurrent.Value')
 			if (( oldcurrent != current )) ; then
