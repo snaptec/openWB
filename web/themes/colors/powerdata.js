@@ -97,7 +97,7 @@ class WbData {
 		this.consumer[0].color = 'var(--color-co1)';
 		this.consumer[1].color = 'var(--color-co2)';
 		for (i = 0; i < 9; i++) {
-			this.historicSummary['sh' + i] = Object.assign(this.shDevice[i])
+			this.historicSummary['sh' + i] = Object.assign({},this.shDevice[i])
 		}
 		this.historicSummary.pv.color = 'var(--color-pv)';
 		this.historicSummary.evuIn.color = 'var(--color-evu)';
