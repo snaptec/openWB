@@ -32,6 +32,7 @@ else
 	username="${wr2deyeusername}"
 	password="${wr2deyepassword}"
 fi
+auth=$username:$password
 
 # get the current generated power value
 dat="webdata_now_p"
@@ -60,12 +61,15 @@ then
   if [ "$p" != "" ]
   then
     echo "$p $val"
+    openwbDebugLog ${DMOD} 2 "${p} ${val}"
     exit 0
   fi
   echo "Error: could not read $4"
+  openwbDebugLog ${DMOD} 2 "Error: could not read $4"
   exit 1
 else
   echo "Error: connection to $host failed"
+  openwbDebugLog ${DMOD} 2 "Error: connection to $host failed"
   exit 1
 fi
 
