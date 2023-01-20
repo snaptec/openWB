@@ -52,10 +52,10 @@ goecheck(){
 					fi
 				fi
 
-	                        version=$(echo $output | jq -r '.fwv')  # get firmware version
-        	                majorVersion=${version%.*}              # remove everything after a "."
-                	        majorVersion=${majorVersion%-*}         # remove everything after a "-"
-                        	majorVersion=${majorVersion#0}          # remove leading "0"
+				version=$(echo $output | jq -r '.fwv')  # get firmware version
+				majorVersion=${version%.*}              # remove everything after a "."
+				majorVersion=${majorVersion%-*}         # remove everything after a "-"
+				majorVersion=${majorVersion#0}          # remove leading "0"
 
 				oldcurrent=$(echo $output | jq -r '.amp')
 				current=$(</var/www/html/openWB/ramdisk/llsolls1)
@@ -85,10 +85,10 @@ goecheck(){
 						fi
 					fi
 
-	                                version=$(echo $output | jq -r '.fwv')  # get firmware version
-        	                        majorVersion=${version%.*}              # remove everything after a "."
-                	                majorVersion=${majorVersion%-*}         # remove everything after a "-"
-                        	        majorVersion=${majorVersion#0}          # remove leading "0"
+					version=$(echo $output | jq -r '.fwv')  # get firmware version
+					majorVersion=${version%.*}              # remove everything after a "."
+					majorVersion=${majorVersion%-*}         # remove everything after a "-"
+					majorVersion=${majorVersion#0}          # remove leading "0"
 
 					oldcurrent=$(echo $output | jq -r '.amp')
 					current=$(</var/www/html/openWB/ramdisk/llsolls2)
