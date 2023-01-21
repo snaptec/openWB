@@ -260,7 +260,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wr2deyehost" id="wr2deyehost" value="<?php echo $wr2deyehostold ?>">
 									<span class="form-text small">
-										Gültige Werte IP Adresse im Format: 192.168.0.12
+										Gültige Werte IP Adresse im Format: 192.168.0.165
 									</span>
 								</div>
 							</div>
@@ -1228,7 +1228,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 									<span class="form-text small">
-										Gültige Werte IP Adresse im Format: 192.168.0.165
+										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
 								</div>
 							</div>
