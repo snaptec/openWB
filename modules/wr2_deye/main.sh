@@ -9,7 +9,7 @@ Debug=$debug
 # generated power values (for more details about this Deye microinverter series please have a look at
 # https://deye.com/product/sun600-800-1000g3-eu-230-600-1000w-single-phase-2-mppt-micro-inverter-rapid-shutdown/)
 #
-# The Deye microinverters are also sold under the same Bosswerk. 
+# The Deye microinverters are also sold under the name Bosswerk. 
 #
 # This script is tested against this Deye SUN600G3-EU-230 device with firmware version:
 #  * Communication Protocol Version：V0.2.0.1
