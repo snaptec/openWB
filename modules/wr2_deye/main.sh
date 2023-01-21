@@ -74,21 +74,21 @@ then
     	if [ ${Debug} == 1 ]; then
     		echo "$p $val"
     	fi
-    	openwbDebugLog ${DMOD} 2 "${p} ${val}"
+    	openwbDebugLog ${DMOD} 1 "${p} ${val}"
     	pvwatt="$p"
   	else
   		if [ ${Debug} == 1 ]; then
   			echo "0 $val"
   		fi
-  		openwbDebugLog ${DMOD} 2 "Error: no power value provided by the microinverter -> set it to 0"
-  		openwbDebugLog ${DMOD} 2 "0 ${val}"
+  		openwbDebugLog ${DMOD} 0 "Error: no power value provided by the microinverter -> set it to 0"
+  		openwbDebugLog ${DMOD} 0 "0 ${val}"
   		pvwatt=0
   	fi
 else
   	if [ ${Debug} == 1 ]; then
  		echo "Error: connection to $host failed"
   	fi
-  	openwbDebugLog ${DMOD} 2 "Error: connection to $host failed"
+  	openwbDebugLog ${DMOD} 0 "Error: connection to $host failed"
   	pvwatt=0
 fi
 
