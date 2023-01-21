@@ -149,7 +149,6 @@ class YieldMeter {
 		const ymax = d3.max(this.plotdata, (d) => d.energy);
 		this.xScale.domain(this.plotdata.map((d) => d.name));
 		this.yScale.domain([0, Math.ceil(ymax)]);
-
 		// Draw the bars
 		const bargroups = svg
 			.selectAll(".bar")
