@@ -58,16 +58,25 @@ then
   p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
   if [ "$p" = "" ]
   then
+  	if [ ${Debug} == 1 ]; then
+  		echo "curl retry: 1"
+  	fi
     sleep 3
     p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
   fi
   if [ "$p" = "" ]
   then
+  	if [ ${Debug} == 1 ]; then
+  		echo "curl retry: 2"
+  	fi
     sleep 3
     p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
   fi
   if [ "$p" = "" ]
   then
+  	if [ ${Debug} == 1 ]; then
+  		echo "curl retry: 3"
+  	fi
     sleep 3
     p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
   fi
