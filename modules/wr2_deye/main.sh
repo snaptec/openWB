@@ -15,6 +15,8 @@ Debug=$debug
 #  * Communication Protocol Version：V0.2.0.1
 #  * Control Board Firmware Version：V0.1.1.4
 #  * Communication Board Firmware Version：V0.2.1.1
+#
+# This script is inspired by this great work: https://github.com/dr-ni/mi600
 
 #For Development only
 Debug=1
