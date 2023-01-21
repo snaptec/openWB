@@ -76,6 +76,11 @@ then
     echo "$p $val"
     openwbDebugLog ${DMOD} 2 "${p} ${val}"
     exit 0
+  else
+  	echo "0 $val"
+  	openwbDebugLog ${DMOD} 2 "Error: no power value provided by the microinverter -> set it to 0"
+  	openwbDebugLog ${DMOD} 2 "0 ${val}"
+  	exit 1
   fi
   echo "Error: could not read $4"
   openwbDebugLog ${DMOD} 2 "Error: could not read $4"
@@ -92,4 +97,4 @@ fi
 
 #openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-cat "${RAMDISKDIR}/pv2watt"
+# cat "${RAMDISKDIR}/pv2watt"
