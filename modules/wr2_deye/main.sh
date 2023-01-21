@@ -5,6 +5,8 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="PV"
 Debug=$debug
 
+pvwatt=0
+
 # This script queries the microinverter Deye SUN600/800/1000G3-EU-230 device series for currently
 # generated power values (for more details about this Deye microinverter series please have a look at
 # https://deye.com/product/sun600-800-1000g3-eu-230-600-1000w-single-phase-2-mppt-micro-inverter-rapid-shutdown/)
@@ -26,10 +28,6 @@ if [ ${DMOD} == "MAIN" ]; then
 else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
-
-#openwbDebugLog ${DMOD} 2 "PV URL : ${wr2jsonurl}"
-#openwbDebugLog ${DMOD} 2 "PV Watt: ${wr2jsonwatt}"
-#openwbDebugLog ${DMOD} 2 "PV kWh : ${wr2jsonkwh}"
 
 host=""
 username=""
@@ -55,55 +53,54 @@ val="W"
 ping -c3 $host > /dev/null 2>&1
 if [ $? -eq 0 ]
 then
-  p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
-  if [ "$p" = "" ]
-  then
-  	if [ ${Debug} == 1 ]; then
-  		echo "curl retry: 1"
+	p=""
+	retrycounter=0
+	while [ $retrycounter -lt 5 ]
+  	do
+		p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
+  	
+  		if [[ "$p" != "" ]]; then
+  			break
+  		fi
+		((retrycounter++))
+		if [ ${Debug} == 1 ]; then
+  			echo "curl retry: $retrycounter"
+  		fi
+  		sleep 5
+	done
+  
+  	if [ "$p" != "" ]
+ 	then
+    	if [ ${Debug} == 1 ]; then
+    		echo "$p $val"
+    	fi
+    	openwbDebugLog ${DMOD} 2 "${p} ${val}"
+    	pvwatt="$p"
+  	else
+  		if [ ${Debug} == 1 ]; then
+  			echo "0 $val"
+  		fi
+  		openwbDebugLog ${DMOD} 2 "Error: no power value provided by the microinverter -> set it to 0"
+  		openwbDebugLog ${DMOD} 2 "0 ${val}"
+  		pvwatt=0
   	fi
-    sleep 3
-    p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
-  fi
-  if [ "$p" = "" ]
-  then
-  	if [ ${Debug} == 1 ]; then
-  		echo "curl retry: 2"
-  	fi
-    sleep 3
-    p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
-  fi
-  if [ "$p" = "" ]
-  then
-  	if [ ${Debug} == 1 ]; then
-  		echo "curl retry: 3"
-  	fi
-    sleep 3
-    p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
-  fi
-  if [ "$p" != "" ]
-  then
-    echo "$p $val"
-    openwbDebugLog ${DMOD} 2 "${p} ${val}"
-    exit 0
-  else
-  	echo "0 $val"
-  	openwbDebugLog ${DMOD} 2 "Error: no power value provided by the microinverter -> set it to 0"
-  	openwbDebugLog ${DMOD} 2 "0 ${val}"
-  	exit 1
-  fi
-  echo "Error: could not read $4"
-  openwbDebugLog ${DMOD} 2 "Error: could not read $4"
-  exit 1
+  #if [ ${Debug} == 1 ]; then
+  #  echo "Error: could not read $4"
+  #fi
+  #openwbDebugLog ${DMOD} 2 "Error: could not read $4"
+  #pvwatt=0
 else
-  echo "Error: connection to $host failed"
-  openwbDebugLog ${DMOD} 2 "Error: connection to $host failed"
-  exit 1
+  	if [ ${Debug} == 1 ]; then
+ 		echo "Error: connection to $host failed"
+  	fi
+  	openwbDebugLog ${DMOD} 2 "Error: connection to $host failed"
+  	pvwatt=0
 fi
 
+# following the instructions of https://github.com/tking/openWB#module-erstellen
+echo "$pvwatt"
+echo "$pvwatt" > "$RAMDISKDIR"/pvwatt
 
-#bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.json.device" "inverter" "${wr2deyehost}" "${wr2jsonwatt}" "${wr2jsonkwh}" "2" >>"$MYLOGFILE" 2>&1
+#bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.deye.device" "inverter" "$host" "pv2watt" >> "$MYLOGFILE" 2>&1
 #ret=$?
-
 #openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
-# cat "${RAMDISKDIR}/pv2watt"
