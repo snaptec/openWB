@@ -92,7 +92,7 @@ else
   	pvwatt=0
 fi
 
-# following the instructions of https://github.com/tking/openWB#module-erstellen
+# following the instructions of https://github.com/snaptec/openWB#module-erstellen
 echo "$pvwatt"
 echo "$pvwatt" > "$RAMDISKDIR"/pvwatt
 
