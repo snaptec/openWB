@@ -103,6 +103,7 @@
 										<option <?php if($pvwattmodulold == "wr_powerwall") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
 										<option <?php if($pvwattmodulold == "wr_victron") echo "selected" ?> value="wr_victron">Victron</option>
 										<option <?php if($pvwattmodulold == "wr_youless120") echo "selected" ?> value="wr_youless120">Youless 120</option>
+										<option <?php if($pvwattmodulold == "wr_deye") echo "selected" ?> value="wr_deye">Deye SUN600/800/1000G3-EU-230</option>
 									</optgroup>
 									<optgroup label="generische Module">
 										<option <?php if($pvwattmodulold == "wr_http") echo "selected" ?> value="wr_http">Http</option>
@@ -250,6 +251,29 @@
 									<span class="form-text small">
 										Diese Option aktivieren wenn statt des S0 der andere Eingang des Youless genutzt wird.
 									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pvdeye" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2deyehost" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wr2deyehost" id="wr2deyehost" value="<?php echo $wr2deyehostold ?>">
+									<span class="form-text small">
+										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2deyeusername" class="col-md-4 col-form-label">Benutzername</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2deyeusername" id="wr2deyeusername" value="<?php echo $wr2deyeusernameold ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2deyepassword" class="col-md-4 col-form-label">Passwort</label>
+								<div class="col">
+									<input class="form-control" type="password" name="wr2deyepassword" id="wr2deyepassword" value="<?php echo htmlspecialchars($wr2deyepasswordold) ?>">
 								</div>
 							</div>
 						</div>
@@ -964,6 +988,7 @@
 								hideSection('#pvsolarview');
 								hideSection('#pvdiscovergy');
 								hideSection('#pvyouless');
+								hideSection('#pvdeye');
 								hideSection('#pvlgessv1');
 								hideSection('#pvmqtt');
 								hideSection('#pvsunways');
@@ -1026,6 +1051,9 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_youless120') {
 									showSection('#pvyouless');
+								}
+								if($('#pvwattmodul').val() == 'wr_deye') {
+									showSection('#pvdeye');
 								}
 								if($('#pvwattmodul').val() == 'wr_solarview') {
 									showSection('#pvsolarview');
@@ -1194,7 +1222,7 @@
 								<div class="col">
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 									<span class="form-text small">
-										Gültige Werte IP Adresse im Format: 192.168.0.12
+										Gültige Werte IP Adresse im Format: 192.168.0.165
 									</span>
 								</div>
 							</div>
