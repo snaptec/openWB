@@ -59,7 +59,7 @@ then
   	do
 		p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
   	
-  		if [[ "$p" != "" ]]; then
+  		if [ $p != "" ]; then
   			break
   		fi
 		((retrycounter++))
@@ -84,11 +84,6 @@ then
   		openwbDebugLog ${DMOD} 2 "0 ${val}"
   		pvwatt=0
   	fi
-  #if [ ${Debug} == 1 ]; then
-  #  echo "Error: could not read $4"
-  #fi
-  #openwbDebugLog ${DMOD} 2 "Error: could not read $4"
-  #pvwatt=0
 else
   	if [ ${Debug} == 1 ]; then
  		echo "Error: connection to $host failed"
