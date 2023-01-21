@@ -268,12 +268,18 @@
 								<label for="wr2deyeusername" class="col-md-4 col-form-label">Benutzername</label>
 								<div class="col">
 									<input class="form-control" type="text" name="wr2deyeusername" id="wr2deyeusername" value="<?php echo $wr2deyeusernameold ?>">
+									<span class="form-text small">
+										Standard Benutzername: admin
+									</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="wr2deyepassword" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
 									<input class="form-control" type="password" name="wr2deyepassword" id="wr2deyepassword" value="<?php echo htmlspecialchars($wr2deyepasswordold) ?>">
+									<span class="form-text small">
+										Standard Passwort: admin
+									</span>
 								</div>
 							</div>
 						</div>
