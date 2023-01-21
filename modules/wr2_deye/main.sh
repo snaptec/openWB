@@ -5,6 +5,17 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="PV"
 Debug=$debug
 
+# This script queries the microinverter Deye SUN600/800/1000G3-EU-230 device series for currently
+# generated power values (for more details about this Deye microinverter series please have a look at
+# https://deye.com/product/sun600-800-1000g3-eu-230-600-1000w-single-phase-2-mppt-micro-inverter-rapid-shutdown/)
+#
+# The Deye microinverters are also sold under the same Bosswerk. 
+#
+# This script is tested against this Deye SUN600G3-EU-230 device with firmware version:
+#  * Communication Protocol Version：V0.2.0.1
+#  * Control Board Firmware Version：V0.1.1.4
+#  * Communication Board Firmware Version：V0.2.1.1
+
 #For Development only
 Debug=1
 
@@ -74,8 +85,8 @@ else
 fi
 
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.json.device" "inverter" "${wr2deyehost}" "${wr2jsonwatt}" "${wr2jsonkwh}" "2" >>"$MYLOGFILE" 2>&1
-ret=$?
+#bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.json.device" "inverter" "${wr2deyehost}" "${wr2jsonwatt}" "${wr2jsonkwh}" "2" >>"$MYLOGFILE" 2>&1
+#ret=$?
 
 #openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
