@@ -754,7 +754,7 @@
 
     <script>
       $('.chargeModeBtn').on("click", function (event) {
-        if (displaylocked == false) {
+        if (wbdata.displaylocked == false) {
           var chargeMode = $(this).attr("data-chargeMode");
           publish(chargeMode, "openWB/set/ChargeMode");
           if (!wbdata.isBatteryConfigured || (chargeMode != '1' && chargeMode != '2')) {
@@ -765,7 +765,7 @@
 
       $('.priorityModeBtn').on("click", function (event) {
         // prio: 0 = battery, 1 = ev
-        if (displaylocked == false) {
+        if (wbdata.displaylocked == false) {
           var priority = $(this).attr('data-priority');
           if (priority == '0' || priority == '1') {
             publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
@@ -775,7 +775,7 @@
 
       $('.70PvBtn').on("click", function (event) {
         // 0 deaktiviert, 1 aktiviert
-        if (displaylocked == false) {
+        if (wbdata.displaylocked == false) {
           if ($(this).hasClass("btn-success")) {
             publish("0", "openWB/set/pv/NurPV70Status");
           } else {
@@ -827,16 +827,16 @@
     var displaypinaktiv = 1;
     var lockTimeoutHandler = null;
     var lockTimeout = 60000;
-    var displaylocked = true;
+    wbdata.displaylocked = true;
 
     function lockDisplay(lock = true) {
       if (lock == false) {
-        displaylocked = false;
+        wbdata.displaylocked = false;
         $('#displaylock').find('.fa-lock').addClass('hide');
         $('#displaylock').find('.fa-unlock').removeClass('hide');
         lockTimeoutHandler = window.setTimeout(lockDisplay, lockTimeout);
       } else {
-        displaylocked = true;
+        wbdata.displaylocked = true;
         $('#displaylock').find('.fa-lock').removeClass('hide');
         $('#displaylock').find('.fa-unlock').addClass('hide');
 
@@ -852,12 +852,12 @@
           if (data == "1") {
             displaypinaktiv = 1;
             if (lockTimeoutHandler == null) {
-              displaylocked = true;
+              wbdata.displaylocked = true;
             }
             $('#displaylock').removeClass('hide');
           } else {
             displaypinaktiv = 0;
-            displaylocked = false;
+            wbdata.displaylocked = false;
             window.clearTimeout(lockTimeoutHandler);
             lockTimeoutHandler = null;
             $('#displaylock').addClass('hide');
@@ -935,14 +935,14 @@
             $('#displaylock').removeClass('hide');
           } else {
             displaypinaktiv = 0;
-            displaylocked = false;
+            wbdata.displaylocked = false;
             $('#displaylock').addClass('hide');
           }
         }
       );
 
       $('#displaylock').on("click", function () {
-        if (displaylocked == true) {
+        if (wbdata.displaylocked == true) {
           $("#lockModal").modal("show");
         } else {
           lockDisplay(true);

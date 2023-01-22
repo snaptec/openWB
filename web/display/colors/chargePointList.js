@@ -204,7 +204,7 @@ function lpButtonClicked(i) {
 }
 
 function configButtonClicked(index) {
-  if (displaylocked == false) {
+  if (wbdata.displaylocked == false) {
     chargePointList.displayChargeConfigModal(index);
 
     // $('#ladepunktConfigModal').find('.configLp').text(index + 1);
@@ -219,7 +219,7 @@ function configButtonClicked(index) {
 function modeButtonClicked(index) {
   wbdata.chargePointToConfig = index; // remember the CP we are configuring
 
-  if (displaylocked == false) {
+  if (wbdata.displaylocked == false) {
     // Enable/Disable button
     let enableDiv = d3.select("div#disableButton").attr("class", "col-sm-4 px-3 pb-3 pt-1 modalLabel");
     enableDiv.selectAll("*").remove();
@@ -275,14 +275,14 @@ function modeButtonClicked(index) {
 }
 
 function socSetButtonClicked(index) {
-  if (displaylocked == false) {
+  if (wbdata.displaylocked == false) {
     $("#socModal").modal("show");
   } else {
     $("#lockInfoModal").modal("show");
   }
 }
 function socLoadButtonClicked(index) {
-  if (displaylocked == false) {
+  if (wbdata.displaylocked == false) {
     publish("1", "openWB/set/lp/" + (+index + 1) + "/ForceSoCUpdate");
   } else {
     $("#lockInfoModal").modal("show");
