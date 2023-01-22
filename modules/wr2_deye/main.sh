@@ -14,9 +14,7 @@ pvwatt=0
 # The Deye microinverters are also sold under the name Bosswerk. 
 #
 # This script is tested against this Deye SUN600G3-EU-230 device with firmware version:
-#  * Communication Protocol Version：V0.2.0.1
-#  * Control Board Firmware Version：V0.1.1.4
-#  * Communication Board Firmware Version：V0.2.1.1
+#  * Firmware version: MW3_15U_5406_1.471
 #
 # This script is inspired by this great work: https://github.com/dr-ni/mi600
 
