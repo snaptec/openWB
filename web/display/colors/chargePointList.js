@@ -30,15 +30,15 @@ class ChargePointList {
 			.append("div").attr("class", "container-fluid mt-3 p-0")
 			;
 		chargePoint.html((row, index) => `
-      <div class="row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
-        ${this.cpNameRow(row, index)}
-      </div>
-      <div class = "row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
-        ${this.cpChargeInfoRow(row, index)}
-      </div>
-      <div class = "row m-0 p-0">
-        ${this.cpChargeModeRow(row, index)}
-      </div>`
+			<div class="row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
+		${this.cpNameRow(row, index)}
+	  </div>
+	  <div class = "row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
+		${this.cpChargeInfoRow(row, index)}
+	  </div>
+	  <div class = "row m-0 p-0">
+		${this.cpChargeModeRow(row, index)}
+	  </div>`
 		)
 		this.updateValues();
 	}
@@ -91,51 +91,51 @@ class ChargePointList {
 
 	cpNameRow(row, index) {
 		return `
-        <div class = "col px-0 py-0 chargePointName"
-          style="color:${row.color};vertical-align:middle;text-align:left;">
-          <span class="cpname-${index} px-0">${row.name}</span>
-          <span class="plugsymbol-${index} fa fa-xs fa-plug hide"></span>
-          <span class="finishsymbol-${index} fa fa-xs fa-flag-checkered pl-0 hide" style="color:${this.fgColor};"></span>
-          <span class="nightsymbol-${index} fa fa-xs fa-moon pl-0" style="color:${this.fgColor};"></span>
-        </div>
-      `
+		<div class = "col px-0 py-0 chargePointName"
+		  style="color:${row.color};vertical-align:middle;text-align:left;">
+		  <span class="cpname-${index} px-0">${row.name}</span>
+		  <span class="plugsymbol-${index} fa fa-xs fa-plug hide"></span>
+		  <span class="finishsymbol-${index} fa fa-xs fa-flag-checkered pl-0 hide" style="color:${this.fgColor};"></span>
+		  <span class="nightsymbol-${index} fa fa-xs fa-moon pl-0" style="color:${this.fgColor};"></span>
+		</div>
+	  `
 	}
 
 	cpChargeInfoRow(row, index) {
 		let soctext = row.isSocConfigured ? row.soc + " %" : " ";
 		return `
-      <div class="col-4 px-0 py-0 chargePointName" style="color:${row.color};text-align:left">
-        <span class="px-0 soctext-${index}" style="vertical-align:middle;">
-          ${soctext}
-        </span>
-      </div>
-      <div class="col-8  pl-0 pr-2 py-0 chargePointData" 
-        style="color:white;vertical-align:middle;text-align:right;">
-        <p class="powerstring-${index} px-0 pb-0 mb-0">
-          ? W / ? A
-        </p>
-        <p class="energystring-${index} px-0 mb-0">
-          ? kWh / ? km
-        </p>
-      </div>
-      `
+	  <div class="col-4 px-0 py-0 chargePointName" style="color:${row.color};text-align:left">
+		<span class="px-0 soctext-${index}" style="vertical-align:middle;">
+		  ${soctext}
+		</span>
+	  </div>
+	  <div class="col-8  pl-0 pr-2 py-0 chargePointData" 
+		style="color:white;vertical-align:middle;text-align:right;">
+		<p class="powerstring-${index} px-0 pb-0 mb-0">
+		  ? W / ? A
+		</p>
+		<p class="energystring-${index} px-0 mb-0">
+		  ? kWh / ? km
+		</p>
+	  </div>
+	  `
 	}
 
 	cpChargeModeRow(row, index) {
 		return `
-      <div class="col-7 m-0 px-0 py-0">
-        <button class="btn btn-block btn-success display-button px-0 py-3" 
-        type="button" onclick="modeButtonClicked(${index})">
-          <span class="chargemode-${index}">Unknown</span>
-          <span class="priority-${index} fas  px-2 hide"> </span>
-        </button>
-      </div>
-      <div class="col-5 m-0 px-1 py-0">
-        <button class="btn btn-block btn-outline-secondary display-button px-0 mx-0  py-3"
-          type="button" onclick = "configButtonClicked(${index})">
-          <i class="fas fa-wrench"></i>
-        </button>
-      </div>`
+	  <div class="col-7 m-0 px-0 py-0">
+		<button class="btn btn-block btn-success display-button px-0 py-3" 
+		type="button" onclick="modeButtonClicked(${index})">
+		  <span class="chargemode-${index}">Unknown</span>
+		  <span class="priority-${index} fas  px-2 hide"> </span>
+		</button>
+	  </div>
+	  <div class="col-5 m-0 px-1 py-0">
+		<button class="btn btn-block btn-outline-secondary display-button px-0 mx-0  py-3"
+		  type="button" onclick = "configButtonClicked(${index})">
+		  <i class="fas fa-wrench"></i>
+		</button>
+	  </div>`
 	}
 
 	displayChargeConfigModal(index) {
