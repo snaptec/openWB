@@ -21,7 +21,7 @@ pvwatt=0
 # This script is inspired by this great work: https://github.com/dr-ni/mi600
 
 #For Development only
-Debug=1
+Debug=0
 
 if [ ${DMOD} == "MAIN" ]; then
 	MYLOGFILE="${RAMDISKDIR}/openWB.log"
