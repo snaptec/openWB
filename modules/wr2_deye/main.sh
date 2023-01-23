@@ -51,12 +51,12 @@ dat="webdata_now_p"
 val="W"
 
 # ping host to check if the WR is online
-ping -c3 $host > /dev/null 2>&1
+ping -c1 $host > /dev/null 2>&1
 if [ $? -eq 0 ]
 then
 	p=""
 	retrycounter=0
-	while [ $retrycounter -lt 5 ]
+	while [ $retrycounter -lt 2 ]
   	do
 		p=$(curl -s -u "$auth" "$host"/status.html | grep "$dat = " | awk -F '"' '{print $2}')
   	
