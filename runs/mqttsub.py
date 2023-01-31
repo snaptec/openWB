@@ -67,10 +67,12 @@ def replaceAll(changeval,newval):
         inaction=0
 
 def getConfigValue(key):
-    for line in fileinput.input(openwbconffile):
-        if line.startswith(str(key+"=")):
-            return line.split("=", 1)[1]
-    return
+    with fileinput.input(openwbconffile) as file:
+        for line in file:
+            if line.startswith(str(key+"=")):
+                return line.split("=", 1)[1]
+        return
+
 
 def getserial():
     # Extract serial from cpuinfo file
@@ -1368,10 +1370,15 @@ def on_message(client, userdata, msg):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/isss/parentWB"):
-                f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
-                f.write(msg.payload.decode("utf-8"))
-                f.close()
-                client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
+                if int(getConfigValue("isss")) == 1:
+                    f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    if Path('/var/www/html/openWB/ramdisk/parentWB').exists():
+                        Path('/var/www/html/openWB/ramdisk/parentWB').unlink()
+                    client.publish("openWB/system/parentWB", "localhost", qos=0, retain=True)
             if (msg.topic == "openWB/set/isss/parentCPlp1"):
                 client.publish("openWB/system/parentCPlp1", msg.payload.decode("utf-8"), qos=0, retain=True)
                 f = open('/var/www/html/openWB/ramdisk/parentCPlp1', 'w')
