@@ -32,13 +32,13 @@ class ChargePointList {
 		chargePoint.html((row, index) => `
 			<div class="row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
 		${this.cpNameRow(row, index)}
-	  </div>
-	  <div class = "row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
+		</div>
+		<div class = "row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
 		${this.cpChargeInfoRow(row, index)}
-	  </div>
-	  <div class = "row m-0 p-0">
+		</div>
+		<div class = "row m-0 p-0">
 		${this.cpChargeModeRow(row, index)}
-	  </div>`
+		</div>`
 		)
 		this.updateValues();
 	}
