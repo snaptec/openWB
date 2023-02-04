@@ -58,7 +58,7 @@ function processChargepointMessages(mqttmsg, mqttpayload) {
 				eval("gaugelp" + index + ".set(mqttpayload)");
 			}
 			if (mqttpayload > 999) {
-				$('#lp' + index + 't').html(lpw.toFixed(2) + " kW");
+				$('#lp' + index + 't').html(lpw.toFixed(1) + " kW");
 			} else {
 				$('#lp' + index + 't').html(mqttpayload + " W");
 			}

@@ -34,7 +34,7 @@ if (displaylp1max > 999) {
 		labels: [0, gaugeLp1MaxValue],  // Print labels at these values
 		unit: "kW", // Optional: Label unit
 		color: "white",  // Optional: Label text color
-		fractionDigits: 2  // Optional: Numerical precision. 0=round off.
+		fractionDigits: 1  // Optional: Numerical precision. 0=round off.
 	}
 } else {
 	var gaugeLp1MaxValue = displaylp1max;
@@ -132,7 +132,7 @@ if (lastmanagementold == '1') {
 			labels: [0, gaugeLp2MaxValue],  // Print labels at these values
 			unit: "kW", // Optional: Label unit
 			color: "white",  // Optional: Label text color
-			fractionDigits: 2  // Optional: Numerical precision. 0=round off.
+			fractionDigits: 1  // Optional: Numerical precision. 0=round off.
 		}
 	} else {
 		var gaugeLp2MaxValue = displaylp2max;
