@@ -58,7 +58,7 @@
 					<canvas id="lp1s" style="height: 400px; top: 30px; left: 0px; position: absolute; width: 740px;"></canvas>
 					<div id="lp1l" style="font-size: 35px; top: 405px; left: 0px; text-align:center; position: absolute; width: 380px; color: white;">LP1</div>
 					<div id="lp1st" style="font-size: 35px; top: 245px; right: 10px; text-align:right; position: absolute; width: 135px; color: white;">0</div>
-					<div id="lp1t" style="font-size: 35px; top: 295px; right: 10px; text-align:right; position: absolute; width: 140px; color: white;">0</div>
+					<div id="lp1t" style="font-size: 35px; top: 295px; right: 10px; text-align:right; position: absolute; width: 145px; color: white;">0</div>
 					<div id="lp1symbol" style="top: 350px; right: 10px; text-align: right; position: absolute; width: 150px; font-size: 32px;">
 						<i id="lp1plugstat" class="fas fa-plug" style="font-size: 32px"></i>
 						<i id="lp1disabled" class="fas fa-lock text-danger"></i>
@@ -70,7 +70,7 @@
 					<canvas id="lp2s" style="height: 400px; top: 30px; left: -360px; position: absolute; width: 740px;"></canvas>
 					<div id="lp2l" style="font-size: 35px; top: 405px; right: 30px; text-align:center; position: absolute; width: 380px; color: white;">LP2</div>
 					<div id="lp2st" style="font-size: 35px; top: 245px; left: 10px; text-align:left; position: absolute; width: 135px; color: white;">0</div>
-					<div id="lp2t" style="font-size: 35px; top: 295px; left: 10px; text-align:left; position: absolute; width: 140px; color: white;">0</div>
+					<div id="lp2t" style="font-size: 35px; top: 295px; left: 10px; text-align:left; position: absolute; width: 145px; color: white;">0</div>
 					<div id="lp2symbol" style="top: 350px; left: 10px; text-align: left; position: absolute; width: 135px; font-size: 32px;">
 						<i id="lp2disabled" class="fas fa-lock text-danger"></i>
 						<i id="lp2enabled" class="fas fa-unlock text-success hide"></i>
@@ -178,7 +178,7 @@
 			var rfidakt = <?php echo $rfidaktold; ?>;
 			var lastmanagementold = <?php echo $lastmanagementold; ?>;
 		</script>
-		<script src="display/minimal/minimalgauge.js?ver=20230106"></script>
+		<script src="display/minimal/minimalgauge.js?ver=20230204"></script>
 		<script>
 			// ************** beginning of MQTT code *************
 			$(document).ready(function() {
@@ -188,7 +188,7 @@
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'display/minimal/processAllMqttMsg.js?ver=20230106',
+					'display/minimal/processAllMqttMsg.js?ver=20230204',
 					// functions performing mqtt and start mqtt-service
 					'display/minimal/setupMqttServices.js?ver=20221229',
 				];
