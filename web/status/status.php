@@ -29,7 +29,7 @@
 		<!-- local css due to async loading of theme css -->
 		<style>
 			#preloader {
-				background-color:white;
+				background-color:black;
 				position:fixed;
 				top:0px;
 				left:0px;
@@ -43,9 +43,10 @@
 			}
 			#preloader-image {
 				max-width: 300px;
+				filter:invert(1);
 			}
 			#preloader-info {
-				color:grey;
+				color:#e4e4e4;
 			}
 		</style>
 		<!-- important scripts to be loaded -->

@@ -21,3 +21,15 @@ def test_parse_html(mock_ramdisk: MockRamdisk):
     # evaluation
     assert actual.power == -50
     assert actual.exported == 73288000
+
+
+def test_parse_html_off(mock_ramdisk: MockRamdisk):
+    # setup
+    sample_html = (Path(__file__).parent / "kostal_piko_var2_test_sample_off.html").read_text()
+
+    # execution
+    actual = parse_kostal_piko_var2_html(sample_html)
+
+    # evaluation
+    assert actual.power == 0
+    assert actual.exported == 42906000

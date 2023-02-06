@@ -45,13 +45,13 @@ class FaultState(Exception):
             if ramdisk:
                 topic = component_type.type_topic_mapping_comp(component_info.type)
                 prefix = "openWB/set/" + topic + "/"
-                if component_info.id is not None:
+                if component_info.type != "counter" and component_info.type != "bat":
                     if component_type == "vehicle":
                         prefix += str(component_info.id) + "/socFault"
                     else:
                         prefix += str(component_info.id) + "/fault"
                 else:
-                    prefix += "f"
+                    prefix += "fault"
                 pub.pub_single(prefix + "Str", self.fault_str, hostname=component_info.hostname)
                 pub.pub_single(prefix + "State", self.fault_state.value, hostname=component_info.hostname)
                 if "chargepoint" in component_info.type:

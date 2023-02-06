@@ -10,7 +10,6 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solarmax.device" "inverter" "${pv1_ipa}" "1">>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.solarmax.device" "inverter" "${pv1_ipa}" "1" >>"$MYLOGFILE" 2>&1
 
-pvwatt=$(<"${RAMDISKDIR}/pvwatt")
-echo "$pvwatt"
+cat "${RAMDISKDIR}/pvwatt"

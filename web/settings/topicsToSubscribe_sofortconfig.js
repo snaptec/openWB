@@ -51,5 +51,16 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 0],
 	["openWB/config/get/sofort/lp/2/socToChargeTo", 0],
 
-	["openWB/config/get/global/minEVSECurrentAllowed", 0]
+	["openWB/config/get/sofort/lp/1/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/2/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/3/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/4/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/5/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/6/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/7/etBasedCharging", 0],
+	["openWB/config/get/sofort/lp/8/etBasedCharging", 0],
+
+	["openWB/config/get/global/minEVSECurrentAllowed", 0],
+
+	["openWB/global/awattar/boolAwattarEnabled", 0]
 ];

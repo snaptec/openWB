@@ -718,6 +718,8 @@ loadvars(){
 	if ((lastmanagementlp4 == 1)); then
 		if [[ "$evseconlp4" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 4 "$chargep4ip" "$chargep4cp" || true
+		elif [[ "$evseconlp4" == "owbpro" ]]; then
+			timeout 3 modules/owbpro/main.sh 4 "$owbpro4ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp4/main.sh || true
 		fi
@@ -756,6 +758,8 @@ loadvars(){
 	if ((lastmanagementlp5 == 1)); then
 		if [[ "$evseconlp5" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 5 "$chargep5ip" "$chargep5cp" || true
+		elif [[ "$evseconlp5" == "owbpro" ]]; then
+			timeout 3 modules/owbpro/main.sh 5 "$owbpro5ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp5/main.sh || true
 		fi
@@ -794,6 +798,8 @@ loadvars(){
 	if ((lastmanagementlp6 == 1)); then
 		if [[ "$evseconlp6" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 6 "$chargep6ip" "$chargep6cp" || true
+		elif [[ "$evseconlp6" == "owbpro" ]]; then
+			timeout 3 modules/owbpro/main.sh 6 "$owbpro6ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp6/main.sh || true
 		fi
@@ -832,6 +838,8 @@ loadvars(){
 	if ((lastmanagementlp7 == 1)); then
 		if [[ "$evseconlp7" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 7 "$chargep7ip" "$chargep7cp" || true
+		elif [[ "$evseconlp7" == "owbpro" ]]; then
+			timeout 3 modules/owbpro/main.sh 7 "$owbpro7ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp7/main.sh || true
 		fi
@@ -869,6 +877,8 @@ loadvars(){
 	if ((lastmanagementlp8 == 1)); then
 		if [[ "$evseconlp8" == "extopenwb" ]]; then
 			timeout 3 modules/extopenwb/main.sh 8 "$chargep8ip" "$chargep8cp" || true
+		elif [[ "$evseconlp8" == "owbpro" ]]; then
+			timeout 3 modules/owbpro/main.sh 8 "$owbpro8ip" || true
 		else
 			timeout 3 modules/mpm3pmlllp8/main.sh || true
 		fi
@@ -1857,6 +1867,14 @@ loadvars(){
 	mqttconfvar["config/get/sofort/lp/6/chargeLimitation"]=msmoduslp6
 	mqttconfvar["config/get/sofort/lp/7/chargeLimitation"]=msmoduslp7
 	mqttconfvar["config/get/sofort/lp/8/chargeLimitation"]=msmoduslp8
+	mqttconfvar["config/get/sofort/lp/1/etBasedCharging"]=lp1etbasedcharging
+	mqttconfvar["config/get/sofort/lp/2/etBasedCharging"]=lp2etbasedcharging
+	mqttconfvar["config/get/sofort/lp/3/etBasedCharging"]=lp3etbasedcharging
+	mqttconfvar["config/get/sofort/lp/4/etBasedCharging"]=lp4etbasedcharging
+	mqttconfvar["config/get/sofort/lp/5/etBasedCharging"]=lp5etbasedcharging
+	mqttconfvar["config/get/sofort/lp/6/etBasedCharging"]=lp6etbasedcharging
+	mqttconfvar["config/get/sofort/lp/7/etBasedCharging"]=lp7etbasedcharging
+	mqttconfvar["config/get/sofort/lp/8/etBasedCharging"]=lp8etbasedcharging
 	mqttconfvar["config/get/pv/lp/1/socLimitation"]=stopchargepvatpercentlp1
 	mqttconfvar["config/get/pv/lp/2/socLimitation"]=stopchargepvatpercentlp2
 	mqttconfvar["config/get/pv/lp/1/maxSoc"]=stopchargepvpercentagelp1

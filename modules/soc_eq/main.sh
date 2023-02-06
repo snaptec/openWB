@@ -77,7 +77,7 @@ else
 	tmpintervall=$(( 60 * 6 ))
 fi
 if (( socDebug > 0 )); then
-	tmpintervall=6
+	tmpintervall=12
 fi
 
 if (( soctimer < tmpintervall )); then
