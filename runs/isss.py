@@ -61,6 +61,8 @@ class UpdateValues:
 
     def update_values(self, counter_state: ChargepointState) -> None:
         self.parent_wb = Isss.get_parent_wb()
+        if self.parent_wb == "localhost":
+            return
         self.cp_num_str = str(Isss.get_cp_num(self.local_charge_point_num))
         if self.old_counter_state:
             # iterate over counterstate
