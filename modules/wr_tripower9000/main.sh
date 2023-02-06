@@ -6,7 +6,7 @@ DMOD="MAIN"
 
 MYLOGFILE="${RAMDISKDIR}/openWB.log"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.sma_sunny_boy.device" "inverter" "${tri9000ip}" "${wrsmawebbox}" "${wrsma2ip}" "${wrsma3ip}" "${wrsma4ip}" "${wrsmaversion}" "${wrsmahybrid}" "${sbs25se}" "1" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sma_sunny_boy.device" "inverter" "${tri9000ip}" "${wrsmawebbox}" "${wrsma2ip}" "${wrsma3ip}" "${wrsma4ip}" "${wrsmaversion}" "${wrsmahybrid}" "${sbs25se}" "1" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

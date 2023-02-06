@@ -581,6 +581,12 @@ updateConfig(){
 	if ! grep -Fq "soc_id_intervall=" $ConfigFile; then
 		echo "soc_id_intervall=120" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_smarteq_intervallladen=" $ConfigFile; then
+		echo "soc_smarteq_intervallladen=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_smarteq_intervall=" $ConfigFile; then
+		echo "soc_smarteq_intervall=120" >> $ConfigFile
+	fi
 	if ! grep -Fq "releasetrain=" $ConfigFile; then
 		echo "releasetrain=stable" >> $ConfigFile
 	fi
@@ -1291,6 +1297,11 @@ updateConfig(){
 	if grep -Fq "awattaraktiv=" $ConfigFile; then
 		sed -i '/^awattaraktiv=/d' $ConfigFile
 	fi
+	for i in $(seq 1 8); do
+		if ! grep -Fq "lp${i}etbasedcharging=" $ConfigFile; then
+			echo "lp${i}etbasedcharging=1" >> $ConfigFile
+		fi
+	done
 	if ! grep -Fq "plz=" $ConfigFile; then
 		echo "plz=36124" >> $ConfigFile
 	fi
@@ -1834,7 +1845,7 @@ updateConfig(){
 		echo "slaveModeSlowRamping=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "slaveModeMinimumAdjustmentInterval=" $ConfigFile; then
-    	echo "slaveModeMinimumAdjustmentInterval=15" >> $ConfigFile
+		echo "slaveModeMinimumAdjustmentInterval=15" >> $ConfigFile
 	fi
 	if ! grep -Fq "standardSocketInstalled=" /var/www/html/openWB/openwb.conf
 	then
@@ -2063,6 +2074,12 @@ updateConfig(){
 	if ! grep -Fq "psa_manufacturerlp2=" $ConfigFile; then
 		echo "psa_manufacturerlp2=Peugeot" >> $ConfigFile
 	fi
+	if ! grep -Fq "psa_vinlp1=" $ConfigFile; then
+		echo "psa_vinlp1=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "psa_vinlp2=" $ConfigFile; then
+		echo "psa_vinlp2=''" >> $ConfigFile
+	fi  
 	if ! grep -Fq "soc_eq_client_id_lp1=" $ConfigFile; then
 		{
 			echo "soc_eq_client_id_lp1=ID"
@@ -2088,6 +2105,17 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_id_vin=" $ConfigFile; then
 		echo "soc_id_vin=VIN" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_smarteq_username=" $ConfigFile; then
+		echo "soc_smarteq_username=User" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_smarteq_passwort=" $ConfigFile; then
+		echo "soc_smarteq_passwort=''" >> $ConfigFile
+	else
+		sed -i "/soc_smarteq_passwort='/b; s/^soc_smarteq_passwort=\(.*\)/soc_smarteq_passwort=\'\1\'/g" $ConfigFile
+	fi
+	if ! grep -Fq "soc_smarteq_vin=" $ConfigFile; then
+		echo "soc_smarteq_vin=VIN" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc2vin=" $ConfigFile; then
 		echo "soc2vin=" >> $ConfigFile

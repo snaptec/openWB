@@ -10,6 +10,6 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.openwb_pv_kit.device" "inverter" "${pv2kitversion}" "2">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.openwb_pv_kit.device" "inverter" "${pv2kitversion}" "2" >>"$MYLOGFILE" 2>&1
 
 cat "$RAMDISKDIR/pv2watt"

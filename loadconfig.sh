@@ -1,3 +1,5 @@
+OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+
 while read -r x; do
 	value="${x#*=}"
 	if [[ "${value:0:1}" == "'" ]] ; then
@@ -7,4 +9,4 @@ while read -r x; do
 	else
 		export "$x"
 	fi
-done < /var/www/html/openWB/openwb.conf
+done < "$OPENWBBASEDIR/openwb.conf"

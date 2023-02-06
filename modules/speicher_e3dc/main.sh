@@ -10,7 +10,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_e3dc.e3dc" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" >>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.e3dc.device" "bat" "$e3dcip" "$e3dc2ip" "$e3dcextprod" "$pvwattmodul" "1" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog "${DMOD}" 2 "BAT RET: ${ret}"

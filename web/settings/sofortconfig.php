@@ -46,7 +46,7 @@
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
-						 Allgemeine Einstellungen
+						Allgemeine Einstellungen
 					</div>
 					<div class="card-body">
 						<div class="form-group mb-0">
@@ -154,6 +154,22 @@
 								</div>
 							</div>
 							<?php } ?>
+							<div class="form-row mb-1 lp<?php echo $chargepoint; ?>etBased hide">
+								<label class="col-md-4 col-form-label">Preisbasiert</label>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="etBasedChargingLp<?php echo $chargepoint; ?>" name="etBasedCharging" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/<?php echo $chargepoint; ?>/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="etBasedChargingLp<?php echo $chargepoint; ?>" data-option="0" value="0"> Aus
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="etBasedChargingLp<?php echo $chargepoint; ?>" data-option="1" value="1"> An
+										</label>
+									</div>
+									<span class="form-text small">
+										Aktiviert/Deaktiviert Preisbasiertes Laden
+									</span>
+								</div>
+							</div>
 						</div>  <!-- end card body Einstellungen Ladepunkt <?php echo $chargepoint; ?> -->
 						<script>
 							$(document).ready(function(){
@@ -274,7 +290,7 @@
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_sofortconfig.js?ver=20200503-a" ></script>
+		<script src = "settings/topicsToSubscribe_sofortconfig.js?ver=20221210-a" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
 		<!-- load mqtt handler-->
@@ -333,6 +349,17 @@
 						hideSection('.lp' + index + 'limitenergy');
 					} else {
 						showSection('.lp' + index + 'limitenergy');
+					}
+				}
+				if ( elementId.match( /^boolAwattarEnabled*$/i ) ) {
+					if ( mqttpayload == 1) {
+						for( $index = 1; $index < 9; $index++ ){
+							showSection('.lp' + $index + 'etBased');
+						}
+					} else {
+						for( $index = 1; $index < 9; $index++ ){
+							hideSection('.lp' + $index + 'etBased');
+						}
 					}
 				}
 			}

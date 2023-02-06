@@ -1,7 +1,7 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
+MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 #DMOD="BAT"
 DMOD="MAIN"
 Debug=$debug
@@ -10,12 +10,12 @@ Debug=$debug
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/bat.log"
+	MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.studer.device" "bat" "${studer_ip}" >>${MYLOGFILE} 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.studer.device" "bat" "${studer_ip}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"

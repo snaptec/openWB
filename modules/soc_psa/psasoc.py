@@ -9,6 +9,7 @@ import urllib
 import requests
 import base64
 import logging
+
 #these two lines enable debugging at httplib level (requests->urllib3->http.client)
 # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
 # The only thing missing will be the response.body which is not logged.
@@ -16,6 +17,7 @@ try:
     import http.client as http_client
 except ImportError: # Python 2
     import httplib as http_client
+
 # to enable http trace set swbedug = 1
 swdebug = 0
 if swdebug == 1:
@@ -28,12 +30,17 @@ if swdebug == 1:
    requests_log.propagate = True
 
 chargepoint=str(sys.argv[1])
-userID=str(sys.argv[2])
+user_id=str(sys.argv[2])
 password=str(sys.argv[3])
 client_id=str(sys.argv[4])
 client_secret=str(sys.argv[5])
 manufacturer=str(sys.argv[6])
 soccalc=str(sys.argv[7])
+
+# vehicle_vin is optional
+vehicle_vin = False
+if (len(sys.argv) > 8 ):
+	vehicle_vin=str(sys.argv[8])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S psasoc lp"+chargepoint, named_tuple)
@@ -57,73 +64,97 @@ elif (manufacturer == "Opel"):
 elif (manufacturer == "Vauxhall"):
 	brand = 'vauxhall.co.uk'
 	realm = 'clientsB2CVauxhall'
-vin='?'
-data = {'realm': realm,'grant_type':'password','password':password,'username': userID,'scope': scope}
+
+# oAuth2 login
+data = {'realm': realm,'grant_type':'password','password':password,'username': user_id,'scope': scope}
 headers = {'Content-Type':'application/x-www-form-urlencoded','Authorization': 'Basic %s' % encoded_u}
 reg = 'https://idpcvs.' + brand + '/am/oauth2/access_token'
+
 f = open('/var/www/html/openWB/ramdisk/psareq1lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
 f.write(str(headers))
 f.close()
+
 response=requests.post(reg,  data=data, headers=headers )
 responsetext  = response.text
 responestatus = response.status_code
+
 f = open('/var/www/html/openWB/ramdisk/psareply1lp'+chargepoint, 'w')
 f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
+
 psa_config = json.loads(responsetext)
 acc_token = psa_config['access_token']
+
+# get Vehicles
 payload = {'client_id':client_id}
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles?' + data
 headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm': realm}
+
 f = open('/var/www/html/openWB/ramdisk/psareq2lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
 f.write(str(headers))
 f.close()
+
 response=requests.get(reg,headers=headers )
-f = open('/var/www/html/openWB/ramdisk/psareply2lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
+
+f = open('/var/www/html/openWB/ramdisk/psareply2lp'+chargepoint, 'w')
 f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
-vin_list = json.loads(responsetext)
-vin_id  = vin_list ['_embedded']['vehicles'][0]['id']
-vin_vin  = vin_list ['_embedded']['vehicles'][0]['vin']
+
+vehicle_response = json.loads(responsetext)
+vehicles = vehicle_response['_embedded']['vehicles']
+
+# Filter List for given VIN or select first entry
+vehicle_selected = next(vehicle for vehicle in vehicles if vehicle['vin'] == vehicle_vin) if vehicle_vin else vehicles[0]
+vehicle_id = vehicle_selected['id']
+
+f = open('/var/www/html/openWB/ramdisk/psareply2filterVINlp'+chargepoint, 'w')
+f.write('VIN: ' + str(vehicle_selected['vin']))
+f.write(', ID: ' + str(vehicle_id))
+f.close()
+
+# get Vehicles Status
 payload = {'client_id':client_id}
 data = urllib.urlencode(payload) 
 data = data.encode('Big5')
 '/user/vehicles/{id}/status'
-reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles/'  + vin_id + '/status?' + data
+reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles/'  + vehicle_id + '/status?' + data
 headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm': realm}
+
 f = open('/var/www/html/openWB/ramdisk/psareq3lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
 f.write(str(headers))
 f.close()
+
 response=requests.get(reg,headers=headers )
-f = open('/var/www/html/openWB/ramdisk/psareply3lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
+
+f = open('/var/www/html/openWB/ramdisk/psareply3lp'+chargepoint, 'w')
 f.write(responsetext.encode("utf-8"))
 f.write(str(responestatus))
 f.close()
-batt = json.loads(responsetext)
 
-# filter to only include type=Electric but remove all others. Seen type=Fuel and type=Electric being returned.
-batt = filter(lambda x: x['type'] == 'Electric', batt['energy'])
-soc = batt[0]['level']
+status_response = json.loads(responsetext)
+energies = status_response['energy']
 
-#soc = batt['energy'][0]['level']
-#print(time_string,'soc lp'+chargepoint,soc)
+# Filter to only include type=Electric but remove all others. Seen type=Fuel and type=Electric being returned.
+energy_selected = next(energy for energy in energies if energy['type'] == 'Electric')
+soc = energy_selected['level']
+fetchedsoctime = energy_selected['updatedAt']
 
 if (int(soccalc) == 0):
-	#manual calculation not enabled, using existing logic
+	# manual calculation not enabled, using existing logic
 	if (int(chargepoint) == 1):
 		f = open('/var/www/html/openWB/ramdisk/soc', 'w')
 	if (int(chargepoint) == 2):
@@ -131,7 +162,7 @@ if (int(soccalc) == 0):
 	f.write(str(soc))
 	f.close()
 else:
-	#manual calculation  enabled, using new logic with timestamp
+	# manual calculation  enabled, using new logic with timestamp
 	if (int(chargepoint) == 1):
 		f = open('/var/www/html/openWB/ramdisk/psasoc', 'w')
 	if (int(chargepoint) == 2):
@@ -139,7 +170,6 @@ else:
 	f.write(str(soc))
 	f.close()
 	# getting timestamp of fetched SoC
-	fetchedsoctime = batt[0]['updatedAt']
 	soct = time.strptime(fetchedsoctime, "%Y-%m-%dT%H:%M:%SZ")
 	soctime = time.mktime(soct)
 	# adding one hour to UTC to get CET

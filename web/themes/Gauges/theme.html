@@ -49,7 +49,7 @@
 	<!-- local css due to async loading of theme css -->
 	<style>
 		#preloader {
-			background-color:white;
+			background-color:black;
 			position:fixed;
 			top:0px;
 			left:0px;
@@ -63,9 +63,10 @@
 		}
 		#preloader-image {
 			max-width: 300px;
+			filter:invert(1);
 		}
 		#preloader-info {
-			color:grey;
+			color: #e4e4e4;
 		}
 		#thegraph > div {
 			height: 350px;
@@ -110,7 +111,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20210307">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20221125">');
 	</script>
 </head>
 
@@ -121,7 +122,7 @@
 		<div id="preloader-inner">
 			<div class="row">
 				<div class="mx-auto d-block justify-content-center">
-					<img id="preloader-image" src="img/favicons/preloader-image.png" alt="openWB">
+					<img id="preloader-image" src="img/favicons/preloader-image-transparent.png" alt="openWB">
 				</div>
 			</div>
 			<div id="preloader-info" class="row justify-content-center mt-2">
@@ -143,7 +144,7 @@
 	<!-- Landing Page -->
 	<div id="nav-placeholder"></div>
 	<div class="container">
-		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
+		<div class="row middle py-1 regularTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
@@ -202,7 +203,7 @@
 				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
 			</div>
 			<div id="verbraucher2" class="col-sm hide">
-				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
+				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 2</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
 			</div>
 		</div>
 
@@ -297,6 +298,7 @@
 				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 			</div>
 		</div>
 
@@ -322,6 +324,7 @@
 				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 			</div>
 		</div>
 
@@ -347,6 +350,7 @@
 				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 			</div>
 		</div>
 
@@ -372,6 +376,7 @@
 				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 			</div>
 		</div>
 
@@ -397,6 +402,7 @@
 				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 			</div>
 		</div>
 
@@ -422,6 +428,7 @@
 				<span class="socLp"></span> %
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 			</div>
 		</div>
 
@@ -446,6 +453,7 @@
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 				<span class="socLp"></span> %
 			</div>
 		</div>
@@ -471,6 +479,7 @@
 			<div class="col-2 px-0 hide socConfiguredLp text-center">
 				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<a class="socHasError hide text-red" href="status/status.php"><i class="fas fa-exclamation-triangle"></i></a>
 				<span class="socLp"></span> %
 			</div>
 		</div>
@@ -1235,6 +1244,11 @@
 		</div>
 
 	</div>  <!-- container -->
+	<footer class="bg-dark fixed-bottom small text-light">
+		<div class="container text-center">
+			openWB - die modulare Wallbox
+		</div>
+	</footer>
 
 	<script>
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
@@ -1675,13 +1689,13 @@
 				// some helper functions
 				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20211125',
+				'themes/Gauges/processAllMqttMsg.js?ver=20221102',
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20210307',
 				// respective Chart.js definition price chart
 				'themes/dark/electricityPriceChart.js?ver=20210210',
 				// functions performing mqtt and start mqtt-service
-				'themes/Gauges/setupMqttServices.js?ver=20210129'
+				'themes/Gauges/setupMqttServices.js?ver=20221102',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1868,9 +1882,9 @@
 				label.addClass('text-danger');
 				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
 					// marks times in the price chart where the price is low enough so charging would be allowed
-	 				var priceAnnotations = createPriceAnnotations();
-	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
-	 				electricityPricechart.update();
+					var priceAnnotations = createPriceAnnotations();
+					electricityPricechart.options.annotation.annotations = priceAnnotations;
+					electricityPricechart.update();
 				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change

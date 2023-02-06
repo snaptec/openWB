@@ -13,7 +13,7 @@ fi
 openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
 openwbDebugLog ${DMOD} 2 "WR IP: ${wrkostalpikoip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.kostal_piko.device" "inverter" "${wrkostalpikoip}" "${speichermodul}" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" 1 >>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.kostal_piko.device" "inverter" "${wrkostalpikoip}" "${speichermodul}" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" 1 >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
