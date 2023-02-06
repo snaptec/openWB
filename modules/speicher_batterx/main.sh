@@ -13,14 +13,12 @@ else
 	MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
-
 openwbDebugLog ${DMOD} 2 "Speicher IP-Adresse: ${batterx_ip}"
 
 # Werte werden im WR ausgelesen, max eine Abfrage pro Sekunde
 if [ ${pvwattmodul} != "wr_batterx" ]; then
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.batterx.device" "bat" "${batterx_ip}" >>"$MYLOGFILE" 2>&1
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.batterx.device" "bat" "${batterx_ip}" >>"$MYLOGFILE" 2>&1
 	ret=$?
-
 	openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 fi
 

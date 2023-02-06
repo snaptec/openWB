@@ -15,7 +15,7 @@ openwbDebugLog ${DMOD} 2 "Speicher IP: ${bydhvip}"
 openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${bydhvuser}"
 openwbDebugLog ${DMOD} 2 "Speicher User: ${bydhvpass}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.byd.device" "bat" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.byd.device" "bat" "${bydhvip}" "${bydhvuser}" "${bydhvpass}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

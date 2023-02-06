@@ -8,9 +8,9 @@ DMOD="MAIN"
 #Debug=1
 
 if [ ${DMOD} == "MAIN" ]; then
-    MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-    MYLOGFILE="${RAMDISKDIR}/speicher.log"
+	MYLOGFILE="${RAMDISKDIR}/speicher.log"
 fi
 
 openwbDebugLog ${DMOD} 2 "Speicher Login erforderlich: ${speicherpwloginneeded}"
@@ -18,7 +18,7 @@ openwbDebugLog ${DMOD} 2 "Speicher User: ${speicherpwuser}"
 openwbDebugLog ${DMOD} 2 "Speicher Passwort: ${speicherpwpass}"
 openwbDebugLog ${DMOD} 2 "Speicher IP: ${speicherpwip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.tesla.device" "bat" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.tesla.device" "bat" "${speicherpwip}" "${speicherpwuser}" "${speicherpwpass}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

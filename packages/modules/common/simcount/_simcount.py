@@ -6,7 +6,7 @@ import time
 
 from modules.common.fault_state import exceptions_to_fault_state
 from modules.common.simcount._calculate import calculate_import_export
-from modules.common.simcount._simcounter_state import SimCounterState
+from modules.common.simcount.simcounter_state import SimCounterState
 from modules.common.simcount._simcounter_store import get_sim_counter_store
 
 log = logging.getLogger(__name__)

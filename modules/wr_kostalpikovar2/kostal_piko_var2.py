@@ -13,12 +13,28 @@ log = logging.getLogger("Kostal Piko Var2")
 
 
 def parse_kostal_piko_var2_html(html: str):
-    result = re.search(r"aktuell</td>\s*<td[^>]*>\s*(\d+).*Gesamtenergie</td>\s*<td[^>]*>\s*(\d+)", html, re.DOTALL)
+    # power may be a string "xxx" when the inverter is offline, so we cannot match as a number
+    # state is just for debugging currently known states:
+    # - Aus
+    # - Leerlauf
+    result = re.search(
+        r"aktuell</td>\s*<td[^>]*>\s*([^<]+).*"
+        r"Gesamtenergie</td>\s*<td[^>]*>\s*(\d+).*"
+        r"Status</td>\s*<td[^>]*>\s*([^<]+)",
+        html,
+        re.DOTALL
+    )
     if result is None:
         raise Exception("Given HTML does not match the expected regular expression. Ignoring.")
+    log.debug("Inverter data: state=%s, power=%s, exported=%s" % (result.group(3), result.group(1), result.group(2)))
+    try:
+        power = -int(result.group(1))
+    except ValueError:
+        log.info("Inverter power is not a number! Inverter may be offline. Setting power to 0 W.")
+        power = 0
     return InverterState(
         exported=int(result.group(2)) * 1000,
-        power=-int(result.group(1))
+        power=power
     )
 
 

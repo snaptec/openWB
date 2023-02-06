@@ -1,7 +1,7 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-MODULEDIR=$(cd `dirname $0` && pwd)
+MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 DMOD="PV"
 #DMOD="MAIN"
 Debug=$debug
@@ -17,8 +17,6 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${solaxip}"
 
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.solax.device" "inverter" "${solaxip}" "${pv1_ida}" "1" >>"$MYLOGFILE" 2>&1
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.solax.device" "inverter" "${solaxip}" "${pv1_ida}" "1">>${MYLOGFILE} 2>&1
-
-pvwatt=$(<${RAMDISKDIR}/pvwatt)
-echo $pvwatt
+cat "${RAMDISKDIR}/pvwatt"

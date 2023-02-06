@@ -735,9 +735,10 @@
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
 										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
 										<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">MyRenault</option>
-										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
+										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
+										<option <?php if($socmodulold == "soc_smarteq") echo "selected" ?> value="soc_smarteq">smart EQ</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
@@ -1262,6 +1263,59 @@
 										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmsmarteq" class="hide">
+								<div class="form-group">
+									<div class="alert alert-info">
+										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
+										- smart Control Account aktiv<br>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_smarteq_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_smarteq_username" id="soc_smarteq_username" value="<?php echo $soc_smarteq_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_smarteq_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_smarteq_passwort" id="soc_smarteq_passwort" value="<?php echo $soc_smarteq_passwortold ?>">
+											<span class="form-text small">
+												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_smarteq_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_smarteq_vin" id="soc_smarteq_vin" value="<?php echo $soc_smarteq_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_smarteq_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_smarteq_intervall" id="soc_smarteq_intervall" value="<?php echo $soc_smarteq_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_smarteq_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_smarteq_intervallladen" id="soc_smarteq_intervallladen" value="<?php echo $soc_smarteq_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -1841,6 +1895,15 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
+										<label for="psa_vinlp1" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="psa_vinlp1" id="psa_vinlp1" value="<?php echo $psa_vinlp1old ?>">
+											<span class="form-text small">
+												VIN des gewünschten Fahrzeugs. Wird keine VIN angegeben, wird das erste Fahrzeug aus dem Account verwendet.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="psa_intervallp1" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
 											<input class="form-control" type="number" min="1" step="1" name="psa_intervallp1" id="psa_intervallp1" value="<?php echo $psa_intervallp1old ?>">
@@ -2252,6 +2315,7 @@
 							hideSection('#socmaudi');
 							hideSection('#socmid');
 							hideSection('#socmvwid');
+							hideSection('#socmsmarteq');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2282,9 +2346,14 @@
 								showSection('#socmqtt');
 							}
 							if($('#socmodul').val() == 'soc_vwid') {
-								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4803')
 								showSection('#socsupportinfo');
 								showSection('#socmvwid');
+							}
+							if($('#socmodul').val() == 'soc_smarteq') {
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
+								showSection('#socsupportinfo');
+								showSection('#socmsmarteq');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
@@ -2932,9 +3001,10 @@
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
 										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
 										<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
-										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
+										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
+										<option <?php if($socmodul1old == "soc_smarteqlp2") echo "selected" ?> value="soc_smarteqlp2">Smart EQ</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
@@ -2984,6 +3054,10 @@
 								Für VW Fahrzeuge. Es wird benötigt:<br>
 								- We Connect (ID) Account aktiv<br>
 								- We Connect ID App eingerichtet - auch für nicht-ID!<br>
+							</div>
+							<div id="socmsmarteqinfolp2" class="mt-1 alert alert-info hide">
+								Für smart EQ Fahrzeuge. Es wird benötigt:<br>
+								- smart Control Account aktiv<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3533,6 +3607,15 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
+										<label for="psa_vinlp2" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="psa_vinlp2" id="psa_vinlp2" value="<?php echo $psa_vinlp2old ?>">
+											<span class="form-text small">
+												VIN des gewünschten Fahrzeugs. Wird keine VIN angegeben, wird das erste Fahrzeug aus dem Account verwendet.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="psa_intervallp2" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
 											<input class="form-control" type="number" min="1" step="1" name="psa_intervallp2" id="psa_intervallp2" value="<?php echo $psa_intervallp2old ?>">
@@ -3644,7 +3727,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/token2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
+											<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/auth?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -4206,6 +4289,7 @@
 							hideSection('#socmkialp2');
 							hideSection('#socoldevccwarninglp2');
 							hideSection('#socmvwidinfolp2');
+							hideSection('#socmsmarteqinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
 
@@ -4249,6 +4333,16 @@
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
 								showSection('#socsupportinfolp2');
 								showSection('#socmvwidinfolp2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
+							}
+							if($('#socmodul1').val() == 'soc_smarteqlp2') {
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
+								showSection('#socsupportinfolp2');
+								showSection('#socmsmarteqinfolp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');

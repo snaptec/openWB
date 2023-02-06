@@ -16,6 +16,6 @@ openwbDebugLog ${DMOD} 2 "WR Var2: ${froniusvar2}"
 openwbDebugLog ${DMOD} 2 "WR IP2: ${wrfronius2ip}"
 openwbDebugLog ${DMOD} 2 "WR Speicher: ${speichermodul}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.fronius.device" "counter_sm" "${wrfroniusip}" "${froniuserzeugung}" "${froniusvar2}" "${wrfronius2ip}">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.fronius.device" "counter_sm" "${wrfroniusip}" "${froniuserzeugung}" "${froniusvar2}" "${wrfronius2ip}">>"$MYLOGFILE" 2>&1
 
 cat "${RAMDISKDIR}/wattbezug"
