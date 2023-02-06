@@ -289,24 +289,22 @@ class PowerGraph {
       wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2]) / 1000;
       wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000;
       var deviceEnergySum = 0;
-      var deviceEnergy
+      var deviceEnergy = 0;
+      let deviceIndex = (wbdata.graphMode == 'day') ? 26 : 19;
       for (var i = 0; i < 9; i++) {
-        if (wbdata.graphMode == 'day') {
-          deviceEnergy = (endValues[26 + i] - startValues[26 + i]) / 1000;
-          deviceEnergySum = deviceEnergySum + deviceEnergy
-        } else {
-          deviceEnergy = (endValues[19 + i] - startValues[19 + i]) / 1000;
-        }
+        deviceEnergy = (endValues[deviceIndex + i] - startValues[deviceIndex + i]) / 1000;
+        if (deviceEnergy < 0) {deviceEnergy = 0}
         deviceEnergySum = deviceEnergySum + deviceEnergy
         wbdata.historicSummary['sh' + i].energy = deviceEnergy
       }
-      deviceEnergy = deviceEnergy + (endValues[10] - startValues[10]) / 1000;
-      deviceEnergy = deviceEnergy + (endValues[12] - startValues[12]) / 1000;
-      wbdata.historicSummary.devices.energy = deviceEnergy;
+      deviceEnergySum = deviceEnergySum + (endValues[10] - startValues[10]) / 1000;
+      deviceEnergySum = deviceEnergySum + (endValues[12] - startValues[12]) / 1000;
+      wbdata.historicSummary.devices.energy = deviceEnergySum;
       wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
       wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
         - wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
     }
+    // console.log (wbdata.historicSummary)
   }
   extractLiveValues(payload) {
     const elements = payload.split(",");

@@ -73,6 +73,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_carlogavazzilan") echo "selected" ?> value="bezug_carlogavazzilan">Carlo Gavazzi EM24 LAN</option>
 										<option <?php if($wattbezugmodulold == "bezug_discovergy") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
 										<option <?php if($wattbezugmodulold == "bezug_e3dc") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_enphase") echo "selected" ?> value="bezug_enphase">Enphase Envoy / IQ Gateway</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_sm") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_fronius_s0") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
 										<option <?php if($wattbezugmodulold == "bezug_good_we") echo "selected" ?> value="bezug_good_we">GoodWe</option>
@@ -88,6 +89,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 										<option <?php if($wattbezugmodulold == "bezug_rct2") echo "selected" ?> value="bezug_rct2">RCT V.2</option>
 										<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_siemens_sentron") echo "selected" ?> value="bezug_siemens_sentron">Siemens SENTRON</option>
 										<option <?php if($wattbezugmodulold == "bezug_smashm") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
 										<option <?php if($wattbezugmodulold == "bezug_sbs25") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 										<option <?php if($wattbezugmodulold == "bezug_smartfox") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
@@ -138,6 +140,9 @@
 							</div>
 						</div>
 						<div id="wattbezugsungrow" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
+							</div>
 							<div class="form-row mb-1">
 								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
 								<div class="col">
@@ -191,7 +196,13 @@
 								<span class="text-info">openWB/set/evu/VPhase1</span> Spannung in Volt für Phase 1, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase2</span> Spannung in Volt für Phase 2, float, Punkt als Trenner<br>
 								<span class="text-info">openWB/set/evu/VPhase3</span> Spannung in Volt für Phase 3, float, Punkt als Trenner<br>
-								<span class="text-info">openWB/set/evu/HzFrequenz</span> Netzfrequenz in Hz, float, Punkt als Trenner
+								<span class="text-info">openWB/set/evu/HzFrequenz</span> oder <span class="text-info">openWB/set/evu/Hz</span> Netzfrequenz in Hz, float, Punkt als Trenner<br>
+								<span class="text-info">openWB/set/evu/WPhase1</span> Leistung in Watt für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase2</span> Leistung in Watt für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/WPhase3</span> Leistung in Watt für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase1</span> Powerfaktor für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase2</span> Powerfaktor für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung<br>
+								<span class="text-info">openWB/set/evu/PfPhase3</span> Powerfaktor für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung
 							</div>
 						</div>
 						<div id="wattbezuglgessv1" class="hide">
@@ -213,6 +224,11 @@
 						<div id="wattbezugsiemens" class="hide">
 							<div class="card-text alert alert-info">
 								IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
+							</div>
+						</div>
+						<div id="wattbezugsiemenssentron" class="hide">
+							<div class="card-text alert alert-info">
+								Derzeit werden nur Messgeräte vom Typ "7KM PAC2200" mit Ethernet-Schnittstelle unterstützt.
 							</div>
 						</div>
 						<div id="wattbezugrct" class="hide">
@@ -251,6 +267,7 @@
 									<input class="form-control" type="text" name="powerfoxid" id="powerfoxid" value="<?php echo $powerfoxidold ?>">
 									<span class="form-text small">
 										Gültige Werte Device ID. Um die Device ID herauszufinden mit dem Browser die Adresse "https://backend.powerfox.energy/api/2.0/my/all/devices" aufrufen und dort Benutzername und Passwort eingeben.
+										Die Device ID ist exakt so einzutragen, wie in der Antwort des Servers. Das bedeutet insbesondere auch die Groß-/KLeinschreibung ist zu beachten!
 									</span>
 								</div>
 							</div>
@@ -703,7 +720,7 @@
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Fronius WR.
 										</span>
-										<button id="wattbezugfroniusload" class="btn btn-primary" type="button" data-value="<?php if(isset($wrfroniusip)) echo $wrfroniusip ?>">Daten auslesen</button>
+										<button id="wattbezugfroniusload" class="btn btn-primary" type="button">Daten auslesen</button>
 										<button id="wattbezugfroniusmanual" class="btn btn-primary hide" type="button">Daten manuell eingeben</button>
 										<span id="wattbezugfroniusloadmessage" class="form-text small"></span>
 									</div>
@@ -910,7 +927,20 @@
 								Die IP des Speichers wird im dazugehörigen SMA SBS Speicher-Modul eingestellt.
 							</div>
 						</div>
-
+						<div id="wattbezugenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Die IP des Envoy / IQ Gateway wird im dazugehörigen Envoy PV-Modul eingestellt.
+							</div>
+							<div class="form-row mb-1">
+								<label for="bezugenphaseeid" class="col-md-4 col-form-label">Zähler EID</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="bezugenphaseeid" id="bezugenphaseeid" value="<?php echo (empty($bezugenphaseeidold)?'':$bezugenphaseeidold) ?>">
+									<span class="form-text small">
+										EID des EVU-Zählers (<i>net-consumption</i>).<br>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="evuglaettungdiv" class="hide">
 							<hr class="border-danger">
 							<div class="form-group">
@@ -989,6 +1019,7 @@
 								hideSection('#wattbezugvarta');
 								hideSection('#wattbezugfems');
 								hideSection('#wattbezugsiemens');
+								hideSection('#wattbezugsiemenssentron');
 								hideSection('#wattbezugpowerdog');
 								hideSection('#wattbezugpowerfox');
 								hideSection('#wattbezugrct');
@@ -1002,6 +1033,7 @@
 								hideSection('#wattbezugsolarwatt');
 								hideSection('#wattbezugjanitza');
 								hideSection('#wattbezugcarlogavazzilan');
+								hideSection('#wattbezugenphase');
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
 								if($('#wattbezugmodul').val() != 'none') {
@@ -1028,6 +1060,10 @@
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('#wattbezugsiemens');
 									showSection('#wattbezugip');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_siemens_sentron') {
+									showSection('#wattbezugip');
+									showSection('#wattbezugsiemenssentron');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_janitza') {
 									showSection('#wattbezugjanitza');
@@ -1156,6 +1192,9 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solarwatt')   {
 									showSection('#wattbezugsolarwatt');
+								}
+								if($('#wattbezugmodul').val() == 'bezug_enphase')   {
+									showSection('#wattbezugenphase');
 								}
 							}
 

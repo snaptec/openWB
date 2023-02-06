@@ -82,8 +82,10 @@ $numDevices = 9;
 											<option value="shelly" data-option="shelly">Shelly oder Shelly plus</option>
 											<option value="tasmota" data-option="tasmota">Tasmota</option>
 											<option value="acthor" data-option="acthor">Acthor</option>
+											<option value="lambda" data-option="lambda">Lambda</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
+											<option value="NXDACXX" data-option="NXDACXX">N4DAC02 0.01V bis 10.0V</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
 											<option value="vampair" data-option="vampair">Vampair</option>
 											<option value="http" data-option="http">Http</option>
@@ -99,9 +101,18 @@ $numDevices = 9;
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
 											Heizstab Acthor der Firma my-PV<br>
 											Im Web Frontend vom Heizstab muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP" und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden.
-											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen (in 1000 Watt Schritten)
+											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.
+											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
 											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
+										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-lambda hide">
+											Wp der Firma lambda<br>
+											Im Web Frontend der WP muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP" gesetzt werden.
+											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.
+											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
+											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.<br>
+											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Lambda nicht zu stören.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mqtt hide">
 											Generisches MQTT modul<br>
@@ -111,6 +122,7 @@ $numDevices = 9;
 											Wenn Ausschaltbedingung erreicht<br>
 											openWB/SmartHome/set/Devices/4/ReqRelay = 0<br>
 											openWB/SmartHome/set/Devices/4/Ueberschuss = in Watt<br>
+											ReqRelay gibt den Status vom Gerät aus Sicht openWb an (1 = eingeschaltet, 0 = ausgeschaltet)<br>
 											Bei der periodischen Abfrage wird die aktuelle Leistung<br>
 											openWB/SmartHome/set/Devices/4/Aktpower = in Watt erwartet<br>
 											und der aktuelle Zähler in Wattstunden wird hier erwartet<br>
@@ -118,6 +130,11 @@ $numDevices = 9;
 											wenn kein Zähler übergeben oder 0 übergeben wird, wird der Zähler selber gerechnet<br>
 											openWB/SmartHome/set/Devices/4/Ueberschuss = in Watt<br>
 										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-NXDACXX hide">
+											N4DAC02 angesteuert über Lan. Der anliegende Überschuss wird in eine Voltzahl zwischen 0.01V und 10.0V umgewandelt. Bezug wird als 0 Volt übertragen.
+											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.<br>
+											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
+											</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-viessmann hide">
 											Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wp kann eingestellt werden, ob für diese Funktion  die Elektroheizung (Heizstab) benutzt werden soll.
 										</span>
@@ -130,7 +147,7 @@ $numDevices = 9;
 											Die Warmwassersicherstellung in Elwa kann genutzt werden. OpenWB erkennt dieses am Status und überträgt dann keinen Überschuss.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
-											Wärmepumpe der Firma IDM mit Navigatorregelung 2.0<br>
+											Wärmepumpe der Firma IDM mit Navigatorregelung 1.7/2.0<br>
 											Im Web Frontend muss unter "Heizungsbauerebene / Konfiguration / PV-Signal": Auswahl "Gebäudeleittechnik / Smartfox" und unter "Heizungsbauerebene / Gebäudeleittechnik" der Parameter "Modbus TCP = Ein" und unter "Einstellungen / Photovoltaik" der Parameter "PV Überschuss = 0" gesetzt werden
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
@@ -198,7 +215,26 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-NXDACXX hide">
+								<hr class="border-secondary">
+								<div class="form-row mb-1">
+									<label for="device_nxdacxxuebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Maximaler Überschuss</label>
+									<div class="col">
+										<input id="device_nxdacxxuebDevices<?php echo $devicenum; ?>" name="device_nxdacxxueb" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="32000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Maximaler Überschuss in Watt = v10.0. Es wird kein grösserer Wert übertragen.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="device_dacportDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Modbusport des Dac</label>
+									<div class="col">
+									  <input id="device_dacportDevices<?php echo $devicenum; ?>" name="device_dacport" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									  <span class="form-text small">
+									    Standardeinstellungen:8899 <br>
+									  </span>
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -239,13 +275,13 @@ $numDevices = 9;
 										<div class="col">
 											<input id="device_leistungurlDevices<?php echo $devicenum; ?>" name="device_leistungurl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<span class="form-text small">
-												Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.<br />
-												<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span><br />
-												Falls keine URL vorhanden ist, kann eine der folgenden angegeben werden:<br />
-												127.0.0.1/openWB/modules/smarthome/http/dummyurl.php. Diese URL gibt immer den Wert 0 zurück.(Device immer aus)<br />
-												127.0.0.1/openWB/modules/smarthome/http/dummyurl1.php?d=nummerdevice. Diese URL gibt den Wert 0 oder 100 zurück. Je nachdem ob das Smarthomedevice gerade läuft<br />
-												127.0.0.1/openWB/modules/smarthome/http/dummyurl2.php. Diese URL gibt immer den Wert 100 zurück. (Device immer an)<br />
-												In der URL kann ein Parameter angegeben werden, der den aktuellen Überschuss an das Gerät übermittelt. Hierzu ist folgender Platzhalter in der URL zu verwenden (inklusive der spitzen Klammern):<br />
+												Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.<br>
+												<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span><br>
+												Falls keine URL vorhanden ist, kann eine der folgenden angegeben werden:<br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurl.php. Diese URL gibt immer den Wert 0 zurück.(Device immer aus)<br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurl1.php?d=nummerdevice. Diese URL gibt den Wert 0 oder 100 zurück. Je nachdem ob das Smarthomedevice gerade läuft<br>
+												127.0.0.1/openWB/modules/smarthome/http/dummyurl2.php. Diese URL gibt immer den Wert 100 zurück. (Device immer an)<br>
+												In der URL kann ein Parameter angegeben werden, der den aktuellen Überschuss an das Gerät übermittelt. Hierzu ist folgender Platzhalter in der URL zu verwenden (inklusive der spitzen Klammern):<br>
 												<span class="text-info">&lt;openwb-ueberschuss&gt;</span>
 											</span>
 										</div>
@@ -291,7 +327,29 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-lambda hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_lambdauebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Überschuss...</label>
+										<div class="col">
+											<select class="form-control" name="device_lambdaueb" id="device_lambdauebDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<option value="UP" data-option="UP">Überschuss als positive Zahl übertragen, Bezug negativ</option>
+												<option value="UN" data-option="UN">Überschuss als negative Zahl übertragen, Bezug positiv</option>
+												<option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>
+											</select>
+											<span class="form-text small">
+												Bezieht sich auf die Modbusadresse 102, wie ist Überschuss zu übertragen.Muss in der WP (Konfiguration E-Manager) genau gleich eingestellt sein.<br>
+												Lambda -> OpenWb<br>
+												Pos E-überschuss -> Überschuss als positive Zahl übertragen, Bezug negativ <br>
+												Neg E-überschuss -> Überschuss als negative Zahl übertragen, Bezug positiv <br>
+												E-Eintrag -> Überschuss als positive Zahl übertragen, Bezug als 0<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -318,7 +376,7 @@ $numDevices = 9;
 												<div class="col">
 													<input id="device_einschalturlDevices<?php echo $devicenum; ?>" name="device_einschalturl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													<span class="form-text small">
-														Die hier angegebene URL wird aufgerufen, um das Gerät einzuschalten.<br />
+														Die hier angegebene URL wird aufgerufen, um das Gerät einzuschalten.<br>
 														<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span>
 													</span>
 												</div>
@@ -328,7 +386,7 @@ $numDevices = 9;
 												<div class="col">
 													<input id="device_ausschalturlDevices<?php echo $devicenum; ?>" name="device_ausschalturl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													<span class="form-text small">
-														Die hier angegebene URL wird aufgerufen, um das Gerät auszuschalten.<br />
+														Die hier angegebene URL wird aufgerufen, um das Gerät auszuschalten.<br>
 														<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span>
 													</span>
 												</div>
@@ -385,17 +443,14 @@ $numDevices = 9;
 												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Das Gerät wird ab dieser Uhrzeit eingeschaltet, unabhängig vom Überschuss unter Berücksichtigung der maximalen Einschaltdauer.</span>
 											</div>
 										</div>
-										
+
 										<div class="form-row mb-1">
 											<label for="device_offTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Immer aus nach</label>
 											<div class="col">
 												<input id="device_offTimeDevices<?php echo $devicenum; ?>" name="device_offTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Das Gerät wird ab dieser Uhrzeit ausgeschaltet, und für den laufenden Tag nicht mehr eingeschaltet.</span>
 											</div>
-										</div>										
-										
-										
-										
+										</div>
 									</div>
 									<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom hide">
 										<hr class="border-secondary">
@@ -477,6 +532,24 @@ $numDevices = 9;
 									<hr class="border-secondary">
 									<div class="form-group">
 										<div class="form-row mb-1">
+											<label class="col-md-4 col-form-label">Um 23:59...</label>
+											<div class="col">
+												<div class="btn-group btn-group-toggle btn-block" id="device_setautoDevices<?php echo $devicenum; ?>" name="device_setauto" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_setautoDevices<?php echo $devicenum; ?>" id="device_setauto<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">nichts tun
+													</label>
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_setautoDevices<?php echo $devicenum; ?>" id="device_setauto<?php echo $devicenum; ?>1" data-option="1" value="1">in den automatischen Modus stellen
+													</label>
+												</div>
+												<span class="form-text small">Diese Option bewirkt, dass ein Gerät um 23:59 immer in den automaischen Modus geschaltet wird.
+												</span>
+											</div>
+										</div>
+									</div>
+									<hr class="border-secondary">
+									<div class="form-group">
+										<div class="form-row mb-1">
 											<label class="col-md-4 col-form-label">Einschalt/Ausschaltgruppe...</label>
 											<div class="col">
 												<div class="btn-group btn-group-toggle btn-block" id="device_deactivateperDevices<?php echo $devicenum; ?>" name="device_deactivateper" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -525,6 +598,13 @@ $numDevices = 9;
 											<div class="col">
 												<input id="device_einschaltverzoegerungDevices<?php echo $devicenum; ?>" name="device_einschaltverzoegerung" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<span class="form-text small">Parameter in Minuten, der bestimmt, wie lange die Einschaltschwelle <b>am Stück</b> überschritten werden muss, bevor das Gerät eingeschaltet wird.</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="device_updatesecDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Updategerät</label>
+											<div class="col">
+												<input id="device_updatesecDevices<?php echo $devicenum; ?>" name="device_updatesec" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="180" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<span class="form-text small">Parameter in Sekunden (von 0 bis 180), in was für einen Abstand openWB das Gerät updatet. 0 Sekunden bedeutet Defaultverhalten. Das Defaultverhalten ist pro Typ definiert und eher konservativ (langsam).</span>
 											</div>
 										</div>
 										<div class="form-row mb-1">
@@ -727,8 +807,8 @@ $numDevices = 9;
 									<div class="col">
 										<input id="device_measurePortSdmDevices<?php echo $devicenum; ?>" name="device_measurePortSdm" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="9999" data-default="8899" value="8899"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">
-											Standardeinstellungen verschiedener Geräte:<br />
-											SDM630: 8899<br />
+											Standardeinstellungen verschiedener Geräte:<br>
+											SDM630: 8899<br>
 											Elgris: 502
 										</span>
 									</div>
@@ -745,7 +825,7 @@ $numDevices = 9;
 									<div class="col">
 										<input id="device_measureurlcDevices<?php echo $devicenum; ?>" name="device_measureurlc" class="form-control" type="text" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">
-											Hier bitte eine URL angeben, die einen absoluten Zählerstand übermittelt. Diese Einstellung ist optional. Wird das Feld leer gelassen, dann wird intern ein Zähler simuliert.<br />
+											Hier bitte eine URL angeben, die einen absoluten Zählerstand übermittelt. Diese Einstellung ist optional. Wird das Feld leer gelassen, dann wird intern ein Zähler simuliert.<br>
 											<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span>
 										</span>
 									</div>
@@ -755,7 +835,7 @@ $numDevices = 9;
 									<div class="col">
 										<input id="device_measurejsonurlDevices<?php echo $devicenum; ?>" name="device_measurejsonurl" class="form-control" type="url" required="required" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">
-											Hier bitte eine URL angeben, deren Antwort die aktuelle Leistung sowie den Zählerstand übermittelt.<br />
+											Hier bitte eine URL angeben, deren Antwort die aktuelle Leistung sowie den Zählerstand übermittelt.<br>
 											<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span>
 										</span>
 									</div>
@@ -765,7 +845,7 @@ $numDevices = 9;
 									<div class="col">
 										<input id="device_measurejsonpowerDevices<?php echo $devicenum; ?>" name="device_measurejsonpower" class="form-control" type="text" required="required" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">
-											Hier bitte den Ausdruck angeben, mit dem die aktuelle Leistung aus der Antwort ermittelt werden kann.<br />
+											Hier bitte den Ausdruck angeben, mit dem die aktuelle Leistung aus der Antwort ermittelt werden kann.<br>
 											<span class="text-info">Wenn der Parameter ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span>
 										</span>
 									</div>
@@ -844,18 +924,6 @@ $numDevices = 9;
 										<option value="2" data-option="2">2</option>
 									</select>
 								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label for="smartmq" class="col-md-4 col-form-label">Smartmq handler verwenden (ohne Config file)</label>
-								<div class="col">
-									<select name="smartmq" id="smartmq" class="form-control" data-default="0" data-topicprefix="openWB/config/get/SmartHome/">
-										<option value="0" data-option="0">Nein</option>
-										<option value="1" data-option="1">Ja</option>
-									</select>
-								</div>
-								<span class="text-danger">Smartmq bietet derweilen die gleichen und mehr Funktionen wie der Smarthomehandler an. Smartmq wird Mitte Juni 2022 den Smarthomehandler komplett ersetzen. Dann wird der obige Parameter fix auf Ja gesetzt und kann nicht mehr geändert werden.</span>
 							</div>
 						</div>
 					</div>

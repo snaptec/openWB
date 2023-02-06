@@ -73,6 +73,7 @@
 										<option <?php if($pvwattmodulold == "wr_alphaess") echo "selected" ?> value="wr_alphaess">AlphaESS-Speicher</option>
 										<option <?php if($pvwattmodulold == "wr_batterx") echo "selected" ?> value="wr_batterx">BatterX</option>
 										<option <?php if($pvwattmodulold == "wr_discovergy") echo "selected" ?> value="wr_discovergy">Discovergy</option>
+										<option <?php if($pvwattmodulold == "wr_enphase") echo "selected" ?> value="wr_enphase">Enphase Envoy / IQ Gateway</option>
 										<option <?php if($pvwattmodulold == "wr_fronius") echo "selected" ?> value="wr_fronius">Fronius WR</option>
 										<option <?php if($pvwattmodulold == "wr_good_we") echo "selected" ?> value="wr_good_we">GoodWe</option>
 										<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
@@ -162,7 +163,7 @@
 						</div>
 						<div id="pvsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich.
+								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
@@ -497,6 +498,26 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvenphase" class="hide">
+							<div class="card-text alert alert-info">
+								Geräte mit Firmware-Versionen 7.0 oder neuer werden derzeit nicht unterstützt.
+							</div>
+							<div class="form-row mb-1">
+								<label for="wrenphasehostname" class="col-md-4 col-form-label">Envoy / IQ-Gateway IP/Hostname</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wrenphasehostname" id="wrenphasehostname" value="<?php echo (empty($wrenphasehostnameold)?'envoy.local':$wrenphasehostnameold) ?>">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wrenphaseeid" class="col-md-4 col-form-label">Zähler EID</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wrenphaseeid" id="wrenphaseeid" value="<?php echo $wrenphaseeidold ?>">
+									<span class="form-text small">
+										EID des PV-Zählers (<i>production</i>).<br>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div id="pvwrjson" class="hide">
 							<div class="form-row mb-1">
 								<label for="wrjsonurl" class="col-md-4 col-form-label">WR URL</label>
@@ -622,7 +643,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
 										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
@@ -962,6 +983,7 @@
 								hideSection('#pvbatterx');
 								hideSection('#pvsonneneco');
 								hideSection('#pvhuawei');
+								hideSection('#pvenphase');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('#pvip');
 									showSection('#pvsiemens');
@@ -1096,6 +1118,9 @@
 								if($('#pvwattmodul').val() == 'wr_sonneneco') {
 									showSection('#pvsonneneco');
 								}
+								if($('#pvwattmodul').val() == 'wr_enphase') {
+									showSection('#pvenphase');
+								}
 							}
 
 							$(function() {
@@ -1170,6 +1195,28 @@
 									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2portdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2port" class="col-md-4 col-form-label">Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="pv2port" id="pv2port" value="<?php echo (empty($pv2portold)?'502':$pv2portold) ?>">
+									<span class="form-text small">
+										TCP Port<br>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="pv2ipportdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2ip" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[1-9][0-9]*)?$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
+									<span class="form-text small">
+										Gültige Werte: <code>adresse</code> oder <code>adresse:port</code>. Wenn nicht angegeben wird port 502 verwendet. Modbus TCP muss am WR aktiviert sein.
 									</span>
 								</div>
 							</div>
@@ -1343,6 +1390,8 @@
 							function display_pv2wattmodul() {
 								hideSection('#pv2noconfig');
 								hideSection('#pv2ipdiv');
+								hideSection('#pv2portdiv');
+								hideSection('#pv2ipportdiv');
 								hideSection('#pv2iddiv');
 								hideSection('#pv2ip2div');
 								hideSection('#pv2id2div');
@@ -1385,6 +1434,8 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2portdiv');
+									showSection('#pv2iddiv');
 								}
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
@@ -1399,7 +1450,7 @@
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solaredge') {
-									showSection('#pv2ipdiv');
+									showSection('#pv2ipportdiv');
 									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {

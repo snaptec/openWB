@@ -9,8 +9,8 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import InverterState, BatState
 from modules.common.fault_state import ComponentInfo
 from modules.common.modbus import ModbusTcpClient_, ModbusDataType
+from modules.common.simcount import sim_count
 from modules.common.store import get_inverter_value_store, get_bat_value_store
-from modules.common.simcount import SimCountFactory
 from modules.common.store.ramdisk import files
 
 log = logging.getLogger("E3DC Battery")
@@ -43,7 +43,7 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
     soc = soc / count
     log.debug("Battery soc %d battery_power %d pv %d pv_external %d count ip %d",
               soc, battery_power, pv, pv_external, count)
-    counter_import, counter_export = SimCountFactory().get_sim_counter()().sim_count(battery_power, prefix="speicher")
+    counter_import, counter_export = sim_count(battery_power, prefix="speicher")
     get_bat_value_store(1).set(BatState(power=battery_power, soc=soc, imported=counter_import, exported=counter_export))
     # pv_other sagt aus, ob WR definiert ist, und dessen PV Leistung auch gilt
     # wenn 0 gilt nur PV und pv_external aus e3dc
@@ -59,7 +59,7 @@ def update_e3dc_battery(addresses: Iterable[str], read_external: int, pv_other: 
             except:
                 pass
         log.debug("wr update pv_other %s pv_total %d", pv_other, pv_total)
-        _, counter_pv = SimCountFactory().get_sim_counter()().sim_count(pv_total, prefix="pv")
+        _, counter_pv = sim_count(pv_total, prefix="pv")
         get_inverter_value_store(1).set(InverterState(exported=counter_pv, power=pv_total))
 
 

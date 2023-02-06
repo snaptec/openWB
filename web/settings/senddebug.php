@@ -35,6 +35,13 @@
 	</head>
 
 	<body>
+		<?php
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+		?>
 
 		<header>
 			<!-- Fixed navbar -->
@@ -53,8 +60,45 @@
 				</div>
 				<?php
 					$result = '';
-					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>20) {
-						$result = $_POST['debugMessage'] . "\n" . $_POST['emailAddress'] . "\n";
+					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>=20) {
+						$result = $_POST['debugMessage'] . "\n";
+						$result .= "E-Mail: " . $_POST['emailAddress'] . "\n";
+						$result .= "Seriennummer: " . $_POST['serialNumber'] . "\n";
+						$result .= "Komponenten: " . $_POST['installedComponents'] . "\n";
+						$result .= "Fahrzeuge: " . $_POST['vehicles'] . "\n";
+						$result .= "EVU-Modul: " . $wattbezugmodulold . "\n";
+						$result .= "PV1-Modul: " . $pvwattmodulold . "\n";
+						$result .= "PV2-Modul: " . $pv2wattmodulold . "\n";
+						$result .= "Speicher-Modul: " . $speichermodulold . "\n";
+						$result .= "LP1: " . $evseconold . "\n";
+						if ($lastmanagementold == 1) {
+							$result .= "LP2: " . $evsecons1old . "\n";
+						}
+						if ($lastmanagements2old == 1) {
+							$result .= "LP3: " . $evsecons2old . "\n";
+						}
+						if ($lastmanagementlp4old == 1) {
+							$result .= "LP4: " . $evseconlp4old . "\n";
+						}
+						if ($lastmanagementlp5old == 1) {
+							$result .= "LP5: " . $evseconlp5old . "\n";
+						}
+						if ($lastmanagementlp6old == 1) {
+							$result .= "LP6: " . $evseconlp6old . "\n";
+						}
+						if ($lastmanagementlp7old == 1) {
+							$result .= "LP7: " . $evseconlp7old . "\n";
+						}
+						if ($lastmanagementlp8old == 1) {
+							$result .= "LP8: " . $evseconlp8old . "\n";
+						}
+						$result .= "Nur Ladepunkt: " . ($isssold == 1 ? "aktiviert" : "deaktiviert") . "\n";
+						$result .= "Phasenumschaltung: " . ($u1p3paktivold == 1 ? "aktiviert" : "deaktiviert") . "\n";
+						$result .= "Taster: " . ($ladetasterold == 1 ? "aktiviert" : "deaktiviert") . "\n";
+						$result .= "LEDs: " . ($ledsaktold == 1 ? "aktiviert" : "deaktiviert") . "\n";
+						$result .= "Netzschutz: " . ($netzabschaltunghzold == 1 ? "aktiviert" : "deaktiviert") . "\n";
+						$result .= "RFID: " . ($rfidaktold > 0 ? "aktiviert (" . $rfidaktold . ")" : "deaktiviert") . "\n";
+						$result .= "Display: " . ($displayaktivold == 1 ? "aktiviert" : "deaktiviert") . "\n";
 						file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/debuguser', $result);
 						file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/debugemail', $_POST['emailAddress'] . "\n");
 

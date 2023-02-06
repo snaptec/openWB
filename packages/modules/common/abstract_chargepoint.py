@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 class AbstractChargepoint:
     @abstractmethod
-    def __init__(self, config: dict) -> None:
+    def __init__(self, id: int, connection_module: dict, power_module: dict) -> None:
         pass
 
     @abstractmethod
@@ -20,4 +20,8 @@ class AbstractChargepoint:
 
     @abstractmethod
     def interrupt_cp(self, duration: int) -> None:
+        pass
+
+    @abstractmethod
+    def clear_rfid(self) -> None:
         pass

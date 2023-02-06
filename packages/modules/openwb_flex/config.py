@@ -1,7 +1,8 @@
 from typing import Optional, Union, overload
 
+from modules.common.component_setup import ComponentSetup
 from modules.openwb_bat_kit.config import BatKitBatSetup
-from modules.openwb_evu_kit.config import EvuKitCounterSetup
+from modules.openwb_evu_kit.config import EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup
 from modules.openwb_pv_kit.config import PvKitInverterSetup
 
 
@@ -29,16 +30,13 @@ class BatKitFlexConfiguration:
         self.version = version
 
 
-class BatKitFlexSetup:
+class BatKitFlexSetup(ComponentSetup[BatKitFlexConfiguration]):
     def __init__(self,
                  name: str = "Speicher-Kit flex",
                  type: str = "bat",
                  id: int = 0,
                  configuration: BatKitFlexConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or BatKitFlexConfiguration()
+        super().__init__(name, type, id, configuration or BatKitFlexConfiguration())
 
 
 class EvuKitFlexConfiguration:
@@ -47,16 +45,13 @@ class EvuKitFlexConfiguration:
         self.version = version
 
 
-class EvuKitFlexSetup:
+class EvuKitFlexSetup(ComponentSetup[EvuKitFlexConfiguration]):
     def __init__(self,
                  name: str = "EVU-Kit flex",
                  type: str = "counter",
                  id: int = 0,
                  configuration: EvuKitFlexConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or EvuKitFlexConfiguration()
+        super().__init__(name, type, id, configuration or EvuKitFlexConfiguration())
 
 
 class PvKitFlexConfiguration:
@@ -65,20 +60,17 @@ class PvKitFlexConfiguration:
         self.version = version
 
 
-class PvKitFlexSetup:
+class PvKitFlexSetup(ComponentSetup[PvKitFlexConfiguration]):
     def __init__(self,
                  name: str = "PV-Kit flex",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: PvKitFlexConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or PvKitFlexConfiguration()
+        super().__init__(name, type, id, configuration or PvKitFlexConfiguration())
 
 
 @overload
-def convert_to_flex_setup(kit: BatKitBatSetup, id) -> BatKitFlexSetup:
+def convert_to_flex_setup(kit: Union[BatKitBatSetup, EvuKitBatSetup], id) -> BatKitFlexSetup:
     pass
 
 
@@ -88,12 +80,13 @@ def convert_to_flex_setup(kit: EvuKitCounterSetup, id) -> EvuKitFlexSetup:
 
 
 @overload
-def convert_to_flex_setup(kit: PvKitInverterSetup, id) -> PvKitFlexSetup:
+def convert_to_flex_setup(kit: Union[EvuKitInverterSetup, PvKitInverterSetup], id) -> PvKitFlexSetup:
     pass
 
 
-def convert_to_flex_setup(kit: Union[BatKitBatSetup, EvuKitCounterSetup, PvKitInverterSetup], id):
-    if isinstance(kit, BatKitBatSetup):
+def convert_to_flex_setup(kit: Union[
+        BatKitBatSetup, EvuKitBatSetup, EvuKitCounterSetup, EvuKitInverterSetup, PvKitInverterSetup], id):
+    if isinstance(kit, (BatKitBatSetup, EvuKitBatSetup)):
         return BatKitFlexSetup(name=kit.name,
                                type=kit.type,
                                id=kit.id,

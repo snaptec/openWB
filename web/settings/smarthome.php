@@ -51,6 +51,10 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>SmartHome</h1>
 			<form action="./settings/saveconfig.php" method="POST">
+				<div class="alert alert-danger">
+					Dieser Bereich wird bald entfernt. Bitte SmartHome 2.0 nutzen.<br />
+					Werden Teile dieser Seite noch benötigt? Dann bitte <a href="https://www.openwb.de/forum/viewtopic.php?f=14&t=5777" target="_blank" rel="noopener noreferrer">hier im Forum</a> melden.
+				</div>
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">

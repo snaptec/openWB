@@ -8,7 +8,7 @@
 # Datei mit aktuell gültigem Strompreis
 #
 # erwartet von API Stundenpreise, d.h. für jede Stunde eine Preisauskunft
-# setzt aktuellen Strompreis (und für kommende 9 Std) im Fehlerfall auf 99.99ct/kWh
+# setzt aktuellen Strompreis (und für kommende 9 Std) im Fehlerfall auf _failure_price
 #
 # Aufruf als Main
 # oder nach Import: update_pricedata(tibber_token, home_id, debug_level)
@@ -45,6 +45,7 @@ MODULE_NAME = 'Tibber'
 
 _openWB_debug_level = 0
 _module_starttime = 0
+_failure_price = 1000.00
 
 #########################################################
 #
@@ -100,19 +101,19 @@ def _publish_price_data(pricelist_to_publish, current_module_name):
     os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
 
 def _exit_on_invalid_price_data(error, current_module_name):
-    # schreibt 99.99ct/kWh in Preis-Datei und füllt Chart-Array für die nächsten 9 Stunden damit,
+    # schreibt _failure_price in Preis-Datei und füllt Chart-Array für die nächsten 9 Stunden damit,
     # schreibt Fehler ins Log
     with open('/var/www/html/openWB/ramdisk/etproviderprice', 'w') as file_current_price, \
          open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w') as file_pricelist:
-        file_current_price.write('99.99\n')
+        file_current_price.write(str(_failure_price) + '\n')
         file_pricelist.write('%s\n' % current_module_name)  # erster Eintrag ist für Preisliste verantwortliches Modul
         now = datetime.now(timezone.utc)  # timezone-aware datetime-object in UTC
         timestamp = now.replace(minute=0, second=0, microsecond=0)  # volle Stunde
         for i in range(9):
-            file_pricelist.write('%d, 99.99\n' % timestamp.timestamp())
+            file_pricelist.write('%d, %f\n' % (timestamp.timestamp(), _failure_price))
             timestamp = timestamp + timedelta(hours=1)
     _write_log_entry(error, 0)
-    _write_log_entry('Setze Preis auf 99.99ct/kWh.', 0)
+    _write_log_entry('Setze Preis auf ' + str(_failure_price) + 'ct/kWh.', 0)
     #publish MQTT-Daten für Preis und Graph
     os.system('mosquitto_pub -r -t openWB/global/awattar/pricelist -m "$(cat /var/www/html/openWB/ramdisk/etprovidergraphlist)"')
     os.system('mosquitto_pub -r -t openWB/global/awattar/ActualPriceForCharging -m "$(cat /var/www/html/openWB/ramdisk/etproviderprice)"')
@@ -357,14 +358,14 @@ def update_pricedata(tibber_token, home_id, debug_level):
         _write_log_entry('Fehler: ' + str(e), 0)
         _write_log_entry("Vorhandene Preisliste konnte nicht gelesen werden, versuche Neuerstellung", 1)
     current_module_name = MODULE_NAME  # analog zu aWATTar, vielleicht gibt es irgendwann Ländervarianten
-    if len(pricelist_in_file) > 0 and pricelist_in_file[0][1] == '99.99':
-        _write_log_entry('Bisherige Preisliste enthaelt nur Fehlerpreise 99.99ct/kWh', 1)
+    if len(pricelist_in_file) > 0 and pricelist_in_file[0][1] == str(_failure_price):
+        _write_log_entry('Bisherige Preisliste enthaelt nur Fehlerpreise ' + str(_failure_price) + 'ct/kWh', 1)
         _write_log_entry('Versuche, neue Preise von Tibber zu empfangen', 1)
     elif module_name_in_file != None and current_module_name != module_name_in_file:
         if module_name_in_file == '':
             log_text = 'Kein Modul für bisherige Preisliste identifizierbar'
         else:
-            log_text = 'Bisherige Preiliste wurde von Modul ' + module_name_in_file + ' erstellt'
+            log_text = 'Bisherige Preisliste wurde von Modul ' + module_name_in_file + ' erstellt'
         _write_log_entry(log_text, 1)
         _write_log_entry('Wechsel auf Modul %s' % current_module_name, 1)
     elif len(pricelist_in_file) > 0:
@@ -396,7 +397,7 @@ def update_pricedata(tibber_token, home_id, debug_level):
                 _write_log_entry('Letzter Preis in bisherige Preisliste gueltig ab ' + pricelist_valid_until_str, 2)
                 if prices_count_after_cleanup < 11:
                     # weniger als 11 Stunden in bisheriger Liste: versuche, die Liste neu abzufragen
-                    # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu 99.99ct/kWh
+                    # dementsprechend auch bei vorherigem Fehler: 9 Einträge zu _failure_price
                     _write_log_entry('Versuche, weitere Preise von Tibber zu empfangen', 1)
                     pricelist_received = []
                     try:
@@ -434,7 +435,7 @@ def update_pricedata(tibber_token, home_id, debug_level):
                 exit()
 
     # bisherige Preisliste leer, fehlerhaft oder neuer Provider: in jedem Fall neue Abfrage und
-    # bei andauerndem Fehler oder weiterhin leerer Liste Preis auf 99.99ct/kWh setzen
+    # bei andauerndem Fehler oder weiterhin leerer Liste Preis auf _failure_price setzen
     try:
         pricelist_received = _get_updated_pricelist()
     except Exception as e:

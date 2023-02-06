@@ -1,5 +1,7 @@
 from typing import Optional
 
+from modules.common.component_setup import ComponentSetup
+
 
 class DiscovergyConfiguration:
     def __init__(self, user: Optional[str] = None, password: Optional[str] = None):
@@ -41,13 +43,10 @@ class DiscovergyInverterConfiguration:
         self.meter_id = meter_id
 
 
-class DiscovergyInverterSetup:
+class DiscovergyInverterSetup(ComponentSetup[DiscovergyInverterConfiguration]):
     def __init__(self,
                  name: str = "Discovergy Wechselrichter",
                  type: str = "inverter",
                  id: int = 0,
                  configuration: DiscovergyInverterConfiguration = None) -> None:
-        self.name = name
-        self.type = type
-        self.id = id
-        self.configuration = configuration or DiscovergyInverterConfiguration()
+        super().__init__(name, type, id, configuration or DiscovergyInverterConfiguration())

@@ -16,7 +16,7 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 # The update might replace a number of files which might currently be in use by the continuously running legacy-run
 # server. If we replace the source files while the process is running, funny things might happen.
 # Thus we shut-down the legacy run server before performing the update.
-pkill -f "$OPENWBBASEDIR/packages/legacy_run_server.py"
+pkill -u pi -f "$OPENWBBASEDIR/packages/legacy_run_server.py"
 
 if [[ "$releasetrain" == "stable" ]]; then
 	train=stable17
@@ -57,7 +57,9 @@ for i in $(seq 4 8); do
 	fi
 done
 
-sleep 15
+# Wait for regulation loop(s) and cron jobs to end, but with timeout in case a script hangs
+pgrep -f "$OPENWBBASEDIR/(regel\\.sh|runs/cron5min\\.sh|runs/cronnightly\\.sh)$" | \
+	timeout 15 xargs -n1 -I'{}' tail -f --pid="{}" /dev/null
 
 # backup some files before fetching new release
 # module soc_eq
@@ -72,9 +74,7 @@ sudo git reset --hard matzempc/$train
 # set permissions
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
-sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
-sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
-sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
+cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 
 # restore saved files after fetching new release
 # module soc_eq

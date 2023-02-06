@@ -505,6 +505,15 @@ updateConfig(){
 	if ! grep -Fq "bezug2_solarlog_speicherv=" $ConfigFile; then
 		echo "bezug2_solarlog_speicherv=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "wrenphasehostname=" $ConfigFile; then
+		echo "wrenphasehostname=envoy.local" >> $ConfigFile
+	fi
+	if ! grep -Fq "wrenphaseeid=" $ConfigFile; then
+		echo "wrenphaseeid=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "bezugenphaseeid=" $ConfigFile; then
+		echo "bezugenphaseeid=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "wrfronius2ip=" $ConfigFile; then
 		echo "wrfronius2ip=none" >> $ConfigFile
 	fi
@@ -1268,8 +1277,12 @@ updateConfig(){
 	fi
 	# tibber demo settings
 	if ! grep -Fq "tibbertoken=" $ConfigFile; then
-		echo "tibbertoken=d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a" >> $ConfigFile
-		echo "tibberhomeid=c70dcbe5-4485-4821-933d-a8a86452737b" >> $ConfigFile
+		echo "tibbertoken=5K4MVS-OjfWhK_4yrjOlFe1F6kJXPVf7eQYggo8ebAE" >> $ConfigFile
+		echo "tibberhomeid=96a14971-525a-4420-aae9-e5aedaa129ff" >> $ConfigFile
+	else
+		# replace outdated demo account (2022-10-19)
+		sed -i "s/^tibbertoken=d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a/tibbertoken=5K4MVS-OjfWhK_4yrjOlFe1F6kJXPVf7eQYggo8ebAE/g" $ConfigFile
+		sed -i "s/^tibberhomeid=c70dcbe5-4485-4821-933d-a8a86452737b/tibberhomeid=96a14971-525a-4420-aae9-e5aedaa129ff/g" $ConfigFile
 	fi
 	if ! grep -Fq "etprovider=" $ConfigFile; then
 		echo "etprovider=et_awattar" >> $ConfigFile
@@ -1851,6 +1864,9 @@ updateConfig(){
 			echo "pv2id2=0"
 		} >> $ConfigFile
 	fi
+	if ! grep -Fq "pv2port=" $ConfigFile; then
+		echo "pv2port=502" >> $ConfigFile
+	fi
 	if ! grep -Fq "pv2ip=" $ConfigFile; then
 		{
 			echo "pv2ip=none"
@@ -2203,6 +2219,10 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
+		echo "sungrowspeicherport=502" >> $ConfigFile
+		echo "sungrowspeicherid=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "alphasource=" $ConfigFile; then
 		echo "alphasource=0" >> $ConfigFile
