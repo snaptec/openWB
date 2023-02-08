@@ -8,10 +8,10 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import ChargepointState
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.modbus import ModbusSerialClient_
-from modules.common.store import ramdisk_read, ramdisk_write
+from modules.common.store import ramdisk_read
 from modules.common import sdm
 from modules.common import evse
-from modules.common import b32
+from modules.common import b23
 from modules.common.store import get_chargepoint_value_store
 
 log = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def get_default_config() -> Dict:
             }}
 
 
-CONNECTION_MODULES = Union[sdm.Sdm630, b32.B32]
+CONNECTION_MODULES = Union[sdm.Sdm630, b23.B23]
 
 
 class InternalOpenWB:
@@ -46,8 +46,10 @@ class ClientFactory:
     def __factory(self, serial_client: ModbusSerialClient_) -> Tuple[CONNECTION_MODULES, evse.Evse]:
         meter_config = NamedTuple("MeterConfig", [('type', CONNECTION_MODULES), ('modbus_id', int)])
         meter_configuration_options = [
-            [meter_config(sdm.Sdm630, modbus_id=105), meter_config(b32.B32, modbus_id=201)],
-            [meter_config(sdm.Sdm630, modbus_id=106)]
+            [meter_config(sdm.Sdm630, modbus_id=5),
+             meter_config(sdm.Sdm630, modbus_id=105),
+             meter_config(b23.B23, modbus_id=201)],
+            [meter_config(sdm.Sdm630, modbus_id=6), meter_config(sdm.Sdm630, modbus_id=106)]
         ]
 
         def _check_meter(serial_client: ModbusSerialClient_, meters: List[meter_config]):
@@ -61,20 +63,20 @@ class ClientFactory:
             else:
                 raise Exception("Es konnte keines der Meter in "+str(meters)+" zugeordnet werden.")
 
-        meter_client = _check_meter(serial_client, meter_configuration_options[self.local_charge_point_num - 1])
-        evse_client = evse.Evse(self.local_charge_point_num, serial_client)
+        meter_client = _check_meter(serial_client, meter_configuration_options[self.local_charge_point_num])
+        evse_client = evse.Evse(self.local_charge_point_num + 1, serial_client)
         return meter_client, evse_client
 
     def get_pins_phase_switch(self, new_phases: int) -> Tuple[int, int]:
         # return gpio_cp, gpio_relay
-        if self.local_charge_point_num == 1:
+        if self.local_charge_point_num == 0:
             return 22, 29 if new_phases == 1 else 37
         else:
             return 15, 11 if new_phases == 1 else 13
 
     def get_pins_cp_interruption(self) -> int:
         # return gpio_cp, gpio_relay
-        if self.local_charge_point_num == 1:
+        if self.local_charge_point_num == 0:
             return 22
         else:
             return 15
@@ -112,9 +114,6 @@ class ChargepointModule(AbstractChargepoint):
             self.__client.read_error = 0
 
             rfid = ramdisk_read("readtag")
-            # reset tag
-            if rfid != "0" and plug_state is False:
-                ramdisk_write("readtag", "0")
 
             if phase_switch_cp_active:
                 # Während des Threads wird die CP-Leitung unterbrochen, das EV soll aber als angesteckt betrachtet

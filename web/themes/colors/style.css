@@ -4,7 +4,7 @@ Stylesheet zum openWB Standard-Theme
 2019-2020 Michael Ortenstein
 */
 
-html{
+html {
 	min-height: 100%;
 	min-width: 100%;
 }
@@ -15,9 +15,11 @@ body {
 	/* Old browsers */
 	background: var(--color-bg);
 }
-body > .container {
+
+body>.container {
 	padding: 55px 15px 0;
 }
+
 h3 {
 	color: var(--color-title);
 }
@@ -26,29 +28,66 @@ h4 {
 	color: var(--color-axis);
 }
 
-body > .container-fluid {
+body>.container-fluid {
 	padding: 55px 15px 0;
 }
+
 @keyframes alertPulsation {
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-o-keyframes alertPulsation{
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+
+@-o-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-moz-keyframes alertPulsation{
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+
+@-moz-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
-@-webkit-keyframes alertPulsation{
-	0%   { opacity:1; }
-	50%  { opacity:0; }
-	100% { opacity:1; }
+
+@-webkit-keyframes alertPulsation {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
+
 .animate-alertPulsation {
 	-webkit-animation: alertPulsation 1s infinite;
 	-moz-animation: alertPulsation 1s infinite;
@@ -61,15 +100,17 @@ body > .container-fluid {
 }
 
 .pull-right {
-	float:right
+	float: right
 }
 
 .row.no-gutter [class*='col-']:first-child:not(:only-child) {
 	padding-right: 0;
 }
+
 .row.no-gutter [class*='col-']:last-child:not(:only-child) {
 	padding-left: 0;
 }
+
 .row.no-gutter [class*='col-']:not(:first-child):not(:last-child):not(:only-child) {
 	padding-right: 0;
 	padding-left: 0;
@@ -82,7 +123,7 @@ body > .container-fluid {
 	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 }
 
-.cursor-pointer{
+.cursor-pointer {
 	cursor: pointer;
 }
 
@@ -100,10 +141,12 @@ body > .container-fluid {
 	color: #006515;
 	text-decoration: none;
 }
+
 .lpWaitingStyle {
 	color: #ffdb00;
 	text-decoration: none;
 }
+
 .lpDisabledStyle {
 	color: #A30000;
 	text-decoration: line-through;
@@ -152,6 +195,7 @@ body > .container-fluid {
 .bg-lightgrey {
 	background-color: #d0d7e6;
 }
+
 .bg-lightblue {
 	background-color: #23ebe1;
 }
@@ -165,15 +209,19 @@ body > .container-fluid {
 }
 
 .bg-apricot {
-	background-color:#fefedf;
+	background-color: #fefedf;
 }
 
 .bg-orange {
-	background-color:#fcbe1e;
+	background-color: #fcbe1e;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query since this is the default in Bootstrap */
+html {
+	font-size: 12px;
+}
+
 h1 {
 	font-size: 1.6rem;
 }
@@ -183,234 +231,174 @@ h2 {
 }
 
 h3 {
-	font-size: 1.2rem;
+	font-size: var(--font-large);
 }
+
 h4 {
 	font-size: 0.9rem;
 }
 
 .verySmallTextSize {
-	font-size: 0.8rem;
+	font-size: var(--font-verysmall);
 }
 
 .smallTextSize {
-	font-size: 0.7rem;
+	font-size: var(--font-small);
 }
 
 .regularTextSize {
-	font-size: 0.9rem;
+	font-size: var(--font-normal);
 }
 
 .largeTextSize {
-	font-size: 1.1rem;
+	font-size: var(--font-large);
 }
 
 .buttonTextSize {
 	font-size: 0.9rem;
 }
+
 .tablecell {
-	font-size: 0.9rem;
+	font-size: var(--font-normal);
 	line-height: 1.1rem;
 	vertical-align: middle;
 	padding: 0;
+
+
+
 }
 
+@media (min-width: 240px) {
+	html {
+		font-size: 12px;
+	}
+}
+@media (min-width: 330px) {
+	html {
+		font-size: 14px;
+	}
+}
+
+@media (min-width: 400px) {
+	html {
+		font-size: 15px;
+	}
+}
+@media (min-width: 435px) {
+	html {
+		font-size: 16px;
+	}
+}
+@media (min-width: 470px) {
+	html {
+		font-size: 17px;
+	}
+}
+@media (min-width: 505px) {
+	html {
+		font-size: 18px;
+	}
+}
+@media (min-width: 540px) {
+	html {
+		font-size: 19px;
+	}
+}
 /* Small devices (landscape phones, 576px and up) */
-@media screen and (min-width: 576px) {
-	h1 {
-		font-size: 2.1rem;
+@media (min-width: 576px) {
+	html {
+		font-size: 20px;
 	}
+}
 
-	h2 {
-		font-size: 1.9rem;
+@media (min-width: 672px) {
+	html {
+		font-size: 21px;
 	}
-
-	h3 {
-		font-size: 1.7rem;
-	}
-
-	h4 {
-		font-size: 1.2rem;
-	}
-	
-	.verySmallTextSize {
-		font-size: 1.0rem;
-	}
-
-	.smallTextSize {
-		font-size: 1.2rem;
-	}
-
-	.regularTextSize {
-		font-size: 1.4rem;
-	}
-
-	.largeTextSize {
-		font-size: 1.6rem;
-	}
-
-	.buttonTextSize {
-		font-size: 1.4rem;
-	}
-	.tablecell {
-		font-size: 1.2rem;
-		line-height: 1.1rem;
-		vertical-align: middle;
-		padding: 0;
-	}
-
-	.table-condensed>tbody>tr>td {
-		padding: 1px;
-	}
-
-
 }
 
 /* Medium devices (tablets, 768px and up) */
-@media screen and (min-width: 768px) {
-	h1 {
-		font-size: 1.5rem;
-	}
-
-	h2 {
-		font-size: 1.3rem;
-	}
-
-	h3 {
-		font-size: 1.1rem;
-	}
-
-	h4 {
-		font-size: 0.9rem;
-	}
-	
-	.verySmallTextSize {
-		font-size: 1.0rem;
-	}
-
-	.smallTextSize {
-		font-size: 0.6rem;
-	}
-
-	.regularTextSize {
-		font-size: 0.8rem;
-	}
-
-	.largeTextSize {
-		font-size: 1.0rem;
-	}
-
-	.buttonTextSize {
-		font-size: 0.8rem;
-	}
-	.tablecell {
-		font-size: 0.9rem;
-		line-height: 0.8rem;
-		vertical-align: middle;
-		padding: 0;
+@media (min-width: 768px) {
+	html {
+		font-size: 22px;
 	}
 }
 
 /* Large devices (desktops, 992px and up) */
-@media screen and (min-width: 992px) {
-	h1 {
-		font-size: 1.5rem;
+@media (min-width: 992px) {
+	html {
+		font-size: 13px;
 	}
+}
 
-	h2 {
-		font-size: 1.3rem;
+@media (min-width: 1061px) {
+	html {
+		font-size: 14px;
 	}
-
-	h3 {
-		font-size: 1.0rem;
-	}
-
-	h4 {
-		font-size: 0.9rem;
-	}
-	
-	.verySmallTextSize {
-		font-size: 1.0rem;
-	}
-
-	.smallTextSize {
-		font-size: 0.7rem;
-	}
-
-	.regularTextSize {
-		font-size: 0.9rem;
-	}
-
-	.largeTextSize {
-		font-size: 1.1rem;
-	}
-
-	.buttonTextSize {
-		font-size: 0.9rem;
-	}
-	.tablecell {
-		font-size: 1.0rem;
-		line-height: 0.8rem;
-		vertical-align: middle;
-		padding: 0;
+}
+@media (min-width: 1130px) {
+	html {
+		font-size: 15px;
 	}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-	h1 {
-		font-size: 3rem;
+	html {
+		font-size: 16px;
 	}
-
-	h2 {
-		font-size: 2.4rem;
+}
+@media (min-width: 1283px) {
+	html {
+		font-size: 17px;
 	}
-
-	h3 {
-		font-size: 1.5rem;
+}
+@media (min-width: 1366px) {
+	html {
+		font-size: 18px;
 	}
-
-	.verySmallTextSize {
-		font-size: 1.4rem;
+}
+@media (min-width: 1449px) {
+	html {
+		font-size: 19px;
 	}
-
-	.smallTextSize {
-		font-size: 1.65rem;
+}
+@media (min-width: 1532px) {
+	html {
+		font-size: 20px;
 	}
-
-	.regularTextSize {
-		font-size: 1.2rem;
+}
+@media (min-width: 1615px) {
+	html {
+		font-size: 21px;
 	}
-
-	.largeTextSize {
-		font-size: 1.8rem;
-	}
-
-	.buttonTextSize {
-		font-size: 2.0rem;
-	}
-	.tablecell {
-		font-size: 1.3rem;
-		line-height: 1.0rem;
-		vertical-align: middle;
-		padding: 0;
+}
+/* Extra extra extra large devices (very large desktops, 2000px and up) */
+@media (min-width: 1700px) {
+	html {
+		font-size: 22px;
 	}
 }
 
 .maxPrice {
 	text-align: center;
 }
+
 /* Overarching colors */
 :root {
 	--fontCol: rgba(160, 160, 160, 0.82);
-	--gridCol: rgba(160,160,160, 0.82);
-	--xgridCol: rgba(160,160,160, 0.82);
-	--tickCol: rgba(160,160,160, 0.82);
+	--gridCol: rgba(160, 160, 160, 0.82);
+	--xgridCol: rgba(160, 160, 160, 0.82);
+	--tickCol: rgba(160, 160, 160, 0.82);
 	--evuCol: rgba(178, 34, 34, 1);
 	--color-switchRed: #d12020;
 	--color-switchGreen: #4db662;
 	--color-switchBlue: steelblue;
-	}
+	--font-normal: 1rem;
+	--font-large: 1.2rem;
+	--font-small: 0.8rem;
+	--font-verysmall: 0.7rem;
+}
 
 
 /* Theme color sets */
@@ -445,7 +433,7 @@ h4 {
 	--gridCol: rgba(255, 255, 255, 0.82);
 	--xgridCol: rgba(255, 255, 255, 0.1);
 	--tickCol: rgba(255, 255, 255, 0.82);
-	--evuCol: rgba(255, 0, 0, 0.7);	
+	--evuCol: rgba(255, 0, 0, 0.7);
 	--invertLogo: invert(0)
 }
 
@@ -501,7 +489,7 @@ h4 {
 	--color-lp6: #deebf7;
 	--color-lp7: #08519c;
 	--color-lp8: #6baed6;
-		--color-co1: #bf3caf;
+	--color-co1: #bf3caf;
 	--color-co2: #963db3;
 	--padding-widget: 0px;
 	--invertLogo: invert(1);
@@ -544,8 +532,8 @@ h4 {
 	--color-sh7: rgba(50, 200, 200, 0.7);
 	--color-sh8: rgba(0, 200, 200, 0.7);
 	--color-sh9: rgba(200, 200, 200, 0.7);
-}	
-	
+}
+
 .openwb-devices {
 	color: #ccffff;
 	background-color: #009696;
@@ -554,25 +542,31 @@ h4 {
 .colormenu {
 	background-color: var(--color-frame);
 }
+
 .wb-widget {
 	background-color: var(--color-bg);
-	border:1px solid var(--color-frame) ;
+	border: 0.5px solid var(--color-frame);
+	height: 100%;
 }
 
 .wb-subwidget {
-	border:1px solid var(--color-subframe) ;
-	padding:var(--padding-widget);
+	border: 0px solid var(--color-subframe);
+	padding: var(--padding-widget);
 }
+
 th {
 	color: var(--color-axis);
 }
+
 .table-borderless td {
 	border: 0;
 }
+
 .popup-header {
 	color: midnightblue;
 }
+
 .axis text {
 	color: var(--color-axis);
 	stroke-width: 0;
-} 
+}

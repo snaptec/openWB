@@ -4,6 +4,7 @@ import re
 from typing import Union, List
 
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common import req
 from modules.common.abstract_device import DeviceDescriptor
 from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, IndependentComponentUpdater
 from modules.devices.http.bat import HttpBat
@@ -25,6 +26,7 @@ def create_device(device_config: HTTP):
     def create_inverter_component(component_config: HttpInverterSetup):
         return HttpInverter(device_config.id, component_config, device_config.configuration.url)
 
+    session = req.get_http_session()
     return ConfigurableDevice(
         device_config=device_config,
         component_factory=ComponentFactoryByType(
@@ -32,7 +34,7 @@ def create_device(device_config: HTTP):
             counter=create_counter_component,
             inverter=create_inverter_component,
         ),
-        component_updater=IndependentComponentUpdater(lambda component: component.update())
+        component_updater=IndependentComponentUpdater(lambda component: component.update(session))
     )
 
 
@@ -41,9 +43,7 @@ def create_paths_dict(**kwargs):
     result = {}
     host_scheme = None
     for key, path in kwargs.items():
-        if path == "none":
-            result[key] = "none"
-        else:
+        if path != "none" and path != "":
             match = regex.search(path)
             if match is None:
                 raise Exception("Invalid URL <" + path + ">: Absolute HTTP or HTTPS URL required")

@@ -35,6 +35,22 @@ at_reboot() {
 	. "$OPENWBBASEDIR/runs/initRamdisk.sh"
 	. "$OPENWBBASEDIR/runs/updateConfig.sh"
 
+	boot_config_source="$OPENWBBASEDIR/web/files/boot_config.txt"
+	boot_config_target="/boot/config.txt"
+	echo "checking init in $boot_config_target..."
+	if versionMatch "$boot_config_source" "$boot_config_target"; then
+		echo "already up to date"
+	else
+		echo "openwb section not found or outdated"
+		pattern_begin=$(grep -m 1 '#' "$boot_config_source")
+		pattern_end=$(grep '#' "$boot_config_source" | tail -n 1)
+		sudo sed -i "/$pattern_begin/,/$pattern_end/d" "$boot_config_target"
+		echo "adding init to $boot_config_target..."
+		sudo tee -a "$boot_config_target" <"$boot_config_source" >/dev/null
+		echo "done"
+		echo "new configuration active after next boot"
+	fi
+
 	sleep 5
 	mkdir -p "$OPENWBBASEDIR/web/backup"
 	touch "$OPENWBBASEDIR/web/backup/.donotdelete"
@@ -302,6 +318,32 @@ at_reboot() {
 			echo 'soc_vwid: enable local python3 secrets.py...'
 			ln -s "$VWIDMODULEDIR/_secrets.py" "$VWIDMODULEDIR/secrets.py"
 		fi
+	fi
+	#Prepare for secrets used in soc module soc_smarteq in Python
+	SMARTEQMODULEDIR="$OPENWBBASEDIR/modules/soc_smarteq"
+	if python3 -c "import secrets" &> /dev/null; then
+		echo 'soc_smarteq: python3 secrets installed...'
+		if [ -L "$SMARTEQMODULEDIR/secrets.py" ]; then
+			echo 'soc_smarteq: remove local python3 secrets.py...'
+			rm "$SMARTEQMODULEDIR/secrets.py"
+		fi
+	else
+		if [ ! -L "$SMARTEQMODULEDIR/secrets.py" ]; then
+			echo 'soc_smarteq: enable local python3 secrets.py...'
+			ln -s "$SMARTEQMODULEDIR/_secrets.py" "$SMARTEQMODULEDIR/secrets.py"
+		fi
+	fi
+	#Prepare for bs4 used in soc module smarteq in Python
+	if python3 -c "import bs4" &> /dev/null; then
+		echo 'bs4 installed...'
+	else
+		sudo pip3 install bs4
+	fi
+	#Prepare for pkce used in soc module smarteq in Python
+	if python3 -c "import pkce" &> /dev/null; then
+		echo 'pkce installed...'
+	else
+		sudo pip3 install pkce
 	fi
 	# update outdated urllib3 for Tesla Powerwall
 	pip3 install --upgrade urllib3

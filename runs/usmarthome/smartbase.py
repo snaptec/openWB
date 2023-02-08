@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 import time
 import os
+from typing import Dict, Tuple, Any
 from usmarthome.global0 import log
 from usmarthome.smartbase0 import Sbase0
-from usmarthome.smartmeas import Slsdm630, Slsdm120, Slwe514, Slfronius
+from usmarthome.smartmeas import Slsdm630, Sllovato, Slsdm120, Slwe514, Slfronius
 from usmarthome.smartmeas import Sljson, Slsmaem, Slshelly, Sltasmota, Slmqtt
 from usmarthome.smartmeas import Slhttp, Slavm, Slmystrom
 from usmarthome.smartbut import Sbshelly
@@ -22,12 +23,12 @@ class Sbase(Sbase0):
     nureinschaltinsec = 0
     eindevstatus = 0
 
-    def __init__(self):
+    def __init__(self) -> None:
         # setting
         super().__init__()
         print('__init__ Sbase executed')
-        self.mqtt_param = {}
-        self.mqtt_param_del = {}
+        self.mqtt_param = {}  # type: Dict[str, str]
+        self.mqtt_param_del = {}  # type: Dict[str, str]
         self.device_name = 'none'
         self.devstatus = 10
         # (10 = ueberschuss gesteuert oder manual,
@@ -53,7 +54,7 @@ class Sbase(Sbase0):
         self.newdevice_manual = 0
         self.newdevice_manual_control = 0
         self.device_type = 'none'
-        self._smart_param = {}
+        self._smart_param = {}  # type: Dict[str, str]
         self._uberschussoffset = 0
         self._uberschuss = 0
         self.device_canswitch = 0
@@ -75,9 +76,9 @@ class Sbase(Sbase0):
         self._device_ip = 'none'
         self._device_measuretype = 'none'
         self._device_measureip = 'none'
-        self._device_measureportsdm = '8899'
-        self._device_dacport = '8899'
-        self._device_measureid = '0'
+        self._device_measureportsdm = 8899
+        self._device_dacport = 8899
+        self._device_measureid = 0
         self._device_finishtime = '00:00'
         self._device_starttime = '00:00'
         self._device_endtime = '00:00'
@@ -89,8 +90,8 @@ class Sbase(Sbase0):
         self._device_pbtype = 'none'
         self._device_lambdaueb = 'UP'
         self._old_pbtype = 'none'
-        self._mydevicepb = 'none'
-        self._oldrelais = '2'
+        self._mydevicepb = 'none'  # type: Any
+        self._oldrelais = 2
         self._oldwatt = 0
         self._device_chan = 0
         self._device_updatesec = 0
@@ -123,12 +124,13 @@ class Sbase(Sbase0):
         self.device_setauto = 0
         self.gruppe = 'none'
         self.btchange = 0
+        self._mydevicemeasure = 'none'  # type: Any
 
-    def __del__(self):
+    def __del__(self) -> None:
 
         print('__del__ Sbase executed ')
 
-    def prewatt(self, uberschuss, uberschussoffset):
+    def prewatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self._uberschuss = uberschuss
         self._uberschussoffset = uberschussoffset
         if (self._deviceconfiguredold == "9") and (self._deviceconfigured ==
@@ -154,7 +156,7 @@ class Sbase(Sbase0):
             # prepare end
         self.getueb()
 
-    def postwatt(self):
+    def postwatt(self) -> None:
         (self.newwatt, self.newwattk) = self.sepwatt(self.newwatt,
                                                      self.newwattk)
         # bei reiner Leistungsmessung relais nur nach Watt setzten
@@ -168,7 +170,7 @@ class Sbase(Sbase0):
             self.relais = 0
         self.mqtt_param = {}
         pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
-        self.mqtt_param[pref + 'RelayStatus'] = self.relais
+        self.mqtt_param[pref + 'RelayStatus'] = str(self.relais)
         if (self.c_mantime_f == 'Y') and (self.device_manual != 1):
             # nach Ausschalten manueller Modus mindestens 30 Sek +
             # max( ausschaltverzögerung,mindeseinschaltdauer
@@ -226,7 +228,7 @@ class Sbase(Sbase0):
         else:
             self.c_oldstampeinschaltdauer = 0
             self.c_oldstampeinschaltdauer_f = 'N'
-        self.mqtt_param[pref + 'RunningTimeToday'] = self.runningtime
+        self.mqtt_param[pref + 'RunningTimeToday'] = str(self.runningtime)
         # Einschaltzeit des Relais setzen
         if (self._oldrelais == 0):
             if (self.relais == 1):
@@ -242,9 +244,9 @@ class Sbase(Sbase0):
             self.mqtt_param[pref + 'TemperatureSensor1'] = self.temp1
         if (self.device_temperatur_configured > 2):
             self.mqtt_param[pref + 'TemperatureSensor2'] = self.temp2
-        self.mqtt_param[pref + 'Watt'] = self._oldwatt
-        self.mqtt_param[pref + 'Wh'] = self._wh
-        self.mqtt_param[pref + 'WHImported_temp'] = self._wpos
+        self.mqtt_param[pref + 'Watt'] = str(self._oldwatt)
+        self.mqtt_param[pref + 'Wh'] = str(self._wh)
+        self.mqtt_param[pref + 'WHImported_temp'] = str(self._wpos)
         self.mqtt_param[pref + 'oncountnor'] = self.oncountnor
         self.mqtt_param[pref + 'OnCntStandby'] = self.oncntstandby
         # nur bei Status 10 on status mitnehmen
@@ -252,7 +254,7 @@ class Sbase(Sbase0):
             sendstatus = self.relais + self.devstatus
         else:
             sendstatus = self.devstatus
-        self.mqtt_param[pref + 'Status'] = sendstatus
+        self.mqtt_param[pref + 'Status'] = str(sendstatus)
         if (self.gruppe == 'A'):
             Sbase.ausschaltwatt = Sbase.ausschaltwatt + self._oldwatt
         elif (self.gruppe == 'E'):
@@ -260,7 +262,7 @@ class Sbase(Sbase0):
                 Sbase.einrelais = 1
             Sbase.eindevstatus = max(Sbase.eindevstatus, self.devstatus)
 
-    def updatepar(self, input_param):
+    def updatepar(self, input_param: Dict[str, str]) -> None:
         self._smart_param = input_param.copy()
         self.device_nummer = int(self._smart_param.get('device_nummer', '0'))
         for key, value in self._smart_param.items():
@@ -327,11 +329,11 @@ class Sbase(Sbase0):
             elif (key == 'device_measureip'):
                 self._device_measureip = value
             elif (key == 'device_measurePortSdm'):
-                self._device_measureportsdm = value
+                self._device_measureportsdm = valueint
             elif (key == 'device_dacport'):
-                self._device_dacport = value
+                self._device_dacport = valueint
             elif (key == 'device_measureid'):
-                self._device_measureid = value
+                self._device_measureid = valueint
             elif (key == 'device_finishTime'):
                 self._device_finishtime = value
             elif (key == 'device_startTime'):
@@ -390,7 +392,7 @@ class Sbase(Sbase0):
                              " " + value)
             else:
                 log.info("(" + str(self.device_nummer) + ") "
-                         + __class__.__name__ + " überlesen " + key +
+                         + "Sbase überlesen " + key +
                          " " + value)
         self._first_run = 0
         pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
@@ -451,6 +453,8 @@ class Sbase(Sbase0):
                     del self._mydevicemeasure
                 if (self._device_measuretype == 'sdm630'):
                     self._mydevicemeasure = Slsdm630()
+                elif (self._device_measuretype == 'lovato'):
+                    self._mydevicemeasure = Sllovato()
                 elif (self._device_measuretype == 'sdm120'):
                     self._mydevicemeasure = Slsdm120()
                 elif (self._device_measuretype == 'we514'):
@@ -494,14 +498,14 @@ class Sbase(Sbase0):
                   str(self.device_nummer), 'w') as f:
             f.write(str(self.device_homeconsumtion))
 
-    def getueb(self):
+    def getueb(self) -> None:
         #    (1 = mit Speicher, 2 = mit offset , 0 = manual eingeschaltet)
         if (self.ueberschussberechnung == 2):
             self.devuberschuss = self._uberschussoffset
         else:
             self.devuberschuss = self._uberschuss
 
-    def preturn(self, zustand, ueberschussberechnung, updatecnt):
+    def preturn(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         self.ueberschussberechnung = ueberschussberechnung
         with open(self._basePath+'/ramdisk/device' + str(self.device_nummer) +
                   '_req_relais', 'w') as f:
@@ -519,7 +523,7 @@ class Sbase(Sbase0):
                 self._c_eintime_f = 'Y'
                 self._c_eintime = int(time.time())
 
-    def sepwatt(self, newwatt, newwattk):
+    def sepwatt(self, newwatt: int, newwattk: int) -> Tuple[int, int]:
         if (self._device_differentmeasurement == 0):
             return newwatt, newwattk
         # ueberschuss übertragen
@@ -529,7 +533,7 @@ class Sbase(Sbase0):
         self.newwattk = self._mydevicemeasure.newwattk
         return self.newwatt, self.newwattk
 
-    def conditions(self, speichersoc):
+    def conditions(self, speichersoc: int) -> None:
         # do not do anything in case none type or can switch = no
         # or device manuam mode
         if ((self.device_canswitch == 0) or
@@ -550,8 +554,8 @@ class Sbase(Sbase0):
         work_ausschaltschwelle = self._device_ausschaltschwelle
         work_ausschaltverzoegerung = self._device_ausschaltverzoegerung
         local_time = datetime.now(timezone.utc).astimezone()
-        localhour = int(local_time.strftime(format="%H"))
-        localminute = int(local_time.strftime(format="%M"))
+        localhour = int(local_time.strftime("%H"))
+        localminute = int(local_time.strftime("%M"))
         localinsec = int((localhour * 60 * 60) + (localminute * 60))
         if (localinsec < Sbase.nureinschaltinsec) and (Sbase.eindevices > 0):
             log.info("(" + str(self.device_nummer) + ") " +
@@ -966,8 +970,8 @@ class Sbase(Sbase0):
                     self._c_ausverz_f = 'N'
                     # rechne Zeit exclusive einschaltgruppe
                     local_time = datetime.now(timezone.utc).astimezone()
-                    localh = int(local_time.strftime(format="%H"))
-                    localminute = int(local_time.strftime(format="%M"))
+                    localh = int(local_time.strftime("%H"))
+                    localminute = int(local_time.strftime("%M"))
                     localinsec = int((localh * 60 * 60) + (localminute * 60))
                     Sbase.nureinschaltinsec = localinsec + Sbase.einverz
                     return
@@ -1132,7 +1136,7 @@ class Sbase(Sbase0):
                 self._c_einverz_f = 'N'
                 self._c_ausverz_f = 'N'
 
-    def simcount(self, watt2, pref, importfn, exportfn, nummer, wattks):
+    def simcount(self, watt2: int, pref: str, importfn: str, exportfn: str, nummer: str, wattks: int) -> None:
         # Zaehler mitgeliefert in WH , zurueckrechnen fuer simcount
         if wattks > 0:
             wattposkh = wattks
@@ -1191,8 +1195,8 @@ class Sbase(Sbase0):
                     wattnegh = wattnegh + watt1
                 else:
                     wattposh = wattposh + watt1
-            wattposkh = wattposh/3600
-            wattnegkh = (wattnegh*-1)/3600
+            wattposkh = int(wattposh/3600)
+            wattnegkh = int((wattnegh*-1)/3600)
             with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w') as f:
                 f.write(str(wattposh))
             self._wpos = wattposh
@@ -1210,17 +1214,17 @@ class Sbase(Sbase0):
             with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
                 f.write(str(watt2))
 
-    def getwatt(self, uberschuss, uberschussoffset):
+    def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
         self.newwatt = 0
         self.newwattk = 0
         self.relais = 0
         self.postwatt()
 
-    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+    def turndevicerelais(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         pass
 
-    def updatebutton(self):
+    def updatebutton(self) -> None:
         self.newdevice_manual = self.device_manual
         self.newdevice_manual_control = self.device_manual_control
         self.btchange = 0

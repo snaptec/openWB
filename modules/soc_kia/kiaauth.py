@@ -103,14 +103,16 @@ def getDeviceId():
     soclogging.logDebug(2, "Requesting DeviceId")
 
     url = parameters.getParameter('baseUrl') + '/api/v1/spa/notifications/register'
+
     data = {"pushRegId": parameters.getParameter('GCMSenderId'), "pushType": "GCM", "uuid": str(uuid.uuid1())}
     headers = {
         'ccsp-service-id': parameters.getParameter('clientId'),
+        'ccsp-application-id': parameters.getParameter('appId'),
         'Content-type': 'application/json;charset=UTF-8',
         'Content-Length': str(len(data)),
         'Host': parameters.getParameter('host'),
-        'Connection': 'close',
-        'Accept-Encoding': 'gzip, deflate',
+        'Connection': 'Keep-Alive',
+        'Accept-Encoding': 'gzip',
         'User-Agent': 'okhttp/3.10.0',
         'Stamp': stamps.getStamp()}
 
@@ -126,7 +128,7 @@ def getDeviceId():
         soclogging.logDebug(1, "Could not receive DeviceId, invalid response")
         soclogging.logDebug(2, response)
         raise
-
+    
     soclogging.logDebug(2, "DeviceId = " + deviceId)
 
     return deviceId
@@ -314,11 +316,11 @@ def refreshAuthToken():
 
 def requestNewAuthToken():
     try:
-        deviceId = getDeviceId()
         cookies = getCookies()
         setLanguage(cookies)
         authCode = getAuthCode(cookies)
         accessToken = getAuthToken(authCode)
+        deviceId = getDeviceId()
         saveAccessToken(accessToken, deviceId)
     except:
         raise

@@ -87,9 +87,9 @@ def read_legacy(
     dev = Device(device_config)
     dev = _add_component(dev, component_type, num)
     if evu_counter == "bezug_batterx":
-        dev = _add_component(dev, "counter", None)
+        dev = _add_component(dev, "counter", 0)
     if bat == "speicher_batterx":
-        dev = _add_component(dev, "bat", None)
+        dev = _add_component(dev, "bat", 3)
 
     log.debug('BatterX IP-Adresse: ' + ip_address)
 

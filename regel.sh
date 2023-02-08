@@ -60,7 +60,7 @@ function cleanup()
 
 	if [ "$t" -le "7" ] ; then   # 1..7 Ok
 		openwbDebugLog "MAIN" 2 "**** Regulation loop needs $t seconds"
-	elif [ "$t" -le "8" ] ; then # 8 Warning 
+	elif [ "$t" -le "8" ] ; then # 8 Warning
 		openwbDebugLog "MAIN" 0 "**** WARNING **** Regulation loop needs $t seconds"
 	else                         # 9,10,... Fatal
 		openwbDebugLog "MAIN" 0 "**** FATAL *********************************"
@@ -81,7 +81,7 @@ declare -r IsFloatingNumberRegex='^-?[0-9.]+$'
 if (( slavemode == 1)); then
 	randomSleep=$(<ramdisk/randomSleepValue)
 	if [[ -z $randomSleep ]] || [[ "${randomSleep}" == "0" ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
-		randomSleep=`shuf --random-source=/dev/urandom -i 0-8 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
+		randomSleep=`shuf --random-source=/dev/urandom -i 0-3 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
 		openwbDebugLog "MAIN" 0 "slavemode=$slavemode: ramdisk/randomSleepValue missing or 0 - creating new one containing $randomSleep"
 		echo "$randomSleep" > ramdisk/randomSleepValue
 	fi
@@ -89,6 +89,9 @@ if (( slavemode == 1)); then
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Waiting ${randomSleep}s"
 
 	sleep "$randomSleep"
+
+	# repeat setting of startregel as we do not want to account for the randomization sleep time
+	startregel=$(date +%s)
 
 	openwbDebugLog "MAIN" 1 "Slave mode regulation spread: Wait end"
 fi

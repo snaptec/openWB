@@ -81,7 +81,7 @@
 							Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
 							Hier ist Ja zu wählen wenn, bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.<br />
 							Es ist sicherzustellen, dass auf dieser openWB die Modulkonfiguration des <span class="text-danger">ersten Ladepunktes</span>
-							korrekt ist und alle weiteren Ladepunkte <span class="text-danger">deaktiviert</span> sind. Handels es sich hier um eine
+							korrekt ist und alle weiteren Ladepunkte <span class="text-danger">deaktiviert</span> sind. Handelt es sich hier um eine
 							<span class="text-danger">DUO</span>, so ist auch der <span class="text-danger">zweite Ladepunkt</span> zu aktivieren.<br />
 							<span class="text-danger">Alle weiteren in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
 							An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
@@ -95,6 +95,9 @@
 											<option <?php if($ssdisplayold == 0) echo "selected" ?> value="0">Normal</option>
 											<option <?php if($ssdisplayold == 1) echo "selected" ?> value="1">Display der übergeordneten openWB</option>
 										</select>
+										<span class="form-text small">
+											Für das Theme "Normal" kann der Maximalwert der Skala im Bereich "Display" unter Einstellungen->Verschiedenes angepasst werden.
+										</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
@@ -262,7 +265,7 @@
 														}
 														addressStr = addressStr + ', ' + this.address.postalCode + ' ' + this.address.city;
 														$('#tibberHomesDropdown').append('<option value="' + homeID + '">' + addressStr + '</option>');
-    												});
+													});
 													$('#tibberhomeIdModal').find('.modal-header').removeClass('bg-danger');
 													$('#tibberhomeIdModal').find('.modal-header').addClass('bg-success');
 													$('#tibberhomeIdModalOkBtn').show();
@@ -287,7 +290,7 @@
 													$('#tibberModalSelectHomeIdDiv').hide();
 													$('#tibberhomeid').val('');
 													$('#tibberhomeIdModal').modal("show");
-								  				})
+												})
 										});
 
 										$('#verifyTibberBtn').click(function(){
@@ -344,10 +347,10 @@
 												<div id="tibberModalSelectHomeIdDiv" class="row justify-content-center hide">
 													<div class="col">
 														<div class="form-group">
-														<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
-														<select class="form-control selectpicker" id="tibberHomesDropdown">
-														</select>
-													  </div>
+															<label for="tibberHomesDropdown">Bitte wählen Sie eine Adresse:</label>
+															<select class="form-control selectpicker" id="tibberHomesDropdown">
+															</select>
+														</div>
 													</div>
 												</div>
 
@@ -700,6 +703,21 @@
 											</div>
 										</div>
 										<span class="form-text small">Ampere mit denen geladen werden soll um den Ziel SoC zu erreichen.</span>
+									</div>
+								</div>
+
+								<div class="form-row mb-1">
+									<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+										<span class="form-text small">
+											Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+											Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+											Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+											Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+											SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+											SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+										</span>
 									</div>
 								</div>
 							</div>

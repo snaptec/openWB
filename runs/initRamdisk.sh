@@ -373,6 +373,7 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/socketApproved
 	echo 0 > $RamdiskPath/socketActivated
 	echo 0 > $RamdiskPath/socketActivationRequested
+	echo "unknown" > $RamdiskPath/prev_isss_mode
 
 	# diverse Dateien
 	echo 0 > $RamdiskPath/AllowedTotalCurrentPerPhase
@@ -517,6 +518,14 @@ initRamdisk(){
 		"mqtteinschaltverzoegerung:-1" \
 		"mqttetprovideraktiv:-1" \
 		"mqttetprovider:notset" \
+		"mqttlp1etbasedcharging:-1" \
+		"mqttlp2etbasedcharging:-1" \
+		"mqttlp3etbasedcharging:-1" \
+		"mqttlp4etbasedcharging:-1" \
+		"mqttlp5etbasedcharging:-1" \
+		"mqttlp6etbasedcharging:-1" \
+		"mqttlp7etbasedcharging:-1" \
+		"mqttlp8etbasedcharging:-1" \
 		"mqttevuglaettungakt:-1" \
 		"mqtthausverbrauch:-1" \
 		"mqtthausverbrauchstat:-1" \
