@@ -61,8 +61,6 @@ class UpdateValues:
 
     def update_values(self, counter_state: ChargepointState) -> None:
         self.parent_wb = Isss.get_parent_wb()
-        if self.parent_wb == "localhost":
-            return
         self.cp_num_str = str(Isss.get_cp_num(self.local_charge_point_num))
         if self.old_counter_state:
             # iterate over counterstate
@@ -83,8 +81,9 @@ class UpdateValues:
         def pub_value(topic: str, value):
             pub_single("openWB/lp/"+str(self.local_charge_point_num+1) +
                        "/"+topic, payload=str(value), no_json=True)
-            pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
-                       payload=str(value), hostname=self.parent_wb, no_json=True)
+            if self.parent_wb != "localhost":
+                pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
+                           payload=str(value), hostname=self.parent_wb, no_json=True)
         topic = self.MAP_KEY_TO_OLD_TOPIC[key]
         rounding = get_rounding_function_by_digits(2)
         if topic is not None:
