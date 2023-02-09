@@ -47,7 +47,7 @@ class Device(AbstractDevice):
             component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
             self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config.configuration.id, component_config, self.client))
+                self.device_config.configuration.modbus_id, component_config, self.client))
         else:
             raise Exception(
                 "illegal component type " + component_type + ". Allowed values: " +
@@ -76,7 +76,7 @@ COMPONENT_TYPE_TO_MODULE = {
 
 
 def read_legacy(component_type: str, ip_address: str, id: int, num: Optional[int]) -> None:
-    device_config = GoodWe(configuration=GoodWeConfiguration(ip_address=ip_address, id=id))
+    device_config = GoodWe(configuration=GoodWeConfiguration(ip_address=ip_address, modbus_id=id))
     dev = Device(device_config)
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
