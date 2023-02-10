@@ -10,6 +10,7 @@ from typing import List, Optional
 import RPi.GPIO as GPIO
 
 from helpermodules.pub import pub_single
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.store import ramdisk_read, ramdisk_write
 from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
@@ -292,7 +293,7 @@ class IsssChargepoint:
                 return thread.is_alive()
             else:
                 return False
-        try:
+        with SingleComponentUpdateContext(self.module.component_info):
             if self.local_charge_point_num == 1:
                 time.sleep(0.1)
             phase_switch_cp_active = __thread_active(self.update_state.cp_interruption_thread) or __thread_active(
@@ -301,8 +302,6 @@ class IsssChargepoint:
             log.debug("Published plug state "+str(state.plug_state))
             self.update_values.update_values(state)
             self.update_state.update_state()
-        except Exception:
-            log.exception("Fehler bei Ladepunkt "+str(self.local_charge_point_num))
 
 
 Isss(IsssMode(sys.argv[1]), int(sys.argv[2])).loop()

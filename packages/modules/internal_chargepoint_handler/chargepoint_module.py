@@ -40,20 +40,23 @@ class ClientFactory:
              meter_config(b23.B23, modbus_id=201)],
             [meter_config(sdm.Sdm630, modbus_id=6), meter_config(sdm.Sdm630, modbus_id=106)]
         ]
+        try:
+            evse_client = evse.Evse(self.local_charge_point_num + 1, serial_client)
+        except Exception:
+            evse_client = None
 
         def _check_meter(serial_client: ModbusSerialClient_, meters: List[meter_config]):
             for meter_type, modbus_id in meters:
                 try:
                     meter_client = meter_type(modbus_id, serial_client)
                     if meter_client.get_voltages()[0] > 20:
+                        log.debug("Verbauter Zähler: "+str(meter_type))
                         return meter_client
                 except Exception:
                     pass
             else:
-                raise Exception("Es konnte keines der Meter in "+str(meters)+" zugeordnet werden.")
-
+                return None
         meter_client = _check_meter(serial_client, meter_configuration_options[self.local_charge_point_num])
-        evse_client = evse.Evse(self.local_charge_point_num + 1, serial_client)
         return meter_client, evse_client
 
     def get_pins_phase_switch(self, new_phases: int) -> Tuple[int, int]:
@@ -86,6 +89,14 @@ class ChargepointModule(AbstractChargepoint):
         self.__client.evse_client.get_firmware_version()
         self.__client.evse_client.deactivate_precise_current()
 
+    def _check_hardware(self):
+        if self.__client.meter_client is None and self.__client.evse_client is None:
+            raise Exception("Auslesen von Zähler UND Evse nicht möglich. Vermutlich ist der USB-Adapter defekt.")
+        if self.__client.meter_client is None:
+            raise Exception("Der Zähler antwortet nicht. Vermutlich ist der Zähler falsch konfiguriert oder defekt.")
+        if self.__client.evse_client is None:
+            raise Exception("Auslesen der EVSE nicht möglich. Vermutlich ist die EVSE defekt.")
+
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):
             if self.set_current_evse != current:
@@ -93,6 +104,7 @@ class ChargepointModule(AbstractChargepoint):
 
     def get_values(self, phase_switch_cp_active: bool) -> Tuple[ChargepointState, float]:
         try:
+            self._check_hardware()
             _, power = self.__client.meter_client.get_power()
             if power < self.PLUG_STANDBY_POWER_THRESHOLD:
                 power = 0
@@ -116,6 +128,10 @@ class ChargepointModule(AbstractChargepoint):
                 plug_state = self.old_plug_state
             else:
                 self.old_plug_state = plug_state
+
+            if any(v < 10 for v in voltages):
+                raise Exception("Spannungen "+str(voltages) +
+                                "V deuten auf einen defekten Zähler oder eine falsche Verkabelung hin.")
 
             chargepoint_state = ChargepointState(
                 power=power,
