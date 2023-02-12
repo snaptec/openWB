@@ -373,8 +373,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/socketApproved
 	echo 0 > $RamdiskPath/socketActivated
 	echo 0 > $RamdiskPath/socketActivationRequested
-	echo "unknown" > $RamdiskPath/prev_isss_mode
-
+	echo "unknown" > $RamdiskPath/isss_mode
+	
 	# diverse Dateien
 	echo 0 > $RamdiskPath/AllowedTotalCurrentPerPhase
 	echo 0 > $RamdiskPath/ChargingVehiclesOnL1
