@@ -265,7 +265,7 @@ class Isss:
             return ramdisk_read("parentWB").replace('\\n', '').replace('\"', '')
         except Exception:
             FaultState.warning("Für den Betrieb im Nur-Ladepunkt-Modus ist zwingend eine Master-openWB erforderlich.")
-            return ""
+            return "localhost"
 
 
 class IsssChargepoint:
