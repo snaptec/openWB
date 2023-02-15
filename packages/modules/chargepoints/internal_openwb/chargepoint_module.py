@@ -125,9 +125,6 @@ class ChargepointModule(AbstractChargepoint):
             else:
                 self.old_plug_state = plug_state
 
-            if (max(currents) > 0.1 and charge_state is False) or (max(currents) == 0 and charge_state):
-                raise ValueError("Ladestatus {} passt nicht zu den Strömen {}.".format(charge_state, currents))
-
             chargepoint_state = ChargepointState(
                 power=power,
                 currents=currents,
