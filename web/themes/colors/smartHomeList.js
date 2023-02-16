@@ -120,14 +120,14 @@ class SmartHomeList {
 		// name
 		cell.append("span")
 			.text(row.name);
-		let temps = row.temp.filter(r => (r > 0.0))
+		let temps = row.temp.filter(r => (r < 200.0))
 		let tempString = "";
 		if (temps.length > 0) {
 			tempString += " (";
 			temps.map((t, i) => {
 				tempString += formatTemp(t);
-				if (i + 1 < temps.length) { 
-					tempString += ', '; 
+				if (i + 1 < temps.length) {
+					tempString += ', ';
 				}
 			})
 			tempString += ") ";
