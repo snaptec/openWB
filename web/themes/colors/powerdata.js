@@ -256,7 +256,9 @@ class WbData {
 					this.updateUsageDetails();
 					yieldMeter.update();
 					break;
-				case 'countAsHouse':
+				case 'name':
+					this.historicSummary['sh'+(index-1)].name = value;
+					yieldMeter.update();
 					break;
 				default:
 					break;
