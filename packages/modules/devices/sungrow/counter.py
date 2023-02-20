@@ -29,7 +29,7 @@ class SungrowCounter:
 
     def update(self):
         unit = self.__device_modbus_id
-        if self.component_config.configuration.version == Version.SH:
+        if self.component_config.configuration.version in [Version.SH, Version.SH_winet_dongle]:
             power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32,
                                                            wordorder=Endian.Little, unit=unit) * -1
             # no valid data for powers per phase
@@ -37,16 +37,16 @@ class SungrowCounter:
             #                                                 wordorder=Endian.Little, unit=unit)
             # powers = [power / 10 for power in powers]
             # log.info("power: " + str(power) + " powers?: " + str(powers))
-        else:
+        else:  # Version.SG, Version.SG_winet_dongle
             power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
                                                            wordorder=Endian.Little, unit=unit)
-            if self.component_config.configuration.version == Version.SG_winet_dongle:
-                power = power * -1
             # no valid data for powers per phase
             # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.UINT_16] * 3,
             #                                                 wordorder=Endian.Little, unit=unit)
             # powers = [power / 10 for power in powers]
             # log.info("power: " + str(power) + " powers?: " + str(powers))
+        if self.component_config.configuration.version in [Version.SH_winet_dongle, Version.SG_winet_dongle]:
+            power *= -1
         frequency = self.__tcp_client.read_input_registers(5035, ModbusDataType.UINT_16, unit=unit) / 10
         voltages = self.__tcp_client.read_input_registers(5018, [ModbusDataType.UINT_16] * 3,
                                                           wordorder=Endian.Little, unit=unit)
