@@ -1,9 +1,9 @@
 /* Colors, for dark gray background */
 :root {
 	--fontCol: rgba(160, 160, 160, 0.82);
-	--gridCol: rgba(160,160,160, 0.82);
-	--xgridCol: rgba(160,160,160, 0.82);
-	--tickCol: rgba(160,160,160, 0.82);
+	--gridCol: rgba(160, 160, 160, 0.82);
+	--xgridCol: rgba(160, 160, 160, 0.82);
+	--tickCol: rgba(160, 160, 160, 0.82);
 	--evuCol: rgba(178, 34, 34, 1);
 	--color-switchRed: #d12020;
 	--color-switchGreen: #4db662;
@@ -29,8 +29,14 @@
 	filter: var(--invertLogo);
 }
 
-.bg-warning, .bg-info, .bg-success, .bg-light {
+.bg-warning,
+.bg-info,
+.bg-success {
 	color: var(--color-fg);
+}
+
+.bg-light {
+	color: #212529;
 }
 
 .btn-outline-secondary,
@@ -87,12 +93,15 @@ body {
 	color: var(--color-fg);
 }
 
-input, select {
+input,
+select {
 	background-color: var(--color-frame);
 	color: var(--color-fg);
 }
 
-input[type="text"], input[type="password"], select {
+input[type="text"],
+input[type="password"],
+select {
 	border: 1px solid var(--color-frame);
 }
 
