@@ -1090,7 +1090,7 @@ loadvars(){
 	fi
 	echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 	usesimbezug=0
-	if [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] ; then
+	if [[ $wattbezugmodul == "bezug_solarwatt" ]]|| [[ $wattbezugmodul == "bezug_rct" ]]|| [[ $wattbezugmodul == "bezug_varta" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] ; then
 		usesimbezug=1
 	fi
 	if ((usesimbezug == 1)); then
@@ -1129,9 +1129,6 @@ loadvars(){
 	fi
 
 	usesimpv=0
-	if [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
-		usesimpv=1
-	fi
 	if [[ $pvwattmodul == "wr_rct" ]]|| [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
@@ -1218,7 +1215,7 @@ loadvars(){
 		echo "$pvallwh" > /var/www/html/openWB/ramdisk/pvallwh
 	fi
 
-	if [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]]|| [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_varta" ]] ; then
+	if [[ $speichermodul == "speicher_tesvoltsma" ]] || [[ $speichermodul == "speicher_solarwatt" ]] || [[ $speichermodul == "speicher_rct" ]] || [[ $speichermodul == "speicher_varta" ]] ; then
 		ra='^-?[0-9]+$'
 		watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 		if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
