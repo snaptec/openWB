@@ -99,14 +99,19 @@
 				}
 
 
+				function generateRandomString($length = 10) {
+					$character_list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+					return substr(str_shuffle(str_repeat($character_list, ceil($length/strlen($character_list)) )),1,$length);
+				}
+
+
 				function gen_challenge()
 				{
 					global $tesla_api_code_vlc;
 
-					$code_verifier = substr(hash('sha512', mt_rand()), 0, $tesla_api_code_vlc);
-					$code_challenge = rtrim(strtr(base64_encode($code_verifier), '+/', '-_'), '='); 
-					
-					$state = rtrim(strtr(base64_encode(substr(hash('sha256', mt_rand()), 0, 12)), '+/', '-_'), '='); 
+					$code_verifier = generateRandomString($tesla_api_code_vlc);
+					$code_challenge = rtrim(strtr(base64_encode(hash('sha256', $code_verifier, true)), '+/', '-_'), '='); 
+					$state = rtrim(strtr(base64_encode(generateRandomString(12)), '+/', '-_'), '='); 
 
 					return array("code_verifier" => $code_verifier, "code_challenge" => $code_challenge, "state" => $state);
 				}
@@ -140,7 +145,7 @@
 				}
 
 
-				function login($weburl, $code_verifier, $code_challenge, $state)
+				function login($weburl, $code_verifier)
 				{
 					global $tesla_api_redirect, $user_agent, $tesla_api_oauth2, $cid, $cs, $tesla_api_owners;
 
@@ -169,7 +174,7 @@
 
 					$tokens = json_decode($response["response"], true);
 
-					if(empty($tokens['access_token'])) { return return_msg(0, "Token issue"); }
+					if(empty($tokens['access_token'])) { return return_msg(0, "Error: '" . $tokens['error'] . "' Description: '" . $tokens['error_description'] . "'"); }
 
 					// $tokens["bearer_token"] = $bearer_token;
 					// $tokens["bearer_refresh_token"] = $refresh_token;
@@ -227,9 +232,6 @@
 					global $tesla_api_redirect;
 
 					$challenge = gen_challenge();
-					$code_verifier = $challenge["code_verifier"];
-					$code_challenge = $challenge["code_challenge"];
-					$state = $challenge["state"];
 					$timestamp = time();
 
 					?>
@@ -240,9 +242,24 @@
 							</div>
 							<div class="card-body">
 								<input type="hidden" name="go" value="login">
-								<input type="hidden" name="code_verifier" value="<?php echo $code_verifier; ?>">
-								<input type="hidden" name="code_challenge" value="<?php echo $code_challenge; ?>">
-								<input type="hidden" name="state" value="<?php echo $state; ?>">
+								<div class="form-row mb-1">
+									<label for="code_verifier" class="col-md-4 col-form-label">Code_Verifier:</label>
+									<div class="col">
+										<input class="form-control" type="text" name="code_verifier" value="<?php echo $challenge["code_verifier"]; ?>" readonly>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="code_challenge" class="col-md-4 col-form-label">Code_Challenge:</label>
+									<div class="col">
+										<input class="form-control" type="text" name="code_challenge" value="<?php echo $challenge["code_challenge"]; ?>" readonly>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="state" class="col-md-4 col-form-label">State:</label>
+									<div class="col">
+										<input class="form-control" type="text" name="state" value="<?php echo $challenge["state"]; ?>" readonly>
+									</div>
+								</div>
 								<p>
 									Seit der Umstellung auf reCaptcha bei der Tesla-Anmeldung kann die Anmeldung nicht mehr automatisch durchgeführt werden.<br />
 									Bitte die folgenden Schritte nacheinander durchführen:
@@ -259,7 +276,6 @@
 										<input class="form-control" type="text" name="weburl" id="weburl" required>
 									</div>
 								</div>
-								
 							</div>
 							<div class="card-footer">
 								<div class="form-row text-center">
@@ -281,7 +297,7 @@
 					-->
 					<script>
 					function teslaLogin () {
-						teslaLogin = window.open("<?php echo gen_url($code_challenge, $state);?>", "TeslaLogin", "width=800,height=600,status=yes,scrollbars=yes,resizable=yes");
+						teslaLogin = window.open("<?php echo gen_url($challenge["code_challenge"], $challenge["state"]);?>", "TeslaLogin", "width=800,height=600,status=yes,scrollbars=yes,resizable=yes");
 						teslaLogin.focus();
 					}
 					</script>
@@ -289,10 +305,10 @@
 					<?php
 				}
 
-				if(isset($_REQUEST["go"])){
+				if (isset($_REQUEST["go"])) {
 					switch($_REQUEST["go"]){
 						case "login":
-							$result = login($_POST["weburl"], $_POST["code_verifier"], $_POST["code_challenge"], $_POST["state"]);
+							$result = login($_POST["weburl"], $_POST["code_verifier"]);
 							$resultJson = json_decode( $result, false );
 							// var_dump( $resultJson );
 							// echo "Success: " . $resultJson->{'success'} . "<br>";
@@ -321,7 +337,6 @@
 									</div>
 								<?php
 							} else {
-								// var_dump( $resultJson->{'message'} );
 								?>
 									<div class="alert alert-danger">
 										Anmeldung fehlgeschlagen!<br>
