@@ -303,7 +303,7 @@ at_reboot() {
 	if python3 -c "import lxml" &> /dev/null; then
 		echo 'lxml installed...'
 	else
-		sudo pip3 install lxml
+		sudo apt-get install python3-lxml
 	fi
 	#Prepare for secrets used in soc module libvwid in Python
 	VWIDMODULEDIR="$OPENWBBASEDIR/modules/soc_vwid"
