@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from typing import Dict, Union
 
+from requests import Session
+
 from dataclass_utils import dataclass_from_dict
 from modules.common.component_state import CounterState
 from modules.common.component_type import ComponentDescriptor
@@ -28,18 +30,18 @@ class HttpCounter:
             component_config.configuration.current_l3_path,
         ])
 
-    def update(self, session):
-        imported = self.__get_imported(session)
-        exported = self.__get_exported(session)
+    def update(self, session: Session) -> None:
         power = self.__get_power(session)
+        exported = self.__get_exported(session)
+        imported = self.__get_imported(session)
         if imported is None or exported is None:
             imported, exported = self.sim_counter.sim_count(power)
 
         counter_state = CounterState(
-            currents=self.__get_currents(session),
-            imported=imported,
+            power=power,
             exported=exported,
-            power=power
+            imported=imported,
+            currents=self.__get_currents(session)
         )
         self.store.set(counter_state)
 

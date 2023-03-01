@@ -954,7 +954,7 @@ def on_message(client, userdata, msg):
                 f.close()
                 setTopicCleared = True
             if (msg.topic == "openWB/set/configure/TotalPower"):
-                if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
+                if (float(msg.payload) >= 0 and float(msg.payload) <= 999999):
                     f = open('/var/www/html/openWB/ramdisk/TotalPower', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()

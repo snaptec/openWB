@@ -56,14 +56,14 @@ class UpdateValues:
     }
 
     def __init__(self, local_charge_point_num: int) -> None:
-        self.local_charge_point_num_str = str(local_charge_point_num)
+        self.local_charge_point_num = local_charge_point_num
         self.old_counter_state = None
 
     def update_values(self, counter_state: ChargepointState) -> None:
         self.parent_wb = Isss.get_parent_wb()
-        self.cp_num_str = str(Isss.get_cp_num(int(self.local_charge_point_num_str)))
+        self.cp_num_str = str(Isss.get_cp_num(self.local_charge_point_num))
         if self.old_counter_state:
-            # iterate over counterstate
+            # iterate over counter_state
             vars_old_counter_state = vars(self.old_counter_state)
             for key, value in vars(counter_state).items():
                 if value != vars_old_counter_state[key]:
@@ -71,7 +71,7 @@ class UpdateValues:
                     self._pub_values_to_2(key, value)
             self.old_counter_state = counter_state
         else:
-            # Bei Neustart alles publishen
+            # Bei Neustart alles veröffentlichen
             for key, value in vars(counter_state).items():
                 self._pub_values_to_1_9(key, value)
                 self._pub_values_to_2(key, value)
@@ -79,7 +79,8 @@ class UpdateValues:
 
     def _pub_values_to_1_9(self, key: str, value) -> None:
         def pub_value(topic: str, value):
-            pub_single("openWB/lp/"+self.local_charge_point_num_str+"/"+topic, payload=str(value), no_json=True)
+            pub_single("openWB/lp/"+str(self.local_charge_point_num+1) +
+                       "/"+topic, payload=str(value), no_json=True)
             pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
                        payload=str(value), hostname=self.parent_wb, no_json=True)
         topic = self.MAP_KEY_TO_OLD_TOPIC[key]
@@ -117,11 +118,10 @@ class UpdateValues:
 
 class UpdateState:
     def __init__(self, cp_module: chargepoint_module.ChargepointModule) -> None:
-        self.old_phases_to_use = 3
+        self.old_phases_to_use = 0
         self.old_set_current = 0
         self.phase_switch_thread = None  # type: Optional[threading.Thread]
         self.cp_interruption_thread = None  # type: Optional[threading.Thread]
-        self.actor_cooldown_thread = None  # type: Optional[threading.Thread]
         self.cp_module = cp_module
         self.__set_current_error = 0
 
@@ -164,8 +164,8 @@ class UpdateState:
         except (FileNotFoundError, ValueError):
             log.error("Error reading u1p3pstat. Setting to default 3.")
             phases_to_use = 3
-        log.debug("Values from ramdisk: set_current"+str(set_current) +
-                  " heartbeat "+str(heartbeat) + " phases_to_use "+str(phases_to_use) + "cp_interruption_duration" + str(cp_interruption_duration))
+        log.debug("Values from ramdisk: set_current" + str(set_current) + " heartbeat " + str(heartbeat) +
+                  " phases_to_use " + str(phases_to_use) + "cp_interruption_duration" + str(cp_interruption_duration))
 
         if self.phase_switch_thread:
             if self.phase_switch_thread.is_alive():
@@ -264,11 +264,12 @@ class Isss:
             return ramdisk_read("parentWB").replace('\\n', '').replace('\"', '')
         except Exception:
             FaultState.warning("Für den Betrieb im Nur-Ladepunkt-Modus ist zwingend eine Master-openWB erforderlich.")
-            return ""
+            return "localhost"
 
 
 class IsssChargepoint:
-    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode, socket_max_current: int) -> None:
+    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode,
+                 socket_max_current: int) -> None:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:

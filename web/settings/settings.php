@@ -81,7 +81,7 @@
 							Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
 							Hier ist Ja zu wählen wenn, bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.<br />
 							Es ist sicherzustellen, dass auf dieser openWB die Modulkonfiguration des <span class="text-danger">ersten Ladepunktes</span>
-							korrekt ist und alle weiteren Ladepunkte <span class="text-danger">deaktiviert</span> sind. Handels es sich hier um eine
+							korrekt ist und alle weiteren Ladepunkte <span class="text-danger">deaktiviert</span> sind. Handelt es sich hier um eine
 							<span class="text-danger">DUO</span>, so ist auch der <span class="text-danger">zweite Ladepunkt</span> zu aktivieren.<br />
 							<span class="text-danger">Alle weiteren in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
 							An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
@@ -95,6 +95,9 @@
 											<option <?php if($ssdisplayold == 0) echo "selected" ?> value="0">Normal</option>
 											<option <?php if($ssdisplayold == 1) echo "selected" ?> value="1">Display der übergeordneten openWB</option>
 										</select>
+										<span class="form-text small">
+											Für das Theme "Normal" kann der Maximalwert der Skala im Bereich "Display" unter Einstellungen->Verschiedenes angepasst werden.
+										</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">

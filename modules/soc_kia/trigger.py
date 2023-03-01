@@ -76,11 +76,14 @@ def isTimerExpired():
 
 def isDownloadTriggered():
     trigger = 0
+    external = 0
 
     try:
         if isExternalTriggered() == 1:
             ackExternalTrigger()
+            soclogging.logDebug(1, "Manual update or charge starts")
             trigger = 1
+            external = 1
         elif isTimerExpired() == 1:
             trigger = 1
         else:
@@ -90,13 +93,15 @@ def isDownloadTriggered():
             if isMinimumTimerExpired() == 1:
                 ackTimerTrigger()
                 trigger = 1
+            elif external == 1:
+                trigger = 1
             else:
                 soclogging.logDebug(1, "Last Download less then " + '{:.0f}'.format(
                     parameters.getParameter('timerMinInterval') / 60) + " minutes ago. Cancelling download")
                 trigger = 0
 
         if trigger == 1:
-            if state.getState('charged') == 0 and state.getState('unplug') == 0:
+            if (state.getState('charged') == 0) and (state.getState('unplug') == 0) and (external == 0):
                 trigger = 0
                 soclogging.logDebug(1, "Vehicle was not unplugged or charging since last download. Cancelling download")
 

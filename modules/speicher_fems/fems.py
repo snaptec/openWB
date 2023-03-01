@@ -29,7 +29,7 @@ def update(multifems: str, femskacopw: str, femsip: str):
     if multifems == "0":
         try:
             response = requests.get(
-                "http://" + femsip + ":8084/rest/channel/ess0/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)",
+                "http://" + femsip + ":8084/rest/channel/ess0/(Soc|DcChargeEnergy|DcDischargeEnergy)",
                 auth=("x", femskacopw)).json()
         except:
             traceback.print_exc()
@@ -38,14 +38,14 @@ def update(multifems: str, femskacopw: str, femsip: str):
             address = singleValue["address"]
             if (address == "ess0/Soc"):
                 write_ramdisk(singleValue["value"], "speichersoc")
-            elif address == "ess0/ActiveChargeEnergy":
+            elif address == "ess0/DcChargeEnergy":
                 write_ramdisk(singleValue["value"], "speicherikwh")
-            elif address == "ess0/ActiveDischargeEnergy":
+            elif address == "ess0/DcDischargeEnergy":
                 write_ramdisk(singleValue["value"], "speicherekwh")
     else:
         try:
             response = requests.get(
-                "http://" + femsip + ":8084/rest/channel/ess2/(Soc|ActiveChargeEnergy|ActiveDischargeEnergy)",
+                "http://" + femsip + ":8084/rest/channel/ess2/(Soc|DcChargeEnergy|DcDischargeEnergy)",
                 auth=("x", femskacopw)).json()
         except:
             traceback.print_exc()
@@ -54,9 +54,9 @@ def update(multifems: str, femskacopw: str, femsip: str):
             address = singleValue["address"]
             if (address == "ess2/Soc"):
                 write_ramdisk(singleValue["value"], "speichersoc")
-            elif address == "ess2/ActiveChargeEnergy":
+            elif address == "ess2/DcChargeEnergy":
                 write_ramdisk(singleValue["value"], "speicherikwh")
-            elif address == "ess2/ActiveDischargeEnergy":
+            elif address == "ess2/DcDischargeEnergy":
                 write_ramdisk(singleValue["value"], "speicherekwh")
 
     try:
