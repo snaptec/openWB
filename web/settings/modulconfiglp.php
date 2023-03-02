@@ -2026,7 +2026,7 @@
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<div class="alert alert-info">
-											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io/" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
+											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -2104,7 +2104,7 @@
 											$("#soc_tronity_select_vehicle_lp1").empty();
 											$.ajax({
 												type: "POST",
-												url: "https://api-eu.TRONITY.io/oauth/authentication",
+												url: "https://api.tronity.tech/authentication",
 												data: JSON.stringify( { "client_id": $('#soc_tronity_client_id_lp1').val(), "client_secret": $('#soc_tronity_client_secret_lp1').val(), "grant_type": "app" } ),
 												contentType: "application/json",
 												dataType: "json",
@@ -2112,7 +2112,7 @@
 													$('#soc_tronity_load_vehicles_lp1').addClass("bg-warning");
 													$.ajax({
 														type: "GET",
-														url: "https://api-eu.TRONITY.io/v1/vehicles",
+														url: "https://api.tronity.tech/tronity/vehicles",
 														headers: {
 															Authorization: 'Bearer '+authdata.access_token
 														},
