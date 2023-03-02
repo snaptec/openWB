@@ -25,6 +25,34 @@ def write_ramdisk(value, file):
         exit(1)
 
 
+def adjust_energy_from_unit_to_watthours(energy, unit):
+    try:
+        if (unit.lower() == 'kwh'):
+            energy = energy * 1000.0
+        elif (unit == 'MWh'):
+            energy = energy * 1000000.0
+        elif (unit == 'mWh'):
+            energy = energy / 1000.0
+
+        return energy
+    except:
+        traceback.print_exc()
+
+
+def adjust_power_from_unit_to_watt(power, unit):
+    try:
+        if (unit == 'mW'):
+            power = power / 1000.0
+        elif (unit == 'MW'):
+            power = power * 1000000.0
+        elif (unit.lower() == 'kW'):
+            power = power * 1000.0
+
+        return power
+    except:
+        traceback.print_exc()
+
+
 def update(multifems: str, femskacopw: str, femsip: str):
     if multifems == "0":
         try:
@@ -39,9 +67,11 @@ def update(multifems: str, femskacopw: str, femsip: str):
             if (address == "ess0/Soc"):
                 write_ramdisk(singleValue["value"], "speichersoc")
             elif address == "ess0/DcChargeEnergy":
-                write_ramdisk(singleValue["value"], "speicherikwh")
+                energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+                write_ramdisk(energy, "speicherikwh")
             elif address == "ess0/DcDischargeEnergy":
-                write_ramdisk(singleValue["value"], "speicherekwh")
+                energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+                write_ramdisk(energy, "speicherekwh")
     else:
         try:
             response = requests.get(
@@ -55,9 +85,11 @@ def update(multifems: str, femskacopw: str, femsip: str):
             if (address == "ess2/Soc"):
                 write_ramdisk(singleValue["value"], "speichersoc")
             elif address == "ess2/DcChargeEnergy":
-                write_ramdisk(singleValue["value"], "speicherikwh")
+                energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+                write_ramdisk(energy, "speicherikwh")
             elif address == "ess2/DcDischargeEnergy":
-                write_ramdisk(singleValue["value"], "speicherekwh")
+                energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+                write_ramdisk(energy, "speicherekwh")
 
     try:
         response = requests.get(
@@ -69,11 +101,11 @@ def update(multifems: str, femskacopw: str, femsip: str):
     for singleValue in response:
         address = singleValue["address"]
         if (address == "_sum/GridActivePower"):
-            grid = singleValue["value"]
+            grid = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
         elif address == "_sum/ProductionActivePower":
-            pv = singleValue["value"]
+            pv = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
         elif address == "_sum/ConsumptionActivePower":
-            haus = singleValue["value"]
+            haus = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
 
     leistung = grid + pv - haus
 
@@ -87,3 +119,31 @@ def update(multifems: str, femskacopw: str, femsip: str):
 
 def main(argv: List[str]):
     run_using_positional_cli_args(update, argv)
+
+# example FEMS response on rest/channel/ess0/(Soc|DcChargeEnergy|DcDischargeEnergy)
+# [
+#     {
+#         "address": "ess0/DcChargeEnergy",
+#         "type": "LONG",
+#         "accessMode": "RO",
+#         "text": "",
+#         "unit": "Wh",
+#         "value": 456732
+#     },
+#     {
+#         "address": "ess0/Soc",
+#         "type": "INTEGER",
+#         "accessMode": "RO",
+#         "text": "",
+#         "unit": "%",
+#         "value": 67
+#     },
+#     {
+#         "address": "ess0/DcDischargeEnergy",
+#         "type": "LONG",
+#         "accessMode": "RO",
+#         "text": "",
+#         "unit": "Wh",
+#         "value": 453354
+#     }
+# ]
