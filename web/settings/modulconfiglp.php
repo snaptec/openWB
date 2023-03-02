@@ -1452,6 +1452,17 @@
 											</span>
 										</div>
 									</div>
+									<div id="socevccpinlp1" class="hide">
+										<div class="form-row mb-1">
+											<label for="soc_evcc_pin_lp1" class="col-md-4 col-form-label">PIN</label>
+											<div class="col">
+												<input class="form-control" type="text" name="soc_evcc_pin_lp1" id="soc_evcc_pin_lp1" value="<?php echo $soc_evcc_pin_lp1old ?>">
+												<span class="form-text small">
+													Sicherheits-PIN der App des Fahrzeugs
+												</span>
+											</div>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_evcc_token_lp1" class="col-md-4 col-form-label">Token</label>
 										<div class="col">
@@ -1481,8 +1492,21 @@
 									</div>
 								</div>
 								<script>
+									function visibility_socevccpinlp1() {
+										if($('#soc_evcc_type_lp1').val() == 'fiat') {
+											showSection('#socevccpinlp1');
+										} else {
+											hideSection('#socevccpinlp1');
+										}
+									}
+
+									$(function() {
+										visibility_socevccpinlp1();
+									});
+
 									$('#soc_evcc_select_vehicle_lp1').change(function(){
 										$('#soc_evcc_type_lp1').val($(this).val());
+										visibility_socevccpinlp1();
 									});
 
 									$('#soc_evcc_load_vehicles_lp1').click(function(){
@@ -4068,6 +4092,17 @@
 											</span>
 										</div>
 									</div>
+									<div id="socevccpinlp2" class="hide">
+										<div class="form-row mb-1">
+											<label for="soc_evcc_pin_lp2" class="col-md-4 col-form-label">PIN</label>
+											<div class="col">
+												<input class="form-control" type="text" name="soc_evcc_pin_lp2" id="soc_evcc_pin_lp2" value="<?php echo $soc_evcc_pin_lp2old ?>">
+												<span class="form-text small">
+													Sicherheits-PIN der App des Fahrzeugs
+												</span>
+											</div>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_evcc_token_lp2" class="col-md-4 col-form-label">Token</label>
 										<div class="col">
@@ -4079,8 +4114,20 @@
 									</div>
 								</div>
 								<script>
+									function visibility_socevccpinlp2() {
+										if($('#soc_evcc_type_lp2').val() == 'fiat') {
+											showSection('#socevccpinlp2');
+										} else {
+											hideSection('#socevccpinlp2');
+										}
+									}
+
+									$(function() {
+										visibility_socevccpinlp2();
+									});
 									$('#soc_evcc_select_vehicle_lp2').change(function(){
 										$('#soc_evcc_type_lp2').val($(this).val());
+										visibility_socevccpinlp2();
 									});
 
 									$('#soc_evcc_load_vehicles_lp2').click(function(){
