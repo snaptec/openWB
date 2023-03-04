@@ -5,12 +5,12 @@ import subprocess
 
 
 class Sratiotherm(Sbase):
-    def __init__(self):
+    def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sratiotherm executed')
+        self._dynregel = 1
 
-    def getwatt(self, uberschuss, uberschussoffset):
+    def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
         forcesend = self.checkbefsend()
         argumentList = ['python3', self._prefixpy + 'ratiotherm/watt.py',
@@ -32,7 +32,7 @@ class Sratiotherm(Sbase):
                            str(self._device_ip), str(e1)))
         self.postwatt()
 
-    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+    def turndevicerelais(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         self.preturn(zustand, ueberschussberechnung, updatecnt)
         if (zustand == 1):
             pname = "/on.py"
