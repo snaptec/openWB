@@ -271,7 +271,7 @@ function setChargingCurrentkeba () {
 				echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:"$kebaiplp1":7090
 			fi
 		else
-			#modbus 1 means modbus interface 
+			#modbus 1 means modbus interface
 			sudo python3 /var/www/html/openWB/modules/keballlp1/setcurrkeba.py "$kebaiplp1" "$current" >> /var/www/html/openWB/ramdisk/port.log 2>&1
 		fi
 	fi

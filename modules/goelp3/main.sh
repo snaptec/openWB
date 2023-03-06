@@ -6,7 +6,7 @@ output=$(curl --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/status)
 if [[ $? == "0" ]] ; then
 	#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
 	fsp=$(echo $output | jq -r '.fsp')
-	if [[ ! $fsp =~ $re ]] ; then 
+	if [[ ! $fsp =~ $re ]] ; then
 		watt=$(echo $output | jq -r '.nrg[11]')
 		watt=$(echo "scale=0;$watt * 10 /1" |bc)
 		if [[ $watt =~ $re ]] ; then
@@ -65,7 +65,7 @@ if [[ $? == "0" ]] ; then
 		else
 			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
-	else 
+	else
 		output=$(curl --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/api/status)
 		if [[ $? == "0" ]] ; then
 			watt=$(echo $output | jq -r '.nrg[11]')
