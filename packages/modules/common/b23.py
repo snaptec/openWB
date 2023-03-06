@@ -11,7 +11,7 @@ class B23:
         self.id = modbus_id
 
     def get_imported(self) -> float:
-        return self.client.read_holding_registers(0x5000, ModbusDataType.UINT_64, unit=self.id) / 1000
+        return self.client.read_holding_registers(0x5000, ModbusDataType.UINT_64, unit=self.id) * 10
 
     def get_frequency(self) -> float:
         return self.client.read_holding_registers(0x5B2C, ModbusDataType.INT_16, unit=self.id) / 100

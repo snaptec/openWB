@@ -952,6 +952,7 @@
 				script.async = false;
 				document.body.appendChild(script);
 			});
+			
 
 			wbdata.init();
 			powerGraph.init();
@@ -961,7 +962,11 @@
 			smartHomeList.init();
 			batteryList.init();
 			priceChart.init();
-
+			if (wbdata.graphMode == 'live') {
+				powerGraph.activateLive()
+			} else {
+				powerGraph.activateDay()
+			}
 			$('.enableLp').click(function (event) {
 				// send mqtt set to enable/disable charge point after click
 				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element

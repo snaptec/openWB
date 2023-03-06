@@ -61,7 +61,7 @@ var topicsToSubscribe = [
 	["openWB/global/awattar/pricelist", 1],
 	// graph topics
 	//
-	["openWB/graph/lastlivevalues", 1],
+/* 	["openWB/graph/lastlivevalues", 1],
 	["openWB/graph/1alllivevalues", 1],
 	["openWB/graph/2alllivevalues", 1],
 	["openWB/graph/3alllivevalues", 1],
@@ -97,33 +97,33 @@ var topicsToSubscribe = [
 	["openWB/graph/boolDisplayEvu", 1],
 	["openWB/graph/boolDisplayLegend", 1],
 	["openWB/graph/boolDisplayLiveGraph", 1],
-	["openWB/graph/boolDisplayPv", 1],
+	["openWB/graph/boolDisplayPv", 1], */
 	// daily graph
-	["openWB/system/DayGraphData1", 0],
-	["openWB/system/DayGraphData2", 0],
-	["openWB/system/DayGraphData3", 0],
-	["openWB/system/DayGraphData4", 0],
-	["openWB/system/DayGraphData5", 0],
-	["openWB/system/DayGraphData6", 0],
-	["openWB/system/DayGraphData7", 0],
-	["openWB/system/DayGraphData8", 0],
-	["openWB/system/DayGraphData9", 0],
-	["openWB/system/DayGraphData10", 0],
-	["openWB/system/DayGraphData11", 0],
-	["openWB/system/DayGraphData12", 0],
+/* 	["openWB/system/DayGraphData1", 1],
+	["openWB/system/DayGraphData2", 1],
+	["openWB/system/DayGraphData3", 1],
+	["openWB/system/DayGraphData4", 1],
+	["openWB/system/DayGraphData5", 1],
+	["openWB/system/DayGraphData6", 1],
+	["openWB/system/DayGraphData7", 1],
+	["openWB/system/DayGraphData8", 1],
+	["openWB/system/DayGraphData9", 1],
+	["openWB/system/DayGraphData10", 1],
+	["openWB/system/DayGraphData11", 1],
+	["openWB/system/DayGraphData12", 1], */
 	// monthly graph
-	["openWB/system/MonthGraphData1", 0],
-	["openWB/system/MonthGraphData2", 0],
-	["openWB/system/MonthGraphData3", 0],
-	["openWB/system/MonthGraphData4", 0],
-	["openWB/system/MonthGraphData5", 0],
-	["openWB/system/MonthGraphData6", 0],
-	["openWB/system/MonthGraphData7", 0],
-	["openWB/system/MonthGraphData8", 0],
-	["openWB/system/MonthGraphData9", 0],
-	["openWB/system/MonthGraphData10", 0],
-	["openWB/system/MonthGraphData11", 0],
-	["openWB/system/MonthGraphData12", 0],
+	/* ["openWB/system/MonthGraphData1", 1],
+	["openWB/system/MonthGraphData2", 1],
+	["openWB/system/MonthGraphData3", 1],
+	["openWB/system/MonthGraphData4", 1],
+	["openWB/system/MonthGraphData5", 1],
+	["openWB/system/MonthGraphData6", 1],
+	["openWB/system/MonthGraphData7", 1],
+	["openWB/system/MonthGraphData8", 1],
+	["openWB/system/MonthGraphData9", 1],
+	["openWB/system/MonthGraphData10", 1],
+	["openWB/system/MonthGraphData11", 1],
+	["openWB/system/MonthGraphData12", 1], */
 
 	// global topics
 	["openWB/global/WHouseConsumption", 1],
@@ -418,7 +418,12 @@ var options = {
 		topicsToSubscribe.forEach((topic) => {
 			client.subscribe(topic[0], { qos: 0 });
 		});
+		if (wbdata.graphMode == 'day') {
 		subscribeDayGraph(new Date());
+		} else {
+			subscribeMqttGraphSegments();
+			subscribeGraphUpdates();
+		}
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
@@ -455,4 +460,16 @@ function publish(payload, topic) {
 	message.qos = 2;
 	message.retained = true;
 	client.send(message);
+}
+function subscribeDayGraph(date) {
+	// var today = new Date();
+	var dd = String(date.getDate()).padStart(2, '0');
+	var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = date.getFullYear();
+	graphdate = yyyy + mm + dd;
+	for (var segment = 1; segment < 13; segment++) {
+		var topic = "openWB/system/DayGraphData" + segment;
+		client.subscribe(topic, { qos: 0 });
+	}
+	publish(graphdate, "openWB/set/graph/RequestDayGraph");
 }
