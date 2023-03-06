@@ -29,4 +29,4 @@ def create_request_function_array(url: str, paths: Iterable[Optional[str]]) -> R
             raise Exception("Expected all or no paths to be None, got: <%s>" % paths)
     if functions:
         return lambda session: [function(session) for function in functions]
-    return lambda: None
+    return lambda _: None

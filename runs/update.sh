@@ -18,7 +18,8 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 # Thus we shut-down the legacy run server before performing the update.
 pkill -u pi -f "$OPENWBBASEDIR/packages/legacy_run_server.py"
 
-if [[ "$releasetrain" == "stable" ]]; then
+# force lower case on releasetrain for comparison
+if [[ "${releasetrain,,}" == "stable" ]]; then
 	train=stable17
 else
 	train=$releasetrain
