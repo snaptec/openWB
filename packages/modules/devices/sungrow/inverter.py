@@ -28,7 +28,14 @@ class SungrowInverter:
 
     def update(self) -> None:
         unit = self.__device_modbus_id
-        power = self.__tcp_client.read_input_registers(5016,
+        if self.component_config.configuration.version == Version.SH:
+            power = self.__tcp_client.read_input_registers(5016,
+                                                       ModbusDataType.UINT_32,
+                                                       wordorder=Endian.Little,
+                                                       unit=unit) * -1
+        
+        else:
+            power = self.__tcp_client.read_input_registers(5030,
                                                        ModbusDataType.UINT_32,
                                                        wordorder=Endian.Little,
                                                        unit=unit) * -1
