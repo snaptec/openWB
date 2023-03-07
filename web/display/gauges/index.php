@@ -324,7 +324,7 @@
 					<div class="col-xs-1 text-center">
 						<div id="speedpv">
 							<div id="arrowpv"></div>
- 						</div>
+						</div>
 					</div>
 					<div class="col-xs-5">
 					</div>
@@ -336,7 +336,7 @@
 					<div class="col-xs-3">
 						<div id="speedevu">
 							<div id="arrowevu"></div>
- 						</div>
+						</div>
 						<span id="bezugdiv"></span>
 					</div>
 					<div class="col-xs-2">
@@ -347,7 +347,7 @@
 						<div class="col-xs-3">
 							<div id="speedspeicher">
 								<div id="arrowspeicher"></div>
- 							</div>
+							</div>
 							<span id="speicherleistungdiv"></span>
 						</div>
 						<div class="col-xs-2">
@@ -386,7 +386,7 @@
 							<div class="col-xs-2">
 								<div id="speedlp1">
 									<div id="arrowlp1"></div>
- 								</div>
+								</div>
 								<span id="lllp1div"></span>
 							</div>
 							<div class="col-xs-1">
@@ -405,7 +405,7 @@
 							<div class="col-xs-2">
 								<div id="speedlp2">
 									<div id="arrowlp2"></div>
- 								</div>
+								</div>
 								<span id="lllp2div"></span>
 							</div>
 							<div class="col-xs-1">
@@ -429,7 +429,7 @@
 							<div class="col-xs-3">
 								<div id="speedlp1">
 									<div id="arrowlp1"></div>
- 								</div>
+								</div>
 								<span id="lllp1div"></span>
 							</div>
 							<div class="col-xs-2">
