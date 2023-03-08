@@ -12,9 +12,13 @@ import asyncio
 import json
 
 # Constants
-LOGIN_BASE = "https://login.apps.emea.vwapps.io"
+# LOGIN_BASE = "https://login.apps.emea.vwapps.io"
+# LOGIN_HANDLER_BASE = "https://identity.vwgroup.io"
+# API_BASE = "https://mobileapi.apps.emea.vwapps.io"
+LOGIN_BASE = "https://emea.bff.cariad.digital/user-login/v1"
 LOGIN_HANDLER_BASE = "https://identity.vwgroup.io"
-API_BASE = "https://mobileapi.apps.emea.vwapps.io"
+API_BASE = "https://emea.bff.cariad.digital/vehicle/v1"
+
 
 class vwid:
 	def __init__(self, session):

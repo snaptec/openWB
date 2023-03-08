@@ -253,6 +253,13 @@ at_reboot() {
 	echo "python3 packages..."
 	python3 -u "$OPENWBBASEDIR/runs/installPythonPackages.py"
 
+	#Prepare for lxml used in soc module libvwid in Python
+	if python3 -c "import lxml" &> /dev/null; then
+		echo 'lxml installed...'
+	else
+		sudo apt-get install python3-lxml
+	fi
+
 	#Prepare for secrets used in soc module libvwid in Python
 	VWIDMODULEDIR="$OPENWBBASEDIR/modules/soc_vwid"
 	if python3 -c "import secrets" &> /dev/null; then

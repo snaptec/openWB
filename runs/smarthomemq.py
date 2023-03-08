@@ -5,23 +5,23 @@ import re
 import os
 import logging
 import math
-from usmarthome.global0 import log, log_config
-from usmarthome.smartbase import Sbase
-from usmarthome.smartavm import Savm
-from usmarthome.smartacthor import Sacthor
-from usmarthome.smartnxdacxx import Snxdacxx
-from usmarthome.smartelwa import Selwa
-from usmarthome.smartidm import Sidm
-from usmarthome.smarthttp import Shttp
-from usmarthome.smartmqtt import Smqtt
-from usmarthome.smartmystrom import Smystrom
-from usmarthome.smartshelly import Sshelly
-from usmarthome.smartstiebel import Sstiebel
-from usmarthome.smartvampair import Svampair
-from usmarthome.smartlambda import Slambda
-from usmarthome.smarttasmota import Stasmota
-from usmarthome.smartviessmann import Sviessmann
-from usmarthome.smartratiotherm import Sratiotherm
+from smarthome.global0 import log, log_config
+from smarthome.smartbase import Sbase
+from modules.smarthome.avmhomeautomation.smartavm import Savm
+from modules.smarthome.acthor.smartacthor import Sacthor
+from modules.smarthome.nxdacxx.smartnxdacxx import Snxdacxx
+from modules.smarthome.elwa.smartelwa import Selwa
+from modules.smarthome.idm.smartidm import Sidm
+from modules.smarthome.http.smarthttp import Shttp
+from modules.smarthome.mqtt.smartmqtt import Smqtt
+from modules.smarthome.mystrom.smartmystrom import Smystrom
+from modules.smarthome.shelly.smartshelly import Sshelly
+from modules.smarthome.stiebel.smartstiebel import Sstiebel
+from modules.smarthome.vampair.smartvampair import Svampair
+from modules.smarthome.lambda_.smartlambda import Slambda
+from modules.smarthome.tasmota.smarttasmota import Stasmota
+from modules.smarthome.viessmann.smartviessmann import Sviessmann
+from modules.smarthome.ratiotherm.smartratiotherm import Sratiotherm
 
 mqtt_cache = {}
 mydevices = []
