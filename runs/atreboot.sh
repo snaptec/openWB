@@ -51,7 +51,25 @@ at_reboot() {
 		echo "new configuration active after next boot"
 	fi
 
-	sleep 5
+	echo "checking openwb remote support service"
+	if [ ! -f "/etc/systemd/system/openwbRemoteSupport.service" ]; then
+		echo "openwbRemoteSupport service missing, installing service"
+		sudo cp "${OPENWBBASEDIR}/runs/remoteSupport/openwbRemoteSupport.service" "/etc/systemd/system/openwbRemoteSupport.service"
+		sudo systemctl daemon-reload
+		sudo systemctl enable openwbRemoteSupport
+		sudo systemctl start openwbRemoteSupport
+	else
+		if versionMatch "${OPENWBBASEDIR}/runs/remoteSupport/openwbRemoteSupport.service" "/etc/systemd/system/openwbRemoteSupport.service"; then
+			echo "openwbRemoteSupport.service already up to date"
+		else
+			echo "updating openwbRemoteSupport.service"
+			sudo cp "${OPENWBBASEDIR}/runs/remoteSupport/openwbRemoteSupport.service" "/etc/systemd/system/openwbRemoteSupport.service"
+			sudo systemctl daemon-reload
+			sudo systemctl enable openwbRemoteSupport
+			sudo systemctl restart openwbRemoteSupport
+		fi
+	fi
+
 	mkdir -p "$OPENWBBASEDIR/web/backup"
 	touch "$OPENWBBASEDIR/web/backup/.donotdelete"
 	# web/backup and web/tools/upload are used to (temporarily) store backup files for download and for restoring.
