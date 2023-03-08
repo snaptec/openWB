@@ -11,7 +11,6 @@ PIP_MODULES = [
     "requests",
     "jq",
     "ipparser",
-    "lxml",
     "bs4",
     "pkce",
 ]
