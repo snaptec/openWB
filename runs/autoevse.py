@@ -21,7 +21,7 @@ GPIO.setup(19, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 DeviceValues = {}
 Values = {}
 
-# gloabl values
+# global values
 DeviceValues.update({'rfidtag': str(5)})
 
 # values LP1
@@ -61,7 +61,7 @@ try:
     with open('/home/pi/ppbuchse', 'r') as value:
         pp = int(value.read())
         buchseconfigured = 1
-except:
+except FileNotFoundError:
     pp = 32
     buchseconfigured = 0
 # initialize LL meter
@@ -115,7 +115,7 @@ try:
     lp1ll = rq.registers[0]
     lp2installed = 2
     logDebug("2", "Zweiten Ladepunkt erkannt")
-except:
+except Exception:
     lp2installed = 1
 # read all meter values and publish to mqtt broker
 
@@ -135,7 +135,7 @@ def getmeter():
                 llmeterconfiglp1 = 105
                 sdmid = 105
                 logDebug("2", "SDM Zaehler erkannt")
-        except:
+        except Exception:
             pass
         # check b23
         try:
@@ -145,7 +145,7 @@ def getmeter():
                 llmeterconfiglp1 = 201
                 sdmid = 201
                 logDebug("2", "B23 Zaehler erkannt")
-        except:
+        except Exception:
             pass
     else:
         sdmid = llmeterconfiglp1
@@ -274,7 +274,7 @@ def getmeter():
             f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
             f.write(str(hz))
             f.close()
-    except:
+    except Exception:
         logDebug("1", "Fehler Auslesung Ladepunkt 1 Meter")
     try:
         if (lp2installed == 2):
@@ -336,14 +336,14 @@ def getmeter():
                 f = open('/var/www/html/openWB/ramdisk/llvs13', 'w')
                 f.write(str(lp2voltage3))
                 f.close()
-            except:
+            except Exception:
                 logDebug("1", "Fehler Auslesung Ladepunkt 2 Meter")
             try:
                 try:
                     time.sleep(0.1)
                     rq = client.read_holding_registers(1000, 1, unit=2)
                     lp2ll = rq.registers[0]
-                except:
+                except Exception:
                     lp2ll = 0
                 try:
                     time.sleep(0.1)
@@ -374,10 +374,9 @@ def getmeter():
                     Values.update({'lp2chargestat': 0})
                 Values.update({'lp2evsell': lp2ll})
                 logDebug("0", "EVSE lp2plugstat: " + str(lp2var) + " EVSE lp2LL: " + str(lp2ll))
-            except:
+            except Exception:
                 logDebug("1", "Fehler Auslesung Ladepunkt 2 EVSE")
-                pass
-    except:
+    except Exception:
         logDebug("1", "Fehler Auslesung Ladepunkt 2 Meter")
     try:
         try:
@@ -385,7 +384,7 @@ def getmeter():
             rq = client.read_holding_registers(1000, 1, unit=1)
             lp1ll = rq.registers[0]
             evsefailure = 0
-        except:
+        except Exception:
             lp1ll = 0
             evsefailure = 1
         try:
@@ -425,21 +424,15 @@ def getmeter():
         f.close()
         Values.update({'lp1evsell': lp1ll})
         logDebug("0", "EVSE lp1plugstat: " + str(lp1var) + " EVSE lp1LL: " + str(lp1ll))
-    except:
+    except Exception:
         logDebug("1", "Fehler Auslesung Ladepunkt 1 EVSE")
     try:
         try:
             with open('ramdisk/readtag', 'r') as value:
                 rfidtag = str(value.read())
-        except:
+        except Exception:
             pass
 
-        # CLI args not used here
-        # parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
-        # parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
-        # parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
-        # parser.set_defaults(retain=False)
-        # args = parser.parse_args()
         mclient = mqtt.Client("openWB-isss-bulkpublisher-" + str(os.getpid()))
         mclient.connect("localhost")
         mclient.loop(timeout=2.0)
@@ -559,13 +552,11 @@ def getmeter():
         mclient.disconnect()
     except Exception as e:
         logDebug("2", "Get meter Fehler:" + str(e))
-        pass
 
-# crontol of socket lock
+
+# control of socket lock
 # GPIO 23: control direction of lock motor
 # GPIO 26: power to lock motor
-
-
 def controlact(action):
     if action == "auf":
         GPIO.output(23, GPIO.LOW)
@@ -580,9 +571,8 @@ def controlact(action):
         GPIO.output(26, GPIO.LOW)
         logDebug("1", "Aktor zu")
 
-# get all values to control our chargepoints
 
-
+# get all values to control our charge points
 def loadregelvars():
     global actorstat
     global lp1solla
@@ -596,14 +586,12 @@ def loadregelvars():
             actorstat = 1
         if GPIO.input(19) is True:
             actorstat = 0
-    except:
+    except Exception:
         actorstat = 0
-        pass
     try:
         with open('ramdisk/llsoll', 'r') as value:
             lp1solla = int(value.read())
-    except:
-        pass
+    except Exception:
         lp1solla = 0
     logDebug("0", "LL Soll: " + str(lp1solla) + " ActorStatus: " + str(actorstat))
     if (buchseconfigured == 1):
@@ -627,12 +615,11 @@ def loadregelvars():
     try:
         with open('ramdisk/u1p3pstat', 'r') as value:
             u1p3ptmpstat = int(value.read())
-    except:
-        pass
+    except Exception:
         u1p3ptmpstat = 3
     try:
         u1p3pstat
-    except:
+    except Exception:
         u1p3pstat = 3
     if (u1p3pstat != u1p3ptmpstat):
         if (u1p3ptmpstat == 1):
@@ -660,8 +647,7 @@ def loadregelvars():
         try:
             with open('ramdisk/llsolls1', 'r') as value:
                 lp2solla = int(value.read())
-        except:
-            pass
+        except Exception:
             lp2solla = 0
         logDebug("0", "LL lp2 Soll: " + str(lp2solla) + " ActorStatus: " + str(actorstat))
         if (Values["lp2evsell"] != lp2solla):

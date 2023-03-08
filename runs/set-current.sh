@@ -210,7 +210,7 @@ function setChargingCurrentgoe () {
 		else
 			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
 
-			version=$(echo $output | jq -r '.fwv')	# get firmware version
+			version=$(echo "$output" | jq -r '.fwv')	# get firmware version
 			majorVersion=${version%.*}      	# remove everything after a "."
 			majorVersion=${majorVersion%-*} 	# remove everything after a "-"
 			majorVersion=${majorVersion#0}  	# remove leading "0"
@@ -408,15 +408,15 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
 		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
-		lla1=$(echo $lla1 | sed 's/\..*$//')
-		lla2=$(echo $lla2 | sed 's/\..*$//')
-		lla3=$(echo $lla3 | sed 's/\..*$//')
+		lla1=$(echo "$lla1" | sed 's/\..*$//')
+		lla2=$(echo "$lla2" | sed 's/\..*$//')
+		lla3=$(echo "$lla3" | sed 's/\..*$//')
 		llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
 		llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
 		llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
-		llas11=$(echo $llas11 | sed 's/\..*$//')
-		llas12=$(echo $llas12 | sed 's/\..*$//')
-		llas13=$(echo $llas13 | sed 's/\..*$//')
+		llas11=$(echo "$llas11" | sed 's/\..*$//')
+		llas12=$(echo "$llas12" | sed 's/\..*$//')
+		llas13=$(echo "$llas13" | sed 's/\..*$//')
 		lslpl1=$((lla1 + llas12))
 		lslpl2=$((lla2 + llas13))
 		lslpl3=$((lla3 + llas11))
@@ -452,7 +452,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 fi
 
 
-if ! [ -z $new2 ]; then
+if [ -n "$new2" ]; then
 	points=$new2
 else
 	points=$2
@@ -468,8 +468,8 @@ if [[ $points == "all" ]] || [[ $points == "m" ]]; then
 		current=0
 	fi
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsoll
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
+		echo "$current" > /var/www/html/openWB/ramdisk/llsoll
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatus
 	if (( lp1enabled == 0 )); then
 		current=$oldcurrent
 	fi
@@ -509,8 +509,8 @@ if [[ $lastmanagement == "1" ]]; then
 
 		setChargingCurrent
 
-		echo $current > /var/www/html/openWB/ramdisk/llsolls1
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolls1
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuss1
 		if (( lp2enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -539,8 +539,8 @@ if [[ $lastmanagements2 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolls2
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss2
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolls2
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuss2
 		if (( lp3enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -562,8 +562,8 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp4
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp4
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp4
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp4
 		if (( lp4enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -585,8 +585,8 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp5
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp5
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp5
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp5
 		if (( lp5enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -607,8 +607,8 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp6
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp6
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp6
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp6
 		if (( lp6enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -630,8 +630,8 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp7
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp7
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp7
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp7
 		if (( lp7enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -653,8 +653,8 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp8
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp8
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp8
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp8
 		if (( lp8enabled == 0 )); then
 			current=$oldcurrent
 		fi
