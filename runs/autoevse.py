@@ -69,14 +69,21 @@ llmeterconfiglp1 = 0
 
 os.chdir('/var/www/html/openWB')
 
-# guess USB/modbus device name
-try:
-    f = open('/dev/ttyUSB0')
-    seradd = "/dev/ttyUSB0"
-    f.close()
-except:
-    seradd = "/dev/serial0"
 
+def detect_modbus_usb_port() -> str:
+    """guess USB/modbus device name"""
+    known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
+    for device in known_devices:
+        try:
+            with open(device):
+                return device
+        except FileNotFoundError:
+            pass
+    return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
+
+
+# guess USB/modbus device name
+seradd = detect_modbus_usb_port()
 loglevel = 1
 MaxEvseError = 5
 sdmid = 105

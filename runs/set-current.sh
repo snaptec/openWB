@@ -306,8 +306,10 @@ function setChargingCurrent () {
 				modbusevseid=1
 
 			else
-				if [ -f /dev/ttyUSB0 ]; then
+				if [ -e "/dev/ttyUSB0" ]; then
 					echo "/dev/ttyUSB" > ramdisk/evsemodulconfig
+				elif [ -e "/dev/ttyACM0" ]; then
+					echo "/dev/ttyACM0" > ramdisk/evsemodulconfig
 				else
 					echo "/dev/serial0" > ramdisk/evsemodulconfig
 				fi

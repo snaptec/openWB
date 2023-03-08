@@ -107,6 +107,8 @@ loadvars(){
 			else
 				if [[ -e "/dev/ttyUSB0" ]]; then
 					echo "/dev/ttyUSB0" > ramdisk/evsemodulconfig
+				elif [[ -e "/dev/ttyACM0" ]]; then
+					echo "/dev/ttyACM0" > ramdisk/evsemodulconfig
 				else
 					echo "/dev/serial0" > ramdisk/evsemodulconfig
 				fi
