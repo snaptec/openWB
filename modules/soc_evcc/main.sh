@@ -78,7 +78,7 @@ getAndWriteSoc(){
 	if [ "${fztype}" == "fiat" ]; then
 		options="${options} --pin ${pin}"
 	fi
-	answer=$($MODULEDIR/../soc_evcc/soc $options 2>&1)
+	answer=$($MODULEDIR/soc $options 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		# catch float
@@ -96,7 +96,7 @@ wakeupCar(){
 	if [ "${fztype}" == "fiat" ]; then
 		options="${options} --pin ${pin}"
 	fi
-	answer=$($MODULEDIR/../soc_evcc/soc $options --action wakeup 2>&1)
+	answer=$($MODULEDIR/soc $options --action wakeup 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Wakeup Message from EVCC: $answer"
