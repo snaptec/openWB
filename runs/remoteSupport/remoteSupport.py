@@ -8,7 +8,7 @@ import paho.mqtt.client as mqtt
 BASE_PATH = Path(__file__).resolve().parents[2]
 RAMDISK_PATH = BASE_PATH / "ramdisk"
 REMOTE_SUPPORT_TOPIC = "openWB/set/system/RemoteSupportTest"
-ssh_tunnel: Popen = None
+ssh_tunnel = None  # type: Popen
 
 logging.basicConfig(
     filename=str(RAMDISK_PATH / "remote_support.log"),
@@ -57,9 +57,9 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                 user = splitted[2] if len(splitted) > 2 else "getsupport"
                 log.info("start remote support")
                 ssh_tunnel = Popen(["sshpass", "-p", token, "ssh", "-tt", "-o", "StrictHostKeyChecking=no",
-                                               "-o", "ServerAliveInterval 60", "-R", f"{port}:localhost:22",
-                                               f"{user}@remotesupport.openwb.de"])
-                log.info(f"ssh tunnel running with pid {ssh_tunnel.pid}")
+                                               "-o", "ServerAliveInterval 60", "-R", port + ":localhost:22",
+                                               user + "@remotesupport.openwb.de"])
+                log.info("ssh tunnel running with pid " + ssh_tunnel.pid)
         else:
             log.info("unknown message: " + payload)
         # clear topic
