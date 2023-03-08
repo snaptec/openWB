@@ -844,6 +844,13 @@ def on_message(client, userdata, msg):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "nurpv70dynw=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
                     client.publish("openWB/config/get/pv/nurpv70dynw", msg.payload.decode("utf-8"), qos=0, retain=True)
+            if (msg.topic == "openWB/set/system/GetRemoteSupport"):
+                if ( 5 <= len(msg.payload.decode("utf-8")) <=50 ):
+                    f = open('/var/www/html/openWB/ramdisk/remotetoken', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    getsupport = ["/var/www/html/openWB/runs/initremote.sh"]
+                    subprocess.run(getsupport)
             if (msg.topic == "openWB/set/hook/HookControl"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <=30):
                     hookmsg=msg.payload.decode("utf-8")
