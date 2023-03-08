@@ -154,13 +154,13 @@ function setChargingCurrentWifi () {
 			if [[ $current -eq 0 ]]; then
 				output=$(curl --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/getParameters")
 				state=$(echo "$output" | jq '.list[] | .evseState')
-				if ((state == true)) ; then
+				if [[ $state == "true" ]]; then
 					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setStatus?active=false" > /dev/null
 				fi
 			else
 				output=$(curl --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/getParameters")
 				state=$(echo "$output" | jq '.list[] | .evseState')
-				if ((state == false)) ; then
+				if [[ $state == "false" ]]; then
 					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setStatus?active=true" > /dev/null
 				fi
 				oldcurrent=$(echo "$output" | jq '.list[] | .actualCurrent')
