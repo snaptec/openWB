@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # import sys
 import os
 import os.path
@@ -11,7 +11,7 @@ import struct
 from pymodbus.client.sync import ModbusSerialClient
 
 
-def detect_modbus_usb_port() -> str:
+def detect_modbus_usb_port():
     """guess USB/modbus device name"""
     known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
     for device in known_devices:

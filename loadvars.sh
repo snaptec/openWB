@@ -117,7 +117,7 @@ loadvars(){
 
 			fi
 		fi
-		evseplugstate=$(sudo python runs/readmodbus.py "$modbusevsesource" "$modbusevseid" 1002 1)
+		evseplugstate=$(sudo python3 runs/readmodbus.py "$modbusevsesource" "$modbusevseid" 1002 1)
 		if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
 			# EVSE read returned empty or non-numeric value --> use last state for this loop
 			evseplugstate=$(</var/www/html/openWB/ramdisk/evseplugstate)
@@ -194,7 +194,7 @@ loadvars(){
 	if ((lastmanagement == 1)); then
 		ConfiguredChargePoints=2
 		if [[ $evsecons1 == "modbusevse" ]]; then
-			evseplugstatelp2=$(sudo python runs/readmodbus.py "$evsesources1" "$evseids1" 1002 1)
+			evseplugstatelp2=$(sudo python3 runs/readmodbus.py "$evsesources1" "$evseids1" 1002 1)
 			if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
 				openwbDebugLog "MAIN" 0 "Modbus EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
@@ -304,7 +304,7 @@ loadvars(){
 
 
 		if [[ $evsecons2 == "modbusevse" ]]; then
-			evseplugstatelp3=$(sudo python runs/readmodbus.py "$evsesources2" "$evseids2" 1002 1)
+			evseplugstatelp3=$(sudo python3 runs/readmodbus.py "$evsesources2" "$evseids2" 1002 1)
 			if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
 				openwbDebugLog "MAIN" 0 "Modbus EVSE read CP3 issue - using previous state '${evseplugstatelp3}'"
