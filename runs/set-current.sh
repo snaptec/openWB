@@ -7,18 +7,18 @@
 #
 #  This file is part of openWB.
 #
-#     openWB is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
+#	  openWB is free software: you can redistribute it and/or modify
+#	  it under the terms of the GNU General Public License as published by
+#	  the Free Software Foundation, either version 3 of the License, or
+#	  (at your option) any later version.
 #
-#     openWB is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
+#	  openWB is distributed in the hope that it will be useful,
+#	  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+#	  GNU General Public License for more details.
 #
-#     You should have received a copy of the GNU General Public License
-#     along with openWB.  If not, see <https://www.gnu.org/licenses/>.
+#	  You should have received a copy of the GNU General Public License
+#	  along with openWB.  If not, see <https://www.gnu.org/licenses/>.
 #
 #####
 
@@ -201,30 +201,51 @@ function setChargingCurrenthttp () {
 # 3: goeiplp1
 function setChargingCurrentgoe () {
 	if [[ $evsecon == "goe" ]]; then
-		if [[ $current -eq 0 ]]; then
-			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
-			state=$(echo "$output" | jq -r '.alw')
-			if ((state == "1")) ; then
-				curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=0" > /dev/null
+		output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
+		#check whether goe has 1to3phase switch capability => new HWV3 and new API V2
+		digit='^[0-9]$'
+		fsp=$(echo "$output" | jq -r '.fsp')
+		if [[ ! $fsp =~ $digit ]] ; then
+			if [[ $current -eq 0 ]]; then
+				state=$(echo "$output" | jq -r '.alw')
+				if ((state == "1")) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=0" > /dev/null
+				fi
+			else
+				output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
+
+				version=$(echo $output | jq -r '.fwv')	# get firmware version
+				majorVersion=${version%.*}			# remove everything after a "."
+				majorVersion=${majorVersion%-*}		# remove everything after a "-"
+				majorVersion=${majorVersion#0}		# remove leading "0"
+
+				state=$(echo "$output" | jq -r '.alw')
+				if ((state == "0")) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=1" > /dev/null
+				fi
+				oldgoecurrent=$(echo "$output" | jq -r '.amp')
+				if (( oldgoecurrent != current )) ; then
+					if ((majorVersion >= 40)) ; then
+						curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amx=$current" > /dev/null
+					else
+						curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amp=$current" > /dev/null
+					fi
+				fi
 			fi
 		else
-			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
-
-			version=$(echo $output | jq -r '.fwv')	# get firmware version
-			majorVersion=${version%.*}      	# remove everything after a "."
-			majorVersion=${majorVersion%-*} 	# remove everything after a "-"
-			majorVersion=${majorVersion#0}  	# remove leading "0"
-
-			state=$(echo "$output" | jq -r '.alw')
-			if ((state == "0")) ; then
-				curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=1" > /dev/null
-			fi
-			oldgoecurrent=$(echo "$output" | jq -r '.amp')
-			if (( oldgoecurrent != current )) ; then
-				if ((majorVersion >= 40)) ; then
-					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amx=$current" > /dev/null
-				else
-					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amp=$current" > /dev/null
+			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/status")
+			state=$(echo "$output" | jq -r '.frc')
+			if [[ $current -eq 0 ]]; then
+				if ((state == "0")) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/set?frc=1" > /dev/null
+				fi
+			else
+				if ((state == "1")) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/set?frc=0" > /dev/null
+				fi
+				oldgoecurrent=$(echo "$output" | jq -r '.amp')
+				if (( oldgoecurrent != current )) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/set?amp=$current" > /dev/null
 				fi
 			fi
 		fi
@@ -250,7 +271,7 @@ function setChargingCurrentkeba () {
 				echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:"$kebaiplp1":7090
 			fi
 		else
-			#modbus 1 means modbus interface 
+			#modbus 1 means modbus interface
 			sudo python3 /var/www/html/openWB/modules/keballlp1/setcurrkeba.py "$kebaiplp1" "$current" >> /var/www/html/openWB/ramdisk/port.log 2>&1
 		fi
 	fi
