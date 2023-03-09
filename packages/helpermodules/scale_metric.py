@@ -3,6 +3,7 @@
 
 from typing import Union
 
+
 def scale_metric(value: Union[float, int], metric: str, base_metric: str):
 
     # If no unit or too short unit or the base unit is not matching, return the unmodified value
@@ -33,4 +34,4 @@ def scale_metric(value: Union[float, int], metric: str, base_metric: str):
     elif scale == 'P':
         return value * 1e15
 
-    raise Exception("unknown scale <%s> in <%s>" % (scale, unit))
+    raise Exception("unknown scale <%s> in <%s>" % (scale, metric))
