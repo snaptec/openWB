@@ -14,7 +14,7 @@ log = logging.getLogger("FEMS")
 
 def adjust_energy_from_unit_to_watthours(energy, unit):
 	try:
-		if (unit.lower() == 'kwh'):
+		if (unit == 'kWh'):
 			energy = energy * 1000.0
 		elif (unit == 'MWh'):
 			energy = energy * 1000000.0
@@ -32,7 +32,7 @@ def adjust_power_from_unit_to_watt(power, unit):
 			power = power / 1000.0
 		elif (unit == 'MW'):
 			power = power * 1000000.0
-		elif (unit.lower() == 'kW'):
+		elif (unit == 'kW'):
 			power = power * 1000.0
 
 		return power

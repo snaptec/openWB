@@ -35,7 +35,7 @@ def adjust_power_from_unit_to_watt(power, unit):
 			power = power / 1000.0
 		elif (unit == 'MW'):
 			power = power * 1000000.0
-		elif (unit.lower() == 'kW'):
+		elif (unit == 'kW'):
 			power = power * 1000.0
 
 		return power
@@ -49,7 +49,7 @@ def adjust_voltage_from_unit_to_volts(voltage, unit):
 			voltage = voltage / 1000.0
 		elif (unit == 'MV'):
 			voltage = voltage * 1000000.0
-		elif (unit.lower() == 'kV'):
+		elif (unit == 'kV'):
 			voltage = voltage * 1000.0
 
 		return voltage
@@ -63,7 +63,7 @@ def adjust_frequency_from_unit_to_hertz(frequency, unit):
 			frequency = frequency / 1000.0
 		elif (unit == 'MHz'):
 			frequency = frequency * 1000000.0
-		elif (unit.lower() == 'kHz'):
+		elif (unit == 'kHz'):
 			frequency = frequency * 1000.0
 
 		return frequency
@@ -73,7 +73,7 @@ def adjust_frequency_from_unit_to_hertz(frequency, unit):
 
 def adjust_energy_from_unit_to_watthours(energy, unit):
 	try:
-		if (unit.lower() == 'kwh'):
+		if (unit == 'kWh'):
 			energy = energy * 1000.0
 		elif (unit == 'MWh'):
 			energy = energy * 1000000.0
