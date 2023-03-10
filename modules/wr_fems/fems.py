@@ -19,7 +19,7 @@ def update(femskacopw: str, femsip: str):
 
 	response = requests.get('http://'+femsip+':8084/rest/channel/_sum/ProductionActivePower', auth=("x", femskacopw)).json()
 	try:
-		pvwatt = scale_metric(response["value"], response["unit"], 'W') * -1
+		pvwatt = scale_metric(response["value"], response.get("unit"), 'W') * -1
 	except:
 		traceback.print_exc()
 		exit(1)
@@ -27,7 +27,7 @@ def update(femskacopw: str, femsip: str):
 	response = requests.get('http://'+femsip+':8084/rest/channel/_sum/ProductionActiveEnergy',
 							auth=("x", femskacopw)).json()
 	try:
-		pvwh = scale_metric(response["value"], response["unit"], 'Wh')
+		pvwh = scale_metric(response["value"], response.get("unit"), 'Wh')
 	except:
 		traceback.print_exc()
 		exit(1)
