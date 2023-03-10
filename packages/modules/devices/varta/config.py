@@ -13,7 +13,7 @@ class VartaConfiguration:
 class Varta:
     def __init__(self,
                  name: str = "Varta",
-                 type: str = "sample",
+                 type: str = "varta",
                  id: int = 0,
                  configuration: VartaConfiguration = None) -> None:
         self.name = name

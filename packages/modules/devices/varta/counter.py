@@ -19,7 +19,7 @@ class VartaCounter:
 
     def update(self, client: ModbusTcpClient_):
         power = client.read_holding_registers(1078, ModbusDataType.INT_16, unit=1) * -1
-        frequency = client.read_holding_registers(1078, ModbusDataType.UINT_16, unit=1) / 100
+        frequency = client.read_holding_registers(1082, ModbusDataType.UINT_16, unit=1) / 100
         imported, exported = self.sim_counter.sim_count(power)
 
         counter_state = CounterState(
