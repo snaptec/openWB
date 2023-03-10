@@ -5,17 +5,18 @@ from typing import Union
 from typing import Optional
 
 scale_factors = {
-    'f': 1e-15, # femto
-    'p': 1e-12, # pico
-    'n': 1e-9,  # nano
-    'µ': 1e-6,  # micro
-    'm': 1e-3,  # milli
-    'k': 1e3,   # kilo
-    'M': 1e6,   # mega
-    'G': 1e9,   # giga
-    'T': 1e12,  # tera
-    'P': 1e15   # peta
+    'f': 1e-15,  # femto
+    'p': 1e-12,  # pico
+    'n': 1e-9,   # nano
+    'µ': 1e-6,   # micro
+    'm': 1e-3,   # milli
+    'k': 1e3,    # kilo
+    'M': 1e6,    # mega
+    'G': 1e9,    # giga
+    'T': 1e12,   # tera
+    'P': 1e15    # peta
 }
+
 
 def scale_metric(value: Union[float, int], metric: Optional[str], base_metric: str):
 
