@@ -270,7 +270,7 @@ class YieldMeter {
 
 	subString(item) {
 		if (item.pvPercentage > 0) {
-			return ("PV: " + item.pvPercentage.toLocaleString(undefined) + " %");
+			return ("Aut: " + item.pvPercentage.toLocaleString(undefined) + " %");
 		} else if (item.name == 'Netz') {
 			return ("Aut: " + this.autarchyPercentage.toLocaleString(undefined) + " %");
 			
