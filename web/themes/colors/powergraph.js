@@ -22,7 +22,7 @@ class PowerGraph {
 		this.graphRefreshCounter = 0;
 		this.width = 500;
 		this.height = 500;
-		this.margin = { top: 10, right: 20, bottom: 10, left: 25 };
+		this.margin = { top: 10, right: 20, bottom: 10, left: 29 };
 		this.liveGraphMinutes = 0;
 		wbdata.usageStackOrder = 2;
 	}
@@ -1027,11 +1027,12 @@ class PowerGraph {
 			.attr("stroke", this.bgcolor)
 			;
 		svg.append("text")
-			.attr("x", - this.margin.left)
-			.attr("y", height / 2 + 5)
+			.attr("x", -2)
+			.attr("y", height / 2 + 5.5)
 			.attr("fill", this.axiscolor)
 			.attr("font-size", fontsize)
-			.text((wbdata.graphMode == 'year') ? "MW" : "kW")
+			.attr("text-anchor", "end")
+			.text((wbdata.graphMode == 'year') ? "MWh" : (wbdata.graphMode == 'month') ? "kWh" : "kW")
 
 		if (wbdata.showGrid) {
 			// second x axis for the grid
