@@ -219,16 +219,27 @@ class PowerMeter {
 		const labelFontSize = 22;
 
 		if (data.power > 0) {
+			let textelement = 
 			svg
 				.append("text")
 				.attr("x", x)
 				.attr("y", y)
-				// .text("\uf5ba;" + " " + data.name + ": " + formatWatt(data.power))
-				.text(data.icon + " " + formatWatt(data.power))
 				.attr("fill", data.color)
 				.attr("text-anchor", anchor)
 				.style("font-size", labelFontSize)
+				
+			textelement.append("tspan")
+
+				// .text("\uf5ba;" + " " + data.name + ": " + formatWatt(data.power))
+				.text(data.icon + " ")
+				.attr("class","fas")
 				;
+				textelement.append("tspan")
+
+				// .text("\uf5ba;" + " " + data.name + ": " + formatWatt(data.power))
+				.text(formatWatt(data.power))
+				;
+				
 		}
 	}
 	consumptionLabel() {

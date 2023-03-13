@@ -265,7 +265,8 @@ class YieldMeter {
 			.attr("font-size", this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
-			.text((d) => (this.truncateCategory(d.icon)));
+			.text((d) => (this.truncateCategory(d.icon)))
+			.classed("fas",(d) => d.icon.length <= 2);
 	}
 
 	subString(item) {
