@@ -119,9 +119,13 @@ start() {
 		sudo pkill -f '^python.*/isss.py'
 	fi
 
-	rseSetup "$rseenabled" 0
-
-	pushButtonsSetup "$ladetaster" 0
+	if ((isss == 0)); then
+		rseSetup "$rseenabled" 0
+		pushButtonsSetup "$ladetaster" 0
+	else
+		rseStop
+		pushButtonsStop
+	fi
 
 	rfidSetup "$rfidakt" 0 "$rfidlist"
 }
