@@ -70,7 +70,7 @@ start() {
 	if (( isss == 1 )) || [[ "$evsecon" == "daemon" ]] || [[ "$evsecon" == "buchse" ]]; then
 		if [[ "$evsecon" == "buchse" ]]; then
 			isss_mode="socket"
-		elif [[ $lastmanagement == 1 ]]; then
+		elif [[ $lastmanagement == 1 ]] && { [[ $evsecons1 == "modbusevse" ]] || [[ $evsecons1 == "daemon" ]]; }; then
 			isss_mode="duo"
 		else
 			isss_mode="daemon"
