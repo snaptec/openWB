@@ -41,16 +41,20 @@ start() {
 		nohup python3 "$OPENWBBASEDIR/runs/mqttsub.py" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1 &
 	fi
 
-
-	openwbDebugLog "MAIN" 1 "Starting smart home handler..."
-	if pgrep -f '^python.*/smarthomemq.py' > /dev/null
-	then
-		openwbDebugLog "MAIN" 1 "smart home handler is already running"
+	openwbDebugLog "MAIN" 1 "smart home handler..."
+	if ((isss == 0)); then
+		if pgrep -f '^python.*/smarthomemq.py' >/dev/null; then
+			openwbDebugLog "MAIN" 1 "smart home handler is already running"
+		else
+			openwbDebugLog "MAIN" 0 "smart home handler not running! restarting process"
+			nohup python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >>"$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
+		fi
 	else
-		openwbDebugLog "MAIN" 0 "smart home handler not running! restarting process"
-		nohup python3 "$OPENWBBASEDIR/runs/smarthomemq.py" >> "$OPENWBBASEDIR/ramdisk/smarthome.log" 2>&1 &
+		if pgrep -f '^python.*/smarthomemq.py' >/dev/null; then
+			openwbDebugLog "MAIN" 1 "smart home handler running but isss configured! killing process"
+			sudo pkill -f '^python.*/smarthomemq.py'
+		fi
 	fi
-
 
 	openwbDebugLog "MAIN" 1 "Starting legacy run server..."
 	pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" > /dev/null
