@@ -44,7 +44,7 @@ class WbData {
 
 		this.usageSummary = {
 			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf57d" },
-			"batIn": { name: "> Bat", power: 1000, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf5df" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf5df" },
 			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf015" },
 			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5e7" },
 			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf1e6" },
