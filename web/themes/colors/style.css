@@ -570,3 +570,7 @@ th {
 	color: var(--color-axis);
 	stroke-width: 0;
 }
+
+svg text {
+	font-family: 'Font Awesome 5 Free';
+}
