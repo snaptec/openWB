@@ -262,7 +262,7 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", this.height - this.margin.bottom - 5)
-			.attr("font-size", this.labelfontsize)
+			.attr("font-size", (d) => (d.icon.length <= 2) ? this.labelfontsize+3  : this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
 			.text((d) => (this.truncateCategory(d.icon)))
