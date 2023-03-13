@@ -240,11 +240,14 @@ class Isss:
 
     def detect_modbus_usb_port(self) -> str:
         """guess USB/modbus device name"""
-        try:
-            with open("/dev/ttyUSB0"):
-                return "/dev/ttyUSB0"
-        except FileNotFoundError:
-            return "/dev/serial0"
+        known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
+        for device in known_devices:
+            try:
+                with open(device):
+                    return device
+            except FileNotFoundError:
+                pass
+        return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
 
     @staticmethod
     def get_cp_num(local_charge_point_num: int) -> int:
