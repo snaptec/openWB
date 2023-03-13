@@ -7,6 +7,7 @@ import requests
 import traceback
 
 from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.scale_metric import scale_metric
 
 log = logging.getLogger("FEMS")
 
@@ -29,62 +30,6 @@ def get_value(url, file):
 		traceback.print_exc()
 
 
-def adjust_power_from_unit_to_watt(power, unit):
-	try:
-		if (unit == 'mW'):
-			power = power / 1000.0
-		elif (unit == 'MW'):
-			power = power * 1000000.0
-		elif (unit.lower() == 'kW'):
-			power = power * 1000.0
-
-		return power
-	except:
-		traceback.print_exc()
-
-
-def adjust_voltage_from_unit_to_volts(voltage, unit):
-	try:
-		if (unit == 'mV'):
-			voltage = voltage / 1000.0
-		elif (unit == 'MV'):
-			voltage = voltage * 1000000.0
-		elif (unit.lower() == 'kV'):
-			voltage = voltage * 1000.0
-
-		return voltage
-	except:
-		traceback.print_exc()
-
-
-def adjust_frequency_from_unit_to_hertz(frequency, unit):
-	try:
-		if (unit == 'mHz'):
-			frequency = frequency / 1000.0
-		elif (unit == 'MHz'):
-			frequency = frequency * 1000000.0
-		elif (unit.lower() == 'kHz'):
-			frequency = frequency * 1000.0
-
-		return frequency
-	except:
-		traceback.print_exc()
-
-
-def adjust_energy_from_unit_to_watthours(energy, unit):
-	try:
-		if (unit.lower() == 'kwh'):
-			energy = energy * 1000.0
-		elif (unit == 'MWh'):
-			energy = energy * 1000000.0
-		elif (unit == 'mWh'):
-			energy = energy / 1000.0
-
-		return energy
-	except:
-		traceback.print_exc()
-
-
 def update(password: str, ip_address: str):
 	try:
 		# Grid meter values
@@ -99,33 +44,33 @@ def update(password: str, ip_address: str):
 		for singleValue in response:
 			address = singleValue['address']
 			if (address == 'meter0/Frequency'):
-				frequency = adjust_frequency_from_unit_to_hertz(singleValue['value'], singleValue['unit'])
+				frequency = scale_metric(singleValue['value'], singleValue.get('unit'), 'Hz')
 				write_ramdisk(frequency, 'evuhz')
 			elif (address == 'meter0/ActivePower'):
-				power = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+				power = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 				write_ramdisk(power, 'wattbezug')
 			elif (address == 'meter0/ActivePowerL1'):
-				power = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+				power = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 				write_ramdisk(power, 'bezugw1')
 				p1 = power
 			elif (address == 'meter0/ActivePowerL2'):
-				power = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+				power = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 				write_ramdisk(power, 'bezugw2')
 				p2 = power
 			elif (address == 'meter0/ActivePowerL3'):
-				power = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+				power = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 				write_ramdisk(power, 'bezugw3')
 				p3 = power
 			elif (address == 'meter0/VoltageL1'):
-				voltage = adjust_voltage_from_unit_to_volts(singleValue['value'], singleValue['unit'])
+				voltage = scale_metric(singleValue['value'], singleValue.get('unit'), 'V')
 				write_ramdisk(voltage, 'evuv1')
 				v1 = voltage
 			elif (address == 'meter0/VoltageL2'):
-				voltage = adjust_voltage_from_unit_to_volts(singleValue['value'], singleValue['unit'])
+				voltage = scale_metric(singleValue['value'], singleValue.get('unit'), 'V')
 				write_ramdisk(voltage, 'evuv2')
 				v2 = voltage
 			elif (address == 'meter0/VoltageL3'):
-				voltage = adjust_voltage_from_unit_to_volts(singleValue['value'], singleValue['unit'])
+				voltage = scale_metric(singleValue['value'], singleValue.get('unit'), 'V')
 				write_ramdisk(voltage, 'evuv3')
 				v3 = voltage
 
@@ -150,10 +95,10 @@ def update(password: str, ip_address: str):
 		for singleValue in response:
 			address = singleValue['address']
 			if (address == '_sum/GridBuyActiveEnergy'):
-				energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+				energy = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 				write_ramdisk(energy, 'bezugkwh')
 			elif (address == '_sum/GridSellActiveEnergy'):
-				energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+				energy = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 				write_ramdisk(energy, 'einspeisungkwh')
 	except ValueError:  # includes simplejson.decoder.JSONDecodeError
 		# nicht alle FEMS-Module unterstützen Regex-Requests

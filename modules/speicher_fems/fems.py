@@ -8,6 +8,7 @@ import requests
 import traceback
 
 from helpermodules.cli import run_using_positional_cli_args
+from helpermodules.scale_metric import scale_metric
 
 log = logging.getLogger("FEMS")
 
@@ -25,34 +26,6 @@ def write_ramdisk(value, file):
 		exit(1)
 
 
-def adjust_energy_from_unit_to_watthours(energy, unit):
-	try:
-		if (unit.lower() == 'kwh'):
-			energy = energy * 1000.0
-		elif (unit == 'MWh'):
-			energy = energy * 1000000.0
-		elif (unit == 'mWh'):
-			energy = energy / 1000.0
-
-		return energy
-	except:
-		traceback.print_exc()
-
-
-def adjust_power_from_unit_to_watt(power, unit):
-	try:
-		if (unit == 'mW'):
-			power = power / 1000.0
-		elif (unit == 'MW'):
-			power = power * 1000000.0
-		elif (unit.lower() == 'kW'):
-			power = power * 1000.0
-
-		return power
-	except:
-		traceback.print_exc()
-
-
 def update(multifems: str, femskacopw: str, femsip: str):
 	if multifems == "0":
 		try:
@@ -67,10 +40,10 @@ def update(multifems: str, femskacopw: str, femsip: str):
 			if (address == "ess0/Soc"):
 				write_ramdisk(singleValue["value"], "speichersoc")
 			elif address == "ess0/DcChargeEnergy":
-				energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+				energy = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 				write_ramdisk(energy, "speicherikwh")
 			elif address == "ess0/DcDischargeEnergy":
-				energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+				energy = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 				write_ramdisk(energy, "speicherekwh")
 	else:
 		try:
@@ -85,10 +58,10 @@ def update(multifems: str, femskacopw: str, femsip: str):
 			if (address == "ess2/Soc"):
 				write_ramdisk(singleValue["value"], "speichersoc")
 			elif address == "ess2/DcChargeEnergy":
-				energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+				energy = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 				write_ramdisk(energy, "speicherikwh")
 			elif address == "ess2/DcDischargeEnergy":
-				energy = adjust_energy_from_unit_to_watthours(singleValue['value'], singleValue['unit'])
+				energy = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 				write_ramdisk(energy, "speicherekwh")
 
 	try:
@@ -101,11 +74,11 @@ def update(multifems: str, femskacopw: str, femsip: str):
 	for singleValue in response:
 		address = singleValue["address"]
 		if (address == "_sum/GridActivePower"):
-			grid = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+			grid = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 		elif address == "_sum/ProductionActivePower":
-			pv = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+			pv = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 		elif address == "_sum/ConsumptionActivePower":
-			haus = adjust_power_from_unit_to_watt(singleValue['value'], singleValue['unit'])
+			haus = scale_metric(singleValue['value'], singleValue.get('unit'), 'W')
 
 	leistung = grid + pv - haus
 
