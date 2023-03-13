@@ -1,7 +1,7 @@
 #!/bin/bash
 OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 
-declare -F "openwbDebugLog" > /dev/null || . "$OPENWBBASEDIR/helperFunctions.sh"
+declare -F "openwbDebugLog" >/dev/null || . "$OPENWBBASEDIR/helperFunctions.sh"
 [[ -z "$debug" ]] && . "$OPENWBBASEDIR/loadconfig.sh"
 
 . "$OPENWBBASEDIR/runs/rfid/rfidHelper.sh"
@@ -17,28 +17,23 @@ stop() {
 	openwbDebugLog "MAIN" 0 "OpenWB services stopped"
 }
 
-
 start() {
 	openwbDebugLog "MAIN" 0 "Starting OpenWB services"
 
-
 	openwbDebugLog "MAIN" 1 "Starting modbus server..."
-	if pgrep -f '^python.*/modbusserver.py' > /dev/null
-	then
+	if pgrep -f '^python.*/modbusserver.py' >/dev/null; then
 		openwbDebugLog "MAIN" 1 "modbus tcp server already running"
 	else
 		openwbDebugLog "MAIN" 0 "modbus tcp server not running! restarting process"
-		sudo nohup python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1 &
+		sudo nohup python3 "$OPENWBBASEDIR/runs/modbusserver/modbusserver.py" >>"$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1 &
 	fi
 
-
 	openwbDebugLog "MAIN" 1 "Starting MQTT handler..."
-	if pgrep -f '^python.*/mqttsub.py' > /dev/null
-	then
+	if pgrep -f '^python.*/mqttsub.py' >/dev/null; then
 		openwbDebugLog "MAIN" 1 "mqtt handler is already running"
 	else
 		openwbDebugLog "MAIN" 0 "mqtt handler not running! restarting process"
-		nohup python3 "$OPENWBBASEDIR/runs/mqttsub.py" >> "$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1 &
+		nohup python3 "$OPENWBBASEDIR/runs/mqttsub.py" >>"$OPENWBBASEDIR/ramdisk/openWB.log" 2>&1 &
 	fi
 
 	openwbDebugLog "MAIN" 1 "smart home handler..."
@@ -57,9 +52,8 @@ start() {
 	fi
 
 	openwbDebugLog "MAIN" 1 "Starting legacy run server..."
-	pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" > /dev/null
-	if [ $? == 1 ]
-	then
+	pgrep -f "$OPENWBBASEDIR/packages/legacy_run_server.py" >/dev/null
+	if [ $? == 1 ]; then
 		openwbDebugLog "MAIN" 0 "legacy run server is not running. Restarting process"
 		bash "$OPENWBBASEDIR/packages/legacy_run_server.sh"
 	else
@@ -146,17 +140,18 @@ start() {
 }
 
 case "$1" in
-	start)
-		start
-		;;
-	stop)
-		stop
-		;;
-	restart)
-		stop
-		start
-		;;
-	*)
-		echo "Usage: ${BASH_SOURCE[0]} {start|stop|restart}"
-		exit 1
+start)
+	start
+	;;
+stop)
+	stop
+	;;
+restart)
+	stop
+	start
+	;;
+*)
+	echo "Usage: ${BASH_SOURCE[0]} {start|stop|restart}"
+	exit 1
+	;;
 esac
