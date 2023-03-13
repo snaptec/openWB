@@ -68,10 +68,12 @@ def replaceAll(changeval,newval):
         inaction=0
 
 def getConfigValue(key):
-    for line in fileinput.input(openwbconffile):
-        if line.startswith(str(key+"=")):
-            return line.split("=", 1)[1]
-    return
+    with fileinput.input(openwbconffile) as file:
+        for line in file:
+            if line.startswith(str(key+"=")):
+                return line.split("=", 1)[1]
+        return
+
 
 def getserial():
     # Extract serial from cpuinfo file
@@ -1103,41 +1105,46 @@ def on_message(client, userdata, msg):
                     f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
                     f.write("0")
                     f.close()
-            if (msg.topic == "openWB/set/isss/Current"):
+            if (msg.topic == "openWB/set/isss/Current") and int(getConfigValue("isss")) == 1:
                 if (float(msg.payload) >= 0 and float(msg.payload) <=32):
                     f = open('/var/www/html/openWB/ramdisk/llsoll', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/Lp2Current"):
+            if (msg.topic == "openWB/set/isss/Lp2Current") and int(getConfigValue("isss")) == 1:
                 if (float(msg.payload) >= 0 and float(msg.payload) <=32):
                     f = open('/var/www/html/openWB/ramdisk/llsolls1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/U1p3p"):
+            if (msg.topic == "openWB/set/isss/U1p3p") and int(getConfigValue("isss")) == 1:
                 if (int(msg.payload) >= 0 and int(msg.payload) <=5):
                     f = open('/var/www/html/openWB/ramdisk/u1p3pstat', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/U1p3pLp2"):
+            if (msg.topic == "openWB/set/isss/U1p3pLp2") and int(getConfigValue("isss")) == 1:
                  if (int(msg.payload) >= 0 and int(msg.payload) <=5):
                      f = open('/var/www/html/openWB/ramdisk/u1p3plp2stat', 'w')
                      f.write(msg.payload.decode("utf-8"))
                      f.close()
-            if (msg.topic == "openWB/set/isss/Cpulp1"):
+            if (msg.topic == "openWB/set/isss/Cpulp1") and int(getConfigValue("isss")) == 1:
                 if (int(msg.payload) >= 0 and int(msg.payload) <=5):
                     f = open('/var/www/html/openWB/ramdisk/extcpulp1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/heartbeat"):
+            if (msg.topic == "openWB/set/isss/heartbeat") and int(getConfigValue("isss")) == 1:
                 if (int(msg.payload) >= -1 and int(msg.payload) <=5):
                     f = open('/var/www/html/openWB/ramdisk/heartbeat', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/isss/parentWB"):
-                f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
-                f.write(msg.payload.decode("utf-8"))
-                f.close()
-                client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
+                if int(getConfigValue("isss")) == 1:
+                    f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
+                    f.write(msg.payload.decode("utf-8"))
+                    f.close()
+                    client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
+                else:
+                    if Path('/var/www/html/openWB/ramdisk/parentWB').exists():
+                        Path('/var/www/html/openWB/ramdisk/parentWB').unlink()
+                    client.publish("openWB/system/parentWB", "localhost", qos=0, retain=True)
             if (msg.topic == "openWB/set/isss/parentCPlp1"):
                 client.publish("openWB/system/parentCPlp1", msg.payload.decode("utf-8"), qos=0, retain=True)
                 f = open('/var/www/html/openWB/ramdisk/parentCPlp1', 'w')
