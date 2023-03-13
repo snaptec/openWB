@@ -125,7 +125,6 @@ at_reboot() {
 		fi
 	fi
 
-
 	# display setup
 	echo "display..."
 	# remove old display config file
@@ -164,15 +163,6 @@ at_reboot() {
 		echo "executed"
 		sed -i '/atreboot.sh/d' "$OPENWBBASEDIR/ramdisk/tmprootcrontab"
 		cat "$OPENWBBASEDIR/ramdisk/tmprootcrontab" | sudo crontab -
-	fi
-
-	# check for LAN/WLAN connection
-	echo "LAN/WLAN..."
-	ethstate=$(</sys/class/net/eth0/carrier)
-	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 "$virtual_ip_eth0" netmask 255.255.255.0 up
-	else
-		sudo ifconfig wlan0:0 "$virtual_ip_wlan0" netmask 255.255.255.0 up
 	fi
 
 	# check for apache configuration
@@ -227,8 +217,6 @@ at_reboot() {
 		sleep 1
 		sudo apt-get -qq install -y libxslt1-dev
 	fi
-	# no need to reload config
-	# . $OPENWBBASEDIR/loadconfig.sh
 
 	# update old ladelog
 	"$OPENWBBASEDIR/runs/transferladelog.sh"
