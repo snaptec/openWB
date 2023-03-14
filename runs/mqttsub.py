@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import configparser
 import fileinput
 import logging
@@ -302,7 +303,7 @@ def on_message(client, userdata, msg):
                     f.write("20005")
                     f.close()
 
-            match = re.match(r"^openWB/config/set/SmartHome/Device/(\d+)/([^/]+)$", msg.topic)
+            match = re.match(r"^openWB/config/set/SmartHome/Devices/(\d+)/([^/]+)$", msg.topic)
             if match is not None:
                 smart_home_device_config_handler(msg.payload.decode("utf-8"), int(match.group(1)), match.group(2))
 
