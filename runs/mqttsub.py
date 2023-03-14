@@ -16,9 +16,8 @@ import paho.mqtt.client as mqtt
 
 from modules.common.store.ramdisk import files
 
-global inaction
 inaction = 0
-openwbconffile = "/var/www/html/openWB/openwb.conf"
+openwb_conf_file = "/var/www/html/openWB/openwb.conf"
 config = configparser.ConfigParser()
 shconfigfile = '/var/www/html/openWB/smarthome.ini'
 config.read(shconfigfile)
@@ -59,27 +58,27 @@ def writetoconfig(configpart, section, key, value):
         print(str(e))
 
 
-def replaceAll(changeval, newval):
+def replace_all(change_val, new_val):
     global inaction
     if (inaction == 0):
         inaction = 1
-        for line in fileinput.input(openwbconffile, inplace=1):
-            if line.startswith(changeval):
-                line = changeval + newval + "\n"
+        for line in fileinput.input(openwb_conf_file, inplace=1):
+            if line.startswith(change_val):
+                line = change_val + new_val + "\n"
             sys.stdout.write(line)
         time.sleep(0.1)
         inaction = 0
 
 
-def getConfigValue(key):
-    with fileinput.input(openwbconffile) as file:
+def get_config_value(key):
+    with fileinput.input(openwb_conf_file) as file:
         for line in file:
             if line.startswith(str(key+"=")):
                 return line.split("=", 1)[1]
         return
 
 
-def getserial():
+def get_serial():
     # Extract serial from cpuinfo file
     with open('/proc/cpuinfo', 'r') as f:
         for line in f:
@@ -89,11 +88,11 @@ def getserial():
 
 
 mqtt_broker_ip = "localhost"
-client = mqtt.Client("openWB-mqttsub-" + getserial())
-ipallowed = '^[0-9.]+$'
-nameallowed = '^[a-zA-Z ]+$'
-namenumballowed = '^[0-9a-zA-Z ]+$'
-emailallowed = '^([\w\.]+)([\w]+)@(\w{2,})\.(\w{2,})$'
+client = mqtt.Client("openWB-mqttsub-" + get_serial())
+ip_allowed = r'^[0-9.]+$'
+name_allowed = r'^[a-zA-Z ]+$'
+name_number_allowed = r'^[0-9a-zA-Z ]+$'
+email_allowed = r'^([\w\.]+)([\w]+)@(\w{2,})\.(\w{2,})$'
 
 
 Validator = Callable[[str], Any]
@@ -134,7 +133,7 @@ def multi_validator(*validators: Validator) -> Validator:
     return validator
 
 
-ip_address_validator = multi_validator(min_length_validator(7), regex_match_validator(ipallowed))
+ip_address_validator = multi_validator(min_length_validator(7), regex_match_validator(ip_allowed))
 
 
 TopicHandler = Callable[[str, int, str], None]
@@ -186,7 +185,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_pbip": create_topic_handler(ip_address_validator),
         "device_pbtype": create_topic_handler(equals_one_of_validator("none", "shellypb")),
         "device_measureip": create_topic_handler(ip_address_validator),
-        "device_name": create_topic_handler((min_length_validator(4), regex_match_validator(nameallowed))),
+        "device_name": create_topic_handler((min_length_validator(4), regex_match_validator(name_allowed))),
         "device_type": create_topic_handler(
             equals_one_of_validator("none", "shelly", "tasmota", "acthor", "lambda", "elwa", "idm", "vampair",
                                     "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm",
@@ -273,23 +272,21 @@ def create_smart_home_device_config_handler() -> TopicHandler:
 
 smart_home_device_config_handler = create_smart_home_device_config_handler()
 
+
 # connect to broker and subscribe to set topics
-
-
-def on_connect(client, userdata, flags, rc):
+def on_connect(client: mqtt.Client, userdata, flags: dict, rc: int):
     log.info("Connected")
     client.subscribe("openWB/set/#", 2)
     client.subscribe("openWB/config/set/#", 2)
 
+
 # handle each set topic
-
-
-def on_message(client, userdata, msg):
-    # log all messages before any error forces this process to die
+def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
     if (len(msg.payload.decode("utf-8")) >= 1):
         lock.acquire()
         try:
             setTopicCleared = False
+            # log all messages before any error forces this process to die
             log.debug("Topic: %s, Message: %s", msg.topic, msg.payload.decode("utf-8"))
 
             if (("openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
@@ -927,7 +924,10 @@ def on_message(client, userdata, msg):
                                    "livegraph=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
             if (msg.topic == "openWB/set/system/SimulateRFID"):
-                if len(str(msg.payload.decode("utf-8"))) >= 1 and bool(re.match(namenumballowed, msg.payload.decode("utf-8"))):
+                if (
+                    len(str(msg.payload.decode("utf-8"))) >= 1 and
+                    bool(re.match(name_number_allowed, msg.payload.decode("utf-8")))
+                ):
                     f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
@@ -948,7 +948,7 @@ def on_message(client, userdata, msg):
                         payload = payload.rpartition('email: ')
                         json_payload = {"message": payload[0], "email": payload[2]}
                     finally:
-                        if (re.match(emailallowed, json_payload["email"])):
+                        if (re.match(email_allowed, json_payload["email"])):
                             f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
                             f.write("%s\n%s\n" % (json_payload["message"], json_payload["email"]))
                             f.close()
@@ -967,7 +967,10 @@ def on_message(client, userdata, msg):
                     client.publish("openWB/system/reloadDisplay", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/set/system/releaseTrain"):
                 releaseTrain = msg.payload.decode("utf-8")
-                if (releaseTrain == "stable17" or releaseTrain == "master" or releaseTrain == "beta" or releaseTrain.startswith("yc/")):
+                if (
+                    releaseTrain == "stable17" or releaseTrain == "master" or releaseTrain == "beta" or
+                    releaseTrain.startswith("yc/")
+                ):
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "releasetrain=", releaseTrain]
                     subprocess.run(sendcommand)
                     client.publish("openWB/system/releaseTrain", releaseTrain, qos=0, retain=True)
@@ -1164,96 +1167,96 @@ def on_message(client, userdata, msg):
                                    msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/set/lp/1/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstat=", msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp1=", msg.payload.decode("utf-8"))
+                    replace_all("lademstat=", msg.payload.decode("utf-8"))
+                    replace_all("sofortsocstatlp1=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstat=", msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp1=", "0")
+                    replace_all("lademstat=", msg.payload.decode("utf-8"))
+                    replace_all("sofortsocstatlp1=", "0")
                 if (int(msg.payload) == 2):
-                    replaceAll("lademstat=", "0")
-                    replaceAll("sofortsocstatlp1=", "1")
+                    replace_all("lademstat=", "0")
+                    replace_all("sofortsocstatlp1=", "1")
             if (msg.topic == "openWB/set/lp/2/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstats1=", msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp2=", msg.payload.decode("utf-8"))
+                    replace_all("lademstats1=", msg.payload.decode("utf-8"))
+                    replace_all("sofortsocstatlp2=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstats1=", msg.payload.decode("utf-8"))
-                    replaceAll("sofortsocstatlp2=", "0")
+                    replace_all("lademstats1=", msg.payload.decode("utf-8"))
+                    replace_all("sofortsocstatlp2=", "0")
                 if (int(msg.payload) == 2):
-                    replaceAll("lademstats1=", "0")
-                    replaceAll("sofortsocstatlp2=", "1")
+                    replace_all("lademstats1=", "0")
+                    replace_all("sofortsocstatlp2=", "1")
             if (msg.topic == "openWB/set/lp/3/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstats2=", msg.payload.decode("utf-8"))
-                    # replaceAll("sofortsocstatlp2=",msg.payload.decode("utf-8"))
+                    replace_all("lademstats2=", msg.payload.decode("utf-8"))
+                    # replace_all("sofortsocstatlp2=",msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstats2=", msg.payload.decode("utf-8"))
-                    # replaceAll("sofortsocstatlp2=","0")
+                    replace_all("lademstats2=", msg.payload.decode("utf-8"))
+                    # replace_all("sofortsocstatlp2=","0")
                 # if (int(msg.payload) == 2):
-                #    replaceAll("lademstats1=","0")
-                #    replaceAll("sofortsocstatlp2=","1")
+                #    replace_all("lademstats1=","0")
+                #    replace_all("sofortsocstatlp2=","1")
             if (msg.topic == "openWB/set/lp/4/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstatlp4=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp4=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstatlp4=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp4=", msg.payload.decode("utf-8"))
             if (msg.topic == "openWB/set/lp/5/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstatlp5=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp5=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstatlp5=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp5=", msg.payload.decode("utf-8"))
             if (msg.topic == "openWB/set/lp/6/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstatlp6=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp6=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstatlp6=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp6=", msg.payload.decode("utf-8"))
             if (msg.topic == "openWB/set/lp/7/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstatlp7=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp7=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstatlp7=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp7=", msg.payload.decode("utf-8"))
             if (msg.topic == "openWB/set/lp/8/DirectChargeSubMode"):
                 if (int(msg.payload) == 0):
-                    replaceAll("lademstatlp8=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp8=", msg.payload.decode("utf-8"))
                 if (int(msg.payload) == 1):
-                    replaceAll("lademstatlp8=", msg.payload.decode("utf-8"))
+                    replace_all("lademstatlp8=", msg.payload.decode("utf-8"))
             if (msg.topic == "openWB/set/isss/ClearRfid"):
                 if (int(msg.payload) > 0 and int(msg.payload) <= 1):
                     f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
                     f.write("0")
                     f.close()
-            if (msg.topic == "openWB/set/isss/Current") and int(getConfigValue("isss")) == 1:
+            if (msg.topic == "openWB/set/isss/Current") and int(get_config_value("isss")) == 1:
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 32):
                     f = open('/var/www/html/openWB/ramdisk/llsoll', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/Lp2Current") and int(getConfigValue("isss")) == 1:
+            if (msg.topic == "openWB/set/isss/Lp2Current") and int(get_config_value("isss")) == 1:
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 32):
                     f = open('/var/www/html/openWB/ramdisk/llsolls1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/U1p3p") and int(getConfigValue("isss")) == 1:
+            if (msg.topic == "openWB/set/isss/U1p3p") and int(get_config_value("isss")) == 1:
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 5):
                     f = open('/var/www/html/openWB/ramdisk/u1p3pstat', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/U1p3pLp2") and int(getConfigValue("isss")) == 1:
+            if (msg.topic == "openWB/set/isss/U1p3pLp2") and int(get_config_value("isss")) == 1:
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 5):
                     f = open('/var/www/html/openWB/ramdisk/u1p3plp2stat', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/Cpulp1") and int(getConfigValue("isss")) == 1:
+            if (msg.topic == "openWB/set/isss/Cpulp1") and int(get_config_value("isss")) == 1:
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 5):
                     f = open('/var/www/html/openWB/ramdisk/extcpulp1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
-            if (msg.topic == "openWB/set/isss/heartbeat") and int(getConfigValue("isss")) == 1:
+            if (msg.topic == "openWB/set/isss/heartbeat") and int(get_config_value("isss")) == 1:
                 if (int(msg.payload) >= -1 and int(msg.payload) <= 5):
                     f = open('/var/www/html/openWB/ramdisk/heartbeat', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/isss/parentWB"):
-                if int(getConfigValue("isss")) == 1:
+                if int(get_config_value("isss")) == 1:
                     f = open('/var/www/html/openWB/ramdisk/parentWB', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
@@ -1453,7 +1456,7 @@ def on_message(client, userdata, msg):
 
             # Topics for Mqtt-EVSE module
             # ToDo: check if Mqtt-EVSE module is selected!
-            # llmodule = getConfigValue("evsecon")
+            # llmodule = get_config_value("evsecon")
             if (("openWB/set/lp" in msg.topic) and ("plugStat" in msg.topic)):
                 devicenumb = int(re.sub(r'\D', '', msg.topic))
                 if ((1 <= devicenumb <= 3) and (0 <= int(msg.payload) <= 1)):
@@ -1483,7 +1486,7 @@ def on_message(client, userdata, msg):
 
             # Topics for Mqtt-LL module
             # ToDo: check if Mqtt-LL module is selected!
-            # llmodule = getConfigValue("ladeleistungsmodul")
+            # llmodule = get_config_value("ladeleistungsmodul")
             if (("openWB/set/lp" in msg.topic) and ("/W" in msg.topic)):
                 devicenumb = int(re.sub(r'\D', '', msg.topic))
                 if ((1 <= devicenumb <= 3) and (0 <= int(msg.payload) <= 100000)):
