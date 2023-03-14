@@ -188,10 +188,9 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_measureip": create_topic_handler(ip_address_validator),
         "device_name": create_topic_handler((min_length_validator(4), regex_match_validator(nameallowed))),
         "device_type": create_topic_handler(
-            # 'pyt' is deprecated and will be removed!:
             equals_one_of_validator("none", "shelly", "tasmota", "acthor", "lambda", "elwa", "idm", "vampair",
                                     "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm",
-                                    "pyt")),
+                                    )),
         "device_measureType": create_topic_handler(
             equals_one_of_validator("shelly", "tasmota", "http", "mystrom", "sdm630", "lovato", "we514", "fronius",
                                     "json", "avm", "mqtt", "sdm120", "smaem")),
