@@ -227,6 +227,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
             return
         try:
             handler(message, device_number, option)
+            RAMDISK_PATH.joinpath("rereadsmarthomedevices").write_text("1")
         except Exception:
             log.exception("Error setting smart home option <%s> for device <%d>", option, device_number)
 
