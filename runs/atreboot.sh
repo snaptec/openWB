@@ -78,7 +78,6 @@ at_reboot() {
 	sudo chmod -R g+w "$OPENWBBASEDIR/"{web/backup,web/tools/upload}
 
 	sudo chmod 777 "$OPENWBBASEDIR/openwb.conf"
-	sudo chmod 777 "$OPENWBBASEDIR/smarthome.ini"
 	sudo chmod 777 "$OPENWBBASEDIR/ramdisk"
 	sudo chmod 777 "$OPENWBBASEDIR/ramdisk/"
 	sudo chmod 777 "$OPENWBBASEDIR/web/files/"*

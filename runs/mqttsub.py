@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import configparser
 import fileinput
 import logging
 import re
@@ -18,44 +17,12 @@ from modules.common.store.ramdisk import files
 
 inaction = 0
 openwb_conf_file = "/var/www/html/openWB/openwb.conf"
-config = configparser.ConfigParser()
-shconfigfile = '/var/www/html/openWB/smarthome.ini'
-config.read(shconfigfile)
 numberOfSupportedDevices = 9  # limit number of smarthome devices
 lock = threading.Lock()
 RAMDISK_PATH = Path(__file__).resolve().parents[1] / "ramdisk"
 
 logging.basicConfig(filename=str(RAMDISK_PATH / "mqtt.log"), level=logging.DEBUG, format='%(asctime)s: %(message)s')
 log = logging.getLogger("MQTT")
-
-for i in range(1, (numberOfSupportedDevices+1)):
-    try:
-        confvar = config.get('smarthomedevices', 'device_configured_' + str(i))
-    except:
-        try:
-            config.set('smarthomedevices', 'device_configured_' + str(i), str(0))
-        except:
-            config.add_section('smarthomedevices')
-            config.set('smarthomedevices', 'device_configured_' + str(i), str(0))
-with open(shconfigfile, 'w') as f:
-    config.write(f)
-
-
-def writetoconfig(configpart, section, key, value):
-    config.read(configpart)
-    try:
-        config.set(section, key, value)
-    except:
-        config.add_section(section)
-        config.set(section, key, value)
-    with open(configpart, 'w') as f:
-        config.write(f)
-    try:
-        f = open('/var/www/html/openWB/ramdisk/reread'+str(section), 'w+')
-        f.write(str(1))
-        f.close()
-    except Exception as e:
-        print(str(e))
 
 
 def replace_all(change_val, new_val):
@@ -140,9 +107,6 @@ TopicHandler = Callable[[str, int, str], None]
 
 
 def create_smart_home_device_config_handler() -> TopicHandler:
-    def write_config_action(message: str, device_number: int, option: str):
-        writetoconfig(shconfigfile, "smarthomedevices", "%s_%d" % (option, device_number), message)
-
     def republish_action(message: str, device_number: int, option: str):
         client.publish(
             "openWB/config/get/SmartHome/Devices/%d/%s" % (device_number, option),
@@ -157,8 +121,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         return action
 
     def create_topic_handler(validators: Union[Iterable[Validator], Validator] = (),
-                             actions: Union[Iterable[TopicHandler], TopicHandler] = (
-                                 write_config_action, republish_action),
+                             actions: Union[Iterable[TopicHandler], TopicHandler] = (republish_action),
                              map_message: Callable[[str], str] = None) -> TopicHandler:
         validators_iterable = validators if isinstance(validators, Iterable) else (validators,)
         actions_iterable = actions if isinstance(actions, Iterable) else (actions,)
@@ -318,13 +281,6 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     client.publish("openWB/config/get/SmartHome/maxBatteryPower",
-                                   msg.payload.decode("utf-8"), qos=0, retain=True)
-            if (msg.topic == "openWB/config/set/SmartHome/smartmq"):
-                if (0 <= int(msg.payload) <= 1):
-                    f = open('/var/www/html/openWB/ramdisk/smartmq', 'w')
-                    f.write(msg.payload.decode("utf-8"))
-                    f.close()
-                    client.publish("openWB/config/get/SmartHome/smartmq",
                                    msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
