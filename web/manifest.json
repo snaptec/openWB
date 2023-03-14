@@ -41,9 +41,8 @@
 	],
 
 	"start_url": "index.php",
-	"background_color": "#ffffff",
+	"background_color": "#000000",
 	"display": "standalone",
-	"theme_color": "#ffffff",
-	"orientation": "portrait",
+	"theme_color": "#000000",
 	"scope": "."
 }
