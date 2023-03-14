@@ -215,22 +215,30 @@ class PowerMeter {
 
 		d3.select("a#meterResetButton").classed("hide", !this.showRelativeArcs);
 	}
+
 	addLabel(svg, x, y, anchor, data) {
 		const labelFontSize = 22;
 
 		if (data.power > 0) {
-			svg
-				.append("text")
-				.attr("x", x)
-				.attr("y", y)
-				// .text("\uf5ba;" + " " + data.name + ": " + formatWatt(data.power))
-				.text(data.icon + " " + formatWatt(data.power))
-				.attr("fill", data.color)
-				.attr("text-anchor", anchor)
-				.style("font-size", labelFontSize)
+			let textelement =
+				svg
+					.append("text")
+					.attr("x", x)
+					.attr("y", y)
+					.attr("fill", data.color)
+					.attr("text-anchor", anchor)
+					.style("font-size", labelFontSize)
+
+			textelement.append("tspan")
+				.text(data.icon + " ")
+				.attr("class", "fas")
+				;
+			textelement.append("tspan")
+				.text(formatWatt(data.power))
 				;
 		}
 	}
+
 	consumptionLabel() {
 		let sourcesToDisplay = Object.values(wbdata.sourceSummary).filter(v => (v.power > 0))
 		if ((sourcesToDisplay.length == 1) && (sourcesToDisplay[0].name == 'PV')) {
@@ -239,6 +247,7 @@ class PowerMeter {
 			return "Bezug/Verbrauch: "
 		}
 	}
+
 	addLabelWithColor(svg, x, y, anchor, labeltext, color) {
 		const labelFontSize = 22;
 		svg.append("text")
@@ -286,8 +295,6 @@ function switchDisplay() {
 	powerMeter.update();
 }
 
-
-
 function switchTheme() {
 	const doc = d3.select("html");
 	switch (wbdata.displayMode) {
@@ -302,10 +309,9 @@ function switchTheme() {
 	doc.classed("theme-dark", (wbdata.displayMode == "dark"));
 	doc.classed("theme-light", (wbdata.displayMode == "light"));
 	doc.classed("theme-gray", (wbdata.displayMode == "gray"));
-
-
 	wbdata.persistGraphPreferences();
 }
+
 function resetButtonClicked() {
 	powerMeter.resetDisplayRatio();
 	powerMeter.update();
