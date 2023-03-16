@@ -91,7 +91,8 @@ class Socket(ChargepointModule):
     def __close_actor(self):
         self.__set_actor(open=False)
 
-    @RateLimiter(max_calls=10, max_seconds=300)
+    # max 10 Versuche innerhalb der letzten 60 Sekunden.
+    @RateLimiter(max_calls=10, max_seconds=60)
     def __set_actor(self, open: bool):
         GPIO.output(23, GPIO.LOW if open else GPIO.HIGH)
         GPIO.output(26, GPIO.HIGH)
