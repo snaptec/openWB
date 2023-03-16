@@ -16,7 +16,7 @@ at_reboot() {
 		target=$2
 		currentVersion=$(grep -o "openwb-version:[0-9]\+" "$file" | grep -o "[0-9]\+$")
 		installedVersion=$(grep -o "openwb-version:[0-9]\+" "$target" | grep -o "[0-9]\+$")
-		if (( currentVersion == installedVersion )); then
+		if ((currentVersion == installedVersion)); then
 			return 0
 		else
 			return 1
@@ -24,7 +24,13 @@ at_reboot() {
 	}
 
 	echo "atreboot.sh started"
-	(sleep 600; echo "checking for stalled atreboot after 10 minutes"; echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"; echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress"; sudo kill "$$") &
+	(
+		sleep 600
+		echo "checking for stalled atreboot after 10 minutes"
+		echo 0 >"$OPENWBBASEDIR/ramdisk/bootinprogress"
+		echo 0 >"$OPENWBBASEDIR/ramdisk/updateinprogress"
+		sudo kill "$$"
+	) &
 
 	# read openwb.conf
 	echo "loading config"
@@ -111,7 +117,7 @@ at_reboot() {
 	fi
 
 	# initialize automatic phase switching
-	if (( u1p3paktiv == 1 )); then
+	if ((u1p3paktiv == 1)); then
 		echo "triginit..."
 		# quick init of phase switching with default pause duration (2s)
 		sudo python "$OPENWBBASEDIR/runs/triginit.py"
@@ -125,7 +131,6 @@ at_reboot() {
 		fi
 	fi
 
-
 	# display setup
 	echo "display..."
 	# remove old display config file
@@ -133,7 +138,7 @@ at_reboot() {
 		rm "/home/pi/.config/lxsession/LXDE-pi/lxdeyeah"
 	fi
 	# check if display is configured and setup timeout
-	if (( displayaktiv == 1 )); then
+	if ((displayaktiv == 1)); then
 		if versionMatch "$OPENWBBASEDIR/web/files/lxdeautostart" /home/pi/.config/lxsession/LXDE-pi/autostart; then
 			echo "already up to date"
 		else
@@ -148,37 +153,25 @@ at_reboot() {
 
 	# check crontab for user pi
 	echo "crontab 1..."
-	crontab -l -u pi > "$OPENWBBASEDIR/ramdisk/tmpcrontab"
-	if grep -Fq "lade.log" "$OPENWBBASEDIR/ramdisk/tmpcrontab"
-	then
+	crontab -l -u pi >"$OPENWBBASEDIR/ramdisk/tmpcrontab"
+	if grep -Fq "lade.log" "$OPENWBBASEDIR/ramdisk/tmpcrontab"; then
 		echo "crontab modified"
 		sed -i '/lade.log/d' "$OPENWBBASEDIR/ramdisk/tmpcrontab"
-		echo "* * * * * $OPENWBBASEDIR/regel.sh >> /var/log/openWB.log 2>&1" >> "$OPENWBBASEDIR/ramdisk/tmpcrontab"
+		echo "* * * * * $OPENWBBASEDIR/regel.sh >> /var/log/openWB.log 2>&1" >>"$OPENWBBASEDIR/ramdisk/tmpcrontab"
 		cat "$OPENWBBASEDIR/ramdisk/tmpcrontab" | crontab -u pi -
 	fi
 
 	# check crontab for user root and remove old @reboot entry
-	sudo crontab -l > "$OPENWBBASEDIR/ramdisk/tmprootcrontab"
-	if grep -Fq "atreboot.sh" "$OPENWBBASEDIR/ramdisk/tmprootcrontab"
-	then
+	sudo crontab -l >"$OPENWBBASEDIR/ramdisk/tmprootcrontab"
+	if grep -Fq "atreboot.sh" "$OPENWBBASEDIR/ramdisk/tmprootcrontab"; then
 		echo "executed"
 		sed -i '/atreboot.sh/d' "$OPENWBBASEDIR/ramdisk/tmprootcrontab"
 		cat "$OPENWBBASEDIR/ramdisk/tmprootcrontab" | sudo crontab -
 	fi
 
-	# check for LAN/WLAN connection
-	echo "LAN/WLAN..."
-	ethstate=$(</sys/class/net/eth0/carrier)
-	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 "$virtual_ip_eth0" netmask 255.255.255.0 up
-	else
-		sudo ifconfig wlan0:0 "$virtual_ip_wlan0" netmask 255.255.255.0 up
-	fi
-
 	# check for apache configuration
 	echo "apache..."
-	if grep -Fxq "AllowOverride" /etc/apache2/sites-available/000-default.conf
-	then
+	if grep -Fxq "AllowOverride" /etc/apache2/sites-available/000-default.conf; then
 		echo "...ok"
 	else
 		sudo cp "$OPENWBBASEDIR/web/tools/000-default.conf" /etc/apache2/sites-available/
@@ -187,33 +180,38 @@ at_reboot() {
 
 	# add some crontab entries for user pi
 	echo "crontab 2..."
-	if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
-	then
-		(crontab -l -u pi ; echo "1 0 * * * $OPENWBBASEDIR/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
+	if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi; then
+		(
+			crontab -l -u pi
+			echo "1 0 * * * $OPENWBBASEDIR/runs/cronnightly.sh >> /var/log/openWB.log 2>&1"
+		) | crontab -u pi -
 	fi
-	if ! sudo grep -Fq "cron5min.sh" /var/spool/cron/crontabs/pi
-	then
-		(crontab -l -u pi ; echo "*/5 * * * * $OPENWBBASEDIR/runs/cron5min.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
+	if ! sudo grep -Fq "cron5min.sh" /var/spool/cron/crontabs/pi; then
+		(
+			crontab -l -u pi
+			echo "*/5 * * * * $OPENWBBASEDIR/runs/cron5min.sh >> /var/log/openWB.log 2>&1"
+		) | crontab -u pi -
 	fi
-	if ! sudo grep -Fq "atreboot.sh" /var/spool/cron/crontabs/pi
-	then
-		(crontab -l -u pi ; echo "@reboot $OPENWBBASEDIR/runs/atreboot.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
+	if ! sudo grep -Fq "atreboot.sh" /var/spool/cron/crontabs/pi; then
+		(
+			crontab -l -u pi
+			echo "@reboot $OPENWBBASEDIR/runs/atreboot.sh >> /var/log/openWB.log 2>&1"
+		) | crontab -u pi -
 	fi
 
 	# check for needed packages
 	echo "packages 1..."
-	if python -c "import evdev" &> /dev/null; then
+	if python -c "import evdev" &>/dev/null; then
 		echo 'evdev for python2 installed...'
 	else
 		sudo pip install evdev
 	fi
-	if ! [ -x "$(command -v sshpass)" ];then
+	if ! [ -x "$(command -v sshpass)" ]; then
 		sudo apt-get -qq update
 		sleep 1
 		sudo apt-get -qq install sshpass
 	fi
-	if [ "$(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed")" -eq 0 ];
-	then
+	if [ "$(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed")" -eq 0 ]; then
 		sudo apt-get -qq update
 		sleep 1
 		sudo apt-get -qq install -y php-gd
@@ -221,20 +219,17 @@ at_reboot() {
 		sudo apt-get -qq install -y php7.0-xml
 	fi
 	# required package for soc_vwid
-	if [ "$(dpkg-query -W -f='${Status}' libxslt1-dev 2>/dev/null | grep -c "ok installed")" -eq 0 ];
-	then
+	if [ "$(dpkg-query -W -f='${Status}' libxslt1-dev 2>/dev/null | grep -c "ok installed")" -eq 0 ]; then
 		sudo apt-get -qq update
 		sleep 1
 		sudo apt-get -qq install -y libxslt1-dev
 	fi
-	# no need to reload config
-	# . $OPENWBBASEDIR/loadconfig.sh
 
 	# update old ladelog
 	"$OPENWBBASEDIR/runs/transferladelog.sh"
 
 	# check for led handler
-	if (( ledsakt == 1 )); then
+	if ((ledsakt == 1)); then
 		echo "led..."
 		sudo python "$OPENWBBASEDIR/runs/leds.py" startup
 	fi
@@ -243,13 +238,11 @@ at_reboot() {
 	echo "timezone..."
 	sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
-
 	if [ ! -f /home/pi/ssl_patched ]; then
 		sudo apt-get update
 		sudo apt-get -qq install -y openssl libcurl3 curl libgcrypt20 libgnutls30 libssl1.1 libcurl3-gnutls libssl1.0.2 php7.0-cli php7.0-gd php7.0-opcache php7.0 php7.0-common php7.0-json php7.0-readline php7.0-xml php7.0-curl libapache2-mod-php7.0
 		touch /home/pi/ssl_patched
 	fi
-
 
 	# check for mosquitto packages
 	echo "mosquitto..."
@@ -271,7 +264,7 @@ at_reboot() {
 	python3 -u "$OPENWBBASEDIR/runs/installPythonPackages.py"
 
 	#Prepare for lxml used in soc module libvwid in Python
-	if python3 -c "import lxml" &> /dev/null; then
+	if python3 -c "import lxml" &>/dev/null; then
 		echo 'lxml installed...'
 	else
 		sudo apt-get install python3-lxml
@@ -279,7 +272,7 @@ at_reboot() {
 
 	#Prepare for secrets used in soc module libvwid in Python
 	VWIDMODULEDIR="$OPENWBBASEDIR/modules/soc_vwid"
-	if python3 -c "import secrets" &> /dev/null; then
+	if python3 -c "import secrets" &>/dev/null; then
 		echo 'soc_vwid: python3 secrets installed...'
 		if [ -L "$VWIDMODULEDIR/secrets.py" ]; then
 			echo 'soc_vwid: remove local python3 secrets.py...'
@@ -293,7 +286,7 @@ at_reboot() {
 	fi
 	#Prepare for secrets used in soc module soc_smarteq in Python
 	SMARTEQMODULEDIR="$OPENWBBASEDIR/modules/soc_smarteq"
-	if python3 -c "import secrets" &> /dev/null; then
+	if python3 -c "import secrets" &>/dev/null; then
 		echo 'soc_smarteq: python3 secrets installed...'
 		if [ -L "$SMARTEQMODULEDIR/secrets.py" ]; then
 			echo 'soc_smarteq: remove local python3 secrets.py...'
@@ -316,28 +309,27 @@ at_reboot() {
 
 	# all done, remove warning in display
 	echo "clear warning..."
-	echo "" > "$OPENWBBASEDIR/ramdisk/lastregelungaktiv"
-	echo "" > "$OPENWBBASEDIR/ramdisk/mqttlastregelungaktiv"
+	echo "" >"$OPENWBBASEDIR/ramdisk/lastregelungaktiv"
+	echo "" >"$OPENWBBASEDIR/ramdisk/mqttlastregelungaktiv"
 	chmod 777 "$OPENWBBASEDIR/ramdisk/mqttlastregelungaktiv"
 
 	"$OPENWBBASEDIR/runs/services.sh" restart
 
 	# get local ip
-	ip route get 1 | awk '{print $7;exit}' > "$OPENWBBASEDIR/ramdisk/ipaddress"
+	ip route get 1 | awk '{print $7;exit}' >"$OPENWBBASEDIR/ramdisk/ipaddress"
 
 	# update our local version
-	sudo git -C "$OPENWBBASEDIR" show --pretty='format:%ci [%h]' | head -n1 > "$OPENWBBASEDIR/web/lastcommit"
+	sudo git -C "$OPENWBBASEDIR" show --pretty='format:%ci [%h]' | head -n1 >"$OPENWBBASEDIR/web/lastcommit"
 	# and record the current commit details
 	commitId=$(git -C "$OPENWBBASEDIR" log --format="%h" -n 1)
-	echo "$commitId" > "$OPENWBBASEDIR/ramdisk/currentCommitHash"
-	git -C "$OPENWBBASEDIR" branch -a --contains "$commitId" | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs > "$OPENWBBASEDIR/ramdisk/currentCommitBranches"
+	echo "$commitId" >"$OPENWBBASEDIR/ramdisk/currentCommitHash"
+	git -C "$OPENWBBASEDIR" branch -a --contains "$commitId" | perl -nle 'm|.*origin/(.+).*|; print $1' | uniq | xargs >"$OPENWBBASEDIR/ramdisk/currentCommitBranches"
 	sudo chmod 777 "$OPENWBBASEDIR/ramdisk/currentCommitHash"
 	sudo chmod 777 "$OPENWBBASEDIR/ramdisk/currentCommitBranches"
 
 	# update broker
 	echo "update broker..."
-	for i in $(seq 1 9);
-	do
+	for i in $(seq 1 9); do
 		configured=$(timeout 1 mosquitto_sub -C 1 -t "openWB/config/get/SmartHome/Devices/$i/device_configured")
 		if ! [[ "$configured" == 0 || "$configured" == 1 ]]; then
 			mosquitto_pub -r -t "openWB/config/get/SmartHome/Devices/$i/device_configured" -m "0"
@@ -356,9 +348,15 @@ at_reboot() {
 	mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor1 -m ""
 	mosquitto_pub -r -t openWB/SmartHome/Devices/2/TemperatureSensor2 -m ""
 	rm -rf "$OPENWBBASEDIR/web/themes/dark19_01"
-	(sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m "$bootmodus") &
-	(sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m "$bootmodus") &
-	echo " " > "$OPENWBBASEDIR/ramdisk/lastregelungaktiv"
+	(
+		sleep 10
+		mosquitto_pub -t openWB/set/ChargeMode -r -m "$bootmodus"
+	) &
+	(
+		sleep 10
+		mosquitto_pub -t openWB/global/ChargeMode -r -m "$bootmodus"
+	) &
+	echo " " >"$OPENWBBASEDIR/ramdisk/lastregelungaktiv"
 	chmod 777 "$OPENWBBASEDIR/ramdisk/lastregelungaktiv"
 	chmod 777 "$OPENWBBASEDIR/ramdisk/smarthome.log"
 	chmod 777 "$OPENWBBASEDIR/ramdisk/smarthomehandlerloglevel"
@@ -367,7 +365,7 @@ at_reboot() {
 	echo "etprovider..."
 	if [[ "$etprovideraktiv" == "1" ]]; then
 		echo "update electricity pricelist..."
-		echo "" > "$OPENWBBASEDIR/ramdisk/etprovidergraphlist"
+		echo "" >"$OPENWBBASEDIR/ramdisk/etprovidergraphlist"
 		mosquitto_pub -r -t openWB/global/ETProvider/modulePath -m "$etprovider"
 		nohup "$OPENWBBASEDIR/modules/$etprovider/main.sh" >>"$LOGFILE" 2>&1 &
 	else
@@ -391,8 +389,8 @@ at_reboot() {
 
 	# all done, remove boot and update status
 	echo "$(date +"%Y-%m-%d %H:%M:%S:") boot done :-)"
-	echo 0 > "$OPENWBBASEDIR/ramdisk/bootinprogress"
-	echo 0 > "$OPENWBBASEDIR/ramdisk/updateinprogress"
+	echo 0 >"$OPENWBBASEDIR/ramdisk/bootinprogress"
+	echo 0 >"$OPENWBBASEDIR/ramdisk/updateinprogress"
 	mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
 	mosquitto_pub -t openWB/system/reloadDisplay -m "1"
 }

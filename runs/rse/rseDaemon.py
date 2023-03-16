@@ -55,7 +55,8 @@ try:
             if rse_states[rse] != last_rse_states[rse]:
                 write_to_ramdisk(rse_inputs[rse]["file"], str("1" if rse_states[rse] else "0"))
                 log_debug(2, "rse input changed: RSE" + str(rse) + ": " + str(last_rse_states[rse]) + "->" +
-                          str(rse_states[rse]) + " (" + str("1" if rse_states[rse] else "0") + ">" + rse_inputs[rse]["file"] + ")")
+                          str(rse_states[rse]) + " (" + str("1" if rse_states[rse] else "0") + ">" +
+                          rse_inputs[rse]["file"] + ")")
         time.sleep(10.2)
         last_rse_states = rse_states
 except Exception as e:
