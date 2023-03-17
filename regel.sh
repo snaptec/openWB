@@ -442,38 +442,38 @@ prenachtlademodus
 #######################
 #Ladestromstarke berechnen
 anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
-if (( anzahlphasen > 9 )); then
+if ((anzahlphasen > 9)); then
 	anzahlphasen=1
 fi
 llphasentest=3
 openwbDebugLog "PV" 0 "Alte Anzahl genutzter Phasen= $anzahlphasen"
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
-if (( llalt > 3 )); then
+if ((llalt > 3)); then
 	anzahlphasen=0
-	if [ $lla1 -ge $llphasentest ]; then
-		anzahlphasen=$((anzahlphasen + 1 ))
+	if ((lla1 >= llphasentest)); then
+		anzahlphasen=$((anzahlphasen + 1))
 	fi
-	if [ $lla2 -ge $llphasentest ]; then
-		anzahlphasen=$((anzahlphasen + 1 ))
+	if ((lla2 >= llphasentest)); then
+		anzahlphasen=$((anzahlphasen + 1))
 	fi
-	if [ $lla3 -ge $llphasentest ]; then
-		anzahlphasen=$((anzahlphasen + 1 ))
+	if ((lla3 >= llphasentest)); then
+		anzahlphasen=$((anzahlphasen + 1))
 	fi
-	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
-	echo $anzahlphasen > /var/www/html/openWB/ramdisk/lp1anzahlphasen
+	echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
+	echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/lp1anzahlphasen
 	openwbDebugLog "PV" 0 "LP1 Anzahl Phasen während Ladung= $anzahlphasen"
 else
-	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
+	if ((plugstat == 1)) && ((lp1enabled == 1)); then
 		if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-			echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+			echo 1 >/var/www/html/openWB/ramdisk/anzahlphasen
 		fi
-		if (( u1p3paktiv == 1 )); then
-			anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+		if ((u1p3paktiv == 1)); then
+			anzahlphasen=$(</var/www/html/openWB/ramdisk/u1p3pstat)
 		else
-			if [ ! -f /var/www/html/openWB/ramdisk/lp1anzahlphasen ]; then
-				anzahlphasen=$(cat /var/www/html/openWB/ramdisk/lp1anzahlphasen)
+			if [ -f /var/www/html/openWB/ramdisk/lp1anzahlphasen ]; then
+				anzahlphasen=$(</var/www/html/openWB/ramdisk/lp1anzahlphasen)
 			else
-				anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
+				anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
 			fi
 		fi
 	else
@@ -481,65 +481,65 @@ else
 	fi
 	openwbDebugLog "PV" 0 "LP1 Anzahl Phasen während keiner Ladung= $anzahlphasen"
 fi
-if (( lastmanagement == 1 )); then
-	if (( llas11 > 3 )); then
+if ((lastmanagement == 1)); then
+	if ((llas11 > 3)); then
 		lp2anzahlphasen=0
-		if [ "$llas11" -ge $llphasentest ]; then
+		if ((llas11 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
 		fi
-		if [ "$llas12" -ge $llphasentest ]; then
+		if ((llas12 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
 		fi
-		if [ "$llas13" -ge $llphasentest ]; then
+		if ((llas13 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
 		fi
-		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
-		echo $lp2anzahlphasen > /var/www/html/openWB/ramdisk/lp2anzahlphasen
+		echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
+		echo "$lp2anzahlphasen" >/var/www/html/openWB/ramdisk/lp2anzahlphasen
 		openwbDebugLog "PV" 0 "LP2 Anzahl Phasen während Ladung= $lp2anzahlphasen"
 	else
-		if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
+		if ((plugstatlp2 == 1)) && ((lp2enabled == 1)); then
 			if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-				echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+				echo 1 >/var/www/html/openWB/ramdisk/anzahlphasen
 			fi
-			if (( u1p3plp2aktiv == 1 )); then
-				lp2anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+			if ((u1p3plp2aktiv == 1)); then
+				lp2anzahlphasen=$(</var/www/html/openWB/ramdisk/u1p3pstat)
 				anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
 			else
 				if [ ! -f /var/www/html/openWB/ramdisk/lp2anzahlphasen ]; then
-					echo 1 > /var/www/html/openWB/ramdisk/lp2anzahlphasen
+					echo 1 >/var/www/html/openWB/ramdisk/lp2anzahlphasen
 					anzahlphasen=$((anzahlphasen + 1 ))
 				else
-					lp2anzahlphasen=$(cat /var/www/html/openWB/ramdisk/lp2anzahlphasen)
+					lp2anzahlphasen=$(</var/www/html/openWB/ramdisk/lp2anzahlphasen)
 					anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
 				fi
 			fi
+		else
+			lp2anzahlphasen=0
 		fi
 		openwbDebugLog "PV" 0 "LP2 Anzahl Phasen während keiner Ladung= $lp2anzahlphasen"
 	fi
 fi
-if (( lastmanagements2 == 1 )); then
-	if (( llas21 > 3 )); then
-		if [ "$llas21" -ge $llphasentest ]; then
+if ((lastmanagements2 == 1)); then
+	if ((llas21 > 3)); then
+		if ((llas21 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 		fi
-		if [ "$llas22" -ge $llphasentest ]; then
+		if ((llas22 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 		fi
-		if [ "$llas23" -ge $llphasentest ]; then
+		if ((llas23 >= llphasentest)); then
 			anzahlphasen=$((anzahlphasen + 1 ))
 		fi
-		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+		echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
 	fi
 fi
-if [ $anzahlphasen -eq 0 ]; then
+if ((anzahlphasen < 1)) || ((anzahlphasen > 24)); then
+	openwbDebugLog "PV" 1 "Ungueltige Anzahl Phasen: $anzahlphasen, setze auf '1'"
 	anzahlphasen=1
-fi
-if [ "$anzahlphasen" -ge "24" ]; then
-	anzahlphasen=1
-	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+	echo "$anzahlphasen" >/var/www/html/openWB/ramdisk/anzahlphasen
 fi
 openwbDebugLog "PV" 0 "Gesamt Anzahl Phasen= $anzahlphasen"
 
