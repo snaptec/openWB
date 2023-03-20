@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """A server that receives and executes commands via file socket
 
 The server expects to receive JSON arrays via a file socket. The first element in the array is the module to call.
