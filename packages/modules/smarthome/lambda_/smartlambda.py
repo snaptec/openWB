@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-
+import subprocess
 import logging
 log = logging.getLogger(__name__)
-import subprocess
 
 
 class Slambda(Sbase):

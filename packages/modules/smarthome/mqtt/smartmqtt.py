@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Slmqtt
 import subprocess
-
 import logging
 log = logging.getLogger(__name__)
+
 
 class Smqtt(Sbase):
     def __init__(self):

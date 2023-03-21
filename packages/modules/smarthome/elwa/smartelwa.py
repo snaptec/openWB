@@ -5,6 +5,7 @@ import subprocess
 import logging
 log = logging.getLogger(__name__)
 
+
 class Selwa(Sbase):
     def __init__(self) -> None:
         # setting

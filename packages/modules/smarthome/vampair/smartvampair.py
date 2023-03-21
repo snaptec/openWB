@@ -4,6 +4,7 @@ import subprocess
 import logging
 log = logging.getLogger(__name__)
 
+
 class Svampair(Sbase):
     def __init__(self):
         # setting

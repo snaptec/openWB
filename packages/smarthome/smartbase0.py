@@ -3,6 +3,7 @@ import time
 import logging
 log = logging.getLogger(__name__)
 
+
 class Sbase0:
     _basePath = '/var/www/html/openWB'
     _prefixpy = _basePath+'/packages/modules/smarthome/'

@@ -4,6 +4,7 @@ import subprocess
 import logging
 log = logging.getLogger(__name__)
 
+
 class Sratiotherm(Sbase):
     def __init__(self) -> None:
         # setting

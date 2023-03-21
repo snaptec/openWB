@@ -33,7 +33,7 @@ else:
 #   urllib.request.urlopen("http://"+str(ipadr)+"/relay/" + str(chan) +
 #                           "?turn=on", timeout=3)
 if (shaut == 1):
-    #  print("Shelly on" + str(shaut) + user + pw)    
+    #  print("Shelly on" + str(shaut) + user + pw)
     passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, url, user, pw)
     authhandler = urllib.request.HTTPBasicAuthHandler(passman)

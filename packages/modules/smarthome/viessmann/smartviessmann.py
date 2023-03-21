@@ -5,6 +5,7 @@ import json
 import logging
 log = logging.getLogger(__name__)
 
+
 class Sviessmann(Sbase):
     def __init__(self):
         # setting

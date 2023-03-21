@@ -4,6 +4,7 @@ import json
 import logging
 log = logging.getLogger(__name__)
 
+
 class Spbase(Sbase0):
     def __init__(self):
         #

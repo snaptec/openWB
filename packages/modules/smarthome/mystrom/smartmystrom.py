@@ -4,6 +4,7 @@ from smarthome.smartbase import Sbase, Slmystrom
 import logging
 log = logging.getLogger(__name__)
 
+
 class Smystrom(Sbase):
     def __init__(self):
         # setting
