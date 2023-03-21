@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Slavm
-from smarthome.global0 import log
 import subprocess
-
+import logging
+log = logging.getLogger(__name__)
 
 class Savm(Sbase):
     def __init__(self):
@@ -13,7 +13,6 @@ class Savm(Sbase):
         self._device_actor = 'none'
         self._device_username = 'none'
         self._device_password = 'none'
-        print('__init__ Savm excuted')
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)

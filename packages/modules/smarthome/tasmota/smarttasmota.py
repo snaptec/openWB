@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Sltasmota
-from smarthome.global0 import log
 import subprocess
-
+import logging
+log = logging.getLogger(__name__)
 
 class Stasmota(Sbase):
     def __init__(self):
         # setting
         super().__init__()
         self._old_measuretype0 = 'none'
-        print('__init__ Stasmota excuted')
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)

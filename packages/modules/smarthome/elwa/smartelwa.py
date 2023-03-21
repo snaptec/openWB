@@ -1,16 +1,15 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 from typing import Dict
 import subprocess
-
+import logging
+log = logging.getLogger(__name__)
 
 class Selwa(Sbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
         self._dynregel = 1
-        print('__init__ Selwa executed')
 
     def updatepar(self, input_param: Dict[str, str]) -> None:
         super().updatepar(input_param)

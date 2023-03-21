@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 from typing import Dict
 import subprocess
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sacthor(Sbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sacthor executed')
         self._smart_paramadd = {}  # type: Dict[str, str]
         self._device_acthortype = 'none'
         self._device_acthorpower = 'none'

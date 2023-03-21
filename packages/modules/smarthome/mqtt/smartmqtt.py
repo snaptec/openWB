@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Slmqtt
-from smarthome.global0 import log
 import subprocess
 
+import logging
+log = logging.getLogger(__name__)
 
 class Smqtt(Sbase):
     def __init__(self):
         # setting
         super().__init__()
         self._old_measuretype0 = 'none'
-        print('__init__ Smqtt executed')
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)
