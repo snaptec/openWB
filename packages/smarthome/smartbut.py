@@ -1,7 +1,8 @@
 from smarthome.smartbase0 import Sbase0
-from smarthome.global0 import log
 import urllib.request
 import json
+import logging
+log = logging.getLogger(__name__)
 
 
 class Spbase(Sbase0):
@@ -9,7 +10,6 @@ class Spbase(Sbase0):
         #
         # setting
         super().__init__()
-        print('__init__ Spbase executed')
         self._device_pbip = 'none'
         self.device_nummer = 0
 
@@ -32,7 +32,6 @@ class Sbshelly(Spbase):
     def __init__(self):
         # setting
         super().__init__()
-        print('__init__ Sbshelly excuted')
         self.counter = 0
         self.led = 9
         self.event_cnt = 0

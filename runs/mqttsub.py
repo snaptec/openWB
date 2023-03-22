@@ -141,6 +141,8 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_configured": create_topic_handler(int_range_validator(0, 1)),
         "device_canSwitch": create_topic_handler(int_range_validator(0, 1)),
         "device_differentMeasurement": create_topic_handler(int_range_validator(0, 1)),
+        "device_shauth": create_topic_handler(int_range_validator(0, 1)),
+        "device_measureshauth": create_topic_handler(int_range_validator(0, 1)),
         "device_chan": create_topic_handler(int_range_validator(0, 6)),
         "device_nxdacxxtype": create_topic_handler(int_range_validator(0, 2)),
         "device_measchan": create_topic_handler(int_range_validator(0, 6)),
@@ -184,6 +186,11 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_measurejsoncounter": create_topic_handler(),
         "device_username": create_topic_handler(),
         "device_password": create_topic_handler(),
+        "device_shusername": create_topic_handler(),
+        "device_shpassword": create_topic_handler(),
+        "device_manwatt": create_topic_handler(int_range_validator(0, 30000)),
+        "device_measureshusername": create_topic_handler(),
+        "device_measureshpassword": create_topic_handler(),
         "device_actor": create_topic_handler(),
         "device_measureavmusername": create_topic_handler(),
         "device_measureavmpassword": create_topic_handler(),
@@ -282,7 +289,8 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     client.publish("openWB/config/get/SmartHome/maxBatteryPower",
-                                   msg.payload.decode("utf-8"), qos=0, retain=True)
+                                   msg.payload.decode("utf-8"), qos=0, retain=True)                 
+                    RAMDISK_PATH.joinpath("rereadsmarthomedevices").write_text("1")
             if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                     f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')

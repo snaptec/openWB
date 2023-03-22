@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 import subprocess
 import json
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sviessmann(Sbase):

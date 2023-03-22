@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 import subprocess
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sidm(Sbase):
@@ -11,7 +12,6 @@ class Sidm(Sbase):
         self._smart_paramadd = {}
         self._device_idmnav = '2'
         self.device_nummer = 0
-        print('__init__ Sidm executed')
 
     def updatepar(self, input_param):
         super().updatepar(input_param)

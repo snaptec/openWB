@@ -2,13 +2,14 @@
 import time
 import os
 from typing import Dict, Tuple, Any
-from smarthome.global0 import log
 from smarthome.smartbase0 import Sbase0
 from smarthome.smartmeas import Slsdm630, Sllovato, Slsdm120, Slwe514, Slfronius
 from smarthome.smartmeas import Sljson, Slsmaem, Slshelly, Sltasmota, Slmqtt
 from smarthome.smartmeas import Slhttp, Slavm, Slmystrom
 from smarthome.smartbut import Sbshelly
 from datetime import datetime, timezone
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sbase(Sbase0):
@@ -26,7 +27,6 @@ class Sbase(Sbase0):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sbase executed')
         self.mqtt_param = {}  # type: Dict[str, str]
         self.mqtt_param_del = {}  # type: Dict[str, str]
         self.device_name = 'none'
@@ -125,10 +125,6 @@ class Sbase(Sbase0):
         self.gruppe = 'none'
         self.btchange = 0
         self._mydevicemeasure = 'none'  # type: Any
-
-    def __del__(self) -> None:
-
-        print('__del__ Sbase executed ')
 
     def prewatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self._uberschuss = uberschuss

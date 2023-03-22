@@ -1,14 +1,12 @@
 import json
 import time
-from smarthome.global0 import log
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sbase0:
     _basePath = '/var/www/html/openWB'
     _prefixpy = _basePath+'/packages/modules/smarthome/'
-
-    def __init__(self):
-        print('__init__ Sbase executed')
 
     def readret(self):
         with open(self._basePath+'/ramdisk/smarthome_device_ret' +
