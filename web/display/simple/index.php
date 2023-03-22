@@ -62,6 +62,12 @@
 				});
 			});
 		</script>
+		<style>
+			/* prevent touch gestures */
+			html, body {
+				overscroll-behavior: none;
+			}
+		</style>
 	</head>
 	<body>
 		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
@@ -113,7 +119,7 @@
 					<div class="col-xs-3">
 						<div id="speedevu">
 							<div id="arrowevu"></div>
- 						</div>
+						</div>
 						<span id="bezugdiv"></span>
 					</div>
 					<div class="col-xs-2">
@@ -131,7 +137,7 @@
 					<div class="col-xs-3">
 						<div id="speedlp1">
 							<div id="arrowlp1"></div>
- 						</div>
+						</div>
 						<span id="lllp1div"></span> <span id="pluggedladungbishergeladenlp1div"></span>kWh
 					</div>
 					<div class="col-xs-1">
@@ -143,7 +149,7 @@
 					<div class="col-xs-3">
 						<div id="speedlp2">
 							<div id="arrowlp2"></div>
- 						</div>
+						</div>
 						<span id="lllp2div"></span> <span id="pluggedladungbishergeladenlp2div"></span>kWh
 					</div>
 					<div class="col-xs-1">
@@ -159,7 +165,7 @@
 						<div class="col-xs-3">
 							<div id="speedlp3">
 								<div id="arrowlp3"></div>
- 							</div>
+							</div>
 							<span id="lllp3div"></span> <span id="pluggedladungbishergeladenlp3div"></span>kWh
 						</div>
 						<div class="col-xs-1">
@@ -173,7 +179,7 @@
 						<div class="col-xs-3">
 							<div id="speedlp4">
 								<div id="arrowlp4"></div>
- 							</div>
+							</div>
 							<span id="lllp4div"></span> <span id="pluggedladungbishergeladenlp4div"></span>kWh
 						</div>
 						<div class="col-xs-1">
@@ -189,7 +195,7 @@
 						<div class="col-xs-3">
 							<div id="speedlp5">
 								<div id="arrowlp5"></div>
- 							</div>
+							</div>
 							<span id="lllp5div"></span> <span id="pluggedladungbishergeladenlp5div"></span>kWh
 						</div>
 						<div class="col-xs-1">
@@ -204,7 +210,7 @@
 						<div class="col-xs-3">
 							<div id="speedlp6">
 								<div id="arrowlp6"></div>
- 							</div>
+							</div>
 							<span id="lllp6div"></span> <span id="pluggedladungbishergeladenlp6div"></span>kWh
 						</div>
 						<div class="col-xs-1">
@@ -220,7 +226,7 @@
 						<div class="col-xs-3">
 							<div id="speedlp7">
 								<div id="arrowlp7"></div>
- 							</div>
+							</div>
 							<span id="lllp7div"></span> <span id="pluggedladungbishergeladenlp7div"></span>kWh
 						</div>
 						<div class="col-xs-1">
@@ -235,7 +241,7 @@
 						<div class="col-xs-3">
 							<div id="speedlp8">
 								<div id="arrowlp8"></div>
- 							</div>
+							</div>
 							<span id="lllp8div"></span> <span id="pluggedladungbishergeladenlp8div"></span>kWh
 						</div>
 						<div class="col-xs-1">
