@@ -62,6 +62,10 @@
 		<!-- Data refresher -->
 		<script src="livefunctions.js"></script>
 		<style>
+			/* prevent touch gestures */
+			html, body {
+				overscroll-behavior: none;
+			}
 			#PINform input:focus,
 			#PINform select:focus,
 			#PINform textarea:focus,

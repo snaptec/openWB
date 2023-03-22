@@ -1,294 +1,299 @@
+/* prevent touch gestures */
+html, body {
+	overscroll-behavior: none;
+}
+
 /* The sidebar menu */
 .sidenav {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 180px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    left: 0;
-    background-color: #111; /* Black */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
+	height: 100%; /* Full-height: remove this if you want "auto" height */
+	width: 180px; /* Set the width of the sidebar */
+	position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+	z-index: 1; /* Stay on top */
+	top: 0; /* Stay at the top */
+	left: 0;
+	background-color: #111; /* Black */
+	overflow-x: hidden; /* Disable horizontal scroll */
+	padding-top: 20px;
 }
-  
+
 /* The navigation menu links */
 .sidenav a {
-    padding-top: 18px;
-    padding-bottom: 18px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-decoration: none;
-    font-size: 22px;
-    color: #818181;
-    display: block;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-decoration: none;
+	font-size: 22px;
+	color: #818181;
+	display: block;
 }
 
 /* When you mouse over the navigation links, change their color */
 /* .sidenav a:hover {
-    color: #f1f1f1;
+	color: #f1f1f1;
 } */
 
 .sidenav .btn {
-    margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .sidenav .btn:hover {
-    background-color: inherit;
-    color: #818181;
+	background-color: inherit;
+	color: #818181;
 }
 
 /* Style page content */
 .resume {
-    margin-left: 190px; /* Same as the width of the sidebar */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 10px;
+	margin-left: 190px; /* Same as the width of the sidebar */
+	margin-right: 10px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-top: 10px;
 }
 
 body {
-    color: white;
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
-    /* Old browsers */
-    background: rgb(90,90,90);
-    /* FF3.6-15 */
-    background: -moz-linear-gradient(top,  rgba(90,90,90,1) 0%, rgba(14,14,14,1) 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: -webkit-linear-gradient(top,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    background: linear-gradient(to bottom,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
-    /* IE6-9 */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', endColorstr='#0e0e0e',GradientType=0 );
-    background-attachment: fixed;
+	color: white;
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
+	/* Old browsers */
+	background: rgb(90,90,90);
+	/* FF3.6-15 */
+	background: -moz-linear-gradient(top,  rgba(90,90,90,1) 0%, rgba(14,14,14,1) 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: -webkit-linear-gradient(top,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
+	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background: linear-gradient(to bottom,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
+	/* IE6-9 */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', endColorstr='#0e0e0e',GradientType=0 );
+	background-attachment: fixed;
 }
 
 .bg-warning, .bg-info, .bg-success {
-    color: #212529;
+	color: #212529;
 }
 
 .btn-outline-secondary {
-    color: #ffffff;
+	color: #ffffff;
 }
 .btn-block {
-    font-size: 24px;
+	font-size: 24px;
 }
 .card {
-    background-color: rgba(0, 0, 0, 0)!important;
-    /*border-color: rgba(0, 0, 0, 0);*/
-    font-size: 18px;
-    border: 0px!important;
+	background-color: rgba(0, 0, 0, 0)!important;
+	/*border-color: rgba(0, 0, 0, 0);*/
+	font-size: 18px;
+	border: 0px!important;
 }
 .card-body {
-    background-color: #212529;
-    /*border-color: rgba(255, 255, 255, 0.5);*/
-    color: #ffffff;
+	background-color: #212529;
+	/*border-color: rgba(255, 255, 255, 0.5);*/
+	color: #ffffff;
 }
 
 .card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
 .card-header.bg-success .btn-outline-info:not(.active):not(:hover) {
-    background-color: #212529;
+	background-color: #212529;
 }
 
 .card-header.bg-success .btn-outline-info.focus {
-    box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
+	box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
 }
 
 .card-header.bg-success .btn-outline-info.active,
 .card-header.bg-success .btn-outline-info:hover {
-    border-color: #212529;
+	border-color: #212529;
 }
 
 .form-control, .form-control[readonly], .form-control:focus {
-    background-color: #343a40;
-    border: 1px solid #ced4da;
-    color: #ffffff;
+	background-color: #343a40;
+	border: 1px solid #ced4da;
+	color: #ffffff;
 }
 
 .input-group-text {
-    background-color: #212529;
-    color: #ffffff;
+	background-color: #212529;
+	color: #ffffff;
 }
 
 .modal-content {
-    background-color: #212529;
-    color: #ffffff;
+	background-color: #212529;
+	color: #ffffff;
 }
 
 body {
-    background-color: #212529;
-    color: #ffffff;
+	background-color: #212529;
+	color: #ffffff;
 }
 
 input, select {
-    background-color: #6c757d;
-    color: #ffffff;
+	background-color: #6c757d;
+	color: #ffffff;
 }
 
 input[type="text"], input[type="password"], select {
-    border: 1px solid #ced4da;
+	border: 1px solid #ced4da;
 }
 
 hr {
-    border-top-color: white;
+	border-top-color: white;
 }
 
 .modal-dialog {
-    max-width: 600px;
+	max-width: 600px;
 }
 
 .modal-content,
 .modal-header,
 .modal-footer {
-    border-color: dimgrey;
-    font-size: 2rem;
+	border-color: dimgrey;
+	font-size: 2rem;
 }
 
 .modal-content label {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 .clockpicker-popover {
-    background-color: #343a40;
+	background-color: #343a40;
 }
 
 .clockpicker-popover .popover-title,
 .clockpicker-popover .popover-content {
-    background-color: transparent;
+	background-color: transparent;
 }
 
 .clockpicker-plate {
-    background-color: black;
+	background-color: black;
 }
 
 .carousel-caption,
 .carousel-control-next,
 .carousel-control-prev {
-    color: #ffffff;
+	color: #ffffff;
 }
 
 .carousel-control-next-icon,
 .carousel-control-prev-icon {
-    filter: none;
+	filter: none;
 }
 
 .carousel-indicators li {
-    background-color: #ffffff;
+	background-color: #ffffff;
 }
 .cursor-pointer{
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .vaRow {
-    /* vertical alignment of content in rows */
-    display: flex;
-    align-items: center;
+	/* vertical alignment of content in rows */
+	display: flex;
+	align-items: center;
 }
 
 .hide {
-    display: none;
+	display: none;
 }
 
 .lpEnabledStyle {
-    color: #006515;
-    text-decoration: none;
+	color: #006515;
+	text-decoration: none;
 }
 .lpWaitingStyle {
-    color: #ffdb00;
-    text-decoration: none;
+	color: #ffdb00;
+	text-decoration: none;
 }
 
 .lpDisabledStyle {
-    color: #A30000;
-    text-decoration: line-through;
+	color: #A30000;
+	text-decoration: line-through;
 }
 
 @keyframes alertPulsation {
-    0%   { opacity:1; }
-    50%  { opacity:0; }
-    100% { opacity:1; }
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
 }
 
 @-o-keyframes alertPulsation{
-    0%   { opacity:1; }
-    50%  { opacity:0; }
-    100% { opacity:1; }
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
 }
 
 @-moz-keyframes alertPulsation{
-    0%   { opacity:1; }
-    50%  { opacity:0; }
-    100% { opacity:1; }
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
 }
 
 @-webkit-keyframes alertPulsation{
-    0%   { opacity:1; }
-    50%  { opacity:0; }
-    100% { opacity:1; }
+	0%   { opacity:1; }
+	50%  { opacity:0; }
+	100% { opacity:1; }
 }
 
 .animate-alertPulsation {
-    -webkit-animation: alertPulsation 1s infinite;
-    -moz-animation: alertPulsation 1s infinite;
-    -o-animation: alertPulsation 1s infinite;
-    animation: alertPulsation 1s infinite;
+	-webkit-animation: alertPulsation 1s infinite;
+	-moz-animation: alertPulsation 1s infinite;
+	-o-animation: alertPulsation 1s infinite;
+	animation: alertPulsation 1s infinite;
 }
 .text-green {
-    color: #006515;
+	color: #006515;
 }
 
 .text-red {
-    color: #A30000;
+	color: #A30000;
 }
 
 .text-white {
-    color: white;
+	color: white;
 }
 
 .text-orange {
-    color: #ff8c1a;
+	color: #ff8c1a;
 }
 
 .text-black {
-    color: black;
+	color: black;
 }
 
 .text-blue {
-    color: blue;
+	color: blue;
 }
 
 .text-grey {
-    color: #515151;
+	color: #515151;
 }
 
 .text-lightgrey {
-    color: rgba(255, 255, 255, 0.82);
+	color: rgba(255, 255, 255, 0.82);
 }
 
 .bg-darkgrey {
-    background-color: #b6bcc9;
+	background-color: #b6bcc9;
 }
 
 .bg-lightgrey {
-    background-color: #d0d7e6;
+	background-color: #d0d7e6;
 }
 .bg-lightblue {
-    background-color: #23ebe1;
+	background-color: #23ebe1;
 }
 
 .bg-lightgreen {
-    background-color: #befebe;
+	background-color: #befebe;
 }
 
 .bg-rose {
-    background-color: #febebe;
+	background-color: #febebe;
 }
 
 .bg-apricot {
-    background-color:#fefedf;
+	background-color:#fefedf;
 }
 
 .bg-orange {
-    background-color:#fcbe1e;
+	background-color:#fcbe1e;
 }
 
 
@@ -298,85 +303,85 @@ hr {
 #PINform select:focus,
 #PINform textarea:focus,
 #PINform button:focus {
-    outline: none;
+	outline: none;
 }
 
 #PINform {
-    background: #1e2020;
-    color: #ffffff!important;
-    /* position: absolute;
-    width: 600px; height: 450px;
-    left: 250px;
-    margin-left: -65px;
-    top: 50%;
-    margin-top: -230px; */
-    padding: 10px;
-    -webkit-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
-    -moz-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
-    box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+	background: #1e2020;
+	color: #ffffff!important;
+	/* position: absolute;
+	width: 600px; height: 450px;
+	left: 250px;
+	margin-left: -65px;
+	top: 50%;
+	margin-top: -230px; */
+	padding: 10px;
+	-webkit-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+	box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
 }
 
 #PINbox {
-    background: #242222!important;
-    color: #ffffff!important;
-    margin: 3.5%;
-    width: 90%;
-    font-size: 4em;
-    text-align: center;
-    border: 1px solid #d5d5d5;
+	background: #242222!important;
+	color: #ffffff!important;
+	margin: 3.5%;
+	width: 90%;
+	font-size: 4em;
+	text-align: center;
+	border: 1px solid #d5d5d5;
 }
 
 .PINbutton {
-    background: #ededed;
-    color: #7e7e7e;
-    border: none;
-    border-radius: 3px;
-    font-size: 36px;
-    text-align: center;
-    width: 90px;
-    height: 65px;
-    margin: 5px 10px;
-    padding: 0;
-    box-shadow: #506CE8 0 0 1px 1px;
+	background: #ededed;
+	color: #7e7e7e;
+	border: none;
+	border-radius: 3px;
+	font-size: 36px;
+	text-align: center;
+	width: 90px;
+	height: 65px;
+	margin: 5px 10px;
+	padding: 0;
+	box-shadow: #506CE8 0 0 1px 1px;
 }
 
 .PINbutton.clear {
-    background-color: orange;
+	background-color: orange;
 }
 
 .PINbutton.enter {
-    background-color: green;
+	background-color: green;
 }
 
 .PINbutton:hover {
-    box-shadow: #506CE8 0 0 1px 1px;
+	box-shadow: #506CE8 0 0 1px 1px;
 }
 
 .PINbutton:active {
-    background: #506CE8;
-    color: #fff;
+	background: #506CE8;
+	color: #fff;
 }
 
 .clear:hover {
-    box-shadow: #ff3c41 0 0 1px 1px;
+	box-shadow: #ff3c41 0 0 1px 1px;
 }
 
 .clear:active {
-    background: #ff3c41;
-    color: #fff;
+	background: #ff3c41;
+	color: #fff;
 }
 
 .enter:hover {
-    box-shadow: #47cf73 0 0 1px 1px;
+	box-shadow: #47cf73 0 0 1px 1px;
 }
 
 .enter:active {
-    background: #47cf73;
-    color: #fff;
+	background: #47cf73;
+	color: #fff;
 }
 
 .shadow{
-    -webkit-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
-    -moz-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
-    box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
+	box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
 }
