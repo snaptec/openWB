@@ -54,24 +54,31 @@ def on_message(client, userdata, msg) -> None:
     devicenumb = re.sub(r'\D', '', msg.topic)
     input = msg.payload.decode("utf-8")
     value = str(input)
+    #  E, S , G
+    topictype = 'E'
     if ("openWB/config/get/SmartHome/Devices" in msg.topic):
         keyword = re.sub('openWB/config/get/SmartHome/Devices/'
                          + str(devicenumb) + '/', '', msg.topic)
+        topictype = 'S'
     if ("openWB/SmartHome/Devices" in msg.topic):
         keyword = re.sub('openWB/SmartHome/Devices/'
                          + str(devicenumb) + '/', '', msg.topic)
+        topictype = 'S'
     if ("openWB/config/get/SmartHome/maxBatteryPower" in msg.topic):
         keyword = re.sub('openWB/config/get/SmartHome/', '', msg.topic)
         log.info("(global) Key " + str(keyword) + " Value " + str(value))
         maxspeicher = int(value)
-    elif (("/" in keyword) or (int(devicenumb) < 1) or
-          (int(devicenumb) > numberOfSupportedDevices)):
-        # falsches topic
+        #  richtiges globales topic
+        topictype = 'G'
+    elif (int(devicenumb) < 1) or (int(devicenumb) > numberOfSupportedDevices):
+        topictype = 'E'
+    if topictype == 'E':
+        #  falsches topic
         log.warning("(" + str(devicenumb) + ") skipped Key " +
                     str(keyword) + " Msg " + str(msg.topic) +
                     " Value " + str(value))
-    else:
-        # richtig  topic
+    elif topictype == 'S':
+        #  richtig  topic single
         log.info("(" + str(devicenumb) + ") Key " +
                  str(keyword) + " Value " + str(value))
         parammqtt.append([devicenumb, keyword, value])
