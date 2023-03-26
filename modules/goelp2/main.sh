@@ -10,17 +10,17 @@ if [[ $? == "0" ]] ; then
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
-	lla1=$(echo "scale=0;$lla1 / 10" |bc)
+	lla1=$(echo "scale=1;$lla1 / 10" |bc)
 	if [[ $lla1 =~ $re ]] ; then
 		echo $lla1 > /var/www/html/openWB/ramdisk/llas11
 	fi
 	lla2=$(echo $output | jq -r '.nrg[5]')
-	lla2=$(echo "scale=0;$lla2 / 10" |bc)
+	lla2=$(echo "scale=1;$lla2 / 10" |bc)
 	if [[ $lla2 =~ $re ]] ; then
 		echo $lla2 > /var/www/html/openWB/ramdisk/llas12
 	fi
 	lla3=$(echo $output | jq -r '.nrg[6]')
-	lla3=$(echo "scale=0;$lla3 / 10" |bc)
+	lla3=$(echo "scale=1;$lla3 / 10" |bc)
 	if [[ $lla3 =~ $re ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/llas13
 	fi
