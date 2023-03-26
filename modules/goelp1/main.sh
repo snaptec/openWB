@@ -36,6 +36,21 @@ if [[ $? == "0" ]] ; then
 	if [[ $llv3 =~ $re ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llv3
 	fi
+	llpf1=$(echo $output | jq -r '.nrg[12]')
+	llpf1=$(echo "scale=2;$llpf1 / 1" |bc)
+	if [[ $llpf1 =~ $re ]] ; then
+		echo $llpf1 > /var/www/html/openWB/ramdisk/llpf1
+	fi
+	llpf2=$(echo $output | jq -r '.nrg[13]')
+	llpf2=$(echo "scale=2;$llpf2 / 1" |bc)
+	if [[ $llpf2 =~ $re ]] ; then
+		echo $llpf2 > /var/www/html/openWB/ramdisk/llpf2
+	fi
+	llpf3=$(echo $output | jq -r '.nrg[14]')
+	llpf3=$(echo "scale=2;$llpf3 / 1" |bc)
+	if [[ $llpf3 =~ $re ]] ; then
+		echo $llpf3 > /var/www/html/openWB/ramdisk/llpf3
+	fi
 	llkwh=$(echo $output | jq -r '.eto')
 	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
 	if [[ $llkwh =~ $rekwh ]] ; then
