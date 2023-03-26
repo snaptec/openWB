@@ -1,5 +1,5 @@
 #!/bin/bash
-re='^-?[0-9]+(\.?[0-9]+)$'
+re='^-?[0-9]+(\.[0-9]+)?$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
 output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
