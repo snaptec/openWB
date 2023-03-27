@@ -26,31 +26,31 @@ class ShellyInverter:
         self.address = address
         self.generation = generation
 
-    def totalPowerFromShellyJson(self, answer) -> int:
-        if 'meters' in answer:
-            meters = answer['meters']  # shelly
-        else:
-            meters = answer['emeters']  # shellyEM & shelly3EM
+    def total_power_from_shelly(self) -> int:
         total = 0
-        # shellyEM has one meter, shelly3EM has three meters:
-        for meter in meters:
-            total = total + meter['power']
-        return int(total)
-
-    def update(self) -> None:
         if self.generation == 1:
-            url = "http://" + self.address + "/status"
+            status_url = "http://" + self.address + "/status"
         else:
-            url = "http://" + self.address + "/rpc/Shelly.GetStatus"
-        answer = req.get_http_session().get(url, timeout=3).json()
-        # Versuche Werte aus der Antwort zu extrahieren.
+            status_url = "http://" + self.address + "/rpc/Shelly.GetStatus"
+        status = req.get_http_session().get(status_url, timeout=3).json()
         try:
             if self.generation == 1:
-                pv = self.totalPowerFromShellyJson(answer) * -1
+                if 'meters' in status:
+                    meters = status['meters']  # shelly
+                else:
+                    meters = status['emeters']  # shellyEM & shelly3EM
+                # shellyEM has one meter, shelly3EM has three meters:
+                for meter in meters:
+                    total = total + meter['power']
             else:
-                pv = int(answer['switch:0']['apower']) * -1
-        except Exception:
-            pv = 0
+                total = status['switch:0']['apower']
+        except KeyError:
+            log.exception("unsupported shelly device?")
+        finally:
+            return int(total)
+
+    def update(self) -> None:
+        pv = self.total_power_from_shelly() * -1
         _, pv_exported = self.sim_counter.sim_count(pv)
         inverter_state = InverterState(
             power=pv,
