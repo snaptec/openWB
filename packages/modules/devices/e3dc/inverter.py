@@ -32,8 +32,8 @@ class E3dcInverter:
     def update(self, client: modbus.ModbusTcpClient_) -> None:
 
         pv = read_inverter(client)
-        # Im gegensatz zu v1.9 implementierung wird nicht mehr die PV
-        # leistung vom WR1 gelesen, da die durch v2.0 separat gehandelt wird
+        # Im gegensatz zur Implementierung in Version 1.9 wird nicht mehr die PV
+        # Leistung vom WR1 gelesen, da die durch v2.0 separat gehandelt wird
         _, pv_exported = self.sim_counter.sim_count(pv)
         inverter_state = InverterState(
             power=pv,
