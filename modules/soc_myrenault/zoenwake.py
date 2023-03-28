@@ -17,17 +17,14 @@ gigyarooturl = 'https://accounts.eu1.gigya.com'
 gigyaapi = '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668'
 kamereonrooturl = 'https://api-wired-prod-1-euw1.wrd-aws.com'
 kamereonapikey = 'VAX7XYKGfa92yMvXculCkEFyfZbuM7Ss'
-f = open('/var/www/html/openWB/ramdisk/zoereply4lp'+chargepoint, 'r')
-gigya_jwt = json.loads(f.read())
-f.close()
+with open('/var/www/html/openWB/ramdisk/zoereply4lp'+chargepoint, 'r') as f:
+    gigya_jwt = json.loads(f.read())
 gigya_jwttoken = gigya_jwt['id_token']
-f = open('/var/www/html/openWB/ramdisk/zoereply5lp'+chargepoint, 'r')
-kamereon_per = json.loads(f.read())
-f.close()
+with open('/var/www/html/openWB/ramdisk/zoereply5lp'+chargepoint, 'r') as f:
+    kamereon_per = json.loads(f.read())
 kamereonaccountid = kamereon_per['accounts'][0]['accountId']
-f = open('/var/www/html/openWB/ramdisk/zoereply7lp'+chargepoint, 'r')
-vehic = json.loads(f.read())
-f.close()
+with open('/var/www/html/openWB/ramdisk/zoereply7lp'+chargepoint, 'r') as f:
+    vehic = json.loads(f.read())
 if len(vin) < 10:
     vin = vehic['vehicleLinks'][0]['vin']
 print(time_string, 'vin wakeup', vin)
@@ -39,12 +36,10 @@ reg = kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/kamereo
 reg += vin + '/actions/charging-start'
 response = requests.post(reg, params=payloadc, data=data, headers=headers)
 responsetext = response.text
-f = open('/var/www/html/openWB/ramdisk/zoereply10lp'+chargepoint, 'w')
-f.write(str(responsetext))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/zoereply11lp'+chargepoint, 'w')
-f.write(str(reg))
-f.write(str(payloadc))
-f.write(str(data))
-f.write(str(headers))
-f.close()
+with open('/var/www/html/openWB/ramdisk/zoereply10lp'+chargepoint, 'w') as f:
+    f.write(str(responsetext))
+with open('/var/www/html/openWB/ramdisk/zoereply11lp'+chargepoint, 'w') as f:
+    f.write(str(reg))
+    f.write(str(payloadc))
+    f.write(str(data))
+    f.write(str(headers))
