@@ -275,7 +275,7 @@ class PowerGraph {
 				}
 			});
 			this.updateGraph();
-			this.updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat, calculatedHouseEnergy);
+			this.updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat, calculatedHouseEnergy/1000);
 			wbdata.dayGraphUpdated();
 			setTimeout(() => this.activateDay(), 300000)
 		}
