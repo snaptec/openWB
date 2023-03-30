@@ -1,38 +1,44 @@
 #!/usr/bin/python3
 
-import os, requests, json, time, sys, os
+import os
+import requests
+import json
+import time
+import sys
 from datetime import datetime, timezone
+from pathlib import Path
 from requests.exceptions import Timeout, RequestException
 from json import JSONDecodeError
 
-ramdiskdir = '/var/www/html/openWB/ramdisk/'
-moduledir = '/var/www/html/openWB/modules/soc_eq/'
+ramdisk_dir = str(Path(__file__).resolve().parents[2] / "ramdisk") + "/"
+module_dir = str(Path(__file__).resolve().parents[0]) + "/"
 
-req_timeout=(30,30) #timeout for requests in seconds
+req_timeout = (30, 30)  # timeout for requests in seconds
 
-client_id     = str(sys.argv[1])
+client_id = str(sys.argv[1])
 client_secret = str(sys.argv[2])
-VIN           = str(sys.argv[3])
-soc_file      = str(sys.argv[4])
-ChargePoint   = str(sys.argv[5])
+VIN = str(sys.argv[3])
+soc_file = str(sys.argv[4])
+charge_point = str(sys.argv[5])
 
-Debug         = int(os.environ.get('debug'))
-myPid         = str(os.getpid())
+debug = int(os.environ.get('debug'))
+my_pid = str(os.getpid())
 
-tok_url   = "https://ssoalpha.dvb.corpinter.net/v1/token"
-soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
-
+tok_url = "https://ssoalpha.dvb.corpinter.net/v1/token"
+soc_url = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
 
 soc = None
 range = None
 
+
 def socDebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": PID:"+ myPid + ": " + message)
+    print(local_time.strftime(format="%Y-%m-%d %H:%M:%S") + ": Lp" + charge_point + ": PID:" + my_pid + ": " + message)
+
 
 def handleResponse(what, status_code, text):
     if status_code == 204:
-        # this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)  
+        # this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)
         socDebugLog(what + " Request Code: " + str(status_code) + " (no data is available for the resource)")
         socDebugLog(text)
     elif status_code == 400:
@@ -40,7 +46,8 @@ def handleResponse(what, status_code, text):
         socDebugLog(text)
         exit(1)
     elif status_code == 401:
-        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (Invalid or missing authorization in header)")
+        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) +
+                    " (Invalid or missing authorization in header)")
         socDebugLog(text)
         exit(1)
     elif status_code == 402:
@@ -52,19 +59,23 @@ def handleResponse(what, status_code, text):
         socDebugLog(text)
         exit(1)
     elif status_code == 404:
-        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
+        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) +
+                    " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
         socDebugLog(text)
         exit(1)
     elif status_code == 429:
-        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The service received too many requests in a given amount of time)")
+        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) +
+                    " (The service received too many requests in a given amount of time)")
         socDebugLog(text)
         exit(1)
     elif status_code == 500:
-        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The service received too many requests in a given amount of time)")
+        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) +
+                    " (The service received too many requests in a given amount of time)")
         socDebugLog(text)
         exit(1)
     elif status_code == 503:
-        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")
+        socDebugLog(what + " Request fehlgeschlagen Code: " + str(status_code) +
+                    " (The server is unable to service the request due to a temporary unavailability condition)")
         socDebugLog(text)
         exit(1)
     else:
@@ -72,106 +83,97 @@ def handleResponse(what, status_code, text):
         socDebugLog(text)
         exit(1)
 
-if Debug >= 1:
-    socDebugLog("Debug Level: " + str(Debug))
-if Debug >= 1:
+
+if debug >= 1:
+    socDebugLog("Debug Level: " + str(debug))
+if debug >= 1:
     socDebugLog("client: " + client_id)
 
 
-if Debug >= 2:
+if debug >= 2:
     socDebugLog("SOC URL: " + soc_url)
 
-#Get Access token from file
+# Get Access token from file
+with open(module_dir + 'soc_eq_acc_lp' + str(charge_point), 'r') as fd:
+    try:
+        tok = json.load(fd)
+        access_token = tok['access_token']
+    except ValueError:
+        socDebugLog(
+            "ERROR: Access Token not found. Please use Link 'HIER bei Mercedes Me' anmelden in LP Configuration"
+        )
+        exit(3)
+    refresh_token = tok['refresh_token']
+    expires_in = tok['expires_in']
 
-fd = open(moduledir + 'soc_eq_acc_lp' + str(ChargePoint),'r')
-try:
-    tok = json.load(fd)
-    access_token = tok['access_token']
-except ValueError:
-    socDebugLog("ERROR: Access Token not found. Please use Link 'HIER bei Mercedes Me' anmelden in LP Configuration")
-    exit(3)        
-refresh_token = tok['refresh_token']
-expires_in = tok['expires_in']
-fd.close()
-
-socDebugLog("Token expires in: " +str((int(expires_in)-int(time.time())))+"s")
+socDebugLog("Token expires in: " + str((int(expires_in)-int(time.time())))+"s")
 
 if int(expires_in) < int(time.time()):
-    #Access Token is exired
-    if Debug >= 1:
+    # Access Token is expired
+    if debug >= 1:
         socDebugLog("Acc Token Expired")
-  
-    #get new Access Token with referesh token
-    data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
-    ref = requests.post(tok_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret), timeout=req_timeout)
-    if Debug >= 1:
+
+    # get new Access Token with refresh token
+    data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token}
+    ref = requests.post(tok_url, data=data, verify=True, allow_redirects=False,
+                        auth=(client_id, client_secret), timeout=req_timeout)
+    if debug >= 1:
         socDebugLog("Refresh Token Call:" + str(ref.status_code))
         socDebugLog("Refresh Token Text:" + str(ref.text))
 
-
-    #write HTTP reponse code to file
-    try:
-        fd = open(ramdiskdir + 'soc_eq_lastresp','w')
+    # write HTTP response code to file
+    with open(ramdisk_dir + 'soc_eq_lastresp', 'w') as fd:
         fd.write(str(ref.status_code))
-        fd.close()
-    except:
-        fd.close()
-
 
     if ref.status_code == 200:
-        #valid response
-        tok = json.loads(ref.text)
+        # valid response
+        tokens = json.loads(ref.text)
 
-        access_token = tok['access_token']
-        refresh_token = tok['refresh_token']
-        expires_in = tok['expires_in'] - 60 + int(time.time())
-        id_token = tok['id_token']
-        token_type = tok['token_type']
+        access_token = tokens['access_token']
+        refresh_token = tokens['refresh_token']
+        expires_in = tokens['expires_in'] - 60 + int(time.time())
+        id_token = tokens['id_token']
+        token_type = tokens['token_type']
 
-        #write new tokens
-  
-        fd = open(moduledir + 'soc_eq_acc_lp' + str(ChargePoint),'w')
-        json.dump({'expires_in' : expires_in, 'refresh_token' : refresh_token, 'access_token' : access_token, 'id_token' : id_token, 'token_type' : token_type}, fd)
-        fd.close()
+        # write new tokens
+        with open(module_dir + 'soc_eq_acc_lp' + str(charge_point), 'w') as fd:
+            json.dump({'expires_in': expires_in, 'refresh_token': refresh_token,
+                       'access_token': access_token, 'id_token': id_token, 'token_type': token_type}, fd)
     else:
-        handleResponse("Refresh",ref.status_code,ref.text)
+        handleResponse("Refresh", ref.status_code, ref.text)
 
-#call API for SoC
+# call API for SoC
 header = {'authorization': 'Bearer ' + access_token}
 try:
 
     req_soc = requests.get(soc_url, headers=header, verify=True)
-    #req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
+    # req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
 
 except Timeout:
     socDebugLog("Soc Request Timed Out")
     exit(2)
 
 except RequestException:
-    socDebugLog("Soc Request Request Exception occured " + soc_url)
+    socDebugLog("Soc Request Request Exception occurred " + soc_url)
     exit(2)
 
-if Debug >= 1:
+if debug >= 1:
     socDebugLog("SOC Request: " + str(req_soc.status_code))
     socDebugLog("SOC Response: " + req_soc.text)
 
-#write HTTP reponse code to file
-try:
-    fd = open(ramdiskdir + 'soc_eq_lastresp','w')
+# write HTTP response code to file
+with open(ramdisk_dir + 'soc_eq_lastresp', 'w') as fd:
     fd.write(str(req_soc.status_code))
-    fd.close()
-except:
-    fd.close()
 
 if req_soc.status_code == 200:
-    #valid Response
+    # valid Response
     try:
         res = json.loads(req_soc.text)
     except JSONDecodeError:
         socDebugLog("Soc Response NO VALID JSON " + req_soc.text)
         exit(2)
 
-    #Extract SoC value and write to file
+    # Extract SoC value and write to file
     for entry in res:
         for values in entry:
             if values == "soc":
@@ -187,13 +189,11 @@ if req_soc.status_code == 200:
         socDebugLog("RangeElectric Value not filled " + req_soc.text)
         range = "0"
     socDebugLog("SOC: " + soc + " RANGE: " + range)
-    fd = open(soc_file,'w')
-    fd.write(str(soc))
-    fd.close()
- 
-else:
-    handleResponse("SoC",req_soc.status_code,req_soc.text)
+    with open(soc_file, 'w') as fd:
+        fd.write(str(soc))
 
-if Debug >= 2:
+else:
+    handleResponse("SoC", req_soc.status_code, req_soc.text)
+
+if debug >= 2:
     socDebugLog("SoC EQ Ende ohne Fehler")
-exit(0)
