@@ -665,14 +665,10 @@ class PowerGraph {
 			values.selfUsage = values.solarPower - values.gridPush;
 			if (values.selfUsage < 0) { values.selfUsage = 0; };
 			if ((values.solarPower + values.gridPull + values.batOut) > 0) {
-				values.chargingPv = this.calcPvFraction(values.charging, values)
-				values.chargingBat = this.calcBatFraction(values.charging, values)
-				values.shPv = this.calcPvFraction(values.devices, values)
-				values.shBat = this.calcBatFraction(values.devices, values)
-				values.housePv = this.calcPvFraction(values.house, values)
-				values.houseBat = this.calcBatFraction(values.house, values)
-
-			} else {
+				this.calcAutFraction("charging", values)
+				this.calcAutFraction("devices", values)
+				this.calcAutFraction("house", values)
+				} else {
 				values.chargingPv = 0;
 				values.chargingBat = 0;
 				values.shPv = 0;
