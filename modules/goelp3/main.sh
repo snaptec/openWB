@@ -1,5 +1,6 @@
 #!/bin/bash
-re='^-?[0-9]+(\.[0-9]+)?$'
+re='^-?[0-9]+$'
+reVAPf='^-?[0-9]+(\.[0-9]+)?$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
 output=$(curl --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/status)
@@ -11,29 +12,29 @@ if [[ $? == "0" ]] ; then
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
 	lla1=$(echo "scale=1;$lla1 / 10" |bc)
-	if [[ $lla1 =~ $re ]] ; then
+	if [[ $lla1 =~ $reVAPf ]] ; then
 		echo $lla1 > /var/www/html/openWB/ramdisk/llas21
 	fi
 	lla2=$(echo $output | jq -r '.nrg[5]')
 	lla2=$(echo "scale=1;$lla2 / 10" |bc)
-	if [[ $lla2 =~ $re ]] ; then
+	if [[ $lla2 =~ $reVAPf ]] ; then
 		echo $lla2 > /var/www/html/openWB/ramdisk/llas22
 	fi
 	lla3=$(echo $output | jq -r '.nrg[6]')
 	lla3=$(echo "scale=1;$lla3 / 10" |bc)
-	if [[ $lla3 =~ $re ]] ; then
+	if [[ $lla3 =~ $reVAPf ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/llas23
 	fi
 	llv1=$(echo $output | jq -r '.nrg[0]')
-	if [[ $llv1 =~ $re ]] ; then
+	if [[ $llv1 =~ $reVAPf ]] ; then
 		echo $llv1 > /var/www/html/openWB/ramdisk/llvs21
 	fi
 	llv2=$(echo $output | jq -r '.nrg[1]')
-	if [[ $llv2 =~ $re ]] ; then
+	if [[ $llv2 =~ $reVAPf ]] ; then
 		echo $llv2 > /var/www/html/openWB/ramdisk/llvs22
 	fi
 	llv3=$(echo $output | jq -r '.nrg[2]')
-	if [[ $llv3 =~ $re ]] ; then
+	if [[ $llv3 =~ $reVAPf ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llvs23
 	fi
 	llkwh=$(echo $output | jq -r '.eto')
