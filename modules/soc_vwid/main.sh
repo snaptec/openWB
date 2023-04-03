@@ -67,7 +67,7 @@ incrementTimer(){
 }
 
 getAndWriteSoc(){
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
+	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
 	#Prepare for secrets used in soc module libvwid in Python
 	if ! python3 -c "import secrets" &> /dev/null ; then
@@ -80,7 +80,7 @@ getAndWriteSoc(){
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $answer"
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: SoC: $answer"
 	else
 		# we have a problem
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from soc_vwid: $answer"

@@ -228,6 +228,15 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/smarthome_device_manual_7
 	echo 0 > $RamdiskPath/smarthome_device_manual_8
 	echo 0 > $RamdiskPath/smarthome_device_manual_9
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_1
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_2
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_3
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_4
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_5
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_6
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_7
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_8
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_9
 	echo 0 > $RamdiskPath/smarthomehandlermaxbatterypower
 	echo 0 > $RamdiskPath/smarthomehandlerloglevel
 
@@ -373,8 +382,8 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/socketApproved
 	echo 0 > $RamdiskPath/socketActivated
 	echo 0 > $RamdiskPath/socketActivationRequested
-	echo "unknown" > $RamdiskPath/prev_isss_mode
-
+	echo "unknown" > $RamdiskPath/isss_mode
+	
 	# diverse Dateien
 	echo 0 > $RamdiskPath/AllowedTotalCurrentPerPhase
 	echo 0 > $RamdiskPath/ChargingVehiclesOnL1

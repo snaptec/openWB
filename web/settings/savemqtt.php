@@ -235,6 +235,7 @@ topic openWB/housebattery/# out 2 "" $remotePrefix
 
 # export all charge point data to remote
 topic openWB/pv/# out 2 "" $remotePrefix
+
 EOS
 	);
 }
@@ -246,6 +247,8 @@ if ($exportGraph) {
 topic openWB/config/get/# out 2 "" $remotePrefix
 topic openWB/SmartHome/# out 2 "" $remotePrefix
 
+# Allow write Access for request for Graphs and selection of Date 
+topic openWB/set/graph/# both 2 "" $remotePrefix
 
 EOS
 	);

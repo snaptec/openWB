@@ -25,6 +25,7 @@ case $CHARGEPOINT in
 		username=$soc_evcc_username_lp2
 		password=$soc_evcc_password_lp2
 		vin=$soc_evcc_vin_lp2
+		pin=$soc_evcc_pin_lp2
 		token=$soc_evcc_token_lp2
 		intervall=$(( soc2intervall * 6 ))
 		intervallladen=$(( soc2intervallladen * 6 ))
@@ -40,6 +41,7 @@ case $CHARGEPOINT in
 		username=$soc_evcc_username_lp1
 		password=$soc_evcc_password_lp1
 		vin=$soc_evcc_vin_lp1
+		pin=$soc_evcc_pin_lp1
 		token=$soc_evcc_token_lp1
 		intervall=$(( soc_evcc_intervall * 6 ))
 		intervallladen=$(( soc_evcc_intervallladen * 6 ))
@@ -72,7 +74,11 @@ incrementTimer(){
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
-	answer=$($MODULEDIR/../soc_evcc/soc $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" 2>&1)
+	options="${fztype} --user ${username} --password ${password} --vin ${vin} --token ${token}"
+	if [ "${fztype}" == "fiat" ]; then
+		options="${options} --pin ${pin}"
+	fi
+	answer=$($MODULEDIR/soc $options 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		# catch float
@@ -86,7 +92,11 @@ getAndWriteSoc(){
 }
 wakeupCar(){
 	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Wakeup car"
-	answer=$($MODULEDIR/../soc_evcc/soc $fztype --user "$username" --password "$password" --vin "$vin" --token "$token" --action wakeup 2>&1)
+	options="${fztype} --user ${username} --password ${password} --vin ${vin} --token ${token}"
+	if [ "${fztype}" == "fiat" ]; then
+		options="${options} --pin ${pin}"
+	fi
+	answer=$($MODULEDIR/soc $options --action wakeup 2>&1)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Wakeup Message from EVCC: $answer"

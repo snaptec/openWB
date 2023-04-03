@@ -73,6 +73,8 @@ class WbData {
 		this.prefs = {};
 		this.chargePointToConfig = 0;
 		this.minCurrent = 6;
+
+		this.displaylocked = true;
 	};
 
 	init() {
@@ -471,7 +473,11 @@ function switchToEnergyView() {
 	powerGraph.deactivateLive()
 }
 function showStatus() {
+	if (wbdata.displaylocked == false) {
 	$("#statusModal").modal("show");
+	} else {
+		$("#lockInfoModal").modal("show");
+	}
 }
 
 function showCode() {
