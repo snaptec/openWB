@@ -70,6 +70,11 @@ start() {
 		fi
 		prev_isss_mode=$(<"$OPENWBBASEDIR/ramdisk/isss_mode")
 
+		if ((isss == 0)) && [ -f "/var/www/html/openWB/ramdisk/parentWB" ]; then
+			rm '/var/www/html/openWB/ramdisk/parentWB'
+			mosquitto_pub -t "openWB/system/parentWB" -m "localhost" -r
+		fi
+
 		openwbDebugLog "MAIN" 1 "external openWB, daemon mode or socket mode configured"
 		if pgrep -f '^python.*/isss.py' >/dev/null && [[ $prev_isss_mode == "$isss_mode" ]]; then
 			openwbDebugLog "MAIN" 1 "isss handler already running"
