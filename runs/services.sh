@@ -60,6 +60,11 @@ start() {
 		openwbDebugLog "MAIN" 1 "legacy run server is already running"
 	fi
 
+	if ((isss == 0)) && [ -f "$OPENWBBASEDIR/ramdisk/parentWB" ]; then
+		rm "$OPENWBBASEDIR/ramdisk/parentWB"
+		mosquitto_pub -t "openWB/system/parentWB" -m "localhost" -r
+	fi
+
 	if ((isss == 1)) || [[ "$evsecon" == "daemon" ]] || [[ "$evsecon" == "buchse" ]]; then
 		if [[ "$evsecon" == "buchse" ]]; then
 			isss_mode="socket"
@@ -69,11 +74,6 @@ start() {
 			isss_mode="daemon"
 		fi
 		prev_isss_mode=$(<"$OPENWBBASEDIR/ramdisk/isss_mode")
-
-		if ((isss == 0)) && [ -f "/var/www/html/openWB/ramdisk/parentWB" ]; then
-			rm '/var/www/html/openWB/ramdisk/parentWB'
-			mosquitto_pub -t "openWB/system/parentWB" -m "localhost" -r
-		fi
 
 		openwbDebugLog "MAIN" 1 "external openWB, daemon mode or socket mode configured"
 		if pgrep -f '^python.*/isss.py' >/dev/null && [[ $prev_isss_mode == "$isss_mode" ]]; then
