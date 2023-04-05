@@ -1,7 +1,48 @@
-<form action="modtest.php" method="get"> 
-<p>Modtest Ip Adresse vom Modbusdevice : <input type="text" name="ip" /></p> 
-<p>Startadresse: <input type="text" name="start" /></p> 
-<p>Laenge: <input type="text" name="len"/></p>
-<p>Modbus id (normalerweise 1): <input type="text" name="id"/></p>
-<p>Function 3 read input register else read holding register: <input type="text" name="fun"/></p> 
-<p><input type="submit" /></p> </form>
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<title>Modbus-Test</title>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<form action="modbus_test.php" method="post">
+		<p>IP-Adresse oder Hostname des Modbusgeräts : <input type="text" name="host" required /></p>
+		<p>Port des Modbusgeräts (normalerweise 502) : <input type="number" min="1" name="port" value="502" required />
+		</p>
+		<p>Modbus ID (normalerweise 1): <input type="number" min="1" name="id" value="1" required /></p>
+		<p>Startadresse: <input type="number" min="1" name="start" required /></p>
+		<p>Anzahl: <input type="number" min="1" name="length" required value="1"/></p>
+		<p>Datentyp:
+			<select name="data_type" required>
+				<optgroup label="unsigned integer">
+					<option value="UINT_8">unsigned int 8</option>
+					<option value="UINT_16">unsigned int 16</option>
+					<option value="UINT_32">unsigned int 32</option>
+					<option value="UINT_64">unsigned int 64</option>
+				</optgroup>
+				<optgroup label="signed integer">
+					<option value="INT_8">signed int 8</option>
+					<option value="INT_16">signed int 16</option>
+					<option value="INT_32">signed int 32</option>
+					<option value="INT_64">signed int 64</option>
+				</optgroup>
+				<optgroup label="float">
+					<option value="FLOAT_16">float 16</option>
+					<option value="FLOAT_32">float 32</option>
+					<option value="FLOAT_64">float 64</option>
+				</optgroup>
+			</select>
+		</p>
+		<p>Funktion:
+			<select name="function" required>
+				<option value="3">Read Holding Register (FC03)</option>
+				<option value="4">Read Input Register (FC04)</option>
+			</select>
+		</p>
+		<p><input type="submit" /></p>
+	</form>
+</body>
+
+</html>
