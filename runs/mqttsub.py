@@ -1226,10 +1226,6 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     client.publish("openWB/system/parentWB", msg.payload.decode("utf-8"), qos=0, retain=True)
-                else:
-                    if Path('/var/www/html/openWB/ramdisk/parentWB').exists():
-                        Path('/var/www/html/openWB/ramdisk/parentWB').unlink()
-                    client.publish("openWB/system/parentWB", "localhost", qos=0, retain=True)
             if (msg.topic == "openWB/set/isss/parentCPlp1"):
                 client.publish("openWB/system/parentCPlp1", msg.payload.decode("utf-8"), qos=0, retain=True)
                 f = open('/var/www/html/openWB/ramdisk/parentCPlp1', 'w')

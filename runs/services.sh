@@ -60,6 +60,11 @@ start() {
 		openwbDebugLog "MAIN" 1 "legacy run server is already running"
 	fi
 
+	if ((isss == 0)) && [ -f "$OPENWBBASEDIR/ramdisk/parentWB" ]; then
+		rm "$OPENWBBASEDIR/ramdisk/parentWB"
+		mosquitto_pub -t "openWB/system/parentWB" -m "localhost" -r
+	fi
+
 	if ((isss == 1)) || [[ "$evsecon" == "daemon" ]] || [[ "$evsecon" == "buchse" ]]; then
 		if [[ "$evsecon" == "buchse" ]]; then
 			isss_mode="socket"
