@@ -9,17 +9,9 @@ import struct
 # import binascii
 from pymodbus.client.sync import ModbusSerialClient
 
+seradd = sys.argv[1]
+idadd = int(sys.argv[2])
 
-def detect_modbus_usb_port():
-    """guess USB/modbus device name"""
-    known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
-    for device in known_devices:
-        try:
-            with open(device):
-                return device
-        except IOError:
-            pass
-    return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
 
 
 seradd = detect_modbus_usb_port()
