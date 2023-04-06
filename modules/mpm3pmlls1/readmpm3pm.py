@@ -3,13 +3,22 @@ import sys
 import struct
 from pymodbus.client.sync import ModbusSerialClient
 
+def detect_modbus_usb_port():
+    """guess USB/modbus device name"""
+    known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
+    for device in known_devices:
+        try:
+            with open(device):
+                return device
+        except IOError:
+            pass
+    return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
 
 def write_to_ramdisk(file: str, content) -> None:
     with open('/var/www/html/openWB/ramdisk/' + file, 'w') as f:
         f.write(str(content))
 
-
-seradd = sys.argv[1]
+seradd = detect_modbus_usb_port()
 idadd = int(sys.argv[2])
 
 client = ModbusSerialClient(method="rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
