@@ -9,4 +9,4 @@ if [[ $evsesources1 = *virtual* ]]; then
 else
 	echo "echo" >/dev/null
 fi
-sudo python /var/www/html/openWB/modules/mpm3pmlls1/readmpm3pm.py "$mpm3pmlls1source" "$mpm3pmlls1id"
+sudo python3 /var/www/html/openWB/modules/mpm3pmlls1/readmpm3pm.py "$mpm3pmlls1source" "$mpm3pmlls1id"
