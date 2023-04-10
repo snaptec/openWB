@@ -60,6 +60,7 @@ class Sbase(Sbase0):
         self.device_canswitch = 0
         self._device_deactivatewhileevcharging = 0
         self._device_mineinschaltdauer = 0
+        self._device_mindayeinschaltdauer = 0
         self._device_maxeinschaltdauer = 0
         self._device_differentmeasurement = 0
         self._device_speichersocbeforestop = 100
@@ -273,6 +274,8 @@ class Sbase(Sbase0):
             elif (key == 'device_deactivateWhileEvCharging'):
                 self._device_deactivatewhileevcharging = valueint
             elif (key == 'device_mineinschaltdauer'):
+                self._device_mineinschaltdauer = valueint * 60
+            elif (key == 'device_mindayeinschaltdauer'):
                 self._device_mineinschaltdauer = valueint * 60
             elif (key == 'device_maxeinschaltdauer'):
                 self._device_maxeinschaltdauer = valueint * 60
@@ -619,28 +622,29 @@ class Sbase(Sbase0):
                          self.device_name +
                          " schalte ein wegen Immer an vor")
                 onnow = 1
+        minrunningtime = max(self._device_mineinschaltdauer, self._device_mindayeinschaltdauer)
         if ((self._device_finishtime != '00:00')
-           and (self.oncountnor == str("0"))):
+           and (self.runningtime < minrunningtime) and self.devstatus != 30):
             finishhour = int(str("0") +
                              str(self._device_finishtime).partition(':')[0])
             finishminute = int(str(self._device_finishtime)[-2:])
             startspatsec = int((finishhour * 60 * 60) + (finishminute * 60) -
-                               self._device_mineinschaltdauer)
+                               max((minrunningtime - self.runningtime), 0))
             log.info("(" + str(self.device_nummer) + ") " +
                      self.device_name +
                      " finishtime definiert " +
                      str(finishhour) + ":" + str('%.2d' % finishminute)
                      + " aktuelle Zeit " + str(localhour) + ":" +
                      str('%.2d' % localminute) +
-                     " Anzahl Starts heute 0 Mineinschaltdauer (Sec)"
-                     + str(self._device_mineinschaltdauer))
+                     " max(Mineinschaltdauer (Sec), Mineinschaltdauer pro Tag (Sec)) "
+                     + str(minrunningtime))
             if (((finishhour > localhour) or ((finishhour == localhour)
                and (finishminute >= localminute)))
-                    and (startspatsec <= localinsec)):
+                    and (startspatsec < localinsec)):
                 log.info("(" + str(self.device_nummer) + ") " +
                          self.device_name +
-                         " schalte ein wegen finishtime, spaetester" +
-                         "start in sec " + str(startspatsec) +
+                         " schalte ein wegen finishtime" +
+                         " spätester Start in sec " + str(startspatsec) +
                          " aktuelle sec " + str(localinsec))
                 self.turndevicerelais(1, 0, 1)
                 self.devstatus = 30
@@ -648,23 +652,22 @@ class Sbase(Sbase0):
         if self.devstatus == 30:
             log.info("(" + str(self.device_nummer) + ") " +
                      self.device_name +
-                     " finishtime laueft, pruefe Mindestlaufzeit")
+                     " finishtime laueft, pruefe max(Mineinschaltdauer (Sec), Mineinschaltdauer pro Tag (Sec)) ")
             if (self._c_eintime_f == 'Y'):
-                timesta = int(time.time()) - int(self._c_eintime)
-                if (self._device_mineinschaltdauer < timesta):
+                if (minrunningtime < self.runningtime):
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
-                             " Mindesteinschaltdauer erreicht," +
+                             " Zeit erreicht," +
                              " finishtime erreicht")
                     self.devstatus = 10
                     return
                 else:
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
-                             " finishtime laueft, Mindesteinschaltdauer" +
+                             " finishtime laueft, max(Mineinschaltdauer (Sec), Mineinschaltdauer pro Tag (Sec)) " +
                              "nicht erreicht, " +
-                             str(self._device_mineinschaltdauer) +
-                             " > " + str(timesta))
+                             str(minrunningtime) +
+                             " > " + str(self.runningtime))
                     return
             else:
                 log.info("(" + str(self.device_nummer) + ") " +

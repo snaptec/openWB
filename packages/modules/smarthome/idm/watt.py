@@ -2,22 +2,24 @@
 import sys
 import os
 import time
-import json
 import struct
+import logging
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadBuilder
 from pymodbus.client.sync import ModbusTcpClient
+from smarthome.smartlog import initlog
+from smarthome.smartret import writeret
 named_tuple = time.localtime()  # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S idm watty.py", named_tuple)
-devicenumber = str(sys.argv[1])
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 try:
     navvers = str(sys.argv[4])
 except Exception:
     navvers = "2"
+initlog("idm", devicenumber)
+log = logging.getLogger("idm")
 bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
-file_string = bp + str(devicenumber) + '_idm.log'
 file_stringpv = bp + str(devicenumber) + '_pv'
 file_stringcount = bp + str(devicenumber) + '_count'
 file_stringcount5 = bp + str(devicenumber) + '_count5'
@@ -84,26 +86,15 @@ if count5 == 0:
     # json return power = aktuelle Leistungsaufnahme in Watt,
     # on = 1 pvmodus, powerc = counter in kwh
     an = '{"power":' + str(aktpower) + ',"powerc":0,"on":' + str(pvmodus) + '}'
-    with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
-              str(devicenumber), 'w') as f1:
-        json.dump(an, f1)
+    writeret(an, devicenumber)
     if count1 < 3:
-        if os.path.isfile(file_string):
-            pass
-        else:
-            with open(file_string, 'w') as f:
-                print('IDM start log', file=f)
-        with open(file_string, 'a') as f:
-            print('%s Nr %s ipadr %s ueberschuss %6d Akt Leistung %6d'
-                  % (time_string, devicenumber, ipadr, uberschuss, aktpower),
-                  file=f)
-            print('%s Nr %s ipadr %s ueberschuss %6d pvmodus %1d modbusw %1d'
-                  % (time_string, devicenumber, ipadr, neupower, pvmodus,
-                     modbuswrite), file=f)
+        log.info(" %d ipadr %s ueberschuss %6d Akt Leistung %6d"
+                 % (devicenumber, ipadr, uberschuss, aktpower))
+        log.info(" %d ipadr %s ueberschuss %6d pvmodus %1d modbusw %1d"
+                 % (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
         client.write_registers(74, regnew, unit=1)
         if count1 < 3:
-            with open(file_string, 'a') as f:
-                print('%s devicenr %s ipadr %s device written by modbus ' %
-                      (time_string, devicenumber, ipadr), file=f)
+            log.info("devicenr %d ipadr %s device written by modbus " %
+                     (devicenumber, ipadr))
