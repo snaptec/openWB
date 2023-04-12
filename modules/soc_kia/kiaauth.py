@@ -214,10 +214,10 @@ def getAuthCode(cookies):
     headers = {
         'Content-type': 'application/x-www-form-urlencoded',
         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_1 like Mac OS X) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0 Mobile/15B92 Safari/604.1'}
-    cookiesForm = {'AUTH_SESSION_ID': kiahttp.lastCookies['AUTH_SESSION_ID'], 'KC_RESTART': kiahttp.lastCookies['KC_RESTART'], 'KEYCLOAK_LOCALE': kiahttp.lastCookies['KEYCLOAK_LOCALE']}
+    cookies['AUTH_SESSION_ID'] = kiahttp.lastCookies['AUTH_SESSION_ID']
     
     try:
-        response = kiahttp.postHTTP(url=url, data=data, headers=headers, cookies=cookiesForm,
+        response = kiahttp.postHTTP(url=url, data=data, headers=headers, cookies=cookies,
                                     timeout=parameters.getParameter('reqTimeout'), allow_redirects=False)
     except:
         soclogging.logDebug(0, "Login failed, invalid response")
@@ -227,9 +227,10 @@ def getAuthCode(cookies):
     url = response
     try:
         response = kiahttp.getHTTP(url=url, cookies=cookies,
-                                   timeout=parameters.getParameter('reqTimeout'), allow_redirects=False)
+                                   timeout=parameters.getParameter('reqTimeout'), allow_redirects=True)
     except:
         raise
+        
    
     url = parameters.getParameter('baseUrl') + '/api/v1/user/silentsignin'
     headers = {'Content-type': 'text/plain;charset=UTF-8'}
