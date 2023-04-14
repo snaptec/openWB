@@ -6,7 +6,7 @@ host = '192.168.193.26'
 unit_id = 5
 
 
-def write_to_ramdisk(file: str, content) -> None:
+def write_to_ramdisk(file, content):
     with open('/var/www/html/openWB/ramdisk/' + file, 'w') as f:
         f.write(str(content))
 
