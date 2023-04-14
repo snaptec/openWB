@@ -5,7 +5,7 @@ import struct
 from pymodbus.client.sync import ModbusSerialClient
 
 
-def write_to_ramdisk(file: str, content) -> None:
+def write_to_ramdisk(file, content):
     with open('/var/www/html/openWB/ramdisk/' + file, 'w') as f:
         f.write(str(content))
 

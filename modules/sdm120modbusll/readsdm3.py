@@ -10,7 +10,7 @@ unit_id_2 = int(sys.argv[3])
 unit_id_3 = int(sys.argv[4])
 
 
-def write_to_ramdisk(file: str, content) -> None:
+def write_to_ramdisk(file, content):
     with open('/var/www/html/openWB/ramdisk/' + file, 'w') as f:
         f.write(str(content))
 
