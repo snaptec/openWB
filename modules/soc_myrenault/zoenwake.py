@@ -16,7 +16,7 @@ time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp"+chargepoint, 
 gigyarooturl = 'https://accounts.eu1.gigya.com'
 gigyaapi = '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668'
 kamereonrooturl = 'https://api-wired-prod-1-euw1.wrd-aws.com'
-kamereonapikey = 'VAX7XYKGfa92yMvXculCkEFyfZbuM7Ss'
+kamereonapikey = 'YjkKtHmGfaceeuExUDKGxrLZGGvtVS0J'
 with open('/var/www/html/openWB/ramdisk/zoereply4lp'+chargepoint, 'r') as f:
     gigya_jwt = json.loads(f.read())
 gigya_jwttoken = gigya_jwt['id_token']
