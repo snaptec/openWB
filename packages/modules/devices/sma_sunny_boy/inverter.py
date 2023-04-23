@@ -54,7 +54,7 @@ class SmaSunnyBoyInverter:
             # AC Wirkleistung über alle Phasen (W) [Pac]
             power_total = self.tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=2)
             # Total eingespeiste Energie auf allen Außenleitern (Wh) [E-Total]
-            energy = self.tcp_client.read_holding_registers(30513, ModbusDataType.UINT_64, unit=3)
+            energy = self.tcp_client.read_holding_registers(30513, ModbusDataType.UINT_64, unit=2)
             # DC-Power = power_total - Cluster-Controller gibt in Register 30775 immer korrekte Werte aus,
             # daher ist wie bei SmaInverterVersion.default keine Prüfung auf DC-Leistung notwendig.
             # Aus kompatibilitätsgründen wird dc_power auf den Wert der AC-Wirkleistung gesetzt.
