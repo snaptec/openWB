@@ -17,7 +17,7 @@ def detect_modbus_usb_port():
         try:
             with open(device):
                 return device
-        except FileNotFoundError:
+        except Exception:
             pass
     return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
 
