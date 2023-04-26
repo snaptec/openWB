@@ -2,28 +2,10 @@
 import sys
 import os
 import os.path
-# import time
-# import getopt
-# import socket
-# import ConfigParser
 import struct
-# import binascii
 from pymodbus.client.sync import ModbusSerialClient
 
-
-def detect_modbus_usb_port():
-    """guess USB/modbus device name"""
-    known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
-    for device in known_devices:
-        try:
-            with open(device):
-                return device
-        except IOError:
-            pass
-    return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
-
-
-seradd = detect_modbus_usb_port()
+seradd = str(sys.argv[1])
 sdmid = int(sys.argv[2])
 
 client = ModbusSerialClient(method="rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
@@ -34,8 +16,8 @@ if (sdmid < 100):
     value2 = resp.registers[1]
     all = format(value1, '04x') + format(value2, '04x')
     ikwh = int(struct.unpack('>i', all.decode('hex'))[0])
-    #resp = client.read_input_registers(0x0002,2, unit=sdmid)
-    #ikwh = resp.registers[1]
+    # resp = client.read_input_registers(0x0002,2, unit=sdmid)
+    # ikwh = resp.registers[1]
     ikwh = float(ikwh) / 100
     f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
     f.write(str(ikwh))
