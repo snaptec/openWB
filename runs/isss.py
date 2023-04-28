@@ -8,6 +8,7 @@ import threading
 import time
 from typing import List, Optional
 import RPi.GPIO as GPIO
+from pathlib import Path
 
 from helpermodules.pub import pub_single
 from modules.common.store import ramdisk_read, ramdisk_write
@@ -19,9 +20,8 @@ from modules.internal_chargepoint_handler import chargepoint_module
 from modules.internal_chargepoint_handler.socket import Socket
 from modules.internal_chargepoint_handler.chargepoint_module import ClientConfig
 
-basePath = "/var/www/html/openWB"
-ramdiskPath = basePath + "/ramdisk"
-logFilename = ramdiskPath + "/isss.log"
+ramdiskPath = Path(__file__).resolve().parents[1] / "ramdisk"
+logFilename = str(ramdiskPath) + "/isss.log"
 MAP_LOG_LEVEL = [logging.ERROR, logging.WARNING, logging.DEBUG]
 
 
@@ -31,7 +31,7 @@ class IsssMode(Enum):
     DAEMON = "daemon"
 
 
-logging.basicConfig(filename=ramdiskPath+'/isss.log',
+logging.basicConfig(filename=logFilename,
                     format='%(asctime)s - {%(name)s:%(lineno)s} - %(levelname)s - %(message)s',
                     level=MAP_LOG_LEVEL[int(os.environ.get('debug'))])
 log = logging.getLogger()
@@ -241,14 +241,26 @@ class Isss:
 
     def detect_modbus_usb_port(self) -> str:
         """guess USB/modbus device name"""
-        known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
-        for device in known_devices:
-            try:
-                with open(device):
-                    return device
-            except FileNotFoundError:
-                pass
-        return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
+        detected_device = "/dev/serial0"  # use this as fallback
+        # order of known_devices is important! first come, first served
+        known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0")
+        # check if we have multiple usb devices and log a warning
+        tty_devices = list(Path("/dev/serial/by-id").glob("*"))
+        log.debug(str(tty_devices))
+        resolved_devices = [str(file.resolve()) for file in tty_devices]
+        log.debug(str(resolved_devices))
+        counter = len(resolved_devices)
+        if counter == 1:
+            detected_device = resolved_devices[0]
+        elif counter > 1:
+            log.error("found "+str(counter)+" possible usb devices! there can only be one!")
+            for device in known_devices:
+                if device in resolved_devices:
+                    detected_device = device
+        else:
+            log.error("no usb device found! fallback to '" + detected_device + "'")
+        log.debug("using '" + detected_device + "'")
+        return detected_device
 
     @staticmethod
     def get_cp_num(local_charge_point_num: int) -> int:
