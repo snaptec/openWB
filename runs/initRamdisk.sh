@@ -535,6 +535,14 @@ initRamdisk(){
 		"mqttlp6etbasedcharging:-1" \
 		"mqttlp7etbasedcharging:-1" \
 		"mqttlp8etbasedcharging:-1" \
+		"mqttlp1etchargemaxprice:-1" \
+		"mqttlp2etchargemaxprice:-1" \
+		"mqttlp3etchargemaxprice:-1" \
+		"mqttlp4etchargemaxprice:-1" \
+		"mqttlp5etchargemaxprice:-1" \
+		"mqttlp6etchargemaxprice:-1" \
+		"mqttlp7etchargemaxprice:-1" \
+		"mqttlp8etchargemaxprice:-1" \
 		"mqttevuglaettungakt:-1" \
 		"mqtthausverbrauch:-1" \
 		"mqtthausverbrauchstat:-1" \

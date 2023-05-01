@@ -1302,6 +1302,11 @@ updateConfig(){
 			echo "lp${i}etbasedcharging=1" >> $ConfigFile
 		fi
 	done
+	for i in $(seq 1 8); do
+		if ! grep -Fq "lp${i}etchargemaxprice=" $ConfigFile; then
+			echo "lp${i}etchargemaxprice=0" >> $ConfigFile
+		fi
+	done
 	if ! grep -Fq "plz=" $ConfigFile; then
 		echo "plz=36124" >> $ConfigFile
 	fi
@@ -1505,6 +1510,15 @@ updateConfig(){
 	fi
 	if ! grep -Fq "displaylp2max=" $ConfigFile; then
 		echo "displaylp2max=22000" >> $ConfigFile
+	fi
+	if ! grep -Fq "displayshowprice=" $ConfigFile; then
+		echo "displayshowprice=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "displayshowrfidpad=" $ConfigFile; then
+		echo "displayshowrfidpad=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "displayallowsetmaxprice=" $ConfigFile; then
+		echo "displayallowsetmaxprice=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "displaypinaktiv=" $ConfigFile; then
 		echo "displaypinaktiv=0" >> $ConfigFile

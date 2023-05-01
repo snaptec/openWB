@@ -35,7 +35,9 @@ if [[ $(wc -l <"$outputname") -ge 5 ]]; then
 		echo "$boolPlugStat" > "$RAMDISKDIR/plugstat"
 		echo "$boolChargeStat" > "$RAMDISKDIR/chargestat"
 		soc=$(<"$RAMDISKDIR/soc")
+		socEnabled=$(<"$RAMDISKDIR/socvorhanden")
 		mosquitto_pub -h "$ip" -r -t "openWB/set/lp/$chargepcp/%Soc" -m "$soc"
+		mosquitto_pub -h "$ip" -r -t "openWB/set/lp/$chargepcp/boolSocConfigured" -m "$socEnabled"
 	fi
 	if (( chargep == "2" ));then
 		echo "$VPhase1" > "$RAMDISKDIR/llvs11"
@@ -49,7 +51,9 @@ if [[ $(wc -l <"$outputname") -ge 5 ]]; then
 		echo "$boolPlugStat" > "$RAMDISKDIR/plugstats1"
 		echo "$boolChargeStat" > "$RAMDISKDIR/chargestats1"
 		soc=$(<"$RAMDISKDIR/soc1")
+		socEnabled=$(<"$RAMDISKDIR/soc1vorhanden")
 		mosquitto_pub -h "$ip" -r -t "openWB/set/lp/$chargepcp/%Soc" -m "$soc"
+		mosquitto_pub -h "$ip" -r -t "openWB/set/lp/$chargepcp/boolSocConfigured" -m "$socEnabled"
 	fi
 	if (( chargep == "3" ));then
 		echo "$VPhase1" > "$RAMDISKDIR/llvs21"
@@ -79,6 +83,21 @@ if [[ $(wc -l <"$outputname") -ge 5 ]]; then
 		echo "$LastScannedRfidTag" > "$RAMDISKDIR/readtag"
 		mosquitto_pub -h "$ip" -r -t "openWB/set/isss/ClearRfid" -m "1"
 	fi
+
+	cpEnabled=$(<"$RAMDISKDIR/lp${chargep}enabled")
+	etEnabled=$(<"$RAMDISKDIR/mqttetprovideraktiv")
+	etPriceList=$(<"$RAMDISKDIR/etprovidergraphlist")
+	etGlobalPrice=$(<"$RAMDISKDIR/etprovidermaxprice")
+	etCurrentPrice=$(<"$RAMDISKDIR/etproviderprice")
+	etMode=$(<"$RAMDISKDIR/mqttlp${chargep}etbasedcharging")
+	etLocalPrice=$(<"$RAMDISKDIR/mqttlp${chargep}etchargemaxprice")
+	mosquitto_pub -h "$ip" -r -t openWB/set/lp/$chargepcp/ChargePointEnabled -m "$cpEnabled"
+	mosquitto_pub -h "$ip" -r -t openWB/set/awattar/boolAwattarEnabled -m "$etEnabled"
+	mosquitto_pub -h "$ip" -r -t openWB/set/awattar/pricelist -m "$etPriceList"
+	mosquitto_pub -h "$ip" -r -t openWB/set/awattar/MaxPriceForCharging -m "$etGlobalPrice"
+	mosquitto_pub -h "$ip" -r -t openWB/set/awattar/ActualPriceForCharging -m "$etCurrentPrice"
+	mosquitto_pub -h "$ip" -r -t openWB/config/set/sofort/lp/$chargepcp/etBasedCharging -m "$etMode"
+	mosquitto_pub -h "$ip" -r -t openWB/config/set/sofort/lp/$chargepcp/etChargeMaxPrice -m "$etLocalPrice"
 
 	mosquitto_pub -h "$ip" -r -t "openWB/set/isss/parentWB" -m "$myipaddress"
 	if (( chargepcp == "1" )); then

@@ -26,6 +26,8 @@ function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
 	if (mqttmsg.match(/^openwb\/system\//i)) { processSystemMessages(mqttmsg, mqttpayload); }
 	else if (mqttmsg.match(/^openwb\/lp\//i)) { processChargepointMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/global\/awattar\//i)) { processETMessages(mqttmsg, mqttpayload); }
+	else if (mqttmsg.match(/^openwb\/config\/get\/sofort\//i)) { processChargeNowMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
 function processSystemMessages(mqttmsg, mqttpayload) {
@@ -34,6 +36,53 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 	if (mqttmsg == 'openWB/system/reloadDisplay') {
 		if (mqttpayload == '1') {
 			reloadDisplay();
+		}
+	} else if (mqttmsg == 'openWB/system/priceForKWh') {
+		let tmpValue = mqttpayload * 100;
+		if (defaultPrice != tmpValue) {
+			defaultPrice = tmpValue;
+			updateMainPriceLabels();
+		}
+	} else if (mqttmsg == 'openWB/system/parentWB') {
+		if (parentWB != mqttpayload) {
+			parentWB = mqttpayload;
+			connectToParent();
+		}
+	} else if (mqttmsg == 'openWB/system/parentCPlp1') {
+		if (parentCP[0] != mqttpayload) {
+			parentCP[0] = mqttpayload;
+		}
+	} else if (mqttmsg == 'openWB/system/parentCPlp2') {
+		if (parentCP[1] != mqttpayload) {
+			parentCP[1] = mqttpayload;
+		}
+	}
+}
+
+function processETMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/global/awattar
+	// called by handlevar
+	if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		etCurrentPrice = parseFloat(mqttpayload)
+		updateMainPriceLabels();
+	} else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
+		etPriceList = mqttpayload;
+		priceChart.update();
+	} else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
+		// if we are an external openWB and have sent an update within the last 20 seconds
+		// or we are just changing the value -> ignore it
+		if (Date.now() - 20000 > etParentGlobalPriceUpdated && ! maxPriceDelayTimers[0]  && ! maxPriceDelayTimers[1]) {
+			if (etMaxPriceGlobal != mqttpayload) {
+				etMaxPriceGlobal = mqttpayload;
+				updateMainPriceLabels();
+				updateSetPriceLabels();
+			}
+		}
+	} else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		if (etEnabled != mqttpayload) {
+			etEnabled = mqttpayload;
+			updateMainPriceLabels();
+			updateSetPriceLabels();
 		}
 	}
 }
@@ -46,7 +95,7 @@ function processChargepointMessages(mqttmsg, mqttpayload) {
 	// last part of topic after /
 	var topic = mqttmsg.substring(mqttmsg.lastIndexOf('/') + 1);
 	var index = mqttmsg.match(/(\w+)\/(\d\d?)\//)[2];
-	if (index != null) {
+	if (index != null && index <= configuredChargePoints) {
 		if (topic == '%Soc') {
 			eval("gaugelp" + index + "s.set(mqttpayload)");
 			$('#lp' + index + 'st').html(mqttpayload + "%");
@@ -89,6 +138,37 @@ function processChargepointMessages(mqttmsg, mqttpayload) {
 			} else {
 				$('#lp' + index + 'enabled').addClass("hide");
 				$('#lp' + index + 'disabled').removeClass("hide");
+			}
+		}
+	}
+}
+
+function processChargeNowMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/system
+	// called by handlevar
+
+	// check if topic contains subgroup like /lp/1/
+	// last part of topic after /
+
+	var topic = mqttmsg.substring(mqttmsg.lastIndexOf('/') + 1);
+	var index = mqttmsg.match(/(\w+)\/(\d\d?)\//)[2];
+	if (index != null) {
+		imm = index - 1;
+		if (topic == 'etBasedCharging') {
+			if (etModes[imm] != mqttpayload) {
+				etModes[imm] = mqttpayload;
+				updateMainPriceLabels();
+				updateSetPriceLabels();
+			}
+		} else if  (topic == 'etChargeMaxPrice') {
+			// if we are an external openWB and have sent an update within the last 20 seconds
+			// or we are just changing the value -> ignore it
+			if (Date.now() - 20000 > etParentLocalPriceUpdated[imm] && ! maxPriceDelayTimers[imm]) {
+				if (etMaxPricesLocal[imm] != mqttpayload) {
+					etMaxPricesLocal[imm] = mqttpayload;
+					updateMainPriceLabels();
+					updateSetPriceLabels();
+				}
 			}
 		}
 	}
