@@ -2,7 +2,9 @@
 import os
 import os.path
 import struct
+import traceback
 from pymodbus.client.sync import ModbusSerialClient
+from pymodbus.exceptions import ModbusIOException
 
 
 def write_to_ramdisk(file, content):
@@ -23,8 +25,8 @@ def detect_modbus_usb_port():
 
 
 serial_port = detect_modbus_usb_port()
-
 client = ModbusSerialClient(method="rtu", port=serial_port, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
+unit_id = None
 
 try:
     with open('/var/www/html/openWB/ramdisk/llmodulconfig', 'r') as value:
@@ -42,6 +44,9 @@ except Exception:
     try:
         meter_unit_id = 5
         resp = client.read_input_registers(0x10, 2, unit=meter_unit_id)
+        if type(resp) == ModbusIOException:
+            print("no response from id " + str(meter_unit_id))
+            raise Exception
         write_to_ramdisk('llmodulconfig', 'mpm')
         unit_id = meter_unit_id
     except Exception:
@@ -50,6 +55,9 @@ except Exception:
     try:
         meter_unit_id = 105
         resp = client.read_input_registers(0x00, 2, unit=meter_unit_id)
+        if type(resp) == ModbusIOException:
+            print("no response from id " + str(meter_unit_id))
+            raise Exception
         voltage = struct.unpack('>f', struct.pack('>HH', *resp.registers))[0]
         if int(voltage) > 20:
             write_to_ramdisk('llmodulconfig', 'sdm')
@@ -60,13 +68,20 @@ except Exception:
     try:
         meter_unit_id = 201
         resp = client.read_holding_registers(0x5B00, 2, unit=meter_unit_id)
+        if type(resp) == ModbusIOException:
+            print("no response from id " + str(meter_unit_id))
+            raise Exception
         voltage = resp.registers[1]
         if int(voltage) > 20:
             write_to_ramdisk('llmodulconfig', 'b23')
             unit_id = meter_unit_id
     except Exception:
-        # no known meter detected!
         pass
+if unit_id is None:
+    write_to_ramdisk('llmodulconfig', 'meter failure')
+    print("could not detect installed meter!")
+    exit(1)
+
 try:
     if (unit_id < 100):
         resp = client.read_input_registers(0x0002, 4, unit=unit_id)
@@ -247,4 +262,5 @@ try:
         hz = float(resp.registers[0]) / 100
         write_to_ramdisk('llhz', hz)
 except Exception:
-    write_to_ramdisk('llmodulconfig', 'failure')
+    write_to_ramdisk('llmodulconfig', 'data failure')
+    traceback.print_exc()
