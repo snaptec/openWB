@@ -81,7 +81,6 @@ class ChargepointModule(AbstractChargepoint):
             "Ladepunkt "+str(self.config.id), "chargepoint")
         self.store = get_chargepoint_value_store(self.config.id)
         self.old_plug_state = False
-        self.old_phases_in_use = 0
         self.__client = ClientFactory(self.config.id, self.config.serial_client)
         time.sleep(0.1)
         version = self.__client.evse_client.get_firmware_version()
@@ -105,10 +104,6 @@ class ChargepointModule(AbstractChargepoint):
             currents = self.__client.meter_client.get_currents()
             imported = self.__client.meter_client.get_imported()
             phases_in_use = sum(1 for current in currents if current > 3)
-            if phases_in_use == 0:
-                phases_in_use = self.old_phases_in_use
-            else:
-                self.old_phases_in_use = phases_in_use
 
             time.sleep(0.1)
             plug_state, charge_state, self.set_current_evse = self.__client.evse_client.get_plug_charge_state()
