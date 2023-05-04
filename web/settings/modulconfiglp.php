@@ -8,8 +8,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>openWB Einstellungen</title>
-		<meta name="description" content="Control your charge" />
-		<meta name="author" content="Michael Ortenstein" />
+		<meta name="description" content="Control your charge">
+		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
@@ -82,7 +82,9 @@
 										<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evseconold == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">Ladepunkt in Verbindung mit Standalone</option>
-										<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">Satellit </option>
+										<?php $ipevseconv2 = ($evseconold == "ipevse" && $evseidlp1old == "1" && $ladeleistungmodulold == "mpm3pmlllp1" && $mpmlp1ipold == $evseiplp1old)?>
+										<option <?php if($evseconold == "ipevse" && !$ipevseconv2) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+										<option <?php if($evseconold == "ipevse" && $ipevseconv2) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 									</optgroup>
 									<optgroup label="andere Ladepunkte">
 										<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -269,12 +271,12 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconipevse" class="hide">
+						<div id="evseconipevseV1" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evseiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" value="<?php echo $evseiplp1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -289,6 +291,29 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div id="evseconipevseV2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="evseiplp1" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Aufgedruckt auf dem Label der openWB.
+										</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="evseidlp1" value="1">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmlllp1">
+							<input type="hidden" name="mpmlp1ip" id="evseiplllp1" value="<?php echo $evseiplp1old ?>">
+							<input type="hidden" name="mpmlp1id" value="105">
+							<script>
+								$('#evseiplp1').on("change", function(){
+									$('#evseiplllp1').val($(this).val());
+								});
+							</script>
 						</div>
 						<div id="evseconkeba" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="keballlp1">
@@ -832,7 +857,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
+										<label class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
 											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_tesla_username" value="1">Bei Tesla anmelden</button>
 											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="1">Anmeldedaten entfernen</button>
@@ -998,7 +1023,7 @@
 									</div>
 									<div id="kia_abrp_enablediv" class="hide">
 										<div class="form-row mb-1">
-											<label for="kia_abrp_token" class="col-md-4 col-form-label">ABRP Token</label>
+											<label for="kia_abrp_token_text" class="col-md-4 col-form-label">ABRP Token</label>
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
 												<span class="form-text small">
@@ -1400,7 +1425,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_evcc_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_evcc_select_vehicle_lp1" class="form-control">
 													<option value="">-- Bitte aktualisieren --</option>
 												</select>
 											</div>
@@ -1410,7 +1435,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_vehicle_id_lp1" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<label for="soc_evcc_type_lp1" class="col-md-4 col-form-label">Fahrzeug Typ</label>
 										<div class="col">
 											<div class="input-group">
 												<div class="input-group-prepend">
@@ -2006,7 +2031,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small font-weight-bold">
-												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br>
 												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
@@ -2074,7 +2099,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control">
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -2189,7 +2214,8 @@
 							hideSection('#openwb12v2mid');
 							hideSection('#evseconhttp');
 							hideSection('#evsecontwcmanager');
-							hideSection('#evseconipevse');
+							hideSection('#evseconipevseV1');
+							hideSection('#evseconipevseV2');
 							hideSection('#openwbbuchse');
 							hideSection('#openwbdaemon');
 							hideSection('#evseconextopenwb');
@@ -2217,9 +2243,16 @@
 								}
 							}
 							if($('#evsecon').val() == 'ipevse') {
-								showSection('#evseconipevse');
-								showSection('#llmodullp1');
-								display_llmp1();
+								switch( $("#evsecon option:selected").attr('data-id') ){
+									case "openwb satellite v1":
+										showSection('#evseconipevseV1');
+										showSection('#llmodullp1');
+										display_llmp1();
+									break;
+									case "openwb satellite v2":
+										showSection('#evseconipevseV2');
+									break;
+								}
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('#evseconextopenwb');
@@ -2513,7 +2546,9 @@
 										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evsecons1old == "daemon") echo "selected" ?> value="daemon">openWB Duo Daemon </option>
 										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
-										<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+										<?php $ipevsecons1v2 = ($evsecons1old == "ipevse" && $evseidlp2old == "1" && $ladeleistungs1modulold == "mpm3pmlllp2" && $mpmlp2ipold == $evseiplp2old)?>
+										<option <?php if($evsecons1old == "ipevse" && !$ipevsecons1v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+										<option <?php if($evsecons1old == "ipevse" && $ipevsecons1v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 									</optgroup>
 									<optgroup label="andere Ladepunkte">
 										<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -2574,12 +2609,12 @@
 								Dies ist die richtige Option für eine fertige openWB Duo und bietet eine optimale und schnelle Auslesung.
 							</div>
 						</div>
-						<div id="evseconipevselp2" class="hide">
+						<div id="evseconipevselp2V1" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="evseiplp2" class="col-md-4 col-form-label">IP Adresse</label>
+									<label class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp2" value="<?php echo $evseiplp2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -2594,6 +2629,29 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div id="evseconipevselp2V2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" id="evseiplp2" name="evseiplp2" value="<?php echo $evseiplp2old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Aufgedruckt auf dem Label der openWB.
+										</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="evseidlp2" value="1">
+							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmlllp2">
+							<input type="hidden" name="mpmlp2ip" id="evseiplllp2" value="<?php echo $evseiplp2old ?>">
+							<input type="hidden" name="mpmlp2id" value="105">
+							<script>
+								$('#evseiplp2').on("change", function(){
+									$('#evseiplllp2').val($(this).val());
+								});
+							</script>
 						</div>
 						<div id="openwb12s1v1" class="hide">
 							<input type="hidden" name="evseids1" value="1">
@@ -3193,7 +3251,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
+										<label class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
 											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_teslalp2_username" value="2">Bei Tesla anmelden</button>
 											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="2">Anmeldedaten entfernen</button>
@@ -3718,7 +3776,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small font-weight-bold">
-												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br>
 												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
@@ -3750,7 +3808,7 @@
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
-											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
+											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br>
 											<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/auth?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
@@ -3820,7 +3878,7 @@
 									</div>
 									<div id="kia_abrp_enable_2div" class="hide">
 										<div class="form-row mb-1">
-											<label for="kia_abrp_token_2" class="col-md-4 col-form-label">ABRP Token</label>
+											<label for="kia_abrp_token_2_text" class="col-md-4 col-form-label">ABRP Token</label>
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
 												<span class="form-text small">
@@ -3952,7 +4010,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control">
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -4040,7 +4098,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_evcc_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_evcc_select_vehicle_lp2" class="form-control">
 													<option value="">-- Bitte aktualisieren --</option>
 												</select>
 											</div>
@@ -4050,7 +4108,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_vehicle_id_lp2" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<label for="soc_evcc_type_lp2" class="col-md-4 col-form-label">Fahrzeug Typ</label>
 										<div class="col">
 											<div class="input-group">
 												<div class="input-group-prepend">
@@ -4208,7 +4266,8 @@
 							hideSection('#evseconextopenwblp2');
 							hideSection('#evseconowbprolp2');
 							hideSection('#evsecondaemonlp2');
-							hideSection('#evseconipevselp2');
+							hideSection('#evseconipevselp2V1');
+							hideSection('#evseconipevselp2V2');
 							hideSection('#evseconmqtts1');
 							hideSection('#evsecontwcmanagers1');
 
@@ -4227,9 +4286,16 @@
 								}
 							}
 							if($('#evsecons1').val() == 'ipevse') {
-								showSection('#evseconipevselp2');
-								showSection('#llmodullp2');
-								display_llmp2();
+								switch( $("#evsecons1 option:selected").attr('data-id') ){
+									case "openwb satellite v1":
+										showSection('#evseconipevselp2V1');
+										showSection('#llmodullp2');
+										display_llmp2();
+									break;
+									case "openwb satellite v2":
+										showSection('#evseconipevselp2V2');
+									break;
+								}
 							}
 							if($('#evsecons1').val() == 'dac') {
 								showSection('#evsecondacs1');
@@ -4540,7 +4606,9 @@
 										<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evsecons2old == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">dritter Ladepunkt</option>
-										<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+										<?php $ipevsecons2v2 = ($evsecons2old == "ipevse" && $evseidlp3old == "1" && $ladeleistungs2modulold == "mpm3pmlllp3" && $mpmlp3ipold == $evseiplp3old)?>
+										<option <?php if($evsecons2old == "ipevse" && !$ipevsecons2v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+										<option <?php if($evsecons2old == "ipevse" && $ipevsecons2v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 									</optgroup>
 									<optgroup label="andere Ladepunkte">
 										<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -4597,12 +4665,12 @@
 							</div>
 						</div>
 
-						<div id="evseconipevselp3" class="hide">
+						<div id="evseconipevselp3V1" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="evseiplp3" class="col-md-4 col-form-label">IP Adresse</label>
+									<label class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" value="<?php echo $evseiplp3old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -4617,6 +4685,29 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div id="evseconipevselp3V2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="evseiplp3" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Aufgedruckt auf dem Label der openWB.
+										</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="evseidlp3" value="1">
+							<input type="hidden" name="ladeleistungs2modul" value="mpm3pmlllp3">
+							<input type="hidden" name="mpmlp3ip" id="evseiplllp3" value="<?php echo $evseiplp3old ?>">
+							<input type="hidden" name="mpmlp3id" value="105">
+							<script>
+								$('#evseiplp3').on("change", function(){
+									$('#evseiplllp3').val($(this).val());
+								});
+							</script>
 						</div>
 						<div id="evseconmbs2" class="hide">
 							<div class="form-group">
@@ -4897,7 +4988,8 @@
 							hideSection('#evseconswifis2');
 							hideSection('#llmodullp3');
 							hideSection('#evsecongoes2');
-							hideSection('#evseconipevselp3');
+							hideSection('#evseconipevselp3V1');
+							hideSection('#evseconipevselp3V2');
 							hideSection('#evseconextopenwblp3');
 							hideSection('#evseconowbprolp3');
 							hideSection('#evseconthirdeth');
@@ -4934,9 +5026,16 @@
 								showSection('#evsecongoes2');
 							}
 							if($('#evsecons2').val() == 'ipevse') {
-								showSection('#evseconipevselp3');
-								showSection('#llmodullp3');
-								display_llmp3();
+								switch( $("#evsecons2 option:selected").attr('data-id') ){
+									case "openwb satellite v1":
+										showSection('#evseconipevselp3V1');
+										showSection('#llmodullp3');
+										display_llmp3();
+									break;
+									case "openwb satellite v2":
+										showSection('#evseconipevselp3V2');
+									break;
+								}
 							}
 						}
 
@@ -5031,7 +5130,9 @@
 										<optgroup label="openWB">
 											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
-											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+											<?php ${'ipevseconlp'.$chargepointNum.'v2'} = (${'evseconlp'.$chargepointNum.'old'} == "ipevse" && ${'evseidlp'.$chargepointNum.'old'} == "1" && ${'mpmlp'.$chargepointNum.'ipold'} == ${'evseiplp'.$chargepointNum.'old'})?>
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse" && !${'ipevseconlp'.$chargepointNum.'v2'}) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse" && ${'ipevseconlp'.$chargepointNum.'v2'}) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 										</optgroup>
 									</select>
 								</div>
@@ -5071,12 +5172,12 @@
 								</div>
 							</div>
 
-							<div id="evseconipevselp<?php echo $chargepointNum; ?>" class="hide">
+							<div id="evseconipevselp<?php echo $chargepointNum; ?>V1" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
+										<label class="col-md-4 col-form-label">EVSE IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12
 											</span>
@@ -5107,10 +5208,32 @@
 									</div>
 								</div>
 							</div>
+							<div id="evseconipevselp<?php echo $chargepointNum; ?>V2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
+										<div class="col">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
+											<span class="form-text small">
+												Gültige Werte IP Adresse im Format: 192.168.0.12
+											</span>
+										</div>
+									</div>
+								</div>
+								<input type="hidden" name="evseidlp<?php echo $chargepointNum; ?>" value="1">
+								<input type="hidden" name="mpmlp<?php echo $chargepointNum; ?>ip" id="evseiplllp<?php echo $chargepointNum; ?>" value="<?php echo ${'mpmlp'.$chargepointNum.'ipold'} ?>">
+								<input type="hidden" name="mpmlp<?php echo $chargepointNum; ?>id" value="105">
+								<script>
+									$('#evseiplp<?php echo $chargepointNum; ?>').on("change", function(){
+										$('#evseiplllp<?php echo $chargepointNum; ?>').val($(this).val());
+									});
+								</script>
+							</div>
 						</div>
 						<script>
 							function display_lp<?php echo $chargepointNum; ?> () {
-								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>');
+								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>V1');
+								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>V2');
 								hideSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 								hideSection('#evseconowbprolp<?php echo $chargepointNum; ?>');
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'owbpro') {
@@ -5120,7 +5243,14 @@
 									showSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 								}
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'ipevse') {
-									showSection('#evseconipevselp<?php echo $chargepointNum; ?>');
+									switch( $("#evseconlp<?php echo $chargepointNum; ?> option:selected").attr('data-id') ){
+										case "openwb satellite v1":
+											showSection('#evseconipevselp<?php echo $chargepointNum; ?>V1');
+										break;
+										case "openwb satellite v2":
+											showSection('#evseconipevselp<?php echo $chargepointNum; ?>V2');
+										break;
+									}
 								}
 							}
 
