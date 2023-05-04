@@ -15,9 +15,9 @@ from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
 from modules.common.component_state import ChargepointState
 from modules.common.modbus import ModbusSerialClient_
-from modules.chargepoints.internal_openwb import chargepoint_module
-from modules.chargepoints.internal_openwb.socket import Socket
-from modules.chargepoints.internal_openwb.chargepoint_module import InternalOpenWB
+from modules.internal_chargepoint_handler import chargepoint_module
+from modules.internal_chargepoint_handler.socket import Socket
+from modules.internal_chargepoint_handler.chargepoint_module import ClientConfig
 
 basePath = "/var/www/html/openWB"
 ramdiskPath = basePath + "/ramdisk"
@@ -277,11 +277,11 @@ class IsssChargepoint:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:
-                self.module = Socket(socket_max_current, InternalOpenWB(0, serial_client))
+                self.module = Socket(socket_max_current, ClientConfig(0, serial_client))
             else:
-                self.module = chargepoint_module.ChargepointModule(InternalOpenWB(0, serial_client))
+                self.module = chargepoint_module.ChargepointModule(ClientConfig(0, serial_client))
         else:
-            self.module = chargepoint_module.ChargepointModule(InternalOpenWB(1, serial_client))
+            self.module = chargepoint_module.ChargepointModule(ClientConfig(1, serial_client))
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False
