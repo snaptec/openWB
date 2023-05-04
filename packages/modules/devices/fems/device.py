@@ -1,71 +1,41 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Optional, Union, List
+from typing import Optional, List
 
-from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
-from modules.common.component_context import MultiComponentUpdateContext
-from modules.devices.fems import bat
-from modules.devices.fems import counter
-from modules.devices.fems import inverter
-from modules.devices.fems.config import Fems, FemsBatSetup, FemsCounterSetup, FemsInverterSetup
-from modules.common import req
+from modules.common.abstract_device import DeviceDescriptor
+from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, IndependentComponentUpdater
+from modules.devices.fems import bat, counter, inverter
+from modules.devices.fems.config import Fems, FemsBatSetup, FemsConfiguration, FemsCounterSetup, FemsInverterSetup
 
 log = logging.getLogger(__name__)
 
 
-fems_component_classes = Union[bat.FemsBat, counter.FemsCounter,
-                               inverter.FemsInverter]
+def create_device(device_config: Fems):
+    def create_bat_component(component_config: FemsBatSetup):
+        return bat.FemsBat(device_config.configuration.password,
+                           device_config.configuration.ip_address,
+                           component_config)
 
+    def create_counter_component(component_config: FemsCounterSetup):
+        return counter.FemsCounter(device_config.configuration.password,
+                                   device_config.configuration.ip_address,
+                                   component_config)
 
-class Device(AbstractDevice):
-    COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.FemsBat,
-        "counter": counter.FemsCounter,
-        "inverter": inverter.FemsInverter,
-    }
+    def create_inverter_component(component_config: FemsInverterSetup):
+        return inverter.FemsInverter(device_config.configuration.password,
+                                     device_config.configuration.ip_address,
+                                     component_config)
 
-    def __init__(self, device_config: Union[Dict, Fems]) -> None:
-        self.components = {}  # type: Dict[str, fems_component_classes]
-        try:
-            self.device_config = dataclass_from_dict(Fems, device_config)
-        except Exception:
-            log.exception("Fehler im Modul "+self.device_config.name)
-
-    def add_component(self, component_config: Union[Dict,
-                                                    FemsBatSetup,
-                                                    FemsCounterSetup,
-                                                    FemsInverterSetup]) -> None:
-        if isinstance(component_config, Dict):
-            component_type = component_config["type"]
-        else:
-            component_type = component_config.type
-        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
-            component_type].component_descriptor.configuration_factory, component_config)
-        if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config.id, component_config))
-        else:
-            raise Exception(
-                "illegal component type " + component_type + ". Allowed values: " +
-                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
-            )
-
-    def update(self) -> None:
-        log.debug("Start device reading " + str(self.components))
-        if self.components:
-            with MultiComponentUpdateContext(self.components):
-                resp_json = req.get_http_session().get(
-                    'http://' + self.device_config.configuration.ip_address + '/api.php?get=currentstate',
-                    timeout=5).json()
-                for component in self.components:
-                    self.components[component].update(resp_json)
-        else:
-            log.warning(
-                self.device_config.name +
-                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
-            )
+    return ConfigurableDevice(
+        device_config=device_config,
+        component_factory=ComponentFactoryByType(
+            bat=create_bat_component,
+            counter=create_counter_component,
+            inverter=create_inverter_component,
+        ),
+        component_updater=IndependentComponentUpdater(lambda component: component.update())
+    )
 
 
 COMPONENT_TYPE_TO_MODULE = {
@@ -75,28 +45,8 @@ COMPONENT_TYPE_TO_MODULE = {
 }
 
 
-def read_legacy(
-        component_type: str,
-        ip_address: str,
-        num: Optional[int] = None,
-        evu_counter: Optional[str] = None,
-        bat: Optional[str] = None) -> None:
-
-    device_config = Fems()
-    device_config.configuration.ip_address = ip_address
-    dev = Device(device_config)
-    dev = _add_component(dev, component_type, num)
-    if evu_counter == "bezug_fems":
-        dev = _add_component(dev, "counter", 0)
-    if bat == "speicher_fems":
-        dev = _add_component(dev, "bat", 3)
-
-    log.debug('Fems IP-Adresse: ' + ip_address)
-
-    dev.update()
-
-
-def _add_component(dev: Device, component_type: str, num: Optional[int]) -> Device:
+def read_legacy(component_type: str, ip_address: str, password: str, bat_num: Optional[int] = None, num: Optional[int] = None) -> None:
+    dev = create_device(Fems(configuration=FemsConfiguration(ip_address=ip_address, password=password)))
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
@@ -105,8 +55,14 @@ def _add_component(dev: Device, component_type: str, num: Optional[int]) -> Devi
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config.id = num
+    if component_type == "bat":
+        component_config.configuration.num = bat_num + 1
     dev.add_component(component_config)
-    return dev
+
+    log.debug('Fems IP-Adresse: ' + ip_address)
+    log.debug('Fems Password: ' + password)
+
+    dev.update()
 
 
 def main(argv: List[str]) -> None:
