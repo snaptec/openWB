@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import logging
 from typing import Dict, Union
-from requests import Session
 
 
 from dataclass_utils import dataclass_from_dict
@@ -22,8 +21,15 @@ class SolarLogCounter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, response: Dict) -> None:
-        response = session.get('https://backend.solar_log.energy/api/2.0/my/'+self.component_config.configuration.id +
-                               '/current', timeout=3).json()
+        pvwatt = int(float(response["801"]["170"]["101"]))
+        hausverbrauch = int(float(response["801"]["170"]["110"]))
+        bezugwatt = hausverbrauch - pvwatt
+        pvkwh = float(response["801"]["170"]["109"])
+
+        if bezug_solarlog_speicherv == 1:
+            with open("ramdisk/speicherleistung", "r") as f:
+                speicherleistung = int(float(f.read()))
+            bezugwatt = bezugwatt + speicherleistung
 
         self.store.set(CounterState(
             imported=float(response['A_Plus']),
