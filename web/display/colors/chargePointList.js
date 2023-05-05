@@ -109,7 +109,7 @@ class ChargePointList {
 		${soctext}
 		</span>
 	</div>
-	<div class="col-8pl-0 pr-2 py-0 chargePointData" 
+	<div class="col-8 pl-0 pr-2 py-0 chargePointData" 
 		style="color:white;vertical-align:middle;text-align:right;">
 		<p class="powerstring-${index} px-0 pb-0 mb-0">
 		? W / ? A
@@ -127,11 +127,11 @@ class ChargePointList {
 		<button class="btn btn-block btn-success display-button px-0 py-3" 
 		type="button" onclick="modeButtonClicked(${index})">
 		<span class="chargemode-${index}">Unknown</span>
-		<span class="priority-${index} faspx-2 hide"> </span>
+		<span class="priority-${index} fas px-2 hide"> </span>
 		</button>
 	</div>
 	<div class="col-5 m-0 px-1 py-0">
-		<button class="btn btn-block btn-outline-secondary display-button px-0 mx-0py-3"
+		<button class="btn btn-block btn-outline-secondary display-button px-0 mx-0 py-3"
 		type="button" onclick = "configButtonClicked(${index})">
 		<i class="fas fa-wrench"></i>
 		</button>

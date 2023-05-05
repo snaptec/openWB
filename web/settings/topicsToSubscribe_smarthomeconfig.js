@@ -76,6 +76,13 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_lambdaueb", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_nxdacxxtype", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_nxdacxxueb", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_manwatt", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_measureshusername", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_measureshpassword", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_shusername", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_shpassword", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_shauth", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_measureshauth", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaage", 0]
 
 ];

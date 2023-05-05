@@ -50,6 +50,7 @@ class YieldMeter {
 		let exportedEnergy = 0
 		let generatedEnergy = 0
 		let batEnergy = 0
+		let storedEnergy = 0
 		switch (wbdata.graphMode) {
 			case 'live':
 				this.plotdata = Object.values(wbdata.sourceSummary)
@@ -63,6 +64,7 @@ class YieldMeter {
 				exportedEnergy = wbdata.usageSummary.evuOut.energy
 				generatedEnergy = wbdata.sourceSummary.pv.energy
 				batEnergy = wbdata.sourceSummary.batOut.energy
+				storedEnergy = wbdata.usageSummary.batIn.energy
 				break;
 			case 'day':
 				if (wbdata.showTodayGraph) {
@@ -78,7 +80,7 @@ class YieldMeter {
 					exportedEnergy = wbdata.usageSummary.evuOut.energy
 					generatedEnergy = wbdata.sourceSummary.pv.energy
 					batEnergy = wbdata.sourceSummary.batOut.energy
-
+					storedEnergy = wbdata.usageSummary.batIn.energy
 				} else {
 					this.plotdata = Object.values(wbdata.historicSummary)
 						.filter(row => row.energy > 0 && row.name != "Geräte");
@@ -89,7 +91,7 @@ class YieldMeter {
 					exportedEnergy = wbdata.historicSummary.evuOut.energy
 					generatedEnergy = wbdata.historicSummary.pv.energy
 					batEnergy = wbdata.historicSummary.batOut.energy
-
+					storedEnergy = wbdata.historicSummary.batIn.energy
 				}
 				break;
 			case 'month':
@@ -105,12 +107,13 @@ class YieldMeter {
 				exportedEnergy = wbdata.historicSummary.evuOut.energy
 				generatedEnergy = wbdata.historicSummary.pv.energy
 				batEnergy = wbdata.historicSummary.batOut.energy
+				storedEnergy = wbdata.historicSummary.batIn.energy
 
 				break;
 			default: break;
 		}
 		this.selfUsePercentage = Math.round((generatedEnergy - exportedEnergy) / generatedEnergy *100)
-		this.autarchyPercentage = Math.round ((generatedEnergy + batEnergy - exportedEnergy) / (generatedEnergy + batEnergy + importedEnergy - exportedEnergy) *100)
+		this.autarchyPercentage = Math.round ((generatedEnergy + batEnergy - exportedEnergy - storedEnergy) / (generatedEnergy + batEnergy + importedEnergy - exportedEnergy - storedEnergy) *100)
 		this.adjustLabelSize()
 		const svg = this.createOrUpdateSvg();
 		this.drawChart(svg);
@@ -259,15 +262,16 @@ class YieldMeter {
 			.append("text")
 			.attr("x", (d) => this.xScale(d.name) + this.xScale.bandwidth() / 2)
 			.attr("y", this.height - this.margin.bottom - 5)
-			.attr("font-size", this.labelfontsize)
+			.attr("font-size", (d) => (d.icon.length <= 2) ? this.labelfontsize+3  : this.labelfontsize)
 			.attr("text-anchor", "middle")
 			.attr("fill", (d) => d.color)
-			.text((d) => (this.truncateCategory(d.name)));
+			.text((d) => (this.truncateCategory(d.icon)))
+			.classed("fas",(d) => d.icon.length <= 2);
 	}
 
 	subString(item) {
 		if (item.pvPercentage > 0) {
-			return ("PV: " + item.pvPercentage.toLocaleString(undefined) + " %");
+			return ("Aut: " + item.pvPercentage.toLocaleString(undefined) + " %");
 		} else if (item.name == 'Netz') {
 			return ("Aut: " + this.autarchyPercentage.toLocaleString(undefined) + " %");
 			

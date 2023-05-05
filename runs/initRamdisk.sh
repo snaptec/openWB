@@ -228,6 +228,15 @@ initRamdisk(){
 	echo 0 > $RamdiskPath/smarthome_device_manual_7
 	echo 0 > $RamdiskPath/smarthome_device_manual_8
 	echo 0 > $RamdiskPath/smarthome_device_manual_9
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_1
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_2
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_3
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_4
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_5
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_6
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_7
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_8
+	echo 0 > $RamdiskPath/smarthome_device_manual_control_9
 	echo 0 > $RamdiskPath/smarthomehandlermaxbatterypower
 	echo 0 > $RamdiskPath/smarthomehandlerloglevel
 

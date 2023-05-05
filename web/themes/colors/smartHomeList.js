@@ -175,9 +175,9 @@ function shDeviceClicked(i) {
 
 	if (!wbdata.shDevice[i].isAutomatic) {
 		if (wbdata.shDevice[i].isOn) {
-			publish("0", "openWB/config/set/SmartHome/Device" + (+i + 1) + "/device_manual_control");
+			publish("0", "openWB/config/set/SmartHome/Devices/" + (+i + 1) + "/device_manual_control");
 		} else {
-			publish("1", "openWB/config/set/SmartHome/Device" + (+i + 1) + "/device_manual_control");
+			publish("1", "openWB/config/set/SmartHome/Devices/" + (+i + 1) + "/device_manual_control");
 		}
 		d3.select("span#shbutton-" + i)
 			.attr("class", "fa fa-clock text-white pr-2")

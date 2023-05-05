@@ -46,7 +46,7 @@ esac
 
 getAndWriteSoc(){
 	re='^-?[0-9]+$'
-	url="https://api-eu.TRONITY.io/v1/vehicles/${soc_tronity_vehicle_id}/battery"
+	url="https://api.tronity.tech/tronity/vehicles/${soc_tronity_vehicle_id}/last_record"
 	response=$(curl --silent --connect-timeout 15 --header 'Authorization: bearer '${authToken} ${url})
 	if [[ "$response" =~ '"level"' ]]; then
 		soclevel=$(echo $response | jq --raw-output .level)
@@ -82,7 +82,7 @@ login(){
 	fi
 	if [ ! -f $tokensfile ]; then
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: requesting new token."
-		response=$(curl --silent --connect-timeout 15 --header 'Content-Type: application/json' --request POST --data '{"client_id":"'${soc_tronity_client_id}'","client_secret":"'${soc_tronity_client_secret}'","grant_type": "app"}' https://api-eu.TRONITY.io/oauth/authentication)
+		response=$(curl --silent --connect-timeout 15 --header 'Content-Type: application/json' --request POST --data '{"client_id":"'${soc_tronity_client_id}'","client_secret":"'${soc_tronity_client_secret}'","grant_type": "app"}' https://api.tronity.tech/authentication)
 		if  [[ "$response" =~ '"access_token"' ]]; then
 			echo "$response" > $tokensfile
 			openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: got new access_token."

@@ -85,7 +85,11 @@ class SimCountPrefix(Enum):
 
 def restore_value(prefix_str: str, postfix: str) -> float:
     prefix = SimCountPrefix[prefix_str.upper()]
-    topic = "openWB/" + prefix.topic + ("/WHImported_temp" if postfix == POSTFIX_IMPORT else "/WHExport_temp")
+    #  topic = "openWB/" + prefix.topic + ("/WHImported_temp" if postfix == POSTFIX_IMPORT else "/WHExport_temp")
+    if prefix.topic == "pv2":
+        topic = "openWB/pv" + ("/WH2Imported_temp" if postfix == POSTFIX_IMPORT else "/WH2Export_temp")
+    else:
+        topic = "openWB/" + prefix.topic + ("/WHImported_temp" if postfix == POSTFIX_IMPORT else "/WHExport_temp")
     mqtt_value = read_mqtt_topic(topic)
     log.info("read from broker: %s=%s", topic, mqtt_value)
     if mqtt_value is None:
@@ -157,8 +161,12 @@ class SimCounterStoreRamdisk(SimCounterStore):
         # For historic reasons, the SimCount stored state uses Watt-seconds instead of Watt-hours -> * 3600:
         ramdisk_write(prefix + POSTFIX_IMPORT, state.imported * 3600)
         ramdisk_write(prefix + POSTFIX_EXPORT, state.exported * 3600)
-        pub.pub_single("openWB/" + topic + "/WHImported_temp", state.imported * 3600, no_json=True)
-        pub.pub_single("openWB/" + topic + "/WHExport_temp", state.exported * 3600, no_json=True)
+        if topic == "pv2":
+            pub.pub_single("openWB/pv/WH2Imported_temp", state.imported * 3600, no_json=True)
+            pub.pub_single("openWB/pv/WH2Export_temp", state.exported * 3600, no_json=True)
+        else:
+            pub.pub_single("openWB/" + topic + "/WHImported_temp", state.imported * 3600, no_json=True)
+            pub.pub_single("openWB/" + topic + "/WHExport_temp", state.exported * 3600, no_json=True)
 
 
 class SimCounterStoreBroker(SimCounterStore):

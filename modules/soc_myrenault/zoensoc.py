@@ -39,7 +39,7 @@ f.close()
 gigyarooturl = 'https://accounts.eu1.gigya.com'
 gigyaapi = '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668'
 kamereonrooturl = 'https://api-wired-prod-1-euw1.wrd-aws.com'
-kamereonapikey = 'VAX7XYKGfa92yMvXculCkEFyfZbuM7Ss'
+kamereonapikey = 'YjkKtHmGfaceeuExUDKGxrLZGGvtVS0J'
 
 payload = {'loginID': loginID, 'password': password, 'apiKey': gigyaapi}
 data = urllib.urlencode(payload)
