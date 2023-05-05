@@ -26,6 +26,8 @@ class EvseState(IntEnum):
 
 
 class Evse:
+    PRECISE_CURRENT_BIT = 1 << 7
+
     def __init__(self, modbus_id: int, client: modbus.ModbusSerialClient_) -> None:
         self.client = client
         self.id = modbus_id
@@ -52,19 +54,17 @@ class Evse:
 
     def is_precise_current_active(self) -> bool:
         value = self.client.read_holding_registers(2005, ModbusDataType.UINT_16, unit=self.id)
-        if value == 521:
-            log.debug("Angabe der Ströme in 0,1A-Schritten ist nicht aktiviert.")
-            return False
-        elif value == 649:
+        if value & self.PRECISE_CURRENT_BIT:
             log.debug("Angabe der Ströme in 0,1A-Schritten ist aktiviert.")
             return True
         else:
-            raise FaultState.error("Unbekannter Zustand der EVSE: Bits " +
-                                   str(value)+" definieren kein Format für die Stromstärke.")
+            log.debug("Angabe der Ströme in 0,1A-Schritten ist nicht aktiviert.")
+            return False
 
-    def activate_precise_current(self) -> bool:
+    def activate_precise_current(self) -> None:
         log.debug("Bit zur Angabe der Ströme in 0,1A-Schritten wird gesetzt.")
-        self.client.delegate.write_registers(2005, 649, unit=self.id)
+        value = self.client.read_holding_registers(2005, ModbusDataType.UINT_16, unit=self.id)
+        self.client.delegate.write_registers(2005, value ^ self.PRECISE_CURRENT_BIT, unit=self.id)
 
     def set_current(self, current: int) -> None:
         self.client.delegate.write_registers(1000, current, unit=self.id)
