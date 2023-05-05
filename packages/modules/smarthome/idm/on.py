@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 import sys
-import os
-import time
 import struct
 from pymodbus.client.sync import ModbusTcpClient
-named_tuple = time.localtime()  # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S idm on.py", named_tuple)
-devicenumber = str(sys.argv[1])
+import logging
+from smarthome.smartlog import initlog
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 bp = '/var/www/html/openWB/ramdisk/smarthome_device_'
@@ -14,20 +12,15 @@ try:
     navvers = str(sys.argv[4])
 except Exception:
     navvers = "2"
+initlog("idm", devicenumber)
+log = logging.getLogger("idm")
 # standard
 # lesen
 # own log
-file_string = bp + str(devicenumber) + '_idm.log'
 file_stringpv = bp + str(devicenumber) + '_pv'
 file_stringcount = bp + str(devicenumber) + '_count'
-if os.path.isfile(file_string):
-    pass
-else:
-    with open(file_string, 'w') as f:
-        print('IDM start log', file=f)
-with open(file_string, 'a') as f:
-    print('%s devicenr %s ipadr %s ueberschuss %6d try to connect (modbus)'
-          % (time_string, devicenumber, ipadr, uberschuss), file=f)
+log.info("devicenr %d ipadr %s ueberschuss %6d try to connect (modbus)"
+         % (devicenumber, ipadr, uberschuss))
 client = ModbusTcpClient(ipadr, port=502)
 start = 4122
 if navvers == "2":
@@ -37,9 +30,8 @@ else:
 raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
 lkw = float(struct.unpack('>f', raw)[0])
 aktpower = int(lkw*1000)
-with open(file_string, 'a') as f:
-    print('%s devicenr %s ipadr %s Akt Leistung  %6d ' %
-          (time_string, devicenumber, ipadr, aktpower), file=f)
+log.info("devicenr %d ipadr %s Akt Leistung  %6d " %
+         (devicenumber, ipadr, aktpower))
 with open(file_stringpv, 'w') as f:
     f.write(str(1))
 count1 = 999
