@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import logging
-from typing import Iterable, Optional, Union, List
+from typing import Optional, List
 
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common import req
 from modules.common.abstract_device import DeviceDescriptor
+from modules.common.component_state import InverterState
 from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, IndependentComponentUpdater
 from modules.devices.kostal_steca import inverter
-from modules.devices.kostal_steca.config import KostalSteca, KostalStecaConfiguration, KostalStecaInverterSetup
+from modules.devices.kostal_steca.config import KostalSteca, KostalStecaInverterSetup
 from modules.devices.kostal_steca.inverter import KostalStecaInverter
 
 log = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 def create_device(device_config: KostalSteca):
     def create_inverter_component(component_config: KostalStecaInverterSetup):
-        return KostalStecaInverter(device_config.id, component_config)
+        return KostalStecaInverter(component_config, device_config.configuration.ip_address)
 
     return ConfigurableDevice(
         device_config=device_config,
@@ -31,9 +31,7 @@ COMPONENT_TYPE_TO_MODULE = {
 }
 
 
-def read_legacy(component_type: str, ip_address: str, id: int, num: Optional[int]) -> None:
-    device_config = KostalSteca(configuration=KostalStecaConfiguration(ip_address=ip_address, id=id))
-    dev = create_device(device_config)
+def read_legacy(component_type: str, ip_address: str, variant: int, num: Optional[int]) -> None:
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
@@ -42,14 +40,19 @@ def read_legacy(component_type: str, ip_address: str, id: int, num: Optional[int
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config.id = num
-    dev.add_component(component_config)
+    component_config.configuration.variant = variant
+    inverter = KostalStecaInverter(component_config, ip_address)
 
     log.debug('KostalSteca IP-Adresse: ' + ip_address)
-    log.debug('KostalSteca ID: ' + str(id))
+    log.debug('KostalSteca Variant: ' + str(variant))
 
-    dev.update()
-    # Hier kann es notwendig sein, für 1.9 eine eigene Update-Methode zu implemenitieren, die die Werte wie benötigt miteinander verrechnet.
-    # Hier muss auch bei Hybrid-Systemen die Speicher-und PV-Leistung verrechnet werden.
+    power, exported = inverter.get_values()
+    if exported is None:
+        log.debug("PVkWh: NaN get prev. Value")
+        with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
+            exported = f.read()
+
+    inverter.store.set(InverterState(power=power, exported=exported))
 
 
 def main(argv: List[str]):

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import logging
+from typing import Optional, Tuple
 import xml.etree.ElementTree as ET
 import re
 from math import isnan
@@ -10,6 +12,8 @@ from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_inverter_value_store
 from modules.devices.kostal_steca.config import KostalStecaInverterSetup
 
+log = logging.getLogger(__name__)
+
 
 class KostalStecaInverter:
     def __init__(self, component_config: KostalStecaInverterSetup, ip_address: str) -> None:
@@ -19,6 +23,12 @@ class KostalStecaInverter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self) -> None:
+        power, exported = self.get_values()
+        if exported is None:
+            exported = 0
+        self.store.set(InverterState(power=power, exported=exported))
+
+    def get_values(self) -> Tuple[float, Optional[float]]:
         # RainerW 8th of April 2020
         # Unfortunately Kostal has introduced the third version of interface: XML
         # This script is for Kostal_Piko_MP_plus and StecaGrid coolcept (single phase inverter)
@@ -50,17 +60,9 @@ class KostalStecaInverter:
                 exported = int(sum(float(s) * 1e6 for s in match.group(1).split(',')))
             except AttributeError:
                 log.debug("PVkWh: Could not find 'data' in " + yields_js + ".")
+                exported = None
 
-        if "pvkwh_kostal_piko_MP" not in locals() or re.search(regex, str(exported)) is None:
-            log.debug("PVkWh: NaN get prev. Value")
-            with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
-                exported = f.read()
-
-        inverter_state = InverterState(
-            power=power,
-            exported=exported,
-        )
-        self.store.set(inverter_state)
+        return power, exported
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=KostalStecaInverterSetup)
