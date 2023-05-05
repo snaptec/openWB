@@ -42,24 +42,21 @@ class KostalStecaInverter:
         measurements = req.get_http_session().get("http://" + self.ip_address + "/measurements.xml", timeout=2).text
         power = float(ET.fromstring(measurements).find(
             ".//Measurement[@Type='AC_Power']").get("Value")) * -1
-        power = 0 if isnan(power) else int(power)
-
-        # call for XML file and parse it for total produced kwh
-        yields_xml = "yields.xml"
-        yields = req.get_http_session().get("http://" + self.ip_address + "/" + yields_xml, timeout=2).text
+        power = 0 if isnan(power) else power
 
         if self.component_config.configuration.variant == 0:
-            exported = int(float(ET.fromstring(yields).find(
-                ".//Yield[@Type='Produced']/YieldValue").get("Value")))
+            # call for XML file and parse it for total produced kwh
+            yields = req.get_http_session().get("http://" + self.ip_address + "/yields.xml", timeout=2).text
+            exported = float(ET.fromstring(yields).find(".//Yield[@Type='Produced']/YieldValue").get("Value"))
         else:
-            yields_js = "gen.yield.total.chart.js"
             # call for .js file and parse it for total produced Wh
-            yields = req.get_http_session().get("http://" + self.ip_address + "/" + yields_js, timeout=2).text
+            yields = req.get_http_session().get("http://" + self.ip_address + "/gen.yield.total.chart.js",
+                                                timeout=2).text
             match = re.search(r'"data":\s*\[\s*([^\]]*)\s*]', yields)
             try:
-                exported = int(sum(float(s) * 1e6 for s in match.group(1).split(',')))
+                exported = sum(float(s) * 1e6 for s in match.group(1).split(','))
             except AttributeError:
-                log.debug("PVkWh: Could not find 'data' in " + yields_js + ".")
+                log.debug("PVkWh: Could not find 'data' in gen.yield.total.chart.js.")
                 exported = None
 
         return power, exported

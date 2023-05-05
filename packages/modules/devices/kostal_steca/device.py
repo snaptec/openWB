@@ -4,6 +4,7 @@ from typing import Optional, List
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import DeviceDescriptor
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import InverterState
 from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, IndependentComponentUpdater
 from modules.devices.kostal_steca import inverter
@@ -46,13 +47,14 @@ def read_legacy(component_type: str, ip_address: str, variant: int, num: Optiona
     log.debug('KostalSteca IP-Adresse: ' + ip_address)
     log.debug('KostalSteca Variant: ' + str(variant))
 
-    power, exported = inverter.get_values()
-    if exported is None:
-        log.debug("PVkWh: NaN get prev. Value")
-        with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
-            exported = f.read()
+    with SingleComponentUpdateContext(inverter.component_info):
+        power, exported = inverter.get_values()
+        if exported is None:
+            log.debug("PVkWh: NaN get prev. Value")
+            with open("/var/www/html/openWB/ramdisk/pv2kwh", "r") as f:
+                exported = f.read()
 
-    inverter.store.set(InverterState(power=power, exported=exported))
+        inverter.store.set(InverterState(power=power, exported=exported))
 
 
 def main(argv: List[str]):
