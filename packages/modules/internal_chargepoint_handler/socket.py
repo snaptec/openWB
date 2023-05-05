@@ -1,24 +1,19 @@
 from enum import IntEnum
 import functools
 import logging
-import RPi.GPIO as GPIO
 import time
-from typing import Callable, Dict, Tuple
+from typing import Callable, Tuple
 
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import ChargepointState
-from modules.chargepoints.internal_openwb.chargepoint_module import ChargepointModule, InternalOpenWB
+from modules.internal_chargepoint_handler.chargepoint_module import ChargepointModule, ClientConfig
 
 log = logging.getLogger(__name__)
 
-
-def get_default_config() -> Dict:
-    return {"id": 0,
-            "connection_module": {
-                "type": "internal_openwb",
-                "configuration": {}
-            },
-            "power_module": {}}
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    log.info("failed to import RPi.GPIO! maybe we are not running on a pi")
 
 
 class RateLimiter:
@@ -48,10 +43,10 @@ class ActorState(IntEnum):
 
 
 class Socket(ChargepointModule):
-    def __init__(self, socket_max_current: int, config: InternalOpenWB) -> None:
+    def __init__(self, socket_max_current: int, config: ClientConfig, rfid: bool, parent_hostname: str) -> None:
         log.debug("Konfiguration als Buchse.")
         self.socket_max_current = socket_max_current
-        super().__init__(config)
+        super().__init__(config, rfid, parent_hostname)
 
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):
