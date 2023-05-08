@@ -11,6 +11,8 @@ from modules.common.simcount import SimCounter
 from modules.common.store import get_counter_value_store
 from modules.devices.sungrow.config import SungrowCounterSetup
 from modules.devices.sungrow.version import Version
+from modules.devices.sungrow.inverter import power
+
 
 
 class SungrowCounter:
@@ -38,10 +40,13 @@ class SungrowCounter:
             # powers = [power / 10 for power in powers]
             # log.info("power: " + str(power) + " powers?: " + str(powers))
         else:
-            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
+            if power != 0:
+                power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
                                                            wordorder=Endian.Little, unit=unit)
-            if self.component_config.configuration.version == Version.SG_winet_dongle:
-                power = power * -1
+            else:
+                power = self.__tcp_client.read_input_registers(5090, ModbusDataType.INT_32,
+                                                           wordorder=Endian.Little, unit=unit)
+            
             # no valid data for powers per phase
             # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.UINT_16] * 3,
             #                                                 wordorder=Endian.Little, unit=unit)
