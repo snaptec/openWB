@@ -275,6 +275,9 @@
 									<span class="form-text small">Gültige Werte 1-254. Standard ist 1.</span>
 								</div>
 							</div>
+							<div class="card-text alert alert-warning">
+								Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und Wii Net Dongels aktuell.
+							</div>
 							<div class="alert alert-info">
 								Es muss Sungrow als PV und EVU Modul gewählt werden.
 							</div>
