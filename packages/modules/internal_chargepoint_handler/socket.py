@@ -43,10 +43,10 @@ class ActorState(IntEnum):
 
 
 class Socket(ChargepointModule):
-    def __init__(self, socket_max_current: int, config: ClientConfig, rfid: bool, parent_hostname: str) -> None:
+    def __init__(self, socket_max_current: int, config: ClientConfig, parent_hostname: str) -> None:
         log.debug("Konfiguration als Buchse.")
         self.socket_max_current = socket_max_current
-        super().__init__(config, rfid, parent_hostname)
+        super().__init__(config, parent_hostname)
 
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):
