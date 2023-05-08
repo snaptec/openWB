@@ -74,11 +74,11 @@ class ClientFactory:
 class ChargepointModule(AbstractChargepoint):
     PLUG_STANDBY_POWER_THRESHOLD = 10
 
-    def __init__(self, config: ClientConfig) -> None:
+    def __init__(self, config: ClientConfig, parent_hostname: str) -> None:
         self.config = config
         self.component_info = ComponentInfo(
             self.config.id,
-            "Ladepunkt "+str(self.config.id), "chargepoint")
+            "Ladepunkt "+str(self.config.id), "chargepoint", parent_hostname)
         self.store = get_chargepoint_value_store(self.config.id)
         self.old_plug_state = False
         self.__client = ClientFactory(self.config.id, self.config.serial_client)
@@ -91,7 +91,7 @@ class ChargepointModule(AbstractChargepoint):
 
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):
-            formatted_current = int(current*100) if self._precise_current else current
+            formatted_current = int(current*100) if self._precise_current else int(current)
             if self.set_current_evse != formatted_current:
                 self.__client.evse_client.set_current(formatted_current)
 

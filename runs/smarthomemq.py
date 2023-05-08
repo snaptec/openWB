@@ -46,7 +46,7 @@ def on_connect(client, userdata, flags, rc) -> None:
     client.subscribe("openWB/SmartHome/Devices/#", 2)
 
 
-def logmq(devicenumb: int, keyword: str, value: str) -> None:
+def logmq(topic: str, devicenumb: int, keyword: str, value: str) -> None:
     global parammqtt
     #  richtig  topic single
     if (devicenumb < 1) or (devicenumb > numberOfSupportedDevices):
@@ -54,12 +54,19 @@ def logmq(devicenumb: int, keyword: str, value: str) -> None:
     else:
         log.info("(" + str(devicenumb) + ") Key " + str(keyword) + " Value " + str(value))
         parammqtt.append([devicenumb, keyword, value])
-
-
+        with open(bp+'/ramdisk/smartparam.sh', 'a') as f:
+            print('%s' %
+                 ('mosquitto_pub -p 1886 -t ' +
+                  '"' + topic + '/' + str(devicenumb) + '/' + keyword +
+                  '" -r -m "' + str(value) + '"'),file=f)
 def logmqgl(keyword: str, value: str) -> None:
     #  richtig  topic global
     log.info("( global ) Key " + str(keyword) + " Value " + str(value))
-
+    with open(bp+'/ramdisk/smartparam.sh', 'a') as f:
+        print('%s' % 
+             ('mosquitto_pub -p 1886 -t ' +
+                '"openWB/config/get/SmartHome/' + keyword + 
+                '" -r -m "' + str(value) +  '"'),file=f)
 
 def on_message(client, userdata, msg) -> None:
     # wenn exception hier wird mit nächster msg weitergemacht
@@ -78,11 +85,11 @@ def on_message(client, userdata, msg) -> None:
     if ("openWB/config/get/SmartHome/Devices" in msg.topic):
         keyword = re.sub('openWB/config/get/SmartHome/Devices/'
                          + str(devicenumb) + '/', '', msg.topic)
-        logmq(devicenumb, keyword, value)
+        logmq("openWB/config/get/SmartHome/Devices",devicenumb, keyword, value)
     elif ("openWB/SmartHome/Devices" in msg.topic):
         keyword = re.sub('openWB/SmartHome/Devices/'
                          + str(devicenumb) + '/', '', msg.topic)
-        logmq(devicenumb, keyword, value)
+        logmq("openWB/SmartHome/Devices",devicenumb, keyword, value)
     elif ("openWB/config/get/SmartHome/maxBatteryPower" in msg.topic):
         keyword = re.sub('openWB/config/get/SmartHome/', '', msg.topic)
         logmqgl(keyword, value)
@@ -402,7 +409,9 @@ def update_devices() -> None:
 def readmq() -> None:
     global parammqtt
     global mydevices
-    log.info("Config reRead start / Parameter check")
+    log.info("Config reRead start / Parameter check") 
+    with open(bp+'/ramdisk/smartparam.sh', 'w') as f:
+        print('%s' % ('#!/bin/bash'),file=f)   
     parammqtt = []
     client = mqtt.Client("openWB-mqttsmarthome")
     client.on_connect = on_connect

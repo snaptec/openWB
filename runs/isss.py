@@ -277,11 +277,11 @@ class IsssChargepoint:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:
-                self.module = Socket(socket_max_current, ClientConfig(0, serial_client))
+                self.module = Socket(socket_max_current, ClientConfig(0, serial_client), "localhost")
             else:
-                self.module = chargepoint_module.ChargepointModule(ClientConfig(0, serial_client))
+                self.module = chargepoint_module.ChargepointModule(ClientConfig(0, serial_client), "localhost")
         else:
-            self.module = chargepoint_module.ChargepointModule(ClientConfig(1, serial_client))
+            self.module = chargepoint_module.ChargepointModule(ClientConfig(1, serial_client), "localhost")
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False
