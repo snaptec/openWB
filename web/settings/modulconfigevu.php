@@ -143,6 +143,9 @@
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
+							<div class="card-text alert alert-warning">
+								Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und Wii Net Dongels aktuell.
+							</div>
 							<div class="form-row mb-1">
 								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
 								<div class="col">
