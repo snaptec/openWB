@@ -1,7 +1,7 @@
 import logging
 import RPi.GPIO as GPIO
 import time
-from typing import Dict, List, NamedTuple, Optional, Tuple, Union
+from typing import List, NamedTuple, Tuple, Union
 
 from modules.common.abstract_chargepoint import AbstractChargepoint
 from modules.common.component_context import SingleComponentUpdateContext
@@ -17,21 +17,10 @@ from modules.common.store import get_chargepoint_value_store
 log = logging.getLogger(__name__)
 
 
-def get_default_config() -> Dict:
-    return {"id": 0,
-            "serial_client": None,  # type: Optional[ModbusSerialClient_]
-            "connection_module": {
-                "client": None  # type: Optional[CONNECTION_MODULES]
-            },
-            "power_module": {
-                "client": None  # type: Optional[evse.Evse]
-            }}
-
-
 CONNECTION_MODULES = Union[sdm.Sdm630, b23.B23]
 
 
-class InternalOpenWB:
+class ClientConfig:
     def __init__(self, id: int, serial_client: ModbusSerialClient_) -> None:
         self.id = id
         self.serial_client = serial_client
@@ -85,19 +74,26 @@ class ClientFactory:
 class ChargepointModule(AbstractChargepoint):
     PLUG_STANDBY_POWER_THRESHOLD = 10
 
-    def __init__(self, config: InternalOpenWB) -> None:
+    def __init__(self, config: ClientConfig, parent_hostname: str) -> None:
         self.config = config
         self.component_info = ComponentInfo(
             self.config.id,
-            "Ladepunkt "+str(self.config.id), "chargepoint")
-        self.__store = get_chargepoint_value_store(self.config.id)
-        self.__client = ClientFactory(self.config.id, self.config.serial_client)
+            "Ladepunkt "+str(self.config.id), "chargepoint", parent_hostname)
+        self.store = get_chargepoint_value_store(self.config.id)
         self.old_plug_state = False
+        self.__client = ClientFactory(self.config.id, self.config.serial_client)
+        time.sleep(0.1)
+        version = self.__client.evse_client.get_firmware_version()
+        if version < 17:
+            self._precise_current = False
+        else:
+            self._precise_current = self.__client.evse_client.is_precise_current_active()
 
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):
-            if self.set_current_evse != current:
-                self.__client.evse_client.set_current(int(current))
+            formatted_current = int(current*100) if self._precise_current else int(current)
+            if self.set_current_evse != formatted_current:
+                self.__client.evse_client.set_current(formatted_current)
 
     def get_values(self, phase_switch_cp_active: bool) -> Tuple[ChargepointState, float]:
         try:
@@ -154,7 +150,7 @@ class ChargepointModule(AbstractChargepoint):
             else:
                 raise FaultState.error(__name__ + " " + str(type(e)) + " " + str(e)) from e
 
-        self.__store.set(chargepoint_state)
+        self.store.set(chargepoint_state)
         return chargepoint_state, self.set_current_evse
 
     def perform_phase_switch(self, phases_to_use: int, duration: int) -> None:

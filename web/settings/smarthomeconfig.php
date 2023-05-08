@@ -94,7 +94,6 @@ $numDevices = 9;
 											<option value="mystrom" data-option="mystrom">MyStrom</option>
 											<option value="viessmann" data-option="viessmann">Viessmann</option>
 											<option value="mqtt" data-option="mqtt">Mqtt</option>
-											<option value="pyt" data-option="pyt">Pyt (veraltet, bitte andere Option wählen)</option>
 										</select>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-none hide">
 											Dieser Gerätetyp wird nicht in die Regelung eingebunden und es können keine Schalthandlungen ausgeführt oder Sensoren eingelesen werden. Es ist jedoch eine separate Leistungsmessung möglich, um reine Verbraucher zu erfassen.
@@ -144,6 +143,7 @@ $numDevices = 9;
 											</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-viessmann hide">
 											Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wp kann eingestellt werden, ob für diese Funktion  die Elektroheizung (Heizstab) benutzt werden soll.
+											siehe auch https://openwb.de/forum/viewtopic.php?t=6593 für alternative Ansteuerungen 
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-elwa hide">
 											Heizstab ELWA-E  der Firma my-PV<br>
@@ -188,6 +188,38 @@ $numDevices = 9;
 								</div>
 							</div>
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly hide">
+									<!-- Shelly -->
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Shelly mit Authentication</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" id="device_shauthDevices<?php echo $devicenum; ?>" name="device_shauth" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<label class="btn btn-outline-info">
+													<input type="radio" name="device_shauthDevices<?php echo $devicenum; ?>" id="device_shauth<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">Nein
+												</label>
+												<label class="btn btn-outline-info">
+													<input type="radio" name="device_shauthDevices<?php echo $devicenum; ?>" id="device_shauth<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
+												</label>
+											</div>
+										</div>
+										<span class="form-text small">Wenn diese Option aktiviert wird, wird für den Shelly eine Userid und ein Password verlangt. Läuft momentan nur für shell ohne plus.</span>
+									</div>	
+									<div class="device<?php echo $devicenum; ?>shauth hide">
+										<div class="form-row mb-1">
+											<label for="device_shusernameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Benutzername</label>
+												<div class="col">
+													<input id="device_shusernameDevices<?php echo $devicenum; ?>" name="device_shusername" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="device_shpasswordDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Passwort</label>
+												<div class="col">
+													<input id="device_shpasswordDevices<?php echo $devicenum; ?>" name="device_shpassword" class="form-control" type="password" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												</div>
+										</div>
+									</div>									
+								</div>									
+									<!-- Shellyend -->
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_chanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Kanal- / Meter-Auswahl</label>
@@ -256,7 +288,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum;  ?>-option-ratiotherm device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum;  ?>-option-viessmann device<?php echo $devicenum;  ?>-option-ratiotherm device<?php echo $devicenum;  ?>-option-NXDACXX hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -300,9 +332,9 @@ $numDevices = 9;
 												Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.<br>
 												<span class="text-info">Wenn in der URL ein Prozentzeichen "%" enthalten ist, muss dieses durch ein weiteres "%" ergänzt werden ("%" -> "%%"), da ansonsten die Daten nicht gespeichert werden können.</span><br>
 												Falls keine URL vorhanden ist, kann eine der folgenden angegeben werden:<br>
-												127.0.0.1/openWB/modules/smarthome/http/dummyurl.php. Diese URL gibt immer den Wert 0 zurück.(Device immer aus)<br>
-												127.0.0.1/openWB/modules/smarthome/http/dummyurl1.php?d=nummerdevice. Diese URL gibt den Wert 0 oder 100 zurück. Je nachdem ob das Smarthomedevice gerade läuft<br>
-												127.0.0.1/openWB/modules/smarthome/http/dummyurl2.php. Diese URL gibt immer den Wert 100 zurück. (Device immer an)<br>
+												127.0.0.1/openWB/packages/modules/smarthome/http/dummyurl.php. Diese URL gibt immer den Wert 0 zurück.(Device immer aus)<br>
+												127.0.0.1/openWB/packages/modules/smarthome/http/dummyurl1.php?d=nummerdevice. Diese URL gibt den Wert 0 oder 100 zurück. Je nachdem ob das Smarthomedevice gerade läuft<br>
+												127.0.0.1/openWB/packages/modules/smarthome/http/dummyurl2.php. Diese URL gibt immer den Wert 100 zurück. (Device immer an)<br>
 												In der URL kann ein Parameter angegeben werden, der den aktuellen Überschuss an das Gerät übermittelt. Hierzu ist folgender Platzhalter in der URL zu verwenden (inklusive der spitzen Klammern):<br>
 												<span class="text-info">&lt;openwb-ueberschuss&gt;</span>
 											</span>
@@ -316,6 +348,20 @@ $numDevices = 9;
 												Die hier angegebene URL wird aufgerufen, um den aktuellen Status (1 = an, 0 = aus) des Geräts zu erhalten. <br>
 												Der Parameter ist optional und kann somit auch leer gelassen werden. In diesem Fall wird der Parameter mit "none" vorbelegt und
 												die Erkennung, ob das Gerät angeschaltet ist, wird weiterhin über die Leistung ermittelt. <br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-elwa hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_manwattDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Manuelle Leistung</label>
+										<div class="col">
+											<input id="device_manwattDevices<?php echo $devicenum; ?>" name="device_manwatt" class="form-control" type="number" min="0" max="30000" step="1" required="required" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">
+												Hier die Leistung angebenen, die beim manuellen Modus beim EInschalten vom Gerät fest übertragen wird. Funktion noch in Entwicklung.
 											</span>
 										</div>
 									</div>
@@ -371,7 +417,7 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum;  ?>-option-ratiotherm device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-viessmann device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-lambda device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-vampair device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum;  ?>-option-ratiotherm device<?php echo $devicenum;  ?>-option-NXDACXX device<?php echo $devicenum; ?>-option-viessmann hide">
 								<hr class="border-secondary">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -424,6 +470,13 @@ $numDevices = 9;
 											</div>
 										</div>
 										<div class="form-row mb-1">
+											<label for="device_mindayeinschaltdauerDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Mindesteinschaltdauer pro Tag</label>
+											<div class="col">
+												<input id="device_mindayeinschaltdauerDevices<?php echo $devicenum; ?>" name="device_mindayeinschaltdauer" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<span class="form-text small">Parameter in Minuten, wie lange das Gerät pro Tag mindestens aktiviert bleibt. Siehe auch "Spätestens fertig um"</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
 											<label for="device_maxeinschaltdauerDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Maximaleinschaltdauer</label>
 											<div class="col">
 												<input id="device_maxeinschaltdauerDevices<?php echo $devicenum; ?>" name="device_maxeinschaltdauer" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1500" data-default="1440" value="1440" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -448,7 +501,7 @@ $numDevices = 9;
 											<label for="device_finishTimeDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Spätestens fertig um</label>
 											<div class="col">
 												<input id="device_finishTimeDevices<?php echo $devicenum; ?>" name="device_finishTime" class="form-control" type="text" pattern="^([01]{0,1}\d|2[0-3]):[0-5]\d" maxlength="5" required data-default="00:00" value="00:00" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Wenn das Gerät heute noch nicht eingeschaltet wurde, wird es unabhängig vom Überschuss eingeschaltet unter Berücksichtigung der Mindestlaufzeit, so dass es zur angegebenen Uhrzeit fertig ist.</span>
+												<span class="form-text small">Uhrzeit im 24 Stunden-Format, z.B. "14:45". Der Wert "00:00" schaltet die Funktion ab. Wenn das Gerät heute noch nicht eingeschaltet wurde, wird es unabhängig vom Überschuss eingeschaltet unter Berücksichtigung der Mindesteinschaltdauer pro Tag oder der Mindesteinschaltdauer, so dass es zur angegebenen Uhrzeit fertig ist.</span>
 											</div>
 										</div>
 										<div class="form-row mb-1">
@@ -709,7 +762,7 @@ $numDevices = 9;
 												<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>3" data-option="3" value="3">3
 											</label>
 										</div>
-										<span class="form-text small">Anzahl der Temperatursensoren die an einem Shelly Unterputzgerät anschließbar sind.</span>
+										<span class="form-text small">Anzahl der Temperatursensoren die an einem Shelly Unterputzgerät anschließbar sind. Für shelly plus müssen die IDs ab 100 beginnen.</span>
 									</div>
 								</div>
 							</div>
@@ -804,9 +857,42 @@ $numDevices = 9;
 										<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 									</div>
 								</div>
-								<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly hide">
-									<div class="form-row mb-1">
+								<div class="form-group mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly hide">
+									<!-- Shelly measure -->
 									<hr class="border-secondary">
+									<div class="form-group">
+									<div class="form-row mb-1">
+											<label class="col-md-4 col-form-label">Shelly mit Authentication</label>
+											<div class="col">
+												<div class="btn-group btn-group-toggle btn-block" id="device_measureshauthDevices<?php echo $devicenum; ?>" name="device_measureshauth" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_measureshauthDevices<?php echo $devicenum; ?>" id="device_measureshauth<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">Nein
+													</label>
+													<label class="btn btn-outline-info">
+														<input type="radio" name="device_measureshauthDevices<?php echo $devicenum; ?>" id="device_measureshauth<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
+													</label>
+												</div>
+											</div>
+											<span class="form-text small">Wenn diese Option aktiviert wird, wird für den Shelly eine Userid und ein Password verlangt.Läuft momentan nur für shell ohne plus.</span>
+										</div>	
+										<div class="device<?php echo $devicenum; ?>measureshauth hide">
+											<div class="form-row mb-1">
+												<label for="device_measureshusernameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Benutzername</label>
+													<div class="col">
+														<input id="device_measureshusernameDevices<?php echo $devicenum; ?>" name="device_measureshusername" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													</div>
+											</div>
+											<div class="form-row mb-1">
+												<label for="device_measureshpasswordDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Passwort</label>
+													<div class="col">
+														<input id="device_measureshpasswordDevices<?php echo $devicenum; ?>" name="device_measureshpassword" class="form-control" type="password" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+													</div>
+											</div>
+										</div>									
+									</div>		
+										<!-- Shellyend -->
+									<hr class="border-secondary">
+									<div class="form-row mb-1">
 										<label for="device_measchanDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Meter Auswahl</label>
 										<select class="form-control" name="device_measchan" id="device_measchanDevices<?php echo $devicenum; ?>" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<option value="0" data-option="0" selected="selected">alle Meter summiert</option>
@@ -1100,6 +1186,29 @@ $numDevices = 9;
 					showSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-"+data);
 				}
 
+				function visibility_device_measureshauthDevices<?php echo $devicenum; ?>( data ){
+					if( typeof data == 'undefined' ){
+						data = $('input[name=device_measureshauthDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+					}
+					if( data == 0 ){
+						hideSection('.device<?php echo $devicenum; ?>measureshauth');
+					} else {
+						showSection('.device<?php echo $devicenum; ?>measureshauth');
+					}
+				}
+
+				function visibility_device_shauthDevices<?php echo $devicenum; ?>( data ){
+					if( typeof data == 'undefined' ){
+						data = $('input[name=device_shauthDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+					}
+					if( data == 0 ){
+						hideSection('.device<?php echo $devicenum; ?>shauth');
+					} else {
+						showSection('.device<?php echo $devicenum; ?>shauth');
+					}
+				}
+
+
 				function visibility_device_canSwitchDevices<?php echo $devicenum; ?>( data ){
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_canSwitchDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
@@ -1160,6 +1269,14 @@ $numDevices = 9;
 						visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
 
+					if ( elementId == 'device_measureshauthDevices<?php echo $devicenum; ?>') {
+						visibility_device_measureshauthDevices<?php echo $devicenum; ?>( mqttpayload );
+					}
+
+					if ( elementId == 'device_shauthDevices<?php echo $devicenum; ?>') {
+						visibility_device_shauthDevices<?php echo $devicenum; ?>( mqttpayload );
+					}
+
 					if ( elementId == 'device_measureTypeDevices<?php echo $devicenum; ?>') {
 						visibility_device_measureTypeDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
@@ -1198,6 +1315,14 @@ $numDevices = 9;
 
 					$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
 						visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
+					});
+
+					$('#device_measureshauthDevices<?php echo $devicenum; ?>').change(function(){
+						visibility_device_measureshauthDevices<?php echo $devicenum; ?>();
+					});
+
+					$('#device_shauthDevices<?php echo $devicenum; ?>').change(function(){
+						visibility_device_shauthDevices<?php echo $devicenum; ?>();
 					});
 
 					$('#device_measureTypeDevices<?php echo $devicenum; ?>').change(function(){
@@ -1244,6 +1369,8 @@ $numDevices = 9;
 					visibility_device_typeDevices<?php echo $devicenum; ?>();
 					visibility_device_pbtypeDevices<?php echo $devicenum; ?>();
 					visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
+					visibility_device_measureshauthDevices<?php echo $devicenum; ?>();										
+					visibility_device_shauthDevices<?php echo $devicenum; ?>();															
 					visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
 					visibility_device_canSwitchDevices<?php echo $devicenum; ?>();
 					visibility_device_nameDevices<?php echo $devicenum; ?>();

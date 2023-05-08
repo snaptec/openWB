@@ -22,7 +22,7 @@ class PowerGraph {
 		this.graphRefreshCounter = 0;
 		this.width = 500;
 		this.height = 500;
-		this.margin = { top: 10, right: 20, bottom: 10, left: 25 };
+		this.margin = { top: 10, right: 20, bottom: 10, left: 29 };
 		this.liveGraphMinutes = 0;
 		wbdata.usageStackOrder = 2;
 	}
@@ -254,6 +254,7 @@ class PowerGraph {
 			let shBat = 0
 			let housePv = 0
 			let houseBat = 0
+			let calculatedHouseEnergy = 0;
 			this.initCounter = 0;
 			this.staging.map(segment =>
 				segment.map(line => this.rawData.push(line))
@@ -268,12 +269,13 @@ class PowerGraph {
 					shBat += (values.shBat / 12)
 					housePv += (values.housePv / 12)
 					houseBat += (values.houseBat / 12)
+					calculatedHouseEnergy += (values.housePower / 12)
 				} else {
 					// const values = this.extractValues(line, []);                
 				}
 			});
 			this.updateGraph();
-			this.updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat);
+			this.updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat, calculatedHouseEnergy/1000);
 			wbdata.dayGraphUpdated();
 			setTimeout(() => this.activateDay(), 300000)
 		}
@@ -365,7 +367,7 @@ class PowerGraph {
 		}
 	}
 
-	updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat) {
+	updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat, calculatedHouse) {
 		if (this.rawData.length) {
 			const startValues = this.rawData[0].split(',');
 			const endValues = this.rawData[this.rawData.length - 1].split(',');
@@ -401,6 +403,11 @@ class PowerGraph {
 			wbdata.usageSummary.devices.energyBat = shBat / 1000;
 			wbdata.usageSummary.devices.pvPercentage = Math.round((wbdata.usageSummary.devices.energyPv + wbdata.usageSummary.devices.energyBat) / (wbdata.usageSummary.devices.energy) * 100)
 			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / (wbdata.historicSummary.devices.energy) * 100)
+			// correct for incorrect calculations of PV or Bat portion
+			if (calculatedHouse > wbdata.historicSummary.house.energy) {
+				housePv = housePv / calculatedHouse * wbdata.historicSummary.house.energy
+				houseBat = houseBat / calculatedHouse * wbdata.historicSummary.house.energy
+			}	
 			wbdata.historicSummary.house.energyPv = housePv / 1000;
 			wbdata.usageSummary.house.energyPv = housePv / 1000;
 			wbdata.historicSummary.house.energyBat = houseBat / 1000;
@@ -1027,11 +1034,12 @@ class PowerGraph {
 			.attr("stroke", this.bgcolor)
 			;
 		svg.append("text")
-			.attr("x", - this.margin.left)
-			.attr("y", height / 2 + 5)
+			.attr("x", -2)
+			.attr("y", height / 2 + 5.5)
 			.attr("fill", this.axiscolor)
 			.attr("font-size", fontsize)
-			.text((wbdata.graphMode == 'year') ? "MW" : "kW")
+			.attr("text-anchor", "end")
+			.text((wbdata.graphMode == 'year') ? "MWh" : (wbdata.graphMode == 'month') ? "kWh" : "kW")
 
 		if (wbdata.showGrid) {
 			// second x axis for the grid

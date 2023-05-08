@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from enum import Enum
 import logging
 import os
@@ -15,9 +15,9 @@ from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
 from modules.common.component_state import ChargepointState
 from modules.common.modbus import ModbusSerialClient_
-from modules.chargepoints.internal_openwb import chargepoint_module
-from modules.chargepoints.internal_openwb.socket import Socket
-from modules.chargepoints.internal_openwb.chargepoint_module import InternalOpenWB
+from modules.internal_chargepoint_handler import chargepoint_module
+from modules.internal_chargepoint_handler.socket import Socket
+from modules.internal_chargepoint_handler.chargepoint_module import ClientConfig
 
 basePath = "/var/www/html/openWB"
 ramdiskPath = basePath + "/ramdisk"
@@ -81,8 +81,9 @@ class UpdateValues:
         def pub_value(topic: str, value):
             pub_single("openWB/lp/"+str(self.local_charge_point_num+1) +
                        "/"+topic, payload=str(value), no_json=True)
-            pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
-                       payload=str(value), hostname=self.parent_wb, no_json=True)
+            if self.parent_wb != "localhost":
+                pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
+                           payload=str(value), hostname=self.parent_wb, no_json=True)
         topic = self.MAP_KEY_TO_OLD_TOPIC[key]
         rounding = get_rounding_function_by_digits(2)
         if topic is not None:
@@ -240,11 +241,14 @@ class Isss:
 
     def detect_modbus_usb_port(self) -> str:
         """guess USB/modbus device name"""
-        try:
-            with open("/dev/ttyUSB0"):
-                return "/dev/ttyUSB0"
-        except FileNotFoundError:
-            return "/dev/serial0"
+        known_devices = ("/dev/ttyUSB0", "/dev/ttyACM0", "/dev/serial0")
+        for device in known_devices:
+            try:
+                with open(device):
+                    return device
+            except FileNotFoundError:
+                pass
+        return known_devices[-1]  # this does not make sense, but is the same behavior as the old code
 
     @staticmethod
     def get_cp_num(local_charge_point_num: int) -> int:
@@ -273,11 +277,11 @@ class IsssChargepoint:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:
-                self.module = Socket(socket_max_current, InternalOpenWB(0, serial_client))
+                self.module = Socket(socket_max_current, ClientConfig(0, serial_client), "localhost")
             else:
-                self.module = chargepoint_module.ChargepointModule(InternalOpenWB(0, serial_client))
+                self.module = chargepoint_module.ChargepointModule(ClientConfig(0, serial_client), "localhost")
         else:
-            self.module = chargepoint_module.ChargepointModule(InternalOpenWB(1, serial_client))
+            self.module = chargepoint_module.ChargepointModule(ClientConfig(1, serial_client), "localhost")
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False

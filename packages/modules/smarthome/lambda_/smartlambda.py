@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 import subprocess
+import logging
+log = logging.getLogger(__name__)
 
 
 class Slambda(Sbase):
     def __init__(self):
         # setting
         super().__init__()
-        print('__init__ Slambda executed')
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)
         forcesend = self.checkbefsend()
-        argumentList = ['python3', self._prefixpy + 'lambda/watt.py',
+        argumentList = ['python3', self._prefixpy + 'lambda_/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self.device_lambdaueb),
                         str(forcesend)]
@@ -38,7 +38,7 @@ class Slambda(Sbase):
             pname = "/on.py"
         else:
             pname = "/off.py"
-        argumentList = ['python3', self._prefixpy + 'lambda' + pname,
+        argumentList = ['python3', self._prefixpy + 'lambda_' + pname,
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self.device_lambdaueb)]
         try:

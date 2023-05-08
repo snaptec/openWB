@@ -959,7 +959,6 @@
 										<span class="form-text small">
 											Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert.
 											Sinnvoll, wenn öfter kurze Lastspitzen auftreten.
-											Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.
 										</span>
 									</div>
 								</div>

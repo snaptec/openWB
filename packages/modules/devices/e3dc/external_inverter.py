@@ -14,7 +14,7 @@ from modules.devices.e3dc.config import E3dcExternalInverterSetup
 log = logging.getLogger(__name__)
 
 
-def read_externalinverter(client: modbus.ModbusTcpClient_) -> int:
+def read_external_inverter(client: modbus.ModbusTcpClient_) -> int:
     # 40075 externe PV Leistung
     pv_external = int(client.read_holding_registers(40075, ModbusDataType.INT_32, wordorder=Endian.Little, unit=1))
     return pv_external
@@ -31,11 +31,11 @@ class E3dcExternalInverter:
 
     def update(self, client: modbus.ModbusTcpClient_) -> None:
 
-        pv_external = read_externalinverter(client)
+        pv_external = read_external_inverter(client)
         # pv_external - > pv Leistung
         # die als externe Produktion an e3dc angeschlossen ist
-        # Im gegensatz zu v1.9 implementierung wird nicht mehr die PV
-        # leistung vom WR1 gelesen, da die durch v2.0 separat gehandelt wird
+        # Im gegensatz zur Implementierung in Version 1.9 wird nicht mehr die PV
+        # Leistung vom WR1 gelesen, da die durch v2.0 separat gehandelt wird
         _, pv_exported = self.sim_counter.sim_count(pv_external)
         inverter_state = InverterState(
             power=pv_external,

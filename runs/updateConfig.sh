@@ -2226,6 +2226,7 @@ updateConfig(){
 			echo "soc_evcc_username_lp1=''"
 			echo "soc_evcc_password_lp1=''"
 			echo "soc_evcc_vin_lp1=''"
+			echo "soc_evcc_pin_lp1=''"
 			echo "soc_evcc_token_lp1=''"
 			echo "soc_evcc_intervall=720"
 			echo "soc_evcc_intervallladen=15"
@@ -2233,8 +2234,15 @@ updateConfig(){
 			echo "soc_evcc_username_lp2=''"
 			echo "soc_evcc_password_lp2=''"
 			echo "soc_evcc_vin_lp2=''"
+			echo "soc_evcc_pin_lp2=''"
 			echo "soc_evcc_token_lp2=''"
 		} >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_evcc_pin_lp1=" $ConfigFile; then
+			echo "soc_evcc_pin_lp1=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_evcc_pin_lp2=" $ConfigFile; then
+			echo "soc_evcc_pin_lp2=''" >> $ConfigFile
 	fi
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		{

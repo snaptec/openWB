@@ -37,28 +37,28 @@ class WbData {
 		this.shDevice = Array.from({ length: 9 }, (v, i) => new SHDevice(i));
 
 		this.sourceSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" }
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf275" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5ba" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5df\uf061" }
 		};
 
 		this.usageSummary = {
-			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf57d" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf5df" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf015" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5e7" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf1e6" },
 		};
 
 		this.historicSummary = {
-			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
-			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white" },
+			"evuIn": { name: "Netz", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf275" },
+			"pv": { name: "PV", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5ba" },
+			"batOut": { name: "Bat >", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5df\uf061" },
+			"evuOut": { name: "Export", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf57d" },
+			"batIn": { name: "> Bat", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf061\uf5df" },
+			"house": { name: "Haus", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf015" },
+			"charging": { name: "Laden", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf5e7" },
+			"devices": { name: "Geräte", power: 0, energy: 0, energyPv: 0, energyBat: 0, pvPercentage: 0, color: "white", icon: "\uf1e6" },
 		};
 
 		this.usageDetails = [this.usageSummary.evuOut];
@@ -258,6 +258,8 @@ class WbData {
 					break;
 				case 'name':
 					this.historicSummary['sh' + (index - 1)].name = value;
+					this.shDevice[index -1].icon = value
+					this.historicSummary['sh' + (index - 1)].icon = value;
 					yieldMeter.update();
 					break;
 				default:

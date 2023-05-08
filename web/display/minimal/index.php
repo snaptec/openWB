@@ -48,7 +48,7 @@
 		?>
 
 		<script src="display/minimal/gauge.js?ver=20230106"></script>
-		<link rel="stylesheet" href="display/minimal/minimal.css?ver=20220510">
+		<link rel="stylesheet" href="display/minimal/minimal.css?ver=20230322">
 
 		<div id="main">
 			<!-- <div id="800x480_Frame" style="position: absolute; top: 0px; left: 0px; height: 480px; width: 800px; border:1px solid white;"> </div> -->

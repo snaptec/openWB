@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 import subprocess
-from smarthome.global0 import log
 from smarthome.smartbase import Sbase, Slmystrom
+import logging
+log = logging.getLogger(__name__)
 
 
 class Smystrom(Sbase):
@@ -9,7 +10,6 @@ class Smystrom(Sbase):
         # setting
         super().__init__()
         self._old_measuretype0 = 'none'
-        print('__init__ Smystrom excuted')
 
     def getwatt(self, uberschuss, uberschussoffset):
         self.prewatt(uberschuss, uberschussoffset)

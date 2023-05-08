@@ -180,6 +180,11 @@
 							<div class="card-text alert alert-danger">
 								Die Abfrage der Huawei Wechselrichter benötigt sehr viel Zeit. Es wird empfohlen das Regelintervall auf "langsam" zu stellen.
 							</div>
+							<div class="card-text alert alert-info">
+								Sind mehrere Huawei Wechselrichter als "Schwarm" verbunden, dann besitzt der Master vermutlich die ID "16".
+								Über diese ID werden dann alle Daten in Summe zur Verfügung gestellt.<br />
+								Die IDs 1 bis 15 sind für einzelne Wechselrichter reserviert.
+							</div>
 						</div>
 						<div id="pvip" class="hide">
 							<div class="form-row mb-1">
