@@ -33,7 +33,7 @@ class Device(AbstractDevice):
         try:
             self.device_config = dataclass_from_dict(Sungrow, device_config)
             self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
-                                                  self.device_config.configuration.port)
+                                                  502)
         except Exception:
             log.exception("Fehler im Modul "+self.device_config.name)
 
@@ -80,30 +80,30 @@ COMPONENT_TYPE_TO_MODULE = {
 }
 
 
-def read_legacy(ip_address: str, port: int, modbus_id: int, component_config: dict):
+def read_legacy(ip_address: str, component_config: dict):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
-    device_config.configuration.port = port
-    device_config.configuration.modbus_id = modbus_id
+    device_config.configuration.port = 502
+    device_config.configuration.modbus_id = 1
     dev = Device(device_config)
     dev.add_component(component_config)
     dev.update()
 
 
-def read_legacy_bat(ip_address: str, port: int, modbus_id: int, num: Optional[int] = None, read_counter: Optional[int] = None, version: Optional[int] = None):
-    read_legacy(ip_address, port, modbus_id, bat.component_descriptor.configuration_factory(id=None))
+def read_legacy_bat(ip_address: str, num: Optional[int] = None, read_counter: Optional[int] = None, version: Optional[int] = None):
+    read_legacy(ip_address,bat.component_descriptor.configuration_factory(id=None))
 
 
-def read_legacy_counter(ip_address: str, port: int, modbus_id: int, version: int, read_counter: int, unused_version: int):
-    read_legacy(ip_address, port, modbus_id, counter.component_descriptor.configuration_factory(
+def read_legacy_counter(ip_address: str, version: int, read_counter: int, unused_version: int):
+    read_legacy(ip_address, counter.component_descriptor.configuration_factory(
         id=None, configuration=SungrowCounterConfiguration(version=Version(version))))
 
 
-def read_legacy_inverter(ip_address: str, port: int, modbus_id: int, num: int, read_counter: int, version: int):
+def read_legacy_inverter(ip_address: str, num: int, read_counter: int, version: int):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
-    device_config.configuration.port = port
-    device_config.configuration.modbus_id = modbus_id
+    device_config.configuration.port = 502
+    device_config.configuration.modbus_id = 1
     dev = Device(device_config)
     dev.add_component(inverter.component_descriptor.configuration_factory(id=num))
     if read_counter == 1:
