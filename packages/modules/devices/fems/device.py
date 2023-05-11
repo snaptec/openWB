@@ -45,7 +45,11 @@ COMPONENT_TYPE_TO_MODULE = {
 }
 
 
-def read_legacy(component_type: str, ip_address: str, password: str, bat_num: Optional[int] = None, num: Optional[int] = None) -> None:
+def read_legacy(component_type: str,
+                ip_address: str,
+                password: str,
+                bat_num: Optional[int] = None,
+                num: Optional[int] = None) -> None:
     dev = create_device(Fems(configuration=FemsConfiguration(ip_address=ip_address, password=password)))
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
