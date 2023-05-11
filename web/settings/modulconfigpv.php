@@ -1132,6 +1132,7 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_sungrow') {
 									showSection('#pvip');
+									showSection('#pvid');
 									showSection('#pvsungrow');
 								}
 								if($('#pvwattmodul').val() == 'wr_sonneneco') {
@@ -1469,6 +1470,7 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
 									showSection('#pv2ipdiv');
+									showSection('#pv2iddiv');
 									showSection('#pv2sungrow');
 
 								}
