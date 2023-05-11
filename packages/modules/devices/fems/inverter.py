@@ -18,12 +18,12 @@ class FemsInverter:
     def update(self) -> None:
         response = req.get_http_session().get(
             'http://'+self.ip_address+':8084/rest/channel/_sum/ProductionActivePower',
-            auth=("x", self.password)).json()
+            auth=("x", self.password), timeout=2).json()
         power = scale_metric(response["value"], response.get("unit"), 'W') * -1
 
         response = req.get_http_session().get(
             'http://'+self.ip_address+':8084/rest/channel/_sum/ProductionActiveEnergy',
-            auth=("x", self.password)).json()
+            auth=("x", self.password), timeout=2).json()
         exported = scale_metric(response["value"], response.get("unit"), 'Wh')
         inverter_state = InverterState(
             power=power,

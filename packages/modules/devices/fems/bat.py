@@ -19,7 +19,7 @@ class FemsBat:
         if self.component_config.configuration.num == 1:
             response = req.get_http_session().get(
                 "http://" + self.ip_address + ":8084/rest/channel/ess0/(Soc|DcChargeEnergy|DcDischargeEnergy)",
-                auth=("x", self.password)).json()
+                auth=("x", self.password), timeout=2).json()
             for singleValue in response:
                 address = singleValue["address"]
                 if (address == "ess0/Soc"):
@@ -31,7 +31,7 @@ class FemsBat:
         else:
             response = req.get_http_session().get(
                 "http://" + self.ip_address + ":8084/rest/channel/ess2/(Soc|DcChargeEnergy|DcDischargeEnergy)",
-                auth=("x", self.password)).json()
+                auth=("x", self.password), timeout=2).json()
             for singleValue in response:
                 address = singleValue["address"]
                 if (address == "ess2/Soc"):
@@ -44,7 +44,7 @@ class FemsBat:
         response = req.get_http_session().get(
             "http://" + self.ip_address +
             ":8084/rest/channel/_sum/(GridActivePower|ProductionActivePower|ConsumptionActivePower)",
-            auth=("x", self.password)).json()
+            auth=("x", self.password), timeout=2).json()
         for singleValue in response:
             address = singleValue["address"]
             if (address == "_sum/GridActivePower"):
