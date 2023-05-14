@@ -5,7 +5,7 @@ sudo cp /var/www/html/openWB/web/tools/upload/backup.tar.gz /home/pi/backup.tar.
 cd /home/pi/
 echo "****************************************"
 echo "Step 2: extracting archive..."
-sudo tar -vxf backup.tar.gz --exclude=dir_to_exclude /var/www/html/openWB/web/logging/data/
+sudo tar -vxf backup.tar.gz --exclude=/var/www/html/openWB/web/logging/data/
 echo "****************************************"
 echo "Step 3: replacing old files..."
 sudo cp -v -R /home/pi/var/www/html/openWB/* /var/www/html/openWB/
