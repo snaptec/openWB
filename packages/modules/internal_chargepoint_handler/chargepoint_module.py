@@ -83,17 +83,13 @@ class ChargepointModule(AbstractChargepoint):
         self.old_plug_state = False
         self.__client = ClientFactory(self.config.id, self.config.serial_client)
         time.sleep(0.1)
-        version = self.__client.evse_client.get_firmware_version()
-        if version < 17:
-            self._precise_current = False
-        else:
-            self._precise_current = self.__client.evse_client.is_precise_current_active()
+        self.__client.evse_client.get_firmware_version()
+        self.__client.evse_client.deactivate_precise_current()
 
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):
-            formatted_current = int(current*100) if self._precise_current else int(current)
-            if self.set_current_evse != formatted_current:
-                self.__client.evse_client.set_current(formatted_current)
+            if self.set_current_evse != current:
+                self.__client.evse_client.set_current(int(current))
 
     def get_values(self, phase_switch_cp_active: bool) -> Tuple[ChargepointState, float]:
         try:
