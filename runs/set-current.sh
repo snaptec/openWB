@@ -94,7 +94,7 @@ function setChargingCurrentModbus () {
 	modbusevsesource=$2
 	modbusevseid=$3
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evsewritemodbus.py "$modbusevsesource" "$modbusevseid" "$current"
+	sudo PYTHONPATH=/var/www/html/openWB/packages python3 /var/www/html/openWB/runs/evsewritemodbus.py "$modbusevsesource" "$modbusevseid" "$current"
 }
 
 function setChargingCurrentBuchse () {
