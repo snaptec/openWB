@@ -366,7 +366,7 @@ class Slsmaem(Slbase):
                         str(self._device_measuresmaser),
                         str(self._device_measuresmaage)]
         try:
-            self.callpro(argumentList)     
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
