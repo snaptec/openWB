@@ -1,19 +1,18 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-import subprocess
+from typing import Dict
 import logging
 log = logging.getLogger(__name__)
 
 
 class Sidm(Sbase):
-    def __init__(self):
+    def __init__(self) -> None:
         # setting
         super().__init__()
-        self._smart_paramadd = {}
         self._device_idmnav = '2'
         self.device_nummer = 0
 
-    def updatepar(self, input_param):
+    def updatepar(self, input_param: Dict[str, str]) -> None:
         super().updatepar(input_param)
         self._smart_paramadd = input_param.copy()
         self.device_nummer = int(self._smart_paramadd.get('device_nummer',
@@ -25,17 +24,16 @@ class Sidm(Sbase):
                 self._device_idmnav = value
             else:
                 log.info("(" + str(self.device_nummer) + ") " +
-                         __class__.__name__ + " überlesen " + key +
+                         " IDM überlesen " + key +
                          " " + value)
 
-    def getwatt(self, uberschuss, uberschussoffset):
+    def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
         argumentList = ['python3', self._prefixpy + 'idm/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self._device_idmnav)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
             self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
@@ -47,7 +45,7 @@ class Sidm(Sbase):
                            str(self._device_ip), str(e1)))
         self.postwatt()
 
-    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+    def turndevicerelais(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         self.preturn(zustand, ueberschussberechnung, updatecnt)
         if (zustand == 1):
             pname = "/on.py"
@@ -57,8 +55,7 @@ class Sidm(Sbase):
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self._device_idmnav)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off  %s %d %s Fehlermeldung: %s "
