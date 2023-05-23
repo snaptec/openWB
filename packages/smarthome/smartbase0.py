@@ -59,4 +59,4 @@ class Sbase0:
             if errs:
                 log.error("%s" % (errs))
         except Exception as e1:
-            log.warning("Subprocess Fehlermeldung: %s in %s " % (str(e1)), argumentList[1])
+            log.exception("Subprocess Fehlermeldung: argumentList %s " % argumentList[1])
