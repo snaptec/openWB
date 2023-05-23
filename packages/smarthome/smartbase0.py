@@ -58,5 +58,5 @@ class Sbase0:
             _, errs = proc.communicate()
             if errs:
                 log.error("%s" % (errs))
-        except Exception as e1:
+        except Exception:
             log.exception("Subprocess Fehlermeldung: argumentList %s " % argumentList[1])
