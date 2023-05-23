@@ -1,6 +1,9 @@
 import json
 import time
+import os
+import subprocess
 import logging
+from typing import List
 log = logging.getLogger(__name__)
 
 
@@ -45,3 +48,15 @@ class Sbase0:
             log.warning("(" + str(self.device_nummer) +
                         ") checksend Fehlermeldung: %s "
                         % (str(e1)))
+
+    def callpro(self, argumentList: List[str]) -> None:
+        try:
+            my_env = os.environ.copy()
+            my_env["PYTHONPATH"] = "/var/www/html/openWB/packages"
+            proc = subprocess.Popen(argumentList, stderr=subprocess.PIPE,
+                                    universal_newlines=True, env=my_env)
+            _, errs = proc.communicate()
+            if errs:
+                log.error("%s" % (errs))
+        except Exception:
+            log.exception("Subprocess Fehlermeldung: argumentList %s " % argumentList[1])
