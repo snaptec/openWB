@@ -11,7 +11,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_rct2.rct_read_wr" "--ip=${bezug1_ip}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.rct.device" "inverter" "${bezug1_ip}" "1">>"$MYLOGFILE" 2>&1
 ret=$?
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 

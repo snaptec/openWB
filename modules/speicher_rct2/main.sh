@@ -10,7 +10,7 @@ else
 	MYLOGFILE="${RAMDISKDIR}/bat.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_rct2.rct_read_speicher" "--ip=${bezug1_ip}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.rct.device" "bat" "${bezug1_ip}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "BAT RET: ${ret}"
