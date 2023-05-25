@@ -29,7 +29,7 @@ class PowerGraph {
 
 	init() {
 		var style = getComputedStyle(document.body);
-		this.colors.housePower = 'var(--color-house)';
+		this.colors.house = 'var(--color-house)';
 		this.colors.batIn = 'var(--color-battery)';
 		this.colors.inverter = 'var(--color-pv)';
 		this.gridColors[0] = 'var(--color-battery)';
@@ -57,6 +57,10 @@ class PowerGraph {
 		}
 		this.colors.co0 = 'var(--color-co1)';
 		this.colors.co1 = 'var(--color-co2)';
+		this.consumerCategories = ['charging', 'house', 'batIn', 'devices',
+			'sh0', 'sh1', 'sh2', 'sh3', 'sh4', 'sh5', 'sh6', 'sh7', 'sh8',
+			'lp0', 'lp1', 'lp2', 'lp3', 'lp4', 'lp5', 'lp6', 'lp7', 'lp8']
+
 
 		var figure = d3.select("figure#powergraph");
 		this.svg = figure.append("svg")
@@ -127,7 +131,7 @@ class PowerGraph {
 				heading = formatMonth(wbdata.graphMonth.month, wbdata.graphMonth.year);
 				break;
 			case 'year':
-				heading =  wbdata.graphYear;
+				heading = wbdata.graphYear;
 				break;
 			default: break;
 		}
@@ -248,12 +252,10 @@ class PowerGraph {
 		}
 		if (this.initCounter == 12) {// Initialization complete
 			unsubscribeDayGraph();
-			let chargingPv = 0
-			let chargingBat = 0
-			let shPv = 0
-			let shBat = 0
-			let housePv = 0
-			let houseBat = 0
+			this.consumerCategories.map(cat => {
+				wbdata.usageSummary[cat].energyPv = 0
+				wbdata.usageSummary[cat].energyBat = 0
+			})
 			let calculatedHouseEnergy = 0;
 			this.initCounter = 0;
 			this.staging.map(segment =>
@@ -263,19 +265,19 @@ class PowerGraph {
 				if (i > 0) {
 					const values = this.extractDayValues(line, a[i - 1]);
 					this.graphData.push(values);
-					chargingPv += (values.chargingPv / 12)
-					chargingBat += (values.chargingBat / 12)
-					shPv += (values.shPv / 12)
-					shBat += (values.shBat / 12)
-					housePv += (values.housePv / 12)
-					houseBat += (values.houseBat / 12)
-					calculatedHouseEnergy += (values.housePower / 12)
-				} else {
-					// const values = this.extractValues(line, []);                
+					this.consumerCategories.map(cat => {
+						wbdata.usageSummary[cat].energyPv += (values[cat + 'Pv'] / 12)
+						wbdata.usageSummary[cat].energyBat += (values[cat + 'Bat'] / 12)
+					})
+					calculatedHouseEnergy += (values.house / 12)
 				}
 			});
+			this.consumerCategories.map(cat => {
+				wbdata.usageSummary[cat].energyPv = Math.round (wbdata.usageSummary[cat].energyPv /10) / 100
+				wbdata.usageSummary[cat].energyBat = Math.round (wbdata.usageSummary[cat].energyBat /10) / 100
+			})
 			this.updateGraph();
-			this.updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat, calculatedHouseEnergy/1000);
+			this.updateEnergyValues(/* chargingPv, chargingBat, shPv, shBat, housePv, houseBat, */ calculatedHouseEnergy / 1000);
 			wbdata.dayGraphUpdated();
 			setTimeout(() => this.activateDay(), 300000)
 		}
@@ -284,7 +286,6 @@ class PowerGraph {
 	updateMonth(topic, payload) {
 		if (payload != 'empty') {
 			const serialNo = topic.substring(29, topic.length);
-
 			var segment = payload.toString().split("\n");
 			if (segment[0] == "") {
 				segment = [];
@@ -295,7 +296,6 @@ class PowerGraph {
 					this.initCounter++;
 				}
 			}
-
 			if (this.initCounter == 12) {// Initialization complete
 				unsubscribeMonthGraph();
 				this.initCounter = 0;
@@ -317,7 +317,6 @@ class PowerGraph {
 						}
 					}
 				});
-
 				this.updateGraph();
 				this.updateMonthlyEnergyValues();
 				wbdata.monthGraphUpdated();
@@ -355,10 +354,9 @@ class PowerGraph {
 						if (values.date.getFullYear() == wbdata.graphYear) {
 							this.graphData.push(values);
 							let va = line.split(',')
-							this.monthlyAmounts = this.monthlyAmounts.map((e,i)=>e+parseFloat(va[i]))
+							this.monthlyAmounts = this.monthlyAmounts.map((e, i) => e + parseFloat(va[i]))
 						}
 					}
-					
 				});
 				this.updateGraph();
 				this.updateAnnualEnergyValues();
@@ -367,7 +365,7 @@ class PowerGraph {
 		}
 	}
 
-	updateEnergyValues(chargingPv, chargingBat, shPv, shBat, housePv, houseBat, calculatedHouse) {
+	updateEnergyValues(/* chargingPv, chargingBat, shPv, shBat, housePv, houseBat, */ calculatedHouse) {
 		if (this.rawData.length) {
 			const startValues = this.rawData[0].split(',');
 			const endValues = this.rawData[this.rawData.length - 1].split(',');
@@ -391,31 +389,18 @@ class PowerGraph {
 			wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
 			wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
 				- wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
-			wbdata.historicSummary.charging.energyPv = chargingPv / 1000;
-			wbdata.historicSummary.charging.energyBat = chargingBat / 1000;
-			wbdata.usageSummary.charging.energyPv = chargingPv / 1000;
-			wbdata.usageSummary.charging.energyBat = chargingBat / 1000;
-			wbdata.usageSummary.charging.pvPercentage = Math.round((wbdata.usageSummary.charging.energyPv + wbdata.usageSummary.charging.energyBat) / (wbdata.usageSummary.charging.energy) * 100)
-			wbdata.historicSummary.charging.pvPercentage = Math.round((wbdata.historicSummary.charging.energyPv + wbdata.historicSummary.charging.energyBat) / (wbdata.historicSummary.charging.energy) * 100)
-			wbdata.historicSummary.devices.energyPv = shPv / 1000;
-			wbdata.usageSummary.devices.energyPv = shPv / 1000;
-			wbdata.historicSummary.devices.energyBat = shBat / 1000;
-			wbdata.usageSummary.devices.energyBat = shBat / 1000;
-			wbdata.usageSummary.devices.pvPercentage = Math.round((wbdata.usageSummary.devices.energyPv + wbdata.usageSummary.devices.energyBat) / (wbdata.usageSummary.devices.energy) * 100)
-			wbdata.historicSummary.devices.pvPercentage = Math.round((wbdata.historicSummary.devices.energyPv + wbdata.historicSummary.devices.energyBat) / (wbdata.historicSummary.devices.energy) * 100)
-			// correct for incorrect calculations of PV or Bat portion
-			if (calculatedHouse > wbdata.historicSummary.house.energy) {
-				housePv = housePv / calculatedHouse * wbdata.historicSummary.house.energy
-				houseBat = houseBat / calculatedHouse * wbdata.historicSummary.house.energy
-			}	
-			wbdata.historicSummary.house.energyPv = housePv / 1000;
-			wbdata.usageSummary.house.energyPv = housePv / 1000;
-			wbdata.historicSummary.house.energyBat = houseBat / 1000;
-			wbdata.usageSummary.house.energyBat = houseBat / 1000;
-			wbdata.usageSummary.house.pvPercentage = Math.round((wbdata.usageSummary.house.energyPv + wbdata.usageSummary.house.energyBat) / (wbdata.usageSummary.house.energy) * 100)
-			wbdata.historicSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
+			// correct for incorrect calculations of PV or Bat portionif (calculatedHouse > wbdata.historicSummary.house.energy) {
+			wbdata.usageSummary.house.energyPv = wbdata.usageSummary.house.energyPv / calculatedHouse * wbdata.usageSummary.house.energy
+			wbdata.usageSummary.house.energyBat = wbdata.usageSummary.house.energyBat / calculatedHouse * wbdata.usageSummary.house.energy
 		}
+		this.consumerCategories.map(cat => {
+			wbdata.usageSummary[cat].pvPercentage = Math.round((wbdata.usageSummary[cat].energyPv + wbdata.usageSummary[cat].energyBat) / (wbdata.usageSummary[cat].energy) * 100)
+			wbdata.historicSummary[cat].energyPv = wbdata.usageSummary[cat].energyPv
+			wbdata.historicSummary[cat].energyBat = wbdata.usageSummary[cat].energyBat
+			wbdata.historicSummary[cat].pvPercentage = wbdata.usageSummary[cat].pvPercentage
+		})
 	}
+
 	updateMonthlyEnergyValues() {
 		if (this.rawData.length) {
 			wbdata.historicSummary.pv.energy = +this.monthlyAmounts[3];
@@ -462,14 +447,6 @@ class PowerGraph {
 	}
 	updateAnnualEnergyValues() {
 		if (this.rawData.length) {
-			const startValues = this.rawData[0].split(',');
-			const endValues = this.rawData[this.rawData.length - 1].split(',');
-			/* wbdata.historicSummary.pv.energy = (endValues[3] - startValues[3]) / 1000;
-			wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1]) / 1000;
-			wbdata.historicSummary.batOut.energy = (endValues[18] - startValues[18]) / 1000;
-			wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2]) / 1000;
-			wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000; */
-			
 			wbdata.historicSummary.pv.energy = +this.monthlyAmounts[3];
 			wbdata.historicSummary.evuIn.energy = +this.monthlyAmounts[1];
 			wbdata.historicSummary.batOut.energy = +this.monthlyAmounts[18];
@@ -541,7 +518,7 @@ class PowerGraph {
 			values.inverter = -elements[3]
 		}
 		// calculated values
-		values.housePower = +elements[11];
+		values.house = +elements[11];
 		values.selfUsage = values.solarPower - values.gridPush;
 		if (values.selfUsage < 0) {
 			values.selfUsage = 0;
@@ -582,7 +559,6 @@ class PowerGraph {
 
 		return values;
 	}
-
 	extractDayValues(payload, oldPayload) {
 		const elements = payload.split(",");
 		const oldElements = oldPayload.split(",");
@@ -625,36 +601,26 @@ class PowerGraph {
 		values.batOut = this.calcValue(9, elements, oldElements);
 		values.batterySoc = +elements[20];
 		// calculated values
-		values.housePower = values.gridPull + values.solarPower + values.batOut
+		values.house = values.gridPull + values.solarPower + values.batOut
 			- values.gridPush - values.batIn - values.charging - values.co0 - values.co1
 			- values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8;
-		if (values.housePower < 0) { values.housePower = 0; };
+		if (values.house < 0) { values.house = 0; };
 		values.selfUsage = values.solarPower - values.gridPush;
 		if (values.selfUsage < 0) { values.selfUsage = 0; };
 		if ((values.solarPower + values.gridPull + values.batOut) > 0) {
-			values.chargingPv = this.calcPvFraction(values.charging, values)
-			values.chargingBat = this.calcBatFraction(values.charging, values)
-			values.shPv = this.calcPvFraction(values.devices, values)
-			values.shBat = this.calcBatFraction(values.devices, values)
-			values.housePv = this.calcPvFraction(values.housePower, values)
-			values.houseBat = this.calcBatFraction(values.housePower, values)
-
+			this.consumerCategories.map(cat => this.calcAutFraction(cat, values))
 		} else {
-			values.chargingPv = 0;
-			values.chargingBat = 0;
-			values.shPv = 0;
-			values.shBat = 0;
-			values.housePv = 0;
-			values.houseBat = 0;
+			this.consumerCategories.map(cat => {
+				values[cat + 'Pv'] = 0
+				values[cat + 'Bat'] = 0
+			})
 		}
 		return values;
 	}
 
-	calcPvFraction(energy, values) {
-		return Math.floor((energy * (values.solarPower - values.gridPush) / (values.solarPower -values.gridPush + values.gridPull + values.batOut)))
-	}
-	calcBatFraction(energy, values) {
-		return Math.floor((energy * values.batOut / (values.solarPower -values.gridPush + values.gridPull + values.batOut)))
+	calcAutFraction(cat, values) {
+		values[cat + 'Pv'] = Math.floor((values[cat] * (values.solarPower - values.gridPush) / (values.solarPower - values.gridPush + values.gridPull + values.batOut)))
+		values[cat + 'Bat'] = Math.floor((values[cat] * (values.batOut) / (values.solarPower - values.gridPush + values.gridPull + values.batOut)))
 	}
 
 	extractMonthValues(payload) {
@@ -693,20 +659,16 @@ class PowerGraph {
 			values.batOut = this.calcMonthlyValue(18, elements);
 			values.batterySoc = +elements[20];
 			// calculated values
-			values.housePower = values.gridPull + values.solarPower + values.batOut
+			values.house = values.gridPull + values.solarPower + values.batOut
 				- values.gridPush - values.batIn - values.charging - values.co0 - values.co1
-				- values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9; if (values.housePower < 0) { values.housePower = 0; };
+				- values.sh0 - values.sh1 - values.sh2 - values.sh3 - values.sh4 - values.sh5 - values.sh6 - values.sh7 - values.sh8 - values.sh9; if (values.house < 0) { values.house = 0; };
 			values.selfUsage = values.solarPower - values.gridPush;
 			if (values.selfUsage < 0) { values.selfUsage = 0; };
 			if ((values.solarPower + values.gridPull + values.batOut) > 0) {
-				values.chargingPv = this.calcPvFraction(values.charging, values)
-				values.chargingBat = this.calcBatFraction(values.charging, values)
-				values.shPv = this.calcPvFraction(values.devices, values)
-				values.shBat = this.calcBatFraction(values.devices, values)
-				values.housePv = this.calcPvFraction(values.housePower, values)
-				values.houseBat = this.calcBatFraction(values.housePower, values)
-
-			} else {
+				this.calcAutFraction("charging", values)
+				this.calcAutFraction("devices", values)
+				this.calcAutFraction("house", values)
+				} else {
 				values.chargingPv = 0;
 				values.chargingBat = 0;
 				values.shPv = 0;
@@ -812,10 +774,10 @@ class PowerGraph {
 					.paddingInner(0.4);
 				break;
 			case 'year':
-				const monthRange = d3.extent(this.graphData, (d => months[d.date.getMonth()+1]))
+				const monthRange = d3.extent(this.graphData, (d => months[d.date.getMonth() + 1]))
 				this.xScale = d3.scaleBand()
 					//.domain(Array.from({ length: (monthRange[1] - monthRange[0] + 1) }, (v, k) => k + monthRange[0]))
-					.domain (months)
+					.domain(months)
 					.paddingInner(0.4);
 				break;
 			default:
@@ -827,9 +789,9 @@ class PowerGraph {
 		const extent = d3.extent(this.graphData, (d) =>
 			Math.max(d.solarPower + d.gridPull + d.batOut, d.selfUsage + d.gridPush));
 
-		
-			yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
-		
+
+		yScale.domain([0, Math.ceil(extent[1] / 1000) * 1000]);
+
 		const stackGen = d3.stack().keys(keys);
 		const stackedSeries = stackGen(this.graphData);
 
@@ -870,7 +832,7 @@ class PowerGraph {
 						.x((d, i) => this.xScale(this.graphData[i].date))
 						.y0((d) => yScale(d[0]))
 						.y1((d) => yScale(d[1])))
-						.attr("fill", (d, i) => this.colors[keys[i]]);
+					.attr("fill", (d, i) => this.colors[keys[i]]);
 				break;
 		}
 
@@ -881,9 +843,9 @@ class PowerGraph {
 				.ticks(4)
 				.tickFormat((d, i) => {
 					if (wbdata.graphMode == 'year') {
-						return ((d == 0) ? "" : (Math.round(d / 100000)/10))
+						return ((d == 0) ? "" : (Math.round(d / 100000) / 10))
 					} else {
-						return ((d == 0) ? "" : (Math.round(d / 100) / 10))	
+						return ((d == 0) ? "" : (Math.round(d / 100) / 10))
 					}
 				})
 			);
@@ -906,7 +868,7 @@ class PowerGraph {
 		const months = ['Jan', 'Feb', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 		const yScale = d3.scaleLinear().range([height + 10, 2 * height]);
 		const extent = d3.extent(this.graphData, (d) =>
-		(d.housePower + d.lp0 + d.lp1 + d.lp2 + d.lp3 + d.lp4
+		(d.house + d.lp0 + d.lp1 + d.lp2 + d.lp3 + d.lp4
 			+ d.lp5 + d.lp6 + d.lp7 + d.sh0 + d.sh1 + d.sh2 + d.sh3 + d.sh4
 			+ d.sh5 + d.sh6 + d.sh7 + d.sh8 + d.co0 + d.co1 + d.batIn + d.inverter)
 		);
@@ -914,13 +876,13 @@ class PowerGraph {
 		const keys = [["lp0", "lp1", "lp2", "lp3", "lp4",
 			"lp5", "lp6", "lp7",
 			"sh0", "sh1", "sh2", "sh3", "sh4",
-			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "housePower", "batIn", "inverter"],
-		["housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "house", "batIn", "inverter"],
+		["house", "lp0", "lp1", "lp2", "lp3", "lp4",
 			"lp5", "lp6", "lp7",
 			"sh0", "sh1", "sh2", "sh3", "sh4",
 			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "batIn", "inverter"],
 		["sh0", "sh1", "sh2", "sh3", "sh4",
-			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "housePower", "lp0", "lp1", "lp2", "lp3", "lp4",
+			"sh5", "sh6", "sh7", "sh8", "co0", "co1", "house", "lp0", "lp1", "lp2", "lp3", "lp4",
 			"lp5", "lp6", "lp7",
 			"batIn", "inverter"]
 		];
@@ -977,9 +939,9 @@ class PowerGraph {
 				.ticks(4)
 				.tickFormat((d, i) => {
 					if (wbdata.graphMode == 'year') {
-						return ((d == 0) ? "" : (Math.round(d / 100000)/10))
+						return ((d == 0) ? "" : (Math.round(d / 100000) / 10))
 					} else {
-						return ((d == 0) ? "" : (Math.round(d / 100) / 10))	
+						return ((d == 0) ? "" : (Math.round(d / 100) / 10))
 					}
 				})
 				//.tickFormat((d, i) => (d == 0) ? "" : (Math.round(d / 100) / 10))

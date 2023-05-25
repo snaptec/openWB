@@ -104,10 +104,10 @@
 		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
 	</script>
 	<script src="themes/colors/js/d3.v6.min.js"></script>
-	<script src="themes/colors/powerdata.js"></script>
+	<script src="themes/colors/powerdata.js?v=20230401"></script>
 	<script src="themes/colors/powermeter.js"></script>
-	<script src="themes/colors/yieldmeter.js"></script>
-	<script src="themes/colors/powergraph.js"></script>
+	<script src="themes/colors/yieldmeter.js?v=20230401"></script>
+	<script src="themes/colors/powergraph.js?v=20230401"></script>
 	<script src="themes/colors/chargePointList.js"></script>
 	<script src="themes/colors/smartHomeList.js"></script>
 	<script src="themes/colors/batteryList.js"></script>
@@ -188,7 +188,9 @@
 											class="fa fa-sliders-h px-0"></span> Dezimalstellen kW & kWh ändern</a>
 									<a class="dropdown-item" href="#" onclick="switchSmartHomeColors()"><span
 											class="fa fa-palette px-0"></span> Farbschema Smart-Home-Geräte ändern</a>
-									<a class="dropdown-item" href="#" onclick="toggleSmartHomeSummary()"><span
+									<a class="dropdown-item" href="#" onclick="toggleChargepointSummary()"><span
+												class="fa fa-charging-station x-0"></span> Ladepunkt-Zusammenfassung an/aus </a>
+										<a class="dropdown-item" href="#" onclick="toggleSmartHomeSummary()"><span
 											class="fa fa-object-group px-0"></span> Smarthome-Zusammenfassung an/aus </a>
 									<a class="dropdown-item" href="#" onclick="toggleWideBoxes()"><span
 											class="fa fa-window-restore px-0"></span> Breite Widgets an/aus </a>

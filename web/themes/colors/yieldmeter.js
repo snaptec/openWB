@@ -122,17 +122,11 @@ class YieldMeter {
 
 	plotfilter(row) {
 		if (row.energy > 0) {
-			if (row.name == "Geräte") {
-				if (wbdata.smartHomeSummary) {
-					return true
-				} else {
-					return false
-				}
-			} else {
-				return true
+			switch (row.name) {
+				case "Geräte": return(wbdata.smartHomeSummary)
+				case "Laden": return (wbdata.chargepointSummary)
+				default: return true
 			}
-		} else {
-			return false
 		}
 	}
 	createOrUpdateSvg() {
