@@ -11,6 +11,7 @@ from modules.smarthome.mqtt.smartmqtt import Smqtt
 from modules.smarthome.http.smarthttp import Shttp
 from modules.smarthome.idm.smartidm import Sidm
 from modules.smarthome.elwa.smartelwa import Selwa
+from modules.smarthome.askoheat.smartaskoheat import Saskoheat
 from modules.smarthome.nxdacxx.smartnxdacxx import Snxdacxx
 from modules.smarthome.acthor.smartacthor import Sacthor
 from modules.smarthome.avmhomeautomation.smartavm import Savm
@@ -282,6 +283,8 @@ def update_devices() -> None:
                     mydevice = Snxdacxx()
                 elif (device_type == 'elwa'):
                     mydevice = Selwa()
+                elif (device_type == 'askoheat'):
+                    mydevice = Saskoheat()
                 elif (device_type == 'idm'):
                     mydevice = Sidm()
                 elif (device_type == 'mqtt'):
