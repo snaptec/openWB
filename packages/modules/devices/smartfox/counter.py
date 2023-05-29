@@ -68,3 +68,4 @@ class SmartfoxCounter:
         ))
 
 component_descriptor = ComponentDescriptor(configuration_factory=SmartfoxCounterSetup)
+
