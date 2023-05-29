@@ -66,6 +66,6 @@ class SmartfoxCounter:
             voltages=[v1, v2, v3],
             currents=[c1, c2, c3]        
         ))
+        
 
 component_descriptor = ComponentDescriptor(configuration_factory=SmartfoxCounterSetup)
-
