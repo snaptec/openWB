@@ -64,8 +64,8 @@ class SmartfoxCounter:
             power=float((get_xml_text("detailsPowerValue"))[:-2]),
             powers=[p1, p2, p3],
             voltages=[v1, v2, v3],
-            currents=[c1, c2, c3]        
+            currents=[c1, c2, c3]
         ))
-        
+
 
 component_descriptor = ComponentDescriptor(configuration_factory=SmartfoxCounterSetup)
