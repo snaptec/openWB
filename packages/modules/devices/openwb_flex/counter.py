@@ -11,7 +11,7 @@ from modules.common.mpm3pm import Mpm3pm
 from modules.common.simcount import SimCounter
 from modules.common.store import get_counter_value_store
 from modules.devices.openwb_flex.config import EvuKitFlexSetup
-from modules.devices.openwb_flex.versions import kit_counter_inverter_version_factory
+from modules.devices.openwb_flex.versions import kit_counter_version_factory
 
 
 class EvuKitFlex:
@@ -21,7 +21,7 @@ class EvuKitFlex:
                  tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
         self.component_config = dataclass_from_dict(EvuKitFlexSetup, component_config)
-        factory = kit_counter_inverter_version_factory(
+        factory = kit_counter_version_factory(
             self.component_config.configuration.version)
         self.__client = factory(self.component_config.configuration.id,
                                 tcp_client)
