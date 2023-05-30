@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 #MODULEDIR=$(cd `dirname $0` && pwd)
 #DMOD="PV"
@@ -18,11 +18,8 @@ fi
 
 openwbDebugLog ${DMOD} 2 "PV IP: ${solarworld_emanagerip}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarworld.solarworld" "${solarworld_emanagerip}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh"  "modules.devices.solar_world.device" "inverter" "${solarworld_emanagerip}" "1" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
-
-
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
-echo $pvwatt
+cat "${RAMDISKDIR}/pvwatt"
