@@ -1,50 +1,40 @@
+from requests import Session
 from helpermodules.scale_metric import scale_metric
 from modules.devices.fems.config import FemsBatSetup
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
-from modules.common import req
 
 
 class FemsBat:
-    def __init__(self, password: str, ip_address: str, component_config: FemsBatSetup) -> None:
-        self.password = password
+    def __init__(self, ip_address: str, component_config: FemsBatSetup) -> None:
         self.ip_address = ip_address
         self.component_config = component_config
         self.store = get_bat_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self) -> None:
+    def update(self, session: Session) -> None:
         if self.component_config.configuration.num == 1:
-            response = req.get_http_session().get(
-                "http://" + self.ip_address + ":8084/rest/channel/ess0/(Soc|DcChargeEnergy|DcDischargeEnergy)",
-                auth=("x", self.password), timeout=2).json()
-            for singleValue in response:
-                address = singleValue["address"]
-                if (address == "ess0/Soc"):
-                    soc = singleValue["value"]
-                elif address == "ess0/DcChargeEnergy":
-                    imported = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
-                elif address == "ess0/DcDischargeEnergy":
-                    exported = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
+            data = "ess0"
         else:
-            response = req.get_http_session().get(
-                "http://" + self.ip_address + ":8084/rest/channel/ess2/(Soc|DcChargeEnergy|DcDischargeEnergy)",
-                auth=("x", self.password), timeout=2).json()
-            for singleValue in response:
-                address = singleValue["address"]
-                if (address == "ess2/Soc"):
-                    soc = singleValue["value"]
-                elif address == "ess2/DcChargeEnergy":
-                    imported = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
-                elif address == "ess2/DcDischargeEnergy":
-                    exported = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
+            data = "ess2"
+        response = session.get(
+            "http://" + self.ip_address + ":8084/rest/channel/"+data+"/(Soc|DcChargeEnergy|DcDischargeEnergy)",
+            timeout=2).json()
+        for singleValue in response:
+            address = singleValue["address"]
+            if (address == data+"/Soc"):
+                soc = singleValue["value"]
+            elif address == data+"/DcChargeEnergy":
+                imported = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
+            elif address == data+"/DcDischargeEnergy":
+                exported = scale_metric(singleValue['value'], singleValue.get('unit'), 'Wh')
 
-        response = req.get_http_session().get(
+        response = session.get(
             "http://" + self.ip_address +
             ":8084/rest/channel/_sum/(GridActivePower|ProductionActivePower|ConsumptionActivePower)",
-            auth=("x", self.password), timeout=2).json()
+            timeout=2).json()
         for singleValue in response:
             address = singleValue["address"]
             if (address == "_sum/GridActivePower"):

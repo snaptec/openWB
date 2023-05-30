@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import logging
-from typing import Optional, List
+from typing import Iterable, Optional, List, Union
 
 from helpermodules.cli import run_using_positional_cli_args
+from modules.common import req
 from modules.common.abstract_device import DeviceDescriptor
-from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, IndependentComponentUpdater
+from modules.common.configurable_device import ConfigurableDevice, ComponentFactoryByType, MultiComponentUpdater
 from modules.devices.fems import bat, counter, inverter
 from modules.devices.fems.config import Fems, FemsBatSetup, FemsConfiguration, FemsCounterSetup, FemsInverterSetup
 
@@ -13,19 +14,22 @@ log = logging.getLogger(__name__)
 
 def create_device(device_config: Fems):
     def create_bat_component(component_config: FemsBatSetup):
-        return bat.FemsBat(device_config.configuration.password,
-                           device_config.configuration.ip_address,
+        return bat.FemsBat(device_config.configuration.ip_address,
                            component_config)
 
     def create_counter_component(component_config: FemsCounterSetup):
-        return counter.FemsCounter(device_config.configuration.password,
-                                   device_config.configuration.ip_address,
+        return counter.FemsCounter(device_config.configuration.ip_address,
                                    component_config)
 
     def create_inverter_component(component_config: FemsInverterSetup):
-        return inverter.FemsInverter(device_config.configuration.password,
-                                     device_config.configuration.ip_address,
+        return inverter.FemsInverter(device_config.configuration.ip_address,
                                      component_config)
+
+    def update_components(components: Iterable[Union[bat.FemsBat, counter.FemsCounter, inverter.FemsInverter]]):
+        session = req.get_http_session()
+        session.auth = ("x", device_config.configuration.password)
+        for component in components:
+            component.update(session)
 
     return ConfigurableDevice(
         device_config=device_config,
@@ -34,7 +38,7 @@ def create_device(device_config: Fems):
             counter=create_counter_component,
             inverter=create_inverter_component,
         ),
-        component_updater=IndependentComponentUpdater(lambda component: component.update())
+        component_updater=MultiComponentUpdater(update_components)
     )
 
 

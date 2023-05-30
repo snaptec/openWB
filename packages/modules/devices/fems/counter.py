@@ -1,26 +1,25 @@
+from requests import Session
 from helpermodules.scale_metric import scale_metric
 from modules.devices.fems.config import FemsCounterSetup
 from modules.common.component_state import CounterState
 from modules.common.component_type import ComponentDescriptor
 from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_counter_value_store
-from modules.common import req
 
 
 class FemsCounter:
-    def __init__(self, password: str, ip_address: str, component_config: FemsCounterSetup) -> None:
-        self.password = password
+    def __init__(self, ip_address: str, component_config: FemsCounterSetup) -> None:
         self.ip_address = ip_address
         self.component_config = component_config
         self.store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self) -> None:
+    def update(self, session: Session) -> None:
         try:
             # Grid meter values
-            response = req.get_http_session().get('http://x:' + self.password + '@' + self.ip_address +
-                                                  ':8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)',
-                                                  timeout=1).json()
+            response = session.get('http://' + self.ip_address +
+                                   ':8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)',
+                                   timeout=1).json()
 
             # ATTENTION: Recent FEMS versions started using the "unit" field (see example response below) and
             #            kind-of arbitrarily return either Volts, Kilowatthours or Hz or Millivolts, Watthours or
@@ -47,8 +46,8 @@ class FemsCounter:
                     voltages[2] = scale_metric(singleValue['value'], singleValue.get('unit'), 'V')
 
             # Grid total energy sums
-            response = req.get_http_session().get(
-                'http://x:'+self.password+'@'+self.ip_address+':8084/rest/channel/_sum/Grid.+ActiveEnergy',
+            response = session.get(
+                'http://'+self.ip_address+':8084/rest/channel/_sum/Grid.+ActiveEnergy',
                 timeout=1).json()
 
             for singleValue in response:
@@ -68,8 +67,8 @@ class FemsCounter:
         except ValueError:  # includes simplejson.decoder.JSONDecodeError
             # nicht alle FEMS-Module unterstützen Regex-Requests
             def get_value(url):
-                response = req.get_http_session().get('http://x:'+self.password+'@'+self.ip_address +
-                                                      ':8084/rest/channel/'+url, timeout=2).json()
+                response = session.get('http://x:'+self.password+'@'+self.ip_address +
+                                       ':8084/rest/channel/'+url, timeout=2).json()
                 return response["value"]
 
             power = get_value('meter0/ActivePower')
