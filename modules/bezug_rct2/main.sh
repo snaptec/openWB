@@ -5,9 +5,9 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="MAIN"
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/evu.log"
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
 bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.rct.device" "counter" "bezug1_ip" >>"${MYLOGFILE}" 2>&1
