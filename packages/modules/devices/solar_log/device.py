@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import json
 import logging
-from typing import List, Union
+from typing import List, Optional, Union
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import DeviceDescriptor
+from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.configurable_device import ComponentFactoryByType, ConfigurableDevice, MultiComponentUpdater
 from modules.common import req
 from modules.devices.solar_log.counter import SolarLogCounter
@@ -15,7 +16,7 @@ from modules.devices.solar_log.inverter import SolarLogInverter
 log = logging.getLogger(__name__)
 
 
-def create_device(device_config: SolarLogConfiguration):
+def create_device(device_config: SolarLog):
     def create_counter_component(component_config: SolarLogCounterSetup):
         return SolarLogCounter(device_config.id, component_config)
 
@@ -38,13 +39,26 @@ def create_device(device_config: SolarLogConfiguration):
     )
 
 
-def read_legacy(component_type: str, ip_address: str, password: str, id: str) -> None:
-    device = create_device(SolarLogConfiguration(ip_address=ip_address))
-    if component_type == "counter":
-        device.add_component(SolarLogCounterSetup(id=None))
-    else:
-        device.add_component(SolarLogInverterSetup(id=1))
+def read_legacy(component_type: str, ip_address: str, note_bat: Optional[int] = 0) -> None:
     log.debug('Solar-Log ip_address: ' + ip_address)
+
+    if component_type == "counter":
+        counter = SolarLogCounter(None, SolarLogCounterSetup(id=None))
+        with SingleComponentUpdateContext(counter.component_info):
+            response = req.get_http_session().post('http://'+ip_address+'/getjp',
+                                                   data=json.dumps({"801": {"170": None}}), timeout=5).json()
+            power = counter.get_power(response)
+            pvwatt = int(float(response["801"]["170"]["101"]))
+            power = power - pvwatt
+
+            if note_bat == 1:
+                with open("ramdisk/speicherleistung", "r") as f:
+                    speicherleistung = int(float(f.read()))
+                power = power + speicherleistung
+            counter.store_values(power)
+    # WR bei WR oder EVU-Modul immer auslesen
+    device = create_device(SolarLogConfiguration(ip_address=ip_address))
+    device.add_component(SolarLogInverterSetup(id=1))
     device.update()
 
 

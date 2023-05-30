@@ -24,15 +24,9 @@ class SolarLogCounter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, response: Dict) -> None:
-        pvwatt = int(float(response["801"]["170"]["101"]))
-        hausverbrauch = int(float(response["801"]["170"]["110"]))
-        power = hausverbrauch - pvwatt
+        self.store_values(self.get_power(response))
 
-        if bezug_solarlog_speicherv == 1:
-            with open("ramdisk/speicherleistung", "r") as f:
-                speicherleistung = int(float(f.read()))
-            power = power + speicherleistung
-
+    def store_values(self, power) -> None:
         imported, exported = self.sim_counter.sim_count(power)
 
         self.store.set(CounterState(
@@ -40,6 +34,9 @@ class SolarLogCounter:
             exported=exported,
             power=power
         ))
+
+    def get_power(self, response: Dict) -> CounterState:
+        return int(float(response["801"]["170"]["110"]))
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=SolarLogCounterSetup)
