@@ -20,8 +20,11 @@ import logging
 import datetime
 from enum import Enum
 
+log = logging.getLogger(__name__)
 
 # helper function to print and error
+
+
 def hexdump(src, length=16):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     lines = []
@@ -390,7 +393,6 @@ class RCT():
         self.start_time = 0
         self.search_id = 0
         self.search_name = None
-        self.logger = logging.getLogger('RCT')
 
         self.id_tab_setup()
         self.host = ip
@@ -443,7 +445,7 @@ class RCT():
         self.socket.settimeout(2.0)
         try:
             self.socket.connect((self.host, self.port))
-            self.dbglog('connect to ', self.host, 'port', self.port)
+            log.debug('connect to ', self.host, 'port', self.port)
             return True
         except Exception:
             print("-"*100)
@@ -495,7 +497,7 @@ class RCT():
 
             # wait for response and consume requested ids and set the value
             self.receive(frame, self.receive_timeout)
-            self.dbglog("Response: requested {:4d} | consumed {:4d} | dropped {:4d}".format(
+            log.debug("Response: requested {:4d} | consumed {:4d} | dropped {:4d}".format(
                 requestedCount, frame.statisticRxConsumed, frame.statisticRxDropped) +
                 " | duplicate {:4d} | Crc16Error {:4d} | pending {:4d}".format(
                 frame.statisticRxDuplicate, frame.statisticCrc16Error, frame.pendingCount))
@@ -532,18 +534,8 @@ class RCT():
     def write_ramdisk(self, fn, val, rctname):
         try:
             fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-# Uncomment form debugging purposes
-#            if self.logger.logger == logging.DEBUG:
-#                f = open(fnn, 'r')
-#                if f is not None:
-#                    oldv = f.read()
-#                    f.close()
-#                    self.dbglog("field " + str(fnn) + " val is:" + str(val) + " oldval:"
-# + str(oldv) + " " + str(rctname))
-            f = open(fnn, 'w')
-            if f is not None:
+            with open(fnn, 'w') as f:
                 f.write(str(val))
-                f.close()
         except Exception:
             return
 
