@@ -16,6 +16,7 @@ log = logging.getLogger(__name__)
 
 class SolarLogInverter:
     def __init__(self,
+                 device_id: int,
                  component_config: Union[Dict, SolarLogInverterSetup]) -> None:
         self.component_config = dataclass_from_dict(SolarLogInverterSetup, component_config)
         self.store = get_inverter_value_store(self.component_config.id)

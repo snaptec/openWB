@@ -17,10 +17,10 @@ log = logging.getLogger(__name__)
 
 def create_device(device_config: SolarLogConfiguration):
     def create_counter_component(component_config: SolarLogCounterSetup):
-        return SolarLogCounter(component_config)
+        return SolarLogCounter(device_config.id, component_config)
 
     def create_inverter_component(component_config: SolarLogInverterSetup):
-        return SolarLogInverter(component_config)
+        return SolarLogInverter(device_config.id, component_config)
 
     def update_components(components: Union[SolarLogCounter, SolarLogInverter]):
         response = req.get_http_session().post('http://'+device_config.ip_adress+'/getjp',
