@@ -15,10 +15,10 @@ class YoulessInverter:
     def update(self, response) -> None:
         if self.component_config.configuration.source_s0:
             power = int(response["ps0"])
-            exported = response["cs0"].replace(",", "")
+            exported = int(response["cs0"].replace(",", ""))
         else:
             power = int(response["pwr"])
-            exported = response["cnt"].replace(",", "")
+            exported = int(response["cnt"].replace(",", ""))
 
         inverter_state = InverterState(
             power=-abs(power),
