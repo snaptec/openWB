@@ -16,24 +16,24 @@ class RctCounter:
 
     def update(self, rct_client: RCT):
         # generate id list for fast bulk read
-        MyTab = []
-        exported = rct_client.add_by_name(MyTab, 'energy.e_grid_feed_total')
-        imported = rct_client.add_by_name(MyTab, 'energy.e_grid_load_total')
-        power = rct_client.add_by_name(MyTab, 'g_sync.p_ac_sc_sum')
-        volt1 = rct_client.add_by_name(MyTab, 'g_sync.u_l_rms[0]')
-        volt2 = rct_client.add_by_name(MyTab, 'g_sync.u_l_rms[1]')
-        volt3 = rct_client.add_by_name(MyTab, 'g_sync.u_l_rms[2]')
-        power1 = rct_client.add_by_name(MyTab, 'g_sync.p_ac_sc[0]')
-        power2 = rct_client.add_by_name(MyTab, 'g_sync.p_ac_sc[1]')
-        power3 = rct_client.add_by_name(MyTab, 'g_sync.p_ac_sc[2]')
-        freq = rct_client.add_by_name(MyTab, 'grid_pll[0].f')
-        stat1 = rct_client.add_by_name(MyTab, 'fault[0].flt')
-        stat2 = rct_client.add_by_name(MyTab, 'fault[1].flt')
-        stat3 = rct_client.add_by_name(MyTab, 'fault[2].flt')
-        stat4 = rct_client.add_by_name(MyTab, 'fault[3].flt')
+        my_tab = []
+        exported = rct_client.add_by_name(my_tab, 'energy.e_grid_feed_total')
+        imported = rct_client.add_by_name(my_tab, 'energy.e_grid_load_total')
+        power = rct_client.add_by_name(my_tab, 'g_sync.p_ac_sc_sum')
+        volt1 = rct_client.add_by_name(my_tab, 'g_sync.u_l_rms[0]')
+        volt2 = rct_client.add_by_name(my_tab, 'g_sync.u_l_rms[1]')
+        volt3 = rct_client.add_by_name(my_tab, 'g_sync.u_l_rms[2]')
+        power1 = rct_client.add_by_name(my_tab, 'g_sync.p_ac_sc[0]')
+        power2 = rct_client.add_by_name(my_tab, 'g_sync.p_ac_sc[1]')
+        power3 = rct_client.add_by_name(my_tab, 'g_sync.p_ac_sc[2]')
+        freq = rct_client.add_by_name(my_tab, 'grid_pll[0].f')
+        stat1 = rct_client.add_by_name(my_tab, 'fault[0].flt')
+        stat2 = rct_client.add_by_name(my_tab, 'fault[1].flt')
+        stat3 = rct_client.add_by_name(my_tab, 'fault[2].flt')
+        stat4 = rct_client.add_by_name(my_tab, 'fault[3].flt')
 
         # read all parameters
-        rct_client.read(MyTab)
+        rct_client.read(my_tab)
 
         if (stat1 + stat2 + stat3 + stat4) > 0:
             raise FaultState.error("Alarm Status Zähler ist ungleich 0.")

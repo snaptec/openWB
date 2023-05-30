@@ -15,21 +15,21 @@ class RctInverter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, rct_client: RCT) -> None:
-        MyTab = []
-        power1 = rct_client.add_by_name(MyTab, 'dc_conv.dc_conv_struct[0].p_dc')
-        power2 = rct_client.add_by_name(MyTab, 'dc_conv.dc_conv_struct[1].p_dc')
-        power3 = rct_client.add_by_name(MyTab, 'io_board.s0_external_power')
+        my_tab = []
+        power1 = rct_client.add_by_name(my_tab, 'dc_conv.dc_conv_struct[0].p_dc')
+        power2 = rct_client.add_by_name(my_tab, 'dc_conv.dc_conv_struct[1].p_dc')
+        power3 = rct_client.add_by_name(my_tab, 'io_board.s0_external_power')
         # pLimit = rct_client.add_by_name(MyTab, 'p_rec_lim[2]')   # max. AC power according to RCT Power
-        pv1total = rct_client.add_by_name(MyTab, 'energy.e_dc_total[0]')
-        pv2total = rct_client.add_by_name(MyTab, 'energy.e_dc_total[1]')
-        pv3total = rct_client.add_by_name(MyTab, 'energy.e_ext_total')
+        exported1 = rct_client.add_by_name(my_tab, 'energy.e_dc_total[0]')
+        exported2 = rct_client.add_by_name(my_tab, 'energy.e_dc_total[1]')
+        exported3 = rct_client.add_by_name(my_tab, 'energy.e_ext_total')
 
         # read all parameters
-        rct_client.read(MyTab)
+        rct_client.read(my_tab)
 
         inverter_state = InverterState(
             power=(power1.value + power2.value + power3.value) * -1,
-            exported=(pv1total.value + pv2total.value + pv3total.value),
+            exported=(exported1.value + exported2.value + exported3.value),
         )
         self.store.set(inverter_state)
 

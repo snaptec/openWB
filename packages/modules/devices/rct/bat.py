@@ -15,18 +15,17 @@ class RctBat:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def update(self, rct_client: RCT) -> None:
-        MyTab = []
-        socx = rct_client.add_by_name(MyTab, 'battery.soc')
-        watt1 = rct_client.add_by_name(MyTab, 'g_sync.p_acc_lp')
-        watt2 = rct_client.add_by_name(MyTab, 'battery.stored_energy')
-        watt3 = rct_client.add_by_name(MyTab, 'battery.used_energy')
-        stat1 = rct_client.add_by_name(MyTab, 'battery.bat_status')
-        stat2 = rct_client.add_by_name(MyTab, 'battery.status')
-        stat3 = rct_client.add_by_name(MyTab, 'battery.status2')
-        socsoll = rct_client.add_by_name(MyTab, 'battery.soc_target')
+        my_tab = []
+        socx = rct_client.add_by_name(my_tab, 'battery.soc')
+        watt1 = rct_client.add_by_name(my_tab, 'g_sync.p_acc_lp')
+        watt2 = rct_client.add_by_name(my_tab, 'battery.stored_energy')
+        watt3 = rct_client.add_by_name(my_tab, 'battery.used_energy')
+        stat1 = rct_client.add_by_name(my_tab, 'battery.bat_status')
+        stat2 = rct_client.add_by_name(my_tab, 'battery.status')
+        stat3 = rct_client.add_by_name(my_tab, 'battery.status2')
 
         # read all parameters
-        rct_client.read(MyTab)
+        rct_client.read(my_tab)
 
         # postprocess values
         soc = socx.value
@@ -36,7 +35,6 @@ class RctBat:
         stat1 = int(stat1.value)
         stat2 = int(stat2.value)
         stat3 = int(stat3.value)
-        socsoll = int(socsoll.value * 100.0)
 
         if (stat1 + stat2 + stat3) > 0:
             raise FaultState.error("Alarm Status Speicher ist ungleich 0.")
