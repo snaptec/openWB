@@ -7,9 +7,6 @@
 # Developed by Peter Oberhofer 6/2020
 # Modified for Python3 by Heinz Hoefling 8/2021
 # Bulk read support added by Peter Oberhofer 03/2022
-#
-# can replace openwb\packages\modules\counter\rct_lib.py on openWB2.0
-#
 
 import sys
 import traceback
@@ -23,9 +20,8 @@ import logging
 import datetime
 from enum import Enum
 
+
 # helper function to print and error
-
-
 def hexdump(src, length=16):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     lines = []
@@ -49,10 +45,9 @@ def hexdump(src, length=16):
 
     return ''.join(lines)
 
+
 # class rct_data
 # valid data types
-
-
 class rct_data(Enum):
     t_unknown = 0
     t_bool = 1
@@ -67,8 +62,6 @@ class rct_data(Enum):
     t_string = 10
     t_log_ts = 11
     t_dump = 12
-
-# class rct_id
 
 
 class rct_id():
@@ -384,8 +377,6 @@ class Frame:
             return bytes(value)
         else:
             return None
-
-# class RCT
 
 
 class RCT():
