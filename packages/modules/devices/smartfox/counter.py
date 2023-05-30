@@ -49,22 +49,13 @@ class SmartfoxCounter:
         # Powerfaktor ist nach dem Firmwareupgrade auf EM2 00.01.03.06 (04-2021)
         # nicht mehr in der values.xml daher fix auf 1
 
-        p1 = float((get_xml_text("powerL1Value"))[:-2])
-        p2 = float((get_xml_text("powerL2Value"))[:-2])
-        p3 = float((get_xml_text("powerL3Value"))[:-2])
-        v1 = float((get_xml_text("voltageL1Value"))[:-2])
-        v2 = float((get_xml_text("voltageL2Value"))[:-2])
-        v3 = float((get_xml_text("voltageL3Value"))[:-2])
-        c1 = float((get_xml_text("ampereL1Value"))[:-2])
-        c2 = float((get_xml_text("ampereL2Value"))[:-2])
-        c3 = float((get_xml_text("ampereL3Value"))[:-2])
         self.store.set(CounterState(
             imported=float((get_xml_text("energyValue"))[:-4]) * 1000,
             exported=float((get_xml_text("eToGridValue"))[:-4]) * 1000,
             power=float((get_xml_text("detailsPowerValue"))[:-2]),
-            powers=[p1, p2, p3],
-            voltages=[v1, v2, v3],
-            currents=[c1, c2, c3]
+            powers=[float(get_xml_text(key)) for key in ["powerL1Value", "powerL2Value", "powerL3Value"]],
+            voltages=[float(get_xml_text(key)) for key in ["voltageL1Value", "voltageL2Value", "voltageL3Value"]],
+            currents=[float(get_xml_text(key)) for key in ["ampereL1Value", "ampereL2Value", "ampereL3Value"]]
         ))
 
 
