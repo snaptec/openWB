@@ -24,8 +24,6 @@ class KostalStecaInverter:
 
     def update(self) -> None:
         power, exported = self.get_values()
-        if exported is None:
-            exported = 0
         self.store.set(InverterState(power=power, exported=exported))
 
     def get_values(self) -> Tuple[float, Optional[float]]:
@@ -44,7 +42,7 @@ class KostalStecaInverter:
             ".//Measurement[@Type='AC_Power']").get("Value")) * -1
         power = 0 if isnan(power) else power
 
-        if self.component_config.configuration.variant == 0:
+        if self.component_config.configuration.variant_steca:
             # call for XML file and parse it for total produced kwh
             yields = req.get_http_session().get("http://" + self.ip_address + "/yields.xml", timeout=2).text
             exported = float(ET.fromstring(yields).find(".//Yield[@Type='Produced']/YieldValue").get("Value"))

@@ -41,7 +41,7 @@ def read_legacy(component_type: str, ip_address: str, variant: int, num: Optiona
             ','.join(COMPONENT_TYPE_TO_MODULE.keys())
         )
     component_config.id = num
-    component_config.configuration.variant = variant
+    component_config.configuration.variant_steca = True if variant == 0 else False
     inverter = KostalStecaInverter(component_config, ip_address)
 
     log.debug('KostalSteca IP-Adresse: ' + ip_address)

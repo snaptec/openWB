@@ -24,8 +24,8 @@ class KostalSteca:
 
 @auto_str
 class KostalStecaInverterConfiguration:
-    def __init__(self, variant: int = 0):
-        self.variant = variant
+    def __init__(self, variant_steca: bool = True):
+        self.variant_steca = variant_steca
 
 
 @auto_str
