@@ -12,9 +12,9 @@ def test_fems_bat(monkeypatch, requests_mock: requests_mock.mock):
     # setup
     mock_counter_value_store = Mock()
     monkeypatch.setattr(counter, 'get_counter_value_store', Mock(return_value=mock_counter_value_store))
-    requests_mock.get('http://x:abc@1.1.1.1:8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)',
+    requests_mock.get('http://1.1.1.1:8084/rest/channel/meter0/(ActivePower.*|VoltageL.|Frequency)',
                       json=SAMPLE_RESPONSE)
-    requests_mock.get('http://x:abc@1.1.1.1:8084/rest/channel/_sum/Grid.+ActiveEnergy',
+    requests_mock.get('http://1.1.1.1:8084/rest/channel/_sum/Grid.+ActiveEnergy',
                       json=SAMPLE_RESPONSE_ENERGY)
 
     dev = device.create_device(Fems(configuration=FemsConfiguration(ip_address="1.1.1.1", password="abc")))
