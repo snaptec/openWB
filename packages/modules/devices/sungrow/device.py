@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import logging
 from typing import Dict, List, Union, Optional
 
@@ -9,9 +10,7 @@ from modules.common.component_context import MultiComponentUpdateContext
 from modules.devices.sungrow import bat
 from modules.devices.sungrow import counter
 from modules.devices.sungrow import inverter
-from modules.devices.sungrow.config import (Sungrow, SungrowBatSetup,
-                                            SungrowCounterConfiguration,
-                                            SungrowCounterSetup,
+from modules.devices.sungrow.config import (Sungrow, SungrowBatSetup, SungrowCounterConfiguration, SungrowCounterSetup,
                                             SungrowInverterSetup)
 from modules.devices.sungrow.version import Version
 
@@ -81,9 +80,7 @@ COMPONENT_TYPE_TO_MODULE = {
 }
 
 
-def read_legacy(ip_address: str,
-                modbus_id: int,
-                component_config: dict):
+def read_legacy(ip_address: str, modbus_id: int, component_config: dict):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
     device_config.configuration.port = 502
@@ -93,28 +90,16 @@ def read_legacy(ip_address: str,
     dev.update()
 
 
-def read_legacy_bat(ip_address: str,
-                    modbus_id: int,
-                    num: Optional[int] = None,
-                    read_counter: Optional[int] = None,
-                    version: Optional[int] = None):
+def read_legacy_bat(ip_address: str, modbus_id: int,  num: Optional[int] = None, read_counter: Optional[int] = None, version: Optional[int] = None):
     read_legacy(ip_address, modbus_id, bat.component_descriptor.configuration_factory(id=None))
 
 
-def read_legacy_counter(ip_address: str,
-                        modbus_id: int,
-                        version: int,
-                        read_counter: int,
-                        unused_version: int):
+def read_legacy_counter(ip_address: str, modbus_id: int, version: int, read_counter: int, unused_version: int):
     read_legacy(ip_address, modbus_id, counter.component_descriptor.configuration_factory(
         id=None, configuration=SungrowCounterConfiguration(version=Version(version))))
 
 
-def read_legacy_inverter(ip_address: str,
-                         modbus_id: int,
-                         num: int,
-                         read_counter: int,
-                         version: int):
+def read_legacy_inverter(ip_address: str, modbus_id: int, num: int, read_counter: int, version: int):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
     device_config.configuration.port = 502
