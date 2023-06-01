@@ -293,6 +293,7 @@ class WbData {
 				break;
 			case 'name':
 				this.chargePoint[index-1]['icon'] = value
+				this.historicSummary['lp' + (index - 1)].icon = value;
 				break
 			default:
 				break;

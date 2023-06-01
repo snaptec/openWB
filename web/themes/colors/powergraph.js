@@ -24,6 +24,8 @@ class PowerGraph {
 		this.height = 500;
 		this.margin = { top: 10, right: 20, bottom: 10, left: 29 };
 		this.liveGraphMinutes = 0;
+		this.lpIndexes = [4,5,6,12,13,14,15,16]
+			
 		wbdata.usageStackOrder = 2;
 	}
 
@@ -373,7 +375,18 @@ class PowerGraph {
 			wbdata.historicSummary.evuIn.energy = (endValues[1] - startValues[1]) / 1000;
 			wbdata.historicSummary.batOut.energy = (endValues[9] - startValues[9]) / 1000;
 			wbdata.historicSummary.evuOut.energy = (endValues[2] - startValues[2]) / 1000;
+			
+			var cpEnergy = 0
+			for (i = 0; i < 3; i++) {
+				cpEnergy = (endValues[4 + i] - startValues[4 + i]) / 1000;
+				wbdata.historicSummary['lp' + i].energyToday = cpEnergy
+			}
+			for (i = 3; i < 8; i++) {
+				cpEnergy = (endValues[12 + i] - startValues[12 + i]) / 1000;
+				wbdata.historicSummary['lp' + i].energyToday = cpEnergy
+			}
 			wbdata.historicSummary.charging.energy = (endValues[7] - startValues[7]) / 1000;
+			
 			var deviceEnergySum = 0;
 			var deviceEnergy = 0;
 			let deviceIndex = (wbdata.graphMode == 'day') ? 26 : 19;
@@ -386,6 +399,7 @@ class PowerGraph {
 			deviceEnergySum = deviceEnergySum + (endValues[10] - startValues[10]) / 1000;
 			deviceEnergySum = deviceEnergySum + (endValues[12] - startValues[12]) / 1000;
 			wbdata.historicSummary.devices.energy = deviceEnergySum;
+			
 			wbdata.historicSummary.batIn.energy = (endValues[8] - startValues[8]) / 1000;
 			wbdata.historicSummary.house.energy = wbdata.historicSummary.evuIn.energy + wbdata.historicSummary.pv.energy + wbdata.historicSummary.batOut.energy
 				- wbdata.historicSummary.evuOut.energy - wbdata.historicSummary.batIn.energy - wbdata.historicSummary.charging.energy - wbdata.historicSummary.devices.energy;
@@ -399,6 +413,13 @@ class PowerGraph {
 			wbdata.historicSummary[cat].energyBat = wbdata.usageSummary[cat].energyBat
 			wbdata.historicSummary[cat].pvPercentage = wbdata.usageSummary[cat].pvPercentage
 		})
+		if (wbdata.graphMode == 'day') {
+			wbdata.chargePoint.map (cp => {cp.energy = cp.energyToday})
+		} else {
+			wbdata.chargePoint.map (cp => {cp.energy = cp.energySincePlugged})
+			
+		}
+
 	}
 
 	updateMonthlyEnergyValues() {
@@ -407,6 +428,14 @@ class PowerGraph {
 			wbdata.historicSummary.evuIn.energy = +this.monthlyAmounts[1];
 			wbdata.historicSummary.batOut.energy = +this.monthlyAmounts[18];
 			wbdata.historicSummary.evuOut.energy = +this.monthlyAmounts[2];;
+			this.lpIndexes.map ((record,i) =>  {
+				wbdata.historicSummary['lp' + i].energy = +this.monthlyAmounts[record]
+				wbdata.historicSummary['lp' + i].energyPv = 0
+				wbdata.historicSummary['lp' + i].energyBat = 0
+				wbdata.historicSummary['lp' + i].pvPercentage = 0
+				
+			})
+			
 			wbdata.historicSummary.charging.energy = +this.monthlyAmounts[7];
 			var deviceEnergySum = 0;
 			var deviceEnergyPvSum = 0;
@@ -443,6 +472,7 @@ class PowerGraph {
 			wbdata.historicSummary.house.energyBat = batHouse / 1000;
 			wbdata.usageSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
 			wbdata.historicSummary.house.pvPercentage = Math.round((wbdata.historicSummary.house.energyPv + wbdata.historicSummary.house.energyBat) / (wbdata.historicSummary.house.energy) * 100)
+		
 		}
 	}
 	updateAnnualEnergyValues() {
@@ -451,6 +481,12 @@ class PowerGraph {
 			wbdata.historicSummary.evuIn.energy = +this.monthlyAmounts[1];
 			wbdata.historicSummary.batOut.energy = +this.monthlyAmounts[18];
 			wbdata.historicSummary.evuOut.energy = +this.monthlyAmounts[2];;
+			this.lpIndexes.map ((record,i) =>  {
+				wbdata.historicSummary['lp' + i].energy = +this.monthlyAmounts[record]
+				wbdata.historicSummary['lp' + i].energyPv = 0
+				wbdata.historicSummary['lp' + i].energyBat = 0
+				wbdata.historicSummary['lp' + i].pvPercentage = 0
+			})
 			wbdata.historicSummary.charging.energy = +this.monthlyAmounts[7];
 			var deviceEnergySum = 0;
 			var deviceEnergyPvSum = 0;
