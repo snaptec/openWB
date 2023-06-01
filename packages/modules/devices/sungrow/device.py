@@ -86,7 +86,9 @@ COMPONENT_TYPE_TO_MODULE = {
 }
 
 
-def read_legacy(ip_address: str, modbus_id: int, component_config: dict):
+def read_legacy(ip_address: str, 
+                modbus_id: int, 
+                component_config: dict):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
     device_config.configuration.port = 502
