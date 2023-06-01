@@ -172,7 +172,7 @@
 									</select>
 								</div>
 								<div class="card-text alert alert-warning">
-								1) Die Variante SH mit Batterie nur über die LAN IP mit OPenWB nutzbar (Hierzu hinter dem WiNet den Lan Anschluss nutzen). WiNet zusätzlich ins Heimnetz (per Lan oder Wlan) einbinden um ISolarCloud nutzen zu können.
+								1) Die Variante SH mit Batterie nur über die LAN IP mit OpenWB nutzbar (Hierzu hinter dem WiNet den Lan Anschluss nutzen). WiNet zusätzlich ins Heimnetz (per Lan oder Wlan) einbinden um ISolarCloud nutzen zu können.
 								2) Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-Dongls aktuell.
 								</div>
 							</div>
