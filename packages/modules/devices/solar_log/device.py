@@ -41,12 +41,20 @@ def create_device(device_config: SolarLog):
 
 def read_legacy(component_type: str, ip_address: str, note_bat: Optional[int] = 0) -> None:
     log.debug('Solar-Log ip_address: ' + ip_address)
-
-    if component_type == "counter":
+    if component_type == "inverter":
+        inverter = SolarLogInverter(None, SolarLogInverterSetup(id=1))
+        with SingleComponentUpdateContext(inverter.component_info):
+            response = req.get_http_session().post('http://'+ip_address+'/getjp',
+                                                    data=json.dumps({"801": {"170": None}}), timeout=5).json()
+            inverter.update(response)
+    elif component_type == "counter":
+        inverter = SolarLogInverter(None, SolarLogInverterSetup(id=1))
         counter = SolarLogCounter(None, SolarLogCounterSetup(id=None))
         with SingleComponentUpdateContext(counter.component_info):
+            # WR bei WR oder EVU-Modul immer auslesen
             response = req.get_http_session().post('http://'+ip_address+'/getjp',
-                                                   data=json.dumps({"801": {"170": None}}), timeout=5).json()
+                                                    data=json.dumps({"801": {"170": None}}), timeout=5).json()
+            inverter.update(response)
             power = counter.get_power(response)
             pvwatt = int(float(response["801"]["170"]["101"]))
             power = power - pvwatt
@@ -56,10 +64,6 @@ def read_legacy(component_type: str, ip_address: str, note_bat: Optional[int] = 
                     speicherleistung = int(float(f.read()))
                 power = power + speicherleistung
             counter.store_values(power)
-    # WR bei WR oder EVU-Modul immer auslesen
-    device = create_device(SolarLogConfiguration(ip_address=ip_address))
-    device.add_component(SolarLogInverterSetup(id=1))
-    device.update()
 
 
 def main(argv: List[str]):
