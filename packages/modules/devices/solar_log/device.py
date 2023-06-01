@@ -9,9 +9,7 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.configurable_device import ComponentFactoryByType, ConfigurableDevice, MultiComponentUpdater
 from modules.common import req
 from modules.devices.solar_log.counter import SolarLogCounter
-from modules.devices.solar_log.config import (SolarLog, SolarLogConfiguration,
-                                              SolarLogCounterSetup,
-                                              SolarLogInverterSetup)
+from modules.devices.solar_log.config import SolarLog, SolarLogCounterSetup, SolarLogInverterSetup
 from modules.devices.solar_log.inverter import SolarLogInverter
 log = logging.getLogger(__name__)
 
@@ -45,7 +43,7 @@ def read_legacy(component_type: str, ip_address: str, note_bat: Optional[int] = 
         inverter = SolarLogInverter(None, SolarLogInverterSetup(id=1))
         with SingleComponentUpdateContext(inverter.component_info):
             response = req.get_http_session().post('http://'+ip_address+'/getjp',
-                                                    data=json.dumps({"801": {"170": None}}), timeout=5).json()
+                                                   data=json.dumps({"801": {"170": None}}), timeout=5).json()
             inverter.update(response)
     elif component_type == "counter":
         inverter = SolarLogInverter(None, SolarLogInverterSetup(id=1))
@@ -53,7 +51,7 @@ def read_legacy(component_type: str, ip_address: str, note_bat: Optional[int] = 
         with SingleComponentUpdateContext(counter.component_info):
             # WR bei WR oder EVU-Modul immer auslesen
             response = req.get_http_session().post('http://'+ip_address+'/getjp',
-                                                    data=json.dumps({"801": {"170": None}}), timeout=5).json()
+                                                   data=json.dumps({"801": {"170": None}}), timeout=5).json()
             inverter.update(response)
             power = counter.get_power(response)
             pvwatt = int(float(response["801"]["170"]["101"]))
