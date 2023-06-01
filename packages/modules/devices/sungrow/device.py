@@ -88,7 +88,7 @@ def read_legacy(ip_address: str,
                 component_config: dict):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
-    device_config.configuration.port = 502
+    device_config.configuration.port = port
     device_config.configuration.modbus_id = modbus_id
     dev = Device(device_config)
     dev.add_component(component_config)
