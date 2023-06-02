@@ -10,19 +10,13 @@ from modules.common.component_context import MultiComponentUpdateContext
 from modules.devices.sungrow import bat
 from modules.devices.sungrow import counter
 from modules.devices.sungrow import inverter
-from modules.devices.sungrow.config import (Sungrow, SungrowBatSetup,  
-                                            SungrowCounterConfiguration,
-                                            SungrowCounterSetup,
+from modules.devices.sungrow.config import (Sungrow, SungrowBatSetup, SungrowCounterConfiguration, SungrowCounterSetup,
                                             SungrowInverterSetup)
 from modules.devices.sungrow.version import Version
 
-
 log = logging.getLogger(__name__)
 
-
-sungrow_component_classes = Union[bat.SungrowBat,
-                                  counter.SungrowCounter,
-                                  inverter.SungrowInverter]
+sungrow_component_classes = Union[bat.SungrowBat, counter.SungrowCounter, inverter.SungrowInverter]
 
 
 class Device(AbstractDevice):
@@ -39,21 +33,19 @@ class Device(AbstractDevice):
             self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
                                                   502)
         except Exception:
-            log.exception("Fehler im Modul "+self.device_config.name)
+            log.exception("Fehler im Modul " + self.device_config.name)
 
     def add_component(self,
-                      component_config: Union[Dict,
-                                              SungrowBatSetup,
-                                              SungrowCounterSetup,
-                                              SungrowInverterSetup]) -> None:
+                      component_config: Union[
+                          Dict, SungrowBatSetup, SungrowCounterSetup, SungrowInverterSetup]) -> None:
         if isinstance(component_config, Dict):
             component_type = component_config["type"]
         else:
             component_type = component_config.type
-        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
-            component_type].component_descriptor.configuration_factory, component_config)
+        component_config = dataclass_from_dict(
+            COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory, component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component" + str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config.id, self.device_config.configuration.modbus_id, component_config, self.client))
         else:
             raise Exception(

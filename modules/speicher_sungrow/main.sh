@@ -10,7 +10,7 @@ else
 	MYLOGFILE="$RAMDISKDIR/bat.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "bat" "$pv1_ipa" "$pv1_ida" "0" "0">>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "bat" "$pv1_ipa" "$pv1_ida" "0" "0" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog $DMOD 2 "BAT RET: $ret"
