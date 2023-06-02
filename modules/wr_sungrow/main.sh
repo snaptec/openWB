@@ -10,6 +10,11 @@ else
 	MYLOGFILE="$RAMDISKDIR/nurpv.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "inverter" "$speicher1_ip" "$sungrowspeicherport" "$sungrowspeicherid" "1" >>"$MYLOGFILE" 2>&1
+if [[ "$wattbezugmodul" == "bezug_sungrow" ]]; then
+	read_counter=1
+else
+	read_counter=0
+fi
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "inverter" "$pv1_ipa" "$pv1_ida" "1" "$read_counter" "$sungrowsr" >>"$MYLOGFILE" 2>&1
 
 cat "$RAMDISKDIR/pvwatt"

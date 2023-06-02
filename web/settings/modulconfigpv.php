@@ -162,6 +162,20 @@
 							</div>
 						</div>
 						<div id="pvsungrow" class="hide">
+							<div class="form-row mb-1">
+								<label for="sungrowsr" class="col-md-4 col-form-label">Variante des Sungrow</label>
+								<div class="col">
+									<select name="sungrowsr" id="sungrowsr" class="form-control">
+										<option <?php if($sungrowsrold == 0) echo "selected" ?> value="0">SH (Hybrid)</option>
+										<option <?php if($sungrowsrold == 1) echo "selected" ?> value="1">SG (kein Hybrid)</option>
+										<option <?php if($sungrowsrold == 2) echo "selected" ?> value="2">SG mit WiNet-Dongle (kein Hybrid)</option>
+									</select>
+								</div>
+								<div class="card-text alert alert-warning">
+								1) Die Variante SH mit Batterie nur über die LAN IP mit OpenWB nutzbar (Hierzu hinter dem WiNet den Lan Anschluss nutzen). WiNet zusätzlich ins Heimnetz (per Lan oder Wlan) einbinden um ISolarCloud nutzen zu können.
+								2) Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-Dongls aktuell.
+								</div>
+							</div>
 							<div class="card-text alert alert-info">
 								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
 							</div>
@@ -1118,6 +1132,8 @@
 									showSection('#pvbatterx');
 								}
 								if($('#pvwattmodul').val() == 'wr_sungrow') {
+									showSection('#pvip');
+									showSection('#pvid');
 									showSection('#pvsungrow');
 								}
 								if($('#pvwattmodul').val() == 'wr_sonneneco') {
@@ -1357,6 +1373,22 @@
 								</div>
 							</div>
 						</div>
+						<div id="pv2sungrow" class="hide">
+							<div class="form-row mb-1">
+								<label for="sungrow2sr" class="col-md-4 col-form-label">Variante des Sungrow</label>
+								<div class="col">
+									<select name="sungrow2sr" id="sungrow2sr" class="form-control">
+										<option <?php if($sungrowsrold == 0) echo "selected" ?> value="0">SH (Hybrid)</option>
+										<option <?php if($sungrowsrold == 1) echo "selected" ?> value="1">SG (kein Hybrid)</option>
+										<option <?php if($sungrowsrold == 2) echo "selected" ?> value="2">SG mit WiNet-Dongle (kein Hybrid)</option>
+									</select>
+								</div>
+								<div class="card-text alert alert-warning">
+								1) Die Variante SH kann bei PV2 nur ohne Batterie berücksichtigt werden. Mit angeschlossener Batterie und Sungrow EVU nur an PV1 nutzbar.
+								2) Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-Dongls aktuell.
+								</div>
+							</div>
+						</div>
 						<div id="pv2solarlogdiv" class="hide">
 							<div class="form-row mb-1">
 								<label for="bezug2_solarlog_ip" class="col-md-4 col-form-label">IP Adresse</label>
@@ -1439,8 +1471,9 @@
 								}
 								if($('#pv2wattmodul').val() == 'wr2_sungrow') {
 									showSection('#pv2ipdiv');
-									showSection('#pv2portdiv');
 									showSection('#pv2iddiv');
+									showSection('#pv2sungrow');
+
 								}
 
 								if($('#pv2wattmodul').val() == 'wr2_kostalpiko') {
