@@ -10,7 +10,7 @@ from modules.common.component_context import MultiComponentUpdateContext
 from modules.devices.sungrow import bat
 from modules.devices.sungrow import counter
 from modules.devices.sungrow import inverter
-from modules.devices.sungrow.config import (Sungrow, SungrowBatSetup,
+from modules.devices.sungrow.config import (Sungrow, SungrowBatSetup,  
                                             SungrowCounterConfiguration,
                                             SungrowCounterSetup,
                                             SungrowInverterSetup)
@@ -114,6 +114,7 @@ def read_legacy_counter(ip_address: str, modbus_id: int,
 
 
 def read_legacy_inverter(ip_address: str,
+
                          modbus_id: int,
                          num: int,
                          read_counter: int,
