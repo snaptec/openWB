@@ -16,11 +16,9 @@ from modules.devices.sungrow.version import Version
 class SungrowCounter:
     def __init__(self,
                  device_id: int,
-                 device_modbus_id: int,
                  component_config: Union[Dict, SungrowCounterSetup],
                  tcp_client: modbus.ModbusTcpClient_) -> None:
         self.__device_id = device_id
-        self.__device_modbus_id = device_modbus_id
         self.component_config = dataclass_from_dict(SungrowCounterSetup, component_config)
         self.__tcp_client = tcp_client
         self.sim_counter = SimCounter(self.__device_id, self.component_config.id, prefix="bezug")

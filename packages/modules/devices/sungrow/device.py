@@ -30,14 +30,15 @@ class Device(AbstractDevice):
         self.components = {}  # type: Dict[str, sungrow_component_classes]
         try:
             self.device_config = dataclass_from_dict(Sungrow, device_config)
-            self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
-                                                  502)
+            ip_address = self.device_config.configuration.ip_address
+            self.client = modbus.ModbusTcpClient_(ip_address, 502)
         except Exception:
             log.exception("Fehler im Modul " + self.device_config.name)
 
-    def add_component(self,
-                      component_config: Union[
-                          Dict, SungrowBatSetup, SungrowCounterSetup, SungrowInverterSetup]) -> None:
+    def add_component(self, component_config: Union[Dict,
+    SungrowBatSetup,
+    SungrowCounterSetup,
+    SungrowInverterSetup]) -> None:
         if isinstance(component_config, Dict):
             component_type = component_config["type"]
         else:
