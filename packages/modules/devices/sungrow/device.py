@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union
 
 from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
