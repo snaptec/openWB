@@ -1130,9 +1130,9 @@
 									showSection('#pvbatterx');
 								}
 								if($('#pvwattmodul').val() == 'wr_sungrow') {
-									showSection('#pvsungrow');
 									showSection('#pvip');
 									showSection('#pvid');
+									showSection('#pvsungrow');
 								}
 								if($('#pvwattmodul').val() == 'wr_sonneneco') {
 									showSection('#pvsonneneco');
