@@ -35,8 +35,7 @@ class Device(AbstractDevice):
             log.exception("Fehler im Modul " + self.device_config.name)
 
     def add_component(self,
-                      component_config: Union[
-                          Dict, SungrowBatSetup, SungrowCounterSetup, SungrowInverterSetup]) -> None:
+                      component_config: Union[Dict, GoodWeBatSetup, GoodWeCounterSetup, GoodWeInverterSetup]) -> None:
         if isinstance(component_config, Dict):
             component_type = component_config["type"]
         else:
