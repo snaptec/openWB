@@ -90,23 +90,16 @@ def read_legacy(ip_address: str,
     dev.update()
 
 
-def read_legacy_bat(ip_address: str, modbus_id: int,
-                    num: Optional[int] = None,
-                    read_counter: Optional[int] = None,
-                    version: Optional[int] = None):
+def read_legacy_bat(ip_address: str, modbus_id: int):
     read_legacy(ip_address, modbus_id, bat.component_descriptor.configuration_factory(id=None))
 
 
-def read_legacy_counter(ip_address: str, modbus_id: int,
-                        version: int,
-                        read_counter: int,
-                        unused_version: int):
+def read_legacy_counter(ip_address: str, modbus_id: int, version: int):
     read_legacy(ip_address, modbus_id, counter.component_descriptor.configuration_factory(
         id=None, configuration=SungrowCounterConfiguration(version=Version(version))))
 
 
 def read_legacy_inverter(ip_address: str,
-
                          modbus_id: int,
                          num: int,
                          read_counter: int,
