@@ -176,6 +176,9 @@
 								2) Beim SH mit Batterie Auswahl "Sungrow" im Modul Batteriespeicher erforderlich. <br>
 								3) Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-Dongls aktuell.
 								</div>
+								<span class="form-text small">
+								Gültige Werte der Geräteadresse 1-254. Standard ist 1.
+								</span>
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
@@ -1382,9 +1385,12 @@
 									</select>
 								</div>
 								<div class="card-text alert alert-warning">
-								1) Die Variante SH kann bei PV2 nur ohne Batterie berücksichtigt werden. Mit angeschlossener Batterie und Sungrow EVU nur an PV1 nutzbar.
+								1) Die Variante SH kann bei PV2 nur ohne Batterie berücksichtigt werden. Mit angeschlossener Batterie und Sungrow EVU nur an PV1 nutzbar. <br>
 								2) Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-Dongls aktuell.
 								</div>
+								<span class="form-text small">
+								Gültige Werte der Geräteadresse 1-254. Standard ist 1.
+								</span>
 							</div>
 						</div>
 						<div id="pv2solarlogdiv" class="hide">
