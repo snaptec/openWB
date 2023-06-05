@@ -261,11 +261,9 @@
 						</div>
 
 						<div id="divspeichersungrow" class="hide">
-							<div class="card-text alert alert-warning">
-								Bitte halten Sie zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und Wii Net Dongels aktuell.
-							</div>
 							<div class="alert alert-info">
-								Es muss Sungrow Variante SH im Modul PV1 und gegebenenfalls Sungrow als EVU Modul gewählt werden.
+								1) Es muss "Sungrow" Variante "SH" im Modul PV1 und gegebenenfalls "Sungrow" als EVU Modul gewählt werden. <br>
+								2) Bitte halten Sie zur Fehlervermeidung die Firmware der Batterie aktuell.
 							</div>
 						</div>
 

@@ -141,7 +141,7 @@
 						</div>
 						<div id="wattbezugsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen PV-Modul 1 mit Auswahl Sungrow erforderlich!
+								Konfiguration im zugehörigen PV-Modul 1 mit Auswahl "Sungrow" erforderlich!
 							</div>
 						</div>
 						<div id="wattbezugsonneneco" class="hide">

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union
 
 from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
@@ -30,8 +30,8 @@ class Device(AbstractDevice):
         self.components = {}  # type: Dict[str, sungrow_component_classes]
         try:
             self.device_config = dataclass_from_dict(Sungrow, device_config)
-            self.client = modbus.ModbusTcpClient_(self.device_config.configuration.ip_address,
-                                                  502)
+            ip_address = self.device_config.configuration.ip_address
+            self.client = modbus.ModbusTcpClient_(ip_address, 502)
         except Exception:
             log.exception("Fehler im Modul " + self.device_config.name)
 
@@ -90,23 +90,16 @@ def read_legacy(ip_address: str,
     dev.update()
 
 
-def read_legacy_bat(ip_address: str, modbus_id: int,
-                    num: Optional[int] = None,
-                    read_counter: Optional[int] = None,
-                    version: Optional[int] = None):
+def read_legacy_bat(ip_address: str, modbus_id: int):
     read_legacy(ip_address, modbus_id, bat.component_descriptor.configuration_factory(id=None))
 
 
-def read_legacy_counter(ip_address: str, modbus_id: int,
-                        version: int,
-                        read_counter: int,
-                        unused_version: int):
+def read_legacy_counter(ip_address: str, modbus_id: int, version: int):
     read_legacy(ip_address, modbus_id, counter.component_descriptor.configuration_factory(
         id=None, configuration=SungrowCounterConfiguration(version=Version(version))))
 
 
 def read_legacy_inverter(ip_address: str,
-
                          modbus_id: int,
                          num: int,
                          read_counter: int,
