@@ -16,13 +16,9 @@ else
 	MYLOGFILE="${RAMDISKDIR}/wr_youless120.log"
 fi
 
-openwbDebugLog ${DMOD} 2 "PV IP: ${wryoulessip}"
-openwbDebugLog ${DMOD} 2 "PV Alternative: ${wryoulessalt}"
-
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_youless120.youless" "${wryoulessip}" "${wryoulessalt}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.youless.device" "inverter" "${wryoulessip}" "${wryoulessalt}" "1">>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
-echo $pvwatt
+cat "${RAMDISKDIR}/pvwatt"
