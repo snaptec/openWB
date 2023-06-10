@@ -35,7 +35,7 @@ class Sbase(Sbase0):
         # 20 = Anlauferkennung aktiv
         # (ausschalten wenn Leistungsaufnahme > Schwelle)
         #  30 = gestartet um fertig bis zu erreichen
-        # default 10        
+        # default 10
         self.mess_only = 0
         self._first_run = 1
         self.device_nummer = 0
@@ -161,10 +161,10 @@ class Sbase(Sbase0):
         if ((self.newwatt > self._device_nonewatt)
            and (self.device_type == 'none')):
             self.relais = 1
-        if self.device_type == 'none':     
+        if self.device_type == 'none':
             self.mess_only = 1
-        else:     
-            self.mess_only = 0            
+        else:
+            self.mess_only = 0
         # bei laufender Anlauferkennung deivce nicht aktiv setzten
         if (self.relais == 1) and (self.devstatus != 20):
             self.relais = 1
