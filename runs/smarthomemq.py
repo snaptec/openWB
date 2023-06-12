@@ -100,4 +100,4 @@ if __name__ == "__main__":
                         + str(e))
             wattbezug = 0
         mainloop(wattbezug, speicherleistung, speichersoc)
-
+        time.sleep(5)
