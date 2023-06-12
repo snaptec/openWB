@@ -486,4 +486,3 @@ def mainloop(wattbezug: int, speicherleistung: int, speichersoc: int) -> None:
                     mqtt_man[pref + 'device_manual_control'] = workman
     if (sendmess == 1):
         sendmq(mqtt_man)
-    time.sleep(5)
