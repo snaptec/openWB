@@ -2278,6 +2278,9 @@ updateConfig(){
 	if ! grep -Fq "batterx_ip=" $ConfigFile; then
 		echo "batterx_ip=192.168.0.17" >> $ConfigFile
 	fi
+	if ! grep -Fq "pvbatterxextinverter=" $ConfigFile; then
+		echo "pvbatterxextinverter=0" >> $ConfigFile
+	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
 		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
 	fi

@@ -158,7 +158,20 @@
 						</div>
 						<div id="pvbatterx" class="hide">
 							<div class="card-text alert alert-info">
-								Keine Konfiguration erforderlich.
+								Konfiguration der IP-Adresse im BatterX-Zähler.
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Externer Wechselrichter</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pvbatterxextinverterold == 0) echo " active" ?>">
+											<input type="radio" name="pvbatterxextinverter" id="pvbatterxextinverterNo" value="0"<?php if($pvbatterxextinverterold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($wryoulessaltold == 1) echo " active" ?>">
+											<input type="radio" name="pvbatterxextinverter" id="pvbatterxextinverterYes" value="1"<?php if($pvbatterxextinverterold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div id="pvsungrow" class="hide">
