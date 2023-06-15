@@ -367,7 +367,7 @@
 						
 						<div id="divspeicherbatterx" class="hide">
 							<div class="alert alert-info">
-								Konfiguration im Bezug BatterX Modul.
+							Konfiguration der IP-Adresse im BatterX EVU Modul.
 							</div>
 						</div>
 
