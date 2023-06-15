@@ -6,7 +6,7 @@ from modules.common import sdm
 from modules.common.fault_state import FaultState
 
 
-def kit_counter_inverter_version_factory(
+def kit_counter_version_factory(
         version: int) -> Type[Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm.Sdm630]]:
     if version == 0:
         return mpm3pm.Mpm3pm
@@ -14,6 +14,21 @@ def kit_counter_inverter_version_factory(
         return lovato.Lovato
     elif version == 2:
         return sdm.Sdm630
+    else:
+        raise FaultState.error("Version "+str(version) +
+                               " unbekannt.")
+
+
+def kit_inverter_version_factory(
+        version: int) -> Type[Union[mpm3pm.Mpm3pm, lovato.Lovato, sdm.Sdm630, sdm.Sdm120]]:
+    if version == 0:
+        return mpm3pm.Mpm3pm
+    elif version == 1:
+        return lovato.Lovato
+    elif version == 2:
+        return sdm.Sdm630
+    elif version == 3:
+        return sdm.Sdm120
     else:
         raise FaultState.error("Version "+str(version) +
                                " unbekannt.")
