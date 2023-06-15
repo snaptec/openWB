@@ -79,7 +79,8 @@ class WbData {
 		this.usageStackOrder = 0;
 		this.decimalPlaces = 1;
 		this.smartHomeColors = "normal";
-		this.chargepointSummary = true;
+		this.showCpEnergyDetails = true; 
+		this.showCpEnergySummary = true;
 		this.smartHomeSummary = true;
 		this.preferWideBoxes = false;
 		this.preferredLayout = 'dynamic';
@@ -293,6 +294,7 @@ class WbData {
 				break;
 			case 'name':
 				this.chargePoint[index-1]['icon'] = value
+				this.historicSummary['lp' + (index - 1)].icon = value;
 				break
 			default:
 				break;
@@ -392,7 +394,9 @@ class WbData {
 		this.prefs.showGr = this.showGrid;
 		this.prefs.decimalP = this.decimalPlaces;
 		this.prefs.smartHomeC = this.smartHomeColors;
-		this.prefs.chargepointSum = this.chargepointSummary;
+		this.prefs.cpEnergyDetails = this.showCpEnergyDetails;
+		this.prefs.cpEnergySum = this.showCpEnergySummary;
+		
 		this.prefs.smartHomeSum = this.smartHomeSummary;
 		this.prefs.wideBoxes = this.preferWideBoxes;
 		this.prefs.layout = this.preferredLayout;
@@ -431,8 +435,11 @@ class WbData {
 			if ('smartHomeC' in this.prefs) {
 				this.smartHomeColors = this.prefs.smartHomeC;
 			}
-			if ('chargepointSum' in this.prefs) {
-				this.chargepointSummary = this.prefs.chargepointSum;
+			if ('cpEnergySum' in this.prefs) {
+				this.showCpEnergySummary = this.prefs.cpEnergySum;
+			}
+			if ('cpEnergyDetails' in this.prefs) {
+				this.showCpEnergyDetails = this.prefs.cpEnergyDetails;
 			}
 			if ('smartHomeSum' in this.prefs) {
 				this.smartHomeSummary = this.prefs.smartHomeSum;
@@ -712,7 +719,16 @@ function switchSmartHomeColors() {
 }
 
 function toggleChargepointSummary() {
-	wbdata.chargepointSummary = !wbdata.chargepointSummary
+	if (wbdata.showCpEnergyDetails) {
+		if (wbdata.showCpEnergySummary) { 
+			wbdata.showCpEnergyDetails = false;
+		} else { 
+			wbdata.showCpEnergySummary = true;
+		}
+	} else { 
+			wbdata.showCpEnergyDetails = true;
+			wbdata.showCpEnergySummary = false;
+	}
 	yieldMeter.update()
 	wbdata.persistGraphPreferences();
 }
