@@ -56,8 +56,8 @@ class Device(AbstractDevice):
     def update(self) -> None:
         log.debug("Start device reading " + str(self.components))
         if self.components:
-            with self.client:
-                with MultiComponentUpdateContext(self.components):
+            with MultiComponentUpdateContext(self.components):
+                with self.client:
                     for component in self.components:
                         if isinstance(component, inverter.SungrowInverter):
                             pv_power = component.update()
