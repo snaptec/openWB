@@ -127,7 +127,7 @@ class UpdateState:
         self.__set_current_error = 0
 
     def update_state(self) -> None:
-        if self.cp_module.config.id == 0:
+        if self.cp_module.local_charge_point_num == 0:
             suffix = ""
         else:
             suffix = "s1"
