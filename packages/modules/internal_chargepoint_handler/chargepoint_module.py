@@ -16,6 +16,7 @@ class ChargepointModule(AbstractChargepoint):
     PLUG_STANDBY_POWER_THRESHOLD = 10
 
     def __init__(self, local_charge_point_num: int, client_handler: ClientHandler, parent_hostname: str) -> None:
+        self.local_charge_point_num = local_charge_point_num
         self.component_info = ComponentInfo(
             local_charge_point_num,
             "Ladepunkt "+str(local_charge_point_num), "chargepoint", parent_hostname)

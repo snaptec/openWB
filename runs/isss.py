@@ -170,12 +170,12 @@ class UpdateState:
 
         if self.phase_switch_thread:
             if self.phase_switch_thread.is_alive():
-                log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.config.id) +
+                log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.local_charge_point_num) +
                           " noch aktiv. Es muss erst gewartet werden, bis die Phasenumschaltung abgeschlossen ist.")
                 return
         if self.cp_interruption_thread:
             if self.cp_interruption_thread.is_alive():
-                log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.config.id) +
+                log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.local_charge_point_num) +
                           " noch aktiv. Es muss erst gewartet werden, bis die CP-Unterbrechung abgeschlossen ist.")
                 return
         self.cp_module.set_current(set_current)
