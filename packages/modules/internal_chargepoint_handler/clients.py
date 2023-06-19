@@ -20,27 +20,24 @@ CP0_METERS = [meter_config(mpm3pm.Mpm3pm, modbus_id=5),
 
 CP1_METERS = [meter_config(mpm3pm.Mpm3pm, modbus_id=6), meter_config(sdm.Sdm630, modbus_id=106)]
 
-EVSE_ID = [1, 2]
+EVSE_ID_CP0 = [1]
+EVSE_ID_TWO_BUSSES_CP1 = [1, 2]
+EVSE_ID_ONE_BUS_CP1 = [2]
 EVSE_MIN_FIRMWARE = 7
 
 
-class ClientConfig:
-    def __init__(self, id: int, serial_client: ModbusSerialClient_) -> None:
-        self.id = id
+class ClientHandler:
+    def __init__(self, local_charge_point_num: int, serial_client: ModbusSerialClient_, evse_ids: List[int]) -> None:
         self.serial_client = serial_client
-
-
-class ClientFactory:
-    def __init__(self, local_charge_point_num: int, serial_client: ModbusSerialClient_) -> None:
         self.local_charge_point_num = local_charge_point_num
-        self.evse_client = self.__evse_factory(serial_client)
+        self.evse_client = self.__evse_factory(serial_client, evse_ids)
         self.meter_client = self.find_meter_client(CP0_METERS if self.local_charge_point_num == 0 else CP1_METERS,
                                                    serial_client)
         self._check_hardware()
         self.read_error = 0
 
-    def __evse_factory(self, serial_client: ModbusSerialClient_) -> evse.Evse:
-        for modbus_id in EVSE_ID:
+    def __evse_factory(self, serial_client: ModbusSerialClient_, evse_ids: List[int]) -> evse.Evse:
+        for modbus_id in evse_ids:
             try:
                 evse_client = evse.Evse(modbus_id, serial_client)
                 with serial_client:
@@ -92,8 +89,8 @@ class ClientFactory:
             return 15
 
 
-def serial_client_factory(local_charge_point_num: int,
-                          created_client: Optional[ModbusSerialClient_] = None) -> ModbusSerialClient_:
+def client_factory(local_charge_point_num: int,
+                   created_client_handler: Optional[ClientHandler] = None) -> ClientHandler:
     tty_devices = list(Path("/dev/serial/by-path").glob("*"))
     log.debug("tty_devices"+str(tty_devices))
     resolved_devices = [str(file.resolve()) for file in tty_devices]
@@ -102,24 +99,28 @@ def serial_client_factory(local_charge_point_num: int,
     if counter == 1 and resolved_devices[0] in BUS_SOURCES:
         if local_charge_point_num == 0:
             log.error("LP0 Device: "+str(resolved_devices[0]))
-            return ModbusSerialClient_(resolved_devices[0])
+            serial_client = ModbusSerialClient_(resolved_devices[0])
+            evse_ids = EVSE_ID_CP0
         else:
             # Don't create two clients for one source!
             log.error("LP1 gleiches Device wie LP0")
-            return created_client
+            serial_client = created_client_handler.serial_client
+            evse_ids = EVSE_ID_ONE_BUS_CP1
     elif counter > 1:
         log.error("found "+str(counter)+" possible usb devices: "+str(resolved_devices))
         if local_charge_point_num == 0:
             meters = CP0_METERS
+            evse_ids = EVSE_ID_CP0
         else:
             meters = CP1_METERS
+            evse_ids = EVSE_ID_TWO_BUSSES_CP1
         for device in BUS_SOURCES:
             if device in resolved_devices:
                 serial_client = ModbusSerialClient_(device)
                 # Source immer an der Modbus-ID des Zählers fest machen, da diese immer fest ist.
                 # Die USB-Anschlüsse können vertauscht sein.
-                detected_device = ClientFactory.find_meter_client(meters, serial_client)
+                detected_device = ClientHandler.find_meter_client(meters, serial_client)
                 if detected_device:
                     break
         log.error("LP"+str(local_charge_point_num)+" Device: "+str(device))
-        return serial_client
+    return ClientHandler(local_charge_point_num, serial_client, evse_ids)

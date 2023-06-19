@@ -14,11 +14,9 @@ from modules.common.store import ramdisk_read, ramdisk_write
 from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
 from modules.common.component_state import ChargepointState
-from modules.common.modbus import ModbusSerialClient_
 from modules.internal_chargepoint_handler import chargepoint_module
-from modules.internal_chargepoint_handler.clients import serial_client_factory
+from modules.internal_chargepoint_handler.clients import client_factory, ClientHandler
 from modules.internal_chargepoint_handler.socket import Socket
-from modules.internal_chargepoint_handler.chargepoint_module import ClientConfig
 
 basePath = "/var/www/html/openWB"
 ramdiskPath = basePath + "/ramdisk"
@@ -206,15 +204,15 @@ class UpdateState:
 class Isss:
     def __init__(self, mode: IsssMode, socket_max_current: int) -> None:
         log.debug("Init isss")
-        self.cp0_serial_client = serial_client_factory(0)
-        self.cp0 = IsssChargepoint(self.cp0_serial_client, 0, mode, socket_max_current)
+        self.cp0_client_handler = client_factory(0)
+        self.cp0 = IsssChargepoint(self.cp0_client_handler, 0, mode, socket_max_current)
         if mode == IsssMode.DUO:
             log.debug("Zweiter Ladepunkt für Duo konfiguriert.")
-            self.cp1_serial_client = serial_client_factory(1, self.cp0_serial_client)
-            self.cp1 = IsssChargepoint(self.cp1_serial_client, 1, mode, socket_max_current)
+            self.cp1_client_handler = client_factory(1, self.cp0_client_handler)
+            self.cp1 = IsssChargepoint(self.cp1_client_handler, 1, mode, socket_max_current)
         else:
             self.cp1 = None
-            self.cp1_serial_client = None
+            self.cp1_client_handler = None
         self.init_gpio()
 
     def init_gpio(self) -> None:
@@ -240,12 +238,15 @@ class Isss:
                 if self.cp1:
                     self.cp1.update()
                 time.sleep(1.1)
-        if self.cp1_serial_client is None:
-            with self.cp0_serial_client:
+        if self.cp1_client_handler is None:
+            with self.cp0_client_handler.serial_client:
+                _loop()
+        elif self.cp0_client_handler.serial_client == self.cp1_client_handler.serial_client:
+            with self.cp0_client_handler.serial_client:
                 _loop()
         else:
-            with self.cp0_serial_client:
-                with self.cp1_serial_client:
+            with self.cp0_client_handler:
+                with self.cp1_client_handler.serial_client:
                     _loop()
 
     @staticmethod
@@ -268,18 +269,17 @@ class Isss:
             FaultState.warning("Für den Betrieb im Nur-Ladepunkt-Modus ist zwingend eine Master-openWB erforderlich.")
             return "localhost"
 
-
 class IsssChargepoint:
-    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode,
+    def __init__(self, client_handler: ClientHandler, local_charge_point_num: int, mode: IsssMode,
                  socket_max_current: int) -> None:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:
-                self.module = Socket(socket_max_current, ClientConfig(0, serial_client), "localhost")
+                self.module = Socket(socket_max_current,  local_charge_point_num, client_handler, "localhost")
             else:
-                self.module = chargepoint_module.ChargepointModule(ClientConfig(0, serial_client), "localhost")
+                self.module = chargepoint_module.ChargepointModule( local_charge_point_num, client_handler, "localhost")
         else:
-            self.module = chargepoint_module.ChargepointModule(ClientConfig(1, serial_client), "localhost")
+            self.module = chargepoint_module.ChargepointModule( local_charge_point_num, client_handler, "localhost")
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False

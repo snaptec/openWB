@@ -8,22 +8,20 @@ from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import ChargepointState
 from modules.common.fault_state import ComponentInfo, FaultState
 from modules.common.store import get_chargepoint_value_store, ramdisk_read
-from modules.internal_chargepoint_handler.clients import ClientConfig, ClientFactory
-
+from modules.internal_chargepoint_handler.clients import ClientHandler
 log = logging.getLogger(__name__)
 
 
 class ChargepointModule(AbstractChargepoint):
     PLUG_STANDBY_POWER_THRESHOLD = 10
 
-    def __init__(self, config: ClientConfig, parent_hostname: str) -> None:
-        self.config = config
+    def __init__(self, local_charge_point_num: int, client_handler: ClientHandler, parent_hostname: str) -> None:
         self.component_info = ComponentInfo(
-            self.config.id,
-            "Ladepunkt "+str(self.config.id), "chargepoint", parent_hostname)
-        self.store = get_chargepoint_value_store(self.config.id)
+            local_charge_point_num,
+            "Ladepunkt "+str(local_charge_point_num), "chargepoint", parent_hostname)
+        self.store = get_chargepoint_value_store(local_charge_point_num)
         self.old_plug_state = False
-        self.__client = ClientFactory(self.config.id, self.config.serial_client)
+        self.__client = client_handler
         time.sleep(0.1)
         self.__client.evse_client.get_firmware_version()
         self.__client.evse_client.deactivate_precise_current()
