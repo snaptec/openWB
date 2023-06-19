@@ -191,13 +191,13 @@ class UpdateState:
         self.phase_switch_thread = threading.Thread(
             target=self.cp_module.perform_phase_switch, args=(phases_to_use, 5))
         self.phase_switch_thread.start()
-        log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.config.id)+" gestartet.")
+        log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.local_charge_point_num)+" gestartet.")
 
     def __thread_cp_interruption(self, duration: int) -> None:
         self.cp_interruption_thread = threading.Thread(
             target=self.cp_module.perform_cp_interruption, args=(duration,))
         self.cp_interruption_thread.start()
-        log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.config.id)+" gestartet.")
+        log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.local_charge_point_num)+" gestartet.")
         ramdisk_write("extcpulp1", "0")
 
 
