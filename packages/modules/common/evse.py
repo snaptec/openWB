@@ -47,7 +47,7 @@ class Evse:
         charging = set_current > 0 if state.charge_enabled else False
         return plugged, charging, set_current
 
-    def get_firmware_version(self) -> bool:
+    def get_firmware_version(self) -> int:
         version = self.client.read_holding_registers(1005, ModbusDataType.UINT_16, unit=self.id)
         log.debug("FW-Version: "+str(version))
         return version
