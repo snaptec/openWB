@@ -172,11 +172,11 @@ loadvars(){
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
 		evseplugstatelp1=$(sudo python runs/readipmodbus.py "$evseiplp1" "$evseidlp1" 1002 1)
-		if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
+		if [ -z "${evseplugstatelp1}" ] || ! [[ "${evseplugstatelp1}" =~ $IsNumberRegex ]]; then
 			evseplugstate=$(</var/www/html/openWB/ramdisk/evseplugstate)
 			openwbDebugLog "MAIN" 0 "IP EVSE read CP1 issue - using previous state '${evseplugstate}'"
 		else
-			echo "$evseplugstate" > /var/www/html/openWB/ramdisk/evseplugstate
+			echo "$evseplugstatelp1" > /var/www/html/openWB/ramdisk/evseplugstate
 		fi
 		ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
 		if ((evseplugstatelp1 > 1)); then
