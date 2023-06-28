@@ -13,7 +13,7 @@ fi
 if [[ "$pvwattmodul" == "wr_sungrow" ]]; then
 	echo "value read at pv modul" >/dev/null
 else
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "counter" "$pv1_ipa" "$pv1_ida" "$sungrowsr" >>"$MYLOGFILE" 2>&1
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "counter" "$speicher1_ip" "$sungrowspeicherid" "$sungrowsr" >>"$MYLOGFILE" 2>&1
 	ret=$?
 fi
 

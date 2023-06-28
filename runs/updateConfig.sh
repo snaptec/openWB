@@ -2256,6 +2256,9 @@ updateConfig(){
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "sungrow2sr=" $ConfigFile; then
+		echo "sungrow2sr=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
 		echo "sungrowspeicherport=502" >> $ConfigFile
 		echo "sungrowspeicherid=1" >> $ConfigFile
