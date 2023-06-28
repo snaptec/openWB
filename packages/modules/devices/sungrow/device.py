@@ -58,10 +58,10 @@ class Device(AbstractDevice):
         if self.components:
             with MultiComponentUpdateContext(self.components):
                 with self.client:
-                    for component in self.components:
+                    for component in self.components.values():
                         if isinstance(component, inverter.SungrowInverter):
                             pv_power = component.update()
-                    for component in self.components:
+                    for component in self.components.values():
                         if isinstance(component, counter.SungrowCounter):
                             component.update(pv_power)
         else:
