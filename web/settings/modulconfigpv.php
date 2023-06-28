@@ -203,11 +203,11 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
- 								<label for="sungrowspeicherid" class="col-md-4 col-form-label">Geräteadresse</label>
- 								<div class="col">
- 									<input class="form-control" type="number" min="1" max="254" step="1" name="sungrowspeicherid" id="sungrowspeicherid" value="<?php echo $sungrowspeicheridold ?>">
- 									<span class="form-text small">Gültige Werte 1-254. Standard ist 1.</span>
- 								</div>
+								<label for="sungrowspeicherid" class="col-md-4 col-form-label">Geräteadresse</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" max="254" step="1" name="sungrowspeicherid" id="sungrowspeicherid" value="<?php echo $sungrowspeicheridold ?>">
+									<span class="form-text small">Gültige Werte 1-254. Standard ist 1.</span>
+								</div>
 							</div>
 						</div>
 						<div id="pvlgessv1" class="hide">
