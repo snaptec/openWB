@@ -15,6 +15,6 @@ if [[ "$wattbezugmodul" == "bezug_sungrow" ]]; then
 else
 	read_counter=0
 fi
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "inverter" "$pv1_ipa" "$pv1_ida" "1" "$read_counter" "$sungrowsr" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "inverter" "$speicher1_ip" "$sungrowspeicherid" "1" "$read_counter" "$sungrowsr" >>"$MYLOGFILE" 2>&1
 
 cat "$RAMDISKDIR/pvwatt"
