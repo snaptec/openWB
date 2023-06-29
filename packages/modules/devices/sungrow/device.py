@@ -64,6 +64,9 @@ class Device(AbstractDevice):
                     for component in self.components.values():
                         if isinstance(component, counter.SungrowCounter):
                             component.update(pv_power)
+                    for component in self.components.values():
+                        if isinstance(component, bat.SungrowBat):
+                            component.update()
         else:
             log.warning(
                 self.device_config.name +
