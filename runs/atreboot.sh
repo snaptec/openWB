@@ -209,14 +209,12 @@ at_reboot() {
 	if ! [ -x "$(command -v sshpass)" ]; then
 		sudo apt-get -qq update
 		sleep 1
-		sudo apt-get -qq install sshpass
+		sudo apt-get -qq install -y sshpass
 	fi
 	if [ "$(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed")" -eq 0 ]; then
 		sudo apt-get -qq update
 		sleep 1
-		sudo apt-get -qq install -y php-gd
-		sleep 1
-		sudo apt-get -qq install -y php7.0-xml
+		sudo apt-get -qq install -y php-gd php7.0-xml
 	fi
 	# required package for soc_vwid
 	if [ "$(dpkg-query -W -f='${Status}' libxslt1-dev 2>/dev/null | grep -c "ok installed")" -eq 0 ]; then
@@ -239,7 +237,8 @@ at_reboot() {
 	sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 	if [ ! -f /home/pi/ssl_patched ]; then
-		sudo apt-get update
+		sudo apt-get -qq update
+		sleep 1
 		sudo apt-get -qq install -y openssl libcurl3 curl libgcrypt20 libgnutls30 libssl1.1 libcurl3-gnutls libssl1.0.2 php7.0-cli php7.0-gd php7.0-opcache php7.0 php7.0-common php7.0-json php7.0-readline php7.0-xml php7.0-curl libapache2-mod-php7.0
 		touch /home/pi/ssl_patched
 	fi
@@ -247,7 +246,8 @@ at_reboot() {
 	# check for mosquitto packages
 	echo "mosquitto..."
 	if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
-		sudo apt-get update
+		sudo apt-get -qq update
+		sleep 1
 		sudo apt-get -qq install -y mosquitto mosquitto-clients
 		sudo service mosquitto start
 	fi
@@ -267,7 +267,9 @@ at_reboot() {
 	if python3 -c "import lxml" &>/dev/null; then
 		echo 'lxml installed...'
 	else
-		sudo apt-get install python3-lxml
+		sudo apt-get -qq update
+		sleep 1
+		sudo apt-get -qq install -y python3-lxml
 	fi
 
 	#Prepare for secrets used in soc module libvwid in Python
