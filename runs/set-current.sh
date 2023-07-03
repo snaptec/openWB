@@ -290,7 +290,7 @@ function setChargingCurrent () {
 	if [[ $evsecon == "daemon" ]]; then
 		setChargingCurrentDaemon "$current"
 	fi
-	if [[ $evsecon == "http" ]]; then
+	if [[ $evsecon == "httpevse" ]]; then
 		setChargingCurrenthttp "$current"
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
