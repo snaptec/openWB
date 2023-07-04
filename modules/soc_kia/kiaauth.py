@@ -79,7 +79,7 @@ def refreshAccessToken(refreshToken):
         'Host': parameters.getParameter('host'),
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.12.0'}
 
     try:
         response = kiahttp.postHTTP(url=url, headers=headers, data=data, timeout=parameters.getParameter('reqTimeout'))
@@ -104,7 +104,7 @@ def getDeviceId():
 
     url = parameters.getParameter('baseUrl') + '/api/v1/spa/notifications/register'
 
-    data = {"pushRegId": parameters.getParameter('GCMSenderId'), "pushType": "GCM", "uuid": str(uuid.uuid1())}
+    data = {"pushRegId": parameters.getParameter('GCMSenderId'), "pushType": parameters.getParameter('PushType'), "uuid": str(uuid.uuid4())}
     headers = {
         'ccsp-service-id': parameters.getParameter('clientId'),
         'ccsp-application-id': parameters.getParameter('appId'),
@@ -113,7 +113,7 @@ def getDeviceId():
         'Host': parameters.getParameter('host'),
         'Connection': 'Keep-Alive',
         'Accept-Encoding': 'gzip',
-        'User-Agent': 'okhttp/3.10.0',
+        'User-Agent': 'okhttp/3.12.0',
         'Stamp': stamps.getStamp()}
 
     try:
@@ -265,7 +265,7 @@ def getAuthToken(authCode):
         'Host': parameters.getParameter('host'),
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.12.0'}
 
     try:
         response = kiahttp.postHTTP(url=url, headers=headers, data=data, timeout=parameters.getParameter('reqTimeout'))
@@ -296,7 +296,7 @@ def getControlToken(pin):
         'Host': parameters.getParameter('host'),
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.12.0'}
 
     try:
         response = kiahttp.putHTTP(url=url, data=data, headers=headers, timeout=parameters.getParameter('reqTimeout'))

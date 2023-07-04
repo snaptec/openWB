@@ -117,16 +117,18 @@ def loadBrandData():
         setParameter('baseUrl', 'https://' + getParameter('host'))
         setParameter('clientId', 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a')
         setParameter('authClientId', '572e0304-5f8d-4b4c-9dd5-41aa84eed160')
-        setParameter('appId', 'e7bcd186-a5fd-410d-92cb-6876a42288bd')
+        setParameter('appId', 'a2b8469b-30a3-4361-8e13-6fceea8fbe74')
         setParameter('GCMSenderId', '345127537656')
+        setParameter('PushType', 'APNS')
         setParameter('basicToken', 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA==')
     if getParameter('brand') == 'hyundai':
         setParameter('host', 'prd.eu-ccapi.hyundai.com:8080')
         setParameter('baseUrl', 'https://' + getParameter('host'))
         setParameter('clientId', '6d477c38-3ca4-4cf3-9557-2a1929a94654')
         setParameter('authClientId', '64621b96-0f0d-11ec-82a8-0242ac130003')
-        setParameter('appId', '014d2225-8495-4735-812d-2616334fd15d')
+        setParameter('appId', '1eba27d2-9a5b-4eba-8ec7-97eb6c62fb51')
         setParameter('GCMSenderId', '414998006775')
+        setParameter('PushType', 'GCM')
         setParameter(
             'basicToken', 'Basic NmQ0NzdjMzgtM2NhNC00Y2YzLTk1NTctMmExOTI5YTk0NjU0OktVeTQ5WHhQekxwTHVvSzB4aEJDNzdXNlZYaG10UVI5aVFobUlGampvWTRJcHhzVg==')
 
