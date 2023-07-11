@@ -199,7 +199,10 @@ def sendmq(mqtt_input: Dict[str, str]) -> None:
         else:
             log.info("Mq pub " + str(key) + "=" +
                      str(value) + " old " + str(valueold))
-            mqtt_cache[key] = value
+            if (mqttcs in str(key)):
+                log.info("Mq no caching " + str(key))
+            else:
+                mqtt_cache[key] = value
             client.publish(key, payload=value, qos=0, retain=True)
             client.loop(timeout=2.0)
     client.disconnect()
