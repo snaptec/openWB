@@ -84,6 +84,7 @@ if count5 == 0:
         modbuswrite = 1
         neupower = 0
         pvmodus = 0
+        pvwatt = 0
         with open(file_stringpv, 'w') as f:
             f.write(str(pvmodus))
     lkwneu = float(neupower)
