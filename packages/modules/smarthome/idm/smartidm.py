@@ -29,7 +29,7 @@ class Sidm(Sbase):
 
     def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
-        forcesend = self.checkbefsend()              
+        forcesend = self.checkbefsend()
         argumentList = ['python3', self._prefixpy + 'idm/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self._device_idmnav),

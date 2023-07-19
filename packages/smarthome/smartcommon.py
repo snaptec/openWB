@@ -390,7 +390,7 @@ def resetmaxeinschaltdauerfunc() -> None:
         resetmaxeinschaltdauer = 0
 
 
-def loadregelvars(wattbezug: int, speicherleistung: int, speichersoc: int,pvwatt: int) -> Tuple[int, int]:
+def loadregelvars(wattbezug: int, speicherleistung: int, speichersoc: int, pvwatt: int) -> Tuple[int, int]:
     global maxspeicher
     global mydevices
     uberschuss = wattbezug + speicherleistung
