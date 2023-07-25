@@ -83,6 +83,7 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/+/device_shpassword", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_shauth", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measureshauth", 0],
+	["openWB/config/get/SmartHome/Devices/+/device_mindayeinschaltdauer", 0],
 	["openWB/config/get/SmartHome/Devices/+/device_measuresmaage", 0]
 
 ];

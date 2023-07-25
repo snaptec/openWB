@@ -1,0 +1,29 @@
+# example FEMS response on rest/channel/ess0/(Soc|DcChargeEnergy|DcDischargeEnergy)
+# [
+#     {
+#         "address": "ess0/DcChargeEnergy",
+#         "type": "LONG",
+#         "accessMode": "RO",
+#         "text": "",
+#         "unit": "Wh",
+#         "value": 456732
+#     },
+#     {
+#         "address": "ess0/Soc",
+#         "type": "INTEGER",
+#         "accessMode": "RO",
+#         "text": "",
+#         "unit": "%",
+#         "value": 67
+#     },
+#     {
+#         "address": "ess0/DcDischargeEnergy",
+#         "type": "LONG",
+#         "accessMode": "RO",
+#         "text": "",
+#         "unit": "Wh",
+#         "value": 453354
+#     }
+# ]
+
+# Beispieldatensatz für Zählerstände fehlt

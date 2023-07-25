@@ -50,6 +50,15 @@ class SmaSunnyBoyInverter:
             # Gesamtertrag (Wh) [E-Total] SF=2!
             energy = self.tcp_client.read_holding_registers(40094, ModbusDataType.UINT_32, unit=1) * 100
             dc_power = self.tcp_client.read_holding_registers(40101, ModbusDataType.UINT_32, unit=1) * 100
+        elif self.component_config.configuration.version == SmaInverterVersion.datamanager:
+            # AC Wirkleistung über alle Phasen (W) [Pac]
+            power_total = self.tcp_client.read_holding_registers(30775, ModbusDataType.INT_32, unit=2)
+            # Total eingespeiste Energie auf allen Außenleitern (Wh) [E-Total]
+            energy = self.tcp_client.read_holding_registers(30513, ModbusDataType.UINT_64, unit=2)
+            # DC-Power = power_total - Cluster-Controller gibt in Register 30775 immer korrekte Werte aus,
+            # daher ist wie bei SmaInverterVersion.default keine Prüfung auf DC-Leistung notwendig.
+            # Aus kompatibilitätsgründen wird dc_power auf den Wert der AC-Wirkleistung gesetzt.
+            dc_power = power_total
         else:
             raise FaultState.error("Unbekannte Version "+str(self.component_config.configuration.version))
         if power_total == self.SMA_INT32_NAN:

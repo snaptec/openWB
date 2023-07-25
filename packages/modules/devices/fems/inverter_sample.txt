@@ -1,0 +1,11 @@
+#example FEMS response on rest/channel/_sum/ProductionActivePower
+#{
+#    "address": "_sum/ProductionActivePower",
+#    "type": "INTEGER",
+#    "accessMode": "RO",
+#    "text": "Total production; always positive",
+#    "unit": "W",
+#    "value": 920
+#}
+#
+#Beispieldatensatz für Zählerstände fehlt

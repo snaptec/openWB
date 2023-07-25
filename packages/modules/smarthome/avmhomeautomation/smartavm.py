@@ -1,21 +1,20 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Slavm
-import subprocess
+from typing import Dict
 import logging
 log = logging.getLogger(__name__)
 
 
 class Savm(Sbase):
-    def __init__(self):
+    def __init__(self) -> None:
         # setting
         super().__init__()
         self._old_measuretype0 = 'none'
-        self._smart_paramadd = {}
         self._device_actor = 'none'
         self._device_username = 'none'
         self._device_password = 'none'
 
-    def getwatt(self, uberschuss, uberschussoffset):
+    def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
         self._mydevicemeasure0.devuberschuss = self.devuberschuss
         self._mydevicemeasure0.getwattread()
@@ -25,7 +24,7 @@ class Savm(Sbase):
 
         self.postwatt()
 
-    def updatepar(self, input_param):
+    def updatepar(self,  input_param: Dict[str, str]) -> None:
         super().updatepar(input_param)
         self._smart_paramadd = input_param.copy()
         self.device_nummer = int(self._smart_paramadd.get('device_nummer',
@@ -39,7 +38,7 @@ class Savm(Sbase):
                 self._device_password = value
             else:
                 log.info("(" + str(self.device_nummer) + ") " +
-                         __class__.__name__ + " überlesen " + key +
+                         " AVM überlesen " + key +
                          " " + value)
 
         if (self._old_measuretype0 == 'none'):
@@ -54,7 +53,7 @@ class Savm(Sbase):
                      " update " + self.device_type)
         self._mydevicemeasure0.updatepar(input_param)
 
-    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+    def turndevicerelais(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         self.preturn(zustand, ueberschussberechnung, updatecnt)
         if (zustand == 1):
             pname = "/on.py"
@@ -69,8 +68,7 @@ class Savm(Sbase):
                         self._device_username,
                         self._device_password]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off %s %d %s Fehlermeldung: %s "

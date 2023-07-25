@@ -2256,6 +2256,9 @@ updateConfig(){
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "sungrow2sr=" $ConfigFile; then
+		echo "sungrow2sr=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
 		echo "sungrowspeicherport=502" >> $ConfigFile
 		echo "sungrowspeicherid=1" >> $ConfigFile
@@ -2277,6 +2280,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "batterx_ip=" $ConfigFile; then
 		echo "batterx_ip=192.168.0.17" >> $ConfigFile
+	fi
+	if ! grep -Fq "pvbatterxextinverter=" $ConfigFile; then
+		echo "pvbatterxextinverter=0" >> $ConfigFile
 	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
 		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile

@@ -18,16 +18,19 @@ class BatterXInverter:
         self.store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self, resp: Dict) -> None:
-        power = resp["1634"]["0"] * -1
+    def get_power(self, resp: Dict) -> float:
+        return resp["1634"]["0"] * -1
 
+    def get_inverter_state(self, power: float) -> InverterState:
         _, exported = self.sim_counter.sim_count(power)
 
-        inverter_state = InverterState(
+        return InverterState(
             power=power,
             exported=exported
         )
-        self.store.set(inverter_state)
+
+    def update(self, resp: Dict) -> None:
+        self.store.set(self.get_inverter_state(self.get_power(resp)))
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=BatterXInverterSetup)

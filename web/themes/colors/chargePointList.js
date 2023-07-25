@@ -130,10 +130,10 @@ class ChargePointList {
 			.style("vertical-align", "middle")
 			.style("text-align", "center");
 		cell.append("span").text(
-			formatWattH(row.energy * 1000))
+			formatWattH(row.energySincePlugged * 1000))
 		cell.append("span")
 			.classed("px-1", true).text("/")
-		cell.append("span").text(" " + Math.round(row.energy / row.energyPer100km * 100) + " km")
+		cell.append("span").text(" " + Math.round(row.energySincePlugged / row.energyPer100km * 100) + " km")
 		return cell.node()
 	}
 	cpSocButtonCell(row) {

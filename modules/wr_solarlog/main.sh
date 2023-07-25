@@ -7,10 +7,8 @@ MYLOGFILE="${RAMDISKDIR}/nurpv.log"
 DMOD="PV"
 Debug=$debug
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_solarlog.solarlog" "${bezug_solarlog_ip}" >> "${MYLOGFILE}" 2>&1
-pvwatt=$(<"${RAMDISKDIR}/pvwatt")
-pvkwh=$(<"${RAMDISKDIR}/pvkwh")
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.solar_log.device" "inverter" "${bezug_solarlog_ip}" "0">> "${MYLOGFILE}" 2>&1
+ret=$?
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-openwbDebugLog ${DMOD} 2 "pvwatt: $pvwatt"
-openwbDebugLog ${DMOD} 2 "pvkwh: $pvkwh"
-echo $pvwatt
+cat "$RAMDISKDIR/pvwatt"

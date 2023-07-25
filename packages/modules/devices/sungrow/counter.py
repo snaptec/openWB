@@ -27,7 +27,7 @@ class SungrowCounter:
         self.store = get_counter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self):
+    def update(self, pv_power: float):
         unit = self.__device_modbus_id
         if self.component_config.configuration.version == Version.SH:
             power = self.__tcp_client.read_input_registers(13009, ModbusDataType.INT_32,
@@ -38,10 +38,13 @@ class SungrowCounter:
             # powers = [power / 10 for power in powers]
             # log.info("power: " + str(power) + " powers?: " + str(powers))
         else:
-            power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
-                                                           wordorder=Endian.Little, unit=unit)
-            if self.component_config.configuration.version == Version.SG_winet_dongle:
-                power = power * -1
+            if pv_power != 0:
+                power = self.__tcp_client.read_input_registers(5082, ModbusDataType.INT_32,
+                                                               wordorder=Endian.Little, unit=unit)
+            else:
+                power = self.__tcp_client.read_input_registers(5090, ModbusDataType.INT_32,
+                                                               wordorder=Endian.Little, unit=unit)
+
             # no valid data for powers per phase
             # powers = self.__tcp_client.read_input_registers(5084, [ModbusDataType.UINT_16] * 3,
             #                                                 wordorder=Endian.Little, unit=unit)

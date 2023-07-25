@@ -3,11 +3,14 @@ import sys
 import time
 import urllib.request
 import os
+import json
 named_tuple = time.localtime()  # getstruct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S shelly off.py", named_tuple)
 devicenumber = str(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
+gen = '1'
+model = '???'
 try:
     chan = int(sys.argv[4])
 except Exception:
@@ -16,10 +19,12 @@ shaut = int(sys.argv[5])
 user = str(sys.argv[6])
 pw = str(sys.argv[7])
 fbase = '/var/www/html/openWB/ramdisk/smarthome_device_ret.'
-fnameg = fbase + str(ipadr) + '_shelly_infog'
+fnameg = fbase + str(ipadr) + '_shelly_infogv1'
 if os.path.isfile(fnameg):
     with open(fnameg, 'r') as f:
-        gen = str(f.read())
+        jsonin = json.loads(f.read())
+        gen = str(jsonin['gen'])
+        model = str(jsonin['model'])
 else:
     gen = "0"
 if (chan == 0):

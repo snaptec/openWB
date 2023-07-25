@@ -1,7 +1,8 @@
 #!/bin/bash
+
 OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
 RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
-#DMOD="BAT"
+#DMOD="BATT"
 DMOD="MAIN"
 
 if [ ${DMOD} == "MAIN" ]; then
@@ -13,21 +14,9 @@ fi
 # Auslesen eines Varta Speicher über die integrierte XML-API der Batteroe.
 
 if [[ "$usevartamodbus" != "1" ]]; then
-	speicherwatt=$(curl --connect-timeout 3 -s "$vartaspeicherip/cgi/ems_data.xml" | grep 'P' | sed 's/.*value=//' |tr -d "'/>")
-	# wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
-	ra='^-?[0-9]+$'
-	if [[ $speicherwatt =~ $ra ]] ; then
-		echo "$speicherwatt" > "$RAMDISKDIR/speicherleistung"
-	fi
-	speichersoc=$(curl --connect-timeout 3 -s "$vartaspeicherip/cgi/ems_data.xml" | grep 'SOC' | sed 's/.*value=//' |tr -d "'/>")
-	# if [[ $speichersoc -ge "101" ]]; then
-	speichersoc=$(echo "$speichersoc / 10" |bc)
-	# fi
-	if [[ $speichersoc =~ $ra ]] ; then
-		echo "$speichersoc" > "$RAMDISKDIR/speichersoc"
-	fi
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.varta.device" "bat_api" "${vartaspeicherip}">>"$MYLOGFILE" 2>&1
 else 
-	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "speicher_varta.varta" "${vartaspeicherip}" "${vartaspeicher2ip}" >>"$MYLOGFILE" 2>&1
-	ret=$?
-	openwbDebugLog ${DMOD} 2 "RET: ${ret}"
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.varta.device" "bat_modbus" "${vartaspeicherip}" "${vartaspeicher2ip}" >>"$MYLOGFILE" 2>&1
 fi
+ret=$?
+openwbDebugLog ${DMOD} 2 "RET: ${ret}"

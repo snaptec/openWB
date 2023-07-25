@@ -152,8 +152,8 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_measureip": create_topic_handler(ip_address_validator),
         "device_name": create_topic_handler((min_length_validator(4), regex_match_validator(name_allowed))),
         "device_type": create_topic_handler(
-            equals_one_of_validator("none", "shelly", "tasmota", "acthor", "lambda", "elwa", "idm", "vampair",
-                                    "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm",
+            equals_one_of_validator("none", "shelly", "tasmota", "acthor", "lambda", "elwa", "askoheat", "idm", "vampair",
+                                    "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm"
                                     )),
         "device_measureType": create_topic_handler(
             equals_one_of_validator("shelly", "tasmota", "http", "mystrom", "sdm630", "lovato", "we514", "fronius",
@@ -171,6 +171,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_speichersocbeforestop": create_topic_handler(int_range_validator(0, 100)),
         "device_maxeinschaltdauer": create_topic_handler(int_range_validator(0, 100000)),
         "device_mineinschaltdauer": create_topic_handler(int_range_validator(0, 100000)),
+        "device_mindayeinschaltdauer": create_topic_handler(int_range_validator(0, 100000)),
         "device_manual_control": create_topic_handler(int_range_validator(0, 1), (
             write_ramdisk_action("smarthome_device_manual_control"), republish_action)),
         "mode": create_topic_handler(int_range_validator(0, 1),
@@ -289,7 +290,7 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
                     client.publish("openWB/config/get/SmartHome/maxBatteryPower",
-                                   msg.payload.decode("utf-8"), qos=0, retain=True)                 
+                                   msg.payload.decode("utf-8"), qos=0, retain=True)
                     RAMDISK_PATH.joinpath("rereadsmarthomedevices").write_text("1")
             if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
                 if (int(msg.payload) >= 0 and int(msg.payload) <= 2):

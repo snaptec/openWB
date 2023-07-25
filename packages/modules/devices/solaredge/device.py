@@ -202,15 +202,19 @@ def read_legacy(component_type: str,
                         total_currents = list(map(add, total_currents, state.currents))
 
                     if extprodakt:
-                        external_inv_state = get_external_inverter_state(dev, int(slave_id0))
-                        total_power += external_inv_state.power
+                        external_inv_power = get_external_inverter_state(dev, int(slave_id0)).power
+                        total_power += external_inv_power
+                    else:
+                        external_inv_power = 0
 
                     if batwrsame == 1:
                         bat_power, bat_state = get_bat_state()
                         # WR-Leistung nur anpassen, wenn die Ladeleistung des Speichers PV-Leistung ist, dh am WR muss
                         # DC-seitig Leistung anliegen. Der Speicher wird auch aus dem Netz geladen, um einen
                         # Mindest-SoC zu halten.
-                        if state.dc_power is None or state.dc_power <= 0:
+                        # Wenn ein weiterer WR über ein Smartmeter angeschlossen ist, kann der Speicher auch über
+                        # diesen geladen werden.
+                        if state.dc_power is None or state.dc_power <= 0 or external_inv_power < 0:
                             if subbat == 1:
                                 total_power -= sum(min(p, 0) for p in bat_power)
                             else:

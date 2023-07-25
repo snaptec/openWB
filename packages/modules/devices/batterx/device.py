@@ -6,7 +6,8 @@ from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
 from modules.common.component_context import MultiComponentUpdateContext
-from modules.devices.batterx import bat
+from modules.common.store import get_inverter_value_store
+from modules.devices.batterx import bat, external_inverter
 from modules.devices.batterx import counter
 from modules.devices.batterx import inverter
 from modules.devices.batterx.config import BatterX, BatterXBatSetup, BatterXCounterSetup, BatterXInverterSetup
@@ -72,6 +73,7 @@ COMPONENT_TYPE_TO_MODULE = {
     "bat": bat,
     "counter": counter,
     "inverter": inverter,
+    "external_inverter": external_inverter
 }
 
 
@@ -80,7 +82,8 @@ def read_legacy(
         ip_address: str,
         num: Optional[int] = None,
         evu_counter: Optional[str] = None,
-        bat: Optional[str] = None) -> None:
+        bat_module: Optional[str] = None,
+        ext_inverter: int = 0) -> None:
 
     device_config = BatterX()
     device_config.configuration.ip_address = ip_address
@@ -88,12 +91,28 @@ def read_legacy(
     dev = _add_component(dev, component_type, num)
     if evu_counter == "bezug_batterx":
         dev = _add_component(dev, "counter", 0)
-    if bat == "speicher_batterx":
+    if bat_module == "speicher_batterx":
         dev = _add_component(dev, "bat", 3)
 
     log.debug('BatterX IP-Adresse: ' + ip_address)
+    log.debug('BatterX externer WR: ' + str(ext_inverter))
 
-    dev.update()
+    with MultiComponentUpdateContext(dev.components):
+        resp_json = req.get_http_session().get(
+            'http://' + ip_address + '/api.php?get=currentstate',
+            timeout=5).json()
+        for component in dev.components.values():
+            if isinstance(component, (bat.BatterXBat, counter.BatterXCounter)):
+                component.update(resp_json)
+            elif isinstance(component, inverter.BatterXInverter):
+                if ext_inverter == 0:
+                    component.update(resp_json)
+                else:
+                    dev = _add_component(dev, "external_inverter", 4)
+                    power = component.get_power(resp_json)
+                    power_ext = dev.components["component4"].get_power(resp_json)
+                    state = component.get_inverter_state(power+power_ext)
+                    get_inverter_value_store(num).set(state)
 
 
 def _add_component(dev: Device, component_type: str, num: Optional[int]) -> Device:

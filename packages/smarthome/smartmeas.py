@@ -3,8 +3,6 @@ from typing import Dict, Tuple
 from modules.common import modbus
 from modules.common import sdm
 from modules.common import lovato
-
-import subprocess
 import logging
 log = logging.getLogger(__name__)
 
@@ -174,8 +172,7 @@ class Slmqtt(Slbase):
                         str(self.device_nummer), str(ip),
                         str(self.devuberschuss)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -204,8 +201,7 @@ class Slshelly(Slbase):
                         str(self.device_nummer), str(ip), '0',
                         str(chan), str(shaut), shuser, shpw]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -260,8 +256,7 @@ class Slavm(Slbase):
                         '0', '0',
                         act, user, pw]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -287,8 +282,7 @@ class Sltasmota(Slbase):
         argumentList = ['python3', self._prefixpy + 'tasmota/watt.py',
                         str(self.device_nummer), str(ip), '0']
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -317,11 +311,8 @@ class Slhttp(Slbase):
                         str(self.device_nummer), '0',
                         str(self.devuberschuss), url, urlc,
                         '0', '0', urls]
-        proc = subprocess.Popen(argumentList)
-        proc.communicate()
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -347,8 +338,7 @@ class Slmystrom(Slbase):
         argumentList = ['python3', self._prefixpy + 'mystrom/watt.py',
                         str(self.device_nummer), str(ip), '0']
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -376,8 +366,7 @@ class Slsmaem(Slbase):
                         str(self._device_measuresmaser),
                         str(self._device_measuresmaage)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -398,8 +387,7 @@ class Slwe514(Slbase):
                         str(self.device_nummer), str(self._device_measureip),
                         str(self._device_measureid)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -422,8 +410,7 @@ class Sljson(Slbase):
                         self._device_measurejsonpower,
                         self._device_measurejsoncounter]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -443,8 +430,7 @@ class Slfronius(Slbase):
                         str(self.device_nummer), str(self._device_measureip),
                         str(self._device_measureid)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
