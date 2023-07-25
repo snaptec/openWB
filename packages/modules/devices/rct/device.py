@@ -27,8 +27,9 @@ def create_device(device_config: Rct):
     def update_components(components: Iterable[Union[RctBat, RctCounter, RctInverter]]):
         try:
             rct = rct_lib.RCT(device_config.configuration.ip_address)
-            for component in components:
-                component.update(rct)
+            if rct.connect_to_server():
+                for component in components:
+                    component.update(rct)
         except Exception:
             raise
         finally:
