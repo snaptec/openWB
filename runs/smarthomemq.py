@@ -99,5 +99,12 @@ if __name__ == "__main__":
             log.warning("Fehler beim Auslesen der Ramdisk (wattbezug):"
                         + str(e))
             wattbezug = 0
-        mainloop(wattbezug, speicherleistung, speichersoc)
+        try:
+            with open(bp+'/ramdisk/pvallwatt', 'r') as value:
+                pvwatt = int(float(value.read())) * -1
+        except Exception as e:
+            log.warning("Fehler beim Auslesen der Ramdisk (pvallwatt):"
+                        + str(e))
+            pvwatt = 0                     
+        mainloop(wattbezug, speicherleistung, speichersoc, pvwatt)
         time.sleep(5)
