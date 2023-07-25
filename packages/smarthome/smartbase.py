@@ -43,6 +43,7 @@ class Sbase(Sbase0):
         self.temp2 = '300'
         self.newwatt = 0
         self.newwattk = 0
+        self.pvwatt = 0
         self.relais = 0
         self.devuberschuss = 0
         self.device_temperatur_configured = 0

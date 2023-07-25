@@ -29,15 +29,18 @@ class Sidm(Sbase):
 
     def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
+        forcesend = self.checkbefsend()
         argumentList = ['python3', self._prefixpy + 'idm/watt.py',
                         str(self.device_nummer), str(self._device_ip),
-                        str(self.devuberschuss), str(self._device_idmnav)]
+                        str(self.devuberschuss), str(self._device_idmnav),
+                        str(self.pvwatt), str(forcesend)]
         try:
             self.callpro(argumentList)
             self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
             self.relais = int(self.answer['on'])
+            self.checksend(self.answer)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") Leistungsmessung %s %d %s Fehlermeldung: %s "
