@@ -35,12 +35,12 @@ class RctCounter:
         # read all parameters
         rct_client.read(my_tab)
 
-        if (stat1 + stat2 + stat3 + stat4) > 0:
+        if (int(stat1) + int(stat2) + int(stat3) + int(stat4)) > 0:
             raise FaultState.error("Alarm Status Zähler ist ungleich 0.")
 
         counter_state = CounterState(
             imported=int(imported.value),
-            exported=exported.value*-1.0,
+            exported=int(exported.value)*-1.0,
             power=int(power.value),
             frequency=int(freq.value),
             powers=[int(power1.value), int(power2.value), int(power3.value)],
