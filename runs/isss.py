@@ -65,7 +65,7 @@ class UpdateValues:
             # iterate over counter_state
             vars_old_counter_state = vars(self.old_counter_state)
             for key, value in vars(counter_state).items():
-                # Zählerstatus immer publishen für Ladelog-Einträge
+                # Zählerstatus immer veröffentlichen für Lade-Log-Einträge
                 if value != vars_old_counter_state[key] or key == "imported":
                     self._pub_values_to_1_9(key, value)
                     self._pub_values_to_2(key, value)
@@ -269,6 +269,7 @@ class Isss:
             FaultState.warning("Für den Betrieb im Nur-Ladepunkt-Modus ist zwingend eine Master-openWB erforderlich.")
             return "localhost"
 
+
 class IsssChargepoint:
     def __init__(self, client_handler: ClientHandler, local_charge_point_num: int, mode: IsssMode,
                  socket_max_current: int) -> None:
@@ -277,9 +278,9 @@ class IsssChargepoint:
             if mode == IsssMode.SOCKET:
                 self.module = Socket(socket_max_current,  local_charge_point_num, client_handler, "localhost")
             else:
-                self.module = chargepoint_module.ChargepointModule( local_charge_point_num, client_handler, "localhost")
+                self.module = chargepoint_module.ChargepointModule(local_charge_point_num, client_handler, "localhost")
         else:
-            self.module = chargepoint_module.ChargepointModule( local_charge_point_num, client_handler, "localhost")
+            self.module = chargepoint_module.ChargepointModule(local_charge_point_num, client_handler, "localhost")
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False
