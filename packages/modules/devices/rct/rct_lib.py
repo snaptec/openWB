@@ -444,7 +444,7 @@ class RCT():
         self.socket.settimeout(2.0)
         try:
             self.socket.connect((self.host, self.port))
-            log.debug('connect to ', self.host, 'port', self.port)
+            log.debug('connect to {} port {}'.format(self.host, self.port))
             return True
         except Exception:
             print("-"*100)
@@ -528,27 +528,6 @@ class RCT():
         except Exception:
             print("-"*100)
             traceback.print_exc(file=sys.stdout)
-
-    # write value to a ramdisk variable
-    def write_ramdisk(self, fn, val, rctname):
-        try:
-            fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-            with open(fnn, 'w') as f:
-                f.write(str(val))
-        except Exception:
-            return
-
-    # helper function to print debug messages
-    def errlog(self, *args):
-        self.logger.error(' '.join(map(str, args)))
-
-    # helper function to print debug messages
-    def dbglog(self, *args):
-        self.logger.debug(' '.join(map(str, args)))
-
-    # helper function to print info messages
-    def infolog(self, *args):
-        self.logger.info(' '.join(map(str, args)))
 
     def id_tab_setup(self):
         # add all known id's with name, data type, description and unit to the id table
