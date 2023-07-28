@@ -22,9 +22,8 @@ from enum import Enum
 
 log = logging.getLogger(__name__)
 
+
 # helper function to print and error
-
-
 def hexdump(src, length=16):
     FILTER = ''.join([(len(repr(chr(x))) == 3) and chr(x) or '.' for x in range(256)])
     lines = []
@@ -75,7 +74,7 @@ class rct_id():
         self.name = name
         self.desc = desc
         self.value = None
-        self.pending = False    # used to read pending
+        self.pending = False  # used to read pending
 
     # decode a value according to the id data type
     def decode_value(self, data):
@@ -130,21 +129,21 @@ cmd_response = 0x05
 cmd_long_response = 0x06
 cmd_extension = 0x3C
 
-HEADER_WITH_LENGTH = 1 + 1 + 2      # frame length for header, command and 2 byte length
-FRAME_TYPE_STANDARD = 4             # standard frame with id
-FRAME_TYPE_PLANT = 8                # plant frame with id and address
-FRAME_CRC16_LENGTH = 2              # nr of bytes for CRC16 field
+HEADER_WITH_LENGTH = 1 + 1 + 2  # frame length for header, command and 2 byte length
+FRAME_TYPE_STANDARD = 4         # standard frame with id
+FRAME_TYPE_PLANT = 8            # plant frame with id and address
+FRAME_CRC16_LENGTH = 2          # nr of bytes for CRC16 field
 
 
 class Frame:
     def __init__(self, command=0, address=0, frame_type=FRAME_TYPE_STANDARD):
         self.command = command
-        self.address = address        # for plant communication only
+        self.address = address  # for plant communication only
         self.idList = []
         self.frame_type = frame_type
         self.bEscapeMode = False
         self.rxStream = b""
-        self.pendingCount = False      # nr of id's which are not yet handled
+        self.pendingCount = False  # nr of id's which are not yet handled
         self.statisticRxDropped = 0
         self.statisticRxConsumed = 0
         self.statisticRxDuplicate = 0
@@ -167,7 +166,7 @@ class Frame:
                 self.pendingCount += 1
 
     # consume all data, extract frames and decode them.
-    # Incomplete frames remain in self.rxStream for the nexht data chunk
+    # Incomplete frames remain in self.rxStream for the next data chunk
     def consume(self, data):
         for d in data:
             c = bytes([d])
@@ -182,7 +181,7 @@ class Frame:
                 self.bEscapeMode = False
             else:
                 if c == escape_token:
-                    self.bEscapeMode = True                  # escape mode -> set mode and don't add byte
+                    self.bEscapeMode = True  # escape mode -> set mode and don't add byte
                     continue
 
             # add byte to receive stream
@@ -193,11 +192,11 @@ class Frame:
                 if len(self.rxStream) == HEADER_WITH_LENGTH:
                     cmd = struct.unpack("B", bytes([self.rxStream[1]]))[0]
                     if cmd == cmd_long_response or cmd == cmd_long_write:
-                        self.FrameLength = struct.unpack(">H", self.rxStream[2:4])[0] + 2     # 2 byte length MSBF
+                        self.FrameLength = struct.unpack(">H", self.rxStream[2:4])[0] + 2  # 2 byte length MSBF
                     else:
-                        self.FrameLength = struct.unpack(">B", bytes([self.rxStream[2]]))[0] + 1       # 1 byte length
+                        self.FrameLength = struct.unpack(">B", bytes([self.rxStream[2]]))[0] + 1  # 1 byte length
 
-                    self.FrameLength += 2                                                   # 2 bytes header
+                    self.FrameLength += 2  # 2 bytes header
                 else:
                     if len(self.rxStream) == self.FrameLength + FRAME_CRC16_LENGTH:
                         # print(binascii.hexlify(self.rxStream))
@@ -222,10 +221,10 @@ class Frame:
             data_length = struct.unpack(">H", self.rxStream[2:4])[0]  # 2 byte length MSBF
             idx = 4
         else:
-            data_length = struct.unpack(">B", bytes([self.rxStream[2]]))[0]   # 1 byte length
+            data_length = struct.unpack(">B", bytes([self.rxStream[2]]))[0]  # 1 byte length
             idx = 3
 
-        # substract frame type specific length
+        # subtract frame type specific length
         data_length -= self.frame_type
 
         # extract 32 bit ID
@@ -259,7 +258,7 @@ class Frame:
 
         self.statisticRxDropped += 1
 
-    # create a formated text string for all elements in frame.idList
+    # create a formatted text string for all elements in frame.idList
     def format_list(self, access_time):
         fmt = ""
         for item in self.idList:
@@ -297,12 +296,12 @@ class Frame:
                 else:
                     buf += struct.pack('>B', length)  # 1 byte for length
 
-                # just for completness but PLANT frames are not used in send direction
+                # just for completeness but PLANT frames are not used in send direction
                 if self.frame_type == FRAME_TYPE_PLANT:
-                    buf += struct.pack('>I', self.address)                    # 4 bytes
+                    buf += struct.pack('>I', self.address)  # 4 bytes
 
                 # append id
-                buf += struct.pack('>I', item.id)                             # 4 bytes
+                buf += struct.pack('>I', item.id)  # 4 bytes
 
                 # append data if used
                 if item.value is not None:
@@ -310,7 +309,7 @@ class Frame:
 
                 # calculate and append CRC16
                 crc16 = self.CRC16(buf)
-                buf += struct.pack('>H', crc16)                               # 2 bytes
+                buf += struct.pack('>H', crc16)  # 2 bytes
 
                 # add start token and inject escape tokens in buf where necessary to buf_all
                 buf_all += struct.pack('c', start_token) + self.createStream(buf)
@@ -445,7 +444,7 @@ class RCT():
         self.socket.settimeout(2.0)
         try:
             self.socket.connect((self.host, self.port))
-            log.debug('connect to ', self.host, 'port', self.port)
+            log.debug('connect to {} port {}'.format(self.host, self.port))
             return True
         except Exception:
             print("-"*100)
@@ -530,27 +529,6 @@ class RCT():
             print("-"*100)
             traceback.print_exc(file=sys.stdout)
 
-    # write value to a ramdisk variable
-    def write_ramdisk(self, fn, val, rctname):
-        try:
-            fnn = "/var/www/html/openWB/ramdisk/"+str(fn)
-            with open(fnn, 'w') as f:
-                f.write(str(val))
-        except Exception:
-            return
-
-    # helper function to print debug messages
-    def errlog(self, *args):
-        self.logger.error(' '.join(map(str, args)))
-
-    # helper function to print debug messages
-    def dbglog(self, *args):
-        self.logger.debug(' '.join(map(str, args)))
-
-    # helper function to print info messages
-    def infolog(self, *args):
-        self.logger.info(' '.join(map(str, args)))
-
     def id_tab_setup(self):
         # add all known id's with name, data type, description and unit to the id table
         self.id_tab.append(rct_id(0x0104EB6A, 0, "rb485.f_grid[2]",
@@ -562,7 +540,7 @@ class RCT():
         self.id_tab.append(rct_id(0x01676FA6, 3, "battery.cells_stat[3]",
                            rct_data.t_string, "battery.cells_stat[3]"))
         self.id_tab.append(rct_id(0x019C0B60, 4, "cs_neg[2]",
-                           rct_data.t_float, "Miltiply value of the current sensor 2 by"))
+                           rct_data.t_float, "Multiply value of the current sensor 2 by"))
         self.id_tab.append(rct_id(0x02247588, 5, "battery_placeholder[0].cells_stat[2].u_min.value",
                            rct_data.t_float, "battery_placeholder[0].cells_stat[2].u_min.value"))
         self.id_tab.append(rct_id(0x031A6110, 6, "energy.e_ext_month",
@@ -1068,7 +1046,7 @@ class RCT():
         self.id_tab.append(rct_id(0x4BE02BB7, 256, "energy.e_load_day_sum",
                            rct_data.t_float, "energy.e_load_day_sum"))
         self.id_tab.append(rct_id(0x4C12C4C7, 257, "cs_neg[1]",
-                           rct_data.t_float, "Miltiply value of the current sensor 1 by"))
+                           rct_data.t_float, "Multiply value of the current sensor 1 by"))
         self.id_tab.append(rct_id(0x4C14CC7C, 258, "logger.year_ea_log_ts",
                            rct_data.t_log_ts, "logger.year_ea_log_ts"))
         self.id_tab.append(rct_id(0x4C2A7CDC, 259, "nsm.cos_phi_p[2][1]",
@@ -1488,7 +1466,7 @@ class RCT():
         self.id_tab.append(rct_id(0x81AF854E, 466, "nsm.pu_use",
                            rct_data.t_bool, "P(U) active"))
         self.id_tab.append(rct_id(0x82258C01, 467, "cs_neg[0]",
-                           rct_data.t_float, "Miltiply value of the current sensor 0 by"))
+                           rct_data.t_float, "Multiply value of the current sensor 0 by"))
         self.id_tab.append(rct_id(0x82CD1525, 468, "grid_mon[1].u_under.threshold",
                            rct_data.t_float, "Min. voltage level 2 [V]"))
         self.id_tab.append(rct_id(0x82E3C121, 469, "g_sync.q_ac[1]",
@@ -1815,8 +1793,8 @@ class RCT():
                            rct_data.t_float, "Grid power phase 3 [W]"))
         self.id_tab.append(rct_id(0xB228EC94, 630, "battery_placeholder[0].cells_stat[3].t_max.time",
                            rct_data.t_uint32, "battery_placeholder[0].cells_stat[3].t_max.time"))
-        self.id_tab.append(rct_id(0xB238942F, 631, "last_successfull_flash_op",
-                           rct_data.t_int16, "last_successfull_flash_op"))
+        self.id_tab.append(rct_id(0xB238942F, 631, "last_successful_flash_op",
+                           rct_data.t_int16, "last_successful_flash_op"))
         self.id_tab.append(rct_id(0xB298395D, 632, "dc_conv.dc_conv_struct[0].u_sg_lp",
                            rct_data.t_float, "Solar generator A voltage [V]"))
         self.id_tab.append(rct_id(0xB2FB9A90, 633, "bat_mng_struct.k_trust",
