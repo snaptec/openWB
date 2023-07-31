@@ -116,8 +116,8 @@ if __name__ == "__main__":
         except Exception:
             pass
         if testcharge <= 1000:
-            chargestatus = 0
+            chargestatus = False
         else:
-            chargestatus = 1            
+            chargestatus = True
         mainloop(wattbezug, speicherleistung, speichersoc, pvwatt, chargestatus)
         time.sleep(5)
