@@ -2343,6 +2343,11 @@ updateConfig(){
 	if grep -Fq "socmodul1=soc_idlp2" $ConfigFile; then
 		sed -i "s/^socmodul1=soc_idlp2/socmodul=soc_vwidlp2/g" $ConfigFile
 	fi
-
+	if ! grep -Fq "ppbuchse=" $ConfigFile; then
+		if [[ -f /home/pi/ppbuchse ]]; then
+			ppbuchse=$(</home/pi/ppbuchse)
+			echo "ppbuchse=${ppbuchse}" >> $ConfigFile
+		fi
+	fi
 	echo "Config file Update done."
 }
