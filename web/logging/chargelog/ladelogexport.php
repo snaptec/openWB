@@ -2,7 +2,7 @@
 <html lang="de">
 
 	<head>
-	<base href="/openWB/web/">
+		<base href="/openWB/web/">
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,7 +39,7 @@
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
 				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++) {
+				for (var i = 0; i < ca.length; i++) {
 					var c = ca[i];
 					while (c.charAt(0) == ' ') {
 						c = c.substring(1);
@@ -52,7 +52,7 @@
 			}
 			var themeCookie = getCookie('openWBTheme');
 			// include special Theme style
-			if( '' != themeCookie ){
+			if ('' != themeCookie) {
 				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20210209">');
 			}
 		</script>
@@ -77,12 +77,13 @@
 					?>
 						<div class="row<?php echo $rowClasses; ?>">
 							<label class="col-6 col-form-label">
-								<?php 
-									preg_match('/\/var\/www\/html\/openWB\/web\/logging\/data\/ladelog\/([0-9]{4})([0-9]{2})\.csv/',$current,$m); 
+								<?php
+									preg_match('/\/var\/www\/html\/openWB\/web\/logging\/data\/ladelog\/([0-9]{4})([0-9]{2})\.csv/', $current, $m);
+									$year = $m[1];
 									$month = $m[2];
 									setlocale(LC_TIME, "de_DE.UTF-8");
-									$month_name = strftime('%B', mktime(0, 0, 0, $month));
-									echo $month_name, " ", $m[1];
+									$month_name = strftime('%B', mktime(0, 0, 0, $month, 1, $year));
+									echo $month_name, " ", $year;
 								?>
 							</label>
 							<div class="col-6 text-right">
@@ -104,9 +105,11 @@
 		</footer>
 
 		<script>
-			$.get(
-				{ url: "themes/navbar.html", cache: false },
-				function(data){
+			$.get({
+					url: "themes/navbar.html",
+					cache: false
+				},
+				function(data) {
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
 					$('#navLadelog').addClass('disabled');
@@ -114,4 +117,5 @@
 			);
 		</script>
 	</body>
+
 </html>
