@@ -48,6 +48,20 @@ class BatterXCounterSetup(ComponentSetup[BatterXCounterConfiguration]):
         super().__init__(name, type, id, configuration or BatterXCounterConfiguration())
 
 
+class BatterXExternalInverterConfiguration:
+    def __init__(self):
+        pass
+
+
+class BatterXExternalInverterSetup(ComponentSetup[BatterXExternalInverterConfiguration]):
+    def __init__(self,
+                 name: str = "BatterX externer Wechselrichter",
+                 type: str = "external_inverter",
+                 id: int = 0,
+                 configuration: BatterXExternalInverterConfiguration = None) -> None:
+        super().__init__(name, type, id, configuration or BatterXExternalInverterConfiguration())
+
+
 class BatterXInverterConfiguration:
     def __init__(self):
         pass

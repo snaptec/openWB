@@ -10,8 +10,12 @@ else
 	MYLOGFILE="$RAMDISKDIR/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "counter" "$speicher1_ip" "$sungrowspeicherport" "$sungrowspeicherid" "$sungrowsr" >>"$MYLOGFILE" 2>&1
-ret=$?
+if [[ "$pvwattmodul" == "wr_sungrow" ]]; then
+	echo "value read at pv modul" >/dev/null
+else
+	bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.sungrow.device" "counter" "$speicher1_ip" "$sungrowspeicherid" "$sungrowsr" >>"$MYLOGFILE" 2>&1
+	ret=$?
+fi
 
 openwbDebugLog $DMOD 2 "EVU RET: $ret"
 

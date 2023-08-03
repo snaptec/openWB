@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Slshelly
 from typing import Dict
-import subprocess
 import logging
 log = logging.getLogger(__name__)
 
@@ -72,8 +71,7 @@ class Sshelly(Sbase):
                         self._device_shusername,
                         self._device_shpassword]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off %s %d %s Fehlermeldung: %s "

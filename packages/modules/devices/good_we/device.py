@@ -15,7 +15,6 @@ from modules.devices.good_we.config import (GoodWe, GoodWeBatSetup, GoodWeConfig
 
 log = logging.getLogger(__name__)
 
-
 good_we_component_classes = Union[bat.GoodWeBat, counter.GoodWeCounter, inverter.GoodWeInverter]
 
 
@@ -33,20 +32,19 @@ class Device(AbstractDevice):
             ip_address = self.device_config.configuration.ip_address
             self.client = modbus.ModbusTcpClient_(ip_address, 502)
         except Exception:
-            log.exception("Fehler im Modul "+self.device_config.name)
+            log.exception("Fehler im Modul " + self.device_config.name)
 
-    def add_component(self, component_config: Union[Dict,
-                                                    GoodWeBatSetup,
-                                                    GoodWeCounterSetup,
-                                                    GoodWeInverterSetup]) -> None:
+    def add_component(self,
+                      component_config: Union[Dict, GoodWeBatSetup, GoodWeCounterSetup, GoodWeInverterSetup]) -> None:
         if isinstance(component_config, Dict):
             component_type = component_config["type"]
         else:
             component_type = component_config.type
         component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
-            component_type].component_descriptor.configuration_factory, component_config)
+                                                   component_type].component_descriptor.configuration_factory,
+                                               component_config)
         if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
+            self.components["component" + str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
                 self.device_config.configuration.modbus_id, component_config, self.client))
         else:
             raise Exception(

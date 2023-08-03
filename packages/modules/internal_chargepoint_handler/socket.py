@@ -6,7 +6,8 @@ from typing import Callable, Tuple
 
 from modules.common.component_context import SingleComponentUpdateContext
 from modules.common.component_state import ChargepointState
-from modules.internal_chargepoint_handler.chargepoint_module import ChargepointModule, ClientConfig
+from modules.internal_chargepoint_handler.chargepoint_module import ChargepointModule
+from modules.internal_chargepoint_handler.clients import ClientHandler
 
 log = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ class RateLimiter:
             now = time.time()
             sleep_needed = self.max_seconds - (now - self.movement_times[self.counter])
             if sleep_needed > 0:
-                log.debug("Actor cooldown. Don't move actor.")
+                log.debug("Actor cool down. Not moving actor.")
                 return None
             else:
                 self.movement_times[self.counter] = time.time()
@@ -43,10 +44,14 @@ class ActorState(IntEnum):
 
 
 class Socket(ChargepointModule):
-    def __init__(self, socket_max_current: int, config: ClientConfig, parent_hostname: str) -> None:
+    def __init__(self,
+                 socket_max_current: int,
+                 local_charge_point_num: int,
+                 client_handler: ClientHandler,
+                 parent_hostname: str) -> None:
         log.debug("Konfiguration als Buchse.")
         self.socket_max_current = socket_max_current
-        super().__init__(config, parent_hostname)
+        super().__init__(local_charge_point_num, client_handler, parent_hostname)
 
     def set_current(self, current: float) -> None:
         with SingleComponentUpdateContext(self.component_info):

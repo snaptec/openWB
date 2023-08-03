@@ -1,5 +1,5 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)
+OPENWBBASEDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 cd /var/www/html/openWB
 . /var/www/html/openWB/loadconfig.sh
 
@@ -25,24 +25,24 @@ else
 	train=$releasetrain
 fi
 
-# check for ext openWB on configured chargepoints and start update
+# check for ext openWB on configured charge points and start update
 if [[ "$evsecon" == "extopenwb" ]]; then
 	echo "starting update on extOpenWB on LP1"
-	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep1ip -m "$releasetrain"
-	mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep1ip -m "1"
+	mosquitto_pub -t openWB/set/system/releaseTrain -r -h "$chargep1ip" -m "$releasetrain"
+	mosquitto_pub -t openWB/set/system/PerformUpdate -r -h "$chargep1ip" -m "1"
 fi
 if [[ $lastmanagement == "1" ]]; then
 	if [[ "$evsecons1" == "extopenwb" ]]; then
 		echo "starting update on extOpenWB on LP2"
-		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep2ip -m "$releasetrain"
-		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep2ip -m "1"
+		mosquitto_pub -t openWB/set/system/releaseTrain -r -h "$chargep2ip" -m "$releasetrain"
+		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h "$chargep2ip" -m "1"
 	fi
 fi
 if [[ $lastmanagements2 == "1" ]]; then
 	if [[ "$evsecons2" == "extopenwb" ]]; then
 		echo "starting update on extOpenWB on LP3"
-		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep3ip -m "$releasetrain"
-		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep3ip -m "1"
+		mosquitto_pub -t openWB/set/system/releaseTrain -r -h "$chargep3ip" -m "$releasetrain"
+		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h "$chargep3ip" -m "1"
 	fi
 fi
 for i in $(seq 4 8); do
@@ -52,14 +52,14 @@ for i in $(seq 4 8); do
 		if [[ ${!evseconVar} == "extopenwb" ]]; then
 			echo "starting update on extOpenWB on LP$i"
 			chargepIpVar="chargep${i}ip"
-			mosquitto_pub -t openWB/set/system/releaseTrain -r -h ${!chargepIpVar} -m "$releasetrain"
-			mosquitto_pub -t openWB/set/system/PerformUpdate -r -h ${!chargepIpVar} -m "1"
+			mosquitto_pub -t openWB/set/system/releaseTrain -r -h "${!chargepIpVar}" -m "$releasetrain"
+			mosquitto_pub -t openWB/set/system/PerformUpdate -r -h "${!chargepIpVar}" -m "1"
 		fi
 	fi
 done
 
 # Wait for regulation loop(s) and cron jobs to end, but with timeout in case a script hangs
-pgrep -f "$OPENWBBASEDIR/(regel\\.sh|runs/cron5min\\.sh|runs/cronnightly\\.sh)$" | \
+pgrep -f "$OPENWBBASEDIR/(regel\\.sh|runs/cron5min\\.sh|runs/cronnightly\\.sh)$" |
 	timeout 15 xargs -n1 -I'{}' tail -f --pid="{}" /dev/null
 
 # backup some files before fetching new release

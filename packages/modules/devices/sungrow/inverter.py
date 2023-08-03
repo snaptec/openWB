@@ -26,7 +26,7 @@ class SungrowInverter:
         self.store = get_inverter_value_store(self.component_config.id)
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
-    def update(self) -> None:
+    def update(self) -> float:
         unit = self.__device_modbus_id
         power = self.__tcp_client.read_input_registers(5016,
                                                        ModbusDataType.UINT_32,
@@ -40,6 +40,7 @@ class SungrowInverter:
             exported=exported
         )
         self.store.set(inverter_state)
+        return power
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=SungrowInverterSetup)

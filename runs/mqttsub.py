@@ -152,8 +152,8 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_measureip": create_topic_handler(ip_address_validator),
         "device_name": create_topic_handler((min_length_validator(4), regex_match_validator(name_allowed))),
         "device_type": create_topic_handler(
-            equals_one_of_validator("none", "shelly", "tasmota", "acthor", "lambda", "elwa", "idm", "vampair",
-                                    "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm",
+            equals_one_of_validator("none", "shelly", "tasmota", "acthor", "lambda", "elwa", "askoheat", "idm", "vampair",
+                                    "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm"
                                     )),
         "device_measureType": create_topic_handler(
             equals_one_of_validator("shelly", "tasmota", "http", "mystrom", "sdm630", "lovato", "we514", "fronius",

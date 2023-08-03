@@ -2256,6 +2256,9 @@ updateConfig(){
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
 	fi
+	if ! grep -Fq "sungrow2sr=" $ConfigFile; then
+		echo "sungrow2sr=0" >> $ConfigFile
+	fi
 	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
 		echo "sungrowspeicherport=502" >> $ConfigFile
 		echo "sungrowspeicherid=1" >> $ConfigFile
@@ -2277,6 +2280,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "batterx_ip=" $ConfigFile; then
 		echo "batterx_ip=192.168.0.17" >> $ConfigFile
+	fi
+	if ! grep -Fq "pvbatterxextinverter=" $ConfigFile; then
+		echo "pvbatterxextinverter=0" >> $ConfigFile
 	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
 		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
@@ -2340,6 +2346,17 @@ updateConfig(){
 	if grep -Fq "socmodul1=soc_idlp2" $ConfigFile; then
 		sed -i "s/^socmodul1=soc_idlp2/socmodul=soc_vwidlp2/g" $ConfigFile
 	fi
-
+	if [[ -f /home/pi/ppbuchse ]]; then
+		ppbuchse=$(</home/pi/ppbuchse)
+		if ! grep -Fq "ppbuchse=" $ConfigFile; then
+			echo "ppbuchse=$ppbuchse" >> $ConfigFile
+		else
+			ppbuchseOld=$(grep -F "ppbuchse=" $ConfigFile)
+			ppbuchseOld=${ppbuchseOld#ppbuchse=}
+			if ((ppbuchseOld != ppbuchse)); then
+				sed -i "s/^ppbuchse=.*$/ppbuchse=$ppbuchse/g" $ConfigFile
+			fi
+		fi
+	fi
 	echo "Config file Update done."
 }

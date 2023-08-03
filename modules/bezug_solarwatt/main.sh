@@ -15,7 +15,7 @@ openwbDebugLog ${DMOD} 2 "Bezug Solarwatt Methode: ${solarwattmethod}"
 openwbDebugLog ${DMOD} 2 "Bezug Solarwatt IP1 : ${speicher1_ip}"
 openwbDebugLog ${DMOD} 2 "Bezug Solarwatt IP2: ${speicher1_ip2}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_solarwatt.solarwatt" "${solarwattmethod}" "${speicher1_ip}" "${speicher1_ip2}" >>"$MYLOGFILE" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.solar_watt.device" "counter" "${speicher1_ip}" "${speicher1_ip2}" "${solarwattmethod}" >>"$MYLOGFILE" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"

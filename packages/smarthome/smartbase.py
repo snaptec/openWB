@@ -43,6 +43,7 @@ class Sbase(Sbase0):
         self.temp2 = '300'
         self.newwatt = 0
         self.newwattk = 0
+        self.pvwatt = 0
         self.relais = 0
         self.devuberschuss = 0
         self.device_temperatur_configured = 0
@@ -166,7 +167,8 @@ class Sbase(Sbase0):
         else:
             self.relais = 0
         self.mqtt_param = {}
-        pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        #  pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        pref = '/' + str(self.device_nummer) + '/'
         self.mqtt_param[pref + 'RelayStatus'] = str(self.relais)
         if (self.c_mantime_f == 'Y') and (self.device_manual != 1):
             # nach Ausschalten manueller Modus mindestens 30 Sek +
@@ -276,7 +278,7 @@ class Sbase(Sbase0):
             elif (key == 'device_mineinschaltdauer'):
                 self._device_mineinschaltdauer = valueint * 60
             elif (key == 'device_mindayeinschaltdauer'):
-                self._device_mineinschaltdauer = valueint * 60
+                self._device_mindayeinschaltdauer = valueint * 60
             elif (key == 'device_maxeinschaltdauer'):
                 self._device_maxeinschaltdauer = valueint * 60
             elif (key == 'device_homeConsumtion'):
@@ -394,7 +396,8 @@ class Sbase(Sbase0):
                          + "Sbase überlesen " + key +
                          " " + value)
         self._first_run = 0
-        pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        #  pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        pref = '/' + str(self.device_nummer) + '/'
         self.mqtt_param_del[pref + 'RelayStatus'] = '0'
         self.mqtt_param_del[pref + 'Watt'] = '0'
         self.mqtt_param_del[pref + 'oncountnor'] = '0'

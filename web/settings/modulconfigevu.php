@@ -101,7 +101,7 @@
 										<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 										<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
 										<option <?php if($wattbezugmodulold == "bezug_sonneneco") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
-										<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
+										<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow</option>
 										<option <?php if($wattbezugmodulold == "bezug_powerwall") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
 										<option <?php if($wattbezugmodulold == "bezug_varta") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
 										<option <?php if($wattbezugmodulold == "bezug_victrongx") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
@@ -141,17 +141,7 @@
 						</div>
 						<div id="wattbezugsungrow" class="hide">
 							<div class="card-text alert alert-info">
-								Konfiguration im zugehörigen Speichermodul des Sungrow erforderlich!
-							</div>
-							<div class="form-row mb-1">
-								<label for="sungrowsr" class="col-md-4 col-form-label">Version des Sungrow</label>
-								<div class="col">
-									<select name="sungrowsr" id="sungrowsr" class="form-control">
-										<option <?php if($sungrowsrold == 0) echo "selected" ?> value="0">SH (Hybrid)</option>
-										<option <?php if($sungrowsrold == 1) echo "selected" ?> value="1">SG (kein Hybrid)</option>
-										<option <?php if($sungrowsrold == 2) echo "selected" ?> value="2">SG mit WiNet-Dongle (kein Hybrid)</option>
-									</select>
-								</div>
+								Konfiguration im zugehörigen PV-Modul 1 mit Auswahl "Sungrow" erforderlich!
 							</div>
 						</div>
 						<div id="wattbezugsonneneco" class="hide">

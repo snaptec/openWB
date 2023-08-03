@@ -17,7 +17,7 @@ class B23:
         return self.client.read_holding_registers(0x5B2C, ModbusDataType.INT_16, unit=self.id) / 100
 
     def get_currents(self) -> List[float]:
-        return [val / 10 for val in self.client.read_holding_registers(
+        return [val / 100 for val in self.client.read_holding_registers(
             0x5B0C, [ModbusDataType.UINT_32]*3, unit=self.id)]
 
     def get_power(self) -> Tuple[List[float], float]:

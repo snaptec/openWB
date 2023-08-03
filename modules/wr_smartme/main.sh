@@ -20,10 +20,9 @@ openwbDebugLog ${DMOD} 2 "WR URL: ${wr_smartme_url}"
 openwbDebugLog ${DMOD} 2 "WR User: ${wr_smartme_user}"
 openwbDebugLog ${DMOD} 2 "WR Passwort: ${wr_smartme_pass}"
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "wr_smartme.smartme" "${wr_smartme_url}" "${wr_smartme_user}" "${wr_smartme_pass}" >>$MYLOGFILE 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.smart_me.device" "inverter" "${wr_smartme_user}" "${wr_smartme_pass}" "${wr_smartme_url}" >>$MYLOGFILE 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt) 
-echo $pvwatt
+cat "${RAMDISKDIR}/pvwatt"

@@ -833,7 +833,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if (isNaN(energyCharged)) {
 			energyCharged = 0;
 		}
-		wbdata.updateCP(index, "energy", energyCharged);
+		wbdata.updateCP(index, "energySincePlugged", energyCharged);
 	} else if (mqttmsg.match(/^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i)) {
 		// energy charged since reset of limitation
 		var actualCharged = parseFloat(mqttpayload, 10)

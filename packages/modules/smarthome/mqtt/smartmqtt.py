@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase, Slmqtt
-import subprocess
+from typing import Dict
 import logging
 log = logging.getLogger(__name__)
 
 
 class Smqtt(Sbase):
-    def __init__(self):
+    def __init__(self) -> None:
         # setting
         super().__init__()
         self._old_measuretype0 = 'none'
 
-    def getwatt(self, uberschuss, uberschussoffset):
+    def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)
         self._mydevicemeasure0.devuberschuss = self.devuberschuss
         self._mydevicemeasure0.getwattread()
@@ -23,7 +23,7 @@ class Smqtt(Sbase):
         self.temp2 = self._mydevicemeasure0.temp2
         self.postwatt()
 
-    def updatepar(self, input_param):
+    def updatepar(self, input_param: Dict[str, str]) -> None:
         super().updatepar(input_param)
         if (self._old_measuretype0 == 'none'):
             self._mydevicemeasure0 = Slmqtt()
@@ -37,7 +37,7 @@ class Smqtt(Sbase):
                      " update " + self.device_type)
         self._mydevicemeasure0.updatepar(input_param)
 
-    def turndevicerelais(self, zustand, ueberschussberechnung, updatecnt):
+    def turndevicerelais(self, zustand: int, ueberschussberechnung: int, updatecnt: int) -> None:
         self.preturn(zustand, ueberschussberechnung, updatecnt)
         if (zustand == 1):
             pname = "/on.py"
@@ -47,8 +47,7 @@ class Smqtt(Sbase):
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off  %s %d %s Fehlermeldung: %s "
