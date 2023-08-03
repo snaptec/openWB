@@ -27,14 +27,14 @@ class RctBat:
         # read all parameters
         rct_client.read(my_tab)
 
-        if (int(stat1.value) + int(stat2.value) + int(stat3.value)) > 0:
+        if (stat1.value + stat2.value + stat3.value) > 0:
             raise FaultState.error("Alarm Status Speicher ist ungleich 0.")
 
         bat_state = BatState(
-            power=int(watt1.value) * -1,
+            power=watt1.value * -1,
             soc=socx.value * 100,
-            imported=int(watt2.value),
-            exported=int(watt3.value)
+            imported=watt2.value,
+            exported=watt3.value
         )
         self.store.set(bat_state)
 
