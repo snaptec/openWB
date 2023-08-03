@@ -2,6 +2,7 @@
 from smarthome.smartcommon import mainloop, initparam
 import time
 import logging
+import os
 log = logging.getLogger("smarthome")
 # openwb 1.9 spec
 mqttcg = 'openWB/config/get/SmartHome/'
@@ -99,5 +100,24 @@ if __name__ == "__main__":
             log.warning("Fehler beim Auslesen der Ramdisk (wattbezug):"
                         + str(e))
             wattbezug = 0
-        mainloop(wattbezug, speicherleistung, speichersoc)
+        try:
+            with open(bp+'/ramdisk/pvallwatt', 'r') as value:
+                pvwatt = int(float(value.read())) * -1
+        except Exception as e:
+            log.warning("Fehler beim Auslesen der Ramdisk (pvallwatt):"
+                        + str(e))
+            pvwatt = 0
+        file_charge = '/var/www/html/openWB/ramdisk/llkombiniert'
+        testcharge = 0.0
+        try:
+            if os.path.isfile(file_charge):
+                with open(file_charge, 'r') as f:
+                    testcharge = float(f.read())
+        except Exception:
+            pass
+        if testcharge <= 1000:
+            chargestatus = False
+        else:
+            chargestatus = True
+        mainloop(wattbezug, speicherleistung, speichersoc, pvwatt, chargestatus)
         time.sleep(5)
