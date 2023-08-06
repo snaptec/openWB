@@ -116,7 +116,7 @@ if count5 == 0:
     client.write_registers(78, pvwnew, unit=1)
 else:
     if pvmodus == 99:
-        pvmodus = 0    
+        pvmodus = 0
 answer = '{"power":' + str(aktpower) + ',"powerc":0'
 answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(neupower)
 answer += ',"on":' + str(pvmodus) + '}'
