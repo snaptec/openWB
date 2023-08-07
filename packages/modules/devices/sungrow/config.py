@@ -4,8 +4,9 @@ from modules.common.component_setup import ComponentSetup
 
 
 class SungrowConfiguration:
-    def __init__(self, ip_address: Optional[str] = None, modbus_id: int = 1):
+    def __init__(self, ip_address: Optional[str] = None, port: int = 502, modbus_id: int = 1):
         self.ip_address = ip_address
+        self.port = port
         self.modbus_id = modbus_id
 
 

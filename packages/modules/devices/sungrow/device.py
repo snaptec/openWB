@@ -31,7 +31,8 @@ class Device(AbstractDevice):
         try:
             self.device_config = dataclass_from_dict(Sungrow, device_config)
             ip_address = self.device_config.configuration.ip_address
-            self.client = modbus.ModbusTcpClient_(ip_address, 502)
+            port = self.device_config.configuration.port
+            self.client = modbus.ModbusTcpClient_(ip_address, port)
         except Exception:
             log.exception("Fehler im Modul " + self.device_config.name)
 
@@ -82,11 +83,12 @@ COMPONENT_TYPE_TO_MODULE = {
 
 
 def read_legacy(ip_address: str,
+                port: int,
                 modbus_id: int,
                 component_config: dict):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
-    device_config.configuration.port = 502
+    device_config.configuration.port = port
     device_config.configuration.modbus_id = modbus_id
     dev = Device(device_config)
     dev.add_component(component_config)
@@ -103,13 +105,14 @@ def read_legacy_counter(ip_address: str, modbus_id: int, version: int):
 
 
 def read_legacy_inverter(ip_address: str,
+                         port: int,
                          modbus_id: int,
                          num: int,
                          read_counter: int,
                          version: int):
     device_config = Sungrow()
     device_config.configuration.ip_address = ip_address
-    device_config.configuration.port = 502
+    device_config.configuration.port = port
     device_config.configuration.modbus_id = modbus_id
     dev = Device(device_config)
     dev.add_component(inverter.component_descriptor.configuration_factory(id=num))

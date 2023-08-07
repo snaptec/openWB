@@ -203,6 +203,13 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
+								<label for="sungrowspeicherport" class="col-md-4 col-form-label">Netzwerk-Port</label>
+								<div class="col">
+									<input class="form-control" type="number" min="1" step="1" name="sungrowspeicherport" id="sungrowspeicherport" value="<?php echo $sungrowspeicherportold ?>">
+									<span class="form-text small">Hier kann ein abweichender Netzwerk-Port angegeben werden, auf dem die Modbus/TCP Verbindung aufgebaut wird.Standard ist 502.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
 								<label for="sungrowspeicherid" class="col-md-4 col-form-label">Geräteadresse</label>
 								<div class="col">
 									<input class="form-control" type="number" min="1" max="254" step="1" name="sungrowspeicherid" id="sungrowspeicherid" value="<?php echo $sungrowspeicheridold ?>">
