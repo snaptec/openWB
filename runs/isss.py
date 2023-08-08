@@ -84,7 +84,7 @@ class UpdateValues:
             if self.parent_wb != "localhost":
                 pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
                            payload=str(value), hostname=self.parent_wb, no_json=True)
-        topic = self.MAP_KEY_TO_OLD_TOPIC[key]
+        topic = self.MAP_KEY_TO_OLD_TOPIC.get(key)
         rounding = get_rounding_function_by_digits(2)
         if topic is not None:
             if isinstance(topic, List):
