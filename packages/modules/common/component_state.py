@@ -125,11 +125,10 @@ class ChargepointState:
                  power_factors: Optional[List[float]] = None,
                  charge_state: bool = False,
                  plug_state: bool = False,
-                 rfid: Optional[str] = None):
+                 rfid: Optional[str] = None,
+                 frequency: float = 50):
         self.currents, self.powers, self.voltages = _calculate_powers_and_currents(currents, powers, voltages)
-        if power_factors is None:
-            power_factors = [0.0]*3
-        self.power_factors = power_factors
+        self.frequency = frequency
         self.imported = imported
         self.exported = exported
         self.power = power
@@ -137,3 +136,6 @@ class ChargepointState:
         self.charge_state = charge_state
         self.plug_state = plug_state
         self.rfid = rfid
+        if power_factors is None:
+            power_factors = [0.0]*3
+        self.power_factors = power_factors
