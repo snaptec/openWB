@@ -5,7 +5,7 @@ from typing import Dict, Tuple, Any
 from smarthome.smartbase0 import Sbase0
 from smarthome.smartmeas import Slsdm630, Sllovato, Slsdm120, Slwe514, Slfronius
 from smarthome.smartmeas import Sljson, Slsmaem, Slshelly, Sltasmota, Slmqtt
-from smarthome.smartmeas import Slhttp, Slavm, Slmystrom
+from smarthome.smartmeas import Slhttp, Slavm, Slmystrom, Slb23
 from smarthome.smartbut import Sbshelly
 from datetime import datetime, timezone
 import logging
@@ -458,6 +458,8 @@ class Sbase(Sbase0):
                     self._mydevicemeasure = Slsdm630()
                 elif (self._device_measuretype == 'lovato'):
                     self._mydevicemeasure = Sllovato()
+                elif (self._device_measuretype == 'b23'):
+                    self._mydevicemeasure = Slb23()
                 elif (self._device_measuretype == 'sdm120'):
                     self._mydevicemeasure = Slsdm120()
                 elif (self._device_measuretype == 'we514'):

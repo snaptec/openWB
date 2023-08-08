@@ -156,7 +156,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
                                     "stiebel", "http", "avm", "mystrom", "viessmann", "mqtt", "NXDACXX", "ratiotherm"
                                     )),
         "device_measureType": create_topic_handler(
-            equals_one_of_validator("shelly", "tasmota", "http", "mystrom", "sdm630", "lovato", "we514", "fronius",
+            equals_one_of_validator("shelly", "tasmota", "http", "mystrom", "sdm630", "lovato", "we514", "fronius", "b23", 
                                     "json", "avm", "mqtt", "sdm120", "smaem")),
         "device_temperatur_configured": create_topic_handler(int_range_validator(0, 3)),
         "device_einschaltschwelle": create_topic_handler(int_range_validator(-100000, 100000)),

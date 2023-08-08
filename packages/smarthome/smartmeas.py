@@ -1,7 +1,7 @@
 from smarthome.smartbase0 import Sbase0
 from typing import Dict, Tuple
 from modules.common import modbus
-from modules.common import sdm
+from modules.common import sdm, b23
 from modules.common import lovato
 import logging
 log = logging.getLogger(__name__)
@@ -457,6 +457,27 @@ class Sllovato(Slbase):
         except Exception as e1:
             log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
                         % ('Lovato ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
+        return self.newwatt, self.newwattk
+
+
+class Slb23(Slbase):
+    def __init__(self) -> None:
+        # setting
+        super().__init__()
+
+    def sepwattread(self) -> Tuple[int, int]:
+        try:
+            # neu aus openwb 2.0
+            with modbus.ModbusTcpClient_(self._device_measureip, self._device_measureportsdm) as tcp_client:
+                b23inst = b23.B23(self._device_measureid, tcp_client)
+                # log.warning(" b23inst id %s " % ( str(id(b23inst))))
+                _, newwatt = b23inst.get_power()
+                self.newwatt = int(newwatt)
+                self.newwattk = int(b23inst.get_imported())
+        except Exception as e1:
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('b23 ', self.device_nummer,
                            str(self._device_measureip), str(e1)))
         return self.newwatt, self.newwattk
 
