@@ -43,10 +43,12 @@ body {
 
 .PINbutton.clear {
 	background-color: orange;
+	color: #ffffff;
 }
 
 .PINbutton.enter {
 	background-color: green;
+	color: #ffffff;
 }
 
 .PINbutton:hover {
@@ -82,8 +84,31 @@ body {
 	box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
 }
 
+.theme-gray {
+	--color-bg: #333333;
+	--color-charging: #1f78b4;
+	--color-axis: #666666;
+	--color-grid: black;
+	--color-fg: white;
+}
+
 .modal-dialog {
 	max-width: 600px;
+}
+
+.modal-content {
+	background-color: var(--color-bg);
+	color: #ffffff;
+}
+
+.modal-header {
+	padding: 2px;
+	align-items: center;
+}
+
+.modal-button {
+	font-size: 15px;
+	padding: 4px;
 }
 
 .modal-content,
@@ -95,4 +120,12 @@ body {
 
 .modal-content label {
 	font-weight: normal;
+}
+
+.text-orange {
+	color: orange;
+}
+
+.text-orangered {
+	color: #FF4500;
 }

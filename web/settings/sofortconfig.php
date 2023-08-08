@@ -162,11 +162,14 @@
 											<input type="radio" name="etBasedChargingLp<?php echo $chargepoint; ?>" data-option="0" value="0"> Aus
 										</label>
 										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="etBasedChargingLp<?php echo $chargepoint; ?>" data-option="1" value="1"> An
+											<input type="radio" name="etBasedChargingLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Global
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="etBasedChargingLp<?php echo $chargepoint; ?>" data-option="2" value="2"> Lokal
 										</label>
 									</div>
 									<span class="form-text small">
-										Aktiviert/Deaktiviert Preisbasiertes Laden
+										Aktiviert/Deaktiviert Preisbasiertes Laden. "Global": Limit gilt Ladepunktübergreifend. Lokal: Preis kann für jeden Ladpunkt individuelll eingestellt werden.
 									</span>
 								</div>
 							</div>

@@ -395,11 +395,19 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                     subprocess.run(sendcommand)
             if (("openWB/config/set/sofort/lp" in msg.topic) and ("etBasedCharging" in msg.topic)):
                 devicenumb = re.sub(r'\D', '', msg.topic)
-                if (1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
+                if (1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 2):
                     client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/etBasedCharging",
                                    msg.payload.decode("utf-8"), qos=0, retain=True)
                     sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lp" +
                                    str(devicenumb)+"etbasedcharging=", msg.payload.decode("utf-8")]
+                    subprocess.run(sendcommand)
+            if (("openWB/config/set/sofort/lp" in msg.topic) and ("etChargeMaxPrice" in msg.topic)):
+                devicenumb = re.sub(r'\D', '', msg.topic)
+                if (1 <= int(devicenumb) <= 8 and float(msg.payload) >= -50 and float(msg.payload) <= 95):
+                    client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/etChargeMaxPrice",
+                                   msg.payload.decode("utf-8"), qos=0, retain=True)
+                    sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lp" +
+                                   str(devicenumb)+"etchargemaxprice=", msg.payload.decode("utf-8")]
                     subprocess.run(sendcommand)
             if (("openWB/config/set/sofort/lp" in msg.topic) and ("chargeLimitation" in msg.topic)):
                 devicenumb = re.sub(r'\D', '', msg.topic)
@@ -1237,11 +1245,27 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                 f = open('/var/www/html/openWB/ramdisk/parentCPlp2', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+            if (msg.topic == "openWB/set/awattar/boolAwattarEnabled"):
+                client.publish("openWB/global/awattar/boolAwattarEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/mqttetprovideraktiv', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
             if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
                 if (float(msg.payload) >= -50 and float(msg.payload) <= 95):
+                    client.publish("openWB/global/awattar/MaxPriceForCharging", msg.payload.decode("utf-8"), qos=0, retain=True)
                     f = open('/var/www/html/openWB/ramdisk/etprovidermaxprice', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+            if (msg.topic == "openWB/set/awattar/ActualPriceForCharging"):
+                client.publish("openWB/global/awattar/ActualPriceForCharging", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/etproviderprice', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+            if (msg.topic == "openWB/set/awattar/pricelist"):
+                client.publish("openWB/global/awattar/pricelist", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/etprovidergraphlist', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
             if (msg.topic == "openWB/set/houseBattery/W"):
                 if (float(msg.payload) >= -30000 and float(msg.payload) <= 30000):
                     f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
@@ -1330,14 +1354,26 @@ def on_message(client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
                 client.publish("openWB/evu/faultStr", msg.payload.decode("utf-8"), qos=0, retain=True)
             if (msg.topic == "openWB/set/lp/1/%Soc"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
+                    client.publish("openWB/lp/1/%Soc", msg.payload.decode("utf-8"), qos=0, retain=True)
                     f = open('/var/www/html/openWB/ramdisk/soc', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
             if (msg.topic == "openWB/set/lp/2/%Soc"):
                 if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
+                    client.publish("openWB/lp/2/%Soc", msg.payload.decode("utf-8"), qos=0, retain=True)
                     f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
                     f.write(msg.payload.decode("utf-8"))
                     f.close()
+            if (msg.topic == "openWB/set/lp/1/boolSocConfigured"):
+                client.publish("openWB/lp/1/boolSocConfigured", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/mqttsocvorhanden', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+            if (msg.topic == "openWB/set/lp/2/boolSocConfigured"):
+                client.publish("openWB/lp/2/boolSocConfigured", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/mqttsoc1vorhanden', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
             set_pv_match = re.match(r"^openWB/set/pv/([12])/(.*)$", msg.topic)
             if set_pv_match is not None:
                 pv = files.pv[int(set_pv_match.group(1)) - 1]

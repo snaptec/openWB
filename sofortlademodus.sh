@@ -10,28 +10,27 @@ sofortlademodus(){
 	fi
 	if (( etprovideraktiv == 1 )); then
 		actualprice=$(<ramdisk/etproviderprice)
-		
-		if (( $(echo "$actualprice <= $etprovidermaxprice" |bc -l) )); then
-			#price lower than max price, enable charging
-			for i in $(seq 1 8); do
-				myenabledvar="lp${i}enabled"
-				myetbasedvar="lp${i}etbasedcharging"
-				if (( ${!myenabledvar} == 0 && ${!myetbasedvar} == 1 )); then
-					openwbDebugLog "MAIN" 1 "Aktiviere Ladung (preisbasiert) für Ladepunkt $i, Preis $actualprice, Max $etprovidermaxprice"
+		for i in $(seq 1 $ConfiguredChargePoints); do
+			myenabledvar="lp${i}enabled"
+			myetbasedvar="lp${i}etbasedcharging"
+			if ((${!myetbasedvar} == 1)); then
+				myetpricevar="etprovidermaxprice"
+			else
+				myetpricevar="lp${i}etchargemaxprice"
+			fi
+			if (( $(echo "$actualprice <= ${!myetpricevar}" |bc -l) )); then
+				#price lower than max price, enable charging
+				if (( ${!myenabledvar} == 0 && ${!myetbasedvar} != 0 )); then
+					openwbDebugLog "MAIN" 1 "Aktiviere Ladung (preisbasiert) für Ladepunkt $i, Preis $actualprice, Max ${!myetpricevar}, Mode ${!myetpricevar}"
 					mosquitto_pub -r -t openWB/set/lp/${i}/ChargePointEnabled -m "1"
 				fi
-			done
-		else
-			#price higher than max price, disable charging
-			for i in $(seq 1 8); do
-				myenabledvar="lp${i}enabled"
-				myetbasedvar="lp${i}etbasedcharging"
-				if (( ${!myenabledvar} == 1 && ${!myetbasedvar} == 1 )); then
-					openwbDebugLog "MAIN" 1 "Deaktiviere Ladung (preisbasiert) für Ladepunkt $i, Preis $actualprice, Max $etprovidermaxprice"
+			else
+				if (( ${!myenabledvar} == 1 && ${!myetbasedvar} != 0 )); then
+					openwbDebugLog "MAIN" 1 "Deaktiviere Ladung (preisbasiert) für Ladepunkt $i, Preis $actualprice, Max ${!myetpricevar}, Mode ${!myetpricevar}"
 					mosquitto_pub -r -t openWB/set/lp/${i}/ChargePointEnabled -m "0"
 				fi
-			done
-		fi
+			fi
+		done
 	fi
 	if (( lastmmaxw < 10 ));then
 		lastmmaxw=40000

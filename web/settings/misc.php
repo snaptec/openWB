@@ -1285,7 +1285,7 @@
 											<option <?php if($displaythemeold == 1) echo "selected" ?> value="1">Symbolfluss</option>
 											<option <?php if($displaythemeold == 5) echo "selected" ?> value="5">Colors</option>
 										<?php } ?>
-										<option <?php if($displaythemeold == 2 || $isssold == 1) echo "selected" ?> value="2">Nur Ladeleistung, keine Verstellmöglichkeit</option>
+										<option <?php if($displaythemeold == 2 || $isssold == 1) echo "selected" ?> value="2">Minimmal, eingeschränkte Verstellmöglichkeit</option>
 									</select>
 								</div>
 							</div>
@@ -1340,6 +1340,51 @@
 									</div>
 								</div>
 							<?php } // end chargepoint loop ?>
+							<div class="form-row mb-1 hide"  id="displayprice">
+								<div class="col-md-4">
+									<label class="col-form-label">zeige Preisinformation</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($displayshowpriceold == 0) echo " active" ?>">
+											<input type="radio" name="displayshowprice" id="displayshowpriceOff" value="0"<?php if($displayshowpriceold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($displayshowpriceold == 1) echo " active" ?>">
+											<input type="radio" name="displayshowprice" id="displayshowpriceOn" value="1"<?php if($displayshowpriceold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1 hide"  id="displayrfidpad">
+								<div class="col-md-4">
+									<label class="col-form-label">manuelle RFID Eingabe</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($displayshowrfidpadold == 0) echo " active" ?>">
+											<input type="radio" name="displayshowrfidpad" id="displayshowrfidpadOff" value="0"<?php if($displayshowrfidpadold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($displayshowrfidpadold == 1) echo " active" ?>">
+											<input type="radio" name="displayshowrfidpad" id="displayshowrfidpadOn" value="1"<?php if($displayshowrfidpadold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1 hide"  id="displaysetmaxprice">
+								<div class="col-md-4">
+									<label class="col-form-label">Preisgrenze einstellen erlaubt</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($displayallowsetmaxpriceold == 0) echo " active" ?>">
+											<input type="radio" name="displayallowsetmaxprice" id="displayallowsetmaxpriceOff" value="0"<?php if($displayallowsetmaxpriceold == 0) echo " checked=\"checked\"" ?>>Nein
+										</label>
+										<label class="btn btn-outline-info<?php if($displayallowsetmaxpriceold == 1) echo " active" ?>">
+											<input type="radio" name="displayallowsetmaxprice" id="displayallowsetmaxpriceOn" value="1"<?php if($displayallowsetmaxpriceold == 1) echo " checked=\"checked\"" ?>>Ja
+										</label>
+									</div>
+								</div>
+							</div>
 							<hr class="border-secondary">
 						</div>
 						<div class="form-group">
@@ -1393,12 +1438,18 @@
 						function visibility_displaytheme() {
 							switch ($('#displaytheme').val()) {
 								case '0': // Cards
+									hideSection('#displayprice');
+									hideSection('#displayrfidpad');
+									hideSection('#displaysetmaxprice');
 									showSection('#displaygauge');
 									for (let cp = 1; cp < 9; cp++) {
 										showSection('#displaylp' + cp);
 									}
 									break;
 								case '2': // Minimal
+									showSection('#displayprice');
+									showSection('#displayrfidpad');
+									showSection('#displaysetmaxprice');
 									hideSection('#displaygauge');
 									for (let cp = 1; cp < 3; cp++) {
 										showSection('#displaylp' + cp);
@@ -1408,6 +1459,9 @@
 									}
 									break;
 								case '3': // Gauges
+									hideSection('#displayprice');
+									hideSection('#displayrfidpad');
+									hideSection('#displaysetmaxprice');
 									showSection('#displaygauge');
 									for (let cp = 1; cp < 3; cp++) {
 										showSection('#displaylp' + cp);
@@ -1417,6 +1471,9 @@
 									}
 									break;
 								default:
+									hideSection('#displayprice');
+									hideSection('#displayrfidpad');
+									hideSection('#displaysetmaxprice');
 									hideSection('#displaygauge');
 									for (let cp = 1; cp < 9; cp++) {
 										hideSection('#displaylp' + cp);

@@ -11,6 +11,10 @@
 var topicsToSubscribe = [
 	// system topics
 	["openWB/system/reloadDisplay", 1],
+	["openWB/system/priceForKWh", 1],
+	["openWB/system/parentWB", 1],
+	["openWB/system/parentCPlp1", 0],
+	["openWB/system/parentCPlp2", 0],
 	["openWB/lp/1/W", 1],
 	["openWB/lp/1/%Soc", 1],
 	["openWB/lp/1/boolSocConfigured"],
@@ -23,6 +27,14 @@ var topicsToSubscribe = [
 	["openWB/lp/2/boolPlugStat", 1],
 	["openWB/lp/2/ChargePointEnabled", 1],
 	["openWB/lp/2/boolChargeStat", 1],
+	["openWB/global/awattar/boolAwattarEnabled", 0],
+	["openWB/global/awattar/MaxPriceForCharging", 1],
+	["openWB/global/awattar/ActualPriceForCharging", 1],
+	["openWB/global/awattar/pricelist", 1],
+	["openWB/config/get/sofort/lp/1/etBasedCharging", 1],
+	["openWB/config/get/sofort/lp/2/etBasedCharging", 1],
+	["openWB/config/get/sofort/lp/1/etChargeMaxPrice", 1],
+	["openWB/config/get/sofort/lp/2/etChargeMaxPrice", 1]
 ];
 
 // holds number of topics flagged 1 initially
@@ -60,6 +72,7 @@ $(document).ready(function(){
 client.onConnectionLost = function (responseObject) {
 	client.connect(options);
 };
+
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
 	handlevar(message.destinationName, message.payloadString);
@@ -77,4 +90,45 @@ function publish(payload, topic) {
 	message.qos = 2;
 	message.retained = true;
 	client.send(message);
-}
+};
+
+var parentOptions = {
+	timeout: 5,
+	useSSL: isSSL,
+	//Gets Called if the connection could not be established
+	onFailure: function (message) {
+		client.connect(parentOptions);
+	}
+};
+
+
+var offspringuid = "extopenwb" + clientuid;
+var offspring = null;
+
+function connectToParent() {
+	if (offspring != null) {
+		offspring.disconnect();
+	}
+	offspring = new Messaging.Client(parentWB, 9001, offspringuid);
+
+	offspring.connect(parentOptions);
+
+	//Gets  called if the websocket/mqtt connection gets disconnected for any reason
+	offspring.onConnectionLost = function (responseObject) {
+		offspring.connect(parentOptions);
+	};
+
+};
+
+function publishToParent(payload, topic) {
+	var parentMessage = new Messaging.Message(payload);
+	parentMessage.destinationName = topic;
+	parentMessage.qos = 2;
+	parentMessage.retained = true;
+	offspring.send(parentMessage);
+	var parentMessage = new Messaging.Message("external openWB uid: " + clientuid + " sent: " + topic);
+	parentMessage.destinationName = "openWB/set/system/topicSender";
+	parentMessage.qos = 2;
+	parentMessage.retained = true;
+	offspring.send(parentMessage);
+};

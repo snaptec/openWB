@@ -1839,6 +1839,14 @@ loadvars(){
 	mqttconfvar["config/get/sofort/lp/6/etBasedCharging"]=lp6etbasedcharging
 	mqttconfvar["config/get/sofort/lp/7/etBasedCharging"]=lp7etbasedcharging
 	mqttconfvar["config/get/sofort/lp/8/etBasedCharging"]=lp8etbasedcharging
+	mqttconfvar["config/get/sofort/lp/1/etChargeMaxPrice"]=lp1etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/2/etChargeMaxPrice"]=lp2etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/3/etChargeMaxPrice"]=lp3etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/4/etChargeMaxPrice"]=lp4etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/5/etChargeMaxPrice"]=lp5etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/6/etChargeMaxPrice"]=lp6etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/7/etChargeMaxPrice"]=lp7etchargemaxprice
+	mqttconfvar["config/get/sofort/lp/8/etChargeMaxPrice"]=lp8etchargemaxprice
 	mqttconfvar["config/get/pv/lp/1/socLimitation"]=stopchargepvatpercentlp1
 	mqttconfvar["config/get/pv/lp/2/socLimitation"]=stopchargepvatpercentlp2
 	mqttconfvar["config/get/pv/lp/1/maxSoc"]=stopchargepvpercentagelp1
@@ -1850,6 +1858,10 @@ loadvars(){
 	mqttconfvar["config/get/display/chartBatteryMinMax"]=displayspeichermax
 	mqttconfvar["config/get/display/chartPvMax"]=displaypvmax
 	mqttconfvar["config/get/display/showHouseConsumption"]=displayhausanzeigen
+	mqttconfvar["config/get/display/showPrice"]=displayshowprice
+	mqttconfvar["config/get/display/showRfidPad"]=displayshowrfidpad
+	mqttconfvar["config/get/display/pinRequired"]=displaypinaktiv
+	mqttconfvar["config/get/display/allowSetMaxPrice"]=displayallowsetmaxprice
 	mqttconfvar["config/get/display/chartHouseConsumptionMax"]=displayhausmax
 	mqttconfvar["config/get/display/chartLp/1/max"]=displaylp1max
 	mqttconfvar["config/get/display/chartLp/2/max"]=displaylp2max
