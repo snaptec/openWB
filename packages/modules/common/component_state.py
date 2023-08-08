@@ -1,6 +1,23 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from helpermodules.auto_str import auto_str
+
+
+def _calculate_powers_and_currents(currents: Optional[List[float]],
+                                   powers: Optional[List[float]],
+                                   voltages: Optional[List[float]]) -> Tuple[List[float]]:
+    if voltages is None:
+        voltages = [230.0]*3
+    if powers is None:
+        if currents is None:
+            powers = [0.0]*3
+        else:
+            powers = [currents[i]*voltages[i] for i in range(0, 3)]
+    if currents is None and powers:
+        currents = [powers[i]/voltages[i] for i in range(0, 3)]
+    if currents and powers:
+        currents = [currents[i]*-1 if powers[i] < 0 and currents[i] > 0 else currents[i] for i in range(0, 3)]
+    return currents, powers, voltages
 
 
 @auto_str
@@ -47,20 +64,7 @@ class CounterState:
             power_factors: actual power factors for 3 phases
             frequency: actual grid frequency in Hz
         """
-        if voltages is None:
-            voltages = [230.0]*3
-        self.voltages = voltages
-        if powers is None:
-            if currents is None:
-                powers = [0.0]*3
-            else:
-                powers = [currents[i]*voltages[i] for i in range(0, 3)]
-        self.powers = powers
-        if currents is None and powers:
-            currents = [powers[i]/voltages[i] for i in range(0, 3)]
-        if currents and powers:
-            currents = [currents[i]*-1 if powers[i] < 0 and currents[i] > 0 else currents[i] for i in range(0, 3)]
-        self.currents = currents
+        self.currents, self.powers, self.voltages = _calculate_powers_and_currents(currents, powers, voltages)
         if power_factors is None:
             power_factors = [0.0]*3
         self.power_factors = power_factors
@@ -115,18 +119,14 @@ class ChargepointState:
                  imported: float = 0,
                  exported: float = 0,
                  power: float = 0,
+                 powers: Optional[List[float]] = None,
                  voltages: Optional[List[float]] = None,
                  currents: Optional[List[float]] = None,
                  power_factors: Optional[List[float]] = None,
                  charge_state: bool = False,
                  plug_state: bool = False,
                  rfid: Optional[str] = None):
-        if voltages is None:
-            voltages = [0.0]*3
-        self.voltages = voltages
-        if currents is None:
-            currents = [0.0]*3
-        self.currents = currents
+        self.currents, self.powers, self.voltages = _calculate_powers_and_currents(currents, powers, voltages)
         if power_factors is None:
             power_factors = [0.0]*3
         self.power_factors = power_factors
