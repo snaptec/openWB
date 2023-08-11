@@ -95,12 +95,12 @@ def read_legacy(ip_address: str,
     dev.update()
 
 
-def read_legacy_bat(ip_address: str, modbus_id: int):
-    read_legacy(ip_address, modbus_id, bat.component_descriptor.configuration_factory(id=None))
+def read_legacy_bat(ip_address: str, port: int, modbus_id: int):
+    read_legacy(ip_address, port, modbus_id, bat.component_descriptor.configuration_factory(id=None))
 
 
-def read_legacy_counter(ip_address: str, modbus_id: int, version: int):
-    read_legacy(ip_address, modbus_id, counter.component_descriptor.configuration_factory(
+def read_legacy_counter(ip_address: str, port: int, modbus_id: int, version: int):
+    read_legacy(ip_address, port, modbus_id, counter.component_descriptor.configuration_factory(
         id=None, configuration=SungrowCounterConfiguration(version=Version(version))))
 
 
