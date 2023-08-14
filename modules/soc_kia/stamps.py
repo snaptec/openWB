@@ -12,12 +12,12 @@ def getStamp():
         # Set App-ID and App-ID specific key
         brand = parameters.getParameter('brand')
         if brand == 'kia':
-            appid = "a2b8469b-30a3-4361-8e13-6fceea8fbe74"
-            secret_ba = bytearray.fromhex("C0B4D5C7089D987F027C96015929C70FA13486E934A33762BB2801E212E43395C283300BD43939B04DFA77F6F1E4F14C6D9B")
+            appid = "1518dd6b-2759-4995-9ae5-c9ad4a9ddad1"
+            secret_ba = bytearray.fromhex("C0B4D5C7089D987F027C96015929C70FA9D2B2AA99530CFD017E4B243C4BA5C5DED96DEB128EEB5DD3963DFC12432C9073EF")
 
         if brand == 'hyundai':
-            appid = "1eba27d2-9a5b-4eba-8ec7-97eb6c62fb51"
-            secret_ba = bytearray.fromhex("445B6846AFEF0D726646776865A650C9AEF98E51A474DCB7EC9B1B67D29C66EAAEF621CA02522A0B80A8087F7A3A7BB0F71B")
+            appid = "014d2225-8495-4735-812d-2616334fd15d"
+            secret_ba = bytearray.fromhex("445B6846AFEF0D726646776865A650C9F3A8B7B3AB22A195163F7A898D962F7CB21F967FA54BE5521AA60B10F6B7E0FADC3B")
     
         # Combine plaintext and convert to bytearray
         plaintext = appid + ":" + now
