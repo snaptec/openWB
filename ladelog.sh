@@ -122,7 +122,7 @@ processChargepoint() {
 			# calculate actual meter value difference since plugged
 			pluggedladungbishergeladen=$(echo "scale=2;($llkwh - $pluggedladungstartkwh)/1" | bc | sed 's/^\./0./')
 			echo "$pluggedladungbishergeladen" >"${RAMDISKDIR}/pluggedladungbishergeladen${chargePointKey}"
-			openwbDebugLog "CHARGESTAT" 1 "charged since plugged: $pluggedladungstartkwh - $llkwh = $pluggedladungbishergeladen"
+			openwbDebugLog "CHARGESTAT" 1 "charged since plugged: $llkwh - $pluggedladungstartkwh = $pluggedladungbishergeladen"
 			# reset unplug timer
 			echo 0 >"${RAMDISKDIR}/pluggedtimer${chargePointKey}"
 		else
@@ -171,7 +171,7 @@ processChargepoint() {
 				# format time charged
 				restzeittext=$(getTimeDiffString "$restzeit")
 				echo "$restzeittext" >"${RAMDISKDIR}/restzeit${chargePointKey}"
-				openwbDebugLog "CHARGESTAT" 1 "energyCharged=${bishergeladen}kWh; rangeCharged=${gelr}km; timeRemaining=${restzeit}m ($restzeittext)"
+				openwbDebugLog "CHARGESTAT" 1 "energyCharged: ${llkwh} - ${ladelstart}=${bishergeladen}kWh; rangeCharged=${gelr}km; timeRemaining=${restzeit}m ($restzeittext)"
 			else
 				# new charge detected
 				openwbDebugLog "CHARGESTAT" 1 "new charge detected"
