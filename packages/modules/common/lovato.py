@@ -2,10 +2,11 @@
 
 from modules.common import modbus
 from typing import List, Tuple
+from modules.common.abstract_counter import AbstractCounter
 from modules.common.modbus import ModbusDataType
 
 
-class Lovato:
+class Lovato(AbstractCounter):
     def __init__(self, modbus_id: int, client: modbus.ModbusTcpClient_) -> None:
         self.client = client
         self.id = modbus_id
