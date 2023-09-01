@@ -126,6 +126,7 @@ def getdevicevalues(uberschuss: int, uberschussoffset: int, pvwatt: int, charges
         mydevice.getwatt(uberschuss, uberschussoffset)
         watt = mydevice.newwatt
         wattk = mydevice.newwattk
+        wattks = mydevice.newwattks
         relais = mydevice.relais
         # temp0 = mydevice.temp0
         # temp1 = mydevice.temp1
@@ -144,7 +145,7 @@ def getdevicevalues(uberschuss: int, uberschussoffset: int, pvwatt: int, charges
                  str(mydevice.runningtime) + " Status/Üeb: " +
                  str(mydevice.devstatus) + "/" +
                  str(mydevice.ueberschussberechnung) + " akt: " + str(watt) +
-                 " Z: " + str(wattk))
+                 " Z1: " + str(wattk) + " Z2: " + str(wattks))
         #  mqtt_all.update(mydevice.mqtt_param)
         for keyread, value in mydevice.mqtt_param.items():
             key = mqttsdevstat + keyread
