@@ -33,7 +33,7 @@ class SmartMeCounter:
             currents[0] = response["Current"]
 
         powers = parse_phase_values("ActivePowerL")
-        powers = [powers[i] * 1000 for i in range(0,3)]
+        powers = [powers[i] * 1000 for i in range(0, 3)]
         if powers[0] == 0:
             powers[0] = response["ActivePower"]
 
