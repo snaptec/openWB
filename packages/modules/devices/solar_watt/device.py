@@ -30,7 +30,7 @@ def update(components: Dict[str, Union[SolarWattBat, SolarWattCounter, SolarWatt
         energy_manager_response = request('http://'+ip_adress + '/rest/kiwigrid/wizard/devices')
     else:
         gateway_response = request('http://'+ip_adress+':8080/')
-    for component in components.values():
+    for component in components:
         if isinstance(component, SolarWattInverter):
             if energy_manager_response is None:
                 energy_manager_response = request('http://'+ip_adress + '/rest/kiwigrid/wizard/devices')
