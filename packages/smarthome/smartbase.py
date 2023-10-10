@@ -209,9 +209,12 @@ class Sbase(Sbase0):
                                                    str(self.device_nummer),
                                                    "device" + str(self.device_nummer) + "_wh",
                                                    "device" + str(self.device_nummer) + "_whe",
-                                                   str(self.device_nummer), 0)
+                                                   str(self.device_nummer), self.newwattk)
+                    #                              str(self.device_nummer), 0)
+                    # um Simulation zweiter Zaehler zu aktivieren
+                    #
                 else:
-                    # uebernehmen grechneten Zaehlerstand für alle anderen devices (z.b. shelly)
+                    # uebernehmen gerechneten Zaehlerstand für alle anderen devices (z.b. shelly)
                     self.newwattk = self.simcount(self._oldwatt, "smarthome_device_" +
                                                   str(self.device_nummer),
                                                   "device" + str(self.device_nummer) + "_wh",

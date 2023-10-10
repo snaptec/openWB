@@ -282,6 +282,7 @@ $numDevices = 9;
 												<option value="0" data-option="0">N4Dac02</option>
 												<option value="1" data-option="1">DA02</option>
 												<option value="2" data-option="2">M120T von Pigeon</option>
+												<option value="3" data-option="3">AA02B</option>												
 											</select>
 											<span class="form-text small">
 												Hier ist das installierte Modell auszuwählen.
