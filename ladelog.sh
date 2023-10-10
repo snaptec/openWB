@@ -30,7 +30,7 @@ fi
 getTimeDiffString() {
 	minutes=$1
 
-	if ((minutes > 60)); then
+	if ((minutes >= 60)); then
 		text="$((minutes / 60)) H $((minutes % 60)) Min"
 	elif ((minutes >= 0)); then
 		text="$minutes Min"
