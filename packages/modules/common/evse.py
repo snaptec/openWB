@@ -35,14 +35,14 @@ class Evse:
     def get_plug_charge_state(self) -> Tuple[bool, bool, float]:
         set_current, _, state_number = self.client.read_holding_registers(
             1000, [ModbusDataType.UINT_16]*3, unit=self.id)
-        # remove leading zeors
+        # remove leading zeros
         set_current = int(set_current)
         log.debug("Gesetzte Stromstärke EVSE: "+str(set_current) +
                   ", Status: "+str(state_number)+", Modbus-ID: "+str(self.id))
         state = EvseState(state_number)
         if state == EvseState.FAILURE:
             raise FaultState.error("Unbekannter Zustand der EVSE: State " +
-                                   str(state)+", Sollstromstärke: "+str(set_current))
+                                   str(state)+", Soll-Stromstärke: "+str(set_current))
         plugged = state.plugged
         charging = set_current > 0 if state.charge_enabled else False
         return plugged, charging, set_current
