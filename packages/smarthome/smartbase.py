@@ -44,6 +44,7 @@ class Sbase(Sbase0):
         self.temp2 = '300'
         self.newwatt = 0
         self.newwattk = 0
+        self.newwattks = 0
         self.pvwatt = 0
         self.relais = 0
         self.devuberschuss = 0
@@ -202,20 +203,53 @@ class Sbase(Sbase0):
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0pos', 'r') as value:
                 importtemp = int(value.read())
-                self.simcount(self._oldwatt, "smarthome_device_" +
-                              str(self.device_nummer),
-                              "device" + str(self.device_nummer) + "_wh",
-                              "device" + str(self.device_nummer) + "_whe",
-                              str(self.device_nummer), self.newwattk)
-        except Exception:
-            importtemp = self._whimported_tmp
+                if (self.newwattk > 0):
+                    # Shadow calculation for devices mit gelierten Zaehler (z.b. sdm630)
+                    self.newwattks = self.simcount(self._oldwatt, "smarthome_device_" +
+                                                   str(self.device_nummer),
+                                                   "device" + str(self.device_nummer) + "_wh",
+                                                   "device" + str(self.device_nummer) + "_whe",
+                                                   str(self.device_nummer), self.newwattk)
+                    #                              str(self.device_nummer), 0)
+                    # um Simulation zweiter Zaehler zu aktivieren
+                    #
+                else:
+                    # uebernehmen gerechneten Zaehlerstand für alle anderen devices (z.b. shelly)
+                    self.newwattk = self.simcount(self._oldwatt, "smarthome_device_" +
+                                                  str(self.device_nummer),
+                                                  "device" + str(self.device_nummer) + "_wh",
+                                                  "device" + str(self.device_nummer) + "_whe",
+                                                  str(self.device_nummer), 0)
 
+        except Exception:
+            # first run simcount also update
+            # add start point for shadow
+            importtemp = self._whimported_tmp
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0pos', 'w') as f:
                 f.write(str(importtemp))
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0neg', 'w') as f:
                 f.write(str("0"))
+            if (self.newwattk > 0):
+                log.info("(" + str(self.device_nummer) +
+                         ") Simcount Startwert aus Z1 (HW) übernommen " +
+                         str(self.newwattk) + " kwh " + str(self.newwattk * 3600) + " wh")
+                self.newwattks = self.simcount(self._oldwatt,
+                                               "smarthome_device_" +
+                                               str(self.device_nummer),
+                                               "device" + str(self.device_nummer) + "_wh",
+                                               "device" + str(self.device_nummer) + "_whe",
+                                               str(self.device_nummer), self.newwattk)
+            else:
+                log.info("(" + str(self.device_nummer) +
+                         ") Simcount Startwert aus mqtt übernommen " +
+                         str(self._whimported_tmp) + " wh")
+                self.newwattk = int(self.simcount(self._oldwatt, "smarthome_device_" +
+                                                  str(self.device_nummer),
+                                                  "device" + str(self.device_nummer) + "_wh",
+                                                  "device" + str(self.device_nummer) + "_whe",
+                                                  str(self.device_nummer), 0))
         if (self.relais == 1):
             newtime = int(time.time())
             if (self.c_oldstampeinschaltdauer_f == 'Y'):
@@ -1129,7 +1163,14 @@ class Sbase(Sbase0):
                 self._c_einverz_f = 'N'
                 self._c_ausverz_f = 'N'
 
-    def simcount(self, watt2: int, pref: str, importfn: str, exportfn: str, nummer: str, wattks: int) -> None:
+    def simcount(self, watt2: int, pref: str, importfn: str, exportfn: str, nummer: str, wattks: int) -> int:
+        # if (nummer == "1"):
+        #    debug = True
+        # else:
+        #   debug = False
+        seconds2 = time.time()
+        watt1 = 0
+        seconds1 = 0.0
         # Zaehler mitgeliefert in WH , zurueckrechnen fuer simcount
         if wattks > 0:
             wattposkh = wattks
@@ -1141,16 +1182,19 @@ class Sbase(Sbase0):
             self._wpos = wattposh
             with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w') as f:
                 f.write(str(wattnegh))
-            self._wh = round(wattposkh, 2)
             with open(self._basePath+'/ramdisk/' + importfn, 'w') as f:
                 f.write(str(round(wattposkh, 2)))
             with open(self._basePath+'/ramdisk/' + exportfn, 'w') as f:
                 f.write(str(wattnegkh))
-            return
+            # start punkt für simulation schreiben
+            value1 = "%22.6f" % seconds2
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
+                f.write(str(value1))
+            with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
+                f.write(str(watt2))
+            self._wh = round(wattposkh, 2)
+            return self._wh
         # emulate import  export
-        seconds2 = time.time()
-        watt1 = 0
-        seconds1 = 0.0
         if os.path.isfile(self._basePath+'/ramdisk/'+pref+'sec0'):
             with open(self._basePath+'/ramdisk/'+pref+'sec0', 'r') as f:
                 seconds1 = float(f.read())
@@ -1160,42 +1204,49 @@ class Sbase(Sbase0):
                 wattposh = int(f.read())
             with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'r') as f:
                 wattnegh = int(f.read())
-            value1 = "%22.6f" % seconds2
-            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
-                f.write(str(value1))
             with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
                 f.write(str(watt2))
             seconds1 = seconds1 + 1
             deltasec = seconds2 - seconds1
-            deltasectrun = int(deltasec * 1000) / 1000
-            stepsize = int((watt2-watt1)/deltasec)
-            while seconds1 <= seconds2:
+            stepsize = int((watt2-watt1)/(deltasec + 1))
+            # if debug:
+            #    log.info("(" + str(nummer) +
+            #             ")D star wh " + str(wattposh) +
+            #              " kwh " + str(int(wattposh/3600)) +
+            #              " seconds1 " + str(seconds1) +
+            #              " watt1 " + str(watt1) +
+            #              " seconds2 " + str(seconds2) +
+            #              " deltasec " + str(deltasec) +
+            #              " stepsize " + str(stepsize) +
+            #              " watt2 " + str(watt2))
+            while seconds1 < seconds2:
                 if watt1 < 0:
                     wattnegh = wattnegh + watt1
                 else:
                     wattposh = wattposh + watt1
+                # if debug:
+                #     log.info("(" + str(nummer) +
+                #              ")D calc wh " + str(wattposh) +
+                #              " kwh " + str(int(wattposh/3600)) +
+                #              " seconds1 " + str(seconds1) +
+                #              " watt1 " + str(watt1))
                 watt1 = watt1 + stepsize
-                if stepsize < 0:
+                if stepsize <= 0:
                     watt1 = max(watt1, watt2)
                 else:
                     watt1 = min(watt1, watt2)
                 seconds1 = seconds1 + 1
-            rest = deltasec - deltasectrun
-            seconds1 = seconds1 - 1 + rest
-            if rest > 0:
-                watt1 = int(watt1 * rest)
-                if watt1 < 0:
-                    wattnegh = wattnegh + watt1
-                else:
-                    wattposh = wattposh + watt1
-            wattposkh = int(wattposh/3600)
+            seconds1 = seconds1 - 1
+            value1 = "%22.6f" % seconds1
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
+                f.write(str(value1))
             wattnegkh = int((wattnegh*-1)/3600)
             with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w') as f:
                 f.write(str(wattposh))
             self._wpos = wattposh
             with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w') as f:
                 f.write(str(wattnegh))
-            self._wh = round(wattposkh, 2)
+            wattposkh = int(wattposh/3600)
             with open(self._basePath+'/ramdisk/' + importfn, 'w') as f:
                 f.write(str(round(wattposkh, 2)))
             with open(self._basePath+'/ramdisk/' + exportfn, 'w') as f:
@@ -1206,6 +1257,11 @@ class Sbase(Sbase0):
                 f.write(str(value1))
             with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
                 f.write(str(watt2))
+            with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'r') as f:
+                wattposh = int(f.read())
+            wattposkh = int(wattposh/3600)
+        self._wh = round(wattposkh, 2)
+        return self._wh
 
     def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)

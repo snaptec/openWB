@@ -282,6 +282,7 @@ $numDevices = 9;
 												<option value="0" data-option="0">N4Dac02</option>
 												<option value="1" data-option="1">DA02</option>
 												<option value="2" data-option="2">M120T von Pigeon</option>
+												<option value="3" data-option="3">AA02B</option>												
 											</select>
 											<span class="form-text small">
 												Hier ist das installierte Modell auszuwählen.
@@ -731,8 +732,10 @@ $numDevices = 9;
 															<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 														</div>
 													</div>
-													<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktivierter Funktion oder wenn der Ladezustand grösser gleich dem Parameter ist, wird die Speicherleistung bei der Berechnung der Ein- und Ausschaltschwelle berücksichtigt.<br>
-													Unterhalb dieses Wertes ist für die Berechnung der Ein und Ausschaltschwelle nur die aktuelle Leistung am EVU Punkt und die maximal mögliche Speicherladung (als Offset) relevant.</span>
+													<span class="form-text small">Parameter in % Ladezustand. 0% deaktiviert die Funktion. Bei deaktivierter Funktion oder wenn der Ladezustand grösser gleich dem Parameter ist, wird die Speicherleistung bei der Berechnung der Ein- und Ausschaltschwelle berücksichtigt<br> Uberschuss = evu + speicherleistung, wobei evu - > Bezug(-)/Einspeisung(+) und speicherleistung Entladung(-)/Ladung(+) ist .<br>
+													Unterhalb dieses Wertes ist für die Berechnung der obige Überschuss und die maximal mögliche Speicherladung (als Offset) relevant <br>Uberschussoffset = Uberschuss - maxspeicher<br>
+													Bei überschussgesteuerten Geräten wird dann der Ueberschuss oder der Ueberschuss mit Offset übertragen.
+																								</span>
 												</div>
 											</div>
 										</div>

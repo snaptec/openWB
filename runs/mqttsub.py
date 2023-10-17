@@ -144,7 +144,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_shauth": create_topic_handler(int_range_validator(0, 1)),
         "device_measureshauth": create_topic_handler(int_range_validator(0, 1)),
         "device_chan": create_topic_handler(int_range_validator(0, 6)),
-        "device_nxdacxxtype": create_topic_handler(int_range_validator(0, 2)),
+        "device_nxdacxxtype": create_topic_handler(int_range_validator(0, 3)),
         "device_measchan": create_topic_handler(int_range_validator(0, 6)),
         "device_ip": create_topic_handler(ip_address_validator),
         "device_pbip": create_topic_handler(ip_address_validator),

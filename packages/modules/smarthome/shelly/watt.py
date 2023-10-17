@@ -120,6 +120,8 @@ try:
                 aktpower = int(answer['em:0']['c_act_power'])
             else:
                 aktpower = int(answer['em:0']['total_act_power'])
+        elif ("SNPM-001PCEU16" in model):
+            aktpower = int(answer['pm1:0']['apower'])
         else:
             aktpower = int(answer[sw]['apower'])
 except Exception:

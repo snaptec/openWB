@@ -92,6 +92,12 @@ if count5 == 0:
                 volt = 370
             #  ausgabe nicht kleiner 0,9V sonst Leistungsregelung der WP aus
             rq = client.write_register(0, volt, unit=1)
+        elif dactyp == 3:
+            ausgabe = int(((neupower * (4095-820)) / maxpower)+820)
+            if ausgabe < 820:
+                ausgabe = 0
+            #  ausgabe nicht kleiner 4ma sonst Leistungsregelung der WP aus
+            rq = client.write_register(0x01f4, ausgabe, unit=1)
         else:
             pass
         if count1 < 3:
