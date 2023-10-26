@@ -41,7 +41,7 @@ if neupower < 0:
     neupower = 0
 if neupower > maxpower:
     neupower = maxpower
-volt = 0
+ausgabe = 0
 pvmodus = 0
 if os.path.isfile(file_stringpv):
     with open(file_stringpv, 'r') as f:
@@ -80,18 +80,18 @@ if count5 == 0:
         client = ModbusTcpClient(ipadr, port=port)
         if dactyp == 0:
             # 10 Volts are 1000
-            volt = int((neupower * 1000) / maxpower)
-            rq = client.write_register(1, volt, unit=1)
+            ausgabe = int((neupower * 1000) / maxpower)
+            rq = client.write_register(1, ausgabe, unit=1)
         elif dactyp == 1:
-            # 10 volts are 4000
-            volt = int((neupower * 4000) / maxpower)
-            rq = client.write_register(0x01f4, volt, unit=1)
+            # 10 Volts are 4000
+            ausgabe = int((neupower * 4000) / maxpower)
+            rq = client.write_register(0x01f4, ausgabe, unit=1)
         elif dactyp == 2:
-            volt = int((neupower * 4095) / maxpower)
-            if volt < 370:
-                volt = 370
+            ausgabe = int((neupower * 4095) / maxpower)
+            if ausgabe < 370:
+                ausgabe = 370
             #  ausgabe nicht kleiner 0,9V sonst Leistungsregelung der WP aus
-            rq = client.write_register(0, volt, unit=1)
+            rq = client.write_register(0, ausgabe, unit=1)
         elif dactyp == 3:
             ausgabe = int(((neupower * (4095-820)) / maxpower)+820)
             if ausgabe < 820:
@@ -101,14 +101,14 @@ if count5 == 0:
         else:
             pass
         if count1 < 3:
-            log.info('devicenr %d ipadr %s Volt %6d dactyp %d written by modbus ' %
-                     (devicenumber, ipadr, volt, dactyp))
+            log.info('devicenr %d ipadr %s Modbuswert %6d dactyp %d written by modbus ' %
+                     (devicenumber, ipadr, ausgabe, dactyp))
     with open(file_stringcount, 'w') as f:
         f.write(str(count1))
 else:
     if pvmodus == 99:
         pvmodus = 0
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)
-answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(volt)
+answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(ausgabe)
 answer += ',"on":' + str(pvmodus) + '}'
 writeret(answer, devicenumber)
