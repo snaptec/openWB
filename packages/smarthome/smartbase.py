@@ -279,7 +279,7 @@ class Sbase(Sbase0):
         elif (self.device_temperatur_configured == 1):
             self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
             self.mqtt_param[pref + 'TemperatureSensor1'] = '300'
-            self.mqtt_param[pref + 'TemperatureSensor2'] = '300' 
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
         elif (self.device_temperatur_configured == 2):
             self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
             self.mqtt_param[pref + 'TemperatureSensor1'] = self.temp1
