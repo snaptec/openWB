@@ -12,6 +12,7 @@ maxpower = int(sys.argv[4])
 forcesend = int(sys.argv[5])
 port = int(sys.argv[6])
 dactyp = int(sys.argv[7])
+aktpoweralt = int(sys.argv[8])
 initlog("DAC", devicenumber)
 log = logging.getLogger("DAC")
 # forcesend = 0 default time period applies
@@ -36,7 +37,10 @@ if count5 > 3:
 with open(file_stringcount5, 'w') as f:
     f.write(str(count5))
 modbuswrite = 0
-neupower = uberschuss
+if dactyp == 3:
+    neupower = uberschuss + aktpoweralt
+else:
+    neupower = uberschuss
 if neupower < 0:
     neupower = 0
 if neupower > maxpower:
@@ -71,9 +75,9 @@ if count5 == 0:
     if count1 > 80:
         count1 = 0
     if count1 < 3:
-        helpstr = 'devicenr %d ipadr %s ueberschuss %6d port %4d'
+        helpstr = 'devicenr %d ipadr %s ueberschuss %6d aktpoweralt %6d port %4d'
         helpstr += ' maxueberschuss %6d pvmodus %1d modbuswrite %1d'
-        log.info(helpstr % (devicenumber, ipadr, uberschuss,
+        log.info(helpstr % (devicenumber, ipadr, uberschuss, aktpoweralt,
                  port, maxpower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
@@ -94,7 +98,7 @@ if count5 == 0:
             rq = client.write_register(0, ausgabe, unit=1)
         elif dactyp == 3:
             ausgabe = int(((neupower * (4095-820)) / maxpower)+820)
-            if ausgabe < 820:
+            if ausgabe <= 820:
                 ausgabe = 0
             #  ausgabe nicht kleiner 4ma sonst Leistungsregelung der WP aus
             rq = client.write_register(0x01f4, ausgabe, unit=1)
