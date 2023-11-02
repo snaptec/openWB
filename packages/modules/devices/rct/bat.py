@@ -20,15 +20,9 @@ class RctBat:
         watt1 = rct_client.add_by_name(my_tab, 'g_sync.p_acc_lp')
         watt2 = rct_client.add_by_name(my_tab, 'battery.stored_energy')
         watt3 = rct_client.add_by_name(my_tab, 'battery.used_energy')
-        stat1 = rct_client.add_by_name(my_tab, 'battery.bat_status')
-        stat2 = rct_client.add_by_name(my_tab, 'battery.status')
-        stat3 = rct_client.add_by_name(my_tab, 'battery.status2')
 
         # read all parameters
         rct_client.read(my_tab)
-
-        if (stat1.value + stat2.value + stat3.value) > 0:
-            raise FaultState.error("Alarm Status Speicher ist ungleich 0.")
 
         bat_state = BatState(
             power=watt1.value * -1,
