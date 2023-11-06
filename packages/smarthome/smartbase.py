@@ -272,11 +272,21 @@ class Sbase(Sbase0):
                 self._c_eintime = 0
                 self._c_eintime_f = 'N'
         self._oldrelais = self.relais
-        if (self.device_temperatur_configured > 0):
+        if (self.device_temperatur_configured == 0):
+            self.mqtt_param[pref + 'TemperatureSensor0'] = '300'
+            self.mqtt_param[pref + 'TemperatureSensor1'] = '300'
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
+        elif (self.device_temperatur_configured == 1):
             self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
-        if (self.device_temperatur_configured > 1):
+            self.mqtt_param[pref + 'TemperatureSensor1'] = '300'
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
+        elif (self.device_temperatur_configured == 2):
+            self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
             self.mqtt_param[pref + 'TemperatureSensor1'] = self.temp1
-        if (self.device_temperatur_configured > 2):
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
+        else:
+            self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
+            self.mqtt_param[pref + 'TemperatureSensor1'] = self.temp1
             self.mqtt_param[pref + 'TemperatureSensor2'] = self.temp2
         self.mqtt_param[pref + 'Watt'] = str(self._oldwatt)
         self.mqtt_param[pref + 'Wh'] = str(self._wh)
