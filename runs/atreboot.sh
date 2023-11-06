@@ -32,6 +32,14 @@ at_reboot() {
 		sudo kill "$$"
 	) &
 
+	# check for outdated sources.list (Stretch only)
+	if grep -q -e "^deb http://raspbian.raspberrypi.org/raspbian/ stretch" /etc/apt/sources.list; then
+		echo "sources.list outdated! upgrading..."
+		sudo sed -i "s/^deb http:\/\/raspbian.raspberrypi.org\/raspbian\/ stretch/deb http:\/\/legacy.raspbian.org\/raspbian\/ stretch/g" /etc/apt/sources.list
+	else
+		echo "sources.list already updated"
+	fi
+
 	# read openwb.conf
 	echo "loading config"
 	. "$OPENWBBASEDIR/loadconfig.sh"
