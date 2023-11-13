@@ -2,7 +2,7 @@
 from dataclass_utils import dataclass_from_dict
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
-from modules.common.fault_state import ComponentInfo, FaultState
+from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
 from modules.devices.rct.config import RctBatSetup
 from modules.devices.rct.rct_lib import RCT

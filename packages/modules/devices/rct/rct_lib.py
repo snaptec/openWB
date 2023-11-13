@@ -65,6 +65,7 @@ class rct_data(Enum):
     t_log_ts = 11
     t_dump = 12
 
+
 # battery status definitions (same for battery.status and status2)
 # battery.status2: comes from BMS
 # battery.status: comes from Inverter
@@ -84,12 +85,14 @@ class battery_status(Enum):
     t_bat_status_error = (1 << 12)              # Error
     t_bat_status_update = (1 << 13)             # Update running
 
+
 # battery.bat_status definitions
 class battery_bat_status(Enum):
     t_bc_result_disconnected = 0                # Battery is disconnected
     t_bc_result_connecting_no_pump = 1          # Battery in connecting state, but DC-Link should not be pumped
     t_bc_result_connecting = 2                  # Battery in connecting state and DC-Link should be pumped
     t_bc_result_connected = 3                   # Battery is connected
+
 
 class rct_id():
     def __init__(self, msgid, idx, name, data_type=rct_data.t_unknown, desc=''):
