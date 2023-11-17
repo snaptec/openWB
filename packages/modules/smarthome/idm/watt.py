@@ -13,7 +13,9 @@ ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 navvers = str(sys.argv[4])
 pvwatt = int(sys.argv[5])
-forcesend = int(sys.argv[6])
+uberschussvz = str(sys.argv[6])
+maxpower = int(sys.argv[7])
+forcesend = int(sys.argv[8])
 # forcesend = 0 default time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -72,12 +74,25 @@ if count5 == 0:
     # logik nur schicken bei pvmodus
     if pvmodus == 1:
         modbuswrite = 1
-    # Nur positiven Uberschuss schicken, nicht aktuelle Leistung
     neupower = uberschuss
-    if neupower < 0:
-        neupower = 0
-    if neupower > 40000:
-        neupower = 40000
+    # uberschuss begrenzung ?
+    if (maxpower > 0):
+        neupower = maxpower - aktpower
+        # maximaler überschuss berechnet ?
+        if (neupower > uberschuss):
+            neupower = uberschuss
+    if (uberschussvz == 'UZ'):
+        # <option value="UP" data-option="UP">Überschuss als positive Zahl übertragen, Bezug negativ</option>
+        # <option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>
+        if neupower < 0:
+            neupower = 0
+        if neupower > 65535:
+            neupower = 65535
+    else:
+        if neupower < -32767:
+            neupower = -32767
+        if neupower > 32767:
+            neupower = 32767
     # wurde IDM gerade ausgeschaltet ?    (pvmodus == 99 ?)
     # dann 0 schicken wenn kein pvmodus mehr
     # und pv modus ausschalten
@@ -105,7 +120,7 @@ if count5 == 0:
     if count1 < 3:
         log.info(" %d ipadr %s ueberschuss %6d Akt Leistung %6d Pv %6d"
                  % (devicenumber, ipadr, uberschuss, aktpower, pvwatt))
-        log.info(" %d ipadr %s ueberschuss %6d pvmodus %1d modbusw %1d"
+        log.info(" %d ipadr %s ueberschuss send %6d pvmodus %1d modbusw %1d"
                  % (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
