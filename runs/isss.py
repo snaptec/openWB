@@ -76,6 +76,10 @@ class UpdateValues:
                 self._pub_values_to_1_9(key, value)
                 self._pub_values_to_2(key, value)
             self.old_counter_state = counter_state
+        pub_single("openWB/set/chargepoint/" + self.cp_num_str +
+                   "/get/fault_state", payload=0, hostname=self.parent_wb)
+        pub_single("openWB/set/chargepoint/" + self.cp_num_str +
+                   "/get/fault_str", payload="Kein Fehler.", hostname=self.parent_wb)
 
     def _pub_values_to_1_9(self, key: str, value) -> None:
         def pub_value(topic: str, value):
