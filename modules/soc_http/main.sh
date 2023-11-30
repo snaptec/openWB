@@ -64,7 +64,7 @@ getAndWriteSoc(){
 	re='^-?[0-9]+$'
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > "$soctimerfile"
-	soc=$(curl --connect-timeout 15 -s "$ip" | cut -f1 -d".")
+	soc=$(curl --connect-timeout 15 -s -g "$ip" | cut -f1 -d".")
 		
 	if  [[ $soc =~ $re ]] ; then
 		if (( soc != 0 )) ; then
