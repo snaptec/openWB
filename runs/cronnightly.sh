@@ -30,6 +30,7 @@ ll6=$(<"$RAMDISKDIR/llkwhlp6")  # Zählerstand LP6
 ll7=$(<"$RAMDISKDIR/llkwhlp7")  # Zählerstand LP7
 ll8=$(<"$RAMDISKDIR/llkwhlp8")  # Zählerstand LP8
 llg=$(<"$RAMDISKDIR/llkwhges")  # Zählerstand Gesamt
+ipaddr=$(<"$RAMDISKDIR/ipaddress")
 
 is_configured_cp1="1"                 #Ladepunkt 1 ist immer konfiguriert
 is_configured_cp2=$lastmanagement     # LP2 konfiguriert?
@@ -148,3 +149,17 @@ done
 # monthly . csv updaten
 echo "Trigger update of logfiles..."
 python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
+
+#check if backup is configured - if yes, let's go
+if [[ $nightlybackup == 1 ]]; then
+	echo "Nightly backup turned on. Performing backup."
+	port=$WEB_PORT
+	if [[ -z "$port" ]]; then
+		port=80
+	fi
+	url="http://127.0.0.1:$port/openWB/web/settings/savebackup.php?extendedFilename=$shortbackupfilename"
+	echo "Using url $url"
+	curl -s -o /dev/null $url
+else
+	echo "Nightly backup turned off. Doing nothing."
+fi
