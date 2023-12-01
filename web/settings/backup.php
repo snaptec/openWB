@@ -35,7 +35,6 @@
 	</head>
 
 	<body>
-
 		<?php
 			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -43,11 +42,6 @@
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
 		?>
-
-		<?php
-			
-		?>
-
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
@@ -59,7 +53,7 @@
 						
 					</div>
 					<div class="card-body">
-						<div class="form-group mb-0">
+						<div class="form-group mb-1">
 							<div class="form-row mb-1">
 								<label for="backuptarget" class="col-md-4 col-form-label">Backup-Ziel</label>
 								<div class="col">
@@ -73,14 +67,14 @@
 								<label for="nightlybackup" class="col-md-4 col-form-label">Nächtliches Backup</label>
 								<div class="col">
 									<input type="hidden" value="0" name="nightlybackup" />
-									<input id="nightlybackupchk" name="nightlybackup" class="form-check-input" type="checkbox" value="1" <?php if ($nightlybackupold == 1) echo "checked=\"checked\"" ?> />
+									<input id="nightlybackupchk" name="nightlybackup" class="" type="checkbox" value="1" <?php if ($nightlybackupold == 1) echo "checked=\"checked\"" ?> />
 								</div>
 							</div>
 							<div class="form-row mb-1" id="shortfilename">
 								<label for="nightlybackup" class="col-md-4 col-form-label">Kurzer Dateiname</label>
 								<div class="col">
 									<input type="hidden" value="0" name="shortbackupfilename" />
-									<input id="shortbackupfilenamechk" name="shortbackupfilename" class="form-check-input" type="checkbox" value="1" <?php if ($shortbackupfilenameold == 1)  echo "checked=\"checked\"" ?> />
+									<input id="shortbackupfilenamechk" name="shortbackupfilename" class="" type="checkbox" value="1" <?php if ($shortbackupfilenameold == 1)  echo "checked=\"checked\"" ?> />
 									<span class="form-text small">Wenn aktiviert, wird die Datei unter den Namen backup.tar.gz am Zielort abgelegt. Wenn nicht aktiviert, wird die Datei unter dem Muster "openWB_backup_$jahr-$monat-$tag-$hourofday-$minute.tar.gz" abgelegt (Beispiel: openWB_backup_2023-11-30_17-19-11.tar.gz)</span>
 								</div>
 							</div>
@@ -175,7 +169,6 @@
 			);
 			}
 
-		
 			$(document).ready(function(){
 				if ($('#backuptarget').val() == "local") {
 					hideSection($("#ftpcreds"));		
@@ -193,9 +186,7 @@
 					// disable navbar entry for current page
 					$('#navOpenwbCloud').addClass('disabled');
 				}
-			);
-
-		
+			);		
 		</script>
 
 	</body>

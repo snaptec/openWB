@@ -12,6 +12,7 @@
 	$backupPath = "/var/www/html/openWB/web/backup/";
 	$globalError = false;
 	$globalErrorMessage = "";
+	$globalErrorCode = 0;
 
 	$useExtendedFilename = false;
 	if( isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1") {
@@ -24,7 +25,7 @@
 		$filename = buildBackup($useExtendedFilename, $backupPath);
 		echo "<!-- File created here: ".$backupPath." // ".$filename."-->";
 		echo "<!-- Uplaoding via FTP: ".$backupPath.$filename."-->";
-		ftpUpload($filename, $backupPath, $ftphostold, $ftppathold, $ftpuserold, $ftppassold);
+		$globalErrorCode = ftpUpload($filename, $backupPath, $ftphostold, $ftppathold, $ftpuserold, $ftppassold);
 	} else {
 		echo "<!-- Building local backup... -->";
 		$filename = buildBackup($useExtendedFilename, $backupPath);
@@ -47,12 +48,10 @@
 		curl_exec ($ch);
 		$error_no = curl_errno($ch);
 		curl_close ($ch);
-		if ($error_no == 0) {
-			$error = 'File uploaded succesfully.';
-		} else {
-			$error = 'File upload error.';
+		if ($error_no > 0) {
+			$globalErrorMessage = "File uploaed failed.";
 		}
-		return error_no;
+		return $error_no;
 	}
 
 	function buildBackup($useExtendedFilename, $backupPath) {
@@ -121,23 +120,30 @@
 		<div role="main" class="container" style="margin-top:20px">
 
 			<h1>Backup erstellen</h1>
-			<div class="alert alert-success">
-				Backup-Datei <?php echo $filename; ?> erfolgreich
-				<?php if ($backuptargetold == "ftp")  { ?>					
-					 auf <?php echo "ftp://".$ftphostold.$ftppathold."/".$filename ?>
-				<?php } ?> erstellt.
-			</div>
 
-			<div class="row">
-					<?php 
-						echo $globalError."<br />";
-						echo $globalErrorMessage."<br />";
+			<?php 
+						if (isset($globalErrorCode) && $globalErrorCode > 0) {
+							echo '<div class="alert alert-primary" role="alert">';
+							echo '<strong>Das Backup ist fehlgeschlagen:</strong><br />';
+							echo $globalErrorMessage.'<br />';
+							echo 'Curl Error Code: '.$globalErrorCode;
+						  	echo '</div>';
+						} else {
 					?>
-					<div class="col text-center">
-						<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>" target="_blank"><i class="fas fa-download"></i> Backup herunterladen</a>
+					<div class="alert alert-success">
+						Backup-Datei <?php echo $filename; ?> erfolgreich
+						<?php if ($backuptargetold == "ftp")  { ?>					
+							auf <?php echo "ftp://".$ftphostold.$ftppathold."/".$filename ?>
+						<?php } ?> erstellt.
 					</div>
-			</div>
 
+					<div class="row">
+							
+							<div class="col text-center">
+								<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>" target="_blank"><i class="fas fa-download"></i> Backup herunterladen</a>
+							</div>
+					</div>
+				<?php } ?>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
