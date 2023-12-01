@@ -30,7 +30,6 @@ ll6=$(<"$RAMDISKDIR/llkwhlp6")  # Zählerstand LP6
 ll7=$(<"$RAMDISKDIR/llkwhlp7")  # Zählerstand LP7
 ll8=$(<"$RAMDISKDIR/llkwhlp8")  # Zählerstand LP8
 llg=$(<"$RAMDISKDIR/llkwhges")  # Zählerstand Gesamt
-ipaddr=$(<"$RAMDISKDIR/ipaddress")
 
 is_configured_cp1="1"                 #Ladepunkt 1 ist immer konfiguriert
 is_configured_cp2=$lastmanagement     # LP2 konfiguriert?
@@ -157,6 +156,14 @@ if [[ $nightlybackup == 1 ]]; then
 	if [[ -z "$port" ]]; then
 		port=80
 	fi
+
+	if (( $shortbackupfilename == 0)); then
+		shortbackupfilename=1
+	else
+		shortbackupfilename=0
+	fi
+
+
 	url="http://127.0.0.1:$port/openWB/web/settings/savebackup.php?extendedFilename=$shortbackupfilename"
 	echo "Using url $url"
 	curl -s -o /dev/null $url
