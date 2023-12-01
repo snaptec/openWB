@@ -163,7 +163,6 @@ if [[ $nightlybackup == 1 ]]; then
 		shortbackupfilename=0
 	fi
 
-
 	url="http://127.0.0.1:$port/openWB/web/settings/savebackup.php?extendedFilename=$shortbackupfilename"
 	echo "Using url $url"
 	curl -s -o /dev/null $url
