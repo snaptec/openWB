@@ -378,6 +378,26 @@ $numDevices = 9;
 									</div>
 								</div>
 							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_maxuebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Maximale Leistungsaufnahme/Überschuss bei PV Betrieb</label>
+										<div class="col">
+											<input id="device_maxuebDevices<?php echo $devicenum; ?>" name="device_maxueb" class="form-control" type="number" min="0" max="30000" step="1" required="required" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">
+												Hier ist die maximale Leistungsaufnahme anzugeben, die idm bei PV Betrieb nicht überschreiten soll. Bei 0 gibt es keine Limitierung bezüglich dem maximal zu übergebenen Überschuss. <br>
+												Sonst wird der zu übergebene Überschuss wie folgt gerechnet: 										
+												maximal zu übergeber Überschuss = maximale Leistungsaufnahme - aktuelle Leistungsaufnahme
+												<br>
+												Sofern die aktuelle Leistungsaufnahme bereits grösser als die maximale Leistungsaufnahme ist, wird gar kein Überschuss mehr übergeben im PV Betrieb.
+
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
 							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
 								<hr class="border-secondary">
 								<div class="form-group">
@@ -423,6 +443,25 @@ $numDevices = 9;
 												Pos E-überschuss -> Überschuss als positive Zahl übertragen, Bezug negativ <br>
 												Neg E-überschuss -> Überschuss als negative Zahl übertragen, Bezug positiv <br>
 												E-Eintrag -> Überschuss als positive Zahl übertragen, Bezug als 0<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_idmuebDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Überschuss...</label>
+										<div class="col">
+											<select class="form-control" name="device_idmueb" id="device_idmuebDevices<?php echo $devicenum; ?>" data-default="UZ" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+												<option value="UP" data-option="UP">Überschuss als positive Zahl übertragen, Bezug negativ</option>
+												<option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>
+											</select>
+											<span class="form-text small">
+												Bezieht sich auf die Modbusadresse 74, wie ist Überschuss zu übertragen.<br>
+												Neue Möglichkeit  -> Überschuss als positive Zahl übertragen, Bezug negativ <br>
+												bisheriges Verhalten -> Überschuss als positive Zahl übertragen, Bezug als 0<br>
 											</span>
 										</div>
 									</div>
@@ -538,7 +577,7 @@ $numDevices = 9;
 											</div>
 										</div>
 									</div>
-									<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom hide">
+									<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-mqtt device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-http device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-mystrom hide">
 										<hr class="border-secondary">
 										<div class="form-group">
 											<div class="form-row mb-1">
