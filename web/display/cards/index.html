@@ -652,7 +652,7 @@
 						$('#ladepunktConfigModal').find('[data-config-lp="'+currentLp+'"]').removeClass('hide');
 						$('#ladepunktConfigModal').modal("show");
 					} else {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					}
 				});
 
@@ -660,7 +660,7 @@
 					if( displaylocked == false ){
 						$("#chargeModeModal").modal("show");
 					} else {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					}
 				});
 
@@ -677,7 +677,7 @@
 							}
 						}
 					} else {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					}
 				});
 
@@ -688,7 +688,7 @@
 							$('#socModal').find('.socLp').text(currentLp);
 							$('#socModal').modal("show");
 						} else {
-							$("#lockInfoModal").modal("show");
+							triggerUnlockDisplay();
 						}
 					}
 				});
@@ -1933,6 +1933,9 @@
 				function addLockNumber(e){
 					var v = $( "#Lockbox" ).val();
 					$( "#Lockbox" ).val( v + e.value );
+					if ($( "#Lockbox" ).val().length  == 4) {
+						submitLockForm(PINbox);
+					}
 				}
 
 				function clearLockForm(e){
@@ -2225,6 +2228,14 @@
 			var lockTimeout = 60000;
 			var displaylocked = true;
 
+			function triggerUnlockDisplay() {
+				if( displaylocked == true ){
+					$("#lockModal").modal("show");
+				} else {
+					lockDisplay(true);
+				}
+			}
+
 			function lockDisplay( lock = true ){
 				if( lock == false ){
 					displaylocked = false;
@@ -2326,7 +2337,7 @@
 
 				$('.sidenav').find('a[href^="#"]').on("click", function(event) {
 					if( $(this).hasClass('displayLock') && displaylocked == true ) {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					} else {
 						// hide all panels
 						$('.resume').addClass('hide');
@@ -2362,13 +2373,7 @@
 					}
 				);
 
-				$('#displaylock').on("click", function(){
-					if( displaylocked == true ){
-						$("#lockModal").modal("show");
-					} else {
-						lockDisplay(true);
-					}
-				});
+				$('#displaylock').on("click", triggerUnlockDisplay);
 
 				$('.btn-group-toggle').change(function(event){
 					// only charge limitation has class btn-group-toggle so far
