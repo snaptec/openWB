@@ -504,6 +504,9 @@
 			function addLockNumber(e) {
 				var v = $("#Lockbox").val();
 				$("#Lockbox").val(v + e.value);
+				if ($("#Lockbox").val().length == 4) {
+					submitLockForm(PINbox);
+				}
 			}
 
 			function clearLockForm(e) {
@@ -523,7 +526,7 @@
 								$('#Lockcode').find('.enter').prop('disabled', false);
 								$("#Lockbox").val("");
 								$("#lockModal").modal("hide");
-							}, 1000);
+							}, 250);
 						} else {
 							$('#lockModal').find('.modal-body').addClass('bg-danger');
 							$('#Lockcode').find('.enter').prop('disabled', true);
@@ -828,6 +831,14 @@
 		var lockTimeoutHandler = null;
 		var lockTimeout = 60000;
 		wbdata.displaylocked = true;
+
+		function triggerUnlockDisplay() {
+			if(wbdata.displaylocked == true){
+				$("#lockModal").modal("show");
+			} else {
+				lockDisplay(true);
+			}
+		}
 
 		function lockDisplay(lock = true) {
 			if (lock == false) {
