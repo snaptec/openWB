@@ -42,9 +42,14 @@
 		</div>
 
 		<!-- Dashboard -->
+		<input type="hidden" value="" id="rfidwebread" />
 		<div id="dashboard" class="dashboard resume">
 			<div class="row">
 				<!-- EVU data -->
+<!--				<div class=" col-xs-6 card evu">
+					<textarea style="width: 450px; height:150px;color: black" id="rifdarea"></textarea>
+
+				</div>-->
 				<div class=" col-xs-6 card evu">
 					<div class="card-header bg-danger">
 						<div class="row">
@@ -2417,7 +2422,27 @@
 						}
 					}, 2000);
 				});
-
+				//
+				var queryString = window.location.search;
+				var urlParams = new URLSearchParams(queryString);
+				var ids = urlParams.get('rfidlist')
+				rfidArray = ids.split(",").filter(n => parseInt(n) > 0);
+				
+				$(document).keydown(function (e) {
+					if (e.keyCode >= 48 && e.keyCode <= 57 && $('#rfidwebread').val().length < 10) {
+						var old = $('#rfidwebread').val();
+						$('#rfidwebread').val(old+String.fromCharCode(e.keyCode));
+					} else if (event.keyCode == 13 || $('#rfidwebread').val().length == 10) {
+    					var rfid = $('#rfidwebread').val();
+						$('#rfidwebread').val('');
+						if (rfidArray.includes(rfid)) {
+							lockDisplay(false);
+						} 						
+    				}	
+					window.setTimeout(function() {
+						$('#rfidwebread').val('')
+					}, 3000);				
+				});
 			});
 		</script>
 	</body>
