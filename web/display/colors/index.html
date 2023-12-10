@@ -27,7 +27,7 @@
 </head>
 
 <body>
-
+	<input type="hidden" value="" id="rfidwebread" />
 	<div class="container-fluid">
 		<div class="row pt-0">
 
@@ -966,6 +966,27 @@
 				var elementId = $(this).attr('id');
 				var option = $('input[name="' + elementId + '"]:checked').data('option').toString();
 				wbdata.setChargeLimitMode(option)
+			});
+
+			var urlParams = new URLSearchParams(queryString);
+			var ids = urlParams.get('rfidlist')
+			rfidArray = ids.split(",").filter(n => parseInt(n) > 0);
+			
+			$(document).keydown(function (e) {
+				if (e.keyCode >= 48 && e.keyCode <= 57 && $('#rfidwebread').val().length < 10) {
+					var old = $('#rfidwebread').val();
+					$('#rfidwebread').val(old+String.fromCharCode(e.keyCode));
+					console.log($('#rfidwebread').val());
+				} else if (event.keyCode == 13 || $('#rfidwebread').val().length == 10) {
+					var rfid = $('#rfidwebread').val();
+					$('#rfidwebread').val('');
+					if (rfidArray.includes(rfid)) {
+						lockDisplay(false);
+					} 						
+				}	
+				window.setTimeout(function() {
+					$('#rfidwebread').val('')
+				}, 3000);				
 			});
 		});
 	</script>
