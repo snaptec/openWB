@@ -76,6 +76,11 @@ class UpdateValues:
                 self._pub_values_to_1_9(key, value)
                 self._pub_values_to_2(key, value)
             self.old_counter_state = counter_state
+        for topic, value in [
+                    ("fault_state", 0),
+                    ("fault_str", "Keine Fehler.")
+                ]:
+            self._pub_values_to_2(topic, value)
 
     def _pub_values_to_1_9(self, key: str, value) -> None:
         def pub_value(topic: str, value):
