@@ -1321,7 +1321,7 @@
 										<label for="soc_smarteq_passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
 											<input class="form-control" type="password" name="soc_smarteq_passwort" id="soc_smarteq_passwort" value="<?php echo $soc_smarteq_passwortold ?>">
- 											<span class="form-text small">
+											<span class="form-text small">
 												Password des Logins.
 											</span>
 										</div>
