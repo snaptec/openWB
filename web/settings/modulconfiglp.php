@@ -1319,13 +1319,13 @@
 									</div>
 									<div class="form-row mb-1">
 										<label for="soc_smarteq_passwort" class="col-md-4 col-form-label">Passwort</label>
- 										<div class="col">
+										<div class="col">
 											<input class="form-control" type="password" name="soc_smarteq_passwort" id="soc_smarteq_passwort" value="<?php echo $soc_smarteq_passwortold ?>">
  											<span class="form-text small">
 												Password des Logins.
- 											</span>
- 										</div>
- 									</div>
+											</span>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_smarteq_pin" class="col-md-4 col-form-label">Pin</label>
 										<div class="col">
@@ -3160,8 +3160,8 @@
 								Das Modul unterstützt 2 Loginverfahren<br>
 								- Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
 								- Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
-								  Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
-								  Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
+								Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
+								Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
