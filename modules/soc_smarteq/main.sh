@@ -76,10 +76,10 @@ getAndWriteSoc(){
 
 	if [ "$password" != "" ]
 	then
-	    answer=$($MODULEDIR/soc_smarteq_pass.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
-        else
-	    answer=$($MODULEDIR/soc_smarteq_2fa.py --user "$username" --pin "$pin" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
-        fi
+		answer=$($MODULEDIR/soc_smarteq_pass.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
+	else
+		answer=$($MODULEDIR/soc_smarteq_2fa.py --user "$username" --pin "$pin" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
+	fi
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile

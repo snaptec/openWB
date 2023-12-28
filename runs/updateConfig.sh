@@ -2114,7 +2114,7 @@ updateConfig(){
 	fi
 	if ! grep -Fq "soc_smarteq_passwort=" $ConfigFile; then
 		echo "soc_smarteq_passwort=''" >> $ConfigFile
- 	else
+	else
 		sed -i "/soc_smarteq_passwort='/b; s/^soc_smarteq_passwort=\(.*\)/soc_smarteq_passwort=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_smarteq_pin=" $ConfigFile; then

@@ -1300,13 +1300,13 @@
 									<div class="alert alert-info">
 										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
 										- smart Control Account aktiv<br>
-								                Für smart EQ Fahrzeuge. Es wird benötigt:<br>
-								                - smart Control Account aktiv<br>
-								                Das Modul unterstützt 2 Loginverfahren<br>
-								                - Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
-								                - Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
-								                  Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
-								                  Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
+										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
+										- smart Control Account aktiv<br>
+										Das Modul unterstützt 2 Loginverfahren<br>
+										- Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
+										- Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
+										Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
+										Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
 									</div>
 									<div class="form-row mb-1">
 										<label for="soc_smarteq_username" class="col-md-4 col-form-label">Benutzername</label>
