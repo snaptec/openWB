@@ -7,12 +7,12 @@ lastCookies = {}
 lastUrl = ""
 
 
-def getHTTP(url='', headers='', cookies='', timeout=30):
+def getHTTP(url='', headers='', cookies='', timeout=30, allow_redirects=True):
     global lastCookies
     global lastUrl
 
     try:
-        response = requests.get(url, headers=headers, cookies=cookies, timeout=timeout)
+        response = requests.get(url, headers=headers, cookies=cookies, timeout=timeout, allow_redirects=allow_redirects)
     except requests.Timeout as err:
         soclogging.logDebug(1, "Connection Timeout")
         raise
@@ -23,6 +23,8 @@ def getHTTP(url='', headers='', cookies='', timeout=30):
     if response.status_code == 200 or response.status_code == 204:
         lastCookies = response.cookies.get_dict()
         return response.text
+    elif response.status_code == 302:
+        return response.headers['Location']
     else:
         try:
             responseDict = json.loads(response.text)
@@ -66,6 +68,18 @@ def putHTTP(url='', data='', headers='', cookies='', timeout=30):
         raise RuntimeError
 
     return
+    
+def deleteHTTP(url='', headers='', cookies='', timeout=30):
+    try:
+        response = requests.delete(url, headers=headers, cookies=cookies, timeout=timeout)
+    except requests.Timeout as err:
+        soclogging.logDebug(1, "Connection Timeout")
+        raise
+    except:
+        soclogging.logDebug(1, "HTTP Error")
+        raise
+
+    return
 
 
 def postHTTP(url='', data='', headers='', cookies='', timeout=30, allow_redirects=True):
@@ -89,6 +103,8 @@ def postHTTP(url='', data='', headers='', cookies='', timeout=30, allow_redirect
     if response.status_code == 200 or response.status_code == 204:
         lastUrl = response.url
         return response.text
+    elif response.status_code == 302:
+        return response.headers['Location']
     else:
         try:
             responseDict = json.loads(response.text)

@@ -2226,6 +2226,7 @@ updateConfig(){
 			echo "soc_evcc_username_lp1=''"
 			echo "soc_evcc_password_lp1=''"
 			echo "soc_evcc_vin_lp1=''"
+			echo "soc_evcc_pin_lp1=''"
 			echo "soc_evcc_token_lp1=''"
 			echo "soc_evcc_intervall=720"
 			echo "soc_evcc_intervallladen=15"
@@ -2233,8 +2234,15 @@ updateConfig(){
 			echo "soc_evcc_username_lp2=''"
 			echo "soc_evcc_password_lp2=''"
 			echo "soc_evcc_vin_lp2=''"
+			echo "soc_evcc_pin_lp2=''"
 			echo "soc_evcc_token_lp2=''"
 		} >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_evcc_pin_lp1=" $ConfigFile; then
+			echo "soc_evcc_pin_lp1=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_evcc_pin_lp2=" $ConfigFile; then
+			echo "soc_evcc_pin_lp2=''" >> $ConfigFile
 	fi
 	if ! grep -Fq "cpunterbrechungmindestlaufzeitaktiv=" $ConfigFile; then
 		{
@@ -2247,6 +2255,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "sungrowsr=" $ConfigFile; then
 		echo "sungrowsr=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "sungrow2sr=" $ConfigFile; then
+		echo "sungrow2sr=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "sungrowspeicherport=" $ConfigFile; then
 		echo "sungrowspeicherport=502" >> $ConfigFile
@@ -2269,6 +2280,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "batterx_ip=" $ConfigFile; then
 		echo "batterx_ip=192.168.0.17" >> $ConfigFile
+	fi
+	if ! grep -Fq "pvbatterxextinverter=" $ConfigFile; then
+		echo "pvbatterxextinverter=0" >> $ConfigFile
 	fi
 	if grep -Fq "socmodul=soc_bluelink" $ConfigFile; then
 		sed -i "s/^socmodul=soc_bluelink/socmodul=soc_kia/g" $ConfigFile
@@ -2332,6 +2346,17 @@ updateConfig(){
 	if grep -Fq "socmodul1=soc_idlp2" $ConfigFile; then
 		sed -i "s/^socmodul1=soc_idlp2/socmodul=soc_vwidlp2/g" $ConfigFile
 	fi
-
+	if [[ -f /home/pi/ppbuchse ]]; then
+		ppbuchse=$(</home/pi/ppbuchse)
+		if ! grep -Fq "ppbuchse=" $ConfigFile; then
+			echo "ppbuchse=$ppbuchse" >> $ConfigFile
+		else
+			ppbuchseOld=$(grep -F "ppbuchse=" $ConfigFile)
+			ppbuchseOld=${ppbuchseOld#ppbuchse=}
+			if ((ppbuchseOld != ppbuchse)); then
+				sed -i "s/^ppbuchse=.*$/ppbuchse=$ppbuchse/g" $ConfigFile
+			fi
+		fi
+	fi
 	echo "Config file Update done."
 }

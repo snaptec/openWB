@@ -4,9 +4,10 @@ import os
 import time
 import json
 import urllib.request
+from smarthome.smartret import writeret
 
 
-def totalPowerFromShellyJson(answer, workchan):
+def totalPowerFromShellyJson(answer, workchan: int) -> int:
     if (workchan == 0):
         if 'meters' in answer:
             meters = answer['meters']   # shelly
@@ -27,7 +28,7 @@ def totalPowerFromShellyJson(answer, workchan):
 
 named_tuple = time.localtime()   # getstruct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S shelly watty.py", named_tuple)
-devicenumber = str(sys.argv[1])
+devicenumber = int(sys.argv[1])
 ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 try:
@@ -37,6 +38,9 @@ except Exception:
 # chan = 0 alle Meter, Kan 0
 # chan = 1 meter 1, Kan 0
 # chan = 2 meter 2, kan 1
+shaut = int(sys.argv[5])
+user = str(sys.argv[6])
+pw = str(sys.argv[7])
 # Setze Default-Werte, andernfalls wird der letzte Wert ewig fortgeschrieben.
 # Insbesondere wichtig für aktuelle Leistung
 # Zähler wird beim Neustart auf 0 gesetzt, darf daher nicht übergeben werden.
@@ -47,43 +51,45 @@ temp2 = '0.0'
 aktpower = 0
 relais = 0
 gen = '1'
-
-# test dic
-g_dictionary = {"gen": 1}
-
-a_dictionary = {"switch:1": {"id": 0, "source": "init", "output": True,
-                             "apower": 93.000, "voltage": 218.794,
-                "aenergy": {"total": 4327.45, "minute_ts": 1637430901},
-                "temperature": {"tC": 49.1, "tF": 120.3}}}
-
-# test dic ende
+model = '???'
 # lesen endpoint, gen bestimmem. gen 1 hat unter Umstaenden keinen Eintrag
 fbase = '/var/www/html/openWB/ramdisk/smarthome_device_ret.'
 fname = fbase + str(ipadr) + '_shelly_info'
-fnameg = fbase + str(ipadr) + '_shelly_infog'
+fnameg = fbase + str(ipadr) + '_shelly_infogv1'
 if os.path.isfile(fnameg):
     with open(fnameg, 'r') as f:
-        gen = str(f.read())
+        jsonin = json.loads(f.read())
+        gen = str(jsonin['gen'])
+        model = str(jsonin['model'])
 else:
     aread = urllib.request.urlopen("http://" + str(ipadr) + "/shelly",
                                    timeout=3).read().decode("utf-8")
     agen = json.loads(str(aread))
-    # agen.update(g_dictionary)
     with open(fname, 'w') as f:
         json.dump(agen, f)
     if 'gen' in agen:
         gen = str(int(agen['gen']))
+    if 'model' in agen:
+        model = str(agen['model'])
+    elif 'type' in agen:
+        model = str(agen['type'])
+    jsontype = {"gen": str(gen), "model": str(model)}
     with open(fnameg, 'w') as f:
-        f.write(str(gen))
+        f.write(json.dumps(jsontype))
 # Versuche Daten von Shelly abzurufen.
 try:
+    # print("Shelly " + str(shaut) + user + pw)
     if (gen == "1"):
-        aread = urllib.request.urlopen("http://"+str(ipadr)+"/status",
-                                       timeout=3).read().decode("utf-8")
+        url = "http://" + str(ipadr) + "/status"
+        if (shaut == 1):
+            passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+            passman.add_password(None, url, user, pw)
+            authhandler = urllib.request.HTTPBasicAuthHandler(passman)
+            opener = urllib.request.build_opener(authhandler)
+            urllib.request.install_opener(opener)
+        with urllib.request.urlopen(url, timeout=3) as response:
+            aread = response.read().decode("utf-8")
         answer = json.loads(str(aread))
-        # answer.update(a_dictionary)
-        # fake new gen
-        # gen = '2'
     else:
         aread = urllib.request.urlopen("http://"+str(ipadr) +
                                        "/rpc/Shelly.GetStatus",
@@ -93,9 +99,8 @@ try:
               str(ipadr) + '_shelly', 'w') as f:
         f.write(str(answer))
 except Exception:
-    print("failed to connect to device on " +
-          ipadr + ", setting all values to 0")
-#  answer.update(a_dictionary)
+    print("shelly/watt.py ERROR failed to connect to device on " +
+          ipadr)
 #  Versuche Werte aus der Antwort zu extrahieren.
 try:
     if (gen == "1"):
@@ -106,7 +111,19 @@ try:
         else:
             workchan = chan
         sw = 'switch:' + str(workchan)
-        aktpower = int(answer[sw]['apower'])
+        if ("SPEM-003CE" in model):
+            if (workchan == 1):
+                aktpower = int(answer['em:0']['a_act_power'])
+            elif (workchan == 2):
+                aktpower = int(answer['em:0']['b_act_power'])
+            elif (workchan == 3):
+                aktpower = int(answer['em:0']['c_act_power'])
+            else:
+                aktpower = int(answer['em:0']['total_act_power'])
+        elif ("SNPM-001PCEU16" in model):
+            aktpower = int(answer['pm1:0']['apower'])
+        else:
+            aktpower = int(answer[sw]['apower'])
 except Exception:
     pass
 
@@ -124,22 +141,29 @@ except Exception:
     pass
 
 try:
-    temp0 = str(answer['ext_temperature']['0']['tC'])
+    if gen == "1":
+        temp0 = str(answer['ext_temperature']['0']['tC'])
+    else:
+        temp0 = str(answer['temperature:100']['tC'])
 except Exception:
     pass
 
 try:
-    temp1 = str(answer['ext_temperature']['1']['tC'])
+    if gen == "1":
+        temp1 = str(answer['ext_temperature']['1']['tC'])
+    else:
+        temp1 = str(answer['temperature:101']['tC'])
 except Exception:
     pass
 
 try:
-    temp2 = str(answer['ext_temperature']['2']['tC'])
+    if gen == "1":
+        temp2 = str(answer['ext_temperature']['2']['tC'])
+    else:
+        temp2 = str(answer['temperature:102']['tC'])
 except Exception:
     pass
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)
 answer += ',"on":' + str(relais) + ',"temp0":' + str(temp0)
 answer += ',"temp1":' + str(temp1) + ',"temp2":' + str(temp2) + '}'
-with open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +
-          str(devicenumber), 'w') as f1:
-    json.dump(answer, f1)
+writeret(answer, devicenumber)

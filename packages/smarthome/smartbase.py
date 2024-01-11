@@ -2,13 +2,14 @@
 import time
 import os
 from typing import Dict, Tuple, Any
-from smarthome.global0 import log
 from smarthome.smartbase0 import Sbase0
 from smarthome.smartmeas import Slsdm630, Sllovato, Slsdm120, Slwe514, Slfronius
 from smarthome.smartmeas import Sljson, Slsmaem, Slshelly, Sltasmota, Slmqtt
-from smarthome.smartmeas import Slhttp, Slavm, Slmystrom
+from smarthome.smartmeas import Slhttp, Slavm, Slmystrom, Slb23
 from smarthome.smartbut import Sbshelly
 from datetime import datetime, timezone
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sbase(Sbase0):
@@ -26,7 +27,6 @@ class Sbase(Sbase0):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sbase executed')
         self.mqtt_param = {}  # type: Dict[str, str]
         self.mqtt_param_del = {}  # type: Dict[str, str]
         self.device_name = 'none'
@@ -37,12 +37,15 @@ class Sbase(Sbase0):
         #  30 = gestartet um fertig bis zu erreichen
         # default 10
         self._first_run = 1
+        self.chargestatus = False
         self.device_nummer = 0
         self.temp0 = '300'
         self.temp1 = '300'
         self.temp2 = '300'
         self.newwatt = 0
         self.newwattk = 0
+        self.newwattks = 0
+        self.pvwatt = 0
         self.relais = 0
         self.devuberschuss = 0
         self.device_temperatur_configured = 0
@@ -60,6 +63,7 @@ class Sbase(Sbase0):
         self.device_canswitch = 0
         self._device_deactivatewhileevcharging = 0
         self._device_mineinschaltdauer = 0
+        self._device_mindayeinschaltdauer = 0
         self._device_maxeinschaltdauer = 0
         self._device_differentmeasurement = 0
         self._device_speichersocbeforestop = 100
@@ -126,10 +130,6 @@ class Sbase(Sbase0):
         self.btchange = 0
         self._mydevicemeasure = 'none'  # type: Any
 
-    def __del__(self) -> None:
-
-        print('__del__ Sbase executed ')
-
     def prewatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self._uberschuss = uberschuss
         self._uberschussoffset = uberschussoffset
@@ -169,7 +169,8 @@ class Sbase(Sbase0):
         else:
             self.relais = 0
         self.mqtt_param = {}
-        pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        #  pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        pref = '/' + str(self.device_nummer) + '/'
         self.mqtt_param[pref + 'RelayStatus'] = str(self.relais)
         if (self.c_mantime_f == 'Y') and (self.device_manual != 1):
             # nach Ausschalten manueller Modus mindestens 30 Sek +
@@ -202,20 +203,53 @@ class Sbase(Sbase0):
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0pos', 'r') as value:
                 importtemp = int(value.read())
-                self.simcount(self._oldwatt, "smarthome_device_" +
-                              str(self.device_nummer),
-                              "device" + str(self.device_nummer) + "_wh",
-                              "device" + str(self.device_nummer) + "_whe",
-                              str(self.device_nummer), self.newwattk)
-        except Exception:
-            importtemp = self._whimported_tmp
+                if (self.newwattk > 0):
+                    # Shadow calculation for devices mit gelierten Zaehler (z.b. sdm630)
+                    self.newwattks = self.simcount(self._oldwatt, "smarthome_device_" +
+                                                   str(self.device_nummer),
+                                                   "device" + str(self.device_nummer) + "_wh",
+                                                   "device" + str(self.device_nummer) + "_whe",
+                                                   str(self.device_nummer), self.newwattk)
+                    #                              str(self.device_nummer), 0)
+                    # um Simulation zweiter Zaehler zu aktivieren
+                    #
+                else:
+                    # uebernehmen gerechneten Zaehlerstand für alle anderen devices (z.b. shelly)
+                    self.newwattk = self.simcount(self._oldwatt, "smarthome_device_" +
+                                                  str(self.device_nummer),
+                                                  "device" + str(self.device_nummer) + "_wh",
+                                                  "device" + str(self.device_nummer) + "_whe",
+                                                  str(self.device_nummer), 0)
 
+        except Exception:
+            # first run simcount also update
+            # add start point for shadow
+            importtemp = self._whimported_tmp
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0pos', 'w') as f:
                 f.write(str(importtemp))
             with open(self._basePath+'/ramdisk/smarthome_device_' +
                       str(self.device_nummer) + 'watt0neg', 'w') as f:
                 f.write(str("0"))
+            if (self.newwattk > 0):
+                log.info("(" + str(self.device_nummer) +
+                         ") Simcount Startwert aus Z1 (HW) übernommen " +
+                         str(self.newwattk) + " kwh " + str(self.newwattk * 3600) + " wh")
+                self.newwattks = self.simcount(self._oldwatt,
+                                               "smarthome_device_" +
+                                               str(self.device_nummer),
+                                               "device" + str(self.device_nummer) + "_wh",
+                                               "device" + str(self.device_nummer) + "_whe",
+                                               str(self.device_nummer), self.newwattk)
+            else:
+                log.info("(" + str(self.device_nummer) +
+                         ") Simcount Startwert aus mqtt übernommen " +
+                         str(self._whimported_tmp) + " wh")
+                self.newwattk = int(self.simcount(self._oldwatt, "smarthome_device_" +
+                                                  str(self.device_nummer),
+                                                  "device" + str(self.device_nummer) + "_wh",
+                                                  "device" + str(self.device_nummer) + "_whe",
+                                                  str(self.device_nummer), 0))
         if (self.relais == 1):
             newtime = int(time.time())
             if (self.c_oldstampeinschaltdauer_f == 'Y'):
@@ -238,11 +272,21 @@ class Sbase(Sbase0):
                 self._c_eintime = 0
                 self._c_eintime_f = 'N'
         self._oldrelais = self.relais
-        if (self.device_temperatur_configured > 0):
+        if (self.device_temperatur_configured == 0):
+            self.mqtt_param[pref + 'TemperatureSensor0'] = '300'
+            self.mqtt_param[pref + 'TemperatureSensor1'] = '300'
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
+        elif (self.device_temperatur_configured == 1):
             self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
-        if (self.device_temperatur_configured > 1):
+            self.mqtt_param[pref + 'TemperatureSensor1'] = '300'
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
+        elif (self.device_temperatur_configured == 2):
+            self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
             self.mqtt_param[pref + 'TemperatureSensor1'] = self.temp1
-        if (self.device_temperatur_configured > 2):
+            self.mqtt_param[pref + 'TemperatureSensor2'] = '300'
+        else:
+            self.mqtt_param[pref + 'TemperatureSensor0'] = self.temp0
+            self.mqtt_param[pref + 'TemperatureSensor1'] = self.temp1
             self.mqtt_param[pref + 'TemperatureSensor2'] = self.temp2
         self.mqtt_param[pref + 'Watt'] = str(self._oldwatt)
         self.mqtt_param[pref + 'Wh'] = str(self._wh)
@@ -278,6 +322,8 @@ class Sbase(Sbase0):
                 self._device_deactivatewhileevcharging = valueint
             elif (key == 'device_mineinschaltdauer'):
                 self._device_mineinschaltdauer = valueint * 60
+            elif (key == 'device_mindayeinschaltdauer'):
+                self._device_mindayeinschaltdauer = valueint * 60
             elif (key == 'device_maxeinschaltdauer'):
                 self._device_maxeinschaltdauer = valueint * 60
             elif (key == 'device_homeConsumtion'):
@@ -395,7 +441,8 @@ class Sbase(Sbase0):
                          + "Sbase überlesen " + key +
                          " " + value)
         self._first_run = 0
-        pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        #  pref = 'openWB/SmartHome/Devices/' + str(self.device_nummer) + '/'
+        pref = '/' + str(self.device_nummer) + '/'
         self.mqtt_param_del[pref + 'RelayStatus'] = '0'
         self.mqtt_param_del[pref + 'Watt'] = '0'
         self.mqtt_param_del[pref + 'oncountnor'] = '0'
@@ -455,6 +502,8 @@ class Sbase(Sbase0):
                     self._mydevicemeasure = Slsdm630()
                 elif (self._device_measuretype == 'lovato'):
                     self._mydevicemeasure = Sllovato()
+                elif (self._device_measuretype == 'b23'):
+                    self._mydevicemeasure = Slb23()
                 elif (self._device_measuretype == 'sdm120'):
                     self._mydevicemeasure = Slsdm120()
                 elif (self._device_measuretype == 'we514'):
@@ -539,18 +588,6 @@ class Sbase(Sbase0):
         if ((self.device_canswitch == 0) or
            (self.device_manual == 1)):
             return
-        file_charge = '/var/www/html/openWB/ramdisk/llkombiniert'
-        testcharge = 0.0
-        try:
-            if os.path.isfile(file_charge):
-                with open(file_charge, 'r') as f:
-                    testcharge = float(f.read())
-        except Exception:
-            pass
-        if testcharge <= 1000:
-            chargestatus = 0
-        else:
-            chargestatus = 1
         work_ausschaltschwelle = self._device_ausschaltschwelle
         work_ausschaltverzoegerung = self._device_ausschaltverzoegerung
         local_time = datetime.now(timezone.utc).astimezone()
@@ -623,28 +660,29 @@ class Sbase(Sbase0):
                          self.device_name +
                          " schalte ein wegen Immer an vor")
                 onnow = 1
+        minrunningtime = max(self._device_mineinschaltdauer, self._device_mindayeinschaltdauer)
         if ((self._device_finishtime != '00:00')
-           and (self.oncountnor == str("0"))):
+           and (self.runningtime < minrunningtime) and self.devstatus != 30):
             finishhour = int(str("0") +
                              str(self._device_finishtime).partition(':')[0])
             finishminute = int(str(self._device_finishtime)[-2:])
             startspatsec = int((finishhour * 60 * 60) + (finishminute * 60) -
-                               self._device_mineinschaltdauer)
+                               max((minrunningtime - self.runningtime), 0))
             log.info("(" + str(self.device_nummer) + ") " +
                      self.device_name +
                      " finishtime definiert " +
                      str(finishhour) + ":" + str('%.2d' % finishminute)
                      + " aktuelle Zeit " + str(localhour) + ":" +
                      str('%.2d' % localminute) +
-                     " Anzahl Starts heute 0 Mineinschaltdauer (Sec)"
-                     + str(self._device_mineinschaltdauer))
+                     " max(Mineinschaltdauer (Sec), Mineinschaltdauer pro Tag (Sec)) "
+                     + str(minrunningtime))
             if (((finishhour > localhour) or ((finishhour == localhour)
                and (finishminute >= localminute)))
-                    and (startspatsec <= localinsec)):
+                    and (startspatsec < localinsec)):
                 log.info("(" + str(self.device_nummer) + ") " +
                          self.device_name +
-                         " schalte ein wegen finishtime, spaetester" +
-                         "start in sec " + str(startspatsec) +
+                         " schalte ein wegen finishtime" +
+                         " spätester Start in sec " + str(startspatsec) +
                          " aktuelle sec " + str(localinsec))
                 self.turndevicerelais(1, 0, 1)
                 self.devstatus = 30
@@ -652,23 +690,22 @@ class Sbase(Sbase0):
         if self.devstatus == 30:
             log.info("(" + str(self.device_nummer) + ") " +
                      self.device_name +
-                     " finishtime laueft, pruefe Mindestlaufzeit")
+                     " finishtime laueft, pruefe max(Mineinschaltdauer (Sec), Mineinschaltdauer pro Tag (Sec)) ")
             if (self._c_eintime_f == 'Y'):
-                timesta = int(time.time()) - int(self._c_eintime)
-                if (self._device_mineinschaltdauer < timesta):
+                if (minrunningtime < self.runningtime):
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
-                             " Mindesteinschaltdauer erreicht," +
+                             " Zeit erreicht," +
                              " finishtime erreicht")
                     self.devstatus = 10
                     return
                 else:
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
-                             " finishtime laueft, Mindesteinschaltdauer" +
+                             " finishtime laueft, max(Mineinschaltdauer (Sec), Mineinschaltdauer pro Tag (Sec)) " +
                              "nicht erreicht, " +
-                             str(self._device_mineinschaltdauer) +
-                             " > " + str(timesta))
+                             str(minrunningtime) +
+                             " > " + str(self.runningtime))
                     return
             else:
                 log.info("(" + str(self.device_nummer) + ") " +
@@ -775,8 +812,8 @@ class Sbase(Sbase0):
                 log.info("(" + str(self.device_nummer) + ") " +
                          self.device_name +
                          " Soll reduziert/abgeschaltet werden" +
-                         " bei Ladung, pruefe " + str(testcharge))
-                if chargestatus == 1:
+                         " bei Ladung, pruefe " + str(self.chargestatus))
+                if self.chargestatus:
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
                              " Ladung läuft, pruefe Mindestlaufzeit")
@@ -848,8 +885,8 @@ class Sbase(Sbase0):
                     log.info("(" + str(self.device_nummer) + ") " +
                              self.device_name +
                              " Soll nicht eingeschaltet werden bei" +
-                             " Ladung, pruefe " + str(testcharge))
-                    if chargestatus == 1:
+                             " Ladung, pruefe " + str(self.chargestatus))
+                    if self.chargestatus:
                         log.info("(" + str(self.device_nummer) + ") "
                                  + self.device_name + " Ladung läuft, " +
                                  "wird nicht eingeschaltet")
@@ -1136,7 +1173,14 @@ class Sbase(Sbase0):
                 self._c_einverz_f = 'N'
                 self._c_ausverz_f = 'N'
 
-    def simcount(self, watt2: int, pref: str, importfn: str, exportfn: str, nummer: str, wattks: int) -> None:
+    def simcount(self, watt2: int, pref: str, importfn: str, exportfn: str, nummer: str, wattks: int) -> int:
+        # if (nummer == "1"):
+        #    debug = True
+        # else:
+        #   debug = False
+        seconds2 = time.time()
+        watt1 = 0
+        seconds1 = 0.0
         # Zaehler mitgeliefert in WH , zurueckrechnen fuer simcount
         if wattks > 0:
             wattposkh = wattks
@@ -1148,16 +1192,19 @@ class Sbase(Sbase0):
             self._wpos = wattposh
             with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w') as f:
                 f.write(str(wattnegh))
-            self._wh = round(wattposkh, 2)
             with open(self._basePath+'/ramdisk/' + importfn, 'w') as f:
                 f.write(str(round(wattposkh, 2)))
             with open(self._basePath+'/ramdisk/' + exportfn, 'w') as f:
                 f.write(str(wattnegkh))
-            return
+            # start punkt für simulation schreiben
+            value1 = "%22.6f" % seconds2
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
+                f.write(str(value1))
+            with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
+                f.write(str(watt2))
+            self._wh = round(wattposkh, 2)
+            return self._wh
         # emulate import  export
-        seconds2 = time.time()
-        watt1 = 0
-        seconds1 = 0.0
         if os.path.isfile(self._basePath+'/ramdisk/'+pref+'sec0'):
             with open(self._basePath+'/ramdisk/'+pref+'sec0', 'r') as f:
                 seconds1 = float(f.read())
@@ -1167,42 +1214,49 @@ class Sbase(Sbase0):
                 wattposh = int(f.read())
             with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'r') as f:
                 wattnegh = int(f.read())
-            value1 = "%22.6f" % seconds2
-            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
-                f.write(str(value1))
             with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
                 f.write(str(watt2))
             seconds1 = seconds1 + 1
             deltasec = seconds2 - seconds1
-            deltasectrun = int(deltasec * 1000) / 1000
-            stepsize = int((watt2-watt1)/deltasec)
-            while seconds1 <= seconds2:
+            stepsize = int((watt2-watt1)/(deltasec + 1))
+            # if debug:
+            #    log.info("(" + str(nummer) +
+            #             ")D star wh " + str(wattposh) +
+            #              " kwh " + str(int(wattposh/3600)) +
+            #              " seconds1 " + str(seconds1) +
+            #              " watt1 " + str(watt1) +
+            #              " seconds2 " + str(seconds2) +
+            #              " deltasec " + str(deltasec) +
+            #              " stepsize " + str(stepsize) +
+            #              " watt2 " + str(watt2))
+            while seconds1 < seconds2:
                 if watt1 < 0:
                     wattnegh = wattnegh + watt1
                 else:
                     wattposh = wattposh + watt1
+                # if debug:
+                #     log.info("(" + str(nummer) +
+                #              ")D calc wh " + str(wattposh) +
+                #              " kwh " + str(int(wattposh/3600)) +
+                #              " seconds1 " + str(seconds1) +
+                #              " watt1 " + str(watt1))
                 watt1 = watt1 + stepsize
-                if stepsize < 0:
+                if stepsize <= 0:
                     watt1 = max(watt1, watt2)
                 else:
                     watt1 = min(watt1, watt2)
                 seconds1 = seconds1 + 1
-            rest = deltasec - deltasectrun
-            seconds1 = seconds1 - 1 + rest
-            if rest > 0:
-                watt1 = int(watt1 * rest)
-                if watt1 < 0:
-                    wattnegh = wattnegh + watt1
-                else:
-                    wattposh = wattposh + watt1
-            wattposkh = int(wattposh/3600)
+            seconds1 = seconds1 - 1
+            value1 = "%22.6f" % seconds1
+            with open(self._basePath+'/ramdisk/'+pref+'sec0', 'w') as f:
+                f.write(str(value1))
             wattnegkh = int((wattnegh*-1)/3600)
             with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'w') as f:
                 f.write(str(wattposh))
             self._wpos = wattposh
             with open(self._basePath+'/ramdisk/'+pref+'watt0neg', 'w') as f:
                 f.write(str(wattnegh))
-            self._wh = round(wattposkh, 2)
+            wattposkh = int(wattposh/3600)
             with open(self._basePath+'/ramdisk/' + importfn, 'w') as f:
                 f.write(str(round(wattposkh, 2)))
             with open(self._basePath+'/ramdisk/' + exportfn, 'w') as f:
@@ -1213,6 +1267,11 @@ class Sbase(Sbase0):
                 f.write(str(value1))
             with open(self._basePath+'/ramdisk/'+pref+'wh0', 'w') as f:
                 f.write(str(watt2))
+            with open(self._basePath+'/ramdisk/'+pref+'watt0pos', 'r') as f:
+                wattposh = int(f.read())
+            wattposkh = int(wattposh/3600)
+        self._wh = round(wattposkh, 2)
+        return self._wh
 
     def getwatt(self, uberschuss: int, uberschussoffset: int) -> None:
         self.prewatt(uberschuss, uberschussoffset)

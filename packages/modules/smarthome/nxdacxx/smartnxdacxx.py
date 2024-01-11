@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 from typing import Dict
-import subprocess
+import logging
+log = logging.getLogger(__name__)
 
 
 class Snxdacxx(Sbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Snxdacxx executed')
         self._smart_paramadd = {}  # type: dict [str,str]
         self._device_nxdacxxueb = 0
         self._device_nxdacxxtype = 0
@@ -45,10 +44,10 @@ class Snxdacxx(Sbase):
                         str(self.devuberschuss),
                         str(self._device_nxdacxxueb), str(forcesend),
                         str(self._device_dacport),
-                        str(self._device_nxdacxxtype)]
+                        str(self._device_nxdacxxtype),
+                        str(self.newwatt)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
             self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
@@ -73,8 +72,7 @@ class Snxdacxx(Sbase):
                         str(self._device_dacport),
                         str(self._device_nxdacxxtype)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off  %s %d %s Fehlermeldung: %s "

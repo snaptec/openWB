@@ -4,9 +4,10 @@ import requests_mock
 
 
 from modules.common.component_state import BatState, CounterState, InverterState
-from modules.devices.batterx import bat, counter, device, inverter
+from modules.devices.batterx import bat, counter, inverter
 from modules.devices.batterx.config import (BatterX, BatterXBatSetup, BatterXConfiguration, BatterXCounterSetup,
                                             BatterXInverterSetup)
+from modules.devices.batterx.device import create_device
 
 
 def test_batterx(monkeypatch, requests_mock: requests_mock.mock):
@@ -19,7 +20,7 @@ def test_batterx(monkeypatch, requests_mock: requests_mock.mock):
     monkeypatch.setattr(inverter, 'get_inverter_value_store', Mock(return_value=mock_inverter_value_store))
     requests_mock.get("http://1.1.1.1/api.php?get=currentstate", json=SAMPLE)
 
-    dev = device.Device(BatterX(configuration=BatterXConfiguration(ip_address="1.1.1.1")))
+    dev = create_device(BatterX(configuration=BatterXConfiguration(ip_address="1.1.1.1")))
     dev.add_component(BatterXBatSetup(id=2))
     dev.add_component(BatterXCounterSetup(id=0))
     dev.add_component(BatterXInverterSetup(id=1))

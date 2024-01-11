@@ -1,14 +1,15 @@
 import json
 import time
-from smarthome.global0 import log
+import os
+import subprocess
+import logging
+from typing import List
+log = logging.getLogger(__name__)
 
 
 class Sbase0:
     _basePath = '/var/www/html/openWB'
     _prefixpy = _basePath+'/packages/modules/smarthome/'
-
-    def __init__(self):
-        print('__init__ Sbase executed')
 
     def readret(self):
         with open(self._basePath+'/ramdisk/smarthome_device_ret' +
@@ -47,3 +48,15 @@ class Sbase0:
             log.warning("(" + str(self.device_nummer) +
                         ") checksend Fehlermeldung: %s "
                         % (str(e1)))
+
+    def callpro(self, argumentList: List[str]) -> None:
+        try:
+            my_env = os.environ.copy()
+            my_env["PYTHONPATH"] = "/var/www/html/openWB/packages"
+            proc = subprocess.Popen(argumentList, stderr=subprocess.PIPE,
+                                    universal_newlines=True, env=my_env)
+            _, errs = proc.communicate()
+            if errs:
+                log.error("%s" % (errs))
+        except Exception:
+            log.exception("Subprocess Fehlermeldung: argumentList %s " % argumentList[1])

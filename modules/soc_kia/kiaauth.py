@@ -79,7 +79,7 @@ def refreshAccessToken(refreshToken):
         'Host': parameters.getParameter('host'),
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.12.0'}
 
     try:
         response = kiahttp.postHTTP(url=url, headers=headers, data=data, timeout=parameters.getParameter('reqTimeout'))
@@ -104,7 +104,7 @@ def getDeviceId():
 
     url = parameters.getParameter('baseUrl') + '/api/v1/spa/notifications/register'
 
-    data = {"pushRegId": parameters.getParameter('GCMSenderId'), "pushType": "GCM", "uuid": str(uuid.uuid1())}
+    data = {"pushRegId": parameters.getParameter('GCMSenderId'), "pushType": parameters.getParameter('PushType'), "uuid": str(uuid.uuid4())}
     headers = {
         'ccsp-service-id': parameters.getParameter('clientId'),
         'ccsp-application-id': parameters.getParameter('appId'),
@@ -113,7 +113,7 @@ def getDeviceId():
         'Host': parameters.getParameter('host'),
         'Connection': 'Keep-Alive',
         'Accept-Encoding': 'gzip',
-        'User-Agent': 'okhttp/3.10.0',
+        'User-Agent': 'okhttp/3.12.0',
         'Stamp': stamps.getStamp()}
 
     try:
@@ -135,7 +135,7 @@ def getDeviceId():
 
 
 def getCookies():
-    soclogging.logDebug(2, "Get cookies for login")
+    soclogging.logDebug(2, "Create login-session")
 
     url = parameters.getParameter('baseUrl') + '/api/v1/user/oauth2/authorize?response_type=code&state=test&client_id=' + \
         parameters.getParameter('clientId') + '&redirect_uri=' + \
@@ -145,13 +145,14 @@ def getCookies():
         cookies = kiahttp.getHTTPCookies(url)
     except:
         raise
-
-    return cookies
-
-
-def setLanguage(cookies):
-    soclogging.logDebug(2, "Setting language")
-
+           
+    url = parameters.getParameter('baseUrl') + '/api/v1/user/session'
+    try:
+        kiahttp.getHTTP(url=url, cookies=cookies,
+                                   timeout=parameters.getParameter('reqTimeout'))
+    except:
+        raise
+        
     url = parameters.getParameter('baseUrl') + '/api/v1/user/language'
     headers = {'Content-type': 'application/json'}
     data = {"lang": "en"}
@@ -161,8 +162,15 @@ def setLanguage(cookies):
                                     timeout=parameters.getParameter('reqTimeout'))
     except:
         raise
-
-    return
+        
+    url = parameters.getParameter('baseUrl') + '/api/v1/user/session'
+    try:
+        kiahttp.deleteHTTP(url=url, cookies=cookies,
+                                   timeout=parameters.getParameter('reqTimeout'))
+    except:
+        raise
+        
+    return cookies
 
 
 def getAuthCode(cookies):
@@ -202,26 +210,30 @@ def getAuthCode(cookies):
     right = response.find('"', left)
     url = response[left:right].replace('&amp;', '&')
     data = urlparse.urlencode({'username': parameters.getParameter('accountName'), 'password': parameters.getParameter(
-        'accountPassword'), 'credentialId': '', 'rememberMe': 'on'})
+        'accountPassword'), 'credentialId': ''})
     headers = {
         'Content-type': 'application/x-www-form-urlencoded',
         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_1 like Mac OS X) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0 Mobile/15B92 Safari/604.1'}
-    cookiesForm = {'AUTH_SESSION_ID': kiahttp.lastCookies['AUTH_SESSION_ID']}
+    cookies['AUTH_SESSION_ID'] = kiahttp.lastCookies['AUTH_SESSION_ID']
 
     try:
-        response = kiahttp.postHTTP(url=url, data=data, headers=headers, cookies=cookiesForm,
-                                    timeout=parameters.getParameter('reqTimeout'))
-        parsed = urlparse.urlparse(kiahttp.lastUrl)
-        intUserId = ''.join(parse_qs(parsed.query)['intUserId'])
-        soclogging.logDebug(2, "intUserId = " + intUserId)
+        response = kiahttp.postHTTP(url=url, data=data, headers=headers, cookies=cookies,
+                                    timeout=parameters.getParameter('reqTimeout'), allow_redirects=False)
     except:
         soclogging.logDebug(0, "Login failed, invalid response")
         soclogging.logDebug(2, response)
         raise
 
+    url = response
+    try:
+        response = kiahttp.getHTTP(url=url, cookies=cookies,
+                                   timeout=parameters.getParameter('reqTimeout'), allow_redirects=True)
+    except:
+        raise
+
     url = parameters.getParameter('baseUrl') + '/api/v1/user/silentsignin'
-    headers = {'Content-type': 'application/json'}
-    data = {'intUserId': intUserId}
+    headers = {'Content-type': 'text/plain;charset=UTF-8'}
+    data = {'intUserId': ""}
 
     try:
         response = kiahttp.postHTTP(url=url, data=data, headers=headers, cookies=cookies,
@@ -253,7 +265,7 @@ def getAuthToken(authCode):
         'Host': parameters.getParameter('host'),
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.12.0'}
 
     try:
         response = kiahttp.postHTTP(url=url, headers=headers, data=data, timeout=parameters.getParameter('reqTimeout'))
@@ -284,7 +296,7 @@ def getControlToken(pin):
         'Host': parameters.getParameter('host'),
         'Connection': 'close',
         'Accept-Encoding': 'gzip, deflate',
-        'User-Agent': 'okhttp/3.10.0'}
+        'User-Agent': 'okhttp/3.12.0'}
 
     try:
         response = kiahttp.putHTTP(url=url, data=data, headers=headers, timeout=parameters.getParameter('reqTimeout'))
@@ -317,7 +329,6 @@ def refreshAuthToken():
 def requestNewAuthToken():
     try:
         cookies = getCookies()
-        setLanguage(cookies)
         authCode = getAuthCode(cookies)
         accessToken = getAuthToken(authCode)
         deviceId = getDeviceId()

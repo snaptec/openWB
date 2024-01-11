@@ -94,7 +94,7 @@ function setChargingCurrentModbus () {
 	modbusevsesource=$2
 	modbusevseid=$3
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evsewritemodbus.py "$modbusevsesource" "$modbusevseid" "$current"
+	sudo PYTHONPATH=/var/www/html/openWB/packages python3 /var/www/html/openWB/runs/evsewritemodbus.py "$modbusevsesource" "$modbusevseid" "$current"
 }
 
 function setChargingCurrentBuchse () {
@@ -154,13 +154,13 @@ function setChargingCurrentWifi () {
 			if [[ $current -eq 0 ]]; then
 				output=$(curl --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/getParameters")
 				state=$(echo "$output" | jq '.list[] | .evseState')
-				if ((state == true)) ; then
+				if [[ $state == "true" ]]; then
 					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setStatus?active=false" > /dev/null
 				fi
 			else
 				output=$(curl --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/getParameters")
 				state=$(echo "$output" | jq '.list[] | .evseState')
-				if ((state == false)) ; then
+				if [[ $state == "false" ]]; then
 					curl --silent --connect-timeout "$evsewifitimeoutlp1" -s "http://$evsewifiiplp1/setStatus?active=true" > /dev/null
 				fi
 				oldcurrent=$(echo "$output" | jq '.list[] | .actualCurrent')
@@ -231,19 +231,23 @@ function setChargingCurrentgoe () {
 				fi
 			fi
 		else
-			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/status")
-			state=$(echo "$output" | jq -r '.frc')
-			if [[ $current -eq 0 ]]; then
-				if ((state == "0")) ; then
-					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/set?frc=1" > /dev/null
-				fi
-			else
-				if ((state == "1")) ; then
-					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/set?frc=0" > /dev/null
-				fi
-				oldgoecurrent=$(echo "$output" | jq -r '.amp')
-				if (( oldgoecurrent != current )) ; then
-					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/api/set?amp=$current" > /dev/null
+			output=$(curl --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/status")
+
+			version=$(echo "$output" | jq -r '.fwv')	# get firmware version
+			majorVersion=${version%.*}      	# remove everything after a "."
+			majorVersion=${majorVersion%-*} 	# remove everything after a "-"
+			majorVersion=${majorVersion#0}  	# remove leading "0"
+
+			state=$(echo "$output" | jq -r '.alw')
+			if ((state == "0")) ; then
+				curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=alw=1" > /dev/null
+			fi
+			oldgoecurrent=$(echo "$output" | jq -r '.amp')
+			if (( oldgoecurrent != current )) ; then
+				if ((majorVersion >= 40)) ; then
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amx=$current" > /dev/null
+				else
+					curl --silent --connect-timeout "$goetimeoutlp1" -s "http://$goeiplp1/mqtt?payload=amp=$current" > /dev/null
 				fi
 			fi
 		fi
@@ -309,7 +313,7 @@ function setChargingCurrent () {
 	if [[ $evsecon == "daemon" ]]; then
 		setChargingCurrentDaemon "$current"
 	fi
-	if [[ $evsecon == "http" ]]; then
+	if [[ $evsecon == "httpevse" ]]; then
 		setChargingCurrenthttp "$current"
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
@@ -325,8 +329,10 @@ function setChargingCurrent () {
 				modbusevseid=1
 
 			else
-				if [ -f /dev/ttyUSB0 ]; then
+				if [ -e "/dev/ttyUSB0" ]; then
 					echo "/dev/ttyUSB" > ramdisk/evsemodulconfig
+				elif [ -e "/dev/ttyACM0" ]; then
+					echo "/dev/ttyACM0" > ramdisk/evsemodulconfig
 				else
 					echo "/dev/serial0" > ramdisk/evsemodulconfig
 				fi
@@ -425,15 +431,15 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
 		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
-		lla1=$(echo $lla1 | sed 's/\..*$//')
-		lla2=$(echo $lla2 | sed 's/\..*$//')
-		lla3=$(echo $lla3 | sed 's/\..*$//')
+		lla1=$(echo "$lla1" | sed 's/\..*$//')
+		lla2=$(echo "$lla2" | sed 's/\..*$//')
+		lla3=$(echo "$lla3" | sed 's/\..*$//')
 		llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
 		llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
 		llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
-		llas11=$(echo $llas11 | sed 's/\..*$//')
-		llas12=$(echo $llas12 | sed 's/\..*$//')
-		llas13=$(echo $llas13 | sed 's/\..*$//')
+		llas11=$(echo "$llas11" | sed 's/\..*$//')
+		llas12=$(echo "$llas12" | sed 's/\..*$//')
+		llas13=$(echo "$llas13" | sed 's/\..*$//')
 		lslpl1=$((lla1 + llas12))
 		lslpl2=$((lla2 + llas13))
 		lslpl3=$((lla3 + llas11))
@@ -469,7 +475,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 fi
 
 
-if ! [ -z $new2 ]; then
+if [ -n "$new2" ]; then
 	points=$new2
 else
 	points=$2
@@ -485,8 +491,8 @@ if [[ $points == "all" ]] || [[ $points == "m" ]]; then
 		current=0
 	fi
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsoll
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
+		echo "$current" > /var/www/html/openWB/ramdisk/llsoll
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatus
 	if (( lp1enabled == 0 )); then
 		current=$oldcurrent
 	fi
@@ -526,8 +532,8 @@ if [[ $lastmanagement == "1" ]]; then
 
 		setChargingCurrent
 
-		echo $current > /var/www/html/openWB/ramdisk/llsolls1
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolls1
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuss1
 		if (( lp2enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -556,8 +562,8 @@ if [[ $lastmanagements2 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolls2
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss2
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolls2
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuss2
 		if (( lp3enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -579,8 +585,8 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp4
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp4
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp4
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp4
 		if (( lp4enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -602,8 +608,8 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp5
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp5
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp5
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp5
 		if (( lp5enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -624,8 +630,8 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp6
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp6
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp6
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp6
 		if (( lp6enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -647,8 +653,8 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp7
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp7
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp7
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp7
 		if (( lp7enabled == 0 )); then
 			current=$oldcurrent
 		fi
@@ -670,8 +676,8 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-		echo $current > /var/www/html/openWB/ramdisk/llsolllp8
-		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp8
+		echo "$current" > /var/www/html/openWB/ramdisk/llsolllp8
+		echo "$lstate" > /var/www/html/openWB/ramdisk/ladestatuslp8
 		if (( lp8enabled == 0 )); then
 			current=$oldcurrent
 		fi

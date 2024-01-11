@@ -1,11 +1,10 @@
 from smarthome.smartbase0 import Sbase0
-from smarthome.global0 import log
 from typing import Dict, Tuple
 from modules.common import modbus
-from modules.common import sdm
+from modules.common import sdm, b23
 from modules.common import lovato
-
-import subprocess
+import logging
+log = logging.getLogger(__name__)
 
 
 class Slbase(Sbase0):
@@ -13,7 +12,6 @@ class Slbase(Sbase0):
         #
         # setting
         super().__init__()
-        print('__init__ Slbase executed')
         self.device_nummer = 0
         self.device_name = 'none'
         self.device_type = 'none'
@@ -50,6 +48,14 @@ class Slbase(Sbase0):
         self._device_password = 'none'
         self._device_measchan = 0
         self._device_chan = 0
+        self._device_measureavmusername = 'none'
+        self._device_measureavmpassword = 'none'
+        self._device_measureshusername = 'none'
+        self._device_measureshpassword = 'none'
+        self._device_measureshauth = 0
+        self._device_shpassword = 'none'
+        self._device_shusername = 'none'
+        self._device_shauth = 0
 
     def updatepar(self, input_param: Dict[str, str]) -> None:
         self._smart_param = input_param.copy()
@@ -131,20 +137,28 @@ class Slbase(Sbase0):
                 self._device_password = value
             elif (key == 'device_stateurl'):
                 self._device_stateurl = value
+            elif (key == 'device_measureshusername'):
+                self._device_measureshusername = value
+            elif (key == 'device_measureshpassword'):
+                self._device_measureshpassword = value
+            elif (key == 'device_measureshauth'):
+                self._device_measureshauth = valueint
+            elif (key == 'device_shusername'):
+                self._device_shusername = value
+            elif (key == 'device_shpassword'):
+                self._device_shpassword = value
+            elif (key == 'device_shauth'):
+                self._device_shauth = valueint
             else:
                 log.info("(" + str(self.device_nummer) + ") "
                          + "Slbase überlesen " + key +
                          " " + value)
-
-    def __del__(self) -> None:
-        print('__del__ Slbase executed ')
 
 
 class Slmqtt(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slmqtt excuted')
 
     def getwattread(self) -> None:
         self._watt(self._device_ip)
@@ -158,8 +172,7 @@ class Slmqtt(Slbase):
                         str(self.device_nummer), str(ip),
                         str(self.devuberschuss)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -173,22 +186,22 @@ class Slshelly(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slshelly excuted')
 
     def getwattread(self) -> None:
-        self._watt(self._device_ip, self._device_chan)
+        self._watt(self._device_ip, self._device_chan,  self._device_shauth,
+                   self._device_shusername, self._device_shpassword)
 
     def sepwattread(self) -> Tuple[int, int]:
-        self._watt(self._device_measureip, self._device_measchan)
+        self._watt(self._device_measureip, self._device_measchan, self._device_measureshauth,
+                   self._device_measureshusername, self._device_measureshpassword)
         return self.newwatt, self.newwattk
 
-    def _watt(self, ip: str, chan: int) -> None:
+    def _watt(self, ip: str, chan: int, shaut: int, shuser: str, shpw: str) -> None:
         argumentList = ['python3', self._prefixpy + 'shelly/watt.py',
                         str(self.device_nummer), str(ip), '0',
-                        str(chan)]
+                        str(chan), str(shaut), shuser, shpw]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -223,7 +236,6 @@ class Slavm(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slavm excuted')
 
     def getwattread(self) -> None:
         self._watt(self._device_ip, self._device_actor,
@@ -244,8 +256,7 @@ class Slavm(Slbase):
                         '0', '0',
                         act, user, pw]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -259,7 +270,6 @@ class Sltasmota(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sltasmota excuted')
 
     def getwattread(self) -> None:
         self._watt(self._device_ip)
@@ -272,8 +282,7 @@ class Sltasmota(Slbase):
         argumentList = ['python3', self._prefixpy + 'tasmota/watt.py',
                         str(self.device_nummer), str(ip), '0']
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -287,7 +296,6 @@ class Slhttp(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slhttp excuted')
 
     def getwattread(self) -> None:
         self._watt(self._device_leistungurl, 'none',
@@ -303,11 +311,8 @@ class Slhttp(Slbase):
                         str(self.device_nummer), '0',
                         str(self.devuberschuss), url, urlc,
                         '0', '0', urls]
-        proc = subprocess.Popen(argumentList)
-        proc.communicate()
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -321,7 +326,6 @@ class Slmystrom(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slmystrom excuted')
 
     def getwattread(self) -> None:
         self._watt(self._device_ip)
@@ -334,8 +338,7 @@ class Slmystrom(Slbase):
         argumentList = ['python3', self._prefixpy + 'mystrom/watt.py',
                         str(self.device_nummer), str(ip), '0']
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -356,7 +359,6 @@ class Slsmaem(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slsmaem excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         argumentList = ['python3', self._prefixpy + 'smaem/watt.py',
@@ -364,8 +366,7 @@ class Slsmaem(Slbase):
                         str(self._device_measuresmaser),
                         str(self._device_measuresmaage)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -380,15 +381,13 @@ class Slwe514(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slwe514 excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         argumentList = ['python3', self._prefixpy + 'we514/watt.py',
                         str(self.device_nummer), str(self._device_measureip),
                         str(self._device_measureid)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -403,7 +402,6 @@ class Sljson(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sljson excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         argumentList = ['python3', self._prefixpy + 'json/watt.py',
@@ -412,8 +410,7 @@ class Sljson(Slbase):
                         self._device_measurejsonpower,
                         self._device_measurejsoncounter]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -427,15 +424,13 @@ class Slfronius(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slfronius excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         argumentList = ['python3', self._prefixpy + 'fronius/watt.py',
                         str(self.device_nummer), str(self._device_measureip),
                         str(self._device_measureid)]
         try:
-            proc = subprocess.Popen(argumentList)
-            proc.communicate()
+            self.callpro(argumentList)
             answer = self.readret()
             self.newwatt = int(answer['power'])
             self.newwattk = int(answer['powerc'])
@@ -450,7 +445,6 @@ class Sllovato(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sllovato excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         try:
@@ -467,11 +461,31 @@ class Sllovato(Slbase):
         return self.newwatt, self.newwattk
 
 
+class Slb23(Slbase):
+    def __init__(self) -> None:
+        # setting
+        super().__init__()
+
+    def sepwattread(self) -> Tuple[int, int]:
+        try:
+            # neu aus openwb 2.0
+            with modbus.ModbusTcpClient_(self._device_measureip, self._device_measureportsdm) as tcp_client:
+                b23inst = b23.B23(self._device_measureid, tcp_client)
+                # log.warning(" b23inst id %s " % ( str(id(b23inst))))
+                _, newwatt = b23inst.get_power()
+                self.newwatt = int(newwatt)
+                self.newwattk = int(b23inst.get_imported())
+        except Exception as e1:
+            log.warning("Leistungsmessung %s %d %s Fehlermeldung: %s "
+                        % ('b23 ', self.device_nummer,
+                           str(self._device_measureip), str(e1)))
+        return self.newwatt, self.newwattk
+
+
 class Slsdm630(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slsdm630 excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         try:
@@ -493,7 +507,6 @@ class Slsdm120(Slbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Slsdm120 excuted')
 
     def sepwattread(self) -> Tuple[int, int]:
         try:

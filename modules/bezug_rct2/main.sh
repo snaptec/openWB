@@ -5,15 +5,14 @@ RAMDISKDIR="${OPENWBBASEDIR}/ramdisk"
 DMOD="MAIN"
 
 if [ ${DMOD} == "MAIN" ]; then
-        MYLOGFILE="${RAMDISKDIR}/openWB.log"
+	MYLOGFILE="${RAMDISKDIR}/openWB.log"
 else
-        MYLOGFILE="${RAMDISKDIR}/evu.log"
+	MYLOGFILE="${RAMDISKDIR}/evu.log"
 fi
 
-bash "$OPENWBBASEDIR/packages/legacy_run.sh" "bezug_rct2.rct_read_bezug" "--ip=${bezug1_ip}" >>"${MYLOGFILE}" 2>&1
+bash "$OPENWBBASEDIR/packages/legacy_run.sh" "modules.devices.rct.device" "counter" "${bezug1_ip}" >>"${MYLOGFILE}" 2>&1
 ret=$?
 
 openwbDebugLog ${DMOD} 2 "RET: ${ret}"
 
-# Nehme wattbezug als ergbenis mit zurueck da beim Bezug-Module ein Returnwert erwartet wird.
 cat "${RAMDISKDIR}/wattbezug"

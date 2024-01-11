@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from enum import Enum
 import logging
 import os
@@ -14,10 +14,9 @@ from modules.common.store import ramdisk_read, ramdisk_write
 from modules.common.store._util import get_rounding_function_by_digits
 from modules.common.fault_state import FaultState
 from modules.common.component_state import ChargepointState
-from modules.common.modbus import ModbusSerialClient_
-from modules.chargepoints.internal_openwb import chargepoint_module
-from modules.chargepoints.internal_openwb.socket import Socket
-from modules.chargepoints.internal_openwb.chargepoint_module import InternalOpenWB
+from modules.internal_chargepoint_handler import chargepoint_module
+from modules.internal_chargepoint_handler.clients import client_factory, ClientHandler
+from modules.internal_chargepoint_handler.socket import Socket
 
 basePath = "/var/www/html/openWB"
 ramdiskPath = basePath + "/ramdisk"
@@ -66,7 +65,8 @@ class UpdateValues:
             # iterate over counter_state
             vars_old_counter_state = vars(self.old_counter_state)
             for key, value in vars(counter_state).items():
-                if value != vars_old_counter_state[key]:
+                # Zählerstatus immer veröffentlichen für Lade-Log-Einträge
+                if value != vars_old_counter_state[key] or key == "imported":
                     self._pub_values_to_1_9(key, value)
                     self._pub_values_to_2(key, value)
             self.old_counter_state = counter_state
@@ -76,14 +76,20 @@ class UpdateValues:
                 self._pub_values_to_1_9(key, value)
                 self._pub_values_to_2(key, value)
             self.old_counter_state = counter_state
+        for topic, value in [
+                    ("fault_state", 0),
+                    ("fault_str", "Keine Fehler.")
+                ]:
+            self._pub_values_to_2(topic, value)
 
     def _pub_values_to_1_9(self, key: str, value) -> None:
         def pub_value(topic: str, value):
             pub_single("openWB/lp/"+str(self.local_charge_point_num+1) +
                        "/"+topic, payload=str(value), no_json=True)
-            pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
-                       payload=str(value), hostname=self.parent_wb, no_json=True)
-        topic = self.MAP_KEY_TO_OLD_TOPIC[key]
+            if self.parent_wb != "localhost":
+                pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
+                           payload=str(value), hostname=self.parent_wb, no_json=True)
+        topic = self.MAP_KEY_TO_OLD_TOPIC.get(key)
         rounding = get_rounding_function_by_digits(2)
         if topic is not None:
             if isinstance(topic, List):
@@ -126,7 +132,7 @@ class UpdateState:
         self.__set_current_error = 0
 
     def update_state(self) -> None:
-        if self.cp_module.config.id == 0:
+        if self.cp_module.local_charge_point_num == 0:
             suffix = ""
         else:
             suffix = "s1"
@@ -169,12 +175,12 @@ class UpdateState:
 
         if self.phase_switch_thread:
             if self.phase_switch_thread.is_alive():
-                log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.config.id) +
+                log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.local_charge_point_num) +
                           " noch aktiv. Es muss erst gewartet werden, bis die Phasenumschaltung abgeschlossen ist.")
                 return
         if self.cp_interruption_thread:
             if self.cp_interruption_thread.is_alive():
-                log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.config.id) +
+                log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.local_charge_point_num) +
                           " noch aktiv. Es muss erst gewartet werden, bis die CP-Unterbrechung abgeschlossen ist.")
                 return
         self.cp_module.set_current(set_current)
@@ -190,26 +196,28 @@ class UpdateState:
         self.phase_switch_thread = threading.Thread(
             target=self.cp_module.perform_phase_switch, args=(phases_to_use, 5))
         self.phase_switch_thread.start()
-        log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.config.id)+" gestartet.")
+        log.debug("Thread zur Phasenumschaltung an LP"+str(self.cp_module.local_charge_point_num)+" gestartet.")
 
     def __thread_cp_interruption(self, duration: int) -> None:
         self.cp_interruption_thread = threading.Thread(
             target=self.cp_module.perform_cp_interruption, args=(duration,))
         self.cp_interruption_thread.start()
-        log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.config.id)+" gestartet.")
+        log.debug("Thread zur CP-Unterbrechung an LP"+str(self.cp_module.local_charge_point_num)+" gestartet.")
         ramdisk_write("extcpulp1", "0")
 
 
 class Isss:
     def __init__(self, mode: IsssMode, socket_max_current: int) -> None:
         log.debug("Init isss")
-        self.serial_client = ModbusSerialClient_(self.detect_modbus_usb_port())
-        self.cp0 = IsssChargepoint(self.serial_client, 0, mode, socket_max_current)
+        self.cp0_client_handler = client_factory(0)
+        self.cp0 = IsssChargepoint(self.cp0_client_handler, 0, mode, socket_max_current)
         if mode == IsssMode.DUO:
             log.debug("Zweiter Ladepunkt für Duo konfiguriert.")
-            self.cp1 = IsssChargepoint(self.serial_client, 1, mode, socket_max_current)
+            self.cp1_client_handler = client_factory(1, self.cp0_client_handler)
+            self.cp1 = IsssChargepoint(self.cp1_client_handler, 1, mode, socket_max_current)
         else:
             self.cp1 = None
+            self.cp1_client_handler = None
         self.init_gpio()
 
     def init_gpio(self) -> None:
@@ -227,9 +235,7 @@ class Isss:
         GPIO.setup(19, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def loop(self) -> None:
-        # connect with USB/modbus device
-        with self.serial_client:
-            # start our control loop
+        def _loop():
             while True:
                 log.setLevel(MAP_LOG_LEVEL[int(os.environ.get('debug'))])
                 log.debug("***Start***")
@@ -237,14 +243,16 @@ class Isss:
                 if self.cp1:
                     self.cp1.update()
                 time.sleep(1.1)
-
-    def detect_modbus_usb_port(self) -> str:
-        """guess USB/modbus device name"""
-        try:
-            with open("/dev/ttyUSB0"):
-                return "/dev/ttyUSB0"
-        except FileNotFoundError:
-            return "/dev/serial0"
+        if self.cp1_client_handler is None:
+            with self.cp0_client_handler.serial_client:
+                _loop()
+        elif self.cp0_client_handler.serial_client == self.cp1_client_handler.serial_client:
+            with self.cp0_client_handler.serial_client:
+                _loop()
+        else:
+            with self.cp0_client_handler:
+                with self.cp1_client_handler.serial_client:
+                    _loop()
 
     @staticmethod
     def get_cp_num(local_charge_point_num: int) -> int:
@@ -268,16 +276,16 @@ class Isss:
 
 
 class IsssChargepoint:
-    def __init__(self, serial_client: ModbusSerialClient_, local_charge_point_num: int, mode: IsssMode,
+    def __init__(self, client_handler: ClientHandler, local_charge_point_num: int, mode: IsssMode,
                  socket_max_current: int) -> None:
         self.local_charge_point_num = local_charge_point_num
         if local_charge_point_num == 0:
             if mode == IsssMode.SOCKET:
-                self.module = Socket(socket_max_current, InternalOpenWB(0, serial_client))
+                self.module = Socket(socket_max_current,  local_charge_point_num, client_handler, "localhost")
             else:
-                self.module = chargepoint_module.ChargepointModule(InternalOpenWB(0, serial_client))
+                self.module = chargepoint_module.ChargepointModule(local_charge_point_num, client_handler, "localhost")
         else:
-            self.module = chargepoint_module.ChargepointModule(InternalOpenWB(1, serial_client))
+            self.module = chargepoint_module.ChargepointModule(local_charge_point_num, client_handler, "localhost")
         self.update_values = UpdateValues(local_charge_point_num)
         self.update_state = UpdateState(self.module)
         self.old_plug_state = False

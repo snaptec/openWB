@@ -90,7 +90,7 @@
 										<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 										<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 										<option <?php if($speichermodulold == "speicher_studer") echo "selected" ?> value="speicher_studer">Studer-Innotec System</option>
-										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
+										<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow SH Speicher</option>
 										<option <?php if($speichermodulold == "speicher_powerwall") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
 										<option <?php if($speichermodulold == "speicher_tesvoltsma") echo "selected" ?> value="speicher_tesvoltsma">Tesvolt mit SMA</option>
 										<option <?php if($speichermodulold == "speicher_varta") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
@@ -261,22 +261,9 @@
 						</div>
 
 						<div id="divspeichersungrow" class="hide">
-							<div class="form-row mb-1">
-								<label for="sungrowspeicherport" class="col-md-4 col-form-label">Netzwerk-Port</label>
-								<div class="col">
-									<input class="form-control" type="number" min="1" step="1" name="sungrowspeicherport" id="sungrowspeicherport" value="<?php echo $sungrowspeicherportold ?>">
-									<span class="form-text small">Hier kann ein abweichender Netzwerk-Port angegeben werden, auf dem die Modbus/TCP Verbindung aufgebaut wird.Standard ist 502.</span>
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<label for="sungrowspeicherid" class="col-md-4 col-form-label">Geräteadresse</label>
-								<div class="col">
-									<input class="form-control" type="number" min="1" max="254" step="1" name="sungrowspeicherid" id="sungrowspeicherid" value="<?php echo $sungrowspeicheridold ?>">
-									<span class="form-text small">Gültige Werte 1-254. Standard ist 1.</span>
-								</div>
-							</div>
 							<div class="alert alert-info">
-								Es muss Sungrow als PV und EVU Modul gewählt werden.
+								1) Es muss "Sungrow" Variante "SH" im Modul PV1 und gegebenenfalls "Sungrow" als EVU Modul gewählt werden. <br>
+								2) Bitte halten Sie zur Fehlervermeidung die Firmware der Batterie aktuell.
 							</div>
 						</div>
 
@@ -380,7 +367,7 @@
 						
 						<div id="divspeicherbatterx" class="hide">
 							<div class="alert alert-info">
-								Konfiguration im Bezug BatterX Modul.
+							Konfiguration der IP-Adresse im BatterX EVU Modul.
 							</div>
 						</div>
 
@@ -801,7 +788,6 @@
 								}
 
 								if($('#speichermodul').val() == 'speicher_sungrow') {
-									showSection('#divspeicherip');
 									showSection('#divspeichersungrow');
 								}
 								if($('#speichermodul').val() == 'speicher_good_we') {

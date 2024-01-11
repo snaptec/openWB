@@ -18,5 +18,4 @@ modules/soc_vwid/secrets.py
 .pytest_cache
 __pycache__
 openwb.conf.*
-smarthome.ini
 web/backup/*.tar.gz

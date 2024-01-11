@@ -117,8 +117,9 @@ def loadBrandData():
         setParameter('baseUrl', 'https://' + getParameter('host'))
         setParameter('clientId', 'fdc85c00-0a2f-4c64-bcb4-2cfb1500730a')
         setParameter('authClientId', '572e0304-5f8d-4b4c-9dd5-41aa84eed160')
-        setParameter('appId', 'e7bcd186-a5fd-410d-92cb-6876a42288bd')
-        setParameter('GCMSenderId', '345127537656')
+        setParameter('appId', '1518dd6b-2759-4995-9ae5-c9ad4a9ddad1')
+        setParameter('GCMSenderId', 'cF5o4DiiQkaw5wsAkLzYIS:APA91bFB59MltBMK29zI0U2llq7khbB2jELkNFKMfBCH6KlCPL16pz_dG0fZ4ncvFn1IMT8nfojb83JyLiT_skBTXtClHhDCKeRbyPy3yQjCVRC3zTZt--wI7vv4jD9aknhHhiQsoZoU')
+        setParameter('PushType', 'GCM')
         setParameter('basicToken', 'Basic ZmRjODVjMDAtMGEyZi00YzY0LWJjYjQtMmNmYjE1MDA3MzBhOnNlY3JldA==')
     if getParameter('brand') == 'hyundai':
         setParameter('host', 'prd.eu-ccapi.hyundai.com:8080')
@@ -126,7 +127,8 @@ def loadBrandData():
         setParameter('clientId', '6d477c38-3ca4-4cf3-9557-2a1929a94654')
         setParameter('authClientId', '64621b96-0f0d-11ec-82a8-0242ac130003')
         setParameter('appId', '014d2225-8495-4735-812d-2616334fd15d')
-        setParameter('GCMSenderId', '414998006775')
+        setParameter('GCMSenderId', 'dQtCqr7gRjy31Ao4nPiLVy:APA91bF_tv9yPOTFa-sW9-vCxOVpzD_iLjRopN_zaKgPKdwS7OYTWFN626-ObhZyzka5kYFKG0KfCsuMOUD5aw9Gyrdh-IeBQZHIcfb5YNUrQBvfqQxbggk9kO6gZeFbCpCLHZB6wITC')
+        setParameter('PushType', 'GCM')
         setParameter(
             'basicToken', 'Basic NmQ0NzdjMzgtM2NhNC00Y2YzLTk1NTctMmExOTI5YTk0NjU0OktVeTQ5WHhQekxwTHVvSzB4aEJDNzdXNlZYaG10UVI5aVFobUlGampvWTRJcHhzVg==')
 

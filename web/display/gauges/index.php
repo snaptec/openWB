@@ -62,6 +62,10 @@
 		<!-- Data refresher -->
 		<script src="livefunctions.js"></script>
 		<style>
+			/* prevent touch gestures */
+			html, body {
+				overscroll-behavior: none;
+			}
 			#PINform input:focus,
 			#PINform select:focus,
 			#PINform textarea:focus,
@@ -296,7 +300,7 @@
 							<div id="lp2anzeigen">
 								<canvas id="lp2" style="height: 200px; top: 120px; left: 397px; position: absolute; width: 265px;"></canvas>
 								<div id="lp2t" style="15px; height: 100px; top: 270px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;"></div>
-								<div style="font-size: 15px; height: 100px; top: 250px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;"></span>'.$lp2nameold.'<span id="plugstatlp2div"></div>
+								<div style="font-size: 15px; height: 100px; top: 250px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;"></span><?php echo $lp2nameold; ?><span id="plugstatlp2div"></div>
 								<canvas id="lp2s" style="height: 200px; top: 120px; left: 397px; position: absolute; width: 265px;"></canvas>
 								<div id="lp2st" style="15px; height: 100px; top: 230px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;"></div>
 							</div>
@@ -324,7 +328,7 @@
 					<div class="col-xs-1 text-center">
 						<div id="speedpv">
 							<div id="arrowpv"></div>
- 						</div>
+						</div>
 					</div>
 					<div class="col-xs-5">
 					</div>
@@ -336,7 +340,7 @@
 					<div class="col-xs-3">
 						<div id="speedevu">
 							<div id="arrowevu"></div>
- 						</div>
+						</div>
 						<span id="bezugdiv"></span>
 					</div>
 					<div class="col-xs-2">
@@ -347,7 +351,7 @@
 						<div class="col-xs-3">
 							<div id="speedspeicher">
 								<div id="arrowspeicher"></div>
- 							</div>
+							</div>
 							<span id="speicherleistungdiv"></span>
 						</div>
 						<div class="col-xs-2">
@@ -386,7 +390,7 @@
 							<div class="col-xs-2">
 								<div id="speedlp1">
 									<div id="arrowlp1"></div>
- 								</div>
+								</div>
 								<span id="lllp1div"></span>
 							</div>
 							<div class="col-xs-1">
@@ -405,7 +409,7 @@
 							<div class="col-xs-2">
 								<div id="speedlp2">
 									<div id="arrowlp2"></div>
- 								</div>
+								</div>
 								<span id="lllp2div"></span>
 							</div>
 							<div class="col-xs-1">
@@ -424,12 +428,12 @@
 						?>
 						<div class="row col-xs-12 text-center" style="height: 100px;">
 							<div class="col-xs-2">
-								<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1enabledclick()"></span><span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+								<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1checkenabledclick()"></span><span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
 							</div>
 							<div class="col-xs-3">
 								<div id="speedlp1">
 									<div id="arrowlp1"></div>
- 								</div>
+								</div>
 								<span id="lllp1div"></span>
 							</div>
 							<div class="col-xs-2">

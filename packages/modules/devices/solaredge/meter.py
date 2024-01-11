@@ -1,3 +1,10 @@
+
+import logging
+
+
+log = logging.getLogger(__name__)
+
+
 class SolaredgeMeterRegisters:
     def __init__(self, internal_meter_id: int = 1, synergy_units: int = 1):
         # 40206: Total Real Power (sum of active phases)
@@ -37,7 +44,11 @@ class SolaredgeMeterRegisters:
         For 3-unit three phase inverters with Synergy technology, add 70 to the default addresses.
         """
         OFFSET = [0, 50, 70]
-        self._add_offset(OFFSET[synergy_units-1])
+        try:
+            self._add_offset(OFFSET[synergy_units-1])
+        except IndexError:
+            log.debug("Undocumented synergy units value "+str(synergy_units)+". Use synergy_units 1.")
+            self._add_offset(OFFSET[0])
 
     def _add_offset(self, offset: int) -> None:
         for name, value in self.__dict__.items():

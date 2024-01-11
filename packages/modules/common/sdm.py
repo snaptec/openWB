@@ -2,10 +2,11 @@
 from typing import List, Tuple
 
 from modules.common import modbus
+from modules.common.abstract_counter import AbstractCounter
 from modules.common.modbus import ModbusDataType
 
 
-class Sdm:
+class Sdm(AbstractCounter):
     def __init__(self, modbus_id: int, client: modbus.ModbusTcpClient_) -> None:
         self.client = client
         self.id = modbus_id
@@ -49,3 +50,6 @@ class Sdm120(Sdm):
     def get_power(self) -> Tuple[List[float], float]:
         power = self.client.read_input_registers(0x0C, ModbusDataType.FLOAT_32, unit=self.id)
         return [power, 0, 0], power
+
+    def get_currents(self) -> List[float]:
+        return [self.client.read_input_registers(0x06, ModbusDataType.FLOAT_32, unit=self.id), 0, 0]

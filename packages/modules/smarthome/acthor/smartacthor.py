@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 from smarthome.smartbase import Sbase
-from smarthome.global0 import log
 from typing import Dict
-import subprocess
+import logging
+log = logging.getLogger(__name__)
 
 
 class Sacthor(Sbase):
     def __init__(self) -> None:
         # setting
         super().__init__()
-        print('__init__ Sacthor executed')
         self._smart_paramadd = {}  # type: Dict[str, str]
         self._device_acthortype = 'none'
         self._device_acthorpower = 'none'
@@ -47,8 +46,7 @@ class Sacthor(Sbase):
                         str(self.devuberschuss), self._device_acthortype,
                         self._device_acthorpower, str(forcesend)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
             self.answer = self.readret()
             self.newwatt = int(self.answer['power'])
             self.newwattk = int(self.answer['powerc'])
@@ -83,8 +81,7 @@ class Sacthor(Sbase):
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss)]
         try:
-            self.proc = subprocess.Popen(argumentList)
-            self.proc.communicate()
+            self.callpro(argumentList)
         except Exception as e1:
             log.warning("(" + str(self.device_nummer) +
                         ") on / off  %s %d %s Fehlermeldung: %s "

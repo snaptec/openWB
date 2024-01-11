@@ -1,77 +1,63 @@
 #!/usr/bin/env python3
 import logging
-from typing import Dict, Optional, Union, List
+from typing import Iterable, Optional, Union, List
 
-from dataclass_utils import dataclass_from_dict
 from helpermodules.cli import run_using_positional_cli_args
-from modules.common.abstract_device import AbstractDevice, DeviceDescriptor
+from modules.common.abstract_device import DeviceDescriptor
 from modules.common.component_context import MultiComponentUpdateContext
-from modules.devices.batterx import bat
+from modules.common.configurable_device import ComponentFactoryByType, ConfigurableDevice, MultiComponentUpdater
+from modules.common.store import get_inverter_value_store
+from modules.devices.batterx import bat, external_inverter
 from modules.devices.batterx import counter
 from modules.devices.batterx import inverter
-from modules.devices.batterx.config import BatterX, BatterXBatSetup, BatterXCounterSetup, BatterXInverterSetup
+from modules.devices.batterx.config import (BatterX, BatterXBatSetup, BatterXCounterSetup,
+                                            BatterXExternalInverterSetup, BatterXInverterSetup)
 from modules.common import req
 
 log = logging.getLogger(__name__)
 
 
 batterx_component_classes = Union[bat.BatterXBat, counter.BatterXCounter,
-                                  inverter.BatterXInverter]
+                                  inverter.BatterXInverter, external_inverter.BatterXExternalInverter]
 
 
-class Device(AbstractDevice):
-    COMPONENT_TYPE_TO_CLASS = {
-        "bat": bat.BatterXBat,
-        "counter": counter.BatterXCounter,
-        "inverter": inverter.BatterXInverter,
-    }
+def create_device(device_config: BatterX):
+    def create_bat_component(component_config: BatterXBatSetup):
+        return bat.BatterXBat(device_config.id, component_config)
 
-    def __init__(self, device_config: Union[Dict, BatterX]) -> None:
-        self.components = {}  # type: Dict[str, batterx_component_classes]
-        try:
-            self.device_config = dataclass_from_dict(BatterX, device_config)
-        except Exception:
-            log.exception("Fehler im Modul "+self.device_config.name)
+    def create_counter_component(component_config: BatterXCounterSetup):
+        return counter.BatterXCounter(device_config.id, component_config)
 
-    def add_component(self, component_config: Union[Dict,
-                                                    BatterXBatSetup,
-                                                    BatterXCounterSetup,
-                                                    BatterXInverterSetup]) -> None:
-        if isinstance(component_config, Dict):
-            component_type = component_config["type"]
-        else:
-            component_type = component_config.type
-        component_config = dataclass_from_dict(COMPONENT_TYPE_TO_MODULE[
-            component_type].component_descriptor.configuration_factory, component_config)
-        if component_type in self.COMPONENT_TYPE_TO_CLASS:
-            self.components["component"+str(component_config.id)] = (self.COMPONENT_TYPE_TO_CLASS[component_type](
-                self.device_config.id, component_config))
-        else:
-            raise Exception(
-                "illegal component type " + component_type + ". Allowed values: " +
-                ','.join(self.COMPONENT_TYPE_TO_CLASS.keys())
-            )
+    def create_inverter_component(component_config: BatterXInverterSetup):
+        return inverter.BatterXInverter(device_config.id, component_config)
 
-    def update(self) -> None:
-        log.debug("Start device reading " + str(self.components))
-        if self.components:
-            with MultiComponentUpdateContext(self.components):
-                resp_json = req.get_http_session().get(
-                    'http://' + self.device_config.configuration.ip_address + '/api.php?get=currentstate',
+    def create_external_inverter_component(component_config: BatterXExternalInverterSetup):
+        return external_inverter.BatterXExternalInverter(device_config.id, component_config)
+
+    def update_components(components: Iterable[batterx_component_classes]):
+        resp_json = req.get_http_session().get(
+                    'http://' + device_config.configuration.ip_address + '/api.php?get=currentstate',
                     timeout=5).json()
-                for component in self.components:
-                    self.components[component].update(resp_json)
-        else:
-            log.warning(
-                self.device_config.name +
-                ": Es konnten keine Werte gelesen werden, da noch keine Komponenten konfiguriert wurden."
-            )
+        for component in components:
+            component.update(resp_json)
+
+    return ConfigurableDevice(
+        device_config=device_config,
+        component_factory=ComponentFactoryByType(
+            bat=create_bat_component,
+            counter=create_counter_component,
+            inverter=create_inverter_component,
+            external_inverter=create_external_inverter_component,
+        ),
+        component_updater=MultiComponentUpdater(update_components)
+    )
 
 
 COMPONENT_TYPE_TO_MODULE = {
     "bat": bat,
     "counter": counter,
     "inverter": inverter,
+    "external_inverter": external_inverter
 }
 
 
@@ -80,23 +66,40 @@ def read_legacy(
         ip_address: str,
         num: Optional[int] = None,
         evu_counter: Optional[str] = None,
-        bat: Optional[str] = None) -> None:
+        bat_module: Optional[str] = None,
+        ext_inverter: int = 0) -> None:
 
     device_config = BatterX()
     device_config.configuration.ip_address = ip_address
-    dev = Device(device_config)
+    dev = create_device(device_config)
     dev = _add_component(dev, component_type, num)
     if evu_counter == "bezug_batterx":
         dev = _add_component(dev, "counter", 0)
-    if bat == "speicher_batterx":
+    if bat_module == "speicher_batterx":
         dev = _add_component(dev, "bat", 3)
 
     log.debug('BatterX IP-Adresse: ' + ip_address)
+    log.debug('BatterX externer WR: ' + str(ext_inverter))
 
-    dev.update()
+    with MultiComponentUpdateContext(dev.components):
+        resp_json = req.get_http_session().get(
+            'http://' + ip_address + '/api.php?get=currentstate',
+            timeout=5).json()
+        for component in dev.components.values():
+            if isinstance(component, (bat.BatterXBat, counter.BatterXCounter)):
+                component.update(resp_json)
+            elif isinstance(component, inverter.BatterXInverter):
+                if ext_inverter == 0:
+                    component.update(resp_json)
+                else:
+                    dev = _add_component(dev, "external_inverter", 4)
+                    power = component.get_power(resp_json)
+                    power_ext = dev.components["component4"].get_power(resp_json)
+                    state = component.get_inverter_state(power+power_ext)
+                    get_inverter_value_store(num).set(state)
 
 
-def _add_component(dev: Device, component_type: str, num: Optional[int]) -> Device:
+def _add_component(dev: ConfigurableDevice, component_type: str, num: Optional[int]) -> ConfigurableDevice:
     if component_type in COMPONENT_TYPE_TO_MODULE:
         component_config = COMPONENT_TYPE_TO_MODULE[component_type].component_descriptor.configuration_factory()
     else:
