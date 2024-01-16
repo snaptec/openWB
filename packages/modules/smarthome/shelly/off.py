@@ -26,16 +26,26 @@ if os.path.isfile(fnameg):
         gen = str(jsonin['gen'])
         model = str(jsonin['model'])
 else:
-    gen = "0"
-if (chan == 0):
-    url = "http://" + str(ipadr) + "/relay/0?turn=off"
-#    urllib.request.urlopen("http://"+str(ipadr)+"/relay/0?turn=off",
-#                           timeout=3)
+    gen = "1"
+if (gen == "1"):
+    if (chan == 0):
+        url = "http://" + str(ipadr) + "/relay/0?turn=off"
+    #    urllib.request.urlopen("http://"+str(ipadr)+"/relay/0?turn=off",
+    #                           timeout=3)
+    else:
+        chan = chan - 1
+        url = "http://" + str(ipadr) + "/relay/" + str(chan) + "?turn=off"
+    #    urllib.request.urlopen("http://"+str(ipadr)+"/relay/" + str(chan) +
+    #                           "?turn=off", timeout=3)
 else:
-    chan = chan - 1
-    url = "http://" + str(ipadr) + "/relay/" + str(chan) + "?turn=off"
-#    urllib.request.urlopen("http://"+str(ipadr)+"/relay/" + str(chan) +
-#                           "?turn=off", timeout=3)
+    if (chan > 0):
+        chan = chan - 1
+    # shelly pro 3em mit add on hat fix id 100 als switch Kanal, das Device muss auf jeden fall mit separater
+    # Leistunsmessung erfasst werden, da die Leistung auf drei verschiedenenen Kanälen angeliefert werden kann
+    if ("SPEM-003CE" in model):
+        chan = 100
+    # gen 2 will das als off cmd IPderPro3EM/rpc/Switch.Set?id=100&on=false
+    url = "http://" + str(ipadr) + "/rpc/Switch.Set?id=" + str(chan) + "&on=false"
 if (shaut == 1):
     #  print("Shelly off" + str(shaut) + user + pw)
     passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
