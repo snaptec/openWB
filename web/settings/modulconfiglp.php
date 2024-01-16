@@ -1300,6 +1300,13 @@
 									<div class="alert alert-info">
 										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
 										- smart Control Account aktiv<br>
+										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
+										- smart Control Account aktiv<br>
+										Das Modul unterstützt 2 Loginverfahren<br>
+										- Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
+										- Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
+										Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
+										Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
 									</div>
 									<div class="form-row mb-1">
 										<label for="soc_smarteq_username" class="col-md-4 col-form-label">Benutzername</label>
@@ -1316,6 +1323,16 @@
 											<input class="form-control" type="password" name="soc_smarteq_passwort" id="soc_smarteq_passwort" value="<?php echo $soc_smarteq_passwortold ?>">
 											<span class="form-text small">
 												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_smarteq_pin" class="col-md-4 col-form-label">Pin</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_smarteq_pin" id="soc_smarteq_pin" value="<?php echo $soc_smarteq_pinold ?>">
+											<span class="form-text small">
+												PIN des Accounts.<br>
+												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
 											</span>
 										</div>
 									</div>
@@ -3140,6 +3157,11 @@
 							<div id="socmsmarteqinfolp2" class="mt-1 alert alert-info hide">
 								Für smart EQ Fahrzeuge. Es wird benötigt:<br>
 								- smart Control Account aktiv<br>
+								Das Modul unterstützt 2 Loginverfahren<br>
+								- Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
+								- Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
+								Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
+								Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3626,7 +3648,22 @@
 										<div class="col">
 											<input class="form-control" type="password" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
 											<span class="form-text small">
-												PIN des Accounts.
+												PIN des Accounts.<br>
+												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmpin2t" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2pint" class="col-md-4 col-form-label">Pin</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2pint" id="soc2pint" value="<?php echo $soc2pintold ?>">
+											<span class="form-text small">
+												PIN des Accounts.<br>
+												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
 											</span>
 										</div>
 									</div>
@@ -4381,6 +4418,7 @@
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
+							hideSection('#socmpin2t');
 							hideSection('#socmnone1');
 							hideSection('#socmhttp1');
 							hideSection('#socleaf1');
@@ -4458,6 +4496,7 @@
 								showSection('#socmsmarteqinfolp2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
+								showSection('#socmpin2t');
 								showSection('#socmvin2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');

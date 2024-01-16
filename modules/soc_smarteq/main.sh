@@ -6,6 +6,8 @@ DMOD="EVSOC"
 CHARGEPOINT=$1
 export OPENWBBASEDIR RAMDISKDIR MODULEDIR
 
+export debug=1
+
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
 	echo "soc_smarteq: Seems like openwb.conf is not loaded. Reading file."
@@ -24,6 +26,7 @@ case $CHARGEPOINT in
 		fztype=$soc2type
 		username=$soc2user
 		password=$soc2pass
+		pin=$soc2pint
 		vin=$soc2vin
 		intervall=$(( soc2intervall * 6 ))
 		intervallladen=$(( soc2intervallladen * 6 ))
@@ -37,6 +40,7 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc"
 		username=$soc_smarteq_username
 		password=$soc_smarteq_passwort
+		pin=$soc_smarteq_pin
 		vin=$soc_smarteq_vin
 		intervall=$(( soc_smarteq_intervall * 6 ))
 		intervallladen=$(( soc_smarteq_intervallladen * 6 ))
@@ -69,14 +73,13 @@ incrementTimer(){
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
-	#Prepare for secrets used in soc module libvwid in Python
-	if ! python3 -c "import secrets" &> /dev/null ; then
-		if [ ! -L $MODULEDIR/secrets.py ]; then
-			echo 'soc_vwid: enable local secrets.py...'
-			ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
-		fi
+
+	if [ "$password" != "" ]
+	then
+		answer=$($MODULEDIR/soc_smarteq_pass.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
+	else
+		answer=$($MODULEDIR/soc_smarteq_2fa.py --user "$username" --pin "$pin" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
 	fi
-	answer=$($MODULEDIR/soc_smarteq.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile

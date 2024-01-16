@@ -1695,6 +1695,9 @@ updateConfig(){
 	if ! grep -Fq "soc2pin=" $ConfigFile; then
 		echo "soc2pin=pin" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc2pint=" $ConfigFile; then
+		echo "soc2pint=''" >> $ConfigFile
+	fi
 	if ! grep -Fq "lgessv1ip=" $ConfigFile; then
 		echo "lgessv1ip=youripaddress" >> $ConfigFile
 	fi
@@ -2113,6 +2116,11 @@ updateConfig(){
 		echo "soc_smarteq_passwort=''" >> $ConfigFile
 	else
 		sed -i "/soc_smarteq_passwort='/b; s/^soc_smarteq_passwort=\(.*\)/soc_smarteq_passwort=\'\1\'/g" $ConfigFile
+	fi
+	if ! grep -Fq "soc_smarteq_pin=" $ConfigFile; then
+		echo "soc_smarteq_pin=''" >> $ConfigFile
+	else
+		sed -i "/soc_smarteq_pin='/b; s/^soc_smarteq_pin=\(.*\)/soc_smarteq_pin=\'\1\'/g" $ConfigFile
 	fi
 	if ! grep -Fq "soc_smarteq_vin=" $ConfigFile; then
 		echo "soc_smarteq_vin=VIN" >> $ConfigFile

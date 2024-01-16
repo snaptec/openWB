@@ -7,17 +7,18 @@ import bs4
 import os
 import time
 import datetime
-import pkce
 import logging
 import pickle
 import copy
+import base64
+import re
+import hashlib
 
 # Constants
 BASE_URL = "https://id.mercedes-benz.com"
 OAUTH_URL = BASE_URL + "/as/authorization.oauth2"
 LOGIN_URL = BASE_URL + "/ciam/auth/login"
 TOKEN_URL = BASE_URL + "/as/token.oauth2"
-#STATUS_URL = "https://oneapp.microservice.smart.com"
 STATUS_URL = "https://oneapp.microservice.smart.mercedes-benz.com"
 REDIRECT_URI = STATUS_URL
 SCOPE = "openid+profile+email+phone+ciam-uid+offline_access"
@@ -28,7 +29,6 @@ ACCEPT_LANGUAGE = "de-de"
 TOKENS_REFRESH_THRESHOLD = 3600
 SSL_VERIFY_AUTH = True
 SSL_VERIFY_STATUS = True
-
 
 
 # helper functions
@@ -48,10 +48,19 @@ def nested_key_exists(element: dict, *keys: str) -> bool:
     return True
 
 
+def generateCodeChallengePair() -> tuple:
+    code_verifier = base64.urlsafe_b64encode(os.urandom(40)).decode('utf-8')
+    code_verifier = re.sub('[^a-zA-Z0-9]+', '', code_verifier)
+    code_challenge = hashlib.sha256(code_verifier.encode('utf-8')).digest()
+    code_challenge = base64.urlsafe_b64encode(code_challenge).decode('utf-8')
+    code_challenge = code_challenge.replace('=', '')
+    return (code_verifier, code_challenge)
+
+
 class smarteq:
     def __init__(self, storeFile: str):
         self.storeFile = storeFile
-        self.log = logging.getLogger("soc_smarteq")
+        self.log = logging.getLogger("soc_smarteq_pass")
         debug = os.environ.get('debug', '0')
         LOGLEVEL = 'WARN'
         if debug == '1':
@@ -68,19 +77,24 @@ class smarteq:
                             datefmt=datefmt,
                             level=LOGLEVEL)
 
+        # for testing send logs to console
+        if os.environ.get('logConsole', '0') == '1':
+            consoleHandler = logging.StreamHandler()
+            consoleHandler.setFormatter(logging.Formatter(format, datefmt))
+            self.log.addHandler(consoleHandler)
+
         # self.method keeps a high level trach of actions
         self.method = ''
         self.soc_ts = 'n/a'
         # self.store is read from ramdisk at start and saved at end.
         # currently is contains:
         # Tokens: refresh- and access-tokens of OAUTH
-        # refresh_timestamp: epoch of last refresh_tokens.
+        # refresh_timestamp: epoch of last refresh_token.
 
         self.session = requests.session()
 
         self.load_store()
         self.oldTokens = copy.deepcopy(self.store['Tokens'])
-        self.init = True
 
     def load_store(self):
         try:
@@ -131,7 +145,7 @@ class smarteq:
     # ===== get resume string ======
     def get_resume(self) -> str:
         response_type = "code"
-        self.code_verifier, self.code_challenge = pkce.generate_pkce_pair()
+        self.code_verifier, self.code_challenge = generateCodeChallengePair()
         self.code_challenge_method = "S256"
         url = OAUTH_URL + '?client_id=' + CLIENT_ID + '&response_type=' + response_type + '&scope=' + SCOPE
         url = url + '&redirect_uri=' + REDIRECT_URI
@@ -261,7 +275,7 @@ class smarteq:
 
     # refresh tokens
     def refresh_tokens(self) -> dict:
-        self.method += " 2-refresh_tokens"
+        self.method += " 2-refresh_token"
         url = TOKEN_URL
         headers = {
             "Accept": "*/*",
@@ -336,12 +350,8 @@ class smarteq:
     # get Soc of Vehicle
     def get_status(self, vin: str) -> int:
         self.method += " 1-get_status"
-        if self.init:
-            url = STATUS_URL + "/seqc/v0/vehicles/" + vin +\
-                   "/init-data?requestedData=BOTH&countryCode=DE&locale=de-DE"
-        else:
-            url = STATUS_URL + "/seqc/v0/vehicles/" + vin + "/refresh-data"
-            self.init = False
+
+        url = STATUS_URL + "/seqc/v0/vehicles/" + vin + "/refresh-data"
 
         headers = {
             "accept": "*/*",
@@ -383,7 +393,7 @@ class smarteq:
     #   1. get_status via stored access_token
     #   2. if expired: refresh_access_token using id and refresh token, then get_status
     #   3. if refresh token expired: login, get tokens, then get_status
-    def fetch_soc(self) -> int:
+    def fetch_soc(self: str, start_ts: float) -> int:
         soc = -1
         try:
             if 'refresh_token' in self.store['Tokens']:
@@ -416,10 +426,13 @@ class smarteq:
             self.store['Tokens'] = self.reconnect()
             if 'access_token' in self.store['Tokens']:
                 soc = self.get_status(self.vin)
+
+        elapsed = time.time() - start_ts
         self.log.info("Lp" + self.chargepoint +
                       " SOC: " + str(soc) + '%' +
                       '@' + self.soc_ts +
-                      ', Method: ' + self.method)
+                      ', Elapsed: ' + str(round(elapsed, 2)) + ' s' +
+                      ', Method:' + self.method)
 
         if self.store['Tokens'] != self.oldTokens:
             self.log.debug("reconnect: tokens changed, store token file")
@@ -430,6 +443,8 @@ class smarteq:
 
 # main program
 def main():
+    start_ts = time.time()
+
     parser = ArgumentParser()
     parser.add_argument("-v", "--vin",
                         help="VIN of vehicle", metavar="VIN", required=True)
@@ -452,7 +467,7 @@ def main():
     Smart.set_credentials(user_id, password)
     Smart.set_vin(vin)
     Smart.set_chargepoint(chargepoint)
-    soc = Smart.fetch_soc()
+    soc = Smart.fetch_soc(start_ts)
     print(soc)
 
 
