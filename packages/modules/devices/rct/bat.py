@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
+import logging
+
 from dataclass_utils import dataclass_from_dict
 from modules.common.component_state import BatState
 from modules.common.component_type import ComponentDescriptor
-from modules.common.fault_state import ComponentInfo, FaultState
+from modules.common.fault_state import ComponentInfo
 from modules.common.store import get_bat_value_store
 from modules.devices.rct.config import RctBatSetup
 from modules.devices.rct.rct_lib import RCT
+
+log = logging.getLogger(__name__)
 
 
 class RctBat:
@@ -27,9 +31,6 @@ class RctBat:
         # read all parameters
         rct_client.read(my_tab)
 
-        if (stat1.value + stat2.value + stat3.value) > 0:
-            raise FaultState.error("Alarm Status Speicher ist ungleich 0.")
-
         bat_state = BatState(
             power=watt1.value * -1,
             soc=socx.value * 100,
@@ -37,6 +38,11 @@ class RctBat:
             exported=watt3.value
         )
         self.store.set(bat_state)
+        if (stat1.value + stat2.value + stat3.value) > 0:
+            # Werte werden trotz Fehlercode übermittelt.
+            log.warning(
+                "Alarm Status Speicher ist ungleich 0. Status 1: " + str(stat1.value) + ", Status 2: " +
+                str(stat2.value) + ", Status 3: " + str(stat3.value))
 
 
 component_descriptor = ComponentDescriptor(configuration_factory=RctBatSetup)
