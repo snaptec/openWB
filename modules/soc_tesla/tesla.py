@@ -318,7 +318,7 @@ def refreshToken(email):
 
 def listCars():
     myList = []
-    myVehicles = requestData('vehicles')
+    myVehicles = requestData('products')
     for index, car in enumerate(json.loads(myVehicles)["response"]):
         myList.append(json.loads("{\"id\":\"%s\", \"vin\":\"%s\", \"name\":\"%s\"}" %
                       (index, car["vin"], car["display_name"])))
@@ -326,7 +326,7 @@ def listCars():
 
 
 def getVehicleIdByVin(vin):
-    myVehicles = requestData('vehicles')
+    myVehicles = requestData('products')
     for car in json.loads(myVehicles)["response"]:
         if(verbose):
             eprint("VIN: %s" % (car["vin"]))
@@ -341,7 +341,7 @@ def getVehicleIdByVin(vin):
 
 
 def getVehicleIdByIndex(index):
-    myVehicles = requestData('vehicles')
+    myVehicles = requestData('products')
     myVehicleId = json.loads(myVehicles)["response"][index]["id"]
     if(verbose):
         eprint("vehicle_id for entry %d: %s" % (index, str(myVehicleId)))
