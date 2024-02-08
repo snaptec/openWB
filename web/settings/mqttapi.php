@@ -8,7 +8,7 @@ if(isset($_GET["topic"])) {
 		$message = $_GET["message"];
 		# check if topic is allowed to write
 		if(strpos($topic, "/set/") !== false){
-			$command = "mosquitto_pub -h localhost -t '$topic' -m '$message' 2>&1";
+			$command = "mosquitto_pub -h localhost -t " . escapeshellarg($topic) . " -m " . escapeshellarg($message) . " 2>&1";
 			$output = exec($command);
 			# Skip an annoying warning because it doesn't cause any problems
 			$output = str_replace("Warning: Unable to locate configuration directory, default config not loaded.", "", $output);
@@ -29,7 +29,7 @@ if(isset($_GET["topic"])) {
 	}
 	# reading topic
 	else{
-		$command = "mosquitto_sub -h localhost -t '$topic' -C 1 -W 1 2>&1";
+		$command = "mosquitto_sub -h localhost -t " . escapeshellarg($topic) . " -C 1 -W 1 2>&1";
 		$output = exec($command);
 		# Skip an annoying warning because it doesn't cause any problems
 		$output = str_replace("Warning: Unable to locate configuration directory, default config not loaded.", "", $output);
