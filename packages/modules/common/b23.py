@@ -25,7 +25,7 @@ class B23(AbstractCounter):
         # reading of total power and power per phase in one call
         powers = [val / 100 for val in self.client.read_holding_registers(
             0x5B14, [ModbusDataType.INT_32]*4, unit=self.id)]
-        return powers[1:3], powers[0]
+        return powers[1:4], powers[0]
 
     def get_power_factors(self) -> List[float]:
         return [val / 1000 for val in self.client.read_holding_registers(
