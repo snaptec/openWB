@@ -103,6 +103,8 @@ if count5 == 0:
         neupowertarget = int((uberschuss + aktpower) * faktor)
     if neupowertarget < 0:
         neupowertarget = 0
+    if instpower > cap:
+        cap = instpower
     if neupowertarget > int(cap * faktor):
         neupowertarget = int(cap * faktor)
     # status nach handbuch Thor
