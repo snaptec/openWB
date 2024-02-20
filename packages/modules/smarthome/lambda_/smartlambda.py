@@ -15,7 +15,7 @@ class Slambda(Sbase):
         argumentList = ['python3', self._prefixpy + 'lambda_/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self.device_lambdaueb),
-                        str(forcesend)]
+                        str(forcesend), str(self.pvwatt)]
         try:
             self.callpro(argumentList)
             self.answer = self.readret()

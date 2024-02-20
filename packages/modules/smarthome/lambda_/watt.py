@@ -16,6 +16,7 @@ ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 uberschussvz = str(sys.argv[4])
 forcesend = int(sys.argv[5])
+pvwatt = int(sys.argv[6])
 # forcesend = 0 default acthor time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -72,6 +73,7 @@ if count5 == 0:
         modbuswrite = 1
     neupower = uberschuss
     if (uberschussvz == 'UZ'):
+        neupower = pvwatt
         if neupower < 0:
             neupower = 0
         if neupower > 65535:
@@ -98,7 +100,7 @@ if count5 == 0:
     # modbus write
     if modbuswrite == 1:
         # andernfalls absturz bei negativen Zahlen
-        builder = BinaryPayloadBuilder(byteorder=Endian.Big)
+        builder = BinaryPayloadBuilder(byteorder=Endian.BIG)
         builder.reset()
         builder.add_16bit_int(neupower)
         pay = builder.to_registers()
