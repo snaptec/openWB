@@ -71,31 +71,30 @@ class Device(AbstractDevice):
                 self.device_config.id, component_config, self.client))
             if component_type == "inverter" or component_type == "external_inverter":
                 self.inverter_counter += 1
-            with self.client:
-                # try:
-                #     # ToDo: convert to String
-                #     manufacturer = self.client.read_holding_registers(40004, [modbus.ModbusDataType.UINT_32]*8,
-                #                                                       unit=component_config.configuration.modbus_id)
-                #     # ToDo: convert to String
-                #     model = self.client.read_holding_registers(40020, [modbus.ModbusDataType.UINT_32]*8,
-                #                                                unit=component_config.configuration.modbus_id)
-                #     # ToDo: convert to String
-                #     version = self.client.read_holding_registers(40044, [modbus.ModbusDataType.UINT_16]*8,
-                #                                                  unit=component_config.configuration.modbus_id)
-                #     serial_number = self.client.read_holding_registers(40052, [modbus.ModbusDataType.UINT_32]*8,
-                #                                                        unit=component_config.configuration.modbus_id)
-                #     log.debug("Version: " + str(version))
-                # except Exception as e:
-                #     log.exception("Fehler beim Auslesen der Modbus-Register: " + str(e))
-                #     pass
-                if self.client.read_holding_registers(40121, modbus.ModbusDataType.UINT_16,
-                                                      unit=component_config.configuration.modbus_id
-                                                      ) == synergy_unit_identifier:
-                    log.debug("Synergy Units supported")
-                    self.synergy_units = int(self.client.read_holding_registers(
-                        40129, modbus.ModbusDataType.UINT_16,
-                        unit=component_config.configuration.modbus_id)) or 1
-                    log.debug("Synergy Units detected: %s", self.synergy_units)
+            # try:
+            #     # ToDo: convert to String
+            #     manufacturer = self.client.read_holding_registers(40004, [modbus.ModbusDataType.UINT_32]*8,
+            #                                                       unit=component_config.configuration.modbus_id)
+            #     # ToDo: convert to String
+            #     model = self.client.read_holding_registers(40020, [modbus.ModbusDataType.UINT_32]*8,
+            #                                                unit=component_config.configuration.modbus_id)
+            #     # ToDo: convert to String
+            #     version = self.client.read_holding_registers(40044, [modbus.ModbusDataType.UINT_16]*8,
+            #                                                  unit=component_config.configuration.modbus_id)
+            #     serial_number = self.client.read_holding_registers(40052, [modbus.ModbusDataType.UINT_32]*8,
+            #                                                        unit=component_config.configuration.modbus_id)
+            #     log.debug("Version: " + str(version))
+            # except Exception as e:
+            #     log.exception("Fehler beim Auslesen der Modbus-Register: " + str(e))
+            #     pass
+            if self.client.read_holding_registers(40121, modbus.ModbusDataType.UINT_16,
+                                                    unit=component_config.configuration.modbus_id
+                                                    ) == synergy_unit_identifier:
+                log.debug("Synergy Units supported")
+                self.synergy_units = int(self.client.read_holding_registers(
+                    40129, modbus.ModbusDataType.UINT_16,
+                    unit=component_config.configuration.modbus_id)) or 1
+                log.debug("Synergy Units detected: %s", self.synergy_units)
             if component_type == "external_inverter" or component_type == "counter" or component_type == "inverter":
                 self.set_component_registers(self.components.values(), self.synergy_units)
         else:
@@ -203,7 +202,6 @@ def read_legacy(component_type: str,
     if component_type == "counter":
         dev.add_component(SolaredgeCounterSetup(
             id=num, configuration=SolaredgeCounterConfiguration(modbus_id=int(slave_id0))))
-        time.sleep(reconnect_delay)
         log.debug('Solaredge ModbusID: ' + str(slave_id0))
         dev.update()
     elif component_type == "inverter":
