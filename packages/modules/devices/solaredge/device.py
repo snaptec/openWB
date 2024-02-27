@@ -88,8 +88,8 @@ class Device(AbstractDevice):
             #     log.exception("Fehler beim Auslesen der Modbus-Register: " + str(e))
             #     pass
             if self.client.read_holding_registers(40121, modbus.ModbusDataType.UINT_16,
-                                                    unit=component_config.configuration.modbus_id
-                                                    ) == synergy_unit_identifier:
+                                                  unit=component_config.configuration.modbus_id
+                                                  ) == synergy_unit_identifier:
                 log.debug("Synergy Units supported")
                 self.synergy_units = int(self.client.read_holding_registers(
                     40129, modbus.ModbusDataType.UINT_16,
@@ -255,13 +255,13 @@ def read_legacy(component_type: str,
                     total_power = state.power
                     total_energy = state.exported
 
-                if batwrsame == 1:
-                    zweiterspeicher = 0
-                    bat_power, bat_state = get_bat_state()
-                    if state.dc_power is None or state.dc_power <= 0:
-                        total_power -= sum(bat_power)
-                    total_energy = total_energy + bat_state.imported - bat_state.exported
-                    get_bat_value_store(1).set(bat_state)
+                    if batwrsame == 1:
+                        zweiterspeicher = 0
+                        bat_power, bat_state = get_bat_state()
+                        if state.dc_power is None or state.dc_power <= 0:
+                            total_power -= sum(bat_power)
+                        total_energy = total_energy + bat_state.imported - bat_state.exported
+                        get_bat_value_store(1).set(bat_state)
                 device_config = Solaredge(configuration=SolaredgeConfiguration(ip_address=ip2address))
                 dev = Device(device_config)
                 inv = create_inverter(int(slave_id0))
