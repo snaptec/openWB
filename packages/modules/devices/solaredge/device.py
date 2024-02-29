@@ -2,6 +2,7 @@
 import logging
 from operator import add
 from statistics import mean
+import time
 from typing import Dict, Iterable, Tuple, Union, Optional, List
 from urllib3.util import parse_url
 
@@ -30,6 +31,8 @@ log = logging.getLogger(__name__)
 solaredge_component_classes = Union[SolaredgeBat, SolaredgeCounter,
                                     SolaredgeExternalInverter, SolaredgeInverter]
 default_unit_id = 85
+synergy_unit_identifier = 160
+reconnect_delay = 1.2
 
 
 class Device(AbstractDevice):
@@ -68,10 +71,30 @@ class Device(AbstractDevice):
                 self.device_config.id, component_config, self.client))
             if component_type == "inverter" or component_type == "external_inverter":
                 self.inverter_counter += 1
-            self.synergy_units = int(self.client.read_holding_registers(
-                40129, modbus.ModbusDataType.UINT_16,
-                unit=component_config.configuration.modbus_id)) or 1
-            log.debug("Synergy Units: %s", self.synergy_units)
+            # try:
+            #     # ToDo: convert to String
+            #     manufacturer = self.client.read_holding_registers(40004, [modbus.ModbusDataType.UINT_32]*8,
+            #                                                       unit=component_config.configuration.modbus_id)
+            #     # ToDo: convert to String
+            #     model = self.client.read_holding_registers(40020, [modbus.ModbusDataType.UINT_32]*8,
+            #                                                unit=component_config.configuration.modbus_id)
+            #     # ToDo: convert to String
+            #     version = self.client.read_holding_registers(40044, [modbus.ModbusDataType.UINT_16]*8,
+            #                                                  unit=component_config.configuration.modbus_id)
+            #     serial_number = self.client.read_holding_registers(40052, [modbus.ModbusDataType.UINT_32]*8,
+            #                                                        unit=component_config.configuration.modbus_id)
+            #     log.debug("Version: " + str(version))
+            # except Exception as e:
+            #     log.exception("Fehler beim Auslesen der Modbus-Register: " + str(e))
+            #     pass
+            if self.client.read_holding_registers(40121, modbus.ModbusDataType.UINT_16,
+                                                  unit=component_config.configuration.modbus_id
+                                                  ) == synergy_unit_identifier:
+                log.debug("Synergy Units supported")
+                self.synergy_units = int(self.client.read_holding_registers(
+                    40129, modbus.ModbusDataType.UINT_16,
+                    unit=component_config.configuration.modbus_id)) or 1
+                log.debug("Synergy Units detected: %s", self.synergy_units)
             if component_type == "external_inverter" or component_type == "counter" or component_type == "inverter":
                 self.set_component_registers(self.components.values(), self.synergy_units)
         else:
@@ -232,13 +255,13 @@ def read_legacy(component_type: str,
                     total_power = state.power
                     total_energy = state.exported
 
-                if batwrsame == 1:
-                    zweiterspeicher = 0
-                    bat_power, bat_state = get_bat_state()
-                    if state.dc_power is None or state.dc_power <= 0:
-                        total_power -= sum(bat_power)
-                    total_energy = total_energy + bat_state.imported - bat_state.exported
-                    get_bat_value_store(1).set(bat_state)
+                    if batwrsame == 1:
+                        zweiterspeicher = 0
+                        bat_power, bat_state = get_bat_state()
+                        if state.dc_power is None or state.dc_power <= 0:
+                            total_power -= sum(bat_power)
+                        total_energy = total_energy + bat_state.imported - bat_state.exported
+                        get_bat_value_store(1).set(bat_state)
                 device_config = Solaredge(configuration=SolaredgeConfiguration(ip_address=ip2address))
                 dev = Device(device_config)
                 inv = create_inverter(int(slave_id0))
@@ -250,6 +273,7 @@ def read_legacy(component_type: str,
                         state = get_external_inverter_state(dev, int(slave_id0))
                         total_power += state.power
                 get_inverter_value_store(num).set(InverterState(exported=total_energy, power=total_power))
+        time.sleep(reconnect_delay)
 
     elif component_type == "bat":
         with SingleComponentUpdateContext(ComponentInfo(0, "Solaredge Speicher", "bat")):
