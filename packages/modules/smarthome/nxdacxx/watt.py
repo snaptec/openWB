@@ -37,7 +37,7 @@ if count5 > 3:
 with open(file_stringcount5, 'w') as f:
     f.write(str(count5))
 modbuswrite = 0
-if dactyp == 3:
+if (dactyp == 3) or (dactyp == 1):
     neupower = uberschuss + aktpoweralt
 else:
     neupower = uberschuss
