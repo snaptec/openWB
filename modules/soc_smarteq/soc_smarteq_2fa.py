@@ -11,7 +11,6 @@ import copy
 import urllib
 import uuid
 
-
 # Constants
 BASE_URL = "https://id.mercedes-benz.com"
 TOKEN_URL = BASE_URL + "/as/token.oauth2"
@@ -20,17 +19,17 @@ STATUS_URL_MERCEDES = "https://bff.emea-prod.mobilesdk.mercedes-benz.com"
 SCOPE = "openid+profile+email+phone+ciam-uid+offline_access"
 CLIENT_ID = "70d89501-938c-4bec-82d0-6abb550b0825"
 GUID = "280C6B55-F179-4428-88B6-E0CCF5C22A7C"
-ACCEPT_LANGUAGE = "de-de"
+ACCEPT_LANGUAGE = "de-DE;q=1.0"
 SSL_VERIFY_STATUS = True
 LOGIN_APP_ID = "01398c1c-dc45-4b42-882b-9f5ba9f175f1"
 COUNTRY_CODE = "DE"
 X_APPLICATIONNAME_ECE = "mycar-store-ece"
-RIS_APPLICATION_VERSION = "1.39.0 (2066)"
+RIS_APPLICATION_VERSION = "1.40.0 (2097)"
 RIS_OS_NAME = "ios"
-RIS_OS_VERSION = "16.5"
-RIS_SDK_VERSION = "2.109.0"
+RIS_OS_VERSION = "17.3"
+RIS_SDK_VERSION = "2.111.1"
 X_LOCALE = "de-DE"
-WEBSOCKET_USER_AGENT = "MyCar/1.30.1 (com.daimler.ris.mercedesme.ece.ios; build:1819; iOS 16.5.0) Alamofire/5.4.0"
+WEBSOCKET_USER_AGENT = "MyCar/1.40.0 (com.daimler.ris.mercedesme.ece.ios; build:2097; iOS 17.3.0) Alamofire/5.4.0"
 STATUS_USER_AGENT = "Device: iPhone 6; OS-version: iOS_12.5.1; App-Name: smart EQ control; App-Version: 3.0;\
                     Build: 202108260942; Language: de_DE"
 CONTENT_TYPE_OAUTH = "application/x-www-form-urlencoded"
@@ -164,9 +163,33 @@ class smarteq:
     def set_chargepoint(self, chargepoint: str):
         self.chargepoint = chargepoint
 
+
+# 2fa authentication functions
     # send request for new pin to oauth server
     def request_pin(self, email: str, nonce: str):
         self.log.debug("Start request_pin: email=" + email + ", nonce=" + nonce)
+
+        headers = {
+            "Host": "bff.emea-prod.mobilesdk.mercedes-benz.com",
+            "Ris-Os-Name": RIS_OS_NAME,
+            "Ris-Os-Version": RIS_OS_VERSION,
+            "Ris-Sdk-Version": RIS_SDK_VERSION,
+            "X-Locale": X_LOCALE,
+            "X-Trackingid": str(uuid.uuid4()),
+            "X-Sessionid": str(uuid.uuid4()),
+            "User-Agent": WEBSOCKET_USER_AGENT,
+            "Content-Type": CONTENT_TYPE,
+            "X-Applicationname": X_APPLICATIONNAME_ECE,
+            "Accept": ACCEPT,
+            "Accept-Encoding": "gzip, deflate, br",
+            "Ris-Application-Version": RIS_APPLICATION_VERSION
+        }
+
+        url = STATUS_URL_MERCEDES + "/v1/config"
+        self.log.info("request_pin-get: url=" + url +
+                      ", headers=" + json.dumps(headers, indent=4))
+        response1 = self.session.get(url, headers=headers)
+        self.log.info("Result request_pin get: %s", response1)
 
         url = STATUS_URL_MERCEDES + "/v1/login"
         d = {
@@ -175,24 +198,6 @@ class smarteq:
              "nonce": nonce
         }
         data = json.dumps(d)
-
-        headers = {
-            "Ris-Os-Name": RIS_OS_NAME,
-            "Ris-Os-Version": RIS_OS_VERSION,
-            "Ris-Sdk-Version": RIS_SDK_VERSION,
-            "X-Locale": X_LOCALE,
-            "Accept": ACCEPT,
-            "Accept-Language": ACCEPT_LANGUAGE,
-            "X-Trackingid": str(uuid.uuid4()),
-            "X-Sessionid": str(uuid.uuid4()),
-            "X-Requestid": str(uuid.uuid4()),
-            "device-id": str(uuid.uuid4()),
-            "User-Agent": WEBSOCKET_USER_AGENT,
-            "Content-Type": CONTENT_TYPE,
-            "X-Applicationname": X_APPLICATIONNAME_ECE,
-            "Ris-Application-Version": RIS_APPLICATION_VERSION,
-            "X-Authmode": "KEYCLOAK"
-        }
 
         self.log.info("request_pin-post: url=" + url +
                       ", data=" + json.dumps(data, indent=4) +
