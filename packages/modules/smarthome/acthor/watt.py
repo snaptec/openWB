@@ -42,7 +42,10 @@ neupower = 0
 if instpower == 0:
     instpower = 1000
 cap = 9000
-if atype == "9s27":
+if atype == "9s45":
+    faktor = 45000/instpower
+    cap = 45000
+elif atype == "9s27":
     faktor = 27000/instpower
     cap = 27000
 elif atype == "9s18":

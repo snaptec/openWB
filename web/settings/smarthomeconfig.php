@@ -409,7 +409,8 @@ $numDevices = 9;
 												<option value="M3" data-option="M3">Acthor M3</option>
 												<option value="9s" data-option="9s">Acthor 9s</option>
 												<option value="9s18" data-option="9s18">Acthor 9s Dual 18k</option>
-												<option value="9s27" data-option="9s27">Acthor 9s Trippel 27k</option>
+												<option value="9s27" data-option="9s27">Acthor 9s boost 27k</option>
+												<option value="9s45" data-option="9s45">Acthor 9s boost 45k</option>
 											</select>
 											<span class="form-text small">
 												Hier ist das installierte Modell auszuwählen.
