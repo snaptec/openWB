@@ -1073,6 +1073,7 @@ loadvars(){
 	verb3_w=$(printf "%.0f\n" $verb3_w)
 
 	#hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shd1_w - shd2_w - shd3_w - shd4_w - shd5_w - shd6_w - shd7_w - shd8_w - shd9_w - verb1_w - verb2_w - verb3_w))
+	openwbDebugLog "Main" 0 "Hausverbrauch: Wattbezug: $wattbezugint ; PVWatt: $pvwatt ;  Ladeleistung: $ladeleistung ; Speicherleistung: $speicherleistung ; SHDall: $shdall_w ; Verb1: $verb1_w ; Verb2: $verb2_w ; Verb3: $verb3_w"
 	hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shdall_w - verb1_w - verb2_w - verb3_w))
 	if ((hausverbrauch < 0)); then
 		if [ -f /var/www/html/openWB/ramdisk/hausverbrauch.invalid ]; then
