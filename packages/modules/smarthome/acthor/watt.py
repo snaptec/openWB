@@ -14,6 +14,8 @@ uberschuss = int(sys.argv[3])
 atype = str(sys.argv[4])
 instpower = int(sys.argv[5])
 forcesend = int(sys.argv[6])
+aktpoweralt = int(sys.argv[7])
+measuretyp = str(sys.argv[8])
 # forcesend = 0 default time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -73,6 +75,11 @@ resp = client.read_holding_registers(start, 35, unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 aktpower = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+# sofern externe Messung wird dieser Wert genommen
+if measuretyp == 'empty':
+    aktpower = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+else:
+    aktpower = aktpoweralt
 # Wassertemperatur lesen
 # Temp0 Warmwasser 1001
 # Temp1 1030 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
@@ -139,8 +146,8 @@ if count5 == 0:
         f.write(str(count1))
     # mehr log schreiben
     if count1 < 3:
-        log.info(" watt devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d Status %2d" %
-                 (devicenumber, ipadr, uberschuss, aktpower, status))
+        log.info(" watt devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d Status %2d Externe Messung %s" %
+                 (devicenumber, ipadr, uberschuss, aktpower, status, measuretyp))
         log.info(" watt devicenr %d ipadr %s Neu Leistung %6d pvmodus %1d modbuswrite %1d" %
                  (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
         log.info(" watt devicenr %d ipadr %s type %s inst. Leistung %6d Skalierung %.2f" %
