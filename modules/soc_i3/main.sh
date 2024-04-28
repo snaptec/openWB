@@ -1,10 +1,10 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd "$(dirname "$0")" && pwd)
+export OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+export RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+export MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 LOGFILE="$RAMDISKDIR/soc.log"
 DMOD="EVSOC"
-CHARGEPOINT=$1
+export CHARGEPOINT=$1
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
