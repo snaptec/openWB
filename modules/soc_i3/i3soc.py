@@ -14,7 +14,16 @@ import hashlib
 # ---------------Constants-------------------------------------------
 auth_server = 'customer.bmwgroup.com'
 api_server = 'cocoapi.bmwgroup.com'
-REGION = '0'                            # rest_of_world
+APIKey = b'NGYxYzg1YTMtNzU4Zi1hMzdkLWJiYjYtZjg3MDQ0OTRhY2Zh'
+USER_AGENT = 'Dart/3.0 (dart:io)'
+REGION = '0'        # 0 = rest_of_world
+BRAND = 'bmw'       # for auth bmw or mini don't matter
+X_USER_AGENT1 = 'android(TQ2A.230405.003.B2);'
+X_USER_AGENT2 = ';3.11.1(29513);'
+X_USER_AGENT = X_USER_AGENT1 + BRAND + X_USER_AGENT2 + REGION
+CONTENT_TYPE = 'application/x-www-form-urlencoded'
+CHARSET = 'charset=UTF-8'
+
 storeFile = 'i3soc.json'
 
 
@@ -105,9 +114,9 @@ def write_store():
     json.dump(store, tf, indent=4)
     tf.close()
     try:
-        os.chmod(storeFile, 0o777)
+        os.chmod(storeFile, 0o666)
     except Exception as e:
-        os.system("sudo chmod 0777 " + storeFile)
+        os.system("sudo chmod 0666 " + storeFile)
 
 
 # ---------------HTTP Function-------------------------------------------
@@ -158,12 +167,11 @@ def postHTTP(url: str = '', data: str = '', headers: str = '', cookies: str = ''
         raise RuntimeError
 
 
-def authStage0(region: str) -> str:
+def authStage0() -> str:
     try:
         id0 = str(uuid.uuid4())
         id1 = str(uuid.uuid4())
-        apiKey = b'NGYxYzg1YTMtNzU4Zi1hMzdkLWJiYjYtZjg3MDQ0OTRhY2Zh'
-        ocp = base64.b64decode(apiKey).decode()
+        ocp = base64.b64decode(APIKey).decode()
         url = 'https://' + api_server + '/eadrax-ucs/v1/presentation/oauth/config'
         headers = {
             'ocp-apim-subscription-key': ocp,
@@ -171,8 +179,8 @@ def authStage0(region: str) -> str:
             'x-identity-provider': 'gcdm',
             'x-correlation-id': id1,
             'bmw-correlation-Id': id1,
-            'user-agent': 'Dart/3.0 (dart:io)',
-            'x-user-agent': 'android(TQ2A.230405.003.B2);bmw;3.11.1(29513);' + region}
+            'user-agent': USER_AGENT,
+            'x-user-agent': X_USER_AGENT}
         body = getHTTP(url, headers)
         cfg = json.loads(body)
     except:
@@ -191,9 +199,9 @@ def authStage1(url: str,
     global config
     try:
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'user-agent': 'Dart/3.0 (dart:io)',
-            'x-user-agent': 'android(TQ2A.230405.003.B2);bmw;3.11.1(29513);0'}
+            'Content-Type': CONTENT_TYPE,
+            'user-agent': USER_AGENT,
+            'x-user-agent': X_USER_AGENT}
         data = {
             'client_id': config['clientId'],
             'response_type': 'code',
@@ -221,9 +229,9 @@ def authStage1(url: str,
 def authStage2(url: str, authcode1: str, code_challenge: str, state: str, nonce: str) -> str:
     try:
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'user-agent': 'Dart/3.0 (dart:io)',
-            'x-user-agent': 'android(TQ2A.230405.003.B2);bmw;3.11.1(29513);0'}
+            'Content-Type': CONTENT_TYPE,
+            'user-agent': USER_AGENT,
+            'x-user-agent': X_USER_AGENT}
         data = {
             'client_id': config['clientId'],
             'response_type': 'code',
@@ -253,10 +261,7 @@ def authStage3(token_url: str, authcode2: str, code_verifier: str) -> dict:
     try:
         url = token_url
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Authorization': (config['clientId'], config['clientSecret'])}
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+            'Content-Type': CONTENT_TYPE + '; ' + CHARSET}
         data = {
             'code': authcode2,
             'code_verifier': code_verifier,
@@ -281,7 +286,7 @@ def requestToken(username: str, password: str) -> dict:
     try:
         # new: get oauth config from server
         method += ' requestToken'
-        config = authStage0(REGION)
+        config = authStage0()
         _debug('config=\n' + json.dumps(config, indent=4))
         token_url = config['tokenEndpoint']
         authenticate_url = token_url.replace('/token', '/authenticate')
@@ -305,12 +310,12 @@ def refreshToken(refreshToken: str) -> dict:
     global method
     try:
         method += ' refreshToken'
-        config = authStage0(REGION)
+        config = authStage0()
         url = config['tokenEndpoint']
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'user-agent': 'Dart/3.0 (dart:io)',
-            'x-user-agent': 'android(TQ2A.230405.003.B2);bmw;3.11.1(29513);0'}
+            'Content-Type': CONTENT_TYPE,
+            'user-agent': USER_AGENT,
+            'x-user-agent': X_USER_AGENT}
         data = {
             'scope': ' '.join(config['scopes']),
             'redirect_uri': config['returnUrl'],
@@ -342,8 +347,8 @@ def requestData(token: str, vin: str) -> dict:
 
         url = 'https://' + api_server + '/eadrax-vcs/v4/vehicles/state'
         headers = {
-            'user-agent': 'Dart/3.0 (dart:io)',
-            'x-user-agent': 'android(TQ2A.230405.003.B2);' + brand + ';3.11.1(29513);0',
+            'user-agent': USER_AGENT,
+            'x-user-agent': X_USER_AGENT1 + brand + X_USER_AGENT2 + REGION,
             'bmw-vin': vin,
             'Authorization': (token["token_type"] + " " + token["access_token"])}
         body = getHTTP(url, headers)
