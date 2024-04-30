@@ -91,7 +91,7 @@ if (( soctimer < (6 * intervall) )); then
 
 		ARGSB64=$(echo -n $ARGS | base64 --wrap=0)
 
-		sudo python3 "$MODULEDIR/manual.py" "$ARGSB64" &>> $LOGFILE &
+		python3 "$MODULEDIR/manual.py" "$ARGSB64" &>> $LOGFILE &
 
 		soclevel=$(<"$socfile")
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"
@@ -113,7 +113,7 @@ else
 
 	ARGSB64=$(echo -n $ARGS | base64 --wrap=0)
 
-	sudo python3 "$MODULEDIR/i3soc.py" "$ARGSB64" &>> $LOGFILE &
+	python3 "$MODULEDIR/i3soc.py" "$ARGSB64" &>> $LOGFILE &
 
 	soclevel=$(<"$socfile")
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"
