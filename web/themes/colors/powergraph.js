@@ -566,7 +566,7 @@ class PowerGraph {
 		values.lp0 = +elements[4];
 		values.lp1 = +elements[5];
 		for (i = 2; i < 9; i++) {
-			values["lp" + i] = +elements[11 + i];
+			values["lp" + i] = +elements[12 + i];
 		}
 		values.soc1 = +elements[9];
 		values.soc2 = +elements[10];
