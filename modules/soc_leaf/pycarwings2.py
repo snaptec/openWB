@@ -118,7 +118,7 @@ class Session(object):
         else:
             params["custom_sessionid"] = ""
 
-        req = Request('POST', url=BASE_URL + endpoint, data=params, headers={"User-Agent": ""}).prepare()
+        req = Request('POST', url=BASE_URL + endpoint, data=params).prepare()
 
         log.debug("invoking carwings API: %s" % req.url)
         log.debug("params: %s" % json.dumps(
