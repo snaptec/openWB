@@ -81,7 +81,7 @@ $numDevices = 9;
 											<option value="none" data-option="none" selected="selected">Kein Gerät</option>
 											<option value="shelly" data-option="shelly">Shelly oder Shelly plus</option>
 											<option value="tasmota" data-option="tasmota">Tasmota</option>
-											<option value="acthor" data-option="acthor">Acthor</option>
+											<option value="acthor" data-option="acthor">Acthor oder Elwa2</option>
 											<option value="lambda" data-option="lambda">Lambda</option>
 											<option value="elwa" data-option="elwa">Elwa</option>
 											<option value="idm" data-option="idm">Idm</option>
@@ -107,6 +107,7 @@ $numDevices = 9;
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
 											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
 											Wenn Acthor als Gerät 1 oder 2 definiert ist, wird die Warmwassertemperatur als Temp1 angezeigt (Modbusadresse 1001). Ebenso wird Temp2 (Modbusadresse 1030) und Temp3 (Modbusadresse 1031) angezeigt (falls angeschlossen).
+											Elwa2 hat fast die gleich Schnittstelle wie Acthor.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-lambda hide">
 											Wp der Firma lambda<br>
@@ -407,6 +408,8 @@ $numDevices = 9;
 											<select class="form-control" name="device_acthortype" id="device_acthortypeDevices<?php echo $devicenum; ?>" data-default="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												<option value="M1" data-option="M1">Acthor M1</option>
 												<option value="M3" data-option="M3">Acthor M3</option>
+												<option value="E2M1" data-option="E2M1">Elwa2 M1</option>
+												<option value="E2M3" data-option="E2M3">Elwa2 M3</option>
 												<option value="9s" data-option="9s">Acthor 9s</option>
 												<option value="9s18" data-option="9s18">Acthor 9s Dual 18k</option>
 												<option value="9s27" data-option="9s27">Acthor 9s boost 27k</option>
