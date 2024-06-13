@@ -88,7 +88,7 @@ else:
 # Temp0 Warmwasser 1001
 # Temp1 1030 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
 # Temp2 1031 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
-# elwa2 hat nur zwei temp fühler
+# elwa2 hat nur zwei temp Fuehler
 value1 = resp.registers[1]
 all = format(value1, '04x')
 temp0int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
