@@ -197,7 +197,7 @@ def create_smart_home_device_config_handler() -> TopicHandler:
         "device_measureavmusername": create_topic_handler(),
         "device_measureavmpassword": create_topic_handler(),
         "device_measureavmactor": create_topic_handler(),
-        "device_acthortype": create_topic_handler(equals_one_of_validator("M1", "M3", "9s", "9s18", "9s27", "9s45")),
+        "device_acthortype": create_topic_handler(equals_one_of_validator("M1", "M3", "9s", "9s18", "9s27", "9s45", "E2M1", "E2M3")),
         "device_lambdaueb": create_topic_handler(equals_one_of_validator("UP", "UN", "UZ")),
         "device_idmueb": create_topic_handler(equals_one_of_validator("UP", "UZ")),
         "device_acthorpower": create_topic_handler(int_range_validator(0, 50000)),
