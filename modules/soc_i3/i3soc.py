@@ -15,11 +15,11 @@ import hashlib
 auth_server = 'customer.bmwgroup.com'
 api_server = 'cocoapi.bmwgroup.com'
 APIKey = b'NGYxYzg1YTMtNzU4Zi1hMzdkLWJiYjYtZjg3MDQ0OTRhY2Zh'
-USER_AGENT = 'Dart/3.0 (dart:io)'
+USER_AGENT = 'Dart/3.3 (dart:io)'
 REGION = '0'        # 0 = rest_of_world
 BRAND = 'bmw'       # for auth bmw or mini don't matter
-X_USER_AGENT1 = 'android(TQ2A.230405.003.B2);'
-X_USER_AGENT2 = ';3.11.1(29513);'
+X_USER_AGENT1 = 'android(AP2A.240605.024);'
+X_USER_AGENT2 = ';4.7.2(35379);'
 X_USER_AGENT = X_USER_AGENT1 + BRAND + X_USER_AGENT2 + REGION
 CONTENT_TYPE = 'application/x-www-form-urlencoded'
 CHARSET = 'charset=UTF-8'
