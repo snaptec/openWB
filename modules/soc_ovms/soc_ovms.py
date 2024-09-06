@@ -110,7 +110,11 @@ def main():
                         datefmt=datefmt,
                         level=LOGLEVEL)
 
-    log.debug("server=" + OVMS_SERVER + ", user=" + id + ", pw=" + pw + ", vehicleId=" + vehicleId + ", cp=" + chargepoint)
+    log.debug("server=" + OVMS_SERVER +
+              ", user=" + id +
+              ", pw=" + pw +
+              ", vehicleId=" + vehicleId +
+              ", cp=" + chargepoint)
     RAMDISKDIR = os.environ.get("RAMDISKDIR", "undefined")
     tokenFile = RAMDISKDIR+'/soc_ovms_tokenlp'+chargepoint
 
