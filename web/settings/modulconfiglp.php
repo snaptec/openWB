@@ -763,6 +763,7 @@
 										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
+										<option <?php if($socmodulold == "soc_ovms") echo "selected" ?> value="soc_ovms">OVMS</option>
 										<option <?php if($socmodulold == "soc_smarteq") echo "selected" ?> value="soc_smarteq">smart EQ</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
@@ -1288,6 +1289,69 @@
 										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmovms" class="hide">
+								<div class="form-group">
+									<div class="alert alert-info">
+										Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
+										- OVMS Account in z.B. dexters-web.de<br>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_server" class="col-md-4 col-form-label">Server URL</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_ovms_server" id="soc_ovms_server" value="<?php echo $soc_ovms_serverold ?>">
+											<span class="form-text small">
+												URL des OVMS Servers incl. Port.<br>
+												z.B. https://ovms.dexters-web.de:6869<br>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_ovms_username" id="soc_ovms_username" value="<?php echo $soc_ovms_usernameold ?>">
+											<span class="form-text small">
+												User Name des Accounts in z.B. dexters-web.de.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_ovms_passwort" id="soc_ovms_passwort" value="<?php echo $soc_ovms_passwortold ?>">
+											<span class="form-text small">
+												Password des Accounts.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_vehicleid" class="col-md-4 col-form-label">Vehicle Id</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_ovms_vehicleid" id="soc_ovms_vehicleid" value="<?php echo $soc_ovms_vehicleidold ?>">
+											<span class="form-text small">
+												OVMS vehicleId des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervall" id="soc_ovms_intervall" value="<?php echo $soc_ovms_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervallladen" id="soc_ovms_intervallladen" value="<?php echo $soc_ovms_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -2389,6 +2453,7 @@
 							hideSection('#socmaudi');
 							hideSection('#socmid');
 							hideSection('#socmvwid');
+							hideSection('#socmovms');
 							hideSection('#socmsmarteq');
 							hideSection('#socvag');
 							hideSection('#socevcc');
@@ -2423,6 +2488,11 @@
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4803')
 								showSection('#socsupportinfo');
 								showSection('#socmvwid');
+							}
+							if($('#socmodul').val() == 'soc_ovms') {
+								$('#socsuportlink').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
+								showSection('#socsupportinfo');
+								showSection('#socmovms');
 							}
 							if($('#socmodul').val() == 'soc_smarteq') {
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
@@ -3103,6 +3173,7 @@
 										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
+										<option <?php if($socmodul1old == "soc_ovmslp2") echo "selected" ?> value="soc_ovmslp2">OVMS</option>
 										<option <?php if($socmodul1old == "soc_smarteqlp2") echo "selected" ?> value="soc_smarteqlp2">Smart EQ</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
@@ -3153,6 +3224,10 @@
 								Für VW Fahrzeuge. Es wird benötigt:<br>
 								- We Connect (ID) Account aktiv<br>
 								- We Connect ID App eingerichtet - auch für nicht-ID!<br>
+							</div>
+							<div id="socmovmsinfolp2" class="mt-1 alert alert-info hide">
+								Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
+								- OVMS Account in z.B. dexters-web.de<br>
 							</div>
 							<div id="socmsmarteqinfolp2" class="mt-1 alert alert-info hide">
 								Für smart EQ Fahrzeuge. Es wird benötigt:<br>
@@ -3655,6 +3730,20 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmserver2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2server" class="col-md-4 col-form-label">Server URL</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2server" id="soc2server" value="<?php echo $soc2serverold ?>">
+											<span class="form-text small">
+												URL des OVMS Servers incl. Port.<br>
+												z.B. https://ovms.dexters-web.de:6869<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div id="socmpin2t" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3664,6 +3753,19 @@
 											<span class="form-text small">
 												PIN des Accounts.<br>
 												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmvehicleid2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2vehicleid" class="col-md-4 col-form-label">Vehicle Id</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2vehicleid" id="soc2vehicleid" value="<?php echo $soc2vehicleidold ?>">
+											<span class="form-text small">
+												OVMS vehicleId des Fahrzeugs.
 											</span>
 										</div>
 									</div>
@@ -4415,6 +4517,7 @@
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
 							hideSection('#socmtype2');
+							hideSection('#socmserver2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
@@ -4432,6 +4535,7 @@
 							hideSection('#socmzeronglp2');
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
+							hideSection('#socmvehicleid2');
 							hideSection('#socmintervall2');
 							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
@@ -4440,6 +4544,7 @@
 							hideSection('#socmkialp2');
 							hideSection('#socoldevccwarninglp2');
 							hideSection('#socmvwidinfolp2');
+							hideSection('#socmovmsinfolp2');
 							hideSection('#socmsmarteqinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
@@ -4487,6 +4592,17 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
+							}
+							if($('#socmodul1').val() == 'soc_ovmslp2') {
+								$('#socsuportlinklp2').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
+								showSection('#socsupportinfolp2');
+								showSection('#socmovmsinfolp2');
+								showSection('#socmserver2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvehicleid2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
