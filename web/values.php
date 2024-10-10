@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $result = '';
 $lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 foreach($lines as $line) {
@@ -158,7 +161,44 @@ foreach($lines as $line) {
 	if(strpos($line, "ssdisplay=") !== false) {
 		list(, $ssdisplayold) = explode("=", $line);
 	}
+	if(strpos($line, "unlockscreenrfid=") !== false) {
+		list(, $unlockscreenrfidold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlist=") !== false) {
+		list(, $rfidlistold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlist=") !== false) {
+		list(, $rfidlistold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c1=") !== false) {
+		list(, $rfidlp1c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c2=") !== false) {
+		list(, $rfidlp1c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c3=") !== false) {
+		list(, $rfidlp1c3old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c1=") !== false) {
+		list(, $rfidlp2c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c2=") !== false) {
+		list(, $rfidlp2c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c3=") !== false) {
+		list(, $rfidlp2c3old) = explode("=", $line);
+	}
 }
+
+if (!isset($_GET['rfidlist']) || strlen($_GET['rfidlist']) == 0) {
+	$rfidlist = trim($rfidlistold).",".trim($rfidlp1c1old).",".trim($rfidlp1c2old).",".trim($rfidlp1c3old).",".trim($rfidlp2c1old).",".trim($rfidlp2c2old).",".trim($rfidlp2c3old);
+	if (isset($unlockscreenrfidold) && trim($unlockscreenrfidold) == "1") {
+		header('Location: '.$_SERVER['PHP_SELF'].'?rfidlist='.$rfidlist);
+		die;
+	}
+}
+
+
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);
 
