@@ -1,5 +1,6 @@
 #!/bin/bash
 re='^-?[0-9]+$'
+reVAPf='^-?[0-9]+(\.[0-9]+)?$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
 output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
@@ -10,31 +11,46 @@ if [[ $? == "0" ]] ; then
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuell
 	fi
 	lla1=$(echo $output | jq -r '.nrg[4]')
-	lla1=$(echo "scale=0;$lla1 / 10" |bc)
-	if [[ $lla1 =~ $re ]] ; then
+	lla1=$(echo "scale=1;$lla1 / 10" |bc)
+	if [[ $lla1 =~ $reVAPf ]] ; then
 		echo $lla1 > /var/www/html/openWB/ramdisk/lla1
 	fi
 	lla2=$(echo $output | jq -r '.nrg[5]')
-	lla2=$(echo "scale=0;$lla2 / 10" |bc)
-	if [[ $lla2 =~ $re ]] ; then
+	lla2=$(echo "scale=1;$lla2 / 10" |bc)
+	if [[ $lla2 =~ $reVAPf ]] ; then
 		echo $lla2 > /var/www/html/openWB/ramdisk/lla2
 	fi
 	lla3=$(echo $output | jq -r '.nrg[6]')
-	lla3=$(echo "scale=0;$lla3 / 10" |bc)
-	if [[ $lla3 =~ $re ]] ; then
+	lla3=$(echo "scale=1;$lla3 / 10" |bc)
+	if [[ $lla3 =~ $reVAPf ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/lla3
 	fi
 	llv1=$(echo $output | jq -r '.nrg[0]')
-	if [[ $llv1 =~ $re ]] ; then
+	if [[ $llv1 =~ $reVAPf ]] ; then
 		echo $llv1 > /var/www/html/openWB/ramdisk/llv1
 	fi
 	llv2=$(echo $output | jq -r '.nrg[1]')
-	if [[ $llv2 =~ $re ]] ; then
+	if [[ $llv2 =~ $reVAPf ]] ; then
 		echo $llv2 > /var/www/html/openWB/ramdisk/llv2
 	fi
 	llv3=$(echo $output | jq -r '.nrg[2]')
-	if [[ $llv3 =~ $re ]] ; then
+	if [[ $llv3 =~ $reVAPf ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llv3
+	fi
+	llpf1=$(echo $output | jq -r '.nrg[12]')
+	llpf1=$(echo "scale=2;$llpf1 / 1" |bc)
+	if [[ $llpf1 =~ $reVAPf ]] ; then
+		echo $llpf1 > /var/www/html/openWB/ramdisk/llpf1
+	fi
+	llpf2=$(echo $output | jq -r '.nrg[13]')
+	llpf2=$(echo "scale=2;$llpf2 / 1" |bc)
+	if [[ $llpf2 =~ $reVAPf ]] ; then
+		echo $llpf2 > /var/www/html/openWB/ramdisk/llpf2
+	fi
+	llpf3=$(echo $output | jq -r '.nrg[14]')
+	llpf3=$(echo "scale=2;$llpf3 / 1" |bc)
+	if [[ $llpf3 =~ $reVAPf ]] ; then
+		echo $llpf3 > /var/www/html/openWB/ramdisk/llpf3
 	fi
 	llkwh=$(echo $output | jq -r '.eto')
 	llkwh=$(echo "scale=3;$llkwh / 10" |bc)
