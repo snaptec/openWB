@@ -581,6 +581,12 @@ updateConfig(){
 	if ! grep -Fq "soc_id_intervall=" $ConfigFile; then
 		echo "soc_id_intervall=120" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_ovms_intervallladen=" $ConfigFile; then
+		echo "soc_ovms_intervallladen=20" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_ovms_intervall=" $ConfigFile; then
+		echo "soc_ovms_intervall=120" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_smarteq_intervallladen=" $ConfigFile; then
 		echo "soc_smarteq_intervallladen=20" >> $ConfigFile
 	fi
@@ -2109,6 +2115,23 @@ updateConfig(){
 	if ! grep -Fq "soc_id_vin=" $ConfigFile; then
 		echo "soc_id_vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "soc_ovms_server=" $ConfigFile; then
+		echo "soc_ovms_server=https://ovms.dexters-web.de:6869" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2server=" $ConfigFile; then
+		echo "soc2server=https://ovms.dexters-web.de:6869" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_ovms_username=" $ConfigFile; then
+		echo "soc_ovms_username=User" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_ovms_passwort=" $ConfigFile; then
+		echo "soc_ovms_passwort=''" >> $ConfigFile
+	else
+		sed -i "/soc_ovms_passwort='/b; s/^soc_ovms_passwort=\(.*\)/soc_ovms_passwort=\'\1\'/g" $ConfigFile
+	fi
+	if ! grep -Fq "soc_ovms_vehicleid=" $ConfigFile; then
+		echo "soc_ovms_vehicleid=vehicleid" >> $ConfigFile
+	fi
 	if ! grep -Fq "soc_smarteq_username=" $ConfigFile; then
 		echo "soc_smarteq_username=User" >> $ConfigFile
 	fi
@@ -2128,6 +2151,15 @@ updateConfig(){
 	if ! grep -Fq "soc2vin=" $ConfigFile; then
 		echo "soc2vin=" >> $ConfigFile
 		echo "soc2intervall=60" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2vehicleid=" $ConfigFile; then
+		echo "soc2vehicleid=" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2intervall=" $ConfigFile; then
+		echo "soc2intervall=60" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2intervallladen=" $ConfigFile; then
+		echo "soc2intervallladen=10" >> $ConfigFile
 	fi
 	if ! grep -Fq "wirkungsgradlp1=" $ConfigFile; then
 		echo "wirkungsgradlp1=90" >> $ConfigFile
