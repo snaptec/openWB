@@ -66,6 +66,15 @@
 	// prepare key/value array
 	$settingsArray = [];
 
+	function checkModule($module){
+		$modulePath = $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/";
+		$path = realpath($modulePath . $module);
+		if ($path === false || strpos($path, $modulePath) !== 0) {
+			return false;
+		}
+		return basename($path);
+	}
+
 	try {
 		if ( !file_exists($myConfigFile) ) {
 			throw new Exception('Konfigurationsdatei nicht gefunden.');
@@ -98,19 +107,6 @@
 			}
 		}
 
-		// write config to file
-		$fp = fopen($myConfigFile, "w");
-		if ( !$fp ) {
-			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
-		}
-		foreach($settingsArray as $key => $value) {
-			// only save to config if $key has some meaningful length
-			if( strlen($key) > 0 ){
-				fwrite($fp, $key."=".$value."\n");
-			}
-		}
-		fclose($fp);
-
 		// handling of different actions required by some modules
 
 		// check for manual ev soc module on lp1
@@ -139,25 +135,39 @@
 		}
 
 		// start etprovider update if in POST data
-		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){ ?>
+		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){
+			$module = checkModule($_POST['etprovider']);
+			if( $module === false ){
+				throw new Exception('Ungültiger ET-Provider: ' . $_POST['etprovider']);
+			}?>
 			<script>$('#feedbackdiv').append("<br>Update des Stromtarifanbieters gestartet.");</script>
 			<?php
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($_POST['etprovider']) . "/main.sh >> /var/log/openWB.log 2>&1 &" );
-			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m ' . escapeshellarg($_POST['etprovider']) );
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh >> /var/log/openWB.log 2>&1 &" );
+			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m ' . $module );
 		}
 
 		// start ev-soc updates if in POST data
-		if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] != 'none') ){ ?>
+		if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] != 'none') ){
+			$module = checkModule($_POST['socmodul']);
+			if( $module === false ){
+				throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul']);
+			}
+			?>
 			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 1 gestartet.");</script>
 			<?php
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20005");
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($_POST['socmodul']) . "/main.sh > /dev/null &" );
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh > /dev/null &" );
 		}
-		if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] != 'none') ){ ?>
+		if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] != 'none') ){
+			$module = checkModule($_POST['socmodul1']);
+			if( $module === false ){
+				throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul1']);
+			}
+			?>
 			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 2 gestartet.");</script>
 			<?php
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20005");
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($_POST['socmodul1']) . "/main.sh > /dev/null &" );
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh > /dev/null &" );
 		}
 
 		// check for rfid mode and start/stop handler
@@ -166,6 +176,19 @@
 			<?php
 			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/rfid/rfidSetup.sh >> /var/log/openWB.log 2>&1 &" );
 		}
+
+		// write config to file
+		$fp = fopen($myConfigFile, "w");
+		if ( !$fp ) {
+			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
+		}
+		foreach($settingsArray as $key => $value) {
+			// only save to config if $key has some meaningful length
+			if( strlen($key) > 0 ){
+				fwrite($fp, $key."=".$value."\n");
+			}
+		}
+		fclose($fp);
 
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
