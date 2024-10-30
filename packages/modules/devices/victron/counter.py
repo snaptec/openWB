@@ -29,7 +29,9 @@ class VictronCounter:
         energy_meter = self.component_config.configuration.energy_meter
         with self.__tcp_client:
             if energy_meter:
-                powers = self.__tcp_client.read_holding_registers(2600, [ModbusDataType.INT_16]*3, unit=unit)
+                powers = [
+                    self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit)
+                    for reg in [2600, 2601, 2602]]
                 currents = [
                     self.__tcp_client.read_holding_registers(reg, ModbusDataType.INT_16, unit=unit) / 10
                     for reg in [2617, 2619, 2621]]
@@ -37,11 +39,12 @@ class VictronCounter:
                     self.__tcp_client.read_holding_registers(reg, ModbusDataType.UINT_16, unit=unit) / 10
                     for reg in [2616, 2618, 2620]]
                 power = sum(powers)
+                imported = self.__tcp_client.read_holding_registers(2634, ModbusDataType.INT_16, unit=unit)
+                exported = self.__tcp_client.read_holding_registers(2636, ModbusDataType.INT_16, unit=unit)
             else:
                 powers = self.__tcp_client.read_holding_registers(820, [ModbusDataType.INT_16]*3, unit=unit)
                 power = sum(powers)
-
-        imported, exported = self.sim_counter.sim_count(power)
+                imported, exported = self.sim_counter.sim_count(power)
 
         if energy_meter:
             counter_state = CounterState(
