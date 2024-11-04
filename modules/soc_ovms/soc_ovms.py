@@ -37,8 +37,9 @@ def fetch_soc(id: str, pw: str, chargepoint: int) -> int:
     return soc
 
 
-def read_token_file() -> dict:
+def read_token_file() -> Union[int, dict]:
     global tokenFile
+    rc = 0
     try:
         with open(tokenFile, "r") as f:
             jsonstr = f.read()
@@ -49,7 +50,8 @@ def read_token_file() -> dict:
         confDict = {}
         confDict['configuration'] = {}
         confDict['configuration']['token'] = token
-    return confDict
+        rc = 1
+    return rc, confDict
 
 
 def write_token_file(confDict: dict):
@@ -124,15 +126,16 @@ def main():
 
 
 # create a new token and store it in the soc_module configuration
-def create_token(user_id: str, password: str) -> str:
+def create_token(user_id: str, password: str, chargepoint: int) -> str:
     global log, session, token, vehicleId, OVMS_SERVER
     token_url = OVMS_SERVER + TOKEN_CMD
+    appl = OVMS_APPL_VALUE + str(chargepoint)
     data = {
         "username": user_id,
         "password": password
     }
     form_data = {
-        OVMS_APPL_LABEL: OVMS_APPL_VALUE,
+        OVMS_APPL_LABEL: appl,
         OVMS_PURPOSE_LABEL: OVMS_PURPOSE_VALUE
     }
     try:
@@ -155,7 +158,7 @@ def create_token(user_id: str, password: str) -> str:
 
 # check list of token on OVMS server for unused token created by the soc mudule
 # if any obsolete token are found these are deleted.
-def cleanup_token(user_id: str, password: str):
+def cleanup_token(user_id: str, password: str, chargepoint: int):
     global log, session, token, vehicleId, OVMS_SERVER
     tokenlist_url = OVMS_SERVER + TOKEN_CMD + '?username=' + user_id + '&' + 'password=' + token
 
@@ -173,11 +176,12 @@ def cleanup_token(user_id: str, password: str):
     else:
         response = resp.text
         full_tokenlist = loads(response)
+        appl = OVMS_APPL_VALUE + str(chargepoint)
         log.debug("cleanup_token status_code=" +
                   str(status_code) + ", full_tokenlist=\n" +
                   dumps(full_tokenlist, indent=4))
         obsolete_tokenlist = list(filter(lambda token:
-                                         token[OVMS_APPL_LABEL] == OVMS_APPL_VALUE and token["token"] != token,
+                                         token[OVMS_APPL_LABEL] == appl and token["token"] != token,
                                          full_tokenlist))
         log.debug("cleanup_token: obsolete_tokenlist=\n" +
                   dumps(obsolete_tokenlist, indent=4))
@@ -231,19 +235,25 @@ def get_status(user_id: str) -> Union[int, dict]:
 def _fetch_soc(user_id: str, password: str, chargepoint: int) -> int:
     global log, session, token, vehicleId
 
-    confDict = read_token_file()
-    tokenstr = confDict['configuration']['token']
-    tokdict = loads(tokenstr)
-    token = tokdict['token']
-    log.debug("read token: " + token)
-    if token is None or token == "":
-        token = create_token(user_id, password)
+    try:
+        rc, confDict = read_token_file()
+        if rc == 0:
+            tokenstr = confDict['configuration']['token']
+            tokdict = loads(tokenstr)
+            token = tokdict['token']
+            log.debug("read token: " + token)
+            if token is None or token == "":
+                token = create_token(user_id, password, chargepoint)
+                log.debug("create_token: " + token)
+    except Exception as e:
+        log.info("_fetch_soc exception:" + str(e) + ", create new token")
+        token = create_token(user_id, password, chargepoint)
         log.debug("create_token: " + token)
 
     log.debug("call get_status, token:" + token)
     status_code, statusDict = get_status(user_id)
     if status_code > 299:
-        token = create_token(user_id, password)
+        token = create_token(user_id, password, chargepoint)
         status_code, statusDict = get_status(user_id)
         if status_code > 299:
             raise "Authentication Problem, status_code " + str(status_code)
@@ -260,7 +270,7 @@ def _fetch_soc(user_id: str, password: str, chargepoint: int) -> int:
              ", km-stand=" + str(float(kms)/10) +
              ", soc_12v=" + str(vehicle12v))
 
-    cleanup_token(user_id, password)
+    cleanup_token(user_id, password, chargepoint)
 
     return int(float(soc))
 
