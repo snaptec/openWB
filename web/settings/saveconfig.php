@@ -109,23 +109,6 @@
 
 		// handling of different actions required by some modules
 
-		// check for manual ev soc module on lp1
-		if( array_key_exists( 'socmodul', $_POST ) ){
-			if( $_POST['socmodul'] == 'soc_manual' ){
-				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "1"' );
-			} else {
-				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "0"' );
-			}
-		}
-		// check for manual ev soc module on lp2
-		if( array_key_exists( 'socmodul1', $_POST ) ){
-			if( $_POST['socmodul1'] == 'soc_manuallp2' ){
-				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "1"' );
-			} else {
-				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "0"' );
-			}
-		}
-
 		// update display process if in POST data
 		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){ ?>
 			<script>$('#feedbackdiv').append("<br>Displays werden neu geladen.");</script>
@@ -146,28 +129,50 @@
 			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m ' . $module );
 		}
 
-		// start ev-soc updates if in POST data
-		if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] != 'none') ){
-			$module = checkModule($_POST['socmodul']);
-			if( $module === false ){
-				throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul']);
+		// soc module for lp1
+		if( array_key_exists( 'socmodul', $_POST ) ){
+			// check for manual soc module on lp1
+			if( $_POST['socmodul'] == 'soc_manual' ){
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "0"' );
 			}
-			?>
-			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 1 gestartet.");</script>
-			<?php
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20005");
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh > /dev/null &" );
+			// start soc update if in POST data
+			if( $_POST['socmodul'] != 'none' ){
+				$module = checkModule($_POST['socmodul']);
+				if( $module === false ){
+					throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul']);
+				}
+				?>
+				<script>$('#feedbackdiv').append("<br>Update SoC-Modul '<?php echo $module; ?>' an Ladepunkt 1 gestartet.");</script>
+				<?php
+				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20005");
+				exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh 1 > /dev/null &" );
+			}
 		}
-		if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] != 'none') ){
-			$module = checkModule($_POST['socmodul1']);
-			if( $module === false ){
-				throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul1']);
+
+		// soc module for lp2
+		if( array_key_exists( 'socmodul1', $_POST ) ){
+			// check for manual ev soc module on lp2
+			if( $_POST['socmodul1'] == 'soc_manuallp2' ){
+				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "0"' );
 			}
-			?>
-			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 2 gestartet.");</script>
-			<?php
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20005");
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh > /dev/null &" );
+			if( $_POST['socmodul1'] != 'none' ){
+				// detect trailing "s1" or "lp2" in $POST['socmodul1']
+				$moduleName = preg_replace('/(s1|lp2)$/', '', $_POST['socmodul1']);
+	
+				$module = checkModule($moduleName);
+				if( $module === false ){
+					throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul1']);
+				}
+				?>
+				<script>$('#feedbackdiv').append("<br>Update SoC-Modul '<?php echo $moduleName; ?>' an Ladepunkt 2 gestartet.");</script>
+				<?php
+				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20005");
+				exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh 2 > /dev/null &" );
+			}
 		}
 
 		// check for rfid mode and start/stop handler
