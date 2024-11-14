@@ -71,7 +71,6 @@ incrementTimer(){
 getAndWriteSoc(){
 	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
-	echo $($MODULEDIR/soc_ovms.py --server "$server" --user "$username" --password "$password" --vehicleId "$vehicleId" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
 	answer=$($MODULEDIR/soc_ovms.py --server "$server" --user "$username" --password "$password" --vehicleId "$vehicleId" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer

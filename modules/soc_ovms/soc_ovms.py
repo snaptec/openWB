@@ -231,7 +231,7 @@ def get_status(user_id: str) -> Union[int, dict]:
     return int(status_code), respDict
 
 
-# async function to fetch soc, range, soc_ts
+# function to fetch soc, range, soc_ts
 def _fetch_soc(user_id: str, password: str, chargepoint: int) -> int:
     global log, session, token, vehicleId
 
