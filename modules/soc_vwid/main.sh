@@ -1,4 +1,18 @@
 #!/bin/bash
+
+# -- start user pi enforcement
+# normally the soc module runs as user pi
+# When LP Configuration is stored, it is run as user www-data
+# This leads to various permission problems
+# if actual user is not pi, this section restarts the script as user pi
+usr=`id -nu`
+if [ "$usr" != "pi" ]
+then
+    sudo -u pi -c bash "$0 $*"
+    exit $?
+fi
+# -- ending user pi enforcement
+
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
