@@ -8,8 +8,8 @@
 usr=`id -nu`
 if [ "$usr" != "pi" ]
 then
-    sudo -u pi -c bash "$0 $*"
-    exit $?
+	sudo -u pi -c bash "$0 $*"
+	exit $?
 fi
 # -- ending user pi enforcement
 
