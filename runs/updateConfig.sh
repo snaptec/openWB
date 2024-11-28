@@ -329,6 +329,12 @@ updateConfig(){
 	if ! grep -Fq "i3vin=" $ConfigFile; then
 		echo "i3vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "i3captcha_token=" $ConfigFile; then
+		echo "i3captcha_token=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "i3captcha_tokens1=" $ConfigFile; then
+		echo "i3captcha_tokens1=''" >> $ConfigFile
+	fi
 	if ! grep -Fq "i3_soccalclp1=" $ConfigFile; then
 		echo "i3_soccalclp1=0" >> $ConfigFile
 	fi

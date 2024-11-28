@@ -1878,6 +1878,28 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
+										<label for="i3captcha_token" class="col-md-4 col-form-label">Captcha-Token</label>
+										<div class="col">
+											<input class="form-control" type="text" name="i3captcha_token" id="i3captcha_token" value="<?php echo $i3captcha_tokenold ?>">
+											<span class="form-text small">
+                                                                                            Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+                                                                                            Dazu bitte folgende Schritte durchführen:<br>
+                                                                                            1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+											</span>
+												<a target="_blamk" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page </a>
+											<span class="form-text small">
+                                                                                            (https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+                                                                                            2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
+                                                                                               Als Ergebnis wird ein sehr langer String angezeigt. <br>
+                                                                                            3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+                                                                                            4. Die Konfiguration speichern.<br>
+                                                                                            5. <b>Fertig.</b> Ab jetzt wird das sog. Refresh-Token verwendet.<br>
+                                                                                            Das erneute Abrufen des Captcha-Token sollte nur notwendig werden wenn die Datei mit dem Refresh-Token verloren wird, z.B. nach SD-Kartentausch.<br>
+                                                                                            <b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soci3intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
@@ -3643,6 +3665,28 @@
 											<input class="form-control" type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>">
 											<span class="form-text small">
 												BMW VIN. Sie ist in voller Länge anzugeben.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="i3captcha_tokens1" class="col-md-4 col-form-label">Captcha-Token</label>
+										<div class="col">
+											<input class="form-control" type="text" name="i3captcha_tokens1" id="i3captcha_tokens1" value="<?php echo $i3captcha_tokens1old ?>">
+											<span class="form-text small">
+                                                                                            Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+                                                                                            Dazu bitte folgende Schritte durchführen:<br>
+                                                                                            1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+											</span>
+												<a target="_blamk" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page </a>
+											<span class="form-text small">
+                                                                                            (https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+                                                                                            2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
+                                                                                               Als Ergebnis wird ein sehr langer String angezeigt. <br>
+                                                                                            3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+                                                                                            4. Die Konfiguration speichern.<br>
+                                                                                            5. <b>Fertig.</b> Ab jetzt wird das sog. Refresh-Token verwendet.<br>
+                                                                                            Das erneute Abrufen des Captcha-Token sollte nur notwendig werden wenn die Datei mit dem Refresh-Token verloren wird, z.B. nach SD-Kartentausch.<br>
+                                                                                            <b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b>
 											</span>
 										</div>
 									</div>
