@@ -495,7 +495,7 @@ def main():
                 authError("Captcha Token nicht definiert.")
                 quit()
             else:
-                # looks like we habe a promising captha_token 
+                # looks like we habe a promising captha_token
                 _debug('call requestToken with captcha_token: \n' + captcha_token)
                 try:
                     # store captcha_token in store to detect reuse

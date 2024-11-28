@@ -75,11 +75,11 @@ prepare_i3DataFolder(){
 	then
 		sudo mkdir -p $i3Folder
 		f=soc_i3_cp1.json
-		if [ -f $RAMDISKDIR/$f  && !-f $i3Folder/$f ]; then
+		if [ -f $RAMDISKDIR/$f && !-f $i3Folder/$f ]; then
 			cp $RAMDISKDIR/$f $i3Folder
 		fi
 		f=soc_i3_cp2.json
-		if [ -f $RAMDISKDIR/$f  && !-f $i3Folder/$f ]; then
+		if [ -f $RAMDISKDIR/$f && !-f $i3Folder/$f ]; then
 			cp $RAMDISKDIR/$f $i3Folder
 		fi
 	fi
