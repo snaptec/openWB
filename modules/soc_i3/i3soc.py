@@ -501,26 +501,28 @@ def main():
                     # store captcha_token in store to detect reuse
                     store['captcha_token'] = captcha_token
                     token = requestToken(username, password, captcha_token)
+                    # compute expires_at and write store file
+                    if 'expires_in' in token:
+                        expires_in = int(token['expires_in'])
+                        expires_at = now + expires_in
+                        store['expires_at'] = expires_at
+                        store['Token'] = token
+                        write_store()
+                        _debug('main: token=\n' + json.dumps(token, indent=4))
+                    else:
+                        _error("requestToken failed")
+                        store['expires_at'] = 0
+                        store['Token'] = token
+                        write_store()
                 except Exception as e:
                     authError("requestToken Exception: " + str(e))
                     raise
 
-        # compute expires_at and write store file
+        # get Data from Server
         if 'expires_in' in token:
-            expires_in = int(token['expires_in'])
-            expires_at = now + expires_in
-            store['expires_at'] = expires_at
-            store['Token'] = token
-            write_store()
-            _debug('main: token=\n' + json.dumps(token, indent=4))
             data = requestData(token, vin)
             soc = int(data["state"]["electricChargingState"]["chargingLevelPercent"])
             _info("Successful - SoC: " + str(soc) + "%" + ', method=' + method)
-        else:
-            _error("requestToken failed")
-            store['expires_at'] = 0
-            store['Token'] = token
-            write_store()
     except Exception as e:
         _error("Request failed, exception=" + str(e))
         raise
