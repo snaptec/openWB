@@ -5,16 +5,19 @@ answer=$(timeout 4 curl -s $ip/connect.php | jq .)
 if [[ $answer == *"vehicle_id"* ]]; then
 	watt=$(echo $answer |jq '.power_all')
 	watt=$(echo $watt | sed 's/\..*$//')
-	APhase1=$(echo $answer | jq ".currents[0]" ) 
-	APhase2=$(echo $answer | jq ".currents[1]" ) 
-	APhase3=$(echo $answer | jq ".currents[2]" ) 
+	APhase1=$(echo $answer | jq ".currents[0]" )
+	APhase2=$(echo $answer | jq ".currents[1]" )
+	APhase3=$(echo $answer | jq ".currents[2]" )
+	VPhase1=$(echo $answer | jq ".voltages[0]" )
+	VPhase2=$(echo $answer | jq ".voltages[1]" )
+	VPhase3=$(echo $answer | jq ".voltages[2]" )
 	boolChargeStat=$(echo $answer | jq ".charge_state" )
 	if [ $boolChargeStat = true ]; then
 		boolChargeStat=1
 	else
 		boolChargeStat=0
 	fi
-	boolPlugStat=$(echo $answer | jq ".plug_state") 
+	boolPlugStat=$(echo $answer | jq ".plug_state")
 	if [ $boolPlugStat = true ]; then
 		boolPlugStat=1
 	else
@@ -28,6 +31,9 @@ if [[ $answer == *"vehicle_id"* ]]; then
 		echo $APhase1 > /var/www/html/openWB/ramdisk/lla1
 		echo $APhase2 > /var/www/html/openWB/ramdisk/lla2
 		echo $APhase3 > /var/www/html/openWB/ramdisk/lla3
+		echo $VPhase1 > /var/www/html/openWB/ramdisk/llv1
+		echo $VPhase2 > /var/www/html/openWB/ramdisk/llv2
+		echo $VPhase3 > /var/www/html/openWB/ramdisk/llv3
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuell
 		echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwh
 		echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstat
@@ -37,6 +43,9 @@ if [[ $answer == *"vehicle_id"* ]]; then
 		echo $APhase1 > /var/www/html/openWB/ramdisk/llas11
 		echo $APhase2 > /var/www/html/openWB/ramdisk/llas12
 		echo $APhase3 > /var/www/html/openWB/ramdisk/llas13
+		echo $VPhase1 > /var/www/html/openWB/ramdisk/llvs11
+		echo $VPhase2 > /var/www/html/openWB/ramdisk/llvs12
+		echo $VPhase3 > /var/www/html/openWB/ramdisk/llvs13
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 		echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwhs1
 		echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstats1
@@ -46,6 +55,9 @@ if [[ $answer == *"vehicle_id"* ]]; then
 		echo $APhase1 > /var/www/html/openWB/ramdisk/llas21
 		echo $APhase2 > /var/www/html/openWB/ramdisk/llas22
 		echo $APhase3 > /var/www/html/openWB/ramdisk/llas23
+		echo $VPhase1 > /var/www/html/openWB/ramdisk/llvs21
+		echo $VPhase2 > /var/www/html/openWB/ramdisk/llvs22
+		echo $VPhase3 > /var/www/html/openWB/ramdisk/llvs23
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuells2
 		echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwhs2
 		echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstatlp3
@@ -55,6 +67,9 @@ if [[ $answer == *"vehicle_id"* ]]; then
 		echo $APhase1 > /var/www/html/openWB/ramdisk/lla1lp$chargep
 		echo $APhase2 > /var/www/html/openWB/ramdisk/lla2lp$chargep
 		echo $APhase3 > /var/www/html/openWB/ramdisk/lla3lp$chargep
+		echo $VPhase1 > /var/www/html/openWB/ramdisk/llv1lp$chargep
+		echo $VPhase2 > /var/www/html/openWB/ramdisk/llv2lp$chargep
+		echo $VPhase3 > /var/www/html/openWB/ramdisk/llv3lp$chargep
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuelllp$chargep
 		echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwhlp$chargep
 		echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstatlp$chargep
