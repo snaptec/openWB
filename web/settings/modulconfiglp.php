@@ -3677,7 +3677,7 @@
 												Dazu bitte folgende Schritte durchführen:<br>
 												1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
 											</span>
-												<a target="_blamk" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page </a>
+											<a target="_blank" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page</a>
 											<span class="form-text small">
 												(https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
 												2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
