@@ -6,6 +6,7 @@ import string
 import sys
 import os
 import time
+from datetime import datetime
 import urllib
 import uuid
 import hashlib
@@ -36,20 +37,49 @@ method = ''
 
 # ---------------Helper Function-------------------------------------------
 
+def _print(txt: str):
+    ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print(ts + ': ' + txt)
+
+
 def _error(txt: str):
-    print(txt)
+    global CHARGEPOINT
+    _print("ERROR: soc_i3:LP" + str(CHARGEPOINT) + ": " + txt)
+
+
+def _warn(txt: str):
+    global CHARGEPOINT
+    _print("WARNING: soc_i3:LP" + str(CHARGEPOINT) + ": " + txt)
 
 
 def _info(txt: str):
     global DEBUGLEVEL
+    global CHARGEPOINT
     if DEBUGLEVEL >= 1:
-        print(txt)
+        _print("INFO: soc_i3:LP" + str(CHARGEPOINT) + ": " + txt)
+
+
+def _attention(txt: str):
+    global CHARGEPOINT
+    _print("HINWEIS: " + txt)
 
 
 def _debug(txt: str):
     global DEBUGLEVEL
+    global CHARGEPOINT
     if DEBUGLEVEL > 1:
-        print(txt)
+        _print("DEBUG: soc_i3:LP" + str(CHARGEPOINT) + ": " + txt)
+
+
+def authError(txt: str):
+    global CHARGEPOINT
+    _attention("-------------------------------------------------------------------------------------")
+    _attention("Anmeldung fehlgeschlagen: " + txt)
+    _attention("Bitte auf folgende Seite gehen: Einstellungen - Modulkonfiguration - Ladepunkte")
+    _attention("In der Konfiguration des LP" + str(CHARGEPOINT) +
+               " im BMW & Mini SOC-Modul einen neuen Captcha Token ermitteln und eingeben.")
+    _attention("Weitere Hinweise zum Ermitteln des Captcha Token finden sich auf der Konfigurationsseite")
+    _attention("-------------------------------------------------------------------------------------")
 
 
 def get_random_string(length: int) -> str:
@@ -78,6 +108,7 @@ def init_store():
     store = {}
     store['Token'] = {}
     store['expires_at'] = int(0)
+    store['captcha_token'] = ''
 
 
 # load store from file, initialize store structure if no file exists
@@ -90,8 +121,10 @@ def load_store():
         if 'Token' not in store:
             init_store()
         tf.close()
+        if 'captcha_token' not in store:
+            store['captcha_token'] = ''
     except FileNotFoundError:
-        _error("load_store: store file not found, new authentication required")
+        _warn("load_store: store file not found, new authentication required")
         store = {}
         init_store()
     except Exception as e:
@@ -117,6 +150,24 @@ def write_store():
         os.chmod(storeFile, 0o666)
     except Exception as e:
         os.system("sudo chmod 0666 " + storeFile)
+
+
+# write state file
+def write_state():
+    global state
+    global stateFile
+    try:
+        tf = open(stateFile, 'w', encoding='utf-8')
+    except Exception as e:
+        _error("write_state_file: Exception " + str(e))
+        os.system("sudo rm -f " + stateFile)
+        tf = open(stateFile, 'w', encoding='utf-8')
+    json.dump(state, tf, indent=4)
+    tf.close()
+    try:
+        os.chmod(stateFile, 0o666)
+    except Exception as e:
+        os.system("sudo chmod 0666 " + stateFile)
 
 
 # ---------------HTTP Function-------------------------------------------
@@ -155,7 +206,7 @@ def postHTTP(url: str = '', data: str = '', headers: str = '', cookies: str = ''
         _error("Connection Timeout")
         raise
     except:
-        _error("HTTP Error")
+        _error("HTTP Error, response=" + str(response))
         raise
 
     if response.status_code == 200 or response.status_code == 204:
@@ -164,6 +215,7 @@ def postHTTP(url: str = '', data: str = '', headers: str = '', cookies: str = ''
         return response.headers["location"]
     else:
         _error('Request failed, StatusCode: ' + str(response.status_code))
+        _error('Request failed, response.content: ' + str(response.content))
         raise RuntimeError
 
 
@@ -195,13 +247,12 @@ def authStage1(url: str,
                password: str,
                code_challenge: str,
                state: str,
-               nonce: str) -> str:
+               nonce: str,
+               captcha_token: str) -> str:
     global config
     try:
         headers = {
-            'Content-Type': CONTENT_TYPE,
-            'user-agent': USER_AGENT,
-            'x-user-agent': X_USER_AGENT}
+            'hcaptchatoken': captcha_token}
         data = {
             'client_id': config['clientId'],
             'response_type': 'code',
@@ -280,7 +331,7 @@ def authStage3(token_url: str, authcode2: str, code_verifier: str) -> dict:
     return token
 
 
-def requestToken(username: str, password: str) -> dict:
+def requestToken(username: str, password: str, captcha_token: str) -> dict:
     global config
     global method
     try:
@@ -295,7 +346,7 @@ def requestToken(username: str, password: str) -> dict:
         state = get_random_string(22)
         nonce = get_random_string(22)
 
-        authcode1 = authStage1(authenticate_url, username, password, code_challenge, state, nonce)
+        authcode1 = authStage1(authenticate_url, username, password, code_challenge, state, nonce, captcha_token)
         authcode2 = authStage2(authenticate_url, authcode1, code_challenge, state, nonce)
         token = authStage3(token_url, authcode2, code_verifier)
     except:
@@ -365,15 +416,19 @@ def requestData(token: str, vin: str) -> dict:
 # ---------------Main Function-------------------------------------------
 def main():
     global store
+    global state
     global storeFile
     global DEBUGLEVEL
+    global CHARGEPOINT
     global method
+    global stateFile
     try:
         method = ''
         CHARGEPOINT = os.environ.get("CHARGEPOINT", "1")
         DEBUGLEVEL = int(os.environ.get("debug", "0"))
-        RAMDISKDIR = os.environ.get("RAMDISKDIR", "undefined")
-        storeFile = RAMDISKDIR + '/soc_i3_cp' + CHARGEPOINT + '.json'
+        _debug("DEBUGLEVEL=" + str(DEBUGLEVEL))
+        OPENWBBASEDIR = os.environ.get("OPENWBBASEDIR", "undefined")
+        storeFile = OPENWBBASEDIR + '/data/i3/soc_i3_cp' + CHARGEPOINT + '.json'
         _debug('storeFile =' + storeFile)
 
         argsStr = base64.b64decode(str(sys.argv[1])).decode('utf-8')
@@ -384,13 +439,14 @@ def main():
         vin = str(argsDict["vin"]).upper()
         socfile = str(argsDict["socfile"])
         meterfile = str(argsDict["meterfile"])
-        statefile = str(argsDict["statefile"])
+        stateFile = str(argsDict["statefile"])
+        captcha_token = str(argsDict["captcha_token"])
     except:
         _error("Parameters could not be processed")
         raise
 
     try:
-        # try to read store file from ramdisk
+        # try to read store file
         expires_in = -1
         load_store()
         now = int(time.time())
@@ -403,9 +459,13 @@ def main():
             expires_in = store['Token']['expires_in']
             expires_at = store['expires_at']
             token = store['Token']
+            _exp_at = datetime.fromtimestamp(expires_at).strftime('%Y-%m-%d %H:%M:%S')
+            _exp_at2 = datetime.fromtimestamp(expires_at-120).strftime('%Y-%m-%d %H:%M:%S')
+            _now = datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
             _debug('main0: expires_in=' + str(expires_in) + ', now=' + str(now) +
-                   ', expires_at=' + str(expires_at) + ', diff=' + str(expires_at - now))
-            if now > expires_at - 120:
+                   ', expires_at=' + str(expires_at) + ', diff=' + str(now - (expires_at - 120)))
+            _debug("expires_at=" + _exp_at + ", now=" + _now + ", expires_at-120=" + _exp_at2)
+            if now > (expires_at - 120):
                 _debug('call refreshToken')
                 token = refreshToken(token['refresh_token'])
                 if 'expires_in' in token:
@@ -420,30 +480,51 @@ def main():
             else:
                 expires_in = store['Token']['expires_in']
 
-        # if refreshToken fails, call requestToken
+        # if refreshToken fails or token are missing, call requestToken
         if expires_in == -1:
-            _debug('call requestToken')
-            token = requestToken(username, password)
+            # check if there is a new captcha_token, i.e. different from the one already used
+            last_captcha_token = store['captcha_token']
+            _debug("captcha_token = " + captcha_token)
+            _debug("last_captcha_token = " + last_captcha_token)
+            # if captcha_token is old, quit with error message
+            if captcha_token == last_captcha_token and captcha_token != "":
+                authError("Captcha Token wurde bereits verwendet.")
+                quit()
+            # if captcha_token is not defined, quit with error message
+            elif captcha_token == "" or captcha_token is None:
+                authError("Captcha Token nicht definiert.")
+                quit()
+            else:
+                # looks like we habe a promising captha_token
+                _debug('call requestToken with captcha_token: \n' + captcha_token)
+                try:
+                    # store captcha_token in store to detect reuse
+                    store['captcha_token'] = captcha_token
+                    token = requestToken(username, password, captcha_token)
+                    # compute expires_at and write store file
+                    if 'expires_in' in token:
+                        expires_in = int(token['expires_in'])
+                        expires_at = now + expires_in
+                        store['expires_at'] = expires_at
+                        store['Token'] = token
+                        write_store()
+                        _debug('main: token=\n' + json.dumps(token, indent=4))
+                    else:
+                        _error("requestToken failed")
+                        store['expires_at'] = 0
+                        store['Token'] = token
+                        write_store()
+                except Exception as e:
+                    authError("requestToken Exception: " + str(e))
+                    raise
 
-        # compute expires_at and store file in ramdisk
+        # get Data from Server
         if 'expires_in' in token:
-            if expires_in != int(token['expires_in']):
-                expires_in = int(token['expires_in'])
-                expires_at = now + expires_in
-                store['expires_at'] = expires_at
-                store['Token'] = token
-                write_store()
-        else:
-            _error("requestToken failed")
-            store['expires_at'] = 0
-            store['Token'] = token
-            write_store()
-        _debug('main: token=\n' + json.dumps(token, indent=4))
-        data = requestData(token, vin)
-        soc = int(data["state"]["electricChargingState"]["chargingLevelPercent"])
-        _info("Successful - SoC: " + str(soc) + "%" + ', method=' + method)
-    except:
-        _error("Request failed")
+            data = requestData(token, vin)
+            soc = int(data["state"]["electricChargingState"]["chargingLevelPercent"])
+            _info("Successful - SoC: " + str(soc) + "%" + ', method=' + method)
+    except Exception as e:
+        _error("Request failed, exception=" + str(e))
         raise
 
     try:
@@ -453,8 +534,7 @@ def main():
         state["soc"] = int(soc)
         with open(meterfile, 'r') as f:
             state["meter"] = float(f.read())
-        with open(statefile, 'w') as f:
-            f.write(json.dumps(state))
+        write_state()
     except:
         _error("Saving SoC failed")
         raise
