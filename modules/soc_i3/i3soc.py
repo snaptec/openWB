@@ -109,6 +109,7 @@ def init_store():
     store['Token'] = {}
     store['expires_at'] = int(0)
     store['captcha_token'] = ''
+    store['session_id'] = str(uuid.uuid4())
 
 
 # load store from file, initialize store structure if no file exists
@@ -220,14 +221,16 @@ def postHTTP(url: str = '', data: str = '', headers: str = '', cookies: str = ''
 
 
 def authStage0() -> str:
+    global session_id
     try:
-        id0 = str(uuid.uuid4())
+        if not session_id:
+            session_id = str(uuid.uuid4())
         id1 = str(uuid.uuid4())
         ocp = base64.b64decode(APIKey).decode()
         url = 'https://' + api_server + '/eadrax-ucs/v1/presentation/oauth/config'
         headers = {
             'ocp-apim-subscription-key': ocp,
-            'bmw-session-id': id0,
+            'bmw-session-id': session_id,
             'x-identity-provider': 'gcdm',
             'x-correlation-id': id1,
             'bmw-correlation-Id': id1,
@@ -422,6 +425,7 @@ def main():
     global CHARGEPOINT
     global method
     global stateFile
+    global session_id
     try:
         method = ''
         CHARGEPOINT = os.environ.get("CHARGEPOINT", "1")
@@ -458,6 +462,9 @@ def main():
            'refresh_token' in store['Token']:
             expires_in = store['Token']['expires_in']
             expires_at = store['expires_at']
+            if 'session_id' not in store:
+                store['session_id'] = str(uuid.uuid4())
+            session_id = store['session_id']
             token = store['Token']
             _exp_at = datetime.fromtimestamp(expires_at).strftime('%Y-%m-%d %H:%M:%S')
             _exp_at2 = datetime.fromtimestamp(expires_at-120).strftime('%Y-%m-%d %H:%M:%S')
