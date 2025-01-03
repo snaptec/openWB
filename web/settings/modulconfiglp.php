@@ -764,7 +764,6 @@
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
 										<option <?php if($socmodulold == "soc_ovms") echo "selected" ?> value="soc_ovms">OVMS</option>
-										<option <?php if($socmodulold == "soc_smarteq") echo "selected" ?> value="soc_smarteq">smart EQ</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
@@ -1352,76 +1351,6 @@
 										<label for="soc_ovms_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervallladen" id="soc_ovms_intervallladen" value="<?php echo $soc_ovms_intervallladenold ?>">
-											<span class="form-text small">
-												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="socmsmarteq" class="hide">
-								<div class="form-group">
-									<div class="alert alert-info">
-										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
-										- smart Control Account aktiv<br>
-										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
-										- smart Control Account aktiv<br>
-										Das Modul unterstützt 2 Loginverfahren<br>
-										- Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
-										- Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
-										Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
-										Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_smarteq_username" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="email" name="soc_smarteq_username" id="soc_smarteq_username" value="<?php echo $soc_smarteq_usernameold ?>">
-											<span class="form-text small">
-												Email Adresse des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_smarteq_passwort" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_smarteq_passwort" id="soc_smarteq_passwort" value="<?php echo $soc_smarteq_passwortold ?>">
-											<span class="form-text small">
-												Password des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_smarteq_pin" class="col-md-4 col-form-label">Pin</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_smarteq_pin" id="soc_smarteq_pin" value="<?php echo $soc_smarteq_pinold ?>">
-											<span class="form-text small">
-												PIN des Accounts.<br>
-												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_smarteq_vin" class="col-md-4 col-form-label">VIN</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_smarteq_vin" id="soc_smarteq_vin" value="<?php echo $soc_smarteq_vinold ?>">
-											<span class="form-text small">
-												Vollständige VIN des Fahrzeugs.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_smarteq_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
-										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_smarteq_intervall" id="soc_smarteq_intervall" value="<?php echo $soc_smarteq_intervallold ?>">
-											<span class="form-text small">
-												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_smarteq_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
-										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_smarteq_intervallladen" id="soc_smarteq_intervallladen" value="<?php echo $soc_smarteq_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -2476,7 +2405,6 @@
 							hideSection('#socmid');
 							hideSection('#socmvwid');
 							hideSection('#socmovms');
-							hideSection('#socmsmarteq');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2515,11 +2443,6 @@
 								$('#socsuportlink').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
 								showSection('#socsupportinfo');
 								showSection('#socmovms');
-							}
-							if($('#socmodul').val() == 'soc_smarteq') {
-								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
-								showSection('#socsupportinfo');
-								showSection('#socmsmarteq');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
@@ -3196,7 +3119,6 @@
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
 										<option <?php if($socmodul1old == "soc_ovmslp2") echo "selected" ?> value="soc_ovmslp2">OVMS</option>
-										<option <?php if($socmodul1old == "soc_smarteqlp2") echo "selected" ?> value="soc_smarteqlp2">Smart EQ</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
@@ -3250,15 +3172,6 @@
 							<div id="socmovmsinfolp2" class="mt-1 alert alert-info hide">
 								Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
 								- OVMS Account in z.B. dexters-web.de<br>
-							</div>
-							<div id="socmsmarteqinfolp2" class="mt-1 alert alert-info hide">
-								Für smart EQ Fahrzeuge. Es wird benötigt:<br>
-								- smart Control Account aktiv<br>
-								Das Modul unterstützt 2 Loginverfahren<br>
-								- Login mit Passwort - wird benutzt wenn das Passwort nicht leer ist<br>
-								- Login über 2FA/Pin - wird benutzt wenn das Password leer ist.<br>
-								Bei 2FA wird nach Konfiguration ein Pin per Email übermittelt. Dieser PIN (6-stellig) ist in das Feld Pin einzutragen.<br>
-								Wichtig: Der Pin ist nach Empfang nur 15 Minuten gültig.<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3783,20 +3696,6 @@
 											<span class="form-text small">
 												URL des OVMS Servers incl. Port.<br>
 												z.B. https://ovms.dexters-web.de:6869<br>
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="socmpin2t" class="hide">
-								<div class="form-group">
-									<div class="form-row mb-1">
-										<label for="soc2pint" class="col-md-4 col-form-label">Pin</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc2pint" id="soc2pint" value="<?php echo $soc2pintold ?>">
-											<span class="form-text small">
-												PIN des Accounts.<br>
-												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
 											</span>
 										</div>
 									</div>
@@ -4565,7 +4464,6 @@
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
-							hideSection('#socmpin2t');
 							hideSection('#socmnone1');
 							hideSection('#socmhttp1');
 							hideSection('#socleaf1');
@@ -4589,7 +4487,6 @@
 							hideSection('#socoldevccwarninglp2');
 							hideSection('#socmvwidinfolp2');
 							hideSection('#socmovmsinfolp2');
-							hideSection('#socmsmarteqinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
 
@@ -4647,17 +4544,6 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvehicleid2');
-								showSection('#socmintervall2');
-								showSection('#socmintervallladen2');
-							}
-							if($('#socmodul1').val() == 'soc_smarteqlp2') {
-								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
-								showSection('#socsupportinfolp2');
-								showSection('#socmsmarteqinfolp2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmpin2t');
-								showSection('#socmvin2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
