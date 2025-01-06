@@ -2385,23 +2385,23 @@ updateConfig(){
 	ism2=`grep "socmodul1=soc_smarteqlp2" $ConfigFile.tmp | wc -l | awk '{print $1}'`
 	if [ $ism2 -ne 0 ]
 	then
-	    echo "soc_smarteq found configured as socmodul1 - cleanup soc2 entries"
-	    sed -e "
-	       s/soc2user=.*$/soc2user=demo@demo.de/
-	       s/soc2pass=.*$/soc2pass=\'\'/
-	       s/soc2pin=.*$/soc2pin=pin/
-	       s/soc2vin=.*$/soc2vin=/
-	       s/soc2intervall=.*$/soc2intervall=60/
-	       s/soc2intervallladen=.*$/soc2intervallladen=10/
-	    " $ConfigFile.tmp > $ConfigFile.tmp.out
-	    cp $ConfigFile.tmp.out $ConfigFile.tmp
+		echo "soc_smarteq found configured as socmodul1 - cleanup soc2 entries"
+		sed -e "
+			s/soc2user=.*$/soc2user=demo@demo.de/
+			s/soc2pass=.*$/soc2pass=\'\'/
+			s/soc2pin=.*$/soc2pin=pin/
+			s/soc2vin=.*$/soc2vin=/
+			s/soc2intervall=.*$/soc2intervall=60/
+			s/soc2intervallladen=.*$/soc2intervallladen=10/
+		" $ConfigFile.tmp > $ConfigFile.tmp.out
+		cp $ConfigFile.tmp.out $ConfigFile.tmp
 	fi
 	# modify configured smarteq modules to none
 	sed -e '
-	   s/socmodul=soc_smarteq/socmodul=none/
-	   s/socmodul1=soc_smarteqlp2/socmodul1=none/
-	   /soc2pint=/d
-	   /soc_smarteq/d
+		s/socmodul=soc_smarteq/socmodul=none/
+		s/socmodul1=soc_smarteqlp2/socmodul1=none/
+		/soc2pint=/d
+		/soc_smarteq/d
 	' $ConfigFile.tmp > $ConfigFile.tmp.out
 	cp $ConfigFile.tmp.out $ConfigFile
 	rm $ConfigFile.tmp $ConfigFile.tmp.out
