@@ -455,6 +455,9 @@ def main():
         load_store()
         now = int(time.time())
         _debug('main0: store=\n' + json.dumps(store, indent=4))
+        if 'session_id' not in store:
+            store['session_id'] = str(uuid.uuid4())
+        session_id = store['session_id']
         # if OK, check if refreshToken is required
         if 'expires_at' in store and \
            'Token' in store and \
@@ -462,9 +465,6 @@ def main():
            'refresh_token' in store['Token']:
             expires_in = store['Token']['expires_in']
             expires_at = store['expires_at']
-            if 'session_id' not in store:
-                store['session_id'] = str(uuid.uuid4())
-            session_id = store['session_id']
             token = store['Token']
             _exp_at = datetime.fromtimestamp(expires_at).strftime('%Y-%m-%d %H:%M:%S')
             _exp_at2 = datetime.fromtimestamp(expires_at-120).strftime('%Y-%m-%d %H:%M:%S')
