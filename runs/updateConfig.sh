@@ -593,12 +593,6 @@ updateConfig(){
 	if ! grep -Fq "soc_ovms_intervall=" $ConfigFile; then
 		echo "soc_ovms_intervall=120" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_intervallladen=" $ConfigFile; then
-		echo "soc_smarteq_intervallladen=20" >> $ConfigFile
-	fi
-	if ! grep -Fq "soc_smarteq_intervall=" $ConfigFile; then
-		echo "soc_smarteq_intervall=120" >> $ConfigFile
-	fi
 	if ! grep -Fq "releasetrain=" $ConfigFile; then
 		echo "releasetrain=stable" >> $ConfigFile
 	fi
@@ -1707,9 +1701,6 @@ updateConfig(){
 	if ! grep -Fq "soc2pin=" $ConfigFile; then
 		echo "soc2pin=pin" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc2pint=" $ConfigFile; then
-		echo "soc2pint=''" >> $ConfigFile
-	fi
 	if ! grep -Fq "lgessv1ip=" $ConfigFile; then
 		echo "lgessv1ip=youripaddress" >> $ConfigFile
 	fi
@@ -2138,22 +2129,6 @@ updateConfig(){
 	if ! grep -Fq "soc_ovms_vehicleid=" $ConfigFile; then
 		echo "soc_ovms_vehicleid=vehicleid" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_username=" $ConfigFile; then
-		echo "soc_smarteq_username=User" >> $ConfigFile
-	fi
-	if ! grep -Fq "soc_smarteq_passwort=" $ConfigFile; then
-		echo "soc_smarteq_passwort=''" >> $ConfigFile
-	else
-		sed -i "/soc_smarteq_passwort='/b; s/^soc_smarteq_passwort=\(.*\)/soc_smarteq_passwort=\'\1\'/g" $ConfigFile
-	fi
-	if ! grep -Fq "soc_smarteq_pin=" $ConfigFile; then
-		echo "soc_smarteq_pin=''" >> $ConfigFile
-	else
-		sed -i "/soc_smarteq_pin='/b; s/^soc_smarteq_pin=\(.*\)/soc_smarteq_pin=\'\1\'/g" $ConfigFile
-	fi
-	if ! grep -Fq "soc_smarteq_vin=" $ConfigFile; then
-		echo "soc_smarteq_vin=VIN" >> $ConfigFile
-	fi
 	if ! grep -Fq "soc2vin=" $ConfigFile; then
 		echo "soc2vin=" >> $ConfigFile
 		echo "soc2intervall=60" >> $ConfigFile
@@ -2404,5 +2379,32 @@ updateConfig(){
 			fi
 		fi
 	fi
+	echo "remove soc_smarteq entries from Config file"
+	cp $ConfigFile $ConfigFile.tmp
+	# check for socmodul1=soc_smarteqlp2
+	ism2=`grep "socmodul1=soc_smarteqlp2" $ConfigFile.tmp | wc -l | awk '{print $1}'`
+	if [ $ism2 -ne 0 ]
+	then
+		echo "soc_smarteq found configured as socmodul1 - cleanup soc2 entries"
+		sed -e "
+			s/soc2user=.*$/soc2user=demo@demo.de/
+			s/soc2pass=.*$/soc2pass=\'\'/
+			s/soc2pin=.*$/soc2pin=pin/
+			s/soc2vin=.*$/soc2vin=/
+			s/soc2intervall=.*$/soc2intervall=60/
+			s/soc2intervallladen=.*$/soc2intervallladen=10/
+		" $ConfigFile.tmp > $ConfigFile.tmp.out
+		cp $ConfigFile.tmp.out $ConfigFile.tmp
+	fi
+	# modify configured smarteq modules to none
+	sed -e '
+		s/socmodul=soc_smarteq/socmodul=none/
+		s/socmodul1=soc_smarteqlp2/socmodul1=none/
+		/soc2pint=/d
+		/soc_smarteq/d
+	' $ConfigFile.tmp > $ConfigFile.tmp.out
+	cp $ConfigFile.tmp.out $ConfigFile
+	rm $ConfigFile.tmp $ConfigFile.tmp.out
+
 	echo "Config file Update done."
 }
