@@ -473,8 +473,12 @@ def main():
                    ', expires_at=' + str(expires_at) + ', diff=' + str(now - (expires_at - 120)))
             _debug("expires_at=" + _exp_at + ", now=" + _now + ", expires_at-120=" + _exp_at2)
             if now > (expires_at - 120):
-                _debug('call refreshToken')
-                token = refreshToken(token['refresh_token'])
+                try:
+                    _debug('call refreshToken')
+                    token = refreshToken(token['refresh_token'])
+                except Exception as e:
+                    _debug("main1: refresh_token failed, err=" + str(e))
+                    token = {}
                 if 'expires_in' in token:
                     expires_in = int(token['expires_in'])
                     expires_at = now + expires_in
