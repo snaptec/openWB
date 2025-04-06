@@ -27,18 +27,19 @@ class ChargePointList {
 		const chargePoint = this.cplist
 			.selectAll("rows")
 			.data(this.chargepoints).enter()
-			.append("div").attr("class", "container-fluid mt-3 p-0")
-			;
+			.append("div").attr("class", "container-fluid mt-3 p-0");
 		chargePoint.html((row, index) => `
-			<div class="row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
-		${this.cpNameRow(row, index)}
-		</div>
-		<div class = "row m-0 p-0" onclick="modeButtonClicked(${row.isEnabled},${index})">
-		${this.cpChargeInfoRow(row, index)}
-		</div>
-		<div class = "row m-0 p-0">
-		${this.cpChargeModeRow(row, index)}
-		</div>`
+			
+			<div class="row m-0 p-0" onclick="modeButtonClicked(${index})">
+			${this.cpNameRow(row, index)}
+			</div>
+			<div class = "row m-0 p-0" onclick="modeButtonClicked(${index})">
+			${this.cpChargeInfoRow(row, index)}
+			</div>
+			<div class = "row m-0 p-0">
+			${this.cpChargeModeRow(row, index)}
+			</div>`
+
 		)
 		this.updateValues();
 	}
@@ -212,7 +213,7 @@ function configButtonClicked(index) {
 		// $('#ladepunktConfigModal').find('[data-config-lp="' + (index + 1) + '"]').removeClass('hide');
 		$('#ladepunktConfigModal').modal("show");
 	} else {
-		$("#lockInfoModal").modal("show");
+		triggerUnlockDisplay();
 	}
 }
 
@@ -270,7 +271,7 @@ function modeButtonClicked(index) {
 
 		$("#chargeModeModal").modal("show");
 	} else {
-		$("#lockInfoModal").modal("show");
+		triggerUnlockDisplay();
 	}
 }
 
@@ -278,14 +279,14 @@ function socSetButtonClicked(index) {
 	if (wbdata.displaylocked == false) {
 		$("#socModal").modal("show");
 	} else {
-		$("#lockInfoModal").modal("show");
+		triggerUnlockDisplay();
 	}
 }
 function socLoadButtonClicked(index) {
 	if (wbdata.displaylocked == false) {
 		publish("1", "openWB/set/lp/" + (+index + 1) + "/ForceSoCUpdate");
 	} else {
-		$("#lockInfoModal").modal("show");
+		triggerUnlockDisplay();
 	}
 }
 var chargePointList = new ChargePointList();

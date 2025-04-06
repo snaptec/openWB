@@ -19,6 +19,7 @@
 	</head>
 
 	<body>
+		<input type="hidden" value="" id="rfidwebread" />
 		<!-- Side navigation -->
 		<div class="sidenav pt-3">
 			<!-- date and lock status -->
@@ -652,7 +653,7 @@
 						$('#ladepunktConfigModal').find('[data-config-lp="'+currentLp+'"]').removeClass('hide');
 						$('#ladepunktConfigModal').modal("show");
 					} else {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					}
 				});
 
@@ -660,7 +661,7 @@
 					if( displaylocked == false ){
 						$("#chargeModeModal").modal("show");
 					} else {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					}
 				});
 
@@ -677,7 +678,7 @@
 							}
 						}
 					} else {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					}
 				});
 
@@ -688,7 +689,7 @@
 							$('#socModal').find('.socLp').text(currentLp);
 							$('#socModal').modal("show");
 						} else {
-							$("#lockInfoModal").modal("show");
+							triggerUnlockDisplay();
 						}
 					}
 				});
@@ -848,7 +849,7 @@
 				});
 
 				$('#backend .reloadBtn').click(function() {
-					location.reload();
+					window.location = window.location.pathname;
 				});
 			</script>
 		</div>
@@ -1933,6 +1934,9 @@
 				function addLockNumber(e){
 					var v = $( "#Lockbox" ).val();
 					$( "#Lockbox" ).val( v + e.value );
+					if ($( "#Lockbox" ).val().length  == 4) {
+						submitLockForm(PINbox);
+					}
 				}
 
 				function clearLockForm(e){
@@ -1952,7 +1956,7 @@
 									$('#Lockcode').find('.enter').prop('disabled', false);
 									$( "#Lockbox" ).val( "" );
 									$("#lockModal").modal("hide");
-								}, 1000);
+								}, 300);
 							} else {
 								$('#lockModal').find('.modal-body').addClass('bg-danger');
 								$('#Lockcode').find('.enter').prop('disabled', true);
@@ -2225,6 +2229,14 @@
 			var lockTimeout = 60000;
 			var displaylocked = true;
 
+			function triggerUnlockDisplay() {
+				if(displaylocked == true){
+					$("#lockModal").modal("show");
+				} else {
+					lockDisplay(true);
+				}
+			}
+
 			function lockDisplay( lock = true ){
 				if( lock == false ){
 					displaylocked = false;
@@ -2326,7 +2338,7 @@
 
 				$('.sidenav').find('a[href^="#"]').on("click", function(event) {
 					if( $(this).hasClass('displayLock') && displaylocked == true ) {
-						$("#lockInfoModal").modal("show");
+						triggerUnlockDisplay();
 					} else {
 						// hide all panels
 						$('.resume').addClass('hide');
@@ -2362,13 +2374,7 @@
 					}
 				);
 
-				$('#displaylock').on("click", function(){
-					if( displaylocked == true ){
-						$("#lockModal").modal("show");
-					} else {
-						lockDisplay(true);
-					}
-				});
+				$('#displaylock').on("click", triggerUnlockDisplay);
 
 				$('.btn-group-toggle').change(function(event){
 					// only charge limitation has class btn-group-toggle so far
@@ -2412,7 +2418,27 @@
 						}
 					}, 2000);
 				});
-
+				//
+				var queryString = window.location.search;
+				var urlParams = new URLSearchParams(queryString);
+				var ids = urlParams.get('rfidlist')
+				rfidArray = ids.split(",").filter(n => parseInt(n) > 0);
+				
+				$(document).keydown(function (e) {
+					if (e.keyCode >= 48 && e.keyCode <= 57 && $('#rfidwebread').val().length < 10) {
+						var old = $('#rfidwebread').val();
+						$('#rfidwebread').val(old+String.fromCharCode(e.keyCode));
+					} else if (event.keyCode == 13 || $('#rfidwebread').val().length == 10) {
+    					var rfid = $('#rfidwebread').val();
+						$('#rfidwebread').val('');
+						if (rfidArray.includes(rfid)) {
+							lockDisplay(false);
+						} 						
+    				}	
+					window.setTimeout(function() {
+						$('#rfidwebread').val('')
+					}, 3000);				
+				});
 			});
 		</script>
 	</body>

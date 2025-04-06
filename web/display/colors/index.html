@@ -27,7 +27,7 @@
 </head>
 
 <body>
-
+	<input type="hidden" value="" id="rfidwebread" />
 	<div class="container-fluid">
 		<div class="row pt-0">
 
@@ -292,7 +292,7 @@
 			});
 
 			$('#backend .reloadBtn').click(function () {
-				location.reload();
+				window.location = window.location.pathname;
 			});
 		</script>
 	</div>
@@ -504,6 +504,9 @@
 			function addLockNumber(e) {
 				var v = $("#Lockbox").val();
 				$("#Lockbox").val(v + e.value);
+				if ($("#Lockbox").val().length == 4) {
+					submitLockForm(PINbox);
+				}
 			}
 
 			function clearLockForm(e) {
@@ -523,7 +526,7 @@
 								$('#Lockcode').find('.enter').prop('disabled', false);
 								$("#Lockbox").val("");
 								$("#lockModal").modal("hide");
-							}, 1000);
+							}, 250);
 						} else {
 							$('#lockModal').find('.modal-body').addClass('bg-danger');
 							$('#Lockcode').find('.enter').prop('disabled', true);
@@ -829,6 +832,14 @@
 		var lockTimeout = 60000;
 		wbdata.displaylocked = true;
 
+		function triggerUnlockDisplay() {
+			if(wbdata.displaylocked == true){
+				$("#lockModal").modal("show");
+			} else {
+				lockDisplay(true);
+			}
+		}
+
 		function lockDisplay(lock = true) {
 			if (lock == false) {
 				wbdata.displaylocked = false;
@@ -955,6 +966,27 @@
 				var elementId = $(this).attr('id');
 				var option = $('input[name="' + elementId + '"]:checked').data('option').toString();
 				wbdata.setChargeLimitMode(option)
+			});
+
+			var urlParams = new URLSearchParams(queryString);
+			var ids = urlParams.get('rfidlist')
+			rfidArray = ids.split(",").filter(n => parseInt(n) > 0);
+			
+			$(document).keydown(function (e) {
+				if (e.keyCode >= 48 && e.keyCode <= 57 && $('#rfidwebread').val().length < 10) {
+					var old = $('#rfidwebread').val();
+					$('#rfidwebread').val(old+String.fromCharCode(e.keyCode));
+					console.log($('#rfidwebread').val());
+				} else if (event.keyCode == 13 || $('#rfidwebread').val().length == 10) {
+					var rfid = $('#rfidwebread').val();
+					$('#rfidwebread').val('');
+					if (rfidArray.includes(rfid)) {
+						lockDisplay(false);
+					} 						
+				}	
+				window.setTimeout(function() {
+					$('#rfidwebread').val('')
+				}, 3000);				
 			});
 		});
 	</script>

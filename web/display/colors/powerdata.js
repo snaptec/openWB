@@ -476,7 +476,7 @@ function showStatus() {
 	if (wbdata.displaylocked == false) {
 	$("#statusModal").modal("show");
 	} else {
-		$("#lockInfoModal").modal("show");
+		triggerUnlockDisplay();
 	}
 }
 
