@@ -102,7 +102,7 @@ openwbDebugLog() {
 export -f openwbDebugLog
 
 openwbRunLoggingOutput() {
-	$1 2>&1 | while read -r line
+	"$@" 2>&1 | while read -r line
 	do
 		# use path to /var/log as link in ramdisk may not be set up yet!
 		echo "$(date +"%Y-%m-%d %H:%M:%S"): $1: $line" >> "/var/log/openWB.log"
