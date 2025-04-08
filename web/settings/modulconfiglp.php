@@ -778,6 +778,9 @@
 								<div id="socsupportinfo" class="mt-1 alert alert-success hide">
 									Support für dieses Modul gibt es im <a id="socsuportlink" href="#" target="_blank" rel="noopener noreferrer">openWB Forum</a>.
 								</div>
+								<div id="socwikiinfo" class="mt-1 alert alert-success hide">
+									Beschreibung und Hinweise für dieses Modul gibt es im <a id="socwikilink" href="#" target="_blank" rel="noopener noreferrer">openWB Wiki</a>.<br>
+								</div>
 								<div id="socnosupportinfo" class="mt-1 alert alert-warning hide">
 									Dieses Modul wird nicht aktiv gepflegt.
 								</div>
@@ -2417,6 +2420,7 @@
 							hideSection('#soctronity');
 							hideSection('#socoldevccwarning');
 							hideSection('#socsupportinfo');
+							hideSection('#socwikiinfo');
 							hideSection('#socnosupportinfo');
 
 							if($('#socmodul').val() == 'none') {
@@ -2435,11 +2439,15 @@
 								showSection('#socmqtt');
 							}
 							if($('#socmodul').val() == 'soc_vwid') {
+								$('#socwikilink').attr('href', 'https://github.com/openWB/core/wiki/SoC-VWId')
+								showSection('#socwikiinfo');
 								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4803')
 								showSection('#socsupportinfo');
 								showSection('#socmvwid');
 							}
 							if($('#socmodul').val() == 'soc_ovms') {
+								$('#socwikilink').attr('href', 'https://github.com/openWB/core/wiki/SoC-OVMS')
+								showSection('#socwikiinfo');
 								$('#socsuportlink').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
 								showSection('#socsupportinfo');
 								showSection('#socmovms');
@@ -2487,6 +2495,10 @@
 								showSection('#socleaf');
 							}
 							if($('#socmodul').val() == 'soc_i3') {
+								$('#socwikilink').attr('href', 'https://github.com/openWB/core/wiki/SoC-BMW-Mini')
+								showSection('#socwikiinfo');
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4870')
+								showSection('#socsupportinfo');
 								showSection('#soci3');
 							}
 							if($('#socmodul').val() == 'soc_zoe') {
@@ -3132,6 +3144,9 @@
 								</div>
 								<div id="socsupportinfolp2" class="mt-1 alert alert-success hide">
 									Support für dieses Modul gibt es im <a id="socsuportlinklp2" href="#" target="_blank" rel="noopener noreferrer">openWB Forum</a>.
+								</div>
+								<div id="socwikiinfolp2" class="mt-1 alert alert-success hide">
+									Beschreibung und Hinweise für dieses Modul gibt es im <a id="socwikilinklp2" href="#" target="_blank" rel="noopener noreferrer">openWB Wiki</a>.<br>
 								</div>
 								<div id="socnosupportinfolp2" class="mt-1 alert alert-warning hide">
 									Dieses Modul wird nicht aktiv gepflegt.
@@ -4488,6 +4503,7 @@
 							hideSection('#socmvwidinfolp2');
 							hideSection('#socmovmsinfolp2');
 							hideSection('#socsupportinfolp2');
+							hideSection('#socwikiinfolp2');
 							hideSection('#socnosupportinfolp2');
 
 							if($('#socmodul1').val() == 'none') {
@@ -4527,7 +4543,9 @@
 								showSection('#socmkialp2');
 							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
-								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
+								$('#socwikilinklp2').attr('href', 'https://github.com/openWB/core/wiki/SoC-VWId')
+								showSection('#socwikiinfolp2');
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4803')
 								showSection('#socsupportinfolp2');
 								showSection('#socmvwidinfolp2');
 								showSection('#socmuser2');
@@ -4537,6 +4555,8 @@
 								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_ovmslp2') {
+								$('#socwikilinklp2').attr('href', 'https://github.com/openWB/core/wiki/SoC-OVMS')
+								showSection('#socwikiinfolp2');
 								$('#socsuportlinklp2').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
 								showSection('#socsupportinfolp2');
 								showSection('#socmovmsinfolp2');
@@ -4572,6 +4592,10 @@
 								showSection('#socmyrenaultlp2');
 							}
 							if($('#socmodul1').val() == 'soc_i3s1') {
+								$('#socwikilinklp2').attr('href', 'https://github.com/openWB/core/wiki/SoC-BMW-Mini')
+								showSection('#socwikiinfolp2');
+								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4870')
+								showSection('#socsupportinfolp2');
 								showSection('#soci31');
 							}
 							if($('#socmodul1').val() == 'soc_evnotifys1') {
