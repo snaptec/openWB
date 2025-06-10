@@ -12,7 +12,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3..9.12"
+          python-version: "3.9.12"
         env:
           PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
       - name: Install dependencies
